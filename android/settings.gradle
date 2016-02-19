@@ -1,0 +1,6 @@
+rootProject.name = 'EatProject'
+
+include ':app'
+include ':react-native-wx'
+
+project(':react-native-wx').projectDir = new File(settingsDir, '../node_modules/react-native-wx/android')

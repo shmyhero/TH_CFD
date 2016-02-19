@@ -1,0 +1,13 @@
+{
+  "name": "EatProject",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "react-native start"
+  },
+  "dependencies": {
+    "react-native": "^0.19.0",
+    "react-native-swiper": "^1.4.3",
+    "react-native-wx": "^1.0.7"
+  }
+}

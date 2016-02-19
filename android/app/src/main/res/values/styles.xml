@@ -1,0 +1,27 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="navigation_icon">
+        <!--<item name="android:background">@drawable/style_navigation_radio</item>-->
+        <item name="android:layout_width">28dp</item>
+        <item name="android:layout_height">28dp</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_marginBottom">3dp</item>
+        <!--<item name="android:duplicateParentState">true</item>-->
+    </style>
+
+    <style name="navigation_text">
+        <!--<item name="android:background">@drawable/style_navigation_radio</item>-->
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">1dp</item>
+        <item name="android:textColor">@color/tab_main_text_selector</item>
+        <item name="android:textSize">12dip</item>
+        <!--<item name="android:duplicateParentState">true</item>-->
+    </style>
+
+</resources>

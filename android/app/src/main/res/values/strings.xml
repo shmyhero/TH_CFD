@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">EatProject</string>
+
+    <string name="tab_main_trade">交易</string>
+    <string name="tab_main_buy_what">买什么</string>
+    <string name="tab_main_stock_god">股神</string>
+    <string name="tab_main_descovery">发现</string>
+    <string name="tab_main_competition">竞赛</string>
+    <string name="tab_main_learning">学堂</string>
+    <string name="tab_main_me">我的</string>
+</resources>

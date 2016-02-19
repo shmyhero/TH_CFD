@@ -13,17 +13,10 @@ var {
 	TouchableHighlight
 } = React;
 
-var LoginPage = require('./LoginPage')
+var LogicData = require('../LogicData')
 
 var LandingPage = React.createClass({
 	loginPress: function() {
-		// this.props.navigator.push({
-		// 	title: '邮箱登陆',
-		// 	component: LoginPage,
-		// 	backButtonTitle: ' ',
-		// 	navigationBarHidden: 'false',
-		// });
-
 		this.props.navigator.replace({
 			name: 'login',
 		});
@@ -31,18 +24,44 @@ var LandingPage = React.createClass({
 
 	guestLoginPress: function() {
 		if (WechatAPI.isWXAppInstalled()) {
-			console.log("We chat is installed.")
-			WechatAPI.login().
-			then((reply) => {
-				console.log(reply)
-				console.log(reply.code)
-
-				this.props.navigator.replace({
-					name: 'login',
-					code: reply.code,
-				});
-			})
+			WechatAPI.login()
+			.then((response) =>  this.wechatLoginCodeHandler(response))
 		}
+	},
+
+	wechatLoginCodeHandler: function(response) {
+		console.log(response)
+
+		var url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + "wxe795a0ba8fa23cf7" +
+			"&secret=" + "a6afcadca7d218c9b2c44632fc8f884d" + 
+			"&code=" + response.code + "&grant_type=authorization_code";
+		fetch(url, {
+			method: 'GET'
+		})
+		.then((response) => response.json())
+		.then((responsejson) => {
+			console.log(responsejson)
+			LogicData.setWechatAuthData(responsejson)
+			this.wechatGetUserInfo()
+		})
+	},
+
+	wechatGetUserInfo: function() {
+		var wechatAuthData = LogicData.getWechatAuthData()
+		var url = "https://api.weixin.qq.com/sns/userinfo?access_token=" + 
+			wechatAuthData.access_token + "&openid=" + wechatAuthData.openid;
+		fetch(url, {
+			method: 'GET'
+		})
+		.then((response) => response.json())
+		.then((responsejson) => {
+			console.log(responsejson)
+			LogicData.setWechatUserData(responsejson)
+
+			this.props.navigator.replace({
+				name: 'wechatLoginConfirm',
+			});
+		})
 	},
 
 	render: function() {

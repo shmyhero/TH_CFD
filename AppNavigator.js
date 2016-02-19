@@ -14,6 +14,7 @@ var LoginPage = require('./js/view/LoginPage')
 var MyHomePage = require('./js/view/MyHomePage')
 var MyNotifications = require('./js/view/MyNotifications')
 var MySettings = require('./js/view/MySettings')
+var WechatLoginConfirmPage = require('./js/view/WechatLoginConfirmPage')
 
 var _navigator;
 BackAndroid.addEventListener('hardwareBackPress', () => {
@@ -61,6 +62,13 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 			<View style={{flex: 1}}>
 				<NavBar title="设置" showBackButton='true' navigator={navigationOperations}/>
 				<MySettings navigator={navigationOperations} />
+			</View>
+		);
+	} else if (route.name === 'wechatLoginConfirm') {
+		return (
+			<View style={{flex: 1}}>
+				<NavBar title="用户名设置"/>
+				<WechatLoginConfirmPage navigator={navigationOperations} />
 			</View>
 		);
 	}

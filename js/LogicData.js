@@ -1,7 +1,9 @@
-
+'use strict'
 
 var userData = {};
 var userSecretKey = '';
+var wechatAuthData = {};
+var wechatUserData = {};
 
 var LogicData = {
 
@@ -20,7 +22,23 @@ var LogicData = {
 
 	getUserData: function() {
 		return userData;
-	}
+	},
+
+    setWechatAuthData: function(authData) {
+        wechatAuthData = authData;
+    },
+
+    getWechatAuthData: function() {
+        return wechatAuthData;
+    },
+
+    setWechatUserData: function(userData) {
+        wechatUserData = userData
+    },
+
+    getWechatUserData: function() {
+        return wechatUserData
+    },
 };
 
 /*

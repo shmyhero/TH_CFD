@@ -30,7 +30,9 @@ public class SettingsFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         mReactInstanceManager = RNManager.getInstanceManager(getActivity().getApplication());
-        reactRootView.startReactApplication(mReactInstanceManager, "Settings_Page", null);
+        Bundle bundle = new Bundle();
+        bundle.putString("initialPage", "mySettings");
+        reactRootView.startReactApplication(mReactInstanceManager, "TH_CFD", bundle);
 
         return view;
     }

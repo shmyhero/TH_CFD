@@ -30,7 +30,9 @@ public class LandingFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         mReactInstanceManager = RNManager.getInstanceManager(getActivity().getApplication());
-        reactRootView.startReactApplication(mReactInstanceManager, "Landing_Page", null);
+        Bundle bundle = new Bundle();
+        bundle.putString("initialPage", "landing");
+        reactRootView.startReactApplication(mReactInstanceManager, "TH_CFD", bundle);
 
         return view;
     }

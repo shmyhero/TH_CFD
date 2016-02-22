@@ -15,18 +15,15 @@ var {
 
 var AppNavigator = require('./AppNavigator')
 
-var LandingPage = React.createClass({
+var TH_CFD = React.createClass({
   render: function() {
+    var initialPage = this.props.initialPage;
+    if (initialPage == null) {
+      initialPage = 'landing'
+    }
     return (
-      <AppNavigator initialViewRoute={'landing'}/>
-    );
-  }
-});
 
-var SettingsPage = React.createClass({
-  render: function() {
-    return (
-      <AppNavigator initialViewRoute={'mySettings'}/>
+      <AppNavigator initialViewRoute={initialPage}/>
     );
   }
 });
@@ -38,5 +35,4 @@ var styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('Landing_Page', () => LandingPage);
-AppRegistry.registerComponent('Settings_Page', () => SettingsPage);
+AppRegistry.registerComponent('TH_CFD', () => TH_CFD);

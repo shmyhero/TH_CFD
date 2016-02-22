@@ -16,15 +16,12 @@ var AppNavigator = require('./AppNavigator')
 
 var EatProject = React.createClass({
   render: function() {
+    var initialPage = this.props.initialPage;
+    if (initialPage == null) {
+      initialPage = 'landing'
+    }
     return (
-      var initialPage = this.props.initialPage;
-      if (initialPage == null) {
-        initialPage = 'landing'
-      }
-      return (
-
-        <AppNavigator initialViewRoute={initialPage}/>
-      );
+      <AppNavigator initialViewRoute={initialPage}/>
     );
   }
 });

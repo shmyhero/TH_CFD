@@ -12,6 +12,8 @@ var {
 	TouchableHighlight,
 } = React;
 
+var ColorConstants = require('../ColorConstants')
+
 var NavBar = React.createClass({
 	backOnClick: function() {
 		this.props.navigator.pop();
@@ -45,7 +47,7 @@ var NavBar = React.createClass({
 var styles = StyleSheet.create({
 	container: {
 		height: 50,
-		backgroundColor: '#1789d5',
+		backgroundColor: ColorConstants.TITLE_BLUE,
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',

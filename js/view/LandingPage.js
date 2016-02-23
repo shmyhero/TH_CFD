@@ -1,6 +1,6 @@
 'use strict'
 
-import * as WechatAPI from 'react-native-wx';
+//import * as WechatAPI from 'react-native-wx';
 
 var React = require('react-native');
 var Swiper = require('react-native-swiper')
@@ -20,48 +20,6 @@ var LandingPage = React.createClass({
 		this.props.navigator.replace({
 			name: 'login',
 		});
-	},
-
-	guestLoginPress: function() {
-		if (WechatAPI.isWXAppInstalled()) {
-			WechatAPI.login()
-			.then((response) =>  this.wechatLoginCodeHandler(response))
-		}
-	},
-
-	wechatLoginCodeHandler: function(response) {
-		console.log(response)
-
-		var url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + "wxe795a0ba8fa23cf7" +
-			"&secret=" + "a6afcadca7d218c9b2c44632fc8f884d" + 
-			"&code=" + response.code + "&grant_type=authorization_code";
-		fetch(url, {
-			method: 'GET'
-		})
-		.then((response) => response.json())
-		.then((responsejson) => {
-			console.log(responsejson)
-			LogicData.setWechatAuthData(responsejson)
-			this.wechatGetUserInfo()
-		})
-	},
-
-	wechatGetUserInfo: function() {
-		var wechatAuthData = LogicData.getWechatAuthData()
-		var url = "https://api.weixin.qq.com/sns/userinfo?access_token=" + 
-			wechatAuthData.access_token + "&openid=" + wechatAuthData.openid;
-		fetch(url, {
-			method: 'GET'
-		})
-		.then((response) => response.json())
-		.then((responsejson) => {
-			console.log(responsejson)
-			LogicData.setWechatUserData(responsejson)
-
-			this.props.navigator.replace({
-				name: 'wechatLoginConfirm',
-			});
-		})
 	},
 
 	render: function() {
@@ -89,17 +47,14 @@ var LandingPage = React.createClass({
 							source={require('image!guide_screen4')}/>
 					</View>
 				</Swiper>
-				<TouchableHighlight style={styles.guestLoginClickableArea}
-					onPress={this.guestLoginPress}>
-					<Text style={styles.guestLoginText}>
-						马上体验
-					</Text>
-				</TouchableHighlight>
 				<TouchableHighlight style={styles.loginClickableArea}
 					onPress={this.loginPress}>
-					<Text style={styles.loginText}>
-						登录
-					</Text>
+					<View style={{borderRadius: 3, padding: 5, backgroundColor: '#1789d5'}}>
+						<Text style={styles.loginText}>
+							登录
+						</Text>
+					</View>
+					
 				</TouchableHighlight>
 			</View>
 		)
@@ -119,26 +74,8 @@ var styles = StyleSheet.create({
 		height: 400,
 		resizeMode: Image.resizeMode.contain,
 	},
-	cloudImage: {
-		flex: 1,
-		height: 50,
-		marginTop: -50,
-		resizeMode: Image.resizeMode.contain,
-	},
-	guestLoginClickableArea: {
-		marginTop: 0,
-	},
 	loginClickableArea: {
 		marginTop: 10,
-	},
-	guestLoginText: {
-		fontSize: 20,
-		width: 200,
-		height: 30,
-		lineHeight: 25,
-		textAlign: 'center',
-		color: '#ffffff',
-		backgroundColor: '#D78F91',
 	},
 	loginText: {
 		fontSize: 20,
@@ -147,7 +84,6 @@ var styles = StyleSheet.create({
 		lineHeight: 25,
 		textAlign: 'center',
 		color: '#ffffff',
-		backgroundColor: '#1789d5',
 	},
 })
 

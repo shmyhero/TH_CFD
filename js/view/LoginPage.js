@@ -10,36 +10,61 @@ var {
 	TouchableHighlight,
 	Alert,
 	Dimensions,
+	Image,
 } = React;
 var LogicData = require('../LogicData')
 var MyHomePage = require('./MyHomePage')
 var LoadingIndicator = require('./LoadingIndicator')
+var ColorConstants = require('../ColorConstants')
 
 var requestSuccess = true;
 const API = 'https://cn1.api.tradehero.mobi/api/'
 
+var rowHeight = 40;
+var fontSize = 16;
+
 var LoginPage = React.createClass({
 	getInitialState: function() {
 		return {
-			userName: '',
-			password: '',
+			phoneNumber: '',
+			validationCode: '',
 			animating: false,
+			phoneNumberBorderColor: ColorConstants.TITLE_BLUE,
+			validationCodeBorderColor: ColorConstants.DISABLED_GREY,
 		};
 	},
 
-	setUserName: function(text: string) {
+	setPhoneNumber: function(text: string) {
 		this.setState({
-			userName: text
+			phoneNumber: text
 		})
 	},
 
-	setPassword: function(text: string) {
+	setValidationCode: function(text: string) {
 		this.setState({
-			password: text
+			validationCode: text
 		})
 	},
 
-	loginPress: function() {
+	phoneNumberOnFocus: function() {
+		this.setState({
+			phoneNumberBorderColor: ColorConstants.TITLE_BLUE,
+			validationCodeBorderColor: ColorConstants.DISABLED_GREY,
+		})
+	},
+
+	validationCodeOnFocus: function() {
+		this.setState({
+			phoneNumberBorderColor: ColorConstants.DISABLED_GREY,
+			validationCodeBorderColor: ColorConstants.TITLE_BLUE,
+		})
+	},
+
+	getValidationCodePressed: function() {
+
+	},
+
+	loginPressed: function() {
 
 		if (this.state.userName === '') {
 			this.state.userName = '13816631019';
@@ -105,66 +130,78 @@ var LoginPage = React.createClass({
 		});
 	},
 
-	forgetPasswordClicked: function() {
-
-	},
-
 	render: function() {
 		var {height, width} = Dimensions.get('window');
 
-		var line = <View style={styles.line}/>;
-		if (Platform.OS === 'android') {
-			line = <View />;
-		}
 		return (
-			<View>
-				<View style={[styles.wrapper, {height: height / 2.5}]}>
-					<View>
-						<View style={styles.rowWrapper}>
-							<Text style={styles.textInputLabel}>
-								用户名：
-							</Text>
-							<TextInput style={styles.textInput} 
-								onChangeText={(text) => this.setUserName(text)}
-								placeholder='请输入用户名'
-							/>
+			<View style={[styles.wrapper, {height: height}]}>
+
+				<View style={styles.phoneLoginContainer}>
+					<View style={styles.rowWrapper}>
+						<View style={[styles.phoneNumberInputView, {borderColor: this.state.phoneNumberBorderColor}]}>
+							<TextInput style={styles.phoneNumberInput}
+								autoFocus={true}
+								onFocus={() => this.phoneNumberOnFocus()}
+								onChangeText={(text) => this.setPhoneNumber(text)}
+								placeholder='手机号'
+								underlineColorAndroid='#ffffff'/>
 						</View>
-
-						{line}
-
-						<View style={styles.rowWrapper}>
-							<Text style={styles.textInputLabel}>
-								密码：
-							</Text>
-							<TextInput style={styles.textInput} 
-								onChangeText={(text) => this.setPassword(text)}
-								placeholder='请输入密码'
-								secureTextEntry={true}
-							/>
-						</View>
-
-						<TouchableHighlight
-							style={styles.forgetPasswordCliableArea}
-							onPress={this.forgetPasswordClicked}
-							underlayColor='#d0d0d0'>
-							<Text style={styles.forgetPasswordLabel}>
-								忘记密码？
-							</Text>
+						
+						<TouchableHighlight style={styles.getValidationCodeArea}
+							onPress={this.getValidationCodePressed}>
+							<View style={styles.getValidationTextView}>
+								<Text style={styles.getValidationText}>
+									验证
+								</Text>
+							</View>
+							
 						</TouchableHighlight>
 					</View>
 
-					<TouchableHighlight style={styles.loginClickableArea}
-						onPress={this.loginPress}>
-						<Text style={styles.loginText}>
-							登录
-						</Text>
-					</TouchableHighlight>
+					<View style={styles.rowWrapper}>
+						<View style={[styles.validationCodeInputView, {borderColor: this.state.validationCodeBorderColor}]}>
+							<TextInput style={styles.validationCodeInput}
+								onFocus={() => this.validationCodeOnFocus()}
+								onChangeText={(text) => this.setValidationCode(text)}
+								placeholder='验证码' 
+								underlineColorAndroid='#ffffff'/>
+						</View>
+						
+					</View>
 
+					<View style={styles.rowWrapper}>
+						<TouchableHighlight style={styles.loginClickableArea}
+							onPress={this.loginPressed}>
+							<View style={styles.loginTextView}>
+								<Text style={styles.loginText}>
+									登录
+								</Text>
+							</View>
+						</TouchableHighlight>
+					</View>
 				</View>
 
-				{this.state.animating ? 
-					<LoadingIndicator animating={this.state.animating}/> :
-					<View/>}
+				<View style={styles.fastLoginContainer}>
+					<View style={styles.fastLoginRowWrapper}>
+						<View style={styles.line}/>
+						<Text style={styles.fastLoginTitle}>
+							快速登录
+						</Text>
+						<View style={styles.line}/>
+					</View>
+
+					<TouchableHighlight style={styles.wechatClickableArea}
+						onPress={this.wechatPressed}>
+						<View>
+							<Image 
+								style={styles.wechatIcon} 
+								source={require('../../images/wechat_icon.png')}/>
+							<Text style={styles.wechatTitle}>
+								微信
+							</Text>
+						</View>
+					</TouchableHighlight>
+				</View>
 			</View>				
 		)
 	}
@@ -175,55 +212,121 @@ var styles = StyleSheet.create({
 		alignSelf: 'stretch',
 		alignItems: 'stretch',
 		justifyContent: 'space-around',
+		backgroundColor: ColorConstants.BACKGROUND_GREY,
+	},
+	phoneLoginContainer: {
+		flex: 2,
+		paddingTop: 20,
+		alignItems: 'stretch',
+	},
+	fastLoginContainer: {
+		flex: 1,
+		alignItems: 'stretch',
 	},
 	rowWrapper: {
 		flexDirection: 'row',
-		alignItems: 'center',
-		paddingTop: 10,
-		paddingBottom: 10,
-		paddingLeft: 20,
-		paddingRight: 20,
+		alignItems: 'stretch',
+		paddingTop: 5,
+		paddingBottom: 5,
+		paddingLeft: 10,
+		paddingRight: 10,
 		justifyContent: 'space-around',
+	},
+	phoneNumberInputView: {
+		flex: 3,
+		borderWidth: 1,
+		borderRadius: 3,
+		marginRight: 10,
 		backgroundColor: '#ffffff',
 	},
-	line: {
-		height: 1,
-		borderWidth: 0.25,
-		borderColor: '#d0d0d0'
+	phoneNumberInput: {
+		height: rowHeight,
+		fontSize: fontSize,
+		paddingLeft: 10,
 	},
-	textInputLabel: {
+	getValidationCodeArea: {
 		flex: 1,
-		fontSize: 12,
-		textAlign: 'center',
+		borderRadius: 3,
+		height: rowHeight,
 	},
-	textInput: {
-		flex: 2,
-		height: 30,
-		fontSize: 12,
+	getValidationTextView: {
+		padding: 5,
+		height: rowHeight,
+		borderRadius: 3,
+		backgroundColor: ColorConstants.TITLE_BLUE,
+		justifyContent: 'center',
 	},
-	loginClickableArea: {
-		alignSelf: 'center',
-	},
-	loginText: {
-		fontSize: 20,
-		width: 200,
-		height: 30,
-		lineHeight: 25,
+	getValidationText: {
+		fontSize: fontSize,
 		textAlign: 'center',
 		color: '#ffffff',
-		backgroundColor: '#1789d5',
 	},
-	forgetPasswordCliableArea: {
-		alignSelf: 'flex-start',
+	validationCodeInputView: {
+		flex: 1,
+		borderWidth: 1,
+		borderRadius: 3,
+		backgroundColor: '#ffffff',
+	},
+	validationCodeInput: {
+		height: 40,
+		fontSize: fontSize,
+		paddingLeft: 10,
+	},
+	loginClickableArea: {
+		flex: 1,
+		alignSelf: 'center',
+	},
+	loginTextView: {
+		padding: 5,
+		height: rowHeight,
+		borderRadius: 3,
+		backgroundColor: ColorConstants.TITLE_BLUE,
+		justifyContent: 'center',
+	},
+	loginText: {
+		fontSize: fontSize,
+		textAlign: 'center',
+		color: '#ffffff',
+	},
+
+	fastLoginRowWrapper: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingLeft: 10,
+		paddingRight: 10,
+		justifyContent: 'space-around',
+	},
+	line: {
+		flex: 1,
+		marginLeft: 5,
+		marginRight: 5,
+		borderWidth: 0.5,
+		borderColor: ColorConstants.DISABLED_GREY,
+	},
+	fastLoginTitle: {
+		fontSize: 14,
+		height: 30,
+		lineHeight: 22,
+		textAlign: 'center',
+		color: '#9c9c9c',
+	},
+	wechatClickableArea: {
 		marginTop: 15,
-		marginLeft: 10,
+		alignSelf: 'center',
+		borderRadius: 3,
 	},
-	forgetPasswordLabel: {
-		color: "#1789d5",
+	wechatIcon: {
+		width: 39,
+		height: 39,
 	},
-	progressView: {
-		marginTop: 20,
-	}
+	wechatTitle: {
+		fontSize: 12,
+		height: 15,
+		lineHeight: 15,
+		textAlign: 'center',
+		color: '#9c9c9c',
+		alignSelf: 'center',
+	},
 })
 
 

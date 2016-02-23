@@ -21,6 +21,11 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
+		3D2A39F31C7C3ECD0085264D /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A39F21C7C3ECD0085264D /* libsqlite3.tbd */; };
+		3D2A39FF1C7C3EDA0085264D /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A39FE1C7C3EDA0085264D /* libc++.tbd */; };
+		3D2A3A011C7C3EE70085264D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A3A001C7C3EE70085264D /* libz.tbd */; };
+		3D2A3A081C7C44470085264D /* libRCTWeChat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A3A071C7C44270085264D /* libRCTWeChat.a */; };
+		3D2A3A0A1C7C44C50085264D /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A3A091C7C44C50085264D /* CoreTelephony.framework */; };
 		73273AD31C7B0EC1004EED11 /* guide_screen1.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273ACF1C7B0EC1004EED11 /* guide_screen1.png */; };
 		73273AD41C7B0EC1004EED11 /* guide_screen2.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273AD01C7B0EC1004EED11 /* guide_screen2.png */; };
 		73273AD51C7B0EC1004EED11 /* guide_screen4.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273AD11C7B0EC1004EED11 /* guide_screen4.png */; };
@@ -92,6 +97,13 @@
 			remoteGlobalIDString = 83CBBA2E1A601D0E00E9B192;
 			remoteInfo = React;
 		};
+		3D2A3A061C7C44270085264D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3D2A3A021C7C44270085264D /* RCTWeChat.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 86D238421BD0BB9E00C75D01;
+			remoteInfo = RCTWeChat;
+		};
 		78C398B81ACF4ADC00677621 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */;
@@ -128,6 +140,11 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = EatProject/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = EatProject/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
+		3D2A39F21C7C3ECD0085264D /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		3D2A39FE1C7C3EDA0085264D /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		3D2A3A001C7C3EE70085264D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		3D2A3A021C7C44270085264D /* RCTWeChat.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWeChat.xcodeproj; path = "../node_modules/react-native-wx/ios/RCTWeChat.xcodeproj"; sourceTree = "<group>"; };
+		3D2A3A091C7C44C50085264D /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		73273ACF1C7B0EC1004EED11 /* guide_screen1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen1.png; sourceTree = "<group>"; };
 		73273AD01C7B0EC1004EED11 /* guide_screen2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen2.png; sourceTree = "<group>"; };
 		73273AD11C7B0EC1004EED11 /* guide_screen4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen4.png; sourceTree = "<group>"; };
@@ -148,6 +165,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D2A3A0A1C7C44C50085264D /* CoreTelephony.framework in Frameworks */,
+				3D2A3A081C7C44470085264D /* libRCTWeChat.a in Frameworks */,
+				3D2A3A011C7C3EE70085264D /* libz.tbd in Frameworks */,
+				3D2A39FF1C7C3EDA0085264D /* libc++.tbd in Frameworks */,
+				3D2A39F31C7C3ECD0085264D /* libsqlite3.tbd in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
@@ -263,6 +285,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		3D2A3A031C7C44270085264D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3D2A3A071C7C44270085264D /* libRCTWeChat.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		78C398B11ACF4ADC00677621 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -274,6 +304,11 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				3D2A3A091C7C44C50085264D /* CoreTelephony.framework */,
+				3D2A3A021C7C44270085264D /* RCTWeChat.xcodeproj */,
+				3D2A3A001C7C3EE70085264D /* libz.tbd */,
+				3D2A39FE1C7C3EDA0085264D /* libc++.tbd */,
+				3D2A39F21C7C3ECD0085264D /* libsqlite3.tbd */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
 				00C302B51ABCB90400DB3ED1 /* RCTGeolocation.xcodeproj */,
@@ -369,6 +404,9 @@
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
+					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = RSLW4S7XVW;
+					};
 				};
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "EatProject" */;
@@ -418,6 +456,10 @@
 				{
 					ProductGroup = 139FDEE71B06529A00C62182 /* Products */;
 					ProjectRef = 139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */;
+				},
+				{
+					ProductGroup = 3D2A3A031C7C44270085264D /* Products */;
+					ProjectRef = 3D2A3A021C7C44270085264D /* RCTWeChat.xcodeproj */;
 				},
 				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
@@ -487,6 +529,13 @@
 			fileType = archive.ar;
 			path = libReact.a;
 			remoteRef = 146834031AC3E56700842450 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3D2A3A071C7C44270085264D /* libRCTWeChat.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTWeChat.a;
+			remoteRef = 3D2A3A061C7C44270085264D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		78C398B91ACF4ADC00677621 /* libRCTLinking.a */ = {
@@ -627,6 +676,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -636,6 +686,7 @@
 				INFOPLIST_FILE = EatProject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.tradehero.EatProject;
 				PRODUCT_NAME = EatProject;
 			};
 			name = Debug;
@@ -644,6 +695,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -652,6 +704,7 @@
 				INFOPLIST_FILE = EatProject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.tradehero.EatProject;
 				PRODUCT_NAME = EatProject;
 			};
 			name = Release;

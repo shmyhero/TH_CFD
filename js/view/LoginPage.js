@@ -305,8 +305,6 @@ var styles = StyleSheet.create({
 	},
 	fastLoginTitle: {
 		fontSize: 14,
-		height: 30,
-		lineHeight: 22,
 		textAlign: 'center',
 		color: '#9c9c9c',
 	},

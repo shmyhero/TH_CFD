@@ -1,7 +1,5 @@
 'use strict'
 
-//import * as WechatAPI from 'react-native-wx';
-
 var React = require('react-native');
 var Swiper = require('react-native-swiper')
 

@@ -17,6 +17,8 @@ var MyHomePage = require('./MyHomePage')
 var LoadingIndicator = require('./LoadingIndicator')
 var ColorConstants = require('../ColorConstants')
 var WechatModule = require('../module/WechatModule')
+var Button = require('./component/Button')
+
 
 var requestSuccess = true;
 const API = 'https://cn1.api.tradehero.mobi/api/'
@@ -32,6 +34,8 @@ var LoginPage = React.createClass({
 			animating: false,
 			phoneNumberBorderColor: ColorConstants.TITLE_BLUE,
 			validationCodeBorderColor: ColorConstants.DISABLED_GREY,
+			getValidationCodeButtonEnabled: false,
+			phoneLoginButtonEnabled: false
 		};
 	},
 
@@ -39,11 +43,27 @@ var LoginPage = React.createClass({
 		this.setState({
 			phoneNumber: text
 		})
+
+		var buttonEnabled = false
+		if (text.length == 11) {
+			buttonEnabled = true
+		} 
+		this.setState({
+			getValidationCodeButtonEnabled: buttonEnabled
+		})
 	},
 
 	setValidationCode: function(text: string) {
 		this.setState({
 			validationCode: text
+		})
+
+		var buttonEnabled = false
+		if (this.state.phoneNumber.length == 11 && text.length == 4) {
+			buttonEnabled = true
+		} 
+		this.setState({
+			phoneLoginButtonEnabled: buttonEnabled
 		})
 	},
 
@@ -62,7 +82,7 @@ var LoginPage = React.createClass({
 	},
 
 	getValidationCodePressed: function() {
-
+		console.log('get validation code pressed.')
 	},
 
 	wechatPressed: function() {
@@ -158,17 +178,16 @@ var LoginPage = React.createClass({
 								onFocus={() => this.phoneNumberOnFocus()}
 								onChangeText={(text) => this.setPhoneNumber(text)}
 								placeholder='手机号'
-								underlineColorAndroid='#ffffff'/>
+								underlineColorAndroid='#ffffff'
+								maxLength={11}/>
 						</View>
 						
-						<TouchableHighlight style={styles.getValidationCodeArea} ref='getValidationButton'
-							onPress={this.getValidationCodePressed}>
-							<View style={styles.getValidationTextView}>
-								<Text style={styles.getValidationText}>
-									验证
-								</Text>
-							</View>
-						</TouchableHighlight>
+						<Button style={styles.getValidationCodeArea}
+							enabled={this.state.getValidationCodeButtonEnabled}
+							onPress={this.getValidationCodePressed}
+							textContainerStyle={styles.getValidationTextView}
+							textStyle={styles.getValidationText}
+							text='验证' />
 					</View>
 
 					<View style={styles.rowWrapper}>
@@ -177,20 +196,18 @@ var LoginPage = React.createClass({
 								onFocus={() => this.validationCodeOnFocus()}
 								onChangeText={(text) => this.setValidationCode(text)}
 								placeholder='验证码' 
-								underlineColorAndroid='#ffffff'/>
+								underlineColorAndroid='#ffffff'
+								maxLength={4}/>
 						</View>
 					</View>
 
 					<View style={styles.rowWrapper}>
-						<TouchableHighlight style={styles.loginClickableArea}
-							disabled={true}
-							onPress={this.loginPressed}>
-							<View style={styles.loginTextView}>
-								<Text style={styles.loginText}>
-									登录
-								</Text>
-							</View>
-						</TouchableHighlight>
+						<Button style={styles.loginClickableArea}
+							enabled={this.state.phoneLoginButtonEnabled}
+							onPress={this.loginPressed}
+							textContainerStyle={styles.loginTextView}
+							textStyle={styles.loginText}
+							text='登录' />
 					</View>
 				</View>
 

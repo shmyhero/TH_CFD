@@ -17,7 +17,7 @@ var LogicData = require('../LogicData')
 
 var LandingPage = React.createClass({
 	loginPress: function() {
-		this.props.navigator.replace({
+		this.props.navigator.push({
 			name: 'login',
 		});
 	},

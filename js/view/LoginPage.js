@@ -16,6 +16,7 @@ var LogicData = require('../LogicData')
 var MyHomePage = require('./MyHomePage')
 var LoadingIndicator = require('./LoadingIndicator')
 var ColorConstants = require('../ColorConstants')
+var WechatModule = require('../module/WechatModule')
 
 var requestSuccess = true;
 const API = 'https://cn1.api.tradehero.mobi/api/'
@@ -64,20 +65,33 @@ var LoginPage = React.createClass({
 
 	},
 
+	wechatPressed: function() {
+		WechatModule.wechatLogin(
+			function() {
+				this.props.navigator.replace({
+					name: 'wechatLoginConfirm',
+				});
+			}.bind(this),
+			function() {
+
+			}.bind(this)
+		)
+	},
+
 	loginPressed: function() {
 
-		if (this.state.userName === '') {
-			this.state.userName = '13816631019';
+		if (this.state.phoneNumber === '') {
+			this.state.phoneNumber = '13816631019';
 		}
-		if (this.state.password === '') {
-			this.state.password = '1111111';
+		if (this.state.validationCode === '') {
+			this.state.validationCode = '1234';
 		}
 
 		this.setState({
 			animating: true
 		});
 
-		LogicData.setUserSecretKey(this.state.userName, this.state.password)
+		LogicData.setUserSecretKey(this.state.phoneNumber, this.state.validationCode)
 		fetch('https://cn1.api.tradehero.mobi/api/signupAndLogin', {
 			method: 'POST',
 			headers: {
@@ -147,14 +161,13 @@ var LoginPage = React.createClass({
 								underlineColorAndroid='#ffffff'/>
 						</View>
 						
-						<TouchableHighlight style={styles.getValidationCodeArea}
+						<TouchableHighlight style={styles.getValidationCodeArea} ref='getValidationButton'
 							onPress={this.getValidationCodePressed}>
 							<View style={styles.getValidationTextView}>
 								<Text style={styles.getValidationText}>
 									验证
 								</Text>
 							</View>
-							
 						</TouchableHighlight>
 					</View>
 
@@ -166,11 +179,11 @@ var LoginPage = React.createClass({
 								placeholder='验证码' 
 								underlineColorAndroid='#ffffff'/>
 						</View>
-						
 					</View>
 
 					<View style={styles.rowWrapper}>
 						<TouchableHighlight style={styles.loginClickableArea}
+							disabled={true}
 							onPress={this.loginPressed}>
 							<View style={styles.loginTextView}>
 								<Text style={styles.loginText}>

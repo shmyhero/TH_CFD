@@ -39,7 +39,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 	} else if (route.name === 'login') {
 		return (
 			<View style={{flex: 1}}>
-				<NavBar title="邮件登陆"/>
+				<NavBar title="手机验证" showBackButton='true' navigator={navigationOperations}/>
 				<LoginPage navigator={navigationOperations} code={route.code}/>
 			</View>
 		);

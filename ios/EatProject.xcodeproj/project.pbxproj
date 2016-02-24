@@ -677,6 +677,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -686,7 +687,7 @@
 				INFOPLIST_FILE = EatProject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.tradehero.EatProject;
+				PRODUCT_BUNDLE_IDENTIFIER = com.myhero.CFD;
 				PRODUCT_NAME = EatProject;
 			};
 			name = Debug;
@@ -704,7 +705,7 @@
 				INFOPLIST_FILE = EatProject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.tradehero.EatProject;
+				PRODUCT_BUNDLE_IDENTIFIER = com.myhero.CFD;
 				PRODUCT_NAME = EatProject;
 			};
 			name = Release;

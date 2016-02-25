@@ -1243,7 +1243,7 @@ return Array.from(arr);}};})(
 
 
 typeof global!=='undefined'?global:typeof self!=='undefined'?self:this);
-__d('EatProject/index.ios.js',function(global, require, module, exports) {  'use strict';
+__d('TH_CFD/index.ios.js',function(global, require, module, exports) {  'use strict';
 
 
 
@@ -1257,9 +1257,9 @@ AppRegistry=
 
 React.AppRegistry;var StyleSheet=React.StyleSheet;var Navigator=React.Navigator;var View=React.View;
 
-var AppNavigator=require('EatProject/AppNavigator.js');
+var AppNavigator=require('TH_CFD/AppNavigator.js');
 
-var EatProject=React.createClass({displayName:'EatProject',
+var TH_CFD=React.createClass({displayName:'TH_CFD',
 render:function(){
 var initialPage=this.props.initialPage;
 if(initialPage==null){
@@ -1278,7 +1278,7 @@ backgroundColor:'#eaeaea'}});
 
 
 
-AppRegistry.registerComponent('EatProject',function(){return EatProject;});
+AppRegistry.registerComponent('TH_CFD',function(){return TH_CFD;});
 });
 __d('react-native/Libraries/react-native/react-native.js',function(global, require, module, exports) {  'use strict';
 
@@ -59388,7 +59388,7 @@ return ReactMount.getNodeFromInstance(componentOrElement);}
 
 module.exports=findDOMNode;
 });
-__d('EatProject/AppNavigator.js',function(global, require, module, exports) {  'use strict';
+__d('TH_CFD/AppNavigator.js',function(global, require, module, exports) {  'use strict';
 
 var React=require('react-native/Libraries/react-native/react-native.js');var 
 
@@ -59398,13 +59398,13 @@ StyleSheet=
 
 React.StyleSheet;var Navigator=React.Navigator;var View=React.View;var BackAndroid=React.BackAndroid;
 
-var NavBar=require('EatProject/js/view/NavBar.js');
-var LandingPage=require('EatProject/js/view/LandingPage.js');
-var LoginPage=require('EatProject/js/view/LoginPage.js');
-var MyHomePage=require('EatProject/js/view/MyHomePage.js');
-var MyNotifications=require('EatProject/js/view/MyNotifications.js');
-var MySettings=require('EatProject/js/view/MySettings.js');
-var WechatLoginConfirmPage=require('EatProject/js/view/WechatLoginConfirmPage.js');
+var NavBar=require('TH_CFD/js/view/NavBar.js');
+var LandingPage=require('TH_CFD/js/view/LandingPage.js');
+var LoginPage=require('TH_CFD/js/view/LoginPage.js');
+var MyHomePage=require('TH_CFD/js/view/MyHomePage.js');
+var MyNotifications=require('TH_CFD/js/view/MyNotifications.js');
+var MySettings=require('TH_CFD/js/view/MySettings.js');
+var WechatLoginConfirmPage=require('TH_CFD/js/view/WechatLoginConfirmPage.js');
 
 var _navigator;
 BackAndroid.addEventListener('hardwareBackPress',function(){
@@ -59489,7 +59489,7 @@ backgroundColor:'#eaeaea'}});
 
 module.exports=AppNavigator;
 });
-__d('EatProject/js/view/NavBar.js',function(global, require, module, exports) {  'use strict';
+__d('TH_CFD/js/view/NavBar.js',function(global, require, module, exports) {  'use strict';
 
 var React=require('react-native/Libraries/react-native/react-native.js');var 
 
@@ -59503,7 +59503,7 @@ AppRegistry=
 
 React.AppRegistry;var StyleSheet=React.StyleSheet;var Navigator=React.Navigator;var Platform=React.Platform;var View=React.View;var Text=React.Text;var Image=React.Image;var TouchableHighlight=React.TouchableHighlight;
 
-var ColorConstants=require('EatProject/js/ColorConstants.js');
+var ColorConstants=require('TH_CFD/js/ColorConstants.js');
 
 var NavBar=React.createClass({displayName:'NavBar',
 backOnClick:function(){
@@ -59516,7 +59516,7 @@ onPress:this.backOnClick,
 underlayColor:'#1789d5'},
 React.createElement(Image,{
 style:styles.backButton,
-source:require('EatProject/images/icon_return_default.png')})):
+source:require('TH_CFD/images/icon_return_default.png')})):
 
 
 React.createElement(View,null);
@@ -59568,7 +59568,7 @@ color:'#ffffff'}});
 
 module.exports=NavBar;
 });
-__d('EatProject/js/ColorConstants.js',function(global, require, module, exports) {  'use strict';
+__d('TH_CFD/js/ColorConstants.js',function(global, require, module, exports) {  'use strict';
 
 var colors={
 TITLE_BLUE:'#1962dd',
@@ -59578,9 +59578,9 @@ BACKGROUND_GREY:'#f0f0f0'};
 
 module.exports=colors;
 });
-__d('EatProject/images/icon_return_default.png',function(global, require, module, exports) {  module.exports = require("AssetRegistry").registerAsset({"__packager_asset":true,"fileSystemLocation":"/Users/william/Projects/TH_CFD/images","httpServerLocation":"/assets/images","width":96,"height":96,"scales":[1],"files":["/Users/william/Projects/TH_CFD/images/icon_return_default.png"],"hash":"60dc1b49210517c2ac99c28e0bbe260f","name":"icon_return_default","type":"png"});
+__d('TH_CFD/images/icon_return_default.png',function(global, require, module, exports) {  module.exports = require("AssetRegistry").registerAsset({"__packager_asset":true,"fileSystemLocation":"/Users/william/Projects/TH_CFD/images","httpServerLocation":"/assets/images","width":96,"height":96,"scales":[1],"files":["/Users/william/Projects/TH_CFD/images/icon_return_default.png"],"hash":"60dc1b49210517c2ac99c28e0bbe260f","name":"icon_return_default","type":"png"});
 });
-__d('EatProject/js/view/LandingPage.js',function(global, require, module, exports) {  'use strict';
+__d('TH_CFD/js/view/LandingPage.js',function(global, require, module, exports) {  'use strict';
 
 var React=require('react-native/Libraries/react-native/react-native.js');
 var Swiper=require('react-native-swiper/dist/index.js');var 
@@ -59593,7 +59593,7 @@ StyleSheet=
 
 React.StyleSheet;var View=React.View;var Image=React.Image;var Text=React.Text;var TouchableHighlight=React.TouchableHighlight;
 
-var LogicData=require('EatProject/js/LogicData.js');
+var LogicData=require('TH_CFD/js/LogicData.js');
 
 var LandingPage=React.createClass({displayName:'LandingPage',
 loginPress:function(){
@@ -60197,7 +60197,7 @@ props.showsPagination&&(props.renderPagination?this.props.renderPagination(state
 this.renderTitle(),
 this.props.showsButtons&&this.renderButtons());}});
 });
-__d('EatProject/js/LogicData.js',function(global, require, module, exports) {  'use strict';
+__d('TH_CFD/js/LogicData.js',function(global, require, module, exports) {  'use strict';
 
 var userData={};
 var userSecretKey='';
@@ -60355,7 +60355,7 @@ __d('image!guide_screen3',function(global, require, module, exports) {  module.e
 });
 __d('image!guide_screen4',function(global, require, module, exports) {  module.exports = {"__packager_asset":true,"path":"/Users/william/Projects/TH_CFD/android/app/src/main/res/drawable/guide_screen4.png","uri":"guide_screen4","width":720,"height":884,"deprecated":true};
 });
-__d('EatProject/js/view/LoginPage.js',function(global, require, module, exports) {  'use strict';
+__d('TH_CFD/js/view/LoginPage.js',function(global, require, module, exports) {  'use strict';
 
 var React=require('react-native/Libraries/react-native/react-native.js');var 
 
@@ -60369,12 +60369,12 @@ StyleSheet=
 
 
 React.StyleSheet;var Platform=React.Platform;var View=React.View;var TextInput=React.TextInput;var Text=React.Text;var TouchableHighlight=React.TouchableHighlight;var Alert=React.Alert;var Dimensions=React.Dimensions;var Image=React.Image;
-var LogicData=require('EatProject/js/LogicData.js');
-var MyHomePage=require('EatProject/js/view/MyHomePage.js');
-var LoadingIndicator=require('EatProject/js/view/LoadingIndicator.ios.js');
-var ColorConstants=require('EatProject/js/ColorConstants.js');
-var WechatModule=require('EatProject/js/module/WechatModule.js');
-var Button=require('EatProject/js/view/component/Button.js');
+var LogicData=require('TH_CFD/js/LogicData.js');
+var MyHomePage=require('TH_CFD/js/view/MyHomePage.js');
+var LoadingIndicator=require('TH_CFD/js/view/LoadingIndicator.ios.js');
+var ColorConstants=require('TH_CFD/js/ColorConstants.js');
+var WechatModule=require('TH_CFD/js/module/WechatModule.js');
+var Button=require('TH_CFD/js/view/component/Button.js');
 
 
 var requestSuccess=true;
@@ -60582,7 +60582,7 @@ onPress:this.wechatPressed},
 React.createElement(View,null,
 React.createElement(Image,{
 style:styles.wechatIcon,
-source:require('EatProject/images/wechat_icon.png')}),
+source:require('TH_CFD/images/wechat_icon.png')}),
 React.createElement(Text,{style:styles.wechatTitle},'微信'))))));}});
 
 
@@ -60717,7 +60717,7 @@ alignSelf:'center'}});
 
 module.exports=LoginPage;
 });
-__d('EatProject/js/view/MyHomePage.js',function(global, require, module, exports) {  'use strict';
+__d('TH_CFD/js/view/MyHomePage.js',function(global, require, module, exports) {  'use strict';
 
 var React=require('react-native/Libraries/react-native/react-native.js');var 
 
@@ -60729,7 +60729,7 @@ AppRegistry=
 
 
 React.AppRegistry;var StyleSheet=React.StyleSheet;var ListView=React.ListView;var Text=React.Text;var Image=React.Image;var View=React.View;var TouchableHighlight=React.TouchableHighlight;
-var LogicData=require('EatProject/js/LogicData.js');
+var LogicData=require('TH_CFD/js/LogicData.js');
 
 
 var MyHomePage=React.createClass({displayName:'MyHomePage',
@@ -60826,7 +60826,7 @@ underlayColor:'#d0d0d0'},
 React.createElement(View,{style:styles.toa},
 React.createElement(Image,{
 style:styles.toaIcon,
-source:require('EatProject/images/icon_me_dynamic.png')}),
+source:require('TH_CFD/images/icon_me_dynamic.png')}),
 React.createElement(Text,{style:styles.toaName},'我的动态'))),
 
 
@@ -60842,7 +60842,7 @@ underlayColor:'#d0d0d0'},
 React.createElement(View,{style:styles.toa},
 React.createElement(Image,{
 style:styles.toaIcon,
-source:require('EatProject/images/icon_me_message.png')}),
+source:require('TH_CFD/images/icon_me_message.png')}),
 React.createElement(Text,{style:styles.toaName},'通知'))),
 
 
@@ -60858,7 +60858,7 @@ underlayColor:'#d0d0d0'},
 React.createElement(View,{style:styles.toa},
 React.createElement(Image,{
 style:styles.toaIcon,
-source:require('EatProject/images/icon_me_setting.png')}),
+source:require('TH_CFD/images/icon_me_setting.png')}),
 React.createElement(Text,{style:styles.toaName},'设置'))),
 
 
@@ -60985,13 +60985,13 @@ marginLeft:30}});
 
 module.exports=MyHomePage;
 });
-__d('EatProject/images/icon_me_dynamic.png',function(global, require, module, exports) {  module.exports = require("AssetRegistry").registerAsset({"__packager_asset":true,"fileSystemLocation":"/Users/william/Projects/TH_CFD/images","httpServerLocation":"/assets/images","width":44,"height":44,"scales":[1],"files":["/Users/william/Projects/TH_CFD/images/icon_me_dynamic.png"],"hash":"60dc1b49210517c2ac99c28e0bbe260f","name":"icon_me_dynamic","type":"png"});
+__d('TH_CFD/images/icon_me_dynamic.png',function(global, require, module, exports) {  module.exports = require("AssetRegistry").registerAsset({"__packager_asset":true,"fileSystemLocation":"/Users/william/Projects/TH_CFD/images","httpServerLocation":"/assets/images","width":44,"height":44,"scales":[1],"files":["/Users/william/Projects/TH_CFD/images/icon_me_dynamic.png"],"hash":"60dc1b49210517c2ac99c28e0bbe260f","name":"icon_me_dynamic","type":"png"});
 });
-__d('EatProject/images/icon_me_message.png',function(global, require, module, exports) {  module.exports = require("AssetRegistry").registerAsset({"__packager_asset":true,"fileSystemLocation":"/Users/william/Projects/TH_CFD/images","httpServerLocation":"/assets/images","width":44,"height":44,"scales":[1],"files":["/Users/william/Projects/TH_CFD/images/icon_me_message.png"],"hash":"60dc1b49210517c2ac99c28e0bbe260f","name":"icon_me_message","type":"png"});
+__d('TH_CFD/images/icon_me_message.png',function(global, require, module, exports) {  module.exports = require("AssetRegistry").registerAsset({"__packager_asset":true,"fileSystemLocation":"/Users/william/Projects/TH_CFD/images","httpServerLocation":"/assets/images","width":44,"height":44,"scales":[1],"files":["/Users/william/Projects/TH_CFD/images/icon_me_message.png"],"hash":"60dc1b49210517c2ac99c28e0bbe260f","name":"icon_me_message","type":"png"});
 });
-__d('EatProject/images/icon_me_setting.png',function(global, require, module, exports) {  module.exports = require("AssetRegistry").registerAsset({"__packager_asset":true,"fileSystemLocation":"/Users/william/Projects/TH_CFD/images","httpServerLocation":"/assets/images","width":44,"height":44,"scales":[1],"files":["/Users/william/Projects/TH_CFD/images/icon_me_setting.png"],"hash":"60dc1b49210517c2ac99c28e0bbe260f","name":"icon_me_setting","type":"png"});
+__d('TH_CFD/images/icon_me_setting.png',function(global, require, module, exports) {  module.exports = require("AssetRegistry").registerAsset({"__packager_asset":true,"fileSystemLocation":"/Users/william/Projects/TH_CFD/images","httpServerLocation":"/assets/images","width":44,"height":44,"scales":[1],"files":["/Users/william/Projects/TH_CFD/images/icon_me_setting.png"],"hash":"60dc1b49210517c2ac99c28e0bbe260f","name":"icon_me_setting","type":"png"});
 });
-__d('EatProject/js/view/LoadingIndicator.ios.js',function(global, require, module, exports) {  'use strict';
+__d('TH_CFD/js/view/LoadingIndicator.ios.js',function(global, require, module, exports) {  'use strict';
 
 var React=require('react-native/Libraries/react-native/react-native.js');var 
 
@@ -61023,14 +61023,14 @@ var styles=StyleSheet.create({});
 
 module.exports=LoadingIndicator;
 });
-__d('EatProject/js/module/WechatModule.js',function(global, require, module, exports) {  'use strict';Object.defineProperty(exports,"__esModule",{value:true});exports.
+__d('TH_CFD/js/module/WechatModule.js',function(global, require, module, exports) {  'use strict';Object.defineProperty(exports,"__esModule",{value:true});exports.
 
 
 
 
 
 
-wechatLogin=wechatLogin;var _reactNativeWx=require('react-native-wx/index.js');var WechatAPI=babelHelpers.interopRequireWildcard(_reactNativeWx);var LogicData=require('EatProject/js/LogicData.js');var mSuccessCallback=null;var mErrorCallback=null;function wechatLogin(successCallback,errorCallback){
+wechatLogin=wechatLogin;var _reactNativeWx=require('react-native-wx/index.js');var WechatAPI=babelHelpers.interopRequireWildcard(_reactNativeWx);var LogicData=require('TH_CFD/js/LogicData.js');var mSuccessCallback=null;var mErrorCallback=null;function wechatLogin(successCallback,errorCallback){
 mSuccessCallback=successCallback;
 mErrorCallback=errorCallback;
 
@@ -62304,7 +62304,7 @@ this['ES6Promise']=lib$es6$promise$umd$$ES6Promise;}
 lib$es6$promise$polyfill$$default();}).
 call(this);
 });
-__d('EatProject/js/view/component/Button.js',function(global, require, module, exports) {  'use strict';
+__d('TH_CFD/js/view/component/Button.js',function(global, require, module, exports) {  'use strict';
 
 var React=require('react-native/Libraries/react-native/react-native.js');var 
 
@@ -62314,7 +62314,7 @@ StyleSheet=
 
 
 React.StyleSheet;var View=React.View;var Text=React.Text;var TouchableHighlight=React.TouchableHighlight;
-var ColorConstants=require('EatProject/js/ColorConstants.js');
+var ColorConstants=require('TH_CFD/js/ColorConstants.js');
 
 var Button=React.createClass({displayName:'Button',
 
@@ -62351,9 +62351,9 @@ this.props.text))));}});
 
 module.exports=Button;
 });
-__d('EatProject/images/wechat_icon.png',function(global, require, module, exports) {  module.exports = require("AssetRegistry").registerAsset({"__packager_asset":true,"fileSystemLocation":"/Users/william/Projects/TH_CFD/images","httpServerLocation":"/assets/images","width":78,"height":78,"scales":[1],"files":["/Users/william/Projects/TH_CFD/images/wechat_icon.png"],"hash":"074d858146c259a32a373ef93423ec45","name":"wechat_icon","type":"png"});
+__d('TH_CFD/images/wechat_icon.png',function(global, require, module, exports) {  module.exports = require("AssetRegistry").registerAsset({"__packager_asset":true,"fileSystemLocation":"/Users/william/Projects/TH_CFD/images","httpServerLocation":"/assets/images","width":78,"height":78,"scales":[1],"files":["/Users/william/Projects/TH_CFD/images/wechat_icon.png"],"hash":"074d858146c259a32a373ef93423ec45","name":"wechat_icon","type":"png"});
 });
-__d('EatProject/js/view/MyNotifications.js',function(global, require, module, exports) {  'use strict';
+__d('TH_CFD/js/view/MyNotifications.js',function(global, require, module, exports) {  'use strict';
 
 var React=require('react-native/Libraries/react-native/react-native.js');var 
 
@@ -62365,7 +62365,7 @@ StyleSheet=
 
 React.StyleSheet;var View=React.View;var Image=React.Image;var Text=React.Text;var ListView=React.ListView;
 
-var LogicData=require('EatProject/js/LogicData.js');
+var LogicData=require('TH_CFD/js/LogicData.js');
 
 var requestSuccess=true;
 var ds=new ListView.DataSource({rowHasChanged:function(r1,r2){return r1!==r2;}});
@@ -62491,7 +62491,7 @@ borderColor:'#d0d0d0'}});
 
 module.exports=MyNotifications;
 });
-__d('EatProject/js/view/MySettings.js',function(global, require, module, exports) {  'use strict';
+__d('TH_CFD/js/view/MySettings.js',function(global, require, module, exports) {  'use strict';
 
 var React=require('react-native/Libraries/react-native/react-native.js');var 
 
@@ -62527,7 +62527,7 @@ React.createElement(Text,{style:styles.rowText},'去评分'),
 
 React.createElement(Image,{
 style:styles.rowImage,
-source:require('EatProject/images/icon_arrow_right.png')})),
+source:require('TH_CFD/images/icon_arrow_right.png')})),
 
 
 React.createElement(View,{style:styles.line}),
@@ -62538,7 +62538,7 @@ React.createElement(Text,{style:styles.rowText},'FAQ'),
 
 React.createElement(Image,{
 style:styles.rowImage,
-source:require('EatProject/images/icon_arrow_right.png')})),
+source:require('TH_CFD/images/icon_arrow_right.png')})),
 
 
 React.createElement(View,{style:styles.lineSicker}),
@@ -62571,7 +62571,7 @@ React.createElement(Text,{style:styles.rowText},'关于'),
 
 React.createElement(Image,{
 style:styles.rowImage,
-source:require('EatProject/images/icon_arrow_right.png')})),
+source:require('TH_CFD/images/icon_arrow_right.png')})),
 
 
 React.createElement(View,{style:styles.lineSicker}),
@@ -62652,9 +62652,9 @@ color:'#ff0000'}});
 
 module.exports=MySettings;
 });
-__d('EatProject/images/icon_arrow_right.png',function(global, require, module, exports) {  module.exports = require("AssetRegistry").registerAsset({"__packager_asset":true,"fileSystemLocation":"/Users/william/Projects/TH_CFD/images","httpServerLocation":"/assets/images","width":15,"height":25,"scales":[1],"files":["/Users/william/Projects/TH_CFD/images/icon_arrow_right.png"],"hash":"60dc1b49210517c2ac99c28e0bbe260f","name":"icon_arrow_right","type":"png"});
+__d('TH_CFD/images/icon_arrow_right.png',function(global, require, module, exports) {  module.exports = require("AssetRegistry").registerAsset({"__packager_asset":true,"fileSystemLocation":"/Users/william/Projects/TH_CFD/images","httpServerLocation":"/assets/images","width":15,"height":25,"scales":[1],"files":["/Users/william/Projects/TH_CFD/images/icon_arrow_right.png"],"hash":"60dc1b49210517c2ac99c28e0bbe260f","name":"icon_arrow_right","type":"png"});
 });
-__d('EatProject/js/view/WechatLoginConfirmPage.js',function(global, require, module, exports) {  'use strict';
+__d('TH_CFD/js/view/WechatLoginConfirmPage.js',function(global, require, module, exports) {  'use strict';
 
 var React=require('react-native/Libraries/react-native/react-native.js');var 
 
@@ -62666,7 +62666,7 @@ AppRegistry=
 
 
 React.AppRegistry;var StyleSheet=React.StyleSheet;var ListView=React.ListView;var Text=React.Text;var Image=React.Image;var View=React.View;var TouchableHighlight=React.TouchableHighlight;
-var LogicData=require('EatProject/js/LogicData.js');
+var LogicData=require('TH_CFD/js/LogicData.js');
 
 
 var WechatLoginConfirmPage=React.createClass({displayName:'WechatLoginConfirmPage',
@@ -62719,5 +62719,5 @@ fontWeight:'bold'}});
 module.exports=WechatLoginConfirmPage;
 });
 ;require("InitializeJavaScriptAppEngine");
-;require("EatProject/index.ios.js");
+;require("TH_CFD/index.ios.js");
 __SSTOKENSTRING = "@generated SignedSource<<e3bd29b9da4d258a19edede795e1c32f>>";

@@ -14,7 +14,7 @@ var {
 
 var AppNavigator = require('./AppNavigator')
 
-var EatProject = React.createClass({
+var TH_CFD = React.createClass({
   render: function() {
     var initialPage = this.props.initialPage;
     if (initialPage == null) {
@@ -33,4 +33,4 @@ var styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('EatProject', () => EatProject);
+AppRegistry.registerComponent('TH_CFD', () => TH_CFD);

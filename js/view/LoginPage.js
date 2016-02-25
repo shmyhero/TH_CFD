@@ -11,22 +11,28 @@ var {
 	Alert,
 	Dimensions,
 	Image,
+	TimerMixin,
 } = React;
 var LogicData = require('../LogicData')
 var MyHomePage = require('./MyHomePage')
 var LoadingIndicator = require('./LoadingIndicator')
 var ColorConstants = require('../ColorConstants')
+var NetConstants = require('../NetConstants')
 var WechatModule = require('../module/WechatModule')
 var Button = require('./component/Button')
-
-
-var requestSuccess = true;
-const API = 'https://cn1.api.tradehero.mobi/api/'
 
 var rowHeight = 40;
 var fontSize = 16;
 
 var LoginPage = React.createClass({
+	mixins: [TimerMixin],
+	// componentDidMount: function() {
+	// 	this.setTimeout(
+	// 		() => { console.log('I do not leak!'); },
+	// 		500
+	// 	);
+	// }
+
 	getInitialState: function() {
 		return {
 			phoneNumber: '',
@@ -82,20 +88,61 @@ var LoginPage = React.createClass({
 	},
 
 	getValidationCodePressed: function() {
-		console.log('get validation code pressed.')
+		var url = NetConstants.GET_PHONE_CODE_API + '?' + NetConstants.PARAMETER_PHONE + "=" + this.state.phoneNumber
+		console.log(url)
+		fetch(url, {
+			method: 'POST',
+
+		})
+		.then((response) => {
+			// Nothing to do.
+		})
 	},
 
 	wechatPressed: function() {
 		WechatModule.wechatLogin(
 			function() {
-				this.props.navigator.replace({
-					name: 'wechatLoginConfirm',
-				});
+				this.wechatLogin()
 			}.bind(this),
-			function() {
 
-			}.bind(this)
+			function() {}.bind(this)
 		)
+	},
+
+	wechatLogin: function() {
+		var requestSuccess = true;
+		var wechatUserData = LogicData.getWechatUserData()
+		console.log('Begin wechatLogin')
+
+		fetch(NetConstants.WECHAT_LOGIN_API, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json; charset=UTF-8'
+			},
+			body: JSON.stringify({
+				openid: wechatUserData.openid,
+				unionid: wechatUserData.unionid,
+				nickname: wechatUserData.nickname,
+				headimgurl: wechatUserData.headimgurl,
+			})
+		})
+		.then((response) => {
+			console.log(response)
+			if (response.status === 200) {
+				requestSuccess = true;
+			} else {
+				requestSuccess = false;
+			}
+
+			return response.json()
+		})
+		.then((responseJson) => {
+			if (requestSuccess && responseJson.success == true) {
+				this.loginSuccess(responseJson);
+			} else {
+				Alert.alert('提示','请重试');
+			}
+		});
 	},
 
 	loginPressed: function() {
@@ -111,32 +158,23 @@ var LoginPage = React.createClass({
 			animating: true
 		});
 
-		LogicData.setUserSecretKey(this.state.phoneNumber, this.state.validationCode)
-		fetch('https://cn1.api.tradehero.mobi/api/signupAndLogin', {
+		var requestSuccess = true;
+
+		fetch(NetConstants.PHONE_NUM_LOGIN_API, {
 			method: 'POST',
 			headers: {
-				'Authorization': LogicData.getUserSecretKey(),
-				'TH-Client-Version': '4.2.0.10068',
-				'TH-Language-Code': 'zh-CN',
-				'TH-Client-Type': 6,
 				'Content-Type': 'application/json; charset=UTF-8'
 			},
 			body: JSON.stringify({
-				device_access_token: '865624026741091',
-				clientType: 6,
-				clientVersion: '4.2.0.10068',
-				deviceToken: ' ',
-				channelType: 1,
-				isEmailLogin: true
-		    })
+				phone: this.state.phoneNumber,
+				verifyCode: this.state.validationCode,
+			})
 		})
 		.then((response) => {
 			console.log(response)
 			if (response.status === 200) {
-				console.log('success')
 				requestSuccess = true;
 			} else {
-				console.log('failed')
 				requestSuccess = false;
 			}
 			
@@ -147,10 +185,10 @@ var LoginPage = React.createClass({
 			return response.json()
 		})
 		.then((responseJson) => {
-			if (requestSuccess) {
+			if (requestSuccess && responseJson.success == true) {
 				this.loginSuccess(responseJson);
 			} else {
-				Alert.alert('提示',responseJson.Message);
+				Alert.alert('提示','请输入正确的验证码');
 			}
 		});
 	},
@@ -160,7 +198,7 @@ var LoginPage = React.createClass({
 		console.log(LogicData.getUserData());
 
 		this.props.navigator.replace({
-			name: 'myhome',
+			name: 'updateUserInfo',
 		});
 	},
 

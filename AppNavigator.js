@@ -11,6 +11,7 @@ var {
 var NavBar = require('./js/view/NavBar')
 var LandingPage = require('./js/view/LandingPage')
 var LoginPage = require('./js/view/LoginPage')
+var UpdateUserInfoPage = require('./js/view/UpdateUserInfoPage')
 var MyHomePage = require('./js/view/MyHomePage')
 var MyNotifications = require('./js/view/MyNotifications')
 var MySettings = require('./js/view/MySettings')
@@ -39,8 +40,21 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 	} else if (route.name === 'login') {
 		return (
 			<View style={{flex: 1}}>
-				<NavBar title="手机验证" showBackButton='true' navigator={navigationOperations}/>
-				<LoginPage navigator={navigationOperations} code={route.code}/>
+				<NavBar title="手机验证" showBackButton={true} navigator={navigationOperations}/>
+				<LoginPage navigator={navigationOperations}/>
+			</View>
+		);
+	} else if (route.name === 'updateUserInfo') {
+		var rightContainerOnClick = function() {
+			navigationOperations.replace({
+				name: 'wechatLoginConfirm',
+			});
+		}
+
+		return (
+			<View style={{flex: 1}}>
+				<NavBar title="我的昵称" showTextOnRight={true} textOnRight='跳过' rightContainerOnClick={rightContainerOnClick}/>
+				<UpdateUserInfoPage navigator={navigationOperations}/>
 			</View>
 		);
 	} else if (route.name === 'myhome') {
@@ -67,7 +81,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 	} else if (route.name === 'wechatLoginConfirm') {
 		return (
 			<View style={{flex: 1}}>
-				<NavBar title="用户名设置"/>
+				<NavBar title="首页"/>
 				<WechatLoginConfirmPage navigator={navigationOperations} />
 			</View>
 		);

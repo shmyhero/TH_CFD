@@ -16,7 +16,8 @@ var LogicData = require('../LogicData')
 var WechatLoginConfirmPage = React.createClass({
 	getInitialState: function() {
 		return {
-			userData: LogicData.getWechatUserData()
+			wechatData: LogicData.getWechatUserData(),
+			userData: LogicData.getUserData(),
 		};
 	},
 
@@ -26,10 +27,18 @@ var WechatLoginConfirmPage = React.createClass({
 
 				<Image
 					style={styles.logo}
-					source={{uri: this.state.userData.headimgurl}} />
+					source={{uri: this.state.wechatData.headimgurl}} />
 
 				<Text style={styles.displayName}>
-					{this.state.userData.nickname}
+					{this.state.wechatData.nickname}
+				</Text>
+
+				<Text style={styles.userId}>
+					UserId: {this.state.userData.userId}
+				</Text>
+
+				<Text style={styles.token}>
+					Token: {this.state.userData.token}
 				</Text>
 
 			</View>
@@ -54,6 +63,16 @@ var styles = StyleSheet.create({
 		marginRight: 10,
 	},
 	displayName: {
+		fontSize: 15,
+		textAlign: 'center',
+		fontWeight: 'bold',
+	},
+	userId: {
+		fontSize: 15,
+		textAlign: 'center',
+		fontWeight: 'bold',
+	},
+	token: {
 		fontSize: 15,
 		textAlign: 'center',
 		fontWeight: 'bold',

@@ -1,20 +1,19 @@
 'use strict'
 
 var userData = {};
-var userSecretKey = '';
 var wechatAuthData = {};
 var wechatUserData = {};
 
 var LogicData = {
 
-	setUserSecretKey: function(userName, password) {
-		userSecretKey = 'Basic ' + base64_encode(userName + ':' + password);
-		console.log(userSecretKey);
-	},
+	// setUserSecretKey: function(userName, password) {
+	// 	userSecretKey = 'Basic ' + base64_encode(userName + ':' + password);
+	// 	console.log(userSecretKey);
+	// },
 
-	getUserSecretKey: function() {
-		return userSecretKey;
-	},
+	// getUserSecretKey: function() {
+	// 	return userSecretKey;
+	// },
 
 	setUserData: function(data) {
 		userData = data;

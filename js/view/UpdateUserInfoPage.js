@@ -55,7 +55,8 @@ var UpdateUserInfoPage = React.createClass({
 			if (requestSuccess) {
 				originalName = responseJson.nickname
 				this.setState({
-					nickName: originalName
+					nickName: originalName ,
+					saveButtonEnabled: true
 				});
 			}
 		});
@@ -67,7 +68,7 @@ var UpdateUserInfoPage = React.createClass({
 		})
 
 		var buttonEnabled = false
-		if (name.length > 0 && name !== originalName) {
+		if (name.length > 0) {
 			buttonEnabled = true
 		} 
 		this.setState({

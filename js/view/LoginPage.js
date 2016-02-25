@@ -15,6 +15,7 @@ var {
 } = React;
 var LogicData = require('../LogicData')
 var MyHomePage = require('./MyHomePage')
+var StorageModule = require('../module/StorageModule')
 var LoadingIndicator = require('./LoadingIndicator')
 var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
@@ -33,8 +34,18 @@ var LoginPage = React.createClass({
 	// 	);
 	// }
 
+	componentWillMount: function() {
+		WechatModule.isWechatInstalled()
+		.then((installed) => {
+			this.setState({
+				wechatInstalled: installed
+			})
+		})
+	},
+
 	getInitialState: function() {
 		return {
+			wechatInstalled: false,
 			phoneNumber: '',
 			validationCode: '',
 			animating: false,
@@ -194,12 +205,43 @@ var LoginPage = React.createClass({
 	},
 
 	loginSuccess: function(userData) {
+		StorageModule.setUserData(JSON.stringify(userData))
 		LogicData.setUserData(userData);
 		console.log(LogicData.getUserData());
 
 		this.props.navigator.replace({
 			name: 'updateUserInfo',
 		});
+	},
+
+	renderFastLogin: function() {
+		if (this.state.wechatInstalled) {
+			return (
+				<View style={styles.fastLoginContainer}>
+					<View style={styles.fastLoginRowWrapper}>
+						<View style={styles.line}/>
+						<Text style={styles.fastLoginTitle}>
+							快速登录
+						</Text>
+						<View style={styles.line}/>
+					</View>
+
+					<TouchableHighlight style={styles.wechatClickableArea}
+						onPress={this.wechatPressed}>
+						<View>
+							<Image 
+								style={styles.wechatIcon} 
+								source={require('../../images/wechat_icon.png')}/>
+							<Text style={styles.wechatTitle}>
+								微信
+							</Text>
+						</View>
+					</TouchableHighlight>
+				</View>
+			);
+		} else {
+			return <View />;
+		}
 	},
 
 	render: function() {
@@ -249,27 +291,7 @@ var LoginPage = React.createClass({
 					</View>
 				</View>
 
-				<View style={styles.fastLoginContainer}>
-					<View style={styles.fastLoginRowWrapper}>
-						<View style={styles.line}/>
-						<Text style={styles.fastLoginTitle}>
-							快速登录
-						</Text>
-						<View style={styles.line}/>
-					</View>
-
-					<TouchableHighlight style={styles.wechatClickableArea}
-						onPress={this.wechatPressed}>
-						<View>
-							<Image 
-								style={styles.wechatIcon} 
-								source={require('../../images/wechat_icon.png')}/>
-							<Text style={styles.wechatTitle}>
-								微信
-							</Text>
-						</View>
-					</TouchableHighlight>
-				</View>
+				{this.renderFastLogin()}
 			</View>				
 		)
 	}

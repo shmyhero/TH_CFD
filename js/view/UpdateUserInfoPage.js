@@ -33,11 +33,12 @@ var UpdateUserInfoPage = React.createClass({
 
 	componentDidMount: function() {
 		var requestSuccess = true
+		var userData = LogicData.getUserData()
 
 		fetch(NetConstants.GET_USER_INFO_API, {
 			method: 'GET',
 			headers: {
-				'Authorization': '',
+				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 			},
 		})
 		.then((response) => {
@@ -76,10 +77,14 @@ var UpdateUserInfoPage = React.createClass({
 
 	savePressed: function() {
 		var requestSuccess = true
+		var userData = LogicData.getUserData()
 
 		var url = NetConstants.SET_USER_NICKNAME_API + '?' + NetConstants.PARAMETER_NICKNAME + '=' + this.state.nickName
 		fetch(url, {
 			method: 'POST',
+			headers: {
+				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+			},
 		})
 		.then((response) => {
 			console.log(response)

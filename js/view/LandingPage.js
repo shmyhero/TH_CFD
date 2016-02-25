@@ -12,12 +12,40 @@ var {
 } = React;
 
 var LogicData = require('../LogicData')
+var StorageModule = require('../module/StorageModule')
 
 var LandingPage = React.createClass({
+
+	getInitialState: function() {
+		return {
+			useTokenAvailable: false
+		};
+	},
+
+	componentDidMount: function() {
+		StorageModule.loadUserData()
+		.then((value) => {
+			if (value !== null) {
+				console.log(value)
+				LogicData.setUserData(JSON.parse(value))
+
+				this.setState({
+					useTokenAvailable: true
+				})
+			}
+		})
+	},
+
 	loginPress: function() {
-		this.props.navigator.push({
-			name: 'login',
-		});
+		if (this.state.useTokenAvailable) {
+			this.props.navigator.replace({
+				name: 'wechatLoginConfirm',
+			});	
+		} else {
+			this.props.navigator.replace({
+				name: 'login',
+			});	
+		}
 	},
 
 	render: function() {

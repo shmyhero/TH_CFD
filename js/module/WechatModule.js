@@ -5,14 +5,23 @@ var LogicData = require('../LogicData')
 
 var mSuccessCallback = null
 var mErrorCallback = null
+
+export function isWechatInstalled() {
+	return WechatAPI.isWXAppInstalled()
+
+}
+
 export function wechatLogin(successCallback, errorCallback) {
 	mSuccessCallback = successCallback
 	mErrorCallback = errorCallback
 
-	if (WechatAPI.isWXAppInstalled()) {
-		WechatAPI.login()
-		.then((response) => wechatLoginCodeHandler(response))
-	}
+	WechatAPI.isWXAppInstalled()
+	.then((installed) => {
+		if (installed) {
+			WechatAPI.login()
+			.then((response) => wechatLoginCodeHandler(response))
+		}
+	})
 }
 
 function wechatLoginCodeHandler(response) {

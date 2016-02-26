@@ -22,16 +22,26 @@ var fontSize = 16;
 
 var originalName = null;
 
+var NOTE_STATE_NORMAL = 0;
+var NOTE_STATE_NORMAL_WECHAT = 1;
+
 var UpdateUserInfoPage = React.createClass({
 
 	getInitialState: function() {
 		return {
+			noteState: NOTE_STATE_NORMAL,
 			nickName: '',
-			saveButtonEnabled: false
+			saveButtonEnabled: false,
 		};
 	},
 
 	componentDidMount: function() {
+		if (LogicData.getWechatUserData().nickname !== undefined) {
+			this.setState({
+				noteState: NOTE_STATE_NORMAL_WECHAT,
+			})
+		}
+
 		var requestSuccess = true
 		var userData = LogicData.getUserData()
 
@@ -99,6 +109,26 @@ var UpdateUserInfoPage = React.createClass({
 		})
 	},
 
+	renderNotes: function() {
+		if (this.state.noteState == NOTE_STATE_NORMAL) {
+			return (
+				<View style={styles.noteView}>
+					<Text style={styles.nickNameText}>
+						请设置一个您喜欢的昵称！
+					</Text>
+				</View>
+			);
+		} else if(this.state.noteState == NOTE_STATE_NORMAL_WECHAT) {
+			return (
+				<View style={styles.noteView}>
+					<Text style={styles.nickNameText}>
+						微信昵称将作为您的昵称，你也可以修改！
+					</Text>
+				</View>
+			);
+		}
+	},
+
 	render: function() {
 		var {height, width} = Dimensions.get('window');
 
@@ -120,6 +150,8 @@ var UpdateUserInfoPage = React.createClass({
 							underlineColorAndroid='#ffffff'
 							value={this.state.nickName}/>
 					</View>
+
+					{this.renderNotes()}
 
 					<View style={styles.rowWrapper}>
 						<Button style={styles.saveClickableArea}
@@ -172,7 +204,7 @@ var styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'stretch',
 		justifyContent: 'space-around',
-		paddingTop: 20,
+		paddingTop: 10,
 		paddingBottom: 5,
 		paddingLeft: 10,
 		paddingRight: 10,
@@ -208,6 +240,16 @@ var styles = StyleSheet.create({
 		fontSize: fontSize,
 		textAlign: 'center',
 		color: '#ffffff',
+	},
+	noteView: {
+		alignSelf: 'flex-start',
+		marginLeft: 10,
+		marginTop: 10,
+	},
+	nickNameText: {
+		fontSize: 14,
+		textAlign: 'center',
+		color: '#c7c7cd',
 	},
 });
 

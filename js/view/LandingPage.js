@@ -50,9 +50,14 @@ var LandingPage = React.createClass({
 	logoutPress: function() {
 		if (this.state.useTokenAvailable) {
 			StorageModule.removeUserData()
-			this.setState({
+			.then(() => {
+				this.setState({
 					useTokenAvailable: false
-			});
+				});
+			})
+			.catch((e) => {
+				
+			})
 		}
 	},
 

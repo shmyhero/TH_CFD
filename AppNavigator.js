@@ -45,15 +45,9 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 			</View>
 		);
 	} else if (route.name === 'updateUserInfo') {
-		var rightContainerOnClick = function() {
-			navigationOperations.replace({
-				name: 'wechatLoginConfirm',
-			});
-		}
-
 		return (
 			<View style={{flex: 1}}>
-				<NavBar title="设置昵称" showTextOnRight={true} textOnRight='跳过' rightContainerOnClick={rightContainerOnClick}/>
+				<NavBar title="设置昵称"/>
 				<UpdateUserInfoPage navigator={navigationOperations}/>
 			</View>
 		);

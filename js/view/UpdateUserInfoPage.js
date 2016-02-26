@@ -113,7 +113,7 @@ var UpdateUserInfoPage = React.createClass({
 		if (this.state.noteState == NOTE_STATE_NORMAL) {
 			return (
 				<View style={styles.noteView}>
-					<Text style={styles.nickNameText}>
+					<Text style={styles.noteText}>
 						请设置一个您喜欢的昵称！
 					</Text>
 				</View>
@@ -121,7 +121,7 @@ var UpdateUserInfoPage = React.createClass({
 		} else if(this.state.noteState == NOTE_STATE_NORMAL_WECHAT) {
 			return (
 				<View style={styles.noteView}>
-					<Text style={styles.nickNameText}>
+					<Text style={styles.noteText}>
 						微信昵称将作为您的昵称，你也可以修改！
 					</Text>
 				</View>
@@ -246,7 +246,7 @@ var styles = StyleSheet.create({
 		marginLeft: 10,
 		marginTop: 10,
 	},
-	nickNameText: {
+	noteText: {
 		fontSize: 14,
 		textAlign: 'center',
 		color: '#c7c7cd',

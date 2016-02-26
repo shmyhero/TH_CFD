@@ -18,6 +18,7 @@ var TimerMixin = require('react-timer-mixin');
 var LogicData = require('../LogicData')
 var MyHomePage = require('./MyHomePage')
 var StorageModule = require('../module/StorageModule')
+var NetworkModule = require('../module/NetworkModule')
 var LoadingIndicator = require('./LoadingIndicator')
 var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
@@ -97,14 +98,18 @@ var LoginPage = React.createClass({
 	},
 
 	getValidationCodePressed: function() {
-		var url = NetConstants.GET_PHONE_CODE_API + '?' + NetConstants.PARAMETER_PHONE + "=" + this.state.phoneNumber
-		console.log(url)
-		fetch(url, {
-			method: 'POST',
-		})
-		.then((response) => {
-			// Nothing to do.
-		})
+		NetworkModule.fetchTHUrl(
+			NetConstants.GET_PHONE_CODE_API + '?' + NetConstants.PARAMETER_PHONE + "=" + this.state.phoneNumber, 
+			{
+				method: 'POST',
+			},
+			function(responseJson) {
+				// Nothing to do.
+			}.bind(this),
+			function(errorMessage) {
+				Alert.alert('提示',errorMessage);
+			}
+		)
 
 		this.setState({
 			validationCodeCountdown: MAX_ValidationCodeCountdown,
@@ -112,7 +117,6 @@ var LoginPage = React.createClass({
 		})
 		var timer = this.setInterval(
 			() => { 
-				console.log('timer count down:' + this.state.validationCodeCountdown)
 				var currentCountDown = this.state.validationCodeCountdown
 
 				if (currentCountDown > 0) {
@@ -144,87 +148,51 @@ var LoginPage = React.createClass({
 	},
 
 	wechatLogin: function() {
-		var requestSuccess = true;
 		var wechatUserData = LogicData.getWechatUserData()
-		console.log('Begin wechatLogin')
 
-		fetch(NetConstants.WECHAT_LOGIN_API, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json; charset=UTF-8'
+		NetworkModule.fetchTHUrl(
+			NetConstants.WECHAT_LOGIN_API, 
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json; charset=UTF-8'
+				},
+				body: JSON.stringify({
+					openid: wechatUserData.openid,
+					unionid: wechatUserData.unionid,
+					nickname: wechatUserData.nickname,
+					headimgurl: wechatUserData.headimgurl,
+				})
 			},
-			body: JSON.stringify({
-				openid: wechatUserData.openid,
-				unionid: wechatUserData.unionid,
-				nickname: wechatUserData.nickname,
-				headimgurl: wechatUserData.headimgurl,
-			})
-		})
-		.then((response) => {
-			console.log(response)
-			if (response.status === 200) {
-				requestSuccess = true;
-			} else {
-				requestSuccess = false;
-			}
-
-			return response.json()
-		})
-		.then((responseJson) => {
-			if (requestSuccess && responseJson.success == true) {
+			function(responseJson) {
 				this.loginSuccess(responseJson);
-			} else {
-				Alert.alert('提示','请重试');
+			}.bind(this),
+			function(errorMessage) {
+				Alert.alert('提示',errorMessage);
 			}
-		});
+		)
 	},
 
 	loginPressed: function() {
-
-		if (this.state.phoneNumber === '') {
-			this.state.phoneNumber = '13816631019';
-		}
-		if (this.state.validationCode === '') {
-			this.state.validationCode = '1234';
-		}
-
-		this.setState({
-			animating: true
-		});
-
-		var requestSuccess = true;
-
-		fetch(NetConstants.PHONE_NUM_LOGIN_API, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json; charset=UTF-8'
+		NetworkModule.fetchTHUrl(
+			NetConstants.PHONE_NUM_LOGIN_API, 
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json; charset=UTF-8'
+				},
+				body: JSON.stringify({
+					phone: this.state.phoneNumber,
+					verifyCode: this.state.validationCode,
+				})
 			},
-			body: JSON.stringify({
-				phone: this.state.phoneNumber,
-				verifyCode: this.state.validationCode,
-			})
-		})
-		.then((response) => {
-			console.log(response)
-			if (response.status === 200) {
-				requestSuccess = true;
-			} else {
-				requestSuccess = false;
-			}
-			
-			this.setState({
-				animating: false
-			});
-
-			return response.json()
-		})
-		.then((responseJson) => {
-			if (requestSuccess && responseJson.success == true) {
+			function(responseJson) {
 				this.loginSuccess(responseJson);
-			} else {
-				Alert.alert('提示','请输入正确的验证码');
+			}.bind(this),
+			function(errorMessage) {
+				Alert.alert('提示',errorMessage);
 			}
-		});
+		)
 	},
 
 	loginSuccess: function(userData) {

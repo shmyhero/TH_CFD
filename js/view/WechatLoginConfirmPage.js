@@ -9,40 +9,35 @@ var {
 	Image,
 	View,
 	TouchableHighlight,
+	Alert,
 } = React;
 
 var NetConstants = require('../NetConstants')
+var NetworkModule = require('../module/NetworkModule')
 var LogicData = require('../LogicData')
 
 
 var WechatLoginConfirmPage = React.createClass({
 	componentDidMount: function() {
-		var requestSuccess = true
 		var userData = LogicData.getUserData()
 
-		fetch(NetConstants.GET_USER_INFO_API, {
-			method: 'GET',
-			headers: {
-				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+		NetworkModule.fetchTHUrl(
+			NetConstants.GET_USER_INFO_API, 
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
 			},
-		})
-		.then((response) => {
-			console.log(response)
-			if (response.status === 200) {
-				requestSuccess = true;
-			} else {
-				requestSuccess = false;
-			}
-
-			return response.json()
-		})
-		.then((responseJson) => {
-			if (requestSuccess) {
+			function(responseJson) {
 				this.setState({
 					nickName: responseJson.nickname
 				});
+			}.bind(this),
+			function(errorMessage) {
+				Alert.alert('提示',errorMessage);
 			}
-		});
+		)
 	},
 
 	getInitialState: function() {

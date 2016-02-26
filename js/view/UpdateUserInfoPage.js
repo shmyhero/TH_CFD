@@ -10,12 +10,14 @@ var {
 	TouchableHighlight,
 	Dimensions,
 	TextInput,
+	Alert,
 } = React;
 
 var Button = require('./component/Button')
 var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
 var LogicData = require('../LogicData')
+var NetworkModule = require('../module/NetworkModule')
 
 var rowHeight = 40;
 var fontSize = 16;
@@ -42,34 +44,27 @@ var UpdateUserInfoPage = React.createClass({
 			})
 		}
 
-		var requestSuccess = true
 		var userData = LogicData.getUserData()
 
-		fetch(NetConstants.GET_USER_INFO_API, {
-			method: 'GET',
-			headers: {
-				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+		NetworkModule.fetchTHUrl(
+			NetConstants.GET_USER_INFO_API, 
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
 			},
-		})
-		.then((response) => {
-			console.log(response)
-			if (response.status === 200) {
-				requestSuccess = true;
-			} else {
-				requestSuccess = false;
-			}
-
-			return response.json()
-		})
-		.then((responseJson) => {
-			if (requestSuccess) {
+			function(responseJson) {
 				originalName = responseJson.nickname
 				this.setState({
 					nickName: originalName ,
 					saveButtonEnabled: true
 				});
+			}.bind(this),
+			function(errorMessage) {
+				Alert.alert('提示',errorMessage);
 			}
-		});
+		)
 	},
 
 	setUserName: function(name) {
@@ -87,26 +82,25 @@ var UpdateUserInfoPage = React.createClass({
 	},
 
 	savePressed: function() {
-		var requestSuccess = true
 		var userData = LogicData.getUserData()
 
-		var url = NetConstants.SET_USER_NICKNAME_API + '?' + NetConstants.PARAMETER_NICKNAME + '=' + this.state.nickName
-		fetch(url, {
-			method: 'POST',
-			headers: {
-				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+		NetworkModule.fetchTHUrl(
+			NetConstants.SET_USER_NICKNAME_API + '?' + NetConstants.PARAMETER_NICKNAME + '=' + this.state.nickName, 
+			{
+				method: 'POST',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
 			},
-		})
-		.then((response) => {
-			console.log(response)
-			if (response.status === 200) {
+			function(responseJson) {
 				this.props.navigator.replace({
 					name: 'wechatLoginConfirm',
 				});
-			} else {
-				Alert.alert('提示','错误请重试');
+			}.bind(this),
+			function(errorMessage) {
+				Alert.alert('提示',errorMessage);
 			}
-		})
+		)
 	},
 
 	renderNotes: function() {

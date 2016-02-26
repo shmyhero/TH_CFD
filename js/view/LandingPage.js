@@ -8,11 +8,13 @@ var {
 	View,
 	Image,
 	Text,
-	TouchableHighlight
+	TouchableHighlight,
+	Alert
 } = React;
 
 var LogicData = require('../LogicData')
 var StorageModule = require('../module/StorageModule')
+var NetworkModule = require('../module/NetworkModule')
 
 var LandingPage = React.createClass({
 

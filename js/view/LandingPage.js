@@ -55,9 +55,6 @@ var LandingPage = React.createClass({
 					useTokenAvailable: false
 				});
 			})
-			.catch((e) => {
-				
-			})
 		}
 	},
 

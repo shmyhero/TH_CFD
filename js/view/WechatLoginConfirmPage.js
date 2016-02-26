@@ -10,14 +10,46 @@ var {
 	View,
 	TouchableHighlight,
 } = React;
+
+var NetConstants = require('../NetConstants')
 var LogicData = require('../LogicData')
 
 
 var WechatLoginConfirmPage = React.createClass({
+	componentDidMount: function() {
+		var requestSuccess = true
+		var userData = LogicData.getUserData()
+
+		fetch(NetConstants.GET_USER_INFO_API, {
+			method: 'GET',
+			headers: {
+				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+			},
+		})
+		.then((response) => {
+			console.log(response)
+			if (response.status === 200) {
+				requestSuccess = true;
+			} else {
+				requestSuccess = false;
+			}
+
+			return response.json()
+		})
+		.then((responseJson) => {
+			if (requestSuccess) {
+				this.setState({
+					nickName: responseJson.nickname
+				});
+			}
+		});
+	},
+
 	getInitialState: function() {
 		return {
 			wechatData: LogicData.getWechatUserData(),
 			userData: LogicData.getUserData(),
+			nickName: '',
 		};
 	},
 
@@ -30,7 +62,7 @@ var WechatLoginConfirmPage = React.createClass({
 					source={{uri: this.state.wechatData.headimgurl}} />
 
 				<Text style={styles.displayName}>
-					{this.state.wechatData.nickname}
+					昵称 {this.state.nickName}
 				</Text>
 
 				<Text style={styles.userId}>

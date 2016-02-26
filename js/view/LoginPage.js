@@ -11,8 +11,10 @@ var {
 	Alert,
 	Dimensions,
 	Image,
-	TimerMixin,
 } = React;
+
+var TimerMixin = require('react-timer-mixin');
+
 var LogicData = require('../LogicData')
 var MyHomePage = require('./MyHomePage')
 var StorageModule = require('../module/StorageModule')
@@ -24,15 +26,10 @@ var Button = require('./component/Button')
 
 var rowHeight = 40;
 var fontSize = 16;
+var MAX_ValidationCodeCountdown = 60
 
 var LoginPage = React.createClass({
 	mixins: [TimerMixin],
-	// componentDidMount: function() {
-	// 	this.setTimeout(
-	// 		() => { console.log('I do not leak!'); },
-	// 		500
-	// 	);
-	// }
 
 	componentWillMount: function() {
 		WechatModule.isWechatInstalled()
@@ -48,6 +45,7 @@ var LoginPage = React.createClass({
 			wechatInstalled: false,
 			phoneNumber: '',
 			validationCode: '',
+			validationCodeCountdown: -1,
 			animating: false,
 			phoneNumberBorderColor: ColorConstants.TITLE_BLUE,
 			validationCodeBorderColor: ColorConstants.DISABLED_GREY,
@@ -62,7 +60,7 @@ var LoginPage = React.createClass({
 		})
 
 		var buttonEnabled = false
-		if (text.length == 11) {
+		if (text.length == 11 && this.state.validationCodeCountdown < 0) {
 			buttonEnabled = true
 		} 
 		this.setState({
@@ -103,11 +101,36 @@ var LoginPage = React.createClass({
 		console.log(url)
 		fetch(url, {
 			method: 'POST',
-
 		})
 		.then((response) => {
 			// Nothing to do.
 		})
+
+		this.setState({
+			validationCodeCountdown: MAX_ValidationCodeCountdown,
+			getValidationCodeButtonEnabled: false
+		})
+		var timer = this.setInterval(
+			() => { 
+				console.log('timer count down:' + this.state.validationCodeCountdown)
+				var currentCountDown = this.state.validationCodeCountdown
+
+				if (currentCountDown > 0) {
+					this.setState({
+						validationCodeCountdown: this.state.validationCodeCountdown - 1
+					})	
+				} else {
+					if (this.state.phoneNumber.length == 11) {
+						this.setState({
+							getValidationCodeButtonEnabled: true,
+							validationCodeCountdown: -1
+						})
+					}
+					this.clearInterval(timer)
+				}
+			},
+			1000
+		);
 	},
 
 	wechatPressed: function() {
@@ -244,6 +267,28 @@ var LoginPage = React.createClass({
 		}
 	},
 
+	renderGetValidationCodeButton: function() {
+		if (this.state.validationCodeCountdown < 0) {
+			return  (
+				<Button style={styles.getValidationCodeArea}
+					enabled={this.state.getValidationCodeButtonEnabled}
+					onPress={this.getValidationCodePressed}
+					textContainerStyle={styles.getValidationTextView}
+					textStyle={styles.getValidationText}
+					text='验证' />
+			);
+		} else {
+			return  (
+				<Button style={styles.getValidationCodeArea}
+					enabled={this.state.getValidationCodeButtonEnabled}
+					onPress={this.getValidationCodePressed}
+					textContainerStyle={styles.getValidationTextView}
+					textStyle={styles.getValidationText}
+					text={'(' + this.state.validationCodeCountdown + ')'} />
+			);
+		}
+	},
+
 	render: function() {
 		var {height, width} = Dimensions.get('window');
 
@@ -262,12 +307,7 @@ var LoginPage = React.createClass({
 								maxLength={11}/>
 						</View>
 						
-						<Button style={styles.getValidationCodeArea}
-							enabled={this.state.getValidationCodeButtonEnabled}
-							onPress={this.getValidationCodePressed}
-							textContainerStyle={styles.getValidationTextView}
-							textStyle={styles.getValidationText}
-							text='验证' />
+						{this.renderGetValidationCodeButton()}
 					</View>
 
 					<View style={styles.rowWrapper}>

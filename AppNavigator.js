@@ -67,21 +67,21 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 	} else if (route.name === 'myNotifications') {
 		return (
 			<View style={{flex: 1}}>
-				<NavBar title="通知" showBackButton='true' navigator={navigationOperations}/>
+				<NavBar title="通知" showBackButton={true} navigator={navigationOperations}/>
 				<MyNotifications navigator={navigationOperations} />
 			</View>
 		);
 	} else if (route.name === 'mySettings') {
 		return (
 			<View style={{flex: 1}}>
-				<NavBar title="设置" showBackButton='true' navigator={navigationOperations}/>
+				<NavBar title="设置" showBackButton={true} navigator={navigationOperations}/>
 				<MySettings navigator={navigationOperations} />
 			</View>
 		);
 	} else if (route.name === 'wechatLoginConfirm') {
 		return (
 			<View style={{flex: 1}}>
-				<NavBar title="首页"/>
+				<NavBar title="首页" showBackButton={true} navigator={navigationOperations}/>
 				<WechatLoginConfirmPage navigator={navigationOperations} />
 			</View>
 		);

@@ -53,7 +53,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 
 		return (
 			<View style={{flex: 1}}>
-				<NavBar title="我的昵称" showTextOnRight={true} textOnRight='跳过' rightContainerOnClick={rightContainerOnClick}/>
+				<NavBar title="设置昵称" showTextOnRight={true} textOnRight='跳过' rightContainerOnClick={rightContainerOnClick}/>
 				<UpdateUserInfoPage navigator={navigationOperations}/>
 			</View>
 		);

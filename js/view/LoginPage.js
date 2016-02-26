@@ -275,7 +275,7 @@ var LoginPage = React.createClass({
 					onPress={this.getValidationCodePressed}
 					textContainerStyle={styles.getValidationTextView}
 					textStyle={styles.getValidationText}
-					text='验证' />
+					text='点击获取' />
 			);
 		} else {
 			return  (

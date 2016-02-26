@@ -24,7 +24,7 @@ var LandingPage = React.createClass({
 		};
 	},
 
-	componentDidMount: function() {
+	loginPress: function() {
 		StorageModule.loadUserData()
 			.then((value) => {
 				if (value !== null) {
@@ -33,20 +33,15 @@ var LandingPage = React.createClass({
 					this.setState({
 						useTokenAvailable: true
 					})
+					this.props.navigator.push({
+						name: 'wechatLoginConfirm',
+					});	
+				} else {
+					this.props.navigator.push({
+						name: 'login',
+					});
 				}
 			})
-	},
-
-	loginPress: function() {
-		if (this.state.useTokenAvailable) {
-			this.props.navigator.push({
-				name: 'wechatLoginConfirm',
-			});	
-		} else {
-			this.props.navigator.push({
-				name: 'login',
-			});	
-		}
 	},
 
 	logoutPress: function() {

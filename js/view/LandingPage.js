@@ -48,6 +48,15 @@ var LandingPage = React.createClass({
 		}
 	},
 
+	logoutPress: function() {
+		if (this.state.useTokenAvailable) {
+			StorageModule.removeUserData()
+			this.setState({
+					useTokenAvailable: false
+			});
+		}
+	},
+
 	render: function() {
 		return (
 			<View style={styles.wrapper}>
@@ -78,6 +87,14 @@ var LandingPage = React.createClass({
 					<View style={{borderRadius: 3, padding: 5, backgroundColor: '#1789d5'}}>
 						<Text style={styles.loginText}>
 							登录
+						</Text>
+					</View>
+				</TouchableHighlight>
+				<TouchableHighlight style={styles.loginClickableArea}
+					onPress={this.logoutPress}>
+					<View style={{borderRadius: 3, padding: 5, backgroundColor: '#1789d5'}}>
+						<Text style={styles.loginText}>
+							退出
 						</Text>
 					</View>
 					

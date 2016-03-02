@@ -32,7 +32,7 @@ public class LandingFragment extends Fragment {
         mReactInstanceManager = RNManager.getInstanceManager(getActivity().getApplication());
         Bundle bundle = new Bundle();
         bundle.putString("initialPage", "landing");
-        reactRootView.startReactApplication(mReactInstanceManager, "TH_CFD", bundle);
+        reactRootView.startReactApplication(mReactInstanceManager, "TH_CFD", null);
 
         return view;
     }

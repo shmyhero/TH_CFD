@@ -19,7 +19,7 @@ var TH_CFD = React.createClass({
   render: function() {
     var initialPage = this.props.initialPage;
     if (initialPage == null) {
-      initialPage = 'landing'
+      initialPage = 'stockList'
     }
     return (
 

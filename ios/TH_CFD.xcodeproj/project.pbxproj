@@ -16,16 +16,15 @@
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
 		139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
-		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		3D2A39F31C7C3ECD0085264D /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A39F21C7C3ECD0085264D /* libsqlite3.tbd */; };
 		3D2A39FF1C7C3EDA0085264D /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A39FE1C7C3EDA0085264D /* libc++.tbd */; };
 		3D2A3A011C7C3EE70085264D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A3A001C7C3EE70085264D /* libz.tbd */; };
 		3D2A3A081C7C44470085264D /* libRCTWeChat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A3A071C7C44270085264D /* libRCTWeChat.a */; };
 		3D2A3A0A1C7C44C50085264D /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A3A091C7C44C50085264D /* CoreTelephony.framework */; };
+		3DFC71B31C882FFD00787AE8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DFC71B21C882FFC00787AE8 /* AppDelegate.swift */; };
 		73273AD31C7B0EC1004EED11 /* guide_screen1.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273ACF1C7B0EC1004EED11 /* guide_screen1.png */; };
 		73273AD41C7B0EC1004EED11 /* guide_screen2.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273AD01C7B0EC1004EED11 /* guide_screen2.png */; };
 		73273AD51C7B0EC1004EED11 /* guide_screen4.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273AD11C7B0EC1004EED11 /* guide_screen4.png */; };
@@ -133,18 +132,17 @@
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* TH_CFD.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TH_CFD.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = TH_CFD/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = TH_CFD/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = TH_CFD/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = TH_CFD/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = TH_CFD/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		3D2A39F21C7C3ECD0085264D /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		3D2A39FE1C7C3EDA0085264D /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		3D2A3A001C7C3EE70085264D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		3D2A3A021C7C44270085264D /* RCTWeChat.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWeChat.xcodeproj; path = "../node_modules/react-native-wx/ios/RCTWeChat.xcodeproj"; sourceTree = "<group>"; };
 		3D2A3A091C7C44C50085264D /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		3DFC71A61C882FFC00787AE8 /* TH_CFD-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TH_CFD-Bridging-Header.h"; sourceTree = "<group>"; };
+		3DFC71B21C882FFC00787AE8 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = TH_CFD/AppDelegate.swift; sourceTree = "<group>"; };
 		73273ACF1C7B0EC1004EED11 /* guide_screen1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen1.png; sourceTree = "<group>"; };
 		73273AD01C7B0EC1004EED11 /* guide_screen2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen2.png; sourceTree = "<group>"; };
 		73273AD11C7B0EC1004EED11 /* guide_screen4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen4.png; sourceTree = "<group>"; };
@@ -262,17 +260,16 @@
 		13B07FAE1A68108700A75B9A /* TH_CFD */ = {
 			isa = PBXGroup;
 			children = (
+				3DFC71B21C882FFC00787AE8 /* AppDelegate.swift */,
 				73273ACF1C7B0EC1004EED11 /* guide_screen1.png */,
 				73273AD01C7B0EC1004EED11 /* guide_screen2.png */,
 				73273AD11C7B0EC1004EED11 /* guide_screen4.png */,
 				73273AD21C7B0EC1004EED11 /* guide_screen3.png */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
-				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
-				13B07FB71A68108700A75B9A /* main.m */,
+				3DFC71A61C882FFC00787AE8 /* TH_CFD-Bridging-Header.h */,
 			);
 			name = TH_CFD;
 			sourceTree = "<group>";
@@ -397,6 +394,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
@@ -607,8 +605,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
-				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				3DFC71B31C882FFD00787AE8 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -676,6 +673,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
@@ -689,6 +687,8 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.myhero.CFD;
 				PRODUCT_NAME = TH_CFD;
+				SWIFT_OBJC_BRIDGING_HEADER = "TH_CFD-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -696,6 +696,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -707,6 +708,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.myhero.CFD;
 				PRODUCT_NAME = TH_CFD;
+				SWIFT_OBJC_BRIDGING_HEADER = "TH_CFD-Bridging-Header.h";
 			};
 			name = Release;
 		};

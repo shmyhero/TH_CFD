@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let jsCodeLocation = NSURL(string: "http://localhost:8081/index.ios.bundle?platform=ios")
         // option 2
 //        let jsCodeLocation = NSBundle.mainBundle().URLForResource("main", withExtension: "jsbundle")
-        let rootView = RCTRootView(bundleURL:jsCodeLocation,moduleName: "AwesomeProject",initialProperties:nil,launchOptions:launchOptions)
+        let rootView = RCTRootView(bundleURL:jsCodeLocation,moduleName: "TH_CFD",initialProperties:nil,launchOptions:launchOptions)
         
         // Initialize a Controller to use view as React View
         let rootViewController:UIViewController = UIViewController()

@@ -18,7 +18,7 @@ var TH_CFD = React.createClass({
   render: function() {
     var initialPage = this.props.initialPage;
     if (initialPage == null) {
-      initialPage = 'stockList'
+      initialPage = 'landing'
     }
     return (
       <AppNavigator initialViewRoute={initialPage}/>

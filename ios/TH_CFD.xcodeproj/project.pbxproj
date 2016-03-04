@@ -24,7 +24,7 @@
 		3D2A3A011C7C3EE70085264D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A3A001C7C3EE70085264D /* libz.tbd */; };
 		3D2A3A081C7C44470085264D /* libRCTWeChat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A3A071C7C44270085264D /* libRCTWeChat.a */; };
 		3D2A3A0A1C7C44C50085264D /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A3A091C7C44C50085264D /* CoreTelephony.framework */; };
-		3DFC71B31C882FFD00787AE8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DFC71B21C882FFC00787AE8 /* AppDelegate.swift */; };
+		3D47CB491C897882000EF6EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D47CB481C897882000EF6EF /* AppDelegate.swift */; };
 		73273AD31C7B0EC1004EED11 /* guide_screen1.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273ACF1C7B0EC1004EED11 /* guide_screen1.png */; };
 		73273AD41C7B0EC1004EED11 /* guide_screen2.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273AD01C7B0EC1004EED11 /* guide_screen2.png */; };
 		73273AD51C7B0EC1004EED11 /* guide_screen4.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273AD11C7B0EC1004EED11 /* guide_screen4.png */; };
@@ -141,8 +141,8 @@
 		3D2A3A001C7C3EE70085264D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		3D2A3A021C7C44270085264D /* RCTWeChat.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWeChat.xcodeproj; path = "../node_modules/react-native-wx/ios/RCTWeChat.xcodeproj"; sourceTree = "<group>"; };
 		3D2A3A091C7C44C50085264D /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		3DFC71A61C882FFC00787AE8 /* TH_CFD-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TH_CFD-Bridging-Header.h"; sourceTree = "<group>"; };
-		3DFC71B21C882FFC00787AE8 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = TH_CFD/AppDelegate.swift; sourceTree = "<group>"; };
+		3D47CB471C897879000EF6EF /* TH_CFD-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TH_CFD-Bridging-Header.h"; sourceTree = "<group>"; };
+		3D47CB481C897882000EF6EF /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = TH_CFD/AppDelegate.swift; sourceTree = "<group>"; };
 		73273ACF1C7B0EC1004EED11 /* guide_screen1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen1.png; sourceTree = "<group>"; };
 		73273AD01C7B0EC1004EED11 /* guide_screen2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen2.png; sourceTree = "<group>"; };
 		73273AD11C7B0EC1004EED11 /* guide_screen4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen4.png; sourceTree = "<group>"; };
@@ -260,7 +260,8 @@
 		13B07FAE1A68108700A75B9A /* TH_CFD */ = {
 			isa = PBXGroup;
 			children = (
-				3DFC71B21C882FFC00787AE8 /* AppDelegate.swift */,
+				3D47CB481C897882000EF6EF /* AppDelegate.swift */,
+				3D47CB471C897879000EF6EF /* TH_CFD-Bridging-Header.h */,
 				73273ACF1C7B0EC1004EED11 /* guide_screen1.png */,
 				73273AD01C7B0EC1004EED11 /* guide_screen2.png */,
 				73273AD11C7B0EC1004EED11 /* guide_screen4.png */,
@@ -269,7 +270,6 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
-				3DFC71A61C882FFC00787AE8 /* TH_CFD-Bridging-Header.h */,
 			);
 			name = TH_CFD;
 			sourceTree = "<group>";
@@ -605,7 +605,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3DFC71B31C882FFD00787AE8 /* AppDelegate.swift in Sources */,
+				3D47CB491C897882000EF6EF /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

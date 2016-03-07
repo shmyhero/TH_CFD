@@ -113,7 +113,7 @@ var styles = StyleSheet.create({
 		color: '#ffffff',
 	},
 	title: {
-		fontSize: 15,
+		fontSize: 18,
 		textAlign: 'center',
 		color: '#ffffff',
 	},

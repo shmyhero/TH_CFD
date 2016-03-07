@@ -61,12 +61,14 @@ var LandingPage = React.createClass({
 
 		var tabs = tabNames.map(
 			(tabName, i) =>
-			<TouchableHighlight style={[styles.tabItemContainer, {width: width / 5}]}
-					underlayColor={ColorConstants.TITLE_BLUE} key={i}
+			<TouchableHighlight style={[styles.tabItemContainer, {width: width / tabNames.length}]} key={i}
+					underlayColor={ColorConstants.TITLE_BLUE}
 					onPress={() => this.tabClicked(i)}>
+
 				<Text style={this.state.currentSelectedTab == i ? styles.tabItemTextSelected : styles.tabItemTextUnSelected}>
 					{tabName}
 				</Text>
+
 			</TouchableHighlight>
 		)
 
@@ -108,10 +110,32 @@ var LandingPage = React.createClass({
 		}
 	},
 
+	renderSeperate: function() {
+		var {height, width} = Dimensions.get('window');
+
+		var offsetX = -width / tabNames.length * (tabNames.length - this.state.currentSelectedTab)
+
+		return (
+			<View style={styles.lineContainer}>
+
+				<View style={[styles.line, {width: width}]}/>
+				
+				<View style={[styles.tabItemContainer, {width: width / tabNames.length, marginLeft: offsetX}]}>
+					<Image 
+						style={styles.indicator} 
+						source={require('../../images/triangle.png')}/>	
+				</View>
+
+			</View>
+		);
+	},
+
 	render: function() {
 		return (
 			<View style={styles.wrapper}>
 				{this.renderTabs()}
+
+				{this.renderSeperate()}
 
 				{this.renderViewPagers()}
 
@@ -149,7 +173,7 @@ var styles = StyleSheet.create({
 	tabItemTextUnSelected: {
 		textAlign: 'center',
 		color: '#00b2fe',
-		fontSize: 12,
+		fontSize: 14,
 	},
 
 	viewPage: {
@@ -158,6 +182,24 @@ var styles = StyleSheet.create({
 
 	slide: {
 		alignItems: 'stretch',
+	},
+
+	indicator: {
+		width: 10,
+		height: 5,
+		marginTop: -4,
+	},
+
+	lineContainer: {
+		alignSelf: 'stretch',
+		flexDirection: 'row',
+	},
+
+	line: {
+		alignSelf: 'stretch',
+		height: 1,
+		borderWidth: 0.5,
+		borderColor: '#0f4fba'
 	},
 })
 

@@ -90,10 +90,11 @@ var LandingPage = React.createClass({
 		if (Platform.OS === 'ios') {
 			return (
 				<ScrollView style={styles.viewPage} ref='viewPages'
-						contentContainerStyle={{width: width * tabNames.length}}
+						contentContainerStyle={{width: width * tabNames.length, height: height - 100}}
 						pagingEnabled={true}
 						horizontal={true}
-						onMomentumScrollEnd={this.onScrollEnd}>
+						onMomentumScrollEnd={this.onScrollEnd}
+						directionalLockEnabled={true} >
 					{viewPages}
 				</ScrollView>
 			);

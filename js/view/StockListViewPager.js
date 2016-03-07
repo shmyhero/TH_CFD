@@ -93,9 +93,6 @@ var LandingPage = React.createClass({
 						contentContainerStyle={{width: width * tabNames.length}}
 						pagingEnabled={true}
 						horizontal={true}
-						bounces={false}
-						directionalLockEnabled={true}
-						showsHorizontalScrollIndicator={false}
 						onMomentumScrollEnd={this.onScrollEnd}>
 					{viewPages}
 				</ScrollView>
@@ -124,6 +121,7 @@ var LandingPage = React.createClass({
 
 var styles = StyleSheet.create({
 	wrapper: {
+		flex: 1,
 		alignItems: 'stretch',
 		alignSelf: 'stretch',
 		justifyContent: 'space-around',
@@ -131,6 +129,7 @@ var styles = StyleSheet.create({
 	},
 	
 	tabs: {
+		flex: 1,
 		alignSelf: 'stretch',
 		backgroundColor: ColorConstants.TITLE_BLUE,
 	},
@@ -153,7 +152,7 @@ var styles = StyleSheet.create({
 	},
 
 	viewPage: {
-		flex: 1,
+		flex: 20,
 	},
 
 	slide: {

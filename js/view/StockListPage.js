@@ -27,6 +27,8 @@ var startData = [
 	{Symbol: 'MSFT', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 9},
 	{Symbol: 'APPL', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 10},
 	{Symbol: 'GOOG', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 11},
+	{Symbol: 'GOOG', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 12},
+	{Symbol: 'GOOG', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 13},
 ]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -111,11 +113,8 @@ var StockListPage = React.createClass({
 				dataSource={this.state.stockInfo}
 				renderFooter={this.renderFooter}
 				renderRow={this.renderRow}
-				onEndReached={this.onEndReached}
-				automaticallyAdjustContentInsets={false}
-				keyboardDismissMode="on-drag"
-				keyboardShouldPersistTaps={true}
-				showsVerticalScrollIndicator={true} />
+				onEndReached={this.onEndReached}/>
+			
 		)
 	},
 });

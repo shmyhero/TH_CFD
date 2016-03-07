@@ -12,46 +12,40 @@ var {
 	TouchableHighlight,
 } = React;
 
-var WebSocketModule = require('../module/WebSocketModule')
 
-var startData = [
-	{Symbol: 'GOOG', Code: '00001', Price: 3100.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.05, key: 0},
-	{Symbol: 'MSFT', Code: '00001', Price: 312.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.119, key: 1},
-	{Symbol: 'APPL', Code: '00001', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: -0.19, key: 2},
-	{Symbol: 'GOOG', Code: '00001', Price: 310.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 3},
-	{Symbol: 'GOOG', Code: '00001', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: -0.0519, key: 4},
-	{Symbol: 'MSFT', Code: '00001', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.19, key: 5},
-	{Symbol: 'APPL', Code: '00001', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0, key: 6},
-	{Symbol: 'GOOG', Code: '00001', Price: 321.97, DayOpen: 30.31, Change: 1.66, PercentChange: -0.0519, key: 7},
-	{Symbol: 'GOOG', Code: '00001', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0, key: 8},
-	{Symbol: 'MSFT', Code: '00001', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 9},
-	{Symbol: 'APPL', Code: '00001', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: -0.0519, key: 10},
-	{Symbol: 'GOOG', Code: '00001', Price: 231.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 11},
-	{Symbol: 'GOOG', Code: '00001', Price: 7731.97, DayOpen: 30.31, Change: 1.66, PercentChange: -0.0519, key: 12},
-	{Symbol: 'GOOG', Code: '00001', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 13},
-]
+var LogicData = require('../LogicData')
+var NetConstants = require('../NetConstants')
+var NetworkModule = require('../module/NetworkModule')
+var WebSocketModule = require('../module/WebSocketModule')
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var StockListPage = React.createClass({
 
-	componentDidMount: function() {
-		// WebSocketModule.start((stockInfo) => {
-		// 	for (var i = 0; i < startData.length; i++) {
-		// 		if (startData[i].Symbol == stockInfo.Symbol) {
-		// 			startData[i].Price = stockInfo.Price
-		// 			startData[i].DayOpen = stockInfo.DayOpen
-		// 			startData[i].Change = stockInfo.Change
-		// 			startData[i].PercentChange = stockInfo.PercentChange
-		// 		}
-		// 	};
+	propTypes: {
+		dataURL: React.PropTypes.string,
+	},
 
-		// 	this.setState({
-		// 		stockInfo: ds.cloneWithRows(startData),
-		// 	});
-		// })
-		
-		
+	componentDidMount: function() {
+		var userData = LogicData.getUserData()
+
+		NetworkModule.fetchTHUrl(
+			this.props.dataURL, 
+			{
+				method: 'GET',
+				// headers: {
+				// 	'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				// },
+			},
+			(responseJson) => {
+				this.setState({
+					stockInfo: ds.cloneWithRows(responseJson)
+				})
+			},
+			(errorMessage) => {
+				Alert.alert('提示', errorMessage);
+			}
+		)
 	},
 
 	componentWillUnmount: function() {
@@ -59,11 +53,8 @@ var StockListPage = React.createClass({
 	},
 
 	getInitialState: function() {
-		startData.forEach(function(element, index, array) {
-			element.key = index;
-		});
 		return {
-			stockInfo: ds.cloneWithRows(startData),
+			stockInfo: ds.cloneWithRows([]),
 		};
 	},
 
@@ -86,31 +77,32 @@ var StockListPage = React.createClass({
 			<View style={styles.rowWrapper} key={rowData.key}>
 
 				<View style={styles.rowLeftPart}>
-					<Text style={styles.symbolNameText}>
-						{rowData.Symbol}
+					<Text style={styles.stockNameText}>
+						{rowData.name}
 					</Text>
 
-					<Text style={styles.symbolCopeText}>
-						{rowData.Code}
+					<Text style={styles.stockSymbolText}>
+						{rowData.symbol}
 					</Text>
 				</View>
 
 				<View style={styles.rowCenterPart}>
-					<Text style={styles.symbolPriceText}>
-						{rowData.Price}
+					<Text style={styles.stockLastText}>
+						{rowData.last.toFixed(2)}
 					</Text>
 				</View>
 
-				{this.renderRowRight(rowData.PercentChange)}
+				{this.renderRowRight((rowData.last - rowData.open) / rowData.open)}
 			</View>
 		);
 	},
 
 	renderRowRight: function(percentChange) {
+		percentChange = percentChange.toFixed(2)
 		if (percentChange > 0) {
 			return (
 				<View style={[styles.rowRightPart, {backgroundColor: '#ea5458'}]}>
-					<Text style={styles.symbolPercentageText} fontStyle='bold'>
+					<Text style={styles.stockPercentText} fontStyle='bold'>
 						 + {percentChange} %
 					</Text>
 				</View>
@@ -118,7 +110,7 @@ var StockListPage = React.createClass({
 		} else if (percentChange == 0) {
 			return (
 				<View style={[styles.rowRightPart, {backgroundColor: '#a0a6aa'}]}>
-					<Text style={styles.symbolPercentageText} fontStyle='bold'>
+					<Text style={styles.stockPercentText} fontStyle='bold'>
 						 {percentChange} %
 					</Text>
 				</View>
@@ -126,7 +118,7 @@ var StockListPage = React.createClass({
 		} else {
 			return (
 				<View style={[styles.rowRightPart, {backgroundColor: '#40c19a'}]}>
-					<Text style={styles.symbolPercentageText} fontStyle='bold'>
+					<Text style={styles.stockPercentText} fontStyle='bold'>
 						 {percentChange} %
 					</Text>
 				</View>
@@ -142,6 +134,7 @@ var StockListPage = React.createClass({
 			<ListView 
 				style={[styles.list, {width: width}]}
 				ref="listview"
+				initialListSize={11}
 				dataSource={this.state.stockInfo}
 				renderFooter={this.renderFooter}
 				renderRow={this.renderRow}
@@ -193,19 +186,19 @@ var styles = StyleSheet.create({
 		backgroundColor: '#eaeaea',
 		marginRight: 10,
 	},
-	symbolNameText: {
+	stockNameText: {
 		fontSize: 18,
 		textAlign: 'center',
 	},
-	symbolCopeText: {
+	stockSymbolText: {
 		fontSize: 12,
 		textAlign: 'center',
 		color: '#5f5f5f',
 	},
-	symbolPriceText: {
+	stockLastText: {
 		fontSize: 18,
 	},
-	symbolPercentageText: {
+	stockPercentText: {
 		fontSize: 16,
 		color: '#ffffff',
 	},

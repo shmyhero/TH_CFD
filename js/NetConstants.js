@@ -7,6 +7,7 @@ export var PHONE_NUM_LOGIN_API = SERVER_IP + '/api/user/signupByPhone'
 export var WECHAT_LOGIN_API = SERVER_IP + '/api/user/signupByWeChat'
 export var GET_USER_INFO_API = SERVER_IP + '/api/user/me'
 export var SET_USER_NICKNAME_API = SERVER_IP + '/api/user/nickname'
+export var GET_USER_BOOKMARK_LIST_API = SERVER_IP + '/api/security/bookmark'
 
 export var PARAMETER_PHONE = 'phone'
 export var PARAMETER_VERFICATION_CODE = 'verifyCode'

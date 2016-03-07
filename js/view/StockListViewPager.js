@@ -20,6 +20,7 @@ var LogicData = require('../LogicData')
 var StockListPage = require('./StockListPage')
 var NetworkModule = require('../module/NetworkModule')
 var ColorConstants = require('../ColorConstants')
+var NetConstants = require('../NetConstants')
 
 var tabNames = ['自选', '美股', '指数', '外汇', '期货']
 
@@ -86,7 +87,7 @@ var LandingPage = React.createClass({
 		var viewPages = tabNames.map(
 			(tabName, i) =>
 			<View style={styles.slide} key={i}>
-				<StockListPage />
+				<StockListPage dataURL={NetConstants.GET_USER_BOOKMARK_LIST_API}/>
 			</View>
 		)
 		if (Platform.OS === 'ios') {

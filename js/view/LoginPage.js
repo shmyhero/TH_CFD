@@ -98,6 +98,7 @@ var LoginPage = React.createClass({
 	},
 
 	getValidationCodePressed: function() {
+		console.log('getValidationCodePressed')
 		NetworkModule.fetchTHUrl(
 			NetConstants.GET_PHONE_CODE_API + '?' + NetConstants.PARAMETER_PHONE + "=" + this.state.phoneNumber, 
 			{
@@ -139,9 +140,9 @@ var LoginPage = React.createClass({
 
 	wechatPressed: function() {
 		WechatModule.wechatLogin(
-			function() {
+			() => {
 				this.wechatLogin()
-			}.bind(this),
+			},
 
 			function() {}.bind(this)
 		)

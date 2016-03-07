@@ -22,11 +22,13 @@ export function start(callback) {
 	});
 
 	// atempt connection, and handle errors
-	webSocketConnection.start().done(() => { 
-		console.log('Now connected, connection ID=' + webSocketConnection.id); 
-		}).fail(() => {
-		console.log('Failed'); 
-	});
+	webSocketConnection.start()
+		.done(() => { 
+			console.log('Now connected, connection ID=' + webSocketConnection.id); 
+		})
+		.fail(() => {
+			console.log('Web socket start failed'); 
+		});
 
 	//connection-handling
 	webSocketConnection.connectionSlow(function () {

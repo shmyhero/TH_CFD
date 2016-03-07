@@ -17,6 +17,7 @@ var MyNotifications = require('./js/view/MyNotifications')
 var MySettings = require('./js/view/MySettings')
 var WechatLoginConfirmPage = require('./js/view/WechatLoginConfirmPage')
 var StockListPage = require('./js/view/StockListPage')
+var StockListViewPager = require('./js/view/StockListViewPager')
 
 var _navigator;
 BackAndroid.addEventListener('hardwareBackPress', () => {
@@ -83,8 +84,14 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 	} else if (route.name === 'stockList') {
 		return (
 			<View style={{flex: 1}}>
-				<NavBar title="股票列表"/>
 				<StockListPage navigator={navigationOperations} />
+			</View>
+		);
+	} else if (route.name === 'stockListViewPager') {
+		return (
+			<View style={{flex: 1}}>
+				<NavBar title="行情"/>
+				<StockListViewPager navigator={navigationOperations} />
 			</View>
 		);
 	}

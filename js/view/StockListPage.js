@@ -1,7 +1,6 @@
 'use strict'
 
 var React = require('react-native');
-var Swiper = require('react-native-swiper')
 
 var {
 	StyleSheet,
@@ -9,14 +8,25 @@ var {
 	Image,
 	Text,
 	ListView,
+	Dimensions,
+	TouchableHighlight,
 } = React;
 
 var WebSocketModule = require('../module/WebSocketModule')
 
 var startData = [
-	{Symbol: 'GOOG', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519},
-	{Symbol: 'MSFT', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519},
-	{Symbol: 'APPL', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519},
+	{Symbol: 'GOOG', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 0},
+	{Symbol: 'MSFT', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 1},
+	{Symbol: 'APPL', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 2},
+	{Symbol: 'GOOG', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 3},
+	{Symbol: 'GOOG', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 4},
+	{Symbol: 'MSFT', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 5},
+	{Symbol: 'APPL', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 6},
+	{Symbol: 'GOOG', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 7},
+	{Symbol: 'GOOG', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 8},
+	{Symbol: 'MSFT', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 9},
+	{Symbol: 'APPL', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 10},
+	{Symbol: 'GOOG', Price: 31.97, DayOpen: 30.31, Change: 1.66, PercentChange: 0.0519, key: 11},
 ]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -24,32 +34,39 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var StockListPage = React.createClass({
 
 	componentDidMount: function() {
-		WebSocketModule.start(function(stockInfo) {
-			
-			for (var i = 0; i < startData.length; i++) {
-				if (startData[i].Symbol == stockInfo.Symbol) {
-					startData[i].Price = stockInfo.Price
-					startData[i].DayOpen = stockInfo.DayOpen
-					startData[i].Change = stockInfo.Change
-					startData[i].PercentChange = stockInfo.PercentChange
-				}
-			};
+		// WebSocketModule.start((stockInfo) => {
+		// 	for (var i = 0; i < startData.length; i++) {
+		// 		if (startData[i].Symbol == stockInfo.Symbol) {
+		// 			startData[i].Price = stockInfo.Price
+		// 			startData[i].DayOpen = stockInfo.DayOpen
+		// 			startData[i].Change = stockInfo.Change
+		// 			startData[i].PercentChange = stockInfo.PercentChange
+		// 		}
+		// 	};
 
-			this.setState({
-				stockInfo: ds.cloneWithRows(startData),
-			})
-
-		}.bind(this))
+		// 	this.setState({
+		// 		stockInfo: ds.cloneWithRows(startData),
+		// 	});
+		// })
+		
+		
 	},
 
 	componentWillUnmount: function() {
-		WebSocketModule.stop()
+		// WebSocketModule.stop()
 	},
 
 	getInitialState: function() {
+		startData.forEach(function(element, index, array) {
+			element.key = index;
+		});
 		return {
 			stockInfo: ds.cloneWithRows(startData),
 		};
+	},
+
+	onEndReached: function() {
+
 	},
 
 	renderSeparator: function() {
@@ -64,7 +81,7 @@ var StockListPage = React.createClass({
 
 	renderRow: function(rowData: string, sectionID: number, rowID: number) {
 		return (
-			<View style={styles.rowWrapper} >
+			<View style={styles.rowWrapper} key={rowData.key}>
 				<Text style={styles.notificationText}>
 					{rowData.Symbol}
 				</Text>
@@ -85,11 +102,12 @@ var StockListPage = React.createClass({
 	},
 
 	render: function() {
+		var {height, width} = Dimensions.get('window');
+
 		return (
 			<ListView 
-				style={styles.list}
+				style={[styles.list, {width: width}]}
 				ref="listview"
-				renderSeparator={this.renderSeparator}
 				dataSource={this.state.stockInfo}
 				renderFooter={this.renderFooter}
 				renderRow={this.renderRow}
@@ -97,14 +115,17 @@ var StockListPage = React.createClass({
 				automaticallyAdjustContentInsets={false}
 				keyboardDismissMode="on-drag"
 				keyboardShouldPersistTaps={true}
-				showsVerticalScrollIndicator={false} />
+				showsVerticalScrollIndicator={true} />
 		)
 	},
 });
 
 var styles = StyleSheet.create({
+	container: {
+		alignItems: 'stretch',
+	},
 	list: {
-		paddingTop: 20,
+		alignSelf: 'stretch',
 	},
 	rowWrapper: {
 		flexDirection: 'row',
@@ -112,7 +133,8 @@ var styles = StyleSheet.create({
 		alignItems: 'center',
 		paddingLeft: 20,
 		paddingRight: 20,
-		paddingBottom: 10,
+		paddingBottom: 20,
+		paddingTop: 20,
 		justifyContent: 'flex-start',
 		backgroundColor: '#ffffff',
 	},
@@ -124,7 +146,7 @@ var styles = StyleSheet.create({
 	},
 	notificationText: {
 		flex: 1,
-		fontSize: 12,
+		fontSize: 16,
 		textAlign: 'center',
 	},
 	line: {

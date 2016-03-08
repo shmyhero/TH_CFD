@@ -1,12 +1,36 @@
 'use strict';
 
+import Tabbar, { Tab, RawContent, Icon, IconWithBar, glypyMapMaker } from 'react-native-tabbar';
+
 var React = require('react-native');
 var {
 	StyleSheet,
 	Navigator,
 	View,
 	BackAndroid,
+	Component,
+	Text,
+	ScrollView,
 } = React;
+
+// var Tabbar= require('react-native-tabbar');
+// var {
+// 	Tab,
+// 	RawContent,
+// 	Icon,
+// 	IconWithBar,
+// 	glypyMapMaker,
+// } = Tabbar;
+
+const glypy = glypyMapMaker({
+  Home: 'e900',
+  Camera: 'e901',
+  Stat: 'e902',
+  Settings: 'e903',
+  Favorite: 'e904'
+});
+
+const systemBlue = '#1a61dd'
 
 var NavBar = require('./js/view/NavBar')
 var LandingPage = require('./js/view/LandingPage')
@@ -104,11 +128,53 @@ var AppNavigator = React.createClass({
 
 	render: function() {
 	    return (
-		<Navigator
-			style={styles.container}
-			initialRoute={{name: this.props.initialViewRoute}}
-			configureScene={() => Navigator.SceneConfigs.PushFromRight}
-			renderScene={RouteMapper} />
+	      <Tabbar ref="myTabbar" barColor={'white'}>
+	        <Tab name="home">
+	          <Icon label="Home" type={glypy.Home} from={'icomoon'} onActiveColor={systemBlue}/>
+	          <RawContent>
+            	<Navigator
+					style={styles.container}
+					initialRoute={{name: 'stockListViewPager'}}
+					configureScene={() => Navigator.SceneConfigs.PushFromRight}
+					renderScene={RouteMapper} />
+	          </RawContent>
+	        </Tab>
+	        <Tab name="camera">
+	          <Icon label="Camera" type={glypy.Camera} from={'icomoon'} onActiveColor={systemBlue}/>
+	          <RawContent>
+            	<Navigator
+					style={styles.container}
+					initialRoute={{name: 'landing'}}
+					configureScene={() => Navigator.SceneConfigs.PushFromRight}
+					renderScene={RouteMapper} />
+	          </RawContent>
+	        </Tab>
+	        <Tab name="stats">
+	          <Icon label="Stats" type={glypy.Stat} from={'icomoon'} onActiveColor={systemBlue}/>
+	          <RawContent>
+	            <View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent:'center' }}>
+	              <Text onPress={()=>console.log('stats')}>Stats</Text>
+	            </View>
+	          </RawContent>
+	        </Tab>
+	        <Tab name="favorite">
+	          <Icon label="Fav" type={glypy.Favorite} from={'icomoon'} onActiveColor={systemBlue}/>
+	          <RawContent>
+	            <View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent:'center' }}>
+	              <Text onPress={()=>console.log('favorite')}>Fav</Text>
+	            </View>
+	          </RawContent>
+	        </Tab>
+	        <Tab name="settings">
+	          <Icon label="Settings" type={glypy.Settings} from={'icomoon'} onActiveColor={systemBlue}/>
+	          <RawContent>
+	            <View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent:'center' }}>
+	              <Text onPress={()=>console.log('settings')}>Settings</Text>
+	            </View>
+	          </RawContent>
+	        </Tab>
+	      </Tabbar>
+		
 		);
 	  }
 });

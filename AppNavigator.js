@@ -31,6 +31,7 @@ const glypy = glypyMapMaker({
 });
 
 const systemBlue = '#1a61dd'
+const iconGrey = '888f9c'
 
 var NavBar = require('./js/view/NavBar')
 var LandingPage = require('./js/view/LandingPage')
@@ -128,9 +129,9 @@ var AppNavigator = React.createClass({
 
 	render: function() {
 	    return (
-	      <Tabbar ref="myTabbar" barColor={'white'}>
+	      <Tabbar ref="myTabbar" barColor={'#f7f7f7'}>
 	        <Tab name="home">
-	          <Icon label="Home" type={glypy.Home} from={'icomoon'} onActiveColor={systemBlue}/>
+	          <Icon label="首页" type={glypy.Home} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
 	          <RawContent>
             	<Navigator
 					style={styles.container}
@@ -140,7 +141,7 @@ var AppNavigator = React.createClass({
 	          </RawContent>
 	        </Tab>
 	        <Tab name="camera">
-	          <Icon label="Camera" type={glypy.Camera} from={'icomoon'} onActiveColor={systemBlue}/>
+	          <Icon label="行情" type={glypy.Camera} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
 	          <RawContent>
             	<Navigator
 					style={styles.container}
@@ -150,31 +151,30 @@ var AppNavigator = React.createClass({
 	          </RawContent>
 	        </Tab>
 	        <Tab name="stats">
-	          <Icon label="Stats" type={glypy.Stat} from={'icomoon'} onActiveColor={systemBlue}/>
+	          <Icon label="交易" type={glypy.Stat} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
 	          <RawContent>
 	            <View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent:'center' }}>
-	              <Text onPress={()=>console.log('stats')}>Stats</Text>
+	              <Text onPress={()=>console.log('stats')}>交易</Text>
 	            </View>
 	          </RawContent>
 	        </Tab>
 	        <Tab name="favorite">
-	          <Icon label="Fav" type={glypy.Favorite} from={'icomoon'} onActiveColor={systemBlue}/>
+	          <Icon label="榜单" type={glypy.Favorite} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
 	          <RawContent>
 	            <View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent:'center' }}>
-	              <Text onPress={()=>console.log('favorite')}>Fav</Text>
+	              <Text onPress={()=>console.log('favorite')}>榜单</Text>
 	            </View>
 	          </RawContent>
 	        </Tab>
 	        <Tab name="settings">
-	          <Icon label="Settings" type={glypy.Settings} from={'icomoon'} onActiveColor={systemBlue}/>
+	          <Icon label="问答" type={glypy.Settings} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
 	          <RawContent>
 	            <View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent:'center' }}>
-	              <Text onPress={()=>console.log('settings')}>Settings</Text>
+	              <Text onPress={()=>console.log('settings')}>问答</Text>
 	            </View>
 	          </RawContent>
 	        </Tab>
 	      </Tabbar>
-		
 		);
 	  }
 });

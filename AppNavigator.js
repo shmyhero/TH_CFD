@@ -119,6 +119,12 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 				<StockListViewPager navigator={navigationOperations} />
 			</View>
 		);
+	} else if (route.name === 'stockSearch') {
+		return (
+			<View style={{flex: 1}}>
+				<NavBar title="搜索" showBackButton={true} navigator={navigationOperations}/>
+			</View>
+		);
 	}
 };
 

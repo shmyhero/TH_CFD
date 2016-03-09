@@ -138,9 +138,54 @@ var LandingPage = React.createClass({
 		);
 	},
 
+	renderNavBarEditButton: function() {
+		if (this.state.currentSelectedTab == 0) {
+			return (
+				<TouchableHighlight
+					onPress={this.rightContainerOnClick}
+					underlayColor={ColorConstants.TITLE_BLUE}>
+
+					<Text style={styles.textOnNavBar}>
+						编辑
+					</Text>
+
+				</TouchableHighlight>
+			)
+		} else {
+			return null
+		}			
+	},
+
+	renderNavBarButtons: function() {
+		return (
+			<View style={styles.navBarButtonContainer}>
+				<View style={styles.leftContainer}>
+					{this.renderNavBarEditButton()}
+				</View>
+
+				<View style={styles.centerContainer} />
+				
+				<View style={styles.rightContainer}>
+					<TouchableHighlight
+						onPress={this.rightContainerOnClick}
+						underlayColor={ColorConstants.TITLE_BLUE}>
+
+						<Image 
+							style={styles.searchButton} 
+							source={require('../../images/search.png')}/>
+
+					</TouchableHighlight>
+				</View>
+			</View>
+		);
+	},
+
 	render: function() {
 		return (
 			<View style={styles.wrapper}>
+
+				{this.renderNavBarButtons()}
+
 				{this.renderTabs()}
 
 				{this.renderSeperate()}
@@ -153,6 +198,42 @@ var LandingPage = React.createClass({
 })
 
 var styles = StyleSheet.create({
+	navBarButtonContainer: {
+		height: 50,
+		marginTop: -50,
+		backgroundColor: 'transparent',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		paddingTop: (Platform.OS === 'ios') ? 15 : 0,
+	},
+
+	leftContainer: {
+		flex: 1,
+		alignItems: 'flex-start',
+		paddingLeft: 15,
+	},
+	centerContainer: {
+		flex: 2,
+	},
+	rightContainer: {
+		flex: 1,
+		alignItems: 'flex-end',
+	},
+	textOnNavBar: {
+		fontSize: 14,
+		textAlign: 'center',
+		color: '#ffffff',
+		marginRight: 10,
+	},
+
+	searchButton: {
+		width: 21,
+		height: 21,
+		marginRight: 15,
+		resizeMode: Image.resizeMode.contain,
+	},
+
 	wrapper: {
 		flex: 1,
 		alignItems: 'stretch',

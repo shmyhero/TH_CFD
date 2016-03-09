@@ -10,6 +10,7 @@ var {
 	ListView,
 	Dimensions,
 	TouchableHighlight,
+	Alert,
 } = React;
 
 
@@ -26,11 +27,17 @@ var StockListPage = React.createClass({
 		dataURL: React.PropTypes.string,
 	},
 
+	getDefaultProps() {
+		return {
+			dataURL: NetConstants.GET_USER_BOOKMARK_LIST_API,
+		}
+	},
+
 	componentDidMount: function() {
 		var userData = LogicData.getUserData()
 
 		NetworkModule.fetchTHUrl(
-			this.props.dataURL, 
+			this.props.dataURL + '?page=1&perPage=20', 
 			{
 				method: 'GET',
 				// headers: {
@@ -73,6 +80,10 @@ var StockListPage = React.createClass({
 	},
 
 	renderRow: function(rowData, sectionID, rowID, highlightRow) {
+		if (rowData.open == 0) {
+			rowData.open = rowData.last
+		}
+
 		return (
 			<View style={styles.rowWrapper} key={rowData.key}>
 

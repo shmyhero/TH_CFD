@@ -51,6 +51,16 @@ var LandingPage = React.createClass({
 		}
 	},
 
+	editButtonClicked: function() {
+
+	},
+
+	searchButtonClicked: function() {
+		this.props.navigator.push({
+			name: 'stockSearch',
+		});
+	},
+
 	viewPageSelected: function(event) {
 		this.setState({
 			currentSelectedTab: event.nativeEvent.position,
@@ -142,7 +152,7 @@ var LandingPage = React.createClass({
 		if (this.state.currentSelectedTab == 0) {
 			return (
 				<TouchableHighlight
-					onPress={this.rightContainerOnClick}
+					onPress={this.editButtonClicked}
 					underlayColor={ColorConstants.TITLE_BLUE}>
 
 					<Text style={styles.textOnNavBar}>
@@ -167,7 +177,7 @@ var LandingPage = React.createClass({
 				
 				<View style={styles.rightContainer}>
 					<TouchableHighlight
-						onPress={this.rightContainerOnClick}
+						onPress={this.searchButtonClicked}
 						underlayColor={ColorConstants.TITLE_BLUE}>
 
 						<Image 

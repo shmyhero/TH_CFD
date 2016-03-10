@@ -32,7 +32,7 @@ var urls = [
 	NetConstants.GET_FUTURE_LIST_API
 ]
 
-var LandingPage = React.createClass({
+var StockListViewPager = React.createClass({
 
 	getInitialState: function() {
 		return {
@@ -214,8 +214,10 @@ var LandingPage = React.createClass({
 	},
 
 	render: function() {
+		var {height, width} = Dimensions.get('window');
+		
 		return (
-			<View style={styles.wrapper}>
+			<View style={[styles.wrapper, {width: width}]}>
 				{this.renderNavBar()}
 
 				{this.renderTabs()}
@@ -330,4 +332,4 @@ var styles = StyleSheet.create({
 	},
 })
 
-module.exports = LandingPage;
+module.exports = StockListViewPager;

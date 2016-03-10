@@ -123,8 +123,12 @@ var StockListPage = React.createClass({
 	},
 
 	renderRow: function(rowData, sectionID, rowID, highlightRow) {
+		var percentChange = 0
 		if (rowData.open == 0) {
 			rowData.open = rowData.last
+		}
+		if (rowData.open !== 0) {
+			percentChange = (rowData.last - rowData.open) / rowData.open
 		}
 
 		return (
@@ -146,7 +150,7 @@ var StockListPage = React.createClass({
 					</Text>
 				</View>
 
-				{this.renderRowRight((rowData.last - rowData.open) / rowData.open)}
+				{this.renderRowRight(percentChange)}
 			</View>
 		);
 	},

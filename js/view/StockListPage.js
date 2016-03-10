@@ -16,6 +16,7 @@ var {
 
 var LogicData = require('../LogicData')
 var NetConstants = require('../NetConstants')
+var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
 
@@ -37,25 +38,38 @@ var StockListPage = React.createClass({
 	},
 
 	componentDidMount: function() {
-		var userData = LogicData.getUserData()
+		StorageModule.loadUserData()
+			.then((value) => {
+				if (value !== null) {
+					LogicData.setUserData(JSON.parse(value))
+				}
+			})
+			.then(() => {
+				var userData = LogicData.getUserData()
 
-		NetworkModule.fetchTHUrl(
-			this.props.dataURL + '?page=1&perPage=20', 
-			{
-				method: 'GET',
-				// headers: {
-				// 	'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-				// },
-			},
-			(responseJson) => {
-				this.setState({
-					stockInfo: ds.cloneWithRows(responseJson)
-				})
-			},
-			(errorMessage) => {
-				Alert.alert('提示', errorMessage);
-			}
-		)
+				NetworkModule.fetchTHUrl(
+					this.props.dataURL + '?page=1&perPage=20', 
+					{
+						method: 'GET',
+						headers: {
+							'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						},
+					},
+					(responseJson) => {
+						this.setState({
+							stockInfo: ds.cloneWithRows(responseJson)
+						})
+					},
+					(errorMessage) => {
+						Alert.alert('提示', errorMessage);
+					}
+				)
+			})
+			.done()
+	},
+
+	componentWillMount: function() {
+
 	},
 
 	componentWillUnmount: function() {
@@ -142,23 +156,24 @@ var StockListPage = React.createClass({
 		if (percentChange > 0) {
 			return (
 				<View style={[styles.rowRightPart, {backgroundColor: '#ea5458'}]}>
-					<Text style={styles.stockPercentText} fontStyle='bold'>
+					<Text style={styles.stockPercentText}>
 						 + {percentChange} %
 					</Text>
 				</View>
 			);
-		} else if (percentChange == 0) {
+		} else if (percentChange < 0) {
 			return (
-				<View style={[styles.rowRightPart, {backgroundColor: '#a0a6aa'}]}>
-					<Text style={styles.stockPercentText} fontStyle='bold'>
+				<View style={[styles.rowRightPart, {backgroundColor: '#40c19a'}]}>
+					<Text style={styles.stockPercentText}>
 						 {percentChange} %
 					</Text>
 				</View>
 			);
+			
 		} else {
 			return (
-				<View style={[styles.rowRightPart, {backgroundColor: '#40c19a'}]}>
-					<Text style={styles.stockPercentText} fontStyle='bold'>
+				<View style={[styles.rowRightPart, {backgroundColor: '#a0a6aa'}]}>
+					<Text style={styles.stockPercentText}>
 						 {percentChange} %
 					</Text>
 				</View>
@@ -246,6 +261,7 @@ var styles = StyleSheet.create({
 	stockNameText: {
 		fontSize: 18,
 		textAlign: 'center',
+		fontWeight: 'bold',
 	},
 	stockSymbolText: {
 		fontSize: 12,
@@ -258,6 +274,7 @@ var styles = StyleSheet.create({
 	stockPercentText: {
 		fontSize: 16,
 		color: '#ffffff',
+		fontWeight: 'bold',
 	},
 	line: {
 		alignSelf: 'stretch',

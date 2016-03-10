@@ -21,6 +21,7 @@ var StockListPage = require('./StockListPage')
 var NetworkModule = require('../module/NetworkModule')
 var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
+var NavBar = require('../view/NavBar')
 
 var tabNames = ['自选', '美股', '指数', '外汇', '期货']
 var urls = [
@@ -52,7 +53,7 @@ var LandingPage = React.createClass({
 	},
 
 	editButtonClicked: function() {
-
+		console.log('Edit button clicked.')
 	},
 
 	searchButtonClicked: function() {
@@ -104,7 +105,7 @@ var LandingPage = React.createClass({
 		var viewPages = tabNames.map(
 			(tabName, i) =>
 			<View style={styles.slide} key={i}>
-				<StockListPage dataURL={urls[i]} showHeaderBar={i==1}/>
+				<StockListPage dataURL={urls[i]} ref={'page' + i} showHeaderBar={i==1}/>
 			</View>
 		)
 		if (Platform.OS === 'ios') {
@@ -173,7 +174,11 @@ var LandingPage = React.createClass({
 					{this.renderNavBarEditButton()}
 				</View>
 
-				<View style={styles.centerContainer} />
+				<View style={styles.centerContainer}>
+					<Text style={styles.title}>
+						行情
+					</Text>
+				</View>
 				
 				<View style={styles.rightContainer}>
 					<TouchableHighlight
@@ -190,11 +195,28 @@ var LandingPage = React.createClass({
 		);
 	},
 
+	renderNavBar: function() {
+		if (this.state.currentSelectedTab == 0) {
+			return (
+				<NavBar title="行情" 
+					textOnLeft='编辑' 
+					leftTextOnClick={this.editButtonClicked}
+					imageOnRight={require('../../images/search.png')}
+					rightImageOnClick={this.searchButtonClicked}/>
+			)
+		} else {
+			return (
+				<NavBar title="行情" 
+					imageOnRight={require('../../images/search.png')}
+					rightImageOnClick={this.searchButtonClicked}/>
+			)
+		}
+	},
+
 	render: function() {
 		return (
 			<View style={styles.wrapper}>
-
-				{this.renderNavBarButtons()}
+				{this.renderNavBar()}
 
 				{this.renderTabs()}
 
@@ -208,10 +230,17 @@ var LandingPage = React.createClass({
 })
 
 var styles = StyleSheet.create({
+	wrapper: {
+		flex: 1,
+		alignItems: 'stretch',
+		alignSelf: 'stretch',
+		justifyContent: 'space-around',
+		backgroundColor: ColorConstants.BACKGROUND_GREY,
+	},
+
 	navBarButtonContainer: {
 		height: 50,
-		marginTop: -50,
-		backgroundColor: 'transparent',
+		backgroundColor: ColorConstants.TITLE_BLUE,
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
@@ -237,19 +266,17 @@ var styles = StyleSheet.create({
 		marginRight: 10,
 	},
 
+	title: {
+		fontSize: 18,
+		textAlign: 'center',
+		color: '#ffffff',
+	},
+
 	searchButton: {
 		width: 21,
 		height: 21,
 		marginRight: 15,
 		resizeMode: Image.resizeMode.contain,
-	},
-
-	wrapper: {
-		flex: 1,
-		alignItems: 'stretch',
-		alignSelf: 'stretch',
-		justifyContent: 'space-around',
-		backgroundColor: ColorConstants.BACKGROUND_GREY,
 	},
 	
 	tabs: {
@@ -267,6 +294,7 @@ var styles = StyleSheet.create({
 		textAlign: 'center',
 		color: '#ffffff',
 		fontSize: 16,
+		fontWeight: 'bold',
 	},
 
 	tabItemTextUnSelected: {

@@ -3,7 +3,9 @@
 export function fetchTHUrl(url, params, successCallback, errorCallback) {
 	var requestSuccess = true;
 
-	console.log('fetching: ' + url + ' with params: ' + params)
+	console.log('fetching: ' + url + ' with params: ')
+	console.log(params)
+	
 	fetch(url, params)
 		.then((response) => {
 			console.log(response)
@@ -26,7 +28,8 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 					console.log('fetchTHUrl handled error with message: ' + responseJson.message)
 					errorCallback(responseJson.message);
 				} else {
-					console.log('fetchTHUrl success with response: ' + responseJson)
+					console.log('fetchTHUrl success with response: ')
+					console.log(responseJson)
 					successCallback(responseJson);
 				}
 			} else {

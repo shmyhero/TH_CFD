@@ -18,11 +18,30 @@ var NavBar = React.createClass({
 	propTypes: {
 		showBackButton: React.PropTypes.bool,
 
-		showTextOnRight: React.PropTypes.bool,
+		textOnLeft: React.PropTypes.string,
 
 		textOnRight: React.PropTypes.string,
 
-		rightContainerOnClick: React.PropTypes.func,
+		imageOnRight: React.PropTypes.number,
+
+		leftTextOnClick: React.PropTypes.func,
+
+		rightTextOnClick: React.PropTypes.func,
+
+		rightImageOnClick: React.PropTypes.func,
+
+	},
+
+	getDefaultProps() {
+		return {
+			showBackButton: false,
+			textOnLeft: null,
+			textOnRight: null,
+			imageOnRight: null,
+			leftTextOnClick: null,
+			rightTextOnClick: null,
+			rightImageOnClick: null,
+		}
 	},
 
 
@@ -30,9 +49,21 @@ var NavBar = React.createClass({
 		this.props.navigator.pop();
 	},
 	
-	rightContainerOnClick: function() {
-		if (this.props.rightContainerOnClick) {
-			this.props.rightContainerOnClick()
+	leftTextOnClick: function() {
+		if (this.props.leftTextOnClick) {
+			this.props.leftTextOnClick()
+		}
+	},
+
+	rightTextOnClick: function() {
+		if (this.props.rightTextOnClick) {
+			this.props.rightTextOnClick()
+		}
+	},
+
+	rightImageOnClick: function() {
+		if (this.props.rightImageOnClick) {
+			this.props.rightImageOnClick()
 		}
 	},
 
@@ -48,9 +79,22 @@ var NavBar = React.createClass({
 			:
 			<View />
 
-		var rightText = this.props.showTextOnRight ?
+		var leftText = this.props.textOnLeft !== null ?
 			<TouchableHighlight
-				onPress={this.rightContainerOnClick}
+				onPress={this.leftTextOnClick}
+				underlayColor={ColorConstants.TITLE_BLUE}>
+
+				<Text style={styles.textOnLeft}>
+					{this.props.textOnLeft}
+				</Text>
+
+			</TouchableHighlight>
+			:
+			<View />
+
+		var rightText = this.props.textOnRight !== null ?
+			<TouchableHighlight
+				onPress={this.rightTextOnClick}
 				underlayColor={ColorConstants.TITLE_BLUE}>
 
 				<Text style={styles.textOnRight}>
@@ -61,10 +105,25 @@ var NavBar = React.createClass({
 			:
 			<View />
 
+		var rightImageSource = this.props.imageOnRight !== null
+		var rightImage = this.props.imageOnRight !== null ?
+			<TouchableHighlight
+				onPress={this.rightImageOnClick}
+				underlayColor={ColorConstants.TITLE_BLUE}>
+
+				<Image 
+					style={styles.rightImage}
+					source={this.props.imageOnRight}/>
+
+			</TouchableHighlight>
+			:
+			<View />
+
 		return (
 			<View style={styles.container} >
 				<View style={styles.leftContainer}>
 					{backButton}
+					{leftText}
 				</View>
 
 				<View style={styles.centerContainer}>
@@ -75,6 +134,7 @@ var NavBar = React.createClass({
 				
 				<View style={styles.rightContainer}>
 					{rightText}
+					{rightImage}
 				</View>
 			</View>
 		);
@@ -92,19 +152,28 @@ var styles = StyleSheet.create({
 	},
 	leftContainer: {
 		flex: 1,
-		alignItems: 'flex-start'
+		flexDirection: 'row',
+		alignItems: 'center',
 	},
 	centerContainer: {
 		flex: 2,
 	},
 	rightContainer: {
 		flex: 1,
-		alignItems: 'flex-end',
+		alignItems: 'center',
+		flexDirection: 'row',
+		justifyContent: 'flex-end'
 	},
 	backButton: {
 		width: 30,
 		height: 30,
 		marginLeft: 10,
+		resizeMode: Image.resizeMode.contain,
+	},
+	rightImage: {
+		width: 21,
+		height: 21,
+		marginRight: 20,
 		resizeMode: Image.resizeMode.contain,
 	},
 	left: {
@@ -116,6 +185,12 @@ var styles = StyleSheet.create({
 		fontSize: 18,
 		textAlign: 'center',
 		color: '#ffffff',
+	},
+	textOnLeft: {
+		fontSize: 15,
+		textAlign: 'center',
+		color: '#ffffff',
+		marginLeft: 20,
 	},
 	textOnRight: {
 		fontSize: 15,

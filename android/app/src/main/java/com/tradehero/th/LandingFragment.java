@@ -57,7 +57,7 @@ public class LandingFragment extends Fragment {
         super.onResume();
 
         if (mReactInstanceManager != null) {
-            mReactInstanceManager.onResume(getActivity(), (MainActivity)getActivity());
+            mReactInstanceManager.onResume(getActivity(), (MainActivity_old)getActivity());
         }
     }
 }

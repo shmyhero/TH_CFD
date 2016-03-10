@@ -43,6 +43,7 @@ var MySettings = require('./js/view/MySettings')
 var WechatLoginConfirmPage = require('./js/view/WechatLoginConfirmPage')
 var StockListPage = require('./js/view/StockListPage')
 var StockListViewPager = require('./js/view/StockListViewPager')
+var StockSearchPage = require('./js/view/StockSearchPage')
 
 var _navigator;
 BackAndroid.addEventListener('hardwareBackPress', () => {
@@ -121,7 +122,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 	} else if (route.name === 'stockSearch') {
 		return (
 			<View style={{flex: 1}}>
-				<NavBar title="搜索" showBackButton={true} navigator={navigationOperations}/>
+				<StockSearchPage navigator={navigationOperations}/>
 			</View>
 		);
 	}
@@ -134,20 +135,20 @@ var AppNavigator = React.createClass({
 
 	render: function() {
 	    return (
-	      <Tabbar ref="myTabbar" barColor={'#f7f7f7'}>
+	      <Tabbar ref="myTabbar" barColor={'#f7f7f7'} style={{alignItems: 'stretch'}}>
 	        <Tab name="home">
 	          <Icon label="首页" type={glypy.Home} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
 	          <RawContent>
             	<Navigator
 					style={styles.container}
-					initialRoute={{name: 'landing'}}
+					initialRoute={{name: 'stockSearch'}}
 					configureScene={() => Navigator.SceneConfigs.PushFromRight}
 					renderScene={RouteMapper} />
 	          </RawContent>
 	        </Tab>
 	        <Tab name="camera">
 	          <Icon label="行情" type={glypy.Camera} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
-	          <RawContent>
+	          <RawContent style={{width: 100}}>
             	<Navigator
 					style={styles.container}
 					initialRoute={{name: 'stockListViewPager'}}
@@ -158,9 +159,11 @@ var AppNavigator = React.createClass({
 	        <Tab name="stats">
 	          <Icon label="交易" type={glypy.Stat} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
 	          <RawContent>
-	            <View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent:'center' }}>
-	              <Text onPress={()=>console.log('stats')}>交易</Text>
-	            </View>
+	            <Navigator
+					style={styles.container}
+					initialRoute={{name: 'landing'}}
+					configureScene={() => Navigator.SceneConfigs.PushFromRight}
+					renderScene={RouteMapper} />
 	          </RawContent>
 	        </Tab>
 	        <Tab name="favorite">
@@ -188,6 +191,7 @@ var styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: '#eaeaea',
+		alignItems: 'stretch',
 	},
 });
 

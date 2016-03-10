@@ -2,9 +2,9 @@
 
 var signalr = require('react-native-signalr');
 
-var serverURL = 'http://300f8c59436243fe920fce09eb87d765.chinacloudapp.cn'
-var serverName = 'stockTickerMini'
-var serverListenerName = 'updateStockPrice'
+var serverURL = 'http://cfd-webapi.chinacloudapp.cn'
+var serverName = 'Q'
+var serverListenerName = 'p'
 var webSocketConnection = null
 
 export function start(callback) {

@@ -20,16 +20,19 @@ var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+var sortType = 0;
 
 var StockListPage = React.createClass({
 
 	propTypes: {
 		dataURL: React.PropTypes.string,
+		showHeaderBar: React.PropTypes.bool,
 	},
 
 	getDefaultProps() {
 		return {
 			dataURL: NetConstants.GET_USER_BOOKMARK_LIST_API,
+			showHeaderBar: false,
 		}
 	},
 
@@ -69,10 +72,36 @@ var StockListPage = React.createClass({
 
 	},
 
+	handlePress: function() {
+		console.log('press')
+    	this.setState({showHeaderBar: !this.state.showHeaderBar});
+  	},
+
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
 		return (
 			<View style={styles.line} key={rowID}/>
 		);
+	},
+
+	renderHeaderBar: function() {
+		var text1 = sortType===0?'涨幅':'跌幅'
+		var text2 = sortType===0?'↓':'↑'
+		var tcolor = sortType===0?'#red':'#green'
+		if (this.props.showHeaderBar) { 
+			return (
+				<View style={styles.headerBar}>
+					<View style={styles.headerCell}>
+						<Text style={styles.headerText}>涨跌榜</Text>
+					</View>
+					<View style={{flex:4}}>
+					</View>
+					<View style={styles.headerCell}>
+						<Text style={styles.headerText} onPress={this.handlePress}>{text1}</Text>
+						<Text style={[styles.headerText,{color:'#red'}]}>{text2}</Text>
+					</View>
+	            </View>
+	            );
+		}
 	},
 
 	renderFooter: function() {
@@ -142,16 +171,18 @@ var StockListPage = React.createClass({
 		var {height, width} = Dimensions.get('window');
 
 		return (
-			<ListView 
-				style={[styles.list, {width: width}]}
-				ref="listview"
-				initialListSize={11}
-				dataSource={this.state.stockInfo}
-				renderFooter={this.renderFooter}
-				renderRow={this.renderRow}
-				renderSeparator={this.renderSeparator}
-				onEndReached={this.onEndReached}/>
-			
+			<View style= {{width: width}}> 
+				{this.renderHeaderBar()}
+				<ListView 
+					style={styles.list}
+					ref="listview"
+					initialListSize={11}
+					dataSource={this.state.stockInfo}
+					renderFooter={this.renderFooter}
+					renderRow={this.renderRow}
+					renderSeparator={this.renderSeparator}
+					onEndReached={this.onEndReached}/>
+			</View>
 		)
 	},
 });
@@ -162,6 +193,21 @@ var styles = StyleSheet.create({
 	},
 	list: {
 		alignSelf: 'stretch',
+	},
+	headerBar: {
+		flexDirection: 'row',
+		backgroundColor: 'gray',
+		height: 40,
+	},
+	headerCell: {
+		flexDirection: 'row',
+		flex: 1,
+		alignItems: 'center',
+		// borderWidth: 1,
+	},
+	headerText: {
+		fontSize: 12,
+		textAlign: 'center'
 	},
 	rowWrapper: {
 		flexDirection: 'row',

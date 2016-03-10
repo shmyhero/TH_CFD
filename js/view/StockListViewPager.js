@@ -104,7 +104,7 @@ var LandingPage = React.createClass({
 		var viewPages = tabNames.map(
 			(tabName, i) =>
 			<View style={styles.slide} key={i}>
-				<StockListPage dataURL={urls[i]}/>
+				<StockListPage dataURL={urls[i]} showHeaderBar={i==1}/>
 			</View>
 		)
 		if (Platform.OS === 'ios') {

@@ -42,7 +42,7 @@ var StockListPage = React.createClass({
 		var hasUpdate = false
 		for (var i = 0; i < this.state.rowStockInfoData.length; i++) {
 			for (var j = 0; j < realtimeStockInfo.length; j++) {
-				if (this.state.rowStockInfoData[i].id == realtimeStockInfo[j].Id && 
+				if (this.state.rowStockInfoData[i].id == realtimeStockInfo[j].id && 
 							this.state.rowStockInfoData[i].last !== realtimeStockInfo[j].last) {
 					this.state.rowStockInfoData[i].last = realtimeStockInfo[j].last;
 					hasUpdate = true;
@@ -144,7 +144,7 @@ var StockListPage = React.createClass({
 			rowData.open = rowData.last
 		}
 		if (rowData.open !== 0) {
-			percentChange = (rowData.last - rowData.open) / rowData.open
+			percentChange = (rowData.last - rowData.open) / rowData.open * 100
 		}
 
 		return (

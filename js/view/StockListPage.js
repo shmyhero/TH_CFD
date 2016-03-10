@@ -20,6 +20,7 @@ var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
 
+
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var sortType = 0;
 
@@ -37,6 +38,27 @@ var StockListPage = React.createClass({
 		}
 	},
 
+	handleStockInfo: function(realtimeStockInfo) {
+		var hasUpdate = false
+		for (var i = 0; i < this.state.rowStockInfoData.length; i++) {
+			for (var j = 0; j < realtimeStockInfo.length; j++) {
+				if (this.state.rowStockInfoData[i].id == realtimeStockInfo[j].Id && 
+							this.state.rowStockInfoData[i].last !== realtimeStockInfo[j].last) {
+					this.state.rowStockInfoData[i].last = realtimeStockInfo[j].last;
+					hasUpdate = true;
+
+					break;
+				}
+			};
+		};
+
+		if (hasUpdate) {
+			this.setState({
+				stockInfo: ds.cloneWithRows(this.state.rowStockInfoData)
+			})
+		}
+	},
+
 	componentDidMount: function() {
 		StorageModule.loadUserData()
 			.then((value) => {
@@ -48,7 +70,7 @@ var StockListPage = React.createClass({
 				var userData = LogicData.getUserData()
 
 				NetworkModule.fetchTHUrl(
-					this.props.dataURL + '?page=1&perPage=20', 
+					this.props.dataURL + '?page=1&perPage=30', 
 					{
 						method: 'GET',
 						headers: {
@@ -57,6 +79,7 @@ var StockListPage = React.createClass({
 					},
 					(responseJson) => {
 						this.setState({
+							rowStockInfoData: responseJson,
 							stockInfo: ds.cloneWithRows(responseJson)
 						})
 					},
@@ -68,17 +91,10 @@ var StockListPage = React.createClass({
 			.done()
 	},
 
-	componentWillMount: function() {
-
-	},
-
-	componentWillUnmount: function() {
-		// WebSocketModule.stop()
-	},
-
 	getInitialState: function() {
 		return {
 			stockInfo: ds.cloneWithRows([]),
+			rowStockInfoData: [],
 		};
 	},
 
@@ -146,7 +162,7 @@ var StockListPage = React.createClass({
 
 				<View style={styles.rowCenterPart}>
 					<Text style={styles.stockLastText}>
-						{rowData.last.toFixed(2)}
+						{rowData.last.toFixed(4)}
 					</Text>
 				</View>
 
@@ -190,7 +206,7 @@ var StockListPage = React.createClass({
 		var {height, width} = Dimensions.get('window');
 
 		return (
-			<View style= {{width: width}}> 
+			<View style={{width : width, flex : 1}}> 
 				{this.renderHeaderBar()}
 				<ListView 
 					style={styles.list}

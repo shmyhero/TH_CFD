@@ -19,6 +19,7 @@ var {
 var LogicData = require('../LogicData')
 var StockListPage = require('./StockListPage')
 var NetworkModule = require('../module/NetworkModule')
+var WebSocketModule = require('../module/WebSocketModule')
 var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
 var NavBar = require('../view/NavBar')
@@ -38,6 +39,16 @@ var StockListViewPager = React.createClass({
 		return {
 			currentSelectedTab : 0,
 		}
+	},
+
+	componentWillMount: function() {
+		WebSocketModule.start((stockInfo) => {
+			this.refs['page' + this.state.currentSelectedTab].handleStockInfo(stockInfo)
+		})
+	},
+
+	componentWillUnmount: function() {
+		WebSocketModule.stop()
 	},
 
 	tabClicked: function(index) {
@@ -145,52 +156,6 @@ var StockListViewPager = React.createClass({
 						source={require('../../images/triangle.png')}/>	
 				</View>
 
-			</View>
-		);
-	},
-
-	renderNavBarEditButton: function() {
-		if (this.state.currentSelectedTab == 0) {
-			return (
-				<TouchableHighlight
-					onPress={this.editButtonClicked}
-					underlayColor={ColorConstants.TITLE_BLUE}>
-
-					<Text style={styles.textOnNavBar}>
-						编辑
-					</Text>
-
-				</TouchableHighlight>
-			)
-		} else {
-			return null
-		}			
-	},
-
-	renderNavBarButtons: function() {
-		return (
-			<View style={styles.navBarButtonContainer}>
-				<View style={styles.leftContainer}>
-					{this.renderNavBarEditButton()}
-				</View>
-
-				<View style={styles.centerContainer}>
-					<Text style={styles.title}>
-						行情
-					</Text>
-				</View>
-				
-				<View style={styles.rightContainer}>
-					<TouchableHighlight
-						onPress={this.searchButtonClicked}
-						underlayColor={ColorConstants.TITLE_BLUE}>
-
-						<Image 
-							style={styles.searchButton} 
-							source={require('../../images/search.png')}/>
-
-					</TouchableHighlight>
-				</View>
 			</View>
 		);
 	},

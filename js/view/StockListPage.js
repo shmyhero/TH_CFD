@@ -16,6 +16,7 @@ var {
 
 var LogicData = require('../LogicData')
 var NetConstants = require('../NetConstants')
+var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
 
@@ -34,25 +35,38 @@ var StockListPage = React.createClass({
 	},
 
 	componentDidMount: function() {
-		var userData = LogicData.getUserData()
+		StorageModule.loadUserData()
+			.then((value) => {
+				if (value !== null) {
+					LogicData.setUserData(JSON.parse(value))
+				}
+			})
+			.then(() => {
+				var userData = LogicData.getUserData()
 
-		NetworkModule.fetchTHUrl(
-			this.props.dataURL + '?page=1&perPage=20', 
-			{
-				method: 'GET',
-				// headers: {
-				// 	'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-				// },
-			},
-			(responseJson) => {
-				this.setState({
-					stockInfo: ds.cloneWithRows(responseJson)
-				})
-			},
-			(errorMessage) => {
-				Alert.alert('提示', errorMessage);
-			}
-		)
+				NetworkModule.fetchTHUrl(
+					this.props.dataURL + '?page=1&perPage=20', 
+					{
+						method: 'GET',
+						headers: {
+							'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						},
+					},
+					(responseJson) => {
+						this.setState({
+							stockInfo: ds.cloneWithRows(responseJson)
+						})
+					},
+					(errorMessage) => {
+						Alert.alert('提示', errorMessage);
+					}
+				)
+			})
+			.done()
+	},
+
+	componentWillMount: function() {
+
 	},
 
 	componentWillUnmount: function() {

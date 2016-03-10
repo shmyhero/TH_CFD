@@ -140,7 +140,7 @@ var AppNavigator = React.createClass({
 	          <RawContent>
             	<Navigator
 					style={styles.container}
-					initialRoute={{name: 'stockListViewPager'}}
+					initialRoute={{name: 'landing'}}
 					configureScene={() => Navigator.SceneConfigs.PushFromRight}
 					renderScene={RouteMapper} />
 	          </RawContent>
@@ -150,7 +150,7 @@ var AppNavigator = React.createClass({
 	          <RawContent>
             	<Navigator
 					style={styles.container}
-					initialRoute={{name: 'landing'}}
+					initialRoute={{name: 'stockListViewPager'}}
 					configureScene={() => Navigator.SceneConfigs.PushFromRight}
 					renderScene={RouteMapper} />
 	          </RawContent>

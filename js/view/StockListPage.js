@@ -11,6 +11,7 @@ var {
 	Dimensions,
 	TouchableHighlight,
 	Alert,
+	TouchableOpacity,
 } = React;
 
 
@@ -21,7 +22,7 @@ var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-var sortType = 0;
+var rawData = []
 
 var StockListPage = React.createClass({
 
@@ -56,8 +57,9 @@ var StockListPage = React.createClass({
 						},
 					},
 					(responseJson) => {
+						rawData = responseJson
 						this.setState({
-							stockInfo: ds.cloneWithRows(responseJson)
+							stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType))
 						})
 					},
 					(errorMessage) => {
@@ -79,6 +81,7 @@ var StockListPage = React.createClass({
 	getInitialState: function() {
 		return {
 			stockInfo: ds.cloneWithRows([]),
+			sortType: 0,
 		};
 	},
 
@@ -86,9 +89,45 @@ var StockListPage = React.createClass({
 
 	},
 
+	sortRawData: function(newType) {
+		var result = rawData;
+		if (newType){
+			result.sort((a,b)=>{
+				if (a.open === 0) {
+					return 1
+				}
+				else if (b.open === 0) {
+					return -1
+				}
+				var pa = (a.last - a.open) / a.open
+				var pb = (b.last - b.open) / b.open
+				return pa-pb
+			});
+		}
+		else {
+			result.sort((a,b)=>{
+				if (a.open === 0) {
+					return 1
+				}
+				else if (b.open === 0) {
+					return -1
+				}
+				var pa = (a.last - a.open) / a.open
+				var pb = (b.last - b.open) / b.open
+				return pb-pa
+			});
+		}
+		return result
+	},
+
 	handlePress: function() {
-		console.log('press')
-    	this.setState({showHeaderBar: !this.state.showHeaderBar});
+		var newType = this.state.sortType === 0?1:0
+		var newRowData = this.sortRawData(newType)
+		console.log(newType)
+    	this.setState({
+    		sortType: newType,
+    		stockInfo: ds.cloneWithRows(newRowData),
+    	});
   	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
@@ -97,22 +136,34 @@ var StockListPage = React.createClass({
 		);
 	},
 
+	renderSortText: function() {
+		if (this.state.sortType ===0) {
+			return (
+					<View style={styles.headerCell}>
+						<Text style={[styles.headerText,{color:'#576b95'}]}>涨幅</Text>
+						<Text style={[styles.headerText,{color:'#red'}]}>↓</Text>
+					</View>);
+		} else {
+			return (
+					<View style={styles.headerCell}>
+						<Text style={[styles.headerText,{color:'#576b95'}]}>跌幅</Text>
+						<Text style={[styles.headerText,{color:'#green'}]}>↑</Text>
+					</View>);
+		}
+	},
+	
 	renderHeaderBar: function() {
-		var text1 = sortType===0?'涨幅':'跌幅'
-		var text2 = sortType===0?'↓':'↑'
-		var tcolor = sortType===0?'#red':'#green'
 		if (this.props.showHeaderBar) { 
 			return (
 				<View style={styles.headerBar}>
 					<View style={styles.headerCell}>
 						<Text style={styles.headerText}>涨跌榜</Text>
 					</View>
-					<View style={{flex:4}}>
+					<View style={{flex:3}}>
 					</View>
-					<View style={styles.headerCell}>
-						<Text style={styles.headerText} onPress={this.handlePress}>{text1}</Text>
-						<Text style={[styles.headerText,{color:'#red'}]}>{text2}</Text>
-					</View>
+					<TouchableOpacity onPress={this.handlePress} style={{flex:1}}>
+						{ this.renderSortText()}
+					</TouchableOpacity>
 	            </View>
 	            );
 		}
@@ -192,6 +243,7 @@ var StockListPage = React.createClass({
 					style={styles.list}
 					ref="listview"
 					initialListSize={11}
+					pageSize={20}
 					dataSource={this.state.stockInfo}
 					renderFooter={this.renderFooter}
 					renderRow={this.renderRow}
@@ -211,17 +263,18 @@ var styles = StyleSheet.create({
 	},
 	headerBar: {
 		flexDirection: 'row',
-		backgroundColor: 'gray',
-		height: 40,
+		backgroundColor: '#d9e6f3',
+		height: 31,
 	},
 	headerCell: {
 		flexDirection: 'row',
 		flex: 1,
 		alignItems: 'center',
+		justifyContent: 'center',
 		// borderWidth: 1,
 	},
 	headerText: {
-		fontSize: 12,
+		fontSize: 14,
 		textAlign: 'center'
 	},
 	rowWrapper: {

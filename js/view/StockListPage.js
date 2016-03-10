@@ -113,23 +113,24 @@ var StockListPage = React.createClass({
 		if (percentChange > 0) {
 			return (
 				<View style={[styles.rowRightPart, {backgroundColor: '#ea5458'}]}>
-					<Text style={styles.stockPercentText} fontStyle='bold'>
+					<Text style={styles.stockPercentText}>
 						 + {percentChange} %
 					</Text>
 				</View>
 			);
-		} else if (percentChange == 0) {
+		} else if (percentChange < 0) {
 			return (
-				<View style={[styles.rowRightPart, {backgroundColor: '#a0a6aa'}]}>
-					<Text style={styles.stockPercentText} fontStyle='bold'>
+				<View style={[styles.rowRightPart, {backgroundColor: '#40c19a'}]}>
+					<Text style={styles.stockPercentText}>
 						 {percentChange} %
 					</Text>
 				</View>
 			);
+			
 		} else {
 			return (
-				<View style={[styles.rowRightPart, {backgroundColor: '#40c19a'}]}>
-					<Text style={styles.stockPercentText} fontStyle='bold'>
+				<View style={[styles.rowRightPart, {backgroundColor: '#a0a6aa'}]}>
+					<Text style={styles.stockPercentText}>
 						 {percentChange} %
 					</Text>
 				</View>
@@ -200,6 +201,7 @@ var styles = StyleSheet.create({
 	stockNameText: {
 		fontSize: 18,
 		textAlign: 'center',
+		fontWeight: 'bold',
 	},
 	stockSymbolText: {
 		fontSize: 12,
@@ -212,6 +214,7 @@ var styles = StyleSheet.create({
 	stockPercentText: {
 		fontSize: 16,
 		color: '#ffffff',
+		fontWeight: 'bold',
 	},
 	line: {
 		alignSelf: 'stretch',

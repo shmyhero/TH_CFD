@@ -115,8 +115,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 	} else if (route.name === 'stockListViewPager') {
 		return (
 			<View style={{flex: 1}}>
-				<NavBar title="行情"/>
-				<StockListViewPager navigator={navigationOperations} />
+				<StockListViewPager navigator={navigationOperations}/>
 			</View>
 		);
 	} else if (route.name === 'stockSearch') {

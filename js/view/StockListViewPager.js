@@ -38,6 +38,7 @@ var StockListViewPager = React.createClass({
 	getInitialState: function() {
 		return {
 			currentSelectedTab : 0,
+			skipOnScrollEvent: false,
 		}
 	},
 
@@ -60,6 +61,7 @@ var StockListViewPager = React.createClass({
 		}
 		this.setState({
 			currentSelectedTab: index,
+			skipOnScrollEvent: true,
 		})
 	},
 
@@ -92,9 +94,18 @@ var StockListViewPager = React.createClass({
 		var {height, width} = Dimensions.get('window');
 		var offsetX = event.nativeEvent.contentOffset.x
 		var targetTabPosition = Math.round(offsetX / width)
-		this.setState({
-			currentSelectedTab: targetTabPosition,
-		})
+
+		if (this.state.skipOnScrollEvent) {
+			if (targetTabPosition == this.state.currentSelectedTab) {
+				this.setState({
+					skipOnScrollEvent: false,
+				})
+			}
+		} else {
+			this.setState({
+				currentSelectedTab: targetTabPosition,
+			})
+		}
 	},
 
 	renderTabs: function() {

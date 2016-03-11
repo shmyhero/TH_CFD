@@ -2,7 +2,7 @@
 
 var signalr = require('react-native-signalr');
 
-var serverURL = 'http://cfd-webapi2.chinacloudapp.cn'
+var serverURL = 'http://cfd-webapi.chinacloudapp.cn'
 var serverName = 'Q'
 var serverListenerName = 'p'
 var webSocketConnection = null

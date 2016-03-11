@@ -122,7 +122,7 @@ var StockListViewPager = React.createClass({
 		if (Platform.OS === 'ios') {
 			return (
 				<ScrollView style={styles.viewPage} ref='viewPages'
-						contentContainerStyle={{width: width * tabNames.length, height: height - 100}}
+						contentContainerStyle={{width: width * tabNames.length, height: height - 120}}
 						pagingEnabled={true}
 						horizontal={true}
 						onMomentumScrollEnd={this.onScrollEnd}

@@ -94,7 +94,7 @@ var StockListPage = React.createClass({
 	getInitialState: function() {
 		return {
 			stockInfo: ds.cloneWithRows([]),
-			sortType: 0,
+			sortType: this.props.showHeaderBar ? 0: -1,
 			rowStockInfoData: [],
 		};
 	},
@@ -108,7 +108,7 @@ var StockListPage = React.createClass({
 			data = this.state.rowStockInfoData
 		}
 		var result = data;
-		if (newType){
+		if (newType == 1){
 			result.sort((a,b)=>{
 				if (a.open === 0) {
 					return 1
@@ -121,7 +121,7 @@ var StockListPage = React.createClass({
 				return pa-pb
 			});
 		}
-		else {
+		else if (newType == 0) {
 			result.sort((a,b)=>{
 				if (a.open === 0) {
 					return 1

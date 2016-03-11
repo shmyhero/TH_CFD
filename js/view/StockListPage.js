@@ -178,7 +178,7 @@ var StockListPage = React.createClass({
 					</View>
 					<View style={{flex:3}}>
 					</View>
-					<TouchableOpacity onPress={this.handlePress} style={{flex:1}}>
+					<TouchableOpacity onPress={this.handlePress} style={{flex:2}}>
 						{ this.renderSortText()}
 					</TouchableOpacity>
 	            </View>

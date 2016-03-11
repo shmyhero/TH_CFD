@@ -51,16 +51,16 @@ var StockListViewPager = React.createClass({
 		WebSocketModule.stop()
 	},
 
-	tabClicked: function(index) {
-		this.setState({
-			currentSelectedTab: index,
-		})
+	tabClicked: function(index) {		
 		if (Platform.OS === 'ios') {
 			var {height, width} = Dimensions.get('window');
 			this.refs.viewPages && this.refs.viewPages.scrollTo(0, index * width)
 		} else {
-			this.refs.viewPages && this.refs.viewPages.setPage(index)
+			this.refs.viewPages && this.refs.viewPages.setPageWithoutAnimation(index)
 		}
+		this.setState({
+			currentSelectedTab: index,
+		})
 	},
 
 	editButtonClicked: function() {
@@ -73,16 +73,27 @@ var StockListViewPager = React.createClass({
 		});
 	},
 
-	viewPageSelected: function(event) {
-		this.setState({
-			currentSelectedTab: event.nativeEvent.position,
-		})
+	viewPageScrolled: function(event) {
+
+		var targetTabPosition = event.nativeEvent.position
+		if (event.nativeEvent.offset > 0.5) {
+			targetTabPosition ++
+		}
+		console.log(event.nativeEvent.position + event.nativeEvent.offset)
+
+		if (targetTabPosition !== this.state.currentSelectedTab) {
+			this.setState({
+				currentSelectedTab: targetTabPosition
+			})
+		}
 	},
 
-	onScrollEnd: function(event) {
+	onScroll: function(event) {
 		var {height, width} = Dimensions.get('window');
+		var offsetX = event.nativeEvent.contentOffset.x
+		var targetTabPosition = Math.round(offsetX / width)
 		this.setState({
-			currentSelectedTab: Math.round(event.nativeEvent.contentOffset.x / width),
+			currentSelectedTab: targetTabPosition,
 		})
 	},
 
@@ -125,7 +136,8 @@ var StockListViewPager = React.createClass({
 						contentContainerStyle={{width: width * tabNames.length, height: height - 120}}
 						pagingEnabled={true}
 						horizontal={true}
-						onMomentumScrollEnd={this.onScrollEnd}
+						onScroll={this.onScroll}
+						scrollEventThrottle={10}
 						directionalLockEnabled={true} >
 					{viewPages}
 				</ScrollView>
@@ -133,7 +145,7 @@ var StockListViewPager = React.createClass({
 		} else {
 			return (
 				<ViewPagerAndroid style={[styles.viewPage, {height: height}]} ref='viewPages'
-						onPageSelected={this.viewPageSelected}>
+						onPageScroll={this.viewPageScrolled}>
 					{viewPages}
 				</ViewPagerAndroid>
 			);
@@ -161,21 +173,13 @@ var StockListViewPager = React.createClass({
 	},
 
 	renderNavBar: function() {
-		if (this.state.currentSelectedTab == 0) {
-			return (
-				<NavBar title="行情" 
-					textOnLeft='编辑' 
-					leftTextOnClick={this.editButtonClicked}
-					imageOnRight={require('../../images/search.png')}
-					rightImageOnClick={this.searchButtonClicked}/>
-			)
-		} else {
-			return (
-				<NavBar title="行情" 
-					imageOnRight={require('../../images/search.png')}
-					rightImageOnClick={this.searchButtonClicked}/>
-			)
-		}
+		return (
+			<NavBar title="行情" 
+				textOnLeft={this.state.currentSelectedTab==0 ? '编辑' : null}
+				leftTextOnClick={this.editButtonClicked}
+				imageOnRight={require('../../images/search.png')}
+				rightImageOnClick={this.searchButtonClicked}/>
+		)
 	},
 
 	render: function() {

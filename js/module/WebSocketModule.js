@@ -11,7 +11,7 @@ export function start(callback) {
 	this.stop();
 
 	webSocketConnection = signalr.hubConnection(serverURL);
-	webSocketConnection.logging = true;
+	webSocketConnection.logging = false;
 
 	var proxy = webSocketConnection.createHubProxy(serverName);
 

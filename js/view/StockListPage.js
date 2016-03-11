@@ -38,6 +38,16 @@ var StockListPage = React.createClass({
 		}
 	},
 
+	getShownStocks: function() {
+		var result = ''
+		for (var i = 0; i < this.state.rowStockInfoData.length; i++) {
+			result += ( this.state.rowStockInfoData[i].id + ',')
+		};
+
+		result = result.substring(0, result.length - 1);
+		return result
+	},
+
 	handleStockInfo: function(realtimeStockInfo) {
 		var hasUpdate = false
 		for (var i = 0; i < this.state.rowStockInfoData.length; i++) {

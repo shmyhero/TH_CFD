@@ -44,8 +44,12 @@ var StockListViewPager = React.createClass({
 
 	componentWillMount: function() {
 		WebSocketModule.start((stockInfo) => {
-			this.refs['page' + this.state.currentSelectedTab].handleStockInfo(stockInfo)
-		})
+				this.refs['page' + this.state.currentSelectedTab].handleStockInfo(stockInfo)
+			},
+			(errorMessage) => {
+				Alert.alert('提示',errorMessage);
+			}
+		)
 	},
 
 	componentWillUnmount: function() {
@@ -59,10 +63,13 @@ var StockListViewPager = React.createClass({
 		} else {
 			this.refs.viewPages && this.refs.viewPages.setPageWithoutAnimation(index)
 		}
-		this.setState({
-			currentSelectedTab: index,
-			skipOnScrollEvent: true,
-		})
+		if (index !== this.state.currentSelectedTab) {
+			this.setState({
+				currentSelectedTab: index,
+				skipOnScrollEvent: true,
+			})
+			this.registerInterestedStock()
+		}
 	},
 
 	editButtonClicked: function() {
@@ -87,6 +94,7 @@ var StockListViewPager = React.createClass({
 			this.setState({
 				currentSelectedTab: targetTabPosition
 			})
+			this.registerInterestedStock()
 		}
 	},
 
@@ -101,11 +109,16 @@ var StockListViewPager = React.createClass({
 					skipOnScrollEvent: false,
 				})
 			}
-		} else {
+		} else if (targetTabPosition !== this.state.currentSelectedTab){
 			this.setState({
 				currentSelectedTab: targetTabPosition,
 			})
+			this.registerInterestedStock()
 		}
+	},
+
+	registerInterestedStock: function() {
+		WebSocketModule.registerInterestedStocks(this.refs['page' + this.state.currentSelectedTab].getShownStocks())
 	},
 
 	renderTabs: function() {

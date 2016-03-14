@@ -58,7 +58,7 @@ var StockSearchPage = React.createClass({
 	},
 
 	addToMyListPressed: function(rowID) {
-
+		LogicData.addStockToOwn(this.state.searchStockRawInfo[rowID])
 	},
 
 	cancel: function() {

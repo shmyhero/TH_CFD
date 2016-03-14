@@ -3,7 +3,7 @@
 var userData = {};
 var wechatAuthData = {};
 var wechatUserData = {};
-var ownStocksData = [{"id":20883,"symbol":"AUDCAD","name":"苹果","open":0.916701,"last":0.98570},{"id":20885,"symbol":"AUDCHF","name":"百度","open":0.845495,"last":0.71050},{"id":29567,"symbol":"AUDDKK","name":"阿里巴巴","open":5.418112,"last":4.83760},];
+var ownStocksData = [];
 
 var LogicData = {
 

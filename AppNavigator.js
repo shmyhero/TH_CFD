@@ -31,7 +31,7 @@ const glypy = glypyMapMaker({
 });
 
 const systemBlue = '#1a61dd'
-const iconGrey = '888f9c'
+const iconGrey = '#888f9c'
 
 var NavBar = require('./js/view/NavBar')
 var LandingPage = require('./js/view/LandingPage')

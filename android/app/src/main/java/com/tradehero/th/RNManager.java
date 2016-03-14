@@ -25,7 +25,7 @@ public class RNManager {
             ReactInstanceManager.Builder builder = ReactInstanceManager.builder()
                     .setApplication(application)
                     .setJSMainModuleName("index.android")
-                    .setUseDeveloperSupport(true)
+                    .setUseDeveloperSupport(BuildConfig.DEBUG)
                     .setInitialLifecycleState(LifecycleState.BEFORE_RESUME);
 
             List<ReactPackage> packages = Arrays.<ReactPackage>asList(

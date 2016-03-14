@@ -168,13 +168,13 @@ var StockListPage = React.createClass({
 			return (
 					<View style={styles.headerCell}>
 						<Text style={[styles.headerText,{color:'#576b95'}]}>涨幅</Text>
-						<Text style={[styles.headerText,{color:'#red'}]}>↓</Text>
+						<Text style={[styles.headerText,{color:'red'}]}>↓</Text>
 					</View>);
 		} else {
 			return (
 					<View style={styles.headerCell}>
 						<Text style={[styles.headerText,{color:'#576b95'}]}>跌幅</Text>
-						<Text style={[styles.headerText,{color:'#green'}]}>↑</Text>
+						<Text style={[styles.headerText,{color:'green'}]}>↑</Text>
 					</View>);
 		}
 	},

@@ -78,7 +78,15 @@ var StockListPage = React.createClass({
 			})
 			.then(() => {
 				var userData = LogicData.getUserData()
-
+				if (this.props.dataURL==='own') {
+					// this if-else should be remove after server finish the api
+					var ownData = LogicData.getOwnStocksData()
+					this.setState({
+						rowStockInfoData: ownData,
+						stockInfo: ds.cloneWithRows(ownData)
+					})
+				}
+				else {
 				NetworkModule.fetchTHUrl(
 					this.props.dataURL + '?page=1&perPage=30', 
 					{
@@ -94,9 +102,10 @@ var StockListPage = React.createClass({
 						})
 					},
 					(errorMessage) => {
-						Alert.alert('提示', errorMessage);
+						Alert.alert('网络错误提示', errorMessage);
 					}
 				)
+				}
 			})
 			.done()
 	},
@@ -117,6 +126,7 @@ var StockListPage = React.createClass({
 		if (data===undefined) {
 			data = this.state.rowStockInfoData
 		}
+		// newTyep: 0:降序，1:升序
 		var result = data;
 		if (newType == 1){
 			result.sort((a,b)=>{
@@ -150,7 +160,6 @@ var StockListPage = React.createClass({
 	handlePress: function() {
 		var newType = this.state.sortType === 0?1:0
 		var newRowData = this.sortRawData(newType)
-		console.log(newType)
     	this.setState({
     		sortType: newType,
     		stockInfo: ds.cloneWithRows(newRowData),

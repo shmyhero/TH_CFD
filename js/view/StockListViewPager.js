@@ -26,7 +26,8 @@ var NavBar = require('../view/NavBar')
 
 var tabNames = ['自选', '美股', '指数', '外汇', '期货']
 var urls = [
-	NetConstants.GET_USER_BOOKMARK_LIST_API,
+	'own',
+	// NetConstants.GET_USER_BOOKMARK_LIST_API,
 	NetConstants.GET_US_STOCK_TOP_GAIN_API,
 	NetConstants.GET_INDEX_LIST_API,
 	NetConstants.GET_FX_LIST_API,
@@ -47,7 +48,8 @@ var StockListViewPager = React.createClass({
 				this.refs['page' + this.state.currentSelectedTab].handleStockInfo(stockInfo)
 			},
 			(errorMessage) => {
-				Alert.alert('提示',errorMessage);
+				//TODO, catch this error
+				Alert.alert('websocket提示',errorMessage);
 			}
 		)
 	},

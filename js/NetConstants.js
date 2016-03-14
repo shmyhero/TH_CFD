@@ -13,6 +13,7 @@ export var GET_US_STOCK_TOP_LOSER_API = SERVER_IP + '/api/security/stock/topLose
 export var GET_INDEX_LIST_API = SERVER_IP + '/api/security/index'
 export var GET_FX_LIST_API = SERVER_IP + '/api/security/fx'
 export var GET_FUTURE_LIST_API = SERVER_IP + '/api/security/futures'
+export var GET_SEARCH_STOCK_API = SERVER_IP + '/api/security/search'
 
 
 export var PARAMETER_PHONE = 'phone'

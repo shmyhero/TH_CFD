@@ -10,7 +10,6 @@ var {
   StyleSheet,
   Navigator,
   View,
-  BackAndroid,
 } = React;
 
 var AppNavigator = require('./AppNavigator')

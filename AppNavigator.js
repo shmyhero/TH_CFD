@@ -141,7 +141,7 @@ var AppNavigator = React.createClass({
 	          <RawContent>
             	<Navigator
 					style={styles.container}
-					initialRoute={{name: 'stockSearch'}}
+					initialRoute={{name: 'landing'}}
 					configureScene={() => Navigator.SceneConfigs.PushFromRight}
 					renderScene={RouteMapper} />
 	          </RawContent>
@@ -159,11 +159,9 @@ var AppNavigator = React.createClass({
 	        <Tab name="stats">
 	          <Icon label="交易" type={glypy.Stat} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
 	          <RawContent>
-	            <Navigator
-					style={styles.container}
-					initialRoute={{name: 'landing'}}
-					configureScene={() => Navigator.SceneConfigs.PushFromRight}
-					renderScene={RouteMapper} />
+	            <View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent:'center' }}>
+	              <Text onPress={()=>console.log('favorite')}>交易</Text>
+	            </View>
 	          </RawContent>
 	        </Tab>
 	        <Tab name="favorite">

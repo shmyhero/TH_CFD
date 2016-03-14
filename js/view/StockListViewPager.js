@@ -87,8 +87,7 @@ var StockListViewPager = React.createClass({
 		var targetTabPosition = event.nativeEvent.position
 		if (event.nativeEvent.offset > 0.5) {
 			targetTabPosition ++
-		}
-		console.log(event.nativeEvent.position + event.nativeEvent.offset)
+		}    
 
 		if (targetTabPosition !== this.state.currentSelectedTab) {
 			this.setState({

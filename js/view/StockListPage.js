@@ -23,18 +23,21 @@ var WebSocketModule = require('../module/WebSocketModule')
 
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+var didFocusSubscription = null;
 
 var StockListPage = React.createClass({
 
 	propTypes: {
 		dataURL: React.PropTypes.string,
 		showHeaderBar: React.PropTypes.bool,
+		isOwnStockPage: React.PropTypes.bool,
 	},
 
 	getDefaultProps() {
 		return {
 			dataURL: NetConstants.GET_USER_BOOKMARK_LIST_API,
 			showHeaderBar: false,
+			isOwnStockPage: false,
 		}
 	},
 
@@ -77,37 +80,62 @@ var StockListPage = React.createClass({
 				}
 			})
 			.then(() => {
-				var userData = LogicData.getUserData()
-				if (this.props.dataURL==='own') {
-					// this if-else should be remove after server finish the api
-					var ownData = LogicData.getOwnStocksData()
-					this.setState({
-						rowStockInfoData: ownData,
-						stockInfo: ds.cloneWithRows(ownData)
-					})
-				}
-				else {
-				NetworkModule.fetchTHUrl(
-					this.props.dataURL + '?page=1&perPage=30', 
-					{
-						method: 'GET',
-						headers: {
-							'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				if (!this.props.isOwnStockPage) {
+					var userData = LogicData.getUserData()
+					NetworkModule.fetchTHUrl(
+						this.props.dataURL + '?page=1&perPage=30', 
+						{
+							method: 'GET',
+							headers: {
+								'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+							},
 						},
-					},
-					(responseJson) => {
-						this.setState({
-							rowStockInfoData: responseJson,
-							stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, responseJson))
-						})
-					},
-					(errorMessage) => {
-						Alert.alert('网络错误提示', errorMessage);
-					}
-				)
+						(responseJson) => {
+							this.setState({
+								rowStockInfoData: responseJson,
+								stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, responseJson))
+							})
+						},
+						(errorMessage) => {
+							Alert.alert('网络错误提示', errorMessage);
+						}
+					)
 				}
 			})
 			.done()
+
+		if (this.props.isOwnStockPage) {
+			StorageModule.loadOwnStocksData().then((value) => {
+				if (value !== null) {
+					LogicData.setOwnStocksData(JSON.parse(value))
+				}
+			}).then(() => {
+				this.updateOwnData();
+			})
+		    this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
+		}
+	},
+
+	componentWillUnmount: function() {
+		if (this.props.isOwnStockPage) {
+			this.didFocusSubscription.remove();
+		}
+	},
+
+	onDidFocus: function(event) {
+		var currentRoute = this.props.navigator.navigationContext.currentRoute;
+		//didfocus emit in componentDidMount
+        if (currentRoute === event.data.route) {
+            this.updateOwnData()
+        }
+	},
+
+	updateOwnData: function() {
+		var ownData = LogicData.getOwnStocksData()
+		this.setState({
+			rowStockInfoData: ownData,
+			stockInfo: ds.cloneWithRows(ownData)
+		})
 	},
 
 	getInitialState: function() {

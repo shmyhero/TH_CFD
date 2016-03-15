@@ -26,8 +26,7 @@ var NavBar = require('../view/NavBar')
 
 var tabNames = ['自选', '美股', '指数', '外汇', '期货']
 var urls = [
-	'own',
-	// NetConstants.GET_USER_BOOKMARK_LIST_API,
+	NetConstants.GET_USER_BOOKMARK_LIST_API,
 	NetConstants.GET_US_STOCK_TOP_GAIN_API,
 	NetConstants.GET_INDEX_LIST_API,
 	NetConstants.GET_FX_LIST_API,
@@ -152,7 +151,7 @@ var StockListViewPager = React.createClass({
 		var viewPages = tabNames.map(
 			(tabName, i) =>
 			<View style={styles.slide} key={i}>
-				<StockListPage dataURL={urls[i]} ref={'page' + i} showHeaderBar={i==1}/>
+				<StockListPage dataURL={urls[i]} ref={'page' + i} showHeaderBar={i==1} isOwnStockPage={i==0} navigator={this.props.navigator}/>
 			</View>
 		)
 		if (Platform.OS === 'ios') {

@@ -6,6 +6,7 @@ var {
 } = React;
 
 var USER_DATA_STORAGE_KEY = '@TH_CFD:userData';
+var OWN_STOCKS_DATA_STORAGE_KEY = '@TH_CFD:ownStocksData';
 
 export async function loadUserData() {
 	try {
@@ -27,6 +28,33 @@ export async function setUserData(selectedValue) {
 export async function removeUserData() {
 	try {
 		await AsyncStorage.removeItem(USER_DATA_STORAGE_KEY);
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function loadOwnStocksData() {
+	try {
+		var value = await AsyncStorage.getItem(OWN_STOCKS_DATA_STORAGE_KEY);
+		console.log('load stocks:'+value)
+		return value;
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function setOwnStocksData(selectedValue) {
+	try {
+		await AsyncStorage.setItem(OWN_STOCKS_DATA_STORAGE_KEY, selectedValue);
+		console.log('save stocks:'+selectedValue)
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function removeOwnStocksData() {
+	try {
+		await AsyncStorage.removeItem(OWN_STOCKS_DATA_STORAGE_KEY);
 	} catch (error) {
 		console.log('AsyncStorage error: ' + error.message);
 	}

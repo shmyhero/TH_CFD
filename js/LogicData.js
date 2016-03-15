@@ -4,6 +4,7 @@ var userData = {};
 var wechatAuthData = {};
 var wechatUserData = {};
 var ownStocksData = [];
+var StorageModule = require('./module/StorageModule')
 
 var LogicData = {
 
@@ -42,6 +43,7 @@ var LogicData = {
 
     setOwnStocksData: function(stocksData) {
         ownStocksData = stocksData
+ 		StorageModule.setOwnStocksData(JSON.stringify(stocksData))
     },
 
     getOwnStocksData: function() {
@@ -52,6 +54,7 @@ var LogicData = {
     	var findResult = ownStocksData.find((stock)=>{return stock.id === stockData.id})
     	if (findResult === undefined) {
     		ownStocksData.unshift(stockData)
+ 			StorageModule.setOwnStocksData(JSON.stringify(ownStocksData))
     	}
     	// if exist, not update.
     	return ownStocksData
@@ -61,6 +64,7 @@ var LogicData = {
     	var index = ownStocksData.findIndex((stock)=>{return stock.id === stockData.id})
     	if (index != -1) {
     		ownStocksData.splice(index, 1)
+ 			StorageModule.setOwnStocksData(JSON.stringify(ownStocksData))
     	}
     	return ownStocksData
     }

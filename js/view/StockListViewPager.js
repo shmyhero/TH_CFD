@@ -61,7 +61,7 @@ var StockListViewPager = React.createClass({
 	tabClicked: function(index) {		
 		if (Platform.OS === 'ios') {
 			var {height, width} = Dimensions.get('window');
-			this.refs.viewPages && this.refs.viewPages.scrollTo(0, index * width)
+			this.refs.viewPages && this.refs.viewPages.scrollTo({x: index * width, y: 0, animated: true})
 		} else {
 			this.refs.viewPages && this.refs.viewPages.setPageWithoutAnimation(index)
 		}

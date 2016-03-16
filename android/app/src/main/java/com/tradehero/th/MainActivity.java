@@ -39,6 +39,11 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         ButterKnife.bind(this);
 
         reactRootView.startReactApplication(mReactInstanceManager, "TH_CFD", null);
+
+        Intent intent = new Intent();
+        intent.setClassName(this, NativeViewActivity.class.getName());
+        intent.putExtra(NativeViewActivity.START_FRAGMENT_NAME, StockEditFragment.class.getName());
+        startActivity(intent);
     }
 
     @Override

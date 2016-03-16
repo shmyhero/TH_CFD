@@ -144,5 +144,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
 
     compile project(':react-native-wx')
-    compile "com.facebook.react:react-native:+"  // From node_modules
+    compile project(':drag-sort-listview')
+
+    compile 'com.facebook.react:react-native:+'
 }

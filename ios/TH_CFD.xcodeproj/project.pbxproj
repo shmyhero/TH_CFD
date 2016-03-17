@@ -25,6 +25,10 @@
 		3D2A3A0A1C7C44C50085264D /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A3A091C7C44C50085264D /* CoreTelephony.framework */; };
 		3D47CB491C897882000EF6EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D47CB481C897882000EF6EF /* AppDelegate.swift */; };
 		3D5C46C81C92B51000BF6FD3 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 3D5C46C71C92B51000BF6FD3 /* main.jsbundle */; };
+		3D61C5CB1C9909CB0037816A /* EditOwnStocksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */; };
+		3D61C5CC1C9909CB0037816A /* EditOwnStocksViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D61C5CA1C9909CB0037816A /* EditOwnStocksViewController.xib */; };
+		3D61C5F11C9931810037816A /* EditOwnStockCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D61C5F01C9931810037816A /* EditOwnStockCell.swift */; };
+		3D61C5F31C9931A10037816A /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D61C5F21C9931A10037816A /* MainStoryboard.storyboard */; };
 		3D8575FA1C8EC8F300D88946 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D8575F91C8EC8F300D88946 /* icomoon.ttf */; };
 		73273AD31C7B0EC1004EED11 /* guide_screen1.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273ACF1C7B0EC1004EED11 /* guide_screen1.png */; };
 		73273AD41C7B0EC1004EED11 /* guide_screen2.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273AD01C7B0EC1004EED11 /* guide_screen2.png */; };
@@ -143,6 +147,10 @@
 		3D47CB471C897879000EF6EF /* TH_CFD-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TH_CFD-Bridging-Header.h"; sourceTree = "<group>"; };
 		3D47CB481C897882000EF6EF /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = TH_CFD/AppDelegate.swift; sourceTree = "<group>"; };
 		3D5C46C71C92B51000BF6FD3 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
+		3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditOwnStocksViewController.swift; path = TH_CFD/EditOwnStocksViewController.swift; sourceTree = "<group>"; };
+		3D61C5CA1C9909CB0037816A /* EditOwnStocksViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = EditOwnStocksViewController.xib; path = TH_CFD/EditOwnStocksViewController.xib; sourceTree = "<group>"; };
+		3D61C5F01C9931810037816A /* EditOwnStockCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditOwnStockCell.swift; path = TH_CFD/EditOwnStockCell.swift; sourceTree = "<group>"; };
+		3D61C5F21C9931A10037816A /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MainStoryboard.storyboard; path = TH_CFD/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		3D8575F91C8EC8F300D88946 /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = icomoon.ttf; sourceTree = "<group>"; };
 		73273ACF1C7B0EC1004EED11 /* guide_screen1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen1.png; sourceTree = "<group>"; };
 		73273AD01C7B0EC1004EED11 /* guide_screen2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen2.png; sourceTree = "<group>"; };
@@ -271,6 +279,10 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
+				3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */,
+				3D61C5CA1C9909CB0037816A /* EditOwnStocksViewController.xib */,
+				3D61C5F01C9931810037816A /* EditOwnStockCell.swift */,
+				3D61C5F21C9931A10037816A /* MainStoryboard.storyboard */,
 			);
 			name = TH_CFD;
 			sourceTree = "<group>";
@@ -337,9 +349,9 @@
 				00E356EF1AD99517003FC87E /* TH_CFDTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 			);
-			indentWidth = 2;
+			indentWidth = 4;
 			sourceTree = "<group>";
-			tabWidth = 2;
+			tabWidth = 4;
 		};
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
@@ -565,11 +577,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D61C5CC1C9909CB0037816A /* EditOwnStocksViewController.xib in Resources */,
 				73273AD61C7B0EC1004EED11 /* guide_screen3.png in Resources */,
 				73273AD31C7B0EC1004EED11 /* guide_screen1.png in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				3D8575FA1C8EC8F300D88946 /* icomoon.ttf in Resources */,
+				3D61C5F31C9931A10037816A /* MainStoryboard.storyboard in Resources */,
 				73273AD41C7B0EC1004EED11 /* guide_screen2.png in Resources */,
 				73273AD51C7B0EC1004EED11 /* guide_screen4.png in Resources */,
 				3D5C46C81C92B51000BF6FD3 /* main.jsbundle in Resources */,
@@ -607,6 +621,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D61C5F11C9931810037816A /* EditOwnStockCell.swift in Sources */,
+				3D61C5CB1C9909CB0037816A /* EditOwnStocksViewController.swift in Sources */,
 				3D47CB491C897882000EF6EF /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -685,6 +701,7 @@
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 				);
 				INFOPLIST_FILE = TH_CFD/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.myhero.CFD;
@@ -706,6 +723,7 @@
 					"$(SRCROOT)/../node_modules/react-native/React/**",
 				);
 				INFOPLIST_FILE = TH_CFD/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.myhero.CFD;

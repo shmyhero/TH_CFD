@@ -15,6 +15,7 @@ RCT_EXPORT_MODULE();
 
 - (void) showScene:(NSString *)sceneName
 {
+	//todo, map sceneName to view controller
 	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
 	EditOwnStocksViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"EditOwnStocksViewController"];
 	AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];

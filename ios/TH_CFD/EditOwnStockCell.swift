@@ -8,23 +8,6 @@
 
 import UIKit
 
-class StockData: NSObject {
-	var stockId: Int = 0
-	var symbol: String?
-	var name: String?
-	var open: Double?
-	var close: Double?
-	var choose: Bool = false
-	
-	func initWithId(stockId:Int, symbol:String, name:String, open:Double, close:Double) -> Void {
-		self.stockId = stockId
-		self.symbol = symbol
-		self.name = name
-		self.open = open
-		self.close = close
-	}
-}
-
 class EditOwnStockCell: UITableViewCell {
 	@IBOutlet weak var selectButton: UIButton!
 	@IBOutlet weak var nameLabel: UILabel!

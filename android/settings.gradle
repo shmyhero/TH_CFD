@@ -2,7 +2,5 @@ rootProject.name = 'TH_CFD'
 
 include ':app'
 include ':react-native-wx'
-include ':drag-sort-listview'
 
 project(':react-native-wx').projectDir = new File(settingsDir, '../node_modules/react-native-wx/android')
-project(':drag-sort-listview').projectDir = new File(settingsDir, './DragSortListView')

@@ -24,4 +24,20 @@
         <!--<item name="android:duplicateParentState">true</item>-->
     </style>
 
+    <style name="ThemeOverlay.ActionBar.TradeHero" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="windowActionBarOverlay">true</item>
+    </style>
+
+    <style name="TradeHero.Dashboard.ActionBar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="theme">@style/ThemeOverlay.ActionBar.TradeHero</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="contentInsetStart">0dp</item>
+    </style>
+
+    <style name="stock_edit_checkbox" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/stock_edit_checkbox</item>
+    </style>
+
 </resources>

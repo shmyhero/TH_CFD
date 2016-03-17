@@ -3,6 +3,8 @@ package com.tradehero.th;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
 import butterknife.ButterKnife;
 
@@ -18,7 +20,6 @@ public class NativeViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.native_activity_container);
-        ButterKnife.bind(this);
 
         String fragmentClassName = getIntent().getExtras().getString(START_FRAGMENT_NAME);
         try {
@@ -32,5 +33,17 @@ public class NativeViewActivity extends AppCompatActivity {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.th_toolbar);
+        this.setSupportActionBar(toolbar);
+        setupToolbar(toolbar, "我的自选", "完成");
+    }
+
+    private void setupToolbar(Toolbar toolbar, String title, String leftText) {
+        TextView tvHeadLeft = (TextView) toolbar.findViewById(R.id.tvHeadLeft);
+        TextView tvHeadMiddleMain = (TextView) toolbar.findViewById(R.id.tvHeadMiddleMain);
+
+        tvHeadLeft.setText(leftText);
+        tvHeadMiddleMain.setText(title);
     }
 }

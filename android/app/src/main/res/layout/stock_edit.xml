@@ -1,14 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:padding="10dp"
+        android:background="@color/title_blue">
+        <CheckBox
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            style="@style/stock_edit_checkbox"
+            android:visibility="invisible"/>
+        <LinearLayout
+            android:layout_toRightOf="@id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#abcaff"
+                android:textSize="18sp"
+                android:text="@string/all_product"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@id/drag_handle"
+            android:layout_alignParentRight="true"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#abcaff"
+                android:textSize="18sp"
+                android:text="@string/drag"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/pushToTop"
+            android:layout_toLeftOf="@id/drag_handle"
+            android:layout_width="50dp"
+            android:layout_marginRight="40dp"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#abcaff"
+                android:textSize="18sp"
+                android:text="@string/push_to_top"/>
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
     <com.mobeta.android.dslv.DragSortListView
-        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:dslv="http://schemas.android.com/apk/res/com.tradehero.th"
         android:id="@+id/stockList"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_margin="3dp"
         android:choiceMode="multipleChoice"
         android:dividerHeight="1px"
@@ -24,5 +88,39 @@
         dslv:remove_enabled="true"
         dslv:remove_mode="clickRemove"
         dslv:slide_shuffle_speed="0.3" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="#efefef"
+        android:layout_height="60dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <Button
+            android:id="@+id/selectAll"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/blue_button"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:text="@string/select_all"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+
+        <Button
+            android:id="@+id/deleteSelected"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/red_button"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:text="@string/delete"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+
+    </LinearLayout>
 
 </LinearLayout>

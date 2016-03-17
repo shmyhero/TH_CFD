@@ -3,6 +3,61 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/th_toolbar"
+        style="@style/TradeHero.Dashboard.ActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:minHeight="@dimen/toolbar_height">
+
+        <RelativeLayout
+            android:id="@+id/rlCustomHeadView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/title_blue"
+            android:visibility="visible"
+            >
+
+            <LinearLayout
+                android:id="@+id/tvHeadLeftContainer"
+                android:layout_width="@dimen/tab_menu_height"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tvHeadLeft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:text="@string/done">
+                </TextView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvHeadMiddleMain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:text="My title">
+                </TextView>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
     <FrameLayout
         android:id="@+id/native_root_view"
         android:layout_width="match_parent"

@@ -11,6 +11,7 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 	
+	var rnRootViewController: UIViewController?
 	var window: UIWindow?
 	
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
@@ -43,6 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Initialize a Controller to use view as React View
 		let rootViewController:UIViewController = UIViewController()
 		rootViewController.view = rootView
+		self.rnRootViewController = rootViewController
 		
 		// Set window to use rootViewController
 		self.window = UIWindow(frame: UIScreen.mainScreen().bounds)

@@ -16,6 +16,7 @@ var {
 	Platform,
 } = React;
 
+var NativeSceneModule = require('../module/NativeSceneModule')
 var LogicData = require('../LogicData')
 var StockListPage = require('./StockListPage')
 var NetworkModule = require('../module/NetworkModule')
@@ -23,6 +24,7 @@ var WebSocketModule = require('../module/WebSocketModule')
 var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
 var NavBar = require('../view/NavBar')
+
 
 var tabNames = ['自选', '美股', '指数', '外汇', '期货']
 var urls = [
@@ -75,6 +77,7 @@ var StockListViewPager = React.createClass({
 
 	editButtonClicked: function() {
 		console.log('Edit button clicked.')
+		NativeSceneModule.launchNativeScene('StockEditFragment')
 	},
 
 	searchButtonClicked: function() {

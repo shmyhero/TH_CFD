@@ -20,6 +20,7 @@ var NetConstants = require('../NetConstants')
 var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
+var RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -113,6 +114,17 @@ var StockListPage = React.createClass({
 				this.updateOwnData();
 			})
 		    this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
+		    
+		    // Update the data when RN view resumed.
+		    RCTDeviceEventEmitter.addListener(
+				'appStateDidChange',
+				(args) => {
+					if (args.app_state == 'active') {
+						this.updateOwnData()
+					}
+				}
+			)
+
 		}
 	},
 

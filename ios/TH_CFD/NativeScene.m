@@ -6,14 +6,14 @@
 //  Copyright © 2016年 Facebook. All rights reserved.
 //
 
-#import "SwiftViewControllerManager.h"
+#import "NativeScene.h"
 #import "TH_CFD-swift.h"
 
-@implementation SwiftViewControllerManager
+@implementation NativeScene
 
 RCT_EXPORT_MODULE();
 
-- (void) showEditOwnStocks
+- (void) showScene:(NSString *)sceneName
 {
 	UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
 	EditOwnStocksViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"EditOwnStocksViewController"];
@@ -23,7 +23,7 @@ RCT_EXPORT_MODULE();
 
 #pragma mark RCT_EXPORT
 
-RCT_EXPORT_METHOD(showEditStocksView) {
-	[self showEditOwnStocks];
+RCT_EXPORT_METHOD(launchNativeScene:(NSString *)sceneName) {
+	[self showScene:sceneName];
 }
 @end

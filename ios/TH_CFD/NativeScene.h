@@ -10,7 +10,7 @@
 #import "RCTBridge.h"
 #import "RCTEventDispatcher.h"
 
-@interface SwiftViewControllerManager : NSObject<RCTBridgeModule>
+@interface NativeScene : NSObject<RCTBridgeModule>
 
-- (void) showEditOwnStocks;
+- (void) showScene:(NSString *)sceneName;
 @end

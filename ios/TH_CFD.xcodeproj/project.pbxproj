@@ -28,7 +28,7 @@
 		3D61C5CB1C9909CB0037816A /* EditOwnStocksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */; };
 		3D61C5F11C9931810037816A /* EditOwnStockCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D61C5F01C9931810037816A /* EditOwnStockCell.swift */; };
 		3D61C5F31C9931A10037816A /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D61C5F21C9931A10037816A /* MainStoryboard.storyboard */; };
-		3D6A23E51C9AA93F00FF1306 /* SwiftViewControllerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A23E41C9AA93F00FF1306 /* SwiftViewControllerManager.m */; };
+		3D6A23E51C9AA93F00FF1306 /* NativeScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A23E41C9AA93F00FF1306 /* NativeScene.m */; };
 		3D8575FA1C8EC8F300D88946 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D8575F91C8EC8F300D88946 /* icomoon.ttf */; };
 		73273AD31C7B0EC1004EED11 /* guide_screen1.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273ACF1C7B0EC1004EED11 /* guide_screen1.png */; };
 		73273AD41C7B0EC1004EED11 /* guide_screen2.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273AD01C7B0EC1004EED11 /* guide_screen2.png */; };
@@ -150,8 +150,8 @@
 		3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditOwnStocksViewController.swift; path = TH_CFD/EditOwnStocksViewController.swift; sourceTree = "<group>"; };
 		3D61C5F01C9931810037816A /* EditOwnStockCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditOwnStockCell.swift; path = TH_CFD/EditOwnStockCell.swift; sourceTree = "<group>"; };
 		3D61C5F21C9931A10037816A /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MainStoryboard.storyboard; path = TH_CFD/MainStoryboard.storyboard; sourceTree = "<group>"; };
-		3D6A23E31C9AA93F00FF1306 /* SwiftViewControllerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SwiftViewControllerManager.h; path = TH_CFD/SwiftViewControllerManager.h; sourceTree = "<group>"; };
-		3D6A23E41C9AA93F00FF1306 /* SwiftViewControllerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SwiftViewControllerManager.m; path = TH_CFD/SwiftViewControllerManager.m; sourceTree = "<group>"; };
+		3D6A23E31C9AA93F00FF1306 /* NativeScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NativeScene.h; path = TH_CFD/NativeScene.h; sourceTree = "<group>"; };
+		3D6A23E41C9AA93F00FF1306 /* NativeScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NativeScene.m; path = TH_CFD/NativeScene.m; sourceTree = "<group>"; };
 		3D8575F91C8EC8F300D88946 /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = icomoon.ttf; sourceTree = "<group>"; };
 		73273ACF1C7B0EC1004EED11 /* guide_screen1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen1.png; sourceTree = "<group>"; };
 		73273AD01C7B0EC1004EED11 /* guide_screen2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen2.png; sourceTree = "<group>"; };
@@ -283,8 +283,8 @@
 				3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */,
 				3D61C5F01C9931810037816A /* EditOwnStockCell.swift */,
 				3D61C5F21C9931A10037816A /* MainStoryboard.storyboard */,
-				3D6A23E31C9AA93F00FF1306 /* SwiftViewControllerManager.h */,
-				3D6A23E41C9AA93F00FF1306 /* SwiftViewControllerManager.m */,
+				3D6A23E31C9AA93F00FF1306 /* NativeScene.h */,
+				3D6A23E41C9AA93F00FF1306 /* NativeScene.m */,
 			);
 			name = TH_CFD;
 			sourceTree = "<group>";
@@ -624,7 +624,7 @@
 			files = (
 				3D61C5F11C9931810037816A /* EditOwnStockCell.swift in Sources */,
 				3D61C5CB1C9909CB0037816A /* EditOwnStocksViewController.swift in Sources */,
-				3D6A23E51C9AA93F00FF1306 /* SwiftViewControllerManager.m in Sources */,
+				3D6A23E51C9AA93F00FF1306 /* NativeScene.m in Sources */,
 				3D47CB491C897882000EF6EF /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

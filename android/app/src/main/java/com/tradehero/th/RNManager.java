@@ -7,6 +7,7 @@ import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.tradehero.th.BuildConfig;
+import com.tradehero.th.RNNativeModules.RNNativePackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +31,8 @@ public class RNManager {
 
             List<ReactPackage> packages = Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
-                    new WeChatPackage()
+                    new WeChatPackage(),
+                    new RNNativePackage()
             );
 
             for (ReactPackage reactPackage : packages) {

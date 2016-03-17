@@ -13,10 +13,16 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.mobeta.android.dslv.DragSortListView;
+import com.tradehero.th.module.LogicData;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -52,9 +58,8 @@ public class StockEditFragment extends Fragment {
         View view = inflater.inflate(R.layout.stock_edit, container, false);
         ButterKnife.bind(this, view);
 
-        String[] names = getResources().getStringArray(R.array.jazz_artist_names);
-        String[] symbols = getResources().getStringArray(R.array.jazz_artist_symbol);
-        List<StockInfo> stockInfo = generateStockInfoList(names, symbols);
+        JSONArray myListArray = LogicData.getInstance().getMyList();
+        List<StockInfo> stockInfo = generateStockInfoList(myListArray);
 
         adapter = new StockListAdapter(getActivity(), R.layout.list_item_checkable, stockInfo);
 
@@ -79,12 +84,18 @@ public class StockEditFragment extends Fragment {
         return view;
     }
 
-    public List<StockInfo> generateStockInfoList(String[] names, String[] symbols) {
+    public List<StockInfo> generateStockInfoList(JSONArray myList) {
         List<StockInfo> result = new ArrayList<>();
 
-        for (int i = 0; i < names.length; i++) {
-            StockInfo info = new StockInfo(names[i], symbols[i]);
-            result.add(info);
+        try {
+            for (int i = 0; i < myList.length(); i++) {
+                JSONObject oneItem = myList.getJSONObject(i);
+
+                StockInfo info = new StockInfo(oneItem.getString("name"), oneItem.getString("symbol"));
+                result.add(info);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
         return result;

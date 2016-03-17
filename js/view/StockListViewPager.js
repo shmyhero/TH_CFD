@@ -17,6 +17,7 @@ var {
 } = React;
 
 var NativeSceneModule = require('../module/NativeSceneModule')
+var NativeDataModule = require('../module/NativeDataModule')
 var LogicData = require('../LogicData')
 var StockListPage = require('./StockListPage')
 var NetworkModule = require('../module/NetworkModule')
@@ -76,7 +77,7 @@ var StockListViewPager = React.createClass({
 	},
 
 	editButtonClicked: function() {
-		console.log('Edit button clicked.')
+		NativeDataModule.passDataToNative('myList', LogicData.getOwnStocksData())
 		NativeSceneModule.launchNativeScene('StockEditFragment')
 	},
 

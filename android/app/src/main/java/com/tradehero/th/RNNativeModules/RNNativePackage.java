@@ -18,6 +18,7 @@ public class RNNativePackage implements ReactPackage {
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         return Arrays.asList(new NativeModule[]{
                 new NativeSceneModule(reactContext),
+                new NativeDataModule(reactContext),
         });
     }
 

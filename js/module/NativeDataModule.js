@@ -2,11 +2,17 @@
 
 var NativeDataModule = require('NativeModules').NativeData;
 var RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
+var LogicData = require('../LogicData')
+
+let MY_LIST = 'myList'
 
 RCTDeviceEventEmitter.addListener(
 	'nativeSendDataToRN',
-	(dataName, data) => {
-		
+	(args) => {
+		if (args[0] == MY_LIST) {
+			LogicData.setOwnStocksData(JSON.parse(args[1]))
+		}
+		console.log('Get data from Native ' + args[0] + ' : ' + args[1])
 	}
 )
 

@@ -1,8 +1,12 @@
 package com.tradehero.th.RNNativeModules;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.tradehero.th.module.LogicData;
 
 import org.json.JSONArray;
@@ -26,13 +30,15 @@ public class NativeDataModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void passDataToNative(String dataName, String data) {
-        try {
-            JSONArray jsonArray = new JSONArray(data);
-            LogicData.getInstance().setData(dataName, jsonArray);
-        } catch (JSONException e) {
-
-        }
+        LogicData.getInstance().setData(dataName, data);
     }
 
+    public static void passDataToRN(ReactContext context, String dataName, String data) {
+        WritableArray args = Arguments.createArray();
+        args.pushString(dataName);
+        args.pushString(data);
 
+        context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).
+                emit("nativeSendDataToRN", args);
+    }
 }

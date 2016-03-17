@@ -12,7 +12,10 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.mobeta.android.dslv.DragSortListView;
+import com.tradehero.th.RNNativeModules.NativeDataModule;
 import com.tradehero.th.module.LogicData;
 
 import org.json.JSONArray;
@@ -22,7 +25,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -58,7 +60,7 @@ public class StockEditFragment extends Fragment {
         View view = inflater.inflate(R.layout.stock_edit, container, false);
         ButterKnife.bind(this, view);
 
-        JSONArray myListArray = LogicData.getInstance().getMyList();
+        final JSONArray myListArray = LogicData.getInstance().getMyList();
         List<StockInfo> stockInfo = generateStockInfoList(myListArray);
 
         adapter = new StockListAdapter(getActivity(), R.layout.list_item_checkable, stockInfo);
@@ -78,6 +80,37 @@ public class StockEditFragment extends Fragment {
             public void onClick(View v) {
                 adapter.deleteChecked();
                 updateDeleteButton();
+            }
+        });
+
+        final NativeViewActivity activity = (NativeViewActivity) getActivity();
+        activity.setHeadLeftCallback(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JSONArray result = new JSONArray();
+
+                try {
+                    for (int i = 0; i < adapter.getCount(); i ++) {
+                        StockInfo info = adapter.getItem(i);
+
+                        for (int j = 0; j < myListArray.length(); j ++) {
+                            JSONObject stockObject = myListArray.getJSONObject(j);
+
+                            if (stockObject.getString("name").equals(info.mName)) {
+                                result.put(stockObject);
+                                break;
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                ReactContext context = RNManager.getInstanceManager(getActivity().getApplication()).getCurrentReactContext();
+
+                NativeDataModule.passDataToRN(context, LogicData.MY_LIST, result.toString());
+
+                activity.finish();
             }
         });
 

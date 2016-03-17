@@ -5,12 +5,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
@@ -19,6 +22,12 @@ import butterknife.ButterKnife;
 public class NativeViewActivity extends AppCompatActivity {
 
     public static final String START_FRAGMENT_NAME = "fragmentName";
+    @Bind(R.id.tvHeadLeft)
+    TextView tvHeadLeft;
+    @Bind(R.id.tvHeadLeftContainer)
+    LinearLayout tvHeadLeftContainer;
+    @Bind(R.id.tvHeadMiddleMain)
+    TextView tvHeadMiddleMain;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -30,6 +39,7 @@ public class NativeViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.native_activity_container);
+        ButterKnife.bind(this);
 
         String fragmentClassName = getIntent().getExtras().getString(START_FRAGMENT_NAME);
         try {
@@ -52,13 +62,13 @@ public class NativeViewActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    public void setHeadLeftCallback() {
-
+    public void setHeadLeftCallback(View.OnClickListener listener) {
+        tvHeadLeftContainer.setOnClickListener(listener);
     }
 
     private void setupToolbar(Toolbar toolbar, String title, String leftText) {
-        TextView tvHeadLeft = (TextView) toolbar.findViewById(R.id.tvHeadLeft);
-        TextView tvHeadMiddleMain = (TextView) toolbar.findViewById(R.id.tvHeadMiddleMain);
+        tvHeadLeft = (TextView) toolbar.findViewById(R.id.tvHeadLeft);
+        tvHeadMiddleMain = (TextView) toolbar.findViewById(R.id.tvHeadMiddleMain);
 
         tvHeadLeft.setText(leftText);
         tvHeadMiddleMain.setText(title);

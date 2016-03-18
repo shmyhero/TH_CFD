@@ -275,7 +275,7 @@ var StockListPage = React.createClass({
 
 				<View style={styles.rowCenterPart}>
 					<Text style={styles.stockLastText}>
-						{rowData.last.toFixed(4)}
+						{rowData.last}
 					</Text>
 				</View>
 

@@ -13,6 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	var rnRootViewController: UIViewController?
 	var window: UIWindow?
+	var nativeData: NativeData?
 	
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 		// Override point for customization after application launch.

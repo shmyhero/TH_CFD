@@ -102,21 +102,18 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		rawData = rawData.filter({ (stock) -> Bool in
 			stock.choose == false
 		})
+		
 		editTableView.endUpdates()
+		
 	}
 	
 	@IBAction func didTapOKButton(sender: AnyObject) {
+		StockDataManager.sharedInstance().stockDataArray = rawData
 		let dataString:String = StockDataManager.sharedInstance().jsonOwnStockData()
-		NativeData.sharedInstance().sendDataToRN("myList", data: dataString)
-		
 		let delegate:AppDelegate! = UIApplication.sharedApplication().delegate as! AppDelegate
+		delegate!.nativeData!.sendDataToRN("myList", data: dataString)
 		delegate!.rnRootViewController?.dismissViewControllerAnimated(true, completion: { () -> Void in
 			print("dismiss")
 		})
-	}
-	
-	func showEditOwnStocksView(message: String!){
-		print("show edit!")
-		print("EditOwnStocksViewController::printMessage => \(message)")
 	}
 }

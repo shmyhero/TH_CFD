@@ -7,3 +7,5 @@
 #import "../Libraries/LinkingIOS/RCTLinkingManager.h"
 
 #import	"NativeData.h"
+#import "RCTBridge.h"
+#import "RCTEventDispatcher.h"

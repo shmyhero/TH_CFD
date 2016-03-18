@@ -31,8 +31,8 @@ class StockData: NSObject {
 		self.symbol = dict["symbol"] as? String
 		self.name = dict["name"] as? String
 		self.open = dict["open"] as? Double
-		self.close = dict["close"] as? Double
-		self.stockTag = dict["tag"] as? String
+		self.close = dict["last"] as? Double
+		self.stockTag = ""//dict["tag"] as? String
 	}
 	
 	func outputDictionay() -> NSDictionary {
@@ -40,9 +40,9 @@ class StockData: NSObject {
 			"id":self.stockId,
 			"symbol":self.symbol!,
 			"name":self.name!,
-			"open":0,//self.open!,
-			"close":0,//self.close!,
-			"tag":""//self.stockTag!
+			"open":self.open!,
+			"close":self.close!,
+			"tag":self.stockTag!
 		]
 		return dict
 	}

@@ -1,12 +1,12 @@
 'use strict';
 
 var NativeDataModule = require('NativeModules').NativeData;
-var RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
+var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 var LogicData = require('../LogicData')
 
 let MY_LIST = 'myList'
 
-RCTDeviceEventEmitter.addListener(
+RCTNativeAppEventEmitter.addListener(
 	'nativeSendDataToRN',
 	(args) => {
 		if (args[0] == MY_LIST) {

@@ -6,11 +6,9 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableArray;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.facebook.react.modules.core.RCTNativeAppEventEmitter;
 import com.tradehero.th.module.LogicData;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
@@ -38,7 +36,7 @@ public class NativeDataModule extends ReactContextBaseJavaModule {
         args.pushString(dataName);
         args.pushString(data);
 
-        context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).
+        context.getJSModule(RCTNativeAppEventEmitter.class).
                 emit("nativeSendDataToRN", args);
     }
 }

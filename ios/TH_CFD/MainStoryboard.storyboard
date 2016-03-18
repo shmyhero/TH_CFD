@@ -129,7 +129,7 @@
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xu9-Ut-wRa">
                                         <rect key="frame" x="194" y="7" width="170" height="43"/>
-                                        <color key="backgroundColor" red="0.1019607843" green="0.3803921569" blue="0.86666666670000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" red="0.8784313725490196" green="0.8784313725490196" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="删除">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -182,6 +182,8 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="allButton" destination="YtX-PF-eiI" id="lfI-D8-MAm"/>
+                        <outlet property="deleteButton" destination="Xu9-Ut-wRa" id="xY6-2T-Xxj"/>
                         <outlet property="editTableView" destination="9Dc-ei-Pxv" id="7i2-67-Sqc"/>
                     </connections>
                 </viewController>

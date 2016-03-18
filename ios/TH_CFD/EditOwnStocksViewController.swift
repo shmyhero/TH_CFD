@@ -11,21 +11,54 @@ import UIKit
 class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 	
 	@IBOutlet weak var editTableView: UITableView!
+	@IBOutlet weak var allButton: UIButton!
+	@IBOutlet weak var deleteButton: UIButton!
+	
+	var allSelect:Bool = false
+	
 	var rawData:[StockData] = []
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		editTableView.editing = true
+		// remove empty lines
+		editTableView.tableFooterView = UIView()
 	}
 	
 	override func viewDidAppear(animated: Bool) {
 		rawData = StockDataManager.sharedInstance().stockDataArray
 		editTableView.reloadData()
+		allButton.layer.cornerRadius = 4
+		deleteButton.layer.cornerRadius = 4
+		self.updateDeleteButton()
 	}
 	
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
 		// Dispose of any resources that can be recreated.
+	}
+	
+	func updateDeleteButton() {
+		let selectedRows = rawData.filter({ (stock) -> Bool in
+			stock.choose == true
+		})
+		deleteButton.enabled = selectedRows.count > 0
+		if deleteButton.enabled {
+			deleteButton.backgroundColor = UIColor(netHex: 0xf1585c)
+			deleteButton.setTitle("删除(\(selectedRows.count))", forState: .Normal)
+		}
+		else {
+			deleteButton.backgroundColor = UIColor(netHex: 0xe0e0e0)
+			deleteButton.setTitle("删除", forState: .Normal)
+		}
+	}
+	
+	func updateAllButton() {
+		let selectedRows = rawData.filter({ (stock) -> Bool in
+			stock.choose == true
+		})
+		allSelect = selectedRows.count == rawData.count
+		allButton.setTitle(allSelect ? "取消":"全部", forState: .Normal)
 	}
 	
 	// MARK: - Table view data source
@@ -62,6 +95,11 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 			self.editTableView.endUpdates()
 		}
 		
+		cell.selectCell { (selectStock) -> Void in
+			self.updateDeleteButton()
+			self.updateAllButton()
+		}
+		
 		return cell
 	}
 	
@@ -86,10 +124,13 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 	}
 	
 	@IBAction func didTapAllButton(sender: AnyObject) {
+		allSelect = !allSelect
 		for stock in rawData {
-			stock.choose = true
+			stock.choose = allSelect
 		}
 		editTableView.reloadData()
+		updateDeleteButton()
+		updateAllButton()
 	}
 	
 	@IBAction func didTapDeleteButton(sender: AnyObject) {

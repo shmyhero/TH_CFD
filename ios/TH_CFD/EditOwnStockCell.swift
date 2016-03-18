@@ -26,9 +26,14 @@ class EditOwnStockCell: UITableViewCell {
 	
 	typealias callbackfunc=(selectStock:StockData)->Void
 	var tapTop = callbackfunc?()
+	var tapSelect = callbackfunc?()
 	
 	func moveToTop( tapTopFunction:callbackfunc ){
 		tapTop = tapTopFunction
+	}
+	
+	func selectCell( tapSelectButton:callbackfunc ){
+		tapSelect = tapSelectButton
 	}
 	
 	override func awakeFromNib() {
@@ -36,20 +41,15 @@ class EditOwnStockCell: UITableViewCell {
 		// Initialization code
 	}
 	
-	override func setSelected(selected: Bool, animated: Bool) {
-		super.setSelected(selected, animated: animated)
-		
-		// Configure the view for the selected state
-	}
-	
 	@IBAction func tapSelectButton(sender: AnyObject) {
 		self.stockData!.choose = !self.stockData!.choose
 		let name:String = self.stockData!.choose ?"Select":"Unselect"
 		self.selectButton?.setImage(UIImage.init(named: name), forState: .Normal)
+		
+		tapSelect!(selectStock: stockData!)
 	}
 	
 	@IBAction func tapTopButton(sender: AnyObject) {
-		print(sender);
 		tapTop!(selectStock: stockData!);
 	}
 }

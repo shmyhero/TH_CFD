@@ -31,6 +31,7 @@
 		3D6A23E51C9AA93F00FF1306 /* NativeScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A23E41C9AA93F00FF1306 /* NativeScene.m */; };
 		3D6A24091C9AB90000FF1306 /* NativeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A24081C9AB90000FF1306 /* NativeData.m */; };
 		3D6A240B1C9ABDE900FF1306 /* StockDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */; };
+		3D6A24181C9C026200FF1306 /* SwiftExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A24171C9C026200FF1306 /* SwiftExtensions.swift */; };
 		3D8575FA1C8EC8F300D88946 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D8575F91C8EC8F300D88946 /* icomoon.ttf */; };
 		73273AD31C7B0EC1004EED11 /* guide_screen1.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273ACF1C7B0EC1004EED11 /* guide_screen1.png */; };
 		73273AD41C7B0EC1004EED11 /* guide_screen2.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273AD01C7B0EC1004EED11 /* guide_screen2.png */; };
@@ -157,6 +158,7 @@
 		3D6A24071C9AB90000FF1306 /* NativeData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NativeData.h; path = TH_CFD/NativeData.h; sourceTree = "<group>"; };
 		3D6A24081C9AB90000FF1306 /* NativeData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NativeData.m; path = TH_CFD/NativeData.m; sourceTree = "<group>"; };
 		3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StockDataManager.swift; path = TH_CFD/StockDataManager.swift; sourceTree = "<group>"; };
+		3D6A24171C9C026200FF1306 /* SwiftExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftExtensions.swift; path = TH_CFD/SwiftExtensions.swift; sourceTree = "<group>"; };
 		3D8575F91C8EC8F300D88946 /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = icomoon.ttf; sourceTree = "<group>"; };
 		73273ACF1C7B0EC1004EED11 /* guide_screen1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen1.png; sourceTree = "<group>"; };
 		73273AD01C7B0EC1004EED11 /* guide_screen2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen2.png; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 				3D6A23E41C9AA93F00FF1306 /* NativeScene.m */,
 				3D6A24071C9AB90000FF1306 /* NativeData.h */,
 				3D6A24081C9AB90000FF1306 /* NativeData.m */,
+				3D6A24171C9C026200FF1306 /* SwiftExtensions.swift */,
 			);
 			name = TH_CFD;
 			sourceTree = "<group>";
@@ -636,6 +639,7 @@
 				3D61C5CB1C9909CB0037816A /* EditOwnStocksViewController.swift in Sources */,
 				3D6A23E51C9AA93F00FF1306 /* NativeScene.m in Sources */,
 				3D47CB491C897882000EF6EF /* AppDelegate.swift in Sources */,
+				3D6A24181C9C026200FF1306 /* SwiftExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

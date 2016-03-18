@@ -15,8 +15,12 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		rawData = StockDataManager.sharedInstance().stockDataArray
 		editTableView.editing = true
+	}
+	
+	override func viewDidAppear(animated: Bool) {
+		rawData = StockDataManager.sharedInstance().stockDataArray
+		editTableView.reloadData()
 	}
 	
 	override func didReceiveMemoryWarning() {

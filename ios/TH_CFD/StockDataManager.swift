@@ -13,7 +13,7 @@ class StockData: NSObject {
 	var symbol: String?
 	var name: String?
 	var open: Double?
-	var close: Double?
+	var last: Double?
 	var stockTag: String?
 	var choose: Bool = false
 	
@@ -22,7 +22,7 @@ class StockData: NSObject {
 		self.symbol = symbol
 		self.name = name
 		self.open = open
-		self.close = close
+		self.last = close
 		self.stockTag = stockTag
 	}
 	
@@ -31,7 +31,7 @@ class StockData: NSObject {
 		self.symbol = dict["symbol"] as? String
 		self.name = dict["name"] as? String
 		self.open = dict["open"] as? Double
-		self.close = dict["last"] as? Double
+		self.last = dict["last"] as? Double
 		self.stockTag = ""//dict["tag"] as? String
 	}
 	
@@ -41,7 +41,7 @@ class StockData: NSObject {
 			"symbol":self.symbol!,
 			"name":self.name!,
 			"open":self.open!,
-			"close":self.close!,
+			"last":self.last!,
 			"tag":self.stockTag!
 		]
 		return dict
@@ -74,7 +74,7 @@ class StockDataManager: NSObject {
 		catch {
 			print("error serializing JSON: \(error)")
 		}
-  
+		print(stockDataArray)
 	}
 	
 	func jsonOwnStockData() -> String {

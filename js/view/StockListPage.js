@@ -20,11 +20,12 @@ var NetConstants = require('../NetConstants')
 var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
-var RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
+var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var didFocusSubscription = null;
+var recevieDataSubscription = null;
 
 var StockListPage = React.createClass({
 
@@ -114,23 +115,24 @@ var StockListPage = React.createClass({
 				this.updateOwnData();
 			})
 		    this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
-		    
-		    // Update the data when RN view resumed.
-		    RCTDeviceEventEmitter.addListener(
-				'appStateDidChange',
+
+		    this.recevieDataSubscription = RCTNativeAppEventEmitter.addListener(
+				'nativeSendDataToRN',
 				(args) => {
-					if (args.app_state == 'active') {
+					if (args[0] == 'myList') {
+						LogicData.setOwnStocksData(JSON.parse(args[1]))
 						this.updateOwnData()
 					}
+					console.log('Get data from Native ' + args[0] + ' : ' + args[1])
 				}
 			)
-
 		}
 	},
 
 	componentWillUnmount: function() {
 		if (this.props.isOwnStockPage) {
 			this.didFocusSubscription.remove();
+			this.recevieDataSubscription.remove();
 		}
 	},
 

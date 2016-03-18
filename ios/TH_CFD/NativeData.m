@@ -12,20 +12,33 @@
 @implementation NativeData
 
 RCT_EXPORT_MODULE();
-- (void)receiveDataFromRN:(NSString *)dataName data:(NSString *)jsonData;
+@synthesize bridge = _bridge;
+
++ (id)sharedInstance {
+	static NativeData *sharedInstance = nil;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		sharedInstance = [[self alloc] init];
+	});
+	return sharedInstance;
+}
+
+- (void)receiveDataFromRN:(NSString *)dataName data:(NSString *)jsonData
 {
-	NSError *error;
-	NSData *data = [jsonData dataUsingEncoding:NSUTF8StringEncoding];
-	NSArray *dataArray = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&error];
-	
-	for (NSDictionary *dict in dataArray) {
-		StockData *stock = [[StockData alloc] init];
-		[stock initWithDictionay:dict]
-	}
+	StockDataManager *manager = [StockDataManager sharedInstance];
+	[manager loadOwnStocksData:jsonData];
+}
+
+- (void)sendDataToRN:(NSString *)dataName data:(NSString *)jsonData
+{
+//	[self.bridge.eventDispatcher sendAppEventWithName:@"nativeSendDataToRN" body:jsonData];
+	[self.bridge.eventDispatcher sendDeviceEventWithName:@"nativeSendDataToRN" body:@[dataName, jsonData]];
 }
 
 #pragma mark RCT_EXPORT
 RCT_EXPORT_METHOD(passDataToNative:(NSString *)dataName data:(NSString *)jsonData) {
 	[self receiveDataFromRN:dataName data:jsonData];
 }
+
+
 @end

@@ -15,16 +15,7 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		let d1:StockData? = StockData()
-		d1?.initWithId(20883, symbol: "AUDCAD", name: "苹果", open: 0.916701, close: 0.98570)
-		let d2:StockData? = StockData()
-		d2?.initWithId(20885, symbol: "AUDCHF", name: "百度", open: 0.916701, close: 0.98570)
-		let d3:StockData? = StockData()
-		d3?.initWithId(29567, symbol: "AUDDKK", name: "阿里巴巴", open: 0.916701, close: 0.98570)
-		let d4:StockData? = StockData()
-		d4?.initWithId(29567, symbol: "AUDK", name: "阿里", open: 0.916701, close: 0.98570)
-		
-		rawData = [d1!, d2!, d3!, d4!]
+		rawData = StockDataManager.sharedInstance().stockDataArray
 		editTableView.editing = true
 	}
 	
@@ -115,21 +106,13 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 	}
 	
 	@IBAction func didTapOKButton(sender: AnyObject) {
+		let dataString:String = StockDataManager.sharedInstance().jsonOwnStockData()
+		NativeData.sharedInstance().sendDataToRN("myList", data: dataString)
+		
 		let delegate:AppDelegate! = UIApplication.sharedApplication().delegate as! AppDelegate
 		delegate!.rnRootViewController?.dismissViewControllerAnimated(true, completion: { () -> Void in
 			print("dismiss")
 		})
-//		let d1:StockData? = StockData()
-//		d1?.initWithId(20883, symbol: "AUDCAD", name: "苹果", open: 0.916701, close: 0.98570)
-//		let d2:StockData? = StockData()
-//		d2?.initWithId(20885, symbol: "AUDCHF", name: "百度", open: 0.916701, close: 0.98570)
-//		let d3:StockData? = StockData()
-//		d3?.initWithId(29567, symbol: "AUDDKK", name: "阿里巴巴", open: 0.916701, close: 0.98570)
-//		let d4:StockData? = StockData()
-//		d4?.initWithId(29567, symbol: "AUDK", name: "阿里", open: 0.916701, close: 0.98570)
-//		
-//		rawData = [d1!, d2!, d3!, d4!]
-//		editTableView.reloadData()
 	}
 	
 	func showEditOwnStocksView(message: String!){

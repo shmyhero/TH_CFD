@@ -27,22 +27,70 @@ class StockData: NSObject {
 	}
 	
 	func initWithDictionay(dict:NSDictionary) -> Void {
-		self .initWithId((dict["id"]?.integerValue)!, symbol: (dict["symbol"]?.string)!, name: dict["name"]!.string, open: (dict["open"]?.doubleValue)!, close: (dict["close"]?.doubleValue)!, stockTag: (dict["tag"]?.string)!)
+		self.stockId = (dict["id"] as? Int)!
+		self.symbol = dict["symbol"] as? String
+		self.name = dict["name"] as? String
+		self.open = dict["open"] as? Double
+		self.close = dict["close"] as? Double
+		self.stockTag = dict["tag"] as? String
+	}
+	
+	func outputDictionay() -> NSDictionary {
+		let dict:NSDictionary = [
+			"id":self.stockId,
+			"symbol":self.symbol!,
+			"name":self.name!,
+			"open":0,//self.open!,
+			"close":0,//self.close!,
+			"tag":""//self.stockTag!
+		]
+		return dict
 	}
 }
 
 class StockDataManager: NSObject {
-	var stockData:[StockData]?
-	func initWithJsonData(json:String) -> Void {
-//		NSError *error;
-//		NSData *data = [jsonData dataUsingEncoding:NSUTF8StringEncoding];
-//		NSArray *dataArray = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&error];
-//		
-//		for (NSDictionary *dict in dataArray) {
-//			StockData *stock = [[StockData alloc] init];
-//			[stock initWithDictionay:dict]
-//		}
-//		let data:NSData = json.dataUsingEncoding(NSUTF8StringEncoding)
-//		let dataArray = NSJSONSerialization.JSONObjectWithData(data, options: <#T##NSJSONReadingOptions#>)
+	static let singleton = StockDataManager()
+	
+	var stockDataArray = [StockData]()
+	
+	class func sharedInstance() ->StockDataManager {
+		return StockDataManager.singleton
+	}
+	
+	func loadOwnStocksData(jsonString:String) -> Void {
+		
+		let nsData: NSData = jsonString.dataUsingEncoding(NSUTF8StringEncoding)!
+		stockDataArray = []
+		do {
+			let json: AnyObject? = try NSJSONSerialization.JSONObjectWithData(nsData, options: NSJSONReadingOptions.MutableLeaves)
+			if let jsonArray = json as? NSArray {
+				for stockDict in jsonArray {
+					let stockData:StockData = StockData()
+					stockData.initWithDictionay(stockDict as! NSDictionary)
+					stockDataArray.append(stockData)
+				}
+			}
+		}
+		catch {
+			print("error serializing JSON: \(error)")
+		}
+  
+	}
+	
+	func jsonOwnStockData() -> String {
+		var dataString = "[]"
+		var array = [AnyObject]()
+		for stock in self.stockDataArray {
+			array.append(stock.outputDictionay())
+		}
+		
+		do {
+			let nsData: NSData = try NSJSONSerialization.dataWithJSONObject(array, options: NSJSONWritingOptions.PrettyPrinted)
+			dataString = NSString(data: nsData, encoding:NSUTF8StringEncoding) as! String
+		}
+		catch {
+			print("error serializing data: \(error)")
+		}
+		return dataString
 	}
 }

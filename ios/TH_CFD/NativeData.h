@@ -11,5 +11,7 @@
 #import "RCTEventDispatcher.h"
 
 @interface NativeData : NSObject<RCTBridgeModule>
++ (id)sharedInstance;
 - (void)receiveDataFromRN:(NSString *)dataName data:(NSString *)jsonData;
+- (void)sendDataToRN:(NSString *)dataName data:(NSString *)jsonData;
 @end

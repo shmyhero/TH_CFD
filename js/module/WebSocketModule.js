@@ -1,6 +1,7 @@
 'use strict'
 
 require('../utils/jquery-1.6.4')
+require('../utils/jquery.signalR-2.2.0')
 
 var serverURL = 'http://cfd-webapi.chinacloudapp.cn'
 var serverName = 'Q'

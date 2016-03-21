@@ -1,6 +1,6 @@
 'use strict'
 
-var signalr = require('react-native-signalr');
+require('../utils/jquery-1.6.4')
 
 var serverURL = 'http://cfd-webapi.chinacloudapp.cn'
 var serverName = 'Q'
@@ -13,25 +13,25 @@ export function start(messageCallback, errorCallback) {
 	this.stop();
 	wsErrorCallback = errorCallback
 
-	webSocketConnection = signalr.hubConnection(serverURL);
+	webSocketConnection = $.hubConnection(serverURL);
 	webSocketConnection.logging = false;
 
 	webSocketProxy = webSocketConnection.createHubProxy(serverName);
-
+	
 	//receives broadcast messages from a hub function, called "broadcastMessage"
 	// StockInfo data structure: {"Symbol":"MSFT","Price":31.97,"DayOpen":30.31,"Change":1.66,"PercentChange":0.0519}
 	webSocketProxy.on(serverListenerName, (stockInfo) => {
 		messageCallback(stockInfo)
 	});
 
-	// atempt connection, and handle errors
+		// atempt connection, and handle errors
 	webSocketConnection.start()
 		.done(() => { 
 			console.log('Now connected, connection ID=' + webSocketConnection.id); 
 		})
 		.fail((error) => {
 			errorCallback(error.message)
-		});
+	});
 
 	//connection-handling
 	webSocketConnection.connectionSlow(function () {

@@ -7,17 +7,25 @@
 //
 
 import Foundation
-
+// MARK: UIColor
 extension UIColor {
-	convenience init(red: Int, green: Int, blue: Int) {
-		assert(red >= 0 && red <= 255, "Invalid red component")
-		assert(green >= 0 && green <= 255, "Invalid green component")
-		assert(blue >= 0 && blue <= 255, "Invalid blue component")
+	convenience init(r: Int, g: Int, b: Int, a:CGFloat) {
+		assert(r >= 0 && r <= 255, "Invalid red component")
+		assert(g >= 0 && g <= 255, "Invalid green component")
+		assert(b >= 0 && b <= 255, "Invalid blue component")
 		
-		self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
+		self.init(red: CGFloat(r) / 255.0, green: CGFloat(g) / 255.0, blue: CGFloat(b) / 255.0, alpha: a)
 	}
 	
-	convenience init(netHex:Int) {
-		self.init(red:(netHex >> 16) & 0xff, green:(netHex >> 8) & 0xff, blue:netHex & 0xff)
+	convenience init(hex:Int, alpha:CGFloat=1.0) {
+		self.init(r:(hex >> 16) & 0xff, g:(hex >> 8) & 0xff, b:hex & 0xff, a:alpha)
 	}
+}
+
+// MARK: UIViewController
+extension UIViewController {
+	func noticeSuccess(text: String, autoClear: Bool = true, autoClearTime: Int = 1) {
+		SwiftNotice.showNoticeWithText(NoticeType.success, text: text, autoClear: autoClear, autoClearTime: autoClearTime)
+	}
+
 }

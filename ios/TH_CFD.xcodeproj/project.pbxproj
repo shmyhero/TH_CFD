@@ -23,6 +23,7 @@
 		3D2A3A011C7C3EE70085264D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A3A001C7C3EE70085264D /* libz.tbd */; };
 		3D2A3A081C7C44470085264D /* libRCTWeChat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A3A071C7C44270085264D /* libRCTWeChat.a */; };
 		3D2A3A0A1C7C44C50085264D /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A3A091C7C44C50085264D /* CoreTelephony.framework */; };
+		3D3E1EFF1C9F9C1C0064F187 /* SwiftNotice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3E1EFE1C9F9C1C0064F187 /* SwiftNotice.swift */; };
 		3D47CB491C897882000EF6EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D47CB481C897882000EF6EF /* AppDelegate.swift */; };
 		3D5C46C81C92B51000BF6FD3 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 3D5C46C71C92B51000BF6FD3 /* main.jsbundle */; };
 		3D61C5CB1C9909CB0037816A /* EditOwnStocksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */; };
@@ -147,6 +148,7 @@
 		3D2A3A001C7C3EE70085264D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		3D2A3A021C7C44270085264D /* RCTWeChat.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWeChat.xcodeproj; path = "../node_modules/react-native-wx/ios/RCTWeChat.xcodeproj"; sourceTree = "<group>"; };
 		3D2A3A091C7C44C50085264D /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		3D3E1EFE1C9F9C1C0064F187 /* SwiftNotice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftNotice.swift; path = TH_CFD/SwiftNotice.swift; sourceTree = "<group>"; };
 		3D47CB471C897879000EF6EF /* TH_CFD-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TH_CFD-Bridging-Header.h"; sourceTree = "<group>"; };
 		3D47CB481C897882000EF6EF /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = TH_CFD/AppDelegate.swift; sourceTree = "<group>"; };
 		3D5C46C71C92B51000BF6FD3 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
@@ -276,6 +278,8 @@
 		13B07FAE1A68108700A75B9A /* TH_CFD */ = {
 			isa = PBXGroup;
 			children = (
+				3D3E1F0C1C9F9C340064F187 /* Swift */,
+				3D3E1F0B1C9F9C240064F187 /* ObjC */,
 				3D5C46C71C92B51000BF6FD3 /* main.jsbundle */,
 				3D8575F91C8EC8F300D88946 /* icomoon.ttf */,
 				3D47CB481C897882000EF6EF /* AppDelegate.swift */,
@@ -287,15 +291,7 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
-				3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */,
-				3D61C5F01C9931810037816A /* EditOwnStockCell.swift */,
-				3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */,
 				3D61C5F21C9931A10037816A /* MainStoryboard.storyboard */,
-				3D6A23E31C9AA93F00FF1306 /* NativeScene.h */,
-				3D6A23E41C9AA93F00FF1306 /* NativeScene.m */,
-				3D6A24071C9AB90000FF1306 /* NativeData.h */,
-				3D6A24081C9AB90000FF1306 /* NativeData.m */,
-				3D6A24171C9C026200FF1306 /* SwiftExtensions.swift */,
 			);
 			name = TH_CFD;
 			sourceTree = "<group>";
@@ -314,6 +310,29 @@
 				3D2A3A071C7C44270085264D /* libRCTWeChat.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		3D3E1F0B1C9F9C240064F187 /* ObjC */ = {
+			isa = PBXGroup;
+			children = (
+				3D6A23E31C9AA93F00FF1306 /* NativeScene.h */,
+				3D6A23E41C9AA93F00FF1306 /* NativeScene.m */,
+				3D6A24071C9AB90000FF1306 /* NativeData.h */,
+				3D6A24081C9AB90000FF1306 /* NativeData.m */,
+			);
+			name = ObjC;
+			sourceTree = "<group>";
+		};
+		3D3E1F0C1C9F9C340064F187 /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */,
+				3D61C5F01C9931810037816A /* EditOwnStockCell.swift */,
+				3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */,
+				3D6A24171C9C026200FF1306 /* SwiftExtensions.swift */,
+				3D3E1EFE1C9F9C1C0064F187 /* SwiftNotice.swift */,
+			);
+			name = Swift;
 			sourceTree = "<group>";
 		};
 		78C398B11ACF4ADC00677621 /* Products */ = {
@@ -636,6 +655,7 @@
 				3D6A24091C9AB90000FF1306 /* NativeData.m in Sources */,
 				3D61C5F11C9931810037816A /* EditOwnStockCell.swift in Sources */,
 				3D6A240B1C9ABDE900FF1306 /* StockDataManager.swift in Sources */,
+				3D3E1EFF1C9F9C1C0064F187 /* SwiftNotice.swift in Sources */,
 				3D61C5CB1C9909CB0037816A /* EditOwnStocksViewController.swift in Sources */,
 				3D6A23E51C9AA93F00FF1306 /* NativeScene.m in Sources */,
 				3D47CB491C897882000EF6EF /* AppDelegate.swift in Sources */,

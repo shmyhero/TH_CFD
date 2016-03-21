@@ -44,11 +44,11 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		})
 		deleteButton.enabled = selectedRows.count > 0
 		if deleteButton.enabled {
-			deleteButton.backgroundColor = UIColor(netHex: 0xf1585c)
+			deleteButton.backgroundColor = UIColor(hex: 0xf1585c)
 			deleteButton.setTitle("删除(\(selectedRows.count))", forState: .Normal)
 		}
 		else {
-			deleteButton.backgroundColor = UIColor(netHex: 0xe0e0e0)
+			deleteButton.backgroundColor = UIColor(hex: 0xe0e0e0)
 			deleteButton.setTitle("删除", forState: .Normal)
 		}
 	}
@@ -93,6 +93,7 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 				}
 			}
 			self.editTableView.endUpdates()
+			self.noticeSuccess("已置顶")
 		}
 		
 		cell.selectCell { (selectStock) -> Void in

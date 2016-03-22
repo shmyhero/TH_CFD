@@ -1,6 +1,7 @@
 'use strict'
 
 var React = require('react-native');
+var LineChart = require('./component/LineChart')
 var Swiper = require('react-native-swiper')
 
 var {
@@ -9,7 +10,8 @@ var {
 	Image,
 	Text,
 	TouchableHighlight,
-	Alert
+	Alert,
+	Dimensions,
 } = React;
 
 var LogicData = require('../LogicData')
@@ -56,13 +58,15 @@ var LandingPage = React.createClass({
 	},
 
 	render: function() {
+		var {height, width} = Dimensions.get('window');
+
 		return (
 			<View style={styles.wrapper}>
+				
+
 				<Swiper height={420} loop={false} bounces={true}>
 					<View style={styles.slide}>
-						<Image 
-							style={styles.image} 
-							source={require('image!guide_screen1')}/>
+						<LineChart style={{flex: 1, width: width}}/>
 					</View>
 					<View style={styles.slide}>
 						<Image 
@@ -109,6 +113,7 @@ var styles = StyleSheet.create({
 	},
 	slide: {
 		alignItems: 'center',
+		flex: 1,
 	},
 	image: {
 		flex: 1,

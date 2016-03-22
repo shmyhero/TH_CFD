@@ -76,6 +76,10 @@ def enableSeparateBuildPerCPUArchitecture = false
  */
 def enableProguardInReleaseBuilds = false
 
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
@@ -143,6 +147,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'asia.ivity.android:drag-sort-listview:1.0'
+    compile 'com.github.PhilJay:MPAndroidChart:v2.2.3'
 
     compile project(':react-native-wx')
 

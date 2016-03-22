@@ -1,7 +1,7 @@
 'use strict'
 
 var React = require('react-native');
-var LineChart = require('./component/LineChart')
+var LineChartAndroid = require('./component/lineChart/LineChartAndroid')
 var Swiper = require('react-native-swiper')
 
 var {
@@ -66,12 +66,12 @@ var LandingPage = React.createClass({
 
 				<Swiper height={420} loop={false} bounces={true}>
 					<View style={styles.slide}>
-						<LineChart style={{flex: 1, width: width}}/>
-					</View>
-					<View style={styles.slide}>
 						<Image 
 							style={styles.image} 
-							source={require('image!guide_screen2')}/>
+							source={require('image!guide_screen1')}/>
+					</View>
+					<View style={styles.slide}>
+						<LineChartAndroid style={{flex: 1, width: width}} xAxisTextSize={0}/>
 					</View>
 					<View style={styles.slide}>
 						<Image 

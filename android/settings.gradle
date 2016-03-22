@@ -2,5 +2,7 @@ rootProject.name = 'TH_CFD'
 
 include ':app'
 include ':react-native-wx'
+include ':MPChartLib'
 
 project(':react-native-wx').projectDir = new File(settingsDir, '../node_modules/react-native-wx/android')
+project(':MPChartLib').projectDir = new File(settingsDir, './MPChartLib')

@@ -2,10 +2,12 @@ package com.tradehero.th.views;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.annotations.ReactProp;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -29,36 +31,145 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
         ReactLineChart chart = new ReactLineChart(reactContext);
 
         chart.setDrawGridBackground(false);
-
-        // no description text
-        chart.setDescription("");
-        chart.setNoDataTextDescription("You need to provide data for the chart.");
-
-        chart.setMinOffset(10f);
-
-        chart.getXAxis().setPosition(XAxis.XAxisPosition.BOTH_SIDED);
-        chart.getXAxis().setLabelsToSkip(19);
-
-        YAxis leftAxis = chart.getAxisLeft();
-        leftAxis.setAxisMaxValue(42f);
-        leftAxis.setAxisMinValue(28f);
-        leftAxis.enableGridDashedLine(10f, 10f, 0f);
-        leftAxis.setDrawZeroLine(true);
-
-        // limit lines are drawn behind data (and not on top)
-        leftAxis.setDrawLimitLinesBehindData(true);
-        leftAxis.setLabelCount(2, true);
-        leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
-
-        chart.getAxisRight().setEnabled(false);
+        chart.setDragEnabled(false);
+        chart.setScaleEnabled(false);
+        chart.setTouchEnabled(false);
+        chart.getLegend().setEnabled(false);
 
         // add data
         setData(reactContext, chart, 45, 10);
 
-        chart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
-
         return chart;
     }
+
+    @ReactProp(name = "description")
+    public void setDescription(ReactLineChart chart, @Nullable String description) {
+        if (chart != null) {
+            chart.setDescription(description);
+        }
+    }
+
+    @ReactProp(name = "noDataTextDescription")
+    public void setNoDataTextDescription(ReactLineChart chart, @Nullable String description) {
+        if (chart != null) {
+            if (description != null) {
+                chart.setNoDataTextDescription(description);
+            }
+        }
+    }
+
+    @ReactProp(name = "padding", defaultFloat = 0.0f)
+    public void setPadding(ReactLineChart chart, float padding) {
+        if (chart != null) {
+            chart.setMinOffset(padding);
+        }
+    }
+
+    @ReactProp(name = "xAxisPosition")
+    public void setXAxisPosition(ReactLineChart chart, @Nullable String position) {
+        if (chart != null) {
+            chart.getXAxis().setPosition(XAxis.XAxisPosition.valueOf(position));
+        }
+    }
+
+    @ReactProp(name = "xAxisStep", defaultInt = 1)
+    public void setXAxisStep(ReactLineChart chart, int step) {
+        if (chart != null) {
+            chart.getXAxis().setLabelsToSkip(step - 1);
+        }
+    }
+
+    @ReactProp(name = "xAxisTextSize", defaultFloat = 10.0f)
+    public void setXAxisTextSize(ReactLineChart chart, float size) {
+        if (chart != null) {
+            chart.getXAxis().setTextSize(size);
+        }
+    }
+
+    @ReactProp(name = "leftAxisEnabled", defaultBoolean = true)
+    public void setLeftAxisEnabled(ReactLineChart chart, boolean enabled) {
+        if (chart != null) {
+            chart.getAxisLeft().setEnabled(enabled);
+        }
+    }
+
+    @ReactProp(name = "leftAxisMaxValue")
+    public void setLeftAxisMaxValue(ReactLineChart chart, float value) {
+        if (chart != null) {
+            chart.getAxisLeft().setAxisMaxValue(value);
+        }
+    }
+
+    @ReactProp(name = "leftAxisMinValue")
+    public void setLeftAxisMinValue(ReactLineChart chart, float value) {
+        if (chart != null) {
+            chart.getAxisLeft().setAxisMinValue(value);
+        }
+    }
+
+    @ReactProp(name = "leftAxisPosition")
+    public void setLeftAxisPosition(ReactLineChart chart, String position) {
+        if (chart != null) {
+            chart.getAxisLeft().setPosition(YAxis.YAxisLabelPosition.valueOf(position));
+        }
+    }
+
+    @ReactProp(name = "leftAxisLabelCount")
+    public void setLeftAxisLabelCount(ReactLineChart chart, int num) {
+        if (chart != null) {
+            chart.getAxisLeft().setLabelCount(num, true);
+        }
+    }
+
+    @ReactProp(name = "leftAxisTextSize", defaultFloat = 10.0f)
+    public void setLeftAxisTextSize(ReactLineChart chart, float size) {
+        if (chart != null) {
+            chart.getAxisLeft().setTextSize(size);
+        }
+    }
+
+    @ReactProp(name = "rightAxisEnabled", defaultBoolean = true)
+    public void setRightAxisEnabled(ReactLineChart chart, boolean enabled) {
+        if (chart != null) {
+            chart.getAxisRight().setEnabled(enabled);
+        }
+    }
+
+    @ReactProp(name = "rightAxisMaxValue")
+    public void setRightAxisMaxValue(ReactLineChart chart, float value) {
+        if (chart != null) {
+            chart.getAxisRight().setAxisMaxValue(value);
+        }
+    }
+
+    @ReactProp(name = "rightAxisMinValue")
+    public void setRightAxisMinValue(ReactLineChart chart, float value) {
+        if (chart != null) {
+            chart.getAxisRight().setAxisMinValue(value);
+        }
+    }
+
+    @ReactProp(name = "rightAxisPosition")
+    public void setRightAxisPosition(ReactLineChart chart, String position) {
+        if (chart != null) {
+            chart.getAxisRight().setPosition(YAxis.YAxisLabelPosition.valueOf(position));
+        }
+    }
+
+    @ReactProp(name = "rightAxisLabelCount")
+    public void setRightAxisLabelCount(ReactLineChart chart, int num) {
+        if (chart != null) {
+            chart.getAxisRight().setLabelCount(num, true);
+        }
+    }
+
+    @ReactProp(name = "rightAxisTextSize", defaultFloat = 10.0f)
+    public void setRightAxisTextSize(ReactLineChart chart, float size) {
+        if (chart != null) {
+            chart.getAxisRight().setTextSize(size);
+        }
+    }
+
 
     @Override
     public String getName() {
@@ -94,7 +205,6 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
         set1.setCircleColor(Color.TRANSPARENT);
         set1.setLineWidth(1f);
         set1.setCircleRadius(3f);
-        set1.setDrawCircleHole(false);
         set1.setValueTextSize(0f);
         Drawable drawable = ContextCompat.getDrawable(reactContext, R.drawable.fade_red);
         set1.setFillDrawable(drawable);

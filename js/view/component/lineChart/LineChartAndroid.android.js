@@ -16,6 +16,8 @@ var LineChart = React.createClass({
 	propTypes: {
 		...View.propTypes,
 
+		data: React.PropTypes.string,	// JSON format
+
 		description: React.PropTypes.string,
 
 		noDataTextDescription: React.PropTypes.string,
@@ -27,6 +29,8 @@ var LineChart = React.createClass({
 		xAxisStep: React.PropTypes.number,
 
 		xAxisTextSize: React.PropTypes.number,
+
+		xAxisDrawLabel: React.PropTypes.bool,
 
 		leftAxisEnabled: React.PropTypes.bool,
 
@@ -40,6 +44,10 @@ var LineChart = React.createClass({
 
 		leftAxisTextSize: React.PropTypes.number,
 
+		leftAxisDrawLabel: React.PropTypes.bool,
+
+		leftAxisLimitLines: React.PropTypes.array,
+
 		rightAxisEnabled: React.PropTypes.bool,
 
 		rightAxisMaxValue: React.PropTypes.number,
@@ -51,16 +59,23 @@ var LineChart = React.createClass({
 		rightAxisLabelCount: React.PropTypes.number,
 
 		rightAxisTextSize: React.PropTypes.number,
+
+		rightAxisDrawLabel: React.PropTypes.bool,
 	},
 
 	getDefaultProps(): Object {
 		return {
 			description: '',
-			padding: 0,
+			padding: 10,
 			xAxisStep: 10,
 			xAxisPosition: LineChartXAxisPosition.BOTH_SIDED,
-			leftAxisEnabled: false,
-			rightAxisEnabled: false,
+			xAxisDrawLabel: false,
+			leftAxisEnabled: true,
+			leftAxisDrawLabel: false,
+			leftAxisLabelCount: 2,
+			rightAxisEnabled: true,
+			rightAxisDrawLabel: false,
+			rightAxisLabelCount: 2,
 		};
 	},
 

@@ -5,10 +5,12 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -17,7 +19,12 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.tradehero.th.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
@@ -36,21 +43,78 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
         chart.setTouchEnabled(false);
         chart.getLegend().setEnabled(false);
 
-        // add data
-        setData(reactContext, chart, 45, 10);
+        chart.getAxisLeft().removeAllLimitLines();
+        chart.getAxisRight().removeAllLimitLines();
+        chart.getXAxis().removeAllLimitLines();
+        chart.getAxisLeft().setDrawLimitLinesBehindData(true);
+        chart.getAxisRight().setDrawLimitLinesBehindData(true);
+        chart.getXAxis().setDrawLimitLinesBehindData(true);
+        chart.getXAxis().setDrawGridLines(false);
 
         return chart;
     }
 
+    @ReactProp(name = "data")
+    public void setData(ReactLineChart chart, String chartData) {
+        if (chart != null && chartData != null && chartData.length() > 0) {
+
+            try {
+                JSONArray chartDataList = new JSONArray(chartData);
+
+                ArrayList<String> xVals = new ArrayList<String>();
+                for (int i = 0; i < chartDataList.length(); i++) {
+                    xVals.add((i) + "");
+                }
+
+                ArrayList<Entry> yVals = new ArrayList<Entry>();
+
+                for (int i = 0; i < chartDataList.length(); i++) {
+
+                    float val = (float) (chartDataList.getJSONObject(i).getDouble("p"));
+                    yVals.add(new Entry(val, i));
+                }
+
+                // create a dataset and give it a type
+                LineDataSet set1 = new LineDataSet(yVals, "DataSet 1");
+                // set1.setFillAlpha(110);
+                // set1.setFillColor(Color.RED);
+
+                // set the line to be drawn like this "- - - - - -"
+                set1.enableDashedLine(10f, 0f, 0f);
+                set1.setColor(Color.WHITE);
+                set1.setCircleColor(Color.TRANSPARENT);
+                set1.setLineWidth(1f);
+                set1.setDrawCircles(false);
+                set1.setValueTextSize(0f);
+                Drawable drawable = ContextCompat.getDrawable(chart.getContext(), R.drawable.fade_red);
+                set1.setFillDrawable(drawable);
+                set1.setDrawFilled(true);
+
+                ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+                dataSets.add(set1); // add the datasets
+
+                // create a data object with the datasets
+                LineData data = new LineData(xVals, dataSets);
+
+                // set data
+                chart.setData(data);
+                chart.invalidate();
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @ReactProp(name = "description")
-    public void setDescription(ReactLineChart chart, @Nullable String description) {
+    public void setDescription(ReactLineChart chart, String description) {
         if (chart != null) {
             chart.setDescription(description);
         }
     }
 
     @ReactProp(name = "noDataTextDescription")
-    public void setNoDataTextDescription(ReactLineChart chart, @Nullable String description) {
+    public void setNoDataTextDescription(ReactLineChart chart, String description) {
         if (chart != null) {
             if (description != null) {
                 chart.setNoDataTextDescription(description);
@@ -66,7 +130,7 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
     }
 
     @ReactProp(name = "xAxisPosition")
-    public void setXAxisPosition(ReactLineChart chart, @Nullable String position) {
+    public void setXAxisPosition(ReactLineChart chart, String position) {
         if (chart != null) {
             chart.getXAxis().setPosition(XAxis.XAxisPosition.valueOf(position));
         }
@@ -83,6 +147,13 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
     public void setXAxisTextSize(ReactLineChart chart, float size) {
         if (chart != null) {
             chart.getXAxis().setTextSize(size);
+        }
+    }
+
+    @ReactProp(name = "xAxisDrawLabel")
+    public void setXAxisDrawLabel(ReactLineChart chart, boolean drawEnabled) {
+        if (chart != null) {
+            chart.getXAxis().setDrawLabels(drawEnabled);
         }
     }
 
@@ -128,6 +199,28 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
         }
     }
 
+    @ReactProp(name = "leftAxisDrawLabel")
+    public void setLeftAxisDrawLabel(ReactLineChart chart, boolean drawEnabled) {
+        if (chart != null) {
+            chart.getAxisLeft().setDrawLabels(drawEnabled);
+        }
+    }
+
+    @ReactProp(name = "leftAxisLimitLines")
+    public void setLeftAxisLimitLines(ReactLineChart chart, ReadableArray lines) {
+        if (chart != null) {
+            for (int i = 0; i < lines.size(); i ++) {
+                LimitLine line = new LimitLine(lines.getInt(i));
+                line.setLineColor(Color.GRAY);
+                line.setLineWidth(0.5f);
+                line.enableDashedLine(10f, 0f, 0f);
+                line.setTextSize(0f);
+
+                chart.getAxisLeft().addLimitLine(line);
+            }
+        }
+    }
+
     @ReactProp(name = "rightAxisEnabled", defaultBoolean = true)
     public void setRightAxisEnabled(ReactLineChart chart, boolean enabled) {
         if (chart != null) {
@@ -170,13 +263,19 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
         }
     }
 
+    @ReactProp(name = "rightAxisDrawLabel")
+    public void setRightAxisDrawLabel(ReactLineChart chart, boolean drawEnabled) {
+        if (chart != null) {
+            chart.getAxisRight().setDrawLabels(drawEnabled);
+        }
+    }
 
     @Override
     public String getName() {
         return REACT_CLASS;
     }
 
-    private void setData(ThemedReactContext reactContext, ReactLineChart chart, int count, float range) {
+    private void setData(ReactLineChart chart, int count, float range) {
 
         ArrayList<String> xVals = new ArrayList<String>();
         for (int i = 0; i < count; i++) {
@@ -206,7 +305,7 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
         set1.setLineWidth(1f);
         set1.setCircleRadius(3f);
         set1.setValueTextSize(0f);
-        Drawable drawable = ContextCompat.getDrawable(reactContext, R.drawable.fade_red);
+        Drawable drawable = ContextCompat.getDrawable(chart.getContext(), R.drawable.fade_red);
         set1.setFillDrawable(drawable);
         set1.setDrawFilled(true);
 

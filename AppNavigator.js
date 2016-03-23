@@ -44,6 +44,7 @@ var WechatLoginConfirmPage = require('./js/view/WechatLoginConfirmPage')
 var StockListPage = require('./js/view/StockListPage')
 var StockListViewPager = require('./js/view/StockListViewPager')
 var StockSearchPage = require('./js/view/StockSearchPage')
+var StockDetailPage = require('./js/view/StockDetailPage')
 
 var _navigator;
 BackAndroid.addEventListener('hardwareBackPress', () => {
@@ -125,6 +126,12 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 				<StockSearchPage navigator={navigationOperations}/>
 			</View>
 		);
+	} else if (route.name === 'stockDetail') {
+		return (
+			<View style={{flex: 1}}>
+				<StockDetailPage navigator={navigationOperations} />
+			</View>
+		);
 	}
 };
 
@@ -141,7 +148,7 @@ var AppNavigator = React.createClass({
 	          <RawContent>
             	<Navigator
 					style={styles.container}
-					initialRoute={{name: 'landing'}}
+					initialRoute={{name: 'stockDetail'}}
 					configureScene={() => Navigator.SceneConfigs.PushFromRight}
 					renderScene={RouteMapper} />
 	          </RawContent>

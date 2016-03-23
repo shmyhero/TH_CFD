@@ -34,6 +34,8 @@
 		3D6A240B1C9ABDE900FF1306 /* StockDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */; };
 		3D6A24181C9C026200FF1306 /* SwiftExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A24171C9C026200FF1306 /* SwiftExtensions.swift */; };
 		3D8575FA1C8EC8F300D88946 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D8575F91C8EC8F300D88946 /* icomoon.ttf */; };
+		3DC618011CA2747E00F36541 /* ChartDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC618001CA2747E00F36541 /* ChartDataManager.swift */; };
+		3DC618051CA29F9900F36541 /* StockChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC618041CA29F9900F36541 /* StockChartView.swift */; };
 		73273AD31C7B0EC1004EED11 /* guide_screen1.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273ACF1C7B0EC1004EED11 /* guide_screen1.png */; };
 		73273AD41C7B0EC1004EED11 /* guide_screen2.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273AD01C7B0EC1004EED11 /* guide_screen2.png */; };
 		73273AD51C7B0EC1004EED11 /* guide_screen4.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273AD11C7B0EC1004EED11 /* guide_screen4.png */; };
@@ -162,6 +164,8 @@
 		3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StockDataManager.swift; path = TH_CFD/StockDataManager.swift; sourceTree = "<group>"; };
 		3D6A24171C9C026200FF1306 /* SwiftExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftExtensions.swift; path = TH_CFD/SwiftExtensions.swift; sourceTree = "<group>"; };
 		3D8575F91C8EC8F300D88946 /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = icomoon.ttf; sourceTree = "<group>"; };
+		3DC618001CA2747E00F36541 /* ChartDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChartDataManager.swift; path = TH_CFD/ChartDataManager.swift; sourceTree = "<group>"; };
+		3DC618041CA29F9900F36541 /* StockChartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StockChartView.swift; path = TH_CFD/StockChartView.swift; sourceTree = "<group>"; };
 		73273ACF1C7B0EC1004EED11 /* guide_screen1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen1.png; sourceTree = "<group>"; };
 		73273AD01C7B0EC1004EED11 /* guide_screen2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen2.png; sourceTree = "<group>"; };
 		73273AD11C7B0EC1004EED11 /* guide_screen4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen4.png; sourceTree = "<group>"; };
@@ -328,9 +332,11 @@
 			children = (
 				3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */,
 				3D61C5F01C9931810037816A /* EditOwnStockCell.swift */,
-				3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */,
 				3D6A24171C9C026200FF1306 /* SwiftExtensions.swift */,
 				3D3E1EFE1C9F9C1C0064F187 /* SwiftNotice.swift */,
+				3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */,
+				3DC618001CA2747E00F36541 /* ChartDataManager.swift */,
+				3DC618041CA29F9900F36541 /* StockChartView.swift */,
 			);
 			name = Swift;
 			sourceTree = "<group>";
@@ -654,8 +660,10 @@
 			files = (
 				3D6A24091C9AB90000FF1306 /* NativeData.m in Sources */,
 				3D61C5F11C9931810037816A /* EditOwnStockCell.swift in Sources */,
+				3DC618051CA29F9900F36541 /* StockChartView.swift in Sources */,
 				3D6A240B1C9ABDE900FF1306 /* StockDataManager.swift in Sources */,
 				3D3E1EFF1C9F9C1C0064F187 /* SwiftNotice.swift in Sources */,
+				3DC618011CA2747E00F36541 /* ChartDataManager.swift in Sources */,
 				3D61C5CB1C9909CB0037816A /* EditOwnStocksViewController.swift in Sources */,
 				3D6A23E51C9AA93F00FF1306 /* NativeScene.m in Sources */,
 				3D47CB491C897882000EF6EF /* AppDelegate.swift in Sources */,

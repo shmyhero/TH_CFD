@@ -191,6 +191,42 @@
             </objects>
             <point key="canvasLocation" x="144.5" y="279.5"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="Y61-Lt-Kjz">
+            <objects>
+                <viewController id="IQS-f6-dwJ" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="YMy-lr-Wzs"/>
+                        <viewControllerLayoutGuide type="bottom" id="SLS-Ew-NTz"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="osq-pu-AGB">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GwP-Yx-kdz" customClass="StockChartView" customModule="TH_CFD" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="146" width="375" height="200"/>
+                                <color key="backgroundColor" red="0.098039215690000001" green="0.3294117647" blue="0.72549019609999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="startColor">
+                                        <color key="value" red="0.32941176470588235" green="0.55294117647058827" blue="0.92941176470588238" alpha="1" colorSpace="calibratedRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="endColor">
+                                        <color key="value" red="0.098039215686274508" green="0.32941176470588235" blue="0.72549019607843135" alpha="1" colorSpace="calibratedRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
+                                        <color key="value" red="0.73333333329999995" green="0.80784313730000001" blue="0.92941176469999998" alpha="1" colorSpace="calibratedRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TgG-bE-GVk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="626.5" y="279.5"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Top" width="22" height="22"/>

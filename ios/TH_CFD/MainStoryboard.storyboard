@@ -208,7 +208,7 @@
                                 <color key="backgroundColor" red="0.098039215690000001" green="0.3294117647" blue="0.72549019609999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="color" keyPath="startColor">
-                                        <color key="value" red="0.32941176470588235" green="0.55294117647058827" blue="0.92941176470588238" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="value" red="0.3294117647" green="0.55294117649999996" blue="0.92941176469999998" alpha="1" colorSpace="calibratedRGB"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="color" keyPath="endColor">
                                         <color key="value" red="0.098039215686274508" green="0.32941176470588235" blue="0.72549019607843135" alpha="1" colorSpace="calibratedRGB"/>

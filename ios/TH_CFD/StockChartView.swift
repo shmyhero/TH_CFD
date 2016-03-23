@@ -10,7 +10,7 @@ import UIKit
 
 @IBDesignable class StockChartView: UIView {
 	
-	var leftMargin:CGFloat = 15.0
+	let margin:CGFloat = 15.0
 	var topMargin:CGFloat = 4.0
 	var bottomMargin:CGFloat = 4.0
 	
@@ -70,20 +70,20 @@ import UIKit
 		CGContextSaveGState(context)
 		
 		//top line
-		linePath.moveToPoint(CGPoint(x:leftMargin, y: topMargin + 0.5))
-		linePath.addLineToPoint(CGPoint(x: width - leftMargin,
+		linePath.moveToPoint(CGPoint(x:margin, y: topMargin + 0.5))
+		linePath.addLineToPoint(CGPoint(x: width - margin,
 			y:topMargin + 0.5))
 		
 		//center line
-		linePath.moveToPoint(CGPoint(x:leftMargin,
+		linePath.moveToPoint(CGPoint(x:margin,
 			y: height/2 + topMargin + 0.5))
-		linePath.addLineToPoint(CGPoint(x:width - leftMargin,
+		linePath.addLineToPoint(CGPoint(x:width - margin,
 			y:height/2 + topMargin + 0.5))
 		
 		//bottom line
-		linePath.moveToPoint(CGPoint(x:leftMargin,
+		linePath.moveToPoint(CGPoint(x:margin,
 			y:height - bottomMargin + 0.5))
-		linePath.addLineToPoint(CGPoint(x:width - leftMargin,
+		linePath.addLineToPoint(CGPoint(x:width - margin,
 			y:height - bottomMargin + 0.5))
 		let color = UIColor(hex: 0x497bce)
 		color.setStroke()
@@ -91,8 +91,48 @@ import UIKit
 		linePath.lineWidth = 1
 		linePath.stroke()
 		
-		// Draw vertical grash lines
-		// TODO
+		CGContextRestoreGState(context)
+	}
+	
+	
+	func drawVerticalLines(rect: CGRect) -> Void {
+		let width = rect.width
+		let height = rect.height
+		//Draw horizontal graph lines on the top of everything
+		let linePath = UIBezierPath()
+		let context = UIGraphicsGetCurrentContext()
+		CGContextSaveGState(context)
+		
+		//left line
+		linePath.moveToPoint(CGPoint(x:margin, y: topMargin))
+		linePath.addLineToPoint(CGPoint(x:margin, y:height - bottomMargin))
+		
+		//center lines
+		// calculate time length
+		let startTime = self.chartData.first?.time
+		let endTime = self.chartData.last?.time
+		
+		let interval:NSTimeInterval = 20000//endTime!.timeIntervalSinceDate(startTime!)
+		let hours = Int(interval/3600)
+		if hours > 0 {
+			let unitWidth = 3600*(width-self.margin*2)/CGFloat(interval)
+			for i in 1...hours {
+				linePath.moveToPoint(CGPoint(x:margin+CGFloat(unitWidth)*CGFloat(i),
+					y: topMargin))
+				linePath.addLineToPoint(CGPoint(x:margin+CGFloat(unitWidth)*CGFloat(i),
+					y:height - bottomMargin))
+			}
+		}
+		
+		//right line
+		linePath.moveToPoint(CGPoint(x:width - margin, y:bottomMargin))
+		linePath.addLineToPoint(CGPoint(x:width - margin, y:height - bottomMargin))
+		let color = UIColor(hex: 0x497bce)
+		color.setStroke()
+		
+		linePath.lineWidth = 1
+		linePath.stroke()
+		
 		CGContextRestoreGState(context)
 	}
 	
@@ -102,13 +142,12 @@ import UIKit
 		let lastIndex = self.chartData.count - 1
 
 		//calculate the x point
-		let margin:CGFloat = 20.0
 		let columnXPoint = { (column:Int) -> CGFloat in
 			//Calculate gap between points
-			let spacer = (width - margin*2 - 4) /
+			let spacer = (width - self.margin*2) /
 				CGFloat((lastIndex))
 			var x:CGFloat = CGFloat(column) * spacer
-			x += margin + 2
+			x += self.margin
 			return x
 		}
 		// calculate the y point
@@ -186,6 +225,7 @@ import UIKit
 		CGContextRestoreGState(context)
 		
 		self.drawHorizontalLines(rect)
+		self.drawVerticalLines(rect)
 		
 		//draw the line on top of the clipped gradient
 		graphPath.lineWidth = 1.0

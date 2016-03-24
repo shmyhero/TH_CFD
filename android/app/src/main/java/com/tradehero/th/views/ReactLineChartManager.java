@@ -21,6 +21,7 @@ import com.tradehero.th.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,11 +56,16 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
     }
 
     @ReactProp(name = "data")
-    public void setData(ReactLineChart chart, String chartData) {
-        if (chart != null && chartData != null && chartData.length() > 0) {
+    public void setData(ReactLineChart chart, String stockInfoData) {
+        if (chart != null && stockInfoData != null && stockInfoData.length() > 0) {
 
             try {
-                JSONArray chartDataList = new JSONArray(chartData);
+                JSONObject stockInfoObject = new JSONObject(stockInfoData);
+                if (!stockInfoObject.has("priceData")) {
+                    return;
+                }
+
+                JSONArray chartDataList = stockInfoObject.getJSONArray("priceData");
 
                 ArrayList<String> xVals = new ArrayList<String>();
                 for (int i = 0; i < chartDataList.length(); i++) {
@@ -110,6 +116,13 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
     public void setDescription(ReactLineChart chart, String description) {
         if (chart != null) {
             chart.setDescription(description);
+        }
+    }
+
+    @ReactProp(name = "noDataText")
+    public void setNoDataText(ReactLineChart chart, String text) {
+        if (chart != null) {
+            chart.setNoDataText(text);
         }
     }
 

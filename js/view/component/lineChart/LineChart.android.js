@@ -20,6 +20,8 @@ var LineChart = React.createClass({
 
 		description: React.PropTypes.string,
 
+		noDataText: React.PropTypes.string,
+
 		noDataTextDescription: React.PropTypes.string,
 
 		padding: React.PropTypes.number,
@@ -66,6 +68,7 @@ var LineChart = React.createClass({
 	getDefaultProps(): Object {
 		return {
 			description: '',
+			noDataText: '数据加载中...',
 			padding: 10,
 			xAxisStep: 10,
 			xAxisPosition: LineChartXAxisPosition.BOTH_SIDED,

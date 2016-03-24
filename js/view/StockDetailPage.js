@@ -32,11 +32,15 @@ var StockDetailPage = React.createClass({
 
 	getInitialState: function() {
 		return {
-			stockInfo: '',
+			stockInfo: [],
 		};
 	},
 
 	componentDidMount: function() {
+		this.loadStockInfo()
+	},
+
+	loadStockInfo: function() {
 		var url = NetConstants.GET_STOCK_DETAIL_API
 		url = url.replace(/<stockCode>/, this.props.stockCode)
 
@@ -47,7 +51,31 @@ var StockDetailPage = React.createClass({
 			},
 			(responseJson) => {
 				this.setState({
-					stockInfo: JSON.stringify(responseJson)
+					stockInfo: responseJson,
+				})
+
+				this.loadStockPriceToday()
+			},
+			(errorMessage) => {
+				Alert.alert('网络错误提示', errorMessage);
+			}
+		)
+	},
+
+	loadStockPriceToday: function() {
+		var url = NetConstants.GET_STOCK_PRICE_TODAY_API
+		url = url.replace(/<stockCode>/, this.props.stockCode)
+
+		NetworkModule.fetchTHUrl(
+			url, 
+			{
+				method: 'GET',
+			},
+			(responseJson) => {
+				var tempStockInfo = this.state.stockInfo
+				tempStockInfo.priceData = responseJson
+				this.setState({
+					stockInfo: tempStockInfo,
 				})
 			},
 			(errorMessage) => {
@@ -56,7 +84,6 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
-
 	render: function() {
 		var {height, width} = Dimensions.get('window');
 
@@ -64,10 +91,14 @@ var StockDetailPage = React.createClass({
 			<View style={styles.wrapper}>
 				<LinearGradient colors={['#1c5fd1', '#123b80']} style={{height: height}}>
 					<View style={{flex: 1}}>
-						<LineChartAndroid style={{flex: 1}} data={this.state.stockInfo}/>
+
 					</View>
 
-					<View style={{flex: 1}}>
+					<View style={{flex: 3}}>
+						<LineChartAndroid style={{flex: 1}} data={JSON.stringify(this.state.stockInfo)}/>
+					</View>
+
+					<View style={{flex: 6}}>
 
 					</View>
 				</LinearGradient>

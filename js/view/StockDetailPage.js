@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react-native');
-var LineChartAndroid = require('./component/lineChart/LineChartAndroid');
+var LineChart = require('./component/lineChart/LineChart');
 var LinearGradient = require('react-native-linear-gradient');
 
 var {
@@ -17,6 +17,7 @@ var {
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
+var NavBar = require('../view/NavBar')
 
 
 var StockDetailPage = React.createClass({
@@ -64,7 +65,7 @@ var StockDetailPage = React.createClass({
 			<View style={styles.wrapper}>
 				<LinearGradient colors={['#1c5fd1', '#123b80']} style={{height: height}}>
 					<View style={{flex: 1}}>
-						<LineChartAndroid style={{flex: 1}} data={this.state.stockInfo}/>
+						<LineChart style={{flex: 1, backgroundColor:'rgba(0,0,0,0)'}} data={this.state.stockInfo}/>
 					</View>
 
 					<View style={{flex: 1}}>
@@ -74,6 +75,16 @@ var StockDetailPage = React.createClass({
 			</View>
 		)
 	},
+
+	renderHeader: function() {
+		return (
+			<NavBar title="苹果" 
+				textOnLeft={this.state.currentSelectedTab==0 ? '编辑' : null}
+				leftTextOnClick={this.editButtonClicked}
+				imageOnRight={require('../../images/search.png')}
+				rightImageOnClick={this.searchButtonClicked}/>
+		)
+	}
 });
 
 var styles = StyleSheet.create({

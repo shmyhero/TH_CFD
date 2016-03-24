@@ -36,11 +36,13 @@
 		3D8575FA1C8EC8F300D88946 /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D8575F91C8EC8F300D88946 /* icomoon.ttf */; };
 		3DC618011CA2747E00F36541 /* ChartDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC618001CA2747E00F36541 /* ChartDataManager.swift */; };
 		3DC618051CA29F9900F36541 /* StockChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC618041CA29F9900F36541 /* StockChartView.swift */; };
+		3DC6182D1CA3922A00F36541 /* StockChartViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC6182C1CA3922A00F36541 /* StockChartViewManager.m */; };
 		73273AD31C7B0EC1004EED11 /* guide_screen1.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273ACF1C7B0EC1004EED11 /* guide_screen1.png */; };
 		73273AD41C7B0EC1004EED11 /* guide_screen2.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273AD01C7B0EC1004EED11 /* guide_screen2.png */; };
 		73273AD51C7B0EC1004EED11 /* guide_screen4.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273AD11C7B0EC1004EED11 /* guide_screen4.png */; };
 		73273AD61C7B0EC1004EED11 /* guide_screen3.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273AD21C7B0EC1004EED11 /* guide_screen3.png */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		E30C3760AD2343E4BF815D6D /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8E9B8FF0CA943FB9D049E93 /* libBVLinearGradient.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,6 +116,13 @@
 			remoteGlobalIDString = 86D238421BD0BB9E00C75D01;
 			remoteInfo = RCTWeChat;
 		};
+		3DC618141CA38B0A00F36541 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 58602275B1F14B899E56D44F /* BVLinearGradient.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = BVLinearGradient;
+		};
 		78C398B81ACF4ADC00677621 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */;
@@ -166,12 +175,16 @@
 		3D8575F91C8EC8F300D88946 /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = icomoon.ttf; sourceTree = "<group>"; };
 		3DC618001CA2747E00F36541 /* ChartDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChartDataManager.swift; path = TH_CFD/ChartDataManager.swift; sourceTree = "<group>"; };
 		3DC618041CA29F9900F36541 /* StockChartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StockChartView.swift; path = TH_CFD/StockChartView.swift; sourceTree = "<group>"; };
+		3DC6182B1CA3922A00F36541 /* StockChartViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StockChartViewManager.h; path = TH_CFD/StockChartViewManager.h; sourceTree = "<group>"; };
+		3DC6182C1CA3922A00F36541 /* StockChartViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StockChartViewManager.m; path = TH_CFD/StockChartViewManager.m; sourceTree = "<group>"; };
+		58602275B1F14B899E56D44F /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
 		73273ACF1C7B0EC1004EED11 /* guide_screen1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen1.png; sourceTree = "<group>"; };
 		73273AD01C7B0EC1004EED11 /* guide_screen2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen2.png; sourceTree = "<group>"; };
 		73273AD11C7B0EC1004EED11 /* guide_screen4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen4.png; sourceTree = "<group>"; };
 		73273AD21C7B0EC1004EED11 /* guide_screen3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen3.png; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		D8E9B8FF0CA943FB9D049E93 /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,6 +214,7 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
+				E30C3760AD2343E4BF815D6D /* libBVLinearGradient.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,6 +337,8 @@
 				3D6A23E41C9AA93F00FF1306 /* NativeScene.m */,
 				3D6A24071C9AB90000FF1306 /* NativeData.h */,
 				3D6A24081C9AB90000FF1306 /* NativeData.m */,
+				3DC6182B1CA3922A00F36541 /* StockChartViewManager.h */,
+				3DC6182C1CA3922A00F36541 /* StockChartViewManager.m */,
 			);
 			name = ObjC;
 			sourceTree = "<group>";
@@ -339,6 +355,14 @@
 				3DC618041CA29F9900F36541 /* StockChartView.swift */,
 			);
 			name = Swift;
+			sourceTree = "<group>";
+		};
+		3DC618111CA38B0A00F36541 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3DC618151CA38B0A00F36541 /* libBVLinearGradient.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		78C398B11ACF4ADC00677621 /* Products */ = {
@@ -367,6 +391,7 @@
 				832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */,
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
+				58602275B1F14B899E56D44F /* BVLinearGradient.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -445,8 +470,8 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0610;
+				LastSwiftUpdateCheck = 720;
+				LastUpgradeCheck = 610;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -470,6 +495,10 @@
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
+				{
+					ProductGroup = 3DC618111CA38B0A00F36541 /* Products */;
+					ProjectRef = 58602275B1F14B899E56D44F /* BVLinearGradient.xcodeproj */;
+				},
 				{
 					ProductGroup = 00C302A81ABCB8CE00DB3ED1 /* Products */;
 					ProjectRef = 00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */;
@@ -587,6 +616,13 @@
 			remoteRef = 3D2A3A061C7C44270085264D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		3DC618151CA38B0A00F36541 /* libBVLinearGradient.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libBVLinearGradient.a;
+			remoteRef = 3DC618141CA38B0A00F36541 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		78C398B91ACF4ADC00677621 /* libRCTLinking.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -663,6 +699,7 @@
 				3DC618051CA29F9900F36541 /* StockChartView.swift in Sources */,
 				3D6A240B1C9ABDE900FF1306 /* StockDataManager.swift in Sources */,
 				3D3E1EFF1C9F9C1C0064F187 /* SwiftNotice.swift in Sources */,
+				3DC6182D1CA3922A00F36541 /* StockChartViewManager.m in Sources */,
 				3DC618011CA2747E00F36541 /* ChartDataManager.swift in Sources */,
 				3D61C5CB1C9909CB0037816A /* EditOwnStocksViewController.swift in Sources */,
 				3D6A23E51C9AA93F00FF1306 /* NativeScene.m in Sources */,
@@ -709,6 +746,10 @@
 				INFOPLIST_FILE = TH_CFDTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TH_CFD\"",
+				);
 				PRODUCT_NAME = TH_CFD;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TH_CFD.app/TH_CFD";
 			};
@@ -726,6 +767,10 @@
 				INFOPLIST_FILE = TH_CFDTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TH_CFD\"",
+				);
 				PRODUCT_NAME = TH_CFD;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TH_CFD.app/TH_CFD";
 			};
@@ -743,10 +788,15 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 				);
 				INFOPLIST_FILE = TH_CFD/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TH_CFD\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.myhero.CFD;
 				PRODUCT_NAME = TH_CFD;
@@ -765,10 +815,15 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 				);
 				INFOPLIST_FILE = TH_CFD/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TH_CFD\"",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.myhero.CFD;
 				PRODUCT_NAME = TH_CFD;
@@ -814,6 +869,7 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -854,6 +910,7 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../node_modules/react-native/React/**",
+					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;

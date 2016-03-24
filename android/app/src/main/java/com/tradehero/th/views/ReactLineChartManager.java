@@ -23,9 +23,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
@@ -33,6 +36,7 @@ import java.util.Date;
 public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
 
     private static final String REACT_CLASS = "LineChart";
+    private static int CHART_BORDER_COLOR = 0xff497bce;
 
     @Override
     protected ReactLineChart createViewInstance(ThemedReactContext reactContext) {
@@ -47,10 +51,15 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
         chart.getAxisLeft().removeAllLimitLines();
         chart.getAxisRight().removeAllLimitLines();
         chart.getXAxis().removeAllLimitLines();
-        chart.getAxisLeft().setDrawLimitLinesBehindData(true);
-        chart.getAxisRight().setDrawLimitLinesBehindData(true);
-        chart.getXAxis().setDrawLimitLinesBehindData(true);
+        chart.getAxisLeft().setDrawLimitLinesBehindData(false);
+        chart.getAxisRight().setDrawLimitLinesBehindData(false);
+        chart.getXAxis().setDrawLimitLinesBehindData(false);
+        chart.getAxisLeft().setDrawGridLines(false);
+        chart.getAxisRight().setDrawGridLines(false);
         chart.getXAxis().setDrawGridLines(false);
+        chart.getAxisLeft().setAxisLineColor(CHART_BORDER_COLOR);
+        chart.getAxisRight().setAxisLineColor(CHART_BORDER_COLOR);
+        chart.getXAxis().setAxisLineColor(CHART_BORDER_COLOR);
 
         return chart;
     }
@@ -104,6 +113,38 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
 
                 // set data
                 chart.setData(data);
+
+                // Set the xAxis with the prev close price line
+                LimitLine line = new LimitLine((float) stockInfoObject.getDouble("preClose"));
+                line.setLineColor(CHART_BORDER_COLOR);
+                line.setLineWidth(0.5f);
+                line.enableDashedLine(10f, 0f, 0f);
+                line.setTextSize(0f);
+
+                chart.getAxisLeft().addLimitLine(line);
+
+                // Set the yAxis lines with 1 hour in between.
+                Calendar nextLineAt = null;
+                for (int i = 0; i < chartDataList.length(); i++) {
+                    Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
+
+                    if (nextLineAt == null) {
+                        calendar.add(Calendar.HOUR_OF_DAY, 1);
+                        nextLineAt = calendar;
+                    } else if (calendar.after(nextLineAt)) {
+                        calendar.add(Calendar.HOUR_OF_DAY, 1);
+                        nextLineAt = calendar;
+
+                        LimitLine hourLine = new LimitLine(i);
+                        hourLine.setLineColor(CHART_BORDER_COLOR);
+                        hourLine.setLineWidth(0.5f);
+                        hourLine.enableDashedLine(10f, 0f, 0f);
+                        hourLine.setTextSize(0f);
+
+                        chart.getXAxis().addLimitLine(hourLine);
+                    }
+                }
+
                 chart.invalidate();
 
             } catch (JSONException e) {
@@ -288,47 +329,20 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
         return REACT_CLASS;
     }
 
-    private void setData(ReactLineChart chart, int count, float range) {
+    private Calendar timeStringToCalendar(String timeStr) {
+        Calendar calendar = GregorianCalendar.getInstance();
+        String s = timeStr.replace("Z", "+00:00");
+        try {
+            s = s.substring(0, 22) + s.substring(23);  // to get rid of the ":"
+            Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(s);
+            calendar.setTime(date);
 
-        ArrayList<String> xVals = new ArrayList<String>();
-        for (int i = 0; i < count; i++) {
-            xVals.add((i) + "");
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
-        ArrayList<Entry> yVals = new ArrayList<Entry>();
-
-        for (int i = 0; i < count; i++) {
-
-            float mult = (range + 1);
-            float val = (float) (Math.random() * mult) + 30;// + (float)
-            // ((mult *
-            // 0.1) / 10);
-            yVals.add(new Entry(val, i));
-        }
-
-        // create a dataset and give it a type
-        LineDataSet set1 = new LineDataSet(yVals, "DataSet 1");
-        // set1.setFillAlpha(110);
-        // set1.setFillColor(Color.RED);
-
-        // set the line to be drawn like this "- - - - - -"
-        set1.enableDashedLine(10f, 0f, 0f);
-        set1.setColor(Color.WHITE);
-        set1.setCircleColor(Color.TRANSPARENT);
-        set1.setLineWidth(1f);
-        set1.setCircleRadius(3f);
-        set1.setValueTextSize(0f);
-        Drawable drawable = ContextCompat.getDrawable(chart.getContext(), R.drawable.fade_red);
-        set1.setFillDrawable(drawable);
-        set1.setDrawFilled(true);
-
-        ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
-        dataSets.add(set1); // add the datasets
-
-        // create a data object with the datasets
-        LineData data = new LineData(xVals, dataSets);
-
-        // set data
-        chart.setData(data);
+        return calendar;
     }
 }

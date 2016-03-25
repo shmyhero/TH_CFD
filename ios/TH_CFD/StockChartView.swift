@@ -112,7 +112,7 @@ import UIKit
 		let startTime = self.chartData.first?.time
 		let endTime = self.chartData.last?.time
 		
-		let interval:NSTimeInterval = 20000//endTime!.timeIntervalSinceDate(startTime!)
+		let interval:NSTimeInterval = endTime!.timeIntervalSinceDate(startTime!)
 		let hours = Int(interval/3600)
 		if hours > 0 {
 			let unitWidth = 3600*(width-self.margin*2)/CGFloat(interval)

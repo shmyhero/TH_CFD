@@ -272,9 +272,9 @@ var StockDetailPage = React.createClass({
 
 		var subTitleText = this.props.stockPrice + '  '
 		if (this.props.stockIncPercentage > 0) {
-			subTitleText += '+' + this.props.stockIncPercentage + '%'
+			subTitleText += '+' + this.props.stockIncPercentage.toFixed(2) + '%'
 		} else {
-			subTitleText += this.props.stockIncPercentage + '%'
+			subTitleText += this.props.stockIncPercentage.toFixed(2) + '%'
 		}
 		return (
 			<NavBar showBackButton={true} navigator={this.props.navigator}

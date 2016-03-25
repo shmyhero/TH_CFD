@@ -272,7 +272,7 @@ var StockListPage = React.createClass({
 		}
 
 		return (
-			<TouchableHighlight onPress={() => this.stockPressed(rowData, rowData.last, rowData.percentChange)}>
+			<TouchableHighlight onPress={() => this.stockPressed(rowData, rowData.last, percentChange)}>
 				<View style={styles.rowWrapper} key={rowData.key}>
 
 					<View style={styles.rowLeftPart}>

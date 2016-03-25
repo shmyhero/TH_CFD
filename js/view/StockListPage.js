@@ -208,6 +208,16 @@ var StockListPage = React.createClass({
     	});
   	},
 
+  	stockPressed: function(rowData, stockPrice, stockIncPercentage) {
+  		this.props.navigator.push({
+			name: 'stockDetail',
+			stockCode: rowData.id,
+			stockName: rowData.name,
+			stockPrice: stockPrice,
+			stockIncPercentage: stockIncPercentage,
+		});
+  	},
+
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
 		return (
 			<View style={styles.line} key={rowID}/>
@@ -261,26 +271,28 @@ var StockListPage = React.createClass({
 		}
 
 		return (
-			<View style={styles.rowWrapper} key={rowData.key}>
+			<TouchableHighlight onPress={() => this.stockPressed(rowData, rowData.last, rowData.percentChange)}>
+				<View style={styles.rowWrapper} key={rowData.key}>
 
-				<View style={styles.rowLeftPart}>
-					<Text style={styles.stockNameText}>
-						{rowData.name}
-					</Text>
+					<View style={styles.rowLeftPart}>
+						<Text style={styles.stockNameText}>
+							{rowData.name}
+						</Text>
 
-					<Text style={styles.stockSymbolText}>
-						{rowData.symbol}
-					</Text>
+						<Text style={styles.stockSymbolText}>
+							{rowData.symbol}
+						</Text>
+					</View>
+
+					<View style={styles.rowCenterPart}>
+						<Text style={styles.stockLastText}>
+							{rowData.last}
+						</Text>
+					</View>
+
+					{this.renderRowRight(percentChange)}
 				</View>
-
-				<View style={styles.rowCenterPart}>
-					<Text style={styles.stockLastText}>
-						{rowData.last}
-					</Text>
-				</View>
-
-				{this.renderRowRight(percentChange)}
-			</View>
+			</TouchableHighlight>
 		);
 	},
 

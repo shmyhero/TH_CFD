@@ -30,6 +30,10 @@ var NavBar = React.createClass({
 
 		rightImageOnClick: React.PropTypes.func,
 
+		subTitle: React.PropTypes.string,
+
+		subTitleStyle: Text.propTypes.style,
+
 	},
 
 	getDefaultProps() {
@@ -41,6 +45,7 @@ var NavBar = React.createClass({
 			leftTextOnClick: null,
 			rightTextOnClick: null,
 			rightImageOnClick: null,
+			subTitle: null,
 		}
 	},
 
@@ -68,76 +73,98 @@ var NavBar = React.createClass({
 	},
 
 	render: function() {
-		var backButton = this.props.showBackButton ?
-			<TouchableHighlight 
-				onPress={this.backOnClick}
-				underlayColor={ColorConstants.TITLE_BLUE}>
-				<Image 
-					style={styles.backButton} 
-					source={require('../../images/icon_return_default.png')}/>
-			</TouchableHighlight>
-			:
-			<View />
-
-		var leftText = this.props.textOnLeft !== null ?
-			<TouchableHighlight
-				onPress={this.leftTextOnClick}
-				underlayColor={ColorConstants.TITLE_BLUE}>
-
-				<Text style={styles.textOnLeft}>
-					{this.props.textOnLeft}
-				</Text>
-
-			</TouchableHighlight>
-			:
-			<View />
-
-		var rightText = this.props.textOnRight !== null ?
-			<TouchableHighlight
-				onPress={this.rightTextOnClick}
-				underlayColor={ColorConstants.TITLE_BLUE}>
-
-				<Text style={styles.textOnRight}>
-					{this.props.textOnRight}
-				</Text>
-
-			</TouchableHighlight>
-			:
-			<View />
-
-		var rightImageSource = this.props.imageOnRight !== null
-		var rightImage = this.props.imageOnRight !== null ?
-			<TouchableHighlight
-				onPress={this.rightImageOnClick}
-				underlayColor={ColorConstants.TITLE_BLUE}>
-
-				<Image 
-					style={styles.rightImage}
-					source={this.props.imageOnRight}/>
-
-			</TouchableHighlight>
-			:
-			<View />
-
 		return (
 			<View style={styles.container} >
 				<View style={styles.leftContainer}>
-					{backButton}
-					{leftText}
+					{this.renderBackButton()}
+					{this.renderLeftText()}
 				</View>
 
 				<View style={styles.centerContainer}>
 					<Text style={styles.title}>
 						{this.props.title}
 					</Text>
+					{this.renderSubTitle()}
 				</View>
 				
 				<View style={styles.rightContainer}>
-					{rightText}
-					{rightImage}
+					{this.renderRightText()}
+					{this.renderRightImage()}
 				</View>
 			</View>
 		);
+	},
+
+	renderBackButton: function() {
+		if (this.props.showBackButton) {
+			return (
+				<TouchableHighlight 
+					onPress={this.backOnClick}
+					underlayColor={ColorConstants.TITLE_BLUE}>
+					<Image 
+						style={styles.backButton} 
+						source={require('../../images/icon_return_default.png')}/>
+				</TouchableHighlight>
+			);
+		}
+	},
+
+	renderLeftText: function() {
+		if (this.props.textOnLeft !== null) {
+			return (
+				<TouchableHighlight
+					onPress={this.leftTextOnClick}
+					underlayColor={ColorConstants.TITLE_BLUE}>
+
+					<Text style={styles.textOnLeft}>
+						{this.props.textOnLeft}
+					</Text>
+
+				</TouchableHighlight>
+			);
+		}
+	},
+
+	renderRightText: function() {
+		if (this.props.textOnRight !== null) {
+			return (
+				<TouchableHighlight
+					onPress={this.rightTextOnClick}
+					underlayColor={ColorConstants.TITLE_BLUE}>
+
+					<Text style={styles.textOnRight}>
+						{this.props.textOnRight}
+					</Text>
+
+				</TouchableHighlight>
+			);
+		}
+	},
+
+	renderRightImage: function() {
+		if (this.props.imageOnRight !== null) {
+			return (
+				<TouchableHighlight
+					onPress={this.rightImageOnClick}
+					underlayColor={ColorConstants.TITLE_BLUE}>
+
+					<Image 
+						style={styles.rightImage}
+						source={this.props.imageOnRight}/>
+
+				</TouchableHighlight>
+			);
+		}
+	},
+
+	renderSubTitle: function() {
+		if (this.props.subTitle !== null) {
+			return (
+				<Text style={this.props.subTitleStyle}>
+					{this.props.subTitle}
+				</Text>
+			)
+		}
 	}
 });
 

@@ -57,7 +57,7 @@ var StockListViewPager = React.createClass({
 	},
 
 	componentWillUnmount: function() {
-		WebSocketModule.stop()
+		
 	},
 
 	tabClicked: function(index) {		

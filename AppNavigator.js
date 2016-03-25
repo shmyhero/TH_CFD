@@ -129,7 +129,11 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 	} else if (route.name === 'stockDetail') {
 		return (
 			<View style={{flex: 1}}>
-				<StockDetailPage navigator={navigationOperations} />
+				<StockDetailPage navigator={navigationOperations} 
+						stockName={route.stockName}
+						stockCode={route.stockCode}
+						stockPrice={route.stockPrice}
+						stockIncPercentage={route.stockIncPercentage}/>
 			</View>
 		);
 	}

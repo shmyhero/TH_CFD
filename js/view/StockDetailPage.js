@@ -23,12 +23,18 @@ var NavBar = require('../view/NavBar')
 
 var StockDetailPage = React.createClass({
 	propTypes: {
-		stockCode: React.PropTypes.string,
+		stockCode: React.PropTypes.number,
+		stockName: React.PropTypes.string,
+		stockPrice: React.PropTypes.number,
+		stockIncPercentage: React.PropTypes.number,
 	},
 
 	getDefaultProps() {
 		return {
-			stockCode: '14993',
+			stockCode: 14993,
+			stockName: 'ABC company',
+			stockPrice: 10,
+			stockIncPercentage: 0.5
 		}
 	},
 
@@ -89,17 +95,68 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
+	renderStockPriceInfo: function(maxPrice, maxPercentage, minPrice, minPercentage) {
+		if (maxPrice && minPrice && maxPercentage && minPercentage)
+		{
+			return (
+				<View style={{flexDirection: 'row', marginTop: -30}}>
+					<View style={{flex: 1, alignItems: 'flex-start', marginLeft: 20}}>
+						<Text style={styles.priceText}>
+							{minPrice}
+						</Text>
+					</View>
+					
+					<View style={{flex: 1, alignItems: 'flex-end', marginRight: 20}}>
+						<Text style={styles.priceText}>
+							{minPercentage} %
+						</Text>
+					</View>
+				</View>
+				
+			);
+		}
+	},
+
 	render: function() {
 		var {height, width} = Dimensions.get('window');
+
 		var charge = 0.03
+		var priceData = this.state.stockInfo.priceData
+		var maxPrice = undefined
+		var minPrice = undefined
+		var maxPercentage = undefined
+		var minPercentage = undefined
+
+		if (priceData != undefined) {
+			var lastClose = this.state.stockInfo.preClose
+			maxPrice = Number.MIN_VALUE
+			minPrice = Number.MAX_VALUE
+			
+			for (var i = 0; i < priceData.length; i ++) {
+				var price = priceData[i].p
+				if (price > maxPrice) {
+					maxPrice = price
+				} else if (price < minPrice) {
+					minPrice = price
+				}
+			}
+			var maxPercentage = (maxPrice - lastClose) / lastClose * 100
+			var minPercentage = (minPrice - lastClose) / lastClose * 100
+			maxPercentage = maxPercentage.toFixed(2)
+			minPercentage = minPercentage.toFixed(2)
+		}
+
 		return (
 			<View style={styles.wrapper}>
 				<LinearGradient colors={['#1c5fd1', '#123b80']} style={{height: height}}>
-					<View style={{flex: 1}}>
+					
+					{this.renderHeader()}
 
-					</View>
 					<View style={{flex: 3}}>
+						
 						<LineChart style={{flex: 1, backgroundColor:'rgba(0,0,0,0)'}} data={JSON.stringify(this.state.stockInfo)}/>
+						{this.renderStockPriceInfo(maxPrice, maxPercentage, minPrice, minPercentage)}
+						
 					</View>
 
 					<View style={{flex: 6, alignItems: 'center'}}>
@@ -131,6 +188,28 @@ var StockDetailPage = React.createClass({
 					</Text>
 				</TouchableHighlight>
 			</View>
+		)
+	},
+
+	renderHeader: function() {
+		var subTitleColor = '#a0a6aa'
+		if (this.props.stockIncPercentage > 0) {
+			subTitleColor = '#ea5458'
+		} else if (this.props.stockIncPercentage < 0) {
+			subTitleColor = '#40c19a'
+		}
+
+		var subTitleText = this.props.stockPrice + '  '
+		if (this.props.stockIncPercentage > 0) {
+			subTitleText += '+' + this.props.stockIncPercentage + '%'
+		} else {
+			subTitleText += this.props.stockIncPercentage + '%'
+		}
+		return (
+			<NavBar showBackButton={true} navigator={this.props.navigator}
+					title={this.props.stockName}
+					subTitle={subTitleText}
+					subTitleStyle={[styles.subTitle, {color: subTitleColor}]}/>
 		)
 	},
 
@@ -231,6 +310,16 @@ var styles = StyleSheet.create({
 		color: '#ffffff',
 		backgroundColor: '#f46b6f',
 	}
+	priceText: {
+		fontSize: 12,
+		textAlign: 'center',
+		color: '#ffffff',
+	},
+	subTitle: {
+		fontSize: 16,
+		textAlign: 'center',
+		color: '#a0a6aa',
+	},
 });
 
 module.exports = StockDetailPage;

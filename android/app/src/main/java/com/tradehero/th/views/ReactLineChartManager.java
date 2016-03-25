@@ -60,6 +60,10 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
         chart.getAxisLeft().setAxisLineColor(CHART_BORDER_COLOR);
         chart.getAxisRight().setAxisLineColor(CHART_BORDER_COLOR);
         chart.getXAxis().setAxisLineColor(CHART_BORDER_COLOR);
+        chart.getAxisLeft().setSpaceTop(20);
+        chart.getAxisLeft().setSpaceBottom(20);
+        chart.getAxisRight().setSpaceTop(20);
+        chart.getAxisRight().setSpaceBottom(20);
 
         return chart;
     }

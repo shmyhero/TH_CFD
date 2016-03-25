@@ -48,7 +48,7 @@ var StockDetailPage = React.createClass({
 		};
 	},
 
-	componentDidMount: function() {
+	componentWillMount: function() {
 		this.loadStockInfo()
 	},
 
@@ -96,8 +96,29 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
-	renderStockPriceInfo: function(maxPrice, maxPercentage, minPrice, minPercentage) {
-		if (maxPrice && minPrice && maxPercentage && minPercentage)
+	renderStockMaxPriceInfo: function(maxPrice, maxPercentage) {
+		if (maxPrice && maxPercentage)
+		{
+			return (
+				<View style={{flexDirection: 'row'}}>
+					<View style={{flex: 1, alignItems: 'flex-start', marginLeft: 20}}>
+						<Text style={styles.priceText}>
+							{maxPrice}
+						</Text>
+					</View>
+					
+					<View style={{flex: 1, alignItems: 'flex-end', marginRight: 20}}>
+						<Text style={styles.priceText}>
+							{maxPercentage} %
+						</Text>
+					</View>
+				</View>
+			);
+		}
+	},
+
+	renderStockMinPriceInfo: function(minPrice, minPercentage) {
+		if (minPrice && minPercentage)
 		{
 			return (
 				<View style={{flexDirection: 'row', marginTop: -30}}>
@@ -113,9 +134,47 @@ var StockDetailPage = React.createClass({
 						</Text>
 					</View>
 				</View>
-				
 			);
 		}
+	},
+
+	renderTime: function(){
+		if (this.state.stockInfo.priceData !== undefined) {
+			var firstDate = new Date(this.state.stockInfo.priceData[0].time)
+			var lastDate = new Date(this.state.stockInfo.priceData[this.state.stockInfo.priceData.length - 1].time)
+
+			return (
+				<View style={{flexDirection: 'row', marginTop: 5}}>
+					<View style={{flex: 1, alignItems: 'flex-start'}}>
+						<Text style={styles.timeText}>
+							{firstDate.getHours()} :00
+						</Text>
+					</View>
+					
+					<View style={{flex: 1, alignItems: 'flex-end'}}>
+						<Text style={styles.timeText}>
+							{lastDate.getHours()} :00
+						</Text>
+					</View>
+				</View>
+			);
+		}
+	},
+
+	renderChartHeader: function() {
+		return(
+			<View style={{flexDirection: 'row', marginBottom: 10}} >
+				<Text style={styles.chartTitleTextHighlighted} >
+					分时
+				</Text>
+				<Text style={styles.chartTitleText} >
+					5日
+				</Text>
+				<Text style={styles.chartTitleText} >
+					1月
+				</Text>
+			</View>
+		);
 	},
 
 	render: function() {
@@ -155,10 +214,14 @@ var StockDetailPage = React.createClass({
 
 					{this.renderTradeStrength()}
 
+					{this.renderChartHeader()}
+
 					<View style={{flex: 3}}>
 						
-						<LineChart style={{flex: 1, backgroundColor:'rgba(0,0,0,0)'}} data={JSON.stringify(this.state.stockInfo)}/>
-						{this.renderStockPriceInfo(maxPrice, maxPercentage, minPrice, minPercentage)}
+						{this.renderStockMaxPriceInfo(maxPrice, maxPercentage)}
+						<LineChart style={{flex: 1, backgroundColor:'transparent', marginTop: -30}} data={JSON.stringify(this.state.stockInfo)}/>
+						{this.renderStockMinPriceInfo(minPrice, minPercentage)}
+						{this.renderTime()}
 						
 					</View>
 
@@ -231,7 +294,18 @@ var StockDetailPage = React.createClass({
 						<View style={{flex: downPercentage * 100, backgroundColor: ColorConstants.STOCK_DOWN_GREEN}} />
 					</View>
 				</View>
-				
+			)
+		} else {
+			return (
+				<View>
+					<Text style={styles.tradeStrengthText}>
+						-- % 买涨
+					</Text>
+					<View style={styles.tradeStrength}>
+						<View style={{flex: 1, marginRight: 5, backgroundColor: ColorConstants.STOCK_RISE_RED}} />
+						<View style={{flex: 1, backgroundColor: ColorConstants.STOCK_DOWN_GREEN}} />
+					</View>
+				</View>
 			)
 		}
 		
@@ -338,6 +412,11 @@ var styles = StyleSheet.create({
 		textAlign: 'center',
 		color: '#ffffff',
 	},
+	timeText: {
+		fontSize: 10,
+		textAlign: 'center',
+		color: '#ffffff',
+	},
 	subTitle: {
 		fontSize: 18,
 		textAlign: 'center',
@@ -356,6 +435,18 @@ var styles = StyleSheet.create({
 		marginRight: 10,
 		marginTop: 5,
 		marginBottom: 5,
+	},
+	chartTitleTextHighlighted: {
+		flex: 1,
+		fontSize: 18,
+		textAlign: 'center',
+		color: '#ffffff'
+	},
+	chartTitleText: {
+		flex: 1,
+		fontSize: 16,
+		textAlign: 'center',
+		color: '#a0a6aa'
 	},
 });
 

@@ -12,6 +12,7 @@ var {
 	TouchableHighlight,
 } = React;
 
+var ColorPropType = require('ColorPropType');
 var ColorConstants = require('../ColorConstants')
 
 var NavBar = React.createClass({
@@ -34,6 +35,8 @@ var NavBar = React.createClass({
 
 		subTitleStyle: Text.propTypes.style,
 
+		backgroundColor: ColorPropType,
+
 	},
 
 	getDefaultProps() {
@@ -46,6 +49,7 @@ var NavBar = React.createClass({
 			rightTextOnClick: null,
 			rightImageOnClick: null,
 			subTitle: null,
+			backgroundColor: ColorConstants.TITLE_BLUE,
 		}
 	},
 
@@ -74,7 +78,7 @@ var NavBar = React.createClass({
 
 	render: function() {
 		return (
-			<View style={styles.container} >
+			<View style={[styles.container, {backgroundColor: this.props.backgroundColor}]} >
 				<View style={styles.leftContainer}>
 					{this.renderBackButton()}
 					{this.renderLeftText()}

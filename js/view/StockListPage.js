@@ -16,6 +16,7 @@ var {
 
 
 var LogicData = require('../LogicData')
+var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
 var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
@@ -300,7 +301,7 @@ var StockListPage = React.createClass({
 		percentChange = percentChange.toFixed(2)
 		if (percentChange > 0) {
 			return (
-				<View style={[styles.rowRightPart, {backgroundColor: '#ea5458'}]}>
+				<View style={[styles.rowRightPart, {backgroundColor: ColorConstants.STOCK_RISE_RED}]}>
 					<Text style={styles.stockPercentText}>
 						 + {percentChange} %
 					</Text>
@@ -308,7 +309,7 @@ var StockListPage = React.createClass({
 			);
 		} else if (percentChange < 0) {
 			return (
-				<View style={[styles.rowRightPart, {backgroundColor: '#40c19a'}]}>
+				<View style={[styles.rowRightPart, {backgroundColor: ColorConstants.STOCK_DOWN_GREEN}]}>
 					<Text style={styles.stockPercentText}>
 						 {percentChange} %
 					</Text>

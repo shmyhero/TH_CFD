@@ -15,6 +15,7 @@ var {
 	Picker,
 } = React;
 
+var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
@@ -152,6 +153,8 @@ var StockDetailPage = React.createClass({
 					
 					{this.renderHeader()}
 
+					{this.renderTradeStrength()}
+
 					<View style={{flex: 3}}>
 						
 						<LineChart style={{flex: 1, backgroundColor:'rgba(0,0,0,0)'}} data={JSON.stringify(this.state.stockInfo)}/>
@@ -194,9 +197,9 @@ var StockDetailPage = React.createClass({
 	renderHeader: function() {
 		var subTitleColor = '#a0a6aa'
 		if (this.props.stockIncPercentage > 0) {
-			subTitleColor = '#ea5458'
+			subTitleColor = ColorConstants.STOCK_RISE_RED
 		} else if (this.props.stockIncPercentage < 0) {
-			subTitleColor = '#40c19a'
+			subTitleColor = ColorConstants.STOCK_DOWN_GREEN
 		}
 
 		var subTitleText = this.props.stockPrice + '  '
@@ -209,8 +212,29 @@ var StockDetailPage = React.createClass({
 			<NavBar showBackButton={true} navigator={this.props.navigator}
 					title={this.props.stockName}
 					subTitle={subTitleText}
+					backgroundColor='transparent'
 					subTitleStyle={[styles.subTitle, {color: subTitleColor}]}/>
 		)
+	},
+
+	renderTradeStrength: function() {
+		if (this.state.stockInfo.longPct !== undefined) {
+			var upPercentage = (this.state.stockInfo.longPct * 100).toFixed(2)
+			var downPercentage = 100 - upPercentage
+			return (
+				<View>
+					<Text style={styles.tradeStrengthText}>
+						{upPercentage} % 买涨
+					</Text>
+					<View style={styles.tradeStrength}>
+						<View style={{flex: upPercentage * 100, marginRight: 5, backgroundColor: ColorConstants.STOCK_RISE_RED}} />
+						<View style={{flex: downPercentage * 100, backgroundColor: ColorConstants.STOCK_DOWN_GREEN}} />
+					</View>
+				</View>
+				
+			)
+		}
+		
 	},
 
 	buyPress: function() {
@@ -238,6 +262,7 @@ var StockDetailPage = React.createClass({
 			<View style={[styles.rowView, {height:160}]}>
 				<Picker style={{width: pickerWidth}}
 				  selectedValue={this.state.money}
+				  mode='dialog'
 				  onValueChange={(value) => this.setState({money: value})}>
 				  <Picker.Item label="10" value="10" />
 				  <Picker.Item label="20" value="20" />
@@ -314,9 +339,23 @@ var styles = StyleSheet.create({
 		color: '#ffffff',
 	},
 	subTitle: {
-		fontSize: 16,
+		fontSize: 18,
 		textAlign: 'center',
 		color: '#a0a6aa',
+	},
+	tradeStrengthText: {
+		fontSize: 18,
+		textAlign: 'left',
+		color: '#70a5ff',
+		marginLeft: 10,
+	},
+	tradeStrength: {
+		flexDirection: 'row', 
+		height: 2,
+		marginLeft: 10,
+		marginRight: 10,
+		marginTop: 5,
+		marginBottom: 5,
 	},
 });
 

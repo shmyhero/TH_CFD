@@ -20,7 +20,7 @@ var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
 var NavBar = require('../view/NavBar')
-
+var PickerItem = Picker.Item;
 
 var StockDetailPage = React.createClass({
 	propTypes: {
@@ -332,24 +332,32 @@ var StockDetailPage = React.createClass({
 	renderScroll: function() {
 		var {height, width} = Dimensions.get('window');
 		var pickerWidth = width/2-40
+		var moneyArray = new Array(10)
+		for (var i = 0; i < 10; i++) {
+			moneyArray[i]=""+(i+1)*10
+		};
+		var leverageArray = new Array(20)
+		for (var i = 0; i < 20; i++) {
+			leverageArray[i]=""+(i+1)
+		};
+		leverageArray[0]='无'
+		var leverageCount = 1
 		return(
-			<View style={[styles.rowView, {height:160}]}>
+			<View style={[styles.rowView, {height:140}]}>
 				<Picker style={{width: pickerWidth}}
 				  selectedValue={this.state.money}
 				  mode='dialog'
 				  onValueChange={(value) => this.setState({money: value})}>
-				  <Picker.Item label="10" value="10" />
-				  <Picker.Item label="20" value="20" />
-				  <Picker.Item label="30" value="30" />
-				  <Picker.Item label="40" value="40" />
-				  <Picker.Item label="50" value="50" />
+				  {moneyArray.map((value) => (
+			          <PickerItem label={value} value={parseInt(value)} key={"money"+value}/>
+			        ))}
 				</Picker>
 				<Picker style={{width: pickerWidth}}
 				  selectedValue={this.state.leverage}
 				  onValueChange={(value) => this.setState({leverage: value})}>
-				  <Picker.Item label="无" value="1" />
-				  <Picker.Item label="2" value="2" />
-				  <Picker.Item label="3" value="3" />
+				  {leverageArray.map((value) => (
+			          <PickerItem label={value} key={"lever"+leverageCount} value={leverageCount++}/>
+			        ))}
 				</Picker>
 			</View>
 		)

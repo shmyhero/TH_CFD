@@ -37,6 +37,8 @@ var NavBar = React.createClass({
 
 		backgroundColor: ColorPropType,
 
+		rightCustomContent: React.PropTypes.func,
+
 	},
 
 	getDefaultProps() {
@@ -50,6 +52,7 @@ var NavBar = React.createClass({
 			rightImageOnClick: null,
 			subTitle: null,
 			backgroundColor: ColorConstants.TITLE_BLUE,
+			rightCustomContent: null,
 		}
 	},
 
@@ -94,6 +97,7 @@ var NavBar = React.createClass({
 				<View style={styles.rightContainer}>
 					{this.renderRightText()}
 					{this.renderRightImage()}
+					{this.renderRightCustomContent()}
 				</View>
 			</View>
 		);
@@ -169,7 +173,17 @@ var NavBar = React.createClass({
 				</Text>
 			)
 		}
-	}
+	},
+
+	renderRightCustomContent: function() {
+		if (this.props.rightCustomContent !== null) {
+			return (
+				<View>
+					{this.props.rightCustomContent()}
+				</View>
+			);
+		}
+	},
 });
 
 var styles = StyleSheet.create({

@@ -10,6 +10,7 @@ var {
 	Image,
 	Text,
 	TouchableHighlight,
+	TouchableOpacity,
 	Alert,
 	Dimensions,
 	Picker,
@@ -94,6 +95,10 @@ var StockDetailPage = React.createClass({
 				Alert.alert('网络错误提示', errorMessage);
 			}
 		)
+	},
+
+	addToMyListClicked: function() {
+
 	},
 
 	renderStockMaxPriceInfo: function(maxPrice, maxPercentage) {
@@ -276,7 +281,21 @@ var StockDetailPage = React.createClass({
 					title={this.props.stockName}
 					subTitle={subTitleText}
 					backgroundColor='transparent'
-					subTitleStyle={[styles.subTitle, {color: subTitleColor}]}/>
+					subTitleStyle={[styles.subTitle, {color: subTitleColor}]}
+					rightCustomContent={() => this.renderAddToMyListButton()}/>
+		)
+	},
+
+	renderAddToMyListButton: function() {
+		return (
+			<TouchableOpacity
+					onPress={this.addToMyListClicked}>
+				<View style={styles.addToMyListContainer}>
+					<Text style={styles.addToMyListText}>
+						+ 自选
+					</Text>
+				</View>
+			</TouchableOpacity>
 		)
 	},
 
@@ -429,6 +448,19 @@ var styles = StyleSheet.create({
 		fontSize: 18,
 		textAlign: 'center',
 		color: '#a0a6aa',
+	},
+	addToMyListContainer: {
+		marginRight: 10,
+		padding: 5,
+		backgroundColor: '#2d71e5',
+		borderWidth: 1,
+		borderRadius: 3,
+		borderColor: '#ffffff',
+	},
+	addToMyListText: {
+		fontSize: 16,
+		textAlign: 'center',
+		color: '#ffffff',
 	},
 	tradeStrengthText: {
 		fontSize: 18,

@@ -159,6 +159,7 @@ var StockDetailPage = React.createClass({
 			<View style={[styles.rowView, {height:160}]}>
 				<Picker style={{width: pickerWidth}}
 				  selectedValue={this.state.money}
+				  itemStyle={{color: 'white'}}
 				  onValueChange={(value) => this.setState({money: value})}>
 				  <Picker.Item label="10" value="10" />
 				  <Picker.Item label="20" value="20" />
@@ -168,6 +169,7 @@ var StockDetailPage = React.createClass({
 				</Picker>
 				<Picker style={{width: pickerWidth}}
 				  selectedValue={this.state.leverage}
+				  itemStyle={{color: 'white'}}
 				  onValueChange={(value) => this.setState({leverage: value})}>
 				  <Picker.Item label="无" value="1" />
 				  <Picker.Item label="2" value="2" />

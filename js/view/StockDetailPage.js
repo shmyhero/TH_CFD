@@ -364,19 +364,21 @@ var StockDetailPage = React.createClass({
 		return(
 			<View style={[styles.rowView, {height:140}]}>
 				<Picker style={{width: pickerWidth}}
-				  selectedValue={this.state.money}
-				  mode='dialog'
-				  onValueChange={(value) => this.setState({money: value})}>
-				  {moneyArray.map((value) => (
-			          <PickerItem label={value} value={parseInt(value)} key={"money"+value}/>
-			        ))}
+					selectedValue={this.state.money}
+					mode='dialog'
+					itemStyle={{color:"white"}}
+					onValueChange={(value) => this.setState({money: value})}>
+					{moneyArray.map((value) => (
+					  <PickerItem label={value} value={parseInt(value)} key={"money"+value}/>
+					))}
 				</Picker>
 				<Picker style={{width: pickerWidth}}
-				  selectedValue={this.state.leverage}
-				  onValueChange={(value) => this.setState({leverage: value})}>
-				  {leverageArray.map((value) => (
-			          <PickerItem label={value} key={"lever"+leverageCount} value={leverageCount++}/>
-			        ))}
+					selectedValue={this.state.leverage}
+					itemStyle={{color:"white"}}
+					onValueChange={(value) => this.setState({leverage: value})}>
+					{leverageArray.map((value) => (
+					  <PickerItem label={value} key={"lever"+leverageCount} value={leverageCount++}/>
+					))}
 				</Picker>
 			</View>
 		)

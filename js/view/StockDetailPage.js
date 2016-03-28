@@ -247,13 +247,15 @@ var StockDetailPage = React.createClass({
 		return (
 			<View style={styles.rowView}>
 				<TouchableHighlight
-					onPress={this.buyPress}>
+					onPress={this.buyPress}
+					style={styles.tradeButtonView}>
 					<Text style={styles.tradeButton}>
 						涨
 					</Text>
 				</TouchableHighlight>
 				<TouchableHighlight
-					onPress={this.sellPress}>
+					onPress={this.sellPress}
+					style={styles.tradeButtonView}>
 					<Text style={styles.tradeButton}>
 						跌
 					</Text>
@@ -362,7 +364,7 @@ var StockDetailPage = React.createClass({
 		leverageArray[0]='无'
 		var leverageCount = 1
 		return(
-			<View style={[styles.rowView, {height:140}]}>
+			<View style={[styles.rowView, {height:120}]}>
 				<Picker style={{width: pickerWidth}}
 					selectedValue={this.state.money}
 					mode='dialog'
@@ -387,7 +389,7 @@ var StockDetailPage = React.createClass({
 	renderOKButton: function() {
 		return (
 			<TouchableHighlight
-				onPress={this.okPress}>
+				onPress={this.okPress} style={styles.okView}>
 				<Text style={styles.okButton}>
 					确认
 				</Text>
@@ -412,14 +414,19 @@ var styles = StyleSheet.create({
 		paddingBottom: 10,
 		justifyContent: 'space-around',
 	},
-	tradeButton: {
-		fontSize: 15,
+	tradeButtonView: {
 		width: 140,
 		height: 40,
-		lineHeight: 27,
+    	paddingTop:5,
+    	paddingBottom:5,
+    	borderRadius:5,
+		backgroundColor: '#6da2fc',
+	},
+	tradeButton: {
+		fontSize: 15,
+		lineHeight: 23,
 		textAlign: 'center',
 		color: '#ffffff',
-		backgroundColor: '#6da2fc',
 	},
 	smallLabel: {
 		fontSize: 13,
@@ -427,14 +434,19 @@ var styles = StyleSheet.create({
 		paddingTop: 3,
 		paddingBottom: 3,
 	},
-	okButton: {
-		fontSize: 15,
+	okView: {
 		width: 140,
 		height: 40,
-		lineHeight: 27,
-		textAlign: 'center',
-		color: '#ffffff',
 		backgroundColor: '#f46b6f',
+    	paddingTop:5,
+    	paddingBottom:5,
+    	borderRadius:5,
+	},
+	okButton: {
+		color: '#ffffff',
+		textAlign: 'center',
+		fontSize: 15,
+		lineHeight: 23,
 	},
 	priceText: {
 		fontSize: 12,

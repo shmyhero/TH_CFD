@@ -74,7 +74,6 @@ class StockDataManager: NSObject {
 		catch {
 			print("error serializing JSON: \(error)")
 		}
-		print(stockDataArray)
 	}
 	
 	func jsonOwnStockData() -> String {

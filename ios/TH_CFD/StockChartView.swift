@@ -13,52 +13,29 @@ import UIKit
 	let margin:CGFloat = 15.0
 	var topMargin:CGFloat = 4.0
 	var bottomMargin:CGFloat = 4.0
+	var columnXPoints:[Double] = []
+	var columnYPoints:[Double] = []
 	
 	@IBInspectable var startColor: UIColor = UIColor(hex: 0x5f97f6)
 	@IBInspectable var endColor: UIColor = UIColor(hex: 0x1954b9)
 	@IBInspectable var lineColor: UIColor = UIColor(hex: 0xbbceed)
-	var chartDataJson: String! = ""
-	
-	var chartData:[ChartData] {
-		get {
-			return ChartDataManager.singleton.chartDataFromJson(self.chartDataJson)
+	var data:String? { // use for RN manager
+		willSet {
+			self.chartDataJson = newValue
+			print(newValue)
+			self.chartData = ChartDataManager.singleton.chartDataFromJson(self.chartDataJson)
+			self.setNeedsDisplay()
 		}
 	}
+	var chartDataJson: String! = ""
+	
+	var chartData:[ChartData] = []
 	
 	override func drawRect(rect: CGRect) {
-		
-		// draw gradients
-//		self.drawBackground(rect)
 		// draw line chart
 		self.drawLineChart(rect)
 		// draw background lines
 //		self.drawHorizontalLines(rect)
-	}
-	
-	func drawBackground(rect: CGRect) -> Void {
-		//get the current context
-		let context = UIGraphicsGetCurrentContext()
-		let colors = [startColor.CGColor, endColor.CGColor]
-		
-		//set up the color space
-		let colorSpace = CGColorSpaceCreateDeviceRGB()
-		
-		//set up the color stops
-		let colorLocations:[CGFloat] = [0.0, 1.0]
-		
-		//create the gradient
-		let gradient = CGGradientCreateWithColors(colorSpace,
-			colors,
-			colorLocations)
-		
-		//draw the gradient
-		let startPoint = CGPoint.zero
-		let endPoint = CGPoint(x:0, y:self.bounds.height)
-		CGContextDrawLinearGradient(context,
-			gradient,
-			startPoint,
-			endPoint,
-			CGGradientDrawingOptions.DrawsBeforeStartLocation)
 	}
 	
 	func drawHorizontalLines(rect: CGRect) -> Void {
@@ -74,11 +51,24 @@ import UIKit
 		linePath.addLineToPoint(CGPoint(x: width - margin,
 			y:topMargin + 0.5))
 		
-		//center line
-		linePath.moveToPoint(CGPoint(x:margin,
-			y: height/2 + topMargin + 0.5))
-		linePath.addLineToPoint(CGPoint(x:width - margin,
-			y:height/2 + topMargin + 0.5))
+		if !self.chartData.isEmpty {
+			//center line
+			let value = ChartDataManager.singleton.preClose
+			let maxValue = chartData.reduce(0) { (max, data) -> Double in
+				(max < data.price) ? data.price : max
+			}
+			let minValue = chartData.reduce(10000000.0) { (min, data) -> Double in
+				(min > data.price) ? data.price : min
+			}
+			
+			if value <= maxValue && value >= minValue {
+				let centerY = height * CGFloat(value - minValue) / CGFloat(maxValue - minValue)
+				linePath.moveToPoint(CGPoint(x:margin,
+					y: centerY + topMargin + 0.5))
+				linePath.addLineToPoint(CGPoint(x:width - margin,
+					y: centerY + topMargin + 0.5))
+			}
+		}
 		
 		//bottom line
 		linePath.moveToPoint(CGPoint(x:margin,
@@ -107,20 +97,22 @@ import UIKit
 		linePath.moveToPoint(CGPoint(x:margin, y: topMargin))
 		linePath.addLineToPoint(CGPoint(x:margin, y:height - bottomMargin))
 		
-		//center lines
-		// calculate time length
-		let startTime = self.chartData.first?.time
-		let endTime = self.chartData.last?.time
-		
-		let interval:NSTimeInterval = endTime!.timeIntervalSinceDate(startTime!)
-		let hours = Int(interval/3600)
-		if hours > 0 {
-			let unitWidth = 3600*(width-self.margin*2)/CGFloat(interval)
-			for i in 1...hours {
-				linePath.moveToPoint(CGPoint(x:margin+CGFloat(unitWidth)*CGFloat(i),
-					y: topMargin))
-				linePath.addLineToPoint(CGPoint(x:margin+CGFloat(unitWidth)*CGFloat(i),
-					y:height - bottomMargin))
+		if !self.chartData.isEmpty {
+			//center lines
+			// calculate time length
+			let startTime = self.chartData.first?.time
+			let endTime = self.chartData.last?.time
+			
+			let interval:NSTimeInterval = endTime!.timeIntervalSinceDate(startTime!)
+			let hours = Int(interval/3600)-1
+			if hours > 0 {
+				let unitWidth = 3600*(width-self.margin*2)/CGFloat(interval)
+				for i in 1...hours {
+					linePath.moveToPoint(CGPoint(x:margin+CGFloat(unitWidth)*CGFloat(i),
+						y: topMargin))
+					linePath.addLineToPoint(CGPoint(x:margin+CGFloat(unitWidth)*CGFloat(i),
+						y:height - bottomMargin))
+				}
 			}
 		}
 		
@@ -137,6 +129,13 @@ import UIKit
 	}
 	
 	func drawLineChart(rect: CGRect) -> Void {
+		// no data
+		if self.chartData.isEmpty {
+			self.drawHorizontalLines(rect)
+			self.drawVerticalLines(rect)
+			return
+		}
+		
 		let width = rect.width
 		let height = rect.height
 		let lastIndex = self.chartData.count - 1

@@ -21,6 +21,7 @@ var NetConstants = require('../NetConstants')
 var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
+var AppNavigator = require('../../AppNavigator')
 var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 
 
@@ -209,13 +210,15 @@ var StockListPage = React.createClass({
     	});
   	},
 
-  	stockPressed: function(rowData, stockPrice, stockIncPercentage) {
+  	stockPressed: function(rowData) {
   		this.props.navigator.push({
-			name: 'stockDetail',
+			name: AppNavigator.STOCK_DETAIL_ROUTE,
+			stockRowData: rowData,
 			stockCode: rowData.id,
 			stockName: rowData.name,
-			stockPrice: stockPrice,
-			stockIncPercentage: stockIncPercentage,
+			stockSymbol: rowData.symbol,
+			stockPrice: rowData.last,
+			lastClosePrice: rowData.open,
 		});
   	},
 
@@ -262,6 +265,18 @@ var StockListPage = React.createClass({
 
 	},
 
+	renderCountyFlag: function(rowData) {
+		if (rowData.tag !== undefined) {
+			return (
+				<View style={styles.stockCountryFlagContainer}>
+					<Text style={styles.stockCountryFlagText}>
+						{rowData.tag}
+					</Text>
+				</View>
+			);
+		}
+	},
+
 	renderRow: function(rowData, sectionID, rowID, highlightRow) {
 		var percentChange = 0
 		if (rowData.open == 0) {
@@ -272,7 +287,7 @@ var StockListPage = React.createClass({
 		}
 
 		return (
-			<TouchableHighlight onPress={() => this.stockPressed(rowData, rowData.last, percentChange)}>
+			<TouchableHighlight onPress={() => this.stockPressed(rowData)}>
 				<View style={styles.rowWrapper} key={rowData.key}>
 
 					<View style={styles.rowLeftPart}>
@@ -280,9 +295,12 @@ var StockListPage = React.createClass({
 							{rowData.name}
 						</Text>
 
-						<Text style={styles.stockSymbolText}>
-							{rowData.symbol}
-						</Text>
+						<View style={{flexDirection: 'row', alignItems: 'center'}}>
+							{this.renderCountyFlag(rowData)}
+							<Text style={styles.stockSymbolText}>
+								{rowData.symbol}
+							</Text>
+						</View>
 					</View>
 
 					<View style={styles.rowCenterPart}>
@@ -422,6 +440,17 @@ var styles = StyleSheet.create({
 		fontSize: 16,
 		color: '#ffffff',
 		fontWeight: 'bold',
+	},
+	stockCountryFlagContainer: {
+		backgroundColor: '#00b2fe',
+		borderRadius: 3,
+		paddingLeft: 3,
+		paddingRight: 3,
+	},
+	stockCountryFlagText: {
+		fontSize: 10,
+		textAlign: 'center',
+		color: '#ffffff',
 	},
 	line: {
 		alignSelf: 'stretch',

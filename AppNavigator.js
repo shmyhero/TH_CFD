@@ -55,6 +55,19 @@ BackAndroid.addEventListener('hardwareBackPress', () => {
 	return false;
 });
 
+export let LANDING_ROUTE = 'landing'
+export let LOGIN_ROUTE = 'login'
+export let UPDATE_USER_INFO_ROUTE = 'updateUserInfo'
+export let MY_HOME_ROUTE = 'myhome'
+export let MY_NOTIFICATION_ROUTE = 'myNotifications'
+export let MY_SETTING_ROUTE = 'mySettings'
+export let WECHAT_LOGIN_CONFIRM_ROUTE = 'wechatLoginConfirm'
+export let STOCK_LIST_ROUTE = 'stockList'
+export let STOCK_LIST_VIEW_PAGER_ROUTE = 'stockListViewPager'
+export let STOCK_SEARCH_ROUTE = 'stockSearch'
+export let STOCK_DETAIL_ROUTE = 'stockDetail'
+
+
 var RouteMapper = function(route, navigationOperations, onComponentRef) {
 	_navigator = navigationOperations;
 	var showBackButton = true;
@@ -62,78 +75,80 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 		showBackButton = false;
 	}
 
-	if (route.name === 'landing') {
+	if (route.name === LANDING_ROUTE) {
 		return (
 			<LandingPage navigator={navigationOperations} />
 		);
-	} else if (route.name === 'login') {
+	} else if (route.name === LOGIN_ROUTE) {
 		return (
 			<View style={{flex: 1}}>
 				<NavBar title="手机验证" showBackButton={true} navigator={navigationOperations}/>
 				<LoginPage navigator={navigationOperations}/>
 			</View>
 		);
-	} else if (route.name === 'updateUserInfo') {
+	} else if (route.name === UPDATE_USER_INFO_ROUTE) {
 		return (
 			<View style={{flex: 1}}>
 				<NavBar title="设置昵称"/>
 				<UpdateUserInfoPage navigator={navigationOperations}/>
 			</View>
 		);
-	} else if (route.name === 'myhome') {
+	} else if (route.name === MY_HOME_ROUTE) {
 		return (
 			<View style={{flex: 1}}>
 				<NavBar title="我的" />
 				<MyHomePage navigator={navigationOperations} />
 			</View>
 		);
-	} else if (route.name === 'myNotifications') {
+	} else if (route.name === MY_NOTIFICATION_ROUTE) {
 		return (
 			<View style={{flex: 1}}>
 				<NavBar title="通知" showBackButton={true} navigator={navigationOperations}/>
 				<MyNotifications navigator={navigationOperations} />
 			</View>
 		);
-	} else if (route.name === 'mySettings') {
+	} else if (route.name === MY_SETTING_ROUTE) {
 		return (
 			<View style={{flex: 1}}>
 				<NavBar title="设置" showBackButton={true} navigator={navigationOperations}/>
 				<MySettings navigator={navigationOperations} />
 			</View>
 		);
-	} else if (route.name === 'wechatLoginConfirm') {
+	} else if (route.name === WECHAT_LOGIN_CONFIRM_ROUTE) {
 		return (
 			<View style={{flex: 1}}>
 				<NavBar title="首页" showBackButton={true} navigator={navigationOperations}/>
 				<WechatLoginConfirmPage navigator={navigationOperations} />
 			</View>
 		);
-	} else if (route.name === 'stockList') {
+	} else if (route.name === STOCK_LIST_ROUTE) {
 		return (
 			<View style={{flex: 1}}>
 				<StockListPage navigator={navigationOperations} />
 			</View>
 		);
-	} else if (route.name === 'stockListViewPager') {
+	} else if (route.name === STOCK_LIST_VIEW_PAGER_ROUTE) {
 		return (
 			<View style={{flex: 1}}>
 				<StockListViewPager navigator={navigationOperations}/>
 			</View>
 		);
-	} else if (route.name === 'stockSearch') {
+	} else if (route.name === STOCK_SEARCH_ROUTE) {
 		return (
 			<View style={{flex: 1}}>
 				<StockSearchPage navigator={navigationOperations}/>
 			</View>
 		);
-	} else if (route.name === 'stockDetail') {
+	} else if (route.name === STOCK_DETAIL_ROUTE) {
 		return (
 			<View style={{flex: 1}}>
 				<StockDetailPage navigator={navigationOperations} 
-						stockName={route.stockName}
-						stockCode={route.stockCode}
-						stockPrice={route.stockPrice}
-						stockIncPercentage={route.stockIncPercentage}/>
+						stockName={route.stockRowData.name}
+						stockCode={route.stockRowData.id}
+						stockSymbol={route.stockRowData.symbol}
+						stockPrice={route.stockRowData.last}
+						stockTag={route.stockRowData.tag}
+						lastClosePrice={route.stockRowData.open}/>
 			</View>
 		);
 	}
@@ -152,7 +167,7 @@ var AppNavigator = React.createClass({
 	          <RawContent>
             	<Navigator
 					style={styles.container}
-					initialRoute={{name: 'stockDetail'}}
+					initialRoute={{name: LANDING_ROUTE}}
 					configureScene={() => Navigator.SceneConfigs.PushFromRight}
 					renderScene={RouteMapper} />
 	          </RawContent>
@@ -162,7 +177,7 @@ var AppNavigator = React.createClass({
 	          <RawContent style={{width: 100}}>
             	<Navigator
 					style={styles.container}
-					initialRoute={{name: 'stockListViewPager'}}
+					initialRoute={{name: STOCK_LIST_VIEW_PAGER_ROUTE}}
 					configureScene={() => Navigator.SceneConfigs.PushFromRight}
 					renderScene={RouteMapper} />
 	          </RawContent>

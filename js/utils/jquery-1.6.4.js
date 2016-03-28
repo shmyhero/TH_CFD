@@ -2811,7 +2811,7 @@ jQuery.event = {
 			// remove generic event handler if no more handlers exist
 			if ( eventType.length === 0 || pos != null && eventType.length === 1 ) {
 				if ( !special.teardown || special.teardown.call( elem, namespaces ) === false ) {
-					jQuery.removeEvent( elem, type, elemData.handle );
+					//jQuery.removeEvent( elem, type, elemData.handle );
 				}
 
 				ret = null;

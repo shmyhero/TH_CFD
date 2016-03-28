@@ -25,6 +25,7 @@ var WebSocketModule = require('../module/WebSocketModule')
 var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
 var NavBar = require('../view/NavBar')
+var AppNavigator = require('../../AppNavigator')
 
 
 var tabNames = ['自选', '美股', '指数', '外汇', '期货']
@@ -36,6 +37,8 @@ var urls = [
 	NetConstants.GET_FUTURE_LIST_API
 ]
 
+var didFocusSubscription = null;
+
 var StockListViewPager = React.createClass({
 
 	getInitialState: function() {
@@ -46,18 +49,21 @@ var StockListViewPager = React.createClass({
 	},
 
 	componentWillMount: function() {
-		WebSocketModule.start((stockInfo) => {
-				this.refs['page' + this.state.currentSelectedTab].handleStockInfo(stockInfo)
-			},
-			(errorMessage) => {
-				//TODO, catch this error
-				Alert.alert('websocket提示',errorMessage);
-			}
-		)
+		WebSocketModule.start()
+
+		this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', (event) => this.onDidFocus(event));
 	},
 
 	componentWillUnmount: function() {
-		
+		this.didFocusSubscription.remove();
+	},
+
+	onDidFocus: function(event) {
+        if (AppNavigator.STOCK_LIST_VIEW_PAGER_ROUTE === event.data.route.name) {
+            WebSocketModule.registerCallbacks((stockInfo) => {
+				this.refs['page' + this.state.currentSelectedTab].handleStockInfo(stockInfo)
+			})
+        }
 	},
 
 	tabClicked: function(index) {		
@@ -83,7 +89,7 @@ var StockListViewPager = React.createClass({
 
 	searchButtonClicked: function() {
 		this.props.navigator.push({
-			name: 'stockSearch',
+			name: AppNavigator.STOCK_SEARCH_ROUTE,
 		});
 	},
 

@@ -239,31 +239,11 @@ var StockDetailPage = React.createClass({
 						{this.renderTradeButton()}
 						{this.renderScrollHeader()}
 						{this.renderScroll()}
-						<Text style={styles.smallLabel}> 账户剩余资金：{this.state.leftMoney}</Text>
+						<Text style={styles.leftMoneyLabel}> 账户剩余资金：{this.state.leftMoney}</Text>
 						<Text style={styles.smallLabel}> 手续费为{this.state.charge}美元</Text>
 						{this.renderOKButton()}
 					</View>
 				</LinearGradient>
-			</View>
-		)
-	},
-
-	renderTradeButton: function() {
-		var upImage = require('../../images/up.png')
-		if (this.state.tradeDirection === 1)
-			upImage = require('../../images/click-up.png')
-		var downImage = require('../../images/down.png')
-		if (this.state.tradeDirection === 2)
-			downImage = require('../../images/click-down.png')
-
-		return (
-			<View style={styles.rowView}>
-				<TouchableHighlight onPress={this.buyPress} style={styles.tradeButtonView}>
-					<Image style={styles.tradeButton} source={upImage}/>
-				</TouchableHighlight>
-				<TouchableHighlight onPress={this.sellPress} style={styles.tradeButtonView}>
-					<Image style={styles.tradeButton} source={downImage}/>
-				</TouchableHighlight>
 			</View>
 		)
 	},
@@ -336,6 +316,28 @@ var StockDetailPage = React.createClass({
 		
 	},
 
+	renderTradeButton: function() {
+		var upSelected = this.state.tradeDirection === 1
+		var upImage = upSelected ? require('../../images/click-up.png') : require('../../images/up.png')
+		var downSelected = this.state.tradeDirection === 2
+		var downImage = downSelected ? require('../../images/click-down.png') : require('../../images/down.png')
+
+		return (
+			<View style={styles.rowView}>
+				<TouchableHighlight
+					underlayColor={upSelected ? '#356dce': '#6da2fc'}
+					onPress={this.buyPress} style={[styles.tradeButtonView, upSelected&&styles.tradeButtonViewSelected]}>
+					<Image style={styles.tradeButton} source={upImage}/>
+				</TouchableHighlight>
+				<TouchableHighlight
+					underlayColor={downSelected ? '#356dce': '#6da2fc'}
+					onPress={this.sellPress} style={[styles.tradeButtonView, downSelected&&styles.tradeButtonViewSelected]}>
+					<Image style={styles.tradeButton} source={downImage}/>
+				</TouchableHighlight>
+			</View>
+		)
+	},
+
 	buyPress: function() {
 		if (this.state.tradeDirection === 1)
 			this.setState({tradeDirection:0})
@@ -352,12 +354,8 @@ var StockDetailPage = React.createClass({
 	renderScrollHeader: function() {
 		return (
 			<View style={styles.rowView}>
-				<Text style={styles.smallLabel}>
-					本金（美元）
-				</Text>
-				<Text style={styles.smallLabel}>
-					杠杠（倍）
-				</Text>
+				<Text style={styles.smallLabel}>本金（美元）</Text>
+				<Text style={styles.smallLabel}>杠杠（倍）</Text>
 			</View>	
 		)
 	},
@@ -414,12 +412,9 @@ var StockDetailPage = React.createClass({
 		var buttonEnable = this.state.tradeDirection !== 0
 		return (
 			<TouchableHighlight
-				activeOpacity={buttonEnable ? 0.7 : 1}
-				underlayColor={buttonEnable ? '#000000': ColorConstants.DISABLED_GREY}
-				onPress={this.okPress} style={buttonEnable ? styles.okView : [styles.okView,styles.okViewDisabled]}>
-				<Text style={styles.okButton}>
-					确认
-				</Text>
+				underlayColor={buttonEnable ? '#f46b6f': '#164593'}
+				onPress={this.okPress} style={[styles.okView, !buttonEnable && styles.okViewDisabled]}>
+				<Text style={styles.okButton}>确认</Text>
 			</TouchableHighlight>
 		)
 	},
@@ -452,6 +447,9 @@ var styles = StyleSheet.create({
 		backgroundColor: '#6da2fc',
 		alignItems: 'center',
 	},
+	tradeButtonViewSelected:{
+		backgroundColor: '#356dce',
+	},
 	tradeButton: {
 		width: 35,
 		height: 25,
@@ -459,6 +457,12 @@ var styles = StyleSheet.create({
 	smallLabel: {
 		fontSize: 13,
 		color: 'white',
+		paddingTop: 3,
+		paddingBottom: 3,
+	},
+	leftMoneyLabel: {
+		fontSize: 13,
+		color: '#7a8cb5',
 		paddingTop: 3,
 		paddingBottom: 3,
 	},

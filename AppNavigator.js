@@ -143,11 +143,12 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 		return (
 			<View style={{flex: 1}}>
 				<StockDetailPage navigator={navigationOperations} 
-						stockName={route.stockName}
-						stockCode={route.stockCode}
-						stockSymbol={route.stockSymbol}
-						stockPrice={route.stockPrice}
-						lastClosePrice={route.lastClosePrice}/>
+						stockName={route.stockRowData.name}
+						stockCode={route.stockRowData.id}
+						stockSymbol={route.stockRowData.symbol}
+						stockPrice={route.stockRowData.last}
+						stockTag={route.stockRowData.tag}
+						lastClosePrice={route.stockRowData.open}/>
 			</View>
 		);
 	}

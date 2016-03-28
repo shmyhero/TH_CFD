@@ -374,7 +374,7 @@ var StockDetailPage = React.createClass({
 		leverageArray[0]='无'
 		var leverageCount = 1
 		return(
-			<View style={[styles.rowView, {height:120}]}>
+			<View style={[styles.rowView, styles.scrollView]}>
 				<Picker style={{width: pickerWidth}}
 					selectedValue={this.state.money}
 					mode='dialog'
@@ -460,11 +460,17 @@ var styles = StyleSheet.create({
 		paddingTop: 3,
 		paddingBottom: 3,
 	},
+	scrollView: {
+		height: 105,
+		overflow: 'hidden',
+	},
 	leftMoneyLabel: {
 		fontSize: 13,
 		color: '#7a8cb5',
 		paddingTop: 3,
 		paddingBottom: 3,
+		marginTop: 5,
+		marginBottom: 5,
 	},
 	okView: {
 		width: 140,
@@ -475,6 +481,7 @@ var styles = StyleSheet.create({
     	borderRadius:5,
     	borderWidth:1,
     	borderColor: '#153a77',
+		marginTop: 5,
 	},
 	okViewDisabled: {
 		backgroundColor: '#164593'

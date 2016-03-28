@@ -14,6 +14,8 @@ var {
 	Alert,
 	Dimensions,
 	Picker,
+	TextInput,
+	ScrollView,
 } = React;
 
 var ColorConstants = require('../ColorConstants')
@@ -21,6 +23,7 @@ var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
 var NavBar = require('../view/NavBar')
+var InputAccessory = require('./component/InputAccessory')
 var PickerItem = Picker.Item;
 
 var StockDetailPage = React.createClass({
@@ -49,6 +52,7 @@ var StockDetailPage = React.createClass({
 			leftMoney: 980,
 			charge: 0.01,
 			tradeDirection: 0,	//0:none, 1:up, 2:down
+			inputText: '0',
 		};
 	},
 
@@ -244,6 +248,7 @@ var StockDetailPage = React.createClass({
 						{this.renderOKButton()}
 					</View>
 				</LinearGradient>
+    			<InputAccessory textValue={this.state.inputText}/>
 			</View>
 		)
 	},
@@ -327,12 +332,12 @@ var StockDetailPage = React.createClass({
 				<TouchableHighlight
 					underlayColor={upSelected ? '#356dce': '#6da2fc'}
 					onPress={this.buyPress} style={[styles.tradeButtonView, upSelected&&styles.tradeButtonViewSelected]}>
-					<Image style={styles.tradeButton} source={upImage}/>
+					<Image style={styles.tradeButtonImage} source={upImage}/>
 				</TouchableHighlight>
 				<TouchableHighlight
 					underlayColor={downSelected ? '#356dce': '#6da2fc'}
 					onPress={this.sellPress} style={[styles.tradeButtonView, downSelected&&styles.tradeButtonViewSelected]}>
-					<Image style={styles.tradeButton} source={downImage}/>
+					<Image style={styles.tradeButtonImage} source={downImage}/>
 				</TouchableHighlight>
 			</View>
 		)
@@ -362,7 +367,7 @@ var StockDetailPage = React.createClass({
 
 	renderScroll: function() {
 		var {height, width} = Dimensions.get('window');
-		var pickerWidth = width/2-40
+		var pickerWidth = width/2-60
 		var moneyArray = new Array(10)
 		for (var i = 0; i < 10; i++) {
 			moneyArray[i]=""+(i+1)*10
@@ -375,6 +380,7 @@ var StockDetailPage = React.createClass({
 		var leverageCount = 1
 		return(
 			<View style={[styles.rowView, styles.scrollView]}>
+				<View/>
 				<Picker style={{width: pickerWidth}}
 					selectedValue={this.state.money}
 					mode='dialog'
@@ -384,6 +390,7 @@ var StockDetailPage = React.createClass({
 					  <PickerItem label={value} value={parseInt(value)} key={"money"+value}/>
 					))}
 				</Picker>
+				<View/>
 				<Picker style={{width: pickerWidth}}
 					selectedValue={this.state.leverage}
 					itemStyle={{color:"white"}}
@@ -392,6 +399,7 @@ var StockDetailPage = React.createClass({
 					  <PickerItem label={value} key={"lever"+leverageCount} value={leverageCount++}/>
 					))}
 				</Picker>
+				{this.renderInput()}
 			</View>
 		)
 	},
@@ -421,6 +429,24 @@ var StockDetailPage = React.createClass({
 
 	okPress: function() {
 	},
+	
+	renderInput: function() {
+		var {height, width} = Dimensions.get('window');
+		return (
+			<View>
+				<Image style={[styles.inputImage, {marginLeft:50-width,marginTop:10}]} source={require('../../images/key.png')}/>
+				<TextInput style={[styles.inputText, {marginLeft:40-width, marginTop:-24}]}
+					keyboardType="numeric"
+					keyboardAppearance='dark'
+					selectionColor='transparent'
+					onChangeText={this.textInputChange}/>
+    		</View>
+			)
+	},
+
+	textInputChange: function(text) {
+		this.setState({inputText:text})
+	}
 });
 
 var styles = StyleSheet.create({
@@ -450,9 +476,18 @@ var styles = StyleSheet.create({
 	tradeButtonViewSelected:{
 		backgroundColor: '#356dce',
 	},
-	tradeButton: {
+	tradeButtonImage: {
 		width: 35,
 		height: 25,
+	},
+	inputImage: {
+		width: 13,
+		height: 11,
+	},
+	inputText: {
+		width: 30,
+		height: 30,
+		color: 'transparent',
 	},
 	smallLabel: {
 		fontSize: 13,

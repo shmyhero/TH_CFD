@@ -16,6 +16,7 @@ var {
 	Picker,
 } = React;
 
+var LogicData = require('../LogicData')
 var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
@@ -27,8 +28,9 @@ var StockDetailPage = React.createClass({
 	propTypes: {
 		stockCode: React.PropTypes.number,
 		stockName: React.PropTypes.string,
+		stockSymbol: React.PropTypes.string,
 		stockPrice: React.PropTypes.number,
-		lastOpenPrice: React.PropTypes.number,
+		lastClosePrice: React.PropTypes.number,
 	},
 
 	getDefaultProps() {
@@ -36,7 +38,7 @@ var StockDetailPage = React.createClass({
 			stockCode: 14993,
 			stockName: 'ABC company',
 			stockPrice: 10,
-			lastOpenPrice: 9,
+			lastClosePrice: 9,
 		}
 	},
 
@@ -50,11 +52,19 @@ var StockDetailPage = React.createClass({
 			charge: 0.01,
 			tradeDirection: 0,	//0:none, 1:up, 2:down
 			stockPrice: this.props.stockPrice,
+			isAddedToMyList: false,
 		};
 	},
 
 	componentWillMount: function() {
 		this.loadStockInfo()
+		var myListData = LogicData.getOwnStocksData()
+		var index = myListData.findIndex((stock)=>{return stock.id === this.props.stockCode})
+    	if (index !== -1) {
+    		this.setState({
+    			isAddedToMyList: true,
+    		})
+    	}
 	},
 
 	loadStockInfo: function() {
@@ -119,7 +129,24 @@ var StockDetailPage = React.createClass({
 	},
 
 	addToMyListClicked: function() {
-
+		var stock = {
+			id: this.props.stockCode,
+			symbol: this.props.stockSymbol,
+			name: this.props.stockName,
+			open: this.props.lastClosePrice,
+			last: this.state.stockPrice
+		}
+		if (this.state.isAddedToMyList) {
+			LogicData.removeStockFromOwn(stock)
+			this.setState({
+				isAddedToMyList: false,
+			})
+		} else {
+			LogicData.addStockToOwn(stock)
+			this.setState({
+				isAddedToMyList: true,
+			})
+		}
 	},
 
 	renderStockMaxPriceInfo: function(maxPrice, maxPercentage) {
@@ -269,10 +296,10 @@ var StockDetailPage = React.createClass({
 	renderHeader: function() {
 		var percentChange = 0
 
-		if (this.props.lastOpenPrice == 0) {
+		if (this.props.lastClosePrice == 0) {
 			percentChange = '--'
 		} else {
-			percentChange = (this.state.stockPrice - this.props.lastOpenPrice) / this.props.lastOpenPrice * 100
+			percentChange = (this.state.stockPrice - this.props.lastClosePrice) / this.props.lastClosePrice * 100
 		}
 
 		var subTitleColor = '#a0a6aa'
@@ -304,7 +331,7 @@ var StockDetailPage = React.createClass({
 					onPress={this.addToMyListClicked}>
 				<View style={styles.addToMyListContainer}>
 					<Text style={styles.addToMyListText}>
-						+ 自选
+						{this.state.isAddedToMyList ? '-':'+'} 自选
 					</Text>
 				</View>
 			</TouchableOpacity>

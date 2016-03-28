@@ -210,13 +210,14 @@ var StockListPage = React.createClass({
     	});
   	},
 
-  	stockPressed: function(rowData, stockPrice, lastOpenPrice) {
+  	stockPressed: function(rowData, stockPrice, lastClosePrice) {
   		this.props.navigator.push({
 			name: AppNavigator.STOCK_DETAIL_ROUTE,
 			stockCode: rowData.id,
 			stockName: rowData.name,
+			stockSymbol: rowData.symbol,
 			stockPrice: stockPrice,
-			lastOpenPrice: lastOpenPrice,
+			lastClosePrice: lastClosePrice,
 		});
   	},
 

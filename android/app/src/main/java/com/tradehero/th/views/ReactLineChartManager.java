@@ -37,6 +37,7 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
 
     private static final String REACT_CLASS = "LineChart";
     private static int CHART_BORDER_COLOR = 0xff497bce;
+    private static int CHART_LINE_COLOR = 0Xff759de2;
 
     @Override
     protected ReactLineChart createViewInstance(ThemedReactContext reactContext) {
@@ -120,7 +121,7 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
 
                 // Set the xAxis with the prev close price line
                 LimitLine line = new LimitLine((float) stockInfoObject.getDouble("preClose"));
-                line.setLineColor(CHART_BORDER_COLOR);
+                line.setLineColor(CHART_LINE_COLOR);
                 line.setLineWidth(0.5f);
                 line.enableDashedLine(10f, 0f, 0f);
                 line.setTextSize(0f);
@@ -140,7 +141,7 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
                         nextLineAt = calendar;
 
                         LimitLine hourLine = new LimitLine(i);
-                        hourLine.setLineColor(CHART_BORDER_COLOR);
+                        hourLine.setLineColor(CHART_LINE_COLOR);
                         hourLine.setLineWidth(0.5f);
                         hourLine.enableDashedLine(10f, 0f, 0f);
                         hourLine.setTextSize(0f);

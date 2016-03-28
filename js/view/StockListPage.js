@@ -21,6 +21,7 @@ var NetConstants = require('../NetConstants')
 var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
+var AppNavigator = require('../../AppNavigator')
 var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 
 
@@ -209,13 +210,13 @@ var StockListPage = React.createClass({
     	});
   	},
 
-  	stockPressed: function(rowData, stockPrice, stockIncPercentage) {
+  	stockPressed: function(rowData, stockPrice, lastOpenPrice) {
   		this.props.navigator.push({
-			name: 'stockDetail',
+			name: AppNavigator.STOCK_DETAIL_ROUTE,
 			stockCode: rowData.id,
 			stockName: rowData.name,
 			stockPrice: stockPrice,
-			stockIncPercentage: stockIncPercentage,
+			lastOpenPrice: lastOpenPrice,
 		});
   	},
 
@@ -272,7 +273,7 @@ var StockListPage = React.createClass({
 		}
 
 		return (
-			<TouchableHighlight onPress={() => this.stockPressed(rowData, rowData.last, percentChange)}>
+			<TouchableHighlight onPress={() => this.stockPressed(rowData, rowData.last, rowData.open)}>
 				<View style={styles.rowWrapper} key={rowData.key}>
 
 					<View style={styles.rowLeftPart}>

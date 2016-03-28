@@ -28,7 +28,7 @@ var StockDetailPage = React.createClass({
 		stockCode: React.PropTypes.number,
 		stockName: React.PropTypes.string,
 		stockPrice: React.PropTypes.number,
-		stockIncPercentage: React.PropTypes.number,
+		lastOpenPrice: React.PropTypes.number,
 	},
 
 	getDefaultProps() {
@@ -36,7 +36,7 @@ var StockDetailPage = React.createClass({
 			stockCode: 14993,
 			stockName: 'ABC company',
 			stockPrice: 10,
-			stockIncPercentage: 0.5
+			lastOpenPrice: 9,
 		}
 	},
 
@@ -49,6 +49,7 @@ var StockDetailPage = React.createClass({
 			leftMoney: 980,
 			charge: 0.01,
 			tradeDirection: 0,	//0:none, 1:up, 2:down
+			stockPrice: this.props.stockPrice,
 		};
 	},
 
@@ -93,11 +94,28 @@ var StockDetailPage = React.createClass({
 				this.setState({
 					stockInfo: tempStockInfo,
 				})
+
+				this.connectWebSocket()
 			},
 			(errorMessage) => {
 				Alert.alert('网络错误提示', errorMessage);
 			}
 		)
+	},
+
+	connectWebSocket: function() {
+		WebSocketModule.registerCallbacks(
+			(realtimeStockInfo) => {
+				for (var i = 0; i < realtimeStockInfo.length; i++) {
+					if (this.props.stockCode == realtimeStockInfo[i].id && 
+								this.state.stockPrice !== realtimeStockInfo[i].last) {
+						this.setState({
+							stockPrice: realtimeStockInfo[i].last
+						})
+						break;
+					}
+				};
+			})
 	},
 
 	addToMyListClicked: function() {
@@ -249,18 +267,26 @@ var StockDetailPage = React.createClass({
 	},
 
 	renderHeader: function() {
+		var percentChange = 0
+
+		if (this.props.lastOpenPrice == 0) {
+			percentChange = '--'
+		} else {
+			percentChange = (this.state.stockPrice - this.props.lastOpenPrice) / this.props.lastOpenPrice * 100
+		}
+
 		var subTitleColor = '#a0a6aa'
-		if (this.props.stockIncPercentage > 0) {
+		if (percentChange > 0) {
 			subTitleColor = ColorConstants.STOCK_RISE_RED
-		} else if (this.props.stockIncPercentage < 0) {
+		} else if (percentChange < 0) {
 			subTitleColor = ColorConstants.STOCK_DOWN_GREEN
 		}
 
-		var subTitleText = this.props.stockPrice + '  '
-		if (this.props.stockIncPercentage > 0) {
-			subTitleText += '+' + this.props.stockIncPercentage.toFixed(2) + '%'
+		var subTitleText = this.state.stockPrice + '  '
+		if (percentChange > 0) {
+			subTitleText += '+' + percentChange.toFixed(2) + '%'
 		} else {
-			subTitleText += this.props.stockIncPercentage.toFixed(2) + '%'
+			subTitleText += percentChange.toFixed(2) + '%'
 		}
 		return (
 			<NavBar showBackButton={true} navigator={this.props.navigator}

@@ -16,6 +16,7 @@ var {
 var LogicData = require('../LogicData')
 var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
+var AppNavigator = require('../../AppNavigator')
 
 var LandingPage = React.createClass({
 
@@ -35,11 +36,11 @@ var LandingPage = React.createClass({
 						useTokenAvailable: true
 					})
 					this.props.navigator.push({
-						name: 'wechatLoginConfirm',
+						name: AppNavigator.WECHAT_LOGIN_CONFIRM_ROUTE,
 					});	
 				} else {
 					this.props.navigator.push({
-						name: 'login',
+						name: AppNavigator.LOGIN_ROUTE,
 					});
 				}
 			})

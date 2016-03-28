@@ -18,6 +18,7 @@ var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
 var LogicData = require('../LogicData')
 var NetworkModule = require('../module/NetworkModule')
+var AppNavigator = require('../../AppNavigator')
 
 var rowHeight = 40;
 var fontSize = 16;
@@ -94,7 +95,7 @@ var UpdateUserInfoPage = React.createClass({
 			},
 			function(responseJson) {
 				this.props.navigator.replace({
-					name: 'wechatLoginConfirm',
+					name: AppNavigator.WECHAT_LOGIN_CONFIRM_ROUTE,
 				});
 			}.bind(this),
 			function(errorMessage) {

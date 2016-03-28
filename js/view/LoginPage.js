@@ -24,6 +24,7 @@ var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
 var WechatModule = require('../module/WechatModule')
 var Button = require('./component/Button')
+var AppNavigator = require('../../AppNavigator')
 
 var rowHeight = 40;
 var fontSize = 16;
@@ -202,7 +203,7 @@ var LoginPage = React.createClass({
 		console.log(LogicData.getUserData());
 
 		this.props.navigator.replace({
-			name: 'updateUserInfo',
+			name: AppNavigator.UPDATE_USER_INFO_ROUTE,
 		});
 	},
 

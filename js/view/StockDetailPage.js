@@ -45,7 +45,10 @@ var StockDetailPage = React.createClass({
 			stockInfo: [],
 			money: 20,
 			leverage: 2,
-			leftMoney: 1000,
+			totalMoney: 1000,
+			leftMoney: 980,
+			charge: 0.01,
+			tradeDirection: 0,	//0:none, 1:up, 2:down
 		};
 	},
 
@@ -120,6 +123,10 @@ var StockDetailPage = React.createClass({
 				</View>
 			);
 		}
+		else {
+			return (
+				<View style={{height:16}}/>)
+		}
 	},
 
 	renderStockMinPriceInfo: function(minPrice, minPercentage) {
@@ -185,7 +192,6 @@ var StockDetailPage = React.createClass({
 	render: function() {
 		var {height, width} = Dimensions.get('window');
 
-		var charge = 0.03
 		var priceData = this.state.stockInfo.priceData
 		var maxPrice = undefined
 		var minPrice = undefined
@@ -222,7 +228,6 @@ var StockDetailPage = React.createClass({
 					{this.renderChartHeader()}
 
 					<View style={{flex: 3}}>
-						
 						{this.renderStockMaxPriceInfo(maxPrice, maxPercentage)}
 						<LineChart style={{flex: 1, backgroundColor:'transparent', marginTop: -30}} data={JSON.stringify(this.state.stockInfo)}/>
 						{this.renderStockMinPriceInfo(minPrice, minPercentage)}
@@ -235,7 +240,7 @@ var StockDetailPage = React.createClass({
 						{this.renderScrollHeader()}
 						{this.renderScroll()}
 						<Text style={styles.smallLabel}> 账户剩余资金：{this.state.leftMoney}</Text>
-						<Text style={styles.smallLabel}> 手续费为{charge}美元</Text>
+						<Text style={styles.smallLabel}> 手续费为{this.state.charge}美元</Text>
 						{this.renderOKButton()}
 					</View>
 				</LinearGradient>
@@ -244,21 +249,20 @@ var StockDetailPage = React.createClass({
 	},
 
 	renderTradeButton: function() {
+		var upImage = require('../../images/up.png')
+		if (this.state.tradeDirection === 1)
+			upImage = require('../../images/click-up.png')
+		var downImage = require('../../images/down.png')
+		if (this.state.tradeDirection === 2)
+			downImage = require('../../images/click-down.png')
+
 		return (
 			<View style={styles.rowView}>
-				<TouchableHighlight
-					onPress={this.buyPress}
-					style={styles.tradeButtonView}>
-					<Text style={styles.tradeButton}>
-						涨
-					</Text>
+				<TouchableHighlight onPress={this.buyPress} style={styles.tradeButtonView}>
+					<Image style={styles.tradeButton} source={upImage}/>
 				</TouchableHighlight>
-				<TouchableHighlight
-					onPress={this.sellPress}
-					style={styles.tradeButtonView}>
-					<Text style={styles.tradeButton}>
-						跌
-					</Text>
+				<TouchableHighlight onPress={this.sellPress} style={styles.tradeButtonView}>
+					<Image style={styles.tradeButton} source={downImage}/>
 				</TouchableHighlight>
 			</View>
 		)
@@ -333,8 +337,16 @@ var StockDetailPage = React.createClass({
 	},
 
 	buyPress: function() {
+		if (this.state.tradeDirection === 1)
+			this.setState({tradeDirection:0})
+		else
+			this.setState({tradeDirection:1})
 	},
 	sellPress: function() {
+		if (this.state.tradeDirection === 2)
+			this.setState({tradeDirection:0})
+		else
+			this.setState({tradeDirection:2})
 	},
 
 	renderScrollHeader: function() {
@@ -369,7 +381,7 @@ var StockDetailPage = React.createClass({
 					selectedValue={this.state.money}
 					mode='dialog'
 					itemStyle={{color:"white"}}
-					onValueChange={(value) => this.setState({money: value})}>
+					onValueChange={(value) => this.onPikcerSelect(value, 1)}>
 					{moneyArray.map((value) => (
 					  <PickerItem label={value} value={parseInt(value)} key={"money"+value}/>
 					))}
@@ -377,7 +389,7 @@ var StockDetailPage = React.createClass({
 				<Picker style={{width: pickerWidth}}
 					selectedValue={this.state.leverage}
 					itemStyle={{color:"white"}}
-					onValueChange={(value) => this.setState({leverage: value})}>
+					onValueChange={(value) => this.onPikcerSelect(value, 2)}>
 					{leverageArray.map((value) => (
 					  <PickerItem label={value} key={"lever"+leverageCount} value={leverageCount++}/>
 					))}
@@ -386,10 +398,25 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
+	onPikcerSelect: function(value, tag) {
+		if(tag===1){
+			this.setState({money: value})
+			this.setState({leftMoney: this.state.totalMoney-value})
+			// 0.06%, limit to 0.01
+			this.setState({charge: parseInt(value*0.06+0.5)/100.0})
+		}
+		else if(tag===2){
+			this.setState({leverage: value})
+		}
+	},
+
 	renderOKButton: function() {
+		var buttonEnable = this.state.tradeDirection !== 0
 		return (
 			<TouchableHighlight
-				onPress={this.okPress} style={styles.okView}>
+				activeOpacity={buttonEnable ? 0.7 : 1}
+				underlayColor={buttonEnable ? '#000000': ColorConstants.DISABLED_GREY}
+				onPress={this.okPress} style={buttonEnable ? styles.okView : [styles.okView,styles.okViewDisabled]}>
 				<Text style={styles.okButton}>
 					确认
 				</Text>
@@ -417,16 +444,17 @@ var styles = StyleSheet.create({
 	tradeButtonView: {
 		width: 140,
 		height: 40,
-    	paddingTop:5,
-    	paddingBottom:5,
+    	paddingTop:7,
+    	paddingBottom:7,
     	borderRadius:5,
+    	borderWidth:1,
+    	borderColor: '#133e86',
 		backgroundColor: '#6da2fc',
+		alignItems: 'center',
 	},
 	tradeButton: {
-		fontSize: 15,
-		lineHeight: 23,
-		textAlign: 'center',
-		color: '#ffffff',
+		width: 35,
+		height: 25,
 	},
 	smallLabel: {
 		fontSize: 13,
@@ -438,15 +466,20 @@ var styles = StyleSheet.create({
 		width: 140,
 		height: 40,
 		backgroundColor: '#f46b6f',
-    	paddingTop:5,
-    	paddingBottom:5,
+    	paddingTop:6,
+    	paddingBottom:6,
     	borderRadius:5,
+    	borderWidth:1,
+    	borderColor: '#153a77',
+	},
+	okViewDisabled: {
+		backgroundColor: '#164593'
 	},
 	okButton: {
 		color: '#ffffff',
 		textAlign: 'center',
 		fontSize: 15,
-		lineHeight: 23,
+		lineHeight: 20,
 	},
 	priceText: {
 		fontSize: 12,

@@ -11,8 +11,8 @@ import UIKit
 @IBDesignable class StockChartView: UIView {
 	
 	let margin:CGFloat = 15.0
-	var topMargin:CGFloat = 4.0
-	var bottomMargin:CGFloat = 4.0
+	var topMargin:CGFloat = 10.0
+	var bottomMargin:CGFloat = 10.0
 	var columnXPoints:[Double] = []
 	var columnYPoints:[Double] = []
 	
@@ -22,7 +22,6 @@ import UIKit
 	var data:String? { // use for RN manager
 		willSet {
 			self.chartDataJson = newValue
-			print(newValue)
 			self.chartData = ChartDataManager.singleton.chartDataFromJson(self.chartDataJson)
 			self.setNeedsDisplay()
 		}
@@ -51,8 +50,11 @@ import UIKit
 		linePath.addLineToPoint(CGPoint(x: width - margin,
 			y:topMargin + 0.5))
 		
+		//center line
+		var centerY = height/2
+		let topBorder:CGFloat = height * 0.2
+		let bottomBorder:CGFloat = height * 0.2
 		if !self.chartData.isEmpty {
-			//center line
 			let value = ChartDataManager.singleton.preClose
 			let maxValue = chartData.reduce(0) { (max, data) -> Double in
 				(max < data.price) ? data.price : max
@@ -62,20 +64,20 @@ import UIKit
 			}
 			
 			if value <= maxValue && value >= minValue {
-				let centerY = height * CGFloat(value - minValue) / CGFloat(maxValue - minValue)
-				linePath.moveToPoint(CGPoint(x:margin,
-					y: centerY + topMargin + 0.5))
-				linePath.addLineToPoint(CGPoint(x:width - margin,
-					y: centerY + topMargin + 0.5))
+				centerY = (height-topBorder-bottomBorder) * CGFloat(maxValue - value) / CGFloat(maxValue - minValue)+topBorder
 			}
 		}
+		linePath.moveToPoint(CGPoint(x:margin,
+			y: centerY + 0.5))
+		linePath.addLineToPoint(CGPoint(x:width - margin,
+			y: centerY + 0.5))
 		
 		//bottom line
-		linePath.moveToPoint(CGPoint(x:margin,
+		linePath.moveToPoint(CGPoint(x:margin-0.5,
 			y:height - bottomMargin + 0.5))
-		linePath.addLineToPoint(CGPoint(x:width - margin,
+		linePath.addLineToPoint(CGPoint(x:width - margin+0.5,
 			y:height - bottomMargin + 0.5))
-		let color = UIColor(hex: 0x497bce)
+		let color = UIColor(hex: 0x759de2)
 		color.setStroke()
 		
 		linePath.lineWidth = 1
@@ -94,8 +96,8 @@ import UIKit
 		CGContextSaveGState(context)
 		
 		//left line
-		linePath.moveToPoint(CGPoint(x:margin, y: topMargin))
-		linePath.addLineToPoint(CGPoint(x:margin, y:height - bottomMargin))
+		linePath.moveToPoint(CGPoint(x:margin - 0.5, y: topMargin))
+		linePath.addLineToPoint(CGPoint(x:margin - 0.5, y:height - bottomMargin))
 		
 		if !self.chartData.isEmpty {
 			//center lines
@@ -108,18 +110,19 @@ import UIKit
 			if hours > 0 {
 				let unitWidth = 3600*(width-self.margin*2)/CGFloat(interval)
 				for i in 1...hours {
-					linePath.moveToPoint(CGPoint(x:margin+CGFloat(unitWidth)*CGFloat(i),
+					let px = Int(margin+unitWidth*CGFloat(i))
+					linePath.moveToPoint(CGPoint(x: CGFloat(px) + 0.5,
 						y: topMargin))
-					linePath.addLineToPoint(CGPoint(x:margin+CGFloat(unitWidth)*CGFloat(i),
+					linePath.addLineToPoint(CGPoint(x:CGFloat(px) + 0.5,
 						y:height - bottomMargin))
 				}
 			}
 		}
 		
 		//right line
-		linePath.moveToPoint(CGPoint(x:width - margin, y:bottomMargin))
-		linePath.addLineToPoint(CGPoint(x:width - margin, y:height - bottomMargin))
-		let color = UIColor(hex: 0x497bce)
+		linePath.moveToPoint(CGPoint(x:width - margin + 0.5, y:bottomMargin))
+		linePath.addLineToPoint(CGPoint(x:width - margin + 0.5, y:height - bottomMargin))
+		let color = UIColor(hex: 0x759de2)
 		color.setStroke()
 		
 		linePath.lineWidth = 1
@@ -150,8 +153,8 @@ import UIKit
 			return x
 		}
 		// calculate the y point
-		let topBorder:CGFloat = height * 0.1
-		let bottomBorder:CGFloat = height * 0.1
+		let topBorder:CGFloat = height * 0.2
+		let bottomBorder:CGFloat = height * 0.2
 		let graphHeight = height - topBorder - bottomBorder
 		let maxValue = chartData.reduce(0) { (max, data) -> Double in
 			(max < data.price) ? data.price : max
@@ -205,7 +208,7 @@ import UIKit
 		// draw gradients
 		let highestYPoint = CGFloat(topBorder)//columnYPoint(maxValue)
 		let startPoint = CGPoint(x:margin, y: highestYPoint)
-		let endPoint = CGPoint(x:margin, y:height)
+		let endPoint = CGPoint(x:margin, y:height-bottomMargin)
 		
 		let colors = [startColor.CGColor, endColor.CGColor]
 		

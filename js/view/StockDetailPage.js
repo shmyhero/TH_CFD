@@ -16,6 +16,7 @@ var {
 	Picker,
 	TextInput,
 	ScrollView,
+	Platform,
 } = React;
 
 var LogicData = require('../LogicData')
@@ -491,9 +492,9 @@ var StockDetailPage = React.createClass({
 			<View>
 				<Image style={[styles.inputImage, {marginLeft:50-width,marginTop:10}]} source={require('../../images/key.png')}/>
 				<TextInput style={[styles.inputText, {marginLeft:40-width, marginTop:-24}]}
-					keyboardType="numeric"
-					keyboardAppearance='dark'
-					selectionColor='transparent'
+					keyboardType={Platform.OS === 'ios' ? "number-pad" : "numeric"}
+					keyboardAppearance={'dark'}
+					selectionColor={'transparent'}
 					onChangeText={this.textInputChange}/>
     		</View>
 			)

@@ -67,9 +67,16 @@ export let STOCK_LIST_VIEW_PAGER_ROUTE = 'stockListViewPager'
 export let STOCK_SEARCH_ROUTE = 'stockSearch'
 export let STOCK_DETAIL_ROUTE = 'stockDetail'
 
-
+var hideTabbar
+var showTabbar
 var RouteMapper = function(route, navigationOperations, onComponentRef) {
 	_navigator = navigationOperations;
+	if (route.showTabbar !== undefined) {
+		showTabbar = route.showTabbar
+	}
+	if (route.hideTabbar !== undefined) {
+		hideTabbar = route.hideTabbar
+	}
 	var showBackButton = true;
 	if (route.hideBackButton) {
 		showBackButton = false;
@@ -128,6 +135,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 			</View>
 		);
 	} else if (route.name === STOCK_LIST_VIEW_PAGER_ROUTE) {
+		showTabbar()
 		return (
 			<View style={{flex: 1}}>
 				<StockListViewPager navigator={navigationOperations}/>
@@ -140,6 +148,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 			</View>
 		);
 	} else if (route.name === STOCK_DETAIL_ROUTE) {
+		hideTabbar()
 		return (
 			<View style={{flex: 1}}>
 				<StockDetailPage navigator={navigationOperations} 
@@ -159,6 +168,14 @@ var AppNavigator = React.createClass({
 		initialViewRoute: React.PropTypes.string,
 	},
 
+	showTabbar() {
+		this.refs['myTabbar'] && this.refs['myTabbar'].getBarRef().show(true);
+	},
+
+	hideTabbar() {
+		this.refs['myTabbar'] && this.refs['myTabbar'].getBarRef().show(false);
+	},
+
 	render: function() {
 	    return (
 	      <Tabbar ref="myTabbar" barColor={'#f7f7f7'} style={{alignItems: 'stretch'}}>
@@ -167,7 +184,7 @@ var AppNavigator = React.createClass({
 	          <RawContent>
             	<Navigator
 					style={styles.container}
-					initialRoute={{name: LANDING_ROUTE}}
+					initialRoute={{name: LANDING_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
 					configureScene={() => Navigator.SceneConfigs.PushFromRight}
 					renderScene={RouteMapper} />
 	          </RawContent>

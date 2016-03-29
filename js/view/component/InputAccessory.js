@@ -7,7 +7,8 @@ import React, {
   TouchableOpacity,
   LayoutAnimation,
   StyleSheet,
-  Text
+  Text,
+  Platform,
 } from 'react-native';
 const dismissKeyboard = require('dismissKeyboard');
 var INPUT_ACCESSORY_HEIGHT = 40;
@@ -79,9 +80,11 @@ var InputAccessory = React.createClass({
       duration:100,
       create: {
         type: LayoutAnimation.Types.linear,
+        property: LayoutAnimation.Properties.scaleXY,
       },
       update: {
         type: LayoutAnimation.Types.linear,
+        property: LayoutAnimation.Properties.scaleXY,
       },
     });
 
@@ -103,8 +106,13 @@ var InputAccessory = React.createClass({
             最低金额10美元！
           </Text> 
 
+    var styleOfPosition = {top: this.state.visibleHeight - 1}
+    if (Platform.OS === 'android') {
+      styleOfPosition = {bottom: 0}
+    } 
+
     return (
-      <View style={[s.InputAccessory,{opacity:this.state.opacity,top:this.state.visibleHeight-1}]} onLayout={(e)=>this.rotateDevice(e)}>
+      <View style={[s.InputAccessory,{opacity:this.state.opacity}, styleOfPosition]} onLayout={(e)=>this.rotateDevice(e)}>
             <Text style={[s.InputAccessoryLabelText]}>
               {this.props.textValue}
             </Text>

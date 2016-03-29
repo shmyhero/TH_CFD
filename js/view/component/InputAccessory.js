@@ -40,6 +40,8 @@ var InputAccessory = React.createClass({
       opacity: 0
     })
     // dismissKeyboardHandler();
+    DeviceEventEmitter.removeAllListeners('keyboardWillShow');
+    DeviceEventEmitter.removeAllListeners('keyboardWillHide');
   },
 
   keyboardWillShow (e) {

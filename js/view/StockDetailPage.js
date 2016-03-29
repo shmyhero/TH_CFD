@@ -302,9 +302,17 @@ var StockDetailPage = React.createClass({
 						{this.renderOKButton()}
 					</View>
 				</LinearGradient>
-    			<InputAccessory textValue={this.state.inputText}/>
+    			<InputAccessory textValue={this.state.inputText} maxValue={this.state.totalMoney}
+    				rightButtonOnClick={this.updateMoney}/>
 			</View>
 		)
+	},
+
+	updateMoney: function() {
+		var value = parseInt(this.state.inputText)
+		if (value > this.state.totalMoney) {
+			this.setState({inputText:'0', money:0})
+		}
 	},
 
 	renderHeader: function() {
@@ -537,14 +545,16 @@ var StockDetailPage = React.createClass({
 					keyboardType={Platform.OS === 'ios' ? "number-pad" : "numeric"}
 					keyboardAppearance={'dark'}
 					selectionColor={'transparent'}
+					value={this.state.inputText}
 					onChangeText={this.textInputChange}/>
     		</View>
 			)
 	},
 
 	textInputChange: function(text) {
-		this.setState({inputText:text,
-			money: parseInt(text),
+		var value = parseInt(text)
+		this.setState({inputText:""+value,
+			money: value,
 			})
 	}
 });

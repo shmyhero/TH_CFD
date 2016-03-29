@@ -19,12 +19,14 @@ var InputAccessory = React.createClass({
 		return {
 			visibleHeight: Dimensions.get('window').height,
 			opacity: 0,
-			validValue: true,
+			validValue: 0, //0, ok; 1, too less; 2, too much
 		};
 	},
 
 	propTypes: {
 		textValue: React.PropTypes.string,
+		maxValue: React.PropTypes.number,
+		rightButtonOnClick: React.PropTypes.func,
 	},
 
 	//For some reason, this gives warnings?
@@ -75,10 +77,18 @@ var InputAccessory = React.createClass({
 		var value = parseInt(this.props.textValue)
 		if (value < 10) {
 			this.setState({
-				validValue: false
+				validValue: 1
 			})
 			return
 		}
+		if (value > this.props.maxValue) {
+			this.setState({
+				validValue: 2
+			})
+			this.props.rightButtonOnClick()
+			return
+		}
+
 		LayoutAnimation.configureNext({
 			duration: 100,
 			create: {
@@ -103,12 +113,13 @@ var InputAccessory = React.createClass({
 
 	render: function() {
 
-		var warningText = this.state.validValue ?
-			< View / > :
-			< Text style = {
-				[s.InputAccessoryNoticeText]
-			} >
-			最低金额10美元！ < /Text> 
+		var warningText = < View / >
+		if (this.state.validValue===1) {
+			warningText = < Text style = {[s.InputAccessoryNoticeText]} >最低金额10美元！ < /Text> 
+		} else if (this.state.validValue===2) {
+			warningText = < Text style = {[s.InputAccessoryNoticeText]} >剩余资金为{this.props.maxValue}美元！ < /Text> 
+		}
+		
 
 		var styleOfPosition = {
 			top: this.state.visibleHeight - 1
@@ -119,29 +130,17 @@ var InputAccessory = React.createClass({
 			}
 		}
 
-		return ( < View style = {
-					[s.InputAccessory, {
-						opacity: this.state.opacity
-					}, styleOfPosition]
-				}
-				onLayout = {
-					(e) => this.rotateDevice(e)
-				} >
-				< Text style = {
-					[s.InputAccessoryLabelText]
-				} > {
-					this.props.textValue
-				} < /Text> {
-				warningText
-			} < TouchableOpacity onPress = {
-				() => this.dismissKeyboardHandler()
-			} >
-			< Text style = {
-				[s.InputAccessoryButtonText]
-			} >
-			完成 < /Text> < /TouchableOpacity > < /View >
-	)
-}
+		return ( < View style = {[s.InputAccessory, {opacity: this.state.opacity}, styleOfPosition]}
+					onLayout = {(e) => this.rotateDevice(e)} >
+					< Text numberOfLines={1} style = {[s.InputAccessoryLabelText]} > 
+					{this.props.textValue} 
+					< /Text> 
+					{warningText} 
+					< TouchableOpacity onPress = {() => this.dismissKeyboardHandler()} >
+						< Text style = {[s.InputAccessoryButtonText]} >完成 < /Text> 
+					< /TouchableOpacity >
+				< /View >)
+	}
 });
 
 var s = StyleSheet.create({
@@ -170,7 +169,7 @@ var s = StyleSheet.create({
 		fontSize: 21,
 		color: '#1b5ecd',
 		paddingHorizontal: 9,
-		paddingVertical: 9,
+		paddingVertical: 7,
 		textAlign: 'center',
 	},
 });

@@ -27,8 +27,8 @@ var InputAccessory = React.createClass({
 
   //For some reason, this gives warnings?
   componentWillMount () {
-    DeviceEventEmitter.addListener('keyboardWillShow', this.keyboardWillShow)
-    DeviceEventEmitter.addListener('keyboardWillHide', this.keyboardWillHide)
+    DeviceEventEmitter.addListener('keyboardDidShow', this.keyboardDidShow)
+    DeviceEventEmitter.addListener('keyboardDidHide', this.keyboardDidHide)
   },
 
   componentWillUnmount(){
@@ -40,23 +40,12 @@ var InputAccessory = React.createClass({
       opacity: 0
     })
     // dismissKeyboardHandler();
-    DeviceEventEmitter.removeAllListeners('keyboardWillShow');
-    DeviceEventEmitter.removeAllListeners('keyboardWillHide');
+    DeviceEventEmitter.removeAllListeners('keyboardDidShow');
+    DeviceEventEmitter.removeAllListeners('keyboardDidHide');
   },
 
-  keyboardWillShow (e) {
+  keyboardDidShow (e) {
     var newSize = e.endCoordinates.screenY - (INPUT_ACCESSORY_HEIGHT-1); //-1 so 1px is showing so it doesn't unmount
-    LayoutAnimation.configureNext({
-      duration:500,
-      create: {
-        type: LayoutAnimation.Types.linear,
-        property: LayoutAnimation.Properties.scaleXY
-      },
-      update: {
-        type: LayoutAnimation.Types.linear,
-        property: LayoutAnimation.Properties.scaleXY
-      },
-    });
     
     this.setState({
       visibleHeight: newSize,
@@ -70,7 +59,7 @@ var InputAccessory = React.createClass({
     return false;
   },
 
-  keyboardWillHide (e) {
+  keyboardDidHide (e) {
     // console.log('keyboardWillHide');
     let newSize = Dimensions.get('window').height
     this.setState({
@@ -107,45 +96,32 @@ var InputAccessory = React.createClass({
   },
 
   render: function(){
-    if (this.state.validValue) {
-      return (
-        <View style={[s.InputAccessory,{opacity:this.state.opacity,top:this.state.visibleHeight-1}]} onLayout={(e)=>this.rotateDevice(e)}>
-              <Text style={[s.InputAccessoryLabelText]}>
-                {this.props.textValue}
-              </Text>
-              <TouchableOpacity
-                onPress={() => this.dismissKeyboardHandler()}>
-              <Text style={[s.InputAccessoryButtonText]}>
-                完成
-              </Text>
-            </TouchableOpacity>
-        </View>
-      )
-    }
-    else {
-      return (
-        <View style={[s.InputAccessory,{opacity:this.state.opacity,top:this.state.visibleHeight-1}]} onLayout={(e)=>this.rotateDevice(e)}>
-              <Text style={[s.InputAccessoryLabelText]}>
-                {this.props.textValue}
-              </Text>
-              <Text style={[s.InputAccessoryNoticeText]}>
-                最低金额10美元！
-              </Text>
-              <TouchableOpacity
-                onPress={() => this.dismissKeyboardHandler()}>
-              <Text style={[s.InputAccessoryButtonText]}>
-                完成
-              </Text>
-            </TouchableOpacity>
-        </View>
-      )
-    }
+
+    var warningText = this.state.validValue ? 
+          <View/> : 
+          <Text style={[s.InputAccessoryNoticeText]}>
+            最低金额10美元！
+          </Text> 
+
+    return (
+      <View style={[s.InputAccessory,{opacity:this.state.opacity,top:this.state.visibleHeight-1}]} onLayout={(e)=>this.rotateDevice(e)}>
+            <Text style={[s.InputAccessoryLabelText]}>
+              {this.props.textValue}
+            </Text>
+            {warningText}
+            <TouchableOpacity
+              onPress={() => this.dismissKeyboardHandler()}>
+            <Text style={[s.InputAccessoryButtonText]}>
+              完成
+            </Text>
+          </TouchableOpacity>
+      </View>
+    )
   }
 });
 
 var s = StyleSheet.create({
   InputAccessory: {
-    alignItems:'stretch',
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor:'#ededed',

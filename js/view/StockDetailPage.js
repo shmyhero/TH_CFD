@@ -53,8 +53,6 @@ var StockDetailPage = React.createClass({
 			money: 20,
 			leverage: 2,
 			totalMoney: 1000,
-			leftMoney: 980,
-			charge: 0.01,
 			tradeDirection: 0,	//0:none, 1:up, 2:down
 			inputText: '0',
 			stockPrice: this.props.stockPrice,
@@ -269,6 +267,10 @@ var StockDetailPage = React.createClass({
 			minPercentage = minPercentage.toFixed(2)
 		}
 
+		// 0.06%, limit to 0.01
+		var leftMoney = this.state.totalMoney - this.state.money
+		var charge = Math.round(this.state.money*0.06)/100.0
+
 		return (
 			<View style={styles.wrapper}>
 				<LinearGradient colors={['#1c5fd1', '#123b80']} style={{height: height}}>
@@ -295,8 +297,8 @@ var StockDetailPage = React.createClass({
 						{this.renderScroll()}
 					</View>
 					<View style={{flex: 2.4, alignItems: 'center'}}>
-						<Text style={styles.leftMoneyLabel}> 账户剩余资金：{this.state.leftMoney}</Text>
-						<Text style={styles.smallLabel}> 手续费为{this.state.charge}美元</Text>
+						<Text style={styles.leftMoneyLabel}> 账户剩余资金：{leftMoney}</Text>
+						<Text style={styles.smallLabel}> 手续费为{charge}美元</Text>
 						{this.renderOKButton()}
 					</View>
 				</LinearGradient>
@@ -449,6 +451,26 @@ var StockDetailPage = React.createClass({
 			};
 			moneyArray[moneyCount-1]=""+this.state.totalMoney
 		}
+		// insert the user input value
+		var exist = false
+		var input = parseInt(this.state.inputText)
+		if (input > 0) {
+			for (var i = moneyArray.length - 1; i >= 0; i--) {
+				var value = parseInt(moneyArray[i])
+				if (value === input) {
+					// already have
+					break
+				} else if (value < input) {
+					if (i === moneyArray.length-1) {
+						// should not bigger than all money
+						break
+					}
+					// insert here
+					moneyArray.splice(i+1, 0, ""+input);  
+					break
+				}
+			}
+		}
 
 		// leverage list: 无，2,3,...,20
 		var leverageArray = new Array(20)
@@ -486,9 +508,6 @@ var StockDetailPage = React.createClass({
 	onPikcerSelect: function(value, tag) {
 		if(tag===1){
 			this.setState({money: value})
-			this.setState({leftMoney: this.state.totalMoney-value})
-			// 0.06%, limit to 0.01
-			this.setState({charge: parseInt(value*0.06+0.5)/100.0})
 		}
 		else if(tag===2){
 			this.setState({leverage: value})
@@ -524,7 +543,9 @@ var StockDetailPage = React.createClass({
 	},
 
 	textInputChange: function(text) {
-		this.setState({inputText:text})
+		this.setState({inputText:text,
+			money: parseInt(text),
+			})
 	}
 });
 

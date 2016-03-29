@@ -287,10 +287,14 @@ var StockDetailPage = React.createClass({
 						
 					</View>
 
-					<View style={{flex: 6, alignItems: 'center'}}>
+					<View style={{flex: 1.2}}>
 						{this.renderTradeButton()}
+					</View>
+					<View style={{flex: 2.4}}>
 						{this.renderScrollHeader()}
 						{this.renderScroll()}
+					</View>
+					<View style={{flex: 2.4, alignItems: 'center'}}>
 						<Text style={styles.leftMoneyLabel}> 账户剩余资金：{this.state.leftMoney}</Text>
 						<Text style={styles.smallLabel}> 手续费为{this.state.charge}美元</Text>
 						{this.renderOKButton()}
@@ -414,7 +418,7 @@ var StockDetailPage = React.createClass({
 
 	renderScrollHeader: function() {
 		return (
-			<View style={styles.rowView}>
+			<View style={[styles.rowView, {flex:1}]}>
 				<Text style={styles.smallLabel}>本金（美元）</Text>
 				<Text style={styles.smallLabel}>杠杠（倍）</Text>
 			</View>	
@@ -510,7 +514,7 @@ var StockDetailPage = React.createClass({
 		return (
 			<View>
 				<Image style={[styles.inputImage, {marginLeft:50-width,marginTop:10}]} source={require('../../images/key.png')}/>
-				<TextInput style={[styles.inputText, {marginLeft:40-width, marginTop:-24}]}
+				<TextInput style={[styles.inputText, {marginLeft:40-width, marginTop:-24, borderWidth:1}]}
 					keyboardType={Platform.OS === 'ios' ? "number-pad" : "numeric"}
 					keyboardAppearance={'dark'}
 					selectionColor={'transparent'}
@@ -533,8 +537,8 @@ var styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignSelf: 'stretch',
 		alignItems: 'center',
-		paddingTop: 10,
-		paddingBottom: 10,
+		paddingTop: 5,
+		paddingBottom: 5,
 		justifyContent: 'space-around',
 	},
 	tradeButtonView: {
@@ -592,6 +596,7 @@ var styles = StyleSheet.create({
     	borderWidth:1,
     	borderColor: '#153a77',
 		marginTop: 5,
+		marginBottom: 5,
 	},
 	okViewDisabled: {
 		backgroundColor: '#164593'

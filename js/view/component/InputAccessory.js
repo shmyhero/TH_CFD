@@ -17,6 +17,7 @@ var InputAccessory = React.createClass({
     return {
       visibleHeight: Dimensions.get('window').height,
       opacity:0,
+      validValue: true,
     };
   },
 
@@ -59,6 +60,7 @@ var InputAccessory = React.createClass({
       visibleHeight: newSize,
       hideKA: false,
       opacity:1,
+      validValue: true,
     })
   },
 
@@ -77,6 +79,11 @@ var InputAccessory = React.createClass({
   },
 
   dismissKeyboardHandler: function(){
+    var value = parseInt(this.props.textValue)
+    if (value < 10) {
+      this.setState({validValue:false})
+      return
+    }
     LayoutAnimation.configureNext({
       duration:100,
       create: {
@@ -98,6 +105,22 @@ var InputAccessory = React.createClass({
   },
 
   render: function(){
+    if (this.state.validValue) {
+      return (
+        <View style={[s.InputAccessory,{opacity:this.state.opacity,top:this.state.visibleHeight-1}]} onLayout={(e)=>this.rotateDevice(e)}>
+              <Text style={[s.InputAccessoryLabelText]}>
+                {this.props.textValue}
+              </Text>
+              <TouchableOpacity
+                onPress={() => this.dismissKeyboardHandler()}>
+              <Text style={[s.InputAccessoryButtonText]}>
+                完成
+              </Text>
+            </TouchableOpacity>
+        </View>
+      )
+    }
+    else {
       return (
         <View style={[s.InputAccessory,{opacity:this.state.opacity,top:this.state.visibleHeight-1}]} onLayout={(e)=>this.rotateDevice(e)}>
               <Text style={[s.InputAccessoryLabelText]}>
@@ -114,6 +137,7 @@ var InputAccessory = React.createClass({
             </TouchableOpacity>
         </View>
       )
+    }
   }
 });
 

@@ -424,10 +424,29 @@ var StockDetailPage = React.createClass({
 	renderScroll: function() {
 		var {height, width} = Dimensions.get('window');
 		var pickerWidth = width/2-60
-		var moneyArray = new Array(10)
-		for (var i = 0; i < 10; i++) {
-			moneyArray[i]=""+(i+1)*10
-		};
+		// money list: 10, 20, 30, ...,100,max
+		var moneyCount = 11
+		var moneyArray = []
+		if (this.state.totalMoney <= 0) {
+			moneyCount = 0
+		}
+		else if (this.state.totalMoney <= 100) {
+			moneyCount = Math.floor(this.state.totalMoney/10)
+			if (this.state.totalMoney % 10 !== 0) {
+				moneyCount += 1
+			}
+		}
+		if (moneyCount === 0) {
+			moneyArray = ['10']
+		}
+		else {
+			for (var i = 0; i < moneyCount-1; i++) {
+				moneyArray[i]=""+(i+1)*10
+			};
+			moneyArray[moneyCount-1]=""+this.state.totalMoney
+		}
+
+		// leverage list: 无，2,3,...,20
 		var leverageArray = new Array(20)
 		for (var i = 0; i < 20; i++) {
 			leverageArray[i]=""+(i+1)
@@ -452,7 +471,7 @@ var StockDetailPage = React.createClass({
 					itemStyle={{color:"white"}}
 					onValueChange={(value) => this.onPikcerSelect(value, 2)}>
 					{leverageArray.map((value) => (
-					  <PickerItem label={value} key={"lever"+leverageCount} value={leverageCount++}/>
+					  <PickerItem label={value} value={leverageCount++} key={"lever"+leverageCount}/>
 					))}
 				</Picker>
 				{this.renderInput()}

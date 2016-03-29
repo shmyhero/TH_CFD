@@ -520,7 +520,7 @@ var StockDetailPage = React.createClass({
 			<TouchableHighlight
 				underlayColor={buttonEnable ? '#f46b6f': '#164593'}
 				onPress={this.okPress} style={[styles.okView, !buttonEnable && styles.okViewDisabled]}>
-				<Text style={styles.okButton}>确认</Text>
+				<Text style={[styles.okButton, !buttonEnable && styles.okButtonDisabled]}>确认</Text>
 			</TouchableHighlight>
 		)
 	},
@@ -533,7 +533,7 @@ var StockDetailPage = React.createClass({
 		return (
 			<View>
 				<Image style={[styles.inputImage, {marginLeft:50-width,marginTop:10}]} source={require('../../images/key.png')}/>
-				<TextInput style={[styles.inputText, {marginLeft:40-width, marginTop:-24, borderWidth:1}]}
+				<TextInput style={[styles.inputText, {marginLeft:40-width, marginTop:-24}]}
 					keyboardType={Platform.OS === 'ios' ? "number-pad" : "numeric"}
 					keyboardAppearance={'dark'}
 					selectionColor={'transparent'}
@@ -627,6 +627,9 @@ var styles = StyleSheet.create({
 		textAlign: 'center',
 		fontSize: 15,
 		lineHeight: 20,
+	},
+	okButtonDisabled: {
+		color: '#5771a8'
 	},
 	priceText: {
 		fontSize: 12,

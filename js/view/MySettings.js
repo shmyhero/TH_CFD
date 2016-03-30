@@ -10,8 +10,6 @@ var {
 	TouchableHighlight,
 } = React;
 
-var WheelCurvedPicker = require('./component/WheelPicker/WheelCurvedPicker')
-
 var MySettings = React.createClass({
 
 	getInitialState: function() {
@@ -29,8 +27,6 @@ var MySettings = React.createClass({
 	render: function() {
 		return (
 			<View style={styles.wrapper}>
-
-				<WheelCurvedPicker style={{flex: 1, width: 200,}}/>
 
 			</View>
 		);

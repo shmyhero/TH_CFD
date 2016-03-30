@@ -444,7 +444,7 @@ var StockDetailPage = React.createClass({
 	renderScroll: function() {
 		var {height, width} = Dimensions.get('window');
 		var pickerWidth = width/2-60
-		var pickerHeight = 105
+		var pickerHeight = 216
 		// money list: 10, 20, 30, ...,100,max
 		var moneyCount = 11
 		var moneyArray = []

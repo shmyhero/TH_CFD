@@ -419,7 +419,7 @@ var styles = StyleSheet.create({
 	rowCenterPart: {
 		flex: 2,
 		alignItems: 'flex-end',
-		paddingRight: 10,
+		paddingRight: 19,
 	},
 	rowRightPart: {
 		flex: 2,
@@ -427,7 +427,7 @@ var styles = StyleSheet.create({
 		paddingBottom: 5,
 		paddingRight: 5,
 		alignItems: 'flex-end',
-		borderRadius: 5,
+		borderRadius: 2,
 	},
 	logo: {
 		width: 60,
@@ -456,7 +456,7 @@ var styles = StyleSheet.create({
 	},
 	stockCountryFlagContainer: {
 		backgroundColor: '#00b2fe',
-		borderRadius: 3,
+		borderRadius: 2,
 		paddingLeft: 3,
 		paddingRight: 3,
 	},

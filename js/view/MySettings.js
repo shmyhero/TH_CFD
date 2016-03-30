@@ -10,6 +10,8 @@ var {
 	TouchableHighlight,
 } = React;
 
+var WheelCurvedPicker = require('./component/WheelPicker/WheelCurvedPicker')
+
 var MySettings = React.createClass({
 
 	getInitialState: function() {
@@ -28,70 +30,7 @@ var MySettings = React.createClass({
 		return (
 			<View style={styles.wrapper}>
 
-				<View style={styles.rowContainer}>
-					<Text style={styles.rowText}>
-						去评分
-					</Text>
-					<Image 
-						style={styles.rowImage} 
-						source={require('../../images/icon_arrow_right.png')}/>
-				</View>
-
-				<View style={styles.line}/>
-
-				<View style={styles.rowContainer}>
-					<Text style={styles.rowText}>
-						FAQ
-					</Text>
-					<Image 
-						style={styles.rowImage} 
-						source={require('../../images/icon_arrow_right.png')}/>
-				</View>
-
-				<View style={styles.lineSicker}/>
-
-				<View style={styles.rowContainer}>
-					<Text style={styles.rowText}>
-						推送通知
-					</Text>
-					<Switch
-						onValueChange={(value) => this.setState({trueSwitchIsOn: value})}
-						value={this.state.trueSwitchIsOn} />
-				</View>
-
-				<View style={styles.line}/>
-
-				<View style={styles.rowContainer}>
-					<Text style={styles.rowText}>
-						版本
-					</Text>
-					<Text style={styles.rowText}>
-						V4.1.1
-					</Text>
-				</View>
-
-				<View style={styles.line}/>
-
-				<View style={styles.rowContainer}>
-					<Text style={styles.rowText}>
-						关于
-					</Text>
-					<Image 
-						style={styles.rowImage} 
-						source={require('../../images/icon_arrow_right.png')}/>
-				</View>
-
-				<View style={styles.lineSicker}/>
-
-				<TouchableHighlight style={styles.quitContainer}
-					onPress={this.quitOnClick}
-					underlayColor='#d0d0d0'>
-					<Text style={styles.quitText}>
-						退出当前账号
-					</Text>
-				</TouchableHighlight>
-
-				<View style={styles.line}/>
+				<WheelCurvedPicker style={{flex: 1, width: 200,}}/>
 
 			</View>
 		);
@@ -100,6 +39,8 @@ var MySettings = React.createClass({
 
 var styles = StyleSheet.create({
 	wrapper: {
+		flex: 1,
+
 		alignItems: 'center',
 	},
 

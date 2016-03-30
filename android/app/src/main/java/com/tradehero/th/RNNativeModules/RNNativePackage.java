@@ -6,6 +6,7 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.tradehero.th.views.ReactLineChartManager;
+import com.tradehero.th.views.ReactWheelCurvedPickerManager;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,7 +32,8 @@ public class RNNativePackage implements ReactPackage {
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
-                new ReactLineChartManager()
+                new ReactLineChartManager(),
+                new ReactWheelCurvedPickerManager()
         );
     }
 }

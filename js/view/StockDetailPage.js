@@ -14,6 +14,7 @@ var {
 	Alert,
 	Dimensions,
 	Picker,
+	PickerIOS,
 	TextInput,
 	ScrollView,
 	Platform,
@@ -26,6 +27,8 @@ var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
 var NavBar = require('../view/NavBar')
 var InputAccessory = require('./component/InputAccessory')
+var WheelCurvedPicker = require('./component/WheelPicker/WheelCurvedPicker')
+var Picker = (Platform.OS === 'ios' ? PickerIOS : WheelCurvedPicker)
 var PickerItem = Picker.Item;
 
 var StockDetailPage = React.createClass({
@@ -438,6 +441,7 @@ var StockDetailPage = React.createClass({
 	renderScroll: function() {
 		var {height, width} = Dimensions.get('window');
 		var pickerWidth = width/2-60
+		var pickerHeight = 105
 		// money list: 10, 20, 30, ...,100,max
 		var moneyCount = 11
 		var moneyArray = []
@@ -490,9 +494,8 @@ var StockDetailPage = React.createClass({
 		return(
 			<View style={[styles.rowView, styles.scrollView]}>
 				<View/>
-				<Picker style={{width: pickerWidth}}
+				<Picker style={{width: pickerWidth, height: pickerHeight}}
 					selectedValue={this.state.money}
-					mode='dialog'
 					itemStyle={{color:"white"}}
 					onValueChange={(value) => this.onPikcerSelect(value, 1)}>
 					{moneyArray.map((value) => (
@@ -500,7 +503,7 @@ var StockDetailPage = React.createClass({
 					))}
 				</Picker>
 				<View/>
-				<Picker style={{width: pickerWidth}}
+				<Picker style={{width: pickerWidth, height: pickerHeight}}
 					selectedValue={this.state.leverage}
 					itemStyle={{color:"white"}}
 					onValueChange={(value) => this.onPikcerSelect(value, 2)}>

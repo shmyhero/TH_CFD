@@ -3,6 +3,7 @@
 var React = require('react-native');
 var LineChart = require('./component/lineChart/LineChart');
 var LinearGradient = require('react-native-linear-gradient');
+var dismissKeyboard = require('dismissKeyboard');
 
 var {
 	StyleSheet,
@@ -11,12 +12,12 @@ var {
 	Text,
 	TouchableHighlight,
 	TouchableOpacity,
+	TouchableWithoutFeedback,
 	Alert,
 	Dimensions,
 	Picker,
 	PickerIOS,
 	TextInput,
-	ScrollView,
 	Platform,
 } = React;
 
@@ -275,6 +276,7 @@ var StockDetailPage = React.createClass({
 		var charge = Math.round(this.state.money*0.06)/100.0
 
 		return (
+			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
 			<View style={styles.wrapper}>
 				<LinearGradient colors={['#1c5fd1', '#123b80']} style={{height: height}}>
 					
@@ -308,6 +310,7 @@ var StockDetailPage = React.createClass({
     			<InputAccessory textValue={this.state.inputText} maxValue={this.state.totalMoney}
     				rightButtonOnClick={this.updateMoney}/>
 			</View>
+    		</TouchableWithoutFeedback>
 		)
 	},
 
@@ -518,7 +521,7 @@ var StockDetailPage = React.createClass({
 
 	onPikcerSelect: function(value, tag) {
 		if(tag===1){
-			this.setState({money: value})
+			this.setState({money: value, inputText:""+value})
 		}
 		else if(tag===2){
 			this.setState({leverage: value})

@@ -31,8 +31,14 @@ var InputAccessory = React.createClass({
 
 	//For some reason, this gives warnings?
 	componentWillMount() {
-		DeviceEventEmitter.addListener('keyboardDidShow', this.keyboardDidShow)
-		DeviceEventEmitter.addListener('keyboardDidHide', this.keyboardDidHide)
+		if (Platform.OS === 'ios') {
+			DeviceEventEmitter.addListener('keyboardWillShow', this.keyboardDidShow)
+			DeviceEventEmitter.addListener('keyboardWillHide', this.keyboardDidHide)
+		}
+		else {
+			DeviceEventEmitter.addListener('keyboardDidShow', this.keyboardDidShow)
+			DeviceEventEmitter.addListener('keyboardDidHide', this.keyboardDidHide)
+		}
 	},
 
 	componentWillUnmount() {
@@ -43,14 +49,33 @@ var InputAccessory = React.createClass({
 				hideKA: true,
 				opacity: 0
 			})
-			// dismissKeyboardHandler();
-		DeviceEventEmitter.removeAllListeners('keyboardDidShow');
-		DeviceEventEmitter.removeAllListeners('keyboardDidHide');
+		// dismissKeyboardHandler();
+		if (Platform.OS === 'ios') {
+			DeviceEventEmitter.removeAllListeners('keyboardWillShow');
+			DeviceEventEmitter.removeAllListeners('keyboardWillHide');
+		}
+		else {
+			DeviceEventEmitter.removeAllListeners('keyboardDidShow');
+			DeviceEventEmitter.removeAllListeners('keyboardDidHide');
+		}
 	},
 
 	keyboardDidShow(e) {
 		var newSize = e.endCoordinates.screenY - (INPUT_ACCESSORY_HEIGHT - 1); //-1 so 1px is showing so it doesn't unmount
 
+		if (Platform.OS === 'ios') {
+			LayoutAnimation.configureNext({
+				duration: 200,
+				create: {
+					type: LayoutAnimation.Types.linear,
+					property: LayoutAnimation.Properties.scaleXY
+				},
+				update: {
+					type: LayoutAnimation.Types.linear,
+					property: LayoutAnimation.Properties.scaleXY
+				},
+			});
+		}
 		this.setState({
 			visibleHeight: newSize,
 			hideKA: false,

@@ -4,12 +4,13 @@ import android.graphics.Color;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
@@ -32,15 +33,32 @@ public class ReactWheelCurvedPickerManager extends SimpleViewManager<ReactWheelC
         return picker;
     }
 
+    @Override
+    public Map getExportedCustomDirectEventTypeConstants() {
+        return MapBuilder.of(
+                ItemSelectedEvent.EVENT_NAME, MapBuilder.of("registrationName", "onValueChange")
+        );
+    }
+
     @ReactProp(name="data")
     public void setData(ReactWheelCurvedPicker picker, ReadableArray items) {
         if (picker != null) {
-            ArrayList<String> data = new ArrayList<>();
+            ArrayList<Integer> valueData = new ArrayList<>();
+            ArrayList<String> labelData = new ArrayList<>();
             for (int i = 0; i < items.size(); i ++) {
                 ReadableMap itemMap = items.getMap(i);
-                data.add(itemMap.getString("label"));
+                valueData.add(itemMap.getInt("value"));
+                labelData.add(itemMap.getString("label"));
             }
-            picker.setData(data);
+            picker.setValueData(valueData);
+            picker.setData(labelData);
+        }
+    }
+
+    @ReactProp(name="selectedIndex")
+    public void setSelectedIndex(ReactWheelCurvedPicker picker, int index) {
+        if (picker != null) {
+            picker.setItemIndex(index);
         }
     }
 

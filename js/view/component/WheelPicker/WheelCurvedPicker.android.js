@@ -27,6 +27,10 @@ var WheelCurvedPicker = React.createClass ({
 		itemSpace: React.PropTypes.number,
 
 		onValueChange: React.PropTypes.func,
+
+		selectedValue: React.PropTypes.any,
+
+		selectedIndex: React.PropTypes.number,
 	},
 
 	getDefaultProps(): Object {
@@ -58,11 +62,18 @@ var WheelCurvedPicker = React.createClass ({
 		return {selectedIndex, items};
 	},
 
+	_onValueChange: function(e: Event) {
+		if (this.props.onValueChange) {
+			this.props.onValueChange(e.nativeEvent.data);
+		}
+	},
+
 	render() {
 		return <WheelCurvedPickerNative 
 				{...this.props}
+				onValueChange={this._onValueChange}
 				data={this.state.items}
-				selectedIndex={this.state.selectedIndex}/>;
+				selectedIndex={parseInt(this.state.selectedIndex)} />;
 	}
 });
 

@@ -232,14 +232,14 @@ var StockListPage = React.createClass({
 		if (this.state.sortType ===0) {
 			return (
 					<View style={styles.headerCell}>
-						<Text style={[styles.headerText,{color:'#576b95'}]}>涨幅</Text>
-						<Text style={[styles.headerText,{color:'red'}]}>↓</Text>
+						<Text style={styles.headerText}>涨幅</Text>
+						<Image style={styles.sortImage} source={require('../../images/upsort.png')}/>
 					</View>);
 		} else {
 			return (
 					<View style={styles.headerCell}>
-						<Text style={[styles.headerText,{color:'#576b95'}]}>跌幅</Text>
-						<Text style={[styles.headerText,{color:'green'}]}>↑</Text>
+						<Text style={styles.headerText}>跌幅</Text>
+						<Image style={styles.sortImage} source={require('../../images/downsort.png')}/>
 					</View>);
 		}
 	},
@@ -249,7 +249,7 @@ var StockListPage = React.createClass({
 			return (
 				<View style={styles.headerBar}>
 					<View style={styles.headerCell}>
-						<Text style={styles.headerText}>涨跌榜</Text>
+						<Text style={styles.headerTextLeft}>涨跌榜</Text>
 					</View>
 					<View style={{flex:3}}>
 					</View>
@@ -387,7 +387,19 @@ var styles = StyleSheet.create({
 	},
 	headerText: {
 		fontSize: 14,
-		textAlign: 'center'
+		textAlign: 'center',
+		color:'#576b95',
+	},
+	headerTextLeft: {
+		fontSize: 14,
+		textAlign: 'left',
+		color:'#576b95',
+		paddingLeft: 10,
+	},
+	sortImage: {
+		marginLeft: 3,
+		width: 9,
+		height: 11,
 	},
 	rowWrapper: {
 		flexDirection: 'row',
@@ -402,7 +414,7 @@ var styles = StyleSheet.create({
 	rowLeftPart: {
 		flex: 3,
 		alignItems: 'flex-start',
-		paddingLeft: 5,
+		paddingLeft: 0,
 	},
 	rowCenterPart: {
 		flex: 2,
@@ -432,6 +444,7 @@ var styles = StyleSheet.create({
 		fontSize: 12,
 		textAlign: 'center',
 		color: '#5f5f5f',
+		paddingLeft: 4,
 	},
 	stockLastText: {
 		fontSize: 18,

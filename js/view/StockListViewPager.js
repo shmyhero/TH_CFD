@@ -69,7 +69,7 @@ var StockListViewPager = React.createClass({
 	tabClicked: function(index) {		
 		if (Platform.OS === 'ios') {
 			var {height, width} = Dimensions.get('window');
-			this.refs.viewPages && this.refs.viewPages.scrollTo({x: index * width, y: 0, animated: true})
+			this.refs.viewPages && this.refs.viewPages.scrollTo({x: index * width, y: 0, animated: false})
 		} else {
 			this.refs.viewPages && this.refs.viewPages.setPageWithoutAnimation(index)
 		}
@@ -304,7 +304,7 @@ var styles = StyleSheet.create({
 
 	tabItemTextUnSelected: {
 		textAlign: 'center',
-		color: '#00b2fe',
+		color: '#abcaff',
 		fontSize: 14,
 	},
 

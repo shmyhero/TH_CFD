@@ -444,7 +444,6 @@ var styles = StyleSheet.create({
 		fontSize: 12,
 		textAlign: 'center',
 		color: '#5f5f5f',
-		paddingLeft: 4,
 	},
 	stockLastText: {
 		fontSize: 18,
@@ -459,6 +458,7 @@ var styles = StyleSheet.create({
 		borderRadius: 2,
 		paddingLeft: 3,
 		paddingRight: 3,
+		marginRight: 4,
 	},
 	stockCountryFlagText: {
 		fontSize: 10,

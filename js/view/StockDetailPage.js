@@ -15,7 +15,6 @@ var {
 	TouchableWithoutFeedback,
 	Alert,
 	Dimensions,
-	Picker,
 	PickerIOS,
 	TextInput,
 	Platform,

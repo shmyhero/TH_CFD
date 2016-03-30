@@ -4,6 +4,7 @@ var React = require('React');
 var View = require('View');
 
 var ReactChildren = require('ReactChildren');
+var ColorPropType = require('ColorPropType');
 var NativeMethodsMixin = require('NativeMethodsMixin');
 var requireNativeComponent = require('requireNativeComponent');
 
@@ -14,6 +15,27 @@ var WheelCurvedPicker = React.createClass ({
 
 	propTypes: {
 		...View.propTypes,
+
+		data: React.PropTypes.array,
+
+		currentTextColor: ColorPropType,
+		
+		otherTextColor: ColorPropType,
+		
+		textSize: React.PropTypes.number,
+		
+		itemSpace: React.PropTypes.number,
+
+		onValueChange: React.PropTypes.func,
+	},
+
+	getDefaultProps(): Object {
+		return {
+			currentTextColor: '#ffffff',
+			otherTextColor: '#cccccc',
+			textSize: 25,
+			itemSpace: 20,
+		};
 	},
 
 	getInitialState: function() {
@@ -37,7 +59,10 @@ var WheelCurvedPicker = React.createClass ({
 	},
 
 	render() {
-		return <WheelCurvedPickerNative {...this.props} />;
+		return <WheelCurvedPickerNative 
+				{...this.props}
+				data={this.state.items}
+				selectedIndex={this.state.selectedIndex}/>;
 	}
 });
 

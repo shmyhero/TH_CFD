@@ -28,7 +28,7 @@ var NavBar = require('../view/NavBar')
 var AppNavigator = require('../../AppNavigator')
 
 
-var tabNames = ['自选', '美股', '指数', '外汇', '期货']
+var tabNames = ['自选', '美股', '指数', '外汇', '商品']
 var urls = [
 	NetConstants.GET_USER_BOOKMARK_LIST_API,
 	NetConstants.GET_US_STOCK_TOP_GAIN_API,

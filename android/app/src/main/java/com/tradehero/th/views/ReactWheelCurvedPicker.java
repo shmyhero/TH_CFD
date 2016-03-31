@@ -25,6 +25,7 @@ public class ReactWheelCurvedPicker extends WheelCurvedPicker implements Abstrac
 
     private final EventDispatcher mEventDispatcher;
     private List<Integer> mValueData;
+    private int mState;
 
     public ReactWheelCurvedPicker(ReactContext reactContext) {
         super(reactContext);
@@ -33,13 +34,19 @@ public class ReactWheelCurvedPicker extends WheelCurvedPicker implements Abstrac
     }
 
     @Override
-    protected void drawItems(Canvas canvas) {
-        super.drawItems(canvas);
+    protected void drawForeground(Canvas canvas) {
+        super.drawForeground(canvas);
 
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
         canvas.drawLine(rectCurItem.left, rectCurItem.top, rectCurItem.right, rectCurItem.top, paint);
         canvas.drawLine(rectCurItem.left, rectCurItem.bottom, rectCurItem.right, rectCurItem.bottom, paint);
+    }
+
+    @Override
+    public void setItemIndex(int index) {
+        super.setItemIndex(index);
+        unitDeltaTotal = 0;
     }
 
     public void setValueData(List<Integer> data) {
@@ -58,7 +65,11 @@ public class ReactWheelCurvedPicker extends WheelCurvedPicker implements Abstrac
     }
 
     public void onWheelScrollStateChanged(int state) {
+        mState = state;
+    }
 
+    public int getState() {
+        return mState;
     }
 }
 

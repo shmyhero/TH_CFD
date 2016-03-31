@@ -458,7 +458,7 @@ var styles = StyleSheet.create({
 		borderRadius: 2,
 		paddingLeft: 3,
 		paddingRight: 3,
-		marginRight: 4,
+		marginRight: 6,
 	},
 	stockCountryFlagText: {
 		fontSize: 10,

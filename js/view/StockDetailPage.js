@@ -186,7 +186,7 @@ var StockDetailPage = React.createClass({
 		if (minPrice && minPercentage)
 		{
 			return (
-				<View style={{flexDirection: 'row', marginTop: -30}}>
+				<View style={{flexDirection: 'row', marginTop: -22}}>
 					<View style={{flex: 1, alignItems: 'flex-start', marginLeft: 20}}>
 						<Text style={styles.priceText}>
 							{minPrice}
@@ -210,13 +210,13 @@ var StockDetailPage = React.createClass({
 
 			return (
 				<View style={{flexDirection: 'row', marginTop: 5}}>
-					<View style={{flex: 1, alignItems: 'flex-start'}}>
+					<View style={{flex: 1, alignItems: 'flex-start', marginLeft:3}}>
 						<Text style={styles.timeText}>
 							{firstDate.getHours()}:{firstDate.getMinutes()}
 						</Text>
 					</View>
 					
-					<View style={{flex: 1, alignItems: 'flex-end'}}>
+					<View style={{flex: 1, alignItems: 'flex-end', marginRight:3}}>
 						<Text style={styles.timeText}>
 							{lastDate.getHours()}:{firstDate.getMinutes()}
 						</Text>
@@ -287,20 +287,20 @@ var StockDetailPage = React.createClass({
 
 					<View style={{flex: 3, marginTop:10}}>
 						{this.renderStockMaxPriceInfo(maxPrice, maxPercentage)}
-						<LineChart style={{flex: 1, backgroundColor:'transparent', marginTop: -30}} data={JSON.stringify(this.state.stockInfo)}/>
+						<LineChart style={{flex: 1, backgroundColor:'transparent', marginTop: -26}} data={JSON.stringify(this.state.stockInfo)}/>
 						{this.renderStockMinPriceInfo(minPrice, minPercentage)}
 						{this.renderTime()}
 						
 					</View>
 
-					<View style={{flex: 1.2}}>
+					<View style={{flex: 1.2, justifyContent: 'space-around'}}>
 						{this.renderTradeButton()}
 					</View>
-					<View style={{flex: 2.4}}>
+					<View style={{flex: 2.8, justifyContent: 'space-around'}}>
 						{this.renderScrollHeader()}
 						{this.renderScroll()}
 					</View>
-					<View style={{flex: 2.4, alignItems: 'center'}}>
+					<View style={{flex: 2, alignItems: 'center', justifyContent: 'space-around', paddingBottom:10}}>
 						<Text style={styles.leftMoneyLabel}> 账户剩余资金：{leftMoney}</Text>
 						<Text style={styles.smallLabel}> 手续费为{charge}美元</Text>
 						{this.renderOKButton()}
@@ -409,7 +409,7 @@ var StockDetailPage = React.createClass({
 		var downImage = downSelected ? require('../../images/click-down.png') : require('../../images/down.png')
 
 		return (
-			<View style={styles.rowView}>
+			<View style={[styles.rowView, {alignItems:'stretch'}]}>
 				<TouchableHighlight
 					underlayColor={upSelected ? '#6da2fc': '#356dce'}
 					onPress={this.buyPress} style={[styles.tradeButtonView, upSelected&&styles.tradeButtonViewSelected]}>
@@ -439,7 +439,7 @@ var StockDetailPage = React.createClass({
 
 	renderScrollHeader: function() {
 		return (
-			<View style={[styles.rowView, {flex:1}]}>
+			<View style={[styles.rowView, {height:20}]}>
 				<Text style={styles.smallLabel}>本金（美元）</Text>
 				<Text style={styles.smallLabel}>杠杠（倍）</Text>
 			</View>	
@@ -504,7 +504,7 @@ var StockDetailPage = React.createClass({
 				<View/>
 				<Picker style={{width: pickerWidth, height: pickerHeight}}
 					selectedValue={this.state.money}
-					itemStyle={{color:"white"}}
+					itemStyle={{color:"white", fontSize:26}}
 					onValueChange={(value) => this.onPikcerSelect(value, 1)}>
 					{moneyArray.map((value) => (
 					  <PickerItem label={value} value={parseInt(value)} key={"money"+value}/>
@@ -513,7 +513,7 @@ var StockDetailPage = React.createClass({
 				<View/>
 				<Picker style={{width: pickerWidth, height: pickerHeight}}
 					selectedValue={this.state.leverage}
-					itemStyle={{color:"white"}}
+					itemStyle={{color:"white", fontSize:26}}
 					onValueChange={(value) => this.onPikcerSelect(value, 2)}>
 					{leverageArray.map((value) => (
 					  <PickerItem label={value} value={leverageCount++} key={"lever"+leverageCount}/>
@@ -588,7 +588,7 @@ var styles = StyleSheet.create({
 	},
 	tradeButtonView: {
 		width: 140,
-		height: 40,
+		height: 45,
     	paddingTop:7,
     	paddingBottom:7,
     	borderRadius:5,
@@ -596,6 +596,7 @@ var styles = StyleSheet.create({
     	borderColor: '#133e86',
 		backgroundColor: '#356dce',
 		alignItems: 'center',
+		justifyContent: 'space-around',
 	},
 	tradeButtonViewSelected:{
 		backgroundColor: '#6da2fc',
@@ -620,7 +621,7 @@ var styles = StyleSheet.create({
 		paddingBottom: 3,
 	},
 	scrollView: {
-		height: 105,
+		height: 100,
 		overflow: 'hidden',
 	},
 	leftMoneyLabel: {
@@ -632,8 +633,8 @@ var styles = StyleSheet.create({
 		marginBottom: 5,
 	},
 	okView: {
-		width: 140,
-		height: 40,
+		width: 167,
+		height: 43,
 		backgroundColor: '#f46b6f',
     	paddingTop:6,
     	paddingBottom:6,
@@ -642,6 +643,7 @@ var styles = StyleSheet.create({
     	borderColor: '#153a77',
 		marginTop: 5,
 		marginBottom: 5,
+		justifyContent: 'space-around',
 	},
 	okViewDisabled: {
 		backgroundColor: '#164593'
@@ -650,20 +652,19 @@ var styles = StyleSheet.create({
 		color: '#ffffff',
 		textAlign: 'center',
 		fontSize: 15,
-		lineHeight: 20,
 	},
 	okButtonDisabled: {
 		color: '#5771a8'
 	},
 	priceText: {
-		fontSize: 12,
+		fontSize: 8,
 		textAlign: 'center',
 		color: '#ffffff',
 	},
 	timeText: {
-		fontSize: 10,
+		fontSize: 8,
 		textAlign: 'center',
-		color: '#ffffff',
+		color: '#70a5ff',
 	},
 	subTitle: {
 		fontSize: 17,

@@ -102,7 +102,7 @@ var NavBar = React.createClass({
 					underlayColor={ColorConstants.TITLE_BLUE}>
 					<Image 
 						style={styles.backButton} 
-						source={require('../../images/icon_return_default.png')}/>
+						source={require('../../images/back.png')}/>
 				</TouchableHighlight>
 			);
 		}
@@ -201,8 +201,8 @@ var styles = StyleSheet.create({
 		justifyContent: 'flex-end'
 	},
 	backButton: {
-		width: 30,
-		height: 30,
+		width: 20,
+		height: 14,
 		marginLeft: 10,
 		resizeMode: Image.resizeMode.contain,
 	},

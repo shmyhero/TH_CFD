@@ -174,27 +174,27 @@ var StockListPage = React.createClass({
 		var result = data;
 		if (newType == 1){
 			result.sort((a,b)=>{
-				if (a.open === 0) {
+				if (a.preClose === 0) {
 					return 1
 				}
-				else if (b.open === 0) {
+				else if (b.preClose === 0) {
 					return -1
 				}
-				var pa = (a.last - a.open) / a.open
-				var pb = (b.last - b.open) / b.open
+				var pa = (a.last - a.preClose) / a.preClose
+				var pb = (b.last - b.preClose) / b.preClose
 				return pa-pb
 			});
 		}
 		else if (newType == 0) {
 			result.sort((a,b)=>{
-				if (a.open === 0) {
+				if (a.preClose === 0) {
 					return 1
 				}
-				else if (b.open === 0) {
+				else if (b.preClose === 0) {
 					return -1
 				}
-				var pa = (a.last - a.open) / a.open
-				var pb = (b.last - b.open) / b.open
+				var pa = (a.last - a.preClose) / a.preClose
+				var pb = (b.last - b.preClose) / b.preClose
 				return pb-pa
 			});
 		}
@@ -218,7 +218,7 @@ var StockListPage = React.createClass({
 			stockName: rowData.name,
 			stockSymbol: rowData.symbol,
 			stockPrice: rowData.last,
-			lastClosePrice: rowData.open,
+			lastClosePrice: rowData.preClose,
 		});
   	},
 
@@ -279,11 +279,11 @@ var StockListPage = React.createClass({
 
 	renderRow: function(rowData, sectionID, rowID, highlightRow) {
 		var percentChange = 0
-		if (rowData.open == 0) {
-			rowData.open = rowData.last
+		if (rowData.preClose == 0) {
+			rowData.preClose = rowData.last
 		}
-		if (rowData.open !== 0) {
-			percentChange = (rowData.last - rowData.open) / rowData.open * 100
+		if (rowData.preClose !== 0) {
+			percentChange = (rowData.last - rowData.preClose) / rowData.preClose * 100
 		}
 
 		return (

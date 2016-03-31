@@ -31,6 +31,8 @@ var WheelCurvedPicker = require('./component/WheelPicker/WheelCurvedPicker')
 var Picker = (Platform.OS === 'ios' ? PickerIOS : WheelCurvedPicker)
 var PickerItem = Picker.Item;
 
+var didFocusSubscription = null;
+
 var StockDetailPage = React.createClass({
 	propTypes: {
 		stockCode: React.PropTypes.number,
@@ -63,16 +65,17 @@ var StockDetailPage = React.createClass({
 		};
 	},
 
-	componentWillMount: function() {
-		this.loadStockInfo()
-		var myListData = LogicData.getOwnStocksData()
-		var index = myListData.findIndex((stock)=>{return stock.id === this.props.stockCode})
-    	if (index !== -1) {
-    		this.setState({
-    			isAddedToMyList: true,
-    		})
-    	}
+	componentDidMount: function() {
+		this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', () => {
+			this.loadStockInfo()
+		});
 	},
+
+	componentWillUnmount: function() {
+		this.didFocusSubscription.remove();
+	},
+
+
 
 	loadStockInfo: function() {
 		var url = NetConstants.GET_STOCK_DETAIL_API
@@ -94,6 +97,14 @@ var StockDetailPage = React.createClass({
 				Alert.alert('网络错误提示', errorMessage);
 			}
 		)
+
+		var myListData = LogicData.getOwnStocksData()
+		var index = myListData.findIndex((stock) => {return stock.id === this.props.stockCode})
+		if (index !== -1) {
+			this.setState({
+				isAddedToMyList: true,
+			})
+		}
 	},
 
 	loadStockPriceToday: function() {

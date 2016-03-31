@@ -564,6 +564,9 @@ var StockDetailPage = React.createClass({
 
 	textInputChange: function(text) {
 		var value = parseInt(text)
+		if (text.length == 0) {
+			value = 0
+		}
 		this.setState({inputText:""+value,
 			money: value,
 			})

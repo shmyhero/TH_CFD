@@ -212,13 +212,13 @@ var StockDetailPage = React.createClass({
 				<View style={{flexDirection: 'row', marginTop: 5}}>
 					<View style={{flex: 1, alignItems: 'flex-start'}}>
 						<Text style={styles.timeText}>
-							{firstDate.getHours()} :00
+							{firstDate.getHours()}:{firstDate.getMinutes()}
 						</Text>
 					</View>
 					
 					<View style={{flex: 1, alignItems: 'flex-end'}}>
 						<Text style={styles.timeText}>
-							{lastDate.getHours()} :00
+							{lastDate.getHours()}:{firstDate.getMinutes()}
 						</Text>
 					</View>
 				</View>

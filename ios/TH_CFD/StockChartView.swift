@@ -13,8 +13,6 @@ import UIKit
 	let margin:CGFloat = 15.0
 	var topMargin:CGFloat = 10.0
 	var bottomMargin:CGFloat = 10.0
-	var columnXPoints:[Double] = []
-	var columnYPoints:[Double] = []
 	
 	@IBInspectable var startColor: UIColor = UIColor(hex: 0x7daeff)
 	@IBInspectable var endColor: UIColor = UIColor(hex: 0x1954b9)
@@ -24,12 +22,78 @@ import UIKit
 		willSet {
 			self.chartDataJson = newValue
 			self.chartData = ChartDataManager.singleton.chartDataFromJson(self.chartDataJson)
+			self.calculatePoint()
 			self.setNeedsDisplay()
 		}
 	}
 	var chartDataJson: String! = ""
 	
 	var chartData:[ChartData] = []
+	var pointData:[CGPoint] = []
+	var middleLineY:CGFloat = 0
+	var topLineY:CGFloat = 0
+	var bottomLineY:CGFloat = 0
+	
+	func calculatePoint() {
+		let size = self.bounds.size
+		if (size.width == 0 || self.chartData.count == 0) {
+			return
+		}
+		
+		var maxValue = chartData.reduce(0) { (max, data) -> Double in
+			(max < data.price) ? data.price : max
+		}
+		var minValue = chartData.reduce(100000000.0) { (min, data) -> Double in
+			(min > data.price) ? data.price : min
+		}
+		let preClose = ChartDataManager.singleton.preClose
+		if (preClose > 0) {
+			if (maxValue < preClose) {
+				maxValue = preClose
+			}
+			if (minValue > preClose) {
+				minValue = preClose
+			}
+		}
+		//calculate the x point
+		let lastIndex = self.chartData.count - 1
+		let columnXPoint = { (column:Int) -> CGFloat in
+			//Calculate gap between points
+			let spacer = (size.width - self.margin*2) /
+				CGFloat((lastIndex))
+			var x:CGFloat = CGFloat(column) * spacer
+			x += self.margin
+			return x
+		}
+		// calculate the y point
+		let topBorder:CGFloat = size.height * 0.15
+		let bottomBorder:CGFloat = size.height * 0.15
+		let graphHeight = size.height - topBorder - bottomBorder
+		
+		let columnYPoint = { (graphPoint:Double) -> CGFloat in
+			var y:CGFloat = CGFloat(graphPoint-minValue) /
+				CGFloat(maxValue-minValue) * graphHeight
+			y = graphHeight + topBorder - y // Flip the graph
+			return y
+		}
+		if (preClose > 0) {
+			middleLineY = (size.height-topBorder-bottomBorder) * CGFloat(maxValue - preClose) / CGFloat(maxValue - minValue)+topBorder
+		}
+		else {
+			middleLineY = size.height/2
+		}
+		topLineY = topBorder
+		bottomLineY = bottomBorder
+		
+		self.pointData = []
+		for i in 0..<self.chartData.count {
+			let x = columnXPoint(i)
+			let y = columnYPoint(self.chartData[i].price)
+			let point:CGPoint = CGPoint(x:x, y:y)
+			self.pointData.append(point)
+		}
+		
+	}
 	
 	override func drawRect(rect: CGRect) {
 		// draw line chart
@@ -63,23 +127,7 @@ import UIKit
 		
 		linePath = UIBezierPath()
 		//center line
-		var centerY = height/2
-		let topBorder:CGFloat = height * 0.2
-		let bottomBorder:CGFloat = height * 0.2
-		if !self.chartData.isEmpty {
-			let value = ChartDataManager.singleton.preClose
-			let maxValue = chartData.reduce(0) { (max, data) -> Double in
-				(max < data.price) ? data.price : max
-			}
-			let minValue = chartData.reduce(10000000.0) { (min, data) -> Double in
-				(min > data.price) ? data.price : min
-			}
-			
-			if value <= maxValue && value >= minValue {
-				centerY = (height-topBorder-bottomBorder) * CGFloat(maxValue - value) / CGFloat(maxValue - minValue)+topBorder
-			}
-		}
-		centerY = CGFloat(roundf(Float(centerY)))
+		let centerY = CGFloat(roundf(Float(middleLineY)))
 		linePath.moveToPoint(CGPoint(x:margin,
 			y: centerY + 0.5))
 		linePath.addLineToPoint(CGPoint(x:width - margin,
@@ -147,32 +195,6 @@ import UIKit
 		let width = rect.width
 		let height = rect.height
 		let lastIndex = self.chartData.count - 1
-
-		//calculate the x point
-		let columnXPoint = { (column:Int) -> CGFloat in
-			//Calculate gap between points
-			let spacer = (width - self.margin*2) /
-				CGFloat((lastIndex))
-			var x:CGFloat = CGFloat(column) * spacer
-			x += self.margin
-			return x
-		}
-		// calculate the y point
-		let topBorder:CGFloat = height * 0.2
-		let bottomBorder:CGFloat = height * 0.2
-		let graphHeight = height - topBorder - bottomBorder
-		let maxValue = chartData.reduce(0) { (max, data) -> Double in
-			(max < data.price) ? data.price : max
-		}
-		let minValue = chartData.reduce(10000000.0) { (min, data) -> Double in
-			(min > data.price) ? data.price : min
-		}
-		let columnYPoint = { (graphPoint:Double) -> CGFloat in
-			var y:CGFloat = CGFloat(graphPoint-minValue) /
-				CGFloat(maxValue-minValue) * graphHeight
-			y = graphHeight + topBorder - y // Flip the graph
-			return y
-		}
 		
 		// draw the line graph
 		lineColor.setFill()
@@ -181,14 +203,12 @@ import UIKit
 		//set up the points line
 		let graphPath = UIBezierPath()
 		//go to start of line
-		graphPath.moveToPoint(CGPoint(x:columnXPoint(0),
-			y:columnYPoint(self.chartData[0].price)))
+		graphPath.moveToPoint(pointData[0])
 		
 		//add points for each item in the graphPoints array
 		//at the correct (x, y) for the point
 		for i in 1..<self.chartData.count {
-			let nextPoint = CGPoint(x:columnXPoint(i),
-				y:columnYPoint(self.chartData[i].price))
+			let nextPoint = pointData[i]
 			graphPath.addLineToPoint(nextPoint)
 		}
 		
@@ -200,10 +220,10 @@ import UIKit
 		
 		//3 - add lines to the copied path to complete the clip area
 		clippingPath.addLineToPoint(CGPoint(
-			x: columnXPoint(lastIndex),
+			x: pointData[lastIndex].x,
 			y:height))
 		clippingPath.addLineToPoint(CGPoint(
-			x:columnXPoint(0),
+			x: pointData[0].x,
 			y:height))
 		clippingPath.closePath()
 		
@@ -211,7 +231,7 @@ import UIKit
 		clippingPath.addClip()
 		
 		// draw gradients
-		let highestYPoint = CGFloat(topBorder)//columnYPoint(maxValue)
+		let highestYPoint = topLineY//columnYPoint(maxValue)
 		let startPoint = CGPoint(x:margin, y: highestYPoint)
 		let endPoint = CGPoint(x:margin, y:height-bottomMargin)
 		
@@ -247,7 +267,7 @@ import UIKit
 		let pointGradient = CGGradientCreateWithColors(colorSpace,
 			circleColors, colorLocations)
 		
-		let centerPoint =  CGPoint(x:columnXPoint(lastIndex), y:columnYPoint(self.chartData[lastIndex].price))
+		let centerPoint =  self.pointData[lastIndex]
 		let startRadius: CGFloat = 2
 		let endRadius: CGFloat = 6
 		

@@ -21,16 +21,31 @@ import java.util.List;
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
  */
-public class ReactWheelCurvedPicker extends WheelCurvedPicker implements AbstractWheelPicker.OnWheelChangeListener {
+public class ReactWheelCurvedPicker extends WheelCurvedPicker {
 
     private final EventDispatcher mEventDispatcher;
     private List<Integer> mValueData;
-    private int mState;
 
     public ReactWheelCurvedPicker(ReactContext reactContext) {
         super(reactContext);
         mEventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
-        setOnWheelChangeListener(this);
+        setOnWheelChangeListener(new OnWheelChangeListener() {
+            @Override
+            public void onWheelScrolling(float deltaX, float deltaY) {
+            }
+
+            @Override
+            public void onWheelSelected(int index, String data) {
+                if (mValueData != null && index < mValueData.size()) {
+                    mEventDispatcher.dispatchEvent(
+                            new ItemSelectedEvent(getId(), SystemClock.uptimeMillis(), mValueData.get(index)));
+                }
+            }
+
+            @Override
+            public void onWheelScrollStateChanged(int state) {
+            }
+        });
     }
 
     @Override
@@ -53,23 +68,8 @@ public class ReactWheelCurvedPicker extends WheelCurvedPicker implements Abstrac
         mValueData = data;
     }
 
-    public void onWheelScrolling(float deltaX, float deltaY) {
-
-    }
-
-    public void onWheelSelected(int index, String data) {
-        if (mValueData != null && index < mValueData.size()) {
-            mEventDispatcher.dispatchEvent(
-                    new ItemSelectedEvent(getId(), SystemClock.uptimeMillis(), mValueData.get(index)));
-        }
-    }
-
-    public void onWheelScrollStateChanged(int state) {
-        mState = state;
-    }
-
     public int getState() {
-        return mState;
+        return state;
     }
 }
 

@@ -137,11 +137,11 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 	@IBAction func didTapDeleteButton(sender: AnyObject) {
 		let refreshAlert = UIAlertController(title: "确认删除", message: "", preferredStyle: UIAlertControllerStyle.Alert)
 		
-		refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action: UIAlertAction!) in
+		refreshAlert.addAction(UIAlertAction(title: "取消", style: .Default, handler: { (action: UIAlertAction!) in
 			// do nothing
 		}))
 		
-		refreshAlert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { (action: UIAlertAction!) in
+		refreshAlert.addAction(UIAlertAction(title: "确定", style: .Default, handler: { (action: UIAlertAction!) in
 			self.deleteStocks()
 		}))
 		

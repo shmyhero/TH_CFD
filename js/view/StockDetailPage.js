@@ -342,9 +342,14 @@ var StockDetailPage = React.createClass({
 		} else {
 			subTitleText += percentChange.toFixed(2) + '%'
 		}
+
+		var barHeight = 68
+		if (Platform.OS == 'android') {
+			barHeight = 50
+		}
 		return (
 			<NavBar showBackButton={true} navigator={this.props.navigator}
-					barStyle={{height:68}}	titleStyle={{fontSize:16}}
+					barStyle={{height: barHeight}}	titleStyle={{fontSize:16}}
 					title={this.props.stockName}
 					subTitle={subTitleText}
 					backgroundColor='transparent'
@@ -359,7 +364,7 @@ var StockDetailPage = React.createClass({
 					onPress={this.addToMyListClicked}>
 				<View style={styles.addToMyListContainer}>
 					<Text style={styles.addToMyListText}>
-						{this.state.isAddedToMyList ? '-':'+'} 自选
+						{this.state.isAddedToMyList ? '删除自选':'+自选'} 
 					</Text>
 				</View>
 			</TouchableOpacity>
@@ -539,7 +544,7 @@ var StockDetailPage = React.createClass({
 			<TouchableHighlight
 				underlayColor={buttonEnable ? '#f46b6f': '#164593'}
 				onPress={this.okPress} style={[styles.okView, !buttonEnable && styles.okViewDisabled]}>
-				<Text style={[styles.okButton, !buttonEnable && styles.okButtonDisabled]}>确认</Text>
+				<Text style={[styles.okButton, !buttonEnable && styles.okButtonDisabled]}>确认</Text>	
 			</TouchableHighlight>
 		)
 	},
@@ -633,10 +638,9 @@ var styles = StyleSheet.create({
 	},
 	okView: {
 		width: 140,
-		height: 40,
+		justifyContent: 'center',
 		backgroundColor: '#f46b6f',
-    	paddingTop:6,
-    	paddingBottom:6,
+		paddingVertical: 10,
     	borderRadius:5,
     	borderWidth:1,
     	borderColor: '#153a77',
@@ -650,7 +654,6 @@ var styles = StyleSheet.create({
 		color: '#ffffff',
 		textAlign: 'center',
 		fontSize: 15,
-		lineHeight: 20,
 	},
 	okButtonDisabled: {
 		color: '#5771a8'
@@ -671,10 +674,9 @@ var styles = StyleSheet.create({
 		color: '#a0a6aa',
 	},
 	addToMyListContainer: {
-		width: 60,
-		height: 24,
 		marginRight: 10,
-		padding: 4,
+		paddingHorizontal: 10,
+		paddingVertical: 5,
 		backgroundColor: '#2d71e5',
 		borderWidth: 1,
 		borderRadius: 3,

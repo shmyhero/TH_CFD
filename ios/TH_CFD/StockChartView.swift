@@ -16,9 +16,10 @@ import UIKit
 	var columnXPoints:[Double] = []
 	var columnYPoints:[Double] = []
 	
-	@IBInspectable var startColor: UIColor = UIColor(hex: 0x5f97f6)
+	@IBInspectable var startColor: UIColor = UIColor(hex: 0x7daeff)
 	@IBInspectable var endColor: UIColor = UIColor(hex: 0x1954b9)
 	@IBInspectable var lineColor: UIColor = UIColor(hex: 0xbbceed)
+	@IBInspectable var bgLineColor: UIColor = UIColor(hex: 0x497bce)
 	var data:String? { // use for RN manager
 		willSet {
 			self.chartDataJson = newValue
@@ -41,7 +42,7 @@ import UIKit
 		let width = rect.width
 		let height = rect.height
 		//Draw horizontal graph lines on the top of everything
-		let linePath = UIBezierPath()
+		var linePath = UIBezierPath()
 		let context = UIGraphicsGetCurrentContext()
 		CGContextSaveGState(context)
 		
@@ -50,6 +51,17 @@ import UIKit
 		linePath.addLineToPoint(CGPoint(x: width - margin,
 			y:topMargin + 0.5))
 		
+		//bottom line
+		linePath.moveToPoint(CGPoint(x:margin-0.5,
+			y:height - bottomMargin + 0.5))
+		linePath.addLineToPoint(CGPoint(x:width - margin+0.5,
+			y:height - bottomMargin + 0.5))
+		bgLineColor.setStroke()
+		
+		linePath.lineWidth = 1
+		linePath.stroke()
+		
+		linePath = UIBezierPath()
 		//center line
 		var centerY = height/2
 		let topBorder:CGFloat = height * 0.2
@@ -67,19 +79,12 @@ import UIKit
 				centerY = (height-topBorder-bottomBorder) * CGFloat(maxValue - value) / CGFloat(maxValue - minValue)+topBorder
 			}
 		}
+		centerY = CGFloat(roundf(Float(centerY)))
 		linePath.moveToPoint(CGPoint(x:margin,
 			y: centerY + 0.5))
 		linePath.addLineToPoint(CGPoint(x:width - margin,
 			y: centerY + 0.5))
-		
-		//bottom line
-		linePath.moveToPoint(CGPoint(x:margin-0.5,
-			y:height - bottomMargin + 0.5))
-		linePath.addLineToPoint(CGPoint(x:width - margin+0.5,
-			y:height - bottomMargin + 0.5))
-		let color = UIColor(hex: 0x759de2)
-		color.setStroke()
-		
+		UIColor(hex: 0xffffff, alpha: 0.5).setStroke()
 		linePath.lineWidth = 1
 		linePath.stroke()
 		
@@ -122,8 +127,8 @@ import UIKit
 		//right line
 		linePath.moveToPoint(CGPoint(x:width - margin + 0.5, y:bottomMargin))
 		linePath.addLineToPoint(CGPoint(x:width - margin + 0.5, y:height - bottomMargin))
-		let color = UIColor(hex: 0x759de2)
-		color.setStroke()
+//		let color = UIColor(hex: 0x759de2)
+		bgLineColor.setStroke()
 		
 		linePath.lineWidth = 1
 		linePath.stroke()

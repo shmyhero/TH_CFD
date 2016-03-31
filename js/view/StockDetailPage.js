@@ -228,7 +228,7 @@ var StockDetailPage = React.createClass({
 
 	renderChartHeader: function() {
 		return(
-			<View style={{flexDirection: 'row', marginBottom: 10}} >
+			<View style={{flexDirection: 'row', marginTop: 6}} >
 				<Text style={styles.chartTitleTextHighlighted} >
 					分时
 				</Text>
@@ -277,7 +277,7 @@ var StockDetailPage = React.createClass({
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
 			<View style={styles.wrapper}>
-				<LinearGradient colors={['#1c5fd1', '#123b80']} style={{height: height}}>
+				<LinearGradient colors={['#3475e3', '#123b80']} style={{height: height}}>
 					
 					{this.renderHeader()}
 
@@ -285,7 +285,7 @@ var StockDetailPage = React.createClass({
 
 					{this.renderChartHeader()}
 
-					<View style={{flex: 3}}>
+					<View style={{flex: 3, marginTop:10}}>
 						{this.renderStockMaxPriceInfo(maxPrice, maxPercentage)}
 						<LineChart style={{flex: 1, backgroundColor:'transparent', marginTop: -30}} data={JSON.stringify(this.state.stockInfo)}/>
 						{this.renderStockMinPriceInfo(minPrice, minPercentage)}
@@ -344,6 +344,7 @@ var StockDetailPage = React.createClass({
 		}
 		return (
 			<NavBar showBackButton={true} navigator={this.props.navigator}
+					barStyle={{height:68}}	titleStyle={{fontSize:16}}
 					title={this.props.stockName}
 					subTitle={subTitleText}
 					backgroundColor='transparent'
@@ -371,24 +372,29 @@ var StockDetailPage = React.createClass({
 			var downPercentage = 100 - upPercentage
 			return (
 				<View>
+					<View style={{flexDirection: 'row', alignItems: 'center'}}>	
 					<Text style={styles.tradeStrengthText}>
-						{upPercentage} % 买涨
+						{upPercentage}
 					</Text>
+					<Text style={styles.tradeStrengthTextSmall}>
+						% 买涨
+					</Text>
+					</View>
 					<View style={styles.tradeStrength}>
-						<View style={{flex: upPercentage * 100, marginRight: 5, backgroundColor: ColorConstants.STOCK_RISE_RED}} />
-						<View style={{flex: downPercentage * 100, backgroundColor: ColorConstants.STOCK_DOWN_GREEN}} />
+						<View style={{flex: upPercentage * 100, marginRight: 5, backgroundColor: "#c65972"}} />
+						<View style={{flex: downPercentage * 100, backgroundColor: "#29af72"}} />
 					</View>
 				</View>
 			)
 		} else {
 			return (
 				<View>
-					<Text style={styles.tradeStrengthText}>
+					<Text style={styles.tradeStrengthTextSmall}>
 						-- % 买涨
 					</Text>
 					<View style={styles.tradeStrength}>
-						<View style={{flex: 1, marginRight: 5, backgroundColor: ColorConstants.STOCK_RISE_RED}} />
-						<View style={{flex: 1, backgroundColor: ColorConstants.STOCK_DOWN_GREEN}} />
+						<View style={{flex: 1, marginRight: 5, backgroundColor: "#c65972"}} />
+						<View style={{flex: 1, backgroundColor: "#29af72"}} />
 					</View>
 				</View>
 			)
@@ -405,12 +411,12 @@ var StockDetailPage = React.createClass({
 		return (
 			<View style={styles.rowView}>
 				<TouchableHighlight
-					underlayColor={upSelected ? '#356dce': '#6da2fc'}
+					underlayColor={upSelected ? '#6da2fc': '#356dce'}
 					onPress={this.buyPress} style={[styles.tradeButtonView, upSelected&&styles.tradeButtonViewSelected]}>
 					<Image style={styles.tradeButtonImage} source={upImage}/>
 				</TouchableHighlight>
 				<TouchableHighlight
-					underlayColor={downSelected ? '#356dce': '#6da2fc'}
+					underlayColor={downSelected ? '#6da2fc': '#356dce'}
 					onPress={this.sellPress} style={[styles.tradeButtonView, downSelected&&styles.tradeButtonViewSelected]}>
 					<Image style={styles.tradeButtonImage} source={downImage}/>
 				</TouchableHighlight>
@@ -585,11 +591,11 @@ var styles = StyleSheet.create({
     	borderRadius:5,
     	borderWidth:1,
     	borderColor: '#133e86',
-		backgroundColor: '#6da2fc',
+		backgroundColor: '#356dce',
 		alignItems: 'center',
 	},
 	tradeButtonViewSelected:{
-		backgroundColor: '#356dce',
+		backgroundColor: '#6da2fc',
 	},
 	tradeButtonImage: {
 		width: 35,
@@ -657,28 +663,36 @@ var styles = StyleSheet.create({
 		color: '#ffffff',
 	},
 	subTitle: {
-		fontSize: 18,
+		fontSize: 17,
 		textAlign: 'center',
 		color: '#a0a6aa',
 	},
 	addToMyListContainer: {
+		width: 60,
+		height: 24,
 		marginRight: 10,
-		padding: 5,
+		padding: 4,
 		backgroundColor: '#2d71e5',
 		borderWidth: 1,
 		borderRadius: 3,
 		borderColor: '#ffffff',
 	},
 	addToMyListText: {
-		fontSize: 16,
+		fontSize: 12,
 		textAlign: 'center',
 		color: '#ffffff',
 	},
 	tradeStrengthText: {
-		fontSize: 18,
+		fontSize: 19,
 		textAlign: 'left',
 		color: '#70a5ff',
 		marginLeft: 10,
+	},
+	tradeStrengthTextSmall: {
+		fontSize: 14,
+		textAlign: 'left',
+		color: '#70a5ff',
+		marginLeft: 1,
 	},
 	tradeStrength: {
 		flexDirection: 'row', 
@@ -690,15 +704,15 @@ var styles = StyleSheet.create({
 	},
 	chartTitleTextHighlighted: {
 		flex: 1,
-		fontSize: 18,
+		fontSize: 15,
 		textAlign: 'center',
 		color: '#ffffff'
 	},
 	chartTitleText: {
 		flex: 1,
-		fontSize: 16,
+		fontSize: 15,
 		textAlign: 'center',
-		color: '#a0a6aa'
+		color: '#70a5ff'
 	},
 });
 

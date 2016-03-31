@@ -18,27 +18,18 @@ var ColorConstants = require('../ColorConstants')
 var NavBar = React.createClass({
 	propTypes: {
 		showBackButton: React.PropTypes.bool,
-
 		textOnLeft: React.PropTypes.string,
-
 		textOnRight: React.PropTypes.string,
-
 		imageOnRight: React.PropTypes.number,
-
 		leftTextOnClick: React.PropTypes.func,
-
 		rightTextOnClick: React.PropTypes.func,
-
 		rightImageOnClick: React.PropTypes.func,
-
 		subTitle: React.PropTypes.string,
-
 		subTitleStyle: Text.propTypes.style,
-
 		backgroundColor: ColorPropType,
-
 		rightCustomContent: React.PropTypes.func,
-
+		barStyle: View.propTypes.style,
+		titleStyle: Text.propTypes.style,
 	},
 
 	getDefaultProps() {
@@ -81,14 +72,14 @@ var NavBar = React.createClass({
 
 	render: function() {
 		return (
-			<View style={[styles.container, {backgroundColor: this.props.backgroundColor}]} >
+			<View style={[styles.container, {backgroundColor: this.props.backgroundColor}, this.props.barStyle]} >
 				<View style={styles.leftContainer}>
 					{this.renderBackButton()}
 					{this.renderLeftText()}
 				</View>
 
 				<View style={styles.centerContainer}>
-					<Text style={styles.title}>
+					<Text style={[styles.title, this.props.titleStyle]}>
 						{this.props.title}
 					</Text>
 					{this.renderSubTitle()}

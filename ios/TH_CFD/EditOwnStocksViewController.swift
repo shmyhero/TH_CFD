@@ -17,6 +17,7 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 	var allSelect:Bool = false
 	
 	var rawData:[StockData] = []
+	var statusView:UIView = UIView()
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -31,6 +32,23 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		allButton.layer.cornerRadius = 4
 		deleteButton.layer.cornerRadius = 4
 		self.updateDeleteButton()
+	}
+	
+	override func viewWillAppear(animated: Bool) {
+		super.viewWillAppear(animated)
+		if (self.statusView.frame.size.height == 0) {
+			self.statusView = UIView(frame:
+				CGRect(x: 0.0, y: 0.0, width: UIScreen.mainScreen().bounds.size.width, height: 20.0)
+			)
+			view.backgroundColor = UIColor(hex: 0x1A61DD)
+			self.view.addSubview(self.statusView)
+		}
+	}
+	
+	override func viewWillDisappear(animated: Bool) {
+		super.viewWillDisappear(animated)
+		self.statusView.removeFromSuperview()
+		self.statusView = UIView()
 	}
 	
 	override func didReceiveMemoryWarning() {

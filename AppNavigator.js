@@ -11,6 +11,7 @@ var {
 	Component,
 	Text,
 	ScrollView,
+	StatusBar,
 } = React;
 
 // var Tabbar= require('react-native-tabbar');
@@ -178,54 +179,57 @@ var AppNavigator = React.createClass({
 
 	render: function() {
 	    return (
-	      <Tabbar ref="myTabbar" barColor={'#f7f7f7'} style={{alignItems: 'stretch'}}>
-	        <Tab name="home">
-	          <Icon label="首页" type={glypy.Home} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
-	          <RawContent>
-            	<Navigator
-					style={styles.container}
-					initialRoute={{name: LANDING_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
-					configureScene={() => Navigator.SceneConfigs.PushFromRight}
-					renderScene={RouteMapper} />
-	          </RawContent>
-	        </Tab>
-	        <Tab name="camera">
-	          <Icon label="行情" type={glypy.Camera} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
-	          <RawContent style={{width: 100}}>
-            	<Navigator
-					style={styles.container}
-					initialRoute={{name: STOCK_LIST_VIEW_PAGER_ROUTE}}
-					configureScene={() => Navigator.SceneConfigs.PushFromRight}
-					renderScene={RouteMapper} />
-	          </RawContent>
-	        </Tab>
-	        <Tab name="stats">
-	          <Icon label="交易" type={glypy.Stat} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
-	          <RawContent>
-	            <View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent:'center' }}>
-	              <Text onPress={()=>console.log('favorite')}>交易</Text>
-	            </View>
-	          </RawContent>
-	        </Tab>
-	        <Tab name="favorite">
-	          <Icon label="榜单" type={glypy.Favorite} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
-	          <RawContent>
-	            <View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent:'center' }}>
-	              <Text onPress={()=>console.log('favorite')}>榜单</Text>
-	            </View>
-	          </RawContent>
-	        </Tab>
-	        <Tab name="settings">
-	          <Icon label="问答" type={glypy.Settings} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
-	          <RawContent>
-	            <View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent:'center' }}>
-	              <Text onPress={()=>console.log('settings')}>问答</Text>
-	            </View>
-	          </RawContent>
-	        </Tab>
-	      </Tabbar>
+	    	<View style={styles.container}>
+		    	<StatusBar barStyle="light-content"/>
+		      	<Tabbar ref="myTabbar" barColor={'#f7f7f7'} style={{alignItems: 'stretch'}}>
+			        <Tab name="home">
+			          	<Icon label="首页" type={glypy.Home} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
+			          	<RawContent>
+		            		<Navigator
+								style={styles.container}
+								initialRoute={{name: LANDING_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
+								configureScene={() => Navigator.SceneConfigs.PushFromRight}
+								renderScene={RouteMapper} />
+			          	</RawContent>
+			        </Tab>
+			        <Tab name="camera">
+			          	<Icon label="行情" type={glypy.Camera} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
+			          	<RawContent style={{width: 100}}>
+		            		<Navigator
+								style={styles.container}
+								initialRoute={{name: STOCK_LIST_VIEW_PAGER_ROUTE}}
+								configureScene={() => Navigator.SceneConfigs.PushFromRight}
+								renderScene={RouteMapper} />
+			          	</RawContent>
+			        </Tab>
+			        <Tab name="stats">
+			          	<Icon label="交易" type={glypy.Stat} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
+			        	<RawContent>
+			            	<View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent:'center' }}>
+			              		<Text onPress={()=>console.log('favorite')}>交易</Text>
+			            	</View>
+			          	</RawContent>
+			        </Tab>
+			        <Tab name="favorite">
+			          	<Icon label="榜单" type={glypy.Favorite} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
+			          	<RawContent>
+			            	<View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent:'center' }}>
+			              		<Text onPress={()=>console.log('favorite')}>榜单</Text>
+			            	</View>
+			          	</RawContent>
+			        </Tab>
+			        <Tab name="settings">
+			          	<Icon label="问答" type={glypy.Settings} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
+			          	<RawContent>
+			            	<View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent:'center' }}>
+			              		<Text onPress={()=>console.log('settings')}>问答</Text>
+			            	</View>
+			          	</RawContent>
+		        	</Tab>
+		      	</Tabbar>
+	      	</View>
 		);
-	  }
+	}
 });
 
 var styles = StyleSheet.create({

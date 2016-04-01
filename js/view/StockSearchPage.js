@@ -121,7 +121,9 @@ var StockSearchPage = React.createClass({
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
 		return (
-			<View style={styles.line} key={rowID}/>
+			<View style={styles.line} key={rowID}>
+				<View style={styles.separator}/>
+			</View>
 		);
 	},
 
@@ -252,12 +254,14 @@ var styles = StyleSheet.create({
 		color: ColorConstants.TITLE_BLUE,		
 		fontWeight: 'bold',
 	},
-
 	line: {
-		alignSelf: 'stretch',
 		height: 1,
-		borderWidth: 0.25,
-		borderColor: '#d0d0d0'
+		backgroundColor: 'white',
+	},
+	separator: {
+		marginLeft: 15,
+		height: 1,
+		backgroundColor: '#ececec',
 	},
 });
 

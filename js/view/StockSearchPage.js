@@ -59,6 +59,7 @@ var StockSearchPage = React.createClass({
 
 	addToMyListPressed: function(rowID) {
 		LogicData.addStockToOwn(this.state.searchStockRawInfo[rowID])
+		this.forceUpdate()
 	},
 
 	cancel: function() {
@@ -94,6 +95,18 @@ var StockSearchPage = React.createClass({
 	},
 
 	renderRow: function(rowData, sectionID, rowID, highlightRow) {
+		var rightPartContent = <Text style={styles.alreadyAddText}>已添加</Text>
+		var myListData = LogicData.getOwnStocksData()
+		var index = myListData.findIndex((stock) => {return stock.id === rowData.id})
+		if (index === -1) {
+			rightPartContent = 
+					<TouchableOpacity style={styles.addToMyListContainer}
+							onPress={() => this.addToMyListPressed(rowID)}>
+						<Text style={styles.addToMyListText}>
+							+
+						</Text>
+					</TouchableOpacity>
+		}
 		return (
 			<View style={styles.rowWrapper} key={rowData.key}>
 
@@ -108,12 +121,7 @@ var StockSearchPage = React.createClass({
 				</View>
 
 				<View style={styles.rowRightPart}>
-					<TouchableOpacity style={styles.addToMyListContainer}
-							onPress={() => this.addToMyListPressed(rowID)}>
-						<Text style={styles.addToMyListText}>
-							+
-						</Text>
-					</TouchableOpacity>
+					{rightPartContent}
 				</View>
 			</View>
 		);
@@ -248,11 +256,14 @@ var styles = StyleSheet.create({
 		paddingBottom: 2,
 		borderColor: ColorConstants.TITLE_BLUE,
 	},
-
 	addToMyListText: {
 		fontSize: 18,
 		color: ColorConstants.TITLE_BLUE,		
 		fontWeight: 'bold',
+	},
+	alreadyAddText: {
+		fontSize: 14,
+		color: "#5274ae",
 	},
 	line: {
 		height: 1,

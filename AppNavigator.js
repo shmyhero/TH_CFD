@@ -158,7 +158,8 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 						stockSymbol={route.stockRowData.symbol}
 						stockPrice={route.stockRowData.last}
 						stockTag={route.stockRowData.tag}
-						lastClosePrice={route.stockRowData.open}/>
+						lastClosePrice={route.stockRowData.preClose}
+						openPrice={route.stockRowData.open}/>
 			</View>
 		);
 	}

@@ -10,10 +10,11 @@ import UIKit
 
 class StockData: NSObject {
 	var stockId: Int = 0
-	var symbol: String?
-	var name: String?
+	var symbol: String!
+	var name: String!
 	var open: Double?
 	var last: Double?
+	var preClose: Double?
 	var stockTag: String?
 	var choose: Bool = false
 	
@@ -32,18 +33,22 @@ class StockData: NSObject {
 		self.name = dict["name"] as? String
 		self.open = dict["open"] as? Double
 		self.last = dict["last"] as? Double
-		self.stockTag = ""//dict["tag"] as? String
+		self.preClose = dict["preClose"] as? Double
+		self.stockTag = dict["tag"] == nil ? nil : dict["tag"] as? String
 	}
 	
 	func outputDictionay() -> NSDictionary {
-		let dict:NSDictionary = [
+		let dict:NSMutableDictionary = [
 			"id":self.stockId,
 			"symbol":self.symbol!,
 			"name":self.name!,
 			"open":self.open!,
 			"last":self.last!,
-			"tag":self.stockTag!
+			"preClose":self.preClose!,
 		]
+		if (self.stockTag != nil) {
+			dict.setValue(self.stockTag, forKey: "tag")
+		}
 		return dict
 	}
 }

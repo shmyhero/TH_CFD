@@ -190,7 +190,6 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		let delegate:AppDelegate! = UIApplication.sharedApplication().delegate as! AppDelegate
 		delegate!.nativeData!.sendDataToRN("myList", data: dataString)
 		delegate!.rnRootViewController?.dismissViewControllerAnimated(true, completion: { () -> Void in
-			print("dismiss")
 		})
 	}
 }

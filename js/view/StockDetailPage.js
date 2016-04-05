@@ -41,6 +41,7 @@ var StockDetailPage = React.createClass({
 		stockPrice: React.PropTypes.number,
 		stockTag: React.PropTypes.string,
 		lastClosePrice: React.PropTypes.number,
+		openPrice: React.PropTypes.number,
 	},
 
 	getDefaultProps() {
@@ -152,7 +153,8 @@ var StockDetailPage = React.createClass({
 			symbol: this.props.stockSymbol,
 			name: this.props.stockName,
 			tag: this.props.stockTag,
-			open: this.props.lastClosePrice,
+			open: this.props.openPrice,
+			preClose: this.props.lastClosePrice,
 			last: this.state.stockPrice
 		}
 		if (this.state.isAddedToMyList) {

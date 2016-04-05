@@ -12,7 +12,9 @@ class EditOwnStockCell: UITableViewCell {
 	@IBOutlet weak var selectButton: UIButton!
 	@IBOutlet weak var nameLabel: UILabel!
 	@IBOutlet weak var codeLabel: UILabel!
+	@IBOutlet weak var tagLabel: UILabel!
 	@IBOutlet weak var topButton: UIButton!
+	@IBOutlet weak var codeLabelLeftConstraint: NSLayoutConstraint!
 	
 	var stockData: StockData?
 	
@@ -20,6 +22,16 @@ class EditOwnStockCell: UITableViewCell {
 		self.stockData = data
 		self.nameLabel?.text = data.name
 		self.codeLabel?.text = data.symbol
+		if (data.stockTag != nil) {
+			self.codeLabelLeftConstraint.constant = 18
+			self.tagLabel.hidden = false
+			self.tagLabel.text = data.stockTag
+			self.tagLabel.layer.cornerRadius = 2
+		}
+		else {
+			self.codeLabelLeftConstraint.constant = 0
+			self.tagLabel.hidden = true
+		}
 		let name:String = data.choose ?"Select":"Unselect"
 		self.selectButton?.setImage(UIImage.init(named: name), forState: .Normal)
 	}

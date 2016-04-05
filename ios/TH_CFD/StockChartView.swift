@@ -8,7 +8,8 @@
 
 import UIKit
 
-@IBDesignable class StockChartView: UIView {
+//@IBDesignable
+class StockChartView: UIView {
 	
 	let margin:CGFloat = 15.0
 	var topMargin:CGFloat = 10.0

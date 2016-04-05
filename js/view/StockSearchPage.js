@@ -59,7 +59,10 @@ var StockSearchPage = React.createClass({
 
 	addToMyListPressed: function(rowID) {
 		LogicData.addStockToOwn(this.state.searchStockRawInfo[rowID])
-		this.forceUpdate()
+		// force re-render list
+		this.setState({
+			searchStockInfo: ds.cloneWithRows(this.state.searchStockRawInfo)
+		})
 	},
 
 	cancel: function() {

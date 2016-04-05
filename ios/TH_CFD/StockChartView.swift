@@ -71,12 +71,15 @@ import UIKit
 		let graphHeight = size.height - topBorder - bottomBorder
 		
 		let columnYPoint = { (graphPoint:Double) -> CGFloat in
-			var y:CGFloat = CGFloat(graphPoint-minValue) /
-				CGFloat(maxValue-minValue) * graphHeight
+			var y:CGFloat = graphHeight/2
+			if (maxValue > minValue) {
+				y = CGFloat(graphPoint-minValue) /
+					CGFloat(maxValue - minValue) * graphHeight
+			}
 			y = graphHeight + topBorder - y // Flip the graph
 			return y
 		}
-		if (preClose > 0) {
+		if (preClose > 0 && maxValue > minValue) {
 			middleLineY = (size.height-topBorder-bottomBorder) * CGFloat(maxValue - preClose) / CGFloat(maxValue - minValue)+topBorder
 		}
 		else {
@@ -126,17 +129,19 @@ import UIKit
 		linePath.stroke()
 		
 		linePath = UIBezierPath()
-		//center line
-		let centerY = CGFloat(roundf(Float(middleLineY)))
-		linePath.moveToPoint(CGPoint(x:margin,
-			y: centerY + 0.5))
-		linePath.addLineToPoint(CGPoint(x:width - margin,
-			y: centerY + 0.5))
-		UIColor(hex: 0xffffff, alpha: 0.5).setStroke()
-		linePath.lineWidth = 1
-		linePath.stroke()
-		
-		CGContextRestoreGState(context)
+		if (middleLineY > 0) {
+			//center line
+			let centerY = CGFloat(roundf(Float(middleLineY)))
+			linePath.moveToPoint(CGPoint(x:margin,
+				y: centerY + 0.5))
+			linePath.addLineToPoint(CGPoint(x:width - margin,
+				y: centerY + 0.5))
+			UIColor(hex: 0xffffff, alpha: 0.5).setStroke()
+			linePath.lineWidth = 1
+			linePath.stroke()
+			
+			CGContextRestoreGState(context)
+		}
 	}
 	
 	
@@ -230,26 +235,26 @@ import UIKit
 		//4 - add the clipping path to the context
 		clippingPath.addClip()
 		
-		// draw gradients
-		let highestYPoint = topLineY//columnYPoint(maxValue)
-		let startPoint = CGPoint(x:margin, y: highestYPoint)
-		let endPoint = CGPoint(x:margin, y:height-bottomMargin)
-		
 		let colors = [startColor.CGColor, endColor.CGColor]
-		
 		//set up the color space
 		let colorSpace = CGColorSpaceCreateDeviceRGB()
-		
 		//set up the color stops
 		let colorLocations:[CGFloat] = [0.0, 1.0]
-		
-		//create the gradient
-		let gradient = CGGradientCreateWithColors(colorSpace,
-			colors,
-			colorLocations)
-		
-		CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, .DrawsBeforeStartLocation)
-		CGContextRestoreGState(context)
+		if(self.pointData.count > 0) {
+			// draw gradients
+			let highestYPoint = topLineY
+			let startPoint = CGPoint(x:margin, y: highestYPoint)
+			let endPoint = CGPoint(x:margin, y:height-bottomMargin)
+			
+			
+			//create the gradient
+			let gradient = CGGradientCreateWithColors(colorSpace,
+				colors,
+				colorLocations)
+			
+			CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, .DrawsBeforeStartLocation)
+			CGContextRestoreGState(context)
+		}
 		
 		self.drawHorizontalLines(rect)
 		self.drawVerticalLines(rect)

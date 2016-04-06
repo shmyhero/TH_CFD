@@ -1,5 +1,6 @@
 package com.tradehero.th;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +24,7 @@ import android.widget.EditText;
 
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactRootView;
+import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 
 import butterknife.Bind;
@@ -73,6 +75,15 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         if (mReactInstanceManager != null) {
             mReactInstanceManager.onResume(this, this);
         }
+
+        UiThreadUtil.runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+                    }
+                }
+        );
     }
 
     @Override

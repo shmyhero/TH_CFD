@@ -1,6 +1,8 @@
 package com.tradehero.th;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -78,8 +80,29 @@ public class StockEditFragment extends Fragment {
         deleteSelected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.deleteChecked();
-                updateDeleteButton();
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                alertDialogBuilder
+                        .setTitle(R.string.dialog_title)
+                        .setMessage(R.string.remove_hint_message)
+                        .setCancelable(true)
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                adapter.deleteChecked();
+                                updateDeleteButton();
+                            }
+                        });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+                alertDialog.setCanceledOnTouchOutside(true);
             }
         });
 

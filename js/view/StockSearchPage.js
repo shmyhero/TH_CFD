@@ -58,7 +58,9 @@ var StockSearchPage = React.createClass({
 	},
 
 	addToMyListPressed: function(rowID) {
-		LogicData.addStockToOwn(this.state.searchStockRawInfo[rowID])
+		var stockData = this.state.searchStockRawInfo[rowID]
+		LogicData.addStockToOwn(stockData)
+		NetworkModule.addToOwnStocks([stockData])
 		// force re-render list
 		this.setState({
 			searchStockInfo: ds.cloneWithRows(this.state.searchStockRawInfo)

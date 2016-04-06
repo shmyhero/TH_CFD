@@ -122,7 +122,9 @@ var StockListPage = React.createClass({
 				'nativeSendDataToRN',
 				(args) => {
 					if (args[0] == 'myList') {
-						LogicData.setOwnStocksData(JSON.parse(args[1]))
+						var stockData = JSON.parse(args[1])
+						LogicData.setOwnStocksData(stockData)
+						NetworkModule.updateOwnStocks(stockData)
 						this.updateOwnData()
 					}
 					console.log('Get data from Native ' + args[0] + ' : ' + args[1])

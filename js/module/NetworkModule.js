@@ -1,5 +1,12 @@
 'use strict'
 
+var LogicData = require('../LogicData')
+var NetConstants = require('../NetConstants')
+var React = require('react-native')
+var {
+	Alert
+} = React
+
 export function fetchTHUrl(url, params, successCallback, errorCallback) {
 	var requestSuccess = true;
 
@@ -42,4 +49,112 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 			errorCallback(e.message);
 		})
 		.done();
+}
+
+export function syncOwnStocks(userData) {
+	var stockData = LogicData.getOwnStocksData()
+	fetchTHUrl(
+		NetConstants.OWN_STOCK_LIST_API, 
+		{
+			method: 'GET',
+			headers: {
+				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+			}
+		},
+		(responseJson) => {
+			if (responseJson.length===0) {
+				console.log('no own stocks online')
+				addToOwnStocks(stockData)
+			}
+			else {
+				console.log('get own stocks')
+				LogicData.setOwnStocksData(responseJson)
+			}
+			console.log(responseJson)
+		},
+		(errorMessage) => {
+			Alert.alert('获取股票列表失败', errorMessage);
+		}
+	)
+}
+
+export function addToOwnStocks(stockData) {
+	var userData = LogicData.getUserData()
+	if (Object.keys(userData).length === 0) {
+		return
+	}
+
+	var idList = stockData.map((stock, index, list)=>{
+		return stock.id
+	})
+
+	fetchTHUrl(
+		NetConstants.OWN_STOCK_LIST_API+'?'+NetConstants.PARAMETER_STOCKIDS+'='+idList, 
+		{
+			method: 'POST',
+			headers: {
+				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+			}
+		},
+		(responseJson) => {
+			console.log('add to own stocks success')
+		},
+		(errorMessage) => {
+			Alert.alert('添加股票失败', errorMessage);
+		}
+	)
+}
+
+export function removeFromOwnStocks(stockData) {
+	var userData = LogicData.getUserData()
+	if (Object.keys(userData).length === 0) {
+		return
+	}
+	
+	var idList = stockData.map((stock, index, list)=>{
+		return stock.id
+	})
+
+	fetchTHUrl(
+		NetConstants.OWN_STOCK_LIST_API+'?'+NetConstants.PARAMETER_STOCKIDS+'='+idList, 
+		{
+			method: 'DELETE',
+			headers: {
+				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+			}
+		},
+		(responseJson) => {
+			console.log('delete from own stocks success')
+		},
+		(errorMessage) => {
+			Alert.alert('删除股票失败', errorMessage);
+		}
+	)
+}
+
+export function updateOwnStocks(stockData) {
+	var userData = LogicData.getUserData()
+	if (Object.keys(userData).length === 0) {
+		return
+	}
+
+	var idList = stockData.map((stock, index, list)=>{
+		return stock.id
+	})
+
+	fetchTHUrl(
+		NetConstants.OWN_STOCK_LIST_API+'?'+NetConstants.PARAMETER_STOCKIDS+'='+idList, 
+		{
+			method: 'PUT',
+			headers: {
+				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+			}
+		},
+		(responseJson) => {
+			console.log('update own stocks success')
+		},
+		(errorMessage) => {
+			Alert.alert('更新股票失败', errorMessage);
+		}
+	)
 }

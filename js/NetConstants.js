@@ -16,8 +16,9 @@ export var GET_FUTURE_LIST_API = SERVER_IP + '/api/security/futures'
 export var GET_SEARCH_STOCK_API = SERVER_IP + '/api/security/search'
 export var GET_STOCK_DETAIL_API = SERVER_IP + '/api/security/<stockCode>'
 export var GET_STOCK_PRICE_TODAY_API = SERVER_IP + '/api/quote/<stockCode>/tick/today'
-
+export var OWN_STOCK_LIST_API = SERVER_IP + '/api/security/bookmark'
 
 export var PARAMETER_PHONE = 'phone'
 export var PARAMETER_VERFICATION_CODE = 'verifyCode'
 export var PARAMETER_NICKNAME = 'nickname'
+export var PARAMETER_STOCKIDS = 'securityIds'

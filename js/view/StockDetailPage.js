@@ -159,11 +159,13 @@ var StockDetailPage = React.createClass({
 		}
 		if (this.state.isAddedToMyList) {
 			LogicData.removeStockFromOwn(stock)
+			NetworkModule.removeFromOwnStocks([stock])
 			this.setState({
 				isAddedToMyList: false,
 			})
 		} else {
 			LogicData.addStockToOwn(stock)
+			NetworkModule.addToOwnStocks([stock])
 			this.setState({
 				isAddedToMyList: true,
 			})

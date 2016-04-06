@@ -202,10 +202,13 @@ var LoginPage = React.createClass({
 		LogicData.setUserData(userData);
 		console.log(LogicData.getUserData());
 
+		NetworkModule.syncOwnStocks(userData)
+
 		this.props.navigator.replace({
 			name: AppNavigator.UPDATE_USER_INFO_ROUTE,
 		});
 	},
+
 
 	renderFastLogin: function() {
 		if (this.state.wechatInstalled) {

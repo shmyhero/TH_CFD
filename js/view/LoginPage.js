@@ -277,7 +277,8 @@ var LoginPage = React.createClass({
 								onChangeText={(text) => this.setPhoneNumber(text)}
 								placeholder='手机号'
 								underlineColorAndroid='#ffffff'
-								maxLength={11}/>
+								maxLength={11}
+								keyboardType='numeric'/>
 						</View>
 						
 						{this.renderGetValidationCodeButton()}
@@ -290,7 +291,8 @@ var LoginPage = React.createClass({
 								onChangeText={(text) => this.setValidationCode(text)}
 								placeholder='验证码' 
 								underlineColorAndroid='#ffffff'
-								maxLength={4}/>
+								maxLength={4}
+								keyboardType='numeric'/>
 						</View>
 					</View>
 

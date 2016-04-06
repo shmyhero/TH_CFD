@@ -2,14 +2,12 @@ package com.tradehero.th.views;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -94,6 +92,15 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
                     yVals.add(new Entry(val, i));
                 }
 
+                int[] circleColors = {Color.TRANSPARENT};
+                if (chartDataList.length() > 0 && stockInfoObject.getBoolean("isOpen")) {
+                    circleColors = new int[chartDataList.length()];
+                    for (int i = 0; i < chartDataList.length(); i++) {
+                        circleColors[i] = Color.TRANSPARENT;
+                    }
+                    circleColors[circleColors.length - 1] = Color.WHITE;
+                }
+
                 // create a dataset and give it a type
                 LineDataSet set1 = new LineDataSet(yVals, "DataSet 1");
                 // set1.setFillAlpha(110);
@@ -102,11 +109,12 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
                 // set the line to be drawn like this "- - - - - -"
                 set1.enableDashedLine(10f, 0f, 0f);
                 set1.setColor(Color.WHITE);
-                set1.setCircleColor(Color.TRANSPARENT);
                 set1.setLineWidth(1f);
-                set1.setDrawCircles(false);
+                set1.setDrawCircles(true);
+                set1.setDrawCircleHole(false);
+                set1.setCircleColors(circleColors);
                 set1.setValueTextSize(0f);
-                Drawable drawable = ContextCompat.getDrawable(chart.getContext(), R.drawable.fade_red);
+                Drawable drawable = ContextCompat.getDrawable(chart.getContext(), R.drawable.stock_price_fill_color);
                 set1.setFillDrawable(drawable);
                 set1.setDrawFilled(true);
 

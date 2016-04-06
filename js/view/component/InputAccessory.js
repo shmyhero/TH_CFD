@@ -182,7 +182,7 @@ var s = StyleSheet.create({
 		flex: 2,
 		fontSize: 26,
 		color: 'black',
-		paddingLeft: 20,
+		marginLeft: 15,
 	},
 	InputAccessoryNoticeText: {
 		flex: 4,
@@ -194,7 +194,6 @@ var s = StyleSheet.create({
 		fontSize: 21,
 		color: '#1b5ecd',
 		paddingHorizontal: 9,
-		paddingVertical: 7,
 		textAlign: 'center',
 	},
 });

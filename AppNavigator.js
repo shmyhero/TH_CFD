@@ -181,7 +181,7 @@ var AppNavigator = React.createClass({
 	render: function() {
 	    return (
 	    	<View style={styles.container}>
-		    	<StatusBar barStyle="light-content"/>
+		    	<StatusBar hidden={true}/>
 		      	<Tabbar ref="myTabbar" barColor={'#f7f7f7'} style={{alignItems: 'stretch'}}>
 			        <Tab name="home">
 			          	<Icon label="首页" type={glypy.Home} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>

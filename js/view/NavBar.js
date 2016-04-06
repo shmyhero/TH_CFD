@@ -184,7 +184,7 @@ var styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		paddingTop: (Platform.OS === 'ios') ? 15 : 0,
+		paddingTop: 0,
 	},
 	leftContainer: {
 		flex: 1,

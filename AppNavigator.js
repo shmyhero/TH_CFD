@@ -143,6 +143,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 			</View>
 		);
 	} else if (route.name === STOCK_SEARCH_ROUTE) {
+		hideTabbar()
 		return (
 			<View style={{flex: 1}}>
 				<StockSearchPage navigator={navigationOperations}/>

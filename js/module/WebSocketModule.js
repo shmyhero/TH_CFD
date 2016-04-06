@@ -67,7 +67,7 @@ export function registerCallbacks(messageCallback) {
 }
 
 export function registerInterestedStocks(stockList) {
-	if (webSocketConnection.state == 1 && webSocketProxy !== null) {
+	if (webSocketConnection.state == 1 && webSocketProxy !== null && stockList.length > 0) {
 		console.log('Send stockList to websocket server: ' + stockList)
 	    var messagePromise = webSocketProxy.invoke('S', stockList);
 

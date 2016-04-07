@@ -3,6 +3,7 @@
 import Tabbar, { Tab, RawContent, Icon, IconWithBar, glypyMapMaker } from 'react-native-tabbar';
 
 var React = require('react-native');
+
 var {
 	StyleSheet,
 	Navigator,
@@ -13,15 +14,6 @@ var {
 	ScrollView,
 	StatusBar,
 } = React;
-
-// var Tabbar= require('react-native-tabbar');
-// var {
-// 	Tab,
-// 	RawContent,
-// 	Icon,
-// 	IconWithBar,
-// 	glypyMapMaker,
-// } = Tabbar;
 
 const glypy = glypyMapMaker({
   Home: 'e900',
@@ -46,6 +38,7 @@ var StockListPage = require('./js/view/StockListPage')
 var StockListViewPager = require('./js/view/StockListViewPager')
 var StockSearchPage = require('./js/view/StockSearchPage')
 var StockDetailPage = require('./js/view/StockDetailPage')
+var {EventCenter, EventConst} = require('./js/EventCenter')
 
 var _navigator;
 BackAndroid.addEventListener('hardwareBackPress', () => {
@@ -179,6 +172,15 @@ var AppNavigator = React.createClass({
 		this.refs['myTabbar'] && this.refs['myTabbar'].getBarRef().show(false);
 	},
 
+	initTabbarEvent() {
+		var ref = this.refs['stockContent'].refs['wrap'].getWrappedRef()
+		ref.tabWillFocus = EventCenter.emitStockTabPressEvent;
+	},
+
+	componentDidMount: function() {
+		this.initTabbarEvent()
+	},
+
 	render: function() {
 	    return (
 	    	<View style={styles.container}>
@@ -196,7 +198,7 @@ var AppNavigator = React.createClass({
 			        </Tab>
 			        <Tab name="camera">
 			          	<Icon label="行情" type={glypy.Camera} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
-			          	<RawContent style={{width: 100}}>
+			          	<RawContent style={{width: 100}} ref="stockContent">
 		            		<Navigator
 								style={styles.container}
 								initialRoute={{name: STOCK_LIST_VIEW_PAGER_ROUTE}}

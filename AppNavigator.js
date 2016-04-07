@@ -124,29 +124,30 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 		);
 	} else if (route.name === STOCK_LIST_ROUTE) {
 		return (
-			<View style={{flex: 1}}>
-				<StockListPage navigator={navigationOperations} />
-			</View>
+			// <View style={{flex: 1}}>
+				<StockListPage navigator={navigationOperations} style={{flex: 1}}/>
+			// </View>
 		);
 	} else if (route.name === STOCK_LIST_VIEW_PAGER_ROUTE) {
 		showTabbar()
 		return (
-			<View style={{flex: 1}}>
-				<StockListViewPager navigator={navigationOperations}/>
-			</View>
+			// <View style={{flex: 1}}>
+				<StockListViewPager navigator={navigationOperations} style={{flex: 1}}/>
+			// </View>
 		);
 	} else if (route.name === STOCK_SEARCH_ROUTE) {
 		hideTabbar()
 		return (
-			<View style={{flex: 1}}>
-				<StockSearchPage navigator={navigationOperations}/>
-			</View>
+			// <View style={{flex: 1}}>
+				<StockSearchPage navigator={navigationOperations} style={{flex: 1}}/>
+			// </View>
 		);
 	} else if (route.name === STOCK_DETAIL_ROUTE) {
 		hideTabbar()
 		return (
-			<View style={{flex: 1}}>
-				<StockDetailPage navigator={navigationOperations} 
+			// <View style={{flex: 1}}>
+				<StockDetailPage style={{flex: 1}}
+						navigator={navigationOperations} 
 						stockName={route.stockRowData.name}
 						stockCode={route.stockRowData.id}
 						stockSymbol={route.stockRowData.symbol}
@@ -154,7 +155,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 						stockTag={route.stockRowData.tag}
 						lastClosePrice={route.stockRowData.preClose}
 						openPrice={route.stockRowData.open}/>
-			</View>
+			// </View>
 		);
 	}
 };

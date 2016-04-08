@@ -27,8 +27,7 @@ var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
 var NavBar = require('../view/NavBar')
 var InputAccessory = require('./component/InputAccessory')
-var WheelCurvedPicker = require('./component/WheelPicker/WheelCurvedPicker')
-var Picker = (Platform.OS === 'ios' ? PickerIOS : WheelCurvedPicker)
+var Picker = require('react-native-wheel-picker')
 var PickerItem = Picker.Item;
 var AppNavigator = require('../../AppNavigator')
 

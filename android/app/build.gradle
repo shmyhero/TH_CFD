@@ -151,7 +151,7 @@ dependencies {
     compile project(':react-native-wx')
     compile project(':MPChartLib')
     compile project(':react-native-linear-gradient')
-    compile project(':WheelPicker')
+    compile project(':react-native-wheel-picker')
 
     compile 'com.facebook.react:react-native:+'
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'

@@ -6,7 +6,7 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.tradehero.th.views.ReactLineChartManager;
-import com.tradehero.th.views.ReactWheelCurvedPickerManager;
+import com.zyu.ReactWheelCurvedPickerManager;
 
 import java.util.Arrays;
 import java.util.Collections;

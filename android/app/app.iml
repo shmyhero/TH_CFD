@@ -123,6 +123,6 @@
     <orderEntry type="module" module-name="MPChartLib" exported="" />
     <orderEntry type="module" module-name="react-native-linear-gradient" exported="" />
     <orderEntry type="module" module-name="react-native-wx" exported="" />
-    <orderEntry type="module" module-name="WheelPicker" exported="" />
+    <orderEntry type="module" module-name="react-native-wheel-picker" exported="" />
   </component>
 </module>

@@ -4,9 +4,9 @@ include ':app'
 include ':react-native-wx'
 include ':MPChartLib'
 include ':react-native-linear-gradient'
-include ':WheelPicker'
+include ':react-native-wheel-picker'
 
 project(':react-native-wx').projectDir = new File(settingsDir, '../node_modules/react-native-wx/android')
 project(':MPChartLib').projectDir = new File(settingsDir, './MPChartLib')
-project(':WheelPicker').projectDir = new File(settingsDir, './WheelPicker')
+project(':react-native-wheel-picker').projectDir = new File(settingsDir, '../node_modules/react-native-wheel-picker/android')
 project(':react-native-linear-gradient').projectDir = new File(settingsDir, '../node_modules/react-native-linear-gradient/android')

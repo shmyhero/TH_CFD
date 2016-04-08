@@ -42,7 +42,6 @@ var InputAccessory = React.createClass({
 	},
 
 	componentWillUnmount() {
-		// console.log('componentWillUnmount');
 		let newSize = Dimensions.get('window').height
 		this.setState({
 				visibleHeight: newSize,
@@ -89,7 +88,6 @@ var InputAccessory = React.createClass({
 	},
 
 	keyboardDidHide(e) {
-		// console.log('keyboardWillHide');
 		let newSize = Dimensions.get('window').height
 		this.setState({
 			visibleHeight: Dimensions.get('window').height,
@@ -132,7 +130,6 @@ var InputAccessory = React.createClass({
 				hideKA: true,
 				opacity: 0,
 			})
-			// console.log('dismissKeyboard',dismissKeyboard());
 		dismissKeyboard();
 	},
 

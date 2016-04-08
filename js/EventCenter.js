@@ -15,7 +15,6 @@ var EventCenter = {
 	},
 
 	emitStockTabPressEvent: function() {
-		console.log('stock tab press event')
 		// this.eventEmitter.emit('eventname', { someArg: 'argValue' });
 		eventEmitter.emit(EventConst.STOCK_TAB_PRESS_EVENT)
 	},

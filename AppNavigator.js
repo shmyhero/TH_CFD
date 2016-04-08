@@ -13,6 +13,7 @@ var {
 	Text,
 	ScrollView,
 	StatusBar,
+	Platform,
 } = React;
 
 const glypy = glypyMapMaker({
@@ -185,7 +186,7 @@ var AppNavigator = React.createClass({
 	render: function() {
 	    return (
 	    	<View style={styles.container}>
-		    	<StatusBar hidden={true}/>
+		    	<StatusBar hidden={Platform.OS !== 'ios'}/>
 		      	<Tabbar ref="myTabbar" barColor={'#f7f7f7'} style={{alignItems: 'stretch'}}>
 			        <Tab name="home">
 			          	<Icon label="首页" type={glypy.Home} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>

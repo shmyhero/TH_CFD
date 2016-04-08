@@ -277,7 +277,8 @@ var StockDetailPage = React.createClass({
 				var price = priceData[i].p
 				if (price > maxPrice) {
 					maxPrice = price
-				} else if (price < minPrice) {
+				} 
+				if (price < minPrice) {
 					minPrice = price
 				}
 			}

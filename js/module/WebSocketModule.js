@@ -12,13 +12,18 @@ var {
 var serverURL = 'http://cfd-webapi.chinacloudapp.cn'
 var serverName = 'Q'
 var serverListenerName = 'p'
+var previousInterestedStocks = null
 var webSocketConnection = null
 var webSocketProxy = null
 var wsMessageCallback = null
-var wsErrorCallback = (errorMessage) => { Alert.alert('websocket提示',errorMessage); }
+var wsErrorCallback = (errorMessage) => { 
+	Alert.alert('提示',errorMessage, [
+              {text: '尝试连接', onPress: () => start()},
+            ]);
+}
 
 export function start() {
-	this.stop();
+	stop();
 
 	webSocketConnection = $.hubConnection(serverURL);
 	webSocketConnection.logging = true;
@@ -36,7 +41,8 @@ export function start() {
 		// atempt connection, and handle errors
 	webSocketConnection.start()
 		.done(() => { 
-			console.log('Now connected, connection ID=' + webSocketConnection.id); 
+			console.log('Now connected, connection ID=' + webSocketConnection.id);
+			registerInterestedStocks(previousInterestedStocks)
 		})
 		.fail((error) => {
 			wsErrorCallback(error.message)
@@ -44,11 +50,11 @@ export function start() {
 
 	//connection-handling
 	webSocketConnection.connectionSlow(function () {
-		wsErrorCallback('We are currently experiencing difficulties with the connection.')
+		wsErrorCallback('网络不稳定。')
 	});
 
 	webSocketConnection.error(function (error) {
-		wsErrorCallback('SignalR error: ' + error)
+		wsErrorCallback('网络已断开。')
 	});
 
 }
@@ -61,14 +67,13 @@ export function stop() {
 }
 
 export function registerCallbacks(messageCallback) {
-	console.log('registerCallbacks(messageCallback)')
-
 	wsMessageCallback = messageCallback
 }
 
 export function registerInterestedStocks(stockList) {
-	if (webSocketConnection.state == 1 && webSocketProxy !== null && stockList.length > 0) {
+	if (webSocketConnection.state == 1 && webSocketProxy !== null && stockList !== null && stockList.length > 0) {
 		console.log('Send stockList to websocket server: ' + stockList)
+		previousInterestedStocks = stockList
 	    var messagePromise = webSocketProxy.invoke('S', stockList);
 
 	    messagePromise

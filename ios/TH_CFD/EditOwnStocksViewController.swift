@@ -31,7 +31,7 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		editTableView.reloadData()
 		allButton.layer.cornerRadius = 4
 		deleteButton.layer.cornerRadius = 4
-		self.updateDeleteButton()
+		self.updateButtons()
 	}
 	
 	override func viewWillAppear(animated: Bool) {
@@ -42,6 +42,7 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 			)
 			view.backgroundColor = UIColor(hex: 0x1A61DD)
 			self.view.addSubview(self.statusView)
+			self.view.sendSubviewToBack(self.statusView)
 		}
 	}
 	
@@ -56,10 +57,13 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		// Dispose of any resources that can be recreated.
 	}
 	
-	func updateDeleteButton() {
+	func updateButtons() {
 		let selectedRows = rawData.filter({ (stock) -> Bool in
 			stock.choose == true
 		})
+		allSelect = selectedRows.count == rawData.count
+		allButton.setTitle(allSelect ? "取消":"全部", forState: .Normal)
+		
 		deleteButton.enabled = selectedRows.count > 0
 		if deleteButton.enabled {
 			deleteButton.backgroundColor = UIColor(hex: 0xf1585c)
@@ -69,14 +73,6 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 			deleteButton.backgroundColor = UIColor(hex: 0xe0e0e0)
 			deleteButton.setTitle("删除", forState: .Normal)
 		}
-	}
-	
-	func updateAllButton() {
-		let selectedRows = rawData.filter({ (stock) -> Bool in
-			stock.choose == true
-		})
-		allSelect = selectedRows.count == rawData.count
-		allButton.setTitle(allSelect ? "取消":"全部", forState: .Normal)
 	}
 	
 	// MARK: - Table view data source
@@ -115,8 +111,7 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		}
 		
 		cell.selectCell { (selectStock) -> Void in
-			self.updateDeleteButton()
-			self.updateAllButton()
+			self.updateButtons()
 		}
 		
 		return cell
@@ -148,8 +143,7 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 			stock.choose = allSelect
 		}
 		editTableView.reloadData()
-		updateDeleteButton()
-		updateAllButton()
+		updateButtons()
 	}
 	
 	@IBAction func didTapDeleteButton(sender: AnyObject) {
@@ -161,6 +155,7 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		
 		refreshAlert.addAction(UIAlertAction(title: "确定", style: .Default, handler: { (action: UIAlertAction!) in
 			self.deleteStocks()
+			self.updateButtons()
 		}))
 		
 		presentViewController(refreshAlert, animated: true, completion: nil)

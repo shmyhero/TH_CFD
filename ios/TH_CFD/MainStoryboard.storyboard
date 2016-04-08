@@ -48,7 +48,11 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FsO-NY-fVx">
-                                        <rect key="frame" x="15" y="0.0" width="30" height="30"/>
+                                        <rect key="frame" x="0.0" y="-5" width="60" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="ZNY-cF-Twr"/>
+                                            <constraint firstAttribute="width" constant="60" id="oeV-nu-qaU"/>
+                                        </constraints>
                                         <state key="normal" title="完成">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -63,7 +67,7 @@
                                     <constraint firstItem="dhq-GU-dFC" firstAttribute="centerY" secondItem="53d-61-UGc" secondAttribute="centerY" id="BEp-2S-TSO"/>
                                     <constraint firstAttribute="bottom" secondItem="53d-61-UGc" secondAttribute="bottom" constant="7" id="OEg-bT-Sap"/>
                                     <constraint firstAttribute="bottom" secondItem="KCJ-vF-tJa" secondAttribute="bottom" constant="7" id="Svf-fD-vJX"/>
-                                    <constraint firstItem="FsO-NY-fVx" firstAttribute="leading" secondItem="ezc-LV-pIO" secondAttribute="leading" constant="15" id="Vgl-1D-nPD"/>
+                                    <constraint firstItem="FsO-NY-fVx" firstAttribute="leading" secondItem="ezc-LV-pIO" secondAttribute="leading" id="Vgl-1D-nPD"/>
                                     <constraint firstAttribute="trailing" secondItem="53d-61-UGc" secondAttribute="trailing" constant="15" id="We6-LN-F4j"/>
                                     <constraint firstItem="dhq-GU-dFC" firstAttribute="leading" secondItem="ezc-LV-pIO" secondAttribute="leading" constant="206" id="gDX-Zk-Orl"/>
                                     <constraint firstAttribute="bottom" secondItem="dhq-GU-dFC" secondAttribute="bottom" constant="7" id="gOG-Lw-3Kj"/>

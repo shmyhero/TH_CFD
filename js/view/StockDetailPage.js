@@ -30,6 +30,7 @@ var InputAccessory = require('./component/InputAccessory')
 var WheelCurvedPicker = require('./component/WheelPicker/WheelCurvedPicker')
 var Picker = (Platform.OS === 'ios' ? PickerIOS : WheelCurvedPicker)
 var PickerItem = Picker.Item;
+var AppNavigator = require('../../AppNavigator')
 
 var didFocusSubscription = null;
 
@@ -67,16 +68,18 @@ var StockDetailPage = React.createClass({
 	},
 
 	componentDidMount: function() {
-		this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', () => {
-			this.loadStockInfo()
-		});
+		this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
 	},
 
 	componentWillUnmount: function() {
 		this.didFocusSubscription.remove();
 	},
 
-
+	onDidFocus: function(event) {
+        if (AppNavigator.STOCK_DETAIL_ROUTE === event.data.route.name) {
+            this.loadStockInfo()
+        }
+	},
 
 	loadStockInfo: function() {
 		var url = NetConstants.GET_STOCK_DETAIL_API

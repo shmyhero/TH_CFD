@@ -64,7 +64,9 @@ export function syncOwnStocks(userData) {
 		(responseJson) => {
 			if (responseJson.length===0) {
 				console.log('no own stocks online')
-				addToOwnStocks(stockData)
+				if (stockData.length > 0) {
+					addToOwnStocks(stockData)
+				};
 			}
 			else {
 				console.log('get own stocks')
@@ -110,7 +112,7 @@ export function removeFromOwnStocks(stockData) {
 	if (Object.keys(userData).length === 0) {
 		return
 	}
-	
+
 	var idList = stockData.map((stock, index, list)=>{
 		return stock.id
 	})

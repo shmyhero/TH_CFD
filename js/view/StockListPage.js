@@ -143,9 +143,7 @@ var StockListPage = React.createClass({
 	},
 
 	onDidFocus: function(event) {
-		var currentRoute = this.props.navigator.navigationContext.currentRoute;
-		//didfocus emit in componentDidMount
-        if (currentRoute === event.data.route) {
+        if (AppNavigator.STOCK_LIST_ROUTE === event.data.route.name) {
             this.updateOwnData()
         }
 	},

@@ -39,6 +39,7 @@ var StockListPage = require('./js/view/StockListPage')
 var StockListViewPager = require('./js/view/StockListViewPager')
 var StockSearchPage = require('./js/view/StockSearchPage')
 var StockDetailPage = require('./js/view/StockDetailPage')
+var StockExchangePage = require('./js/view/StockExchangePage')
 var {EventCenter, EventConst} = require('./js/EventCenter')
 
 var _navigator;
@@ -61,6 +62,7 @@ export let STOCK_LIST_ROUTE = 'stockList'
 export let STOCK_LIST_VIEW_PAGER_ROUTE = 'stockListViewPager'
 export let STOCK_SEARCH_ROUTE = 'stockSearch'
 export let STOCK_DETAIL_ROUTE = 'stockDetail'
+export let STOCK_EXCHANGE_ROUTE = 'stockExchange'
 
 var hideTabbar
 var showTabbar
@@ -158,6 +160,13 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 						openPrice={route.stockRowData.open}/>
 			// </View>
 		);
+	} else if (route.name === STOCK_EXCHANGE_ROUTE) {
+		return (
+			<View style={{flex: 1}}>
+				<NavBar title="交易"/>
+				<StockExchangePage navigator={navigationOperations} />
+			</View>
+		)
 	}
 };
 
@@ -211,9 +220,11 @@ var AppNavigator = React.createClass({
 			        <Tab name="stats">
 			          	<Icon label="交易" type={glypy.Stat} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
 			        	<RawContent>
-			            	<View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent:'center' }}>
-			              		<Text onPress={()=>console.log('favorite')}>交易</Text>
-			            	</View>
+			            	<Navigator
+								style={styles.container}
+								initialRoute={{name: STOCK_EXCHANGE_ROUTE}}
+								configureScene={() => Navigator.SceneConfigs.PushFromRight}
+								renderScene={RouteMapper} />
 			          	</RawContent>
 			        </Tab>
 			        <Tab name="favorite">

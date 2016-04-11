@@ -13,17 +13,14 @@ var {
 	Platform,
 } = React;
 
-var StockListPage = require('./StockListPage')
+var StockOpenPositionPage = require('./StockOpenPositionPage')
+var StockClosedPositionPage = require('./StockClosedPositionPage')
+var StockStatisticsPage = require('./StockStatisticsPage')
 var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
 
 var {height, width} = Dimensions.get('window');
 var tabNames = ['持仓', '平仓', '统计']
-var urls = [
-	NetConstants.GET_USER_BOOKMARK_LIST_API,
-	NetConstants.GET_US_STOCK_TOP_GAIN_API,
-	NetConstants.GET_INDEX_LIST_API
-]
 
 var StockExchangePage = React.createClass({
 
@@ -120,10 +117,16 @@ var StockExchangePage = React.createClass({
 	},
 
 	renderViewPagers: function() {
+		var tabPages = [
+			<StockOpenPositionPage navigator={this.props.navigator}/>,
+			<StockClosedPositionPage navigator={this.props.navigator}/>,
+			<StockStatisticsPage navigator={this.props.navigator}/>
+		]
+
 		var viewPages = tabNames.map(
 			(tabName, i) =>
 			<View style={styles.slide} key={i}>
-				<StockListPage dataURL={urls[i]} ref={'page' + i} showHeaderBar={i==1} isOwnStockPage={i==0} navigator={this.props.navigator}/>
+				{tabPages[i]}
 			</View>
 		)
 		if (Platform.OS === 'ios') {

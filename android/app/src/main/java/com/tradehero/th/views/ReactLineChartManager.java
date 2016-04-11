@@ -85,12 +85,23 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
                 }
 
                 ArrayList<Entry> yVals = new ArrayList<Entry>();
+                float minVal = Float.MAX_VALUE;
+                float maxVal = Float.MIN_VALUE;
 
                 for (int i = 0; i < chartDataList.length(); i++) {
-
                     float val = (float) (chartDataList.getJSONObject(i).getDouble("p"));
+                    if (val > maxVal) {
+                        maxVal = val;
+                    }
+                    if (val < minVal) {
+                        minVal = val;
+                    }
                     yVals.add(new Entry(val, i));
                 }
+                minVal = Math.min(minVal, (float)stockInfoObject.getDouble("preClose"));
+                maxVal = Math.max(maxVal, (float) stockInfoObject.getDouble("preClose"));
+                minVal -= (maxVal - minVal) / 5;
+                maxVal += (maxVal - minVal) / 5;
 
                 int[] circleColors = {Color.TRANSPARENT};
                 if (chartDataList.length() > 0 && stockInfoObject.getBoolean("isOpen")) {
@@ -125,6 +136,8 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
                 LineData data = new LineData(xVals, dataSets);
 
                 // set data
+                chart.getAxisLeft().setAxisMinValue(minVal);
+                chart.getAxisLeft().setAxisMaxValue(maxVal);
                 chart.setData(data);
 
                 // Set the xAxis with the prev close price line

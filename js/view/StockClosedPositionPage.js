@@ -28,11 +28,26 @@ var StockClosedPositionPage = React.createClass({
 	getInitialState: function() {
 		return {
 			stockInfo: ds.cloneWithRows(tempData),
+			selectedRow: -1,
 		};
 	},
 
 	onEndReached: function() {
 
+	},
+
+	stockPressed: function(rowData, sectionID, rowID, highlightRow) {
+		if (this.state.selectedRow == rowID) {
+			this.setState({
+				stockInfo: ds.cloneWithRows(tempData),
+				selectedRow: -1,
+			})
+		} else {
+			this.setState({
+				stockInfo: ds.cloneWithRows(tempData),
+				selectedRow: rowID,
+			})
+		}
 	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
@@ -84,28 +99,42 @@ var StockClosedPositionPage = React.createClass({
 		
 	},
 
+	renderDetailInfo: function(rowData) {
+		return (
+			<View style={{height: 200}} >
+				<Text style={styles.stockNameText}>
+					Detail info
+				</Text>
+			</View>
+		);
+	},
+
 	renderRow: function(rowData, sectionID, rowID, highlightRow) {
 		return (
-			<TouchableHighlight onPress={() => this.stockPressed(rowData)}>
-				<View style={styles.rowWrapper} key={rowData.key}>
-					<View style={styles.rowLeftPart}>
-						<Text style={styles.stockNameText}>
-							{rowData.name}
-						</Text>
-
-						<View style={{flexDirection: 'row', alignItems: 'center'}}>
-							{this.renderCountyFlag(rowData)}
-							<Text style={styles.stockSymbolText}>
-								{rowData.symbol}
+			<View>
+				<TouchableHighlight onPress={() => this.stockPressed(rowData, sectionID, rowID, highlightRow)}>
+					<View style={styles.rowWrapper} key={rowData.key}>
+						<View style={styles.rowLeftPart}>
+							<Text style={styles.stockNameText}>
+								{rowData.name}
 							</Text>
+
+							<View style={{flexDirection: 'row', alignItems: 'center'}}>
+								{this.renderCountyFlag(rowData)}
+								<Text style={styles.stockSymbolText}>
+									{rowData.symbol}
+								</Text>
+							</View>
+						</View>
+
+						<View style={styles.rowRightPart}>
+							{this.renderProfit(rowData.profitPercentage * 100)}
 						</View>
 					</View>
+				</TouchableHighlight>
 
-					<View style={styles.rowRightPart}>
-						{this.renderProfit(rowData.profitPercentage * 100)}
-					</View>
-				</View>
-			</TouchableHighlight>
+				{this.state.selectedRow == rowID ? this.renderDetailInfo(rowData): null}
+			</View>
 		);
 	},
 

@@ -34,6 +34,7 @@ var StockOpenPositionPage = React.createClass({
 		return {
 			stockInfo: ds.cloneWithRows(tempData),
 			selectedRow: -1,
+			selectedSubItem: -1,
 		};
 	},
 
@@ -49,6 +50,7 @@ var StockOpenPositionPage = React.createClass({
 			this.setState({
 				stockInfo: this.state.stockInfo.cloneWithRows(newData),
 				selectedRow: -1,
+				selectedSubItem: -1,
 			})
 			tempData = newData
 		} else {
@@ -61,6 +63,7 @@ var StockOpenPositionPage = React.createClass({
 			this.setState({
 				stockInfo: this.state.stockInfo.cloneWithRows(newData),
 				selectedRow: rowID,
+				selectedSubItem: -1,
 			})
 			tempData = newData
 			var y = Math.floor(height/tempData.length*rowID)
@@ -125,6 +128,7 @@ var StockOpenPositionPage = React.createClass({
 		extendHeight = 200
 		var buttonEnable = true
 		var tradeImage = true ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
+		var showNetIncome = true
 		return (
 			<View style={[{height: extendHeight}, styles.extendWrapper]} >
 				<View style={styles.darkSeparator} />
@@ -173,9 +177,12 @@ var StockOpenPositionPage = React.createClass({
 				</View>
 
 				<View style={styles.darkSeparator} />
+				{showNetIncome ? 
+				<Text style={styles.netIncomeText}>净收益:9.26</Text>
+				: null}
 
 				<TouchableHighlight 
-					underlayColor={buttonEnable ? '#f46b6f': '#164593'}
+					underlayColor={	'#164593'}
 					onPress={this.okPress} style={[styles.okView, !buttonEnable && styles.okViewDisabled]}>
 					<Text style={[styles.okButton, !buttonEnable && styles.okButtonDisabled]}>获利:$10</Text>
 				</TouchableHighlight>
@@ -362,7 +369,7 @@ var styles = StyleSheet.create({
 		marginTop: 15,
 		marginBottom: 15,
 		justifyContent: 'space-around',
-		alignSelf: 'center'
+		alignSelf: 'center',
 	},
 	okViewDisabled: {
 		backgroundColor: '#f5f5f5',
@@ -376,6 +383,13 @@ var styles = StyleSheet.create({
 	},
 	okButtonDisabled: {
 		color: '#1962dd',
+	},
+
+	netIncomeText: {
+		fontSize: 14,
+		color: '#e60b11',
+		alignSelf: 'center',
+		marginTop: 15,
 	},
 });
 

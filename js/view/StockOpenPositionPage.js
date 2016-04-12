@@ -25,6 +25,8 @@ var tempData = [
 	{id:13004, symbol:'AAPL UW4', name:'苹果4', profitPercentage: 0, hasSelected:false},
 ]
 
+var extendHeight = 0
+
 var StockOpenPositionPage = React.createClass({
 	
 	getInitialState: function() {
@@ -49,8 +51,10 @@ var StockOpenPositionPage = React.createClass({
 			})
 			tempData = newData
 		} else {
+			var height = this.refs['listview'].getMetrics().contentLength
 			if (this.state.selectedRow >=0 ) {
 				newData[this.state.selectedRow].hasSelected = false
+				height -= extendHeight
 			}
 			newData[rowID].hasSelected = true
 			this.setState({
@@ -58,6 +62,8 @@ var StockOpenPositionPage = React.createClass({
 				selectedRow: rowID,
 			})
 			tempData = newData
+			var y = Math.floor(height/tempData.length*rowID)
+			this.refs['listview'].scrollTo({x:0, y:y, animated:true})
 		}
 	},
 
@@ -111,8 +117,9 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	renderDetailInfo: function(rowData) {
+		extendHeight = 200
 		return (
-			<View style={{height: 200}} >
+			<View style={{height: extendHeight}} >
 				<Text style={styles.stockNameText}>
 					Detail info
 				</Text>

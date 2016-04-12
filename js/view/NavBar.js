@@ -14,10 +14,12 @@ var {
 
 var ColorPropType = require('ColorPropType');
 var ColorConstants = require('../ColorConstants')
+var AppNavigator = require('../../AppNavigator')
 
 var NavBar = React.createClass({
 	propTypes: {
 		showBackButton: React.PropTypes.bool,
+		showSearchButton: React.PropTypes.bool,
 		textOnLeft: React.PropTypes.string,
 		textOnRight: React.PropTypes.string,
 		imageOnRight: React.PropTypes.number,
@@ -35,6 +37,7 @@ var NavBar = React.createClass({
 	getDefaultProps() {
 		return {
 			showBackButton: false,
+			showSearchButton: false,
 			textOnLeft: null,
 			textOnRight: null,
 			imageOnRight: null,
@@ -70,6 +73,12 @@ var NavBar = React.createClass({
 		}
 	},
 
+	searchButtonClicked: function() {
+		this.props.navigator.push({
+			name: AppNavigator.STOCK_SEARCH_ROUTE,
+		});
+	},
+
 	render: function() {
 		return (
 			<View style={[styles.container, {backgroundColor: this.props.backgroundColor}, this.props.barStyle]} >
@@ -86,6 +95,7 @@ var NavBar = React.createClass({
 				</View>
 				
 				<View style={styles.rightContainer}>
+					{this.renderSearchButton()}
 					{this.renderRightText()}
 					{this.renderRightImage()}
 					{this.renderRightCustomContent()}
@@ -118,6 +128,22 @@ var NavBar = React.createClass({
 					<Text style={styles.textOnLeft}>
 						{this.props.textOnLeft}
 					</Text>
+
+				</TouchableHighlight>
+			);
+		}
+	},
+
+	renderSearchButton: function() {
+		if (this.props.showSearchButton) {
+			return (
+				<TouchableHighlight
+					onPress={this.searchButtonClicked}
+					underlayColor={ColorConstants.TITLE_BLUE}>
+
+					<Image 
+						style={styles.rightImage}
+						source={require('../../images/search.png')}/>
 
 				</TouchableHighlight>
 			);

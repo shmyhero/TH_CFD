@@ -67,12 +67,6 @@ var StockListViewPager = React.createClass({
 		NativeSceneModule.launchNativeScene('StockEditFragment')
 	},
 
-	searchButtonClicked: function() {
-		this.props.navigator.push({
-			name: AppNavigator.STOCK_SEARCH_ROUTE,
-		});
-	},
-
 	onPageSelected: function(index) {
 		this.setState({
 			currentSelectedTab: index,
@@ -86,8 +80,8 @@ var StockListViewPager = React.createClass({
 			<NavBar title="行情" 
 				textOnLeft={this.state.currentSelectedTab==0 ? '编辑' : null}
 				leftTextOnClick={this.editButtonClicked}
-				imageOnRight={require('../../images/search.png')}
-				rightImageOnClick={this.searchButtonClicked}/>
+				showSearchButton={true}
+				navigator={this.props.navigator}/>
 		)
 	},
 

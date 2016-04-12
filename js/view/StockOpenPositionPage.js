@@ -8,6 +8,7 @@ var {
 	ListView,
 	TouchableHighlight,
 	Dimensions,
+	Image,
 } = React;
 
 
@@ -67,6 +68,10 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
+	okPress: function() {
+
+	},
+
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
 		return (
 			<View style={styles.line} key={rowID}>
@@ -118,20 +123,72 @@ var StockOpenPositionPage = React.createClass({
 
 	renderDetailInfo: function(rowData) {
 		extendHeight = 200
+		var buttonEnable = true
+		var tradeImage = true ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
 		return (
-			<View style={{height: extendHeight}} >
-				<Text style={styles.stockNameText}>
-					Detail info
-				</Text>
+			<View style={[{height: extendHeight}, styles.extendWrapper]} >
+				<View style={styles.darkSeparator} />
+				<View style={styles.extendRowWrapper}>
+					<View style={styles.extendLeft}>
+						<Text style={styles.extendTextTop}>类型</Text>
+						<Image style={styles.extendImageBottom} source={tradeImage}/>
+					</View>
+					<View style={styles.extendMiddle}>
+						<Text style={styles.extendTextTop}>本金</Text>
+						<Text style={styles.extendTextBottom}>100</Text>
+					</View>
+					<View style={styles.extendRight}>
+						<Text style={styles.extendTextTop}>杠杆</Text>
+						<Text style={styles.extendTextBottom}>x10</Text>
+					</View>
+				</View>
+				<View style={styles.darkSeparator} />
+				<View style={styles.extendRowWrapper}>
+					<View style={styles.extendLeft}>
+						<Text style={styles.extendTextTop}>开仓价格</Text>
+						<Text style={styles.extendTextBottom}>10.24</Text>
+					</View>
+					<View style={styles.extendMiddle}>
+						<Text style={styles.extendTextTop}>当前价格</Text>
+						<Text style={styles.extendTextBottom}>11.24</Text>
+					</View>
+					<View style={styles.extendRight}>
+						<Text style={styles.extendTextTop}>涨跌幅</Text>
+						<Text style={styles.extendTextBottom}>＋9.77%</Text>
+					</View>
+				</View>
+				<View style={styles.darkSeparator} />
+
+				<View style={styles.extendRowWrapper}>
+					<View style={styles.extendLeft}>
+						<Text style={styles.extendTextTop}>手续费</Text>
+						<Image style={styles.extendImageBottom} source={require('../../images/charge.png')}/>
+					</View>
+					<View style={styles.extendMiddle}>
+						<Text style={styles.extendTextTop}>行情</Text>
+						<Image style={styles.extendImageBottom} source={require('../../images/market.png')}/>
+					</View>
+					<View style={styles.extendRight}>
+					</View>
+				</View>
+
+				<View style={styles.darkSeparator} />
+
+				<TouchableHighlight 
+					underlayColor={buttonEnable ? '#f46b6f': '#164593'}
+					onPress={this.okPress} style={[styles.okView, !buttonEnable && styles.okViewDisabled]}>
+					<Text style={[styles.okButton, !buttonEnable && styles.okButtonDisabled]}>获利:$10</Text>
+				</TouchableHighlight>
 			</View>
 		);
 	},
 
 	renderRow: function(rowData, sectionID, rowID, highlightRow) {
+		var bgcolor = this.state.selectedRow === rowID ? '#f5f5f5' : 'white'
 		return (
 			<View>
 				<TouchableHighlight onPress={() => this.stockPressed(rowData, sectionID, rowID, highlightRow)}>
-					<View style={styles.rowWrapper} key={rowData.key}>
+					<View style={[styles.rowWrapper, {backgroundColor: bgcolor}]} key={rowData.key}>
 						<View style={styles.rowLeftPart}>
 							<Text style={styles.stockNameText}>
 								{rowData.name}
@@ -245,6 +302,80 @@ var styles = StyleSheet.create({
 		fontSize: 18,
 		color: '#ffffff',
 		fontWeight: 'bold',
+	},
+
+	darkSeparator: {
+		marginLeft: 15,
+		height: 1,
+		backgroundColor: '#dcdcdc',
+	},
+
+	extendWrapper: {
+		alignItems: 'stretch',
+		justifyContent: 'space-around',
+		backgroundColor: '#f5f5f5',
+	},
+
+	extendRowWrapper: {
+		flexDirection: 'row',
+		alignItems: 'stretch',
+		paddingBottom: 10,
+		paddingTop: 10,
+		justifyContent: 'space-around',
+	},
+
+	extendLeft: {
+		flex: 1,
+		alignItems: 'flex-start',
+		marginLeft: 15,
+	},
+	extendMiddle: {
+		flex: 1,
+		alignItems: 'center',
+	},
+	extendRight: {
+		flex: 1,
+		alignItems: 'flex-end',
+		marginRight: 15,
+	},
+
+	extendTextTop: {
+		fontSize:14,
+		color: '#7d7d7d',
+	},
+	extendTextBottom: {
+		fontSize:13,
+		color: 'black',
+		marginTop: 5,
+	},
+	extendImageBottom: {
+		width: 24,
+		height: 24,
+	},
+
+	okView: {
+		width: 312,
+		height: 39,
+		backgroundColor: '#1962dd',
+		paddingVertical: 10,
+    	borderRadius:5,
+		marginTop: 15,
+		marginBottom: 15,
+		justifyContent: 'space-around',
+		alignSelf: 'center'
+	},
+	okViewDisabled: {
+		backgroundColor: '#f5f5f5',
+    	borderWidth:1,
+    	borderColor: '#1962dd',
+	},
+	okButton: {
+		color: 'white',
+		textAlign: 'center',
+		fontSize: 17,
+	},
+	okButtonDisabled: {
+		color: '#1962dd',
 	},
 });
 

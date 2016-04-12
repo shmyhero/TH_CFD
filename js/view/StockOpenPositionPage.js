@@ -14,13 +14,15 @@ var {
 var ColorConstants = require('../ColorConstants')
 
 var {height, width} = Dimensions.get('window');
-var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {
+		return r1.id !== r2.id || r1.profitPercentage!==r2.profitPercentage || r1.hasSelected!==r2.hasSelected
+	}});
 
 var tempData = [
-	{id:13001, symbol:'AAPL UW', name:'苹果', tag: 'US', profitPercentage: 0.1},
-	{id:13001, symbol:'AAPL UW2', name:'苹果2', tag: 'US', profitPercentage: 0.05},
-	{id:13001, symbol:'AAPL UW3', name:'苹果3', profitPercentage: -0.08},
-	{id:13001, symbol:'AAPL UW4', name:'苹果4', profitPercentage: 0},
+	{id:13001, symbol:'AAPL UW', name:'苹果', tag: 'US', profitPercentage: 0.1, hasSelected:false},
+	{id:13002, symbol:'AAPL UW2', name:'苹果2', tag: 'US', profitPercentage: 0.05, hasSelected:false},
+	{id:13003, symbol:'AAPL UW3', name:'苹果3', profitPercentage: -0.08, hasSelected:false},
+	{id:13004, symbol:'AAPL UW4', name:'苹果4', profitPercentage: 0, hasSelected:false},
 ]
 
 var StockOpenPositionPage = React.createClass({
@@ -37,16 +39,25 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	stockPressed: function(rowData, sectionID, rowID, highlightRow) {
+		var newData = []
+		$.extend(true, newData, tempData)	// deep copy
 		if (this.state.selectedRow == rowID) {
+			newData[rowID].hasSelected = false
 			this.setState({
-				stockInfo: ds.cloneWithRows(tempData),
+				stockInfo: this.state.stockInfo.cloneWithRows(newData),
 				selectedRow: -1,
 			})
+			tempData = newData
 		} else {
+			if (this.state.selectedRow >=0 ) {
+				newData[this.state.selectedRow].hasSelected = false
+			}
+			newData[rowID].hasSelected = true
 			this.setState({
-				stockInfo: ds.cloneWithRows(tempData),
+				stockInfo: this.state.stockInfo.cloneWithRows(newData),
 				selectedRow: rowID,
 			})
+			tempData = newData
 		}
 	},
 

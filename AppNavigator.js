@@ -14,7 +14,11 @@ var {
 	ScrollView,
 	StatusBar,
 	Platform,
+	Dimensions,
+	PixelRatio,
 } = React;
+
+var buildStyleInterpolator = require('buildStyleInterpolator');
 
 const glypy = glypyMapMaker({
   Home: 'e900',
@@ -161,6 +165,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 			// </View>
 		);
 	} else if (route.name === STOCK_EXCHANGE_ROUTE) {
+		showTabbar()
 		return (
 			<View style={{flex: 1}}>
 				<NavBar title="交易" showSearchButton={true} navigator={navigationOperations}/>
@@ -193,6 +198,29 @@ var AppNavigator = React.createClass({
 	},
 
 	render: function() {
+		var SCREEN_WIDTH = Dimensions.get('window').width;
+		var ToTheLeft = {
+			opacity: {
+				from: 1,
+				to: 0.5,
+				min: 0,
+				max: 1,
+				type: 'linear',
+				extrapolate: false,
+				round: 100,
+			},
+			left: {
+				from: 0,
+				to: -SCREEN_WIDTH,
+				min: 0,
+				max: 1,
+				type: 'linear',
+				extrapolate: true,
+				round: PixelRatio.get(),
+			},
+		};
+		Navigator.SceneConfigs.PushFromRight.animationInterpolators.out = buildStyleInterpolator(ToTheLeft)
+
 	    return (
 	    	<View style={styles.container}>
 		    	<StatusBar barStyle="light-content" backgroundColor='#1962dd'/>

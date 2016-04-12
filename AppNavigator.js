@@ -175,6 +175,27 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 	}
 };
 
+var SCREEN_WIDTH = Dimensions.get('window').width;
+var ToTheLeft = {
+	opacity: {
+		from: 1,
+		to: 0.5,
+		min: 0,
+		max: 1,
+		type: 'linear',
+		extrapolate: false,
+	},
+	left: {
+		from: 0,
+		to: -SCREEN_WIDTH,
+		min: 0,
+		max: 1,
+		type: 'linear',
+		extrapolate: true,
+	},
+};
+Navigator.SceneConfigs.PushFromRight.animationInterpolators.out = buildStyleInterpolator(ToTheLeft)
+
 var AppNavigator = React.createClass({
 	propTypes: {
 		initialViewRoute: React.PropTypes.string,
@@ -198,28 +219,6 @@ var AppNavigator = React.createClass({
 	},
 
 	render: function() {
-		var SCREEN_WIDTH = Dimensions.get('window').width;
-		var ToTheLeft = {
-			opacity: {
-				from: 1,
-				to: 0.5,
-				min: 0,
-				max: 1,
-				type: 'linear',
-				extrapolate: false,
-				round: 100,
-			},
-			left: {
-				from: 0,
-				to: -SCREEN_WIDTH,
-				min: 0,
-				max: 1,
-				type: 'linear',
-				extrapolate: true,
-				round: PixelRatio.get(),
-			},
-		};
-		Navigator.SceneConfigs.PushFromRight.animationInterpolators.out = buildStyleInterpolator(ToTheLeft)
 
 	    return (
 	    	<View style={styles.container}>

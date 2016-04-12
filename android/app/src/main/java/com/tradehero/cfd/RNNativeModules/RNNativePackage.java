@@ -1,11 +1,11 @@
-package com.tradehero.th.RNNativeModules;
+package com.tradehero.cfd.RNNativeModules;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
-import com.tradehero.th.views.ReactLineChartManager;
+import com.tradehero.cfd.views.ReactLineChartManager;
 import com.zyu.ReactWheelCurvedPickerManager;
 
 import java.util.Arrays;

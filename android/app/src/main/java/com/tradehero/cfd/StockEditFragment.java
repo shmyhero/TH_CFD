@@ -1,4 +1,4 @@
-package com.tradehero.th;
+package com.tradehero.cfd;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -15,10 +15,9 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.mobeta.android.dslv.DragSortListView;
-import com.tradehero.th.RNNativeModules.NativeDataModule;
-import com.tradehero.th.module.LogicData;
+import com.tradehero.cfd.RNNativeModules.NativeDataModule;
+import com.tradehero.cfd.module.LogicData;
 
 import org.json.JSONArray;
 import org.json.JSONException;

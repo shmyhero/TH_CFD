@@ -1,4 +1,4 @@
-package com.tradehero.th;
+package com.tradehero.cfd;
 
 import android.app.Application;
 
@@ -7,8 +7,7 @@ import com.facebook.react.LifecycleState;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
-import com.tradehero.th.BuildConfig;
-import com.tradehero.th.RNNativeModules.RNNativePackage;
+import com.tradehero.cfd.RNNativeModules.RNNativePackage;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.tradehero.th.RNNativeModules;
+package com.tradehero.cfd.RNNativeModules;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,9 +6,8 @@ import android.content.Intent;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.tradehero.th.MainActivity;
-import com.tradehero.th.NativeViewActivity;
-import com.tradehero.th.StockEditFragment;
+import com.tradehero.cfd.MainActivity;
+import com.tradehero.cfd.NativeViewActivity;
 
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>

@@ -1,4 +1,4 @@
-package com.tradehero.th;
+package com.tradehero.cfd;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

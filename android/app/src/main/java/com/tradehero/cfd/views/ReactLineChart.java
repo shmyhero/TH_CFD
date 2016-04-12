@@ -1,4 +1,4 @@
-package com.tradehero.th.views;
+package com.tradehero.cfd.views;
 
 import android.content.Context;
 import android.util.AttributeSet;

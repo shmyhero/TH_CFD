@@ -1,4 +1,4 @@
-package com.tradehero.th.wxapi;
+package com.tradehero.cfd.wxapi;
 
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>

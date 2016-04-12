@@ -1,4 +1,4 @@
-package com.tradehero.th.views;
+package com.tradehero.cfd.views;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -15,7 +15,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.tradehero.th.R;
+import com.tradehero.cfd.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

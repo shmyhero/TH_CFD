@@ -1,8 +1,7 @@
-package com.tradehero.th.module;
+package com.tradehero.cfd.module;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>

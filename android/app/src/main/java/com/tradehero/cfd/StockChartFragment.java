@@ -1,4 +1,4 @@
-package com.tradehero.th;
+package com.tradehero.cfd;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;

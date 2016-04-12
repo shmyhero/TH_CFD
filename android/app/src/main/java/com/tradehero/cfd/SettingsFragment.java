@@ -1,4 +1,4 @@
-package com.tradehero.th;
+package com.tradehero.cfd;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,7 +16,7 @@ import butterknife.ButterKnife;
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
  */
-public class LandingFragment extends Fragment {
+public class SettingsFragment extends Fragment {
 
     private ReactInstanceManager mReactInstanceManager;
 
@@ -31,8 +31,8 @@ public class LandingFragment extends Fragment {
 
         mReactInstanceManager = RNManager.getInstanceManager(getActivity().getApplication());
         Bundle bundle = new Bundle();
-        bundle.putString("initialPage", "landing");
-        reactRootView.startReactApplication(mReactInstanceManager, "TH_CFD", null);
+        bundle.putString("initialPage", "mySettings");
+        reactRootView.startReactApplication(mReactInstanceManager, "TH_CFD", bundle);
 
         return view;
     }

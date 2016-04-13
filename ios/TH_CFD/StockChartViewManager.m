@@ -14,6 +14,7 @@
 RCT_EXPORT_MODULE();
 
 RCT_EXPORT_VIEW_PROPERTY(data, NSString)
+RCT_EXPORT_VIEW_PROPERTY(colorType, NSInteger)
 
 - (UIView *)view
 {

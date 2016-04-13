@@ -6,8 +6,14 @@ import React, {
 
 var LineChart = React.createClass ({
 	propTypes: {
-		// isRed: React.PropTypes.bool,
 		data: React.PropTypes.string,
+		colorType: React.PropTypes.number,
+	},
+
+	getDefaultProps(): Object {
+		return {
+			colorType: 0,
+		};
 	},
 
 	render() {

@@ -27,6 +27,14 @@ class StockChartView: UIView {
 			self.setNeedsDisplay()
 		}
 	}
+	
+	var colorType:Int=0 {
+		willSet {
+			self.bgLineColor = newValue == 1 ? UIColor(hex: 0xffffff, alpha: 0.5) : UIColor(hex: 0x497bce)
+			self.lineColor = newValue == 1 ? UIColor(hex: 0xffffff, alpha: 0.5) : UIColor(hex: 0xbbceed	)
+		}
+	}
+	
 	var chartDataJson: String! = ""
 	
 	var chartData:[ChartData] = []

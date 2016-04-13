@@ -177,6 +177,47 @@ var StockOpenPositionPage = React.createClass({
 		
 	},
 
+	renderChartHeader: function() {
+		return(
+			<View style={{flexDirection: 'row', marginTop: 6}} >
+				<Text style={styles.chartTitleTextHighlighted} >
+					分时
+				</Text>
+				<Text style={styles.chartTitleText} >
+					5日
+				</Text>
+				<Text style={styles.chartTitleText} >
+					1月
+				</Text>
+			</View>
+		);
+	},
+
+	renderStockMaxPriceInfo: function(maxPrice, maxPercentage, isTop) {
+		if (maxPrice && maxPercentage)
+		{
+			return (
+				<View style={{flexDirection: 'row'}}>
+					<View style={{flex: 1, alignItems: 'flex-start', marginLeft: 20}}>
+						<Text style={[styles.priceText, isTop && {color:'black'}]}>
+							{maxPrice}
+						</Text>
+					</View>
+					
+					<View style={{flex: 1, alignItems: 'flex-end', marginRight: 20}}>
+						<Text style={[styles.priceText, isTop && {color:'black'}]}>
+							{maxPercentage} %
+						</Text>
+					</View>
+				</View>
+			);
+		}
+		else {
+			return (
+				<View style={{height:16}}/>)
+		}
+	},
+
 	renderSubDetail: function(rowData) {
 		if (this.state.selectedSubItem === 1) {
 			// charge detail
@@ -198,10 +239,41 @@ var StockOpenPositionPage = React.createClass({
 			);
 		}
 		else {
+			var priceData = this.state.stockDetailInfo.priceData
+			var maxPrice = undefined
+			var minPrice = undefined
+			var maxPercentage = undefined
+			var minPercentage = undefined
+
+			if (priceData != undefined) {
+				//todo
+				var lastClose = rowData.preClose
+				maxPrice = Number.MIN_VALUE
+				minPrice = Number.MAX_VALUE
+				
+				for (var i = 0; i < priceData.length; i ++) {
+					var price = priceData[i].p
+					if (price > maxPrice) {
+						maxPrice = price
+					} 
+					if (price < minPrice) {
+						minPrice = price
+					}
+				}
+				var maxPercentage = (maxPrice - lastClose) / lastClose * 100
+				var minPercentage = (minPrice - lastClose) / lastClose * 100
+				maxPercentage = maxPercentage.toFixed(2)
+				minPercentage = minPercentage.toFixed(2)
+			}
 			// market detail
 			return (
 				<View style={{height: 170}}>
-						<LineChart style={{flex: 1, backgroundColor:'transparent', marginTop: 5}} data={JSON.stringify(this.state.stockDetailInfo)}/>
+					{this.renderChartHeader()}
+					{this.renderStockMaxPriceInfo(maxPrice, maxPercentage, true)}
+					<LineChart style={{flex: 1, backgroundColor:'transparent', marginTop:-25, marginBottom:-25}}
+						data={JSON.stringify(this.state.stockDetailInfo)}
+						colorType={1}/>
+					{this.renderStockMaxPriceInfo(maxPrice, maxPercentage, false)}
 				</View>
 			);
 		}
@@ -512,6 +584,27 @@ var styles = StyleSheet.create({
 		borderRightColor: '#1962dd',
 		borderTopWidth: 1,
 		borderTopColor: '#1962dd',
+	},
+	priceText: {
+		marginTop: 5,
+		marginBottom: 5,
+		fontSize: 8,
+		textAlign: 'center',
+		color: '#ffffff',
+		backgroundColor: 'transparent',
+	},
+	
+	chartTitleTextHighlighted: {
+		flex: 1,
+		fontSize: 15,
+		textAlign: 'center',
+		color: '#70a5ff'
+	},
+	chartTitleText: {
+		flex: 1,
+		fontSize: 15,
+		textAlign: 'center',
+		color: '#7d7d7d'
 	},
 });
 

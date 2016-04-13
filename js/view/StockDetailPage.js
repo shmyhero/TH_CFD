@@ -319,7 +319,7 @@ var StockDetailPage = React.createClass({
 							{this.renderScrollHeader()}
 							{this.renderScroll()}
 						</View>
-						<View style={{flex: 2, alignItems: 'center', justifyContent: 'space-around', paddingBottom:10}}>
+						<View style={{flex: 2, alignItems: 'center', justifyContent: 'space-around', paddingBottom:Platform.OS === 'ios'?10:48}}>
 							<Text style={styles.leftMoneyLabel}> 账户剩余资金：{leftMoney}</Text>
 							<Text style={styles.smallLabel}> 手续费为{charge}美元</Text>
 							{this.renderOKButton()}

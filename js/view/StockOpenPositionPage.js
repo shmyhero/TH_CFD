@@ -194,7 +194,7 @@ var StockOpenPositionPage = React.createClass({
 		var bgcolor = this.state.selectedRow === rowID ? '#f5f5f5' : 'white'
 		return (
 			<View>
-				<TouchableHighlight onPress={() => this.stockPressed(rowData, sectionID, rowID, highlightRow)}>
+				<TouchableHighlight activeOpacity={1} onPress={() => this.stockPressed(rowData, sectionID, rowID, highlightRow)}>
 					<View style={[styles.rowWrapper, {backgroundColor: bgcolor}]} key={rowData.key}>
 						<View style={styles.rowLeftPart}>
 							<Text style={styles.stockNameText}>

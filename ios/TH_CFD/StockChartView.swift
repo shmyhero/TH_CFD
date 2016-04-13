@@ -100,6 +100,9 @@ class StockChartView: UIView {
 	}
 	
 	override func drawRect(rect: CGRect) {
+		if (self.pointData.isEmpty && !self.chartData.isEmpty) {
+			self.calculatePoint()
+		}
 		// draw line chart
 		self.drawLineChart(rect)
 		// draw background lines

@@ -1,5 +1,6 @@
 'use strict';
 
+var LineChart = require('./component/lineChart/LineChart');
 var React = require('react-native');
 var { 
 	StyleSheet,
@@ -10,9 +11,12 @@ var {
 	TouchableOpacity,
 	Dimensions,
 	Image,
+	Alert,
 } = React;
 
 
+var NetConstants = require('../NetConstants')
+var NetworkModule = require('../module/NetworkModule')
 var ColorConstants = require('../ColorConstants')
 
 var {height, width} = Dimensions.get('window');
@@ -22,9 +26,9 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {
 
 var tempData = [
 	{id:13001, symbol:'AAPL UW', name:'苹果', tag: 'US', profitPercentage: 0.1, hasSelected:false},
-	{id:13002, symbol:'AAPL UW2', name:'苹果2', tag: 'US', profitPercentage: 0.05, hasSelected:false},
-	{id:13003, symbol:'AAPL UW3', name:'苹果3', profitPercentage: -0.08, hasSelected:false},
-	{id:13004, symbol:'AAPL UW4', name:'苹果4', profitPercentage: 0, hasSelected:false},
+	{id:13001, symbol:'AAPL UW2', name:'苹果2', tag: 'US', profitPercentage: 0.05, hasSelected:false},
+	{id:13001, symbol:'AAPL UW3', name:'苹果3', profitPercentage: -0.08, hasSelected:false},
+	{id:13001, symbol:'AAPL UW4', name:'苹果4', profitPercentage: 0, hasSelected:false},
 ]
 
 var extendHeight = 0
@@ -36,11 +40,34 @@ var StockOpenPositionPage = React.createClass({
 			stockInfo: ds.cloneWithRows(tempData),
 			selectedRow: -1,
 			selectedSubItem: 0,
+			stockDetailInfo: []
 		};
 	},
 
 	onEndReached: function() {
 
+	},
+
+	loadStockDetailInfo: function(stockCode) {
+		var url = NetConstants.GET_STOCK_PRICE_TODAY_API
+		url = url.replace(/<stockCode>/, stockCode)
+
+		NetworkModule.fetchTHUrl(
+			url, 
+			{
+				method: 'GET',
+			},
+			(responseJson) => {
+				var tempStockInfo = this.state.stockDetailInfo
+				tempStockInfo.priceData = responseJson
+				this.setState({
+					stockDetailInfo: tempStockInfo,
+				})
+			},
+			(errorMessage) => {
+				Alert.alert('网络错误提示', errorMessage);
+			}
+		)
 	},
 
 	stockPressed: function(rowData, sectionID, rowID, highlightRow) {
@@ -72,10 +99,18 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	subItemPress: function(item) {
+	subItemPress: function(item, rowData) {
 		this.setState({
 			selectedSubItem: this.state.selectedSubItem === item ? 0 : item,
 		})
+
+		if (item === 2) {
+			var stockid = rowData.id
+			this.setState({
+				stockDetailInfo: rowData
+			})
+			this.loadStockDetailInfo(stockid)
+		}
 	},
 
 	okPress: function() {
@@ -133,6 +168,7 @@ var StockOpenPositionPage = React.createClass({
 
 	renderSubDetail: function(rowData) {
 		if (this.state.selectedSubItem === 1) {
+			// charge detail
 			return (
 				<View style={styles.extendRowWrapper}>
 					<View style={styles.extendLeft}>
@@ -151,8 +187,11 @@ var StockOpenPositionPage = React.createClass({
 			);
 		}
 		else {
+			// market detail
 			return (
-				<View style={{height: 10}}/>
+				<View style={{height: 170}}>
+						<LineChart style={{flex: 1, backgroundColor:'transparent', marginTop: 5}} data={JSON.stringify(this.state.stockDetailInfo)}/>
+				</View>
 			);
 		}
 	},
@@ -169,7 +208,7 @@ var StockOpenPositionPage = React.createClass({
 			extendHeight += 51
 		}
 		if (this.state.selectedSubItem === 2) {
-			extendHeight += 10
+			extendHeight += 170
 		}
 		return (
 			<View style={[{height: extendHeight}, styles.extendWrapper]} >
@@ -206,19 +245,20 @@ var StockOpenPositionPage = React.createClass({
 				<View style={styles.darkSeparator} />
 
 				<View style={styles.extendRowWrapper}>
-					<TouchableOpacity onPress={()=>this.subItemPress(1)} style={styles.extendLeft}>
+					<TouchableOpacity onPress={()=>this.subItemPress(1, rowData)}
+						style={[styles.extendLeft, (this.state.selectedSubItem===1)&&styles.rightTopBorder, (this.state.selectedSubItem===2)&&styles.bottomBorder]}>
 						<Text style={styles.extendTextTop}>手续费</Text>
 						<Image style={styles.extendImageBottom} source={require('../../images/charge.png')}/>
 					</TouchableOpacity>
-					<TouchableOpacity onPress={()=>this.subItemPress(2)} style={styles.extendMiddle}>
+					<TouchableOpacity onPress={()=>this.subItemPress(2, rowData)}
+						style={[styles.extendMiddle, (this.state.selectedSubItem===1)&&styles.bottomBorder, (this.state.selectedSubItem===2)&&styles.leftTopRightBorder]}>
 						<Text style={styles.extendTextTop}>行情</Text>
 						<Image style={styles.extendImageBottom} source={require('../../images/market.png')}/>
 					</TouchableOpacity>
-					<View style={styles.extendRight}>
+					<View style={[styles.extendRight, (this.state.selectedSubItem!==0)&&styles.bottomBorder]}>
 					</View>
 				</View>
 
-				{this.state.selectedSubItem !== 0 ? <View style={styles.darkSeparator} />: null}
 				{this.state.selectedSubItem !== 0 ? this.renderSubDetail(rowData): null}
 
 				<View style={styles.darkSeparator} />
@@ -236,7 +276,7 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	renderRow: function(rowData, sectionID, rowID, highlightRow) {
-		var bgcolor = this.state.selectedRow === rowID ? '#f5f5f5' : 'white'
+		var bgcolor = this.state.selectedRow === rowID ? '#dfdfdf' : 'white'
 		return (
 			<View>
 				<TouchableHighlight activeOpacity={1} onPress={() => this.stockPressed(rowData, sectionID, rowID, highlightRow)}>
@@ -359,20 +399,18 @@ var styles = StyleSheet.create({
 	darkSeparator: {
 		marginLeft: 15,
 		height: 1,
-		backgroundColor: '#dcdcdc',
+		backgroundColor: '#c9c9c9',
 	},
 
 	extendWrapper: {
 		alignItems: 'stretch',
 		justifyContent: 'space-around',
-		backgroundColor: '#f5f5f5',
+		backgroundColor: '#dfdfdf',
 	},
 
 	extendRowWrapper: {
 		flexDirection: 'row',
 		alignItems: 'stretch',
-		paddingBottom: 8,
-		paddingTop: 8,
 		justifyContent: 'space-around',
 		height: 51,
 	},
@@ -381,15 +419,21 @@ var styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'flex-start',
 		marginLeft: 15,
+		paddingTop: 8,
+		paddingBottom: 8,
 	},
 	extendMiddle: {
 		flex: 1,
 		alignItems: 'center',
+		paddingTop: 8,
+		paddingBottom: 8,
 	},
 	extendRight: {
 		flex: 1,
 		alignItems: 'flex-end',
 		marginRight: 15,
+		paddingTop: 8,
+		paddingBottom: 8,
 	},
 
 	extendTextTop: {
@@ -436,6 +480,27 @@ var styles = StyleSheet.create({
 		color: '#e60b11',
 		alignSelf: 'center',
 		marginTop: 10,
+	},
+
+	rightTopBorder: {
+		borderRightWidth: 1,
+		borderRightColor: '#1962dd',
+		borderTopWidth: 1,
+		borderTopColor: '#1962dd',
+	},
+
+	bottomBorder: {
+		borderBottomWidth: 1,
+		borderBottomColor: '#1962dd',
+	},
+
+	leftTopRightBorder: {
+		borderLeftWidth: 1,
+		borderLeftColor: '#1962dd',
+		borderRightWidth: 1,
+		borderRightColor: '#1962dd',
+		borderTopWidth: 1,
+		borderTopColor: '#1962dd',
 	},
 });
 

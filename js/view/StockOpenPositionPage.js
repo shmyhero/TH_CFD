@@ -7,6 +7,7 @@ var {
 	Text,
 	ListView,
 	TouchableHighlight,
+	TouchableOpacity,
 	Dimensions,
 	Image,
 } = React;
@@ -34,7 +35,7 @@ var StockOpenPositionPage = React.createClass({
 		return {
 			stockInfo: ds.cloneWithRows(tempData),
 			selectedRow: -1,
-			selectedSubItem: -1,
+			selectedSubItem: 0,
 		};
 	},
 
@@ -50,7 +51,7 @@ var StockOpenPositionPage = React.createClass({
 			this.setState({
 				stockInfo: this.state.stockInfo.cloneWithRows(newData),
 				selectedRow: -1,
-				selectedSubItem: -1,
+				selectedSubItem: 0,
 			})
 			tempData = newData
 		} else {
@@ -63,12 +64,18 @@ var StockOpenPositionPage = React.createClass({
 			this.setState({
 				stockInfo: this.state.stockInfo.cloneWithRows(newData),
 				selectedRow: rowID,
-				selectedSubItem: -1,
+				selectedSubItem: 0,
 			})
 			tempData = newData
 			var y = Math.floor(height/tempData.length*rowID)
 			this.refs['listview'].scrollTo({x:0, y:y, animated:true})
 		}
+	},
+
+	subItemPress: function(item) {
+		this.setState({
+			selectedSubItem: this.state.selectedSubItem === item ? 0 : item,
+		})
 	},
 
 	okPress: function() {
@@ -124,11 +131,46 @@ var StockOpenPositionPage = React.createClass({
 		
 	},
 
+	renderSubDetail: function(rowData) {
+		if (this.state.selectedSubItem === 1) {
+			return (
+				<View style={styles.extendRowWrapper}>
+					<View style={styles.extendLeft}>
+						<Text style={styles.extendTextTop}>开仓费</Text>
+						<Text style={styles.extendTextBottom}>0.12</Text>
+					</View>
+					<View style={styles.extendMiddle}>
+						<Text style={styles.extendTextTop}>留仓费</Text>
+						<Text style={styles.extendTextBottom}>0.02</Text>
+					</View>
+					<View style={styles.extendRight}>
+						<Text style={styles.extendTextTop}>平仓费</Text>
+						<Text style={styles.extendTextBottom}>0.6</Text>
+					</View>
+				</View>
+			);
+		}
+		else {
+			return (
+				<View style={{height: 10}}/>
+			);
+		}
+	},
+
 	renderDetailInfo: function(rowData) {
-		extendHeight = 200
 		var buttonEnable = true
 		var tradeImage = true ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
-		var showNetIncome = true
+		var showNetIncome = false
+		extendHeight = 222
+		if (showNetIncome) {
+			extendHeight += 20
+		}
+		if (this.state.selectedSubItem === 1) {
+			extendHeight += 51
+		}
+		if (this.state.selectedSubItem === 2) {
+			extendHeight += 10
+		}
 		return (
 			<View style={[{height: extendHeight}, styles.extendWrapper]} >
 				<View style={styles.darkSeparator} />
@@ -164,17 +206,20 @@ var StockOpenPositionPage = React.createClass({
 				<View style={styles.darkSeparator} />
 
 				<View style={styles.extendRowWrapper}>
-					<View style={styles.extendLeft}>
+					<TouchableOpacity onPress={()=>this.subItemPress(1)} style={styles.extendLeft}>
 						<Text style={styles.extendTextTop}>手续费</Text>
 						<Image style={styles.extendImageBottom} source={require('../../images/charge.png')}/>
-					</View>
-					<View style={styles.extendMiddle}>
+					</TouchableOpacity>
+					<TouchableOpacity onPress={()=>this.subItemPress(2)} style={styles.extendMiddle}>
 						<Text style={styles.extendTextTop}>行情</Text>
 						<Image style={styles.extendImageBottom} source={require('../../images/market.png')}/>
-					</View>
+					</TouchableOpacity>
 					<View style={styles.extendRight}>
 					</View>
 				</View>
+
+				{this.state.selectedSubItem !== 0 ? <View style={styles.darkSeparator} />: null}
+				{this.state.selectedSubItem !== 0 ? this.renderSubDetail(rowData): null}
 
 				<View style={styles.darkSeparator} />
 				{showNetIncome ? 
@@ -215,7 +260,7 @@ var StockOpenPositionPage = React.createClass({
 					</View>
 				</TouchableHighlight>
 
-				{this.state.selectedRow == rowID ? this.renderDetailInfo(rowData): null}
+				{this.state.selectedRow === rowID ? this.renderDetailInfo(rowData): null}
 			</View>
 		);
 	},
@@ -326,9 +371,10 @@ var styles = StyleSheet.create({
 	extendRowWrapper: {
 		flexDirection: 'row',
 		alignItems: 'stretch',
-		paddingBottom: 10,
-		paddingTop: 10,
+		paddingBottom: 8,
+		paddingTop: 8,
 		justifyContent: 'space-around',
+		height: 51,
 	},
 
 	extendLeft: {
@@ -389,7 +435,7 @@ var styles = StyleSheet.create({
 		fontSize: 14,
 		color: '#e60b11',
 		alignSelf: 'center',
-		marginTop: 15,
+		marginTop: 10,
 	},
 });
 

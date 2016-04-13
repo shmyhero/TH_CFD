@@ -30,6 +30,7 @@ var InputAccessory = require('./component/InputAccessory')
 var Picker = require('react-native-wheel-picker')
 var PickerItem = Picker.Item;
 var AppNavigator = require('../../AppNavigator')
+var StockTransactionConfirmPage = require('./StockTransactionConfirmPage')
 
 var didFocusSubscription = null;
 
@@ -294,39 +295,41 @@ var StockDetailPage = React.createClass({
 
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
-			<View style={styles.wrapper}>
-				<LinearGradient colors={['#3475e3', '#123b80']} style={{height: height}}>
-					
-					{this.renderHeader()}
-
-					{this.renderTradeStrength()}
-
-					{this.renderChartHeader()}
-
-					<View style={{flex: 3, marginTop:10}}>
-						{this.renderStockMaxPriceInfo(maxPrice, maxPercentage)}
-						<LineChart style={{flex: 1, backgroundColor:'transparent', marginTop: -26}} data={JSON.stringify(this.state.stockInfo)}/>
-						{this.renderStockMinPriceInfo(minPrice, minPercentage)}
-						{this.renderTime()}
+				<View style={styles.wrapper}>
+					<LinearGradient colors={['#3475e3', '#123b80']} style={{height: height}}>
 						
-					</View>
+						{this.renderHeader()}
 
-					<View style={{flex: 1.2, justifyContent: 'space-around'}}>
-						{this.renderTradeButton()}
-					</View>
-					<View style={{flex: 2.8, justifyContent: 'space-around'}}>
-						{this.renderScrollHeader()}
-						{this.renderScroll()}
-					</View>
-					<View style={{flex: 2, alignItems: 'center', justifyContent: 'space-around', paddingBottom:10}}>
-						<Text style={styles.leftMoneyLabel}> 账户剩余资金：{leftMoney}</Text>
-						<Text style={styles.smallLabel}> 手续费为{charge}美元</Text>
-						{this.renderOKButton()}
-					</View>
-				</LinearGradient>
-    			<InputAccessory textValue={this.state.inputText} maxValue={this.state.totalMoney}
-    				rightButtonOnClick={this.updateMoney}/>
-			</View>
+						{this.renderTradeStrength()}
+
+						{this.renderChartHeader()}
+
+						<View style={{flex: 3, marginTop:10}}>
+							{this.renderStockMaxPriceInfo(maxPrice, maxPercentage)}
+							<LineChart style={{flex: 1, backgroundColor:'transparent', marginTop: -26}} data={JSON.stringify(this.state.stockInfo)}/>
+							{this.renderStockMinPriceInfo(minPrice, minPercentage)}
+							{this.renderTime()}
+							
+						</View>
+
+						<View style={{flex: 1.2, justifyContent: 'space-around'}}>
+							{this.renderTradeButton()}
+						</View>
+						<View style={{flex: 2.8, justifyContent: 'space-around'}}>
+							{this.renderScrollHeader()}
+							{this.renderScroll()}
+						</View>
+						<View style={{flex: 2, alignItems: 'center', justifyContent: 'space-around', paddingBottom:10}}>
+							<Text style={styles.leftMoneyLabel}> 账户剩余资金：{leftMoney}</Text>
+							<Text style={styles.smallLabel}> 手续费为{charge}美元</Text>
+							{this.renderOKButton()}
+						</View>
+					</LinearGradient>
+	    			<InputAccessory textValue={this.state.inputText} maxValue={this.state.totalMoney}
+	    				rightButtonOnClick={this.updateMoney}/>
+				
+	    			<StockTransactionConfirmPage ref='confirmPage'/>
+				</View>
     		</TouchableWithoutFeedback>
 		)
 	},
@@ -568,6 +571,7 @@ var StockDetailPage = React.createClass({
 	},
 
 	okPress: function() {
+		this.refs['confirmPage'].show()
 	},
 	
 	renderInput: function() {

@@ -29,6 +29,17 @@ var tempData = [
 	{id:13001, symbol:'AAPL UW2', name:'苹果2', tag: 'US', profitPercentage: 0.05, hasSelected:false},
 	{id:13001, symbol:'AAPL UW3', name:'苹果3', profitPercentage: -0.08, hasSelected:false},
 	{id:13001, symbol:'AAPL UW4', name:'苹果4', profitPercentage: 0, hasSelected:false},
+	{id:13002, symbol:'AAPL UW2', name:'苹果2', tag: 'US', profitPercentage: 0.05, hasSelected:false},
+	{id:13003, symbol:'AAPL UW3', name:'苹果3', profitPercentage: -0.08, hasSelected:false},
+	{id:13004, symbol:'AAPL UW4', name:'苹果4', profitPercentage: 0, hasSelected:false},
+	{id:13001, symbol:'AAPL UW', name:'苹果', tag: 'US', profitPercentage: 0.1, hasSelected:false},
+	{id:13002, symbol:'AAPL UW2', name:'苹果2', tag: 'US', profitPercentage: 0.05, hasSelected:false},
+	{id:13003, symbol:'AAPL UW3', name:'苹果3', profitPercentage: -0.08, hasSelected:false},
+	{id:13004, symbol:'AAPL UW4', name:'苹果4', profitPercentage: 0, hasSelected:false},
+	{id:13001, symbol:'AAPL UW', name:'苹果', tag: 'US', profitPercentage: 0.1, hasSelected:false},
+	{id:13002, symbol:'AAPL UW2', name:'苹果2', tag: 'US', profitPercentage: 0.05, hasSelected:false},
+	{id:13003, symbol:'AAPL UW3', name:'苹果3', profitPercentage: -0.08, hasSelected:false},
+	{id:13004, symbol:'AAPL UW4', name:'苹果4', profitPercentage: 0, hasSelected:false},
 ]
 
 var extendHeight = 0

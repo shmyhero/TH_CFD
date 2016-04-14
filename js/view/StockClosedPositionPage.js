@@ -79,20 +79,20 @@ var StockClosedPositionPage = React.createClass({
 		percentChange = percentChange.toFixed(2)
 		if (percentChange > 0) {
 			return (
-				<Text style={[styles.stockPercentText, {color: ColorConstants.STOCK_RISE_RED}]}>
+				<Text style={[styles.stockPercentText, {color: '#f19296'}]}>
 					 +{percentChange} %
 				</Text>
 			);
 		} else if (percentChange < 0) {
 			return (
-				<Text style={[styles.stockPercentText, {color: ColorConstants.STOCK_DOWN_GREEN}]}>
+				<Text style={[styles.stockPercentText, {color: '#82d2bb'}]}>
 					 {percentChange} %
 				</Text>
 			);
 			
 		} else {
 			return (
-				<Text style={[styles.stockPercentText, {color: '#a0a6aa'}]}>
+				<Text style={[styles.stockPercentText, {color: '#c5c5c5'}]}>
 					 {percentChange} %
 				</Text>
 			);
@@ -103,6 +103,7 @@ var StockClosedPositionPage = React.createClass({
 	renderDetailInfo: function(rowData) {
 		var extendHeight = 204
 		var tradeImage = true ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
+		var profitColor = ColorConstants.STOCK_RISE_RED
 		return (
 			<View style={[{height: extendHeight}, styles.extendWrapper]} >
 				<View style={styles.darkSeparator} />
@@ -158,7 +159,7 @@ var StockClosedPositionPage = React.createClass({
 					</View>
 					<View style={styles.extendMiddle}>
 						<Text style={styles.extendTextTop}>净收益</Text>
-						<Text style={[styles.extendTextBottom, {color:'#e60b11'}]}>14.28</Text>
+						<Text style={[styles.extendTextBottom, {color:profitColor}]}>14.28</Text>
 					</View>
 					<View style={styles.extendRight}>
 					</View>

@@ -133,9 +133,9 @@ var StockOpenPositionPage = React.createClass({
 		})
 
 		if (item === 2) {
-			var stockid = rowData.id
+			var stockid = rowData.security.id
 			this.setState({
-				stockDetailInfo: rowData
+				stockDetailInfo: rowData.security
 			})
 			this.loadStockDetailInfo(stockid)
 		}

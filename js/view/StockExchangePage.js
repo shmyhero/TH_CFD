@@ -11,6 +11,8 @@ var {
 	TouchableHighlight,
 } = React;
 
+var {EventCenter, EventConst} = require('../EventCenter')
+
 var ScrollTabView = require('./component/ScrollTabView')
 var StockOpenPositionPage = require('./StockOpenPositionPage')
 var StockClosedPositionPage = require('./StockClosedPositionPage')
@@ -20,11 +22,36 @@ var NavBar = require('../view/NavBar')
 var LogicData = require('../LogicData')
 
 var tabNames = ['持仓', '平仓', '统计']
+var didTabSelectSubscription = null
 
 var StockExchangePage = React.createClass({
 
 	registerPressed: function() {
+	},
 
+	getInitialState: function() {
+		return {
+			currentSelectedTab : 0,
+		}
+	},
+
+	componentDidMount: function() {
+		this.didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.EXCHANGE_TAB_PRESS_EVENT, () => {
+			if (this.refs['page' + this.state.currentSelectedTab]) {
+				this.refs['page' + this.state.currentSelectedTab].tabPressed()
+			}
+			this.forceUpdate()
+		});
+	},
+
+	componentWillUnmount: function() {
+		this.didTabSelectSubscription.remove();
+	},
+
+	onPageSelected: function(index) {
+		this.setState({
+			currentSelectedTab: index,
+		})
 	},
 
 	render: function() {
@@ -33,9 +60,9 @@ var StockExchangePage = React.createClass({
 
 		var {height, width} = Dimensions.get('window');
 		var tabPages = [
-			<StockOpenPositionPage navigator={this.props.navigator}/>,
-			<StockClosedPositionPage navigator={this.props.navigator}/>,
-			<StockStatisticsPage navigator={this.props.navigator}/>
+			<StockOpenPositionPage navigator={this.props.navigator} ref={'page0'}/>,
+			<StockClosedPositionPage navigator={this.props.navigator} ref={'page1'}/>,
+			<StockStatisticsPage navigator={this.props.navigator} ref={'page2'}/>
 		]
 
 		var viewPages = tabNames.map(
@@ -44,11 +71,13 @@ var StockExchangePage = React.createClass({
 				{tabPages[i]}
 			</View>
 		)
+
 		if (loggined) {
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title="交易" showSearchButton={true} navigator={this.props.navigator}/>
-					<ScrollTabView tabNames={tabNames} viewPages={viewPages} />
+					<ScrollTabView tabNames={tabNames} viewPages={viewPages} 
+						onPageSelected={(index) => this.onPageSelected(index)} />
 				</View>
 			)
 		}

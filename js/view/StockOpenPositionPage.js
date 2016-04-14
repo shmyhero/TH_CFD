@@ -13,13 +13,13 @@ var {
 	Image,
 	Alert,
 } = React;
-var {EventCenter, EventConst} = require('../EventCenter')
 
 
 var LogicData = require('../LogicData')
 var AppNavigator = require('../../AppNavigator')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
+var WebSocketModule = require('../module/WebSocketModule')
 var ColorConstants = require('../ColorConstants')
 
 var {height, width} = Dimensions.get('window');
@@ -41,16 +41,12 @@ var StockOpenPositionPage = React.createClass({
 		};
 	},
 
-	componentDidMount: function() {
-		this.didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.EXCHANGE_TAB_PRESS_EVENT, this.loadOpenPositionInfo);
-	},
-
-	componentWillUnmount: function() {
-		this.didTabSelectSubscription.remove();
-	},
-
 	onEndReached: function() {
 
+	},
+
+	tabPressed: function() {
+		this.loadOpenPositionInfo()
 	},
 
 	loadOpenPositionInfo: function() {
@@ -68,6 +64,20 @@ var StockOpenPositionPage = React.createClass({
 				this.setState({
 					stockInfoRowData: responseJson,
 					stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
+				})
+
+				var stockIds = []
+				for (var i = 0; i < responseJson.length; i++) {
+					var stockId = responseJson[i].security.id
+					if (stockIds.indexOf(stockId) < 0) {
+						stockIds.push(stockId)
+					}
+				};
+
+				WebSocketModule.registerInterestedStocks(stockIds.join(','))
+				WebSocketModule.registerCallbacks(
+					(realtimeStockInfo) => {
+						this.handleStockInfo(realtimeStockInfo)
 				})
 			},
 			(errorMessage) => {
@@ -96,6 +106,27 @@ var StockOpenPositionPage = React.createClass({
 				Alert.alert('网络错误提示', errorMessage);
 			}
 		)
+	},
+
+	handleStockInfo: function(realtimeStockInfo) {
+		var hasUpdate = false
+		for (var i = 0; i < this.state.stockInfoRowData.length; i++) {
+			for (var j = 0; j < realtimeStockInfo.length; j++) {
+				if (this.state.stockInfoRowData[i].security.id == realtimeStockInfo[j].id && 
+							this.state.stockInfoRowData[i].security.last !== realtimeStockInfo[j].last) {
+					
+					this.state.stockInfoRowData[i].security.last = realtimeStockInfo[j].last;
+					hasUpdate = true;
+					break;
+				}
+			};
+		};
+
+		if (hasUpdate) {
+			this.setState({
+				stockInfo: ds.cloneWithRows(this.state.stockInfoRowData)
+			})
+		}
 	},
 
 	stockPressed: function(rowData, sectionID, rowID, highlightRow) {
@@ -377,8 +408,8 @@ var StockOpenPositionPage = React.createClass({
 
 	renderRow: function(rowData, sectionID, rowID, highlightRow) {
 		var profitPercentage = 0
-		if (rowData.invest !== 0) {
-			profitPercentage = (rowData.profit / rowData.invest).toFixed(2)
+		if (rowData.settlePrice !== 0) {
+			profitPercentage = (rowData.security.last - rowData.settlePrice) / rowData.settlePrice
 		}
 		var bgcolor = this.state.selectedRow === rowID ? ColorConstants.LIST_BACKGROUND_GREY : 'white'
 		return (

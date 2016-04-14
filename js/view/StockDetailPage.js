@@ -571,7 +571,32 @@ var StockDetailPage = React.createClass({
 	},
 
 	okPress: function() {
-		this.refs['confirmPage'].show()
+		var userData = LogicData.getUserData()
+		var url = NetConstants.POST_CREATE_POSITION_API
+
+		NetworkModule.fetchTHUrl(
+			url, 
+			{
+				method: 'POST',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Content-Type': 'application/json; charset=utf-8',
+				},
+				body: JSON.stringify({
+					securityId: this.props.stockCode,
+					isLong: this.state.tradeDirection === 1,
+					invest: this.state.money,
+					leverage: this.state.leverage,
+				})
+			},
+			(responseJson) => {
+				responseJson.stockName = this.props.stockName
+				this.refs['confirmPage'].show(responseJson)
+			},
+			(errorMessage) => {
+				Alert.alert('网络错误提示', errorMessage);
+			}
+		)	
 	},
 	
 	renderInput: function() {

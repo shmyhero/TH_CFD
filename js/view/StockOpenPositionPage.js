@@ -359,7 +359,7 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	renderRow: function(rowData, sectionID, rowID, highlightRow) {
-		var bgcolor = this.state.selectedRow === rowID ? '#dfdfdf' : 'white'
+		var bgcolor = this.state.selectedRow === rowID ? ColorConstants.LIST_BACKGROUND_GREY : 'white'
 		return (
 			<View>
 				<TouchableHighlight activeOpacity={1} onPress={() => this.stockPressed(rowData, sectionID, rowID, highlightRow)}>
@@ -488,7 +488,7 @@ var styles = StyleSheet.create({
 	extendWrapper: {
 		alignItems: 'stretch',
 		justifyContent: 'space-around',
-		backgroundColor: '#dfdfdf',
+		backgroundColor: ColorConstants.LIST_BACKGROUND_GREY,
 	},
 
 	extendRowWrapper: {

@@ -8,6 +8,7 @@ var {
 	ListView,
 	TouchableHighlight,
 	Dimensions,
+	Image,
 } = React;
 
 
@@ -100,20 +101,79 @@ var StockClosedPositionPage = React.createClass({
 	},
 
 	renderDetailInfo: function(rowData) {
+		var extendHeight = 204
+		var tradeImage = true ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
 		return (
-			<View style={{height: 200}} >
-				<Text style={styles.stockNameText}>
-					Detail info
-				</Text>
+			<View style={[{height: extendHeight}, styles.extendWrapper]} >
+				<View style={styles.darkSeparator} />
+				<View style={styles.extendRowWrapper}>
+					<View style={styles.extendLeft}>
+						<Text style={styles.extendTextTop}>类型</Text>
+						<Image style={styles.extendImageBottom} source={tradeImage}/>
+					</View>
+					<View style={styles.extendMiddle}>
+						<Text style={styles.extendTextTop}>本金</Text>
+						<Text style={styles.extendTextBottom}>100</Text>
+					</View>
+					<View style={styles.extendRight}>
+						<Text style={styles.extendTextTop}>杠杆</Text>
+						<Text style={styles.extendTextBottom}>x10</Text>
+					</View>
+				</View>
+				<View style={styles.darkSeparator} />
+				<View style={styles.extendRowWrapper}>
+					<View style={styles.extendLeft}>
+						<Text style={styles.extendTextTop}>开仓价格</Text>
+						<Text style={styles.extendTextBottom}>10.24</Text>
+					</View>
+					<View style={styles.extendMiddle}>
+						<Text style={styles.extendTextTop}>开仓费</Text>
+						<Text style={styles.extendTextBottom}>0.24</Text>
+					</View>
+					<View style={styles.extendRight}>
+						<Text style={styles.extendTextTop}>16/03/24</Text>
+						<Text style={styles.extendTextBottom}>13:30</Text>
+					</View>
+				</View>
+				<View style={styles.darkSeparator} />
+				<View style={styles.extendRowWrapper}>
+					<View style={styles.extendLeft}>
+						<Text style={styles.extendTextTop}>平仓价格</Text>
+						<Text style={styles.extendTextBottom}>10.24</Text>
+					</View>
+					<View style={styles.extendMiddle}>
+						<Text style={styles.extendTextTop}>平仓费</Text>
+						<Text style={styles.extendTextBottom}>1.24</Text>
+					</View>
+					<View style={styles.extendRight}>
+						<Text style={styles.extendTextTop}>16/03/24</Text>
+						<Text style={styles.extendTextBottom}>14:30</Text>
+					</View>
+				</View>
+				<View style={styles.darkSeparator} />
+				<View style={styles.extendRowWrapper}>
+					<View style={styles.extendLeft}>
+						<Text style={styles.extendTextTop}>留仓费</Text>
+						<Text style={styles.extendTextBottom}>0.24</Text>
+					</View>
+					<View style={styles.extendMiddle}>
+						<Text style={styles.extendTextTop}>净收益</Text>
+						<Text style={[styles.extendTextBottom, {color:'#e60b11'}]}>14.28</Text>
+					</View>
+					<View style={styles.extendRight}>
+					</View>
+				</View>
+
 			</View>
 		);
 	},
 
 	renderRow: function(rowData, sectionID, rowID, highlightRow) {
+		var bgcolor = this.state.selectedRow === rowID ? ColorConstants.LIST_BACKGROUND_GREY : 'white'
 		return (
 			<View>
-				<TouchableHighlight onPress={() => this.stockPressed(rowData, sectionID, rowID, highlightRow)}>
-					<View style={styles.rowWrapper} key={rowData.key}>
+				<TouchableHighlight activeOpacity={1} onPress={() => this.stockPressed(rowData, sectionID, rowID, highlightRow)}>
+					<View style={[styles.rowWrapper, {backgroundColor: bgcolor}]} key={rowData.key}>
 						<View style={styles.rowLeftPart}>
 							<Text style={styles.stockNameText}>
 								{rowData.name}
@@ -227,6 +287,60 @@ var styles = StyleSheet.create({
 		fontSize: 18,
 		color: '#ffffff',
 		fontWeight: 'bold',
+	},
+
+	darkSeparator: {
+		marginLeft: 15,
+		height: 1,
+		backgroundColor: '#c9c9c9',
+	},
+
+	extendWrapper: {
+		alignItems: 'stretch',
+		justifyContent: 'space-around',
+		backgroundColor: ColorConstants.LIST_BACKGROUND_GREY,
+	},
+
+	extendRowWrapper: {
+		flexDirection: 'row',
+		alignItems: 'stretch',
+		justifyContent: 'space-around',
+		height: 51,
+	},
+
+	extendLeft: {
+		flex: 1,
+		alignItems: 'flex-start',
+		marginLeft: 15,
+		paddingTop: 8,
+		paddingBottom: 8,
+	},
+	extendMiddle: {
+		flex: 1,
+		alignItems: 'center',
+		paddingTop: 8,
+		paddingBottom: 8,
+	},
+	extendRight: {
+		flex: 1,
+		alignItems: 'flex-end',
+		marginRight: 15,
+		paddingTop: 8,
+		paddingBottom: 8,
+	},
+
+	extendTextTop: {
+		fontSize:14,
+		color: '#7d7d7d',
+	},
+	extendTextBottom: {
+		fontSize:13,
+		color: 'black',
+		marginTop: 5,
+	},
+	extendImageBottom: {
+		width: 24,
+		height: 24,
 	},
 });
 

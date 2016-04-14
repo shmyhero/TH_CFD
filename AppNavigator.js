@@ -210,8 +210,11 @@ var AppNavigator = React.createClass({
 	},
 
 	initTabbarEvent() {
-		var ref = this.refs['stockContent'].refs['wrap'].getWrappedRef()
-		ref.tabWillFocus = EventCenter.emitStockTabPressEvent;
+		var stockRef = this.refs['stockContent'].refs['wrap'].getWrappedRef()
+		stockRef.tabWillFocus = EventCenter.emitStockTabPressEvent;
+
+		var exchangeRef = this.refs['exchangeContent'].refs['wrap'].getWrappedRef()
+		exchangeRef.tabWillFocus = EventCenter.emitExchangeTabPressEvent;
 	},
 
 	componentDidMount: function() {
@@ -246,7 +249,7 @@ var AppNavigator = React.createClass({
 			        </Tab>
 			        <Tab name="stats">
 			          	<Icon label="交易" type={glypy.Stat} from={'icomoon'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
-			        	<RawContent>
+			        	<RawContent ref="exchangeContent">
 			            	<Navigator
 								style={styles.container}
 								initialRoute={{name: STOCK_EXCHANGE_ROUTE}}

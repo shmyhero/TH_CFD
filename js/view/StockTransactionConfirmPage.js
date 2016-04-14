@@ -27,11 +27,26 @@ var StockTransactionConfirmPage = React.createClass({
 				backgroundOpacity: new Animated.Value(0),
 				dialogY: new Animated.Value(10000),
 				visible: false,
+				name: 'ABC',
+				isLong: true,
+				invest: 0,
+				leverage: 0,
+				settlePrice: 0,
+
 			}
 		);
 	},
 
-	show: function() {
+	show: function(transactionInfo) {
+		if (transactionInfo !== null) {
+			this.setState({
+				name: transactionInfo.stockName,
+				isLong: transactionInfo.isLong,
+				invest: transactionInfo.invest,
+				leverage: transactionInfo.leverage,
+				settlePrice: transactionInfo.settlePrice,
+			})
+		}
 		this.setState({
 			visible: true,
 		})
@@ -100,7 +115,7 @@ var StockTransactionConfirmPage = React.createClass({
 				<Animated.View style={[styles.contentContainer, {top: this.state.dialogY}]}>
 					<View style={styles.titleContainer}>
 						<Text style={styles.titleText}>
-							新东方 - 开仓
+							{this.state.name} - 开仓
 						</Text>
 					</View>
 					<View style={styles.centerContainer}>
@@ -108,14 +123,14 @@ var StockTransactionConfirmPage = React.createClass({
 							<Text style={styles.itemTitleText}>
 								类型
 							</Text>
-							<Image style={styles.sortImage} source={require('../../images/downsort.png')}/>
+							<Image style={styles.longImage} source={this.state.isLong ? require('../../images/dark_up.png') : require('../../images/dark_down.png')}/>
 						</View>
 						<View style={{flex: 1, alignItems: 'center'}}>
 							<Text style={styles.itemTitleText}>
 								本金
 							</Text>
 							<Text style={styles.itemValueText}>
-								100
+								{this.state.invest}
 							</Text>
 						</View>
 						<View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>
@@ -123,7 +138,7 @@ var StockTransactionConfirmPage = React.createClass({
 								杠杆
 							</Text>
 							<Text style={styles.itemValueText}>
-								X 10
+								{this.state.leverage}
 							</Text>
 						</View>
 					</View>
@@ -134,7 +149,7 @@ var StockTransactionConfirmPage = React.createClass({
 								交易价格
 							</Text>
 							<Text style={styles.itemValueText}>
-								10.12
+								{this.state.settlePrice}
 							</Text>
 						</View>
 						<View style={{flex: 1, alignItems: 'center'}}>
@@ -142,7 +157,7 @@ var StockTransactionConfirmPage = React.createClass({
 								止损
 							</Text>
 							<Text style={styles.itemValueText}>
-								100
+								{this.state.invest}
 							</Text>
 						</View>
 						<View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>
@@ -221,6 +236,11 @@ var styles = StyleSheet.create({
 		fontSize: 14,
 		textAlign: 'center',
 		color: '#000000',
+	},
+
+	longImage: {
+		width: 24,
+		height: 24,
 	},
 
 	line: {

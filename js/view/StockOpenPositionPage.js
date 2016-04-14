@@ -264,7 +264,7 @@ var StockOpenPositionPage = React.createClass({
 
 			if (priceData != undefined) {
 				//todo
-				var lastClose = rowData.preClose
+				var lastClose = rowData.security.preClose
 				maxPrice = Number.MIN_VALUE
 				minPrice = Number.MAX_VALUE
 				

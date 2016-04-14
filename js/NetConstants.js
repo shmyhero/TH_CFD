@@ -17,6 +17,7 @@ export const GET_SEARCH_STOCK_API = SERVER_IP + '/api/security/search'
 export const GET_STOCK_DETAIL_API = SERVER_IP + '/api/security/<stockCode>'
 export const GET_STOCK_PRICE_TODAY_API = SERVER_IP + '/api/quote/<stockCode>/tick/today'
 export const OWN_STOCK_LIST_API = SERVER_IP + '/api/security/bookmark'
+export const GET_OPEN_POSITION_API = SERVER_IP + '/api/position/open'
 
 export const PARAMETER_PHONE = 'phone'
 export const PARAMETER_VERFICATION_CODE = 'verifyCode'

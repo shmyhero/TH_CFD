@@ -13,8 +13,11 @@ var {
 	Image,
 	Alert,
 } = React;
+var {EventCenter, EventConst} = require('../EventCenter')
 
 
+var LogicData = require('../LogicData')
+var AppNavigator = require('../../AppNavigator')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var ColorConstants = require('../ColorConstants')
@@ -24,39 +27,53 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {
 		return r1.id !== r2.id || r1.profitPercentage!==r2.profitPercentage || r1.hasSelected!==r2.hasSelected
 	}});
 
-var tempData = [
-	{id:13001, symbol:'AAPL UW', name:'苹果', tag: 'US', profitPercentage: 0.1, hasSelected:false},
-	{id:13001, symbol:'AAPL UW2', name:'苹果2', tag: 'US', profitPercentage: 0.05, hasSelected:false},
-	{id:13001, symbol:'AAPL UW3', name:'苹果3', profitPercentage: -0.08, hasSelected:false},
-	{id:13001, symbol:'AAPL UW4', name:'苹果4', profitPercentage: 0, hasSelected:false},
-	{id:13002, symbol:'AAPL UW2', name:'苹果2', tag: 'US', profitPercentage: 0.05, hasSelected:false},
-	{id:13003, symbol:'AAPL UW3', name:'苹果3', profitPercentage: -0.08, hasSelected:false},
-	{id:13004, symbol:'AAPL UW4', name:'苹果4', profitPercentage: 0, hasSelected:false},
-	{id:13001, symbol:'AAPL UW', name:'苹果', tag: 'US', profitPercentage: 0.1, hasSelected:false},
-	{id:13002, symbol:'AAPL UW2', name:'苹果2', tag: 'US', profitPercentage: 0.05, hasSelected:false},
-	{id:13003, symbol:'AAPL UW3', name:'苹果3', profitPercentage: -0.08, hasSelected:false},
-	{id:13004, symbol:'AAPL UW4', name:'苹果4', profitPercentage: 0, hasSelected:false},
-	{id:13001, symbol:'AAPL UW', name:'苹果', tag: 'US', profitPercentage: 0.1, hasSelected:false},
-	{id:13002, symbol:'AAPL UW2', name:'苹果2', tag: 'US', profitPercentage: 0.05, hasSelected:false},
-	{id:13003, symbol:'AAPL UW3', name:'苹果3', profitPercentage: -0.08, hasSelected:false},
-	{id:13004, symbol:'AAPL UW4', name:'苹果4', profitPercentage: 0, hasSelected:false},
-]
-
 var extendHeight = 0
 
 var StockOpenPositionPage = React.createClass({
 	
 	getInitialState: function() {
 		return {
-			stockInfo: ds.cloneWithRows(tempData),
+			stockInfo: ds.cloneWithRows([]),
+			stockInfoRowData: [],
 			selectedRow: -1,
 			selectedSubItem: 0,
 			stockDetailInfo: []
 		};
 	},
 
+	componentDidMount: function() {
+		this.didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.EXCHANGE_TAB_PRESS_EVENT, this.loadOpenPositionInfo);
+	},
+
+	componentWillUnmount: function() {
+		this.didTabSelectSubscription.remove();
+	},
+
 	onEndReached: function() {
 
+	},
+
+	loadOpenPositionInfo: function() {
+		var userData = LogicData.getUserData()
+		var url = NetConstants.GET_OPEN_POSITION_API
+		NetworkModule.fetchTHUrl(
+			url, 
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+			},
+			(responseJson) => {
+				this.setState({
+					stockInfoRowData: responseJson,
+					stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
+				})
+			},
+			(errorMessage) => {
+				Alert.alert('网络错误提示', errorMessage);
+			}
+		)
 	},
 
 	loadStockDetailInfo: function(stockCode) {
@@ -83,15 +100,15 @@ var StockOpenPositionPage = React.createClass({
 
 	stockPressed: function(rowData, sectionID, rowID, highlightRow) {
 		var newData = []
-		$.extend(true, newData, tempData)	// deep copy
+		$.extend(true, newData, this.state.stockInfoRowData)	// deep copy
 		if (this.state.selectedRow == rowID) {
 			newData[rowID].hasSelected = false
 			this.setState({
 				stockInfo: this.state.stockInfo.cloneWithRows(newData),
 				selectedRow: -1,
 				selectedSubItem: 0,
+				stockInfoRowData: newData,
 			})
-			tempData = newData
 		} else {
 			var height = this.refs['listview'].getMetrics().contentLength
 			if (this.state.selectedRow >=0 ) {
@@ -103,9 +120,9 @@ var StockOpenPositionPage = React.createClass({
 				stockInfo: this.state.stockInfo.cloneWithRows(newData),
 				selectedRow: rowID,
 				selectedSubItem: 0,
+				stockInfoRowData: newData,
 			})
-			tempData = newData
-			var y = Math.floor(height/tempData.length*rowID)
+			var y = Math.floor(height/newData.length*rowID)
 			this.refs['listview'].scrollTo({x:0, y:y, animated:true})
 		}
 	},
@@ -116,9 +133,9 @@ var StockOpenPositionPage = React.createClass({
 		})
 
 		if (item === 2) {
-			var stockid = rowData.id
+			var stockid = rowData.security.id
 			this.setState({
-				stockDetailInfo: rowData
+				stockDetailInfo: rowData.security
 			})
 			this.loadStockDetailInfo(stockid)
 		}
@@ -145,7 +162,7 @@ var StockOpenPositionPage = React.createClass({
 			return (
 				<View style={styles.stockCountryFlagContainer}>
 					<Text style={styles.stockCountryFlagText}>
-						{rowData.tag}
+						{rowData.security.tag}
 					</Text>
 				</View>
 			);
@@ -247,7 +264,7 @@ var StockOpenPositionPage = React.createClass({
 
 			if (priceData != undefined) {
 				//todo
-				var lastClose = rowData.preClose
+				var lastClose = rowData.security.preClose
 				maxPrice = Number.MIN_VALUE
 				minPrice = Number.MAX_VALUE
 				
@@ -281,7 +298,7 @@ var StockOpenPositionPage = React.createClass({
 
 	renderDetailInfo: function(rowData) {
 		var buttonEnable = true
-		var tradeImage = true ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
+		var tradeImage = rowData.isLong ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
 		var showNetIncome = false
 		extendHeight = 222
 		if (showNetIncome) {
@@ -303,26 +320,26 @@ var StockOpenPositionPage = React.createClass({
 					</View>
 					<View style={styles.extendMiddle}>
 						<Text style={styles.extendTextTop}>本金</Text>
-						<Text style={styles.extendTextBottom}>100</Text>
+						<Text style={styles.extendTextBottom}>{rowData.invest}</Text>
 					</View>
 					<View style={styles.extendRight}>
 						<Text style={styles.extendTextTop}>杠杆</Text>
-						<Text style={styles.extendTextBottom}>x10</Text>
+						<Text style={styles.extendTextBottom}>{rowData.leverage}</Text>
 					</View>
 				</View>
 				<View style={styles.darkSeparator} />
 				<View style={styles.extendRowWrapper}>
 					<View style={styles.extendLeft}>
 						<Text style={styles.extendTextTop}>开仓价格</Text>
-						<Text style={styles.extendTextBottom}>10.24</Text>
+						<Text style={styles.extendTextBottom}>{rowData.settlePrice}</Text>
 					</View>
 					<View style={styles.extendMiddle}>
 						<Text style={styles.extendTextTop}>当前价格</Text>
-						<Text style={styles.extendTextBottom}>11.24</Text>
+						<Text style={styles.extendTextBottom}>{rowData.security.last}</Text>
 					</View>
 					<View style={styles.extendRight}>
-						<Text style={styles.extendTextTop}>涨跌幅</Text>
-						<Text style={styles.extendTextBottom}>＋9.77%</Text>
+						<Text style={styles.extendTextTop}>价差</Text>
+						<Text style={styles.extendTextBottom}>{(rowData.security.last - rowData.settlePrice).toFixed(2)}</Text>
 					</View>
 				</View>
 				<View style={styles.darkSeparator} />
@@ -359,6 +376,10 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	renderRow: function(rowData, sectionID, rowID, highlightRow) {
+		var profitPercentage = 0
+		if (rowData.invest !== 0) {
+			profitPercentage = (rowData.profit / rowData.invest).toFixed(2)
+		}
 		var bgcolor = this.state.selectedRow === rowID ? ColorConstants.LIST_BACKGROUND_GREY : 'white'
 		return (
 			<View>
@@ -366,19 +387,19 @@ var StockOpenPositionPage = React.createClass({
 					<View style={[styles.rowWrapper, {backgroundColor: bgcolor}]} key={rowData.key}>
 						<View style={styles.rowLeftPart}>
 							<Text style={styles.stockNameText}>
-								{rowData.name}
+								{rowData.security.name}
 							</Text>
 
 							<View style={{flexDirection: 'row', alignItems: 'center'}}>
 								{this.renderCountyFlag(rowData)}
 								<Text style={styles.stockSymbolText}>
-									{rowData.symbol}
+									{rowData.security.symbol}
 								</Text>
 							</View>
 						</View>
 
 						<View style={styles.rowRightPart}>
-							{this.renderProfit(rowData.profitPercentage * 100)}
+							{this.renderProfit(profitPercentage * 100)}
 						</View>
 					</View>
 				</TouchableHighlight>

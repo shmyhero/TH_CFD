@@ -7,6 +7,7 @@ var eventEmitter = new EventEmitter()
 
 const EventConst = {
 	STOCK_TAB_PRESS_EVENT : 'stockTabEvent',
+	EXCHANGE_TAB_PRESS_EVENT : 'exchangeTabEvent',
 }
 
 var EventCenter = {
@@ -17,6 +18,11 @@ var EventCenter = {
 	emitStockTabPressEvent: function() {
 		// this.eventEmitter.emit('eventname', { someArg: 'argValue' });
 		eventEmitter.emit(EventConst.STOCK_TAB_PRESS_EVENT)
+	},
+
+	emitExchangeTabPressEvent: function() {
+		// this.eventEmitter.emit('eventname', { someArg: 'argValue' });
+		eventEmitter.emit(EventConst.EXCHANGE_TAB_PRESS_EVENT)
 	},
 }
 

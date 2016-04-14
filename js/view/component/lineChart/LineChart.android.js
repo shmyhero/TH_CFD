@@ -18,6 +18,8 @@ var LineChart = React.createClass({
 
 		data: React.PropTypes.string,	// JSON format
 
+		colorType: React.PropTypes.number,
+
 		description: React.PropTypes.string,
 
 		noDataText: React.PropTypes.string,
@@ -67,6 +69,7 @@ var LineChart = React.createClass({
 
 	getDefaultProps(): Object {
 		return {
+			colorType: 0,
 			description: '',
 			noDataText: '数据加载中...',
 			padding: 10,

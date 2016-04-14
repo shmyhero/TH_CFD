@@ -179,6 +179,14 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
         }
     }
 
+    @ReactProp(name = "colorType")
+    public void setColorType(ReactLineChart chart, int type) {
+        if (type == 1) {
+            CHART_BORDER_COLOR = Color.WHITE;
+            CHART_LINE_COLOR = Color.WHITE;
+        }
+    }
+
     @ReactProp(name = "description")
     public void setDescription(ReactLineChart chart, String description) {
         if (chart != null) {

@@ -23,11 +23,10 @@ var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
 var AppNavigator = require('../../AppNavigator')
 var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
-var {EventCenter, EventConst} = require('../EventCenter')
+
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var didFocusSubscription = null;
-var didTabSelectSubscription = null;
 var recevieDataSubscription = null;
 
 var StockListPage = React.createClass({
@@ -118,7 +117,6 @@ var StockListPage = React.createClass({
 				this.updateOwnData();
 			})
 		    this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
-		    this.didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.STOCK_TAB_PRESS_EVENT, this.updateOwnData);
 		    this.recevieDataSubscription = RCTNativeAppEventEmitter.addListener(
 				'nativeSendDataToRN',
 				(args) => {
@@ -138,7 +136,6 @@ var StockListPage = React.createClass({
 		if (this.props.isOwnStockPage) {
 			this.didFocusSubscription.remove();
 			this.recevieDataSubscription.remove();
-			this.didTabSelectSubscription.remove();
 		}
 	},
 
@@ -148,6 +145,12 @@ var StockListPage = React.createClass({
         if (currentRoute === event.data.route) {
             this.updateOwnData()
         }
+	},
+
+	tabPressed: function() {
+		if (this.props.isOwnStockPage) {
+			this.updateOwnData()
+		}
 	},
 
 	updateOwnData: function() {

@@ -12,6 +12,8 @@ var {
 	Dimensions,
 } = React;
 
+var {EventCenter, EventConst} = require('../EventCenter')
+
 var NativeSceneModule = require('../module/NativeSceneModule')
 var NativeDataModule = require('../module/NativeDataModule')
 var LogicData = require('../LogicData')
@@ -35,6 +37,7 @@ var urls = [
 ]
 
 var didFocusSubscription = null;
+var didTabSelectSubscription = null;
 
 var StockListViewPager = React.createClass({
 
@@ -48,10 +51,17 @@ var StockListViewPager = React.createClass({
 		WebSocketModule.start()
 
 		this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', (event) => this.onDidFocus(event));
+		this.didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.STOCK_TAB_PRESS_EVENT, () => {
+			this.refs['page' + this.state.currentSelectedTab].tabPressed()
+			WebSocketModule.registerCallbacks((stockInfo) => {
+				this.refs['page' + this.state.currentSelectedTab].handleStockInfo(stockInfo)
+			})
+		});
 	},
 
 	componentWillUnmount: function() {
 		this.didFocusSubscription.remove();
+		this.didTabSelectSubscription.remove();
 	},
 
 	onDidFocus: function(event) {

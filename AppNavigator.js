@@ -167,10 +167,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 	} else if (route.name === STOCK_EXCHANGE_ROUTE) {
 		showTabbar()
 		return (
-			<View style={{flex: 1}}>
-				<NavBar title="交易" showSearchButton={true} navigator={navigationOperations}/>
-				<StockExchangePage navigator={navigationOperations} />
-			</View>
+			<StockExchangePage navigator={navigationOperations} />
 		)
 	}
 };

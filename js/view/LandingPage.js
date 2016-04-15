@@ -20,21 +20,12 @@ var AppNavigator = require('../../AppNavigator')
 
 var LandingPage = React.createClass({
 
-	getInitialState: function() {
-		return {
-			useTokenAvailable: false
-		};
-	},
-
 	loginPress: function() {
 		StorageModule.loadUserData()
 			.then((value) => {
 				if (value !== null) {
 					LogicData.setUserData(JSON.parse(value))
 
-					this.setState({
-						useTokenAvailable: true
-					})
 					this.props.navigator.push({
 						name: AppNavigator.WECHAT_LOGIN_CONFIRM_ROUTE,
 					});	
@@ -47,14 +38,10 @@ var LandingPage = React.createClass({
 	},
 
 	logoutPress: function() {
-		if (this.state.useTokenAvailable) {
-			StorageModule.removeUserData()
-			.then(() => {
-				this.setState({
-					useTokenAvailable: false
-				});
-			})
-		}
+		StorageModule.removeUserData()
+		.then(() => {
+			LogicData.removeUserData()
+		})
 	},
 
 	render: function() {

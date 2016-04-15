@@ -133,8 +133,9 @@ var StockOpenPositionPage = React.createClass({
 	stockPressed: function(rowData, sectionID, rowID, highlightRow) {
 		var newData = []
 		$.extend(true, newData, this.state.stockInfoRowData)	// deep copy
-		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+		
 		if (this.state.selectedRow == rowID) {
+			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 			newData[rowID].hasSelected = false
 			this.setState({
 				stockInfo: this.state.stockInfo.cloneWithRows(newData),
@@ -143,6 +144,7 @@ var StockOpenPositionPage = React.createClass({
 				stockInfoRowData: newData,
 			})
 		} else {
+			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
 			var height = this.refs['listview'].getMetrics().contentLength
 			if (this.state.selectedRow >=0 ) {
 				newData[this.state.selectedRow].hasSelected = false

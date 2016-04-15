@@ -10,6 +10,7 @@ var {
 	Dimensions,
 	Image,
 } = React;
+var LayoutAnimation = require('LayoutAnimation')
 
 
 var ColorConstants = require('../ColorConstants')
@@ -33,17 +34,24 @@ var StockClosedPositionPage = React.createClass({
 		};
 	},
 
+	tabPressed: function(index) {
+		
+	},
+
 	onEndReached: function() {
 
 	},
 
 	stockPressed: function(rowData, sectionID, rowID, highlightRow) {
+		
 		if (this.state.selectedRow == rowID) {
+			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 			this.setState({
 				stockInfo: ds.cloneWithRows(tempData),
 				selectedRow: -1,
 			})
 		} else {
+			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
 			this.setState({
 				stockInfo: ds.cloneWithRows(tempData),
 				selectedRow: rowID,

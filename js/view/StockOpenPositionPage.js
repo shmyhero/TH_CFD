@@ -13,6 +13,7 @@ var {
 	Image,
 	Alert,
 } = React;
+var LayoutAnimation = require('LayoutAnimation')
 
 
 var LogicData = require('../LogicData')
@@ -132,6 +133,7 @@ var StockOpenPositionPage = React.createClass({
 	stockPressed: function(rowData, sectionID, rowID, highlightRow) {
 		var newData = []
 		$.extend(true, newData, this.state.stockInfoRowData)	// deep copy
+		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 		if (this.state.selectedRow == rowID) {
 			newData[rowID].hasSelected = false
 			this.setState({
@@ -159,6 +161,7 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	subItemPress: function(item, rowData) {
+		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 		this.setState({
 			selectedSubItem: this.state.selectedSubItem === item ? 0 : item,
 		})

@@ -20,6 +20,7 @@ var StockStatisticsPage = require('./StockStatisticsPage')
 var ColorConstants = require('../ColorConstants')
 var NavBar = require('../view/NavBar')
 var LogicData = require('../LogicData')
+var AppNavigator = require('../../AppNavigator')
 
 var tabNames = ['持仓', '平仓', '统计']
 var didTabSelectSubscription = null
@@ -27,6 +28,9 @@ var didTabSelectSubscription = null
 var StockExchangePage = React.createClass({
 
 	registerPressed: function() {
+		this.props.navigator.push({
+			name: AppNavigator.LOGIN_ROUTE,
+		});
 	},
 
 	getInitialState: function() {
@@ -96,6 +100,8 @@ var StockExchangePage = React.createClass({
 					</View>
 
 					<TouchableHighlight 
+						activeOpacity={0.7}
+						underlayColor={'transparent'}
 						onPress={this.registerPressed}
 						style={styles.registerView}>
 						<Text style={styles.registerButton}>快速注册</Text>

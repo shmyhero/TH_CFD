@@ -9,6 +9,10 @@ var {
 
 
 var StockStatisticsPage = React.createClass({
+
+	tabPressed: function(index) {
+		
+	},
 	render: function() {
 		return (
 			<View>

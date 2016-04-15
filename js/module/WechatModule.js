@@ -27,8 +27,8 @@ export function wechatLogin(successCallback, errorCallback) {
 function wechatLoginCodeHandler(response) {
 	console.log(response)
 
-	var url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + "wxe795a0ba8fa23cf7" +
-		"&secret=" + "a6afcadca7d218c9b2c44632fc8f884d" + 
+	var url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + "wxe102be8f66949cd1" +
+		"&secret=" + "54d2804023e3e3db6ee956738b41aaf0" + 
 		"&code=" + response.code + "&grant_type=authorization_code";
 	fetch(url, {
 		method: 'GET'

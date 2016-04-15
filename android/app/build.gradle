@@ -95,7 +95,7 @@ android {
         }
         manifestPlaceholders = [
                 // 如果有多项，每一项之间需要用逗号分隔
-                WX_APPID: "wxe795a0ba8fa23cf7"      //在此修改微信APPID
+                WX_APPID: "wxe102be8f66949cd1"      //在此修改微信APPID
         ]
     }
     splits {

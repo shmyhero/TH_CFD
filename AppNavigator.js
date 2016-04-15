@@ -84,10 +84,12 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 	}
 
 	if (route.name === LANDING_ROUTE) {
+		showTabbar()
 		return (
 			<LandingPage navigator={navigationOperations} />
 		);
 	} else if (route.name === LOGIN_ROUTE) {
+		hideTabbar()
 		return (
 			<View style={{flex: 1}}>
 				<NavBar title="手机验证" showBackButton={true} navigator={navigationOperations}/>

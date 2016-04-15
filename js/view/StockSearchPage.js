@@ -15,6 +15,7 @@ var {
 	Alert,
 	TouchableOpacity,
 } = React;
+var LayoutAnimation = require('LayoutAnimation')
 
 var LogicData = require('../LogicData')
 var ColorConstants = require('../ColorConstants')
@@ -45,6 +46,7 @@ var StockSearchPage = React.createClass({
 					if (responseJson.length == 0) {
 						Alert.alert('提示', '没有找到包含此信息的商品。')
 					}
+					LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 					this.setState({
 						searchStockRawInfo: responseJson,
 						searchStockInfo: ds.cloneWithRows(responseJson)

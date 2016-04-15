@@ -94,9 +94,7 @@ var UpdateUserInfoPage = React.createClass({
 				},
 			},
 			function(responseJson) {
-				this.props.navigator.replace({
-					name: AppNavigator.WECHAT_LOGIN_CONFIRM_ROUTE,
-				});
+				this.props.navigator.popToTop()
 			}.bind(this),
 			function(errorMessage) {
 				Alert.alert('提示',errorMessage);

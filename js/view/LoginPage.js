@@ -272,7 +272,7 @@ var LoginPage = React.createClass({
 					<View style={styles.rowWrapper}>
 						<View style={[styles.phoneNumberInputView, {borderColor: this.state.phoneNumberBorderColor}]}>
 							<TextInput style={styles.phoneNumberInput}
-								autoFocus={true}
+								autoFocus={Platform.OS !== 'ios'}
 								onFocus={() => this.phoneNumberOnFocus()}
 								onChangeText={(text) => this.setPhoneNumber(text)}
 								placeholder='手机号'

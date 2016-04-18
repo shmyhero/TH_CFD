@@ -286,7 +286,7 @@ var StockListPage = React.createClass({
 		if (rowData.preClose == 0) {
 			rowData.preClose = rowData.last
 		}
-		if (rowData.preClose !== 0) {
+		if (rowData.preClose > 0) {
 			percentChange = (rowData.last - rowData.preClose) / rowData.preClose * 100
 		}
 

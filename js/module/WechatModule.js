@@ -1,5 +1,18 @@
 'use strict'
 
+var React = require('react-native')
+var {
+	StyleSheet,
+	Platform,
+	View,
+	TextInput,
+	Text,
+	TouchableHighlight,
+	Alert,
+	Dimensions,
+	Image,
+} = React;
+
 import * as WechatAPI from 'react-native-wx';
 var LogicData = require('../LogicData')
 
@@ -19,8 +32,17 @@ export function wechatLogin(successCallback, errorCallback) {
 	.then((installed) => {
 		if (installed) {
 			WechatAPI.login()
-			.then((response) => wechatLoginCodeHandler(response))
+			.then((response) => {
+				mErrorCallback('chenmggong ');
+				wechatLoginCodeHandler(response)
+			})
+			.catch((e) => {
+				mErrorCallback(e.message);
+			})
 		}
+	})
+	.catch((e) => {
+		mErrorCallback(e.message);
 	})
 }
 
@@ -39,6 +61,11 @@ function wechatLoginCodeHandler(response) {
 		LogicData.setWechatAuthData(responsejson)
 		wechatGetUserInfo()
 	})
+	.catch((e) => {
+		console.log('fetchTHUrl catches: ' + e)
+		mErrorCallback(e.message);
+	})
+	.done();
 }
 
 function wechatGetUserInfo() {
@@ -60,4 +87,9 @@ function wechatGetUserInfo() {
 			mErrorCallback = null
 		}
 	})
+	.catch((e) => {
+		console.log('fetchTHUrl catches: ' + e)
+		mErrorCallback(e.message);
+	})
+	.done();
 }

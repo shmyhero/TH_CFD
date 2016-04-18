@@ -31,6 +31,8 @@ const glypy = glypyMapMaker({
 const systemBlue = '#1a61dd'
 const iconGrey = '#888f9c'
 
+require('./js/utils/dateUtils')
+
 var NavBar = require('./js/view/NavBar')
 var LandingPage = require('./js/view/LandingPage')
 var LoginPage = require('./js/view/LoginPage')
@@ -156,7 +158,7 @@ var RouteMapper = function(route, navigationOperations, onComponentRef) {
 		return (
 			// <View style={{flex: 1}}>
 				<StockDetailPage style={{flex: 1}}
-						navigator={navigationOperations} 
+						navigator={navigationOperations}
 						stockName={route.stockRowData.name}
 						stockCode={route.stockRowData.id}
 						stockSymbol={route.stockRowData.symbol}

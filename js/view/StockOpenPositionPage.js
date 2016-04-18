@@ -2,7 +2,7 @@
 
 var LineChart = require('./component/lineChart/LineChart');
 var React = require('react-native');
-var { 
+var {
 	StyleSheet,
 	View,
 	Text,
@@ -22,6 +22,7 @@ var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
 var ColorConstants = require('../ColorConstants')
+var StockTransactionConfirmPage = require('./StockTransactionConfirmPage')
 
 var {height, width} = Dimensions.get('window');
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {
@@ -31,7 +32,7 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {
 var extendHeight = 0
 
 var StockOpenPositionPage = React.createClass({
-	
+
 	getInitialState: function() {
 		return {
 			stockInfo: ds.cloneWithRows([]),
@@ -54,7 +55,7 @@ var StockOpenPositionPage = React.createClass({
 		var userData = LogicData.getUserData()
 		var url = NetConstants.GET_OPEN_POSITION_API
 		NetworkModule.fetchTHUrl(
-			url, 
+			url,
 			{
 				method: 'GET',
 				headers: {
@@ -92,7 +93,7 @@ var StockOpenPositionPage = React.createClass({
 		url = url.replace(/<stockCode>/, stockCode)
 
 		NetworkModule.fetchTHUrl(
-			url, 
+			url,
 			{
 				method: 'GET',
 			},
@@ -113,9 +114,9 @@ var StockOpenPositionPage = React.createClass({
 		var hasUpdate = false
 		for (var i = 0; i < this.state.stockInfoRowData.length; i++) {
 			for (var j = 0; j < realtimeStockInfo.length; j++) {
-				if (this.state.stockInfoRowData[i].security.id == realtimeStockInfo[j].id && 
+				if (this.state.stockInfoRowData[i].security.id == realtimeStockInfo[j].id &&
 							this.state.stockInfoRowData[i].security.last !== realtimeStockInfo[j].last) {
-					
+
 					this.state.stockInfoRowData[i].security.last = realtimeStockInfo[j].last;
 					hasUpdate = true;
 					break;
@@ -133,7 +134,7 @@ var StockOpenPositionPage = React.createClass({
 	stockPressed: function(rowData, sectionID, rowID, highlightRow) {
 		var newData = []
 		$.extend(true, newData, this.state.stockInfoRowData)	// deep copy
-		
+
 		if (this.state.selectedRow == rowID) {
 			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 			newData[rowID].hasSelected = false
@@ -177,8 +178,36 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	okPress: function() {
-
+	okPress: function(rowData) {
+		var userData = LogicData.getUserData()
+		var url = NetConstants.POST_DELETE_POSITION_API
+		NetworkModule.fetchTHUrl(
+			url,
+			{
+				method: 'POST',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Content-Type': 'application/json; charset=utf-8',
+				},
+				body: JSON.stringify({
+					posId: rowData.id,
+					securityId: rowData.security.id,
+					isPosLong: rowData.isLong,
+					posQty: rowData.quantity,
+				})
+			},
+			(responseJson) => {
+				this.loadOpenPositionInfo()
+				responseJson.stockName = rowData.security.name
+				responseJson.isCreate = false
+				responseJson.isLong = rowData.isLong
+				responseJson.time = new Date(responseJson.createAt)
+				this.refs['confirmPage'].show(responseJson)
+			},
+			(errorMessage) => {
+				Alert.alert('网络错误提示', errorMessage);
+			}
+		)
 	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
@@ -219,7 +248,7 @@ var StockOpenPositionPage = React.createClass({
 					 {percentChange} %
 				</Text>
 			);
-			
+
 		} else {
 			return (
 				<Text style={[styles.stockPercentText, {color: '#a0a6aa'}]}>
@@ -227,7 +256,7 @@ var StockOpenPositionPage = React.createClass({
 				</Text>
 			);
 		}
-		
+
 	},
 
 	renderChartHeader: function() {
@@ -256,7 +285,7 @@ var StockOpenPositionPage = React.createClass({
 							{maxPrice}
 						</Text>
 					</View>
-					
+
 					<View style={{flex: 1, alignItems: 'flex-end', marginRight: 20}}>
 						<Text style={[styles.priceText, isTop && {color:'black'}]}>
 							{maxPercentage} %
@@ -303,12 +332,12 @@ var StockOpenPositionPage = React.createClass({
 				var lastClose = rowData.security.preClose
 				maxPrice = Number.MIN_VALUE
 				minPrice = Number.MAX_VALUE
-				
+
 				for (var i = 0; i < priceData.length; i ++) {
 					var price = priceData[i].p
 					if (price > maxPrice) {
 						maxPrice = price
-					} 
+					}
 					if (price < minPrice) {
 						minPrice = price
 					}
@@ -398,13 +427,13 @@ var StockOpenPositionPage = React.createClass({
 				{this.state.selectedSubItem !== 0 ? this.renderSubDetail(rowData): null}
 
 				<View style={styles.darkSeparator} />
-				{showNetIncome ? 
+				{showNetIncome ?
 				<Text style={styles.netIncomeText}>净收益:9.26</Text>
 				: null}
 
-				<TouchableHighlight 
+				<TouchableHighlight
 					underlayColor={	'#164593'}
-					onPress={this.okPress} style={[styles.okView, !buttonEnable && styles.okViewDisabled]}>
+					onPress={() => this.okPress(rowData)} style={[styles.okView, !buttonEnable && styles.okViewDisabled]}>
 					<Text style={[styles.okButton, !buttonEnable && styles.okButtonDisabled]}>获利:$10</Text>
 				</TouchableHighlight>
 			</View>
@@ -447,8 +476,8 @@ var StockOpenPositionPage = React.createClass({
 
 	render: function() {
 		return (
-			<View style={{width : width, flex : 1}}> 
-				<ListView 
+			<View style={{width : width, flex : 1}}>
+				<ListView
 					style={styles.list}
 					ref="listview"
 					initialListSize={11}
@@ -457,6 +486,8 @@ var StockOpenPositionPage = React.createClass({
 					renderRow={this.renderRow}
 					renderSeparator={this.renderSeparator}
 					onEndReached={this.onEndReached}/>
+
+					<StockTransactionConfirmPage ref='confirmPage'/>
 			</View>
 		)
 	},
@@ -650,7 +681,7 @@ var styles = StyleSheet.create({
 		color: '#ffffff',
 		backgroundColor: 'transparent',
 	},
-	
+
 	chartTitleTextHighlighted: {
 		flex: 1,
 		fontSize: 15,

@@ -86,7 +86,7 @@ var StockDetailPage = React.createClass({
 		url = url.replace(/<stockCode>/, this.props.stockCode)
 
 		NetworkModule.fetchTHUrl(
-			url, 
+			url,
 			{
 				method: 'GET',
 			},
@@ -116,7 +116,7 @@ var StockDetailPage = React.createClass({
 		url = url.replace(/<stockCode>/, this.props.stockCode)
 
 		NetworkModule.fetchTHUrl(
-			url, 
+			url,
 			{
 				method: 'GET',
 			},
@@ -139,7 +139,7 @@ var StockDetailPage = React.createClass({
 		WebSocketModule.registerCallbacks(
 			(realtimeStockInfo) => {
 				for (var i = 0; i < realtimeStockInfo.length; i++) {
-					if (this.props.stockCode == realtimeStockInfo[i].id && 
+					if (this.props.stockCode == realtimeStockInfo[i].id &&
 								this.state.stockPrice !== realtimeStockInfo[i].last) {
 						this.setState({
 							stockPrice: realtimeStockInfo[i].last
@@ -185,7 +185,7 @@ var StockDetailPage = React.createClass({
 							{maxPrice}
 						</Text>
 					</View>
-					
+
 					<View style={{flex: 1, alignItems: 'flex-end', marginRight: 20}}>
 						<Text style={styles.priceText}>
 							{maxPercentage} %
@@ -210,7 +210,7 @@ var StockDetailPage = React.createClass({
 							{minPrice}
 						</Text>
 					</View>
-					
+
 					<View style={{flex: 1, alignItems: 'flex-end', marginRight: 20}}>
 						<Text style={styles.priceText}>
 							{minPercentage} %
@@ -233,7 +233,7 @@ var StockDetailPage = React.createClass({
 							{firstDate.getHours()}:{firstDate.getMinutes()}
 						</Text>
 					</View>
-					
+
 					<View style={{flex: 1, alignItems: 'flex-end', marginRight:3}}>
 						<Text style={styles.timeText}>
 							{lastDate.getHours()}:{firstDate.getMinutes()}
@@ -273,12 +273,12 @@ var StockDetailPage = React.createClass({
 			var lastClose = this.state.stockInfo.preClose
 			maxPrice = Number.MIN_VALUE
 			minPrice = Number.MAX_VALUE
-			
+
 			for (var i = 0; i < priceData.length; i ++) {
 				var price = priceData[i].p
 				if (price > maxPrice) {
 					maxPrice = price
-				} 
+				}
 				if (price < minPrice) {
 					minPrice = price
 				}
@@ -297,7 +297,7 @@ var StockDetailPage = React.createClass({
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
 				<View style={styles.wrapper}>
 					<LinearGradient colors={['#3475e3', '#123b80']} style={{height: height}}>
-						
+
 						{this.renderHeader()}
 
 						{this.renderTradeStrength()}
@@ -309,7 +309,7 @@ var StockDetailPage = React.createClass({
 							<LineChart style={{flex: 1, backgroundColor:'transparent', marginTop: -26}} data={JSON.stringify(this.state.stockInfo)}/>
 							{this.renderStockMinPriceInfo(minPrice, minPercentage)}
 							{this.renderTime()}
-							
+
 						</View>
 
 						<View style={{flex: 1.2, justifyContent: 'space-around'}}>
@@ -327,7 +327,7 @@ var StockDetailPage = React.createClass({
 					</LinearGradient>
 	    			<InputAccessory textValue={this.state.inputText} maxValue={this.state.totalMoney}
 	    				rightButtonOnClick={this.updateMoney}/>
-				
+
 	    			<StockTransactionConfirmPage ref='confirmPage'/>
 				</View>
     		</TouchableWithoutFeedback>
@@ -385,7 +385,7 @@ var StockDetailPage = React.createClass({
 					onPress={this.addToMyListClicked}>
 				<View style={styles.addToMyListContainer}>
 					<Text style={styles.addToMyListText}>
-						{this.state.isAddedToMyList ? '删除自选':'+自选'} 
+						{this.state.isAddedToMyList ? '删除自选':'+自选'}
 					</Text>
 				</View>
 			</TouchableOpacity>
@@ -398,7 +398,7 @@ var StockDetailPage = React.createClass({
 			var downPercentage = 100 - upPercentage
 			return (
 				<View>
-					<View style={{flexDirection: 'row', alignItems: 'center'}}>	
+					<View style={{flexDirection: 'row', alignItems: 'center'}}>
 					<Text style={styles.tradeStrengthText}>
 						{upPercentage}
 					</Text>
@@ -425,7 +425,7 @@ var StockDetailPage = React.createClass({
 				</View>
 			)
 		}
-		
+
 	},
 
 	renderTradeButton: function() {
@@ -468,7 +468,7 @@ var StockDetailPage = React.createClass({
 			<View style={[styles.rowView, {height:20}]}>
 				<Text style={styles.smallLabel}>本金（美元）</Text>
 				<Text style={styles.smallLabel}>杠杠（倍）</Text>
-			</View>	
+			</View>
 		)
 	},
 
@@ -512,7 +512,7 @@ var StockDetailPage = React.createClass({
 						break
 					}
 					// insert here
-					moneyArray.splice(i+1, 0, ""+input);  
+					moneyArray.splice(i+1, 0, ""+input);
 					break
 				}
 			}
@@ -565,7 +565,7 @@ var StockDetailPage = React.createClass({
 			<TouchableHighlight
 				underlayColor={buttonEnable ? '#f46b6f': '#164593'}
 				onPress={this.okPress} style={[styles.okView, !buttonEnable && styles.okViewDisabled]}>
-				<Text style={[styles.okButton, !buttonEnable && styles.okButtonDisabled]}>确认</Text>	
+				<Text style={[styles.okButton, !buttonEnable && styles.okButtonDisabled]}>确认</Text>
 			</TouchableHighlight>
 		)
 	},
@@ -575,7 +575,7 @@ var StockDetailPage = React.createClass({
 		var url = NetConstants.POST_CREATE_POSITION_API
 
 		NetworkModule.fetchTHUrl(
-			url, 
+			url,
 			{
 				method: 'POST',
 				headers: {
@@ -591,14 +591,16 @@ var StockDetailPage = React.createClass({
 			},
 			(responseJson) => {
 				responseJson.stockName = this.props.stockName
+				responseJson.isCreate = true
+				responseJson.time = new Date(responseJson.createAt)
 				this.refs['confirmPage'].show(responseJson)
 			},
 			(errorMessage) => {
 				Alert.alert('网络错误提示', errorMessage);
 			}
-		)	
+		)
 	},
-	
+
 	renderInput: function() {
 		var {height, width} = Dimensions.get('window');
 		return (
@@ -749,7 +751,7 @@ var styles = StyleSheet.create({
 		marginLeft: 1,
 	},
 	tradeStrength: {
-		flexDirection: 'row', 
+		flexDirection: 'row',
 		height: 2,
 		marginLeft: 10,
 		marginRight: 10,

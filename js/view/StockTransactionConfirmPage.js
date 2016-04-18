@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react-native');
-var { 
+var {
 	StyleSheet,
 	View,
 	Text,
@@ -22,17 +22,18 @@ var StockTransactionConfirmPage = React.createClass({
 
 	getInitialState: function() {
 		return merge(
-			this.touchableGetInitialState(), 
+			this.touchableGetInitialState(),
 			{
 				backgroundOpacity: new Animated.Value(0),
 				dialogY: new Animated.Value(10000),
 				visible: false,
 				name: 'ABC',
+				isCreate: true,
 				isLong: true,
 				invest: 0,
 				leverage: 0,
 				settlePrice: 0,
-
+				time: new Date(),
 			}
 		);
 	},
@@ -41,10 +42,12 @@ var StockTransactionConfirmPage = React.createClass({
 		if (transactionInfo !== null) {
 			this.setState({
 				name: transactionInfo.stockName,
+				isCreate: transactionInfo.isCreate,
 				isLong: transactionInfo.isLong,
 				invest: transactionInfo.invest,
 				leverage: transactionInfo.leverage,
 				settlePrice: transactionInfo.settlePrice,
+				time: transactionInfo.time,
 			})
 		}
 		this.setState({
@@ -53,14 +56,14 @@ var StockTransactionConfirmPage = React.createClass({
 		this.state.dialogY.setValue(height)
 		Animated.parallel([
 			Animated.timing(
-				this.state.backgroundOpacity, 
+				this.state.backgroundOpacity,
 				{
 					toValue: 0.6,
 					duration: 300,
 				},
 			),
 			Animated.timing(
-				this.state.dialogY, 
+				this.state.dialogY,
 				{
 					toValue: height / 3,
 					duration: 100,
@@ -72,14 +75,14 @@ var StockTransactionConfirmPage = React.createClass({
 	hide: function() {
 		Animated.parallel([
 			Animated.timing(
-				this.state.backgroundOpacity, 
+				this.state.backgroundOpacity,
 				{
 					toValue: 0,
 					duration: 300,
 				},
 			),
 			Animated.timing(
-				this.state.dialogY, 
+				this.state.dialogY,
 				{
 					toValue: height,
 					duration: 100,
@@ -114,9 +117,15 @@ var StockTransactionConfirmPage = React.createClass({
 
 				<Animated.View style={[styles.contentContainer, {top: this.state.dialogY}]}>
 					<View style={styles.titleContainer}>
-						<Text style={styles.titleText}>
-							{this.state.name} - 开仓
-						</Text>
+						<View style={{flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch'}}>
+							<Text style={styles.titleText}>
+								{this.state.name} - {this.state.isCreate?'开仓':'平仓'}
+							</Text>
+
+							<Text style={[styles.titleText, {marginRight: 20}]}>
+								0.00%
+							</Text>
+						</View>
 					</View>
 					<View style={styles.centerContainer}>
 						<View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20, paddingVertical: 8}}>
@@ -162,17 +171,17 @@ var StockTransactionConfirmPage = React.createClass({
 						</View>
 						<View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>
 							<Text style={styles.itemTitleText}>
-								16/03/24
+								{this.state.time.Format('dd/MM/yy')}
 							</Text>
 							<Text style={styles.itemValueText}>
-								14:30
+								{this.state.time.Format('hh:mm')}
 							</Text>
 						</View>
 					</View>
 				</Animated.View>
 
 			</View>
-			
+
 		);
 	},
 });
@@ -205,7 +214,7 @@ var styles = StyleSheet.create({
 	},
 
 	centerContainer: {
-		flexDirection: 'row', 
+		flexDirection: 'row',
 		alignItems: 'center',
 		backgroundColor: '#f5f5f5',
 	},
@@ -213,7 +222,7 @@ var styles = StyleSheet.create({
 	bottomContainer: {
 		borderBottomLeftRadius: 3,
 		borderBottomRightRadius: 3,
-		flexDirection: 'row', 
+		flexDirection: 'row',
 		alignItems: 'center',
 		backgroundColor: '#f5f5f5',
 	},

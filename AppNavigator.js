@@ -17,6 +17,7 @@ var {
 } = React;
 
 var buildStyleInterpolator = require('buildStyleInterpolator');
+var UIManager = require('UIManager');
 
 require('./js/utils/dateUtils')
 
@@ -200,6 +201,7 @@ var AppNavigator = React.createClass({
 	},
 
 	componentDidMount: function() {
+		UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 		StorageModule.loadUserData()
 			.then((value) => {
 				if (value !== null) {

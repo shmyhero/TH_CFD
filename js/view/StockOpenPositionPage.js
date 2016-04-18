@@ -66,6 +66,8 @@ var StockOpenPositionPage = React.createClass({
 				this.setState({
 					stockInfoRowData: responseJson,
 					stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
+					selectedRow: -1,
+					selectedSubItem: 0,
 				})
 
 				var stockIds = []

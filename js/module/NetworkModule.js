@@ -12,7 +12,7 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 
 	console.log('fetching: ' + url + ' with params: ')
 	console.log(params)
-	
+
 	fetch(url, params)
 		.then((response) => {
 			console.log(response)
@@ -32,16 +32,16 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 		.then((responseJson) => {
 			if (requestSuccess) {
 				if (responseJson.success == false) {
-					console.log('fetchTHUrl handled error with message: ' + responseJson.message)
-					errorCallback(responseJson.message);
+					console.log('fetchTHUrl handled error with message: ' + responseJson.ExceptionMessage)
+					errorCallback(responseJson.ExceptionMessage || responseJson.Message);
 				} else {
 					console.log('fetchTHUrl success with response: ')
 					console.log(responseJson)
 					successCallback(responseJson);
 				}
 			} else {
-				console.log('fetchTHUrl unhandled error with message: ' + responseJson.Message)
-				errorCallback(responseJson.Message);
+				console.log('fetchTHUrl unhandled error with message: ' + responseJson.ExceptionMessage)
+				errorCallback(responseJson.ExceptionMessage || responseJson.Message);
 			}
 		})
 		.catch((e) => {
@@ -54,7 +54,7 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 export function syncOwnStocks(userData) {
 	var stockData = LogicData.getOwnStocksData()
 	fetchTHUrl(
-		NetConstants.OWN_STOCK_LIST_API, 
+		NetConstants.OWN_STOCK_LIST_API,
 		{
 			method: 'GET',
 			headers: {
@@ -91,7 +91,7 @@ export function addToOwnStocks(stockData) {
 	})
 
 	fetchTHUrl(
-		NetConstants.OWN_STOCK_LIST_API+'?'+NetConstants.PARAMETER_STOCKIDS+'='+idList, 
+		NetConstants.OWN_STOCK_LIST_API+'?'+NetConstants.PARAMETER_STOCKIDS+'='+idList,
 		{
 			method: 'POST',
 			headers: {
@@ -118,7 +118,7 @@ export function removeFromOwnStocks(stockData) {
 	})
 
 	fetchTHUrl(
-		NetConstants.OWN_STOCK_LIST_API+'?'+NetConstants.PARAMETER_STOCKIDS+'='+idList, 
+		NetConstants.OWN_STOCK_LIST_API+'?'+NetConstants.PARAMETER_STOCKIDS+'='+idList,
 		{
 			method: 'DELETE',
 			headers: {
@@ -145,7 +145,7 @@ export function updateOwnStocks(stockData) {
 	})
 
 	fetchTHUrl(
-		NetConstants.OWN_STOCK_LIST_API+'?'+NetConstants.PARAMETER_STOCKIDS+'='+idList, 
+		NetConstants.OWN_STOCK_LIST_API+'?'+NetConstants.PARAMETER_STOCKIDS+'='+idList,
 		{
 			method: 'PUT',
 			headers: {

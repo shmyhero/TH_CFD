@@ -19,7 +19,14 @@ export function wechatLogin(successCallback, errorCallback) {
 	.then((installed) => {
 		if (installed) {
 			WechatAPI.login()
-			.then((response) => wechatLoginCodeHandler(response))
+			.then((response) => {
+				wechatLoginCodeHandler(response)
+			})
+			.catch((e) => {
+				console.log('wechat login error catches: ' + e)
+				errorCallback(e.message);
+			})
+			.done();
 		}
 	})
 }

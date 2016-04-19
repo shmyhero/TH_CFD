@@ -1,6 +1,6 @@
 'use strict';
 
-var keyMirror = require('keyMirror');
+var keyMirror = require('fbjs/lib/keyMirror');
 
 
 var LineChartYAxisPosition = keyMirror({

@@ -1,15 +1,15 @@
 'use strict';
 
-
+var LayoutAnimation = require('LayoutAnimation');
 var React = require('react-native');
 var TimerMixin = require('react-timer-mixin');
-var LayoutAnimation = require('LayoutAnimation');
 
 var {
 	StyleSheet,
 	View,
 	Text,
 	Dimensions,
+	Platform
 } = React;
 
 var {height, width} = Dimensions.get('window');
@@ -59,7 +59,7 @@ var StockStatisticsPage = React.createClass({
 			})
 			this.setTimeout(
 				() => {
-					LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+					LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 					this.setState({
 						barSize: [
 							{invest: 100, profit: 100},
@@ -167,7 +167,7 @@ var StockStatisticsPage = React.createClass({
 			<View style={styles.chart}>
 				{this.renderChartHeader()}
 				<View style={styles.separator}/>
-				<View style={styles.empty}>
+				<View style={[styles.empty, {padding: 20}]}>
 					{this.renderBars()}
 				</View>
 				<View style={[styles.separator, {marginBottom: 10}]}/>
@@ -197,9 +197,9 @@ var styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
 		alignItems: 'stretch',
+		paddingBottom: Platform.OS === 'android' ? 40 : 0,
 	},
 	empty: {
-		padding: 20,
 		paddingBottom: 0,
 		flex: 1,
 	},
@@ -249,7 +249,6 @@ var styles = StyleSheet.create({
 	chart: {
 		flex: 3,
 		backgroundColor: 'white',
-		justifyContent: 'space-around',
 	},
 
 	chartHeader: {

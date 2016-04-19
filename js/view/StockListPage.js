@@ -361,6 +361,7 @@ var StockListPage = React.createClass({
 					ref="listview"
 					initialListSize={11}
 					dataSource={this.state.stockInfo}
+					enableEmptySections={true}
 					renderFooter={this.renderFooter}
 					renderRow={this.renderRow}
 					renderSeparator={this.renderSeparator}

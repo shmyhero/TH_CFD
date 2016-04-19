@@ -2,7 +2,7 @@
 
 var React = require('react-native');
 var LinearGradient = require('react-native-linear-gradient');
-var { 
+var {
 	StyleSheet,
 	View,
 	Text,
@@ -40,7 +40,7 @@ var StockExchangePage = React.createClass({
 	},
 
 	componentDidMount: function() {
-		this.didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.EXCHANGE_TAB_PRESS_EVENT, () => {
+		didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.EXCHANGE_TAB_PRESS_EVENT, () => {
 			if (this.refs['page' + this.state.currentSelectedTab]) {
 				this.refs['page' + this.state.currentSelectedTab].tabPressed()
 			}
@@ -49,10 +49,10 @@ var StockExchangePage = React.createClass({
 	},
 
 	componentWillUnmount: function() {
-		this.didTabSelectSubscription.remove();
+		didTabSelectSubscription && didTabSelectSubscription.remove();
 	},
 
-	onPageSelected: function(index) {
+	onPageSelected: function(index: number) {
 		this.setState({
 			currentSelectedTab: index,
 		})
@@ -80,7 +80,7 @@ var StockExchangePage = React.createClass({
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title="我的交易" showSearchButton={true} navigator={this.props.navigator}/>
-					<ScrollTabView tabNames={tabNames} viewPages={viewPages} 
+					<ScrollTabView tabNames={tabNames} viewPages={viewPages}
 						onPageSelected={(index) => this.onPageSelected(index)} />
 				</View>
 			)
@@ -99,7 +99,7 @@ var StockExchangePage = React.createClass({
 						<Text style={styles.text2}>全民有份 任性挥霍</Text>
 					</View>
 
-					<TouchableHighlight 
+					<TouchableHighlight
 						activeOpacity={0.7}
 						underlayColor={'transparent'}
 						onPress={this.registerPressed}

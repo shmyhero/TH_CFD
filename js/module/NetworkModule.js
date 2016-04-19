@@ -31,7 +31,7 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 		})
 		.then((responseJson) => {
 			if (requestSuccess) {
-				if (responseJson.success == false) {
+				if (responseJson.success === false) {
 					console.log('fetchTHUrl handled error with message: ' + responseJson.ExceptionMessage)
 					errorCallback(responseJson.ExceptionMessage || responseJson.Message);
 				} else {

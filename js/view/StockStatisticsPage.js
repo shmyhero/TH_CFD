@@ -157,12 +157,22 @@ var StockStatisticsPage = React.createClass({
 	},
 
 	renderChart: function() {
+		var barNameText = barNames.map(
+			(name, i) =>
+				<Text key={i} style={styles.barNameText}>
+					{name}
+				</Text>
+		)
 		return (
 			<View style={styles.chart}>
 				{this.renderChartHeader()}
 				<View style={styles.separator}/>
 				<View style={styles.empty}>
 					{this.renderBars()}
+				</View>
+				<View style={[styles.separator, {marginBottom: 10}]}/>
+				<View style={styles.barNamesContainer}>
+					{barNameText}
 				</View>
 			</View>
 		)
@@ -189,6 +199,8 @@ var styles = StyleSheet.create({
 		alignItems: 'stretch',
 	},
 	empty: {
+		padding: 20,
+		paddingBottom: 0,
 		flex: 1,
 	},
 
@@ -292,6 +304,19 @@ var styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 		alignItems: 'stretch',
+	},
+
+	barNamesContainer: {
+		paddingLeft: 20,
+		paddingRight: 20,
+		marginBottom: 20,
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		alignItems: 'stretch',
+	},
+	barNameText: {
+		fontSize: 13,
+		color: '#adadad',
 	},
 
 	investBar: {

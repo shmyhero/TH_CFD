@@ -23,16 +23,38 @@ var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
 var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
+var TimerMixin = require('react-timer-mixin');
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var StockSearchPage = React.createClass({
+	mixins: [TimerMixin],
 
 	getInitialState: function() {
 		return {
 			searchStockRawInfo: [],
-			searchStockInfo: ds.cloneWithRows([])
+			searchStockInfo: ds.cloneWithRows([]),
+			timerCount: 0,
 		};
+	},
+
+	searchStockDelay: function(text) {
+		console.log(text)
+		this.setState({
+			timerCount: this.state.timerCount+1,
+		})
+		this.setTimeout(
+			() => {
+				this.setState({
+					timerCount: this.state.timerCount - 1,
+				})
+				
+				if (this.state.timerCount === 0) {
+					this.searchStock(text)
+				}
+			 },
+			1000
+		);
 	},
 
 	searchStock: function(text) {
@@ -84,6 +106,7 @@ var StockSearchPage = React.createClass({
 
 					<TextInput style={styles.searchInput}
 							onSubmitEditing={(event) => this.searchStock(event.nativeEvent.text)}
+							onChangeText={(text) => this.searchStockDelay(text)}
 							autoCorrect={false}
 							autoCapitalize='none'
 							returnKeyType='search'
@@ -108,7 +131,7 @@ var StockSearchPage = React.createClass({
 			stockRowData: rowData
 		});
   	},
-  	
+
 	renderRow: function(rowData, sectionID, rowID, highlightRow) {
 		var rightPartContent = <Text style={styles.alreadyAddText}>已添加</Text>
 		var myListData = LogicData.getOwnStocksData()
@@ -123,25 +146,24 @@ var StockSearchPage = React.createClass({
 					</TouchableOpacity>
 		}
 		return (
-			<TouchableOpacity
-					onPress={() => this.stockPressed(rowData)}>
-			<View style={styles.rowWrapper} key={rowData.key}>
+			<TouchableOpacity onPress={() => this.stockPressed(rowData)}>
+				<View style={styles.rowWrapper} key={rowData.key}>
 
-				<View style={styles.rowLeftPart}>
-					<Text style={styles.stockNameText}>
-						{rowData.name}
-					</Text>
+					<View style={styles.rowLeftPart}>
+						<Text style={styles.stockNameText}>
+							{rowData.name}
+						</Text>
 
-					<Text style={styles.stockSymbolText}>
-						{rowData.symbol}
-					</Text>
+						<Text style={styles.stockSymbolText}>
+							{rowData.symbol}
+						</Text>
+					</View>
+
+					<View style={styles.rowRightPart}>
+						{rightPartContent}
+					</View>
 				</View>
-
-				<View style={styles.rowRightPart}>
-					{rightPartContent}
-				</View>
-			</View>
-					</TouchableOpacity>
+			</TouchableOpacity>
 		);
 	},
 

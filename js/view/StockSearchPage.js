@@ -39,7 +39,6 @@ var StockSearchPage = React.createClass({
 	},
 
 	searchStockDelay: function(text) {
-		console.log(text)
 		this.setState({
 			timerCount: this.state.timerCount+1,
 		})

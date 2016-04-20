@@ -451,12 +451,21 @@ var StockDetailPage = React.createClass({
 	},
 
 	buyPress: function() {
+		if(!this.state.stockInfo.isOpen) {
+			Alert.alert(this.state.stockInfo.name,'已停牌/休市,暂时不能进行交易')
+			return
+		}
 		if (this.state.tradeDirection === 1)
 			this.setState({tradeDirection:0})
 		else
 			this.setState({tradeDirection:1})
 	},
+
 	sellPress: function() {
+		if(!this.state.stockInfo.isOpen) {
+			Alert.alert(this.state.stockInfo.name,'已停牌/休市,暂时不能进行交易')
+			return
+		}
 		if (this.state.tradeDirection === 2)
 			this.setState({tradeDirection:0})
 		else

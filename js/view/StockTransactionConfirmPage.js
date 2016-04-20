@@ -171,7 +171,7 @@ var StockTransactionConfirmPage = React.createClass({
 						</View>
 						<View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>
 							<Text style={styles.itemTitleText}>
-								{this.state.time.Format('dd/MM/yy')}
+								{this.state.time.Format('yy/MM/dd')}
 							</Text>
 							<Text style={styles.itemValueText}>
 								{this.state.time.Format('hh:mm')}

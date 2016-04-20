@@ -48,7 +48,7 @@ public class SettingsFragment extends Fragment {
         super.onPause();
 
         if (mReactInstanceManager != null) {
-            mReactInstanceManager.onPause();
+            mReactInstanceManager.onHostPause();
         }
     }
 
@@ -57,7 +57,7 @@ public class SettingsFragment extends Fragment {
         super.onResume();
 
         if (mReactInstanceManager != null) {
-            mReactInstanceManager.onResume(getActivity(), (MainActivity_old)getActivity());
+            mReactInstanceManager.onHostResume(getActivity(), (MainActivity_old)getActivity());
         }
     }
 }

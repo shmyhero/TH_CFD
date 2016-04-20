@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     protected void onPause() {
         super.onPause();
         if (mReactInstanceManager != null) {
-            mReactInstanceManager.onPause();
+            mReactInstanceManager.onHostPause();
         }
     }
 
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     protected void onResume() {
         super.onResume();
         if (mReactInstanceManager != null) {
-            mReactInstanceManager.onResume(this, this);
+            mReactInstanceManager.onHostResume(this, this);
         }
 
         UiThreadUtil.runOnUiThread(

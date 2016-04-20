@@ -52,7 +52,7 @@ var StockSearchPage = React.createClass({
 					this.searchStock(text)
 				}
 			 },
-			1000
+			600
 		);
 	},
 
@@ -183,6 +183,7 @@ var StockSearchPage = React.createClass({
 					style={styles.list}
 					ref="listview"
 					initialListSize={11}
+					enableEmptySections={true}
 					dataSource={this.state.searchStockInfo}
 					renderRow={this.renderRow}
 					renderSeparator={this.renderSeparator}/>

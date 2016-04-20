@@ -18,6 +18,7 @@ var {
 var LayoutAnimation = require('LayoutAnimation')
 
 var LogicData = require('../LogicData')
+var AppNavigator = require('../../AppNavigator')
 var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
 var StorageModule = require('../module/StorageModule')
@@ -101,6 +102,13 @@ var StockSearchPage = React.createClass({
 		);
 	},
 
+  	stockPressed: function(rowData) {
+  		this.props.navigator.push({
+			name: AppNavigator.STOCK_DETAIL_ROUTE,
+			stockRowData: rowData
+		});
+  	},
+  	
 	renderRow: function(rowData, sectionID, rowID, highlightRow) {
 		var rightPartContent = <Text style={styles.alreadyAddText}>已添加</Text>
 		var myListData = LogicData.getOwnStocksData()
@@ -115,6 +123,8 @@ var StockSearchPage = React.createClass({
 					</TouchableOpacity>
 		}
 		return (
+			<TouchableOpacity
+					onPress={() => this.stockPressed(rowData)}>
 			<View style={styles.rowWrapper} key={rowData.key}>
 
 				<View style={styles.rowLeftPart}>
@@ -131,6 +141,7 @@ var StockSearchPage = React.createClass({
 					{rightPartContent}
 				</View>
 			</View>
+					</TouchableOpacity>
 		);
 	},
 

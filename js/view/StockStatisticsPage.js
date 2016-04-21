@@ -70,7 +70,7 @@ var StockStatisticsPage = React.createClass({
 						barAnimPlayed: true,
 					})
 				 },
-				500
+				1000
 			);
 		}
 	},

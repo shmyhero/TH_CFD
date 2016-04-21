@@ -39,7 +39,8 @@ var StockOpenPositionPage = React.createClass({
 			stockInfoRowData: [],
 			selectedRow: -1,
 			selectedSubItem: 0,
-			stockDetailInfo: []
+			stockDetailInfo: [],
+			showExchangeDoubleCheck: false,
 		};
 	},
 
@@ -134,6 +135,9 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	stockPressed: function(rowData, sectionID, rowID, highlightRow) {
+		this.setState({
+			showExchangeDoubleCheck: false,
+		})
 		var newData = []
 		$.extend(true, newData, this.state.stockInfoRowData)	// deep copy
 
@@ -181,6 +185,12 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	okPress: function(rowData) {
+		if (this.state.showExchangeDoubleCheck === false) {
+			this.setState({
+				showExchangeDoubleCheck: true,
+			})
+			return
+		}
 		var userData = LogicData.getUserData()
 		var url = NetConstants.POST_DELETE_POSITION_API
 		NetworkModule.fetchTHUrl(
@@ -377,6 +387,9 @@ var StockOpenPositionPage = React.createClass({
 		if (this.state.selectedSubItem === 2) {
 			extendHeight += 170
 		}
+		if (this.state.showExchangeDoubleCheck) {
+			extendHeight += 28
+		}
 		return (
 			<View style={[{height: extendHeight}, styles.extendWrapper]} >
 				<View style={styles.darkSeparator} />
@@ -435,9 +448,15 @@ var StockOpenPositionPage = React.createClass({
 
 				<TouchableHighlight
 					underlayColor={	'#164593'}
-					onPress={() => this.okPress(rowData)} style={[styles.okView, !buttonEnable && styles.okViewDisabled]}>
-					<Text style={[styles.okButton, !buttonEnable && styles.okButtonDisabled]}>获利:$10</Text>
+					onPress={() => this.okPress(rowData)} style={[styles.okView, this.state.showExchangeDoubleCheck && styles.okViewDoubleConfirm]}>
+					<Text style={[styles.okButton, this.state.showExchangeDoubleCheck && styles.okButtonDoubleConfirm]}>
+						{rowData.upl < 0 ? '亏损':'获利'}:${rowData.upl.toFixed(2)}
+					</Text>
 				</TouchableHighlight>
+
+				{this.state.showExchangeDoubleCheck ?
+					<Text style={styles.feeText}>平仓费：0.26</Text> :
+					null}
 			</View>
 		);
 	},
@@ -627,7 +646,7 @@ var styles = StyleSheet.create({
 	okView: {
 		width: 312,
 		height: 39,
-		backgroundColor: '#1962dd',
+		backgroundColor: ColorConstants.TITLE_BLUE,
 		paddingVertical: 10,
     	borderRadius:5,
 		marginTop: 15,
@@ -635,20 +654,26 @@ var styles = StyleSheet.create({
 		justifyContent: 'space-around',
 		alignSelf: 'center',
 	},
-	okViewDisabled: {
-		backgroundColor: '#f5f5f5',
+	okViewDoubleConfirm: {
+		backgroundColor: 'transparent',
     	borderWidth:1,
-    	borderColor: '#1962dd',
+    	borderColor: ColorConstants.TITLE_BLUE,
 	},
 	okButton: {
 		color: 'white',
 		textAlign: 'center',
 		fontSize: 17,
 	},
-	okButtonDisabled: {
-		color: '#1962dd',
+	okButtonDoubleConfirm: {
+		color: ColorConstants.TITLE_BLUE,
 	},
 
+	feeText: {
+		color: 'grey',
+		marginBottom: 10,
+		alignSelf: 'center',
+		fontSize: 15,
+	},
 	netIncomeText: {
 		fontSize: 14,
 		color: '#e60b11',
@@ -658,23 +683,23 @@ var styles = StyleSheet.create({
 
 	rightTopBorder: {
 		borderRightWidth: 1,
-		borderRightColor: '#1962dd',
+		borderRightColor: ColorConstants.TITLE_BLUE,
 		borderTopWidth: 1,
-		borderTopColor: '#1962dd',
+		borderTopColor: ColorConstants.TITLE_BLUE,
 	},
 
 	bottomBorder: {
 		borderBottomWidth: 1,
-		borderBottomColor: '#1962dd',
+		borderBottomColor: ColorConstants.TITLE_BLUE,
 	},
 
 	leftTopRightBorder: {
 		borderLeftWidth: 1,
-		borderLeftColor: '#1962dd',
+		borderLeftColor: ColorConstants.TITLE_BLUE,
 		borderRightWidth: 1,
-		borderRightColor: '#1962dd',
+		borderRightColor: ColorConstants.TITLE_BLUE,
 		borderTopWidth: 1,
-		borderTopColor: '#1962dd',
+		borderTopColor: ColorConstants.TITLE_BLUE,
 	},
 	priceText: {
 		marginTop: 5,
@@ -689,7 +714,7 @@ var styles = StyleSheet.create({
 		flex: 1,
 		fontSize: 15,
 		textAlign: 'center',
-		color: '#70a5ff'
+		color: '#70a5ff',
 	},
 	chartTitleText: {
 		flex: 1,

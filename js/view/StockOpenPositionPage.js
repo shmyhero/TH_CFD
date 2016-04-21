@@ -447,7 +447,7 @@ var StockOpenPositionPage = React.createClass({
 		if (rowData.settlePrice !== 0) {
 			profitPercentage = (rowData.security.last - rowData.settlePrice) / rowData.settlePrice
 		}
-		var bgcolor = this.state.selectedRow === rowID ? ColorConstants.LIST_BACKGROUND_GREY : 'white'
+		var bgcolor = this.state.selectedRow === rowID ? '#d2d2d2' : 'white'
 		return (
 			<View>
 				<TouchableHighlight activeOpacity={1} onPress={() => this.stockPressed(rowData, sectionID, rowID, highlightRow)}>

@@ -253,7 +253,6 @@ class StockChartView: UIView {
 			let startPoint = CGPoint(x:margin, y: highestYPoint)
 			let endPoint = CGPoint(x:margin, y:height-bottomMargin)
 			
-			
 			//create the gradient
 			let gradient = CGGradientCreateWithColors(colorSpace,
 				colors,

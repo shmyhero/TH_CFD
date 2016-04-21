@@ -164,8 +164,13 @@ var StockOpenPositionPage = React.createClass({
 				selectedSubItem: 0,
 				stockInfoRowData: newData,
 			})
-			var y = Math.floor(height/newData.length*rowID)
-			this.refs['listview'].scrollTo({x:0, y:y, animated:true})
+
+			var maxY = (height-100)*20/21 - extendHeight
+			var listHeight = this.refs['listview'].getMetrics().contentLength
+			var currentY = listHeight/newData.length*(parseInt(rowID)+1)
+			if (currentY > maxY) {
+				this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
+			}
 		}
 	},
 

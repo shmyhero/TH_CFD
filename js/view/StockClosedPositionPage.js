@@ -23,7 +23,16 @@ var tempData = [
 	{id:13001, symbol:'AAPL UW2', name:'新东方2', tag: 'US', profitPercentage: 0.05},
 	{id:13001, symbol:'AAPL UW3', name:'新东方3', profitPercentage: -0.08},
 	{id:13001, symbol:'AAPL UW4', name:'新东方4', profitPercentage: 0},
+	{id:13001, symbol:'AAPL UW5', name:'新东方5', tag: 'US', profitPercentage: 0.1},
+	{id:13001, symbol:'AAPL UW6', name:'新东方6', tag: 'US', profitPercentage: 0.05},
+	{id:13001, symbol:'AAPL UW7', name:'新东方7', profitPercentage: -0.08},
+	{id:13001, symbol:'AAPL UW8', name:'新东方8', profitPercentage: 0},
+	{id:13001, symbol:'AAPL UW9', name:'新东方9', tag: 'US', profitPercentage: 0.1},
+	{id:13001, symbol:'AAPL UW10', name:'新东方10', tag: 'US', profitPercentage: 0.05},
+	{id:13001, symbol:'AAPL UW11', name:'新东方11', profitPercentage: -0.08},
+	{id:13001, symbol:'AAPL UW12', name:'新东方12', profitPercentage: 0},
 ]
+var extendHeight = 204
 
 var StockClosedPositionPage = React.createClass({
 	
@@ -56,6 +65,13 @@ var StockClosedPositionPage = React.createClass({
 				stockInfo: ds.cloneWithRows(tempData),
 				selectedRow: rowID,
 			})
+
+			var maxY = (height-100)*20/21 - extendHeight
+			var listHeight = this.refs['listview'].getMetrics().contentLength
+			var currentY = listHeight/tempData.length*(parseInt(rowID)+1)
+			if (currentY > maxY) {
+				this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
+			}
 		}
 	},
 
@@ -109,7 +125,6 @@ var StockClosedPositionPage = React.createClass({
 	},
 
 	renderDetailInfo: function(rowData) {
-		var extendHeight = 204
 		var tradeImage = true ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
 		var profitColor = ColorConstants.STOCK_RISE_RED
 		return (

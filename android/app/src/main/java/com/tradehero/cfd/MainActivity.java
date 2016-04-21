@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         preferences.edit().putString("debug_http_host", "192.168.20.46:8081").apply();
 
-        super.onCreate(savedInstanceState);
+        super.onCreate(null);
 
         mReactInstanceManager = RNManager.getInstanceManager(getApplication());
         setContentView(R.layout.react_activity_container);

@@ -184,7 +184,7 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		let dataString:String = StockDataManager.sharedInstance().jsonOwnStockData()
 		let delegate:AppDelegate! = UIApplication.sharedApplication().delegate as! AppDelegate
 		delegate!.nativeData!.sendDataToRN("myList", data: dataString)
-		delegate!.rnRootViewController?.dismissViewControllerAnimated(true, completion: { () -> Void in
+		delegate!.rnRootViewController.dismissViewControllerAnimated(true, completion: { () -> Void in
 		})
 	}
 }

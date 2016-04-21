@@ -20,8 +20,8 @@ class EditOwnStockCell: UITableViewCell {
 	
 	func setData(data:StockData) {
 		self.stockData = data
-		self.nameLabel?.text = data.name
-		self.codeLabel?.text = data.symbol
+		self.nameLabel.text = data.name
+		self.codeLabel.text = data.symbol
 		if (data.stockTag != nil) {
 			self.codeLabelLeftConstraint.constant = 18
 			self.tagLabel.hidden = false
@@ -33,7 +33,7 @@ class EditOwnStockCell: UITableViewCell {
 			self.tagLabel.hidden = true
 		}
 		let name:String = data.choose ?"Select":"Unselect"
-		self.selectButton?.setImage(UIImage.init(named: name), forState: .Normal)
+		self.selectButton.setImage(UIImage.init(named: name), forState: .Normal)
 	}
 	
 	typealias callbackfunc=(selectStock:StockData)->Void
@@ -56,7 +56,7 @@ class EditOwnStockCell: UITableViewCell {
 	@IBAction func tapSelectButton(sender: AnyObject) {
 		self.stockData!.choose = !self.stockData!.choose
 		let name:String = self.stockData!.choose ?"Select":"Unselect"
-		self.selectButton?.setImage(UIImage.init(named: name), forState: .Normal)
+		self.selectButton.setImage(UIImage.init(named: name), forState: .Normal)
 		
 		tapSelect!(selectStock: stockData!)
 	}

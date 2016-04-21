@@ -19,6 +19,17 @@ class StockChartView: UIView {
 	@IBInspectable var endColor: UIColor = UIColor(hex: 0x1954b9)
 	@IBInspectable var lineColor: UIColor = UIColor(hex: 0xbbceed)
 	@IBInspectable var bgLineColor: UIColor = UIColor(hex: 0x497bce)
+	@IBInspectable var middleLineColor: UIColor = UIColor(hex: 0xffffff, alpha: 0.5)
+	
+	var chartDataJson: String! = ""
+	
+	var chartData:[ChartData] = []
+	var pointData:[CGPoint] = []
+	var middleLineY:CGFloat = 0
+	var topLineY:CGFloat = 0
+	var bottomLineY:CGFloat = 0
+	
+// MARK: deal with raw data
 	var data:String? { // use for RN manager
 		willSet {
 			self.chartDataJson = newValue
@@ -35,17 +46,14 @@ class StockChartView: UIView {
 		}
 	}
 	
-	var chartDataJson: String! = ""
-	
-	var chartData:[ChartData] = []
-	var pointData:[CGPoint] = []
-	var middleLineY:CGFloat = 0
-	var topLineY:CGFloat = 0
-	var bottomLineY:CGFloat = 0
-	
+	var chartType:Int=0 {
+		willSet {
+			// 0: day, 1: 5 day, 2:month
+		}
+	}
 	func calculatePoint() {
 		let size = self.bounds.size
-		if (size.width == 0 || self.chartData.count == 0) {
+		if (size.width == 0 || self.chartData.isEmpty) {
 			return
 		}
 		
@@ -106,15 +114,19 @@ class StockChartView: UIView {
 		}
 		
 	}
-	
+// MARK: render
 	override func drawRect(rect: CGRect) {
-		if (self.pointData.isEmpty && !self.chartData.isEmpty) {
+		if (self.pointData.isEmpty) {
 			self.calculatePoint()
 		}
 		// draw line chart
-		self.drawLineChart(rect)
-		// draw background lines
-//		self.drawHorizontalLines(rect)
+		if self.chartData.isEmpty {
+			// no data, only draw lines
+			self.drawHorizontalLines(rect)
+			self.drawVerticalLines(rect)
+		} else {
+			self.drawLineChart(rect)
+		}
 	}
 	
 	func drawHorizontalLines(rect: CGRect) -> Void {
@@ -127,33 +139,28 @@ class StockChartView: UIView {
 		
 		//top line
 		linePath.moveToPoint(CGPoint(x:margin, y: topMargin + 0.5))
-		linePath.addLineToPoint(CGPoint(x: width - margin,
-			y:topMargin + 0.5))
+		linePath.addLineToPoint(CGPoint(x: width - margin, y:topMargin + 0.5))
 		
 		//bottom line
-		linePath.moveToPoint(CGPoint(x:margin-0.5,
-			y:height - bottomMargin + 0.5))
-		linePath.addLineToPoint(CGPoint(x:width - margin+0.5,
-			y:height - bottomMargin + 0.5))
-		bgLineColor.setStroke()
+		linePath.moveToPoint(CGPoint(x:margin-0.5, y:height - bottomMargin + 0.5))
+		linePath.addLineToPoint(CGPoint(x:width - margin+0.5, y:height - bottomMargin + 0.5))
 		
+		bgLineColor.setStroke()
 		linePath.lineWidth = 1
 		linePath.stroke()
 		
-		linePath = UIBezierPath()
 		if (middleLineY > 0) {
+			linePath = UIBezierPath()
 			//center line
 			let centerY = CGFloat(roundf(Float(middleLineY)))
-			linePath.moveToPoint(CGPoint(x:margin,
-				y: centerY + 0.5))
-			linePath.addLineToPoint(CGPoint(x:width - margin,
-				y: centerY + 0.5))
-			UIColor(hex: 0xffffff, alpha: 0.5).setStroke()
+			linePath.moveToPoint(CGPoint(x:margin, y: centerY + 0.5))
+			linePath.addLineToPoint(CGPoint(x:width - margin, y: centerY + 0.5))
+			
+			middleLineColor.setStroke()
 			linePath.lineWidth = 1
 			linePath.stroke()
-			
-			CGContextRestoreGState(context)
 		}
+		CGContextRestoreGState(context)
 	}
 	
 	
@@ -170,8 +177,7 @@ class StockChartView: UIView {
 		linePath.addLineToPoint(CGPoint(x:margin - 0.5, y:height - bottomMargin))
 		
 		if !self.chartData.isEmpty {
-			//center lines
-			// calculate time length
+			//center lines, calculate time length
 			let startTime = self.chartData.first?.time
 			let endTime = self.chartData.last?.time
 			
@@ -181,10 +187,8 @@ class StockChartView: UIView {
 				let unitWidth = 3600*(width-self.margin*2)/CGFloat(interval)
 				for i in 1...hours {
 					let px = Int(margin+unitWidth*CGFloat(i))
-					linePath.moveToPoint(CGPoint(x: CGFloat(px) + 0.5,
-						y: topMargin))
-					linePath.addLineToPoint(CGPoint(x:CGFloat(px) + 0.5,
-						y:height - bottomMargin))
+					linePath.moveToPoint(CGPoint(x: CGFloat(px) + 0.5, y: topMargin))
+					linePath.addLineToPoint(CGPoint(x:CGFloat(px) + 0.5, y:height - bottomMargin))
 				}
 			}
 		}
@@ -192,9 +196,8 @@ class StockChartView: UIView {
 		//right line
 		linePath.moveToPoint(CGPoint(x:width - margin + 0.5, y:bottomMargin))
 		linePath.addLineToPoint(CGPoint(x:width - margin + 0.5, y:height - bottomMargin))
-//		let color = UIColor(hex: 0x759de2)
+
 		bgLineColor.setStroke()
-		
 		linePath.lineWidth = 1
 		linePath.stroke()
 		
@@ -202,16 +205,9 @@ class StockChartView: UIView {
 	}
 	
 	func drawLineChart(rect: CGRect) -> Void {
-		// no data
-		if self.chartData.isEmpty {
-			self.drawHorizontalLines(rect)
-			self.drawVerticalLines(rect)
-			return
-		}
 		
 		let width = rect.width
 		let height = rect.height
-		let lastIndex = self.chartData.count - 1
 		
 		// draw the line graph
 		lineColor.setFill()
@@ -229,7 +225,6 @@ class StockChartView: UIView {
 			graphPath.addLineToPoint(nextPoint)
 		}
 		
-//		graphPath.stroke()
 		let context = UIGraphicsGetCurrentContext()
 		CGContextSaveGState(context)
 		
@@ -237,7 +232,7 @@ class StockChartView: UIView {
 		
 		//3 - add lines to the copied path to complete the clip area
 		clippingPath.addLineToPoint(CGPoint(
-			x: pointData[lastIndex].x,
+			x: pointData.last!.x,
 			y:height))
 		clippingPath.addLineToPoint(CGPoint(
 			x: pointData[0].x,
@@ -274,7 +269,6 @@ class StockChartView: UIView {
 		//draw the line on top of the clipped gradient
 		graphPath.lineWidth = 1.0
 		graphPath.stroke()
-		
 
 		//Draw the circles on right top of graph stroke
 		
@@ -284,7 +278,7 @@ class StockChartView: UIView {
 		let pointGradient = CGGradientCreateWithColors(colorSpace,
 			circleColors, colorLocations)
 		
-		let centerPoint =  self.pointData[lastIndex]
+		let centerPoint =  self.pointData.last!
 		let startRadius: CGFloat = 2
 		let endRadius: CGFloat = 6
 		

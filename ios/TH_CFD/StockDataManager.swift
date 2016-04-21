@@ -28,9 +28,9 @@ class StockData: NSObject {
 	}
 	
 	func initWithDictionay(dict:NSDictionary) -> Void {
-		self.stockId = (dict["id"] as? Int)!
-		self.symbol = dict["symbol"] as? String
-		self.name = dict["name"] as? String
+		self.stockId = dict["id"] as! Int
+		self.symbol = dict["symbol"] as! String
+		self.name = dict["name"] as! String
 		self.open = dict["open"] as? Double
 		self.last = dict["last"] as? Double
 		self.preClose = dict["preClose"] as? Double

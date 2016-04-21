@@ -11,7 +11,7 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 	
-	var rnRootViewController: UIViewController?
+	var rnRootViewController: UIViewController!
 	var window: UIWindow?
 	var nativeData: NativeData?
 	

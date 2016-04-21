@@ -60,18 +60,21 @@ var StockClosedPositionPage = React.createClass({
 				selectedRow: -1,
 			})
 		} else {
+			var maxY = (height-100)*20/21 - extendHeight
+			var listHeight = this.refs['listview'].getMetrics().contentLength
+			if (this.state.selectedRow !== -1) {
+				listHeight -= extendHeight
+			}
+			var currentY = listHeight/tempData.length*(parseInt(rowID)+1)
+			if (currentY > maxY && parseInt(this.state.selectedRow) < parseInt(rowID)) {
+				this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
+			}
+
 			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
 			this.setState({
 				stockInfo: ds.cloneWithRows(tempData),
 				selectedRow: rowID,
 			})
-
-			var maxY = (height-100)*20/21 - extendHeight
-			var listHeight = this.refs['listview'].getMetrics().contentLength
-			var currentY = listHeight/tempData.length*(parseInt(rowID)+1)
-			if (currentY > maxY) {
-				this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
-			}
 		}
 	},
 

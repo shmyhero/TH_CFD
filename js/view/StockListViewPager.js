@@ -54,7 +54,7 @@ var StockListViewPager = React.createClass({
 		this.didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.STOCK_TAB_PRESS_EVENT, () => {
 			this.refs['page' + this.state.currentSelectedTab].tabPressed()
 			WebSocketModule.registerCallbacks((stockInfo) => {
-				this.refs['page' + this.state.currentSelectedTab].handleStockInfo(stockInfo)
+				this.refs['page' + this.state.currentSelectedTab] && this.refs['page' + this.state.currentSelectedTab].handleStockInfo(stockInfo)
 			})
 		});
 	},
@@ -67,7 +67,7 @@ var StockListViewPager = React.createClass({
 	onDidFocus: function(event) {
         if (AppNavigator.STOCK_LIST_VIEW_PAGER_ROUTE === event.data.route.name) {
             WebSocketModule.registerCallbacks((stockInfo) => {
-				this.refs['page' + this.state.currentSelectedTab].handleStockInfo(stockInfo)
+				this.refs['page' + this.state.currentSelectedTab] && this.refs['page' + this.state.currentSelectedTab].handleStockInfo(stockInfo)
 			})
         }
 	},
@@ -87,7 +87,7 @@ var StockListViewPager = React.createClass({
 
 	renderNavBar: function() {
 		return (
-			<NavBar title="行情" 
+			<NavBar title="行情"
 				textOnLeft={this.state.currentSelectedTab==0 ? '编辑' : null}
 				leftTextOnClick={this.editButtonClicked}
 				showSearchButton={true}
@@ -107,9 +107,9 @@ var StockListViewPager = React.createClass({
 			<View style={[styles.wrapper, {width: width}]}>
 				{this.renderNavBar()}
 
-				<ScrollTabView 
-						tabNames={tabNames} 
-						viewPages={viewPages} 
+				<ScrollTabView
+						tabNames={tabNames}
+						viewPages={viewPages}
 						onPageSelected={(index) => this.onPageSelected(index)} />
 			</View>
 		)

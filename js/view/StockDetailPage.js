@@ -581,6 +581,18 @@ var StockDetailPage = React.createClass({
 	},
 
 	okPress: function() {
+
+		var tradeValue = this.state.money * this.state.leverage
+		var minValue = this.state.tradeDirection === 1 ? this.state.stockInfo.minValueLong : this.state.stockInfo.minValueShort
+		var maxValue = this.state.tradeDirection === 1 ? this.state.stockInfo.maxValueLong : this.state.stockInfo.maxValueShort
+		if (tradeValue < minValue) {
+			Alert.alert('提示', '低于最小交易额: ' + minValue.toFixed(0) + 'USD\n(交易额=交易本金X杠杆)')
+			return
+		} else if (tradeValue > maxValue) {
+			Alert.alert('提示', '高于最大交易额: ' + maxValue.toFixed(0) + 'USD\n(交易额=交易本金X杠杆)')
+			return
+		}
+
 		var userData = LogicData.getUserData()
 		var url = NetConstants.POST_CREATE_POSITION_API
 		this.setState({tradingInProgress: true})

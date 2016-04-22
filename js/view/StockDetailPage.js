@@ -56,7 +56,7 @@ var StockDetailPage = React.createClass({
 
 	getInitialState: function() {
 		return {
-			stockInfo: [],
+			stockInfo: {isOpen: true},
 			money: 20,
 			leverage: 2,
 			totalMoney: 1000,
@@ -439,12 +439,12 @@ var StockDetailPage = React.createClass({
 			<View style={[styles.rowView, {alignItems:'stretch'}]}>
 				<TouchableHighlight
 					underlayColor={upSelected ? '#6da2fc': '#356dce'}
-					onPress={this.buyPress} style={[styles.tradeButtonView, upSelected&&styles.tradeButtonViewSelected]}>
+					onPress={() => this.state.stockInfo.isOpen && this.buyPress()} style={[styles.tradeButtonView, upSelected&&styles.tradeButtonViewSelected]}>
 					<Image style={styles.tradeButtonImage} source={upImage}/>
 				</TouchableHighlight>
 				<TouchableHighlight
 					underlayColor={downSelected ? '#6da2fc': '#356dce'}
-					onPress={this.sellPress} style={[styles.tradeButtonView, downSelected&&styles.tradeButtonViewSelected]}>
+					onPress={() => this.state.stockInfo.isOpen && this.sellPress()} style={[styles.tradeButtonView, downSelected&&styles.tradeButtonViewSelected]}>
 					<Image style={styles.tradeButtonImage} source={downImage}/>
 				</TouchableHighlight>
 			</View>
@@ -572,11 +572,14 @@ var StockDetailPage = React.createClass({
 	renderOKButton: function() {
 		var buttonEnable = this.state.tradeDirection !== 0 && !this.state.tradingInProgress
 		return (
-			<TouchableHighlight
-				underlayColor={buttonEnable ? '#f46b6f': '#164593'}
-				onPress={() => buttonEnable && this.okPress()} style={[styles.okView, !buttonEnable && styles.okViewDisabled]}>
-				<Text style={[styles.okButton, !buttonEnable && styles.okButtonDisabled]}>确认</Text>
-			</TouchableHighlight>
+			<TouchableOpacity
+				activeOpacity={0.85}
+				onPress={() => buttonEnable && this.okPress()}
+				style={[styles.okView, !buttonEnable && styles.okViewDisabled, !this.state.stockInfo.isOpen && styles.okViewNotOpened]}>
+				<Text style={[styles.okButton, !buttonEnable && styles.okButtonDisabled, !this.state.stockInfo.isOpen && styles.okButtonNotOpened]}>
+					{this.state.stockInfo.isOpen ? '确认' : '未开市'}
+				</Text>
+			</TouchableOpacity>
 		)
 	},
 
@@ -729,6 +732,9 @@ var styles = StyleSheet.create({
 	okViewDisabled: {
 		backgroundColor: '#164593'
 	},
+	okViewNotOpened: {
+		backgroundColor: '#6da2fc'
+	},
 	okButton: {
 		color: '#ffffff',
 		textAlign: 'center',
@@ -736,6 +742,9 @@ var styles = StyleSheet.create({
 	},
 	okButtonDisabled: {
 		color: '#5771a8'
+	},
+	okButtonNotOpened: {
+		color: '#ffffff'
 	},
 	priceText: {
 		fontSize: 8,

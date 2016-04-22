@@ -151,13 +151,19 @@ var StockOpenPositionPage = React.createClass({
 				stockInfoRowData: newData,
 			})
 		} else {
-			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-			var height = this.refs['listview'].getMetrics().contentLength
-			if (this.state.selectedRow >=0 ) {
+			var maxY = (height-100)*20/21 - extendHeight
+			var listHeight = this.refs['listview'].getMetrics().contentLength
+			if (this.state.selectedRow >=0) {
 				newData[this.state.selectedRow].hasSelected = false
-				height -= extendHeight
+				listHeight -= extendHeight
+			}
+			var currentY = listHeight/newData.length*(parseInt(rowID)+1)
+			if (currentY > maxY && parseInt(this.state.selectedRow) < parseInt(rowID)) {
+				this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
 			}
 			newData[rowID].hasSelected = true
+
+			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
 			this.setState({
 				stockInfo: this.state.stockInfo.cloneWithRows(newData),
 				selectedRow: rowID,
@@ -165,12 +171,6 @@ var StockOpenPositionPage = React.createClass({
 				stockInfoRowData: newData,
 			})
 
-			var maxY = (height-100)*20/21 - extendHeight
-			var listHeight = this.refs['listview'].getMetrics().contentLength
-			var currentY = listHeight/newData.length*(parseInt(rowID)+1)
-			if (currentY > maxY) {
-				this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
-			}
 		}
 	},
 

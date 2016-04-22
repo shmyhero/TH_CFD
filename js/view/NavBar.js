@@ -54,7 +54,7 @@ var NavBar = React.createClass({
 	backOnClick: function() {
 		this.props.navigator.pop();
 	},
-	
+
 	leftTextOnClick: function() {
 		if (this.props.leftTextOnClick) {
 			this.props.leftTextOnClick()
@@ -93,7 +93,7 @@ var NavBar = React.createClass({
 					</Text>
 					{this.renderSubTitle()}
 				</View>
-				
+
 				<View style={styles.rightContainer}>
 					{this.renderSearchButton()}
 					{this.renderRightText()}
@@ -107,12 +107,14 @@ var NavBar = React.createClass({
 	renderBackButton: function() {
 		if (this.props.showBackButton) {
 			return (
-				<TouchableHighlight 
+				<TouchableHighlight
 					onPress={this.backOnClick}
 					underlayColor={ColorConstants.TITLE_BLUE}>
-					<Image 
-						style={styles.backButton} 
-						source={require('../../images/back.png')}/>
+					<View style={{padding: 5}}>
+						<Image
+							style={styles.backButton}
+							source={require('../../images/back.png')}/>
+					</View>
 				</TouchableHighlight>
 			);
 		}
@@ -141,7 +143,7 @@ var NavBar = React.createClass({
 					onPress={this.searchButtonClicked}
 					underlayColor={ColorConstants.TITLE_BLUE}>
 
-					<Image 
+					<Image
 						style={styles.rightImage}
 						source={require('../../images/search.png')}/>
 
@@ -173,7 +175,7 @@ var NavBar = React.createClass({
 					onPress={this.rightImageOnClick}
 					underlayColor={ColorConstants.TITLE_BLUE}>
 
-					<Image 
+					<Image
 						style={styles.rightImage}
 						source={this.props.imageOnRight}/>
 

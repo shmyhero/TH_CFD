@@ -34,11 +34,12 @@ var StockTransactionConfirmPage = React.createClass({
 				leverage: 0,
 				settlePrice: 0,
 				time: new Date(),
+				hideCallback: null,
 			}
 		);
 	},
 
-	show: function(transactionInfo) {
+	show: function(transactionInfo, callback) {
 		if (transactionInfo !== null) {
 			this.setState({
 				name: transactionInfo.stockName,
@@ -52,6 +53,7 @@ var StockTransactionConfirmPage = React.createClass({
 		}
 		this.setState({
 			visible: true,
+			hideCallback: callback,
 		})
 		this.state.dialogY.setValue(height)
 		Animated.parallel([
@@ -97,6 +99,7 @@ var StockTransactionConfirmPage = React.createClass({
 
 	touchableHandlePress: function(e: Event) {
 		this.hide()
+		this.state.hideCallback && this.state.hideCallback()
 	},
 
 	render: function() {

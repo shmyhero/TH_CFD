@@ -64,6 +64,7 @@ var StockDetailPage = React.createClass({
 			inputText: '0',
 			stockPrice: this.props.stockPrice,
 			isAddedToMyList: false,
+			tradingInProgress: false,
 		};
 	},
 
@@ -569,11 +570,11 @@ var StockDetailPage = React.createClass({
 	},
 
 	renderOKButton: function() {
-		var buttonEnable = this.state.tradeDirection !== 0
+		var buttonEnable = this.state.tradeDirection !== 0 && !this.state.tradingInProgress
 		return (
 			<TouchableHighlight
 				underlayColor={buttonEnable ? '#f46b6f': '#164593'}
-				onPress={this.okPress} style={[styles.okView, !buttonEnable && styles.okViewDisabled]}>
+				onPress={() => buttonEnable && this.okPress()} style={[styles.okView, !buttonEnable && styles.okViewDisabled]}>
 				<Text style={[styles.okButton, !buttonEnable && styles.okButtonDisabled]}>确认</Text>
 			</TouchableHighlight>
 		)
@@ -582,6 +583,7 @@ var StockDetailPage = React.createClass({
 	okPress: function() {
 		var userData = LogicData.getUserData()
 		var url = NetConstants.POST_CREATE_POSITION_API
+		this.setState({tradingInProgress: true})
 
 		NetworkModule.fetchTHUrl(
 			url,
@@ -602,10 +604,15 @@ var StockDetailPage = React.createClass({
 				responseJson.stockName = this.props.stockName
 				responseJson.isCreate = true
 				responseJson.time = new Date(responseJson.createAt)
-				this.refs['confirmPage'].show(responseJson)
+				this.refs['confirmPage'].show(responseJson, () => this.setState({tradingInProgress: false}))
 			},
 			(errorMessage) => {
-				Alert.alert('网络错误提示', errorMessage);
+				Alert.alert('网络错误提示', errorMessage,
+				[
+					{text: 'OK', onPress: () => this.setState({tradingInProgress: false})}
+				]
+			);
+
 			}
 		)
 	},

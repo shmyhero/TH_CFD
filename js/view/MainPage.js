@@ -57,7 +57,7 @@ var MainPage = React.createClass({
 			          	<RawContent>
 		            		<Navigator
 								style={styles.container}
-								initialRoute={{name: AppNavigator.LANDING_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
+								initialRoute={{name: AppNavigator.HOME_PAGE_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
 								configureScene={() => Navigator.SceneConfigs.PushFromRight}
 								renderScene={AppNavigator.RouteMapper} />
 			          	</RawContent>
@@ -93,9 +93,11 @@ var MainPage = React.createClass({
 			        <Tab name="settings">
 			          	<Icon label="问答" type={glypy.Settings} from={'myhero'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
 			          	<RawContent>
-			            	<View style={{ flex: 1, backgroundColor: 'white', alignItems: 'center', justifyContent:'center' }}>
-			              		<Text onPress={()=>console.log('settings')}>问答</Text>
-			            	</View>
+							<Navigator
+								style={styles.container}
+								initialRoute={{name: AppNavigator.LANDING_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
+								configureScene={() => Navigator.SceneConfigs.PushFromRight}
+								renderScene={AppNavigator.RouteMapper} />
 			          	</RawContent>
 		        	</Tab>
 		      	</Tabbar>

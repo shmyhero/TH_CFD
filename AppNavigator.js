@@ -23,6 +23,7 @@ require('./js/utils/dateUtils')
 
 var NavBar = require('./js/view/NavBar')
 var MainPage = require('./js/view/MainPage')
+var HomePage = require('./js/view/HomePage')
 var LandingPage = require('./js/view/LandingPage')
 var LoginPage = require('./js/view/LoginPage')
 var UpdateUserInfoPage = require('./js/view/UpdateUserInfoPage')
@@ -50,6 +51,7 @@ BackAndroid.addEventListener('hardwareBackPress', () => {
 });
 
 export let MAIN_PAGE_ROUTE = 'main'
+export let HOME_PAGE_ROUTE = 'homepage'
 export let LANDING_ROUTE = 'landing'
 export let LOGIN_ROUTE = 'login'
 export let UPDATE_USER_INFO_ROUTE = 'updateUserInfo'
@@ -80,6 +82,10 @@ export var RouteMapper = function(route, navigationOperations, onComponentRef) {
 	if (route.name === MAIN_PAGE_ROUTE) {
 		return (
 			<MainPage />
+		)
+	} else if (route.name == HOME_PAGE_ROUTE) {
+		return (
+			<HomePage navigator={navigationOperations}/>
 		)
 	} else if (route.name === LANDING_ROUTE) {
 		showTabbar()

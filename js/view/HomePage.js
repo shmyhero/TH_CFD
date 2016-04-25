@@ -51,7 +51,7 @@ var HomePage = React.createClass({
 	render: function() {
 		return (
 			<View style={{width: width, height: height - (Platform.OS === 'android' ? 75 : 50)}}>
-				<View style={{height: imageHeight}}>
+				<View style={{width: width, height: imageHeight}}>
 					<ViewPager
 						dataSource={this.state.dataSource}
 						renderPage={this._renderPage}

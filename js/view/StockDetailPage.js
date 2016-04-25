@@ -65,6 +65,7 @@ var StockDetailPage = React.createClass({
 			stockPrice: this.props.stockPrice,
 			isAddedToMyList: false,
 			tradingInProgress: false,
+			chartType: NetConstants.PARAMETER_CHARTTYPE_TODAY,
 		};
 	},
 
@@ -115,6 +116,7 @@ var StockDetailPage = React.createClass({
 	loadStockPriceToday: function() {
 		var url = NetConstants.GET_STOCK_PRICE_TODAY_API
 		url = url.replace(/<stockCode>/, this.props.stockCode)
+		url = url.replace(/<chartType>/, this.state.chartType)
 
 		NetworkModule.fetchTHUrl(
 			url,
@@ -174,6 +176,13 @@ var StockDetailPage = React.createClass({
 				isAddedToMyList: true,
 			})
 		}
+	},
+
+	pressChartHeaderTab: function(type) {
+		this.setState({
+			chartType: type
+		})
+		this.loadStockPriceToday()
 	},
 
 	renderStockMaxPriceInfo: function(maxPrice, maxPercentage) {
@@ -248,15 +257,21 @@ var StockDetailPage = React.createClass({
 	renderChartHeader: function() {
 		return(
 			<View style={{flexDirection: 'row', marginTop: 6}} >
-				<Text style={styles.chartTitleTextHighlighted} >
-					分时
-				</Text>
-				<Text style={styles.chartTitleText} >
-					5日
-				</Text>
-				<Text style={styles.chartTitleText} >
-					1月
-				</Text>
+				<TouchableOpacity style={{flex:1}} onPress={()=>this.pressChartHeaderTab(NetConstants.PARAMETER_CHARTTYPE_TODAY)}>
+					<Text style={this.state.chartType===NetConstants.PARAMETER_CHARTTYPE_TODAY ? styles.chartTitleTextHighlighted : styles.chartTitleText} >
+						分时
+					</Text>
+				</TouchableOpacity>
+				<TouchableOpacity style={{flex:1}} onPress={()=>this.pressChartHeaderTab(NetConstants.PARAMETER_CHARTTYPE_WEEK)}>
+					<Text style={this.state.chartType===NetConstants.PARAMETER_CHARTTYPE_WEEK ? styles.chartTitleTextHighlighted : styles.chartTitleText} >
+						5日
+					</Text>
+				</TouchableOpacity>
+				<TouchableOpacity style={{flex:1}} onPress={()=>this.pressChartHeaderTab(NetConstants.PARAMETER_CHARTTYPE_MONTH)}>
+					<Text style={this.state.chartType===NetConstants.PARAMETER_CHARTTYPE_MONTH ? styles.chartTitleTextHighlighted : styles.chartTitleText} >
+						1月
+					</Text>
+				</TouchableOpacity>
 			</View>
 		);
 	},
@@ -307,7 +322,9 @@ var StockDetailPage = React.createClass({
 
 						<View style={{flex: 3, marginTop:10}}>
 							{this.renderStockMaxPriceInfo(maxPrice, maxPercentage)}
-							<LineChart style={{flex: 1, backgroundColor:'transparent', marginTop: -26}} data={JSON.stringify(this.state.stockInfo)}/>
+							<LineChart style={{flex: 1, backgroundColor:'transparent', marginTop: -26}}
+								data={JSON.stringify(this.state.stockInfo)}
+								chartType={this.state.chartType}/>
 							{this.renderStockMinPriceInfo(minPrice, minPercentage)}
 							{this.renderTime()}
 

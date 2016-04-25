@@ -46,11 +46,13 @@ class StockChartView: UIView {
 		}
 	}
 	
-	var chartType:Int=0 {
+	var chartType:String="day" {
 		willSet {
-			// 0: day, 1: 5 day, 2:month
+//			print(newValue);
+			//today, week, month
 		}
 	}
+	
 	func calculatePoint() {
 		let size = self.bounds.size
 		if (size.width == 0 || self.chartData.isEmpty) {
@@ -178,17 +180,20 @@ class StockChartView: UIView {
 		
 		if !self.chartData.isEmpty {
 			//center lines, calculate time length
-			let startTime = self.chartData.first?.time
-			let endTime = self.chartData.last?.time
 			
-			let interval:NSTimeInterval = endTime!.timeIntervalSinceDate(startTime!)
-			let hours = Int(interval/3600)-1
-			if hours > 0 {
-				let unitWidth = 3600*(width-self.margin*2)/CGFloat(interval)
-				for i in 1...hours {
-					let px = Int(margin+unitWidth*CGFloat(i))
-					linePath.moveToPoint(CGPoint(x: CGFloat(px) + 0.5, y: topMargin))
-					linePath.addLineToPoint(CGPoint(x:CGFloat(px) + 0.5, y:height - bottomMargin))
+			if chartType == "today" {
+				let startTime = self.chartData.first?.time
+				let endTime = self.chartData.last?.time
+				
+				let interval:NSTimeInterval = endTime!.timeIntervalSinceDate(startTime!)
+				let hours = Int(interval/3600)-1
+				if hours > 0 {
+					let unitWidth = 3600*(width-self.margin*2)/CGFloat(interval)
+					for i in 1...hours {
+						let px = Int(margin+unitWidth*CGFloat(i))
+						linePath.moveToPoint(CGPoint(x: CGFloat(px) + 0.5, y: topMargin))
+						linePath.addLineToPoint(CGPoint(x:CGFloat(px) + 0.5, y:height - bottomMargin))
+					}
 				}
 			}
 		}

@@ -61,7 +61,7 @@ var StockDetailPage = React.createClass({
 			leverage: 2,
 			totalMoney: 1000,
 			tradeDirection: 0,	//0:none, 1:up, 2:down
-			inputText: '0',
+			inputText: '20',
 			stockPrice: this.props.stockPrice,
 			isAddedToMyList: false,
 			tradingInProgress: false,

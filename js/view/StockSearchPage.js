@@ -35,6 +35,7 @@ var StockSearchPage = React.createClass({
 			searchStockRawInfo: [],
 			searchStockInfo: ds.cloneWithRows([]),
 			timerCount: 0,
+			searchFailedText: null,
 		};
 	},
 
@@ -47,7 +48,7 @@ var StockSearchPage = React.createClass({
 				this.setState({
 					timerCount: this.state.timerCount - 1,
 				})
-				
+
 				if (this.state.timerCount === 0) {
 					this.searchStock(text)
 				}
@@ -60,22 +61,28 @@ var StockSearchPage = React.createClass({
 		if (text.length > 0) {
 			console.log('Start search: ' + text)
 			NetworkModule.fetchTHUrl(
-				NetConstants.GET_SEARCH_STOCK_API + '?keyword=' + text, 
+				NetConstants.GET_SEARCH_STOCK_API + '?keyword=' + text,
 				{
 					method: 'GET',
 				},
 				(responseJson) => {
-					if (responseJson.length == 0) {
-						Alert.alert('提示', '没有找到包含此信息的商品。')
-					}
 					LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-					this.setState({
-						searchStockRawInfo: responseJson,
-						searchStockInfo: ds.cloneWithRows(responseJson)
-					})
+					if (responseJson.length == 0) {
+						this.setState({
+							searchFailedText: '搜索无结果',
+						})
+					} else {
+						this.setState({
+							searchStockRawInfo: responseJson,
+							searchStockInfo: ds.cloneWithRows(responseJson),
+							searchFailedText: null,
+						})
+					}
 				},
 				(errorMessage) => {
-					Alert.alert('提示', errorMessage);
+					this.setState({
+						searchFailedText: errorMessage,
+					})
 				}
 			)
 		}
@@ -99,8 +106,8 @@ var StockSearchPage = React.createClass({
 		return (
 			<View style={styles.navBarContainer} >
 				<View style={styles.navBarInputContainer}>
-					<Image 
-						style={styles.searchButton} 
+					<Image
+						style={styles.searchButton}
 						source={require('../../images/search.png')}/>
 
 					<TextInput style={styles.searchInput}
@@ -136,7 +143,7 @@ var StockSearchPage = React.createClass({
 		var myListData = LogicData.getOwnStocksData()
 		var index = myListData.findIndex((stock) => {return stock.id === rowData.id})
 		if (index === -1) {
-			rightPartContent = 
+			rightPartContent =
 					<TouchableOpacity style={styles.addToMyListContainer}
 							onPress={() => this.addToMyListPressed(rowID)}>
 						<Text style={styles.addToMyListText}>
@@ -179,6 +186,10 @@ var StockSearchPage = React.createClass({
 		return (
 			<View style={{flex: 1, width: width}}>
 				{this.renderNavBar()}
+				{this.state.searchFailedText !== null ?
+				<Text style={styles.searchFailedText}>
+					{this.state.searchFailedText}
+				</Text> :
 				<ListView
 					style={styles.list}
 					ref="listview"
@@ -187,6 +198,7 @@ var StockSearchPage = React.createClass({
 					dataSource={this.state.searchStockInfo}
 					renderRow={this.renderRow}
 					renderSeparator={this.renderSeparator}/>
+				}
 			</View>
 		);
 	},
@@ -292,7 +304,7 @@ var styles = StyleSheet.create({
 	},
 	addToMyListText: {
 		fontSize: 18,
-		color: ColorConstants.TITLE_BLUE,		
+		color: ColorConstants.TITLE_BLUE,
 		fontWeight: 'bold',
 		paddingLeft: 5,
 		paddingRight: 5,
@@ -313,6 +325,13 @@ var styles = StyleSheet.create({
 		marginLeft: 15,
 		height: 1,
 		backgroundColor: '#ececec',
+	},
+
+	searchFailedText: {
+		alignSelf: 'center',
+		marginTop: 20,
+		fontSize: 14,
+		color: '#9e9e9e',
 	},
 });
 

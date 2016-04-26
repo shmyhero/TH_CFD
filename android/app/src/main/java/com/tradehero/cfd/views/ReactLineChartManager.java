@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
@@ -31,9 +32,15 @@ import java.util.GregorianCalendar;
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
  */
-public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
+public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
 
     private static final String REACT_CLASS = "LineChart";
+    private enum CHART_TYPE {
+        today,
+        week,
+        month
+    };
+    private CHART_TYPE mChartType = CHART_TYPE.today;
     private static int CHART_BORDER_COLOR = 0xff497bce;
     private static int CHART_LINE_COLOR = 0Xff759de2;
 
@@ -156,24 +163,30 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
                 chart.getAxisLeft().addLimitLine(line);
 
                 // Set the yAxis lines with 1 hour in between.
+                int gapLineUnit = Calendar.HOUR_OF_DAY;
+                if (mChartType == CHART_TYPE.week) {
+                    gapLineUnit = Calendar.DAY_OF_MONTH;
+                } else if (mChartType == CHART_TYPE.month) {
+                    gapLineUnit = Calendar.WEEK_OF_YEAR;
+                }
                 Calendar nextLineAt = null;
                 for (int i = 0; i < chartDataList.length(); i++) {
                     Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
 
                     if (nextLineAt == null) {
-                        calendar.add(Calendar.HOUR_OF_DAY, 1);
+                        calendar.add(gapLineUnit, 1);
                         nextLineAt = calendar;
                     } else if (calendar.after(nextLineAt)) {
-                        calendar.add(Calendar.HOUR_OF_DAY, 1);
+                        calendar.add(gapLineUnit, 1);
                         nextLineAt = calendar;
 
-                        LimitLine hourLine = new LimitLine(i);
-                        hourLine.setLineColor(CHART_LINE_COLOR);
-                        hourLine.setLineWidth(0.5f);
-                        hourLine.enableDashedLine(10f, 0f, 0f);
-                        hourLine.setTextSize(0f);
+                        LimitLine gapLine = new LimitLine(i);
+                        gapLine.setLineColor(CHART_LINE_COLOR);
+                        gapLine.setLineWidth(0.5f);
+                        gapLine.enableDashedLine(10f, 0f, 0f);
+                        gapLine.setTextSize(0f);
 
-                        chart.getXAxis().addLimitLine(hourLine);
+                        chart.getXAxis().addLimitLine(gapLine);
                     }
                 }
 
@@ -191,6 +204,11 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
             CHART_BORDER_COLOR = Color.WHITE;
             CHART_LINE_COLOR = Color.WHITE;
         }
+    }
+
+    @ReactProp(name = "chartType")
+    public void setChartType(ReactLineChart chart, String type) {
+        mChartType = CHART_TYPE.valueOf(type);
     }
 
     @ReactProp(name = "description")
@@ -368,6 +386,8 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
     public String getName() {
         return REACT_CLASS;
     }
+
+
 
     private Calendar timeStringToCalendar(String timeStr) {
         Calendar calendar = GregorianCalendar.getInstance();

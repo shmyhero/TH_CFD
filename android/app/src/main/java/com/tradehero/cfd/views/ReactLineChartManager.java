@@ -46,6 +46,8 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
         chart.setScaleEnabled(false);
         chart.setTouchEnabled(false);
         chart.getLegend().setEnabled(false);
+        chart.setExtraLeftOffset(8);
+        chart.setExtraRightOffset(8);
 
         chart.getAxisLeft().removeAllLimitLines();
         chart.getAxisRight().removeAllLimitLines();
@@ -136,6 +138,10 @@ public class ReactLineChartManager extends SimpleViewManager<ReactLineChart> {
                 LineData data = new LineData(xVals, dataSets);
 
                 // set data
+                chart.clear();
+                chart.getXAxis().removeAllLimitLines();
+                chart.getAxisLeft().removeAllLimitLines();
+                chart.getAxisRight().removeAllLimitLines();
                 chart.getAxisLeft().setAxisMinValue(minVal);
                 chart.getAxisLeft().setAxisMaxValue(maxVal);
                 chart.setData(data);

@@ -66,7 +66,6 @@ var HomePage = React.createClass({
 						<Text style={styles.blockTitleText}>
 							涨跌双盈
 						</Text>
-						<View style={styles.blockTitleUnderLine}/>
 						<Text style={styles.blockTitleContent}>
 							{'市场行情的涨跌动态都是\n盈利时机'}
 						</Text>
@@ -77,7 +76,6 @@ var HomePage = React.createClass({
 						<Text style={styles.blockTitleText}>
 							以小搏大
 						</Text>
-						<View style={styles.blockTitleUnderLine}/>
 						<Text style={styles.blockTitleContent}>
 							{'盈利无上限 亏损有底线\n杠杆收益'}
 						</Text>
@@ -90,7 +88,6 @@ var HomePage = React.createClass({
 						<Text style={styles.blockTitleText}>
 							实时行情
 						</Text>
-						<View style={styles.blockTitleUnderLine}/>
 						<Text style={styles.blockTitleContent}>
 							{'市场同步的行情助您掌控\n涨跌趋势'}
 						</Text>
@@ -101,9 +98,8 @@ var HomePage = React.createClass({
 						<Text style={styles.blockTitleText}>
 							体验简单
 						</Text>
-						<View style={styles.blockTitleUnderLine}/>
 						<Text style={styles.blockTitleContent}>
-							{'根本上区别于传统CFD复杂\n用户体验'}
+							{'选择涨跌 本金和杠杆三步\n便捷交易'}
 						</Text>
 					</View>
 				</View>
@@ -145,12 +141,6 @@ var styles = StyleSheet.create({
 	blockTitleText: {
 		color: '#ffe400',
 		fontSize: 22,
-		marginBottom: 5,
-	},
-	blockTitleUnderLine: {
-		height: 1,
-		width: 45,
-		backgroundColor: '#4da1ff',
 		marginBottom: 10,
 	},
 	blockTitleContent: {

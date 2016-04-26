@@ -72,7 +72,7 @@ var LineChart = React.createClass({
 			colorType: 0,
 			description: '',
 			noDataText: '数据加载中...',
-			padding: 10,
+			padding: 2,
 			xAxisStep: 10,
 			xAxisPosition: LineChartXAxisPosition.BOTH_SIDED,
 			xAxisDrawLabel: false,

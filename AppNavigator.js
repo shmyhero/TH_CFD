@@ -86,6 +86,7 @@ export var RouteMapper = function(route, navigationOperations, onComponentRef) {
 			<MainPage />
 		)
 	} else if (route.name == HOME_PAGE_ROUTE) {
+		showTabbar()
 		return (
 			<HomePage navigator={navigationOperations}/>
 		)

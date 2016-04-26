@@ -75,15 +75,11 @@ var StockStatisticsPage = React.createClass({
 		}
 	},
 
-	tabPressed: function(index) {
-
-	},
-
 	renderBars: function() {
 		var bars = this.state.barSize.map(
 			(barContent, i) => {
-				var investBarFlex = barContent.invest / this.state.maxBarSize
-				var profitBarFlex = barContent.profit / this.state.maxBarSize
+				var investBarFlex = Math.floor(barContent.invest / this.state.maxBarSize * 100)
+				var profitBarFlex = Math.floor(barContent.profit / this.state.maxBarSize * 100)
 				var profitBarStyle = barContent.profit > 0 ? styles.positiveProfitBar : styles.negtiveProfitBar
 				if (barContent.profit < 0) {
 					profitBarFlex *= -1
@@ -91,7 +87,7 @@ var StockStatisticsPage = React.createClass({
 				}
 				return (
 					<View key={i}>
-						<View style={{flex: 1 - investBarFlex - profitBarFlex}} />
+						<View style={{flex: 100 - investBarFlex - profitBarFlex}} />
 						<View style={[{flex: profitBarFlex}, profitBarStyle]} />
 						<View style={[{flex: investBarFlex},styles.investBar]} />
 					</View>
@@ -170,7 +166,7 @@ var StockStatisticsPage = React.createClass({
 				<View style={[styles.empty, {padding: 20}]}>
 					{this.renderBars()}
 				</View>
-				<View style={[styles.separator, {marginBottom: 10}]}/>
+				<View style={[styles.separator, {marginBottom: 10, marginRight:15}]}/>
 				<View style={styles.barNamesContainer}>
 					{barNameText}
 				</View>

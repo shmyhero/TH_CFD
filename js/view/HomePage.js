@@ -6,12 +6,15 @@ var {
 	View,
 	Image,
 	Text,
+	TouchableOpacity,
 	Dimensions,
 	Platform,
 } = React;
 var ViewPager = require('react-native-viewpager');
 var ColorConstants = require('../ColorConstants')
+var AppNavigator = require('../../AppNavigator')
 
+var RECOMMAND_URL = 'http://www.baidu.com'
 var PAGES = [
   'Page 0',
   'Page 1',
@@ -42,10 +45,21 @@ var HomePage = React.createClass({
 		data: Object,
 		pageID: number | string,) {
 		return (
-			<Image
-				style={[styles.image, {height: imageHeight, width: width}]}
-				source={BANNERS[pageID]}/>
+			<TouchableOpacity
+				onPress={() => this.gotoRecommandPage(pageID)}>
+				<Image
+					style={[styles.image, {height: imageHeight, width: width}]}
+					source={BANNERS[pageID]}/>
+			</TouchableOpacity>
+
 		);
+	},
+
+	gotoRecommandPage: function(pageID) {
+		this.props.navigator.push({
+			name: AppNavigator.HOMEPAGE_RECOMMAND_ROUTE,
+			url: RECOMMAND_URL,
+		});
 	},
 
 	render: function() {

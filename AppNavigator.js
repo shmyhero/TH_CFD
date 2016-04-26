@@ -36,6 +36,7 @@ var StockListViewPager = require('./js/view/StockListViewPager')
 var StockSearchPage = require('./js/view/StockSearchPage')
 var StockDetailPage = require('./js/view/StockDetailPage')
 var StockExchangePage = require('./js/view/StockExchangePage')
+var WebViewPage = require('./js/view/WebViewPage');
 var {EventCenter, EventConst} = require('./js/EventCenter')
 
 var LogicData = require('./js/LogicData')
@@ -64,6 +65,7 @@ export let STOCK_LIST_VIEW_PAGER_ROUTE = 'stockListViewPager'
 export let STOCK_SEARCH_ROUTE = 'stockSearch'
 export let STOCK_DETAIL_ROUTE = 'stockDetail'
 export let STOCK_EXCHANGE_ROUTE = 'stockExchange'
+export let HOMEPAGE_RECOMMAND_ROUTE = 'homepageRecommand'
 
 var hideTabbar
 var showTabbar
@@ -174,6 +176,14 @@ export var RouteMapper = function(route, navigationOperations, onComponentRef) {
 		showTabbar()
 		return (
 			<StockExchangePage navigator={navigationOperations} />
+		)
+	} else if (route.name === HOMEPAGE_RECOMMAND_ROUTE) {
+		hideTabbar()
+		return (
+			<View style={{flex: 1}}>
+				<NavBar title='推荐' showBackButton={true} navigator={navigationOperations}/>
+				<WebViewPage url={route.url}/>
+			</View>
 		)
 	}
 };

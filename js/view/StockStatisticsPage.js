@@ -31,6 +31,11 @@ var StockStatisticsPage = React.createClass({
 		}
 	},
 
+	tabPressed: function(index) {
+		// TODO
+		// Do not delete this function, it is called somewhere.
+	},
+
 	playStartAnim: function() {
 		if (this.state.barAnimPlayed === false) {
 			this.setState({

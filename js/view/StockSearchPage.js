@@ -269,11 +269,7 @@ var styles = StyleSheet.create({
 	},
 	rowRightPart: {
 		flex: 1,
-		paddingTop: 5,
-		paddingBottom: 5,
-		paddingRight: 5,
 		alignItems: 'flex-end',
-		borderRadius: 5,
 	},
 
 	stockNameText: {
@@ -288,17 +284,22 @@ var styles = StyleSheet.create({
 	},
 
 	addToMyListContainer: {
-		borderWidth: 1,
-		borderRadius: 2,
-		paddingLeft: 5,
-		paddingRight: 5,
-		paddingBottom: 2,
-		borderColor: ColorConstants.TITLE_BLUE,
+		paddingLeft: 10,
+		paddingRight: 10,
+		paddingBottom: 10,
+		paddingTop: 10,
+		alignItems: 'center',
 	},
 	addToMyListText: {
 		fontSize: 18,
 		color: ColorConstants.TITLE_BLUE,		
 		fontWeight: 'bold',
+		paddingLeft: 5,
+		paddingRight: 5,
+		borderWidth: 1,
+		borderRadius: 2,
+		borderColor: ColorConstants.TITLE_BLUE,
+		textAlign: 'center',
 	},
 	alreadyAddText: {
 		fontSize: 14,

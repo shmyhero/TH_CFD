@@ -431,9 +431,13 @@ var StockOpenPositionPage = React.createClass({
 		if (this.state.selectedSubItem === 2) {
 			extendHeight += 170
 		}
+
+		var buttonText = (rowData.upl < 0 ? '亏损':'获利') + ':$' + rowData.upl.toFixed(2)
 		if (this.state.showExchangeDoubleCheck) {
 			extendHeight += 28
+			buttonText = "确认"
 		}
+
 		return (
 			<View style={[{height: extendHeight}, styles.extendWrapper]} >
 				<View style={styles.darkSeparator} />
@@ -494,7 +498,7 @@ var StockOpenPositionPage = React.createClass({
 					underlayColor={	'#164593'}
 					onPress={() => this.okPress(rowData)} style={[styles.okView, this.state.showExchangeDoubleCheck && styles.okViewDoubleConfirm]}>
 					<Text style={[styles.okButton, this.state.showExchangeDoubleCheck && styles.okButtonDoubleConfirm]}>
-						{rowData.upl < 0 ? '亏损':'获利'}:${rowData.upl.toFixed(2)}
+						{buttonText}
 					</Text>
 				</TouchableHighlight>
 

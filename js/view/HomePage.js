@@ -135,11 +135,11 @@ var styles = StyleSheet.create({
 	},
 	horiLine: {
 		height: 1,
-		backgroundColor: '#4da1ff',
+		backgroundColor: '#268dff',
 	},
 	vertLine: {
 		width: 1,
-		backgroundColor: '#4da1ff',
+		backgroundColor: '#268dff',
 	},
 	blockContainer: {
 		flex: 1,

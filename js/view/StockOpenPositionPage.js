@@ -513,6 +513,9 @@ var StockOpenPositionPage = React.createClass({
 		var profitPercentage = 0
 		if (rowData.settlePrice !== 0) {
 			profitPercentage = (rowData.security.last - rowData.settlePrice) / rowData.settlePrice
+			if (!rowData.isLong) {
+				profitPercentage *= (-1)
+			}
 		}
 		var bgcolor = this.state.selectedRow === rowID ? '#d2d2d2' : 'white'
 		return (

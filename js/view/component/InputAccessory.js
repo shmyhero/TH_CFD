@@ -26,7 +26,7 @@ var InputAccessory = React.createClass({
 	propTypes: {
 		textValue: React.PropTypes.string,
 		maxValue: React.PropTypes.number,
-		rightButtonOnClick: React.PropTypes.func,
+		rightButtonOnClick: React.PropTypes.func,	// use to clear text when error occured.
 	},
 
 	//For some reason, this gives warnings?
@@ -79,7 +79,7 @@ var InputAccessory = React.createClass({
 			visibleHeight: newSize,
 			hideKA: false,
 			opacity: 1,
-			validValue: true,
+			validValue: 0,
 		})
 	},
 
@@ -131,6 +131,12 @@ var InputAccessory = React.createClass({
 				opacity: 0,
 			})
 		dismissKeyboard();
+	},
+
+	resetValidState: function() {
+		this.setState({
+			validValue: 0
+		})
 	},
 
 	render: function() {

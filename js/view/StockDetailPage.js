@@ -344,8 +344,10 @@ var StockDetailPage = React.createClass({
 							{this.renderOKButton()}
 						</View>
 					</LinearGradient>
-	    			<InputAccessory textValue={this.state.inputText} maxValue={this.state.totalMoney}
-	    				rightButtonOnClick={this.updateMoney}/>
+	    			<InputAccessory ref='InputAccessory'
+	    				textValue={this.state.inputText}
+	    				maxValue={this.state.totalMoney}
+	    				rightButtonOnClick={this.clearMoney}/>
 
 	    			<StockTransactionConfirmPage ref='confirmPage'/>
 				</View>
@@ -353,7 +355,7 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
-	updateMoney: function() {
+	clearMoney: function() {
 		var value = parseInt(this.state.inputText)
 		if (value > this.state.totalMoney) {
 			this.setState({inputText:'0', money:0})
@@ -669,6 +671,9 @@ var StockDetailPage = React.createClass({
 		var value = parseInt(text)
 		if (text.length == 0) {
 			value = 0
+		}
+		else {
+			this.refs['InputAccessory'].resetValidState()
 		}
 		this.setState({inputText:""+value,
 			money: value,

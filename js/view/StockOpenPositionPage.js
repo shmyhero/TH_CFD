@@ -29,7 +29,8 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {
 		return r1.id !== r2.id || r1.profitPercentage!==r2.profitPercentage || r1.hasSelected!==r2.hasSelected
 	}});
 
-var extendHeight = 0
+var extendHeight = 222
+var rowHeight = 0
 
 var StockOpenPositionPage = React.createClass({
 
@@ -41,6 +42,7 @@ var StockOpenPositionPage = React.createClass({
 			selectedSubItem: 0,
 			stockDetailInfo: [],
 			showExchangeDoubleCheck: false,
+			chartType: NetConstants.PARAMETER_CHARTTYPE_TODAY,
 		};
 	},
 
@@ -94,6 +96,7 @@ var StockOpenPositionPage = React.createClass({
 	loadStockDetailInfo: function(stockCode) {
 		var url = NetConstants.GET_STOCK_PRICE_TODAY_API
 		url = url.replace(/<stockCode>/, stockCode)
+		url = url.replace(/<chartType>/, this.state.chartType)
 
 		NetworkModule.fetchTHUrl(
 			url,
@@ -135,6 +138,10 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	stockPressed: function(rowData, sectionID, rowID, highlightRow) {
+		if (rowHeight === 0) {
+			rowHeight = this.refs['listview'].getMetrics().contentLength/this.state.stockInfoRowData.length
+		}
+
 		this.setState({
 			showExchangeDoubleCheck: false,
 		})
@@ -152,12 +159,10 @@ var StockOpenPositionPage = React.createClass({
 			})
 		} else {
 			var maxY = (height-100)*20/21 - extendHeight
-			var listHeight = this.refs['listview'].getMetrics().contentLength
 			if (this.state.selectedRow >=0) {
 				newData[this.state.selectedRow].hasSelected = false
-				listHeight -= extendHeight
 			}
-			var currentY = listHeight/newData.length*(parseInt(rowID)+1)
+			var currentY = rowHeight*(parseInt(rowID)+1)
 			if (currentY > maxY && parseInt(this.state.selectedRow) < parseInt(rowID)) {
 				this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
 			}
@@ -175,6 +180,25 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	subItemPress: function(item, rowData) {
+		var detalY = 0
+		var rowID = this.state.selectedRow
+		if (this.state.selectedSubItem === 0) {
+			detalY = item === 1 ? 51 : 170
+		}
+		else {
+			if (item === 1) {
+				detalY = this.state.selectedSubItem === 1 ? 0 : 0
+			}
+			else {
+				detalY = this.state.selectedSubItem === 2 ? -51 : 119
+			}
+		}
+		var maxY = (height-100)*20/21 - extendHeight - detalY
+		var currentY = rowHeight*(parseInt(rowID)+1)
+		if (currentY > maxY ) {
+			this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
+		}
+
 		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 		this.setState({
 			selectedSubItem: this.state.selectedSubItem === item ? 0 : item,
@@ -227,6 +251,13 @@ var StockOpenPositionPage = React.createClass({
 		)
 	},
 
+	pressChartHeaderTab: function(type, rowData) {
+		this.setState({
+			chartType: type
+		})
+		this.loadStockDetailInfo(rowData.security.id)
+	},
+
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
 		return (
 			<View style={styles.line} key={rowID}>
@@ -276,18 +307,24 @@ var StockOpenPositionPage = React.createClass({
 
 	},
 
-	renderChartHeader: function() {
+	renderChartHeader: function(rowData) {
 		return(
-			<View style={{flexDirection: 'row', marginTop: 6}} >
-				<Text style={styles.chartTitleTextHighlighted} >
-					分时
-				</Text>
-				<Text style={styles.chartTitleText} >
-					5日
-				</Text>
-				<Text style={styles.chartTitleText} >
-					1月
-				</Text>
+			<View style={{flexDirection: 'row', marginTop: 6, marginBottom: 5}} >
+				<TouchableOpacity style={{flex:1}} onPress={()=>this.pressChartHeaderTab(NetConstants.PARAMETER_CHARTTYPE_TODAY, rowData)}>
+					<Text style={this.state.chartType===NetConstants.PARAMETER_CHARTTYPE_TODAY ? styles.chartTitleTextHighlighted : styles.chartTitleText} >
+						分时
+					</Text>
+				</TouchableOpacity>
+				<TouchableOpacity style={{flex:1}} onPress={()=>this.pressChartHeaderTab(NetConstants.PARAMETER_CHARTTYPE_WEEK, rowData)}>
+					<Text style={this.state.chartType===NetConstants.PARAMETER_CHARTTYPE_WEEK ? styles.chartTitleTextHighlighted : styles.chartTitleText} >
+						5日
+					</Text>
+				</TouchableOpacity>
+				<TouchableOpacity style={{flex:1}} onPress={()=>this.pressChartHeaderTab(NetConstants.PARAMETER_CHARTTYPE_MONTH, rowData)}>
+					<Text style={this.state.chartType===NetConstants.PARAMETER_CHARTTYPE_MONTH ? styles.chartTitleTextHighlighted : styles.chartTitleText} >
+						1月
+					</Text>
+				</TouchableOpacity>
 			</View>
 		);
 	},
@@ -367,12 +404,14 @@ var StockOpenPositionPage = React.createClass({
 			// market detail
 			return (
 				<View style={{height: 170}}>
-					{this.renderChartHeader()}
-					{this.renderStockMaxPriceInfo(maxPrice, maxPercentage, true)}
-					<LineChart style={{flex: 1, backgroundColor:'transparent', marginTop:-25, marginBottom:-25}}
+					{this.renderChartHeader(rowData)}
+					<LineChart style={styles.lineChart}
 						data={JSON.stringify(this.state.stockDetailInfo)}
-						colorType={1}/>
-					{this.renderStockMaxPriceInfo(maxPrice, maxPercentage, false)}
+						chartType={this.state.chartType}
+						colorType={1}>
+						{this.renderStockMaxPriceInfo(maxPrice, maxPercentage, true)}
+						{this.renderStockMaxPriceInfo(maxPrice, maxPercentage, false)}
+					</LineChart>
 				</View>
 			);
 		}
@@ -646,6 +685,13 @@ var styles = StyleSheet.create({
 	extendImageBottom: {
 		width: 24,
 		height: 24,
+	},
+	lineChart: {
+		flex: 1,
+		backgroundColor:'transparent',
+		justifyContent:'space-between',
+		paddingTop: 1,
+		paddingBottom: 1,
 	},
 
 	okView: {

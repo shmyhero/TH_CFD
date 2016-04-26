@@ -237,7 +237,7 @@ var StockDetailPage = React.createClass({
 			var lastDate = new Date(this.state.stockInfo.priceData[this.state.stockInfo.priceData.length - 1].time)
 
 			return (
-				<View style={{flexDirection: 'row', marginTop: 5}}>
+				<View style={{flexDirection: 'row'}}>
 					<View style={{flex: 1, alignItems: 'flex-start', marginLeft:3}}>
 						<Text style={styles.timeText}>
 							{firstDate.getHours()}:{firstDate.getMinutes()}
@@ -320,12 +320,13 @@ var StockDetailPage = React.createClass({
 
 						{this.renderChartHeader()}
 
-						<View style={{flex: 3, marginTop:10}}>
-							{this.renderStockMaxPriceInfo(maxPrice, maxPercentage)}
-							<LineChart style={{flex: 1, backgroundColor:'transparent', marginTop: -26}}
+						<View style={{flex: 3, marginTop:5}}>
+							<LineChart style={styles.lineChart}
 								data={JSON.stringify(this.state.stockInfo)}
-								chartType={this.state.chartType}/>
+								chartType={this.state.chartType}>
+							{this.renderStockMaxPriceInfo(maxPrice, maxPercentage)}
 							{this.renderStockMinPriceInfo(minPrice, minPercentage)}
+							</LineChart>
 							{this.renderTime()}
 
 						</View>
@@ -687,6 +688,13 @@ var styles = StyleSheet.create({
 		paddingTop: 5,
 		paddingBottom: 5,
 		justifyContent: 'space-around',
+	},
+	lineChart: {
+		flex: 1,
+		backgroundColor:'transparent',
+		justifyContent:'space-between',
+		paddingTop: 6,
+		paddingBottom: 6, 
 	},
 	tradeButtonView: {
 		width: 140,

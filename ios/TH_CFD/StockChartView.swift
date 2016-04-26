@@ -12,8 +12,8 @@ import UIKit
 class StockChartView: UIView {
 	
 	let margin:CGFloat = 15.0
-	var topMargin:CGFloat = 10.0
-	var bottomMargin:CGFloat = 10.0
+	var topMargin:CGFloat = 2.0
+	var bottomMargin:CGFloat = 2.0
 	
 	@IBInspectable var startColor: UIColor = UIColor(hex: 0x7daeff)
 	@IBInspectable var endColor: UIColor = UIColor(hex: 0x1954b9)

@@ -103,12 +103,10 @@ var ScrollTabView = React.createClass({
 	},
 
 	renderSeperate: function() {
-		var offsetX = -width / this.props.tabNames.length * (this.props.tabNames.length - this.state.currentSelectedTab)
+		var offsetX = width / this.props.tabNames.length * this.state.currentSelectedTab
 
 		return (
 			<View style={styles.lineContainer}>
-
-				<View style={[styles.line, {width: width}]}/>
 				
 				<View style={[styles.tabItemContainer, {width: width / this.props.tabNames.length, marginLeft: offsetX}]}>
 					<Image 
@@ -204,7 +202,7 @@ var styles = StyleSheet.create({
 	indicator: {
 		width: 10,
 		height: 5,
-		marginTop: -4,
+		marginTop: -5,
 	},
 
 	slide: {

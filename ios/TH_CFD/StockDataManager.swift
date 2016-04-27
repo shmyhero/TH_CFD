@@ -17,6 +17,7 @@ class StockData: NSObject {
 	var preClose: Double?
 	var stockTag: String?
 	var choose: Bool = false
+	var lastOpen: NSDate?
 	
 	func initWithId(stockId:Int, symbol:String, name:String, open:Double, close:Double, stockTag:String) -> Void {
 		self.stockId = stockId
@@ -35,6 +36,11 @@ class StockData: NSObject {
 		self.last = dict["last"] as? Double
 		self.preClose = dict["preClose"] as? Double
 		self.stockTag = dict["tag"] == nil ? nil : dict["tag"] as? String
+		
+		let timeString = dict["lastOpen"] as? String
+		let dateFormatter = NSDateFormatter()
+		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+		self.lastOpen = dateFormatter.dateFromString(timeString!)
 	}
 	
 	func outputDictionay() -> NSDictionary {
@@ -48,6 +54,9 @@ class StockData: NSObject {
 		]
 		if (self.stockTag != nil) {
 			dict.setValue(self.stockTag, forKey: "tag")
+		}
+		if (self.lastOpen != nil) {
+			dict.setValue(self.lastOpen, forKey: "lastClose")
 		}
 		return dict
 	}

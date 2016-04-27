@@ -65,13 +65,13 @@ class StockChartView: UIView {
 		var minValue = chartData.reduce(100000000.0) { (min, data) -> Double in
 			(min > data.price) ? data.price : min
 		}
-		let preClose = ChartDataManager.singleton.preClose
+		let preClose = ChartDataManager.singleton.stockData?.preClose
 		if (preClose > 0) {
 			if (maxValue < preClose) {
-				maxValue = preClose
+				maxValue = preClose!
 			}
 			if (minValue > preClose) {
-				minValue = preClose
+				minValue = preClose!
 			}
 		}
 		//calculate the x point
@@ -99,7 +99,7 @@ class StockChartView: UIView {
 			return y
 		}
 		if (preClose > 0 && maxValue > minValue) {
-			middleLineY = (size.height-topBorder-bottomBorder) * CGFloat(maxValue - preClose) / CGFloat(maxValue - minValue)+topBorder
+			middleLineY = (size.height-topBorder-bottomBorder) * CGFloat(maxValue - preClose!) / CGFloat(maxValue - minValue)+topBorder
 		}
 		else {
 			middleLineY = size.height/2

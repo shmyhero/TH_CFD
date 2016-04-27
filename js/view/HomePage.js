@@ -13,6 +13,9 @@ var {
 var ViewPager = require('react-native-viewpager');
 var ColorConstants = require('../ColorConstants')
 var AppNavigator = require('../../AppNavigator')
+var NetConstants = require('../NetConstants');
+var NetworkModule = require('../module/NetworkModule');
+var StorageModule = require('../module/StorageModule')
 
 var RECOMMAND_URL = 'http://www.baidu.com'
 var PAGES = [
@@ -26,33 +29,66 @@ var BANNERS = [
 var {height, width} = Dimensions.get('window');
 var imageHeight = 478 / 750 * width
 
+var ds = new ViewPager.DataSource({
+	pageHasChanged: (p1, p2) => p1 !== p2,
+});
 var HomePage = React.createClass({
 	getInitialState: function() {
-		var dataSource = new ViewPager.DataSource({
-			pageHasChanged: (p1, p2) => p1 !== p2,
-		});
-
 		return {
-			dataSource: dataSource.cloneWithPages(PAGES),
+			dataSource: ds.cloneWithPages(PAGES),
 		};
 	},
 
-	componentWillUnmount: function() {
+	componentWillMount: function() {
+		StorageModule.loadBanners()
+			.then((value) => {
+				if (value !== null) {
+					this.setState({
+						dataSource: ds.cloneWithPages(value)
+					})
+				}
+			})
+			.done()
 
+		NetworkModule.fetchTHUrl(
+			NetConstants.GET_HOMEPAGE_BANNER_API,
+			{
+				method: 'GET',
+			},
+			(responseJson) => {
+				this.setState({
+					dataSource: ds.cloneWithPages(responseJson)
+				})
+				StorageModule.setBanners(JSON.stringify(responseJson))
+			},
+			(errorMessage) => {
+				// Ignore it.
+			}
+		)
 	},
 
 	_renderPage: function(
 		data: Object,
 		pageID: number | string,) {
-		return (
-			<TouchableOpacity
-				onPress={() => this.gotoRecommandPage(pageID)}>
-				<Image
-					style={[styles.image, {height: imageHeight, width: width}]}
-					source={BANNERS[pageID]}/>
-			</TouchableOpacity>
-
-		);
+		if (data.imgUrl !== undefined && data.imgUrl !== null) {
+			return (
+				<TouchableOpacity
+					onPress={() => this.gotoRecommandPage(pageID)}>
+					<Image
+						style={[styles.image, {height: imageHeight, width: width}]}
+						source={{uri: data.imgUrl}}/>
+				</TouchableOpacity>
+			);
+		} else {
+			return (
+				<TouchableOpacity
+					onPress={() => this.gotoRecommandPage(pageID)}>
+					<Image
+						style={[styles.image, {height: imageHeight, width: width}]}
+						source={BANNERS[pageID % 2]}/>
+				</TouchableOpacity>
+			);
+		}
 	},
 
 	gotoRecommandPage: function(pageID) {

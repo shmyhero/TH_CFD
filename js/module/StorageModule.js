@@ -7,6 +7,7 @@ var {
 
 var USER_DATA_STORAGE_KEY = '@TH_CFD:userData';
 var OWN_STOCKS_DATA_STORAGE_KEY = '@TH_CFD:ownStocksData';
+var BANNER_STORAGE_KEY = '@TH_CFD:bannerData';
 
 export async function loadUserData() {
 	try {
@@ -55,6 +56,23 @@ export async function setOwnStocksData(selectedValue) {
 export async function removeOwnStocksData() {
 	try {
 		await AsyncStorage.removeItem(OWN_STOCKS_DATA_STORAGE_KEY);
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function setBanners(banners) {
+	try {
+		await AsyncStorage.setItem(BANNER_STORAGE_KEY, banners)
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function loadBanners() {
+	try {
+		var value = await AsyncStorage.getItem(BANNER_STORAGE_KEY);
+		return value;
 	} catch (error) {
 		console.log('AsyncStorage error: ' + error.message);
 	}

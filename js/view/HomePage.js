@@ -44,7 +44,7 @@ var HomePage = React.createClass({
 			.then((value) => {
 				if (value !== null) {
 					this.setState({
-						dataSource: ds.cloneWithPages(value)
+						dataSource: ds.cloneWithPages(JSON.parse(value))
 					})
 				}
 			})

@@ -397,13 +397,19 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
     }
 
 
-
-    private Calendar timeStringToCalendar(String timeStr) {
+    private static Calendar timeStringToCalendar(String timeStr) {
         Calendar calendar = GregorianCalendar.getInstance();
         String s = timeStr.replace("Z", "+00:00");
         try {
-            s = s.substring(0, 22) + s.substring(23);  // to get rid of the ":"
-            Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(s);
+            int lastColonPos = s.lastIndexOf(":");
+            s = s.substring(0, lastColonPos) + s.substring(lastColonPos + 1);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+
+            if (s.indexOf(".") > 0) {
+                format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+            }
+
+            Date date = format.parse(s);
             calendar.setTime(date);
 
         } catch (IndexOutOfBoundsException e) {

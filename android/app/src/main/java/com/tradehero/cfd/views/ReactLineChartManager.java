@@ -186,8 +186,10 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                         calendar.add(gapLineUnit, 1);
                         nextLineAt = calendar;
                     } else if (calendar.after(nextLineAt)) {
-                        calendar.add(gapLineUnit, 1);
-                        nextLineAt = calendar;
+
+                        while(calendar.after(nextLineAt)) {
+                            nextLineAt.add(gapLineUnit, 1);
+                        }
 
                         LimitLine gapLine = new LimitLine(i);
                         gapLine.setLineColor(CHART_LINE_COLOR);

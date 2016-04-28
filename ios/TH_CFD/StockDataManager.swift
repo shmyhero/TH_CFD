@@ -38,9 +38,7 @@ class StockData: NSObject {
 		self.stockTag = dict["tag"] == nil ? nil : dict["tag"] as? String
 		
 		let timeString = dict["lastOpen"] as? String
-		let dateFormatter = NSDateFormatter()
-		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
-		self.lastOpen = dateFormatter.dateFromString(timeString!)
+		self.lastOpen = timeString?.toDate()
 	}
 	
 	func outputDictionay() -> NSDictionary {

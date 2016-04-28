@@ -25,6 +25,7 @@ class StockChartView: UIView {
 	
 	var chartData:[ChartData] = []
 	var pointData:[CGPoint] = []
+	var verticalLinesX:[CGFloat] = []
 	var middleLineY:CGFloat = 0
 	var topLineY:CGFloat = 0
 	var bottomLineY:CGFloat = 0
@@ -46,13 +47,13 @@ class StockChartView: UIView {
 		}
 	}
 	
-	var chartType:String="day" {
+	var chartType:String="today" {
 		willSet {
 //			print(newValue);
 			//today, week, month
 		}
 	}
-	
+	// MARK: calculation
 	func calculatePoint() {
 		let size = self.bounds.size
 		if (size.width == 0 || self.chartData.isEmpty) {
@@ -115,7 +116,65 @@ class StockChartView: UIView {
 			self.pointData.append(point)
 		}
 		
+		self.calculateVerticalLines()
 	}
+	
+	func calculateVerticalLines() -> Void {
+		let size = self.bounds.size
+		if (size.width == 0 || self.chartData.isEmpty) {
+			return
+		}
+		print(chartType)
+		self.verticalLinesX = []
+		
+		if chartType == "today" {
+			// 1 hour, 1 line, with the first start time
+			var startTime = chartData.first?.time
+			if startTime == nil {
+				return
+			}
+			for i in 0 ..< self.chartData.count {
+				if let time:NSDate? = chartData[i].time {
+					let interval:NSTimeInterval = time!.timeIntervalSinceDate(startTime!)
+					if interval >= 3600 {
+						self.verticalLinesX.append(self.pointData[i].x+0.5)
+						startTime = time
+					}
+				}
+				
+			}
+		}
+		else if chartType == "week" {
+			// 1 day, 1 line
+			let oneDay:Double = 3600 * 24
+			var startTime = ChartDataManager.singleton.stockData?.lastOpen
+			if startTime == nil {
+				return
+			}
+			if let time:NSDate? = chartData[0].time {
+				let interval:NSTimeInterval = time!.timeIntervalSinceDate(startTime!)
+				let days = floor(interval / oneDay)
+				startTime = NSDate(timeInterval: days*oneDay, sinceDate: startTime!)
+			}
+			else {
+				return
+			}
+			for i in 0 ..< self.chartData.count {
+				if let time:NSDate? = chartData[i].time {
+					let interval:NSTimeInterval = time!.timeIntervalSinceDate(startTime!)
+					if interval >= oneDay {
+						self.verticalLinesX.append(self.pointData[i].x+0.5)
+						startTime = time
+					}
+				}
+				
+			}
+		}
+		else if chartType == "month" {
+			// 1 week, 1 line
+		}
+	}
+	
 // MARK: render
 	override func drawRect(rect: CGRect) {
 		if (self.pointData.isEmpty) {
@@ -180,21 +239,10 @@ class StockChartView: UIView {
 		
 		if !self.chartData.isEmpty {
 			//center lines, calculate time length
-			
-			if chartType == "today" {
-				let startTime = self.chartData.first?.time
-				let endTime = self.chartData.last?.time
-				
-				let interval:NSTimeInterval = endTime!.timeIntervalSinceDate(startTime!)
-				let hours = Int(interval/3600)-1
-				if hours > 0 {
-					let unitWidth = 3600*(width-self.margin*2)/CGFloat(interval)
-					for i in 1...hours {
-						let px = Int(margin+unitWidth*CGFloat(i))
-						linePath.moveToPoint(CGPoint(x: CGFloat(px) + 0.5, y: topMargin))
-						linePath.addLineToPoint(CGPoint(x:CGFloat(px) + 0.5, y:height - bottomMargin))
-					}
-				}
+			for i in 0..<self.verticalLinesX.count {
+				let px = self.verticalLinesX[i]
+				linePath.moveToPoint(CGPoint(x: px, y: topMargin))
+				linePath.addLineToPoint(CGPoint(x:px, y:height - bottomMargin))
 			}
 		}
 		

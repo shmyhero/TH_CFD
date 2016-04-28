@@ -29,3 +29,18 @@ extension UIViewController {
 	}
 
 }
+
+extension String {
+	func toDate() -> NSDate?{
+		let dateFormatter = NSDateFormatter()
+		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+		if let date:NSDate = dateFormatter.dateFromString(self) {
+			return date
+		}
+		else {
+			dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+			let date = dateFormatter.dateFromString(self)
+			return date
+		}
+	}
+}

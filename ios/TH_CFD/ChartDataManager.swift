@@ -13,9 +13,7 @@ class ChartData: NSObject {
 	func initWithDictionay(dict:NSDictionary) -> Void {
 		self.price = (dict["p"] as? Double)!
 		let timeString = dict["time"] as? String
-		let dateFormatter = NSDateFormatter()
-		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
-		self.time = dateFormatter.dateFromString(timeString!)
+		self.time = timeString?.toDate()
 	}
 }
 

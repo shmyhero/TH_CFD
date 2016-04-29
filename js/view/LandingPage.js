@@ -42,7 +42,9 @@ var LandingPage = React.createClass({
 		StorageModule.removeUserData()
 		.then(() => {
 			LogicData.removeUserData()
-			WebSocketModule.stop()
+			WebSocketModule.registerCallbacks(
+				() => {
+			})
 		})
 	},
 

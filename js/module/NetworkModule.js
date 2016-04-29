@@ -32,7 +32,7 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 		.then((responseJson) => {
 			if (requestSuccess) {
 				if (responseJson.success === false) {
-					console.log('fetchTHUrl handled error with message: ' + responseJson)
+					console.log('fetchTHUrl handled error with message: ' + JSON.stringify(responseJson))
 					errorCallback(responseJson.ExceptionMessage || responseJson.Message || responseJson.message);
 				} else {
 					console.log('fetchTHUrl success with response: ')
@@ -40,14 +40,14 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 					successCallback(responseJson);
 				}
 			} else {
-				console.log('fetchTHUrl unhandled error with message: ' + responseJson)
+				console.log('fetchTHUrl unhandled error with message: ' + JSON.stringify(responseJson))
 				errorCallback(responseJson.ExceptionMessage || responseJson.Message|| responseJson.message);
 			}
 		})
-		.catch((e) => {
-			console.log('fetchTHUrl catches: ' + e)
-			errorCallback(e.message);
-		})
+		// .catch((e) => {
+		// 	console.log('fetchTHUrl catches: ' + e)
+		// 	errorCallback(e.message);
+		// })
 		.done();
 }
 

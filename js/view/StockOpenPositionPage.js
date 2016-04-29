@@ -46,6 +46,10 @@ var StockOpenPositionPage = React.createClass({
 		};
 	},
 
+	componentDidMount: function() {
+		this.loadOpenPositionInfo()
+	},
+
 	onEndReached: function() {
 
 	},

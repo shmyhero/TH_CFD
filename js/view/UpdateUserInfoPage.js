@@ -48,7 +48,7 @@ var UpdateUserInfoPage = React.createClass({
 		var userData = LogicData.getUserData()
 
 		NetworkModule.fetchTHUrl(
-			NetConstants.GET_USER_INFO_API, 
+			NetConstants.GET_USER_INFO_API,
 			{
 				method: 'GET',
 				headers: {
@@ -76,7 +76,7 @@ var UpdateUserInfoPage = React.createClass({
 		var buttonEnabled = false
 		if (name.length > 0) {
 			buttonEnabled = true
-		} 
+		}
 		this.setState({
 			saveButtonEnabled: buttonEnabled
 		})
@@ -86,7 +86,7 @@ var UpdateUserInfoPage = React.createClass({
 		var userData = LogicData.getUserData()
 
 		NetworkModule.fetchTHUrl(
-			NetConstants.SET_USER_NICKNAME_API + '?' + NetConstants.PARAMETER_NICKNAME + '=' + this.state.nickName, 
+			NetConstants.SET_USER_NICKNAME_API + '?' + NetConstants.PARAMETER_NICKNAME + '=' + this.state.nickName,
 			{
 				method: 'POST',
 				headers: {
@@ -94,7 +94,7 @@ var UpdateUserInfoPage = React.createClass({
 				},
 			},
 			function(responseJson) {
-				this.props.navigator.popToTop()
+				this.props.navigator.pop()
 			}.bind(this),
 			function(errorMessage) {
 				Alert.alert('提示',errorMessage);

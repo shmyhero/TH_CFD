@@ -476,10 +476,18 @@ var StockDetailPage = React.createClass({
 			Alert.alert(this.state.stockInfo.name,'已停牌/休市,暂时不能进行交易')
 			return
 		}
-		if (this.state.tradeDirection === 1)
-			this.setState({tradeDirection:0})
-		else
-			this.setState({tradeDirection:1})
+		var userData = LogicData.getUserData()
+		var loggined = Object.keys(userData).length !== 0
+		if (loggined) {
+			if (this.state.tradeDirection === 1)
+				this.setState({tradeDirection:0})
+			else
+				this.setState({tradeDirection:1})
+		} else {
+			this.props.navigator.push({
+				name: AppNavigator.LOGIN_ROUTE,
+			});
+		}
 	},
 
 	sellPress: function() {
@@ -487,10 +495,18 @@ var StockDetailPage = React.createClass({
 			Alert.alert(this.state.stockInfo.name,'已停牌/休市,暂时不能进行交易')
 			return
 		}
-		if (this.state.tradeDirection === 2)
-			this.setState({tradeDirection:0})
-		else
-			this.setState({tradeDirection:2})
+		var userData = LogicData.getUserData()
+		var loggined = Object.keys(userData).length !== 0
+		if (loggined) {
+			if (this.state.tradeDirection === 2)
+				this.setState({tradeDirection:0})
+			else
+				this.setState({tradeDirection:2})
+		} else {
+			this.props.navigator.push({
+				name: AppNavigator.LOGIN_ROUTE,
+			});
+		}
 	},
 
 	renderScrollHeader: function() {

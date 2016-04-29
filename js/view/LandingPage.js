@@ -17,6 +17,7 @@ var LogicData = require('../LogicData')
 var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
 var AppNavigator = require('../../AppNavigator')
+var WebSocketModule = require('../module/WebSocketModule')
 
 var LandingPage = React.createClass({
 
@@ -41,6 +42,7 @@ var LandingPage = React.createClass({
 		StorageModule.removeUserData()
 		.then(() => {
 			LogicData.removeUserData()
+			WebSocketModule.stop()
 		})
 	},
 

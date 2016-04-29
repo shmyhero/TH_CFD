@@ -40,12 +40,8 @@ var StockExchangePage = React.createClass({
 	},
 
 	componentDidMount: function() {
-		didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.EXCHANGE_TAB_PRESS_EVENT, () => {
-			if (this.refs['page' + this.state.currentSelectedTab]) {
-				this.refs['page' + this.state.currentSelectedTab].tabPressed()
-			}
-			this.forceUpdate()
-		});
+		didTabSelectSubscription = EventCenter.getEventEmitter().
+			addListener(EventConst.EXCHANGE_TAB_PRESS_EVENT, this.onTabChanged);
 	},
 
 	componentWillUnmount: function() {
@@ -59,6 +55,15 @@ var StockExchangePage = React.createClass({
 		if (index == 2) {
 			this.refs['page' + this.state.currentSelectedTab].playStartAnim()
 		}
+	},
+
+	onTabChanged: function(){
+		var userData = LogicData.getUserData()
+		var loggined = Object.keys(userData).length !== 0
+		if (loggined && this.refs['page' + this.state.currentSelectedTab]) {
+			this.refs['page' + this.state.currentSelectedTab].tabPressed()
+		}
+		this.forceUpdate()
 	},
 
 	render: function() {

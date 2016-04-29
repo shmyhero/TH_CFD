@@ -699,7 +699,7 @@ var styles = StyleSheet.create({
 		backgroundColor:'transparent',
 		justifyContent:'space-between',
 		paddingTop: 6,
-		paddingBottom: 6, 
+		paddingBottom: 6,
 	},
 	tradeButtonView: {
 		width: 140,
@@ -763,7 +763,7 @@ var styles = StyleSheet.create({
 		backgroundColor: '#164593'
 	},
 	okViewNotOpened: {
-		backgroundColor: '#6da2fc'
+		backgroundColor: '#164593'
 	},
 	okButton: {
 		color: '#ffffff',
@@ -774,7 +774,7 @@ var styles = StyleSheet.create({
 		color: '#5771a8'
 	},
 	okButtonNotOpened: {
-		color: '#ffffff'
+		color: '#f1585c'
 	},
 	priceText: {
 		fontSize: 8,

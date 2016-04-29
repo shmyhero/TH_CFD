@@ -11,6 +11,7 @@ var {
 	Alert,
 	Dimensions,
 	Image,
+	TouchableWithoutFeedback,
 } = React;
 
 var TimerMixin = require('react-timer-mixin');
@@ -25,6 +26,8 @@ var NetConstants = require('../NetConstants')
 var WechatModule = require('../module/WechatModule')
 var Button = require('./component/Button')
 var AppNavigator = require('../../AppNavigator')
+var dismissKeyboard = require('dismissKeyboard');
+
 
 var rowHeight = 40;
 var fontSize = 16;
@@ -56,18 +59,19 @@ var LoginPage = React.createClass({
 		};
 	},
 
+	checkButtonsEnable: function() { 
+		this.setState({
+			getValidationCodeButtonEnabled: (this.state.phoneNumber.length === 11 && this.state.validationCodeCountdown < 0),
+			phoneLoginButtonEnabled: (this.state.phoneNumber.length === 11 && this.state.validationCode.length === 4),
+		})
+	},
+
 	setPhoneNumber: function(text: string) {
 		this.setState({
 			phoneNumber: text
 		})
 
-		var buttonEnabled = false
-		if (text.length == 11 && this.state.validationCodeCountdown < 0) {
-			buttonEnabled = true
-		} 
-		this.setState({
-			getValidationCodeButtonEnabled: buttonEnabled
-		})
+		this.checkButtonsEnable()
 	},
 
 	setValidationCode: function(text: string) {
@@ -75,13 +79,7 @@ var LoginPage = React.createClass({
 			validationCode: text
 		})
 
-		var buttonEnabled = false
-		if (this.state.phoneNumber.length == 11 && text.length == 4) {
-			buttonEnabled = true
-		} 
-		this.setState({
-			phoneLoginButtonEnabled: buttonEnabled
-		})
+		this.checkButtonsEnable()
 	},
 
 	phoneNumberOnFocus: function() {
@@ -266,6 +264,7 @@ var LoginPage = React.createClass({
 		var {height, width} = Dimensions.get('window');
 
 		return (
+			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
 			<View style={[styles.wrapper, {height: height}]}>
 
 				<View style={styles.phoneLoginContainer}>
@@ -307,7 +306,8 @@ var LoginPage = React.createClass({
 				</View>
 
 				{this.renderFastLogin()}
-			</View>				
+			</View>	
+			</TouchableWithoutFeedback>			
 		)
 	}
 })

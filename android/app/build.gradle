@@ -148,6 +148,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'asia.ivity.android:drag-sort-listview:1.0'
 
+    compile project(':realm')
     compile project(':react-native-wx')
     compile project(':MPChartLib')
     compile project(':react-native-linear-gradient')

@@ -439,7 +439,7 @@ var StockOpenPositionPage = React.createClass({
 		var buttonText = (rowData.upl < 0 ? '亏损':'获利') + ':$' + rowData.upl.toFixed(2)
 		if (this.state.showExchangeDoubleCheck) {
 			extendHeight += 28
-			buttonText = "确认"
+			buttonText = '确认:$' + rowData.upl.toFixed(2)
 		}
 
 		return (

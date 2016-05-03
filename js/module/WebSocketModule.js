@@ -16,10 +16,8 @@ var previousInterestedStocks = null
 var webSocketConnection = null
 var webSocketProxy = null
 var wsMessageCallback = null
-var wsErrorCallback = (errorMessage) => { 
-	Alert.alert('提示',errorMessage, [
-              {text: '尝试连接', onPress: () => start()},
-            ]);
+var wsErrorCallback = (errorMessage) => {
+	start()
 }
 
 export function start() {
@@ -29,7 +27,7 @@ export function start() {
 	webSocketConnection.logging = true;
 
 	webSocketProxy = webSocketConnection.createHubProxy(serverName);
-	
+
 	//receives broadcast messages from a hub function, called "broadcastMessage"
 	// StockInfo data structure: {"Symbol":"MSFT","Price":31.97,"DayOpen":30.31,"Change":1.66,"PercentChange":0.0519}
 	webSocketProxy.on(serverListenerName, (stockInfo) => {
@@ -40,7 +38,7 @@ export function start() {
 
 		// atempt connection, and handle errors
 	webSocketConnection.start()
-		.done(() => { 
+		.done(() => {
 			console.log('Now connected, connection ID=' + webSocketConnection.id);
 			registerInterestedStocks(previousInterestedStocks)
 		})

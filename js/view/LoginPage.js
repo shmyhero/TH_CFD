@@ -59,7 +59,7 @@ var LoginPage = React.createClass({
 		};
 	},
 
-	checkButtonsEnable: function() { 
+	checkButtonsEnable: function() {
 		this.setState({
 			getValidationCodeButtonEnabled: (this.state.phoneNumber.length === 11 && this.state.validationCodeCountdown < 0),
 			phoneLoginButtonEnabled: (this.state.phoneNumber.length === 11 && this.state.validationCode.length === 4),
@@ -99,7 +99,7 @@ var LoginPage = React.createClass({
 	getValidationCodePressed: function() {
 		console.log('getValidationCodePressed')
 		NetworkModule.fetchTHUrl(
-			NetConstants.GET_PHONE_CODE_API + '?' + NetConstants.PARAMETER_PHONE + "=" + this.state.phoneNumber, 
+			NetConstants.GET_PHONE_CODE_API + '?' + NetConstants.PARAMETER_PHONE + "=" + this.state.phoneNumber,
 			{
 				method: 'POST',
 			},
@@ -116,13 +116,13 @@ var LoginPage = React.createClass({
 			getValidationCodeButtonEnabled: false
 		})
 		var timer = this.setInterval(
-			() => { 
+			() => {
 				var currentCountDown = this.state.validationCodeCountdown
 
 				if (currentCountDown > 0) {
 					this.setState({
 						validationCodeCountdown: this.state.validationCodeCountdown - 1
-					})	
+					})
 				} else {
 					if (this.state.phoneNumber.length == 11) {
 						this.setState({
@@ -151,7 +151,7 @@ var LoginPage = React.createClass({
 		var wechatUserData = LogicData.getWechatUserData()
 
 		NetworkModule.fetchTHUrl(
-			NetConstants.WECHAT_LOGIN_API, 
+			NetConstants.WECHAT_LOGIN_API,
 			{
 				method: 'POST',
 				headers: {
@@ -162,7 +162,8 @@ var LoginPage = React.createClass({
 					unionid: wechatUserData.unionid,
 					nickname: wechatUserData.nickname,
 					headimgurl: wechatUserData.headimgurl,
-				})
+				}),
+				showLoading: true,
 			},
 			function(responseJson) {
 				this.loginSuccess(responseJson);
@@ -175,7 +176,7 @@ var LoginPage = React.createClass({
 
 	loginPressed: function() {
 		NetworkModule.fetchTHUrl(
-			NetConstants.PHONE_NUM_LOGIN_API, 
+			NetConstants.PHONE_NUM_LOGIN_API,
 			{
 				method: 'POST',
 				headers: {
@@ -184,7 +185,8 @@ var LoginPage = React.createClass({
 				body: JSON.stringify({
 					phone: this.state.phoneNumber,
 					verifyCode: this.state.validationCode,
-				})
+				}),
+				showLoading: true,
 			},
 			function(responseJson) {
 				this.loginSuccess(responseJson);
@@ -223,8 +225,8 @@ var LoginPage = React.createClass({
 					<TouchableHighlight style={styles.wechatClickableArea}
 						onPress={this.wechatPressed}>
 						<View>
-							<Image 
-								style={styles.wechatIcon} 
+							<Image
+								style={styles.wechatIcon}
 								source={require('../../images/wechat_icon.png')}/>
 							<Text style={styles.wechatTitle}>
 								微信
@@ -279,7 +281,7 @@ var LoginPage = React.createClass({
 								maxLength={11}
 								keyboardType='numeric'/>
 						</View>
-						
+
 						{this.renderGetValidationCodeButton()}
 					</View>
 
@@ -288,7 +290,7 @@ var LoginPage = React.createClass({
 							<TextInput style={styles.validationCodeInput}
 								onFocus={() => this.validationCodeOnFocus()}
 								onChangeText={(text) => this.setValidationCode(text)}
-								placeholder='验证码' 
+								placeholder='验证码'
 								underlineColorAndroid='#ffffff'
 								maxLength={4}
 								keyboardType='numeric'/>
@@ -306,8 +308,8 @@ var LoginPage = React.createClass({
 				</View>
 
 				{this.renderFastLogin()}
-			</View>	
-			</TouchableWithoutFeedback>			
+			</View>
+			</TouchableWithoutFeedback>
 		)
 	}
 })

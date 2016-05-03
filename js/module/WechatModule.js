@@ -12,6 +12,7 @@ var {
 	Dimensions,
 	Image,
 } = React;
+var AppNavigator = require('../../AppNavigator')
 
 import * as WechatAPI from 'react-native-wx';
 var LogicData = require('../LogicData')
@@ -21,7 +22,6 @@ var mErrorCallback = null
 
 export function isWechatInstalled() {
 	return WechatAPI.isWXAppInstalled()
-
 }
 
 export function wechatLogin(successCallback, errorCallback) {
@@ -49,9 +49,10 @@ export function wechatLogin(successCallback, errorCallback) {
 
 function wechatLoginCodeHandler(response) {
 	console.log(response)
+	AppNavigator.showProgress && AppNavigator.showProgress()
 
 	var url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + "wxe102be8f66949cd1" +
-		"&secret=" + "54d2804023e3e3db6ee956738b41aaf0" + 
+		"&secret=" + "54d2804023e3e3db6ee956738b41aaf0" +
 		"&code=" + response.code + "&grant_type=authorization_code";
 	fetch(url, {
 		method: 'GET'
@@ -66,12 +67,16 @@ function wechatLoginCodeHandler(response) {
 		console.log('fetchTHUrl catches: ' + e)
 		mErrorCallback(e.message);
 	})
-	.done();
+	.done(() => {
+		AppNavigator.hideProgress && AppNavigator.hideProgress()
+	});
 }
 
 function wechatGetUserInfo() {
+	AppNavigator.showProgress && AppNavigator.showProgress()
+
 	var wechatAuthData = LogicData.getWechatAuthData()
-	var url = "https://api.weixin.qq.com/sns/userinfo?access_token=" + 
+	var url = "https://api.weixin.qq.com/sns/userinfo?access_token=" +
 		wechatAuthData.access_token + "&openid=" + wechatAuthData.openid;
 	fetch(url, {
 		method: 'GET'
@@ -92,5 +97,7 @@ function wechatGetUserInfo() {
 		console.log('fetchTHUrl catches: ' + e)
 		mErrorCallback(e.message);
 	})
-	.done();
+	.done(() => {
+		AppNavigator.hideProgress && AppNavigator.hideProgress()
+	});
 }

@@ -521,7 +521,7 @@ var StockOpenPositionPage = React.createClass({
 				profitPercentage *= (-1)
 			}
 		}
-		var bgcolor = this.state.selectedRow === rowID ? '#d2d2d2' : 'white'
+		var bgcolor = this.state.selectedRow === rowID ? '#e6e5eb' : 'white'
 		return (
 			<View>
 				<TouchableHighlight activeOpacity={1} onPress={() => this.stockPressed(rowData, sectionID, rowID, highlightRow)}>
@@ -647,7 +647,7 @@ var styles = StyleSheet.create({
 	darkSeparator: {
 		marginLeft: 15,
 		height: 1,
-		backgroundColor: '#c9c9c9',
+		backgroundColor: '#dfdfdf',
 	},
 
 	extendWrapper: {

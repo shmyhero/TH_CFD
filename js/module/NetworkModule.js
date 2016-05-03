@@ -3,6 +3,7 @@
 var LogicData = require('../LogicData')
 var NetConstants = require('../NetConstants')
 var React = require('react-native')
+var AppNavigator = require('../../AppNavigator')
 var {
 	Alert
 } = React
@@ -12,6 +13,10 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 
 	console.log('fetching: ' + url + ' with params: ')
 	console.log(params)
+	
+	if (params.showLoading === true) {
+		AppNavigator.showProgress && AppNavigator.showProgress()
+	}
 
 	fetch(url, params)
 		.then((response) => {
@@ -44,11 +49,13 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 				errorCallback(responseJson.ExceptionMessage || responseJson.Message|| responseJson.message);
 			}
 		})
-		// .catch((e) => {
-		// 	console.log('fetchTHUrl catches: ' + e)
-		// 	errorCallback(e.message);
-		// })
-		.done();
+		.catch((e) => {
+			console.log('fetchTHUrl catches: ' + e)
+			errorCallback(e.message);
+		})
+		.done(() => {
+			AppNavigator.hideProgress && AppNavigator.hideProgress()
+		});
 }
 
 export function syncOwnStocks(userData) {

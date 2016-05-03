@@ -91,6 +91,7 @@ var StockDetailPage = React.createClass({
 			url,
 			{
 				method: 'GET',
+				showLoading: true,
 			},
 			(responseJson) => {
 				this.setState({
@@ -122,6 +123,7 @@ var StockDetailPage = React.createClass({
 			url,
 			{
 				method: 'GET',
+				showLoading: true,
 			},
 			(responseJson) => {
 				var tempStockInfo = this.state.stockInfo
@@ -649,7 +651,8 @@ var StockDetailPage = React.createClass({
 					isLong: this.state.tradeDirection === 1,
 					invest: this.state.money,
 					leverage: this.state.leverage,
-				})
+				}),
+				showLoading: true,
 			},
 			(responseJson) => {
 				responseJson.stockName = this.props.stockName

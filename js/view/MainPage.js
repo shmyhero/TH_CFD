@@ -13,6 +13,8 @@ import Tabbar, { Tab, RawContent, Icon, IconWithBar, glypyMapMaker } from 'react
 var AppNavigator = require('../../AppNavigator')
 var {EventCenter, EventConst} = require('../EventCenter')
 
+var LoadingIndicator = require('./LoadingIndicator');
+
 const glypy = glypyMapMaker({
   Home: 'f04f',
   Camera: 'f04e',
@@ -32,6 +34,14 @@ var MainPage = React.createClass({
 
 	hideTabbar() {
 		this.refs['myTabbar'] && this.refs['myTabbar'].getBarRef().show(false);
+	},
+
+	showProgress() {
+		this.refs['progressBar'] && this.refs['progressBar'].show()
+	},
+
+	hideProgress() {
+		this.refs['progressBar'] && this.refs['progressBar'].hide()
 	},
 
 	initTabbarEvent() {
@@ -57,7 +67,11 @@ var MainPage = React.createClass({
 			          	<RawContent>
 		            		<Navigator
 								style={styles.container}
-								initialRoute={{name: AppNavigator.HOME_PAGE_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
+								initialRoute={{name: AppNavigator.HOME_PAGE_ROUTE,
+												showTabbar: this.showTabbar,
+												hideTabbar: this.hideTabbar,
+												showProgress: this.showProgress,
+												hideProgress: this.hideProgress}}
 								configureScene={() => Navigator.SceneConfigs.PushFromRight}
 								renderScene={AppNavigator.RouteMapper} />
 			          	</RawContent>
@@ -101,6 +115,7 @@ var MainPage = React.createClass({
 			          	</RawContent>
 		        	</Tab>
 		      	</Tabbar>
+				<LoadingIndicator ref='progressBar'/>
 	      	</View>
 		);
 	}

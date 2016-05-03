@@ -69,6 +69,8 @@ export let HOMEPAGE_RECOMMAND_ROUTE = 'homepageRecommand'
 
 var hideTabbar
 var showTabbar
+export var hideProgress
+export var showProgress
 export var RouteMapper = function(route, navigationOperations, onComponentRef) {
 	_navigator = navigationOperations;
 	if (route.showTabbar !== undefined) {
@@ -76,6 +78,12 @@ export var RouteMapper = function(route, navigationOperations, onComponentRef) {
 	}
 	if (route.hideTabbar !== undefined) {
 		hideTabbar = route.hideTabbar
+	}
+	if (route.showProgress !== undefined) {
+		showProgress = route.showProgress
+	}
+	if (route.hideProgress !== undefined) {
+		hideProgress = route.hideProgress
 	}
 	var showBackButton = true;
 	if (route.hideBackButton) {

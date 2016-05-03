@@ -239,7 +239,8 @@ var StockOpenPositionPage = React.createClass({
 					securityId: rowData.security.id,
 					isPosLong: rowData.isLong,
 					posQty: rowData.quantity,
-				})
+				}),
+				showLoading: true,
 			},
 			(responseJson) => {
 				this.loadOpenPositionInfo()

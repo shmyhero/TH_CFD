@@ -65,3 +65,6 @@
 # stetho
 
 -dontwarn com.facebook.stetho.**
+
+#Bugly
+-keep public class com.tencent.bugly.**{*;}

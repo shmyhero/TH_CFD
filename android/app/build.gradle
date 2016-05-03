@@ -156,4 +156,6 @@ dependencies {
 
     compile 'com.facebook.react:react-native:+'
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+    compile 'com.tencent.bugly:crashreport:latest.release'
+
 }

@@ -14,6 +14,7 @@ import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactRootView;
 import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         preferences.edit().putString("debug_http_host", "192.168.20.46:8081").apply();
 
         super.onCreate(null);
+
+        CrashReport.initCrashReport(getApplicationContext());
 
         mReactInstanceManager = RNManager.getInstanceManager(getApplication());
         setContentView(R.layout.react_activity_container);

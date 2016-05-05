@@ -16,8 +16,21 @@ var previousInterestedStocks = null
 var webSocketConnection = null
 var webSocketProxy = null
 var wsMessageCallback = null
-var wsErrorCallback = (errorMessage) => {
-	start()
+var retryDialogShown = false
+var wsErrorCallback = (errorMessage) =>
+{
+	if (retryDialogShown === false) {
+		retryDialogShown = true
+		Alert.alert('提示',errorMessage, [
+			{
+				text: '尝试连接',
+				onPress: () => {
+					start()
+					retryDialogShown = false
+				}
+			},
+		]);
+	}
 }
 
 export function start() {

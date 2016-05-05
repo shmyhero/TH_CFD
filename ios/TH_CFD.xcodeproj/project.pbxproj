@@ -43,6 +43,7 @@
 		865A436B8FB54AF8B476E495 /* libRCTWeChat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4824BD7846734F98A8B26DD3 /* libRCTWeChat.a */; };
 		C5971F975A91415B996BBB9C /* libRealmReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EE2CE709A38445E9875FCBD /* libRealmReact.a */; };
 		E30C3760AD2343E4BF815D6D /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8E9B8FF0CA943FB9D049E93 /* libBVLinearGradient.a */; };
+		80BCA2B8147C419E82DF3DFB /* libRCTHotUpdate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADAFAB0527AA419A8350A2B3 /* libRCTHotUpdate.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -195,6 +196,8 @@
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		8BCBE68C9A854D14A920EAD9 /* RealmReact.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RealmReact.xcodeproj; path = "../node_modules/realm/react-native/ios/RealmReact.xcodeproj"; sourceTree = "<group>"; };
 		D8E9B8FF0CA943FB9D049E93 /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
+		22F5EC88B9014CDA85FEBFBA /* RCTHotUpdate.xcodeproj */ = {isa = PBXFileReference; name = "RCTHotUpdate.xcodeproj"; path = "../node_modules/react-native-update/ios/RCTHotUpdate.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		ADAFAB0527AA419A8350A2B3 /* libRCTHotUpdate.a */ = {isa = PBXFileReference; name = "libRCTHotUpdate.a"; path = "libRCTHotUpdate.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -226,6 +229,7 @@
 				E30C3760AD2343E4BF815D6D /* libBVLinearGradient.a in Frameworks */,
 				865A436B8FB54AF8B476E495 /* libRCTWeChat.a in Frameworks */,
 				C5971F975A91415B996BBB9C /* libRealmReact.a in Frameworks */,
+				80BCA2B8147C419E82DF3DFB /* libRCTHotUpdate.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +416,7 @@
 				58602275B1F14B899E56D44F /* BVLinearGradient.xcodeproj */,
 				2554F18D88E7464BB61A513C /* RCTWeChat.xcodeproj */,
 				8BCBE68C9A854D14A920EAD9 /* RealmReact.xcodeproj */,
+				22F5EC88B9014CDA85FEBFBA /* RCTHotUpdate.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -794,6 +799,7 @@
 					"\"$(SRCROOT)/TH_CFD\"",
 					"\"$(SRCROOT)/TH_CFD\"",
 					"\"$(SRCROOT)/TH_CFD\"",
+					"\"$(SRCROOT)/TH_CFD\"",
 				);
 				PRODUCT_NAME = TH_CFD;
 				PROVISIONING_PROFILE = "";
@@ -820,6 +826,7 @@
 					"\"$(SRCROOT)/TH_CFD\"",
 					"\"$(SRCROOT)/TH_CFD\"",
 					"\"$(SRCROOT)/TH_CFD\"",
+					"\"$(SRCROOT)/TH_CFD\"",
 				);
 				PRODUCT_NAME = TH_CFD;
 				PROVISIONING_PROFILE = "";
@@ -842,12 +849,14 @@
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-wx/ios/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
+					"$(SRCROOT)/../node_modules/react-native-update/ios/RCTHotUpdate/**",
 				);
 				INFOPLIST_FILE = TH_CFD/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/TH_CFD\"",
 					"\"$(SRCROOT)/TH_CFD\"",
 					"\"$(SRCROOT)/TH_CFD\"",
 					"\"$(SRCROOT)/TH_CFD\"",
@@ -875,12 +884,14 @@
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-wx/ios/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
+					"$(SRCROOT)/../node_modules/react-native-update/ios/RCTHotUpdate/**",
 				);
 				INFOPLIST_FILE = TH_CFD/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/TH_CFD\"",
 					"\"$(SRCROOT)/TH_CFD\"",
 					"\"$(SRCROOT)/TH_CFD\"",
 					"\"$(SRCROOT)/TH_CFD\"",
@@ -934,6 +945,7 @@
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-wx/ios/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
+					"$(SRCROOT)/../node_modules/react-native-update/ios/RCTHotUpdate/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -977,6 +989,7 @@
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-wx/ios/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
+					"$(SRCROOT)/../node_modules/react-native-update/ios/RCTHotUpdate/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;

@@ -12,6 +12,8 @@ import com.tradehero.cfd.RNNativeModules.RNNativePackage;
 import java.util.Arrays;
 import java.util.List;
 
+import cn.reactnative.modules.update.UpdateContext;
+import cn.reactnative.modules.update.UpdatePackage;
 import cn.reactnative.modules.wx.WeChatPackage;
 
 /**
@@ -33,17 +35,18 @@ public class RNManager {
                     new MainReactPackage(),
                     new WeChatPackage(),
                     new RNNativePackage(),
-                    new LinearGradientPackage()
+                    new LinearGradientPackage(),
+                    new UpdatePackage()
             );
 
             for (ReactPackage reactPackage : packages) {
                 builder.addPackage(reactPackage);
             }
 
-            String jsBundleFile = null;
+            String jsBundleFile = UpdateContext.getBundleUrl(application);
 
             if (jsBundleFile != null) {
-                builder.setJSBundleFile(jsBundleFile);
+                builder.setJSBundleFile(UpdateContext.getBundleUrl(application));
             } else {
                 builder.setBundleAssetName("index.android.bundle");
             }

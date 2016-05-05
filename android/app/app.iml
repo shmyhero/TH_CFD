@@ -124,6 +124,7 @@
     <orderEntry type="module" module-name="MPChartLib" exported="" />
     <orderEntry type="module" module-name="react-native-linear-gradient" exported="" />
     <orderEntry type="module" module-name="react-native-wx" exported="" />
+    <orderEntry type="module" module-name="react-native-update" exported="" />
     <orderEntry type="module" module-name="react-native-wheel-picker" exported="" />
     <orderEntry type="module" module-name="realm" exported="" />
   </component>

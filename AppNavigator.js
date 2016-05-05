@@ -16,6 +16,21 @@ var {
 	PixelRatio,
 } = React;
 
+import {
+	isFirstTime,
+	isRolledBack,
+	packageVersion,
+	currentVersion,
+	checkUpdate,
+	downloadUpdate,
+	switchVersion,
+	switchVersionLater,
+	markSuccess,
+} from 'react-native-update';
+
+import _updateConfig from './update.json';
+const {appKey} = _updateConfig[Platform.OS];
+
 var buildStyleInterpolator = require('buildStyleInterpolator');
 var UIManager = require('UIManager');
 
@@ -226,17 +241,47 @@ var AppNavigator = React.createClass({
 	},
 
 	componentDidMount: function() {
+		if (isFirstTime) {
+			markSuccess()
+		}
+
 		UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 		StorageModule.loadUserData()
 			.then((value) => {
 				if (value !== null) {
 					LogicData.setUserData(JSON.parse(value))
 				}
+				this.checkUpdate()
 				this.setState({
 					initialized: true,
 				})
 			})
 			.done()
+	},
+
+	checkUpdate: function() {
+		checkUpdate(appKey).then(info => {
+			if (info.expired) {
+				// TODO redirect to App store to update.
+				// Alert.alert('提示', '您的应用版本已更新,请前往应用商店下载新的版本', [
+				// 	{text: '确定', onPress: ()=>{info.downloadUrl && Linking.openURL(info.downloadUrl)}},
+				// ]);
+			} else if (info.upToDate) {
+				// Do nothing as the version is up-to-date.
+			} else {
+				this.doUpdate(info)
+			}
+		}).catch(err => {
+			Alert.alert('提示', '更新失败.');
+		});
+	},
+
+	doUpdate: function(info) {
+		downloadUpdate(info).then(hash => {
+			switchVersionLater(hash);
+		}).catch(err => {
+			// TODO upload log for update failed.
+		});
 	},
 
 	render: function() {
@@ -250,7 +295,7 @@ var AppNavigator = React.createClass({
 			)
 		} else {
 			return (
-		    	<View />
+				<View />
 			);
 		}
 	}

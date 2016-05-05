@@ -6,9 +6,11 @@ include ':MPChartLib'
 include ':react-native-linear-gradient'
 include ':react-native-wheel-picker'
 include ':realm'
+include ':react-native-update'
 
 project(':react-native-wx').projectDir = new File(settingsDir, '../node_modules/react-native-wx/android')
 project(':MPChartLib').projectDir = new File(settingsDir, './MPChartLib')
 project(':react-native-wheel-picker').projectDir = new File(settingsDir, '../node_modules/react-native-wheel-picker/android')
 project(':react-native-linear-gradient').projectDir = new File(settingsDir, '../node_modules/react-native-linear-gradient/android')
 project(':realm').projectDir = new File(rootProject.projectDir, '../node_modules/realm/android')
+project(':react-native-update').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-update/android')

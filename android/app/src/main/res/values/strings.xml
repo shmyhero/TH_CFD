@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">盈交易</string>
 
     <string name="tab_main_trade">交易</string>

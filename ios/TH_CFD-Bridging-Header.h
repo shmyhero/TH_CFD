@@ -9,3 +9,4 @@
 #import	"NativeData.h"
 #import "RCTBridge.h"
 #import "RCTEventDispatcher.h"
+#import "RCTHotUpdate.h"

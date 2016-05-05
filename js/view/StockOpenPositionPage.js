@@ -186,18 +186,23 @@ var StockOpenPositionPage = React.createClass({
 	subItemPress: function(item, rowData) {
 		var detalY = 0
 		var rowID = this.state.selectedRow
-		if (this.state.selectedSubItem === 0) {
-			detalY = item === 1 ? 51 : 170
+		var newExtendHeight = this.currentExtendHeight(item)
+		if (newExtendHeight < extendHeight) {
+			newExtendHeight = extendHeight
 		}
-		else {
-			if (item === 1) {
-				detalY = this.state.selectedSubItem === 1 ? 0 : 0
-			}
-			else {
-				detalY = this.state.selectedSubItem === 2 ? -51 : 119
-			}
-		}
-		var maxY = (height-100)*20/21 - extendHeight - detalY
+		// if (this.state.selectedSubItem === 0) {
+		// 	detalY = item === 1 ? 51 : 170
+		// }
+		// else {
+		// 	if (item === 1) {
+		// 		detalY = this.state.selectedSubItem === 1 ? 0 : 0
+		// 	}
+		// 	else {
+		// 		detalY = this.state.selectedSubItem === 2 ? -51 : 119
+		// 	}
+		// }
+		// var maxY = (height-100)*20/21 - extendHeight - detalY
+		var maxY = (height-100)*20/21 - newExtendHeight
 		var currentY = rowHeight*(parseInt(rowID)+1)
 		if (currentY > maxY ) {
 			this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
@@ -422,24 +427,35 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
+	currentExtendHeight: function(subItem) {
+		var showNetIncome = false
+		var newHeight = 222
+		if (showNetIncome) {
+			newHeight += 20
+		}
+		if (subItem === 1) {
+			newHeight += 51
+		}
+		if (subItem === 2) {
+			newHeight += 170
+		}
+		if (subItem === 3) {
+			newHeight += 200
+		}
+		if (this.state.showExchangeDoubleCheck) {
+			newHeight += 28
+		}
+		return newHeight
+	},
+
 	renderDetailInfo: function(rowData) {
-		var buttonEnable = true
 		var tradeImage = rowData.isLong ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
 		var showNetIncome = false
-		extendHeight = 222
-		if (showNetIncome) {
-			extendHeight += 20
-		}
-		if (this.state.selectedSubItem === 1) {
-			extendHeight += 51
-		}
-		if (this.state.selectedSubItem === 2) {
-			extendHeight += 170
-		}
+
+		extendHeight = this.currentExtendHeight(this.state.selectedSubItem)
 
 		var buttonText = (rowData.upl < 0 ? '亏损':'获利') + ':$' + rowData.upl.toFixed(2)
 		if (this.state.showExchangeDoubleCheck) {
-			extendHeight += 28
 			buttonText = '确认:$' + rowData.upl.toFixed(2)
 		}
 
@@ -479,17 +495,26 @@ var StockOpenPositionPage = React.createClass({
 
 				<View style={styles.extendRowWrapper}>
 					<TouchableOpacity onPress={()=>this.subItemPress(1, rowData)}
-						style={[styles.extendLeft, (this.state.selectedSubItem===1)&&styles.rightTopBorder, (this.state.selectedSubItem===2)&&styles.bottomBorder]}>
+						style={[styles.extendLeft, (this.state.selectedSubItem===1)&&styles.rightTopBorder,
+								(this.state.selectedSubItem===2)&&styles.bottomBorder, 
+								(this.state.selectedSubItem===3)&&styles.bottomBorder]}>
 						<Text style={styles.extendTextTop}>手续费</Text>
 						<Image style={styles.extendImageBottom} source={require('../../images/charge.png')}/>
 					</TouchableOpacity>
 					<TouchableOpacity onPress={()=>this.subItemPress(2, rowData)}
-						style={[styles.extendMiddle, (this.state.selectedSubItem===1)&&styles.bottomBorder, (this.state.selectedSubItem===2)&&styles.leftTopRightBorder]}>
+						style={[styles.extendMiddle, (this.state.selectedSubItem===1)&&styles.bottomBorder, 
+								(this.state.selectedSubItem===2)&&styles.leftTopRightBorder,
+								(this.state.selectedSubItem===3)&&styles.bottomBorder]}>
 						<Text style={styles.extendTextTop}>行情</Text>
 						<Image style={styles.extendImageBottom} source={require('../../images/market.png')}/>
 					</TouchableOpacity>
-					<View style={[styles.extendRight, (this.state.selectedSubItem!==0)&&styles.bottomBorder]}>
-					</View>
+					<TouchableOpacity onPress={()=>this.subItemPress(3, rowData)}
+						style={[styles.extendRight, (this.state.selectedSubItem===1)&&styles.bottomBorder, 
+								(this.state.selectedSubItem===2)&&styles.bottomBorder,
+								(this.state.selectedSubItem===3)&&styles.leftTopBorder]}>
+						<Text style={styles.extendTextTop}>行情</Text>
+						<Image style={styles.extendImageBottom} source={require('../../images/check.png')}/>
+					</TouchableOpacity>
 				</View>
 
 				{this.state.selectedSubItem !== 0 ? this.renderSubDetail(rowData): null}
@@ -750,12 +775,10 @@ var styles = StyleSheet.create({
 		borderTopWidth: 1,
 		borderTopColor: ColorConstants.TITLE_BLUE,
 	},
-
 	bottomBorder: {
 		borderBottomWidth: 1,
 		borderBottomColor: ColorConstants.TITLE_BLUE,
 	},
-
 	leftTopRightBorder: {
 		borderLeftWidth: 1,
 		borderLeftColor: ColorConstants.TITLE_BLUE,
@@ -764,6 +787,13 @@ var styles = StyleSheet.create({
 		borderTopWidth: 1,
 		borderTopColor: ColorConstants.TITLE_BLUE,
 	},
+	leftTopBorder: {
+		borderLeftWidth: 1,
+		borderLeftColor: ColorConstants.TITLE_BLUE,
+		borderTopWidth: 1,
+		borderTopColor: ColorConstants.TITLE_BLUE,
+	},
+
 	priceText: {
 		marginTop: 5,
 		marginBottom: 5,

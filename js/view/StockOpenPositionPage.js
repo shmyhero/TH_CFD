@@ -414,10 +414,12 @@ var StockOpenPositionPage = React.createClass({
 		return (
 			<View style={styles.sliderView}>
 				<Slider
+					minimumTrackTintColor={ColorConstants.TITLE_BLUE}
 					minimumValue={startPercent}
 					value={percent}
 					maximumValue={endPercent}
 					onValueChange={(value) => this.setSlideValue(type, value)} />
+
 				<View style = {styles.subDetailRowWrapper}>
 					<Text style={styles.sliderLeftText}>{startPercent.toFixed(2)}%</Text>
 					<Text style={styles.sliderRightText}>{endPercent.toFixed(2)}%</Text>

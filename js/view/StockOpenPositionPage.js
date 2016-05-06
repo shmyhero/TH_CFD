@@ -12,6 +12,8 @@ var {
 	Dimensions,
 	Image,
 	Alert,
+  	Switch,
+  	Slider,
 } = React;
 var LayoutAnimation = require('LayoutAnimation')
 
@@ -43,6 +45,9 @@ var StockOpenPositionPage = React.createClass({
 			stockDetailInfo: [],
 			showExchangeDoubleCheck: false,
 			chartType: NetConstants.PARAMETER_CHARTTYPE_TODAY,
+			stopProfitSwitchIsOn: false,
+			stopLossSwitchIsOn: false,
+			profitLossUpdated: false,
 		};
 	},
 
@@ -190,18 +195,6 @@ var StockOpenPositionPage = React.createClass({
 		if (newExtendHeight < extendHeight) {
 			newExtendHeight = extendHeight
 		}
-		// if (this.state.selectedSubItem === 0) {
-		// 	detalY = item === 1 ? 51 : 170
-		// }
-		// else {
-		// 	if (item === 1) {
-		// 		detalY = this.state.selectedSubItem === 1 ? 0 : 0
-		// 	}
-		// 	else {
-		// 		detalY = this.state.selectedSubItem === 2 ? -51 : 119
-		// 	}
-		// }
-		// var maxY = (height-100)*20/21 - extendHeight - detalY
 		var maxY = (height-100)*20/21 - newExtendHeight
 		var currentY = rowHeight*(parseInt(rowID)+1)
 		if (currentY > maxY ) {
@@ -266,6 +259,34 @@ var StockOpenPositionPage = React.createClass({
 			chartType: type
 		})
 		this.loadStockDetailInfo(rowData.security.id)
+	},
+
+	currentExtendHeight: function(subItem) {
+		var showNetIncome = false
+		var newHeight = 222
+		if (showNetIncome) {
+			newHeight += 20
+		}
+		if (subItem === 1) {
+			newHeight += 170
+		}
+		if (subItem === 2) {
+			newHeight += 170 - 70
+			newHeight += this.state.stopLossSwitchIsOn ? 55 : 0
+			newHeight += this.state.stopProfitSwitchIsOn ? 55 : 0
+		}
+		if (this.state.showExchangeDoubleCheck) {
+			newHeight += 28
+		}
+		return newHeight
+	},
+
+	onSwitchPressed: function(type, value) {
+		if (type===1) {
+			this.setState({stopProfitSwitchIsOn: value})
+		} else{
+			this.setState({stopLossSwitchIsOn: value})
+		};
 	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
@@ -364,27 +385,46 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
+	renderSlide: function(type) {
+		//1, stop profit
+		//2, stop loss
+		return (
+			<View style={styles.sliderView}>
+				<Slider onValueChange={(value) => this.setState({value: value})} />
+				<View style = {styles.subDetailRowWrapper}>
+					<Text style={styles.sliderLeftText}>0%</Text>
+					<Text style={styles.sliderRightText}>100%</Text>
+				</View>
+			</View>
+			)
+	},
+
+	renderStopProfitLoss: function(type) {
+		var titleText = type===1 ? "止盈" : "止损"
+		var switchIsOn = type===1 ? this.state.stopProfitSwitchIsOn : this.state.stopLossSwitchIsOn
+		return (
+			<View>
+				<View style={[styles.subDetailRowWrapper, {height:50}]}>
+					<Text style={styles.extendLeft}>{titleText}</Text>
+					{	
+						switchIsOn ?
+						<Text style={[styles.extendMiddle, {textAlign:'center'}]}>0% | 9.24</Text>
+						: null
+					}
+					<View style={styles.extendRight}>
+				        <Switch
+				          onValueChange={(value) => this.onSwitchPressed(type, value)}
+				          value={switchIsOn} />
+			        </View>
+				</View>
+				{ switchIsOn ? this.renderSlide(type) : null}
+				<View style={styles.darkSeparator} />
+			</View>)
+	},
+
 	renderSubDetail: function(rowData) {
 		if (this.state.selectedSubItem === 1) {
-			// charge detail
-			return (
-				<View style={styles.extendRowWrapper}>
-					<View style={styles.extendLeft}>
-						<Text style={styles.extendTextTop}>开仓费</Text>
-						<Text style={styles.extendTextBottom}>0.12</Text>
-					</View>
-					<View style={styles.extendMiddle}>
-						<Text style={styles.extendTextTop}>留仓费</Text>
-						<Text style={styles.extendTextBottom}>0.02</Text>
-					</View>
-					<View style={styles.extendRight}>
-						<Text style={styles.extendTextTop}>平仓费</Text>
-						<Text style={styles.extendTextBottom}>0.6</Text>
-					</View>
-				</View>
-			);
-		}
-		else {
+			// market view
 			var priceData = this.state.stockDetailInfo.priceData
 			var maxPrice = undefined
 			var minPrice = undefined
@@ -425,39 +465,60 @@ var StockOpenPositionPage = React.createClass({
 				</View>
 			);
 		}
+		else {
+			var thisPartHeight = 170
+			thisPartHeight += this.state.stopLossSwitchIsOn ? 55 : 0
+			thisPartHeight += this.state.stopProfitSwitchIsOn ? 55 : 0
+			return (
+				<View style={{height:thisPartHeight}}>
+					{this.renderStopProfitLoss(1)}
+
+					{this.renderStopProfitLoss(2)}
+
+					<TouchableHighlight
+						underlayColor={	'#164593'}
+						onPress={() => this.switchConfrim(rowData)} style={[styles.okView, !this.state.profitLossUpdated && styles.okViewDisabled]}>
+						<Text style={[styles.okButton, !this.state.profitLossUpdated && styles.okViewDisabled]}>
+							确认
+						</Text>
+					</TouchableHighlight>
+				</View>
+				);
+		}
 	},
 
-	currentExtendHeight: function(subItem) {
+	renderOKView: function(rowData) {
 		var showNetIncome = false
-		var newHeight = 222
-		if (showNetIncome) {
-			newHeight += 20
-		}
-		if (subItem === 1) {
-			newHeight += 51
-		}
-		if (subItem === 2) {
-			newHeight += 170
-		}
-		if (subItem === 3) {
-			newHeight += 200
-		}
-		if (this.state.showExchangeDoubleCheck) {
-			newHeight += 28
-		}
-		return newHeight
-	},
-
-	renderDetailInfo: function(rowData) {
-		var tradeImage = rowData.isLong ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
-		var showNetIncome = false
-
-		extendHeight = this.currentExtendHeight(this.state.selectedSubItem)
 
 		var buttonText = (rowData.upl < 0 ? '亏损':'获利') + ':$' + rowData.upl.toFixed(2)
 		if (this.state.showExchangeDoubleCheck) {
 			buttonText = '确认:$' + rowData.upl.toFixed(2)
 		}
+		return(
+			<View>
+				<View style={styles.darkSeparator} />
+				{showNetIncome ?
+				<Text style={styles.netIncomeText}>净收益:9.26</Text>
+				: null}
+
+				<TouchableHighlight
+					underlayColor={	'#164593'}
+					onPress={() => this.okPress(rowData)} style={[styles.okView, this.state.showExchangeDoubleCheck && styles.okViewDoubleConfirm]}>
+					<Text style={[styles.okButton, this.state.showExchangeDoubleCheck && styles.okButtonDoubleConfirm]}>
+						{buttonText}
+					</Text>
+				</TouchableHighlight>
+
+				{this.state.showExchangeDoubleCheck ?
+					<Text style={styles.feeText}>平仓费：0.26</Text> :
+					null}
+			</View>)
+	},
+
+	renderDetailInfo: function(rowData) {
+		var tradeImage = rowData.isLong ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
+
+		extendHeight = this.currentExtendHeight(this.state.selectedSubItem)
 
 		return (
 			<View style={[{height: extendHeight}, styles.extendWrapper]} >
@@ -496,45 +557,23 @@ var StockOpenPositionPage = React.createClass({
 				<View style={styles.extendRowWrapper}>
 					<TouchableOpacity onPress={()=>this.subItemPress(1, rowData)}
 						style={[styles.extendLeft, (this.state.selectedSubItem===1)&&styles.rightTopBorder,
-								(this.state.selectedSubItem===2)&&styles.bottomBorder, 
-								(this.state.selectedSubItem===3)&&styles.bottomBorder]}>
-						<Text style={styles.extendTextTop}>手续费</Text>
-						<Image style={styles.extendImageBottom} source={require('../../images/charge.png')}/>
-					</TouchableOpacity>
-					<TouchableOpacity onPress={()=>this.subItemPress(2, rowData)}
-						style={[styles.extendMiddle, (this.state.selectedSubItem===1)&&styles.bottomBorder, 
-								(this.state.selectedSubItem===2)&&styles.leftTopRightBorder,
-								(this.state.selectedSubItem===3)&&styles.bottomBorder]}>
+								(this.state.selectedSubItem===2)&&styles.bottomBorder]}>
 						<Text style={styles.extendTextTop}>行情</Text>
 						<Image style={styles.extendImageBottom} source={require('../../images/market.png')}/>
 					</TouchableOpacity>
-					<TouchableOpacity onPress={()=>this.subItemPress(3, rowData)}
-						style={[styles.extendRight, (this.state.selectedSubItem===1)&&styles.bottomBorder, 
-								(this.state.selectedSubItem===2)&&styles.bottomBorder,
-								(this.state.selectedSubItem===3)&&styles.leftTopBorder]}>
-						<Text style={styles.extendTextTop}>行情</Text>
+					<TouchableOpacity onPress={()=>this.subItemPress(2, rowData)}
+						style={[styles.extendMiddle, (this.state.selectedSubItem===1)&&styles.bottomBorder, 
+								(this.state.selectedSubItem===2)&&styles.leftTopRightBorder]}>
+						<Text style={styles.extendTextTop}>止盈/止损</Text>
 						<Image style={styles.extendImageBottom} source={require('../../images/check.png')}/>
 					</TouchableOpacity>
+					<View style={[styles.extendRight, this.state.selectedSubItem!==0 && styles.bottomBorder]}>
+					</View>
 				</View>
 
 				{this.state.selectedSubItem !== 0 ? this.renderSubDetail(rowData): null}
 
-				<View style={styles.darkSeparator} />
-				{showNetIncome ?
-				<Text style={styles.netIncomeText}>净收益:9.26</Text>
-				: null}
-
-				<TouchableHighlight
-					underlayColor={	'#164593'}
-					onPress={() => this.okPress(rowData)} style={[styles.okView, this.state.showExchangeDoubleCheck && styles.okViewDoubleConfirm]}>
-					<Text style={[styles.okButton, this.state.showExchangeDoubleCheck && styles.okButtonDoubleConfirm]}>
-						{buttonText}
-					</Text>
-				</TouchableHighlight>
-
-				{this.state.showExchangeDoubleCheck ?
-					<Text style={styles.feeText}>平仓费：0.26</Text> :
-					null}
+				{this.state.selectedSubItem !== 2 ? this.renderOKView(rowData) : null}
 			</View>
 		);
 	},
@@ -747,6 +786,9 @@ var styles = StyleSheet.create({
     	borderWidth:1,
     	borderColor: ColorConstants.TITLE_BLUE,
 	},
+	okViewDisabled: {
+		backgroundColor: '#dfdee4',
+	},
 	okButton: {
 		color: 'white',
 		textAlign: 'center',
@@ -814,6 +856,29 @@ var styles = StyleSheet.create({
 		fontSize: 15,
 		textAlign: 'center',
 		color: '#7d7d7d'
+	},
+
+	subDetailRowWrapper: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-around',
+	},
+
+	sliderView: {
+		paddingLeft: 15,
+		paddingRight: 15,
+	},
+	sliderLeftText: {
+		fontSize: 12,
+		color: '#909090',
+		textAlign: 'left',
+		flex: 1,
+	},
+	sliderRightText: {
+		fontSize: 12,
+		color: '#909090',
+		textAlign: 'right',
+		flex: 1,
 	},
 });
 

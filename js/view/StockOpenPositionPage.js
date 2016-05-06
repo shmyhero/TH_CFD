@@ -178,11 +178,15 @@ var StockOpenPositionPage = React.createClass({
 			newData[rowID].hasSelected = true
 
 			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+			var stopLoss = rowData.stopPx !== 0
+			var stopProfit = rowData.takePx !== undefined
 			this.setState({
 				stockInfo: this.state.stockInfo.cloneWithRows(newData),
 				selectedRow: rowID,
 				selectedSubItem: 0,
 				stockInfoRowData: newData,
+				stopProfitSwitchIsOn: stopProfit,
+				stopLossSwitchIsOn: stopLoss,
 			})
 
 		}
@@ -287,6 +291,10 @@ var StockOpenPositionPage = React.createClass({
 		} else{
 			this.setState({stopLossSwitchIsOn: value})
 		};
+	},
+
+	switchConfrim: function() {
+		//todo
 	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
@@ -402,6 +410,7 @@ var StockOpenPositionPage = React.createClass({
 	renderStopProfitLoss: function(type) {
 		var titleText = type===1 ? "止盈" : "止损"
 		var switchIsOn = type===1 ? this.state.stopProfitSwitchIsOn : this.state.stopLossSwitchIsOn
+
 		return (
 			<View>
 				<View style={[styles.subDetailRowWrapper, {height:50}]}>
@@ -469,6 +478,7 @@ var StockOpenPositionPage = React.createClass({
 			var thisPartHeight = 170
 			thisPartHeight += this.state.stopLossSwitchIsOn ? 55 : 0
 			thisPartHeight += this.state.stopProfitSwitchIsOn ? 55 : 0
+
 			return (
 				<View style={{height:thisPartHeight}}>
 					{this.renderStopProfitLoss(1)}
@@ -519,6 +529,12 @@ var StockOpenPositionPage = React.createClass({
 		var tradeImage = rowData.isLong ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
 
 		extendHeight = this.currentExtendHeight(this.state.selectedSubItem)
+		var stopLossImage = require('../../images/check.png')
+		var stopLoss = rowData.stopPx !== 0
+		var stopProfit = rowData.takePx !== undefined
+		if (stopLoss || stopProfit) {
+			stopLossImage = require('../../images/check2.png')
+		}
 
 		return (
 			<View style={[{height: extendHeight}, styles.extendWrapper]} >
@@ -565,7 +581,7 @@ var StockOpenPositionPage = React.createClass({
 						style={[styles.extendMiddle, (this.state.selectedSubItem===1)&&styles.bottomBorder, 
 								(this.state.selectedSubItem===2)&&styles.leftTopRightBorder]}>
 						<Text style={styles.extendTextTop}>止盈/止损</Text>
-						<Image style={styles.extendImageBottom} source={require('../../images/check.png')}/>
+						<Image style={styles.extendImageBottom} source={stopLossImage}/>
 					</TouchableOpacity>
 					<View style={[styles.extendRight, this.state.selectedSubItem!==0 && styles.bottomBorder]}>
 					</View>

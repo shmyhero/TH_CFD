@@ -34,6 +34,9 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {
 var extendHeight = 222
 var rowHeight = 0
 
+var stopProfitPercent = 0
+var stopLossPercent = 0
+
 var StockOpenPositionPage = React.createClass({
 
 	getInitialState: function() {
@@ -180,6 +183,9 @@ var StockOpenPositionPage = React.createClass({
 			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
 			var stopLoss = rowData.stopPx !== 0
 			var stopProfit = rowData.takePx !== undefined
+
+			stopProfitPercent = 0
+			stopLossPercent = 0
 			this.setState({
 				stockInfo: this.state.stockInfo.cloneWithRows(newData),
 				selectedRow: rowID,
@@ -393,23 +399,60 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	renderSlide: function(type) {
+	setSlideValue: function(type, value) {
+		if (type === 1) {
+			stopProfitPercent = value
+		}
+		else {
+			stopLossPercent = value
+		}
+	},
+
+	renderSlide: function(rowData, type, startPercent, endPercent, percent) {
 		//1, stop profit
 		//2, stop loss
 		return (
 			<View style={styles.sliderView}>
-				<Slider onValueChange={(value) => this.setState({value: value})} />
+				<Slider
+					minimumValue={startPercent}
+					value={percent}
+					maximumValue={endPercent}
+					onValueChange={(value) => this.setSlideValue(type, value)} />
 				<View style = {styles.subDetailRowWrapper}>
-					<Text style={styles.sliderLeftText}>0%</Text>
-					<Text style={styles.sliderRightText}>100%</Text>
+					<Text style={styles.sliderLeftText}>{startPercent.toFixed(2)}%</Text>
+					<Text style={styles.sliderRightText}>{endPercent.toFixed(2)}%</Text>
 				</View>
 			</View>
 			)
 	},
 
-	renderStopProfitLoss: function(type) {
+	renderStopProfitLoss: function(rowData, type) {
 		var titleText = type===1 ? "止盈" : "止损"
 		var switchIsOn = type===1 ? this.state.stopProfitSwitchIsOn : this.state.stopLossSwitchIsOn
+		var color = type===1 ? ColorConstants.STOCK_RISE_RED : ColorConstants.STOCK_DOWN_GREEN
+		var settlePrice = rowData.settlePrice
+		var price = settlePrice
+		var percent = type===1 ? stopProfitPercent : stopLossPercent
+		var startPercent = 0
+		var endPercent = 90
+		if (type === 1) {
+			if(rowData.takePx !== undefined) {
+				startPercent = ((rowData.takePx - settlePrice) / settlePrice * 100)
+			}
+			if (percent=== 0) {
+				percent = startPercent
+			}
+			price = settlePrice*(1+percent/100)
+			endPercent = percent + 100
+		} else{
+			if(rowData.stopPx !== 0) {
+				startPercent = ((settlePrice - rowData.stopPx) / settlePrice * 100)
+			}
+			if (percent=== 0) {
+				percent = startPercent
+			}
+			price = settlePrice*(1-percent/100)
+		};
 
 		return (
 			<View>
@@ -417,7 +460,11 @@ var StockOpenPositionPage = React.createClass({
 					<Text style={styles.extendLeft}>{titleText}</Text>
 					{	
 						switchIsOn ?
-						<Text style={[styles.extendMiddle, {textAlign:'center'}]}>0% | 9.24</Text>
+						<View style={[styles.extendMiddle, {flexDirection: 'row', flex:3}]}>
+							<Text style={{flex:3, textAlign:'right', color: color}}>{percent.toFixed(2)}%</Text>
+							<Text style={{flex:1, textAlign:'center', color: '#dfdfdf'}}>|</Text>
+							<Text style={{flex:3, textAlign:'left'}}>{price.toFixed(2)}</Text>
+						</View>
 						: null
 					}
 					<View style={styles.extendRight}>
@@ -426,7 +473,7 @@ var StockOpenPositionPage = React.createClass({
 				          value={switchIsOn} />
 			        </View>
 				</View>
-				{ switchIsOn ? this.renderSlide(type) : null}
+				{ switchIsOn ? this.renderSlide(rowData, type, startPercent, endPercent, percent) : null}
 				<View style={styles.darkSeparator} />
 			</View>)
 	},
@@ -481,9 +528,9 @@ var StockOpenPositionPage = React.createClass({
 
 			return (
 				<View style={{height:thisPartHeight}}>
-					{this.renderStopProfitLoss(1)}
+					{this.renderStopProfitLoss(rowData, 1)}
 
-					{this.renderStopProfitLoss(2)}
+					{this.renderStopProfitLoss(rowData, 2)}
 
 					<TouchableHighlight
 						underlayColor={	'#164593'}
@@ -889,12 +936,16 @@ var styles = StyleSheet.create({
 		color: '#909090',
 		textAlign: 'left',
 		flex: 1,
+		marginTop: -4,
+		marginBottom: 6,
 	},
 	sliderRightText: {
 		fontSize: 12,
 		color: '#909090',
 		textAlign: 'right',
 		flex: 1,
+		marginTop: -4,
+		marginBottom: 6,
 	},
 });
 

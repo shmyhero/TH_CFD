@@ -458,7 +458,7 @@ var StockOpenPositionPage = React.createClass({
 			<View>
 				<View style={[styles.subDetailRowWrapper, {height:50}]}>
 					<Text style={styles.extendLeft}>{titleText}</Text>
-					{	
+					{
 						switchIsOn ?
 						<View style={[styles.extendMiddle, {flexDirection: 'row', flex:3}]}>
 							<Text style={{flex:3, textAlign:'right', color: color}}>{percent.toFixed(2)}%</Text>
@@ -470,7 +470,8 @@ var StockOpenPositionPage = React.createClass({
 					<View style={styles.extendRight}>
 				        <Switch
 				          onValueChange={(value) => this.onSwitchPressed(type, value)}
-				          value={switchIsOn} />
+				          value={switchIsOn}
+						  onTintColor={ColorConstants.TITLE_BLUE} />
 			        </View>
 				</View>
 				{ switchIsOn ? this.renderSlide(rowData, type, startPercent, endPercent, percent) : null}
@@ -625,7 +626,7 @@ var StockOpenPositionPage = React.createClass({
 						<Image style={styles.extendImageBottom} source={require('../../images/market.png')}/>
 					</TouchableOpacity>
 					<TouchableOpacity onPress={()=>this.subItemPress(2, rowData)}
-						style={[styles.extendMiddle, (this.state.selectedSubItem===1)&&styles.bottomBorder, 
+						style={[styles.extendMiddle, (this.state.selectedSubItem===1)&&styles.bottomBorder,
 								(this.state.selectedSubItem===2)&&styles.leftTopRightBorder]}>
 						<Text style={styles.extendTextTop}>止盈/止损</Text>
 						<Image style={styles.extendImageBottom} source={stopLossImage}/>

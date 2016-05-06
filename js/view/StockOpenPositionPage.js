@@ -533,20 +533,22 @@ var StockOpenPositionPage = React.createClass({
 		var startPercent = 0
 		var endPercent = 90
 		if (type === 1) {
-			if(rowData.takePx !== undefined) {
-				startPercent = ((rowData.takePx - settlePrice) / settlePrice * 100)
-			}
-			if (percent=== 0) {
-				percent = startPercent
+			startPercent = (rowData.security.last - settlePrice) / settlePrice * 100
+			if (startPercent < 0)
+				startPercent = 0
+			endPercent = percent + 100
+
+			if (percent === 0) {
+				percent = rowData.takePx === undefined ? startPercent : (rowData.takePx - settlePrice) / settlePrice * 100
 			}
 			price = settlePrice*(1+percent/100)
-			endPercent = percent + 100
 		} else{
-			if(rowData.stopPx !== 0) {
-				startPercent = ((settlePrice - rowData.stopPx) / settlePrice * 100)
-			}
+			startPercent = ((settlePrice - rowData.security.last) / settlePrice * 100)
+			if (startPercent < 0)
+				startPercent = 0
+
 			if (percent=== 0) {
-				percent = startPercent
+				percent = rowData.takePx === 0 ? startPercent : (settlePrice - rowData.stopPx) / settlePrice * 100
 			}
 			price = settlePrice*(1-percent/100)
 		};

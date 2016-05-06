@@ -36,6 +36,8 @@ var rowHeight = 0
 
 var stopProfitPercent = 0
 var stopLossPercent = 0
+var stopProfitUpdated = false
+var stopLossUpdated = false
 
 var StockOpenPositionPage = React.createClass({
 
@@ -186,6 +188,9 @@ var StockOpenPositionPage = React.createClass({
 
 			stopProfitPercent = 0
 			stopLossPercent = 0
+			stopProfitUpdated = false
+			stopLossUpdated = false
+
 			this.setState({
 				stockInfo: this.state.stockInfo.cloneWithRows(newData),
 				selectedRow: rowID,
@@ -193,6 +198,7 @@ var StockOpenPositionPage = React.createClass({
 				stockInfoRowData: newData,
 				stopProfitSwitchIsOn: stopProfit,
 				stopLossSwitchIsOn: stopLoss,
+				profitLossUpdated: false,
 			})
 
 		}
@@ -299,8 +305,95 @@ var StockOpenPositionPage = React.createClass({
 		};
 	},
 
-	switchConfrim: function() {
-		//todo
+	switchConfrim: function(rowData) {
+		var userData = LogicData.getUserData()
+		var url = NetConstants.STOP_PROFIT_LOSS_API
+
+		// STOP LOSS
+		if (stopLossUpdated) {
+			url = NetConstants.STOP_PROFIT_LOSS_API
+			NetworkModule.fetchTHUrl(
+				url,
+				{
+					method: 'PUT',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						'Content-Type': 'application/json; charset=utf-8',
+					},
+					body: JSON.stringify({
+						posId: rowData.id,
+						securityId: rowData.security.id,
+						orderId: rowData.stopOID,
+						price: rowData.settlePrice*(1-stopLossPercent/100),
+					}),
+					showLoading: true,
+				},
+				(responseJson) => {
+					stopLossUpdated = false
+					this.setState({profitLossUpdated: false})
+				},
+				(errorMessage) => {
+					Alert.alert('网络错误提示', errorMessage);
+				}
+			)
+		}
+		// STOP PROFIT
+		var type = 'PUT'
+		var body = JSON.stringify({})
+		if (stopProfitUpdated) {
+			if (rowData.takeOID === undefined) {
+				if (this.state.stopProfitSwitchIsOn) {
+					url = NetConstants.ADD_REMOVE_STOP_PROFIT_API
+					type = 'POST'
+					body = JSON.stringify({
+							posId: rowData.id,
+							securityId: rowData.security.id,
+							price: rowData.settlePrice*(1+stopProfitPercent/100),
+						})
+				}
+				else {
+					return
+				}
+			}
+			else {
+				if(this.state.stopProfitSwitchIsOn) {
+					body = JSON.stringify({
+						posId: rowData.id,
+						securityId: rowData.security.id,
+						orderId: rowData.takeOID,
+						price: rowData.settlePrice*(1+stopProfitPercent/100),
+					})
+				}
+				else {
+					url = NetConstants.ADD_REMOVE_STOP_PROFIT_API
+					type = 'DEL'
+					body = JSON.stringify({
+							posId: rowData.id,
+							securityId: rowData.security.id,
+							orderId: owData.takeOID,
+						})
+				}
+			}
+			NetworkModule.fetchTHUrl(
+				url,
+				{
+					method: type,
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						'Content-Type': 'application/json; charset=utf-8',
+					},
+					body: body,
+					showLoading: true,
+				},
+				(responseJson) => {
+					stopProfitUpdated = false
+					this.setState({profitLossUpdated: false})
+				},
+				(errorMessage) => {
+					Alert.alert('网络错误提示', errorMessage);
+				}
+			)
+		}
 	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
@@ -399,12 +492,14 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	setSlideValue: function(type, value) {
+	setSliderValue: function(type, value) {
 		if (type === 1) {
 			stopProfitPercent = value
+			stopProfitUpdated = true
 		}
 		else {
 			stopLossPercent = value
+			stopLossUpdated = true
 		}
 	},
 
@@ -417,7 +512,8 @@ var StockOpenPositionPage = React.createClass({
 					minimumValue={startPercent}
 					value={percent}
 					maximumValue={endPercent}
-					onValueChange={(value) => this.setSlideValue(type, value)} />
+					onSlidingComplete={(value) => this.setState({profitLossUpdated: true})}
+					onValueChange={(value) => this.setSliderValue(type, value)} />
 				<View style = {styles.subDetailRowWrapper}>
 					<Text style={styles.sliderLeftText}>{startPercent.toFixed(2)}%</Text>
 					<Text style={styles.sliderRightText}>{endPercent.toFixed(2)}%</Text>

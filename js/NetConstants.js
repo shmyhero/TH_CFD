@@ -21,6 +21,8 @@ export const GET_HOMEPAGE_BANNER_API = SERVER_IP + '/api/banner'
 export const OWN_STOCK_LIST_API = SERVER_IP + '/api/security/bookmark'
 export const POST_CREATE_POSITION_API = SERVER_IP + '/api/position'
 export const POST_DELETE_POSITION_API = SERVER_IP + '/api/position/net'
+export const STOP_PROFIT_LOSS_API = SERVER_IP + '/api/position/order'
+export const ADD_REMOVE_STOP_PROFIT_API = SERVER_IP + '/api/position/order/take'
 
 export const PARAMETER_PHONE = 'phone'
 export const PARAMETER_VERFICATION_CODE = 'verifyCode'

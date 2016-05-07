@@ -300,9 +300,13 @@ var StockOpenPositionPage = React.createClass({
 	onSwitchPressed: function(type, value) {
 		if (type===1) {
 			this.setState({stopProfitSwitchIsOn: value})
+			stopProfitUpdated = true
 		} else{
 			this.setState({stopLossSwitchIsOn: value})
+			stopLossUpdated = true
 		};
+
+		this.setState({profitLossUpdated: true})
 	},
 
 	switchConfrim: function(rowData) {
@@ -312,6 +316,11 @@ var StockOpenPositionPage = React.createClass({
 		// STOP LOSS
 		if (stopLossUpdated) {
 			url = NetConstants.STOP_PROFIT_LOSS_API
+			var price = this.percentToPriceWithRow(stopLossPercent, rowData, 2)
+			if(!this.state.stopLossSwitchIsOn){
+				stopLossPercent=0
+				price = 0
+			}
 			NetworkModule.fetchTHUrl(
 				url,
 				{
@@ -324,7 +333,7 @@ var StockOpenPositionPage = React.createClass({
 						posId: rowData.id,
 						securityId: rowData.security.id,
 						orderId: rowData.stopOID,
-						price: rowData.settlePrice*(1-stopLossPercent/100),
+						price: price
 					}),
 					showLoading: true,
 				},
@@ -348,10 +357,12 @@ var StockOpenPositionPage = React.createClass({
 					body = JSON.stringify({
 							posId: rowData.id,
 							securityId: rowData.security.id,
-							price: rowData.settlePrice*(1+stopProfitPercent/100),
+							price: this.percentToPriceWithRow(stopProfitPercent, rowData, 1),
 						})
 				}
 				else {
+					stopProfitUpdated = false
+					this.setState({profitLossUpdated: false})
 					return
 				}
 			}
@@ -361,16 +372,16 @@ var StockOpenPositionPage = React.createClass({
 						posId: rowData.id,
 						securityId: rowData.security.id,
 						orderId: rowData.takeOID,
-						price: rowData.settlePrice*(1+stopProfitPercent/100),
+						price: this.percentToPriceWithRow(stopProfitPercent, rowData, 1),
 					})
 				}
 				else {
 					url = NetConstants.ADD_REMOVE_STOP_PROFIT_API
-					type = 'DEL'
+					type = 'DELETE'
 					body = JSON.stringify({
 							posId: rowData.id,
-							securityId: rowData.security.id,
-							orderId: owData.takeOID,
+							securityId: stockInfoRowData.security.id,
+							orderId: rowData.takeOID,
 						})
 				}
 			}
@@ -503,6 +514,37 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
+	percentToPrice: function(percent, basePrice, leverage, type, isLong) {
+		if (type === 1) {
+			// 止盈
+			return isLong ? basePrice * (1+percent/100/leverage) : basePrice * (1-percent/100/leverage)
+		}
+		else {
+			// 止损
+			return isLong ? basePrice * (1-percent/100/leverage) : basePrice * (1+percent/100/leverage)
+		}
+	},
+
+	percentToPriceWithRow: function(percent, rowData, type) {
+		var leverage = rowData.leverage === 0 ? 1 : rowData.leverage
+		return this.percentToPrice(percent, rowData.settlePrice, leverage, type, rowData.isLong)
+	},
+
+	priceToPercent: function(price, basePrice, leverage, type, isLong) {
+		if (type === 1) {
+			return (price-basePrice)/basePrice*100*leverage * (isLong?1:-1)
+		}
+		else {
+			return (basePrice-price)/basePrice*100*leverage * (isLong?1:-1)
+		}
+	},
+
+	priceToPercentWithRow: function(price, rowData, type) {
+		var leverage = rowData.leverage === 0 ? 1 : rowData.leverage
+		return this.priceToPercent(price, rowData.settlePrice, leverage, type, rowData.isLong)
+	},
+
+
 	renderSlide: function(rowData, type, startPercent, endPercent, percent) {
 		//1, stop profit
 		//2, stop loss
@@ -527,31 +569,28 @@ var StockOpenPositionPage = React.createClass({
 		var titleText = type===1 ? "止盈" : "止损"
 		var switchIsOn = type===1 ? this.state.stopProfitSwitchIsOn : this.state.stopLossSwitchIsOn
 		var color = type===1 ? ColorConstants.STOCK_RISE_RED : ColorConstants.STOCK_DOWN_GREEN
-		var settlePrice = rowData.settlePrice
-		var price = settlePrice
+		var price = rowData.settlePrice
 		var percent = type===1 ? stopProfitPercent : stopLossPercent
 		var startPercent = 0
 		var endPercent = 90
+
+		startPercent = this.priceToPercentWithRow(rowData.security.last, rowData, type)
+		if (startPercent < 0)
+			startPercent = 0
+
 		if (type === 1) {
-			startPercent = (rowData.security.last - settlePrice) / settlePrice * 100
-			if (startPercent < 0)
-				startPercent = 0
-			endPercent = percent + 100
-
+			endPercent = startPercent + 100
 			if (percent === 0) {
-				percent = rowData.takePx === undefined ? startPercent : (rowData.takePx - settlePrice) / settlePrice * 100
+				percent = rowData.takePx === undefined ? startPercent
+					: this.priceToPercentWithRow(rowData.takePx, rowData, type)
 			}
-			price = settlePrice*(1+percent/100)
 		} else{
-			startPercent = ((settlePrice - rowData.security.last) / settlePrice * 100)
-			if (startPercent < 0)
-				startPercent = 0
-
 			if (percent=== 0) {
-				percent = rowData.takePx === 0 ? startPercent : (settlePrice - rowData.stopPx) / settlePrice * 100
+				percent = rowData.stopPx === 0 ? startPercent
+					: this.priceToPercentWithRow(rowData.stopPx, rowData, type)
 			}
-			price = settlePrice*(1-percent/100)
 		};
+		price = this.percentToPriceWithRow(percent, rowData, type)
 
 		return (
 			<View>

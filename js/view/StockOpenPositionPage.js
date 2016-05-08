@@ -340,6 +340,13 @@ var StockOpenPositionPage = React.createClass({
 				(responseJson) => {
 					stopLossUpdated = false
 					this.setState({profitLossUpdated: false})
+
+					var tempStockInfo = this.state.stockInfoRowData
+					tempStockInfo[this.state.selectedRow].stopPx = responseJson.stopPx
+					this.setState({
+						stockInfoRowData: tempStockInfo,
+						stockInfo: ds.cloneWithRows(tempStockInfo),
+					})
 				},
 				(errorMessage) => {
 					Alert.alert('网络错误提示', errorMessage);
@@ -380,7 +387,7 @@ var StockOpenPositionPage = React.createClass({
 					type = 'DELETE'
 					body = JSON.stringify({
 							posId: rowData.id,
-							securityId: stockInfoRowData.security.id,
+							securityId: rowData.security.id,
 							orderId: rowData.takeOID,
 						})
 				}
@@ -399,6 +406,20 @@ var StockOpenPositionPage = React.createClass({
 				(responseJson) => {
 					stopProfitUpdated = false
 					this.setState({profitLossUpdated: false})
+
+					var tempStockInfo = this.state.stockInfoRowData
+					if (responseJson.takePx === undefined) {
+						tempStockInfo[this.state.selectedRow].takeOID = undefined
+						tempStockInfo[this.state.selectedRow].takePx = undefined
+					}
+					else {
+						tempStockInfo[this.state.selectedRow].takeOID = responseJson.takeOID
+						tempStockInfo[this.state.selectedRow].takePx = responseJson.takePx
+					}
+					this.setState({
+						stockInfoRowData: tempStockInfo,
+						stockInfo: ds.cloneWithRows(tempStockInfo),
+					})
 				},
 				(errorMessage) => {
 					Alert.alert('网络错误提示', errorMessage);

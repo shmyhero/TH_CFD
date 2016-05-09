@@ -240,7 +240,6 @@ var ToTheLeft = {
 };
 Navigator.SceneConfigs.PushFromRight.animationInterpolators.out = buildStyleInterpolator(ToTheLeft)
 
-var {height, width} = Dimensions.get('window')
 var TimerMixin = require('react-timer-mixin');
 var LayoutAnimation = require('LayoutAnimation')
 var AppNavigator = React.createClass({
@@ -304,6 +303,7 @@ var AppNavigator = React.createClass({
 	},
 
 	render: function() {
+		var {height, width} = Dimensions.get('window')
 		if (this.state.initialized) {
 			return (
 				<Navigator
@@ -313,11 +313,12 @@ var AppNavigator = React.createClass({
 					renderScene={RouteMapper} />
 			)
 		} else {
+			var imageHeight = 1334 / 750 * width
 			return (
 				<View>
 					<StatusBar barStyle="light-content" backgroundColor='#1962dd'/>
 					<Image
-						style={[styles.image, {height: height, width: width}]}
+						style={[styles.image, {width: width, height: imageHeight-(Platform.OS === 'android' ? 20 : 0)}]}
 						source={require('./images/frontPage.jpg')}/>
 				</View>
 			);
@@ -332,7 +333,7 @@ var styles = StyleSheet.create({
 		alignItems: 'stretch',
 	},
 	image: {
-		resizeMode: Image.resizeMode.contain,
+		resizeMode: Image.resizeMode.stretch,
 	},
 });
 

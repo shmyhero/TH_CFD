@@ -151,6 +151,21 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
+	doScrollAnimation: function() {
+		var newExtendHeight = this.currentExtendHeight(this.state.selectedSubItem)
+		if (newExtendHeight < extendHeight) {
+			newExtendHeight = extendHeight
+		}
+		var rowID = this.state.selectedRow
+		var maxY = (height-114)*20/21 - newExtendHeight
+		var currentY = rowHeight*(parseInt(rowID)+1)
+		if (currentY > maxY) {
+			this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
+		}
+		LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+		extendHeight = newExtendHeight
+	},
+
 	stockPressed: function(rowData, sectionID, rowID, highlightRow) {
 		if (rowHeight === 0) {
 			rowHeight = this.refs['listview'].getMetrics().contentLength/this.state.stockInfoRowData.length
@@ -162,6 +177,7 @@ var StockOpenPositionPage = React.createClass({
 		var newData = []
 		$.extend(true, newData, this.state.stockInfoRowData)	// deep copy
 
+		extendHeight = 222
 		if (this.state.selectedRow == rowID) {
 			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 			newData[rowID].hasSelected = false
@@ -172,17 +188,11 @@ var StockOpenPositionPage = React.createClass({
 				stockInfoRowData: newData,
 			})
 		} else {
-			var maxY = (height-100)*20/21 - extendHeight
 			if (this.state.selectedRow >=0) {
 				newData[this.state.selectedRow].hasSelected = false
 			}
-			var currentY = rowHeight*(parseInt(rowID)+1)
-			if (currentY > maxY && parseInt(this.state.selectedRow) < parseInt(rowID)) {
-				this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
-			}
 			newData[rowID].hasSelected = true
 
-			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
 			var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) <= 90
 			var stopProfit = rowData.takePx !== undefined
 
@@ -201,26 +211,17 @@ var StockOpenPositionPage = React.createClass({
 				profitLossUpdated: false,
 			})
 
+			this.doScrollAnimation()
 		}
 	},
 
 	subItemPress: function(item, rowData) {
 		var detalY = 0
-		var rowID = this.state.selectedRow
-		var newExtendHeight = this.currentExtendHeight(item)
-		if (newExtendHeight < extendHeight) {
-			newExtendHeight = extendHeight
-		}
-		var maxY = (height-100)*20/21 - newExtendHeight
-		var currentY = rowHeight*(parseInt(rowID)+1)
-		if (currentY > maxY ) {
-			this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
-		}
 
-		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 		this.setState({
 			selectedSubItem: this.state.selectedSubItem === item ? 0 : item,
 		})
+		this.doScrollAnimation()
 
 		if (item === 2) {
 			var stockid = rowData.security.id
@@ -307,6 +308,7 @@ var StockOpenPositionPage = React.createClass({
 		};
 
 		this.setState({profitLossUpdated: true})
+		this.doScrollAnimation()
 	},
 
 	switchConfrim: function(rowData) {
@@ -734,7 +736,7 @@ var StockOpenPositionPage = React.createClass({
 	renderDetailInfo: function(rowData) {
 		var tradeImage = rowData.isLong ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
 
-		extendHeight = this.currentExtendHeight(this.state.selectedSubItem)
+		var newExtendHeight = this.currentExtendHeight(this.state.selectedSubItem)
 		var stopLossImage = require('../../images/check.png')
 		var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) <= 90
 		var stopProfit = rowData.takePx !== undefined
@@ -743,7 +745,7 @@ var StockOpenPositionPage = React.createClass({
 		}
 
 		return (
-			<View style={[{height: extendHeight}, styles.extendWrapper]} >
+			<View style={[{height: newExtendHeight}, styles.extendWrapper]} >
 				<View style={styles.darkSeparator} />
 				<View style={styles.extendRowWrapper}>
 					<View style={styles.extendLeft}>

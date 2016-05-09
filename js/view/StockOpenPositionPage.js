@@ -183,7 +183,7 @@ var StockOpenPositionPage = React.createClass({
 			newData[rowID].hasSelected = true
 
 			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-			var stopLoss = rowData.stopPx !== 0
+			var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) <= 90
 			var stopProfit = rowData.takePx !== undefined
 
 			stopProfitPercent = 0
@@ -319,7 +319,7 @@ var StockOpenPositionPage = React.createClass({
 			var price = this.percentToPriceWithRow(stopLossPercent, rowData, 2)
 			if(!this.state.stopLossSwitchIsOn){
 				stopLossPercent=0
-				price = 0
+				price = this.percentToPriceWithRow(100, rowData, 2)
 			}
 			NetworkModule.fetchTHUrl(
 				url,
@@ -607,8 +607,7 @@ var StockOpenPositionPage = React.createClass({
 			}
 		} else{
 			if (percent=== 0) {
-				percent = rowData.stopPx === 0 ? startPercent
-					: this.priceToPercentWithRow(rowData.stopPx, rowData, type)
+				percent = this.priceToPercentWithRow(rowData.stopPx, rowData, type)
 			}
 		};
 		price = this.percentToPriceWithRow(percent, rowData, type)
@@ -737,7 +736,7 @@ var StockOpenPositionPage = React.createClass({
 
 		extendHeight = this.currentExtendHeight(this.state.selectedSubItem)
 		var stopLossImage = require('../../images/check.png')
-		var stopLoss = rowData.stopPx !== 0
+		var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) <= 90
 		var stopProfit = rowData.takePx !== undefined
 		if (stopLoss || stopProfit) {
 			stopLossImage = require('../../images/check2.png')
@@ -753,7 +752,7 @@ var StockOpenPositionPage = React.createClass({
 					</View>
 					<View style={styles.extendMiddle}>
 						<Text style={styles.extendTextTop}>本金</Text>
-						<Text style={styles.extendTextBottom}>{rowData.invest}</Text>
+						<Text style={styles.extendTextBottom}>{rowData.invest.toFixed(2)}</Text>
 					</View>
 					<View style={styles.extendRight}>
 						<Text style={styles.extendTextTop}>杠杆</Text>

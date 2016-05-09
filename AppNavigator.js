@@ -52,6 +52,7 @@ var StockSearchPage = require('./js/view/StockSearchPage')
 var StockDetailPage = require('./js/view/StockDetailPage')
 var StockExchangePage = require('./js/view/StockExchangePage')
 var WebViewPage = require('./js/view/WebViewPage');
+var QAPage = require('./js/view/QAPage')
 var {EventCenter, EventConst} = require('./js/EventCenter')
 
 var LogicData = require('./js/LogicData')
@@ -81,6 +82,7 @@ export let STOCK_SEARCH_ROUTE = 'stockSearch'
 export let STOCK_DETAIL_ROUTE = 'stockDetail'
 export let STOCK_EXCHANGE_ROUTE = 'stockExchange'
 export let HOMEPAGE_RECOMMAND_ROUTE = 'homepageRecommand'
+export let QA_ROUTE = 'q&a'
 
 var hideTabbar
 var showTabbar
@@ -208,6 +210,10 @@ export var RouteMapper = function(route, navigationOperations, onComponentRef) {
 				<NavBar title='推荐' showBackButton={true} navigator={navigationOperations}/>
 				<WebViewPage url={route.url}/>
 			</View>
+		)
+	} else if (route.name === QA_ROUTE) {
+		return (
+			<QAPage />
 		)
 	}
 };

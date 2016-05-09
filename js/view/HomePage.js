@@ -17,7 +17,7 @@ var NetConstants = require('../NetConstants');
 var NetworkModule = require('../module/NetworkModule');
 var StorageModule = require('../module/StorageModule')
 
-var RECOMMAND_URL = 'http://www.baidu.com'
+var RECOMMAND_URL = 'http://cn.tradehero.mobi/TH_CFD_WEB/public/detailslider.html?pageid='
 var PAGES = [
   'Page 0',
   'Page 1',
@@ -94,7 +94,7 @@ var HomePage = React.createClass({
 	gotoRecommandPage: function(pageID) {
 		this.props.navigator.push({
 			name: AppNavigator.HOMEPAGE_RECOMMAND_ROUTE,
-			url: RECOMMAND_URL,
+			url: RECOMMAND_URL + pageID,
 		});
 	},
 

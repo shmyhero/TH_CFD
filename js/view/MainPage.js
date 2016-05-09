@@ -109,7 +109,7 @@ var MainPage = React.createClass({
 			          	<RawContent>
 							<Navigator
 								style={styles.container}
-								initialRoute={{name: AppNavigator.LANDING_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
+								initialRoute={{name: AppNavigator.QA_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
 								configureScene={() => Navigator.SceneConfigs.PushFromRight}
 								renderScene={AppNavigator.RouteMapper} />
 			          	</RawContent>

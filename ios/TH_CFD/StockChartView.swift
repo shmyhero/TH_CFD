@@ -59,6 +59,11 @@ class StockChartView: UIView {
 		if (size.width == 0 || self.chartData.isEmpty) {
 			return
 		}
+		
+		if chartData.count == 1 {
+			// only 1 point data.
+			chartData.append(chartData[0])
+		}
 		 
 		var maxValue = chartData.reduce(0) { (max, data) -> Double in
 			(max < data.price) ? data.price : max

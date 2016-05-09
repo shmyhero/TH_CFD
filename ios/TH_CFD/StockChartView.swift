@@ -300,7 +300,7 @@ class StockChartView: UIView {
 		let colorSpace = CGColorSpaceCreateDeviceRGB()
 		//set up the color stops
 		let colorLocations:[CGFloat] = [0.0, 1.0]
-		if(self.pointData.count > 0) {
+		if(self.pointData.count > 1) {
 			// draw gradients
 			let highestYPoint = topLineY
 			let startPoint = CGPoint(x:margin, y: highestYPoint)

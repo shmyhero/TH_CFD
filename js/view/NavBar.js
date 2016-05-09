@@ -207,7 +207,7 @@ var NavBar = React.createClass({
 
 var styles = StyleSheet.create({
 	container: {
-		height: 50,
+		height: 64,
 		backgroundColor: ColorConstants.TITLE_BLUE,
 		flexDirection: 'row',
 		alignItems: 'center',

@@ -314,9 +314,12 @@ var AppNavigator = React.createClass({
 			)
 		} else {
 			return (
-				<Image
-					style={[styles.image, {height: height, width: width}]}
-					source={require('./images/frontPage.jpg')}/>
+				<View>
+					<StatusBar barStyle="light-content" backgroundColor='#1962dd'/>
+					<Image
+						style={[styles.image, {height: height, width: width}]}
+						source={require('./images/frontPage.jpg')}/>
+				</View>
 			);
 		}
 	}
@@ -329,7 +332,7 @@ var styles = StyleSheet.create({
 		alignItems: 'stretch',
 	},
 	image: {
-		resizeMode: Image.resizeMode.stretch,
+		resizeMode: Image.resizeMode.contain,
 	},
 });
 

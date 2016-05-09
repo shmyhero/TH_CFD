@@ -37,7 +37,7 @@ export function start() {
 	stop();
 
 	webSocketConnection = $.hubConnection(serverURL);
-	webSocketConnection.logging = true;
+	webSocketConnection.logging = false;
 
 	webSocketProxy = webSocketConnection.createHubProxy(serverName);
 

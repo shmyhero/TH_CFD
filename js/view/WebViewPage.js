@@ -37,7 +37,6 @@ var WebViewPage = React.createClass({
 var styles = StyleSheet.create({
 	webView: {
 		backgroundColor: 'white',
-		height: 350,
 	},
 });
 

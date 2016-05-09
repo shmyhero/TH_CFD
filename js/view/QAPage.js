@@ -5,10 +5,12 @@ var {
 	StyleSheet,
 	View,
 	WebView,
+	Dimensions,
 } = React;
 
 var WEBVIEW_REF = 'webview';
 
+var {height, width} = Dimensions.get('window')
 var QAPage = React.createClass({
 	propTypes: {
 		url: React.PropTypes.string,
@@ -37,7 +39,7 @@ var QAPage = React.createClass({
 var styles = StyleSheet.create({
 	webView: {
 		backgroundColor: 'white',
-		height: 350,
+		marginBottom: 50,
 	},
 });
 

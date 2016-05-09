@@ -9,6 +9,7 @@ var {
 	BackAndroid,
 	Component,
 	Text,
+	Image,
 	ScrollView,
 	StatusBar,
 	Platform,
@@ -239,7 +240,13 @@ var ToTheLeft = {
 };
 Navigator.SceneConfigs.PushFromRight.animationInterpolators.out = buildStyleInterpolator(ToTheLeft)
 
+var {height, width} = Dimensions.get('window')
+var TimerMixin = require('react-timer-mixin');
+var LayoutAnimation = require('LayoutAnimation')
 var AppNavigator = React.createClass({
+
+	mixins: [TimerMixin],
+
 	getInitialState: function() {
 		return {
 			initialized: false,
@@ -258,9 +265,15 @@ var AppNavigator = React.createClass({
 					LogicData.setUserData(JSON.parse(value))
 				}
 				this.checkUpdate()
-				this.setState({
-					initialized: true,
-				})
+				this.setTimeout(
+					() => {
+						LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+						this.setState({
+							initialized: true,
+						})
+					 },
+					3000
+				);
 			})
 			.done()
 	},
@@ -301,7 +314,9 @@ var AppNavigator = React.createClass({
 			)
 		} else {
 			return (
-				<View />
+				<Image
+					style={[styles.image, {height: height, width: width}]}
+					source={require('./images/frontPage.jpg')}/>
 			);
 		}
 	}
@@ -312,6 +327,9 @@ var styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: '#eaeaea',
 		alignItems: 'stretch',
+	},
+	image: {
+		resizeMode: Image.resizeMode.stretch,
 	},
 });
 

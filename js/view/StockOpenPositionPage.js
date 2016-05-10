@@ -593,11 +593,11 @@ var StockOpenPositionPage = React.createClass({
 	useNativePropsToUpdate: function(type, value, rowData){
 		var price = this.percentToPriceWithRow(value, rowData, type)
 		if (type === 1){
-			this._text1.setNativeProps({text: value.toFixed(2)+'%'});
+			this._text1.setNativeProps({text: value.toFixed(1)+'%'});
 			this._text3.setNativeProps({text: price.toFixed(2)})
 		}
 		else if (type === 2) {
-			this._text2.setNativeProps({text: value.toFixed(2)+'%'});
+			this._text2.setNativeProps({text: value.toFixed(1)+'%'});
 			this._text4.setNativeProps({text: price.toFixed(2)})
 		}
 	},
@@ -658,11 +658,13 @@ var StockOpenPositionPage = React.createClass({
 					{
 						switchIsOn ?
 						<View style={[styles.extendMiddle, {flexDirection: 'row', flex:3}]}>
-							<TextInput editable={false} ref={component => this.bindRef(type, component, 1)} defaultValue={percent.toFixed(2)+'%'}
-								style={{flex:3, textAlign:'right', fontSize:17, color: color}}/>
+							<TextInput editable={false} ref={component => this.bindRef(type, component, 1)} defaultValue={percent.toFixed(1)+'%'}
+								style={{flex:3, textAlign:'right', fontSize:17, color: color}}
+								underlineColorAndroid='transparent'/>
 							<Text style={{flex:1, textAlign:'center', color: '#dfdfdf'}}>|</Text>
 							<TextInput editable={false} ref={component => this.bindRef(type, component, 2)} defaultValue={price.toFixed(2)}
-								style={{flex:3, textAlign:'left', fontSize:17}}/>
+								style={{flex:3, textAlign:'left', fontSize:17}}
+								underlineColorAndroid='transparent'/>
 						</View>
 						: null
 					}

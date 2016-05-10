@@ -511,7 +511,7 @@ var styles = StyleSheet.create({
 	addText: {
 		fontSize: 12,
 		color: '#185ed3',
-		marginTop: 5,
+		marginTop: 14,
 	},
 });
 

@@ -567,8 +567,12 @@ var StockDetailPage = React.createClass({
 		}
 
 		// leverage list: 无，2,3,...,20
-		var leverageArray = new Array(20)
-		for (var i = 0; i < 20; i++) {
+		var maxLeverage = 20
+		if (this.state.stockInfo.maxLeverage !== undefined) {
+			maxLeverage = this.state.stockInfo.maxLeverage
+		}
+		var leverageArray = new Array(maxLeverage)
+		for (var i = 0; i < maxLeverage; i++) {
 			leverageArray[i]=""+(i+1)
 		};
 		leverageArray[0]='无'

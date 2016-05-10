@@ -275,6 +275,13 @@ var AppNavigator = React.createClass({
 				);
 			})
 			.done()
+
+		StorageModule.loadOwnStocksData().then((value) => {
+				if (value !== null) {
+					LogicData.setOwnStocksData(JSON.parse(value))
+				}
+			})
+			.done()
 	},
 
 	checkUpdate: function() {

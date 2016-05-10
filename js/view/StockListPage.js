@@ -217,6 +217,12 @@ var StockListPage = React.createClass({
     	});
   	},
 
+  	handleAddStock: function() {
+		this.props.navigator.push({
+			name: AppNavigator.STOCK_SEARCH_ROUTE,
+		});
+  	},
+
   	stockPressed: function(rowData) {
   		this.props.navigator.push({
 			name: AppNavigator.STOCK_DETAIL_ROUTE,
@@ -262,6 +268,21 @@ var StockListPage = React.createClass({
 					</TouchableOpacity>
 	            </View>
 	            );
+		}
+	},
+
+	renderAddStockView: function() {
+		if(this.props.isOwnStockPage){
+			if(this.state.rowStockInfoData.length===0){
+				return (
+					<TouchableOpacity onPress={this.handleAddStock} style={{flex:10, alignItems:'center', justifyContent: 'space-around'}}>
+						<View>
+							<Image style={styles.addImage} source={require('../../images/add.png')}/>
+							<Text style={styles.addText}>暂无产品 点击添加</Text>
+						</View>
+					</TouchableOpacity>
+					);
+			}
 		}
 	},
 
@@ -356,6 +377,7 @@ var StockListPage = React.createClass({
 		return (
 			<View style={{width : width, flex : 1}}> 
 				{this.renderHeaderBar()}
+				{this.renderAddStockView()}
 				<ListView 
 					style={styles.list}
 					ref="listview"
@@ -478,6 +500,15 @@ var styles = StyleSheet.create({
 		marginLeft: 15,
 		height: 1,
 		backgroundColor: '#ececec',
+	},
+	addImage: {
+		width: 104,
+		height: 104,
+	},
+	addText: {
+		fontSize: 12,
+		color: '#185ed3',
+		marginTop: 5,
 	},
 });
 

@@ -86,9 +86,10 @@ var StockListViewPager = React.createClass({
 	},
 
 	renderNavBar: function() {
+		var hasOwnStocks = LogicData.getOwnStocksData().length !== 0
 		return (
 			<NavBar title="行情"
-				textOnLeft={this.state.currentSelectedTab==0 ? '编辑' : null}
+				textOnLeft={(this.state.currentSelectedTab==0 && hasOwnStocks) ? '编辑' : null}
 				leftTextOnClick={this.editButtonClicked}
 				showSearchButton={true}
 				navigator={this.props.navigator}/>

@@ -61,6 +61,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Initialize a Controller to use view as React View
 		let rootViewController:UIViewController = UIViewController()
 		rootViewController.view = rootView
+		let loadingView = UIImageView(frame: UIScreen.mainScreen().bounds)
+		loadingView.image = UIImage(named: "frontPage.jpg")
+		rootView.loadingView = loadingView
 		self.rnRootViewController = rootViewController
 		
 		// Set window to use rootViewController

@@ -14,6 +14,7 @@ var {
 	Alert,
   	Switch,
   	Slider,
+  	TextInput,
 } = React;
 var LayoutAnimation = require('LayoutAnimation')
 
@@ -526,7 +527,7 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	setSliderValue: function(type, value) {
+	setSliderValue: function(type, value, rowData) {
 		if (type === 1) {
 			stopProfitPercent = value
 			stopProfitUpdated = true
@@ -535,6 +536,7 @@ var StockOpenPositionPage = React.createClass({
 			stopLossPercent = value
 			stopLossUpdated = true
 		}
+		this.useNativePropsToUpdate(type, value, rowData)
 	},
 
 	percentToPrice: function(percent, basePrice, leverage, type, isLong) {
@@ -568,7 +570,7 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 
-	renderSlide: function(rowData, type, startPercent, endPercent, percent) {
+	renderSlider: function(rowData, type, startPercent, endPercent, percent) {
 		//1, stop profit
 		//2, stop loss
 		return (
@@ -579,13 +581,44 @@ var StockOpenPositionPage = React.createClass({
 					value={percent}
 					maximumValue={endPercent}
 					onSlidingComplete={(value) => this.setState({profitLossUpdated: true})}
-					onValueChange={(value) => this.setSliderValue(type, value)} />
+					onValueChange={(value) => this.setSliderValue(type, value, rowData)} />
 				<View style = {styles.subDetailRowWrapper}>
 					<Text style={styles.sliderLeftText}>{startPercent.toFixed(2)}%</Text>
 					<Text style={styles.sliderRightText}>{endPercent.toFixed(2)}%</Text>
 				</View>
 			</View>
 			)
+	},
+
+	useNativePropsToUpdate: function(type, value, rowData){
+		var price = this.percentToPriceWithRow(value, rowData, type)
+		if (type === 1){
+			this._text1.setNativeProps({text: value.toFixed(2)+'%'});
+			this._text3.setNativeProps({text: price.toFixed(2)})
+		}
+		else if (type === 2) {
+			this._text2.setNativeProps({text: value.toFixed(2)+'%'});
+			this._text4.setNativeProps({text: price.toFixed(2)})
+		}
+	},
+
+	bindRef: function(type, component, mode){
+		if (mode === 1) {
+			if (type === 1){
+				this._text1 = component
+			}
+			else if (type === 2) {
+				this._text2 = component
+			}
+		}
+		else {
+			if (type === 1){
+				this._text3 = component
+			}
+			else if (type === 2) {
+				this._text4 = component
+			}
+		}
 	},
 
 	renderStopProfitLoss: function(rowData, type) {
@@ -621,9 +654,11 @@ var StockOpenPositionPage = React.createClass({
 					{
 						switchIsOn ?
 						<View style={[styles.extendMiddle, {flexDirection: 'row', flex:3}]}>
-							<Text style={{flex:3, textAlign:'right', color: color}}>{percent.toFixed(2)}%</Text>
+							<TextInput editable={false} ref={component => this.bindRef(type, component, 1)} defaultValue={percent.toFixed(2)+'%'}
+								style={{flex:3, textAlign:'right', fontSize:17, color: color}}/>
 							<Text style={{flex:1, textAlign:'center', color: '#dfdfdf'}}>|</Text>
-							<Text style={{flex:3, textAlign:'left'}}>{price.toFixed(2)}</Text>
+							<TextInput editable={false} ref={component => this.bindRef(type, component, 2)} defaultValue={price.toFixed(2)}
+								style={{flex:3, textAlign:'left', fontSize:17}}/>
 						</View>
 						: null
 					}
@@ -634,7 +669,7 @@ var StockOpenPositionPage = React.createClass({
 						  onTintColor={ColorConstants.TITLE_BLUE} />
 			        </View>
 				</View>
-				{ switchIsOn ? this.renderSlide(rowData, type, startPercent, endPercent, percent) : null}
+				{ switchIsOn ? this.renderSlider(rowData, type, startPercent, endPercent, percent) : null}
 				<View style={styles.darkSeparator} />
 			</View>)
 	},

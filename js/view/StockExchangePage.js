@@ -88,7 +88,7 @@ var StockExchangePage = React.createClass({
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title="我的交易" showSearchButton={true} navigator={this.props.navigator}/>
-					<ScrollTabView tabNames={tabNames} viewPages={viewPages}
+					<ScrollTabView tabNames={tabNames} viewPages={viewPages} removeClippedSubviews={true}
 						onPageSelected={(index) => this.onPageSelected(index)} />
 				</View>
 			)

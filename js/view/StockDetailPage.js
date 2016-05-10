@@ -309,7 +309,7 @@ var StockDetailPage = React.createClass({
 
 		// 0.06%, limit to 0.01
 		var leftMoney = this.state.totalMoney - this.state.money
-		var charge = Math.round(this.state.money*0.06)/100.0
+		var charge = 0
 
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>

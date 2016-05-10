@@ -770,7 +770,7 @@ var StockOpenPositionPage = React.createClass({
 				</TouchableHighlight>
 
 				{this.state.showExchangeDoubleCheck ?
-					<Text style={styles.feeText}>平仓费：0.26</Text> :
+					<Text style={styles.feeText}>平仓费：0</Text> :
 					null}
 			</View>)
 	},

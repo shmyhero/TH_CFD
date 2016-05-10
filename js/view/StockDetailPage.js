@@ -238,17 +238,27 @@ var StockDetailPage = React.createClass({
 			var firstDate = new Date(this.state.stockInfo.priceData[0].time)
 			var lastDate = new Date(this.state.stockInfo.priceData[this.state.stockInfo.priceData.length - 1].time)
 
+			var firstDateDisplayString
+			var lastDateDisplayString
+			if (this.state.chartType === NetConstants.PARAMETER_CHARTTYPE_TODAY) {
+				firstDateDisplayString = firstDate.getHours() + ':' + firstDate.getMinutes()
+				lastDateDisplayString = lastDate.getHours() + ':' + firstDate.getMinutes()
+			} else {
+				firstDateDisplayString = firstDate.Format('MM/dd')
+				lastDateDisplayString = lastDate.Format('MM/dd')
+			}
+
 			return (
 				<View style={{flexDirection: 'row'}}>
 					<View style={{flex: 1, alignItems: 'flex-start', marginLeft:3}}>
 						<Text style={styles.timeText}>
-							{firstDate.getHours()}:{firstDate.getMinutes()}
+							{firstDateDisplayString}
 						</Text>
 					</View>
 
 					<View style={{flex: 1, alignItems: 'flex-end', marginRight:3}}>
 						<Text style={styles.timeText}>
-							{lastDate.getHours()}:{firstDate.getMinutes()}
+							{lastDateDisplayString}
 						</Text>
 					</View>
 				</View>

@@ -10,6 +10,7 @@ var {
 	TouchableHighlight,
 	TouchableOpacity,
 	Dimensions,
+	Platform,
 	Image,
 	Alert,
   	Switch,
@@ -881,8 +882,11 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	render: function() {
+		var viewStyle = Platform.OS === 'android' ?
+			{width: width, height: height - 164} :
+			{width: width, flex: 1}
 		return (
-			<View style={{width : width, flex : 1}}>
+			<View style={viewStyle}>
 				<ListView
 					style={styles.list}
 					ref="listview"

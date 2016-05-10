@@ -133,7 +133,7 @@ var ScrollTabView = React.createClass({
 			);
 		} else {
 			return (
-				<ViewPagerAndroid style={[styles.viewPage, {height: height - 142}]} ref='viewPages'
+				<ViewPagerAndroid style={[styles.viewPage, {height: height}]} ref='viewPages'
 						onPageScroll={this.viewPageScrolled}>
 					{this.props.viewPages}
 				</ViewPagerAndroid>

@@ -11,6 +11,7 @@ var {
 	Dimensions,
 	TouchableHighlight,
 	Alert,
+	Platform,
 	TouchableOpacity,
 } = React;
 
@@ -59,7 +60,7 @@ var StockListPage = React.createClass({
 		var hasUpdate = false
 		for (var i = 0; i < this.state.rowStockInfoData.length; i++) {
 			for (var j = 0; j < realtimeStockInfo.length; j++) {
-				if (this.state.rowStockInfoData[i].id == realtimeStockInfo[j].id && 
+				if (this.state.rowStockInfoData[i].id == realtimeStockInfo[j].id &&
 							this.state.rowStockInfoData[i].last !== realtimeStockInfo[j].last) {
 					this.state.rowStockInfoData[i].last = realtimeStockInfo[j].last;
 					hasUpdate = true;
@@ -87,7 +88,7 @@ var StockListPage = React.createClass({
 				if (!this.props.isOwnStockPage) {
 					var userData = LogicData.getUserData()
 					NetworkModule.fetchTHUrl(
-						this.props.dataURL + '?page=1&perPage=30', 
+						this.props.dataURL + '?page=1&perPage=30',
 						{
 							method: 'GET',
 							headers: {
@@ -253,9 +254,9 @@ var StockListPage = React.createClass({
 					</View>);
 		}
 	},
-	
+
 	renderHeaderBar: function() {
-		if (this.props.showHeaderBar) { 
+		if (this.props.showHeaderBar) {
 			return (
 				<View style={styles.headerBar}>
 					<View style={styles.headerCell}>
@@ -358,7 +359,7 @@ var StockListPage = React.createClass({
 					</Text>
 				</View>
 			);
-			
+
 		} else {
 			return (
 				<View style={[styles.rowRightPart, {backgroundColor: '#a0a6aa'}]}>
@@ -368,17 +369,19 @@ var StockListPage = React.createClass({
 				</View>
 			);
 		}
-		
+
 	},
 
 	render: function() {
 		var {height, width} = Dimensions.get('window');
-
+		var viewStyle = Platform.OS === 'android' ?
+			{width: width, height: height - 164} :
+			{width: width, flex: 1}
 		return (
-			<View style={{width : width, flex : 1}}> 
+			<View style={viewStyle}>
 				{this.renderHeaderBar()}
 				{this.renderAddStockView()}
-				<ListView 
+				<ListView
 					style={styles.list}
 					ref="listview"
 					initialListSize={11}

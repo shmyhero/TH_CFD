@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react-native');
-var { 
+var {
 	StyleSheet,
 	View,
 	Text,
@@ -9,6 +9,7 @@ var {
 	TouchableHighlight,
 	Dimensions,
 	Image,
+	Platform,
 } = React;
 var LayoutAnimation = require('LayoutAnimation')
 
@@ -35,7 +36,7 @@ var tempData = [
 var extendHeight = 204
 
 var StockClosedPositionPage = React.createClass({
-	
+
 	getInitialState: function() {
 		return {
 			stockInfo: ds.cloneWithRows(tempData),
@@ -44,7 +45,7 @@ var StockClosedPositionPage = React.createClass({
 	},
 
 	tabPressed: function(index) {
-		
+
 	},
 
 	onEndReached: function() {
@@ -52,7 +53,7 @@ var StockClosedPositionPage = React.createClass({
 	},
 
 	stockPressed: function(rowData, sectionID, rowID, highlightRow) {
-		
+
 		if (this.state.selectedRow == rowID) {
 			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 			this.setState({
@@ -116,7 +117,7 @@ var StockClosedPositionPage = React.createClass({
 					 {percentChange} %
 				</Text>
 			);
-			
+
 		} else {
 			return (
 				<Text style={[styles.stockPercentText, {color: '#c5c5c5'}]}>
@@ -124,7 +125,7 @@ var StockClosedPositionPage = React.createClass({
 				</Text>
 			);
 		}
-		
+
 	},
 
 	renderDetailInfo: function(rowData) {
@@ -226,9 +227,12 @@ var StockClosedPositionPage = React.createClass({
 	},
 
 	render: function() {
+		var viewStyle = Platform.OS === 'android' ?
+			{width: width, height: height - 164} :
+			{width: width, flex: 1}
 		return (
-			<View style={{width : width, flex : 1}}> 
-				<ListView 
+			<View style={viewStyle}>
+				<ListView
 					style={styles.list}
 					ref="listview"
 					initialListSize={11}

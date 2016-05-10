@@ -32,6 +32,7 @@
 		3D6A24091C9AB90000FF1306 /* NativeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A24081C9AB90000FF1306 /* NativeData.m */; };
 		3D6A240B1C9ABDE900FF1306 /* StockDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */; };
 		3D6A24181C9C026200FF1306 /* SwiftExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A24171C9C026200FF1306 /* SwiftExtensions.swift */; };
+		3DB98C0F1CE1CF1A00DB3FA5 /* frontPage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3DB98C0E1CE1CF1A00DB3FA5 /* frontPage.jpg */; };
 		3DC618011CA2747E00F36541 /* ChartDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC618001CA2747E00F36541 /* ChartDataManager.swift */; };
 		3DC618051CA29F9900F36541 /* StockChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC618041CA29F9900F36541 /* StockChartView.swift */; };
 		3DC6182D1CA3922A00F36541 /* StockChartViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC6182C1CA3922A00F36541 /* StockChartViewManager.m */; };
@@ -190,6 +191,7 @@
 		3D6A24081C9AB90000FF1306 /* NativeData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NativeData.m; path = TH_CFD/NativeData.m; sourceTree = "<group>"; };
 		3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StockDataManager.swift; path = TH_CFD/StockDataManager.swift; sourceTree = "<group>"; };
 		3D6A24171C9C026200FF1306 /* SwiftExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftExtensions.swift; path = TH_CFD/SwiftExtensions.swift; sourceTree = "<group>"; };
+		3DB98C0E1CE1CF1A00DB3FA5 /* frontPage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = frontPage.jpg; path = ../images/frontPage.jpg; sourceTree = "<group>"; };
 		3DC618001CA2747E00F36541 /* ChartDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChartDataManager.swift; path = TH_CFD/ChartDataManager.swift; sourceTree = "<group>"; };
 		3DC618041CA29F9900F36541 /* StockChartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StockChartView.swift; path = TH_CFD/StockChartView.swift; sourceTree = "<group>"; };
 		3DC6182B1CA3922A00F36541 /* StockChartViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StockChartViewManager.h; path = TH_CFD/StockChartViewManager.h; sourceTree = "<group>"; };
@@ -322,6 +324,7 @@
 		13B07FAE1A68108700A75B9A /* TH_CFD */ = {
 			isa = PBXGroup;
 			children = (
+				3DB98C0E1CE1CF1A00DB3FA5 /* frontPage.jpg */,
 				3DD744761CCE18040021304F /* myhero.ttf */,
 				3D3E1F0C1C9F9C340064F187 /* Swift */,
 				3D3E1F0B1C9F9C240064F187 /* ObjC */,
@@ -729,6 +732,7 @@
 			files = (
 				73273AD61C7B0EC1004EED11 /* guide_screen3.png in Resources */,
 				73273AD31C7B0EC1004EED11 /* guide_screen1.png in Resources */,
+				3DB98C0F1CE1CF1A00DB3FA5 /* frontPage.jpg in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				3D61C5F31C9931A10037816A /* MainStoryboard.storyboard in Resources */,

@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react-native')
-var { 
+var {
 	StyleSheet,
 	View,
 	Text,
@@ -51,7 +51,7 @@ var ScrollTabView = React.createClass({
 		var targetTabPosition = event.nativeEvent.position
 		if (event.nativeEvent.offset > 0.5) {
 			targetTabPosition ++
-		}    
+		}
 
 		if (targetTabPosition !== this.state.currentSelectedTab) {
 			this.setState({
@@ -107,11 +107,11 @@ var ScrollTabView = React.createClass({
 
 		return (
 			<View style={styles.lineContainer}>
-				
+
 				<View style={[styles.tabItemContainer, {width: width / this.props.tabNames.length, marginLeft: offsetX}]}>
-					<Image 
-						style={styles.indicator} 
-						source={require('../../../images/triangle.png')}/>	
+					<Image
+						style={styles.indicator}
+						source={require('../../../images/triangle.png')}/>
 				</View>
 
 			</View>
@@ -122,7 +122,7 @@ var ScrollTabView = React.createClass({
 		if (Platform.OS === 'ios') {
 			return (
 				<ScrollView style={styles.viewPage} ref='viewPages'
-						contentContainerStyle={{width: width * this.props.tabNames.length, height: height - 120}}
+						contentContainerStyle={{width: width * this.props.tabNames.length, height: height - 142}}
 						pagingEnabled={true}
 						horizontal={true}
 						onScroll={this.onScroll}
@@ -133,7 +133,7 @@ var ScrollTabView = React.createClass({
 			);
 		} else {
 			return (
-				<ViewPagerAndroid style={[styles.viewPage, {height: height}]} ref='viewPages'
+				<ViewPagerAndroid style={[styles.viewPage, {height: height - 142}]} ref='viewPages'
 						onPageScroll={this.viewPageScrolled}>
 					{this.props.viewPages}
 				</ViewPagerAndroid>

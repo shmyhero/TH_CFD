@@ -271,7 +271,7 @@ var AppNavigator = React.createClass({
 							initialized: true,
 						})
 					 },
-					3000
+					200
 				);
 			})
 			.done()

@@ -167,7 +167,7 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                 if (mChartType == CHART_TYPE.week) {
                     gapLineUnit = Calendar.DAY_OF_MONTH;
                 } else if (mChartType == CHART_TYPE.month) {
-                    gapLineUnit = Calendar.YEAR;
+                    gapLineUnit = Calendar.WEEK_OF_MONTH;
                 }
                 Calendar nextLineAt = null;
                 if (mChartType == CHART_TYPE.week) {
@@ -177,6 +177,15 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                     while(nextLineAt.after(firstDataDate)) {
                         nextLineAt.roll(gapLineUnit, 1);
                     }
+                    nextLineAt.add(gapLineUnit, 1);
+                } else if (mChartType == CHART_TYPE.month) {
+                    nextLineAt = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
+
+                    nextLineAt.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+                    nextLineAt.set(Calendar.HOUR_OF_DAY, 8);
+                    nextLineAt.set(Calendar.MINUTE, 0);
+                    nextLineAt.set(Calendar.MILLISECOND, 0);
+
                     nextLineAt.add(gapLineUnit, 1);
                 }
                 for (int i = 0; i < chartDataList.length(); i++) {

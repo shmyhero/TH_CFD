@@ -18,7 +18,7 @@ var QAPage = React.createClass({
 
 	getDefaultProps() {
 		return {
-			url: 'http://cn.tradehero.mobi/TH_CFD_WEB/public/wenda.html',
+			url: 'http://cn.tradehero.mobi/TH_CFD_WEB/wenda.html',
 		}
 	},
 

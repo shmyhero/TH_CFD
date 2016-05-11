@@ -9,8 +9,13 @@ var {
 	View,
 	Text,
 	Dimensions,
-	Platform
+	Platform,
+	Alert,
 } = React;
+
+var LogicData = require('../LogicData')
+var NetConstants = require('../NetConstants')
+var NetworkModule = require('../module/NetworkModule')
 
 var {height, width} = Dimensions.get('window');
 var barNames = ['美股', '指数', '外汇', '现货'];
@@ -28,56 +33,72 @@ var StockStatisticsPage = React.createClass({
 			],
 			maxBarSize: 1,
 			barAnimPlayed: false,
+			balanceData: null,
 		}
 	},
 
 	tabPressed: function(index) {
-		// TODO
-		// Do not delete this function, it is called somewhere.
+		var userData = LogicData.getUserData()
+		var url = NetConstants.GET_USER_BALANCE_API
+		NetworkModule.fetchTHUrl(
+			url,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+			},
+			(responseJson) => {
+				this.setState({
+					balanceData: responseJson,
+				})
+			},
+			(errorMessage) => {
+				Alert.alert('网络错误提示', errorMessage);
+			}
+		)
 	},
 
 	playStartAnim: function() {
-		if (this.state.barAnimPlayed === false) {
-			this.setState({
-				barSize: [
-					{invest: 100, profit: 100},
-					{invest: 50, profit: 20},
-					{invest: 150, profit: -80},
-					{invest: 110, profit: 200},
-				],
-			})
-			var maxBarSize = 1
-			for (var i = 0; i < this.state.barSize.length; i++) {
-				var barContent = this.state.barSize[i]
-				if (maxBarSize < barContent.invest + barContent.profit) {
-					maxBarSize = barContent.invest + barContent.profit
-				}
+		this.setState({
+			barSize: [
+				{invest: 100, profit: 100},
+				{invest: 50, profit: 20},
+				{invest: 150, profit: -80},
+				{invest: 110, profit: 200},
+			],
+		})
+		var maxBarSize = 1
+		for (var i = 0; i < this.state.barSize.length; i++) {
+			var barContent = this.state.barSize[i]
+			if (maxBarSize < barContent.invest + barContent.profit) {
+				maxBarSize = barContent.invest + barContent.profit
 			}
-			this.setState({
-				barSize: [
-					{invest: 100, profit: 0},
-					{invest: 50, profit: 0},
-					{invest: 150, profit: 0},
-					{invest: 110, profit: 0},
-				],
-				maxBarSize: maxBarSize,
-			})
-			this.setTimeout(
-				() => {
-					LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-					this.setState({
-						barSize: [
-							{invest: 100, profit: 100},
-							{invest: 50, profit: 20},
-							{invest: 150, profit: -80},
-							{invest: 110, profit: 200},
-						],
-						barAnimPlayed: true,
-					})
-				 },
-				1000
-			);
 		}
+		this.setState({
+			barSize: [
+				{invest: 100, profit: 0},
+				{invest: 50, profit: 0},
+				{invest: 150, profit: 0},
+				{invest: 110, profit: 0},
+			],
+			maxBarSize: maxBarSize,
+		})
+		this.setTimeout(
+			() => {
+				LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+				this.setState({
+					barSize: [
+						{invest: 100, profit: 100},
+						{invest: 50, profit: 20},
+						{invest: 150, profit: -80},
+						{invest: 110, profit: 200},
+					],
+					barAnimPlayed: true,
+				})
+			 },
+			1000
+		);
 	},
 
 	renderBars: function() {
@@ -107,14 +128,21 @@ var StockStatisticsPage = React.createClass({
 	},
 
 	renderHeader: function() {
+		var total = '--'
+		var available = '--'
+		if (this.state.balanceData) {
+			total = this.state.balanceData.total.toFixed(2)
+			available = this.state.balanceData.available.toFixed(2)
+		}
+
 		return (
 			<View style={styles.header}>
 				<View style={styles.empty}/>
 				<Text style={styles.headerText1}>总资产</Text>
-				<Text style={styles.headerText2}>999999.0</Text>
+				<Text style={styles.headerText2}>{total}</Text>
 				<View style={styles.empty}/>
 				<Text style={styles.headerText3}>剩余资金</Text>
-				<Text style={styles.headerText4}>8000000.0</Text>
+				<Text style={styles.headerText4}>{available}</Text>
 				<View style={styles.empty}/>
 			</View>
 		)

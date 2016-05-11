@@ -24,6 +24,7 @@ var StockStatisticsPage = React.createClass({
 	mixins: [TimerMixin],
 
 	getInitialState: function() {
+		var balanceData = LogicData.getBalanceData()
 		return {
 			barSize: [
 				{invest: 0, profit: 0},
@@ -33,30 +34,34 @@ var StockStatisticsPage = React.createClass({
 			],
 			maxBarSize: 1,
 			barAnimPlayed: false,
-			balanceData: null,
+			balanceData: balanceData,
 		}
 	},
 
 	tabPressed: function(index) {
-		var userData = LogicData.getUserData()
-		var url = NetConstants.GET_USER_BALANCE_API
-		NetworkModule.fetchTHUrl(
-			url,
-			{
-				method: 'GET',
-				headers: {
-					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+		if (this.state.balanceData === null) {
+			var userData = LogicData.getUserData()
+			var url = NetConstants.GET_USER_BALANCE_API
+			NetworkModule.fetchTHUrl(
+				url,
+				{
+					method: 'GET',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					},
+					showLoading: true,
 				},
-			},
-			(responseJson) => {
-				this.setState({
-					balanceData: responseJson,
-				})
-			},
-			(errorMessage) => {
-				Alert.alert('网络错误提示', errorMessage);
-			}
-		)
+				(responseJson) => {
+					LogicData.setBalanceData(responseJson)
+					this.setState({
+						balanceData: responseJson,
+					})
+				},
+				(errorMessage) => {
+					Alert.alert('网络错误提示', errorMessage);
+				}
+			)
+		}
 	},
 
 	playStartAnim: function() {

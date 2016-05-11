@@ -55,11 +55,12 @@ var StockDetailPage = React.createClass({
 	},
 
 	getInitialState: function() {
+		var balanceData = LogicData.getBalanceData()
 		return {
 			stockInfo: {isOpen: true},
-			money: 20,
+			money: balanceData === null ? 0 : 20,
 			leverage: 2,
-			totalMoney: 1000,
+			totalMoney: balanceData === null ? 0 : balanceData.available,
 			tradeDirection: 0,	//0:none, 1:up, 2:down
 			inputText: '20',
 			stockPrice: this.props.stockPrice,
@@ -138,6 +139,32 @@ var StockDetailPage = React.createClass({
 				Alert.alert('网络错误提示', errorMessage);
 			}
 		)
+	},
+
+	loadUserBalance: function() {
+		if (this.state.balanceData === null) {
+			var userData = LogicData.getUserData()
+			var url = NetConstants.GET_USER_BALANCE_API
+			NetworkModule.fetchTHUrl(
+				url,
+				{
+					method: 'GET',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					},
+					showLoading: true,
+				},
+				(responseJson) => {
+					LogicData.setBalanceData(responseJson)
+					this.setState({
+						totalMoney: responseJson.available,
+					})
+				},
+				(errorMessage) => {
+					Alert.alert('网络错误提示', errorMessage);
+				}
+			)
+		}
 	},
 
 	connectWebSocket: function() {

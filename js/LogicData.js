@@ -4,6 +4,7 @@ var userData = {};
 var wechatAuthData = {};
 var wechatUserData = {};
 var ownStocksData = [];
+var balanceData = null;
 var StorageModule = require('./module/StorageModule')
 
 var LogicData = {
@@ -71,7 +72,15 @@ var LogicData = {
  			StorageModule.setOwnStocksData(JSON.stringify(ownStocksData))
     	}
     	return ownStocksData
-    }
+    },
+
+	setBalanceData: function(balanceData) {
+		balanceData = balanceData
+	},
+
+	getBalanceData: function() {
+		return balanceData
+	},
 };
 
 module.exports = LogicData;

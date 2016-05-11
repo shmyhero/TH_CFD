@@ -881,12 +881,23 @@ var StockOpenPositionPage = React.createClass({
 		);
 	},
 
+	renderLoadingText: function() {
+		if(this.state.stockInfoRowData.length === 0) {
+			return (
+				<View style={styles.loadingTextView}>
+					<Text style={styles.loadingText}>暂无持仓记录</Text>
+				</View>
+				)
+		}
+	},
+
 	render: function() {
 		var viewStyle = Platform.OS === 'android' ?
 			{width: width, height: height - 164} :
 			{width: width, flex: 1}
 		return (
 			<View style={viewStyle}>
+				{this.renderLoadingText()}
 				<ListView
 					style={styles.list}
 					ref="listview"
@@ -1152,6 +1163,16 @@ var styles = StyleSheet.create({
 		flex: 1,
 		marginTop: -4,
 		marginBottom: 6,
+	},
+
+	loadingTextView: {
+		alignItems: 'center',
+		paddingTop: 20,
+		backgroundColor: 'transparent'
+	},
+	loadingText: {
+		fontSize: 13,
+		color: '#9f9f9f'
 	},
 });
 

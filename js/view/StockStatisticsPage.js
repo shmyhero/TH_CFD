@@ -191,25 +191,35 @@ var StockStatisticsPage = React.createClass({
 	},
 
 	renderChart: function() {
+		var hasData = this.state.balanceData!==null
 		var barNameText = barNames.map(
 			(name, i) =>
 				<Text key={i} style={styles.barNameText}>
 					{name}
 				</Text>
 		)
-		return (
-			<View style={styles.chart}>
-				{this.renderChartHeader()}
-				<View style={styles.separator}/>
-				<View style={[styles.empty, {padding: 20}]}>
-					{this.renderBars()}
+		if (hasData) {
+			return (
+				<View style={styles.chart}>
+					{this.renderChartHeader()}
+					<View style={styles.separator}/>
+					<View style={[styles.empty, {padding: 20}]}>
+						{this.renderBars()}
+					</View>
+					<View style={[styles.separator, {marginBottom: 10, marginRight:15}]}/>
+					<View style={styles.barNamesContainer}>
+						{barNameText}
+					</View>
 				</View>
-				<View style={[styles.separator, {marginBottom: 10, marginRight:15}]}/>
-				<View style={styles.barNamesContainer}>
-					{barNameText}
+			)
+		}
+		else {
+			return (
+				<View style={[styles.header, styles.chart]}>
+					<Text style={styles.loadingText}>暂无盈亏分布记录</Text>
 				</View>
-			</View>
-		)
+				)
+		}
 	},
 
 	render: function() {
@@ -365,6 +375,11 @@ var styles = StyleSheet.create({
 	negtiveProfitBar: {
 		backgroundColor: '#5fd959',
 		width: 20,
+	},
+
+	loadingText: {
+		fontSize: 13,
+		color: '#9f9f9f'
 	},
 });
 

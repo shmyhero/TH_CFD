@@ -226,12 +226,23 @@ var StockClosedPositionPage = React.createClass({
 		);
 	},
 
+	renderLoadingText: function() {
+		if(tempData.length === 0) {
+			return (
+				<View style={styles.loadingTextView}>
+					<Text style={styles.loadingText}>暂无平仓记录</Text>
+				</View>
+				)
+		}
+	},
+
 	render: function() {
 		var viewStyle = Platform.OS === 'android' ?
 			{width: width, height: height - 164} :
 			{width: width, flex: 1}
 		return (
 			<View style={viewStyle}>
+				{this.renderLoadingText()}
 				<ListView
 					style={styles.list}
 					ref="listview"
@@ -372,6 +383,15 @@ var styles = StyleSheet.create({
 	extendImageBottom: {
 		width: 24,
 		height: 24,
+	},
+	loadingTextView: {
+		alignItems: 'center',
+		paddingTop: 20,
+		backgroundColor: 'transparent'
+	},
+	loadingText: {
+		fontSize: 13,
+		color: '#9f9f9f'
 	},
 });
 

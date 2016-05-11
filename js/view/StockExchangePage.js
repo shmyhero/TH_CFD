@@ -55,6 +55,7 @@ var StockExchangePage = React.createClass({
 		if (index == 2) {
 			this.refs['page' + this.state.currentSelectedTab].playStartAnim()
 		}
+		this.onTabChanged()
 	},
 
 	onTabChanged: function(){

@@ -81,6 +81,7 @@ var StockDetailPage = React.createClass({
 	onDidFocus: function(event) {
         if (AppNavigator.STOCK_DETAIL_ROUTE === event.data.route.name) {
             this.loadStockInfo()
+			this.loadUserBalance()
         }
 	},
 
@@ -142,7 +143,7 @@ var StockDetailPage = React.createClass({
 	},
 
 	loadUserBalance: function() {
-		if (this.state.balanceData === null) {
+		if (LogicData.getBalanceData() === null) {
 			var userData = LogicData.getUserData()
 			var url = NetConstants.GET_USER_BALANCE_API
 			NetworkModule.fetchTHUrl(
@@ -152,12 +153,11 @@ var StockDetailPage = React.createClass({
 					headers: {
 						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 					},
-					showLoading: true,
 				},
 				(responseJson) => {
 					LogicData.setBalanceData(responseJson)
 					this.setState({
-						totalMoney: responseJson.available,
+						totalMoney: responseJson.available.toFixed(2),
 					})
 				},
 				(errorMessage) => {

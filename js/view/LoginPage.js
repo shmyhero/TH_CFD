@@ -7,7 +7,7 @@ var {
 	View,
 	TextInput,
 	Text,
-	TouchableHighlight,
+	TouchableOpacity,
 	Alert,
 	Dimensions,
 	Image,
@@ -222,7 +222,7 @@ var LoginPage = React.createClass({
 						<View style={styles.line}/>
 					</View>
 
-					<TouchableHighlight style={styles.wechatClickableArea}
+					<TouchableOpacity style={styles.wechatClickableArea}
 						onPress={this.wechatPressed}>
 						<View>
 							<Image
@@ -232,7 +232,7 @@ var LoginPage = React.createClass({
 								微信
 							</Text>
 						</View>
-					</TouchableHighlight>
+					</TouchableOpacity>
 				</View>
 			);
 		} else {
@@ -267,7 +267,7 @@ var LoginPage = React.createClass({
 
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
-			<View style={[styles.wrapper, {height: height}]}>
+			<View style={[styles.wrapper, {flex: 1}]}>
 
 				<View style={styles.phoneLoginContainer}>
 					<View style={styles.rowWrapper}>
@@ -318,16 +318,15 @@ var styles = StyleSheet.create({
 	wrapper: {
 		alignSelf: 'stretch',
 		alignItems: 'stretch',
-		justifyContent: 'space-around',
+		justifyContent: 'space-between',
 		backgroundColor: ColorConstants.BACKGROUND_GREY,
 	},
 	phoneLoginContainer: {
-		flex: 2,
 		paddingTop: 20,
 		alignItems: 'stretch',
 	},
 	fastLoginContainer: {
-		flex: 1,
+		paddingBottom: 20,
 		alignItems: 'stretch',
 	},
 	rowWrapper: {

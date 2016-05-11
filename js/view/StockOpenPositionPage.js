@@ -239,6 +239,7 @@ var StockOpenPositionPage = React.createClass({
 			this.setState({
 				showExchangeDoubleCheck: true,
 			})
+			this.doScrollAnimation()
 			return
 		}
 		var userData = LogicData.getUserData()

@@ -282,6 +282,14 @@ var AppNavigator = React.createClass({
 				}
 			})
 			.done()
+
+
+		StorageModule.loadSearchHistory().then((value) => {
+				if (value !== null) {
+					LogicData.setSearchStockHistory(JSON.parse(value))
+				}
+			})
+			.done()
 	},
 
 	checkUpdate: function() {

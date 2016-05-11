@@ -26,6 +26,8 @@ var NetworkModule = require('../module/NetworkModule')
 var TimerMixin = require('react-timer-mixin');
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+var searchText = ""
+var didFocusSubscription = null;
 
 var StockSearchPage = React.createClass({
 	mixins: [TimerMixin],
@@ -36,10 +38,47 @@ var StockSearchPage = React.createClass({
 			searchStockInfo: ds.cloneWithRows([]),
 			timerCount: 0,
 			searchFailedText: null,
+			historyRawInfo: [],
+			historyInfo: ds.cloneWithRows([]),
 		};
 	},
 
+	componentDidMount: function() {
+		this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
+	},
+
+	componentWillUnmount: function() {
+		this.didFocusSubscription.remove();
+	},
+
+	onDidFocus: function(event) {
+		var currentRoute = this.props.navigator.navigationContext.currentRoute;
+		//didfocus emit in componentDidMount
+        if (currentRoute === event.data.route) {
+            this.updateSearchHistory()
+        }
+	},
+
+	updateSearchHistory: function() {
+		// load history
+		var history = LogicData.getSearchStockHistory()
+		this.setState({
+			historyRawInfo: history,
+			historyInfo: ds.cloneWithRows(history),
+		})
+	},
+
+	cleanSearchHistory: function() {
+		var history = []
+		LogicData.setSearchStockHistory(history)
+		this.setState({
+			historyRawInfo: history,
+			historyInfo: ds.cloneWithRows(history),
+		})
+	},
+
 	searchStockDelay: function(text) {
+		searchText = text
 		this.setState({
 			timerCount: this.state.timerCount+1,
 		})
@@ -85,6 +124,9 @@ var StockSearchPage = React.createClass({
 					})
 				}
 			)
+		}
+		else {
+			this.forceUpdate()
 		}
 	},
 
@@ -132,6 +174,7 @@ var StockSearchPage = React.createClass({
 	},
 
   	stockPressed: function(rowData) {
+  		LogicData.addStockToSearchHistory(rowData)
   		this.props.navigator.push({
 			name: AppNavigator.STOCK_DETAIL_ROUTE,
 			stockRowData: rowData
@@ -181,11 +224,41 @@ var StockSearchPage = React.createClass({
 		);
 	},
 
-	render: function() {
-		var {height, width} = Dimensions.get('window');
+	renderHistoryFooter: function() {
+		return(
+			<View style={styles.historyFooterView}>
+				<TouchableOpacity style={styles.cleanHistoryButton} onPress={() => this.cleanSearchHistory()}>
+					<Image style={styles.cleanHistoryImage} source={require('../../images/delete.png')}/>
+					<Text style={styles.cleanHistoryText}>清除历史纪录</Text>
+				</TouchableOpacity>
+			</View>
+		)
+	},
+
+	renderHistoryView: function() {
+		if(this.state.historyRawInfo.length > 0) {
+			return(
+				<View style={{flex: 1}}>
+					<View>
+						<Text style={styles.historyText}>以下为历史查询记录</Text>
+					</View>
+					<ListView
+						style={styles.list}
+						ref="listview"
+						initialListSize={11}
+						enableEmptySections={true}
+						dataSource={this.state.historyInfo}
+						renderRow={this.renderRow}
+						renderFooter={this.renderHistoryFooter}
+						renderSeparator={this.renderSeparator}/>
+				</View>
+				)
+		}
+	},
+
+	renderSearchView: function() {
 		return (
-			<View style={{flex: 1, width: width}}>
-				{this.renderNavBar()}
+			<View style={{flex: 1, alignItems: 'center'}}>
 				{this.state.searchFailedText !== null ?
 				<Text style={styles.searchFailedText}>
 					{this.state.searchFailedText}
@@ -199,6 +272,17 @@ var StockSearchPage = React.createClass({
 					renderRow={this.renderRow}
 					renderSeparator={this.renderSeparator}/>
 				}
+			</View>
+			)
+	},
+
+	render: function() {
+		var {height, width} = Dimensions.get('window');
+		var showHistory = searchText.length === 0
+		return (
+			<View style={{flex: 1, width: width}}>
+				{this.renderNavBar()}
+				{showHistory ? this.renderHistoryView() :this.renderSearchView()}
 			</View>
 		);
 	},
@@ -333,6 +417,39 @@ var styles = StyleSheet.create({
 		fontSize: 14,
 		color: '#9e9e9e',
 	},
+
+	historyText: {
+		fontSize: 15,
+		color: '#4b70ae',
+		padding: 8,
+		paddingLeft: 15,
+	},
+	historyFooterView: {
+		height: 120,
+		alignItems: 'center',
+		justifyContent: 'space-around',
+		backgroundColor: 'white',
+	},
+	cleanHistoryButton: {
+		width: 171,
+		height: 36,
+		borderColor: '#8b9ba8',
+		borderWidth: 1,
+    	borderRadius: 4,
+		alignItems: 'center',
+		justifyContent: 'space-around',
+		flexDirection: 'row',
+	},
+	cleanHistoryImage: {
+		marginLeft: 30,
+		width: 15,
+		height: 15,
+	},
+	cleanHistoryText: {
+		fontSize: 14,
+		color: '#8b9ba8',
+		marginRight: 30,
+	}
 });
 
 module.exports = StockSearchPage;

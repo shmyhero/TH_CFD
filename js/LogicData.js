@@ -4,6 +4,7 @@ var userData = {};
 var wechatAuthData = {};
 var wechatUserData = {};
 var ownStocksData = [];
+var searchStockHistory = [];
 var balanceData = null;
 var StorageModule = require('./module/StorageModule')
 
@@ -72,6 +73,25 @@ var LogicData = {
  			StorageModule.setOwnStocksData(JSON.stringify(ownStocksData))
     	}
     	return ownStocksData
+    },
+
+    setSearchStockHistory: function(stocksData){
+        searchStockHistory = stocksData
+        StorageModule.setSearchHistory(JSON.stringify(stocksData))
+    },
+
+    getSearchStockHistory: function() {
+        return searchStockHistory
+    },
+
+    addStockToSearchHistory: function(stockData) {
+        var findResult = searchStockHistory.find((stock)=>{return stock.id === stockData.id})
+        if (findResult === undefined) {
+            searchStockHistory.unshift(stockData)
+            StorageModule.setSearchHistory(JSON.stringify(searchStockHistory))
+        }
+        // if exist, not update.
+        return searchStockHistory
     },
 
 	setBalanceData: function(balanceData) {

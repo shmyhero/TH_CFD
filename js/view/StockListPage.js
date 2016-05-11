@@ -276,12 +276,14 @@ var StockListPage = React.createClass({
 		if(this.props.isOwnStockPage){
 			if(this.state.rowStockInfoData.length===0){
 				return (
-					<TouchableOpacity onPress={this.handleAddStock} style={{flex:10, alignItems:'center', justifyContent: 'space-around'}}>
-						<View>
-							<Image style={styles.addImage} source={require('../../images/add.png')}/>
-							<Text style={styles.addText}>暂无产品 点击添加</Text>
-						</View>
-					</TouchableOpacity>
+					<View style={{flex:10, alignItems:'center', justifyContent: 'space-around'}}>
+						<TouchableOpacity onPress={this.handleAddStock}>
+							<View>
+								<Image style={styles.addImage} source={require('../../images/add.png')}/>
+								<Text style={styles.addText}>暂无产品 点击添加</Text>
+							</View>
+						</TouchableOpacity>
+					</View>
 					);
 			}
 		}

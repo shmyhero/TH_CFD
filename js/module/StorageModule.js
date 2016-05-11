@@ -7,6 +7,7 @@ var {
 
 var USER_DATA_STORAGE_KEY = '@TH_CFD:userData';
 var OWN_STOCKS_DATA_STORAGE_KEY = '@TH_CFD:ownStocksData';
+var SEARCH_HISTORY_KEY = '@TH_CFD:searchHistory';
 var BANNER_STORAGE_KEY = '@TH_CFD:bannerData';
 
 export async function loadUserData() {
@@ -56,6 +57,33 @@ export async function setOwnStocksData(selectedValue) {
 export async function removeOwnStocksData() {
 	try {
 		await AsyncStorage.removeItem(OWN_STOCKS_DATA_STORAGE_KEY);
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function loadSearchHistory() {
+	try {
+		var value = await AsyncStorage.getItem(SEARCH_HISTORY_KEY);
+		console.log('search history:'+value)
+		return value;
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function setSearchHistory(history) {
+	try {
+		await AsyncStorage.setItem(SEARCH_HISTORY_KEY, history);
+		console.log('save search history:'+history)
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function removeSearchHistory() {
+	try {
+		await AsyncStorage.removeItem(SEARCH_HISTORY_KEY);
 	} catch (error) {
 		console.log('AsyncStorage error: ' + error.message);
 	}

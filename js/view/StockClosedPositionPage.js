@@ -386,7 +386,7 @@ var styles = StyleSheet.create({
 	},
 	loadingTextView: {
 		alignItems: 'center',
-		paddingTop: 20,
+		paddingTop: 180,
 		backgroundColor: 'transparent'
 	},
 	loadingText: {

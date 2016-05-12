@@ -26,6 +26,7 @@ var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
 var ColorConstants = require('../ColorConstants')
+var UIConstants = require('../UIConstants');
 var StockTransactionConfirmPage = require('./StockTransactionConfirmPage')
 
 var {height, width} = Dimensions.get('window');
@@ -894,7 +895,7 @@ var StockOpenPositionPage = React.createClass({
 
 	render: function() {
 		var viewStyle = Platform.OS === 'android' ?
-			{width: width, height: height - 164} :
+			{width: width, height: height - UIConstants.TAB_BAR_HEIGHT - UIConstants.HEADER_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER, } :
 			{width: width, flex: 1}
 		return (
 			<View style={viewStyle}>

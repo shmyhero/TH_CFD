@@ -15,6 +15,7 @@ var LayoutAnimation = require('LayoutAnimation')
 
 
 var ColorConstants = require('../ColorConstants')
+var UIConstants = require('../UIConstants');
 
 var {height, width} = Dimensions.get('window');
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -238,7 +239,7 @@ var StockClosedPositionPage = React.createClass({
 
 	render: function() {
 		var viewStyle = Platform.OS === 'android' ?
-			{width: width, height: height - 164} :
+			{width: width, height: height - UIConstants.TAB_BAR_HEIGHT - UIConstants.HEADER_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER,} :
 			{width: width, flex: 1}
 		return (
 			<View style={viewStyle}>

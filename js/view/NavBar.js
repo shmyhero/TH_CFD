@@ -14,6 +14,7 @@ var {
 
 var ColorPropType = require('ColorPropType');
 var ColorConstants = require('../ColorConstants')
+var UIConstants = require('../UIConstants');
 var AppNavigator = require('../../AppNavigator')
 
 var NavBar = React.createClass({
@@ -207,7 +208,7 @@ var NavBar = React.createClass({
 
 var styles = StyleSheet.create({
 	container: {
-		height: 64,
+		height: UIConstants.HEADER_HEIGHT,
 		backgroundColor: ColorConstants.TITLE_BLUE,
 		flexDirection: 'row',
 		alignItems: 'center',

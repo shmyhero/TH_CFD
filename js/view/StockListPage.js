@@ -19,6 +19,7 @@ var {
 var LogicData = require('../LogicData')
 var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
+var UIConstants = require('../UIConstants');
 var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
@@ -377,7 +378,7 @@ var StockListPage = React.createClass({
 	render: function() {
 		var {height, width} = Dimensions.get('window');
 		var viewStyle = Platform.OS === 'android' ?
-			{width: width, height: height - 164} :
+			{width: width, height: height - UIConstants.TAB_BAR_HEIGHT - UIConstants.HEADER_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER,} :
 			{width: width, flex: 1}
 		return (
 			<View style={viewStyle}>
@@ -403,6 +404,7 @@ var styles = StyleSheet.create({
 		alignItems: 'stretch',
 	},
 	list: {
+		flex: 1,
 		alignSelf: 'stretch',
 	},
 	headerBar: {

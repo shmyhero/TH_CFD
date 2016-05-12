@@ -385,7 +385,7 @@ var StockDetailPage = React.createClass({
 					</LinearGradient>
 	    			<InputAccessory ref='InputAccessory'
 	    				textValue={this.state.inputText}
-	    				maxValue={this.state.totalMoney}
+	    				maxValue={parseFloat(this.state.totalMoney)}
 	    				rightButtonOnClick={this.clearMoney}/>
 
 	    			<StockTransactionConfirmPage ref='confirmPage'/>

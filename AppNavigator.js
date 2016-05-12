@@ -321,19 +321,21 @@ var AppNavigator = React.createClass({
 		var {height, width} = Dimensions.get('window')
 		if (this.state.initialized) {
 			return (
-				<Navigator
-					style={styles.container}
-					initialRoute={{name: MAIN_PAGE_ROUTE}}
-					configureScene={() => Navigator.SceneConfigs.PushFromRight}
-					renderScene={RouteMapper} />
+				<View style={styles.container}>
+					<StatusBar barStyle="light-content" backgroundColor='#1962dd' hidden={Platform.OS === 'android' ? true : false}/>
+					<Navigator
+						initialRoute={{name: MAIN_PAGE_ROUTE}}
+						configureScene={() => Navigator.SceneConfigs.PushFromRight}
+						renderScene={RouteMapper} />
+				</View>
 			)
 		} else {
 			var imageHeight = 1334 / 750 * width
 			return (
 				<View>
-					<StatusBar barStyle="light-content" backgroundColor='#1962dd'/>
+					<StatusBar barStyle="light-content" backgroundColor='#1962dd' hidden={Platform.OS === 'android' ? true : false}/>
 					<Image
-						style={[styles.image, {width: width, height: imageHeight-(Platform.OS === 'android' ? 20 : 0)}]}
+						style={[styles.image, {width: width, height: imageHeight}]}
 						source={require('./images/frontPage.jpg')}/>
 				</View>
 			);

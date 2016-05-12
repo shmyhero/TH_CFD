@@ -15,6 +15,7 @@ var ViewPager = require('react-native-viewpager');
 var ColorConstants = require('../ColorConstants')
 var AppNavigator = require('../../AppNavigator')
 var NetConstants = require('../NetConstants');
+var UIConstants = require('../UIConstants');
 var NetworkModule = require('../module/NetworkModule');
 var StorageModule = require('../module/StorageModule')
 var LogicData = require('../LogicData')
@@ -113,7 +114,7 @@ var HomePage = React.createClass({
 	},
 	render: function() {
 		return (
-			<View style={{width: width, height: height - (Platform.OS === 'android' ? 75 : 50)}}>
+			<View style={{width: width, height: height - UIConstants.TAB_BAR_HEIGHT}}>
 				<View style={{width: width, height: imageHeight}}>
 					<ViewPager
 						dataSource={this.state.dataSource}

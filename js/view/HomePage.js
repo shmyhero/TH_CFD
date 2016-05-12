@@ -10,12 +10,15 @@ var {
 	Dimensions,
 	Platform,
 } = React;
+
 var ViewPager = require('react-native-viewpager');
 var ColorConstants = require('../ColorConstants')
 var AppNavigator = require('../../AppNavigator')
 var NetConstants = require('../NetConstants');
 var NetworkModule = require('../module/NetworkModule');
 var StorageModule = require('../module/StorageModule')
+var LogicData = require('../LogicData')
+var WebSocketModule = require('../module/WebSocketModule')
 
 var RECOMMAND_URL = 'http://cn.tradehero.mobi/TH_CFD_WEB/mydetailslider.html?pageid='
 var PAGES = [
@@ -99,6 +102,15 @@ var HomePage = React.createClass({
 		});
 	},
 
+	logoutPress: function() {
+		StorageModule.removeUserData()
+		.then(() => {
+			LogicData.removeUserData()
+			WebSocketModule.registerCallbacks(
+				() => {
+			})
+		})
+	},
 	render: function() {
 		return (
 			<View style={{width: width, height: height - (Platform.OS === 'android' ? 75 : 50)}}>
@@ -144,6 +156,7 @@ var HomePage = React.createClass({
 						</Text>
 					</View>
 					<View style={styles.vertLine}/>
+					<TouchableOpacity style={styles.blockContainer} activeOpacity={0.95} onPress={this.logoutPress}>
 					<View style={styles.blockContainer}>
 						<Image style={styles.blockImage} source={require('../../images/advantage.png')}/>
 						<Text style={styles.blockTitleText}>
@@ -153,6 +166,7 @@ var HomePage = React.createClass({
 							{'选择涨跌 本金和杠杆三步\n便捷交易'}
 						</Text>
 					</View>
+					</TouchableOpacity>
 				</View>
 			</View>
 

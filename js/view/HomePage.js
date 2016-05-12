@@ -21,7 +21,7 @@ var StorageModule = require('../module/StorageModule')
 var LogicData = require('../LogicData')
 var WebSocketModule = require('../module/WebSocketModule')
 
-var RECOMMAND_URL = 'http://cn.tradehero.mobi/TH_CFD_WEB/mydetailslider.html?pageid='
+var RECOMMAND_URL = 'http://cn.tradehero.mobi/TH_CFD_WEB/detailslider.html?pageid='
 var PAGES = [
   'Page 0',
   'Page 1',

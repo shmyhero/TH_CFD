@@ -45,6 +45,7 @@ var StockSearchPage = React.createClass({
 
 	componentDidMount: function() {
 		this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
+		searchText = ""
 	},
 
 	componentWillUnmount: function() {

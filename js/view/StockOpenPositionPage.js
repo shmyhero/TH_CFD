@@ -140,7 +140,9 @@ var StockOpenPositionPage = React.createClass({
 				if (this.state.stockInfoRowData[i].security.id == realtimeStockInfo[j].id &&
 							this.state.stockInfoRowData[i].security.last !== realtimeStockInfo[j].last) {
 
-					this.state.stockInfoRowData[i].security.last = realtimeStockInfo[j].last;
+					this.state.stockInfoRowData[i].security.ask = realtimeStockInfo[j].ask
+					this.state.stockInfoRowData[i].security.bid = realtimeStockInfo[j].bid
+					this.state.stockInfoRowData[i].security.last = (realtimeStockInfo[j].ask + realtimeStockInfo[j].bid) / 2;
 					hasUpdate = true;
 					break;
 				}
@@ -754,13 +756,13 @@ var StockOpenPositionPage = React.createClass({
 
 		var profitAmount = rowData.upl
 		if (rowData.settlePrice !== 0) {
-			var profitPercentage = (rowData.security.last - rowData.settlePrice) / rowData.settlePrice
+			var lastPrice = rowData.isLong ? rowData.security.ask : rowData.security.bid
+			var profitPercentage = (lastPrice - rowData.settlePrice) / rowData.settlePrice
 			if (!rowData.isLong) {
 				profitPercentage *= (-1)
 			}
 			profitAmount = profitPercentage * rowData.invest * rowData.leverage
 		}
-
 
 		var buttonText = (profitAmount < 0 ? '亏损':'获利') + ':$' + profitAmount.toFixed(2)
 		if (this.state.showExchangeDoubleCheck) {
@@ -789,6 +791,7 @@ var StockOpenPositionPage = React.createClass({
 
 	renderDetailInfo: function(rowData) {
 		var tradeImage = rowData.isLong ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
+		var lastPrice = rowData.isLong ? rowData.security.ask : rowData.security.bid
 
 		var newExtendHeight = this.currentExtendHeight(this.state.selectedSubItem)
 		var stopLossImage = require('../../images/check.png')
@@ -823,11 +826,11 @@ var StockOpenPositionPage = React.createClass({
 					</View>
 					<View style={styles.extendMiddle}>
 						<Text style={styles.extendTextTop}>当前价格</Text>
-						<Text style={styles.extendTextBottom}>{rowData.security.last}</Text>
+						<Text style={styles.extendTextBottom}>{lastPrice}</Text>
 					</View>
 					<View style={styles.extendRight}>
 						<Text style={styles.extendTextTop}>价差</Text>
-						<Text style={styles.extendTextBottom}>{(rowData.security.last - rowData.settlePrice).toFixed(2)}</Text>
+						<Text style={styles.extendTextBottom}>{(lastPrice - rowData.settlePrice).toFixed(2)}</Text>
 					</View>
 				</View>
 				<View style={styles.darkSeparator} />

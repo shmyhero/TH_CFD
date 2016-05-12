@@ -226,7 +226,7 @@ var StockOpenPositionPage = React.createClass({
 		})
 		this.doScrollAnimation()
 
-		if (item === 2) {
+		if (item === 1) {
 			var stockid = rowData.security.id
 			this.setState({
 				stockDetailInfo: rowData.security
@@ -752,9 +752,19 @@ var StockOpenPositionPage = React.createClass({
 	renderOKView: function(rowData) {
 		var showNetIncome = false
 
-		var buttonText = (rowData.upl < 0 ? '亏损':'获利') + ':$' + rowData.upl.toFixed(2)
+		var profitAmount = rowData.upl
+		if (rowData.settlePrice !== 0) {
+			var profitPercentage = (rowData.security.last - rowData.settlePrice) / rowData.settlePrice
+			if (!rowData.isLong) {
+				profitPercentage *= (-1)
+			}
+			profitAmount = profitPercentage * rowData.invest * rowData.leverage
+		}
+
+
+		var buttonText = (profitAmount < 0 ? '亏损':'获利') + ':$' + profitAmount.toFixed(2)
 		if (this.state.showExchangeDoubleCheck) {
-			buttonText = '确认:$' + rowData.upl.toFixed(2)
+			buttonText = '确认:$' + profitAmount.toFixed(2)
 		}
 		return(
 			<View>

@@ -4,6 +4,7 @@ require('../utils/jquery-1.6.4')
 require('../utils/jquery.signalR-2.2.0')
 
 var React = require('react-native');
+var AppStateModule = require('./AppStateModule');
 
 var {
 	Alert,
@@ -16,22 +17,19 @@ var previousInterestedStocks = null
 var webSocketConnection = null
 var webSocketProxy = null
 var wsMessageCallback = null
-var retryDialogShown = false
+
 var wsErrorCallback = (errorMessage) =>
 {
-	if (retryDialogShown === false) {
-		retryDialogShown = true
-		Alert.alert('提示',errorMessage, [
-			{
-				text: '尝试连接',
-				onPress: () => {
-					start()
-					retryDialogShown = false
-				}
-			},
-		]);
+	if (AppStateModule.getAppState() === AppStateModule.STATE_ACTIVE && webSocketConnection.state == 4) {
+		start()
 	}
 }
+AppStateModule.registerTurnToActiveListener(() => {
+	console.log('Check Web sockets connection.')
+	if (webSocketConnection.state == 4) { // disconnected state
+		start()
+	}
+})
 
 export function start() {
 	stop();

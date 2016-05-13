@@ -745,7 +745,7 @@ var StockOpenPositionPage = React.createClass({
 					{this.renderStopProfitLoss(rowData, 2)}
 
 					<TouchableHighlight
-						underlayColor={	'#164593'}
+						underlayColor={this.state.profitLossUpdated ? '#164593':'#dfdee4'}
 						onPress={() => this.switchConfrim(rowData)} style={[styles.okView, !this.state.profitLossUpdated && styles.okViewDisabled]}>
 						<Text style={[styles.okButton, !this.state.profitLossUpdated && styles.okViewDisabled]}>
 							确认

@@ -436,6 +436,11 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
+	getLastPrice: function(rowData) {
+		var lastPrice = rowData.isLong ? rowData.security.ask : rowData.security.bid
+		return lastPrice === undefined ? rowData.security.last : lastPrice
+	},
+
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
 		return (
 			<View style={styles.line} key={rowID}>
@@ -756,7 +761,7 @@ var StockOpenPositionPage = React.createClass({
 
 		var profitAmount = rowData.upl
 		if (rowData.settlePrice !== 0) {
-			var lastPrice = rowData.isLong ? rowData.security.ask : rowData.security.bid
+			var lastPrice = this.getLastPrice(rowData)
 			var profitPercentage = (lastPrice - rowData.settlePrice) / rowData.settlePrice
 			if (!rowData.isLong) {
 				profitPercentage *= (-1)
@@ -791,7 +796,7 @@ var StockOpenPositionPage = React.createClass({
 
 	renderDetailInfo: function(rowData) {
 		var tradeImage = rowData.isLong ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
-		var lastPrice = rowData.isLong ? rowData.security.ask : rowData.security.bid
+		var lastPrice = this.getLastPrice(rowData)
 
 		var newExtendHeight = this.currentExtendHeight(this.state.selectedSubItem)
 		var stopLossImage = require('../../images/check.png')

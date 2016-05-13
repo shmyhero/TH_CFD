@@ -144,7 +144,7 @@ var StockOpenPositionPage = React.createClass({
 					this.state.stockInfoRowData[i].security.bid = realtimeStockInfo[j].bid
 					this.state.stockInfoRowData[i].security.last = (realtimeStockInfo[j].ask + realtimeStockInfo[j].bid) / 2;
 					hasUpdate = true;
-					break;
+					// break;
 				}
 			};
 		};
@@ -649,8 +649,8 @@ var StockOpenPositionPage = React.createClass({
 			if (percent=== 0) {
 				percent = this.priceToPercentWithRow(rowData.stopPx, rowData, type)
 				if (percent > endPercent) {
-					percent = endPercent
-					stopLossPercent = endPercent
+					percent = startPercent
+					stopLossPercent = startPercent
 				}
 			}
 		};

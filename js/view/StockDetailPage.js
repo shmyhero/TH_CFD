@@ -378,7 +378,7 @@ var StockDetailPage = React.createClass({
 							{this.renderScroll()}
 						</View>
 						<View style={{flex: 2, alignItems: 'center', justifyContent: 'space-around', paddingBottom:Platform.OS === 'ios'?10:48}}>
-							<Text style={styles.leftMoneyLabel}> 账户剩余资金：{leftMoney}</Text>
+							<Text style={styles.leftMoneyLabel}> 账户剩余资金：{leftMoney.toFixed(2)}</Text>
 							<Text style={styles.smallLabel}> 手续费为{charge}美元</Text>
 							{this.renderOKButton()}
 						</View>
@@ -574,13 +574,13 @@ var StockDetailPage = React.createClass({
 			}
 		}
 		if (moneyCount === 0) {
-			moneyArray = ['10']
+			moneyArray = ['10','20']
 		}
 		else {
 			for (var i = 0; i < moneyCount-1; i++) {
 				moneyArray[i]=""+(i+1)*10
 			};
-			moneyArray[moneyCount-1]=""+this.state.totalMoney
+			moneyArray[moneyCount-1]=""+ Math.floor(this.state.totalMoney)
 		}
 		// insert the user input value
 		var exist = false

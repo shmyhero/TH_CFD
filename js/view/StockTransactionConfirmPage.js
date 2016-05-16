@@ -131,9 +131,13 @@ var StockTransactionConfirmPage = React.createClass({
 								{this.state.name} - {this.state.isCreate?'开仓':'平仓'}
 							</Text>
 
-							<Text style={[styles.titleText, {marginRight: 20}]}>
-								0.00%
-							</Text>
+							{this.state.isCreate ?
+								null :
+								<Text style={[styles.titleText, {marginRight: 20}]}>
+									0.00%
+								</Text>
+							}
+
 						</View>
 					</View>
 					<View style={styles.centerContainer}>

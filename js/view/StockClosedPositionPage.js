@@ -62,7 +62,7 @@ var StockClosedPositionPage = React.createClass({
 				selectedRow: -1,
 			})
 		} else {
-			var maxY = (height-100)*20/21 - extendHeight
+			var maxY = (height-114)*20/21 - extendHeight
 			var listHeight = this.refs['listview'].getMetrics().contentLength
 			if (this.state.selectedRow !== -1) {
 				listHeight -= extendHeight

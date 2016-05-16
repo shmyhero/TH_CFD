@@ -605,11 +605,11 @@ var StockOpenPositionPage = React.createClass({
 		var price = this.percentToPriceWithRow(value, rowData, type)
 		if (type === 1){
 			this._text1.setNativeProps({text: value.toFixed(1)+'%'});
-			this._text3.setNativeProps({text: price.toFixed(2)})
+			this._text3.setNativeProps({text: price.toFixed(rowData.security.dcmCount)})
 		}
 		else if (type === 2) {
 			this._text2.setNativeProps({text: value.toFixed(1)+'%'});
-			this._text4.setNativeProps({text: price.toFixed(2)})
+			this._text4.setNativeProps({text: price.toFixed(rowData.security.dcmCount)})
 		}
 	},
 
@@ -673,7 +673,7 @@ var StockOpenPositionPage = React.createClass({
 								style={{flex:3, textAlign:'right', fontSize:17, color: color}}
 								underlineColorAndroid='transparent'/>
 							<Text style={{flex:1, textAlign:'center', color: '#dfdfdf'}}>|</Text>
-							<TextInput editable={false} ref={component => this.bindRef(type, component, 2)} defaultValue={price.toFixed(2)}
+							<TextInput editable={false} ref={component => this.bindRef(type, component, 2)} defaultValue={price.toFixed(rowData.security.dcmCount)}
 								style={{flex:3, textAlign:'left', fontSize:17}}
 								underlineColorAndroid='transparent'/>
 						</View>
@@ -836,7 +836,7 @@ var StockOpenPositionPage = React.createClass({
 					</View>
 					<View style={styles.extendRight}>
 						<Text style={styles.extendTextTop}>价差</Text>
-						<Text style={styles.extendTextBottom}>{(lastPrice - rowData.settlePrice).toFixed(2)}</Text>
+						<Text style={styles.extendTextBottom}>{(lastPrice - rowData.settlePrice).toFixed(rowData.security.dcmCount)}</Text>
 					</View>
 				</View>
 				<View style={styles.darkSeparator} />

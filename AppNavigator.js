@@ -15,6 +15,7 @@ var {
 	Platform,
 	Dimensions,
 	PixelRatio,
+	TouchableOpacity,
 } = React;
 
 import {
@@ -243,13 +244,24 @@ Navigator.SceneConfigs.PushFromRight.animationInterpolators.out = buildStyleInte
 
 var TimerMixin = require('react-timer-mixin');
 var LayoutAnimation = require('LayoutAnimation')
+var Swiper = require('react-native-swiper')
+
+var GUIDE_SLIDES = [
+	require('./images/Guide-page01.png'),
+	require('./images/Guide-page02.png'),
+	require('./images/Guide-page03.png'),
+];
+
+var LOADING_PHASE = 'loading'
+var GUIDE_PHASE = 'guide'
+var MAIN_PAGE_PHASE = 'mainPage'
 var AppNavigator = React.createClass({
 
 	mixins: [TimerMixin],
 
 	getInitialState: function() {
 		return {
-			initialized: false,
+			startUpPhase: LOADING_PHASE,
 		};
 	},
 
@@ -269,7 +281,7 @@ var AppNavigator = React.createClass({
 					() => {
 						LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 						this.setState({
-							initialized: true,
+							startUpPhase: GUIDE_PHASE,
 						})
 					 },
 					200
@@ -291,6 +303,13 @@ var AppNavigator = React.createClass({
 				}
 			})
 			.done()
+	},
+
+	enterMainPage: function() {
+		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+		this.setState({
+			startUpPhase: MAIN_PAGE_PHASE,
+		})
 	},
 
 	checkUpdate: function() {
@@ -320,21 +339,58 @@ var AppNavigator = React.createClass({
 
 	render: function() {
 		var {height, width} = Dimensions.get('window')
-		if (this.state.initialized) {
+		var statusBar = <StatusBar barStyle="light-content" backgroundColor='#1962dd' hidden={Platform.OS === 'android' ? true : false}/>
+
+		if (this.state.startUpPhase == MAIN_PAGE_PHASE) {
 			return (
 				<View style={styles.container}>
-					<StatusBar barStyle="light-content" backgroundColor='#1962dd' hidden={Platform.OS === 'android' ? true : false}/>
+					{statusBar}
 					<Navigator
 						initialRoute={{name: MAIN_PAGE_ROUTE}}
 						configureScene={() => Navigator.SceneConfigs.PushFromRight}
 						renderScene={RouteMapper} />
 				</View>
 			)
-		} else {
+		} else if (this.state.startUpPhase == GUIDE_PHASE) {
+			var activeDot = <View style={styles.guideActiveDot} />
+			var dot = <View style={styles.guideDot} />
+			var slides = []
+			for (var i = 0; i < GUIDE_SLIDES.length; i++) {
+				slides.push(
+					<View style={[styles.guideContainer, {height: height}]} key={i}>
+						<View style={{flex: 5, justifyContent: 'flex-end'}}>
+							<Image
+								style={styles.guideImage}
+								source={GUIDE_SLIDES[i]}/>
+						</View>
+						<View style={{flex: 1, justifyContent: 'flex-end'}} >
+							{i == GUIDE_SLIDES.length - 1 ?
+								<TouchableOpacity onPress={this.enterMainPage}>
+									<View style={styles.guideEnterTextView}>
+										<Text style={styles.guideEnterText}>
+											点击开启
+										</Text>
+									</View>
+								</TouchableOpacity>
+								: null}
+						</View>
+						<View style={{flex: 1}} />
+					</View>
+				)
+			}
+			return (
+				<View style={{width: width, height: height, backgroundColor: '#0079ff'}}>
+					{statusBar}
+					<Swiper loop={false} bounces={true} activeDot={activeDot} dot={dot}>
+						{slides}
+					</Swiper>
+				</View>
+			)
+		} else if (this.state.startUpPhase == LOADING_PHASE){
 			var imageHeight = 1334 / 750 * width
 			return (
 				<View>
-					<StatusBar barStyle="light-content" backgroundColor='#1962dd' hidden={Platform.OS === 'android' ? true : false}/>
+					{statusBar}
 					<Image
 						style={[styles.image, {width: width, height: imageHeight}]}
 						source={require('./images/frontPage.jpg')}/>
@@ -352,6 +408,48 @@ var styles = StyleSheet.create({
 	},
 	image: {
 		resizeMode: Image.resizeMode.stretch,
+	},
+	guideContainer: {
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	guideImage: {
+		height: 375,
+		width: 413,
+		resizeMode: Image.resizeMode.contain,
+	},
+	guideActiveDot: {
+		backgroundColor: 'rgba(255, 255, 255, 0.8)',
+		width: 8,
+		height: 8,
+		borderRadius: 4,
+		marginLeft: 3,
+		marginRight: 3,
+		marginTop: 3,
+		marginBottom: 20,
+	},
+	guideDot: {
+		backgroundColor:'rgba(0,0,0,.2)',
+		width: 8,
+		height: 8,
+		borderRadius: 4,
+		marginLeft: 3,
+		marginRight: 3,
+		marginTop: 3,
+		marginBottom: 20,
+	},
+	guideEnterTextView: {
+		paddingHorizontal: 40,
+		paddingVertical: 10,
+		borderColor: 'white',
+		borderWidth: 0.5,
+		borderRadius: 5,
+		justifyContent: 'center',
+	},
+	guideEnterText: {
+		fontSize: 20,
+		textAlign: 'center',
+		color: '#ffffff',
 	},
 });
 

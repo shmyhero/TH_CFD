@@ -9,6 +9,7 @@ var USER_DATA_STORAGE_KEY = '@TH_CFD:userData';
 var OWN_STOCKS_DATA_STORAGE_KEY = '@TH_CFD:ownStocksData';
 var SEARCH_HISTORY_KEY = '@TH_CFD:searchHistory';
 var BANNER_STORAGE_KEY = '@TH_CFD:bannerData';
+var GUIDE_STORAGE_KEY = '@TH_CFD:guideData';
 
 export async function loadUserData() {
 	try {
@@ -100,6 +101,23 @@ export async function setBanners(banners) {
 export async function loadBanners() {
 	try {
 		var value = await AsyncStorage.getItem(BANNER_STORAGE_KEY);
+		return value;
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function setGuide(guideData) {
+	try {
+		await AsyncStorage.setItem(GUIDE_STORAGE_KEY, guideData)
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function loadGuide() {
+	try {
+		var value = await AsyncStorage.getItem(GUIDE_STORAGE_KEY);
 		return value;
 	} catch (error) {
 		console.log('AsyncStorage error: ' + error.message);

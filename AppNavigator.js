@@ -251,6 +251,7 @@ var GUIDE_SLIDES = [
 	require('./images/Guide-page02.png'),
 	require('./images/Guide-page03.png'),
 ];
+var GUIDE_VERSION = {version: 1}
 
 var LOADING_PHASE = 'loading'
 var GUIDE_PHASE = 'guide'
@@ -277,15 +278,25 @@ var AppNavigator = React.createClass({
 					LogicData.setUserData(JSON.parse(value))
 				}
 				this.checkUpdate()
-				this.setTimeout(
-					() => {
-						LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-						this.setState({
-							startUpPhase: GUIDE_PHASE,
-						})
-					 },
-					200
-				);
+
+				StorageModule.loadGuide()
+				.then((value) => {
+					var guideData = JSON.parse(value)
+					var nextPhase = GUIDE_PHASE
+					if (guideData.version == GUIDE_VERSION.version) {
+						nextPhase = MAIN_PAGE_PHASE
+					}
+					this.setTimeout(
+						() => {
+							LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+							this.setState({
+								startUpPhase: nextPhase,
+							})
+						 },
+						200
+					);
+				})
+				.done()
 			})
 			.done()
 
@@ -310,6 +321,7 @@ var AppNavigator = React.createClass({
 		this.setState({
 			startUpPhase: MAIN_PAGE_PHASE,
 		})
+		StorageModule.setGuide(JSON.stringify(GUIDE_VERSION))
 	},
 
 	checkUpdate: function() {

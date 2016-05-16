@@ -269,6 +269,7 @@ var StockOpenPositionPage = React.createClass({
 				responseJson.isCreate = false
 				responseJson.isLong = rowData.isLong
 				responseJson.time = new Date(responseJson.createAt)
+				responseJson.invest = rowData.invest
 				this.refs['confirmPage'].show(responseJson)
 			},
 			(errorMessage) => {

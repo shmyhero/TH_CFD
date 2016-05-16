@@ -35,6 +35,7 @@ var StockTransactionConfirmPage = React.createClass({
 				settlePrice: 0,
 				time: new Date(),
 				hideCallback: null,
+				transactionInfo: null,
 			}
 		);
 	},
@@ -49,6 +50,7 @@ var StockTransactionConfirmPage = React.createClass({
 				leverage: transactionInfo.leverage,
 				settlePrice: transactionInfo.settlePrice,
 				time: transactionInfo.time,
+				transactionInfo: transactionInfo
 			})
 		}
 		this.setState({
@@ -106,6 +108,10 @@ var StockTransactionConfirmPage = React.createClass({
 		if (!this.state.visible) {
 			return null
 		}
+		var pl = this.state.isCreate ? '' : this.state.transactionInfo.pl
+		var plColor = 'black'
+		if (!this.state.isCreate)
+			plColor = pl > 0 ? ColorConstants.STOCK_RISE_RED : (pl < 0 ? ColorConstants.STOCK_DOWN_GREEN : 'black')
 		return (
 			<View style={styles.container}>
 
@@ -142,7 +148,7 @@ var StockTransactionConfirmPage = React.createClass({
 								本金
 							</Text>
 							<Text style={styles.itemValueText}>
-								{this.state.invest}
+								{this.state.invest.toFixed(2)}
 							</Text>
 						</View>
 						<View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>
@@ -166,10 +172,10 @@ var StockTransactionConfirmPage = React.createClass({
 						</View>
 						<View style={{flex: 1, alignItems: 'center'}}>
 							<Text style={styles.itemTitleText}>
-								止损
+								{this.state.isCreate?'':'盈亏'}
 							</Text>
-							<Text style={styles.itemValueText}>
-								{this.state.invest}
+							<Text style={[styles.itemValueText, {color: plColor}]}>
+								{this.state.isCreate?'':pl.toFixed(2)}
 							</Text>
 						</View>
 						<View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>

@@ -125,9 +125,13 @@ var StockTransactionConfirmPage = React.createClass({
 								{this.state.name} - {this.state.isCreate?'开仓':'平仓'}
 							</Text>
 
-							<Text style={[styles.titleText, {marginRight: 20}]}>
-								0.00%
-							</Text>
+							{this.state.isCreate ?
+								null :
+								<Text style={[styles.titleText, {marginRight: 20}]}>
+									0.00%
+								</Text>
+							}
+
 						</View>
 					</View>
 					<View style={styles.centerContainer}>
@@ -142,7 +146,7 @@ var StockTransactionConfirmPage = React.createClass({
 								本金
 							</Text>
 							<Text style={styles.itemValueText}>
-								{this.state.invest}
+								{this.state.invest.toFixed(2)}
 							</Text>
 						</View>
 						<View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>
@@ -166,10 +170,10 @@ var StockTransactionConfirmPage = React.createClass({
 						</View>
 						<View style={{flex: 1, alignItems: 'center'}}>
 							<Text style={styles.itemTitleText}>
-								止损
+								{this.state.isCreate ? '止损' : '盈亏'}
 							</Text>
 							<Text style={styles.itemValueText}>
-								{this.state.invest}
+								{this.state.invest.toFixed(2)}
 							</Text>
 						</View>
 						<View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>

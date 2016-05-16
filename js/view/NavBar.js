@@ -27,6 +27,7 @@ var NavBar = React.createClass({
 		leftTextOnClick: React.PropTypes.func,
 		rightTextOnClick: React.PropTypes.func,
 		rightImageOnClick: React.PropTypes.func,
+		backButtonOnClick: React.PropTypes.func,
 		subTitle: React.PropTypes.string,
 		subTitleStyle: Text.propTypes.style,
 		backgroundColor: ColorPropType,
@@ -45,6 +46,7 @@ var NavBar = React.createClass({
 			leftTextOnClick: null,
 			rightTextOnClick: null,
 			rightImageOnClick: null,
+			backButtonOnClick: null,
 			subTitle: null,
 			backgroundColor: ColorConstants.TITLE_BLUE,
 			rightCustomContent: null,
@@ -54,6 +56,9 @@ var NavBar = React.createClass({
 
 	backOnClick: function() {
 		this.props.navigator.pop();
+		if (this.props.backButtonOnClick) {
+			this.props.backButtonOnClick()
+		}
 	},
 
 	leftTextOnClick: function() {

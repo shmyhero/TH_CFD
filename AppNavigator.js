@@ -190,6 +190,7 @@ export var RouteMapper = function(route, navigationOperations, onComponentRef) {
 			// <View style={{flex: 1}}>
 				<StockDetailPage style={{flex: 1}}
 						navigator={navigationOperations}
+						showTabbar={showTabbar}
 						stockName={route.stockRowData.name}
 						stockCode={route.stockRowData.id}
 						stockSymbol={route.stockRowData.symbol}

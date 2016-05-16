@@ -43,6 +43,7 @@ var StockDetailPage = React.createClass({
 		stockTag: React.PropTypes.string,
 		lastClosePrice: React.PropTypes.number,
 		openPrice: React.PropTypes.number,
+		showTabbar: React.PropTypes.func,
 	},
 
 	getDefaultProps() {
@@ -430,6 +431,7 @@ var StockDetailPage = React.createClass({
 		}
 		return (
 			<NavBar showBackButton={true} navigator={this.props.navigator}
+					backButtonOnClick={this.props.showTabbar}
 					barStyle={{height: barHeight}}	titleStyle={{fontSize:16}}
 					title={this.props.stockName}
 					subTitle={subTitleText}

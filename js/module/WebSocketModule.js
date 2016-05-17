@@ -20,13 +20,13 @@ var wsMessageCallback = null
 
 var wsErrorCallback = (errorMessage) =>
 {
-	if (AppStateModule.getAppState() === AppStateModule.STATE_ACTIVE && webSocketConnection.state == 4) {
+	if (AppStateModule.getAppState() === AppStateModule.STATE_ACTIVE && webSocketConnection && webSocketConnection.state == 4) {
 		start()
 	}
 }
 AppStateModule.registerTurnToActiveListener(() => {
 	console.log('Check Web sockets connection.')
-	if (webSocketConnection.state == 4) { // disconnected state
+	if (webSocketConnection && webSocketConnection.state == 4) { // disconnected state
 		start()
 	}
 })

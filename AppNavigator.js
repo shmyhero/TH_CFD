@@ -283,7 +283,7 @@ var AppNavigator = React.createClass({
 				.then((value) => {
 					var guideData = JSON.parse(value)
 					var nextPhase = GUIDE_PHASE
-					if (guideData.version == GUIDE_VERSION.version) {
+					if (guideData && guideData.version == GUIDE_VERSION.version) {
 						nextPhase = MAIN_PAGE_PHASE
 					}
 					this.setTimeout(

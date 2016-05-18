@@ -21,7 +21,6 @@ var LayoutAnimation = require('LayoutAnimation')
 
 
 var LogicData = require('../LogicData')
-var AppNavigator = require('../../AppNavigator')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')

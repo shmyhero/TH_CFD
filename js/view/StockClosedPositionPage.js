@@ -10,43 +10,65 @@ var {
 	Dimensions,
 	Image,
 	Platform,
+	Alert,
 } = React;
 var LayoutAnimation = require('LayoutAnimation')
 
-
+var LogicData = require('../LogicData')
+var NetConstants = require('../NetConstants')
+var NetworkModule = require('../module/NetworkModule')
+var WebSocketModule = require('../module/WebSocketModule')
 var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
 
 var {height, width} = Dimensions.get('window');
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-var tempData = [
-	{id:13001, symbol:'AAPL UW', name:'新东方', tag: 'US', profitPercentage: 0.1},
-	{id:13001, symbol:'AAPL UW2', name:'新东方2', tag: 'US', profitPercentage: 0.05},
-	{id:13001, symbol:'AAPL UW3', name:'新东方3', profitPercentage: -0.08},
-	{id:13001, symbol:'AAPL UW4', name:'新东方4', profitPercentage: 0},
-	{id:13001, symbol:'AAPL UW5', name:'新东方5', tag: 'US', profitPercentage: 0.1},
-	{id:13001, symbol:'AAPL UW6', name:'新东方6', tag: 'US', profitPercentage: 0.05},
-	{id:13001, symbol:'AAPL UW7', name:'新东方7', profitPercentage: -0.08},
-	{id:13001, symbol:'AAPL UW8', name:'新东方8', profitPercentage: 0},
-	{id:13001, symbol:'AAPL UW9', name:'新东方9', tag: 'US', profitPercentage: 0.1},
-	{id:13001, symbol:'AAPL UW10', name:'新东方10', tag: 'US', profitPercentage: 0.05},
-	{id:13001, symbol:'AAPL UW11', name:'新东方11', profitPercentage: -0.08},
-	{id:13001, symbol:'AAPL UW12', name:'新东方12', profitPercentage: 0},
-]
 var extendHeight = 204
 
 var StockClosedPositionPage = React.createClass({
 
 	getInitialState: function() {
 		return {
-			stockInfo: ds.cloneWithRows(tempData),
+			stockInfoRowData: [],
+			stockInfo: ds.cloneWithRows([]),
 			selectedRow: -1,
 		};
 	},
 
-	tabPressed: function(index) {
+	componentDidMount: function() {
+		this.loadClosedPositionInfo()
+	},
 
+	tabPressed: function(index) {
+		this.loadClosedPositionInfo()
+
+		WebSocketModule.registerCallbacks(
+			() => {
+		})
+	},
+
+	loadClosedPositionInfo: function() {
+		var userData = LogicData.getUserData()
+		var url = NetConstants.GET_CLOSED_POSITION_API
+		NetworkModule.fetchTHUrl(
+			url,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+			},
+			(responseJson) => {
+				this.setState({
+					stockInfoRowData: responseJson,
+					stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
+				})
+			},
+			(errorMessage) => {
+				Alert.alert('网络错误提示', errorMessage);
+			}
+		)
 	},
 
 	onEndReached: function() {
@@ -55,10 +77,15 @@ var StockClosedPositionPage = React.createClass({
 
 	stockPressed: function(rowData, sectionID, rowID, highlightRow) {
 
+		var newData = []
+		$.extend(true, newData, this.state.stockInfoRowData)	// deep copy
+
 		if (this.state.selectedRow == rowID) {
 			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+			newData[rowID].hasSelected = false
 			this.setState({
-				stockInfo: ds.cloneWithRows(tempData),
+				stockInfo: this.state.stockInfo.cloneWithRows(newData),
+				stockInfoRowData: newData,
 				selectedRow: -1,
 			})
 		} else {
@@ -67,14 +94,16 @@ var StockClosedPositionPage = React.createClass({
 			if (this.state.selectedRow !== -1) {
 				listHeight -= extendHeight
 			}
-			var currentY = listHeight/tempData.length*(parseInt(rowID)+1)
+			var currentY = listHeight/this.state.stockInfoRowData.length*(parseInt(rowID)+1)
 			if (currentY > maxY && parseInt(this.state.selectedRow) < parseInt(rowID)) {
 				this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
 			}
 
 			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+			newData[rowID].hasSelected = true
 			this.setState({
-				stockInfo: ds.cloneWithRows(tempData),
+				stockInfo: this.state.stockInfo.cloneWithRows(newData),
+				stockInfoRowData: newData,
 				selectedRow: rowID,
 			})
 		}
@@ -126,12 +155,13 @@ var StockClosedPositionPage = React.createClass({
 				</Text>
 			);
 		}
-
 	},
 
 	renderDetailInfo: function(rowData) {
-		var tradeImage = true ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
-		var profitColor = ColorConstants.STOCK_RISE_RED
+		var tradeImage = rowData.isLong ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
+		var profitColor = rowData.pl > 0 ? ColorConstants.STOCK_RISE_RED : ColorConstants.STOCK_DOWN_GREEN
+		var openDate = new Date(rowData.openAt)
+		var closeDate = new Date(rowData.closeAt)
 		return (
 			<View style={[{height: extendHeight}, styles.extendWrapper]} >
 				<View style={styles.darkSeparator} />
@@ -142,52 +172,52 @@ var StockClosedPositionPage = React.createClass({
 					</View>
 					<View style={styles.extendMiddle}>
 						<Text style={styles.extendTextTop}>本金</Text>
-						<Text style={styles.extendTextBottom}>100</Text>
+						<Text style={styles.extendTextBottom}>{rowData.invest && rowData.invest.toFixed(2)}</Text>
 					</View>
 					<View style={styles.extendRight}>
 						<Text style={styles.extendTextTop}>杠杆</Text>
-						<Text style={styles.extendTextBottom}>x10</Text>
+						<Text style={styles.extendTextBottom}>x{rowData.leverage}</Text>
 					</View>
 				</View>
 				<View style={styles.darkSeparator} />
 				<View style={styles.extendRowWrapper}>
 					<View style={styles.extendLeft}>
 						<Text style={styles.extendTextTop}>开仓价格</Text>
-						<Text style={styles.extendTextBottom}>10.24</Text>
+						<Text style={styles.extendTextBottom}>{rowData.openPrice}</Text>
 					</View>
 					<View style={styles.extendMiddle}>
 						<Text style={styles.extendTextTop}>开仓费</Text>
-						<Text style={styles.extendTextBottom}>0.24</Text>
+						<Text style={styles.extendTextBottom}>0</Text>
 					</View>
 					<View style={styles.extendRight}>
-						<Text style={styles.extendTextTop}>16/03/24</Text>
-						<Text style={styles.extendTextBottom}>13:30</Text>
+						<Text style={styles.extendTextTop}>{openDate.Format('yy/MM/dd')}</Text>
+						<Text style={styles.extendTextBottom}>{openDate.Format('hh:mm')}</Text>
 					</View>
 				</View>
 				<View style={styles.darkSeparator} />
 				<View style={styles.extendRowWrapper}>
 					<View style={styles.extendLeft}>
 						<Text style={styles.extendTextTop}>平仓价格</Text>
-						<Text style={styles.extendTextBottom}>10.24</Text>
+						<Text style={styles.extendTextBottom}>{rowData.closePrice}</Text>
 					</View>
 					<View style={styles.extendMiddle}>
 						<Text style={styles.extendTextTop}>平仓费</Text>
-						<Text style={styles.extendTextBottom}>1.24</Text>
+						<Text style={styles.extendTextBottom}>0</Text>
 					</View>
 					<View style={styles.extendRight}>
-						<Text style={styles.extendTextTop}>16/03/24</Text>
-						<Text style={styles.extendTextBottom}>14:30</Text>
+						<Text style={styles.extendTextTop}>{closeDate.Format('yy/MM/dd')}</Text>
+						<Text style={styles.extendTextBottom}>{closeDate.Format('hh:mm')}</Text>
 					</View>
 				</View>
 				<View style={styles.darkSeparator} />
 				<View style={styles.extendRowWrapper}>
 					<View style={styles.extendLeft}>
 						<Text style={styles.extendTextTop}>留仓费</Text>
-						<Text style={styles.extendTextBottom}>0.24</Text>
+						<Text style={styles.extendTextBottom}>0</Text>
 					</View>
 					<View style={styles.extendMiddle}>
 						<Text style={styles.extendTextTop}>净收益</Text>
-						<Text style={[styles.extendTextBottom, {color:profitColor}]}>14.28</Text>
+						<Text style={[styles.extendTextBottom, {color:profitColor}]}>{rowData.pl.toFixed(2)}</Text>
 					</View>
 					<View style={styles.extendRight}>
 					</View>
@@ -205,19 +235,19 @@ var StockClosedPositionPage = React.createClass({
 					<View style={[styles.rowWrapper, {backgroundColor: bgcolor}]} key={rowData.key}>
 						<View style={styles.rowLeftPart}>
 							<Text style={styles.stockNameText}>
-								{rowData.name}
+								{rowData.security.name}
 							</Text>
 
 							<View style={{flexDirection: 'row', alignItems: 'center'}}>
 								{this.renderCountyFlag(rowData)}
 								<Text style={styles.stockSymbolText}>
-									{rowData.symbol}
+									{rowData.security.symbol}
 								</Text>
 							</View>
 						</View>
 
 						<View style={styles.rowRightPart}>
-							{this.renderProfit(rowData.profitPercentage * 100)}
+							{this.renderProfit(rowData.pl / rowData.invest * 100)}
 						</View>
 					</View>
 				</TouchableHighlight>
@@ -228,7 +258,7 @@ var StockClosedPositionPage = React.createClass({
 	},
 
 	renderLoadingText: function() {
-		if(tempData.length === 0) {
+		if(this.state.stockInfoRowData.length === 0) {
 			return (
 				<View style={styles.loadingTextView}>
 					<Text style={styles.loadingText}>暂无平仓记录</Text>
@@ -249,6 +279,7 @@ var StockClosedPositionPage = React.createClass({
 					ref="listview"
 					initialListSize={11}
 					dataSource={this.state.stockInfo}
+					enableEmptySections={true}
 					renderFooter={this.renderFooter}
 					renderRow={this.renderRow}
 					renderSeparator={this.renderSeparator}

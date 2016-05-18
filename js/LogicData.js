@@ -94,8 +94,8 @@ var LogicData = {
         return searchStockHistory
     },
 
-	setBalanceData: function(balanceData) {
-		balanceData = balanceData
+	setBalanceData: function(data) {
+		balanceData = data
 	},
 
 	getBalanceData: function() {

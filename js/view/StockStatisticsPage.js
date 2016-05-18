@@ -39,29 +39,27 @@ var StockStatisticsPage = React.createClass({
 	},
 
 	tabPressed: function(index) {
-		if (this.state.balanceData === null) {
-			var userData = LogicData.getUserData()
-			var url = NetConstants.GET_USER_BALANCE_API
-			NetworkModule.fetchTHUrl(
-				url,
-				{
-					method: 'GET',
-					headers: {
-						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-					},
-					showLoading: true,
+		var userData = LogicData.getUserData()
+		var url = NetConstants.GET_USER_BALANCE_API
+		NetworkModule.fetchTHUrl(
+			url,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 				},
-				(responseJson) => {
-					LogicData.setBalanceData(responseJson)
-					this.setState({
-						balanceData: responseJson,
-					})
-				},
-				(errorMessage) => {
-					Alert.alert('网络错误提示', errorMessage);
-				}
-			)
-		}
+				showLoading: this.state.balanceData === null,
+			},
+			(responseJson) => {
+				LogicData.setBalanceData(responseJson)
+				this.setState({
+					balanceData: responseJson,
+				})
+			},
+			(errorMessage) => {
+				Alert.alert('网络错误提示', errorMessage);
+			}
+		)
 	},
 
 	playStartAnim: function() {

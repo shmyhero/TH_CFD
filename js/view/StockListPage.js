@@ -116,7 +116,29 @@ var StockListPage = React.createClass({
 					LogicData.setOwnStocksData(JSON.parse(value))
 				}
 			}).then(() => {
-				this.updateOwnData();
+				// this.updateOwnData();
+				var ownData = LogicData.getOwnStocksData()
+				if (ownData.length > 0) {
+					var param = "/"+ownData[0].id
+					for (var i = 1; i < ownData.length; i++) {
+						param += ","+ownData[i].id
+					};
+					NetworkModule.fetchTHUrl(
+						this.props.dataURL + param,
+						{
+							method: 'GET',
+						},
+						(responseJson) => {
+							this.setState({
+								rowStockInfoData: responseJson,
+								stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, responseJson))
+							})
+						},
+						(errorMessage) => {
+							Alert.alert('网络错误提示', errorMessage);
+						}
+					)
+				}
 			})
 		    this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
 		    this.recevieDataSubscription = RCTNativeAppEventEmitter.addListener(

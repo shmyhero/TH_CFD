@@ -26,6 +26,7 @@ var StockStatisticsPage = React.createClass({
 		var balanceData = LogicData.getBalanceData()
 		return {
 			statisticsBarInfo: [],
+			statisticsSumInfo: [],
 			maxBarSize: 1,
 			barAnimPlayed: false,
 			balanceData: balanceData,
@@ -84,6 +85,7 @@ var StockStatisticsPage = React.createClass({
 		$.extend(true, originalStatisticsInfo, statisticsInfo)	// deep copy
 		this.setState({
 			statisticsBarInfo: statisticsInfo,
+			statisticsSumInfo: originalStatisticsInfo,
 			barAnimPlayed: true,
 		})
 		var maxBarSize = 1
@@ -159,11 +161,11 @@ var StockStatisticsPage = React.createClass({
 	renderBody: function() {
 		var sumPl = '--'
 		var avgPlRate = '--'
-		if (this.state.statisticsBarInfo.length > 0) {
+		if (this.state.statisticsSumInfo.length > 0) {
 			sumPl = 0
 			var sumInvest = 0
-			for (var i = 0; i < this.state.statisticsBarInfo.length; i++) {
-				var barContent = this.state.statisticsBarInfo[i]
+			for (var i = 0; i < this.state.statisticsSumInfo.length; i++) {
+				var barContent = this.state.statisticsSumInfo[i]
 				sumPl += barContent.pl
 				sumInvest += barContent.invest
 			}

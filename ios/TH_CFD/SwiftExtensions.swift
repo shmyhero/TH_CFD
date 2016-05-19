@@ -30,6 +30,7 @@ extension UIViewController {
 
 }
 
+// MARK: String
 extension String {
 	func toDate() -> NSDate?{
 		let dateFormatter = NSDateFormatter()
@@ -42,5 +43,15 @@ extension String {
 			let date = dateFormatter.dateFromString(self)
 			return date
 		}
+	}
+}
+
+// MARK: NSDate
+extension NSDate {
+	func sameTimeOnLastSunday() -> NSDate {
+		let calendar:NSCalendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
+		let components:NSDateComponents = calendar.components([.YearForWeekOfYear, .WeekOfYear, .Weekday, .Hour, .Minute, .Second, .Nanosecond], fromDate: self)
+		components.weekday = 1
+		return calendar.dateFromComponents(components)!
 	}
 }

@@ -154,7 +154,7 @@ class StockChartView: UIView {
 			let oneDay:Double = 3600 * 24
 			var startTime = ChartDataManager.singleton.stockData?.lastOpen
 			if startTime == nil {
-				return
+				startTime = NSDate()
 			}
 			if let time:NSDate? = chartData[0].time {
 				let interval:NSTimeInterval = time!.timeIntervalSinceDate(startTime!)
@@ -177,6 +177,30 @@ class StockChartView: UIView {
 		}
 		else if chartType == "month" {
 			// 1 week, 1 line
+			let oneWeek:Double = 3600 * 24 * 7
+			var startTime = ChartDataManager.singleton.stockData?.lastOpen
+			if startTime == nil {
+				startTime = NSDate()
+			}
+			startTime = startTime?.sameTimeOnLastSunday()
+			if let time:NSDate? = chartData[0].time {
+				let interval:NSTimeInterval = time!.timeIntervalSinceDate(startTime!)
+				let weeks = floor(interval / oneWeek)
+				startTime = NSDate(timeInterval: weeks*oneWeek, sinceDate: startTime!)
+			}
+			else {
+				return
+			}
+			for i in 0 ..< self.chartData.count {
+				if let time:NSDate? = chartData[i].time {
+					let interval:NSTimeInterval = time!.timeIntervalSinceDate(startTime!)
+					if interval >= oneWeek {
+						self.verticalLinesX.append(self.pointData[i].x+0.5)
+						startTime = time
+					}
+				}
+				
+			}
 		}
 	}
 	

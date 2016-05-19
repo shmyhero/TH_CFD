@@ -18,7 +18,6 @@ var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 
 var {height, width} = Dimensions.get('window');
-var barNames = ['美股', '指数', '外汇', '现货'];
 
 var StockStatisticsPage = React.createClass({
 	mixins: [TimerMixin],
@@ -26,12 +25,7 @@ var StockStatisticsPage = React.createClass({
 	getInitialState: function() {
 		var balanceData = LogicData.getBalanceData()
 		return {
-			barSize: [
-				{invest: 0, profit: 0},
-				{invest: 0, profit: 0},
-				{invest: 0, profit: 0},
-				{invest: 0, profit: 0},
-			],
+			statisticsBarInfo: [],
 			maxBarSize: 1,
 			barAnimPlayed: false,
 			balanceData: balanceData,
@@ -63,40 +57,51 @@ var StockStatisticsPage = React.createClass({
 	},
 
 	playStartAnim: function() {
+		if (this.state.statisticsBarInfo.length > 0) {
+			this.playStatisticsAnim(this.state.statisticsBarInfo)
+		} else {
+			var userData = LogicData.getUserData()
+			NetworkModule.fetchTHUrl(
+				NetConstants.GET_USER_STATISTICS_API,
+				{
+					method: 'GET',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					},
+				},
+				(responseJson) => {
+					this.playStatisticsAnim(responseJson)
+				},
+				(errorMessage) => {
+					Alert.alert('网络错误提示', errorMessage);
+				}
+			)
+		}
+	},
+
+	playStatisticsAnim: function(statisticsInfo) {
+		var originalStatisticsInfo = []
+		$.extend(true, originalStatisticsInfo, statisticsInfo)	// deep copy
 		this.setState({
-			barSize: [
-				{invest: 100, profit: 100},
-				{invest: 50, profit: 20},
-				{invest: 150, profit: -80},
-				{invest: 110, profit: 200},
-			],
+			statisticsBarInfo: statisticsInfo,
+			barAnimPlayed: true,
 		})
 		var maxBarSize = 1
-		for (var i = 0; i < this.state.barSize.length; i++) {
-			var barContent = this.state.barSize[i]
-			if (maxBarSize < barContent.invest + barContent.profit) {
-				maxBarSize = barContent.invest + barContent.profit
+		for (var i = 0; i < this.state.statisticsBarInfo.length; i++) {
+			var barContent = this.state.statisticsBarInfo[i]
+			if (maxBarSize < barContent.invest + barContent.pl) {
+				maxBarSize = barContent.invest + barContent.pl
 			}
+			barContent.pl = 0
 		}
 		this.setState({
-			barSize: [
-				{invest: 100, profit: 0},
-				{invest: 50, profit: 0},
-				{invest: 150, profit: 0},
-				{invest: 110, profit: 0},
-			],
 			maxBarSize: maxBarSize,
 		})
 		this.setTimeout(
 			() => {
 				LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 				this.setState({
-					barSize: [
-						{invest: 100, profit: 100},
-						{invest: 50, profit: 20},
-						{invest: 150, profit: -80},
-						{invest: 110, profit: 200},
-					],
+					statisticsBarInfo: originalStatisticsInfo,
 					barAnimPlayed: true,
 				})
 			 },
@@ -105,12 +110,12 @@ var StockStatisticsPage = React.createClass({
 	},
 
 	renderBars: function() {
-		var bars = this.state.barSize.map(
+		var bars = this.state.statisticsBarInfo.map(
 			(barContent, i) => {
 				var investBarFlex = Math.floor(barContent.invest / this.state.maxBarSize * 100)
-				var profitBarFlex = Math.floor(barContent.profit / this.state.maxBarSize * 100)
-				var profitBarStyle = barContent.profit > 0 ? styles.positiveProfitBar : styles.negtiveProfitBar
-				if (barContent.profit < 0) {
+				var profitBarFlex = Math.floor(barContent.pl / this.state.maxBarSize * 100)
+				var profitBarStyle = barContent.pl > 0 ? styles.positiveProfitBar : styles.negtiveProfitBar
+				if (barContent.pl < 0) {
 					profitBarFlex *= -1
 					investBarFlex -= profitBarFlex
 				}
@@ -152,18 +157,33 @@ var StockStatisticsPage = React.createClass({
 	},
 
 	renderBody: function() {
+		var sumPl = '--'
+		var avgPlRate = '--'
+		if (this.state.statisticsBarInfo.length > 0) {
+			sumPl = 0
+			var sumInvest = 0
+			for (var i = 0; i < this.state.statisticsBarInfo.length; i++) {
+				var barContent = this.state.statisticsBarInfo[i]
+				sumPl += barContent.pl
+				sumInvest += barContent.invest
+			}
+
+			avgPlRate = (sumInvest > 0) ? sumPl / sumInvest * 100: 0
+			sumPl = sumPl.toFixed(2)
+			avgPlRate = avgPlRate.toFixed(2)
+		}
 		return (
 			<View style={styles.center}>
 				<View style={styles.centerView}>
 					<View style={styles.empty}/>
 					<Text style={styles.centerText1}>累计收益</Text>
-					<Text style={styles.centerText2}>20999.9</Text>
+					<Text style={styles.centerText2}>{sumPl}</Text>
 					<View style={styles.empty}/>
 				</View>
 				<View style={styles.centerView}>
 					<View style={styles.empty}/>
 					<Text style={styles.centerText1}>总收益率</Text>
-					<Text style={styles.centerText2}>21.40%</Text>
+					<Text style={styles.centerText2}>{avgPlRate}%</Text>
 					<View style={styles.empty}/>
 				</View>
 			</View>
@@ -190,10 +210,10 @@ var StockStatisticsPage = React.createClass({
 
 	renderChart: function() {
 		var hasData = this.state.balanceData!==null
-		var barNameText = barNames.map(
-			(name, i) =>
+		var barNameText = this.state.statisticsBarInfo.map(
+			(barContent, i) =>
 				<Text key={i} style={styles.barNameText}>
-					{name}
+					{barContent.name}
 				</Text>
 		)
 		if (hasData) {

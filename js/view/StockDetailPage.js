@@ -612,10 +612,12 @@ var StockDetailPage = React.createClass({
 		}
 		var leverageArray = new Array(maxLeverage)
 		for (var i = 0; i < maxLeverage; i++) {
-			leverageArray[i]=""+(i+1)
+			leverageArray[i]=i+1
 		};
-		leverageArray[0]='无'
-		var leverageCount = 1
+		if (this.state.stockInfo.levList !== undefined) {
+			leverageArray = this.state.stockInfo.levList
+		}
+
 		return(
 			<View style={[styles.rowView, styles.scrollView]}>
 				<View/>
@@ -633,12 +635,19 @@ var StockDetailPage = React.createClass({
 					itemStyle={{color:"white", fontSize:26}}
 					onValueChange={(value) => this.onPikcerSelect(value, 2)}>
 					{leverageArray.map((value) => (
-					  <PickerItem label={value} value={leverageCount++} key={"lever"+leverageCount}/>
+					  <PickerItem label={this.parseLeverage(value)} value={value} key={"lever"+value}/>
 					))}
 				</Picker>
 				{this.renderInput()}
 			</View>
 		)
+	},
+
+	parseLeverage: function(value) {
+		if (value === 1)
+			return '无'
+		else
+			return ""+value
 	},
 
 	onPikcerSelect: function(value, tag) {

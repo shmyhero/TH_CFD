@@ -723,6 +723,9 @@ var StockDetailPage = React.createClass({
 				responseJson.isCreate = true
 				responseJson.time = new Date(responseJson.createAt)
 				this.refs['confirmPage'].show(responseJson, this.resultConfirmed)
+				this.setState({
+					tradeDirection: 0,
+				})
 			},
 			(errorMessage) => {
 				Alert.alert('网络错误提示', errorMessage,

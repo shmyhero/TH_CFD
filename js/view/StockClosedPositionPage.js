@@ -20,6 +20,7 @@ var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
 var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
+var TimerMixin = require('react-timer-mixin');
 
 var {height, width} = Dimensions.get('window');
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -27,6 +28,7 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var extendHeight = 204
 
 var StockClosedPositionPage = React.createClass({
+	mixins: [TimerMixin],
 
 	getInitialState: function() {
 		return {
@@ -95,9 +97,16 @@ var StockClosedPositionPage = React.createClass({
 				listHeight -= extendHeight
 			}
 			var currentY = listHeight/this.state.stockInfoRowData.length*(parseInt(rowID)+1)
-			if (currentY > maxY && parseInt(this.state.selectedRow) < parseInt(rowID)) {
-				this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
-			}
+
+			var previousSelectedRow = this.state.selectedRow
+			this.setTimeout(
+				() => {
+					if (currentY > maxY && parseInt(previousSelectedRow) < parseInt(rowID)) {
+						this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
+					}
+				 },
+				Platform.OS === 'android' ? 1000 : 0
+			);
 
 			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
 			newData[rowID].hasSelected = true

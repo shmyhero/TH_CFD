@@ -27,6 +27,7 @@ var WebSocketModule = require('../module/WebSocketModule')
 var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
 var StockTransactionConfirmPage = require('./StockTransactionConfirmPage')
+var TimerMixin = require('react-timer-mixin');
 
 var {height, width} = Dimensions.get('window');
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {
@@ -42,6 +43,8 @@ var stopProfitUpdated = false
 var stopLossUpdated = false
 
 var StockOpenPositionPage = React.createClass({
+
+	mixins: [TimerMixin],
 
 	getInitialState: function() {
 		return {
@@ -156,18 +159,23 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	doScrollAnimation: function() {
-		var newExtendHeight = this.currentExtendHeight(this.state.selectedSubItem)
-		if (newExtendHeight < extendHeight) {
-			newExtendHeight = extendHeight
-		}
-		var rowID = this.state.selectedRow
-		var maxY = (height-114)*20/21 - newExtendHeight
-		var currentY = rowHeight*(parseInt(rowID)+1)
-		if (currentY > maxY) {
-			this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
-		}
-		LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-		extendHeight = newExtendHeight
+		this.setTimeout(
+			() => {
+				var newExtendHeight = this.currentExtendHeight(this.state.selectedSubItem)
+				if (newExtendHeight < extendHeight) {
+					newExtendHeight = extendHeight
+				}
+				var rowID = this.state.selectedRow
+				var maxY = (height-114)*20/21 - newExtendHeight
+				var currentY = rowHeight*(parseInt(rowID)+1)
+				if (currentY > maxY) {
+					this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
+				}
+				LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+				extendHeight = newExtendHeight
+			},
+			Platform.OS === 'android' ? 1000 : 0
+		);
 	},
 
 	stockPressed: function(rowData, sectionID, rowID, highlightRow) {

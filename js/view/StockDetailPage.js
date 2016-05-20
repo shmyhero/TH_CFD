@@ -673,6 +673,13 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
+	resultConfirmed: function() {
+		this.setState({
+			tradingInProgress: false,
+			tradeDirection: 0,
+		})
+	},
+
 	okPress: function() {
 
 		var tradeValue = this.state.money * this.state.leverage
@@ -710,7 +717,7 @@ var StockDetailPage = React.createClass({
 				responseJson.stockName = this.props.stockName
 				responseJson.isCreate = true
 				responseJson.time = new Date(responseJson.createAt)
-				this.refs['confirmPage'].show(responseJson, () => this.setState({tradingInProgress: false}))
+				this.refs['confirmPage'].show(responseJson, this.resultConfirmed)
 			},
 			(errorMessage) => {
 				Alert.alert('网络错误提示', errorMessage,

@@ -154,13 +154,15 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                 chart.setData(data);
 
                 // Set the xAxis with the prev close price line
-                LimitLine line = new LimitLine((float) stockInfoObject.getDouble("preClose"));
-                line.setLineColor(CHART_LINE_COLOR);
-                line.setLineWidth(0.5f);
-                line.enableDashedLine(10f, 0f, 0f);
-                line.setTextSize(0f);
+                if (mChartType == CHART_TYPE.today) {
+                    LimitLine line = new LimitLine((float) stockInfoObject.getDouble("preClose"));
+                    line.setLineColor(CHART_LINE_COLOR);
+                    line.setLineWidth(0.5f);
+                    line.enableDashedLine(10f, 10f, 0f);
+                    line.setTextSize(0f);
 
-                chart.getAxisLeft().addLimitLine(line);
+                    chart.getAxisLeft().addLimitLine(line);
+                }
 
                 // Set the yAxis lines with 1 hour in between.
                 int gapLineUnit = Calendar.HOUR_OF_DAY;

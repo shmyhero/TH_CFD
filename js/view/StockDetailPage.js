@@ -146,6 +146,10 @@ var StockDetailPage = React.createClass({
 	loadUserBalance: function() {
 		if (LogicData.getBalanceData() === null) {
 			var userData = LogicData.getUserData()
+			var notLogin = Object.keys(userData).length === 0
+			if (notLogin) {
+				return
+			}
 			var url = NetConstants.GET_USER_BALANCE_API
 			NetworkModule.fetchTHUrl(
 				url,
@@ -674,6 +678,7 @@ var StockDetailPage = React.createClass({
 	},
 
 	resultConfirmed: function() {
+		this.clearMoney()
 		this.setState({
 			tradingInProgress: false,
 			tradeDirection: 0,

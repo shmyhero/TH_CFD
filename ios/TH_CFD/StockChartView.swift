@@ -110,6 +110,11 @@ class StockChartView: UIView {
 		else {
 			middleLineY = size.height/2
 		}
+		
+		if chartType != "today" {
+			middleLineY = 0		// do not draw this line
+		}
+		
 		topLineY = topBorder
 		bottomLineY = bottomBorder
 		
@@ -248,6 +253,7 @@ class StockChartView: UIView {
 			
 			middleLineColor.setStroke()
 			linePath.lineWidth = 1
+			linePath.setLineDash([5,3], count: 2, phase: 0)
 			linePath.stroke()
 		}
 		CGContextRestoreGState(context)

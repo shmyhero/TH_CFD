@@ -266,7 +266,7 @@ var StockDetailPage = React.createClass({
 	},
 
 	renderTime: function(){
-		if (this.state.stockInfo.priceData !== undefined) {
+		if (this.state.stockInfo.priceData !== undefined && this.state.stockInfo.priceData.length > 0) {
 			var firstDate = new Date(this.state.stockInfo.priceData[0].time)
 			var lastDate = new Date(this.state.stockInfo.priceData[this.state.stockInfo.priceData.length - 1].time)
 
@@ -329,7 +329,7 @@ var StockDetailPage = React.createClass({
 		var maxPercentage = undefined
 		var minPercentage = undefined
 
-		if (priceData != undefined) {
+		if (priceData != undefined && priceData.length > 0) {
 			var lastClose = this.state.stockInfo.preClose
 			maxPrice = Number.MIN_VALUE
 			minPrice = Number.MAX_VALUE
@@ -409,8 +409,8 @@ var StockDetailPage = React.createClass({
 	renderHeader: function() {
 		var percentChange = 0
 
-		if (this.props.lastClosePrice == 0) {
-			percentChange = '--'
+		if (this.props.lastClosePrice <= 0) {
+			percentChange = 0
 		} else {
 			percentChange = (this.state.stockPrice - this.props.lastClosePrice) / this.props.lastClosePrice * 100
 		}

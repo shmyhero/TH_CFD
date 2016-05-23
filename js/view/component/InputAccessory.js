@@ -141,33 +141,40 @@ var InputAccessory = React.createClass({
 
 	render: function() {
 
-		var warningText = < View / >
+		var warningText = <View />
 		if (this.state.validValue===1) {
-			warningText = < Text style = {[s.InputAccessoryNoticeText]} >最低金额10美元！ < /Text> 
+			warningText = <Text style = {[s.InputAccessoryNoticeText]}>最低金额10美元！ </Text>
 		} else if (this.state.validValue===2) {
-			warningText = < Text style = {[s.InputAccessoryNoticeText]} >剩余资金为{this.props.maxValue}美元！ < /Text> 
+			warningText = <Text style = {[s.InputAccessoryNoticeText]}>剩余资金为{this.props.maxValue}美元！ </Text>
 		}
-		
+
 
 		var styleOfPosition = {
 			top: this.state.visibleHeight - 1
 		}
 		if (Platform.OS === 'android') {
-			styleOfPosition = {
-				bottom: 0
+			if (this.state.opacity > 0) {
+				styleOfPosition = {
+					bottom: 197
+				}
+			} else {
+				styleOfPosition = {
+					bottom: 0
+				}
 			}
+
 		}
 
-		return ( < View style = {[s.InputAccessory, {opacity: this.state.opacity}, styleOfPosition]}
+		return ( <View style = {[s.InputAccessory, {opacity: this.state.opacity}, styleOfPosition]}
 					onLayout = {(e) => this.rotateDevice(e)} >
-					< Text numberOfLines={1} style = {[s.InputAccessoryLabelText]} > 
-					{this.props.textValue} 
-					< /Text> 
-					{warningText} 
-					< TouchableOpacity onPress = {() => this.dismissKeyboardHandler()} >
-						< Text style = {[s.InputAccessoryButtonText]} >完成 < /Text> 
-					< /TouchableOpacity >
-				< /View >)
+					<Text numberOfLines={1} style = {[s.InputAccessoryLabelText]} >
+					{this.props.textValue}
+					</Text>
+					{warningText}
+					<TouchableOpacity onPress = {() => this.dismissKeyboardHandler()} >
+						<Text style = {[s.InputAccessoryButtonText]} >完成 </Text>
+					</TouchableOpacity>
+				</View>)
 	}
 });
 

@@ -267,13 +267,13 @@ var StockListPage = React.createClass({
 			return (
 					<View style={styles.headerCell}>
 						<Text style={styles.headerText}>涨幅</Text>
-						<Image style={styles.sortImage} source={require('../../images/upsort.png')}/>
+						<Image style={[styles.sortImage, {transform: [{rotate: '0deg'}]}]} source={require('../../images/sort.png')}/>
 					</View>);
 		} else {
 			return (
 					<View style={styles.headerCell}>
-						<Text style={styles.headerText}>跌幅</Text>
-						<Image style={styles.sortImage} source={require('../../images/downsort.png')}/>
+						<Text style={styles.headerText}>涨幅</Text>
+						<Image style={[styles.sortImage, {transform: [{rotate: '180deg'}]}]} source={require('../../images/sort.png')}/>
 					</View>);
 		}
 	},

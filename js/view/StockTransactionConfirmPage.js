@@ -134,7 +134,7 @@ var StockTransactionConfirmPage = React.createClass({
 							{this.state.isCreate ?
 								null :
 								<Text style={[styles.titleText, {marginRight: 20}]}>
-									0.00%
+									{(pl / this.state.invest * 100).toFixed(2)} %
 								</Text>
 							}
 

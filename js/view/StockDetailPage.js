@@ -433,14 +433,17 @@ var StockDetailPage = React.createClass({
 			barHeight = 50
 		}
 		return (
-			<NavBar showBackButton={true} navigator={this.props.navigator}
-					backButtonOnClick={this.props.showTabbar}
-					barStyle={{height: barHeight}}	titleStyle={{fontSize:16}}
-					title={this.props.stockName}
-					subTitle={subTitleText}
-					backgroundColor='transparent'
-					subTitleStyle={[styles.subTitle, {color: subTitleColor}]}
-					rightCustomContent={() => this.renderAddToMyListButton()}/>
+			<View style={{paddingTop: Platform.OS === 'android' ? 10 : 0}}>
+				<NavBar showBackButton={true} navigator={this.props.navigator}
+						backButtonOnClick={this.props.showTabbar}
+						barStyle={{height: barHeight}}	titleStyle={{fontSize:16}}
+						title={this.props.stockName}
+						subTitle={subTitleText}
+						backgroundColor='transparent'
+						subTitleStyle={[styles.subTitle, {color: subTitleColor}]}
+						rightCustomContent={() => this.renderAddToMyListButton()}/>
+			</View>
+
 		)
 	},
 

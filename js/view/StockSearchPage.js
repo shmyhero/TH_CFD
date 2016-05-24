@@ -291,12 +291,12 @@ var StockSearchPage = React.createClass({
 
 var styles = StyleSheet.create({
 	navBarContainer: {
-		height: (Platform.OS === 'ios') ? 65 : 50,
+		height: (Platform.OS === 'ios') ? 65 : 70,
 		backgroundColor: ColorConstants.TITLE_BLUE,
 		flexDirection: 'row',
 		alignItems: 'stretch',
 		justifyContent: 'space-between',
-		paddingTop: (Platform.OS === 'ios') ? 15 : 0,
+		paddingTop: (Platform.OS === 'ios') ? 15 : 20,
 	},
 
 	navBarInputContainer: {

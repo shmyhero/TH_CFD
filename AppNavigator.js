@@ -352,7 +352,7 @@ var AppNavigator = React.createClass({
 	render: function() {
 		var {height, width} = Dimensions.get('window')
 		var statusBarHidden = <StatusBar barStyle="light-content" backgroundColor='#1962dd' hidden={Platform.OS === 'android' ? true : false}/>
-		var statusBarTranslucent = <StatusBar barStyle="light-content" backgroundColor='#1962dd' translucent={Platform.OS === 'android' ? true : false}/>
+		var statusBarTranslucent = <StatusBar barStyle="light-content" backgroundColor='rgba(0, 0, 0, 0)'/>
 
 		if (this.state.startUpPhase == MAIN_PAGE_PHASE) {
 			return (

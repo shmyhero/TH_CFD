@@ -406,13 +406,15 @@ class StockChartView: UIView {
 		leftText.drawInRect(CGRect(x: 0, y: textY, width: textWidth, height: 10), withAttributes: attributes)
 		rightText.drawInRect(CGRect(x: width-textWidth, y: textY, width: textWidth, height: 10), withAttributes: attributes)
 		
+		var lastX:CGFloat = textWidth/2	//center x of last text
 		for i in 0..<self.verticalTimes.count {
-			if self.verticalLinesX[i] < textWidth*1.5 || self.verticalLinesX[i]>width-textWidth*1.5 {
+			if self.verticalLinesX[i] < lastX+textWidth-5 || self.verticalLinesX[i]>width-textWidth*1.5+8 {
 				continue
 			}
 			let text:NSString = dateFormatter.stringFromDate(self.verticalTimes[i])
 			let rect = CGRect(x: self.verticalLinesX[i]-textWidth/2, y: textY, width: textWidth, height: 10)
 			text.drawInRect(rect, withAttributes: attributes)
+			lastX = self.verticalLinesX[i]
 		}
 	}
 }

@@ -351,12 +351,13 @@ var AppNavigator = React.createClass({
 
 	render: function() {
 		var {height, width} = Dimensions.get('window')
-		var statusBar = <StatusBar barStyle="light-content" backgroundColor='#1962dd' hidden={Platform.OS === 'android' ? true : false}/>
+		var statusBarHidden = <StatusBar barStyle="light-content" backgroundColor='#1962dd' hidden={Platform.OS === 'android' ? true : false}/>
+		var statusBarTranslucent = <StatusBar barStyle="light-content" backgroundColor='#1962dd' translucent={Platform.OS === 'android' ? true : false}/>
 
 		if (this.state.startUpPhase == MAIN_PAGE_PHASE) {
 			return (
 				<View style={styles.container}>
-					{statusBar}
+					{statusBarTranslucent}
 					<Navigator
 						initialRoute={{name: MAIN_PAGE_ROUTE}}
 						configureScene={() => Navigator.SceneConfigs.PushFromRight}
@@ -392,7 +393,7 @@ var AppNavigator = React.createClass({
 			}
 			return (
 				<View style={{width: width, height: height, backgroundColor: '#0079ff'}}>
-					{statusBar}
+					{statusBarHidden}
 					<Swiper loop={false} bounces={true} activeDot={activeDot} dot={dot}>
 						{slides}
 					</Swiper>
@@ -402,7 +403,7 @@ var AppNavigator = React.createClass({
 			var imageHeight = 1334 / 750 * width
 			return (
 				<View>
-					{statusBar}
+					{statusBarHidden}
 					<Image
 						style={[styles.image, {width: width, height: imageHeight}]}
 						source={require('./images/frontPage.jpg')}/>

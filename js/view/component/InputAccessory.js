@@ -153,16 +153,9 @@ var InputAccessory = React.createClass({
 			top: this.state.visibleHeight - 1
 		}
 		if (Platform.OS === 'android') {
-			if (this.state.opacity > 0) {
-				styleOfPosition = {
-					bottom: 197
-				}
-			} else {
-				styleOfPosition = {
-					bottom: 0
-				}
+			styleOfPosition = {
+				bottom: 0
 			}
-
 		}
 
 		return ( <View style = {[s.InputAccessory, {opacity: this.state.opacity}, styleOfPosition]}

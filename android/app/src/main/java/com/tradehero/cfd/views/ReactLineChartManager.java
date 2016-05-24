@@ -15,7 +15,9 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.XAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.tradehero.cfd.R;
 
 import org.json.JSONArray;
@@ -43,6 +45,7 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
     private CHART_TYPE mChartType = CHART_TYPE.today;
     private static int CHART_BORDER_COLOR = 0xff497bce;
     private static int CHART_LINE_COLOR = 0Xff759de2;
+    private static int CHART_TEXT_COLOR = 0Xff70a5ff;
 
     @Override
     protected ReactLineChart createViewInstance(ThemedReactContext reactContext) {
@@ -53,8 +56,8 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
         chart.setScaleEnabled(false);
         chart.setTouchEnabled(false);
         chart.getLegend().setEnabled(false);
-        chart.setExtraLeftOffset(8);
-        chart.setExtraRightOffset(8);
+        chart.setExtraLeftOffset(12);
+        chart.setExtraRightOffset(12);
 
         chart.getAxisLeft().removeAllLimitLines();
         chart.getAxisRight().removeAllLimitLines();
@@ -64,10 +67,14 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
         chart.getXAxis().setDrawLimitLinesBehindData(false);
         chart.getAxisLeft().setDrawGridLines(false);
         chart.getAxisRight().setDrawGridLines(false);
-        chart.getXAxis().setDrawGridLines(false);
+        chart.getXAxis().setDrawGridLines(true);
         chart.getAxisLeft().setAxisLineColor(CHART_BORDER_COLOR);
         chart.getAxisRight().setAxisLineColor(CHART_BORDER_COLOR);
         chart.getXAxis().setAxisLineColor(CHART_BORDER_COLOR);
+        chart.getAxisLeft().setTextColor(CHART_TEXT_COLOR);
+        chart.getAxisRight().setTextColor(CHART_TEXT_COLOR);
+        chart.getXAxis().setTextColor(CHART_TEXT_COLOR);
+        chart.getXAxis().setTextSize(8f);
         chart.getAxisLeft().setSpaceTop(20);
         chart.getAxisLeft().setSpaceBottom(20);
         chart.getAxisRight().setSpaceTop(20);
@@ -86,7 +93,7 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                     return;
                 }
 
-                JSONArray chartDataList = stockInfoObject.getJSONArray("priceData");
+                final JSONArray chartDataList = stockInfoObject.getJSONArray("priceData");
 
                 ArrayList<String> xVals = new ArrayList<String>();
                 for (int i = 0; i < chartDataList.length(); i++) {
@@ -147,6 +154,24 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                 // set data
                 chart.clear();
                 chart.getXAxis().removeAllLimitLines();
+                chart.getXAxis().mAxisLabelModulus = chartDataList.length() - 1;
+                chart.getXAxis().setValueFormatter(new XAxisValueFormatter() {
+                    @Override
+                    public String getXValue(String original, int index, ViewPortHandler viewPortHandler) {
+                        try {
+                            Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(index).getString("time"));
+                            if (mChartType == CHART_TYPE.today) {
+                                return calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
+                            } else {
+                                return calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.DAY_OF_MONTH);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        return "";
+                    }
+                });
                 chart.getAxisLeft().removeAllLimitLines();
                 chart.getAxisRight().removeAllLimitLines();
                 chart.getAxisLeft().setAxisMinValue(minVal);
@@ -166,7 +191,16 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
 
                 // Set the yAxis lines with 1 hour in between.
                 int gapLineUnit = Calendar.HOUR_OF_DAY;
-                if (mChartType == CHART_TYPE.week) {
+                int gapLineUnitAddMount = 1;
+                if (mChartType == CHART_TYPE.today) {
+                    gapLineUnit = Calendar.HOUR_OF_DAY;
+                    Calendar timeStart = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
+                    Calendar timeEnd = timeStringToCalendar(chartDataList.getJSONObject(chartDataList.length() - 1).getString("time"));
+                    timeStart.add(Calendar.HOUR_OF_DAY, 10);
+                    if (timeEnd.after(timeStart)) {
+                        gapLineUnitAddMount = 2;
+                    }
+                } else if (mChartType == CHART_TYPE.week) {
                     gapLineUnit = Calendar.DAY_OF_MONTH;
                 } else if (mChartType == CHART_TYPE.month) {
                     gapLineUnit = Calendar.WEEK_OF_MONTH;
@@ -194,19 +228,26 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                     Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
 
                     if (nextLineAt == null) {
-                        calendar.add(gapLineUnit, 1);
+                        calendar.add(gapLineUnit, gapLineUnitAddMount);
                         nextLineAt = calendar;
                     } else if (calendar.after(nextLineAt)) {
 
                         while(calendar.after(nextLineAt)) {
-                            nextLineAt.add(gapLineUnit, 1);
+                            nextLineAt.add(gapLineUnit, gapLineUnitAddMount);
                         }
 
                         LimitLine gapLine = new LimitLine(i);
                         gapLine.setLineColor(CHART_LINE_COLOR);
                         gapLine.setLineWidth(0.5f);
                         gapLine.enableDashedLine(10f, 0f, 0f);
-                        gapLine.setTextSize(0f);
+                        gapLine.setTextSize(8f);
+                        gapLine.setTextColor(CHART_TEXT_COLOR);
+                        if (mChartType == CHART_TYPE.today) {
+                            gapLine.setLabel(calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
+                        } else {
+                            gapLine.setLabel(calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.DAY_OF_MONTH));
+                        }
+                        gapLine.setLabelPosition(LimitLine.LimitLabelPosition.BELOW_BOTTOM);
 
                         chart.getXAxis().addLimitLine(gapLine);
                     }

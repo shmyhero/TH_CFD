@@ -123,21 +123,13 @@ public class XAxisRenderer extends AxisRenderer {
         mAxisLinePaint.setColor(mXAxis.getAxisLineColor());
         mAxisLinePaint.setStrokeWidth(mXAxis.getAxisLineWidth());
 
-        if (mXAxis.getPosition() == XAxisPosition.TOP
-                || mXAxis.getPosition() == XAxisPosition.TOP_INSIDE
-                || mXAxis.getPosition() == XAxisPosition.BOTH_SIDED) {
-            c.drawLine(mViewPortHandler.contentLeft(),
-                    mViewPortHandler.contentTop(), mViewPortHandler.contentRight(),
-                    mViewPortHandler.contentTop(), mAxisLinePaint);
-        }
+        c.drawLine(mViewPortHandler.contentLeft(),
+                mViewPortHandler.contentTop(), mViewPortHandler.contentRight(),
+                mViewPortHandler.contentTop(), mAxisLinePaint);
 
-        if (mXAxis.getPosition() == XAxisPosition.BOTTOM
-                || mXAxis.getPosition() == XAxisPosition.BOTTOM_INSIDE
-                || mXAxis.getPosition() == XAxisPosition.BOTH_SIDED) {
-            c.drawLine(mViewPortHandler.contentLeft(),
-                    mViewPortHandler.contentBottom(), mViewPortHandler.contentRight(),
-                    mViewPortHandler.contentBottom(), mAxisLinePaint);
-        }
+        c.drawLine(mViewPortHandler.contentLeft(),
+                mViewPortHandler.contentBottom(), mViewPortHandler.contentRight(),
+                mViewPortHandler.contentBottom(), mAxisLinePaint);
     }
 
     /**
@@ -313,10 +305,15 @@ public class XAxisRenderer extends AxisRenderer {
                 mLimitLinePaint.setTextAlign(Align.RIGHT);
                 final float labelLineHeight = Utils.calcTextHeight(mLimitLinePaint, label);
                 c.drawText(label, position[0] - xOffset, mViewPortHandler.contentTop() + yOffset + labelLineHeight, mLimitLinePaint);
-            } else {
+            } else if (labelPosition == LimitLine.LimitLabelPosition.LEFT_BOTTOM){
 
                 mLimitLinePaint.setTextAlign(Align.RIGHT);
                 c.drawText(label, position[0] - xOffset, mViewPortHandler.contentBottom() - yOffset, mLimitLinePaint);
+            } else {
+                mLimitLinePaint.setTextAlign(Align.LEFT);
+                float width = Utils.calcTextWidth(mAxisLabelPaint, label);
+
+                c.drawText(label, position[0] - width / 2, mViewPortHandler.contentBottom() + yOffset + 15, mLimitLinePaint);
             }
         }
     }

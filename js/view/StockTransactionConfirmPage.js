@@ -27,6 +27,7 @@ var StockTransactionConfirmPage = React.createClass({
 				backgroundOpacity: new Animated.Value(0),
 				dialogY: new Animated.Value(10000),
 				visible: false,
+				totalHeight: height,
 				name: 'ABC',
 				isCreate: true,
 				isLong: true,
@@ -50,14 +51,15 @@ var StockTransactionConfirmPage = React.createClass({
 				leverage: transactionInfo.leverage,
 				settlePrice: transactionInfo.settlePrice,
 				time: transactionInfo.time,
-				transactionInfo: transactionInfo
+				transactionInfo: transactionInfo,
+				totalHeight: transactionInfo.totalHeight,
 			})
 		}
 		this.setState({
 			visible: true,
 			hideCallback: callback,
 		})
-		this.state.dialogY.setValue(height)
+		this.state.dialogY.setValue(this.state.totalHeight)
 		Animated.parallel([
 			Animated.timing(
 				this.state.backgroundOpacity,
@@ -69,7 +71,7 @@ var StockTransactionConfirmPage = React.createClass({
 			Animated.timing(
 				this.state.dialogY,
 				{
-					toValue: height / 3,
+					toValue: this.state.totalHeight / 3,
 					duration: 100,
 				}
 			),

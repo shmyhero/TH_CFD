@@ -721,6 +721,7 @@ var StockDetailPage = React.createClass({
 				responseJson.stockName = this.props.stockName
 				responseJson.isCreate = true
 				responseJson.time = new Date(responseJson.createAt)
+				responseJson.totalHeight = Dimensions.get('window').height
 				this.refs['confirmPage'].show(responseJson, this.resultConfirmed)
 				this.setState({
 					tradeDirection: 0,

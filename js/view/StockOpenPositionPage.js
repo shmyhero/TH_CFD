@@ -659,6 +659,7 @@ var StockOpenPositionPage = React.createClass({
 		var endPercent = 90
 
 		startPercent = this.priceToPercentWithRow(rowData.security.last, rowData, type)
+		startPercent += rowData.security.gsmd*100
 		if (startPercent < 0)
 			startPercent = 0
 

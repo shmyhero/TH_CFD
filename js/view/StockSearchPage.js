@@ -186,13 +186,20 @@ var StockSearchPage = React.createClass({
 		var rightPartContent = <Text style={styles.alreadyAddText}>已添加</Text>
 		var myListData = LogicData.getOwnStocksData()
 		var index = myListData.findIndex((stock) => {return stock.id === rowData.id})
+
+		var viewStyle = Platform.OS === 'android' ?
+			{paddingLeft: 7, paddingRight: 7} :
+			{paddingLeft: 6, paddingRight: 6, paddingBottom: 3}
 		if (index === -1) {
 			rightPartContent =
 					<TouchableOpacity style={styles.addToMyListContainer}
 							onPress={() => this.addToMyListPressed(rowID)}>
-						<Text style={styles.addToMyListText}>
-							+
-						</Text>
+						<View style={[styles.addToMyListView, viewStyle]}>
+							<Text style={styles.addToMyListText}>
+								+
+							</Text>
+						</View>
+
 					</TouchableOpacity>
 		}
 		return (
@@ -387,15 +394,15 @@ var styles = StyleSheet.create({
 		paddingTop: 10,
 		alignItems: 'center',
 	},
+	addToMyListView: {
+		borderWidth: 1,
+		borderRadius: 2,
+		borderColor: ColorConstants.TITLE_BLUE,
+	},
 	addToMyListText: {
 		fontSize: 18,
 		color: ColorConstants.TITLE_BLUE,
 		fontWeight: 'bold',
-		paddingLeft: 5,
-		paddingRight: 5,
-		borderWidth: 1,
-		borderRadius: 2,
-		borderColor: ColorConstants.TITLE_BLUE,
 		textAlign: 'center',
 	},
 	alreadyAddText: {

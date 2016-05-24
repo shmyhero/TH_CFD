@@ -1075,7 +1075,7 @@ var styles = StyleSheet.create({
 		backgroundColor:'transparent',
 		justifyContent:'space-between',
 		paddingTop: 1,
-		paddingBottom: 1,
+		paddingBottom: 11,
 	},
 
 	okView: {

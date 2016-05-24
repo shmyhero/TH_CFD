@@ -371,7 +371,6 @@ var StockDetailPage = React.createClass({
 							{this.renderStockMaxPriceInfo(maxPrice, maxPercentage)}
 							{this.renderStockMinPriceInfo(minPrice, minPercentage)}
 							</LineChart>
-							{this.renderTime()}
 
 						</View>
 
@@ -785,7 +784,7 @@ var styles = StyleSheet.create({
 		backgroundColor:'transparent',
 		justifyContent:'space-between',
 		paddingTop: 6,
-		paddingBottom: 6,
+		paddingBottom: 16,
 	},
 	tradeButtonView: {
 		width: 140,

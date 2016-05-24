@@ -13,7 +13,7 @@ class StockChartView: UIView {
 	
 	let margin:CGFloat = 15.0
 	var topMargin:CGFloat = 2.0
-	var bottomMargin:CGFloat = 2.0
+	var bottomMargin:CGFloat = 15.0
 	
 	@IBInspectable var startColor: UIColor = UIColor(hex: 0x7daeff)
 	@IBInspectable var endColor: UIColor = UIColor(hex: 0x1954b9)
@@ -26,6 +26,7 @@ class StockChartView: UIView {
 	var chartData:[ChartData] = []
 	var pointData:[CGPoint] = []
 	var verticalLinesX:[CGFloat] = []
+	var verticalTimes:[NSDate] = []
 	var middleLineY:CGFloat = 0
 	var topLineY:CGFloat = 0
 	var bottomLineY:CGFloat = 0
@@ -136,6 +137,7 @@ class StockChartView: UIView {
 		}
 		print(chartType)
 		self.verticalLinesX = []
+		self.verticalTimes = []
 		
 		if chartType == "today" {
 			// 1 hour, 1 line, with the first start time
@@ -149,6 +151,7 @@ class StockChartView: UIView {
 					if interval >= 3600 {
 						self.verticalLinesX.append(self.pointData[i].x+0.5)
 						startTime = time
+						self.verticalTimes.append(self.chartData[i].time!)
 					}
 				}
 				
@@ -175,6 +178,7 @@ class StockChartView: UIView {
 					if interval >= oneDay {
 						self.verticalLinesX.append(self.pointData[i].x+0.5)
 						startTime = time
+						self.verticalTimes.append(self.chartData[i].time!)
 					}
 				}
 				
@@ -202,6 +206,7 @@ class StockChartView: UIView {
 					if interval >= oneWeek {
 						self.verticalLinesX.append(self.pointData[i].x+0.5)
 						startTime = time
+						self.verticalTimes.append(self.chartData[i].time!)
 					}
 				}
 				
@@ -221,6 +226,7 @@ class StockChartView: UIView {
 			self.drawVerticalLines(rect)
 		} else {
 			self.drawLineChart(rect)
+			self.drawTimeText(rect)
 		}
 	}
 	
@@ -371,5 +377,42 @@ class StockChartView: UIView {
 		
 		CGContextDrawRadialGradient(context, pointGradient, centerPoint,
 			startRadius, centerPoint, endRadius, .DrawsBeforeStartLocation)
+	}
+	
+	func drawTimeText(rect: CGRect) -> Void {
+		let height = rect.height
+		let width = rect.width
+		let dateFormatter = NSDateFormatter()
+		if chartType == "today" {
+			dateFormatter.dateFormat = "HH:mm"
+		}
+		else {
+			dateFormatter.dateFormat = "MM/dd"
+		}
+		let leftText: NSString = dateFormatter.stringFromDate((self.chartData.first?.time)!)
+		let rightText = dateFormatter.stringFromDate((self.chartData.last?.time)!)
+		let textColor = UIColor(hex: 0x70a5ff)
+		let textFont = UIFont(name: "Helvetica Neue", size: 8)
+		let textStyle = NSMutableParagraphStyle()
+		textStyle.alignment = .Center
+		let attributes: [String:AnyObject] = [
+			NSForegroundColorAttributeName: textColor,
+//			NSBackgroundColorAttributeName: UIColor.blackColor(),
+			NSFontAttributeName: textFont!,
+			NSParagraphStyleAttributeName: textStyle,
+		]
+		let textWidth:CGFloat = 30.0
+		let textY = height-bottomMargin+2
+		leftText.drawInRect(CGRect(x: 0, y: textY, width: textWidth, height: 10), withAttributes: attributes)
+		rightText.drawInRect(CGRect(x: width-textWidth, y: textY, width: textWidth, height: 10), withAttributes: attributes)
+		
+		for i in 0..<self.verticalTimes.count {
+			if self.verticalLinesX[i] < textWidth*1.5 || self.verticalLinesX[i]>width-textWidth*1.5 {
+				continue
+			}
+			let text:NSString = dateFormatter.stringFromDate(self.verticalTimes[i])
+			let rect = CGRect(x: self.verticalLinesX[i]-textWidth/2, y: textY, width: textWidth, height: 10)
+			text.drawInRect(rect, withAttributes: attributes)
+		}
 	}
 }

@@ -90,6 +90,16 @@ var StockClosedPositionPage = React.createClass({
 				stockInfoRowData: newData,
 				selectedRow: -1,
 			})
+			if (Platform.OS === 'android') {
+				var listHeight = this.refs['listview'].getMetrics().contentLength
+				var currentY = listHeight/this.state.stockInfoRowData.length*(parseInt(rowID)+1)
+				this.setTimeout(
+					() => {
+						this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY), animated:true})
+					 },
+					Platform.OS === 'android' ? 500 : 0
+				);
+			}
 		} else {
 			var maxY = (height-114)*20/21 - extendHeight
 			var listHeight = this.refs['listview'].getMetrics().contentLength

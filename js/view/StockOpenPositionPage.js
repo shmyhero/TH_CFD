@@ -199,6 +199,15 @@ var StockOpenPositionPage = React.createClass({
 				selectedSubItem: 0,
 				stockInfoRowData: newData,
 			})
+			if (Platform.OS === 'android') {
+				var currentY = rowHeight*(parseInt(rowID)+1)
+				this.setTimeout(
+					() => {
+						this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY), animated:true})
+					 },
+					Platform.OS === 'android' ? 500 : 0
+				);
+			}
 		} else {
 			if (this.state.selectedRow >=0) {
 				newData[this.state.selectedRow].hasSelected = false

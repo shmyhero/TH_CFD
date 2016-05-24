@@ -103,7 +103,7 @@ var StockListPage = React.createClass({
 							})
 						},
 						(errorMessage) => {
-							Alert.alert('网络错误提示', errorMessage);
+							Alert.alert('', errorMessage);
 						}
 					)
 				}
@@ -135,7 +135,7 @@ var StockListPage = React.createClass({
 							})
 						},
 						(errorMessage) => {
-							Alert.alert('网络错误提示', errorMessage);
+							Alert.alert('', errorMessage);
 						}
 					)
 				}

@@ -107,7 +107,7 @@ var StockOpenPositionPage = React.createClass({
 				})
 			},
 			(errorMessage) => {
-				Alert.alert('网络错误提示', errorMessage);
+				Alert.alert('', errorMessage);
 			}
 		)
 	},
@@ -130,7 +130,7 @@ var StockOpenPositionPage = React.createClass({
 				})
 			},
 			(errorMessage) => {
-				Alert.alert('网络错误提示', errorMessage);
+				Alert.alert('', errorMessage);
 			}
 		)
 	},
@@ -280,7 +280,7 @@ var StockOpenPositionPage = React.createClass({
 				this.refs['confirmPage'].show(responseJson)
 			},
 			(errorMessage) => {
-				Alert.alert('网络错误提示', errorMessage);
+				Alert.alert('', errorMessage);
 			}
 		)
 	},
@@ -365,7 +365,7 @@ var StockOpenPositionPage = React.createClass({
 					})
 				},
 				(errorMessage) => {
-					Alert.alert('网络错误提示', errorMessage);
+					Alert.alert('', errorMessage);
 				}
 			)
 		}
@@ -438,7 +438,7 @@ var StockOpenPositionPage = React.createClass({
 					})
 				},
 				(errorMessage) => {
-					Alert.alert('网络错误提示', errorMessage);
+					Alert.alert('', errorMessage);
 				}
 			)
 		}

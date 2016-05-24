@@ -52,7 +52,7 @@ var StockStatisticsPage = React.createClass({
 				})
 			},
 			(errorMessage) => {
-				Alert.alert('网络错误提示', errorMessage);
+				Alert.alert('', errorMessage);
 			}
 		)
 	},
@@ -74,7 +74,7 @@ var StockStatisticsPage = React.createClass({
 					this.playStatisticsAnim(responseJson)
 				},
 				(errorMessage) => {
-					Alert.alert('网络错误提示', errorMessage);
+					Alert.alert('', errorMessage);
 				}
 			)
 		}

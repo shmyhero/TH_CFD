@@ -104,7 +104,7 @@ var StockDetailPage = React.createClass({
 				this.loadStockPriceToday()
 			},
 			(errorMessage) => {
-				Alert.alert('网络错误提示', errorMessage);
+				Alert.alert('', errorMessage);
 			}
 		)
 
@@ -138,7 +138,7 @@ var StockDetailPage = React.createClass({
 				this.connectWebSocket()
 			},
 			(errorMessage) => {
-				Alert.alert('网络错误提示', errorMessage);
+				Alert.alert('', errorMessage);
 			}
 		)
 	},
@@ -166,7 +166,7 @@ var StockDetailPage = React.createClass({
 					})
 				},
 				(errorMessage) => {
-					Alert.alert('网络错误提示', errorMessage);
+					Alert.alert('', errorMessage);
 				}
 			)
 		}
@@ -727,7 +727,7 @@ var StockDetailPage = React.createClass({
 				})
 			},
 			(errorMessage) => {
-				Alert.alert('网络错误提示', errorMessage,
+				Alert.alert('', errorMessage,
 				[
 					{text: 'OK', onPress: () => this.setState({tradingInProgress: false})}
 				]

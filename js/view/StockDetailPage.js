@@ -31,10 +31,14 @@ var Picker = require('react-native-wheel-picker')
 var PickerItem = Picker.Item;
 var AppNavigator = require('../../AppNavigator')
 var StockTransactionConfirmPage = require('./StockTransactionConfirmPage')
+var TimerMixin = require('react-timer-mixin');
 
 var didFocusSubscription = null;
+var updateStockInfoTimer = null;
 
 var StockDetailPage = React.createClass({
+	mixins: [TimerMixin],
+
 	propTypes: {
 		stockCode: React.PropTypes.number,
 		stockName: React.PropTypes.string,
@@ -101,7 +105,17 @@ var StockDetailPage = React.createClass({
 					stockInfo: responseJson,
 				})
 
-				this.loadStockPriceToday()
+				this.loadStockPriceToday(true)
+
+				if(updateStockInfoTimer !== null) {
+					this.clearInterval(updateStockInfoTimer)
+				}
+				updateStockInfoTimer = this.setInterval(
+					() => {
+						this.updateStockInfo()
+					},
+					60000
+				);
 			},
 			(errorMessage) => {
 				Alert.alert('', errorMessage);
@@ -117,7 +131,14 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
-	loadStockPriceToday: function() {
+	updateStockInfo: function() {
+		if (this.state.chartType !== NetConstants.PARAMETER_CHARTTYPE_TODAY)
+			return
+
+		this.loadStockPriceToday(false)
+	},
+
+	loadStockPriceToday: function(showLoading) {
 		var url = NetConstants.GET_STOCK_PRICE_TODAY_API
 		url = url.replace(/<stockCode>/, this.props.stockCode)
 		url = url.replace(/<chartType>/, this.state.chartType)
@@ -126,7 +147,7 @@ var StockDetailPage = React.createClass({
 			url,
 			{
 				method: 'GET',
-				showLoading: true,
+				showLoading: showLoading,
 			},
 			(responseJson) => {
 				var tempStockInfo = this.state.stockInfo
@@ -216,7 +237,7 @@ var StockDetailPage = React.createClass({
 		this.setState({
 			chartType: type
 		})
-		this.loadStockPriceToday()
+		this.loadStockPriceToday(true)
 	},
 
 	renderStockMaxPriceInfo: function(maxPrice, maxPercentage) {

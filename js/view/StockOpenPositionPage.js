@@ -886,7 +886,7 @@ var StockOpenPositionPage = React.createClass({
 	renderRow: function(rowData, sectionID, rowID, highlightRow) {
 		var profitPercentage = 0
 		if (rowData.settlePrice !== 0) {
-			profitPercentage = (rowData.security.last - rowData.settlePrice) / rowData.settlePrice * rowData.leverage
+			profitPercentage = (this.getLastPrice(rowData) - rowData.settlePrice) / rowData.settlePrice * rowData.leverage
 			if (!rowData.isLong) {
 				profitPercentage *= (-1)
 			}

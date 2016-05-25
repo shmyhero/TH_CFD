@@ -41,6 +41,7 @@ var stopProfitPercent = 0
 var stopLossPercent = 0
 var stopProfitUpdated = false
 var stopLossUpdated = false
+var MAX_PERCENT = 99
 
 var StockOpenPositionPage = React.createClass({
 
@@ -214,7 +215,7 @@ var StockOpenPositionPage = React.createClass({
 			}
 			newData[rowID].hasSelected = true
 
-			var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) <= 90
+			var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) <= MAX_PERCENT
 			var stopProfit = rowData.takePx !== undefined
 
 			stopProfitPercent = 0
@@ -656,10 +657,11 @@ var StockOpenPositionPage = React.createClass({
 		var price = rowData.settlePrice
 		var percent = type===1 ? stopProfitPercent : stopLossPercent
 		var startPercent = 0
-		var endPercent = 90
+		var endPercent = MAX_PERCENT
 
 		startPercent = this.priceToPercentWithRow(rowData.security.last, rowData, type)
-		startPercent += rowData.security.gsmd*100
+		// use gsmd to make sure this order is guaranteed.
+		startPercent += rowData.security.gsmd*100*rowData.leverage
 		if (startPercent < 0)
 			startPercent = 0
 

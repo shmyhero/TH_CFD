@@ -59,6 +59,7 @@ var StockOpenPositionPage = React.createClass({
 			stopProfitSwitchIsOn: false,
 			stopLossSwitchIsOn: false,
 			profitLossUpdated: false,
+			profitLossConfirmed: false,
 		};
 	},
 
@@ -231,6 +232,7 @@ var StockOpenPositionPage = React.createClass({
 				stopProfitSwitchIsOn: stopProfit,
 				stopLossSwitchIsOn: stopLoss,
 				profitLossUpdated: false,
+				profitLossConfirmed: false,
 			})
 
 			this.doScrollAnimation()
@@ -366,7 +368,9 @@ var StockOpenPositionPage = React.createClass({
 				},
 				(responseJson) => {
 					stopLossUpdated = false
-					this.setState({profitLossUpdated: false})
+					this.setState({
+						profitLossUpdated: false,
+						profitLossConfirmed: true})
 
 					var tempStockInfo = this.state.stockInfoRowData
 					tempStockInfo[this.state.selectedRow].stopPx = responseJson.stopPx
@@ -432,7 +436,9 @@ var StockOpenPositionPage = React.createClass({
 				},
 				(responseJson) => {
 					stopProfitUpdated = false
-					this.setState({profitLossUpdated: false})
+					this.setState({
+						profitLossUpdated: false,
+						profitLossConfirmed: true})
 
 					var tempStockInfo = this.state.stockInfoRowData
 					if (responseJson.takePx === undefined) {
@@ -758,6 +764,10 @@ var StockOpenPositionPage = React.createClass({
 			var thisPartHeight = 170
 			thisPartHeight += this.state.stopLossSwitchIsOn ? 55 : 0
 			thisPartHeight += this.state.stopProfitSwitchIsOn ? 55 : 0
+			var confirmText = '确认'
+			if (!this.state.profitLossUpdated && this.state.profitLossConfirmed) {
+				confirmText = '已设置'
+			}
 
 			return (
 				<View style={{height:thisPartHeight}}>
@@ -769,7 +779,7 @@ var StockOpenPositionPage = React.createClass({
 						underlayColor={this.state.profitLossUpdated ? '#164593':'#dfdee4'}
 						onPress={() => this.switchConfrim(rowData)} style={[styles.okView, !this.state.profitLossUpdated && styles.okViewDisabled]}>
 						<Text style={[styles.okButton, !this.state.profitLossUpdated && styles.okViewDisabled]}>
-							确认
+							{confirmText}
 						</Text>
 					</TouchableHighlight>
 				</View>

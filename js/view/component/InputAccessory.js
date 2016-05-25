@@ -145,7 +145,7 @@ var InputAccessory = React.createClass({
 		if (this.state.validValue===1) {
 			warningText = <Text style = {[s.InputAccessoryNoticeText]}>最低金额10美元！ </Text>
 		} else if (this.state.validValue===2) {
-			warningText = <Text style = {[s.InputAccessoryNoticeText]}>剩余资金为{this.props.maxValue}美元！ </Text>
+			warningText = <Text style = {[s.InputAccessoryNoticeText]}>剩余资金不足! </Text>
 		}
 
 

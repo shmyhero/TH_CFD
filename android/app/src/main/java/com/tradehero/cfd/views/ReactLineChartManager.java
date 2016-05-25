@@ -154,21 +154,10 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                 // set data
                 chart.clear();
                 chart.getXAxis().removeAllLimitLines();
-                chart.getXAxis().mAxisLabelModulus = chartDataList.length() - 1;
+                chart.getXAxis().setLabelsToSkip(chartDataList.length());
                 chart.getXAxis().setValueFormatter(new XAxisValueFormatter() {
                     @Override
                     public String getXValue(String original, int index, ViewPortHandler viewPortHandler) {
-                        try {
-                            Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(index).getString("time"));
-                            if (mChartType == CHART_TYPE.today) {
-                                return calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
-                            } else {
-                                return calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.DAY_OF_MONTH);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
                         return "";
                     }
                 });
@@ -194,12 +183,6 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                 int gapLineUnitAddMount = 1;
                 if (mChartType == CHART_TYPE.today) {
                     gapLineUnit = Calendar.HOUR_OF_DAY;
-                    Calendar timeStart = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
-                    Calendar timeEnd = timeStringToCalendar(chartDataList.getJSONObject(chartDataList.length() - 1).getString("time"));
-                    timeStart.add(Calendar.HOUR_OF_DAY, 10);
-                    if (timeEnd.after(timeStart)) {
-                        gapLineUnitAddMount = 2;
-                    }
                 } else if (mChartType == CHART_TYPE.week) {
                     gapLineUnit = Calendar.DAY_OF_MONTH;
                 } else if (mChartType == CHART_TYPE.month) {
@@ -224,28 +207,60 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
 
                     nextLineAt.add(gapLineUnit, 1);
                 }
-                for (int i = 0; i < chartDataList.length(); i++) {
-                    Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
 
-                    if (nextLineAt == null) {
-                        calendar.add(gapLineUnit, gapLineUnitAddMount);
-                        nextLineAt = calendar;
-                    } else if (calendar.after(nextLineAt)) {
+                ArrayList<Integer> limitLineAt = new ArrayList<>();
+                ArrayList<Calendar> limitLineCalender = new ArrayList<>();
+                if (chartDataList.length() > 0) {
 
-                        while(calendar.after(nextLineAt)) {
-                            nextLineAt.add(gapLineUnit, gapLineUnitAddMount);
+                    int firstLine = 0;
+                    limitLineAt.add(firstLine);
+                    limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(firstLine).getString("time")));
+
+                    for(int i = 0; i < chartDataList.length(); i ++) {
+                        Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
+
+                        if (nextLineAt == null) {
+                            calendar.add(gapLineUnit, gapLineUnitAddMount);
+                            nextLineAt = calendar;
+                        } else if (calendar.after(nextLineAt)) {
+
+                            while(calendar.after(nextLineAt)) {
+                                nextLineAt.add(gapLineUnit, gapLineUnitAddMount);
+                            }
+
+                            limitLineAt.add(i);
+                            limitLineCalender.add(calendar);
                         }
+                    }
 
-                        LimitLine gapLine = new LimitLine(i);
+                    int lastLine = chartDataList.length() - 1;
+                    limitLineAt.add(lastLine);
+                    limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
+
+                    boolean needSkipLabel = false;
+                    if (limitLineAt.size() > 10) {
+                        needSkipLabel = true;
+                    }
+
+                    SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+                    if (mChartType != CHART_TYPE.today) {
+                        format = new SimpleDateFormat("MM/dd");
+                    }
+
+                    for (int i = 0; i < limitLineAt.size(); i++) {
+                        int index = limitLineAt.get(i);
+                        Calendar calendar = limitLineCalender.get(i);
+
+                        LimitLine gapLine = new LimitLine(index);
                         gapLine.setLineColor(CHART_LINE_COLOR);
                         gapLine.setLineWidth(0.5f);
                         gapLine.enableDashedLine(10f, 0f, 0f);
                         gapLine.setTextSize(8f);
                         gapLine.setTextColor(CHART_TEXT_COLOR);
-                        if (mChartType == CHART_TYPE.today) {
-                            gapLine.setLabel(calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
+                        if (needSkipLabel && i < limitLineAt.size() - 1 && i % 2 == 1) {
+                            gapLine.setLabel("");
                         } else {
-                            gapLine.setLabel(calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.DAY_OF_MONTH));
+                            gapLine.setLabel(format.format(calendar.getTime()));
                         }
                         gapLine.setLabelPosition(LimitLine.LimitLabelPosition.BELOW_BOTTOM);
 

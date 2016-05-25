@@ -462,7 +462,8 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	getLastPrice: function(rowData) {
-		var lastPrice = rowData.isLong ? rowData.security.ask : rowData.security.bid
+		var lastPrice = rowData.isLong ? rowData.security.bid : rowData.security.ask
+		// console.log(rowData.security.bid, rowData.security.ask)
 		return lastPrice === undefined ? rowData.security.last : lastPrice
 	},
 

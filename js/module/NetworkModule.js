@@ -8,6 +8,8 @@ var {
 	Alert
 } = React
 
+var alertShow = false
+
 export function fetchTHUrl(url, params, successCallback, errorCallback) {
 	var requestSuccess = true;
 
@@ -55,7 +57,11 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 			if(message.toLowerCase() === "network request failed"){
 				message = "连接网络失败"
 			}
-			errorCallback(message);
+			// errorCallback(message);
+			if (!alertShow) {
+				alertShow = true
+				Alert.alert('', message, [{text: 'OK', onPress: () => alertShow=false}])
+			};
 		})
 		.done(() => {
 			AppNavigator.hideProgress && AppNavigator.hideProgress()

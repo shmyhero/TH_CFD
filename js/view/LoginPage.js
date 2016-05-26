@@ -24,6 +24,7 @@ var LoadingIndicator = require('./LoadingIndicator')
 var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
 var WechatModule = require('../module/WechatModule')
+var WebSocketModule = require('../module/WebSocketModule')
 var Button = require('./component/Button')
 var AppNavigator = require('../../AppNavigator')
 var dismissKeyboard = require('dismissKeyboard');
@@ -203,6 +204,7 @@ var LoginPage = React.createClass({
 		console.log(LogicData.getUserData());
 
 		NetworkModule.syncOwnStocks(userData)
+		WebSocketModule.alertServiceLogin(userData.token)
 
 		this.props.navigator.replace({
 			name: AppNavigator.UPDATE_USER_INFO_ROUTE,

@@ -399,15 +399,19 @@ var AppNavigator = React.createClass({
 				</View>
 			)
 		} else if (this.state.startUpPhase == LOADING_PHASE){
-			var imageHeight = 1334 / 750 * width
-			return (
-				<View>
-					{statusBar}
-					<Image
-						style={[styles.image, {width: width, height: imageHeight}]}
-						source={require('./images/frontPage.jpg')}/>
-				</View>
-			);
+			if (Platform.OS === 'ios') {
+				return (
+					<View style={{backgroundColor: '#0665de', alignItems: 'center'}}>
+						{statusBar}
+						<Image
+							style={[styles.image, {width: width, height: height}]}
+							source={require('./images/frontPage.jpg')}/>
+
+					</View>
+				);
+			} else {
+				return null;
+			}
 		}
 	}
 });
@@ -419,7 +423,7 @@ var styles = StyleSheet.create({
 		alignItems: 'stretch',
 	},
 	image: {
-		resizeMode: Image.resizeMode.stretch,
+		resizeMode: Image.resizeMode.contain,
 	},
 	guideContainer: {
 		alignItems: 'center',

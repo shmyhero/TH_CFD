@@ -114,7 +114,7 @@ var HomePage = React.createClass({
 	},
 	render: function() {
 		return (
-			<View style={{width: width, height: height - UIConstants.TAB_BAR_HEIGHT}}>
+			<View style={{width: width, height: height - UIConstants.TAB_BAR_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER}}>
 				<View style={{width: width, height: imageHeight}}>
 					<ViewPager
 						dataSource={this.state.dataSource}

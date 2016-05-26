@@ -95,8 +95,7 @@ var ScrollTabView = React.createClass({
 		)
 
 		return (
-			<ScrollView horizontal={true} style={styles.tabs}
-					contentContainerStyle={{height: 25}}>
+			<ScrollView horizontal={true} style={styles.tabs}>
 				{tabs}
 			</ScrollView>
 		);

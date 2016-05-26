@@ -51,7 +51,11 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 		})
 		.catch((e) => {
 			console.log('fetchTHUrl catches: ' + e)
-			errorCallback(e.message);
+			var message = e.message
+			if(message.toLowerCase() === "network request failed"){
+				message = "连接网络失败"
+			}
+			errorCallback(message);
 		})
 		.done(() => {
 			AppNavigator.hideProgress && AppNavigator.hideProgress()

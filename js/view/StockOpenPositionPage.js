@@ -206,12 +206,14 @@ var StockOpenPositionPage = React.createClass({
 				stockInfoRowData: newData,
 			})
 			if (Platform.OS === 'android') {
-				var currentY = rowHeight*(parseInt(rowID)+1)
+				var currentY = rowHeight*(parseInt(rowID))
 				this.setTimeout(
 					() => {
-						this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY), animated:true})
+						if (currentY > 300 && currentY + 3 * rowHeight > this.refs['listview'].getMetrics().contentLength) {
+							this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY), animated:true})
+						}
 					 },
-					Platform.OS === 'android' ? 500 : 0
+					500
 				);
 			}
 		} else {

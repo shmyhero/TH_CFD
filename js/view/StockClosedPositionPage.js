@@ -26,6 +26,7 @@ var {height, width} = Dimensions.get('window');
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var extendHeight = 204
+var rowHeight = 0
 
 var StockClosedPositionPage = React.createClass({
 	mixins: [TimerMixin],
@@ -78,6 +79,9 @@ var StockClosedPositionPage = React.createClass({
 	},
 
 	stockPressed: function(rowData, sectionID, rowID, highlightRow) {
+		if (rowHeight === 0) {
+			rowHeight = this.refs['listview'].getMetrics().contentLength/this.state.stockInfoRowData.length
+		}
 
 		var newData = []
 		$.extend(true, newData, this.state.stockInfoRowData)	// deep copy
@@ -92,12 +96,14 @@ var StockClosedPositionPage = React.createClass({
 			})
 			if (Platform.OS === 'android') {
 				var listHeight = this.refs['listview'].getMetrics().contentLength
-				var currentY = listHeight/this.state.stockInfoRowData.length*(parseInt(rowID)+1)
+				var currentY = listHeight/this.state.stockInfoRowData.length*(parseInt(rowID))
 				this.setTimeout(
 					() => {
-						this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY), animated:true})
+						if (currentY > 300 && currentY + 3 * rowHeight > this.refs['listview'].getMetrics().contentLength) {
+							this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY), animated:true})
+						}
 					 },
-					Platform.OS === 'android' ? 500 : 0
+					500
 				);
 			}
 		} else {
@@ -412,7 +418,7 @@ var styles = StyleSheet.create({
 	},
 
 	stockPercentText: {
-		fontSize: 15,
+		fontSize: 18,
 		color: '#ffffff',
 		fontWeight: 'bold',
 	},

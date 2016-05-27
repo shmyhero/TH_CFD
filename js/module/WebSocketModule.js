@@ -55,6 +55,7 @@ export function start() {
 
 	alertWebSocketProxy = webSocketConnection.createHubProxy(alertServerName);
 	alertWebSocketProxy.on(serverListenerName, (alertInfoArr) => {
+		console.log('alert comes.')
 		for (var alertInfo in alertInfoArr) {
 			Alert.alert('', alertInfo)
 		}
@@ -125,8 +126,8 @@ export function alertServiceLogin(token) {
 		var messagePromise = alertWebSocketProxy.invoke('L', token);
 
 	    messagePromise
-	    	.done(() => {
-		    	console.log ('Send Login to Alert server succeed');
+	    	.done((result) => {
+		    	console.log ('Send Login to Alert server succeed: ' + result);
 			})
 			.fail(function (error) {
 		    	if (wsErrorCallback) {

@@ -44,6 +44,8 @@ var StockDetailPage = React.createClass({
 		stockName: React.PropTypes.string,
 		stockSymbol: React.PropTypes.string,
 		stockPrice: React.PropTypes.number,
+		stockPriceAsk: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
+		stockPriceBid: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
 		stockTag: React.PropTypes.string,
 		lastClosePrice: React.PropTypes.number,
 		openPrice: React.PropTypes.number,
@@ -55,6 +57,8 @@ var StockDetailPage = React.createClass({
 			stockCode: 14993,
 			stockName: 'ABC company',
 			stockPrice: 10,
+			stockPriceAsk: '--',
+			stockPriceBid: '--',
 			lastClosePrice: 9,
 		}
 	},
@@ -69,6 +73,8 @@ var StockDetailPage = React.createClass({
 			tradeDirection: 0,	//0:none, 1:up, 2:down
 			inputText: '20',
 			stockPrice: this.props.stockPrice,
+			stockPriceAsk: this.props.stockPriceAsk,
+			stockPriceBid: this.props.stockPriceBid,
 			isAddedToMyList: false,
 			tradingInProgress: false,
 			chartType: NetConstants.PARAMETER_CHARTTYPE_TODAY,
@@ -103,6 +109,8 @@ var StockDetailPage = React.createClass({
 			(responseJson) => {
 				this.setState({
 					stockInfo: responseJson,
+					stockPriceBid: responseJson.bid,
+					stockPriceAsk: responseJson.ask,
 				})
 
 				this.loadStockPriceToday(true)
@@ -200,7 +208,9 @@ var StockDetailPage = React.createClass({
 					if (this.props.stockCode == realtimeStockInfo[i].id &&
 								this.state.stockPrice !== realtimeStockInfo[i].last) {
 						this.setState({
-							stockPrice: realtimeStockInfo[i].last
+							stockPrice: realtimeStockInfo[i].last,
+							stockPriceAsk: realtimeStockInfo[i].ask,
+							stockPriceBid: realtimeStockInfo[i].bid,
 						})
 						break;
 					}
@@ -458,7 +468,6 @@ var StockDetailPage = React.createClass({
 				backButtonOnClick={this.props.showTabbar}
 				barStyle={{height: barHeight}}	titleStyle={{fontSize:16}}
 				title={this.props.stockName}
-				subTitle={subTitleText}
 				backgroundColor='transparent'
 				subTitleStyle={[styles.subTitle, {color: subTitleColor}]}
 				rightCustomContent={() => this.renderAddToMyListButton()}/>
@@ -520,17 +529,33 @@ var StockDetailPage = React.createClass({
 		var downSelected = this.state.tradeDirection === 2
 		var downImage = downSelected ? require('../../images/click-down.png') : require('../../images/down.png')
 
+		var upTextColor = 'white'
+		var downTextColor = 'white'
+		if (!upSelected) upTextColor = '#568ff1'
+		if (!downSelected) downTextColor = '#568ff1'
+
 		return (
 			<View style={[styles.rowView, {alignItems:'stretch'}]}>
 				<TouchableHighlight
 					underlayColor={upSelected ? '#6da2fc': '#356dce'}
 					onPress={() => this.state.stockInfo.isOpen && this.buyPress()} style={[styles.tradeButtonView, upSelected&&styles.tradeButtonViewSelected]}>
-					<Image style={styles.tradeButtonImage} source={upImage}/>
+					<View style={styles.tradeButtonContainer}>
+						<Text style={[styles.tradeButtonText, {color: upTextColor}]}>
+							{this.state.stockPriceBid}
+						</Text>
+						<Image style={styles.tradeButtonImage} source={upImage}/>
+					</View>
+
 				</TouchableHighlight>
 				<TouchableHighlight
 					underlayColor={downSelected ? '#6da2fc': '#356dce'}
 					onPress={() => this.state.stockInfo.isOpen && this.sellPress()} style={[styles.tradeButtonView, downSelected&&styles.tradeButtonViewSelected]}>
-					<Image style={styles.tradeButtonImage} source={downImage}/>
+					<View style={styles.tradeButtonContainer}>
+						<Text style={[styles.tradeButtonText, {color: downTextColor}]}>
+							{this.state.stockPriceAsk}
+						</Text>
+						<Image style={styles.tradeButtonImage} source={downImage}/>
+					</View>
 				</TouchableHighlight>
 			</View>
 		)
@@ -819,6 +844,16 @@ var styles = StyleSheet.create({
 		backgroundColor: '#356dce',
 		alignItems: 'center',
 		justifyContent: 'space-around',
+	},
+	tradeButtonContainer: {
+		alignSelf: 'stretch',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		paddingHorizontal: 10,
+	},
+	tradeButtonText: {
+		fontSize: 19,
 	},
 	tradeButtonViewSelected:{
 		backgroundColor: '#6da2fc',

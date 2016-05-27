@@ -64,6 +64,8 @@ var StockListPage = React.createClass({
 				if (this.state.rowStockInfoData[i].id == realtimeStockInfo[j].id &&
 							this.state.rowStockInfoData[i].last !== realtimeStockInfo[j].last) {
 					this.state.rowStockInfoData[i].last = realtimeStockInfo[j].last;
+					this.state.rowStockInfoData[i].lastAsk = realtimeStockInfo[j].ask;
+					this.state.rowStockInfoData[i].lastBid = realtimeStockInfo[j].bid;
 					hasUpdate = true;
 
 					break;

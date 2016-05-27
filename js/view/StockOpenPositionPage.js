@@ -842,6 +842,7 @@ var StockOpenPositionPage = React.createClass({
 		if (stopLoss || stopProfit) {
 			stopLossImage = require('../../images/check2.png')
 		}
+		var currentPriceLabel = rowData.isLong ? '当前买价' : '当前卖价'
 
 		return (
 			<View style={[{height: newExtendHeight}, styles.extendWrapper]} >
@@ -867,7 +868,7 @@ var StockOpenPositionPage = React.createClass({
 						<Text style={styles.extendTextBottom}>{rowData.settlePrice}</Text>
 					</View>
 					<View style={styles.extendMiddle}>
-						<Text style={styles.extendTextTop}>当前价格</Text>
+						<Text style={styles.extendTextTop}>{currentPriceLabel}</Text>
 						<Text style={styles.extendTextBottom}>{lastPrice}</Text>
 					</View>
 					<View style={styles.extendRight}>

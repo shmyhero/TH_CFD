@@ -677,14 +677,15 @@ var StockOpenPositionPage = React.createClass({
 			if (percent === 0) {
 				percent = rowData.takePx === undefined ? startPercent
 					: this.priceToPercentWithRow(rowData.takePx, rowData, type)
+				stopProfitPercent = percent
 			}
 		} else{
 			if (percent=== 0) {
 				percent = this.priceToPercentWithRow(rowData.stopPx, rowData, type)
 				if (percent > endPercent) {
 					percent = startPercent
-					stopLossPercent = startPercent
 				}
+				stopLossPercent = percent
 			}
 		};
 		price = this.percentToPriceWithRow(percent, rowData, type)

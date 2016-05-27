@@ -50,6 +50,9 @@ var MainPage = React.createClass({
 
 		var exchangeRef = this.refs['exchangeContent'].refs['wrap'].getWrappedRef()
 		exchangeRef.tabWillFocus = EventCenter.emitExchangeTabPressEvent;
+
+		var qaRef = this.refs['qaContent'].refs['wrap'].getWrappedRef()
+		qaRef.tabWillFocus = EventCenter.emitQATabPressEvent;
 	},
 
 	componentDidMount: function() {
@@ -98,7 +101,7 @@ var MainPage = React.createClass({
 			        </Tab>
 			        <Tab name="settings">
 			          	<Icon label="问答" type={glypy.Settings} from={'myhero'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
-			          	<RawContent>
+			          	<RawContent ref="qaContent">
 							<Navigator
 								style={styles.container}
 								initialRoute={{name: AppNavigator.QA_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}

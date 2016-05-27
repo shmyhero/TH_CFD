@@ -9,7 +9,9 @@ var {
 } = React;
 
 var WEBVIEW_REF = 'webview';
+var {EventCenter, EventConst} = require('../EventCenter')
 
+var didTabSelectSubscription = null;
 var {height, width} = Dimensions.get('window')
 var QAPage = React.createClass({
 	propTypes: {
@@ -22,14 +24,34 @@ var QAPage = React.createClass({
 		}
 	},
 
+	getInitialState: function() {
+		return {
+			refresh: true,
+		};
+	},
+	
+	componentWillMount: function() {
+		this.didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.QA_TAB_PRESS_EVENT, () => {
+			this.refs[WEBVIEW_REF].reload();
+			this.setState({refresh: true})
+		});
+	},
+	
+	onShouldStartLoadWithRequest: function(event) {
+    	// Implement any custom loading logic here, don't forget to return!
+    	return true;
+  	},
+
 	render: function() {
 		return (
 			<WebView
+				ref={WEBVIEW_REF}
 				style={styles.webView}
 				javaScriptEnabled={true}
 				domStorageEnabled={true}
 				scalesPageToFit={true}
 				automaticallyAdjustContentInsets={true}
+          		onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
 				decelerationRate="normal"
 				source={{uri: this.props.url}} />
 		)

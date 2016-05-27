@@ -81,6 +81,7 @@ var StockListViewPager = React.createClass({
 		this.setState({
 			currentSelectedTab: index,
 		})
+		this.refs['page' + this.state.currentSelectedTab].onPageSelected()
 
 		WebSocketModule.registerInterestedStocks(this.refs['page' + this.state.currentSelectedTab].getShownStocks())
 	},

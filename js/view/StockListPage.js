@@ -80,7 +80,7 @@ var StockListPage = React.createClass({
 		}
 	},
 
-	componentDidMount: function() {
+	fetchStockData: function() {
 		StorageModule.loadUserData()
 			.then((value) => {
 				if (value !== null) {
@@ -111,37 +111,47 @@ var StockListPage = React.createClass({
 				}
 			})
 			.done()
+	},
+
+	fetchOwnData: function() {
+
+		StorageModule.loadOwnStocksData().then((value) => {
+			if (value !== null) {
+				LogicData.setOwnStocksData(JSON.parse(value))
+			}
+		}).then(() => {
+			// this.updateOwnData();
+			var ownData = LogicData.getOwnStocksData()
+			if (ownData.length > 0) {
+				var param = "/"+ownData[0].id
+				for (var i = 1; i < ownData.length; i++) {
+					param += ","+ownData[i].id
+				};
+				NetworkModule.fetchTHUrl(
+					this.props.dataURL + param,
+					{
+						method: 'GET',
+					},
+					(responseJson) => {
+						this.setState({
+							rowStockInfoData: responseJson,
+							stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, responseJson))
+						})
+					},
+					(errorMessage) => {
+						Alert.alert('', errorMessage);
+					}
+				)
+			}
+		})
+	},
+
+	componentDidMount: function() {
+		this.fetchStockData()
 
 		if (this.props.isOwnStockPage) {
-			StorageModule.loadOwnStocksData().then((value) => {
-				if (value !== null) {
-					LogicData.setOwnStocksData(JSON.parse(value))
-				}
-			}).then(() => {
-				// this.updateOwnData();
-				var ownData = LogicData.getOwnStocksData()
-				if (ownData.length > 0) {
-					var param = "/"+ownData[0].id
-					for (var i = 1; i < ownData.length; i++) {
-						param += ","+ownData[i].id
-					};
-					NetworkModule.fetchTHUrl(
-						this.props.dataURL + param,
-						{
-							method: 'GET',
-						},
-						(responseJson) => {
-							this.setState({
-								rowStockInfoData: responseJson,
-								stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, responseJson))
-							})
-						},
-						(errorMessage) => {
-							Alert.alert('', errorMessage);
-						}
-					)
-				}
-			})
+			this.fetchOwnData()
+
 		    this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
 		    this.recevieDataSubscription = RCTNativeAppEventEmitter.addListener(
 				'nativeSendDataToRN',
@@ -173,9 +183,22 @@ var StockListPage = React.createClass({
         }
 	},
 
+	onPageSelected: function() {
+		if (!this.props.isOwnStockPage){
+			if (this.state.rowStockInfoData.length === 0) {
+				this.fetchStockData()
+			}
+		}
+	},
+
 	tabPressed: function() {
 		if (this.props.isOwnStockPage) {
 			this.updateOwnData()
+		}
+		else {
+			if (this.state.rowStockInfoData.length === 0) {
+				this.fetchStockData()
+			}
 		}
 	},
 

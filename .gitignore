@@ -32,4 +32,9 @@ local.properties
 #
 node_modules/
 npm-debug.log
-main.jsbundle
+
+# BUCK
+buck-out/
+\.buckd/
+android/app/libs
+android/keystores/debug.keystore

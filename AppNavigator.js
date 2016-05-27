@@ -351,7 +351,7 @@ var AppNavigator = React.createClass({
 
 	render: function() {
 		var {height, width} = Dimensions.get('window')
-		var statusBar = <StatusBar barStyle="light-content" backgroundColor='#1962dd'/>
+		var statusBar = <StatusBar barStyle="light-content"/>
 
 		if (this.state.startUpPhase == MAIN_PAGE_PHASE) {
 			return (

@@ -54,10 +54,13 @@ export function start() {
 	});
 
 	alertWebSocketProxy = webSocketConnection.createHubProxy(alertServerName);
-	alertWebSocketProxy.on(serverListenerName, (alertInfo) => {
-		Alert.alert('', alertInfo)
+	alertWebSocketProxy.on(serverListenerName, (alertInfoArr) => {
+		for (var alertInfo in alertInfoArr) {
+			Alert.alert('', alertInfo)
+		}
+
 		if (wsAlertCallback !== null) {
-			wsAlertCallback(alertInfo)
+			wsAlertCallback(alertInfoArr)
 		}
 	});
 
@@ -69,7 +72,7 @@ export function start() {
 
 			var userData = LogicData.getUserData()
 			if (userData != null) {
-				alertServiceLogin(userData.token)
+				alertServiceLogin(userData.userId + '_' + userData.token)
 			}
 		})
 		.fail((error) => {

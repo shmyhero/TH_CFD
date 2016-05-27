@@ -106,7 +106,11 @@ var StockOpenPositionPage = React.createClass({
 				WebSocketModule.registerCallbacks(
 					(realtimeStockInfo) => {
 						this.handleStockInfo(realtimeStockInfo)
-				})
+					},
+					(alertInfo) => {
+						this.loadOpenPositionInfo()
+					}
+				)
 			},
 			(errorMessage) => {
 				Alert.alert('', errorMessage);

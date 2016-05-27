@@ -21,7 +21,8 @@ var previousInterestedStocks = null
 var webSocketConnection = null
 var stockPriceWebSocketProxy = null
 var alertWebSocketProxy = null
-var wsMessageCallback = null
+var wsStockInfoCallback = null
+var wsAlertCallback = null
 
 var wsErrorCallback = (errorMessage) =>
 {
@@ -47,14 +48,17 @@ export function start() {
 	//receives broadcast messages from a hub function, called "broadcastMessage"
 	// StockInfo data structure: {"Symbol":"MSFT","Price":31.97,"DayOpen":30.31,"Change":1.66,"PercentChange":0.0519}
 	stockPriceWebSocketProxy.on(serverListenerName, (stockInfo) => {
-		if (wsMessageCallback !== null) {
-			wsMessageCallback(stockInfo)
+		if (wsStockInfoCallback !== null) {
+			wsStockInfoCallback(stockInfo)
 		}
 	});
 
 	alertWebSocketProxy = webSocketConnection.createHubProxy(alertServerName);
 	alertWebSocketProxy.on(serverListenerName, (alertInfo) => {
 		Alert.alert('', alertInfo)
+		if (wsAlertCallback !== null) {
+			wsAlertCallback(alertInfo)
+		}
 	});
 
 		// atempt connection, and handle errors
@@ -90,8 +94,9 @@ export function stop() {
 	}
 }
 
-export function registerCallbacks(messageCallback) {
-	wsMessageCallback = messageCallback
+export function registerCallbacks(stockInfoCallback, alertCallback) {
+	wsStockInfoCallback = stockInfoCallback
+	wsAlertCallback = alertCallback
 }
 
 export function registerInterestedStocks(stockList) {

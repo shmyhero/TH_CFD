@@ -152,7 +152,31 @@ var StockClosedPositionPage = React.createClass({
 		}
 	},
 
-	renderProfit: function(percentChange) {
+	renderProfit: function(pl) {
+		pl = pl.toFixed(2)
+		if (pl > 0) {
+			return (
+				<Text style={[styles.stockPercentText, {color: '#f19296'}]}>
+					 +{pl}
+				</Text>
+			);
+		} else if (pl < 0) {
+			return (
+				<Text style={[styles.stockPercentText, {color: '#82d2bb'}]}>
+					 {pl}
+				</Text>
+			);
+
+		} else {
+			return (
+				<Text style={[styles.stockPercentText, {color: '#c5c5c5'}]}>
+					 {pl}
+				</Text>
+			);
+		}
+	},
+
+	renderProfitPercentage: function(percentChange) {
 		percentChange = percentChange.toFixed(2)
 		if (percentChange > 0) {
 			return (
@@ -265,8 +289,12 @@ var StockClosedPositionPage = React.createClass({
 							</View>
 						</View>
 
+						<View style={styles.rowCenterPart}>
+							{this.renderProfit(rowData.pl)}
+						</View>
+
 						<View style={styles.rowRightPart}>
-							{this.renderProfit(rowData.pl / rowData.invest * 100)}
+							{this.renderProfitPercentage(rowData.pl / rowData.invest * 100)}
 						</View>
 					</View>
 				</TouchableHighlight>
@@ -350,22 +378,29 @@ var styles = StyleSheet.create({
 	},
 
 	rowLeftPart: {
-		flex: 1,
+		flex: 3,
 		alignItems: 'flex-start',
 		paddingLeft: 0,
 	},
 
+	rowCenterPart: {
+		flex: 2,
+		paddingTop: 5,
+		paddingBottom: 5,
+		paddingRight: 5,
+		alignItems: 'center',
+	},
+
 	rowRightPart: {
-		flex: 1,
+		flex: 2,
 		paddingTop: 5,
 		paddingBottom: 5,
 		paddingRight: 5,
 		alignItems: 'flex-end',
-		borderRadius: 2,
 	},
 
 	stockNameText: {
-		fontSize: 18,
+		fontSize: 15,
 		textAlign: 'center',
 		fontWeight: 'bold',
 	},
@@ -377,7 +412,7 @@ var styles = StyleSheet.create({
 	},
 
 	stockPercentText: {
-		fontSize: 18,
+		fontSize: 15,
 		color: '#ffffff',
 		fontWeight: 'bold',
 	},

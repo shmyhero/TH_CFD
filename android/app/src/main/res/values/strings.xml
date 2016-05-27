@@ -19,6 +19,7 @@
     <string name="dialog_title">提示</string>
     <string name="cancel">取消</string>
     <string name="confirm">确认</string>
+    <string name="pushed_to_top">已顶置</string>
 
 
     <string-array name="jazz_artist_names">

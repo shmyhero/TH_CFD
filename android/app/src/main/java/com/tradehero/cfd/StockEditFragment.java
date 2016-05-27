@@ -13,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.react.bridge.ReactContext;
 import com.mobeta.android.dslv.DragSortListView;
@@ -41,6 +42,8 @@ public class StockEditFragment extends Fragment {
     TextView selectAll;
     @Bind(R.id.deleteSelected)
     TextView deleteSelected;
+
+    private boolean selectAllPicked = false;
 
     private StockListAdapter adapter;
     private DragSortListView.DropListener onDrop =
@@ -72,7 +75,16 @@ public class StockEditFragment extends Fragment {
         selectAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.markAllChecked();
+                if (selectAllPicked) {
+                    selectAllPicked = false;
+                    adapter.markAllUnchecked();
+                    selectAll.setText(R.string.select_all);
+                } else {
+                    adapter.markAllChecked();
+                    selectAllPicked = true;
+                    selectAll.setText(R.string.cancel);
+                }
+
             }
         });
 
@@ -167,6 +179,13 @@ public class StockEditFragment extends Fragment {
         }
     }
 
+    private void updateSelectAllButton() {
+        if (selectAllPicked && adapter.getCheckedNum() == 0) {
+            selectAllPicked = false;
+            selectAll.setText(R.string.select_all);
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -231,6 +250,7 @@ public class StockEditFragment extends Fragment {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     mStockInfo.get(position).mChecked = isChecked;
                     updateDeleteButton();
+                    updateSelectAllButton();
                 }
             });
 
@@ -239,6 +259,7 @@ public class StockEditFragment extends Fragment {
                 public void onClick(View v) {
                     StockInfo info = remove(position);
                     insert(info, 0);
+                    Toast.makeText(getActivity(), R.string.pushed_to_top, Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -271,6 +292,17 @@ public class StockEditFragment extends Fragment {
             while (iterator.hasNext()) {
                 StockInfo info = iterator.next();
                 info.mChecked = true;
+            }
+
+            updateDeleteButton();
+            notifyDataSetChanged();
+        }
+
+        public void markAllUnchecked() {
+            Iterator<StockInfo> iterator = mStockInfo.iterator();
+            while (iterator.hasNext()) {
+                StockInfo info = iterator.next();
+                info.mChecked = false;
             }
 
             updateDeleteButton();

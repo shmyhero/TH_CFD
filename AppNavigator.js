@@ -1,13 +1,14 @@
 'use strict';
 
-var React = require('react-native');
+import React, {
+	Component,
+} from 'react';
 
-var {
+import {
 	StyleSheet,
 	Navigator,
 	View,
 	BackAndroid,
-	Component,
 	Text,
 	Image,
 	ScrollView,
@@ -16,7 +17,7 @@ var {
 	Dimensions,
 	PixelRatio,
 	TouchableOpacity,
-} = React;
+} from 'react-native';
 
 import {
 	isFirstTime,

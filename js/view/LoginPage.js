@@ -1,7 +1,7 @@
 'use strict'
 
-var React = require('react-native')
-var {
+import React from 'react';
+import {
 	StyleSheet,
 	Platform,
 	View,
@@ -12,7 +12,7 @@ var {
 	Dimensions,
 	Image,
 	TouchableWithoutFeedback,
-} = React;
+} from 'react-native';
 
 var TimerMixin = require('react-timer-mixin');
 

@@ -1,14 +1,13 @@
 'use strict'
 
-var React = require('react-native')
-var ProgressBar = require('ProgressBarAndroid');
-
-var {
+import React from 'react';
+import {
 	StyleSheet,
 	View,
 	Dimensions,
-} = React;
+} from 'react-native';
 
+var ProgressBar = require('ProgressBarAndroid');
 var {height, width} = Dimensions.get('window')
 var LoadingIndicator = React.createClass({
 	propTypes: {

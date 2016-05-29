@@ -3,13 +3,12 @@
 require('../utils/jquery-1.6.4')
 require('../utils/jquery.signalR-2.2.0')
 
-var React = require('react-native');
-var AppStateModule = require('./AppStateModule');
-
-var {
+import React from 'react';
+import {
 	Alert,
-} = React;
+} from 'react-native';
 
+var AppStateModule = require('./AppStateModule');
 var LogicData = require('../LogicData')
 var StorageModule = require('./StorageModule')
 

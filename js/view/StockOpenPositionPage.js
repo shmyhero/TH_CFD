@@ -1,8 +1,8 @@
 'use strict';
 
 var LineChart = require('./component/lineChart/LineChart');
-var React = require('react-native');
-var {
+import React from 'react';
+import {
 	StyleSheet,
 	View,
 	Text,
@@ -16,7 +16,7 @@ var {
   	Switch,
   	Slider,
   	TextInput,
-} = React;
+} from 'react-native';
 var LayoutAnimation = require('LayoutAnimation')
 
 

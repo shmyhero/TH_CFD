@@ -1,16 +1,7 @@
 'use strict';
 
-import React, {
-	View,
-	DeviceEventEmitter,
-	Dimensions,
-	TouchableOpacity,
-	LayoutAnimation,
-	StyleSheet,
-	Text,
-	Platform,
-}
-from 'react-native';
+import React from 'react';
+import {View, DeviceEventEmitter, Dimensions, TouchableOpacity, LayoutAnimation, StyleSheet, Text, Platform} from 'react-native';
 const dismissKeyboard = require('dismissKeyboard');
 var INPUT_ACCESSORY_HEIGHT = 40;
 

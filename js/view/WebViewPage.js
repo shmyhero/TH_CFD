@@ -1,11 +1,11 @@
 'use strict';
 
-var React = require('react-native');
-var {
+import React from 'react';
+import {
 	StyleSheet,
 	View,
 	WebView,
-} = React;
+} from 'react-native';
 
 var WEBVIEW_REF = 'webview';
 

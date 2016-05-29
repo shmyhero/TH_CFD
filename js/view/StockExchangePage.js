@@ -1,16 +1,16 @@
 'use strict';
 
-var React = require('react-native');
-var LinearGradient = require('react-native-linear-gradient');
-var {
+import React from 'react';
+import {
 	StyleSheet,
 	View,
 	Text,
 	Image,
 	Dimensions,
 	TouchableHighlight,
-} = React;
+} from 'react-native';
 
+var LinearGradient = require('react-native-linear-gradient');
 var {EventCenter, EventConst} = require('../EventCenter')
 
 var ScrollTabView = require('./component/ScrollTabView')

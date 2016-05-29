@@ -1,13 +1,12 @@
 'use strict'
 
-var React = require('react-native')
-
-var {
+import React from 'react';
+import {
 	StyleSheet,
 	View,
 	ActivityIndicatorIOS,
 	Dimensions,
-} = React;
+} from 'react-native';
 
 
 var LoadingIndicator = React.createClass({

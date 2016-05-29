@@ -1,7 +1,7 @@
 'use strict';
 
-var React = require('react-native');
-var {
+import React from 'react';
+import {
 	AppRegistry,
 	StyleSheet,
 	ListView,
@@ -10,7 +10,7 @@ var {
 	View,
 	TouchableHighlight,
 	Alert,
-} = React;
+} from 'react-native';
 
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')

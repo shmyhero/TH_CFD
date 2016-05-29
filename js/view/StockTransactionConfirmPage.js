@@ -1,7 +1,7 @@
 'use strict';
 
-var React = require('react-native');
-var {
+import React from 'react';
+import {
 	StyleSheet,
 	View,
 	Text,
@@ -9,7 +9,7 @@ var {
 	Animated,
 	Dimensions,
 	PanResponder,
-} = React;
+} from 'react-native';
 
 var Touchable = require('Touchable');
 var merge = require('merge');

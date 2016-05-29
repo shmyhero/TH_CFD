@@ -2,7 +2,7 @@
 
 var LogicData = require('../LogicData')
 var NetConstants = require('../NetConstants')
-var React = require('react-native')
+import React from 'react';
 var AppNavigator = require('../../AppNavigator')
 var {
 	Alert

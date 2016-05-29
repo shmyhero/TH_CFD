@@ -1,7 +1,7 @@
 'use strict';
 
-var React = require('react-native');
-var {
+import React from 'react';
+import {
 	AppRegistry,
 	StyleSheet,
 	ListView,
@@ -9,9 +9,9 @@ var {
 	Image,
 	View,
 	TouchableHighlight,
-} = React;
-var LogicData = require('../LogicData')
+} from 'react-native';
 
+var LogicData = require('../LogicData')
 
 var MyHomePage = React.createClass({
 	getInitialState: function() {

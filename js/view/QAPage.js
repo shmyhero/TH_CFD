@@ -1,12 +1,12 @@
 'use strict';
 
-var React = require('react-native');
-var {
+import React from 'react';
+import {
 	StyleSheet,
 	View,
 	WebView,
 	Dimensions,
-} = React;
+} from 'react-native';
 
 var WEBVIEW_REF = 'qawebview';
 var {EventCenter, EventConst} = require('../EventCenter')

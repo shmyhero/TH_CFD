@@ -1,11 +1,7 @@
 'use strict';
 
-var React = require('react-native');
-var LineChart = require('./component/lineChart/LineChart');
-var LinearGradient = require('react-native-linear-gradient');
-var dismissKeyboard = require('dismissKeyboard');
-
-var {
+import React from 'react';
+import {
 	StyleSheet,
 	View,
 	Image,
@@ -18,8 +14,11 @@ var {
 	PickerIOS,
 	TextInput,
 	Platform,
-} = React;
+} from 'react-native';
 
+var LineChart = require('./component/lineChart/LineChart');
+var LinearGradient = require('react-native-linear-gradient');
+var dismissKeyboard = require('dismissKeyboard');
 var LogicData = require('../LogicData')
 var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')

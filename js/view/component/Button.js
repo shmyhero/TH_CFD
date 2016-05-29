@@ -1,13 +1,12 @@
 'use strict';
 
-var React = require('react-native');
-
-var {
+import React from 'react';
+import {
 	StyleSheet,
 	View,
 	Text,
 	TouchableHighlight
-} = React;
+} from 'react-native';
 var ColorConstants = require('../../ColorConstants')
 
 var Button = React.createClass({

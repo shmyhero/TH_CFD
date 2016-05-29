@@ -1,6 +1,6 @@
 'use strict';
 
-var React = require('React');
+import React from 'react';
 var View = require('View');
 
 var NativeMethodsMixin = require('NativeMethodsMixin');

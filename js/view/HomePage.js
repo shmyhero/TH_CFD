@@ -1,7 +1,7 @@
 'use strict';
 
-var React = require('react-native');
-var {
+import React from 'react';
+import {
 	StyleSheet,
 	View,
 	Image,
@@ -9,7 +9,7 @@ var {
 	TouchableOpacity,
 	Dimensions,
 	Platform,
-} = React;
+} from 'react-native';
 
 var ViewPager = require('react-native-viewpager');
 var ColorConstants = require('../ColorConstants')

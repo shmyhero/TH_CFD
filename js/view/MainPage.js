@@ -1,13 +1,13 @@
 'use strict';
 
-var React = require('react-native');
-var {
+import React from 'react';
+import {
     StyleSheet,
     View,
     Text,
     StatusBar,
     Navigator,
-} = React;
+} from 'react-native';
 
 import Tabbar, { Tab, RawContent, Icon, IconWithBar, glypyMapMaker } from 'react-native-tabbar';
 var AppNavigator = require('../../AppNavigator')

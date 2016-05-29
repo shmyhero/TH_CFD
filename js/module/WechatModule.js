@@ -1,7 +1,7 @@
 'use strict'
 
-var React = require('react-native')
-var {
+import React from 'react';
+import {
 	StyleSheet,
 	Platform,
 	View,
@@ -11,7 +11,7 @@ var {
 	Alert,
 	Dimensions,
 	Image,
-} = React;
+} from 'react-native';
 var AppNavigator = require('../../AppNavigator')
 
 import * as WechatAPI from 'react-native-wx';

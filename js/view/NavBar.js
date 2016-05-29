@@ -1,7 +1,7 @@
 'use strict';
 
-var React = require('react-native');
-var {
+import React from 'react';
+import {
 	AppRegistry,
 	StyleSheet,
 	Navigator,
@@ -10,7 +10,7 @@ var {
 	Text,
 	Image,
 	TouchableHighlight,
-} = React;
+} from 'react-native';
 
 var ColorPropType = require('ColorPropType');
 var ColorConstants = require('../ColorConstants')

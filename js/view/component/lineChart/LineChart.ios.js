@@ -1,8 +1,7 @@
 'use strict';
 
-import React, {
-	requireNativeComponent
-} from 'react-native';
+import React from 'react';
+import {requireNativeComponent} from 'react-native';
 
 var LineChart = React.createClass ({
 	propTypes: {

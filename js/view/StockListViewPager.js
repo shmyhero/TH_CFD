@@ -1,16 +1,15 @@
 'use strict'
 
-var React = require('react-native');
-var Swiper = require('react-native-swiper')
-
-var {
+import React from 'react';
+import {
 	StyleSheet,
 	View,
 	Image,
 	Text,
 	Alert,
 	Dimensions,
-} = React;
+} from 'react-native';
+var Swiper = require('react-native-swiper')
 
 var {EventCenter, EventConst} = require('../EventCenter')
 

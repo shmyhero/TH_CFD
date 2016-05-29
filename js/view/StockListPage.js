@@ -1,8 +1,7 @@
 'use strict'
 
-var React = require('react-native');
-
-var {
+import React from 'react';
+import {
 	StyleSheet,
 	View,
 	Image,
@@ -13,7 +12,7 @@ var {
 	Alert,
 	Platform,
 	TouchableOpacity,
-} = React;
+} from 'react-native';
 
 
 var LogicData = require('../LogicData')

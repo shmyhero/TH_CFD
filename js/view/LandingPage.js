@@ -1,9 +1,7 @@
 'use strict'
 
-var React = require('react-native');
-var Swiper = require('react-native-swiper')
-
-var {
+import React from 'react';
+import {
 	StyleSheet,
 	View,
 	Image,
@@ -11,7 +9,8 @@ var {
 	TouchableHighlight,
 	Alert,
 	Dimensions,
-} = React;
+} from 'react-native';
+var Swiper = require('react-native-swiper')
 
 var LogicData = require('../LogicData')
 var StorageModule = require('../module/StorageModule')

@@ -1,14 +1,14 @@
 'use strict';
 
-var React = require('react-native');
-var {
+import React from 'react';
+import {
 	StyleSheet,
 	View,
 	Text,
 	Image,
 	Switch,
 	TouchableHighlight,
-} = React;
+} from 'react-native';
 
 var MySettings = React.createClass({
 

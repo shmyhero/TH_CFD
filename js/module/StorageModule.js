@@ -1,9 +1,9 @@
 'use strict'
 
-var React = require('react-native');
-var {
+import React from 'react';
+import {
   AsyncStorage,
-} = React;
+} from 'react-native';
 
 var USER_DATA_STORAGE_KEY = '@TH_CFD:userData';
 var OWN_STOCKS_DATA_STORAGE_KEY = '@TH_CFD:ownStocksData';

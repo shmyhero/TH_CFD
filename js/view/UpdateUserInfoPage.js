@@ -1,8 +1,7 @@
 'use strict'
 
-var React = require('react-native');
-
-var {
+import React from 'react';
+import {
 	StyleSheet,
 	View,
 	Image,
@@ -11,7 +10,7 @@ var {
 	Dimensions,
 	TextInput,
 	Alert,
-} = React;
+} from 'react-native';
 
 var Button = require('./component/Button')
 var ColorConstants = require('../ColorConstants')

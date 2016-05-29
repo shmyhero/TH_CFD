@@ -1,18 +1,18 @@
 'use strict';
 
 var LayoutAnimation = require('LayoutAnimation');
-var React = require('react-native');
-var TimerMixin = require('react-timer-mixin');
+import React from 'react';
 
-var {
+import {
 	StyleSheet,
 	View,
 	Text,
 	Dimensions,
 	Platform,
 	Alert,
-} = React;
+} from 'react-native';
 
+var TimerMixin = require('react-timer-mixin');
 var LogicData = require('../LogicData')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')

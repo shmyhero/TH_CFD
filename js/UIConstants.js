@@ -1,9 +1,8 @@
 'use strict';
 
-var React = require('react-native');
-var {
+import {
 	Platform,
-} = React;
+} from 'react-native';
 
 export let TAB_BAR_HEIGHT = 50
 export let HEADER_HEIGHT = 64

@@ -4,13 +4,16 @@
  */
 'use strict';
 
-var React = require('react-native');
-var {
+import React, {
+  Component,
+} from 'react';
+
+import {
   AppRegistry,
   StyleSheet,
   Navigator,
   View,
-} = React;
+} from 'react-native';
 
 var AppNavigator = require('./AppNavigator')
 

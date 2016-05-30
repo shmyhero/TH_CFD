@@ -130,13 +130,23 @@ var StockSearchPage = React.createClass({
 		}
 	},
 
-	addToMyListPressed: function(rowID) {
+	addToMyListPressedFromSearchResult: function(rowID) {
 		var stockData = this.state.searchStockRawInfo[rowID]
 		LogicData.addStockToOwn(stockData)
 		NetworkModule.addToOwnStocks([stockData])
 		// force re-render list
 		this.setState({
 			searchStockInfo: ds.cloneWithRows(this.state.searchStockRawInfo)
+		})
+	},
+
+	addToMyListPressedFromHistory: function(rowID) {
+		var stockData = this.state.historyRawInfo[rowID]
+		LogicData.addStockToOwn(stockData)
+		NetworkModule.addToOwnStocks([stockData])
+		// force re-render list
+		this.setState({
+			historyInfo: ds.cloneWithRows(this.state.historyRawInfo)
 		})
 	},
 
@@ -181,7 +191,15 @@ var StockSearchPage = React.createClass({
 		});
   	},
 
-	renderRow: function(rowData, sectionID, rowID, highlightRow) {
+	renderRowHistory: function(rowData, sectionID, rowID, highlightRow) {
+		return this.renderRow(rowData, sectionID, rowID, highlightRow, this.addToMyListPressedFromHistory)
+	},
+
+	renderRowSearchResult: function(rowData, sectionID, rowID, highlightRow) {
+		return this.renderRow(rowData, sectionID, rowID, highlightRow, this.addToMyListPressedFromSearchResult)
+	},
+
+	renderRow: function(rowData, sectionID, rowID, highlightRow, onPressFunction) {
 		var rightPartContent = <Text style={styles.alreadyAddText}>已添加</Text>
 		var myListData = LogicData.getOwnStocksData()
 		var index = myListData.findIndex((stock) => {return stock.id === rowData.id})
@@ -192,7 +210,7 @@ var StockSearchPage = React.createClass({
 		if (index === -1) {
 			rightPartContent =
 					<TouchableOpacity style={styles.addToMyListContainer}
-							onPress={() => this.addToMyListPressed(rowID)}>
+							onPress={() => onPressFunction(rowID)}>
 						<View style={[styles.addToMyListView, viewStyle]}>
 							<Text style={styles.addToMyListText}>
 								+
@@ -255,7 +273,7 @@ var StockSearchPage = React.createClass({
 						initialListSize={11}
 						enableEmptySections={true}
 						dataSource={this.state.historyInfo}
-						renderRow={this.renderRow}
+						renderRow={this.renderRowHistory}
 						renderFooter={this.renderHistoryFooter}
 						renderSeparator={this.renderSeparator}/>
 				</View>
@@ -276,7 +294,7 @@ var StockSearchPage = React.createClass({
 					initialListSize={11}
 					enableEmptySections={true}
 					dataSource={this.state.searchStockInfo}
-					renderRow={this.renderRow}
+					renderRow={this.renderRowSearchResult}
 					renderSeparator={this.renderSeparator}/>
 				}
 			</View>

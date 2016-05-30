@@ -79,6 +79,12 @@ var StockListPage = React.createClass({
 		}
 	},
 
+	reFetchStockData: function() {
+		if (this.state.rowStockInfoData.length === 0) {
+			this.fetchStockData()
+		}
+	},
+
 	fetchStockData: function() {
 		StorageModule.loadUserData()
 			.then((value) => {
@@ -184,9 +190,7 @@ var StockListPage = React.createClass({
 
 	onPageSelected: function() {
 		if (!this.props.isOwnStockPage){
-			if (this.state.rowStockInfoData.length === 0) {
-				this.fetchStockData()
-			}
+			this.reFetchStockData()
 		}
 	},
 
@@ -195,9 +199,7 @@ var StockListPage = React.createClass({
 			this.updateOwnData()
 		}
 		else {
-			if (this.state.rowStockInfoData.length === 0) {
-				this.fetchStockData()
-			}
+			this.reFetchStockData()
 		}
 	},
 

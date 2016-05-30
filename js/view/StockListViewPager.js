@@ -8,6 +8,7 @@ import {
 	Text,
 	Alert,
 	Dimensions,
+	NetInfo,
 } from 'react-native';
 var Swiper = require('react-native-swiper')
 
@@ -58,11 +59,28 @@ var StockListViewPager = React.createClass({
 		});
 	},
 
+	componentDidMount: function() {
+		NetInfo.isConnected.addEventListener(
+			'change',
+			this._handleConnectivityChange
+		);
+	},
+
 	componentWillUnmount: function() {
 		this.didFocusSubscription.remove();
 		this.didTabSelectSubscription.remove();
+    	NetInfo.isConnected.removeEventListener(
+			'change',
+			this._handleConnectivityChange
+		);
 	},
 
+	_handleConnectivityChange: function(isConnected) {
+		if (isConnected) {
+			this.refs['page' + this.state.currentSelectedTab].onPageSelected()
+		}
+	},
+	
 	onDidFocus: function(event) {
         if (AppNavigator.STOCK_LIST_VIEW_PAGER_ROUTE === event.data.route.name) {
             WebSocketModule.registerCallbacks((stockInfo) => {

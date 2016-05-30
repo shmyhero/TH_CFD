@@ -6,6 +6,7 @@ import {
 	View,
 	WebView,
 	Dimensions,
+	NetInfo,
 } from 'react-native';
 
 var WEBVIEW_REF = 'qawebview';
@@ -24,20 +25,45 @@ var QAPage = React.createClass({
 		}
 	},
 
-	getInitialState: function() {
-		return {
-			refresh: true,
-		};
-	},
-	
-	componentWillMount: function() {
-		this.didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.QA_TAB_PRESS_EVENT, this.onTabPressed);
+	// getInitialState: function() {
+	// 	return {
+	// 		isNetConnected: true,
+	// 	};
+	// },
+
+	componentDidMount: function() {
+		NetInfo.isConnected.addEventListener(
+			'change',
+			this._handleConnectivityChange
+		);
+		// //检测网络是否连接
+		// NetInfo.isConnected.fetch().done(
+		// 	(isConnected) => { this.setState({isNetConnected: isConnected}); }
+		// );
 	},
 
-	onTabPressed: function() {
-		this.refs[WEBVIEW_REF].reload();
-		this.setState({refresh: true})
+	// componentWillMount: function() {
+	// 	this.didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.QA_TAB_PRESS_EVENT, this.onTabPressed);
+	// },
+
+	componentWillUnmount: function() {
+    	NetInfo.isConnected.removeEventListener(
+			'change',
+			this._handleConnectivityChange
+		);
+		// this.didTabSelectSubscription.remove()
+    },
+
+	_handleConnectivityChange: function(isConnected) {
+		if (isConnected) {
+			// this.setState({isNetConnected: isConnected})
+			this.refs[WEBVIEW_REF].reload();
+		}
 	},
+
+	// onTabPressed: function() {
+	// 	this.refs[WEBVIEW_REF].reload();
+	// },
 
 	render: function() {
 		return (
@@ -48,9 +74,6 @@ var QAPage = React.createClass({
 				domStorageEnabled={true}
 				scalesPageToFit={true}
 				automaticallyAdjustContentInsets={true}
-          		onLoadStart={()=>console.log("load start")}
-          		onLoadEnd={()=>console.log("load finish")}
-          		onError={()=>console.log("load error")}
 				decelerationRate="normal"
 				source={{uri: this.props.url}} />
 		)

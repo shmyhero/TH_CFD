@@ -14,7 +14,7 @@
     "react-native-update": "^1.0.5",
     "react-native-viewpager": "^0.2.1",
     "react-native-wheel-picker": "^0.9.5",
-    "react-native-wx": "^1.0.7",
+    "react-native-wx": "^1.0.9",
     "react-timer-mixin": "^0.13.3",
     "realm": "^0.11.1"
   }

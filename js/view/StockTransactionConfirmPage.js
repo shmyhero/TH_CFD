@@ -217,8 +217,8 @@ var styles = StyleSheet.create({
 
 	contentContainer: {
 		position: 'absolute',
-		left: 0,
-		right: 0,
+		left: 10,
+		right: 10,
 	},
 
 	titleContainer: {

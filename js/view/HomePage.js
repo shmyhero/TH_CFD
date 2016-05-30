@@ -96,7 +96,7 @@ var HomePage = React.createClass({
 	},
 
 	gotoRecommandPage: function(pageID) {
-		pageID += 1
+		pageID = parseInt(pageID) + 1
 		this.props.navigator.push({
 			name: AppNavigator.HOMEPAGE_RECOMMAND_ROUTE,
 			url: RECOMMAND_URL + pageID,

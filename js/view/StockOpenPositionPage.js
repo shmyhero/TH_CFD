@@ -263,6 +263,8 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	okPress: function(rowData) {
+		if (!rowData.security.isOpen)
+			return
 		if (this.state.showExchangeDoubleCheck === false) {
 			this.setState({
 				showExchangeDoubleCheck: true,
@@ -823,6 +825,7 @@ var StockOpenPositionPage = React.createClass({
 					underlayColor={	'#164593'}
 					onPress={() => this.okPress(rowData)} style={[styles.okView, this.state.showExchangeDoubleCheck && styles.okViewDoubleConfirm]}>
 					<Text style={[styles.okButton, this.state.showExchangeDoubleCheck && styles.okButtonDoubleConfirm]}>
+						{rowData.security.isOpen ? null : <Text style={[{color:'#f1585c', fontSize: 20}]}>未开市    </Text>}
 						{buttonText}
 					</Text>
 				</TouchableHighlight>

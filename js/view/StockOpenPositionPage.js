@@ -822,10 +822,9 @@ var StockOpenPositionPage = React.createClass({
 				: null}
 
 				<TouchableHighlight
-					underlayColor={	'#164593'}
-					onPress={() => this.okPress(rowData)} style={[styles.okView, this.state.showExchangeDoubleCheck && styles.okViewDoubleConfirm]}>
+					underlayColor={rowData.security.isOpen ? '#164593' : '#dfdee4'}
+					onPress={() => this.okPress(rowData)} style={[styles.okView, this.state.showExchangeDoubleCheck && styles.okViewDoubleConfirm, !rowData.security.isOpen && styles.okViewDisabled]}>
 					<Text style={[styles.okButton, this.state.showExchangeDoubleCheck && styles.okButtonDoubleConfirm]}>
-						{rowData.security.isOpen ? null : <Text style={[{color:'#f1585c', fontSize: 20}]}>未开市    </Text>}
 						{buttonText}
 					</Text>
 				</TouchableHighlight>
@@ -936,6 +935,9 @@ var StockOpenPositionPage = React.createClass({
 						<View style={styles.rowRightPart}>
 							{this.renderProfit(profitPercentage * 100)}
 						</View>
+						{rowData.security.isOpen ? null :
+							<Image style={styles.notOpenImage} source={require('../../images/not_open.png')}/>
+						}
 					</View>
 				</TouchableHighlight>
 
@@ -1032,6 +1034,13 @@ var styles = StyleSheet.create({
 		paddingRight: 5,
 		alignItems: 'flex-end',
 		borderRadius: 2,
+	},
+
+	notOpenImage: {
+		width: 23,
+		height: 23,
+		marginRight: -15,
+		marginTop: -32,
 	},
 
 	stockNameText: {

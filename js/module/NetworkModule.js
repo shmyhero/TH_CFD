@@ -4,9 +4,9 @@ var LogicData = require('../LogicData')
 var NetConstants = require('../NetConstants')
 import React from 'react';
 var AppNavigator = require('../../AppNavigator')
-var {
+import {
 	Alert
-} = React
+} from 'react-native';
 
 var alertShow = false
 
@@ -15,7 +15,7 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 
 	console.log('fetching: ' + url + ' with params: ')
 	console.log(params)
-	
+
 	if (params.showLoading === true) {
 		AppNavigator.showProgress && AppNavigator.showProgress()
 	}

@@ -397,6 +397,7 @@ var styles = StyleSheet.create({
 		fontSize: 18,
 		textAlign: 'center',
 		fontWeight: 'bold',
+		paddingBottom: 2,
 	},
 	stockSymbolText: {
 		fontSize: 12,
@@ -407,8 +408,8 @@ var styles = StyleSheet.create({
 	addToMyListContainer: {
 		paddingLeft: 10,
 		paddingRight: 10,
-		paddingBottom: 10,
-		paddingTop: 10,
+		paddingBottom: 5,
+		paddingTop: 5,
 		alignItems: 'center',
 	},
 	addToMyListView: {

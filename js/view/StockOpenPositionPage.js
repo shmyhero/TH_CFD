@@ -41,7 +41,7 @@ var stopProfitPercent = 0
 var stopLossPercent = 0
 var stopProfitUpdated = false
 var stopLossUpdated = false
-var MAX_PERCENT = 99
+var MAX_PERCENT = 90
 
 var StockOpenPositionPage = React.createClass({
 

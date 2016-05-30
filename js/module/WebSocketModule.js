@@ -55,11 +55,11 @@ export function start() {
 	alertWebSocketProxy = webSocketConnection.createHubProxy(alertServerName);
 	alertWebSocketProxy.on(serverListenerName, (alertInfoArr) => {
 		console.log('alert comes.')
-		for (var alertInfo in alertInfoArr) {
-			Alert.alert('', alertInfo)
+		for (var i = 0; i < alertInfoArr.length; i++) {
+			Alert.alert('', alertInfoArr[i])
 		}
 
-		if (wsAlertCallback !== null) {
+		if (wsAlertCallback) {
 			wsAlertCallback(alertInfoArr)
 		}
 	});

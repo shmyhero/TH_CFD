@@ -125,7 +125,6 @@ var StockListPage = React.createClass({
 				LogicData.setOwnStocksData(JSON.parse(value))
 			}
 		}).then(() => {
-			// this.updateOwnData();
 			var ownData = LogicData.getOwnStocksData()
 			if (ownData.length > 0) {
 				var param = "/"+ownData[0].id
@@ -138,6 +137,7 @@ var StockListPage = React.createClass({
 						method: 'GET',
 					},
 					(responseJson) => {
+						LogicData.setOwnStocksData(responseJson)
 						this.setState({
 							rowStockInfoData: responseJson,
 							stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, responseJson))
@@ -165,7 +165,7 @@ var StockListPage = React.createClass({
 						var stockData = JSON.parse(args[1])
 						LogicData.setOwnStocksData(stockData)
 						NetworkModule.updateOwnStocks(stockData)
-						this.updateOwnData()
+						this.refreshOwnData()
 					}
 					console.log('Get data from Native ' + args[0] + ' : ' + args[1])
 				}
@@ -184,7 +184,7 @@ var StockListPage = React.createClass({
 		var currentRoute = this.props.navigator.navigationContext.currentRoute;
 		//didfocus emit in componentDidMount
         if (currentRoute === event.data.route) {
-            this.updateOwnData()
+            this.refreshOwnData()
         }
 	},
 
@@ -196,14 +196,14 @@ var StockListPage = React.createClass({
 
 	tabPressed: function() {
 		if (this.props.isOwnStockPage) {
-			this.updateOwnData()
+			this.refreshOwnData()
 		}
 		else {
 			this.reFetchStockData()
 		}
 	},
 
-	updateOwnData: function() {
+	refreshOwnData: function() {
 		var ownData = LogicData.getOwnStocksData()
 		this.setState({
 			rowStockInfoData: ownData,

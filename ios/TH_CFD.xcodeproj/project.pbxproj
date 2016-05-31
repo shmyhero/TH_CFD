@@ -37,10 +37,6 @@
 		3DC618051CA29F9900F36541 /* StockChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC618041CA29F9900F36541 /* StockChartView.swift */; };
 		3DC6182D1CA3922A00F36541 /* StockChartViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC6182C1CA3922A00F36541 /* StockChartViewManager.m */; };
 		3DD744771CCE18040021304F /* myhero.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3DD744761CCE18040021304F /* myhero.ttf */; };
-		73273AD31C7B0EC1004EED11 /* guide_screen1.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273ACF1C7B0EC1004EED11 /* guide_screen1.png */; };
-		73273AD41C7B0EC1004EED11 /* guide_screen2.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273AD01C7B0EC1004EED11 /* guide_screen2.png */; };
-		73273AD51C7B0EC1004EED11 /* guide_screen4.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273AD11C7B0EC1004EED11 /* guide_screen4.png */; };
-		73273AD61C7B0EC1004EED11 /* guide_screen3.png in Resources */ = {isa = PBXBuildFile; fileRef = 73273AD21C7B0EC1004EED11 /* guide_screen3.png */; };
 		73DFEAF21CDB242700234CE8 /* libbz2.1.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 73DFEAF01CDB22A500234CE8 /* libbz2.1.0.tbd */; };
 		80BCA2B8147C419E82DF3DFB /* libRCTHotUpdate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADAFAB0527AA419A8350A2B3 /* libRCTHotUpdate.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
@@ -200,10 +196,6 @@
 		4824BD7846734F98A8B26DD3 /* libRCTWeChat.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTWeChat.a; sourceTree = "<group>"; };
 		58602275B1F14B899E56D44F /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
 		5EE2CE709A38445E9875FCBD /* libRealmReact.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRealmReact.a; sourceTree = "<group>"; };
-		73273ACF1C7B0EC1004EED11 /* guide_screen1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen1.png; sourceTree = "<group>"; };
-		73273AD01C7B0EC1004EED11 /* guide_screen2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen2.png; sourceTree = "<group>"; };
-		73273AD11C7B0EC1004EED11 /* guide_screen4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen4.png; sourceTree = "<group>"; };
-		73273AD21C7B0EC1004EED11 /* guide_screen3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = guide_screen3.png; sourceTree = "<group>"; };
 		73DFEAF01CDB22A500234CE8 /* libbz2.1.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.1.0.tbd; path = usr/lib/libbz2.1.0.tbd; sourceTree = SDKROOT; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
@@ -331,10 +323,6 @@
 				3D5C46C71C92B51000BF6FD3 /* main.jsbundle */,
 				3D47CB481C897882000EF6EF /* AppDelegate.swift */,
 				3D47CB471C897879000EF6EF /* TH_CFD-Bridging-Header.h */,
-				73273ACF1C7B0EC1004EED11 /* guide_screen1.png */,
-				73273AD01C7B0EC1004EED11 /* guide_screen2.png */,
-				73273AD11C7B0EC1004EED11 /* guide_screen4.png */,
-				73273AD21C7B0EC1004EED11 /* guide_screen3.png */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
@@ -536,7 +524,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = RSLW4S7XVW;
+						DevelopmentTeam = CLAS2G6QPJ;
 					};
 				};
 			};
@@ -730,14 +718,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				73273AD61C7B0EC1004EED11 /* guide_screen3.png in Resources */,
-				73273AD31C7B0EC1004EED11 /* guide_screen1.png in Resources */,
 				3DB98C0F1CE1CF1A00DB3FA5 /* frontPage.jpg in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				3D61C5F31C9931A10037816A /* MainStoryboard.storyboard in Resources */,
-				73273AD41C7B0EC1004EED11 /* guide_screen2.png in Resources */,
-				73273AD51C7B0EC1004EED11 /* guide_screen4.png in Resources */,
 				3DD744771CCE18040021304F /* myhero.ttf in Resources */,
 				3D5C46C81C92B51000BF6FD3 /* main.jsbundle in Resources */,
 			);
@@ -896,7 +880,7 @@
 					"\"$(SRCROOT)/TH_CFD\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.myhero.CFD;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mymanisku.CFD;
 				PRODUCT_NAME = TH_CFD;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "TH_CFD-Bridging-Header.h";
@@ -931,7 +915,7 @@
 					"\"$(SRCROOT)/TH_CFD\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.myhero.CFD;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mymanisku.CFD;
 				PRODUCT_NAME = TH_CFD;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "TH_CFD-Bridging-Header.h";

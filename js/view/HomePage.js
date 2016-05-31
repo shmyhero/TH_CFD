@@ -105,13 +105,13 @@ var HomePage = React.createClass({
 	},
 
 	logoutPress: function() {
-		StorageModule.removeUserData()
-		.then(() => {
-			LogicData.removeUserData()
-			WebSocketModule.registerCallbacks(
-				() => {
-			})
-		})
+		// StorageModule.removeUserData()
+		// .then(() => {
+		// 	LogicData.removeUserData()
+		// 	WebSocketModule.registerCallbacks(
+		// 		() => {
+		// 	})
+		// })
 	},
 	render: function() {
 		return (

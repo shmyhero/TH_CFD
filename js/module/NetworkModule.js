@@ -55,7 +55,7 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 			console.log('fetchTHUrl catches: ' + e)
 			var message = e.message
 			if(message.toLowerCase() === "network request failed"){
-				message = "连接网络失败"
+				message = "网络连接已断开，请检查设置"
 			}
 			// errorCallback(message);
 			if (!alertShow) {

@@ -96,7 +96,7 @@ var StockListPage = React.createClass({
 				if (!this.props.isOwnStockPage) {
 					var userData = LogicData.getUserData()
 					NetworkModule.fetchTHUrl(
-						this.props.dataURL + '?page=1&perPage=30',
+						this.props.dataURL + '?page=1&perPage=99',
 						{
 							method: 'GET',
 							headers: {

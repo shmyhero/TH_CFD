@@ -74,25 +74,26 @@ var HomePage = React.createClass({
 	_renderPage: function(
 		data: Object,
 		pageID: number | string,) {
-		if (data.imgUrl !== undefined && data.imgUrl !== null) {
+		// if (data.imgUrl !== undefined && data.imgUrl !== null) {
 			return (
 				<TouchableOpacity
+					activeOpacity = {0.7}
 					onPress={() => this.gotoRecommandPage(pageID)}>
 					<Image
 						style={[styles.image, {height: imageHeight, width: width}]}
 						source={{uri: data.imgUrl}}/>
 				</TouchableOpacity>
 			);
-		} else {
-			return (
-				<TouchableOpacity
-					onPress={() => this.gotoRecommandPage(pageID)}>
-					<Image
-						style={[styles.image, {height: imageHeight, width: width}]}
-						source={BANNERS[pageID % 2]}/>
-				</TouchableOpacity>
-			);
-		}
+		// } else {
+		// 	return (
+		// 		<TouchableOpacity
+		// 			onPress={() => this.gotoRecommandPage(pageID)}>
+		// 			<Image
+		// 				style={[styles.image, {height: imageHeight, width: width}]}
+		// 				source={BANNERS[pageID % 2]}/>
+		// 		</TouchableOpacity>
+		// 	);
+		// }
 	},
 
 	gotoRecommandPage: function(pageID) {
@@ -116,12 +117,17 @@ var HomePage = React.createClass({
 		return (
 			<View style={{width: width, height: height - UIConstants.TAB_BAR_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER}}>
 				<View style={{width: width, height: imageHeight}}>
+					<Image
+						style={[styles.backgroundImage, {height: imageHeight, width: width}]}
+						source={BANNERS[0]}>
 					<ViewPager
+						style={{backgroundColor:'transparent'}}
 						dataSource={this.state.dataSource}
 						renderPage={this._renderPage}
 						renderPageIndicator={false}
 						isLoop={true}
 						autoPlay={true}/>
+					</Image>
 				</View>
 
 				<View style={styles.rowContainer}>
@@ -179,6 +185,7 @@ var styles = StyleSheet.create({
 	image: {
 		height: 239,
 		resizeMode: Image.resizeMode.stretch,
+		backgroundColor:'transparent',
 	},
 	rowContainer: {
 		flex: 1,
@@ -214,6 +221,10 @@ var styles = StyleSheet.create({
 		fontSize: 12,
 		textAlign: 'center',
 	},
+	  backgroundImage: {
+	    flex: 1,
+	    resizeMode: 'cover', // or 'stretch'
+	  }
 });
 
 module.exports = HomePage;

@@ -432,7 +432,7 @@ var StockDetailPage = React.createClass({
 		return (
 			<NavBar showBackButton={true} navigator={this.props.navigator}
 				backButtonOnClick={this.props.showTabbar}
-				barStyle={{height: barHeight}}	titleStyle={{fontSize:16}}
+				barStyle={{height: barHeight}}	titleStyle={{fontSize:18}}
 				title={this.props.stockName}
 				backgroundColor='transparent'
 				subTitleStyle={[styles.subTitle, {color: subTitleColor}]}

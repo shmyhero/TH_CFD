@@ -407,7 +407,7 @@ var styles = StyleSheet.create({
 
 	addToMyListContainer: {
 		paddingLeft: 20,
-		paddingRight: 20,
+		paddingRight: 10,
 		paddingBottom: 10,
 		paddingTop: 10,
 		alignItems: 'center',

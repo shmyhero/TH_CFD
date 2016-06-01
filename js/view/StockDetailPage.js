@@ -361,7 +361,7 @@ var StockDetailPage = React.createClass({
 
 						{this.renderChartHeader()}
 
-						<View style={{flex: 3, marginTop:5}}>
+						<View style={{flex: 3.5, marginTop:5}}>
 							<LineChart style={styles.lineChart}
 								data={JSON.stringify(this.state.stockInfo)}
 								chartType={this.state.chartType}>
@@ -374,11 +374,11 @@ var StockDetailPage = React.createClass({
 						<View style={{flex: 1.2, justifyContent: 'space-around'}}>
 							{this.renderTradeButton()}
 						</View>
-						<View style={{flex: 2.8, justifyContent: 'space-around'}}>
+						<View style={{flex: 2.5, justifyContent: 'space-around'}}>
 							{this.renderScrollHeader()}
 							{this.renderScroll()}
 						</View>
-						<View style={{flex: 2, alignItems: 'center', justifyContent: 'space-around', paddingBottom:Platform.OS === 'ios'?10:48}}>
+						<View style={{flex: 2, alignItems: 'center', justifyContent: 'space-around', paddingTop: 30, paddingBottom:Platform.OS === 'ios'?10:48}}>
 							<Text style={styles.leftMoneyLabel}> 账户剩余资金：{leftMoney.toFixed(2)}</Text>
 							<Text style={styles.smallLabel}> 手续费为{charge}美元</Text>
 							{this.renderOKButton()}
@@ -800,10 +800,10 @@ var styles = StyleSheet.create({
 		paddingBottom: 16,
 	},
 	tradeButtonView: {
-		width: 140,
-		height: 45,
-    	paddingTop:7,
-    	paddingBottom:7,
+		flex: 1,
+		margin: 12,
+    	paddingTop:8,
+    	paddingBottom:9,
     	borderRadius:5,
     	borderWidth:1,
     	borderColor: '#133e86',

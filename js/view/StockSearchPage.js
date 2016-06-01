@@ -378,8 +378,6 @@ var styles = StyleSheet.create({
 		alignItems: 'center',
 		paddingLeft: 15,
 		paddingRight: 15,
-		paddingBottom: 10,
-		paddingTop: 10,
 		backgroundColor: '#ffffff',
 	},
 
@@ -398,18 +396,20 @@ var styles = StyleSheet.create({
 		textAlign: 'center',
 		fontWeight: 'bold',
 		paddingBottom: 2,
+		paddingTop: 10,
 	},
 	stockSymbolText: {
 		fontSize: 12,
 		textAlign: 'center',
 		color: '#5f5f5f',
+		paddingBottom: 10,
 	},
 
 	addToMyListContainer: {
-		paddingLeft: 10,
-		paddingRight: 10,
-		paddingBottom: 5,
-		paddingTop: 5,
+		paddingLeft: 20,
+		paddingRight: 20,
+		paddingBottom: 10,
+		paddingTop: 10,
 		alignItems: 'center',
 	},
 	addToMyListView: {

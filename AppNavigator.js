@@ -17,6 +17,7 @@ import {
 	Dimensions,
 	PixelRatio,
 	TouchableOpacity,
+	Alert,
 } from 'react-native';
 
 import {
@@ -346,7 +347,10 @@ var AppNavigator = React.createClass({
 
 	doUpdate: function(info) {
 		downloadUpdate(info).then(hash => {
-			switchVersionLater(hash);
+			Alert.alert('提示', '下载完毕,是否重启应用?', [
+				{text: '是', onPress: ()=>{switchVersion(hash);}},
+				{text: '否', onPress: ()=>{switchVersionLater(hash);}},
+			]);
 		}).catch(err => {
 			// TODO upload log for update failed.
 		});

@@ -10,6 +10,7 @@ var OWN_STOCKS_DATA_STORAGE_KEY = '@TH_CFD:ownStocksData';
 var SEARCH_HISTORY_KEY = '@TH_CFD:searchHistory';
 var BANNER_STORAGE_KEY = '@TH_CFD:bannerData';
 var GUIDE_STORAGE_KEY = '@TH_CFD:guideData';
+var TUTORIAL_KEY = '@TH_CFD:tutorialData';
 
 export async function loadUserData() {
 	try {
@@ -118,6 +119,25 @@ export async function setGuide(guideData) {
 export async function loadGuide() {
 	try {
 		var value = await AsyncStorage.getItem(GUIDE_STORAGE_KEY);
+		return value;
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function setTutorial(tutorialData) {
+	try {
+		await AsyncStorage.setItem(TUTORIAL_KEY, tutorialData)
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function loadTutorial() {
+	// the value is a dictionary, like:
+	// {trade: true, openclose: false}
+	try {
+		var value = await AsyncStorage.getItem(TUTORIAL_KEY);
 		return value;
 	} catch (error) {
 		console.log('AsyncStorage error: ' + error.message);

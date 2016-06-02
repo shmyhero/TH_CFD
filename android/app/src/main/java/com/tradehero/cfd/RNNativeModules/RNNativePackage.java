@@ -33,7 +33,6 @@ public class RNNativePackage implements ReactPackage {
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
                 new ReactLineChartManager(),
-                new ReactWheelCurvedPickerManager(),
                 new NativeWebViewModule()
         );
     }

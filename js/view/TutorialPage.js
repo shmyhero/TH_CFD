@@ -79,7 +79,7 @@ var TutorialPage = React.createClass({
 		var imageSource = pages[this.state.tutorialType][this.state.page]
 		return (
 			<TouchableOpacity style={styles.container} onPress={this.gotoNextPage}>
-				<Image source={imageSource} style={{width:width, height:height}}/>
+				<Image source={imageSource} style={{width:width, height:height, resizeMode:'stretch'}}/>
 			</TouchableOpacity>
 		)
 	},

@@ -10,7 +10,6 @@ import {
 	Dimensions,
 	NetInfo,
 } from 'react-native';
-var Swiper = require('react-native-swiper')
 
 var {EventCenter, EventConst} = require('../EventCenter')
 
@@ -80,7 +79,7 @@ var StockListViewPager = React.createClass({
 			this.refs['page' + this.state.currentSelectedTab].onPageSelected()
 		}
 	},
-	
+
 	onDidFocus: function(event) {
         if (AppNavigator.STOCK_LIST_VIEW_PAGER_ROUTE === event.data.route.name) {
             WebSocketModule.registerCallbacks((stockInfo) => {

@@ -17,7 +17,6 @@ var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
 var LogicData = require('../LogicData')
 var NetworkModule = require('../module/NetworkModule')
-var AppNavigator = require('../../AppNavigator')
 
 var rowHeight = 40;
 var fontSize = 16;

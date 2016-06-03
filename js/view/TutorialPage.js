@@ -16,7 +16,7 @@ var pages = {
 		require('../../images/tutorial01.png'),
 		require('../../images/tutorial02.png'),
 		require('../../images/tutorial03.png')],
-	'other': [require('../../images/tutorial03.png')],
+	'position': [require('../../images/tutorial04.png')],
 }
 
 var TutorialPage = React.createClass({
@@ -26,28 +26,35 @@ var TutorialPage = React.createClass({
 			visible: false,
 			page: 0,
 			time: new Date(),
+			showCallback: null,
 			hideCallback: null,
 		}
 	},
 
-	show: function(type, callback) {
+	componentWillMount: function() {
+		// this.setState({tutorialType: this.props.type})
+	},
+
+	show: function(type, showcallback, hidecallback) {
 		StorageModule.loadTutorial()
 			.then((value) => {
 				var data = JSON.parse(value)
-				if(data !== null && data[this.state.tutorialType] !== undefined) {
+				if(data !== null && data[type] !== undefined) {
 					return
 				}
 				else {
 					if(data === null) {
 						data = {}
 					}
-					data[this.state.tutorialType] = true
+					data[type] = true
 					StorageModule.setTutorial(JSON.stringify(data))
 					this.setState({
 						tutorialType: type,
 						visible: true,
-						hideCallback: callback,
+						showCallback: showcallback,
+						hideCallback: hidecallback,
 					});
+					showcallback && showcallback()
 				}
 			})
 			.done()

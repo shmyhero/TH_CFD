@@ -26,7 +26,7 @@ var NetConstants = require('../NetConstants')
 var WechatModule = require('../module/WechatModule')
 var WebSocketModule = require('../module/WebSocketModule')
 var Button = require('./component/Button')
-var AppNavigator = require('../../AppNavigator')
+var MainPage = require('./MainPage')
 var dismissKeyboard = require('dismissKeyboard');
 
 
@@ -207,7 +207,7 @@ var LoginPage = React.createClass({
 		WebSocketModule.alertServiceLogin(userData.token)
 
 		this.props.navigator.replace({
-			name: AppNavigator.UPDATE_USER_INFO_ROUTE,
+			name: MainPage.UPDATE_USER_INFO_ROUTE,
 		});
 	},
 

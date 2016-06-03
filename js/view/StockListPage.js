@@ -22,7 +22,7 @@ var UIConstants = require('../UIConstants');
 var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
-var AppNavigator = require('../../AppNavigator')
+var MainPage = require('./MainPage')
 var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 
 
@@ -269,13 +269,13 @@ var StockListPage = React.createClass({
 
   	handleAddStock: function() {
 		this.props.navigator.push({
-			name: AppNavigator.STOCK_SEARCH_ROUTE,
+			name: MainPage.STOCK_SEARCH_ROUTE,
 		});
   	},
 
   	stockPressed: function(rowData) {
   		this.props.navigator.push({
-			name: AppNavigator.STOCK_DETAIL_ROUTE,
+			name: MainPage.STOCK_DETAIL_ROUTE,
 			stockRowData: rowData
 		});
   	},

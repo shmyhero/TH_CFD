@@ -13,7 +13,7 @@ import {
 
 var ViewPager = require('react-native-viewpager');
 var ColorConstants = require('../ColorConstants')
-var AppNavigator = require('../../AppNavigator')
+var MainPage = require('./MainPage')
 var NetConstants = require('../NetConstants');
 var UIConstants = require('../UIConstants');
 var NetworkModule = require('../module/NetworkModule');
@@ -99,7 +99,7 @@ var HomePage = React.createClass({
 	gotoRecommandPage: function(pageID) {
 		pageID = parseInt(pageID) + 1
 		this.props.navigator.push({
-			name: AppNavigator.HOMEPAGE_RECOMMAND_ROUTE,
+			name: MainPage.HOMEPAGE_RECOMMAND_ROUTE,
 			url: RECOMMAND_URL + pageID,
 		});
 	},

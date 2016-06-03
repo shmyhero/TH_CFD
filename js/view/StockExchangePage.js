@@ -20,7 +20,7 @@ var StockStatisticsPage = require('./StockStatisticsPage')
 var ColorConstants = require('../ColorConstants')
 var NavBar = require('../view/NavBar')
 var LogicData = require('../LogicData')
-var AppNavigator = require('../../AppNavigator')
+var MainPage = require('./MainPage')
 
 var tabNames = ['持仓', '平仓', '统计']
 var didTabSelectSubscription = null
@@ -29,7 +29,7 @@ var StockExchangePage = React.createClass({
 
 	registerPressed: function() {
 		this.props.navigator.push({
-			name: AppNavigator.LOGIN_ROUTE,
+			name: MainPage.LOGIN_ROUTE,
 		});
 	},
 

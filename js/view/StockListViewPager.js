@@ -23,7 +23,7 @@ var WebSocketModule = require('../module/WebSocketModule')
 var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
 var NavBar = require('../view/NavBar')
-var AppNavigator = require('../../AppNavigator')
+var MainPage = require('./MainPage')
 
 
 var tabNames = ['自选', '美股', '指数', '外汇', '商品']
@@ -81,7 +81,7 @@ var StockListViewPager = React.createClass({
 	},
 
 	onDidFocus: function(event) {
-        if (AppNavigator.STOCK_LIST_VIEW_PAGER_ROUTE === event.data.route.name) {
+        if (MainPage.STOCK_LIST_VIEW_PAGER_ROUTE === event.data.route.name) {
             WebSocketModule.registerCallbacks((stockInfo) => {
 				this.refs['page' + this.state.currentSelectedTab] && this.refs['page' + this.state.currentSelectedTab].handleStockInfo(stockInfo)
 			})

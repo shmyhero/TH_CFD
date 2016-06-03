@@ -15,7 +15,7 @@ import {
 var ColorPropType = require('ColorPropType');
 var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
-var AppNavigator = require('../../AppNavigator')
+var MainPage = require('./MainPage')
 
 var NavBar = React.createClass({
 	propTypes: {
@@ -81,7 +81,7 @@ var NavBar = React.createClass({
 
 	searchButtonClicked: function() {
 		this.props.navigator.push({
-			name: AppNavigator.STOCK_SEARCH_ROUTE,
+			name: MainPage.STOCK_SEARCH_ROUTE,
 		});
 	},
 

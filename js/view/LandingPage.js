@@ -15,7 +15,7 @@ var Swiper = require('react-native-swiper')
 var LogicData = require('../LogicData')
 var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
-var AppNavigator = require('../../AppNavigator')
+var MainPage = require('./MainPage')
 var WebSocketModule = require('../module/WebSocketModule')
 
 var LandingPage = React.createClass({
@@ -27,11 +27,11 @@ var LandingPage = React.createClass({
 					LogicData.setUserData(JSON.parse(value))
 
 					this.props.navigator.push({
-						name: AppNavigator.WECHAT_LOGIN_CONFIRM_ROUTE,
+						name: MainPage.WECHAT_LOGIN_CONFIRM_ROUTE,
 					});	
 				} else {
 					this.props.navigator.push({
-						name: AppNavigator.LOGIN_ROUTE,
+						name: MainPage.LOGIN_ROUTE,
 					});
 				}
 			})

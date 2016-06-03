@@ -17,7 +17,7 @@ import {
 var LayoutAnimation = require('LayoutAnimation')
 
 var LogicData = require('../LogicData')
-var AppNavigator = require('../../AppNavigator')
+var MainPage = require('./MainPage')
 var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
 var StorageModule = require('../module/StorageModule')
@@ -186,7 +186,7 @@ var StockSearchPage = React.createClass({
   	stockPressed: function(rowData) {
   		LogicData.addStockToSearchHistory(rowData)
   		this.props.navigator.push({
-			name: AppNavigator.STOCK_DETAIL_ROUTE,
+			name: MainPage.STOCK_DETAIL_ROUTE,
 			stockRowData: rowData
 		});
   	},

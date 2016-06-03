@@ -2,8 +2,8 @@
 
 var LogicData = require('../LogicData')
 var NetConstants = require('../NetConstants')
+var MainPage = require('../view/MainPage')
 import React from 'react';
-var AppNavigator = require('../../AppNavigator')
 import {
 	Alert
 } from 'react-native';
@@ -17,7 +17,7 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 	console.log(params)
 
 	if (params.showLoading === true) {
-		AppNavigator.showProgress && AppNavigator.showProgress()
+		MainPage.showProgress && MainPage.showProgress()
 	}
 
 	fetch(url, params)
@@ -64,7 +64,7 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 			};
 		})
 		.done(() => {
-			AppNavigator.hideProgress && AppNavigator.hideProgress()
+			MainPage.hideProgress && MainPage.hideProgress()
 		});
 }
 

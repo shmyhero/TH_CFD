@@ -12,7 +12,7 @@ import {
 	Dimensions,
 	Image,
 } from 'react-native';
-var AppNavigator = require('../../AppNavigator')
+var MainPage = require('../view/MainPage')
 
 import * as WechatAPI from 'react-native-wx';
 var LogicData = require('../LogicData')
@@ -49,7 +49,7 @@ export function wechatLogin(successCallback, errorCallback) {
 
 function wechatLoginCodeHandler(response) {
 	console.log(response)
-	AppNavigator.showProgress && AppNavigator.showProgress()
+	MainPage.showProgress && MainPage.showProgress()
 
 	var url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + "wxe102be8f66949cd1" +
 		"&secret=" + "54d2804023e3e3db6ee956738b41aaf0" +
@@ -68,12 +68,12 @@ function wechatLoginCodeHandler(response) {
 		mErrorCallback(e.message);
 	})
 	.done(() => {
-		AppNavigator.hideProgress && AppNavigator.hideProgress()
+		MainPage.hideProgress && MainPage.hideProgress()
 	});
 }
 
 function wechatGetUserInfo() {
-	AppNavigator.showProgress && AppNavigator.showProgress()
+	MainPage.showProgress && MainPage.showProgress()
 
 	var wechatAuthData = LogicData.getWechatAuthData()
 	var url = "https://api.weixin.qq.com/sns/userinfo?access_token=" +
@@ -98,6 +98,6 @@ function wechatGetUserInfo() {
 		mErrorCallback(e.message);
 	})
 	.done(() => {
-		AppNavigator.hideProgress && AppNavigator.hideProgress()
+		MainPage.hideProgress && MainPage.hideProgress()
 	});
 }

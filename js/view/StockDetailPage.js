@@ -28,7 +28,7 @@ var NavBar = require('../view/NavBar')
 var InputAccessory = require('./component/InputAccessory')
 var Picker = require('react-native-wheel-picker')
 var PickerItem = Picker.Item;
-var AppNavigator = require('../../AppNavigator')
+var MainPage = require('./MainPage')
 var StockTransactionConfirmPage = require('./StockTransactionConfirmPage')
 var TimerMixin = require('react-timer-mixin');
 var TutorialPage = require('./TutorialPage');
@@ -90,7 +90,7 @@ var StockDetailPage = React.createClass({
 	},
 
 	onDidFocus: function(event) {
-        if (AppNavigator.STOCK_DETAIL_ROUTE === event.data.route.name) {
+        if (MainPage.STOCK_DETAIL_ROUTE === event.data.route.name) {
             this.loadStockInfo()
 			this.loadUserBalance()
         }
@@ -544,7 +544,7 @@ var StockDetailPage = React.createClass({
 				this.setState({tradeDirection:1})
 		} else {
 			this.props.navigator.push({
-				name: AppNavigator.LOGIN_ROUTE,
+				name: MainPage.LOGIN_ROUTE,
 			});
 		}
 	},
@@ -563,7 +563,7 @@ var StockDetailPage = React.createClass({
 				this.setState({tradeDirection:2})
 		} else {
 			this.props.navigator.push({
-				name: AppNavigator.LOGIN_ROUTE,
+				name: MainPage.LOGIN_ROUTE,
 			});
 		}
 	},

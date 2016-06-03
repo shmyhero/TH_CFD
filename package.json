@@ -6,13 +6,14 @@
     "start": "react-native start"
   },
   "dependencies": {
-    "react": "^0.14.8",
-    "react-native": "^0.25.1",
+    "react": "^15.0.2",
+    "react-native": "^0.26.3",
     "react-native-linear-gradient": "^1.5.9",
     "react-native-swiper": "^1.4.5",
     "react-native-tabbar": "^0.3.6",
     "react-native-update": "^1.0.5",
     "react-native-viewpager": "^0.2.1",
+    "react-native-viewpager-es6": "^0.2.2",
     "react-native-wheel-picker": "^1.0.0",
     "react-native-wx": "^1.0.9",
     "react-timer-mixin": "^0.13.3",

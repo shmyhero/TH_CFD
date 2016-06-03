@@ -11,7 +11,7 @@ import {
 	Platform,
 } from 'react-native';
 
-var ViewPager = require('react-native-viewpager');
+var ViewPager = require('react-native-viewpager-es6');
 var ColorConstants = require('../ColorConstants')
 var MainPage = require('./MainPage')
 var NetConstants = require('../NetConstants');
@@ -120,13 +120,13 @@ var HomePage = React.createClass({
 					<Image
 						style={[styles.backgroundImage, {height: imageHeight, width: width}]}
 						source={BANNERS[0]}>
-					<ViewPager
-						style={{backgroundColor:'transparent'}}
-						dataSource={this.state.dataSource}
-						renderPage={this._renderPage}
-						renderPageIndicator={false}
-						isLoop={true}
-						autoPlay={true}/>
+						<ViewPager
+							style={{backgroundColor:'transparent'}}
+							dataSource={this.state.dataSource}
+							renderPage={this._renderPage}
+							renderPageIndicator={false}
+							isLoop={true}
+							autoPlay={true}/>
 					</Image>
 				</View>
 

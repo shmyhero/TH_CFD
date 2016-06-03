@@ -192,10 +192,11 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                 if (mChartType == CHART_TYPE.week) {
                     Calendar lastOpen = timeStringToCalendar(stockInfoObject.getString("lastOpen"));
                     Calendar firstDataDate = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
-                    nextLineAt = lastOpen;
-                    while(nextLineAt.after(firstDataDate)) {
-                        nextLineAt.roll(gapLineUnit, 1);
-                    }
+                    nextLineAt = (Calendar) firstDataDate.clone();
+                    nextLineAt.set(Calendar.HOUR_OF_DAY, lastOpen.get(Calendar.HOUR_OF_DAY));
+                    nextLineAt.set(Calendar.MINUTE, lastOpen.get(Calendar.MINUTE));
+                    nextLineAt.set(Calendar.MILLISECOND, lastOpen.get(Calendar.MILLISECOND));
+
                     nextLineAt.add(gapLineUnit, 1);
                 } else if (mChartType == CHART_TYPE.month) {
                     nextLineAt = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
@@ -233,9 +234,11 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                         }
                     }
 
-                    int lastLine = chartDataList.length() - 1;
-                    limitLineAt.add(lastLine);
-                    limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
+                    if (mChartType != CHART_TYPE.week || !stockInfoObject.getBoolean("isOpen")) {
+                        int lastLine = chartDataList.length() - 1;
+                        limitLineAt.add(lastLine);
+                        limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
+                    }
 
                     boolean needSkipLabel = false;
                     if (limitLineAt.size() > 10) {

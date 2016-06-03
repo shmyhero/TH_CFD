@@ -31,7 +31,6 @@ var PickerItem = Picker.Item;
 var MainPage = require('./MainPage')
 var StockTransactionConfirmPage = require('./StockTransactionConfirmPage')
 var TimerMixin = require('react-timer-mixin');
-var TutorialPage = require('./TutorialPage');
 
 var didFocusSubscription = null;
 var updateStockInfoTimer = null;
@@ -124,7 +123,7 @@ var StockDetailPage = React.createClass({
 					},
 					60000
 				);
-				this.refs['tutorialPage'].show('trade')
+				this.props.showTutorial('trade')
 			},
 			(errorMessage) => {
 				Alert.alert('', errorMessage);
@@ -391,7 +390,6 @@ var StockDetailPage = React.createClass({
 	    				maxValue={parseFloat(this.state.totalMoney)}
 	    				rightButtonOnClick={this.clearMoney}/>
 
-		    		<TutorialPage ref='tutorialPage'/>
 	    			<StockTransactionConfirmPage ref='confirmPage'/>
 				</View>
     		</TouchableWithoutFeedback>

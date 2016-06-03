@@ -288,7 +288,7 @@ class StockChartView: UIView {
 		}
 		
 		//right line
-		linePath.moveToPoint(CGPoint(x:width - margin + 0.5, y:bottomMargin))
+		linePath.moveToPoint(CGPoint(x:width - margin + 0.5, y:topMargin))
 		linePath.addLineToPoint(CGPoint(x:width - margin + 0.5, y:height - bottomMargin))
 
 		bgLineColor.setStroke()

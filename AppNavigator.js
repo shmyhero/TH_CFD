@@ -7,11 +7,9 @@ import {
 	View,
 	Text,
 	Image,
-	ScrollView,
 	StatusBar,
 	Platform,
 	Dimensions,
-	PixelRatio,
 	TouchableOpacity,
 	Alert,
 } from 'react-native';

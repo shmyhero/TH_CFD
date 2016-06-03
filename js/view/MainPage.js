@@ -78,6 +78,13 @@ export var showProgress
 
 var MainPage = React.createClass({
 
+	getInitialState: function() {
+		return {
+			showTutorial: false,
+			tutorialType: 'trade',
+		};
+	},
+
 	RouteMapper : function(route, navigationOperations, onComponentRef) {
 		_navigator = navigationOperations;
 		if (route.showTabbar !== undefined) {
@@ -172,6 +179,7 @@ var MainPage = React.createClass({
 			return (
 				<StockDetailPage style={{flex: 1}}
 					navigator={navigationOperations}
+					showTutorial={this.showTutorial}
 					showTabbar={showTabbar}
 					stockName={route.stockRowData.name}
 					stockCode={route.stockRowData.id}
@@ -186,7 +194,8 @@ var MainPage = React.createClass({
 		} else if (route.name === STOCK_EXCHANGE_ROUTE) {
 			showTabbar()
 			return (
-				<StockExchangePage navigator={navigationOperations} />
+				<StockExchangePage navigator={navigationOperations} 
+					showTutorial={this.showTutorial}/>
 			)
 		} else if (route.name === HOMEPAGE_RECOMMAND_ROUTE) {
 			hideTabbar()
@@ -201,6 +210,14 @@ var MainPage = React.createClass({
 				<QAPage />
 			)
 		}
+	},
+
+	showTutorial: function(type){
+		this.setState({tutorialType:type, showTutorial:true})
+	},
+
+	hideTutorial: function(){
+		this.setState({showTutorial: false})
 	},
 
 	showTabbar() {
@@ -286,6 +303,7 @@ var MainPage = React.createClass({
 		        	</Tab>
 		      	</Tabbar>
 				<LoadingIndicator ref='progressBar'/>
+				{this.state.showTutorial ? <TutorialPage type={this.state.tutorialType} hideTutorial={this.hideTutorial}/> : null }
 	      	</View>
 		);
 	}

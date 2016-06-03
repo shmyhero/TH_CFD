@@ -19,58 +19,52 @@ var pages = {
 	'position': [require('../../images/tutorial04.png')],
 }
 
+var savedData = null
+
 var TutorialPage = React.createClass({
 	getInitialState: function() {
 		return {
 			tutorialType: 'trade',
 			visible: false,
 			page: 0,
-			time: new Date(),
 			showCallback: null,
 			hideCallback: null,
 		}
 	},
 
 	componentWillMount: function() {
-		// this.setState({tutorialType: this.props.type})
-	},
-
-	show: function(type, showcallback, hidecallback) {
+		var type = this.props.type
 		StorageModule.loadTutorial()
 			.then((value) => {
 				var data = JSON.parse(value)
+				savedData = data
 				if(data !== null && data[type] !== undefined) {
 					return
 				}
 				else {
-					if(data === null) {
-						data = {}
-					}
-					data[type] = true
-					StorageModule.setTutorial(JSON.stringify(data))
 					this.setState({
 						tutorialType: type,
 						visible: true,
-						showCallback: showcallback,
-						hideCallback: hidecallback,
 					});
-					showcallback && showcallback()
 				}
 			})
 			.done()
 	},
 
-	hide: function() {
-		this.setState({
-			visible: false,
-		})
-		this.state.hideCallback && this.state.hideCallback()
-	},
-
 	gotoNextPage: function() {
 		var totalPage = pages[this.state.tutorialType].length;
 		if (this.state.page === totalPage) {
-			this.hide()
+			this.setState({
+				visible: false,
+			})
+			this.hideCallback && this.hideCallback()
+			this.props.hideTutorial()
+
+			if(savedData === null) {
+				savedData = {}
+			}
+			savedData[this.state.tutorialType] = true
+			StorageModule.setTutorial(JSON.stringify(savedData))
 		}
 		else {
 			this.setState({

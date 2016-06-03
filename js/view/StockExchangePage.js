@@ -73,7 +73,8 @@ var StockExchangePage = React.createClass({
 
 		var {height, width} = Dimensions.get('window');
 		var tabPages = [
-			<StockOpenPositionPage navigator={this.props.navigator} ref={'page0'}/>,
+			<StockOpenPositionPage navigator={this.props.navigator} ref={'page0'}
+					showTutorial={(type)=>this.props.showTutorial(type)}/>,
 			<StockClosedPositionPage navigator={this.props.navigator} ref={'page1'}/>,
 			<StockStatisticsPage navigator={this.props.navigator} ref={'page2'}/>
 		]

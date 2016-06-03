@@ -28,6 +28,7 @@ var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
 var StockTransactionConfirmPage = require('./StockTransactionConfirmPage')
 var TimerMixin = require('react-timer-mixin');
+var StorageModule = require('../module/StorageModule')
 
 var {height, width} = Dimensions.get('window');
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {
@@ -65,6 +66,7 @@ var StockOpenPositionPage = React.createClass({
 
 	componentDidMount: function() {
 		this.loadOpenPositionInfo()
+
 	},
 
 	onEndReached: function() {
@@ -73,6 +75,19 @@ var StockOpenPositionPage = React.createClass({
 
 	tabPressed: function() {
 		this.loadOpenPositionInfo()
+		// show tutorial
+		StorageModule.loadTutorial()
+			.then((value) => {
+				var data = JSON.parse(value)
+				if(data === null || data['position'] === undefined) {
+					if (this.state.stockInfoRowData.length > 0) {
+						this.setState({selectedSubItem: 2, selectedRow: 0})
+						this.props.showTutorial('position')
+					}
+				}
+			})
+			.done()
+		
 	},
 
 	loadOpenPositionInfo: function() {
@@ -914,7 +929,7 @@ var StockOpenPositionPage = React.createClass({
 				profitPercentage *= (-1)
 			}
 		}
-		var bgcolor = this.state.selectedRow === rowID ? '#e6e5eb' : 'white'
+		var bgcolor = this.state.selectedRow == rowID ? '#e6e5eb' : 'white'
 		return (
 			<View>
 				<TouchableHighlight activeOpacity={1} onPress={() => this.stockPressed(rowData, sectionID, rowID, highlightRow)}>
@@ -941,7 +956,7 @@ var StockOpenPositionPage = React.createClass({
 					</View>
 				</TouchableHighlight>
 
-				{this.state.selectedRow === rowID ? this.renderDetailInfo(rowData): null}
+				{this.state.selectedRow == rowID ? this.renderDetailInfo(rowData): null}
 			</View>
 		);
 	},

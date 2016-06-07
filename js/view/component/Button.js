@@ -29,8 +29,8 @@ var Button = React.createClass({
 				activeOpacity={this.props.enabled ? 0.7 : 1}
 				underlayColor={this.props.enabled ? '#000000': ColorConstants.DISABLED_GREY}
 				onPress={this.props.enabled ? this.props.onPress : null}>
-				<View style={this.props.enabled ? 
-						this.props.textContainerStyle : 
+				<View style={this.props.enabled ?
+						this.props.textContainerStyle :
 						[this.props.textContainerStyle, {backgroundColor: ColorConstants.DISABLED_GREY}]}>
 					<Text style={this.props.textStyle}>
 						{this.props.text}

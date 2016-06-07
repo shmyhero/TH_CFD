@@ -63,6 +63,7 @@ var StorageModule = require('./js/module/StorageModule')
 var FSModule = require('./js/module/FSModule')
 var LogicData = require('./js/LogicData')
 var MainPage = require('./js/view/MainPage')
+var AskForRestartPage = require('./js/view/AskForRestartPage')
 
 var GUIDE_SLIDES = [
 	require('./images/Guide-page01.png'),
@@ -81,6 +82,9 @@ var AppNavigator = React.createClass({
 	getInitialState: function() {
 		return {
 			startUpPhase: LOADING_PHASE,
+			showAskForRestart: false,
+			updateDescription: '',
+			updateHash: '',
 		};
 	},
 
@@ -152,6 +156,10 @@ var AppNavigator = React.createClass({
 			} else if (info.upToDate) {
 				// Do nothing as the version is up-to-date.
 			} else {
+				var description = info.description.replace(/\\n/g, '\n')
+				this.setState({
+					updateDescription: description,
+				})
 				this.doUpdate(info)
 			}
 		}).catch(err => {
@@ -161,13 +169,30 @@ var AppNavigator = React.createClass({
 
 	doUpdate: function(info) {
 		downloadUpdate(info).then(hash => {
-			Alert.alert('提示', '下载完毕,是否重启应用?', [
-				{text: '是', onPress: ()=>{switchVersion(hash);}},
-				{text: '否', onPress: ()=>{switchVersionLater(hash);}},
-			]);
+			this.setState({
+				showAskForRestart: true,
+				updateHash: hash,
+			})
 		}).catch(err => {
 			// TODO upload log for update failed.
 		});
+	},
+
+	closeAskForRestartDialog: function() {
+		this.setState({
+			showAskForRestart: false,
+		})
+	},
+
+	renderAskForRestart: function() {
+		if (this.state.showAskForRestart) {
+			return (
+				<AskForRestartPage
+					updateDescription={this.state.updateDescription}
+					updateHash={this.state.updateHash}
+					closeCallback={this.closeAskForRestartDialog}/>
+			)
+		}
 	},
 
 	render: function() {
@@ -179,6 +204,7 @@ var AppNavigator = React.createClass({
 				<View style={styles.container}>
 					{statusBar}
 					<MainPage />
+					{this.renderAskForRestart()}
 				</View>
 			)
 		} else if (this.state.startUpPhase == GUIDE_PHASE) {
@@ -214,6 +240,7 @@ var AppNavigator = React.createClass({
 					<Swiper loop={false} bounces={true} activeDot={activeDot} dot={dot}>
 						{slides}
 					</Swiper>
+					{this.renderAskForRestart()}
 				</View>
 			)
 		} else if (this.state.startUpPhase == LOADING_PHASE){
@@ -225,6 +252,7 @@ var AppNavigator = React.createClass({
 							style={[styles.image, {width: width, height: height}]}
 							source={require('./images/frontPage.jpg')}/>
 
+						{this.renderAskForRestart()}
 					</View>
 				);
 			} else {

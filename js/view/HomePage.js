@@ -157,8 +157,8 @@ var HomePage = React.createClass({
 						dataSource={this.state.dataSource}
 						renderPage={this._renderPage}
 						renderPageIndicator={false}
-						isLoop={this.state.dataSource.length > 1}
-						autoPlay={this.state.dataSource.length > 1}/>
+						isLoop={this.state.dataSource.getPageCount() > 1}
+						autoPlay={this.state.dataSource.getPageCount() > 1}/>
 				</View>
 
 				<View style={styles.rowContainer}>

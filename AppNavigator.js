@@ -60,6 +60,7 @@ var TimerMixin = require('react-timer-mixin');
 var LayoutAnimation = require('LayoutAnimation')
 var Swiper = require('react-native-swiper')
 var StorageModule = require('./js/module/StorageModule')
+var FSModule = require('./js/module/FSModule')
 var LogicData = require('./js/LogicData')
 var MainPage = require('./js/view/MainPage')
 
@@ -154,7 +155,7 @@ var AppNavigator = React.createClass({
 				this.doUpdate(info)
 			}
 		}).catch(err => {
-			Alert.alert('提示', '更新失败.');
+			// Do nothing.
 		});
 	},
 

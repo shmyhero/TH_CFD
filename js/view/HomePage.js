@@ -17,18 +17,19 @@ var MainPage = require('./MainPage')
 var NetConstants = require('../NetConstants');
 var UIConstants = require('../UIConstants');
 var NetworkModule = require('../module/NetworkModule');
-var StorageModule = require('../module/StorageModule')
-var LogicData = require('../LogicData')
-var WebSocketModule = require('../module/WebSocketModule')
+var StorageModule = require('../module/StorageModule');
+var FSModule = require('../module/FSModule');
+var LogicData = require('../LogicData');
+var WebSocketModule = require('../module/WebSocketModule');
 
 var RECOMMAND_URL = 'http://cn.tradehero.mobi/TH_CFD_WEB/detailslider.html?pageid='
 var PAGES = [
-  'Page 0',
-  'Page 1',
+	{name: 'Page0'},
+	{name: 'Page1'},
 ];
 var BANNERS = [
-	require('../../images/bannar01.png'),
-	require('../../images/bannar02.png'),
+	require('../../images/back.png'),
+	require('../../images/back.png'),
 ];
 var {height, width} = Dimensions.get('window');
 var imageHeight = 478 / 750 * width
@@ -47,9 +48,7 @@ var HomePage = React.createClass({
 		StorageModule.loadBanners()
 			.then((value) => {
 				if (value !== null) {
-					this.setState({
-						dataSource: ds.cloneWithPages(JSON.parse(value))
-					})
+					this.downloadBannerImages(JSON.parse(value))
 				}
 			})
 			.done()
@@ -60,9 +59,7 @@ var HomePage = React.createClass({
 				method: 'GET',
 			},
 			(responseJson) => {
-				this.setState({
-					dataSource: ds.cloneWithPages(responseJson)
-				})
+				this.downloadBannerImages(responseJson)
 				StorageModule.setBanners(JSON.stringify(responseJson))
 			},
 			(errorMessage) => {
@@ -71,29 +68,67 @@ var HomePage = React.createClass({
 		)
 	},
 
+	downloadBannerImages: function(images) {
+		this.downloadOneBannerImage(images, 0)
+	},
+
+	downloadOneBannerImage: function(images, index) {
+		if (index >= images.length) {
+			return
+		}
+		var imagePath = images[index].imgUrl
+
+		FSModule.getBannerImageLocalPath(imagePath)
+			.then(filePath => {
+				if (filePath !== null) {
+					while(PAGES.length <= index) {
+						PAGES.push({name: 'PAGE' + PAGES.length})
+					}
+					PAGES[index].imgUrl = filePath
+					this.setState({
+						dataSource: ds.cloneWithPages(PAGES)
+					})
+					this.downloadOneBannerImage(images, index + 1)
+				} else {
+					FSModule.downloadBannerImage(imagePath, (filePath) => {
+						if (filePath !== null) {
+							while(PAGES.length <= index) {
+								PAGES.push({name: 'PAGE' + PAGES.length})
+							}
+							PAGES[index].imgUrl = filePath
+							this.setState({
+								dataSource: ds.cloneWithPages(PAGES)
+							})
+						}
+						this.downloadOneBannerImage(images, index + 1)
+					})
+				}
+			})
+	},
+
 	_renderPage: function(
 		data: Object,
 		pageID: number | string,) {
-		// if (data.imgUrl !== undefined && data.imgUrl !== null) {
+		if (data.imgUrl !== undefined && data.imgUrl !== null) {
 			return (
 				<TouchableOpacity
 					activeOpacity = {0.7}
 					onPress={() => this.gotoRecommandPage(pageID)}>
 					<Image
 						style={[styles.image, {height: imageHeight, width: width}]}
-						source={{uri: data.imgUrl}}/>
+						source={{uri: 'file://' + data.imgUrl}}/>
 				</TouchableOpacity>
 			);
-		// } else {
-		// 	return (
-		// 		<TouchableOpacity
-		// 			onPress={() => this.gotoRecommandPage(pageID)}>
-		// 			<Image
-		// 				style={[styles.image, {height: imageHeight, width: width}]}
-		// 				source={BANNERS[pageID % 2]}/>
-		// 		</TouchableOpacity>
-		// 	);
-		// }
+		} else {
+			return (
+				<TouchableOpacity
+					onPress={() => this.gotoRecommandPage(pageID)}>
+					<Image
+						style={[styles.image, {height: imageHeight, width: width}]}
+						source={BANNERS[pageID % 2]}/>
+				</TouchableOpacity>
+			);
+		}
 	},
 
 	gotoRecommandPage: function(pageID) {
@@ -117,17 +152,13 @@ var HomePage = React.createClass({
 		return (
 			<View style={{width: width, height: height - UIConstants.TAB_BAR_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER}}>
 				<View style={{width: width, height: imageHeight}}>
-					<Image
-						style={[styles.backgroundImage, {height: imageHeight, width: width}]}
-						source={BANNERS[0]}>
-						<ViewPager
-							style={{backgroundColor:'transparent'}}
-							dataSource={this.state.dataSource}
-							renderPage={this._renderPage}
-							renderPageIndicator={false}
-							isLoop={true}
-							autoPlay={true}/>
-					</Image>
+					<ViewPager
+						style={{backgroundColor:'transparent'}}
+						dataSource={this.state.dataSource}
+						renderPage={this._renderPage}
+						renderPageIndicator={false}
+						isLoop={this.state.dataSource.length > 1}
+						autoPlay={this.state.dataSource.length > 1}/>
 				</View>
 
 				<View style={styles.rowContainer}>

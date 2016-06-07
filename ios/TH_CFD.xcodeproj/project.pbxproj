@@ -38,6 +38,7 @@
 		3DC6182D1CA3922A00F36541 /* StockChartViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC6182C1CA3922A00F36541 /* StockChartViewManager.m */; };
 		3DD744771CCE18040021304F /* myhero.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3DD744761CCE18040021304F /* myhero.ttf */; };
 		73DFEAF21CDB242700234CE8 /* libbz2.1.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 73DFEAF01CDB22A500234CE8 /* libbz2.1.0.tbd */; };
+		73FD306D1D0574FD00D77EFC /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73FD306C1D0574C200D77EFC /* libRNFS.a */; };
 		80BCA2B8147C419E82DF3DFB /* libRCTHotUpdate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADAFAB0527AA419A8350A2B3 /* libRCTHotUpdate.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		865A436B8FB54AF8B476E495 /* libRCTWeChat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4824BD7846734F98A8B26DD3 /* libRCTWeChat.a */; };
@@ -130,6 +131,13 @@
 			remoteGlobalIDString = 91C5EFFF1C76ECA90037E727;
 			remoteInfo = RCTHotUpdate;
 		};
+		73FD306B1D0574C200D77EFC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 73FD30591D0574C200D77EFC /* RNFS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F12AFB9B1ADAF8F800E0535D;
+			remoteInfo = RNFS;
+		};
 		78C398B81ACF4ADC00677621 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */;
@@ -188,6 +196,7 @@
 		58602275B1F14B899E56D44F /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
 		5EE2CE709A38445E9875FCBD /* libRealmReact.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRealmReact.a; sourceTree = "<group>"; };
 		73DFEAF01CDB22A500234CE8 /* libbz2.1.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.1.0.tbd; path = usr/lib/libbz2.1.0.tbd; sourceTree = SDKROOT; };
+		73FD30591D0574C200D77EFC /* RNFS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFS.xcodeproj; path = "../node_modules/react-native-fs/RNFS.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		8BCBE68C9A854D14A920EAD9 /* RealmReact.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RealmReact.xcodeproj; path = "../node_modules/realm/react-native/ios/RealmReact.xcodeproj"; sourceTree = "<group>"; };
@@ -200,6 +209,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				73FD306D1D0574FD00D77EFC /* libRNFS.a in Frameworks */,
 				3D2A3A0A1C7C44C50085264D /* CoreTelephony.framework in Frameworks */,
 				3D2A3A011C7C3EE70085264D /* libz.tbd in Frameworks */,
 				73DFEAF21CDB242700234CE8 /* libbz2.1.0.tbd in Frameworks */,
@@ -374,6 +384,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		73FD305A1D0574C200D77EFC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				73FD306C1D0574C200D77EFC /* libRNFS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		78C398B11ACF4ADC00677621 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -385,6 +403,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				73FD30591D0574C200D77EFC /* RNFS.xcodeproj */,
 				3D2A3A091C7C44C50085264D /* CoreTelephony.framework */,
 				3D2A3A001C7C3EE70085264D /* libz.tbd */,
 				3D2A39FE1C7C3EDA0085264D /* libc++.tbd */,
@@ -539,6 +558,10 @@
 					ProductGroup = 737CC9A61CD30DFE00166A6A /* Products */;
 					ProjectRef = 8BCBE68C9A854D14A920EAD9 /* RealmReact.xcodeproj */;
 				},
+				{
+					ProductGroup = 73FD305A1D0574C200D77EFC /* Products */;
+					ProjectRef = 73FD30591D0574C200D77EFC /* RNFS.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -630,6 +653,13 @@
 			fileType = archive.ar;
 			path = libRCTHotUpdate.a;
 			remoteRef = 73DFEAE41CDB21FA00234CE8 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		73FD306C1D0574C200D77EFC /* libRNFS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNFS.a;
+			remoteRef = 73FD306B1D0574C200D77EFC /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		78C398B91ACF4ADC00677621 /* libRCTLinking.a */ = {

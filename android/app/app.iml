@@ -143,6 +143,7 @@
     <orderEntry type="library" exported="" name="support-annotations-23.0.1" level="project" />
     <orderEntry type="module" module-name="MPChartLib" exported="" />
     <orderEntry type="module" module-name="react-native-linear-gradient" exported="" />
+    <orderEntry type="module" module-name="react-native-fs" exported="" />
     <orderEntry type="module" module-name="react-native-wx" exported="" />
     <orderEntry type="module" module-name="react-native-update" exported="" />
     <orderEntry type="module" module-name="react-native-wheel-picker" exported="" />

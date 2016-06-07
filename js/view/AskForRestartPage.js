@@ -42,6 +42,9 @@ var AskForRestartPage = React.createClass({
 
 	restartNow: function() {
 		switchVersion(this.props.updateHash)
+		if (this.props.closeCallback) {
+			this.props.closeCallback()
+		}
 	},
 
 	restartLater: function() {

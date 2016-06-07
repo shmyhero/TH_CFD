@@ -28,8 +28,8 @@ var PAGES = [
 	{name: 'Page1'},
 ];
 var BANNERS = [
-	require('../../images/back.png'),
-	require('../../images/back.png'),
+	require('../../images/bannar01.png'),
+	require('../../images/bannar02.png'),
 ];
 var {height, width} = Dimensions.get('window');
 var imageHeight = 478 / 750 * width

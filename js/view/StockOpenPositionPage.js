@@ -105,9 +105,14 @@ var StockOpenPositionPage = React.createClass({
 				this.setState({
 					stockInfoRowData: responseJson,
 					stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
-					selectedRow: -1,
-					selectedSubItem: 0,
 				})
+
+				if (this.state.selectedRow >= responseJson.length) {
+					this.setState ({
+						selectedRow: -1,
+						selectedSubItem: 0,
+					})
+				}
 
 				var stockIds = []
 				for (var i = 0; i < responseJson.length; i++) {
@@ -314,6 +319,11 @@ var StockOpenPositionPage = React.createClass({
 				responseJson.invest = rowData.invest
 				responseJson.totalHeight = Dimensions.get('window').height - UIConstants.HEADER_HEIGHT - UIConstants.TAB_BAR_HEIGHT - 50
 				this.refs['confirmPage'].show(responseJson)
+
+				this.setState ({
+					selectedRow: -1,
+					selectedSubItem: 0,
+				})
 			},
 			(errorMessage) => {
 				Alert.alert('', errorMessage);

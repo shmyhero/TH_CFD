@@ -78,8 +78,6 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	showTutorial: function() {
-		console.log("show tutorial")
-		console.log("id: ",this.props.navigator.getCurrentRoutes())
 		// show tutorial
 		StorageModule.loadTutorial()
 			.then((value) => {

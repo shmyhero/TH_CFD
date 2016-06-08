@@ -75,7 +75,7 @@ var StockOpenPositionPage = React.createClass({
 
 	tabPressed: function() {
 		this.loadOpenPositionInfo()
-		this.showTutorial()
+		// this.showTutorial()
 	},
 
 	showTutorial: function() {

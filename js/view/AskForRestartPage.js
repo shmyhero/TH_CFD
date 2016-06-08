@@ -132,6 +132,8 @@ var styles = StyleSheet.create({
 		fontSize: 18,
 		lineHeight: 28,
 		marginBottom: 30,
+		marginLeft: 5,
+		marginRight: 5,
 	},
 	askForRestartCancelButtonArea: {
 		flex: 1,

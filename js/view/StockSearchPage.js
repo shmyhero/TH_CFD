@@ -170,7 +170,7 @@ var StockSearchPage = React.createClass({
 							returnKeyType='search'
 							placeholder='搜索金融产品'
 							placeholderTextColor='#bac6e6'
-							underlineColorAndroid='#1553bc' />
+							underlineColorAndroid='transparent' />
 				</View>
 
 				<TouchableOpacity style={styles.navBarCancelTextContainer}
@@ -352,7 +352,6 @@ var styles = StyleSheet.create({
 
 	searchInput: {
 		flex: 1,
-		height: 36,
 		fontSize: 16,
 		marginLeft: 10,
 		marginRight: 10,

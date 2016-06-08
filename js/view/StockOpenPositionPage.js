@@ -65,7 +65,7 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	componentDidMount: function() {
-		this.loadOpenPositionInfo(false)
+		this.loadOpenPositionInfo()
 
 	},
 
@@ -74,7 +74,8 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	tabPressed: function() {
-		this.loadOpenPositionInfo(true)
+		this.loadOpenPositionInfo()
+		this.showTutorial()
 	},
 
 	showTutorial: function() {
@@ -92,7 +93,7 @@ var StockOpenPositionPage = React.createClass({
 			.done()
 		},
 
-	loadOpenPositionInfo: function(needTutorial) {
+	loadOpenPositionInfo: function() {
 		var userData = LogicData.getUserData()
 		var url = NetConstants.GET_OPEN_POSITION_API
 		NetworkModule.fetchTHUrl(
@@ -127,17 +128,13 @@ var StockOpenPositionPage = React.createClass({
 					}
 				};
 
-				if(needTutorial) {
-					this.showTutorial()
-				}
-
 				WebSocketModule.registerInterestedStocks(stockIds.join(','))
 				WebSocketModule.registerCallbacks(
 					(realtimeStockInfo) => {
 						this.handleStockInfo(realtimeStockInfo)
 					},
 					(alertInfo) => {
-						this.loadOpenPositionInfo(false)
+						this.loadOpenPositionInfo()
 					}
 				)
 			},
@@ -320,7 +317,7 @@ var StockOpenPositionPage = React.createClass({
 				showLoading: true,
 			},
 			(responseJson) => {
-				this.loadOpenPositionInfo(false)
+				this.loadOpenPositionInfo()
 				responseJson.stockName = rowData.security.name
 				responseJson.isCreate = false
 				responseJson.isLong = rowData.isLong

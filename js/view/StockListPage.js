@@ -30,6 +30,8 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var didFocusSubscription = null;
 var recevieDataSubscription = null;
 
+var stockNameFontSize = 18;
+
 var StockListPage = React.createClass({
 
 	propTypes: {
@@ -152,6 +154,9 @@ var StockListPage = React.createClass({
 	},
 
 	componentDidMount: function() {
+		var {height, width} = Dimensions.get('window');
+		stockNameFontSize = Math.round(18*width/375)
+
 		this.fetchStockData()
 
 		if (this.props.isOwnStockPage) {
@@ -368,7 +373,7 @@ var StockListPage = React.createClass({
 				<View style={styles.rowWrapper} key={rowData.key}>
 
 					<View style={styles.rowLeftPart}>
-						<Text style={styles.stockNameText}>
+						<Text style={[styles.stockNameText, {fontSize: stockNameFontSize}]}>
 							{rowData.name}
 						</Text>
 
@@ -381,7 +386,7 @@ var StockListPage = React.createClass({
 					</View>
 
 					<View style={styles.rowCenterPart}>
-						<Text style={styles.stockLastText}>
+						<Text style={{fontSize: stockNameFontSize}}>
 							{rowData.last}
 						</Text>
 					</View>
@@ -519,7 +524,6 @@ var styles = StyleSheet.create({
 		marginRight: 10,
 	},
 	stockNameText: {
-		fontSize: 18,
 		textAlign: 'center',
 		fontWeight: 'bold',
 	},
@@ -527,9 +531,6 @@ var styles = StyleSheet.create({
 		fontSize: 12,
 		textAlign: 'center',
 		color: '#5f5f5f',
-	},
-	stockLastText: {
-		fontSize: 18,
 	},
 	stockPercentText: {
 		fontSize: 16,

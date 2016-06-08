@@ -243,13 +243,15 @@ var LoginPage = React.createClass({
 	},
 
 	renderGetValidationCodeButton: function() {
+		var {height, width} = Dimensions.get('window');
+		var textSize = Math.round(fontSize*width/375.0)
 		if (this.state.validationCodeCountdown < 0) {
 			return  (
 				<Button style={styles.getValidationCodeArea}
 					enabled={this.state.getValidationCodeButtonEnabled}
 					onPress={this.getValidationCodePressed}
 					textContainerStyle={styles.getValidationTextView}
-					textStyle={styles.getValidationText}
+					textStyle={[styles.getValidationText, {fontSize: textSize}]}
 					text='点击获取' />
 			);
 		} else {
@@ -258,7 +260,7 @@ var LoginPage = React.createClass({
 					enabled={this.state.getValidationCodeButtonEnabled}
 					onPress={this.getValidationCodePressed}
 					textContainerStyle={styles.getValidationTextView}
-					textStyle={styles.getValidationText}
+					textStyle={[styles.getValidationText, {fontSize: textSize}]}
 					text={'(' + this.state.validationCodeCountdown + ')'} />
 			);
 		}

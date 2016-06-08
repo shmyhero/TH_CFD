@@ -177,3 +177,31 @@ export function updateOwnStocks(stockData) {
 		}
 	)
 }
+
+export function loadUserBalance(force, successCallback) {
+	if (force || LogicData.getBalanceData() === null) {
+		var userData = LogicData.getUserData()
+		var notLogin = Object.keys(userData).length === 0
+		if (notLogin) {
+			return
+		}
+		var url = NetConstants.GET_USER_BALANCE_API
+		this.fetchTHUrl(
+			url,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+			},
+			(responseJson) => {
+				LogicData.setBalanceData(responseJson)
+				successCallback && successCallback(responseJson)
+			},
+			(errorMessage) => {
+				Alert.alert('', errorMessage);
+			}
+		)
+	}
+}
+

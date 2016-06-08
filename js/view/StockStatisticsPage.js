@@ -34,27 +34,7 @@ var StockStatisticsPage = React.createClass({
 	},
 
 	tabPressed: function(index) {
-		var userData = LogicData.getUserData()
-		var url = NetConstants.GET_USER_BALANCE_API
-		NetworkModule.fetchTHUrl(
-			url,
-			{
-				method: 'GET',
-				headers: {
-					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-				},
-				showLoading: this.state.balanceData === null,
-			},
-			(responseJson) => {
-				LogicData.setBalanceData(responseJson)
-				this.setState({
-					balanceData: responseJson,
-				})
-			},
-			(errorMessage) => {
-				Alert.alert('', errorMessage);
-			}
-		)
+		NetworkModule.loadUserBalance(true, (responseJson)=>{this.setState({balanceData: responseJson,})})
 	},
 
 	playStartAnim: function() {

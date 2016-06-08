@@ -91,8 +91,14 @@ var StockDetailPage = React.createClass({
 	onDidFocus: function(event) {
         if (MainPage.STOCK_DETAIL_ROUTE === event.data.route.name) {
             this.loadStockInfo()
-			this.loadUserBalance()
+			NetworkModule.loadUserBalance(false, this.updateUserBalance)
         }
+	},
+
+	updateUserBalance: function(responseJson){
+		this.setState({
+			totalMoney: responseJson.available.toFixed(2),
+		})
 	},
 
 	loadStockInfo: function() {
@@ -170,35 +176,6 @@ var StockDetailPage = React.createClass({
 				Alert.alert('', errorMessage);
 			}
 		)
-	},
-
-	loadUserBalance: function() {
-		if (LogicData.getBalanceData() === null) {
-			var userData = LogicData.getUserData()
-			var notLogin = Object.keys(userData).length === 0
-			if (notLogin) {
-				return
-			}
-			var url = NetConstants.GET_USER_BALANCE_API
-			NetworkModule.fetchTHUrl(
-				url,
-				{
-					method: 'GET',
-					headers: {
-						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-					},
-				},
-				(responseJson) => {
-					LogicData.setBalanceData(responseJson)
-					this.setState({
-						totalMoney: responseJson.available.toFixed(2),
-					})
-				},
-				(errorMessage) => {
-					Alert.alert('', errorMessage);
-				}
-			)
-		}
 	},
 
 	connectWebSocket: function() {
@@ -739,6 +716,8 @@ var StockDetailPage = React.createClass({
 				this.setState({
 					tradeDirection: 0,
 				})
+				// refresh balcance data
+				NetworkModule.loadUserBalance(true, this.updateUserBalance)
 			},
 			(errorMessage) => {
 				Alert.alert('', errorMessage,

@@ -325,6 +325,7 @@ var StockOpenPositionPage = React.createClass({
 				responseJson.invest = rowData.invest
 				responseJson.totalHeight = Dimensions.get('window').height - UIConstants.HEADER_HEIGHT - UIConstants.TAB_BAR_HEIGHT - 50
 				this.refs['confirmPage'].show(responseJson)
+				NetworkModule.loadUserBalance(true)
 
 				this.setState ({
 					selectedRow: -1,

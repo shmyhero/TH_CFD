@@ -50,6 +50,12 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     }
 
     @Override
+    public void finish() {
+        super.finish();
+        RNManager.destroyInstance();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);

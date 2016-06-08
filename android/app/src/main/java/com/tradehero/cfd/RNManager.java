@@ -60,4 +60,8 @@ public class RNManager {
 
         return gReactInstanceManager;
     }
+
+    public synchronized static void destroyInstance() {
+        gReactInstanceManager = null;
+    }
 }

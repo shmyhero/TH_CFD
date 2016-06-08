@@ -124,6 +124,7 @@ var styles = StyleSheet.create({
 		fontSize: 20,
 		marginTop: 10,
 		marginBottom: 20,
+		fontWeight: '100',
 	},
 	askForRestartContent: {
 		color: '#a0a0a0',
@@ -143,14 +144,14 @@ var styles = StyleSheet.create({
 		height: 45,
 		borderRadius: 3,
 		borderWidth: 0.5,
-		borderColor: '#a0a0a0',
+		borderColor: '#dddddd',
 		backgroundColor: 'white',
 		justifyContent: 'center',
 	},
 	askForRestartCancelButtonText: {
 		fontSize: 18,
 		textAlign: 'center',
-		color: 'black',
+		color: '#535456',
 	},
 	askForRestartOKButtonArea: {
 		flex: 1,

@@ -135,6 +135,9 @@ var StockClosedPositionPage = React.createClass({
 	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
+		if(rowID == this.state.selectedRow - 1) {
+			return null
+		}
 		return (
 			<View style={styles.line} key={rowID}>
 				<View style={styles.separator}/>
@@ -217,7 +220,7 @@ var StockClosedPositionPage = React.createClass({
 		var closeDate = new Date(rowData.closeAt)
 		return (
 			<View style={[{height: extendHeight}, styles.extendWrapper]} >
-				<View style={styles.darkSeparator} />
+				<View style={[styles.darkSeparator, {marginLeft: 0}]} />
 				<View style={styles.extendRowWrapper}>
 					<View style={styles.extendLeft}>
 						<Text style={styles.extendTextTop}>类型</Text>

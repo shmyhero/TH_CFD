@@ -501,6 +501,9 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
+		if(rowID == this.state.selectedRow - 1) {
+			return null
+		}
 		return (
 			<View style={styles.line} key={rowID}>
 				<View style={styles.separator}/>
@@ -875,7 +878,7 @@ var StockOpenPositionPage = React.createClass({
 
 		return (
 			<View style={[{height: newExtendHeight}, styles.extendWrapper]} >
-				<View style={styles.darkSeparator} />
+				<View style={[styles.darkSeparator, {marginLeft: 0}]} />
 				<View style={styles.extendRowWrapper}>
 					<View style={styles.extendLeft}>
 						<Text style={styles.extendTextTop}>类型</Text>
@@ -1058,14 +1061,14 @@ var styles = StyleSheet.create({
 		paddingBottom: 5,
 		paddingRight: 5,
 		alignItems: 'flex-end',
-		borderRadius: 2,
 	},
 
 	notOpenImage: {
 		width: 23,
 		height: 23,
-		marginRight: -15,
-		marginTop: -32,
+		position: 'absolute',
+		top: 0, 
+		right: 0,
 	},
 
 	stockNameText: {

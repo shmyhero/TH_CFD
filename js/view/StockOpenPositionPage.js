@@ -75,6 +75,9 @@ var StockOpenPositionPage = React.createClass({
 
 	tabPressed: function() {
 		this.loadOpenPositionInfo()
+	},
+
+	showTutorial: function() {
 		// show tutorial
 		StorageModule.loadTutorial()
 			.then((value) => {
@@ -87,8 +90,7 @@ var StockOpenPositionPage = React.createClass({
 				}
 			})
 			.done()
-		
-	},
+		},
 
 	loadOpenPositionInfo: function() {
 		var userData = LogicData.getUserData()
@@ -102,15 +104,18 @@ var StockOpenPositionPage = React.createClass({
 				},
 			},
 			(responseJson) => {
-				this.setState({
-					stockInfoRowData: responseJson,
-					stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
-				})
-
 				if (this.state.selectedRow >= responseJson.length) {
 					this.setState ({
+						stockInfoRowData: responseJson,
+						stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
 						selectedRow: -1,
 						selectedSubItem: 0,
+					})
+				}
+				else {
+					this.setState({
+						stockInfoRowData: responseJson,
+						stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
 					})
 				}
 
@@ -121,6 +126,8 @@ var StockOpenPositionPage = React.createClass({
 						stockIds.push(stockId)
 					}
 				};
+
+				this.showTutorial()
 
 				WebSocketModule.registerInterestedStocks(stockIds.join(','))
 				WebSocketModule.registerCallbacks(

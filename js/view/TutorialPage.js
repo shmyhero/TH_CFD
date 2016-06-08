@@ -27,12 +27,14 @@ var TutorialPage = React.createClass({
 			tutorialType: 'trade',
 			visible: false,
 			page: 0,
-			showCallback: null,
-			hideCallback: null,
 		}
 	},
 
 	componentWillMount: function() {
+		// this.show()
+	},
+
+	checkShow: function() {
 		var type = this.props.type
 		StorageModule.loadTutorial()
 			.then((value) => {
@@ -42,10 +44,14 @@ var TutorialPage = React.createClass({
 					return
 				}
 				else {
-					this.setState({
-						tutorialType: type,
-						visible: true,
-					});
+					//异步
+					if (!this.state.visible) {
+						this.setState({
+							tutorialType: type,
+							visible: true,
+							page: 0,
+						});
+					}
 				}
 			})
 			.done()
@@ -53,18 +59,17 @@ var TutorialPage = React.createClass({
 
 	gotoNextPage: function() {
 		var totalPage = pages[this.state.tutorialType].length;
-		if (this.state.page === totalPage) {
-			this.setState({
-				visible: false,
-			})
-			this.hideCallback && this.hideCallback()
-			this.props.hideTutorial()
-
+		if (this.state.page+1 >= totalPage) {
 			if(savedData === null) {
 				savedData = {}
 			}
 			savedData[this.state.tutorialType] = true
 			StorageModule.setTutorial(JSON.stringify(savedData))
+			// the call sequence is useful here, first set visible false, then call super's hideTutorial
+			this.setState({
+				visible: false,
+			})
+			this.props.hideTutorial()
 		}
 		else {
 			this.setState({
@@ -75,6 +80,7 @@ var TutorialPage = React.createClass({
 
 	render: function() {
 		if (!this.state.visible) {
+			this.checkShow()
 			return null
 		}
 		var imageSource = pages[this.state.tutorialType][this.state.page]

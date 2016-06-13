@@ -204,7 +204,7 @@ var LoginPage = React.createClass({
 		console.log(LogicData.getUserData());
 
 		NetworkModule.syncOwnStocks(userData)
-		WebSocketModule.alertServiceLogin(userData.token)
+		WebSocketModule.alertServiceLogin(userData.userId + '_' + userData.token)
 
 		this.props.navigator.replace({
 			name: MainPage.UPDATE_USER_INFO_ROUTE,

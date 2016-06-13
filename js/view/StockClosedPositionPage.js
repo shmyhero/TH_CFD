@@ -285,6 +285,8 @@ var StockClosedPositionPage = React.createClass({
 
 	renderRow: function(rowData, sectionID, rowID, highlightRow) {
 		var bgcolor = this.state.selectedRow === rowID ? '#e6e5eb' : 'white'
+		var plPercent = (rowData.closePrice - rowData.openPrice) / rowData.openPrice * rowData.leverage * 100
+		plPercent = plPercent * (rowData.isLong ? 1 : -1)
 		return (
 			<View>
 				<TouchableHighlight activeOpacity={1} onPress={() => this.stockPressed(rowData, sectionID, rowID, highlightRow)}>
@@ -307,7 +309,7 @@ var StockClosedPositionPage = React.createClass({
 						</View>
 
 						<View style={styles.rowRightPart}>
-							{this.renderProfitPercentage(rowData.pl / rowData.invest * 100)}
+							{this.renderProfitPercentage(plPercent)}
 						</View>
 					</View>
 				</TouchableHighlight>

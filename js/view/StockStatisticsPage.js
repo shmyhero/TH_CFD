@@ -38,26 +38,26 @@ var StockStatisticsPage = React.createClass({
 	},
 
 	playStartAnim: function() {
-		if (this.state.statisticsBarInfo.length > 0) {
-			this.playStatisticsAnim(this.state.statisticsBarInfo)
-		} else {
-			var userData = LogicData.getUserData()
-			NetworkModule.fetchTHUrl(
-				NetConstants.GET_USER_STATISTICS_API,
-				{
-					method: 'GET',
-					headers: {
-						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-					},
+		this.setState({
+			statisticsBarInfo: [],
+			statisticsSumInfo: [],
+		})
+		var userData = LogicData.getUserData()
+		NetworkModule.fetchTHUrl(
+			NetConstants.GET_USER_STATISTICS_API,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 				},
-				(responseJson) => {
-					this.playStatisticsAnim(responseJson)
-				},
-				(errorMessage) => {
-					Alert.alert('', errorMessage);
-				}
-			)
-		}
+			},
+			(responseJson) => {
+				this.playStatisticsAnim(responseJson)
+			},
+			(errorMessage) => {
+				Alert.alert('', errorMessage);
+			}
+		)
 	},
 
 	playStatisticsAnim: function(statisticsInfo) {

@@ -211,7 +211,7 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	stockPressed: function(rowData, sectionID, rowID, highlightRow) {
-		if (rowHeight === 0) {
+		if (rowHeight === 0) {	// to get the row height, should have better method.
 			rowHeight = this.refs['listview'].getMetrics().contentLength/this.state.stockInfoRowData.length
 		}
 
@@ -277,7 +277,6 @@ var StockOpenPositionPage = React.createClass({
 		this.setState({
 			selectedSubItem: this.state.selectedSubItem === item ? 0 : item,
 		})
-		this.doScrollAnimation()
 
 		if (item === 1) {
 			var stockid = rowData.security.id
@@ -286,6 +285,7 @@ var StockOpenPositionPage = React.createClass({
 			})
 			this.loadStockDetailInfo(stockid)
 		}
+		this.doScrollAnimation()
 	},
 
 	okPress: function(rowData) {

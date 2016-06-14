@@ -485,7 +485,7 @@ var StockDetailPage = React.createClass({
 					onPress={() => this.state.stockInfo.isOpen && this.buyPress()} style={[styles.tradeButtonView, upSelected&&styles.tradeButtonViewSelected]}>
 					<View style={styles.tradeButtonContainer}>
 						<Text style={[styles.tradeButtonText, {color: upTextColor}]}>
-							{this.state.stockPriceBid}
+							{this.state.stockPriceAsk}
 						</Text>
 						<Image style={styles.tradeButtonImage} source={upImage}/>
 					</View>
@@ -496,7 +496,7 @@ var StockDetailPage = React.createClass({
 					onPress={() => this.state.stockInfo.isOpen && this.sellPress()} style={[styles.tradeButtonView, downSelected&&styles.tradeButtonViewSelected]}>
 					<View style={styles.tradeButtonContainer}>
 						<Text style={[styles.tradeButtonText, {color: downTextColor}]}>
-							{this.state.stockPriceAsk}
+							{this.state.stockPriceBid}
 						</Text>
 						<Image style={styles.tradeButtonImage} source={downImage}/>
 					</View>

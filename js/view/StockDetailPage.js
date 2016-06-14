@@ -64,11 +64,12 @@ var StockDetailPage = React.createClass({
 
 	getInitialState: function() {
 		var balanceData = LogicData.getBalanceData()
+		var available = balanceData === null ? 0 : (balanceData.available < 0 ? 0 : balanceData.available)
 		return {
 			stockInfo: {isOpen: true},
-			money: balanceData === null ? 0 : 20,
+			money: available < 20 ? Math.floor(available) : 20,
 			leverage: 2,
-			totalMoney: balanceData === null ? 0 : balanceData.available,
+			totalMoney: available,
 			tradeDirection: 0,	//0:none, 1:up, 2:down
 			inputText: '20',
 			stockPrice: this.props.stockPrice,
@@ -97,7 +98,7 @@ var StockDetailPage = React.createClass({
 
 	updateUserBalance: function(responseJson){
 		this.setState({
-			totalMoney: responseJson.available.toFixed(2),
+			totalMoney: responseJson.available < 0 ? 0 : responseJson.available,
 		})
 	},
 
@@ -364,7 +365,7 @@ var StockDetailPage = React.createClass({
 					</LinearGradient>
 	    			<InputAccessory ref='InputAccessory'
 	    				textValue={this.state.inputText}
-	    				maxValue={parseFloat(this.state.totalMoney)}
+	    				maxValue={parseFloat(this.state.totalMoney.toFixed(2))}
 	    				rightButtonOnClick={this.clearMoney}/>
 
 	    			<StockTransactionConfirmPage ref='confirmPage'/>

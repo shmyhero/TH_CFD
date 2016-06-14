@@ -123,6 +123,9 @@ var StockStatisticsPage = React.createClass({
 		if (this.state.balanceData) {
 			total = this.state.balanceData.total.toFixed(2)
 			available = this.state.balanceData.available.toFixed(2)
+			if (this.state.balanceData.available < 0) {
+				available = '0'
+			}
 		}
 
 		return (

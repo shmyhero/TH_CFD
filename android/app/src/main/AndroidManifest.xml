@@ -38,7 +38,7 @@
             android:value="900028261" /> <!-- 配置APP版本号 -->
         <meta-data
             android:name="BUGLY_APP_VERSION"
-            android:value="1.3.2" /> <!-- 配置APP渠道号 -->
+            android:value="${version_name}" /> <!-- 配置APP渠道号 -->
         <meta-data
             android:name="BUGLY_APP_CHANNEL"
             android:value="360" /> <!-- 配置Bugly调试模式(true或者false)-->

@@ -14,6 +14,7 @@ import {
 var Touchable = require('Touchable');
 var merge = require('merge');
 var ColorConstants = require('../ColorConstants')
+var UIConstants = require('../UIConstants');
 
 var {height, width} = Dimensions.get('window');
 
@@ -114,6 +115,7 @@ var StockTransactionConfirmPage = React.createClass({
 		var plColor = 'black'
 		if (!this.state.isCreate)
 			plColor = pl > 0 ? ColorConstants.STOCK_RISE_RED : (pl < 0 ? ColorConstants.STOCK_DOWN_GREEN : 'black')
+		var currency = UIConstants.CURRENCY_CODE_LIST[this.state.transactionInfo.security.ccy]
 		return (
 			<View style={styles.container}>
 
@@ -149,9 +151,9 @@ var StockTransactionConfirmPage = React.createClass({
 							</Text>
 							<Image style={styles.longImage} source={this.state.isLong ? require('../../images/dark_up.png') : require('../../images/dark_down.png')}/>
 						</View>
-						<View style={{flex: 1, alignItems: 'center'}}>
+						<View style={{flex: 2, alignItems: 'center'}}>
 							<Text style={styles.itemTitleText}>
-								本金
+								本金({currency})
 							</Text>
 							<Text style={styles.itemValueText}>
 								{this.state.invest.toFixed(2)}
@@ -176,9 +178,9 @@ var StockTransactionConfirmPage = React.createClass({
 								{this.state.settlePrice}
 							</Text>
 						</View>
-						<View style={{flex: 1, alignItems: 'center'}}>
+						<View style={{flex: 2, alignItems: 'center'}}>
 							<Text style={styles.itemTitleText}>
-								{this.state.isCreate?'最大风险':'盈亏'}
+								{this.state.isCreate? ('最大风险('+currency+')') : '盈亏'}
 							</Text>
 							<Text style={[styles.itemValueText, {color: plColor}]}>
 								{this.state.isCreate? this.state.invest.toFixed(2) : pl.toFixed(2)}

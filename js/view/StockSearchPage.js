@@ -264,7 +264,7 @@ var StockSearchPage = React.createClass({
 		if(this.state.historyRawInfo.length > 0) {
 			return(
 				<View style={{flex: 1}}>
-					<View>
+					<View style={{flexDirection: 'row', alignItems: 'center', padding: 8}}>
 						<Text style={styles.historyText}>以下为历史查询记录</Text>
 					</View>
 					<ListView
@@ -395,7 +395,7 @@ var styles = StyleSheet.create({
 		textAlign: 'center',
 		fontWeight: 'bold',
 		paddingBottom: 2,
-		paddingTop: 10,
+		marginTop: 10,
 	},
 	stockSymbolText: {
 		fontSize: 12,
@@ -446,8 +446,7 @@ var styles = StyleSheet.create({
 	historyText: {
 		fontSize: 15,
 		color: '#4b70ae',
-		padding: 8,
-		paddingLeft: 15,
+		marginLeft: 10,
 	},
 	historyFooterView: {
 		height: 120,

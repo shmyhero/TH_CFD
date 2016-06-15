@@ -60,6 +60,8 @@ var TimerMixin = require('react-timer-mixin');
 var LayoutAnimation = require('LayoutAnimation')
 var Swiper = require('react-native-swiper')
 var StorageModule = require('./js/module/StorageModule')
+var NetworkModule = require('./js/module/NetworkModule')
+var NetConstants = require('./js/NetConstants')
 var FSModule = require('./js/module/FSModule')
 var LogicData = require('./js/LogicData')
 var MainPage = require('./js/view/MainPage')
@@ -136,6 +138,19 @@ var AppNavigator = React.createClass({
 				}
 			})
 			.done()
+
+		NetworkModule.fetchTHUrl(
+			NetConstants.GET_FX_LIST_API + '?page=1&perPage=99',
+			{
+				method: 'GET',
+			},
+			(responseJson) => {
+				LogicData.setFxData(responseJson)
+			},
+			(errorMessage) => {
+				console.log(errorMessage)
+			}
+		)
 	},
 
 	enterMainPage: function() {

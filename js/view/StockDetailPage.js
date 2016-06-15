@@ -32,6 +32,7 @@ var MainPage = require('./MainPage')
 var StockTransactionConfirmPage = require('./StockTransactionConfirmPage')
 var TimerMixin = require('react-timer-mixin');
 
+var USD_CURRENCY = 'USD'
 var didFocusSubscription = null;
 var updateStockInfoTimer = null;
 
@@ -73,6 +74,7 @@ var StockDetailPage = React.createClass({
 			tradeDirection: 0,	//0:none, 1:up, 2:down
 			inputText: '20',
 			stockPrice: this.props.stockPrice,
+			stockCurrencyPrice: '--',
 			stockPriceAsk: this.props.stockPriceAsk,
 			stockPriceBid: this.props.stockPriceBid,
 			isAddedToMyList: false,
@@ -113,6 +115,22 @@ var StockDetailPage = React.createClass({
 				showLoading: true,
 			},
 			(responseJson) => {
+				var currencySymbol = responseJson.ccy
+				if (currencySymbol != USD_CURRENCY) {
+					// Find the USD/ccy fx data first.
+					var fxData = LogicData.getFxDataBySymbol(USD_CURRENCY + currencySymbol)
+					if (!fxData) {
+						fxData = LogicData.getFxDataBySymbol(currencySymbol + USD_CURRENCY)
+					}
+					if (fxData) {
+						var fxId = fxData.id
+						responseJson.fxData = fxData
+						var previousInterestedStocks = WebSocketModule.getPreviousInterestedStocks()
+						previousInterestedStocks += ',' + fxId
+						WebSocketModule.registerInterestedStocks(previousInterestedStocks)
+					}
+				}
+
 				this.setState({
 					stockInfo: responseJson,
 					stockPriceBid: responseJson.bid,
@@ -193,6 +211,19 @@ var StockDetailPage = React.createClass({
 						break;
 					}
 				};
+
+				if (this.state.stockInfo.fxData) {
+					var fxId = this.state.stockInfo.fxData.id
+					for (var i = 0; i < realtimeStockInfo.length; i++) {
+						if (fxId == realtimeStockInfo[i].id &&
+									this.state.stockCurrencyPrice !== realtimeStockInfo[i].last) {
+							this.setState({
+								stockCurrencyPrice: realtimeStockInfo[i].last,
+							})
+							break;
+						}
+					};
+				}
 			})
 	},
 
@@ -361,6 +392,7 @@ var StockDetailPage = React.createClass({
 							<Text style={styles.leftMoneyLabel}> 账户剩余资金：{leftMoney.toFixed(2)}</Text>
 							<Text style={styles.smallLabel}> 手续费为{charge}美元</Text>
 							{this.renderOKButton()}
+							{this.renderStockCurrencyWarning()}
 						</View>
 					</LinearGradient>
 	    			<InputAccessory ref='InputAccessory'
@@ -667,6 +699,28 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
+	renderStockCurrencyWarning: function() {
+		if (this.state.stockInfo.fxData) {
+			var fxData = this.state.stockInfo.fxData
+			var fxName = fxData.name
+			var fxPrice = this.state.stockCurrencyPrice
+			if (fxData.symbol.substring(0, USD_CURRENCY.length) != USD_CURRENCY) {
+				var nameParts = fxName.split('/')
+				fxName = nameParts[1] + '/' + nameParts[0]
+				fxPrice = (1 / this.state.stockCurrencyPrice).toPrecision(6)
+				if ($.isNaN(fxPrice)) {
+					fxPrice = '--'
+				}
+			}
+
+			return (
+				<Text style={styles.stockCurrencyWarningText}>
+					当前以{fxName}{fxPrice}汇率结算，存在汇率变动风险！
+				</Text>
+			)
+		}
+	},
+
 	resultConfirmed: function() {
 		this.clearMoney()
 		this.setState({
@@ -864,6 +918,12 @@ var styles = StyleSheet.create({
 	},
 	okButtonNotOpened: {
 		color: '#f1585c'
+	},
+	stockCurrencyWarningText: {
+		margin: 5,
+		fontSize: 10,
+		textAlign: 'center',
+		color: '#4e6ea3',
 	},
 	priceText: {
 		fontSize: 8,

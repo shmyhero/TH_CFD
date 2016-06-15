@@ -135,3 +135,7 @@ export function alertServiceLogin(token) {
 			});
 	}
 }
+
+export function getPreviousInterestedStocks() {
+	return previousInterestedStocks
+}

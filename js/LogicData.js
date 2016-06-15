@@ -1,23 +1,16 @@
 'use strict'
 
+var StorageModule = require('./module/StorageModule')
+
 var userData = {};
 var wechatAuthData = {};
 var wechatUserData = {};
 var ownStocksData = [];
 var searchStockHistory = [];
 var balanceData = null;
-var StorageModule = require('./module/StorageModule')
+var fxData = [];
 
 var LogicData = {
-
-	// setUserSecretKey: function(userName, password) {
-	// 	userSecretKey = 'Basic ' + base64_encode(userName + ':' + password);
-	// 	console.log(userSecretKey);
-	// },
-
-	// getUserSecretKey: function() {
-	// 	return userSecretKey;
-	// },
 
 	setUserData: function(data) {
 		userData = data;
@@ -100,6 +93,19 @@ var LogicData = {
 
 	getBalanceData: function() {
 		return balanceData
+	},
+
+	setFxData: function(data) {
+		fxData = data
+	},
+
+	getFxDataBySymbol: function(symbol) {
+		for (var i = 0; i < fxData.length; i++) {
+			if (fxData[i].symbol == symbol) {
+				return fxData[i]
+			}
+		}
+		return null
 	},
 };
 

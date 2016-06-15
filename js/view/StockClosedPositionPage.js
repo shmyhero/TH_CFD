@@ -404,11 +404,11 @@ var styles = StyleSheet.create({
 		paddingTop: 5,
 		paddingBottom: 5,
 		paddingRight: 5,
-		alignItems: 'center',
+		alignItems: 'flex-end',
 	},
 
 	rowRightPart: {
-		flex: 2,
+		flex: 3,
 		paddingTop: 5,
 		paddingBottom: 5,
 		paddingRight: 5,

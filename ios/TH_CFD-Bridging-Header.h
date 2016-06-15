@@ -4,7 +4,7 @@
 
 #import "RCTRootView.h"
 #import "RCTLog.h"
-//#import "../Libraries/LinkingIOS/RCTLinkingManager.h"
+#import "../Libraries/LinkingIOS/RCTLinkingManager.h"
 
 #import	"NativeData.h"
 #import "RCTBridge.h"

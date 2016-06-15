@@ -273,7 +273,7 @@ var StockClosedPositionPage = React.createClass({
 						<Text style={styles.extendTextBottom}>0</Text>
 					</View>
 					<View style={styles.extendMiddle}>
-						<Text style={styles.extendTextTop}>净收益</Text>
+						<Text style={styles.extendTextTop}>净收益(美元)</Text>
 						<Text style={[styles.extendTextBottom, {color:profitColor}]}>{rowData.pl.toFixed(2)}</Text>
 					</View>
 					<View style={styles.extendRight}>

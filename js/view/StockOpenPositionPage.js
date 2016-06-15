@@ -873,7 +873,7 @@ var StockOpenPositionPage = React.createClass({
 			}
 		}
 
-		var buttonText = (profitAmount < 0 ? '亏损':'获利') + ':$' + profitAmount.toFixed(2)
+		var buttonText = (profitAmount < 0 ? '亏损':'获利') + ': $' + profitAmount.toFixed(2)
 		if (this.state.showExchangeDoubleCheck) {
 			buttonText = '确认:$' + profitAmount.toFixed(2)
 		}

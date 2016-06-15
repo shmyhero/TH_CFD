@@ -180,7 +180,7 @@ var StockTransactionConfirmPage = React.createClass({
 						</View>
 						<View style={{flex: 2, alignItems: 'center'}}>
 							<Text style={styles.itemTitleText}>
-								{this.state.isCreate? ('最大风险('+currency+')') : '盈亏'}
+								{this.state.isCreate? ('最大风险('+currency+')') : '盈亏(美元)'}
 							</Text>
 							<Text style={[styles.itemValueText, {color: plColor}]}>
 								{this.state.isCreate? this.state.invest.toFixed(2) : pl.toFixed(2)}

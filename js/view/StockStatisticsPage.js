@@ -131,10 +131,10 @@ var StockStatisticsPage = React.createClass({
 		return (
 			<View style={styles.header}>
 				<View style={styles.empty}/>
-				<Text style={styles.headerText1}>总资产</Text>
+				<Text style={styles.headerText1}>总资产(美元)</Text>
 				<Text style={styles.headerText2}>{total}</Text>
 				<View style={styles.empty}/>
-				<Text style={styles.headerText3}>剩余资金</Text>
+				<Text style={styles.headerText3}>剩余资金(美元)</Text>
 				<Text style={styles.headerText4}>{available}</Text>
 				<View style={styles.empty}/>
 			</View>
@@ -161,7 +161,7 @@ var StockStatisticsPage = React.createClass({
 			<View style={styles.center}>
 				<View style={styles.centerView}>
 					<View style={styles.empty}/>
-					<Text style={styles.centerText1}>累计收益</Text>
+					<Text style={styles.centerText1}>累计收益(美元)</Text>
 					<Text style={styles.centerText2}>{sumPl}</Text>
 					<View style={styles.empty}/>
 				</View>

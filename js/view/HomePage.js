@@ -151,14 +151,21 @@ var HomePage = React.createClass({
 	render: function() {
 		return (
 			<View style={{width: width, height: height - UIConstants.TAB_BAR_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER}}>
+
 				<View style={{width: width, height: imageHeight}}>
-					<ViewPager
-						style={{backgroundColor:'transparent'}}
-						dataSource={this.state.dataSource}
-						renderPage={this._renderPage}
-						renderPageIndicator={false}
-						isLoop={this.state.dataSource.getPageCount() > 1}
-						autoPlay={this.state.dataSource.getPageCount() > 1}/>
+					<Image
+						style={[styles.backgroundImage, {height: imageHeight, width: width}]}
+						source={BANNERS[0]} >
+
+						<ViewPager
+							style={{backgroundColor:'transparent'}}
+							dataSource={this.state.dataSource}
+							renderPage={this._renderPage}
+							renderPageIndicator={false}
+							isLoop={this.state.dataSource.getPageCount() > 1}
+							autoPlay={this.state.dataSource.getPageCount() > 1}/>
+
+					</Image>
 				</View>
 
 				<View style={styles.rowContainer}>
@@ -252,10 +259,9 @@ var styles = StyleSheet.create({
 		fontSize: 12,
 		textAlign: 'center',
 	},
-	  backgroundImage: {
-	    flex: 1,
-	    resizeMode: 'cover', // or 'stretch'
-	  }
+	backgroundImage: {
+		flex: 1,
+	}
 });
 
 module.exports = HomePage;

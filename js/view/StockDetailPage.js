@@ -20,6 +20,7 @@ var LineChart = require('./component/lineChart/LineChart');
 var LinearGradient = require('react-native-linear-gradient');
 var dismissKeyboard = require('dismissKeyboard');
 var LogicData = require('../LogicData')
+var UIConstants = require('../UIConstants');
 var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
@@ -32,7 +33,6 @@ var MainPage = require('./MainPage')
 var StockTransactionConfirmPage = require('./StockTransactionConfirmPage')
 var TimerMixin = require('react-timer-mixin');
 
-var USD_CURRENCY = 'USD'
 var didFocusSubscription = null;
 var updateStockInfoTimer = null;
 
@@ -116,11 +116,11 @@ var StockDetailPage = React.createClass({
 			},
 			(responseJson) => {
 				var currencySymbol = responseJson.ccy
-				if (currencySymbol != USD_CURRENCY) {
+				if (currencySymbol != UIConstants.USD_CURRENCY) {
 					// Find the USD/ccy fx data first.
-					var fxData = LogicData.getFxDataBySymbol(USD_CURRENCY + currencySymbol)
+					var fxData = LogicData.getFxDataBySymbol(UIConstants.USD_CURRENCY + currencySymbol)
 					if (!fxData) {
-						fxData = LogicData.getFxDataBySymbol(currencySymbol + USD_CURRENCY)
+						fxData = LogicData.getFxDataBySymbol(currencySymbol + UIConstants.USD_CURRENCY)
 					}
 					if (fxData) {
 						var fxId = fxData.id
@@ -704,7 +704,7 @@ var StockDetailPage = React.createClass({
 			var fxData = this.state.stockInfo.fxData
 			var fxName = fxData.name
 			var fxPrice = this.state.stockCurrencyPrice
-			if (fxData.symbol.substring(0, USD_CURRENCY.length) != USD_CURRENCY) {
+			if (fxData.symbol.substring(0, UIConstants.USD_CURRENCY.length) != UIConstants.USD_CURRENCY) {
 				var nameParts = fxName.split('/')
 				fxName = nameParts[1] + '/' + nameParts[0]
 				fxPrice = (1 / this.state.stockCurrencyPrice).toPrecision(6)

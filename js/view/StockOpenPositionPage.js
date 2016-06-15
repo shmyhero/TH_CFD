@@ -66,7 +66,6 @@ var StockOpenPositionPage = React.createClass({
 
 	componentDidMount: function() {
 		this.loadOpenPositionInfo()
-
 	},
 
 	onEndReached: function() {
@@ -105,6 +104,23 @@ var StockOpenPositionPage = React.createClass({
 				},
 			},
 			(responseJson) => {
+				var interestedStockIds = []
+				for (var i = 0; i < responseJson.length; i++) {
+					var currencySymbol = responseJson[i].security.ccy
+					if (currencySymbol != UIConstants.USD_CURRENCY) {
+						// Find the ccy/USD fx data first.
+						var fxData = LogicData.getFxDataBySymbol(currencySymbol + UIConstants.USD_CURRENCY)
+						if (!fxData) {
+							fxData = LogicData.getFxDataBySymbol(UIConstants.USD_CURRENCY + currencySymbol)
+						}
+						if (fxData) {
+							var fxId = fxData.id
+							responseJson[i].fxData = fxData
+							interestedStockIds.push(fxId)
+						}
+					}
+				}
+
 				if (this.state.selectedRow >= responseJson.length) {
 					this.setState ({
 						stockInfoRowData: responseJson,
@@ -120,15 +136,14 @@ var StockOpenPositionPage = React.createClass({
 					})
 				}
 
-				var stockIds = []
 				for (var i = 0; i < responseJson.length; i++) {
 					var stockId = responseJson[i].security.id
-					if (stockIds.indexOf(stockId) < 0) {
-						stockIds.push(stockId)
+					if (interestedStockIds.indexOf(stockId) < 0) {
+						interestedStockIds.push(stockId)
 					}
 				};
 
-				WebSocketModule.registerInterestedStocks(stockIds.join(','))
+				WebSocketModule.registerInterestedStocks(interestedStockIds.join(','))
 				WebSocketModule.registerCallbacks(
 					(realtimeStockInfo) => {
 						this.handleStockInfo(realtimeStockInfo)
@@ -178,7 +193,14 @@ var StockOpenPositionPage = React.createClass({
 					this.state.stockInfoRowData[i].security.bid = realtimeStockInfo[j].bid
 					this.state.stockInfoRowData[i].security.last = (realtimeStockInfo[j].ask + realtimeStockInfo[j].bid) / 2;
 					hasUpdate = true;
-					// break;
+				}
+				if (this.state.stockInfoRowData[i].fxData) {
+					var fxData = this.state.stockInfoRowData[i].fxData
+					if (fxData.id == realtimeStockInfo[j].id &&
+								fxData.last !== realtimeStockInfo[j].last) {
+						fxData.last = realtimeStockInfo[j].last
+						hasUpdate = true;
+					}
 				}
 			};
 		};
@@ -842,6 +864,13 @@ var StockOpenPositionPage = React.createClass({
 			var profitPercentage = (lastPrice - rowData.settlePrice) / rowData.settlePrice
 			profitPercentage *= (rowData.isLong ? 1 : -1)
 			profitAmount = profitPercentage * rowData.invest * rowData.leverage
+			if (rowData.fxData) {
+				var fxPrice = rowData.fxData.last
+				if (rowData.fxData.symbol.substring(UIConstants.USD_CURRENCY.length) != UIConstants.USD_CURRENCY) {
+					fxPrice = 1 / rowData.fxData.last
+				}
+				profitAmount *= fxPrice
+			}
 		}
 
 		var buttonText = (profitAmount < 0 ? '亏损':'获利') + ':$' + profitAmount.toFixed(2)
@@ -1073,7 +1102,7 @@ var styles = StyleSheet.create({
 		width: 23,
 		height: 23,
 		position: 'absolute',
-		top: 0, 
+		top: 0,
 		right: 0,
 	},
 

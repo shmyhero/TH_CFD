@@ -218,6 +218,7 @@ var StockClosedPositionPage = React.createClass({
 		var profitColor = rowData.pl > 0 ? ColorConstants.STOCK_RISE_RED : ColorConstants.STOCK_DOWN_GREEN
 		var openDate = new Date(rowData.openAt)
 		var closeDate = new Date(rowData.closeAt)
+		var currency = UIConstants.CURRENCY_CODE_LIST[rowData.security.ccy]
 		return (
 			<View style={[{height: extendHeight}, styles.extendWrapper]} >
 				<View style={[styles.darkSeparator, {marginLeft: 0}]} />
@@ -227,7 +228,7 @@ var StockClosedPositionPage = React.createClass({
 						<Image style={styles.extendImageBottom} source={tradeImage}/>
 					</View>
 					<View style={styles.extendMiddle}>
-						<Text style={styles.extendTextTop}>本金</Text>
+						<Text style={styles.extendTextTop}>本金({currency})</Text>
 						<Text style={styles.extendTextBottom}>{rowData.invest && rowData.invest.toFixed(2)}</Text>
 					</View>
 					<View style={styles.extendRight}>

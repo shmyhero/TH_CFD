@@ -880,6 +880,8 @@ var StockOpenPositionPage = React.createClass({
 			stopLossImage = require('../../images/check2.png')
 		}
 		var currentPriceLabel = rowData.isLong ? '当前买价' : '当前卖价'
+		var openDate = new Date(rowData.createAt)
+		var currency = UIConstants.CURRENCY_CODE_LIST[rowData.security.ccy]
 
 		return (
 			<View style={[{height: newExtendHeight}, styles.extendWrapper]} >
@@ -890,7 +892,7 @@ var StockOpenPositionPage = React.createClass({
 						<Image style={styles.extendImageBottom} source={tradeImage}/>
 					</View>
 					<View style={styles.extendMiddle}>
-						<Text style={styles.extendTextTop}>本金</Text>
+						<Text style={styles.extendTextTop}>本金({currency})</Text>
 						<Text style={styles.extendTextBottom}>{rowData.invest.toFixed(2)}</Text>
 					</View>
 					<View style={styles.extendRight}>
@@ -909,8 +911,8 @@ var StockOpenPositionPage = React.createClass({
 						<Text style={styles.extendTextBottom}>{lastPrice}</Text>
 					</View>
 					<View style={styles.extendRight}>
-						<Text style={styles.extendTextTop}>价差</Text>
-						<Text style={styles.extendTextBottom}>{(lastPrice - rowData.settlePrice).toFixed(rowData.security.dcmCount)}</Text>
+						<Text style={styles.extendTextTop}>开仓时间</Text>
+						<Text style={styles.extendTextBottom}>{openDate.Format('yy/MM/dd')}</Text>
 					</View>
 				</View>
 				<View style={styles.darkSeparator} />

@@ -111,7 +111,12 @@ var StockTransactionConfirmPage = React.createClass({
 		if (!this.state.visible) {
 			return null
 		}
-		var pl = this.state.isCreate ? '' : this.state.transactionInfo.pl
+		var pl = ''
+		if (!this.state.isCreate) {
+			pl = (this.state.settlePrice - this.state.transactionInfo.openPrice) / this.state.transactionInfo.openPrice * this.state.leverage * 100
+			pl *= (this.state.isLong ? 1 : -1)
+		}
+
 		var plColor = 'black'
 		if (!this.state.isCreate)
 			plColor = pl > 0 ? ColorConstants.STOCK_RISE_RED : (pl < 0 ? ColorConstants.STOCK_DOWN_GREEN : 'black')
@@ -138,7 +143,7 @@ var StockTransactionConfirmPage = React.createClass({
 							{this.state.isCreate ?
 								null :
 								<Text style={[styles.titleText, {marginRight: 20}]}>
-									{(pl / this.state.invest * 100).toFixed(2)} %
+									{(pl).toFixed(2)} %
 								</Text>
 							}
 
@@ -183,7 +188,7 @@ var StockTransactionConfirmPage = React.createClass({
 								{this.state.isCreate? ('最大风险('+currency+')') : '盈亏(美元)'}
 							</Text>
 							<Text style={[styles.itemValueText, {color: plColor}]}>
-								{this.state.isCreate? this.state.invest.toFixed(2) : pl.toFixed(2)}
+								{this.state.isCreate? this.state.invest.toFixed(2) : this.state.transactionInfo.pl.toFixed(2)}
 							</Text>
 						</View>
 						<View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>

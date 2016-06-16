@@ -339,7 +339,20 @@ var StockOpenPositionPage = React.createClass({
 				showLoading: true,
 			},
 			(responseJson) => {
-				this.loadOpenPositionInfo()
+				var soldStockData = null
+				for (var i = 0; i < this.state.stockInfoRowData.length; i++) {
+					if (this.state.stockInfoRowData[i].id == responseJson.id) {
+						soldStockData = this.state.stockInfoRowData.splice(i, 1)
+						break
+					}
+				}
+				if (soldStockData) {
+					responseJson.openPrice = soldStockData[0].settlePrice
+					this.setState({
+						stockInfo: ds.cloneWithRows(this.state.stockInfoRowData)
+					})
+				}
+
 				responseJson.stockName = rowData.security.name
 				responseJson.isCreate = false
 				responseJson.isLong = rowData.isLong

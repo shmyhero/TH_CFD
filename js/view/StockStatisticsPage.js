@@ -167,7 +167,7 @@ var StockStatisticsPage = React.createClass({
 				</View>
 				<View style={styles.centerView}>
 					<View style={styles.empty}/>
-					<Text style={styles.centerText1}>投资收益率</Text>
+					<Text style={styles.centerText1}>投资回报率</Text>
 					<Text style={styles.centerText2}>{avgPlRate}%</Text>
 					<View style={styles.empty}/>
 				</View>

@@ -400,7 +400,7 @@ var styles = StyleSheet.create({
 	},
 
 	rowCenterPart: {
-		flex: 2,
+		flex: 2.5,
 		paddingTop: 5,
 		paddingBottom: 5,
 		paddingRight: 5,
@@ -408,10 +408,10 @@ var styles = StyleSheet.create({
 	},
 
 	rowRightPart: {
-		flex: 3,
+		flex: 2.5,
 		paddingTop: 5,
 		paddingBottom: 5,
-		paddingRight: 5,
+		paddingRight: 0,
 		alignItems: 'flex-end',
 	},
 

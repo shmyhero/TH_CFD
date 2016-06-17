@@ -213,23 +213,20 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	doScrollAnimation: function() {
-		this.setTimeout(
-			() => {
-				var newExtendHeight = this.currentExtendHeight(this.state.selectedSubItem)
-				if (newExtendHeight < extendHeight) {
-					newExtendHeight = extendHeight
-				}
-				var rowID = this.state.selectedRow
-				var maxY = (height-114)*20/21 - newExtendHeight
-				var currentY = rowHeight*(parseInt(rowID)+1)
-				if (currentY > maxY) {
-					this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
-				}
-				LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-				extendHeight = newExtendHeight
-			},
-			Platform.OS === 'android' ? 1000 : 0
-		);
+		if (Platform.OS === 'ios') {
+			var newExtendHeight = this.currentExtendHeight(this.state.selectedSubItem)
+			if (newExtendHeight < extendHeight) {
+				newExtendHeight = extendHeight
+			}
+			var rowID = this.state.selectedRow
+			var maxY = (height-114)*20/21 - newExtendHeight
+			var currentY = rowHeight*(parseInt(rowID)+1)
+			if (currentY > maxY) {
+				this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
+			}
+			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+			extendHeight = newExtendHeight
+		}
 	},
 
 	stockPressed: function(rowData, sectionID, rowID, highlightRow) {

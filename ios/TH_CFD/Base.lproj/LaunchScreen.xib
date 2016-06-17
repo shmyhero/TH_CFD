@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
@@ -13,13 +14,21 @@
                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="frontPage.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="DpB-E7-GmM">
                     <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
                 </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" alpha="0.40000000000000002" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version 1.0 (3)" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JOw-IY-hqm">
+                    <rect key="frame" x="212" y="467" width="57" height="10"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="8"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="DpB-E7-GmM" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" id="6mz-ak-oSH"/>
                 <constraint firstItem="DpB-E7-GmM" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" id="Wts-qQ-ZN8"/>
                 <constraint firstItem="DpB-E7-GmM" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="hef-HF-dIP"/>
+                <constraint firstAttribute="bottom" secondItem="JOw-IY-hqm" secondAttribute="bottom" constant="3" id="rg5-tb-BDu"/>
                 <constraint firstItem="DpB-E7-GmM" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="rhp-i6-3YI"/>
+                <constraint firstAttribute="centerX" secondItem="JOw-IY-hqm" secondAttribute="centerX" id="vXd-1C-wPF"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

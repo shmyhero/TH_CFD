@@ -43,6 +43,7 @@ var stopLossPercent = 0
 var stopProfitUpdated = false
 var stopLossUpdated = false
 var MAX_PERCENT = 90
+var isWaiting = false
 
 var StockOpenPositionPage = React.createClass({
 
@@ -262,6 +263,7 @@ var StockOpenPositionPage = React.createClass({
 				);
 			}
 		} else {
+			isWaiting = false
 			if (this.state.selectedRow >=0) {
 				newData[this.state.selectedRow].hasSelected = false
 			}
@@ -317,6 +319,12 @@ var StockOpenPositionPage = React.createClass({
 			this.doScrollAnimation()
 			return
 		}
+
+		if (isWaiting) {
+			return
+		}
+		isWaiting = true
+
 		var userData = LogicData.getUserData()
 		var url = NetConstants.POST_DELETE_POSITION_API
 		NetworkModule.fetchTHUrl(
@@ -364,9 +372,11 @@ var StockOpenPositionPage = React.createClass({
 					selectedRow: -1,
 					selectedSubItem: 0,
 				})
+				isWaiting = false
 			},
 			(errorMessage) => {
 				Alert.alert('', errorMessage);
+				isWaiting = false
 			}
 		)
 	},

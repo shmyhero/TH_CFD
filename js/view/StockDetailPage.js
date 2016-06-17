@@ -66,13 +66,14 @@ var StockDetailPage = React.createClass({
 	getInitialState: function() {
 		var balanceData = LogicData.getBalanceData()
 		var available = balanceData === null ? 0 : (balanceData.available < 0 ? 0 : balanceData.available)
+		var money = available > 100 ? 100 : Math.floor(available)
 		return {
 			stockInfo: {isOpen: true},
-			money: 0,
+			money: money,
 			leverage: 2,
 			totalMoney: available,
 			tradeDirection: 0,	//0:none, 1:up, 2:down
-			inputText: '0',
+			inputText: ''+money,
 			stockPrice: this.props.stockPrice,
 			stockCurrencyPrice: '--',
 			stockPriceAsk: this.props.stockPriceAsk,
@@ -99,6 +100,14 @@ var StockDetailPage = React.createClass({
 	},
 
 	updateUserBalance: function(responseJson){
+		if (this.state.totalMoney === 0 && this.state.money === 0 && responseJson.available > 0){
+			// first time get the total money value.
+			var money = responseJson.available > 100 ? 100 : Math.floor(responseJson.available)
+			this.setState({
+				money: money,
+				inputText: ''+money,
+			})
+		}
 		this.setState({
 			totalMoney: responseJson.available < 0 ? 0 : responseJson.available,
 		})
@@ -633,6 +642,12 @@ var StockDetailPage = React.createClass({
 					// insert here
 					moneyArray.splice(i+1, 0, ""+input);
 					break
+				}
+				else {
+					// value > input
+					if (i === 0) {
+						moneyArray.splice(0, 0, ""+input)
+					}
 				}
 			}
 		}

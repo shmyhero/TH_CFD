@@ -17,6 +17,8 @@ var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
 
 var {height, width} = Dimensions.get('window');
+var itemTitleFontSize = 16//Math.round(16*width/375)
+var itemValueFontSize = 14//Math.round(14*width/375)
 
 var StockTransactionConfirmPage = React.createClass({
 	mixins: [Touchable.Mixin],
@@ -142,7 +144,7 @@ var StockTransactionConfirmPage = React.createClass({
 
 							{this.state.isCreate ?
 								null :
-								<Text style={[styles.titleText, {marginRight: 20}]}>
+								<Text style={[styles.titleText, {marginRight: 15}]}>
 									{(pl).toFixed(2)} %
 								</Text>
 							}
@@ -150,7 +152,7 @@ var StockTransactionConfirmPage = React.createClass({
 						</View>
 					</View>
 					<View style={styles.centerContainer}>
-						<View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20, paddingVertical: 8}}>
+						<View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 15, paddingVertical: 8}}>
 							<Text style={styles.itemTitleText}>
 								类型
 							</Text>
@@ -164,7 +166,7 @@ var StockTransactionConfirmPage = React.createClass({
 								{this.state.invest.toFixed(2)}
 							</Text>
 						</View>
-						<View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>
+						<View style={{flex: 1, alignItems: 'flex-end', paddingRight: 15}}>
 							<Text style={styles.itemTitleText}>
 								杠杆
 							</Text>
@@ -175,7 +177,7 @@ var StockTransactionConfirmPage = React.createClass({
 					</View>
 					<View style={styles.line}/>
 					<View style={styles.bottomContainer}>
-						<View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 20, paddingVertical: 8}}>
+						<View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 15, paddingVertical: 8}}>
 							<Text style={styles.itemTitleText}>
 								交易价格
 							</Text>
@@ -191,7 +193,7 @@ var StockTransactionConfirmPage = React.createClass({
 								{this.state.isCreate? this.state.invest.toFixed(2) : this.state.transactionInfo.pl.toFixed(2)}
 							</Text>
 						</View>
-						<View style={{flex: 1, alignItems: 'flex-end', paddingRight: 20}}>
+						<View style={{flex: 1, alignItems: 'flex-end', paddingRight: 15}}>
 							<Text style={styles.itemTitleText}>
 								{this.state.time.Format('yy/MM/dd')}
 							</Text>
@@ -253,25 +255,25 @@ var styles = StyleSheet.create({
 		fontSize: 20,
 		textAlign: 'center',
 		color: '#ffffff',
-		marginLeft: 20,
+		marginLeft: 15,
 		marginVertical: 8,
 	},
 
 	itemTitleText: {
-		fontSize: 16,
+		fontSize: itemTitleFontSize,
 		textAlign: 'center',
 		color: '#7d7d7d',
 	},
 
 	itemValueText: {
-		fontSize: 14,
+		fontSize: itemValueFontSize,
 		textAlign: 'center',
 		color: '#000000',
 	},
 
 	longImage: {
-		width: 24,
-		height: 24,
+		width: itemValueFontSize*1.5,
+		height: itemValueFontSize*1.5,
 	},
 
 	line: {

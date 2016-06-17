@@ -68,11 +68,11 @@ var StockDetailPage = React.createClass({
 		var available = balanceData === null ? 0 : (balanceData.available < 0 ? 0 : balanceData.available)
 		return {
 			stockInfo: {isOpen: true},
-			money: available < 20 ? Math.floor(available) : 20,
+			money: 0,
 			leverage: 2,
 			totalMoney: available,
 			tradeDirection: 0,	//0:none, 1:up, 2:down
-			inputText: '20',
+			inputText: '0',
 			stockPrice: this.props.stockPrice,
 			stockCurrencyPrice: '--',
 			stockPriceAsk: this.props.stockPriceAsk,
@@ -589,26 +589,33 @@ var StockDetailPage = React.createClass({
 		var {height, width} = Dimensions.get('window');
 		var pickerWidth = width/2-60
 		var pickerHeight = 216
-		// money list: 10, 20, 30, ...,100,max
-		var moneyCount = 11
+		// money list: 100,500,1000,3000,5000,7000,10000,20000,max
+		var rawList=[100, 500, 1000, 3000, 5000, 7000, 10000, 20000]
+		var moneyCount = 0
 		var moneyArray = []
+		console.log('total money:'+ this.state.totalMoney)
 		if (this.state.totalMoney <= 0) {
-			moneyCount = 0
+			moneyCount = -1
 		}
-		else if (this.state.totalMoney <= 100) {
-			moneyCount = Math.floor(this.state.totalMoney/10)
-			if (this.state.totalMoney % 10 !== 0) {
-				moneyCount += 1
-			}
-		}
-		if (moneyCount === 0) {
-			moneyArray = ['10','20']
+		else if (this.state.totalMoney <= rawList[rawList.length-1]) {
+			for (var i = 0; i < rawList.length; i++) {
+				if(this.state.totalMoney > rawList[i]) {
+					moneyCount += 1
+				}
+			};
 		}
 		else {
-			for (var i = 0; i < moneyCount-1; i++) {
-				moneyArray[i]=""+(i+1)*10
+			moneyCount = rawList.length
+		}
+
+		if (moneyCount === -1) {
+			moneyArray = ['0']
+		}
+		else {
+			for (var i = 0; i < moneyCount; i++) {
+				moneyArray[i]=""+rawList[i]
 			};
-			moneyArray[moneyCount-1]=""+ Math.floor(this.state.totalMoney)
+			moneyArray.push(""+ Math.floor(this.state.totalMoney))
 		}
 		// insert the user input value
 		var exist = false

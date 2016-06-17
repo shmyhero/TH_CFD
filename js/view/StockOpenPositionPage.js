@@ -425,6 +425,13 @@ var StockOpenPositionPage = React.createClass({
 			if(!this.state.stopLossSwitchIsOn){
 				stopLossPercent=0
 				price = this.percentToPriceWithRow(100, rowData, 2)
+				var dcm = Math.pow(10, rowData.security.dcmCount)
+				if (rowData.isLong){
+					price = Math.ceil(price * dcm)/dcm
+				}
+				else {
+					price = Math.floor(price * dcm)/dcm
+				}
 			}
 			NetworkModule.fetchTHUrl(
 				url,

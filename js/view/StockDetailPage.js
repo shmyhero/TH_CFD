@@ -593,7 +593,6 @@ var StockDetailPage = React.createClass({
 		var rawList=[100, 500, 1000, 3000, 5000, 7000, 10000, 20000]
 		var moneyCount = 0
 		var moneyArray = []
-		console.log('total money:'+ this.state.totalMoney)
 		if (this.state.totalMoney <= 0) {
 			moneyCount = -1
 		}

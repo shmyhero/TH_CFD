@@ -55,16 +55,27 @@ var StockExchangePage = React.createClass({
 		if (index == 2) {
 			this.refs['page' + this.state.currentSelectedTab].playStartAnim()
 		}
-		this.onTabChanged()
+		var userData = LogicData.getUserData()
+		var loggined = Object.keys(userData).length !== 0
+		if (loggined && this.refs['page' + index]) {
+			this.refs['page' + index].tabPressed()
+		}
 	},
 
 	onTabChanged: function(){
 		var userData = LogicData.getUserData()
 		var loggined = Object.keys(userData).length !== 0
-		if (loggined && this.refs['page' + this.state.currentSelectedTab]) {
-			this.refs['page' + this.state.currentSelectedTab].tabPressed()
+		// if (loggined && this.refs['page' + this.state.currentSelectedTab]) {
+		// 	this.refs['page' + this.state.currentSelectedTab].tabPressed()
+		// }
+		// this.forceUpdate()
+		if (loggined && this.refs['page0']){
+			this.refs['tabPages'].tabClicked(0)
+			this.setState({
+				currentSelectedTab: 0
+			})
+			this.refs['page0'].tabPressed()
 		}
-		this.forceUpdate()
 	},
 
 	render: function() {
@@ -90,7 +101,7 @@ var StockExchangePage = React.createClass({
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title="我的交易" showSearchButton={true} navigator={this.props.navigator}/>
-					<ScrollTabView tabNames={tabNames} viewPages={viewPages} removeClippedSubviews={true}
+					<ScrollTabView ref={"tabPages"} tabNames={tabNames} viewPages={viewPages} removeClippedSubviews={true}
 						onPageSelected={(index) => this.onPageSelected(index)} />
 				</View>
 			)

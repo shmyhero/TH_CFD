@@ -27,11 +27,7 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 	}
 	
 	override func viewDidAppear(animated: Bool) {
-		rawData = StockDataManager.sharedInstance().stockDataArray
 		editTableView.reloadData()
-		allButton.layer.cornerRadius = 4
-		deleteButton.layer.cornerRadius = 4
-		self.updateButtons()
 	}
 	
 	override func viewWillAppear(animated: Bool) {
@@ -44,6 +40,10 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 			self.view.addSubview(self.statusView)
 			self.view.sendSubviewToBack(self.statusView)
 		}
+		rawData = StockDataManager.sharedInstance().stockDataArray
+		allButton.layer.cornerRadius = 4
+		deleteButton.layer.cornerRadius = 4
+		self.updateButtons()
 	}
 	
 	override func viewWillDisappear(animated: Bool) {
@@ -63,6 +63,8 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		})
 		allSelect = selectedRows.count == rawData.count
 		allButton.setTitle(allSelect ? "取消":"全部", forState: .Normal)
+		allButton.enabled = rawData.count > 0
+		allButton.backgroundColor = allButton.enabled ? UIColor(hex: 0x1962DD) : UIColor(hex: 0xe0e0e0)
 		
 		deleteButton.enabled = selectedRows.count > 0
 		if deleteButton.enabled {

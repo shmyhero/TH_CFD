@@ -358,13 +358,13 @@ var styles = StyleSheet.create({
 	},
 
 	line: {
-		height: 1,
+		height: 0.5,
 		backgroundColor: 'white',
 	},
 
 	separator: {
 		marginLeft: 15,
-		height: 1,
+		height: 0.5,
 		backgroundColor: '#ececec',
 	},
 
@@ -435,8 +435,8 @@ var styles = StyleSheet.create({
 
 	darkSeparator: {
 		marginLeft: 15,
-		height: 1,
-		backgroundColor: '#dfdfdf',
+		height: 0.5,
+		backgroundColor: '#ececec',
 	},
 
 	extendWrapper: {

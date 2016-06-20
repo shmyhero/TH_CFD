@@ -127,7 +127,7 @@ var styles = StyleSheet.create({
 	line: {
 		alignSelf: 'stretch',
 		height: 1,
-		borderWidth: 0.25,
+		borderWidth: 0,
 		borderColor: '#d0d0d0'
 	},
 

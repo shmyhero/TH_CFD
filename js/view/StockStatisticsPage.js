@@ -336,8 +336,8 @@ var styles = StyleSheet.create({
 
 	separator: {
 		marginLeft: 15,
-		height: 1,
-		backgroundColor: '#dfe5ef',
+		height: 0.5,
+		backgroundColor: '#ececec',
 	},
 
 	container: {

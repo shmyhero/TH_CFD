@@ -550,12 +550,12 @@ var styles = StyleSheet.create({
 		color: '#ffffff',
 	},
 	line: {
-		height: 1,
+		height: 0.5,
 		backgroundColor: 'white',
 	},
 	separator: {
 		marginLeft: 15,
-		height: 1,
+		height: 0.5,
 		backgroundColor: '#ececec',
 	},
 	addImage: {

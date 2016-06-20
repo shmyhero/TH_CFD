@@ -432,7 +432,7 @@ var styles = StyleSheet.create({
 	},
 	separator: {
 		marginLeft: 15,
-		height: 1,
+		height: 0.5,
 		backgroundColor: '#ececec',
 	},
 

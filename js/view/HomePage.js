@@ -37,6 +37,9 @@ var imageHeight = 478 / 750 * width
 var ds = new ViewPager.DataSource({
 	pageHasChanged: (p1, p2) => p1 !== p2,
 });
+
+var magicCode = ""
+
 var HomePage = React.createClass({
 	getInitialState: function() {
 		return {
@@ -139,15 +142,30 @@ var HomePage = React.createClass({
 		});
 	},
 
-	logoutPress: function() {
-		// StorageModule.removeUserData()
-		// .then(() => {
-		// 	LogicData.removeUserData()
-		// 	WebSocketModule.registerCallbacks(
-		// 		() => {
-		// 	})
-		// })
+	endsWith: function(str, suffix) {
+	    return str.indexOf(suffix, str.length - suffix.length) !== -1;
 	},
+
+	magicButtonPress: function(index) {
+		magicCode += ""+index
+		console.log(magicCode)
+		if(this.endsWith(magicCode, "12342234")){
+			this.props.navigator.push({
+				name: MainPage.OPEN_ACCOUNT_ROUTE,
+			});
+		}
+	},
+
+	logoutPress: function() {
+		StorageModule.removeUserData()
+		.then(() => {
+			LogicData.removeUserData()
+			WebSocketModule.registerCallbacks(
+				() => {
+			})
+		})
+	},
+
 	render: function() {
 		return (
 			<View style={{width: width, height: height - UIConstants.TAB_BAR_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER}}>
@@ -169,6 +187,7 @@ var HomePage = React.createClass({
 				</View>
 
 				<View style={styles.rowContainer}>
+					<TouchableOpacity style={styles.blockContainer} activeOpacity={0.95} onPress={()=>this.magicButtonPress(1)}>
 					<View style={styles.blockContainer}>
 						<Image style={styles.blockImage} source={require('../../images/updown.png')}/>
 						<Text style={styles.blockTitleText}>
@@ -178,7 +197,9 @@ var HomePage = React.createClass({
 							{'市场行情的涨跌动态都是\n盈利时机'}
 						</Text>
 					</View>
+					</TouchableOpacity>
 					<View style={styles.vertLine}/>
+					<TouchableOpacity style={styles.blockContainer} activeOpacity={0.95} onPress={()=>this.magicButtonPress(2)}>
 					<View style={styles.blockContainer}>
 						<Image style={styles.blockImage} source={require('../../images/smallbig.png')}/>
 						<Text style={styles.blockTitleText}>
@@ -188,9 +209,11 @@ var HomePage = React.createClass({
 							{'盈利无上限 亏损有底线\n杠杆收益'}
 						</Text>
 					</View>
+					</TouchableOpacity>
 				</View>
 				<View style={styles.horiLine}/>
 				<View style={styles.rowContainer}>
+					<TouchableOpacity style={styles.blockContainer} activeOpacity={0.95} onPress={()=>this.magicButtonPress(3)}>
 					<View style={styles.blockContainer}>
 						<Image style={styles.blockImage} source={require('../../images/markets.png')}/>
 						<Text style={styles.blockTitleText}>
@@ -200,8 +223,9 @@ var HomePage = React.createClass({
 							{'市场同步的行情助您掌控\n涨跌趋势'}
 						</Text>
 					</View>
+					</TouchableOpacity>
 					<View style={styles.vertLine}/>
-					<TouchableOpacity style={styles.blockContainer} activeOpacity={0.95} onPress={this.logoutPress}>
+					<TouchableOpacity style={styles.blockContainer} activeOpacity={0.95} onPress={()=>this.magicButtonPress(4)}>
 					<View style={styles.blockContainer}>
 						<Image style={styles.blockImage} source={require('../../images/advantage.png')}/>
 						<Text style={styles.blockTitleText}>

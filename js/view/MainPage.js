@@ -33,6 +33,7 @@ var QAPage = require('./QAPage')
 var {EventCenter, EventConst} = require('../EventCenter')
 
 var TutorialPage = require('./TutorialPage');
+var OpenAccountPage = require('./openAccount/OAIdPhotoPage')
 
 var _navigator;
 BackAndroid.addEventListener('hardwareBackPress', () => {
@@ -59,6 +60,7 @@ export let STOCK_DETAIL_ROUTE = 'stockDetail'
 export let STOCK_EXCHANGE_ROUTE = 'stockExchange'
 export let HOMEPAGE_RECOMMAND_ROUTE = 'homepageRecommand'
 export let QA_ROUTE = 'q&a'
+export let OPEN_ACCOUNT_ROUTE = 'openAccount'
 
 const glypy = glypyMapMaker({
   Home: 'f04f',
@@ -208,6 +210,15 @@ var MainPage = React.createClass({
 		} else if (route.name === QA_ROUTE) {
 			return (
 				<QAPage />
+			)
+		}
+		else if (route.name === OPEN_ACCOUNT_ROUTE) {
+			hideTabbar()
+			return (
+				<View style={{flex: 1}}>
+					<NavBar title="上传身份证照片（1/4）" showBackButton={true} navigator={navigationOperations}/>
+					<OpenAccountPage navigator={navigationOperations} />
+				</View>
 			)
 		}
 	},

@@ -4,47 +4,35 @@ import React from 'react';
 import {
 	StyleSheet,
 	View,
-	TouchableOpacity,
-	Image,
 	Text,
+	Image,
 	Dimensions,
 } from 'react-native';
 
 var Button = require('../component/Button')
 var MainPage = require('../MainPage')
 var ColorConstants = require('../../ColorConstants')
+
 var {height, width} = Dimensions.get('window')
 
-var OAIdPhotoPage = React.createClass({
-
-	pressAddImage: function() {
-		//todo
-	},
+var OAStartPage = React.createClass({
 
 	gotoNext: function() {
-		//TODO, check
 		this.props.navigator.push({
 			name: MainPage.OPEN_ACCOUNT_ROUTE,
-			step: 2,
+			step: 1,
 		});
 	},
 
 	render: function() {
 		return (
 			<View style={styles.wrapper}>
-				<View style={{height: 15}} />
-				<TouchableOpacity onPress={this.pressAddImage}>
-					<View style={styles.imageArea}>
-						<Image style={styles.addImage} source={require('../../../images/add_front.png')}/>
-					</View>
-				</TouchableOpacity>
-				<TouchableOpacity onPress={this.pressAddImage}>
-					<View style={styles.imageArea}>
-						<Image style={styles.addImage} source={require('../../../images/add_back.png')}/>
-					</View>
-				</TouchableOpacity>
-				<Text style={styles.reminderText}>请保持身份证四边框清晰完整，背景干净
-				</Text>
+				<View style={{flex: 1}} />
+				<Text style={styles.text1}>开户前请准备好</Text>
+				<Image style={styles.image} source={require('../../../images/icon1.png')}/>
+				<Text style={styles.text2}>准备好您的二代身份证，您必须年满18周岁</Text>
+				<Image style={styles.image} source={require('../../../images/icon2.png')}/>
+				<Text style={styles.text3}>{"开户需要上传图片等大流量数据，建议使用\nWIFI，4G或者3G网络"}</Text>
 				<View style={styles.bottomArea}>
 					<Button style={styles.buttonArea}
 						enabled={true}
@@ -61,28 +49,32 @@ var OAIdPhotoPage = React.createClass({
 var styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
-		alignItems: 'stretch',
+   		alignItems: 'stretch',
+    	justifyContent: 'space-around',
 		backgroundColor: ColorConstants.BACKGROUND_GREY,
 	},
-
-	imageArea: {
-		flex: 4,
-		alignSelf: 'center',
-		alignItems: 'center',
-	},
-	addImage: {
-		width: width*0.85,
-		height: height*0.3,
-		marginTop: 10,
-		marginBottom: 10,
-		borderRadius: 3,
-	},
-
-	reminderText: {
-		marginTop: 10,
-		flex: 1,
+	text1: {
+		flex: 2,
+		fontSize: 17,
 		textAlign: 'center',
+		paddingTop: 10,
+	},
+	text2: {
+		flex: 2,
 		fontSize: 14,
+		textAlign: 'center',
+		paddingTop: 10,
+	},
+	text3: {
+		flex: 7,
+		fontSize: 14,
+		textAlign: 'center',
+		paddingTop: 10,
+	},
+	image: {
+		alignSelf: 'center',
+		width: 39,
+		height: 39,
 	},
 
 	bottomArea: {
@@ -112,4 +104,4 @@ var styles = StyleSheet.create({
 });
 
 
-module.exports = OAIdPhotoPage;
+module.exports = OAStartPage;

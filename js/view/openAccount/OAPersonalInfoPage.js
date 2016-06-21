@@ -39,6 +39,7 @@ var styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
 		alignItems: 'stretch',
+		backgroundColor: ColorConstants.BACKGROUND_GREY,
 	},
 });
 

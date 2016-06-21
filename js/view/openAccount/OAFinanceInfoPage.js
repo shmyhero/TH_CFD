@@ -41,7 +41,7 @@ var styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
 		alignItems: 'stretch',
-		paddingBottom: Platform.OS === 'android' ? 40 : 0,
+		backgroundColor: ColorConstants.BACKGROUND_GREY,
 	},
 });
 

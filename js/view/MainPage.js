@@ -33,10 +33,13 @@ var QAPage = require('./QAPage')
 var {EventCenter, EventConst} = require('../EventCenter')
 
 var TutorialPage = require('./TutorialPage');
-var OpenAccountPages = [require('./openAccount/OAIdPhotoPage'),
+var OpenAccountPages = [
+		require('./openAccount/OAStartPage'),
+		require('./openAccount/OAIdPhotoPage'),
 		require('./openAccount/OAPersonalInfoPage'),
 		require('./openAccount/OAFinanceInfoPage'),
 	]
+var OpenAccountTitles = ["开户准备","上传身份证照片(1/4)", "完善个人信息(2/4)", "完善财务信息(3/4)","提交申请(4/4)"]
 
 var _navigator;
 BackAndroid.addEventListener('hardwareBackPress', () => {
@@ -219,10 +222,9 @@ var MainPage = React.createClass({
 			hideTabbar()
 			var step = route.step
 			var Page = OpenAccountPages[step]
-			var titles = ["上传身份证照片(1/4)", "完善个人信息(2/4)", "完善财务信息(3/4)","提交申请(4/4)"]
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title={titles[step]}
+					<NavBar title={OpenAccountTitles[step]}
 						showBackButton={true}
 						backgroundColor={'#415a86'}
 						navigator={navigationOperations}/>

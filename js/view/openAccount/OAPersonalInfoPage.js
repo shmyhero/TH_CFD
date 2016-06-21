@@ -4,7 +4,6 @@ import React from 'react';
 import {
 	StyleSheet,
 	View,
-	Platform,
 } from 'react-native';
 
 var Button = require('../component/Button')
@@ -40,7 +39,6 @@ var styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
 		alignItems: 'stretch',
-		paddingBottom: Platform.OS === 'android' ? 40 : 0,
 	},
 });
 

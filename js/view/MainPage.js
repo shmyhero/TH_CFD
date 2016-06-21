@@ -222,7 +222,10 @@ var MainPage = React.createClass({
 			var titles = ["上传身份证照片(1/4)", "完善个人信息(2/4)", "完善财务信息(3/4)","提交申请(4/4)"]
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title={titles[step]} showBackButton={true} navigator={navigationOperations}/>
+					<NavBar title={titles[step]}
+						showBackButton={true}
+						backgroundColor={'#415a86'}
+						navigator={navigationOperations}/>
 					<Page navigator={navigationOperations} />
 				</View>
 			)

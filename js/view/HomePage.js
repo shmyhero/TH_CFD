@@ -39,6 +39,7 @@ var ds = new ViewPager.DataSource({
 });
 
 var magicCode = ""
+var NO_MAGIC = false
 
 var HomePage = React.createClass({
 	getInitialState: function() {
@@ -147,12 +148,20 @@ var HomePage = React.createClass({
 	},
 
 	magicButtonPress: function(index) {
+		if (NO_MAGIC) {
+			return
+		}
 		magicCode += ""+index
-		console.log(magicCode)
+
 		if(this.endsWith(magicCode, "12342234")){
+			// open account
 			this.props.navigator.push({
 				name: MainPage.OPEN_ACCOUNT_ROUTE,
+				step: 0,
 			});
+		}
+		else if(this.endsWith(magicCode, "41414141")) {
+			this.logoutPress()
 		}
 	},
 

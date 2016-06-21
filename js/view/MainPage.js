@@ -33,7 +33,10 @@ var QAPage = require('./QAPage')
 var {EventCenter, EventConst} = require('../EventCenter')
 
 var TutorialPage = require('./TutorialPage');
-var OpenAccountPage = require('./openAccount/OAIdPhotoPage')
+var OpenAccountPages = [require('./openAccount/OAIdPhotoPage'),
+		require('./openAccount/OAPersonalInfoPage'),
+		require('./openAccount/OAFinanceInfoPage'),
+	]
 
 var _navigator;
 BackAndroid.addEventListener('hardwareBackPress', () => {
@@ -214,10 +217,13 @@ var MainPage = React.createClass({
 		}
 		else if (route.name === OPEN_ACCOUNT_ROUTE) {
 			hideTabbar()
+			var step = route.step
+			var Page = OpenAccountPages[step]
+			var titles = ["上传身份证照片(1/4)", "完善个人信息(2/4)", "完善财务信息(3/4)","提交申请(4/4)"]
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title="上传身份证照片（1/4）" showBackButton={true} navigator={navigationOperations}/>
-					<OpenAccountPage navigator={navigationOperations} />
+					<NavBar title={titles[step]} showBackButton={true} navigator={navigationOperations}/>
+					<Page navigator={navigationOperations} />
 				</View>
 			)
 		}

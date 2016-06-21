@@ -4,17 +4,31 @@ import React from 'react';
 import {
 	StyleSheet,
 	View,
-	Dimensions,
 	Platform,
-	Alert,
 } from 'react-native';
 
+var Button = require('../component/Button')
+var MainPage = require('../MainPage')
+var ColorConstants = require('../../ColorConstants')
 
 var OAIdPhotoPage = React.createClass({
+	gotoNext: function() {
+		//TODO, check
+		this.props.navigator.push({
+			name: MainPage.OPEN_ACCOUNT_ROUTE,
+			step: 1,
+		});
+	},
+
 	render: function() {
 		return (
 			<View style={styles.wrapper}>
-
+				<Button style={styles.buttonArea}
+					enabled={true}
+					onPress={this.gotoNext}
+					textContainerStyle={styles.buttonView}
+					textStyle={styles.buttonText}
+					text='下一步' />
 			</View>
 		);
 	},
@@ -25,6 +39,22 @@ var styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'stretch',
 		paddingBottom: Platform.OS === 'android' ? 40 : 0,
+	},
+	buttonArea: {
+		flex: 1,
+		alignSelf: 'center',
+	},
+	buttonView: {
+		padding: 5,
+		height: 40,
+		borderRadius: 3,
+		backgroundColor: ColorConstants.TITLE_BLUE,
+		justifyContent: 'center',
+	},
+	buttonText: {
+		fontSize: 16,
+		textAlign: 'center',
+		color: '#ffffff',
 	},
 });
 

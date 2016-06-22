@@ -65,7 +65,6 @@ var NetConstants = require('./js/NetConstants')
 var FSModule = require('./js/module/FSModule')
 var LogicData = require('./js/LogicData')
 var MainPage = require('./js/view/MainPage')
-var MyHomePage = require('./js/view/MyHomePage')
 var AskForRestartPage = require('./js/view/AskForRestartPage')
 
 var GUIDE_SLIDES = [
@@ -219,7 +218,7 @@ var AppNavigator = React.createClass({
 			return (
 				<View style={styles.container}>
 					{statusBar}
-					<MyHomePage />
+					<MainPage />
 					{this.renderAskForRestart()}
 				</View>
 			)

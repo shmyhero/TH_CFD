@@ -18,4 +18,4 @@ project(':react-native-linear-gradient').projectDir = new File(settingsDir, '../
 project(':realm').projectDir = new File(rootProject.projectDir, '../node_modules/realm/android')
 project(':react-native-update').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-update/android')
 project(':react-native-fs').projectDir = new File(settingsDir, '../node_modules/react-native-fs/android')
-project(':react-native-image-picker').projectDir = new File(settingsDir, './react-native-image-picker')
+project(':react-native-image-picker').projectDir = new File(settingsDir, '../node_modules/react-native-image-picker/android')

@@ -23,8 +23,8 @@ var options = {
 
 	cameraType: 'back', // 'front' or 'back'
 	mediaType: 'photo', // 'photo' or 'video'
-	maxWidth: imageWidth * 2, // photos only
-	maxHeight: imageHeight * 2, // photos only
+	maxWidth: imageWidth * 3, // photos only
+	maxHeight: imageHeight * 3, // photos only
 	aspectX: 3, // android only - aspectX:aspectY, the cropping image's ratio of width to height
 	aspectY: 2, // android only - aspectX:aspectY, the cropping image's ratio of width to height
 	quality: 1, // 0 to 1, photos only
@@ -43,7 +43,6 @@ var MyHomePage = React.createClass({
 	getInitialState: function() {
 		return {
 			avatarSource: require('../../images/bannar01.png'),
-			imageRotation: 0,
 		};
 	},
 
@@ -73,11 +72,6 @@ var MyHomePage = React.createClass({
 					avatarSource: source
 				});
 
-				if (response.isVertical == true) {
-					this.setState({
-						imageRotation: 90,
-					})
-				}
 			}
 		});
 	},
@@ -101,7 +95,7 @@ var MyHomePage = React.createClass({
 
 				<View style={styles.line}/>
 
-				<Image source={this.state.avatarSource} style={[styles.avatar, {transform: [{rotate: this.state.imageRotation + 'deg'}]}]}/>
+				<Image source={this.state.avatarSource} style={[styles.avatar]}/>
 			</View>
 
 		);

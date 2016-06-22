@@ -7,6 +7,7 @@ import com.facebook.react.LifecycleState;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
+import com.imagepicker.ImagePickerPackage;
 import com.rnfs.RNFSPackage;
 import com.tradehero.cfd.RNNativeModules.RNNativePackage;
 import com.zyu.ReactNativeWheelPickerPackage;
@@ -40,7 +41,8 @@ public class RNManager {
                     new ReactNativeWheelPickerPackage(),
                     new LinearGradientPackage(),
                     new UpdatePackage(),
-                    new RNFSPackage()
+                    new RNFSPackage(),
+                    new ImagePickerPackage()
             );
 
             for (ReactPackage reactPackage : packages) {

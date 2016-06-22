@@ -9,147 +9,101 @@ import {
 	Image,
 	View,
 	TouchableHighlight,
+	Dimensions,
 } from 'react-native';
+var ImagePicker = require('react-native-image-picker');
+var {height, width} = Dimensions.get('window')
+var imageWidth = width - 40
+var imageHeight = Math.round(imageWidth / 1.5)
+var options = {
+	title: null, // specify null or empty string to remove the title
+	cancelButtonTitle: '取消',
+	takePhotoButtonTitle: '拍照', // specify null or empty string to remove this button
+	chooseFromLibraryButtonTitle: '照片图库', // specify null or empty string to remove this button
+
+	cameraType: 'back', // 'front' or 'back'
+	mediaType: 'photo', // 'photo' or 'video'
+	maxWidth: imageWidth * 2, // photos only
+	maxHeight: imageHeight * 2, // photos only
+	aspectX: 3, // android only - aspectX:aspectY, the cropping image's ratio of width to height
+	aspectY: 2, // android only - aspectX:aspectY, the cropping image's ratio of width to height
+	quality: 1, // 0 to 1, photos only
+	angle: 0, // android only, photos only
+	allowsEditing: false, // Built in functionality to resize/reposition the image after selection
+	noData: false, // photos only - disables the base64 `data` field from being generated (greatly improves performance on large photos)
+	storageOptions: { // if this key is provided, the image will get saved in the documents directory on ios, and the pictures directory on android (rather than a temporary directory)
+		skipBackup: true, // ios only - image will NOT be backed up to icloud
+		path: 'images' // ios only - will save image at /Documents/images rather than the root
+	},
+};
 
 var LogicData = require('../LogicData')
 
 var MyHomePage = React.createClass({
 	getInitialState: function() {
 		return {
-			userData: LogicData.getUserData()
+			avatarSource: require('../../images/bannar01.png'),
+			imageRotation: 0,
 		};
 	},
 
-	myActivitiesOnClick: function() {
-
-	},
-
-	myNoticeOnClick: function() {
-		this.props.navigator.push({
-			name: 'myNotifications',
-		});
-	},
-
 	mySettingsOnClick: function() {
-		this.props.navigator.push({
-			name: 'mySettings',
+		ImagePicker.showImagePicker(options, (response) => {
+			console.log('Response = ', response);
+
+			if (response.didCancel) {
+				console.log('User cancelled image picker');
+			}
+			else if (response.error) {
+				console.log('ImagePicker Error: ', response.error);
+			}
+			else if (response.customButton) {
+				console.log('User tapped custom button: ', response.customButton);
+			}
+			else {
+				// You can display the image using either data:
+				const source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
+
+				// uri (on iOS)
+				//const source = {uri: response.uri.replace('file://', ''), isStatic: true};
+				// uri (on android)
+				//const source = {uri: response.uri, isStatic: true};
+
+				this.setState({
+					avatarSource: source
+				});
+
+				if (response.isVertical == true) {
+					this.setState({
+						imageRotation: 90,
+					})
+				}
+			}
 		});
 	},
 
 	render: function() {
 		return (
 			<View style={styles.wrapper}>
-
-				<View style={styles.profileContainer}>
-					<Image
-						style={styles.logo}
-						source={{uri: this.state.userData.profileDTO.picture}}
-					/>
-					<View style={styles.nameContainer}>
-						<Text style={styles.displayName}>
-							{this.state.userData.profileDTO.displayName}
-						</Text>
-						<Text style={styles.roi}>
-							收益率：{this.state.userData.profileDTO.portfolio.roiSinceInception * 100}
-						</Text>
-						<Text style={styles.signature}>
-							收益率：{this.state.userData.profileDTO.signature}
-						</Text>
-					</View>
-				</View>
-
-				<View style={styles.line}/>
-
-				<View style={styles.portfolio}>
-					<View style={styles.portfolioDataContainer}>
-						<Text style={styles.portfolioData}>
-							$ {Math.round(this.state.userData.profileDTO.portfolio.totalValue)}
-						</Text>
-						<Text style={styles.portfolioKey}>
-							总资产
-						</Text>
-					</View>
-					<View style={styles.portfolioDataContainer}>
-						<Text style={styles.portfolioData}>
-							{this.state.userData.profileDTO.heroIds.length}
-						</Text>
-						<Text style={styles.portfolioKey}>
-							股神
-						</Text>
-					</View>
-					<View style={styles.portfolioDataContainer}>
-						<Text style={styles.portfolioData}>
-							{this.state.userData.profileDTO.allFollowerCount}
-						</Text>
-						<Text style={styles.portfolioKey}>
-							粉丝
-						</Text>
-					</View>
-				</View>
-
-				<View style={styles.line}/>
-
-				<View style={styles.liveTrade}>
-					<Text style={styles.liveTradeButton}>
-						开通实盘
-					</Text>
-					<Text style={styles.liveTradeButton}>
-						实盘交易
-					</Text>
-				</View>
-
-				<View style={styles.line}/>
-
-				<TouchableHighlight 
-					style={styles.toaClickableArea}
-					onPress={this.myActivitiesOnClick}
-					underlayColor='#d0d0d0'>
-					<View style={styles.toa}>
-						<Image 
-							style={styles.toaIcon} 
-							source={require('../../images/icon_me_dynamic.png')}/>
-						<Text style={styles.toaName}>
-							我的动态
-						</Text>
-					</View>
-				</TouchableHighlight>
-
-				<View style={styles.line}/>
-
-				<TouchableHighlight 
-					style={styles.toaClickableArea}
-					onPress={this.myNoticeOnClick}
-					underlayColor='#d0d0d0'>
-					<View style={styles.toa}>
-						<Image 
-							style={styles.toaIcon} 
-							source={require('../../images/icon_me_message.png')}/>
-						<Text style={styles.toaName}>
-							通知
-						</Text>
-					</View>
-				</TouchableHighlight>
-
-				<View style={styles.line}/>
-
-				<TouchableHighlight 
+				<TouchableHighlight
 					style={styles.toaClickableArea}
 					onPress={this.mySettingsOnClick}
 					underlayColor='#d0d0d0'>
 					<View style={styles.toa}>
-						<Image 
-							style={styles.toaIcon} 
+						<Image
+							style={styles.toaIcon}
 							source={require('../../images/icon_me_setting.png')}/>
 						<Text style={styles.toaName}>
 							设置
 						</Text>
 					</View>
 				</TouchableHighlight>
-				
+
 				<View style={styles.line}/>
 
+				<Image source={this.state.avatarSource} style={[styles.avatar, {transform: [{rotate: this.state.imageRotation + 'deg'}]}]}/>
 			</View>
-			
+
 		);
 	},
 });
@@ -262,6 +216,11 @@ var styles = StyleSheet.create({
 		textAlign: 'center',
 		marginLeft: 30,
 	},
+	avatar: {
+		width: imageWidth,
+		height: imageHeight,
+		resizeMode: 'contain',
+	}
 });
 
 module.exports = MyHomePage;

@@ -84,9 +84,10 @@ var styles = StyleSheet.create({
 		flexDirection:'row'
 	},
 	buttonArea: {
+		flex: 1,
 		backgroundColor: 'green',
-		width: width*0.92,
-		marginLeft: width*0.04,
+		marginLeft: 15,
+		marginRight: 15,
 		marginBottom: 16,
 		borderRadius: 3,
 	},

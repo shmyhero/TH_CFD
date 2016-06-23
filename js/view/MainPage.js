@@ -225,6 +225,7 @@ var MainPage = React.createClass({
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title={OpenAccountTitles[step]}
+						titleStyle={{marginLeft:-20, marginRight:-20}}
 						showBackButton={true}
 						backgroundColor={'#415a86'}
 						navigator={navigationOperations}/>

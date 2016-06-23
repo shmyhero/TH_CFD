@@ -32,7 +32,6 @@ var OAPersonalInfoPage = React.createClass({
 	getInitialState: function() {
 		var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		return {
-			personalInfo: listRawData,
 			dataSource: ds.cloneWithRows(listRawData),
 		};
 	},
@@ -45,10 +44,19 @@ var OAPersonalInfoPage = React.createClass({
 		});
 	},
 
+	textInputChange: function(event, rowID) {
+		listRawData[rowID].value = event.nativeEvent.text
+	},
+
 	renderRow: function(rowData, sectionID, rowID) {
 		return (
 			<View style={styles.rowWrapper}>
 				<Text style={styles.rowTitle}>{rowData.key}</Text>
+				<TextInput style={styles.valueText}
+					autoCapitalize="none"
+					autoCorrect={false}
+					defaultValue={rowData.value}
+					onEndEditing={(event)=>this.textInputChange(event, rowID)} />
 			</View>
 			)
 	},
@@ -114,7 +122,15 @@ var styles = StyleSheet.create({
 	},
 	rowTitle:{
 		fontSize: fontSize,
-		color: '#333333'
+		color: '#333333',
+		flex: 1,
+	},
+	valueText: {
+		fontSize: fontSize,
+		color: '#333333',
+		flex: 3,
+		marginTop: -rowPadding,
+		marginBottom: -rowPadding,
 	},
 
 	bottomArea: {

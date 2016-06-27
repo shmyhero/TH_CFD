@@ -128,10 +128,7 @@ var MainPage = React.createClass({
 		} else if (route.name === LOGIN_ROUTE) {
 			hideTabbar()
 			return (
-				<View style={{flex: 1}}>
-					<NavBar title="手机验证" showBackButton={true} navigator={navigationOperations}/>
-					<LoginPage navigator={navigationOperations}/>
-				</View>
+				<LoginPage navigator={navigationOperations}/>
 			);
 		} else if (route.name === UPDATE_USER_INFO_ROUTE) {
 			return (
@@ -202,7 +199,7 @@ var MainPage = React.createClass({
 		} else if (route.name === STOCK_EXCHANGE_ROUTE) {
 			showTabbar()
 			return (
-				<StockExchangePage navigator={navigationOperations} 
+				<StockExchangePage navigator={navigationOperations}
 					showTutorial={this.showTutorial}/>
 			)
 		} else if (route.name === HOMEPAGE_RECOMMAND_ROUTE) {

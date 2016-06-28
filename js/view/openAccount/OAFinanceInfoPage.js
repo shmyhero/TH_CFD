@@ -10,9 +10,11 @@ import {
 	Text,
 	TextInput,
 	Switch,
+	Image,
 } from 'react-native';
 
 var Button = require('../component/Button')
+var CheckBoxButton = require('../component/CheckBoxButton')
 var MainPage = require('../MainPage')
 var ColorConstants = require('../../ColorConstants')
 
@@ -28,8 +30,7 @@ var listRawData = [
 		{"key":"投资频率", "value":"点击选择", "type":"choice"},
 		{"key":"你是否了解过Ayondo的金融产品", "value":true, "type":"switch"},
 		{"key":"你是否有一年以上与金融交易相关的经验", "value":false, "type":"switch"},
-		{"key":"你有哪些产品的交易经验", "value":false, "type":""},
-		{"key":"开账户选择", "value":false, "type":""},
+		{"key":"你有哪些产品的交易经验", "value":["场外衍生品","衍生产品","股票和债券"], "type":"options"},
 		]
 
 var OAFinanceInfoPage = React.createClass({
@@ -58,6 +59,7 @@ var OAFinanceInfoPage = React.createClass({
 						autoCorrect={false}
 						editable={false}
 						defaultValue={"点击选择"} />
+					<Image style={{width:17.5, height:13.5}} source={require("../../../images/icon_down_arrow.png")} />
 				</View>
 				)
 		}
@@ -69,6 +71,20 @@ var OAFinanceInfoPage = React.createClass({
 						onValueChange={(value) => this.setState({falseSwitchIsOn: value})}
 						style={{height: 16}}
 						value={rowData.value} />
+				</View>)
+		}
+		else if(rowData.type === 'options'){
+			var boxes = rowData.value.map(
+				(title, i) =>
+				<CheckBoxButton key={i} text={title}>
+				</CheckBoxButton>
+			)
+			return(
+				<View style={styles.rowWrapperOption}>
+					<Text style={styles.rowTitle}>{rowData.key}</Text>
+					<View style={styles.checkboxView}>
+						{boxes}
+					</View>
 				</View>)
 		}
 		else {
@@ -128,6 +144,15 @@ var styles = StyleSheet.create({
 		paddingTop: rowPadding,
 		backgroundColor: '#ffffff',
 	},
+	rowWrapperOption: {
+		flexDirection: 'column',
+		alignItems:'stretch',
+		backgroundColor: '#ffffff',
+		paddingLeft: 15,
+		paddingRight: 15,
+		paddingBottom: rowPadding,
+		paddingTop: rowPadding,
+	},
 	line: {
 		height: 0.5,
 		backgroundColor: 'white',
@@ -148,6 +173,11 @@ var styles = StyleSheet.create({
 		flex: 3,
 		marginTop: -rowPadding,
 		marginBottom: -rowPadding,
+	},
+	checkboxView: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		paddingTop: 10,
 	},
 
 	bottomArea: {

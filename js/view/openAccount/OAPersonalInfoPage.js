@@ -36,7 +36,7 @@ var OAPersonalInfoPage = React.createClass({
 			listRawData = [
 					{"key":"姓名", "value": certificateIdCardInfo.real_name},
 					{"key":"性别", "value":certificateIdCardInfo.gender},
-					{"key":"出生日期", "value":''},
+					{"key":"出生日期", "value":certificateIdCardInfo.birthday},
 					{"key":"民族", "value":certificateIdCardInfo.ethnic},
 					{"key":"身份证号", "value":certificateIdCardInfo.id_code},
 					{"key":"证件地址", "value":certificateIdCardInfo.addr},

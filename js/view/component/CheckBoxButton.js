@@ -45,9 +45,10 @@ var CheckBoxButton = React.createClass({
 	},
 
 	onPressed: function() {
-		this.props.onPress &&this.props.onPress()
+		var newState = !this.state.selected
+		this.props.onPress &&this.props.onPress(newState)
 		this.setState({
-			selected: !this.state.selected,
+			selected: newState,
 		})
 	},
 

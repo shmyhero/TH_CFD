@@ -39,13 +39,15 @@ var OpenAccountPages = [
 		require('./openAccount/OAPersonalInfoPage'),
 		require('./openAccount/OAFinanceInfoPage'),
 		require('./openAccount/OADocumentInfoPage'),
+		require('./openAccount/OAReviewStatusPage'),
 	]
 var OpenAccountTitles = [
 		"开户准备",
 		"上传身份证照片(1/4)",
 		"完善个人信息(2/4)",
 		"完善财务信息(3/4)",
-		"提交申请(4/4)"]
+		"提交申请(4/4)",
+		"审核状态"]
 
 var _navigator;
 BackAndroid.addEventListener('hardwareBackPress', () => {

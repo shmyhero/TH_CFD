@@ -45,7 +45,7 @@ var OAFinanceInfoPage = React.createClass({
 		//TODO, check
 		this.props.navigator.push({
 			name: MainPage.OPEN_ACCOUNT_ROUTE,
-			step: 2,
+			step: 4,
 		});
 	},
 	

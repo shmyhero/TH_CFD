@@ -39,7 +39,7 @@ var OADocumentInfoPage = React.createClass({
 		if (this.state.enabled) {
 			this.props.navigator.push({
 				name: MainPage.OPEN_ACCOUNT_ROUTE,
-				step: 1,
+				step: 5,
 			});
 		}
 	},

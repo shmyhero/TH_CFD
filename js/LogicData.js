@@ -9,6 +9,7 @@ var ownStocksData = [];
 var searchStockHistory = [];
 var balanceData = null;
 var fxData = [];
+var certificateIdCardInfo = null;
 
 var LogicData = {
 
@@ -107,6 +108,23 @@ var LogicData = {
 		}
 		return null
 	},
+
+	setCertificateIdCardInfo: function(data) {
+		data.message = decodeURIComponent(data.message)
+		data.real_name = decodeURIComponent(data.real_name)
+		data.id_code = decodeURIComponent(data.id_code)
+		data.addr = decodeURIComponent(data.addr)
+		data.gender = decodeURIComponent(data.gender)
+		data.ethnic = decodeURIComponent(data.ethnic)
+		data.issue_authority = decodeURIComponent(data.issue_authority)
+		data.valid_period = decodeURIComponent(data.valid_period)
+
+		certificateIdCardInfo = data
+	},
+
+	getCertificateIdCardInfo: function() {
+		return certificateIdCardInfo
+	}
 };
 
 module.exports = LogicData;

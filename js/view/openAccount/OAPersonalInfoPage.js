@@ -12,16 +12,16 @@ import {
 
 var Button = require('../component/Button')
 var MainPage = require('../MainPage')
+var LogicData = require('../../LogicData')
 var ColorConstants = require('../../ColorConstants')
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
 var fontSize = Math.round(16*width/375)
 var listRawData = [
-		{"key":"姓", "value":""},
-		{"key":"名", "value":""},
-		{"key":"性别", "value":""},
-		{"key":"出生日期", "value":""},
+		{"key":"姓名", "value":"1"},
+		{"key":"性别", "value":"2"},
+		{"key":"出生日期", "value":"3"},
 		{"key":"民族", "value":""},
 		{"key":"身份证号", "value":""},
 		{"key":"证件地址", "value":""},
@@ -31,6 +31,18 @@ var listRawData = [
 var OAPersonalInfoPage = React.createClass({
 	getInitialState: function() {
 		var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+		if (LogicData.getCertificateIdCardInfo() != null) {
+			var certificateIdCardInfo = LogicData.getCertificateIdCardInfo()
+			listRawData = [
+					{"key":"姓名", "value": certificateIdCardInfo.real_name},
+					{"key":"性别", "value":certificateIdCardInfo.gender},
+					{"key":"出生日期", "value":''},
+					{"key":"民族", "value":certificateIdCardInfo.ethnic},
+					{"key":"身份证号", "value":certificateIdCardInfo.id_code},
+					{"key":"证件地址", "value":certificateIdCardInfo.addr},
+					{"key":"签发机关", "value":certificateIdCardInfo.issue_authority},
+					{"key":"有效期限", "value":certificateIdCardInfo.valid_period}];
+		}
 		return {
 			dataSource: ds.cloneWithRows(listRawData),
 		};
@@ -134,7 +146,7 @@ var styles = StyleSheet.create({
 	},
 
 	bottomArea: {
-		height: 72, 
+		height: 72,
 		backgroundColor: 'white',
 		alignItems: 'flex-end',
 		flexDirection:'row'

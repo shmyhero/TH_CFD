@@ -8,13 +8,16 @@ import {
 	Image,
 	Text,
 	Dimensions,
+	Alert,
 } from 'react-native';
 
 var ImagePicker = require('react-native-image-picker');
 
+var LogicData = require('../../LogicData')
 var Button = require('../component/Button')
 var MainPage = require('../MainPage')
 var ColorConstants = require('../../ColorConstants')
+var NetworkModule = require('../../module/NetworkModule')
 var {height, width} = Dimensions.get('window')
 
 const ID_CARD_FRONT = 1
@@ -50,6 +53,8 @@ var OAIdPhotoPage = React.createClass({
 		return {
 			idCardFront: require('../../../images/add_front.png'),
 			idCardBack: require('../../../images/add_back.png'),
+			idCardFrontData: null,
+			idCardBackData: null,
 		};
 	},
 
@@ -69,11 +74,13 @@ var OAIdPhotoPage = React.createClass({
 
 				if (idCardIndex == ID_CARD_FRONT) {
 					this.setState({
-						idCardFront: source
+						idCardFront: source,
+						idCardFrontData: response.data,
 					});
 				} else if (idCardIndex == ID_CARD_BACK) {
 					this.setState({
-						idCardBack: source
+						idCardBack: source,
+						idCardBackData: response.data,
 					});
 				}
 			}
@@ -81,11 +88,43 @@ var OAIdPhotoPage = React.createClass({
 	},
 
 	gotoNext: function() {
-		//TODO, check
-		this.props.navigator.push({
-			name: MainPage.OPEN_ACCOUNT_ROUTE,
-			step: 2,
-		});
+		if (this.state.idCardFrontData != null && this.state.idCardBackData != null) {
+			NetworkModule.fetchTHUrl(
+				'http://124.192.161.110:8080/ocrCheck',
+				{
+					method: 'POST',
+					body: JSON.stringify({
+						accessId: 'shmhxx',
+						accessKey: 'SHMHAKQHSA',
+						frontImg: this.state.idCardFrontData,
+						frontImgExt: 'jpg',
+						backImg: this.state.idCardBackData,
+						backImgExt: 'jpg',
+					}),
+					showLoading: true,
+				},
+				(responseJson) => {
+					if (responseJson.result == 0) {
+						LogicData.setCertificateIdCardInfo(responseJson)
+
+						this.props.navigator.push({
+							name: MainPage.OPEN_ACCOUNT_ROUTE,
+							step: 2,
+						});
+					} else {
+						Alert.alert('', decodeURIComponent(responseJson.message));
+					}
+				},
+				(errorJson) => {
+					Alert.alert('', decodeURIComponent(errorJson.message));
+				}
+			)
+		} else {
+			this.props.navigator.push({
+				name: MainPage.OPEN_ACCOUNT_ROUTE,
+				step: 2,
+			});
+		}
 	},
 
 	render: function() {

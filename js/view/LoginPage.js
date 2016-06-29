@@ -311,7 +311,7 @@ var LoginPage = React.createClass({
 		var {height, width} = Dimensions.get('window');
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
-				<View style={{flex: 1}}>
+				<View style={{flex: 1, justifyContent: 'space-between'}}>
 					<Image style={styles.logoImage} source={require('../../images/login_logo.png')}/>
 					<Text style={styles.text1}>体验十万模拟资金</Text>
 
@@ -435,8 +435,7 @@ var styles = StyleSheet.create({
 		alignItems: 'stretch',
 	},
 	fastLoginContainer: {
-		flex: 1,
-		paddingBottom: 20,
+		paddingBottom: 60,
 		alignItems: 'stretch',
 	},
 	rowWrapper: {

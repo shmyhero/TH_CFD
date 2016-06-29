@@ -27,6 +27,7 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var extendHeight = 204
 var rowHeight = 0
+var stockNameFontSize = Math.round(17*width/375.0)
 
 var StockClosedPositionPage = React.createClass({
 	mixins: [TimerMixin],
@@ -293,7 +294,7 @@ var StockClosedPositionPage = React.createClass({
 				<TouchableHighlight activeOpacity={1} onPress={() => this.stockPressed(rowData, sectionID, rowID, highlightRow)}>
 					<View style={[styles.rowWrapper, {backgroundColor: bgcolor}]} key={rowData.key}>
 						<View style={styles.rowLeftPart}>
-							<Text style={styles.stockNameText}>
+							<Text style={styles.stockNameText} allowFontScaling={false} numberOfLines={1}>
 								{rowData.security.name}
 							</Text>
 
@@ -416,27 +417,29 @@ var styles = StyleSheet.create({
 	},
 
 	stockNameText: {
-		fontSize: 15,
+		fontSize: stockNameFontSize,
 		textAlign: 'center',
 		fontWeight: 'bold',
+		lineHeight: 22,
 	},
 
 	stockSymbolText: {
 		fontSize: 12,
 		textAlign: 'center',
 		color: '#5f5f5f',
+		lineHeight: 14,
 	},
 
 	stockPercentText: {
 		fontSize: 18,
 		color: '#ffffff',
-		fontWeight: 'bold',
+		fontWeight: 'normal',
 	},
 
 	darkSeparator: {
 		marginLeft: 15,
 		height: 0.5,
-		backgroundColor: '#ececec',
+		backgroundColor: '#dfdfdf',
 	},
 
 	extendWrapper: {

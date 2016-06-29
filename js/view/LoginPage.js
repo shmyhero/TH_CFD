@@ -59,8 +59,6 @@ var LoginPage = React.createClass({
 			validationCode: '',
 			validationCodeCountdown: -1,
 			animating: false,
-			phoneNumberBorderColor: ColorConstants.TITLE_BLUE,
-			validationCodeBorderColor: ColorConstants.DISABLED_GREY,
 			getValidationCodeButtonEnabled: false,
 			phoneLoginButtonEnabled: false,
 		};
@@ -87,20 +85,6 @@ var LoginPage = React.createClass({
 		})
 
 		this.checkButtonsEnable()
-	},
-
-	phoneNumberOnFocus: function() {
-		this.setState({
-			phoneNumberBorderColor: ColorConstants.TITLE_BLUE,
-			validationCodeBorderColor: ColorConstants.DISABLED_GREY,
-		})
-	},
-
-	validationCodeOnFocus: function() {
-		this.setState({
-			phoneNumberBorderColor: ColorConstants.DISABLED_GREY,
-			validationCodeBorderColor: ColorConstants.TITLE_BLUE,
-		})
 	},
 
 	getValidationCodePressed: function() {
@@ -254,7 +238,7 @@ var LoginPage = React.createClass({
 		if (this.state.validationCodeCountdown < 0) {
 			return  (
 				<Button style={styles.getValidationCodeArea}
-					enabled={this.state.getValidationCodeButtonEnabled}
+					enabled={true}
 					onPress={this.getValidationCodePressed}
 					textContainerStyle={styles.getValidationTextView}
 					textStyle={[styles.getValidationText, {fontSize: textSize}]}
@@ -263,7 +247,7 @@ var LoginPage = React.createClass({
 		} else {
 			return  (
 				<Button style={styles.getValidationCodeArea}
-					enabled={this.state.getValidationCodeButtonEnabled}
+					enabled={true}
 					onPress={this.getValidationCodePressed}
 					textContainerStyle={styles.getValidationTextView}
 					textStyle={[styles.getValidationText, {fontSize: textSize}]}
@@ -279,7 +263,7 @@ var LoginPage = React.createClass({
 		var simulatorTextAdditionalAttributes = {}
 		if (this.state.tabSelected == TAB_LIVE) {
 			liveTextAdditionalAttributes = {
-				color: ColorConstants.TITLE_BLUE
+				color: '#415a87'
 			}
 			simulatorTabAdditionalAttributes = {
 				backgroundColor: 'transparent',
@@ -320,7 +304,13 @@ var LoginPage = React.createClass({
 		)
 	},
 
-	renderLoginContent: function() {
+	renderLiveLoginContent: function() {
+		return (
+			null
+		)
+	},
+
+	renderSimulatorLoginContent: function() {
 		var {height, width} = Dimensions.get('window');
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
@@ -330,32 +320,33 @@ var LoginPage = React.createClass({
 
 					<View style={styles.phoneLoginContainer}>
 						<View style={styles.rowWrapper}>
-							<View style={[styles.phoneNumberInputView, {borderColor: this.state.phoneNumberBorderColor}]}>
+							<View style={[styles.phoneNumberInputView]}>
 								<TextInput style={styles.phoneNumberInput}
-									onFocus={() => this.phoneNumberOnFocus()}
 									onChangeText={(text) => this.setPhoneNumber(text)}
 									placeholder='手机号'
-									underlineColorAndroid='#ffffff'
+									placeholderTextColor='white'
+									underlineColorAndroid='transparent'
 									maxLength={11}
 									keyboardType='numeric'/>
 							</View>
 
+							<View style={{borderWidth: 0.5, borderColor: 'white', marginHorizontal: 15, marginVertical: 7}}/>
 							{this.renderGetValidationCodeButton()}
 						</View>
 
-						<View style={styles.rowWrapper}>
-							<View style={[styles.validationCodeInputView, {borderColor: this.state.validationCodeBorderColor}]}>
+						<View style={[styles.rowWrapper, {marginTop: 2}]}>
+							<View style={[styles.validationCodeInputView]}>
 								<TextInput style={styles.validationCodeInput}
-									onFocus={() => this.validationCodeOnFocus()}
 									onChangeText={(text) => this.setValidationCode(text)}
 									placeholder='验证码'
-									underlineColorAndroid='#ffffff'
+									placeholderTextColor='white'
+									underlineColorAndroid='transparent'
 									maxLength={4}
 									keyboardType='numeric'/>
 							</View>
 						</View>
 
-						<View style={styles.rowWrapper}>
+						<View style={[styles.rowWrapper, {marginTop: 20, backgroundColor: 'transparent'}]}>
 							<Button style={styles.loginClickableArea}
 								enabled={this.state.phoneLoginButtonEnabled}
 								onPress={this.loginPressed}
@@ -371,11 +362,23 @@ var LoginPage = React.createClass({
 		)
 	},
 
+	renderLoginContent: function() {
+		if (this.state.tabSelected == TAB_LIVE) {
+			return this.renderLiveLoginContent()
+		} else {
+			return this.renderSimulatorLoginContent()
+		}
+	},
+
 	render: function() {
 		var {height, width} = Dimensions.get('window');
+		var gradientColors = ['#1c5fd1', '#123b80']
+		if (this.state.tabSelected == TAB_LIVE) {
+			gradientColors = ['#415a87', '#36496a']
+		}
 
 		return (
-			<LinearGradient colors={['#3475e3', '#123b80']} style={[styles.wrapper, {height: height}]}>
+			<LinearGradient colors={gradientColors} style={[styles.wrapper, {height: height}]}>
 				{this.renderTab()}
 				{this.renderLoginContent()}
 			</LinearGradient>
@@ -398,8 +401,8 @@ var styles = StyleSheet.create({
 		borderRightWidth: 0,
 		borderTopLeftRadius: 5,
 		borderBottomLeftRadius: 5,
-		paddingLeft: 20,
-		paddingRight: 10,
+		paddingLeft: 15,
+		paddingRight: 15,
 		paddingVertical: 5,
 	},
 	simulatorTab: {
@@ -409,8 +412,8 @@ var styles = StyleSheet.create({
 		borderLeftWidth: 0,
 		borderTopRightRadius: 5,
 		borderBottomRightRadius: 5,
-		paddingLeft: 10,
-		paddingRight: 20,
+		paddingLeft: 15,
+		paddingRight: 15,
 		paddingVertical: 5,
 	},
 	tabText: {
@@ -441,34 +444,27 @@ var styles = StyleSheet.create({
 	rowWrapper: {
 		flexDirection: 'row',
 		alignItems: 'stretch',
-		paddingTop: 5,
-		paddingBottom: 5,
-		paddingLeft: 10,
-		paddingRight: 10,
+		paddingVertical: 5,
+		paddingHorizontal: 10,
 		justifyContent: 'space-around',
+		backgroundColor: '#678cc9',
 	},
 	phoneNumberInputView: {
 		flex: 3,
-		borderWidth: 1,
-		borderRadius: 3,
-		marginRight: 10,
-		backgroundColor: '#ffffff',
 	},
 	phoneNumberInput: {
 		height: rowHeight,
 		fontSize: fontSize,
 		paddingLeft: 10,
+		color: 'white',
 	},
 	getValidationCodeArea: {
 		flex: 1,
-		borderRadius: 3,
 		height: rowHeight,
 	},
 	getValidationTextView: {
 		padding: 5,
 		height: rowHeight,
-		borderRadius: 3,
-		backgroundColor: ColorConstants.TITLE_BLUE,
 		justifyContent: 'center',
 	},
 	getValidationText: {
@@ -478,14 +474,12 @@ var styles = StyleSheet.create({
 	},
 	validationCodeInputView: {
 		flex: 1,
-		borderWidth: 1,
-		borderRadius: 3,
-		backgroundColor: '#ffffff',
 	},
 	validationCodeInput: {
 		height: 40,
 		fontSize: fontSize,
 		paddingLeft: 10,
+		color: 'white',
 	},
 	loginClickableArea: {
 		flex: 1,

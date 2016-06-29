@@ -1,6 +1,7 @@
 'use strict'
 
 const SERVER_IP = 'http://cfd-webapi.chinacloudapp.cn'
+const GZT_SERVER_IP = 'http://124.192.161.110:8080'
 
 export const GET_PHONE_CODE_API = SERVER_IP + '/api/sendCode'
 export const PHONE_NUM_LOGIN_API = SERVER_IP + '/api/user/signupByPhone'
@@ -26,6 +27,7 @@ export const STOP_PROFIT_LOSS_API = SERVER_IP + '/api/position/order'
 export const ADD_REMOVE_STOP_PROFIT_API = SERVER_IP + '/api/position/order/take'
 export const GET_USER_BALANCE_API = SERVER_IP + '/api/user/balance'
 export const GET_USER_STATISTICS_API = SERVER_IP + '/api/user/plReport'
+export const GZT_OCR_CHECK_API = GZT_SERVER_IP + '/ocrCheck'
 
 export const PARAMETER_PHONE = 'phone'
 export const PARAMETER_VERFICATION_CODE = 'verifyCode'

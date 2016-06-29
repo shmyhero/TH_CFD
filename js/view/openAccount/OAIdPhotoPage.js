@@ -17,6 +17,7 @@ var LogicData = require('../../LogicData')
 var Button = require('../component/Button')
 var MainPage = require('../MainPage')
 var ColorConstants = require('../../ColorConstants')
+var NetConstants = require('../..NetConstants');
 var NetworkModule = require('../../module/NetworkModule')
 var {height, width} = Dimensions.get('window')
 
@@ -90,7 +91,7 @@ var OAIdPhotoPage = React.createClass({
 	gotoNext: function() {
 		if (this.state.idCardFrontData != null && this.state.idCardBackData != null) {
 			NetworkModule.fetchTHUrl(
-				'http://124.192.161.110:8080/ocrCheck',
+				NetConstants.GZT_OCR_CHECK_API,
 				{
 					method: 'POST',
 					body: JSON.stringify({

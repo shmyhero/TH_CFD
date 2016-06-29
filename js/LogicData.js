@@ -118,6 +118,8 @@ var LogicData = {
 		data.ethnic = decodeURIComponent(data.ethnic)
 		data.issue_authority = decodeURIComponent(data.issue_authority)
 		data.valid_period = decodeURIComponent(data.valid_period)
+		data.transaction_id = decodeURIComponent(data.transaction_id)
+		
 		data.birthday =  data.id_code.charAt(6) + data.id_code.charAt(7) + data.id_code.charAt(8) + data.id_code.charAt(9) +
 				'-' + data.id_code.charAt(10) + data.id_code.charAt(11) +
 				'-' + data.id_code.charAt(12) + data.id_code.charAt(13);

@@ -18,29 +18,33 @@ var {height, width} = Dimensions.get('window')
 var OAReviewStatusPage = React.createClass({
 
 	gotoNext: function() {
-		this.props.navigator.push({
-			name: MainPage.OPEN_ACCOUNT_ROUTE,
-			step: 1,
-		});
+		this.props.navigator.popToTop();
 	},
 
 	render: function() {
+		var startDate = new Date()
+		startDate.Format('yy/MM/dd')
 		return (
 			<View style={styles.wrapper}>
-				<View style={{flex: 1}} />
-				<Text style={styles.text1}>开户前请准备好</Text>
-				<Image style={styles.image} source={require('../../../images/icon1.png')}/>
-				<Text style={styles.text2}>准备好您的二代身份证，您必须年满18周岁</Text>
-				<Image style={styles.image} source={require('../../../images/icon2.png')}/>
-				<Text style={styles.text3}>{"开户需要上传图片等大流量数据，建议使用\nWIFI，4G或者3G网络"}</Text>
-				<View style={styles.bottomArea}>
-					<Button style={styles.buttonArea}
-						enabled={true}
-						onPress={this.gotoNext}
-						textContainerStyle={styles.buttonView}
-						textStyle={styles.buttonText}
-						text='下一步' />
+				<View />
+				<Text style={styles.text1}>感谢您开设Ayondo账户</Text>
+				<View style={styles.rowWrapper}>
+					<Image style={styles.image} source={require('../../../images/icon_review1.png')}/>
+					<Image style={styles.image} source={require('../../../images/icon_review2.png')}/>
+					<Image style={styles.image} source={require('../../../images/icon_review3.png')}/>
 				</View>
+				<View style={styles.rowWrapper}>
+					<Text style={styles.text2}>{"提交申请\n"+startDate.Format('yy/MM/dd')+"\n"+startDate.Format('hh:mm:ss')}</Text>
+					<Text style={styles.text2}>{"正在审核"}</Text>
+					<Text style={styles.text2}>{"预计审核时间\n"+startDate.Format('yy/MM/dd')+"\n"+startDate.Format('hh:mm:ss')}</Text>
+				</View>
+				<Text style={styles.text3}>{"开户成功后，我们将以短信告知您的审核结果"}</Text>
+				<Button style={styles.buttonArea}
+					enabled={true}
+					onPress={this.gotoNext}
+					textContainerStyle={styles.buttonView}
+					textStyle={styles.buttonText}
+					text='返回首页' />
 			</View>
 		);
 	},
@@ -50,42 +54,42 @@ var styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
    		alignItems: 'stretch',
-    	justifyContent: 'space-around',
+    	justifyContent: 'flex-start',
 		backgroundColor: ColorConstants.BACKGROUND_GREY,
 	},
+	rowWrapper: {
+		flexDirection: 'row',
+		backgroundColor: 'white',
+		justifyContent: 'space-around',
+		paddingBottom: 10,
+	},
 	text1: {
-		flex: 2,
 		fontSize: 17,
 		textAlign: 'center',
-		paddingTop: 10,
+		paddingTop: 20,
+		paddingBottom: 20,
+		backgroundColor: 'white',
 	},
 	text2: {
-		flex: 2,
+		flex: 1,
 		fontSize: 14,
 		textAlign: 'center',
-		paddingTop: 10,
+		color: '#f36b6f',
+		paddingBottom: 10,
 	},
 	text3: {
-		flex: 7,
-		fontSize: 14,
+		fontSize: 13,
 		textAlign: 'center',
-		paddingTop: 10,
+		paddingTop: 15,
+		paddingBottom: 15,
 	},
 	image: {
 		alignSelf: 'center',
-		width: 39,
-		height: 39,
+		width: 31,
+		height: 31,
 	},
 
-	bottomArea: {
-		height: 72, 
-		backgroundColor: 'white',
-		alignItems: 'flex-end',
-		flexDirection:'row'
-	},
 	buttonArea: {
-		flex: 1,
-		backgroundColor: 'green',
 		marginLeft: 15,
 		marginRight: 15,
 		marginBottom: 16,
@@ -94,7 +98,7 @@ var styles = StyleSheet.create({
 	buttonView: {
 		height: 40,
 		borderRadius: 3,
-		backgroundColor: '#4567a4',
+		backgroundColor: '#f36b6f',
 		justifyContent: 'center',
 	},
 	buttonText: {

@@ -192,7 +192,6 @@ var styles = StyleSheet.create({
 	},
 	buttonArea: {
 		flex: 1,
-		backgroundColor: 'green',
 		marginLeft: 15,
 		marginRight: 15,
 		marginBottom: 16,

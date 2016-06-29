@@ -88,7 +88,9 @@ var LoginPage = React.createClass({
 	},
 
 	getValidationCodePressed: function() {
-		console.log('getValidationCodePressed')
+		if (! this.state.getValidationCodeButtonEnabled) {
+			return
+		}
 		NetworkModule.fetchTHUrl(
 			NetConstants.GET_PHONE_CODE_API + '?' + NetConstants.PARAMETER_PHONE + "=" + this.state.phoneNumber,
 			{
@@ -166,6 +168,9 @@ var LoginPage = React.createClass({
 	},
 
 	loginPressed: function() {
+		if (!this.state.phoneLoginButtonEnabled) {
+			return
+		}
 		NetworkModule.fetchTHUrl(
 			NetConstants.PHONE_NUM_LOGIN_API,
 			{
@@ -235,25 +240,17 @@ var LoginPage = React.createClass({
 	renderGetValidationCodeButton: function() {
 		var {height, width} = Dimensions.get('window');
 		var textSize = Math.round(fontSize*width/375.0)
-		if (this.state.validationCodeCountdown < 0) {
-			return  (
-				<Button style={styles.getValidationCodeArea}
-					enabled={true}
-					onPress={this.getValidationCodePressed}
-					textContainerStyle={styles.getValidationTextView}
-					textStyle={[styles.getValidationText, {fontSize: textSize}]}
-					text='点击获取' />
-			);
-		} else {
-			return  (
-				<Button style={styles.getValidationCodeArea}
-					enabled={true}
-					onPress={this.getValidationCodePressed}
-					textContainerStyle={styles.getValidationTextView}
-					textStyle={[styles.getValidationText, {fontSize: textSize}]}
-					text={'(' + this.state.validationCodeCountdown + ')'} />
-			);
+		var text = '获取验证码'
+		if (this.state.validationCodeCountdown > 0) {
+			text = '(' + this.state.validationCodeCountdown + ')'
 		}
+		return  (
+			<TouchableOpacity style={styles.getValidationCodeArea} onPress={this.getValidationCodePressed}>
+				<Text style={[styles.getValidationText, {fontSize: textSize}]}>
+					{text}
+				</Text>
+			</TouchableOpacity>
+		);
 	},
 
 	renderTab: function() {
@@ -348,7 +345,7 @@ var LoginPage = React.createClass({
 
 						<View style={[styles.rowWrapper, {marginTop: 20, backgroundColor: 'transparent'}]}>
 							<Button style={styles.loginClickableArea}
-								enabled={this.state.phoneLoginButtonEnabled}
+								enabled={true}
 								onPress={this.loginPressed}
 								textContainerStyle={styles.loginTextView}
 								textStyle={styles.loginText}
@@ -459,11 +456,8 @@ var styles = StyleSheet.create({
 		color: 'white',
 	},
 	getValidationCodeArea: {
+		paddingVertical: 5,
 		flex: 1,
-		height: rowHeight,
-	},
-	getValidationTextView: {
-		padding: 5,
 		height: rowHeight,
 		justifyContent: 'center',
 	},
@@ -489,13 +483,13 @@ var styles = StyleSheet.create({
 		padding: 5,
 		height: rowHeight,
 		borderRadius: 3,
-		backgroundColor: ColorConstants.TITLE_BLUE,
+		backgroundColor: '#b8c7db',
 		justifyContent: 'center',
 	},
 	loginText: {
 		fontSize: fontSize,
 		textAlign: 'center',
-		color: '#ffffff',
+		color: '#2e2e2e',
 	},
 
 	fastLoginRowWrapper: {

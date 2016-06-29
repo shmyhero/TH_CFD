@@ -17,7 +17,7 @@ var LogicData = require('../../LogicData')
 var Button = require('../component/Button')
 var MainPage = require('../MainPage')
 var ColorConstants = require('../../ColorConstants')
-var NetConstants = require('../..NetConstants');
+var NetConstants = require('../../NetConstants');
 var NetworkModule = require('../../module/NetworkModule')
 var {height, width} = Dimensions.get('window')
 

@@ -14,7 +14,8 @@ import {
 	TouchableWithoutFeedback,
 } from 'react-native';
 
-var LinearGradient = require('react-native-linear-gradient');
+import LinearGradient from 'react-native-linear-gradient';
+import CheckBox from 'react-native-checkbox';
 var TimerMixin = require('react-timer-mixin');
 
 var LogicData = require('../LogicData')
@@ -27,7 +28,6 @@ var UIConstants = require('../UIConstants');
 var NetConstants = require('../NetConstants')
 var WechatModule = require('../module/WechatModule')
 var WebSocketModule = require('../module/WebSocketModule')
-var Button = require('./component/Button')
 var MainPage = require('./MainPage')
 var dismissKeyboard = require('dismissKeyboard');
 
@@ -61,6 +61,7 @@ var LoginPage = React.createClass({
 			animating: false,
 			getValidationCodeButtonEnabled: false,
 			phoneLoginButtonEnabled: false,
+			liveLoginRememberUserName: true,
 		};
 	},
 
@@ -206,6 +207,9 @@ var LoginPage = React.createClass({
 		});
 	},
 
+	forgetPassword: function() {
+
+	},
 
 	renderFastLogin: function() {
 		if (this.state.wechatInstalled) {
@@ -233,7 +237,7 @@ var LoginPage = React.createClass({
 				</View>
 			);
 		} else {
-			return <View />;
+			return <View style={{flex: 1}}/>;
 		}
 	},
 
@@ -301,9 +305,98 @@ var LoginPage = React.createClass({
 		)
 	},
 
-	renderLiveLoginContent: function() {
+	renderRememberUserCheckbox: function() {
+		var checkBox = require('../../images/checkbox_unchecked.png')
+		if (this.state.liveLoginRememberUserName) {
+			checkBox = require('../../images/checkbox_checked.png')
+		}
 		return (
-			null
+			<TouchableOpacity style={{padding: 10}} onPress={() => {this.setState({liveLoginRememberUserName: !this.state.liveLoginRememberUserName})}}>
+				<Image source={checkBox} style={{width: 17, height: 17}} />
+			</TouchableOpacity>
+		)
+	},
+
+	renderLiveLoginContent: function() {
+		var {height, width} = Dimensions.get('window');
+		return (
+			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
+				<View style={{flex: 1, justifyContent: 'space-between'}}>
+					<View>
+						<Image style={styles.ayondoLogoImage} source={require('../../images/ayondo_logo.png')}/>
+						<Text style={{alignSelf: 'center', fontSize: 35, color: 'white'}}>ayondo</Text>
+						<Text style={{alignSelf: 'center', fontSize: 11, color: '#2a3f43', marginTop: 20}}>您正在登录券商ayondo</Text>
+
+						<View style={styles.phoneLoginContainer}>
+							<View style={styles.liveRowWrapper}>
+								<View style={[styles.phoneNumberInputView]}>
+									<TextInput style={styles.phoneNumberInput}
+										onChangeText={(text) => this.setPhoneNumber(text)}
+										placeholder='手机号'
+										placeholderTextColor='white'
+										underlineColorAndroid='transparent'
+										maxLength={11}
+										keyboardType='numeric'/>
+								</View>
+							</View>
+
+							<View style={[styles.liveRowWrapper, {marginTop: 2}]}>
+								<View style={[styles.validationCodeInputView]}>
+									<TextInput style={styles.validationCodeInput}
+										onChangeText={(text) => this.setValidationCode(text)}
+										placeholder='登录密码'
+										placeholderTextColor='white'
+										underlineColorAndroid='transparent'
+										maxLength={4}
+										keyboardType='numeric'/>
+								</View>
+							</View>
+
+							<View style={[styles.liveRowWrapper, {marginTop: 10, paddingVertical: 0, backgroundColor: 'transparent'}]}>
+								<View style={{alignSelf: 'stretch', justifyContent: 'center'}}>
+									<Text style={{fontSize: 15, color: 'white'}}>
+										记住我
+									</Text>
+								</View>
+
+								{this.renderRememberUserCheckbox()}
+							</View>
+
+							<View style={[styles.liveRowWrapper, {marginTop: 0, backgroundColor: 'transparent'}]}>
+								<TouchableOpacity style={styles.loginClickableArea} onPress={this.loginPressed}>
+									<View style={styles.loginTextView}>
+										<Text style={styles.loginText}>
+											登录
+										</Text>
+									</View>
+								</TouchableOpacity>
+							</View>
+
+							<View style={[styles.liveRowWrapper, {marginTop: 10, backgroundColor: 'transparent'}]}>
+								<TouchableOpacity style={styles.loginClickableArea} onPress={this.loginPressed}>
+									<View style={styles.registerTextView}>
+										<Text style={styles.registerText}>
+											注册
+										</Text>
+									</View>
+								</TouchableOpacity>
+							</View>
+						</View>
+					</View>
+
+					<View style={styles.fastLoginContainer}>
+						<View style={styles.fastLoginRowWrapper}>
+							<View style={styles.forgetPasswordLine}/>
+							<TouchableOpacity style={{padding: 5}} onPress={this.forgetPassword}>
+								<Text style={styles.forgetPasswordTitle}>
+									 忘记密码
+								</Text>
+							</TouchableOpacity>
+							<View style={styles.forgetPasswordLine}/>
+						</View>
+					</View>
+				</View>
+			</TouchableWithoutFeedback>
 		)
 	},
 
@@ -312,44 +405,47 @@ var LoginPage = React.createClass({
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
 				<View style={{flex: 1, justifyContent: 'space-between'}}>
-					<Image style={styles.logoImage} source={require('../../images/login_logo.png')}/>
-					<Text style={styles.text1}>体验十万模拟资金</Text>
+					<View>
+						<Image style={styles.logoImage} source={require('../../images/login_logo.png')}/>
+						<Text style={{alignSelf: 'center', fontSize: 20, color: 'white'}}>体验十万模拟资金</Text>
 
-					<View style={styles.phoneLoginContainer}>
-						<View style={styles.rowWrapper}>
-							<View style={[styles.phoneNumberInputView]}>
-								<TextInput style={styles.phoneNumberInput}
-									onChangeText={(text) => this.setPhoneNumber(text)}
-									placeholder='手机号'
-									placeholderTextColor='white'
-									underlineColorAndroid='transparent'
-									maxLength={11}
-									keyboardType='numeric'/>
+						<View style={styles.phoneLoginContainer}>
+							<View style={styles.rowWrapper}>
+								<View style={[styles.phoneNumberInputView]}>
+									<TextInput style={styles.phoneNumberInput}
+										onChangeText={(text) => this.setPhoneNumber(text)}
+										placeholder='手机号'
+										placeholderTextColor='white'
+										underlineColorAndroid='transparent'
+										maxLength={11}
+										keyboardType='numeric'/>
+								</View>
+
+								<View style={{borderWidth: 0.5, borderColor: 'white', marginHorizontal: 15, marginVertical: 7}}/>
+								{this.renderGetValidationCodeButton()}
 							</View>
 
-							<View style={{borderWidth: 0.5, borderColor: 'white', marginHorizontal: 15, marginVertical: 7}}/>
-							{this.renderGetValidationCodeButton()}
-						</View>
-
-						<View style={[styles.rowWrapper, {marginTop: 2}]}>
-							<View style={[styles.validationCodeInputView]}>
-								<TextInput style={styles.validationCodeInput}
-									onChangeText={(text) => this.setValidationCode(text)}
-									placeholder='验证码'
-									placeholderTextColor='white'
-									underlineColorAndroid='transparent'
-									maxLength={4}
-									keyboardType='numeric'/>
+							<View style={[styles.rowWrapper, {marginTop: 2}]}>
+								<View style={[styles.validationCodeInputView]}>
+									<TextInput style={styles.validationCodeInput}
+										onChangeText={(text) => this.setValidationCode(text)}
+										placeholder='验证码'
+										placeholderTextColor='white'
+										underlineColorAndroid='transparent'
+										maxLength={4}
+										keyboardType='numeric'/>
+								</View>
 							</View>
-						</View>
 
-						<View style={[styles.rowWrapper, {marginTop: 20, backgroundColor: 'transparent'}]}>
-							<Button style={styles.loginClickableArea}
-								enabled={true}
-								onPress={this.loginPressed}
-								textContainerStyle={styles.loginTextView}
-								textStyle={styles.loginText}
-								text='登录' />
+							<View style={[styles.rowWrapper, {marginTop: 20, backgroundColor: 'transparent'}]}>
+								<TouchableOpacity style={styles.loginClickableArea} onPress={this.loginPressed}>
+									<View style={styles.loginTextView}>
+										<Text style={styles.loginText}>
+											登录
+										</Text>
+									</View>
+								</TouchableOpacity>
+							</View>
 						</View>
 					</View>
 
@@ -417,14 +513,16 @@ var styles = StyleSheet.create({
 		fontSize: 15
 	},
 	logoImage: {
+		marginTop: 10,
 		alignSelf: 'center',
 		width: 190,
 		height: 190,
 	},
-	text1: {
+	ayondoLogoImage: {
+		marginTop: 50,
 		alignSelf: 'center',
-		fontSize: 20,
-		color: 'white',
+		width: 89,
+		height: 48,
 	},
 	wrapper: {
 		flex:1,
@@ -435,7 +533,7 @@ var styles = StyleSheet.create({
 		alignItems: 'stretch',
 	},
 	fastLoginContainer: {
-		paddingBottom: 60,
+		paddingBottom: 70,
 		alignItems: 'stretch',
 	},
 	rowWrapper: {
@@ -445,6 +543,14 @@ var styles = StyleSheet.create({
 		paddingHorizontal: 10,
 		justifyContent: 'space-around',
 		backgroundColor: '#678cc9',
+	},
+	liveRowWrapper: {
+		flexDirection: 'row',
+		alignItems: 'stretch',
+		paddingVertical: 5,
+		paddingHorizontal: 10,
+		justifyContent: 'space-between',
+		backgroundColor: '#7e8da5',
 	},
 	phoneNumberInputView: {
 		flex: 3,
@@ -491,7 +597,20 @@ var styles = StyleSheet.create({
 		textAlign: 'center',
 		color: '#2e2e2e',
 	},
-
+	registerTextView: {
+		padding: 5,
+		height: rowHeight,
+		borderRadius: 3,
+		backgroundColor: 'transparent',
+		borderWidth: 1,
+		borderColor: '#b8c7db',
+		justifyContent: 'center',
+	},
+	registerText: {
+		fontSize: fontSize,
+		textAlign: 'center',
+		color: '#b8c7db',
+	},
 	fastLoginRowWrapper: {
 		flexDirection: 'row',
 		alignItems: 'center',
@@ -504,12 +623,24 @@ var styles = StyleSheet.create({
 		marginLeft: 5,
 		marginRight: 5,
 		borderWidth: 0.5,
-		borderColor: ColorConstants.DISABLED_GREY,
+		borderColor: '#1c5fcf',
 	},
 	fastLoginTitle: {
 		fontSize: 14,
 		textAlign: 'center',
-		color: '#9c9c9c',
+		color: '#1c5fcf',
+	},
+	forgetPasswordLine: {
+		flex: 1,
+		marginLeft: 5,
+		marginRight: 5,
+		borderWidth: 0.5,
+		borderColor: '#415a87',
+	},
+	forgetPasswordTitle: {
+		fontSize: 14,
+		textAlign: 'center',
+		color: '#415a87',
 	},
 	wechatClickableArea: {
 		marginTop: 5,

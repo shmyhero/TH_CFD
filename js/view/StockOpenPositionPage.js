@@ -852,7 +852,7 @@ var StockOpenPositionPage = React.createClass({
 						chartType={this.state.chartType}
 						colorType={1}>
 						{this.renderStockMaxPriceInfo(maxPrice, maxPercentage, true)}
-						{this.renderStockMaxPriceInfo(maxPrice, maxPercentage, false)}
+						{this.renderStockMaxPriceInfo(minPrice, minPercentage, false)}
 					</LineChart>
 				</View>
 			);

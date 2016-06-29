@@ -135,7 +135,7 @@ class StockChartView: UIView {
 		if (size.width == 0 || self.chartData.isEmpty) {
 			return
 		}
-		print(chartType)
+//		print(chartType)
 		self.verticalLinesX = []
 		self.verticalTimes = []
 		

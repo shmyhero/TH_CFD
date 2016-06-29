@@ -423,7 +423,7 @@ var styles = StyleSheet.create({
 	},
 	text1: {
 		alignSelf: 'center',
-		fontSize: 27,
+		fontSize: 20,
 		color: 'white',
 	},
 	wrapper: {
@@ -435,6 +435,7 @@ var styles = StyleSheet.create({
 		alignItems: 'stretch',
 	},
 	fastLoginContainer: {
+		flex: 1,
 		paddingBottom: 20,
 		alignItems: 'stretch',
 	},
@@ -512,7 +513,7 @@ var styles = StyleSheet.create({
 		color: '#9c9c9c',
 	},
 	wechatClickableArea: {
-		marginTop: 15,
+		marginTop: 5,
 		alignSelf: 'center',
 		borderRadius: 3,
 	},

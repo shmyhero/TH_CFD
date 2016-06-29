@@ -13,6 +13,7 @@ import {
 var LinearGradient = require('react-native-linear-gradient');
 var {EventCenter, EventConst} = require('../EventCenter')
 
+var LoginPage = require('./LoginPage');
 var ScrollTabView = require('./component/ScrollTabView')
 var StockOpenPositionPage = require('./StockOpenPositionPage')
 var StockClosedPositionPage = require('./StockClosedPositionPage')
@@ -108,28 +109,7 @@ var StockExchangePage = React.createClass({
 		}
 		else {
 			return (
-				<LinearGradient colors={['#3475e3', '#123b80']} style={[styles.wrapper, {height: height}]}>
-					<View style={styles.rowWrapper}>
-						<Text style={styles.headerText}>模拟交易</Text>
-					</View>
-					<Image style={styles.logoImage} source={require('../../images/login_logo.png')}/>
-					<View style={styles.rowWrapper}>
-						<Text style={styles.text1}>体验十万模拟资金</Text>
-					</View>
-					<View style={[styles.rowWrapper, {alignItems:'flex-start'}]}>
-						<Text style={styles.text2}>全民有份 任性挥霍</Text>
-					</View>
-
-					<TouchableHighlight
-						activeOpacity={0.7}
-						underlayColor={'transparent'}
-						onPress={this.registerPressed}
-						style={styles.registerView}>
-						<Text style={styles.registerButton}>快速注册</Text>
-					</TouchableHighlight>
-
-					<View style={{flex:3}}/>
-				</LinearGradient>
+				<LoginPage />
 			)
 		}
 	},

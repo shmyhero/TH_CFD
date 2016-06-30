@@ -217,6 +217,9 @@ var StockClosedPositionPage = React.createClass({
 	renderDetailInfo: function(rowData) {
 		var tradeImage = rowData.isLong ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
 		var profitColor = rowData.pl > 0 ? ColorConstants.STOCK_RISE_RED : ColorConstants.STOCK_DOWN_GREEN
+		if (rowData.pl === 0) {
+			profitColor = 'black'
+		}
 		var openDate = new Date(rowData.openAt)
 		var closeDate = new Date(rowData.closeAt)
 		var currency = UIConstants.CURRENCY_CODE_LIST[rowData.security.ccy]

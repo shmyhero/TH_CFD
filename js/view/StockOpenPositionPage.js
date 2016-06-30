@@ -588,26 +588,12 @@ var StockOpenPositionPage = React.createClass({
 	renderProfit: function(percentChange, endMark) {
 		var textSize = Math.round(18*width/375.0)
 		percentChange = percentChange.toFixed(2)
-		if (percentChange > 0) {
-			return (
-				<Text style={[styles.stockPercentText, {color: ColorConstants.STOCK_RISE_RED, fontSize:textSize}]}>
-					 +{percentChange} {endMark}
-				</Text>
-			);
-		} else if (percentChange < 0) {
-			return (
-				<Text style={[styles.stockPercentText, {color: ColorConstants.STOCK_DOWN_GREEN, fontSize:textSize}]}>
-					 {percentChange} {endMark}
-				</Text>
-			);
-
-		} else {
-			return (
-				<Text style={[styles.stockPercentText, {color: '#a0a6aa', fontSize:textSize}]}>
-					 {percentChange} {endMark}
-				</Text>
-			);
-		}
+		var startMark = percentChange > 0 ? "+":null
+		return (
+			<Text style={[styles.stockPercentText, {color: ColorConstants.stock_color(percentChange), fontSize:textSize}]}>
+				 {startMark}{percentChange} {endMark}
+			</Text>
+		);
 
 	},
 

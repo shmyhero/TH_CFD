@@ -1026,9 +1026,9 @@ var StockOpenPositionPage = React.createClass({
 						<View style={styles.rowRightPart}>
 							{this.renderProfit(profitPercentage * 100, "%")}
 						</View>
-
+						{rowData.security.isOpen ? null :
 							<Image style={styles.notOpenImage} source={require('../../images/not_open.png')}/>
-
+						}
 					</View>
 				</TouchableHighlight>
 

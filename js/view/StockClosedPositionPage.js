@@ -424,6 +424,7 @@ var styles = StyleSheet.create({
 		textAlign: 'center',
 		fontWeight: 'bold',
 		lineHeight: 22,
+		color: '#505050',
 	},
 
 	stockSymbolText: {

@@ -15,9 +15,9 @@ import {
 	TextInput,
 	Platform,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 var LineChart = require('./component/lineChart/LineChart');
-var LinearGradient = require('react-native-linear-gradient');
 var dismissKeyboard = require('dismissKeyboard');
 var LogicData = require('../LogicData')
 var UIConstants = require('../UIConstants');

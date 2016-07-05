@@ -10,7 +10,6 @@ import {
 	TouchableHighlight,
 } from 'react-native';
 
-var LinearGradient = require('react-native-linear-gradient');
 var {EventCenter, EventConst} = require('../EventCenter')
 
 var LoginPage = require('./LoginPage');

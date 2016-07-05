@@ -109,7 +109,7 @@ var StockExchangePage = React.createClass({
 		}
 		else {
 			return (
-				<LoginPage />
+				<LoginPage navigator={this.props.navigator}/>
 			)
 		}
 	},

@@ -159,10 +159,10 @@ var LoginPage = React.createClass({
 				}),
 				showLoading: true,
 			},
-			function(responseJson) {
+			(responseJson) => {
 				this.loginSuccess(responseJson);
-			}.bind(this),
-			function(errorMessage) {
+			},
+			(errorMessage) => {
 				Alert.alert('提示',errorMessage);
 			}
 		)
@@ -185,10 +185,10 @@ var LoginPage = React.createClass({
 				}),
 				showLoading: true,
 			},
-			function(responseJson) {
+			(responseJson) => {
 				this.loginSuccess(responseJson);
-			}.bind(this),
-			function(errorMessage) {
+			},
+			(errorMessage) => {
 				Alert.alert('提示',errorMessage);
 			}
 		)
@@ -202,7 +202,7 @@ var LoginPage = React.createClass({
 		NetworkModule.syncOwnStocks(userData)
 		WebSocketModule.alertServiceLogin(userData.userId + '_' + userData.token)
 
-		this.props.navigator.replace({
+		this.props.navigator.push({
 			name: MainPage.UPDATE_USER_INFO_ROUTE,
 		});
 	},

@@ -313,6 +313,7 @@ var StockOpenPositionPage = React.createClass({
 	okPress: function(rowData) {
 		if (!rowData.security.isOpen)
 			return
+
 		if (this.state.showExchangeDoubleCheck === false) {
 			this.setState({
 				showExchangeDoubleCheck: true,
@@ -428,6 +429,10 @@ var StockOpenPositionPage = React.createClass({
 
 		// STOP LOSS
 		if (stopLossUpdated) {
+			if (this.state.stopLossSwitchIsOn && stopLossPercent > MAX_PERCENT) {
+				Alert.alert('', '止损超过'+MAX_PERCENT+'%，无法设置');
+				return
+			}
 			url = NetConstants.STOP_PROFIT_LOSS_API
 			var price = this.percentToPriceWithRow(stopLossPercent, rowData, 2)
 			if(!this.state.stopLossSwitchIsOn){
@@ -690,6 +695,13 @@ var StockOpenPositionPage = React.createClass({
 	renderSlider: function(rowData, type, startPercent, endPercent, percent) {
 		//1, stop profit
 		//2, stop loss
+		var disabled = false
+		if (type === 2) {
+			if (startPercent > MAX_PERCENT) {
+				endPercent = startPercent
+				disabled = true
+			}
+		}
 		return (
 			<View style={styles.sliderView}>
 				<Slider
@@ -697,6 +709,7 @@ var StockOpenPositionPage = React.createClass({
 					minimumValue={startPercent}
 					value={percent}
 					maximumValue={endPercent}
+					disabled={disabled}
 					onSlidingComplete={(value) => this.setState({profitLossUpdated: true})}
 					onValueChange={(value) => this.setSliderValue(type, value, rowData)} />
 				<View style = {styles.subDetailRowWrapper}>
@@ -919,7 +932,7 @@ var StockOpenPositionPage = React.createClass({
 
 		var newExtendHeight = this.currentExtendHeight(this.state.selectedSubItem)
 		var stopLossImage = require('../../images/check.png')
-		var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) <= 90
+		var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) <= MAX_PERCENT
 		var stopProfit = rowData.takePx !== undefined
 		if (stopLoss || stopProfit) {
 			stopLossImage = require('../../images/check2.png')

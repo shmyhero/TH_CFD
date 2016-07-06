@@ -27,6 +27,7 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var extendHeight = 204
 var rowHeight = 0
+var stockNameFontSize = Math.round(17*width/375.0)
 
 var StockClosedPositionPage = React.createClass({
 	mixins: [TimerMixin],
@@ -216,6 +217,9 @@ var StockClosedPositionPage = React.createClass({
 	renderDetailInfo: function(rowData) {
 		var tradeImage = rowData.isLong ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
 		var profitColor = rowData.pl > 0 ? ColorConstants.STOCK_RISE_RED : ColorConstants.STOCK_DOWN_GREEN
+		if (rowData.pl === 0) {
+			profitColor = 'black'
+		}
 		var openDate = new Date(rowData.openAt)
 		var closeDate = new Date(rowData.closeAt)
 		var currency = UIConstants.CURRENCY_CODE_LIST[rowData.security.ccy]
@@ -293,7 +297,7 @@ var StockClosedPositionPage = React.createClass({
 				<TouchableHighlight activeOpacity={1} onPress={() => this.stockPressed(rowData, sectionID, rowID, highlightRow)}>
 					<View style={[styles.rowWrapper, {backgroundColor: bgcolor}]} key={rowData.key}>
 						<View style={styles.rowLeftPart}>
-							<Text style={styles.stockNameText}>
+							<Text style={styles.stockNameText} allowFontScaling={false} numberOfLines={1}>
 								{rowData.security.name}
 							</Text>
 
@@ -416,27 +420,30 @@ var styles = StyleSheet.create({
 	},
 
 	stockNameText: {
-		fontSize: 15,
+		fontSize: stockNameFontSize,
 		textAlign: 'center',
 		fontWeight: 'bold',
+		lineHeight: 22,
+		color: '#505050',
 	},
 
 	stockSymbolText: {
 		fontSize: 12,
 		textAlign: 'center',
 		color: '#5f5f5f',
+		lineHeight: 14,
 	},
 
 	stockPercentText: {
 		fontSize: 18,
 		color: '#ffffff',
-		fontWeight: 'bold',
+		fontWeight: 'normal',
 	},
 
 	darkSeparator: {
 		marginLeft: 15,
 		height: 0.5,
-		backgroundColor: '#ececec',
+		backgroundColor: '#dfdfdf',
 	},
 
 	extendWrapper: {

@@ -431,13 +431,7 @@ var StockDetailPage = React.createClass({
 			percentChange = (this.state.stockPrice - this.props.lastClosePrice) / this.props.lastClosePrice * 100
 		}
 
-		var subTitleColor = '#a0a6aa'
-		if (percentChange > 0) {
-			subTitleColor = ColorConstants.STOCK_RISE_RED
-		} else if (percentChange < 0) {
-			subTitleColor = ColorConstants.STOCK_DOWN_GREEN
-		}
-
+		var subTitleColor = ColorConstants.stock_color(percentChange)
 		var subTitleText = this.state.stockPrice + '  '
 		if (percentChange > 0) {
 			subTitleText += '+' + percentChange.toFixed(2) + '%'

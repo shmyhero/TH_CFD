@@ -161,13 +161,13 @@ var StockStatisticsPage = React.createClass({
 			<View style={styles.center}>
 				<View style={styles.centerView}>
 					<View style={styles.empty}/>
-					<Text style={styles.centerText1}>累计收益(美元)</Text>
+					<Text style={styles.centerText1}>近10天收益(美元)</Text>
 					<Text style={styles.centerText2}>{sumPl}</Text>
 					<View style={styles.empty}/>
 				</View>
 				<View style={styles.centerView}>
 					<View style={styles.empty}/>
-					<Text style={styles.centerText1}>投资回报率</Text>
+					<Text style={styles.centerText1}>近10天收益率</Text>
 					<Text style={styles.centerText2}>{avgPlRate}%</Text>
 					<View style={styles.empty}/>
 				</View>

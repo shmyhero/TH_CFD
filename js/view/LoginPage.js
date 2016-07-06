@@ -170,7 +170,10 @@ var LoginPage = React.createClass({
 	loginPressed: function() {
 		if (!this.state.phoneLoginButtonEnabled) {
 			return
-		}
+		}		
+		this.setState({
+			phoneLoginButtonEnabled: false
+		})
 		NetworkModule.fetchTHUrl(
 			NetConstants.PHONE_NUM_LOGIN_API,
 			{
@@ -188,6 +191,9 @@ var LoginPage = React.createClass({
 				this.loginSuccess(responseJson);
 			},
 			(errorMessage) => {
+				this.setState({
+					phoneLoginButtonEnabled: true
+				})
 				Alert.alert('提示',errorMessage);
 			}
 		)
@@ -201,6 +207,9 @@ var LoginPage = React.createClass({
 		NetworkModule.syncOwnStocks(userData)
 		WebSocketModule.alertServiceLogin(userData.userId + '_' + userData.token)
 
+		this.setState({
+			phoneLoginButtonEnabled: true
+		});
 		this.props.navigator.push({
 			name: MainPage.UPDATE_USER_INFO_ROUTE,
 		});

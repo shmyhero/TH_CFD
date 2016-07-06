@@ -399,32 +399,15 @@ var StockListPage = React.createClass({
 
 	renderRowRight: function(percentChange) {
 		percentChange = percentChange.toFixed(2)
-		if (percentChange > 0) {
-			return (
-				<View style={[styles.rowRightPart, {backgroundColor: ColorConstants.STOCK_RISE_RED}]}>
-					<Text style={styles.stockPercentText}>
-						 + {percentChange} %
-					</Text>
-				</View>
-			);
-		} else if (percentChange < 0) {
-			return (
-				<View style={[styles.rowRightPart, {backgroundColor: ColorConstants.STOCK_DOWN_GREEN}]}>
-					<Text style={styles.stockPercentText}>
-						 {percentChange} %
-					</Text>
-				</View>
-			);
-
-		} else {
-			return (
-				<View style={[styles.rowRightPart, {backgroundColor: '#a0a6aa'}]}>
-					<Text style={styles.stockPercentText}>
-						 {percentChange} %
-					</Text>
-				</View>
-			);
-		}
+		var color = ColorConstants.stock_color(percentChange)
+		var startMark = percentChange > 0 ? "+" : null
+		return (
+			<View style={[styles.rowRightPart, {backgroundColor: color}]}>
+				<Text style={styles.stockPercentText}>
+					 {startMark} {percentChange} %
+				</Text>
+			</View>
+		);
 
 	},
 

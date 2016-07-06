@@ -37,6 +37,7 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {
 
 var extendHeight = 222
 var rowHeight = 0
+var stockNameFontSize = Math.round(17*width/375.0)
 
 var stopProfitPercent = 0
 var stopLossPercent = 0
@@ -312,6 +313,7 @@ var StockOpenPositionPage = React.createClass({
 	okPress: function(rowData) {
 		if (!rowData.security.isOpen)
 			return
+
 		if (this.state.showExchangeDoubleCheck === false) {
 			this.setState({
 				showExchangeDoubleCheck: true,
@@ -427,6 +429,10 @@ var StockOpenPositionPage = React.createClass({
 
 		// STOP LOSS
 		if (stopLossUpdated) {
+			if (this.state.stopLossSwitchIsOn && stopLossPercent > MAX_PERCENT) {
+				Alert.alert('', '止损超过'+MAX_PERCENT+'%，无法设置');
+				return
+			}
 			url = NetConstants.STOP_PROFIT_LOSS_API
 			var price = this.percentToPriceWithRow(stopLossPercent, rowData, 2)
 			if(!this.state.stopLossSwitchIsOn){
@@ -584,28 +590,15 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	renderProfit: function(percentChange) {
+	renderProfit: function(percentChange, endMark) {
+		var textSize = Math.round(18*width/375.0)
 		percentChange = percentChange.toFixed(2)
-		if (percentChange > 0) {
-			return (
-				<Text style={[styles.stockPercentText, {color: ColorConstants.STOCK_RISE_RED}]}>
-					 +{percentChange} %
-				</Text>
-			);
-		} else if (percentChange < 0) {
-			return (
-				<Text style={[styles.stockPercentText, {color: ColorConstants.STOCK_DOWN_GREEN}]}>
-					 {percentChange} %
-				</Text>
-			);
-
-		} else {
-			return (
-				<Text style={[styles.stockPercentText, {color: '#a0a6aa'}]}>
-					 {percentChange} %
-				</Text>
-			);
-		}
+		var startMark = percentChange > 0 ? "+":null
+		return (
+			<Text style={[styles.stockPercentText, {color: ColorConstants.stock_color(percentChange), fontSize:textSize}]}>
+				 {startMark}{percentChange} {endMark}
+			</Text>
+		);
 
 	},
 
@@ -702,6 +695,13 @@ var StockOpenPositionPage = React.createClass({
 	renderSlider: function(rowData, type, startPercent, endPercent, percent) {
 		//1, stop profit
 		//2, stop loss
+		var disabled = false
+		if (type === 2) {
+			if (startPercent > MAX_PERCENT) {
+				endPercent = startPercent
+				disabled = true
+			}
+		}
 		return (
 			<View style={styles.sliderView}>
 				<Slider
@@ -709,6 +709,7 @@ var StockOpenPositionPage = React.createClass({
 					minimumValue={startPercent}
 					value={percent}
 					maximumValue={endPercent}
+					disabled={disabled}
 					onSlidingComplete={(value) => this.setState({profitLossUpdated: true})}
 					onValueChange={(value) => this.setSliderValue(type, value, rowData)} />
 				<View style = {styles.subDetailRowWrapper}>
@@ -850,7 +851,7 @@ var StockOpenPositionPage = React.createClass({
 						chartType={this.state.chartType}
 						colorType={1}>
 						{this.renderStockMaxPriceInfo(maxPrice, maxPercentage, true)}
-						{this.renderStockMaxPriceInfo(maxPrice, maxPercentage, false)}
+						{this.renderStockMaxPriceInfo(minPrice, minPercentage, false)}
 					</LineChart>
 				</View>
 			);
@@ -888,9 +889,9 @@ var StockOpenPositionPage = React.createClass({
 		var profitAmount = rowData.upl
 		if (rowData.settlePrice !== 0) {
 			var lastPrice = this.getLastPrice(rowData)
-			var profitPercentage = (lastPrice - rowData.settlePrice) / rowData.settlePrice
+			var profitPercentage = (lastPrice - rowData.settlePrice) / rowData.settlePrice * rowData.leverage
 			profitPercentage *= (rowData.isLong ? 1 : -1)
-			profitAmount = profitPercentage * rowData.invest * rowData.leverage
+			profitAmount = profitPercentage * rowData.invest
 			if (rowData.fxData) {
 				var fxPrice = rowData.fxData.last
 				if (rowData.fxData.symbol.substring(UIConstants.USD_CURRENCY.length) != UIConstants.USD_CURRENCY) {
@@ -931,7 +932,7 @@ var StockOpenPositionPage = React.createClass({
 
 		var newExtendHeight = this.currentExtendHeight(this.state.selectedSubItem)
 		var stopLossImage = require('../../images/check.png')
-		var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) <= 90
+		var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) <= MAX_PERCENT
 		var stopProfit = rowData.takePx !== undefined
 		if (stopLoss || stopProfit) {
 			stopLossImage = require('../../images/check2.png')
@@ -1000,9 +1001,18 @@ var StockOpenPositionPage = React.createClass({
 
 	renderRow: function(rowData, sectionID, rowID, highlightRow) {
 		var profitPercentage = 0
+		var profitAmount = rowData.upl
 		if (rowData.settlePrice !== 0) {
 			profitPercentage = (this.getLastPrice(rowData) - rowData.settlePrice) / rowData.settlePrice * rowData.leverage
 			profitPercentage *= (rowData.isLong ? 1 : -1)
+			profitAmount = profitPercentage * rowData.invest
+			if (rowData.fxData) {
+				var fxPrice = rowData.fxData.last
+				if (rowData.fxData.symbol.substring(UIConstants.USD_CURRENCY.length) != UIConstants.USD_CURRENCY) {
+					fxPrice = 1 / rowData.fxData.last
+				}
+				profitAmount *= fxPrice
+			}
 		}
 		var bgcolor = this.state.selectedRow == rowID ? '#e6e5eb' : 'white'
 		return (
@@ -1010,7 +1020,7 @@ var StockOpenPositionPage = React.createClass({
 				<TouchableHighlight activeOpacity={1} onPress={() => this.stockPressed(rowData, sectionID, rowID, highlightRow)}>
 					<View style={[styles.rowWrapper, {backgroundColor: bgcolor}]} key={rowData.key}>
 						<View style={styles.rowLeftPart}>
-							<Text style={styles.stockNameText}>
+							<Text style={styles.stockNameText} allowFontScaling={false} numberOfLines={1}>
 								{rowData.security.name}
 							</Text>
 
@@ -1022,8 +1032,12 @@ var StockOpenPositionPage = React.createClass({
 							</View>
 						</View>
 
+						<View style={styles.rowCenterPart}>
+							{this.renderProfit(profitAmount, null)}
+						</View>
+
 						<View style={styles.rowRightPart}>
-							{this.renderProfit(profitPercentage * 100)}
+							{this.renderProfit(profitPercentage * 100, "%")}
 						</View>
 						{rowData.security.isOpen ? null :
 							<Image style={styles.notOpenImage} source={require('../../images/not_open.png')}/>
@@ -1112,16 +1126,24 @@ var styles = StyleSheet.create({
 	},
 
 	rowLeftPart: {
-		flex: 1,
+		flex: 3,
 		alignItems: 'flex-start',
 		paddingLeft: 0,
 	},
 
-	rowRightPart: {
-		flex: 1,
+	rowCenterPart: {
+		flex: 2.5,
 		paddingTop: 5,
 		paddingBottom: 5,
 		paddingRight: 5,
+		alignItems: 'flex-end',
+	},
+
+	rowRightPart: {
+		flex: 2.5,
+		paddingTop: 5,
+		paddingBottom: 5,
+		paddingRight: 0,
 		alignItems: 'flex-end',
 	},
 
@@ -1134,21 +1156,23 @@ var styles = StyleSheet.create({
 	},
 
 	stockNameText: {
-		fontSize: 18,
+		fontSize: stockNameFontSize,
 		textAlign: 'center',
 		fontWeight: 'bold',
+		lineHeight: 22,
 	},
 
 	stockSymbolText: {
 		fontSize: 12,
 		textAlign: 'center',
 		color: '#5f5f5f',
+		lineHeight: 14,
 	},
 
 	stockPercentText: {
 		fontSize: 18,
 		color: '#ffffff',
-		fontWeight: 'bold',
+		fontWeight: 'normal',
 	},
 
 	darkSeparator: {

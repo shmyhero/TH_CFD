@@ -2,6 +2,7 @@
 
 var colors = {
 	TITLE_BLUE: '#1962dd',
+	TITLE_DARK_BLUE: '#415a86',
 	DISABLED_GREY: '#e0e0e0',
 	BACKGROUND_GREY: '#f0f0f0',
 	STOCK_RISE_RED: '#ea5458',

@@ -13,6 +13,7 @@ import {
 import Tabbar, { Tab, RawContent, Icon, IconWithBar, glypyMapMaker } from 'react-native-tabbar';
 var {EventCenter, EventConst} = require('../EventCenter')
 
+var ColorConstants = require('../ColorConstants')
 var LoadingIndicator = require('./LoadingIndicator');
 var NavBar = require('./NavBar')
 var HomePage = require('./HomePage')
@@ -30,7 +31,8 @@ var StockDetailPage = require('./StockDetailPage')
 var StockExchangePage = require('./StockExchangePage')
 var WebViewPage = require('./WebViewPage');
 var QAPage = require('./QAPage')
-var {EventCenter, EventConst} = require('../EventCenter')
+var LiveRegisterPage = require('./openAccount/OALiveRegisterPage')
+var LiveUpdateUserInfoPage = require('./openAccount/OALiveUpdateUserInfoPage')
 
 var TutorialPage = require('./TutorialPage');
 var OpenAccountPages = [
@@ -75,6 +77,8 @@ export let STOCK_EXCHANGE_ROUTE = 'stockExchange'
 export let HOMEPAGE_RECOMMAND_ROUTE = 'homepageRecommand'
 export let QA_ROUTE = 'q&a'
 export let OPEN_ACCOUNT_ROUTE = 'openAccount'
+export let LIVE_REGISTER_ROUTE = 'liveRegister'
+export let LIVE_UPDATE_USER_INFO_ROUTE = 'liveUpdateUserInfo'
 
 const glypy = glypyMapMaker({
   Home: 'f04f',
@@ -222,8 +226,7 @@ var MainPage = React.createClass({
 			return (
 				<QAPage />
 			)
-		}
-		else if (route.name === OPEN_ACCOUNT_ROUTE) {
+		} else if (route.name === OPEN_ACCOUNT_ROUTE) {
 			hideTabbar()
 			var step = route.step
 			var Page = OpenAccountPages[step]
@@ -232,9 +235,28 @@ var MainPage = React.createClass({
 					<NavBar title={OpenAccountTitles[step]}
 						titleStyle={{marginLeft:-20, marginRight:-20}}
 						showBackButton={true}
-						backgroundColor={'#415a86'}
+						backgroundColor={ColorConstants.TITLE_DARK_BLUE}
 						navigator={navigationOperations}/>
 					<Page navigator={navigationOperations} />
+				</View>
+			)
+		} else if (route.name === LIVE_REGISTER_ROUTE) {
+			hideTabbar()
+			return (
+				<View style={{flex: 1}}>
+					<NavBar title='实盘注册' showBackButton={true}
+						backgroundColor={ColorConstants.TITLE_DARK_BLUE}
+						navigator={navigationOperations}/>
+					<LiveRegisterPage navigator={navigationOperations}/>
+				</View>
+			)
+		} else if (route.name === LIVE_UPDATE_USER_INFO_ROUTE) {
+			return (
+				<View style={{flex: 1}}>
+					<NavBar title='实盘注册' showBackButton={true}
+						backgroundColor={ColorConstants.TITLE_DARK_BLUE}
+						navigator={navigationOperations}/>
+					<LiveUpdateUserInfoPage navigator={navigationOperations}/>
 				</View>
 			)
 		}

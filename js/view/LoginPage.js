@@ -199,6 +199,12 @@ var LoginPage = React.createClass({
 		)
 	},
 
+	liveRegisterPressed: function() {
+		this.props.navigator.push({
+			name: MainPage.LIVE_REGISTER_ROUTE,
+		});
+	},
+
 	loginSuccess: function(userData) {
 		StorageModule.setUserData(JSON.stringify(userData))
 		LogicData.setUserData(userData);
@@ -381,7 +387,7 @@ var LoginPage = React.createClass({
 							</View>
 
 							<View style={[styles.liveRowWrapper, {marginTop: 10, backgroundColor: 'transparent'}]}>
-								<TouchableOpacity style={styles.loginClickableArea} onPress={this.loginPressed}>
+								<TouchableOpacity style={styles.loginClickableArea} onPress={this.liveRegisterPressed}>
 									<View style={styles.registerTextView}>
 										<Text style={styles.registerText}>
 											注册

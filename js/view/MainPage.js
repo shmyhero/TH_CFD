@@ -236,6 +236,8 @@ var MainPage = React.createClass({
 						titleStyle={{marginLeft:-20, marginRight:-20}}
 						showBackButton={true}
 						backgroundColor={ColorConstants.TITLE_DARK_BLUE}
+						textOnRight={'取消'}
+						rightTextOnClick={()=>_navigator.popToTop()}
 						navigator={navigationOperations}/>
 					<Page navigator={navigationOperations} />
 				</View>

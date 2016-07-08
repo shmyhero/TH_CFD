@@ -11,11 +11,12 @@ import {
 	TouchableWithoutFeedback,
 	Alert,
 	Dimensions,
-	PickerIOS,
 	TextInput,
 	Platform,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import Picker from 'react-native-wheel-picker';
+var PickerItem = Picker.Item;
 
 var LineChart = require('./component/lineChart/LineChart');
 var dismissKeyboard = require('dismissKeyboard');
@@ -27,8 +28,6 @@ var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
 var NavBar = require('../view/NavBar')
 var InputAccessory = require('./component/InputAccessory')
-var Picker = require('react-native-wheel-picker')
-var PickerItem = Picker.Item;
 var MainPage = require('./MainPage')
 var StockTransactionConfirmPage = require('./StockTransactionConfirmPage')
 var TimerMixin = require('react-timer-mixin');

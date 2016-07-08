@@ -11,7 +11,11 @@ import {
 	TextInput,
 	Switch,
 	Image,
+	TouchableOpacity,
 } from 'react-native';
+
+import Picker from 'react-native-wheel-picker';
+var PickerItem = Picker.Item;
 
 var Button = require('../component/Button')
 var CheckBoxButton = require('../component/CheckBoxButton')
@@ -23,21 +27,24 @@ var rowPadding = Math.round(18*width/375)
 var fontSize = Math.round(16*width/375)
 var fontSize2 = Math.round(15*width/375)
 var listRawData = [
-		{"key":"年收入", "value":"点击选择", "type":"choice"},
-		{"key":"净资产", "value":"点击选择", "type":"choice"},
-		{"key":"投资比重", "value":"点击选择", "type":"choice"},
-		{"key":"就业", "value":"点击选择", "type":"choice"},
-		{"key":"投资频率", "value":"点击选择", "type":"choice"},
+		{"key":"年收入", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":["15万以下","15-30万","30-60万","60-120万","120万以上"]},
+		{"key":"净资产", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":["15万以下","15-30万","30-60万","60-120万","120万以上"]},
+		{"key":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":["占净资产10%","占净资产30%","占净资产50%","占净资产70%"]},
+		{"key":"就业", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":["受雇/创业","退休","学生","失业中"]},
+		{"key":"投资频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":["短期（小于3年）","中期（4到7年）","长期（8年以上）"]},
 		{"key":"你是否了解过Ayondo的金融产品", "value":true, "type":"switch"},
 		{"key":"你是否有一年以上与金融交易相关的经验", "value":false, "type":"switch"},
 		{"key":"你有哪些产品的交易经验", "value":["场外衍生品","衍生产品","股票和债券"], "type":"options"},
 		]
 
+var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
 var OAFinanceInfoPage = React.createClass({
 	getInitialState: function() {
-		var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		return {
 			dataSource: ds.cloneWithRows(listRawData),
+			pickerArray: [],
+			selectedPicker: -1,
 		};
 	},
 
@@ -49,18 +56,56 @@ var OAFinanceInfoPage = React.createClass({
 		});
 	},
 	
+	onPressPicker: function(rowData,rowID) {
+		if (-1 !== this.state.selectedPicker) {
+			this.setState({
+				selectedPicker: -1,
+				pickerArray: [],
+			})
+		}
+		else {
+			this.setState({
+				selectedPicker: rowID,
+				pickerArray: rowData.choices,
+			})
+		}
+	},
+
+	onPikcerSelect: function(value) {
+		if (this.state.selectedPicker >= 0) {
+			listRawData[this.state.selectedPicker].value = value
+			this.setState({
+				dataSource: ds.cloneWithRows(listRawData),
+			})
+		}
+	},
+
+	onPressSwitch: function(value, rowID) {
+		console.log(value, rowID)
+		if(rowID >= 0) {
+			listRawData[rowID].value = value
+			this.setState({
+				dataSource: ds.cloneWithRows(listRawData),
+			})
+		}
+	},
+
 	renderRow: function(rowData, sectionID, rowID) {
 		if (rowData.type === "choice") {
 			return (
+				<TouchableOpacity activeOpacity={0.9} onPress={() => this.onPressPicker(rowData, rowID)}>
 				<View style={styles.rowWrapper}>
 					<Text style={styles.rowTitle}>{rowData.key}</Text>
 					<TextInput style={styles.valueText}
 						autoCapitalize="none"
 						autoCorrect={false}
 						editable={false}
-						defaultValue={"点击选择"} />
+						placeholder={rowData.defaultValue}
+						placeholderTextColor={"#3f6dbd"}
+						value={rowData.value} />
 					<Image style={{width:17.5, height:13.5}} source={require("../../../images/icon_down_arrow.png")} />
 				</View>
+				</TouchableOpacity>
 				)
 		}
 		else if(rowData.type === "switch") {
@@ -68,7 +113,7 @@ var OAFinanceInfoPage = React.createClass({
 				<View style={styles.rowWrapper}>
 					<Text style={styles.rowTitle}>{rowData.key}</Text>
 					<Switch
-						onValueChange={(value) => this.setState({falseSwitchIsOn: value})}
+						onValueChange={(value) => this.onPressSwitch(value, rowID)}
 						style={{height: 16}}
 						value={rowData.value} />
 				</View>)
@@ -94,6 +139,7 @@ var OAFinanceInfoPage = React.createClass({
 				</View>)
 		}
 	},
+
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
 		return (
 			<View style={styles.line} key={rowID}>
@@ -103,6 +149,20 @@ var OAFinanceInfoPage = React.createClass({
 	},
 
 	render: function() {
+		var pickerModal = null
+		if (this.state.selectedPicker>=0) {
+			var pickerValue = listRawData[this.state.selectedPicker].value
+			pickerModal = (<View style={styles.pickerContainer}>
+				<Picker ref={"picker"} style={{width: width, height: 150}}
+					itemStyle={{color:"black", fontSize:26}}
+					selectedValue={pickerValue}
+					onValueChange={(value) => this.onPikcerSelect(value)}>
+					{this.state.pickerArray.map((value) => (
+					  <PickerItem label={value} value={value} key={"lever"+value}/>
+					))}
+				</Picker>
+			</View>)
+		}
 		return (
 			<View style={styles.wrapper}>
 			    <ListView
@@ -118,6 +178,7 @@ var OAFinanceInfoPage = React.createClass({
 						textStyle={styles.buttonText}
 						text='下一步' />
 				</View>
+				{pickerModal}
 			</View>
 		);
 	},
@@ -169,7 +230,7 @@ var styles = StyleSheet.create({
 	},
 	valueText: {
 		fontSize: fontSize2,
-		color: '#3f6dbd',
+		color: 'black',
 		flex: 3,
 		marginTop: -rowPadding,
 		marginBottom: -rowPadding,
@@ -178,6 +239,14 @@ var styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		paddingTop: 10,
+	},
+
+	pickerContainer: {
+		flex: 1,
+	    borderRadius: 5,
+	    justifyContent: 'center',
+	    alignItems: 'center',
+	    marginBottom: 0,
 	},
 
 	bottomArea: {

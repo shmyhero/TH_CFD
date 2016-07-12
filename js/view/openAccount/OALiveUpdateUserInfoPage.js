@@ -16,6 +16,7 @@ var Button = require('../component/Button')
 var ColorConstants = require('../../ColorConstants')
 var NetConstants = require('../../NetConstants')
 var LogicData = require('../../LogicData')
+var MainPage = require('../MainPage')
 var NetworkModule = require('../../module/NetworkModule')
 
 var rowHeight = 40;
@@ -32,6 +33,8 @@ var UpdateUserInfoPage = React.createClass({
 		return {
 			noteState: NOTE_STATE_NORMAL,
 			nickName: '',
+			password1: '',
+			password2: '',
 			saveButtonEnabled: false,
 			nicknameBorderColor: ColorConstants.TITLE_DARK_BLUE,
 			password1BorderColor: ColorConstants.DISABLED_GREY,
@@ -60,7 +63,7 @@ var UpdateUserInfoPage = React.createClass({
 				originalName = responseJson.nickname
 				this.setState({
 					nickName: originalName ,
-					saveButtonEnabled: true
+					saveButtonEnabled: false,
 				});
 			}.bind(this),
 			function(errorMessage) {
@@ -98,10 +101,33 @@ var UpdateUserInfoPage = React.createClass({
 			nickName: name
 		})
 
-		var buttonEnabled = false
-		if (name.length > 0) {
-			buttonEnabled = true
+		this.checkInfoValid()
+	},
+
+	setPassword1: function(password) {
+		this.setState({
+			password1: password
+		})
+
+		this.checkInfoValid()
+	},
+
+	setPassword2: function(password) {
+		this.setState({
+			password2: password
+		})
+
+		this.checkInfoValid()
+	},
+
+	checkInfoValid: function() {
+		var buttonEnabled = true
+		if (this.state.nickName.length <= 0 || this.state.password1.length < 8 || this.state.password2.length < 8) {
+			buttonEnabled = false
+		} else if (this.state.password1 != this.state.password2) {
+			buttonEnabled = false
 		}
+
 		this.setState({
 			saveButtonEnabled: buttonEnabled
 		})
@@ -119,7 +145,9 @@ var UpdateUserInfoPage = React.createClass({
 				},
 			},
 			function(responseJson) {
-				this.props.navigator.pop()
+				this.props.navigator.replace({
+					name: MainPage.LIVE_REGISTER_STATUS_ROUTE,
+				});
 			}.bind(this),
 			function(errorMessage) {
 				Alert.alert('提示',errorMessage);
@@ -180,12 +208,12 @@ var UpdateUserInfoPage = React.createClass({
 						</View>
 
 						<TextInput style={styles.passwordInput}
-							onChangeText={(text) => this.setUserName(text)}
+							onChangeText={(text) => this.setPassword1(text)}
 							onFocus={this.onPassword1Focus}
 							underlineColorAndroid='#ffffff'
 							secureTextEntry={true}
 							placeholder='8位以上数字字母组合'
-							value={this.state.nickName}/>
+							value={this.state.password1}/>
 					</View>
 
 					<View style={[styles.rowWrapperWithBorder, {marginTop: 10, borderColor: this.state.password2BorderColor}]}>
@@ -196,12 +224,12 @@ var UpdateUserInfoPage = React.createClass({
 						</View>
 
 						<TextInput style={styles.passwordInput}
-							onChangeText={(text) => this.setUserName(text)}
+							onChangeText={(text) => this.setPassword2(text)}
 							onFocus={this.onPassword2Focus}
 							underlineColorAndroid='#ffffff'
 							secureTextEntry={true}
 							placeholder='确认密码'
-							value={this.state.nickName}/>
+							value={this.state.password2}/>
 					</View>
 
 					<View style={styles.rowWrapper}>

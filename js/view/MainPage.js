@@ -33,6 +33,7 @@ var WebViewPage = require('./WebViewPage');
 var QAPage = require('./QAPage')
 var LiveRegisterPage = require('./openAccount/OALiveRegisterPage')
 var LiveUpdateUserInfoPage = require('./openAccount/OALiveUpdateUserInfoPage')
+var LiveRegisterStatusPage = require('./openAccount/OAStatusPage')
 
 var TutorialPage = require('./TutorialPage');
 var OpenAccountPages = [
@@ -79,6 +80,7 @@ export let QA_ROUTE = 'q&a'
 export let OPEN_ACCOUNT_ROUTE = 'openAccount'
 export let LIVE_REGISTER_ROUTE = 'liveRegister'
 export let LIVE_UPDATE_USER_INFO_ROUTE = 'liveUpdateUserInfo'
+export let LIVE_REGISTER_STATUS_ROUTE = 'liveRegisterStatus'
 
 const glypy = glypyMapMaker({
   Home: 'f04f',
@@ -243,7 +245,7 @@ var MainPage = React.createClass({
 				</View>
 			)
 		} else if (route.name === LIVE_REGISTER_ROUTE) {
-			hideTabbar()
+			// hideTabbar()
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title='实盘注册' showBackButton={true}
@@ -259,6 +261,16 @@ var MainPage = React.createClass({
 						backgroundColor={ColorConstants.TITLE_DARK_BLUE}
 						navigator={navigationOperations}/>
 					<LiveUpdateUserInfoPage navigator={navigationOperations}/>
+				</View>
+			)
+		} else if (route.name === LIVE_REGISTER_STATUS_ROUTE) {
+			showTabbar()
+			return (
+				<View style={{flex: 1}}>
+					<NavBar title='实盘交易'
+						backgroundColor={ColorConstants.TITLE_DARK_BLUE}
+						navigator={navigationOperations}/>
+					<LiveRegisterStatusPage navigator={navigationOperations}/>
 				</View>
 			)
 		}

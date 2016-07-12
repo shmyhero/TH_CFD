@@ -153,7 +153,7 @@ var HomePage = React.createClass({
 		}
 		magicCode += ""+index
 
-		if(this.endsWith(magicCode, "2")){
+		if(this.endsWith(magicCode, "12341234")){
 			// open account
 			this.props.navigator.push({
 				name: MainPage.OPEN_ACCOUNT_ROUTE,

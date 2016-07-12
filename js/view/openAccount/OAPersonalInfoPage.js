@@ -19,9 +19,9 @@ var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
 var fontSize = Math.round(16*width/375)
 var listRawData = [
-		{"key":"姓名", "value":"1"},
-		{"key":"性别", "value":"2"},
-		{"key":"出生日期", "value":"3"},
+		{"key":"姓名", "value":""},
+		{"key":"性别", "value":""},
+		{"key":"出生日期", "value":""},
 		{"key":"民族", "value":""},
 		{"key":"身份证号", "value":""},
 		{"key":"证件地址", "value":""},

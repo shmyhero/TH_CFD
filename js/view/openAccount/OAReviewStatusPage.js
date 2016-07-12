@@ -24,6 +24,7 @@ var OAReviewStatusPage = React.createClass({
 	render: function() {
 		var startDate = new Date()
 		startDate.Format('yy/MM/dd')
+		var endDate = new Date(startDate.valueOf()+7*24*60*60*1000)
 		return (
 			<View style={styles.wrapper}>
 				<View />
@@ -36,7 +37,7 @@ var OAReviewStatusPage = React.createClass({
 				<View style={styles.rowWrapper}>
 					<Text style={styles.text2}>{"提交申请\n"+startDate.Format('yy/MM/dd')+"\n"+startDate.Format('hh:mm:ss')}</Text>
 					<Text style={styles.text2}>{"正在审核"}</Text>
-					<Text style={styles.text2}>{"预计审核时间\n"+startDate.Format('yy/MM/dd')+"\n"+startDate.Format('hh:mm:ss')}</Text>
+					<Text style={styles.text2}>{"预计审核时间\n"+endDate.Format('yy/MM/dd')+"\n"+startDate.Format('hh:mm:ss')}</Text>
 				</View>
 				<Text style={styles.text3}>{"开户成功后，我们将以短信告知您的审核结果"}</Text>
 				<Button style={styles.buttonArea}

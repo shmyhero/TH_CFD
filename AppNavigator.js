@@ -140,7 +140,7 @@ var AppNavigator = React.createClass({
 			.done()
 
 		NetworkModule.fetchTHUrl(
-			NetConstants.GET_FX_LIST_API + '?page=1&perPage=99',
+			NetConstants.GET_OUT_RIGHT_API + '?page=1&perPage=99',
 			{
 				method: 'GET',
 			},

@@ -201,6 +201,8 @@ var StockOpenPositionPage = React.createClass({
 					if (fxData.id == realtimeStockInfo[j].id &&
 								fxData.last !== realtimeStockInfo[j].last) {
 						fxData.last = realtimeStockInfo[j].last
+						fxData.ask = realtimeStockInfo[j].ask * 1.005
+						fxData.bid = realtimeStockInfo[j].bid * 0.995
 						hasUpdate = true;
 					}
 				}
@@ -691,6 +693,26 @@ var StockOpenPositionPage = React.createClass({
 		return this.priceToPercent(price, rowData.settlePrice, leverage, type, rowData.isLong)
 	},
 
+	calculateProfitWithOutright: function(profitAmount, rowData) {
+		if (profitAmount > 0) {//want to sell XXX and buy USD
+			var fxPrice
+			if (rowData.fxData.symbol.substring(UIConstants.USD_CURRENCY.length) != UIConstants.USD_CURRENCY) {//USD/XXX
+				fxPrice = 1 / rowData.fxData.ask
+			} else {// XXX/USD
+				fxPrice = rowData.fxData.bid
+			}
+			profitAmount *= fxPrice
+		} else {// Want to buy XXX and sell USD
+			var fxPrice
+			if (rowData.fxData.symbol.substring(UIConstants.USD_CURRENCY.length) != UIConstants.USD_CURRENCY) { // USD/XXX
+				fxPrice = 1 / rowData.fxData.bid
+			} else { // XXX/USD
+				fxPrice = rowData.fxData.ask
+			}
+			profitAmount *= fxPrice
+		}
+		return profitAmount
+	},
 
 	renderSlider: function(rowData, type, startPercent, endPercent, percent) {
 		//1, stop profit
@@ -893,11 +915,7 @@ var StockOpenPositionPage = React.createClass({
 			profitPercentage *= (rowData.isLong ? 1 : -1)
 			profitAmount = profitPercentage * rowData.invest
 			if (rowData.fxData) {
-				var fxPrice = rowData.fxData.last
-				if (rowData.fxData.symbol.substring(UIConstants.USD_CURRENCY.length) != UIConstants.USD_CURRENCY) {
-					fxPrice = 1 / rowData.fxData.last
-				}
-				profitAmount *= fxPrice
+				profitAmount = this.calculateProfitWithOutright(profitAmount, rowData)
 			}
 		}
 
@@ -1007,11 +1025,7 @@ var StockOpenPositionPage = React.createClass({
 			profitPercentage *= (rowData.isLong ? 1 : -1)
 			profitAmount = profitPercentage * rowData.invest
 			if (rowData.fxData) {
-				var fxPrice = rowData.fxData.last
-				if (rowData.fxData.symbol.substring(UIConstants.USD_CURRENCY.length) != UIConstants.USD_CURRENCY) {
-					fxPrice = 1 / rowData.fxData.last
-				}
-				profitAmount *= fxPrice
+				profitAmount = this.calculateProfitWithOutright(profitAmount, rowData)
 			}
 		}
 		var bgcolor = this.state.selectedRow == rowID ? '#e6e5eb' : 'white'

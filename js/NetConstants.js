@@ -35,6 +35,8 @@ export const PARAMETER_VERFICATION_CODE = 'verifyCode'
 export const PARAMETER_NICKNAME = 'nickname'
 export const PARAMETER_STOCKIDS = 'securityIds'
 
+export const PARAMETER_CHARTTYPE_TEN_MINUTE = '10m'
+export const PARAMETER_CHARTTYPE_TWO_HOUR = '2h'
 export const PARAMETER_CHARTTYPE_TODAY = 'today'
 export const PARAMETER_CHARTTYPE_WEEK = 'week'
 export const PARAMETER_CHARTTYPE_MONTH = 'month'

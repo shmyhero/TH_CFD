@@ -13,6 +13,7 @@ import {
 	Dimensions,
 	TextInput,
 	Platform,
+	ScrollView,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Picker from 'react-native-wheel-picker';
@@ -32,6 +33,12 @@ var MainPage = require('./MainPage')
 var StockTransactionConfirmPage = require('./StockTransactionConfirmPage')
 var TimerMixin = require('react-timer-mixin');
 
+var {height, width} = Dimensions.get('window');
+var tabData = [
+			{"type":NetConstants.PARAMETER_CHARTTYPE_TWO_HOUR, "name":'2小时'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_TODAY, "name":'分时'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_WEEK, "name":'5日'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_MONTH, "name":'1月'}]
 var didFocusSubscription = null;
 var updateStockInfoTimer = null;
 
@@ -314,30 +321,24 @@ var StockDetailPage = React.createClass({
 	},
 
 	renderChartHeader: function() {
+		var tabs = tabData.map(
+			(data, i) =>
+			<TouchableHighlight style={{width:width/tabData.length}} key={i}
+					onPress={() => this.pressChartHeaderTab(data.type)}>
+				<Text style={this.state.chartType == data.type? styles.chartTitleTextHighlighted : styles.chartTitleText}>
+					{data.name}
+				</Text>
+
+			</TouchableHighlight>
+		)
 		return(
-			<View style={{flexDirection: 'row', marginTop: 6}} >
-				<TouchableOpacity style={{flex:1}} onPress={()=>this.pressChartHeaderTab(NetConstants.PARAMETER_CHARTTYPE_TODAY)}>
-					<Text style={this.state.chartType===NetConstants.PARAMETER_CHARTTYPE_TODAY ? styles.chartTitleTextHighlighted : styles.chartTitleText} >
-						分时
-					</Text>
-				</TouchableOpacity>
-				<TouchableOpacity style={{flex:1}} onPress={()=>this.pressChartHeaderTab(NetConstants.PARAMETER_CHARTTYPE_WEEK)}>
-					<Text style={this.state.chartType===NetConstants.PARAMETER_CHARTTYPE_WEEK ? styles.chartTitleTextHighlighted : styles.chartTitleText} >
-						5日
-					</Text>
-				</TouchableOpacity>
-				<TouchableOpacity style={{flex:1}} onPress={()=>this.pressChartHeaderTab(NetConstants.PARAMETER_CHARTTYPE_MONTH)}>
-					<Text style={this.state.chartType===NetConstants.PARAMETER_CHARTTYPE_MONTH ? styles.chartTitleTextHighlighted : styles.chartTitleText} >
-						1月
-					</Text>
-				</TouchableOpacity>
-			</View>
-		);
+			<ScrollView horizontal={true} style={{flex: 0,marginTop: 6}}>
+				{tabs}
+			</ScrollView>
+			);
 	},
 
 	render: function() {
-		var {height, width} = Dimensions.get('window');
-
 		var priceData = this.state.stockInfo.priceData
 		var maxPrice = undefined
 		var minPrice = undefined
@@ -588,7 +589,6 @@ var StockDetailPage = React.createClass({
 	},
 
 	renderScroll: function() {
-		var {height, width} = Dimensions.get('window');
 		var pickerWidth = width/2-60
 		var pickerHeight = 216
 		// money list: 100,500,1000,3000,5000,7000,10000,20000,max
@@ -800,7 +800,6 @@ var StockDetailPage = React.createClass({
 	},
 
 	renderInput: function() {
-		var {height, width} = Dimensions.get('window');
 		return (
 			<View>
 				<Image style={[styles.inputImage, {marginLeft:50-width,marginTop:10}]} source={require('../../images/key.png')}/>

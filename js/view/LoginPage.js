@@ -170,7 +170,7 @@ var LoginPage = React.createClass({
 	loginPressed: function() {
 		if (!this.state.phoneLoginButtonEnabled) {
 			return
-		}		
+		}
 		this.setState({
 			phoneLoginButtonEnabled: false
 		})
@@ -366,7 +366,7 @@ var LoginPage = React.createClass({
 								</View>
 							</View>
 
-							<View style={[styles.liveRowWrapper, {marginTop: 10, paddingVertical: 0, backgroundColor: 'transparent'}]}>
+							<View style={[styles.liveRowWrapper, {justifyContent: 'space-between', marginTop: 10, paddingVertical: 0, backgroundColor: 'transparent'}]}>
 								<View style={{alignSelf: 'stretch', justifyContent: 'center'}}>
 									<Text style={{fontSize: 15, color: 'white'}}>
 										记住我
@@ -563,11 +563,11 @@ var styles = StyleSheet.create({
 		alignItems: 'stretch',
 		paddingVertical: 5,
 		paddingHorizontal: 10,
-		justifyContent: 'space-between',
+		justifyContent: 'space-around',
 		backgroundColor: '#7e8da5',
 	},
 	phoneNumberInputView: {
-		flex: 3,
+		flex: 2.5,
 	},
 	phoneNumberInput: {
 		height: rowHeight,

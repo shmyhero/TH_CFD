@@ -135,11 +135,12 @@ class StockChartView: UIView {
 		if (size.width == 0 || self.chartData.isEmpty) {
 			return
 		}
-//		print(chartType)
 		self.verticalLinesX = []
 		self.verticalTimes = []
 		
-		if chartType == "today" {
+		let gaps = ["today":3600.0, "2h":1800.0, "week":3600.0*24, "month":3600.0*24*7]
+		
+		if chartType == "today" || chartType == "2h"{
 			// 1 hour, 1 line, with the first start time
 			var startTime = chartData.first?.time
 			if startTime == nil {
@@ -148,7 +149,7 @@ class StockChartView: UIView {
 			for i in 0 ..< self.chartData.count {
 				if let time:NSDate? = chartData[i].time {
 					let interval:NSTimeInterval = time!.timeIntervalSinceDate(startTime!)
-					if interval >= 3600 {
+					if interval >= gaps[self.chartType] {
 						self.verticalLinesX.append(self.pointData[i].x+0.5)
 						startTime = time
 						self.verticalTimes.append(self.chartData[i].time!)
@@ -159,7 +160,7 @@ class StockChartView: UIView {
 		}
 		else if chartType == "week" {
 			// 1 day, 1 line
-			let oneDay:Double = 3600 * 24
+			let oneDay:Double = gaps[self.chartType]!
 			var startTime = ChartDataManager.singleton.stockData?.lastOpen
 			if startTime == nil {
 				startTime = NSDate()
@@ -186,7 +187,7 @@ class StockChartView: UIView {
 		}
 		else if chartType == "month" {
 			// 1 week, 1 line
-			let oneWeek:Double = 3600 * 24 * 7
+			let oneWeek:Double = gaps[self.chartType]!
 			var startTime = ChartDataManager.singleton.stockData?.lastOpen
 			if startTime == nil {
 				startTime = NSDate()
@@ -383,11 +384,11 @@ class StockChartView: UIView {
 		let height = rect.height
 		let width = rect.width
 		let dateFormatter = NSDateFormatter()
-		if chartType == "today" {
-			dateFormatter.dateFormat = "HH:mm"
+		if chartType == "week" || chartType == "month" {
+			dateFormatter.dateFormat = "MM/dd"
 		}
 		else {
-			dateFormatter.dateFormat = "MM/dd"
+			dateFormatter.dateFormat = "HH:mm"
 		}
 		let leftText: NSString = dateFormatter.stringFromDate((self.chartData.first?.time)!)
 		let rightText = dateFormatter.stringFromDate((self.chartData.last?.time)!)

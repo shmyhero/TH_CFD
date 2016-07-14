@@ -32,8 +32,9 @@ var listRawData = [
 		{"key":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":["占净资产10%","占净资产30%","占净资产50%","占净资产70%"]},
 		{"key":"就业", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":["受雇/创业","退休","学生","失业中"]},
 		{"key":"投资频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":["短期（小于3年）","中期（4到7年）","长期（8年以上）"]},
-		{"key":"你是否了解过Ayondo的金融产品", "value":true, "type":"switch"},
-		{"key":"你是否有一年以上与金融交易相关的经验", "value":false, "type":"switch"},
+		{"key":"你是否有一年以上与金融杠杆交易相关的职业经历", "value":false, "type":"switch"},
+		{"key":"你是否了解过ayondo的金融产品或使用ayondo模拟账户交易", "value":true, "type":"switch"},
+		{"key":"你是否有其它相关资质帮助理解ayondo的服务", "value":false, "type":"switch"},
 		{"key":"你有哪些产品的交易经验", "value":["场外衍生品","衍生产品","股票和债券"], "type":"options"},
 		]
 

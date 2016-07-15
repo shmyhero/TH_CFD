@@ -36,6 +36,7 @@ var TimerMixin = require('react-timer-mixin');
 var {height, width} = Dimensions.get('window');
 var tabData = [
 			{"type":NetConstants.PARAMETER_CHARTTYPE_TODAY, "name":'分时'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_TEN_MINUTE, "name":'10分钟'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_TWO_HOUR, "name":'2小时'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_WEEK, "name":'5日'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_MONTH, "name":'1月'}]

@@ -30,6 +30,8 @@ class StockChartView: UIView {
 	var middleLineY:CGFloat = 0
 	var topLineY:CGFloat = 0
 	var bottomLineY:CGFloat = 0
+	var usingRealTimeX = false
+	var drawPreCloseLine = false
 	
 // MARK: deal with raw data
 	var data:String? { // use for RN manager
@@ -50,8 +52,8 @@ class StockChartView: UIView {
 	
 	var chartType:String="today" {
 		willSet {
-//			print(newValue);
-			//today, week, month
+			usingRealTimeX = newValue == "10m"
+			drawPreCloseLine = newValue == "today"
 		}
 	}
 	// MARK: calculation
@@ -73,13 +75,9 @@ class StockChartView: UIView {
 			(min > data.price) ? data.price : min
 		}
 		let preClose = ChartDataManager.singleton.stockData?.preClose
-		if (preClose > 0) {
-			if (maxValue < preClose) {
-				maxValue = preClose!
-			}
-			if (minValue > preClose) {
-				minValue = preClose!
-			}
+		if (preClose > 0 && drawPreCloseLine) {
+			maxValue = maxValue < preClose ? preClose! : maxValue
+			minValue = minValue > preClose ? preClose! : minValue
 		}
 		//calculate the x point
 		let lastIndex = self.chartData.count - 1
@@ -91,8 +89,10 @@ class StockChartView: UIView {
 			x += self.margin
 			return x
 		}
+		
+		
 		// calculate the y point
-		let topBorder:CGFloat = size.height * 0.15
+		let topBorder:CGFloat = size.height * 0.12
 		let bottomBorder:CGFloat = size.height * 0.15
 		let graphHeight = size.height - topBorder - bottomBorder
 		
@@ -112,7 +112,7 @@ class StockChartView: UIView {
 			middleLineY = size.height/2
 		}
 		
-		if chartType != "today" {
+		if !drawPreCloseLine {
 			middleLineY = 0		// do not draw this line
 		}
 		
@@ -120,11 +120,32 @@ class StockChartView: UIView {
 		bottomLineY = bottomBorder
 		
 		self.pointData = []
-		for i in 0..<self.chartData.count {
-			let x = columnXPoint(i)
-			let y = columnYPoint(self.chartData[i].price)
-			let point:CGPoint = CGPoint(x:x, y:y)
-			self.pointData.append(point)
+		
+		if self.usingRealTimeX {
+			let timeStart:NSDate! = chartData.first!.time
+			let timeEnd:NSDate! = chartData.last!.time
+			let timeGap:NSTimeInterval = timeEnd!.timeIntervalSinceDate(timeStart!)
+			
+			let columnTimeXPoint = { (pointTime:NSDate) -> CGFloat in
+				//Calculate gap between points
+				let spacer = (size.width - self.margin*2)  * CGFloat((pointTime.timeIntervalSinceDate(timeStart)) / timeGap)
+				let x:CGFloat = self.margin + spacer
+				return x
+			}
+			for i in 0..<self.chartData.count {
+				let x = columnTimeXPoint(self.chartData[i].time!)
+				let y = columnYPoint(self.chartData[i].price)
+				let point:CGPoint = CGPoint(x:x, y:y)
+				self.pointData.append(point)
+			}
+		}
+		else {
+			for i in 0..<self.chartData.count {
+				let x = columnXPoint(i)
+				let y = columnYPoint(self.chartData[i].price)
+				let point:CGPoint = CGPoint(x:x, y:y)
+				self.pointData.append(point)
+			}
 		}
 		
 		self.calculateVerticalLines()
@@ -138,81 +159,59 @@ class StockChartView: UIView {
 		self.verticalLinesX = []
 		self.verticalTimes = []
 		
-		let gaps = ["today":3600.0, "2h":1800.0, "week":3600.0*24, "month":3600.0*24*7]
+		let gaps = ["today":3600.0, "2h":1800.0, "week":3600.0*24, "month":3600.0*24*7, "10m":120.0]
+		let gap = gaps[self.chartType]!		// gap between two lines
 		
-		if chartType == "today" || chartType == "2h"{
-			// 1 hour, 1 line, with the first start time
-			var startTime = chartData.first?.time
-			if startTime == nil {
-				return
-			}
-			for i in 0 ..< self.chartData.count {
-				if let time:NSDate? = chartData[i].time {
-					let interval:NSTimeInterval = time!.timeIntervalSinceDate(startTime!)
-					if interval >= gaps[self.chartType] {
-						self.verticalLinesX.append(self.pointData[i].x+0.5)
-						startTime = time
-						self.verticalTimes.append(self.chartData[i].time!)
-					}
+		if let time0:NSDate? = chartData.first?.time {
+			if self.usingRealTimeX {
+				let timeEnd:NSDate! = chartData.last!.time
+				let timePeriod:NSTimeInterval! = timeEnd.timeIntervalSinceDate(time0!)
+				var time:NSDate! = NSDate(timeInterval: -gap, sinceDate: timeEnd)
+				var timeGap = time.timeIntervalSinceDate(time0!)
+				while timeGap > 0 {
+						let x:CGFloat = self.margin + (size.width - self.margin*2) * CGFloat(timeGap / timePeriod)
+						self.verticalLinesX.insert(x+0.5, atIndex: 0)
+						self.verticalTimes.insert(time, atIndex: 0)
+						time = NSDate(timeInterval: -gap, sinceDate: time)
+						timeGap = time.timeIntervalSinceDate(time0!)
 				}
-				
-			}
-		}
-		else if chartType == "week" {
-			// 1 day, 1 line
-			let oneDay:Double = gaps[self.chartType]!
-			var startTime = ChartDataManager.singleton.stockData?.lastOpen
-			if startTime == nil {
-				startTime = NSDate()
-			}
-			if let time:NSDate? = chartData[0].time {
-				let interval:NSTimeInterval = time!.timeIntervalSinceDate(startTime!)
-				let days = floor(interval / oneDay)
-				startTime = NSDate(timeInterval: days*oneDay, sinceDate: startTime!)
 			}
 			else {
-				return
-			}
-			for i in 0 ..< self.chartData.count {
-				if let time:NSDate? = chartData[i].time {
-					let interval:NSTimeInterval = time!.timeIntervalSinceDate(startTime!)
-					if interval >= oneDay {
-						self.verticalLinesX.append(self.pointData[i].x+0.5)
-						startTime = time
-						self.verticalTimes.append(self.chartData[i].time!)
-					}
+				var startTime = ChartDataManager.singleton.stockData?.lastOpen
+				if startTime == nil {
+					startTime = NSDate()
 				}
 				
-			}
-		}
-		else if chartType == "month" {
-			// 1 week, 1 line
-			let oneWeek:Double = gaps[self.chartType]!
-			var startTime = ChartDataManager.singleton.stockData?.lastOpen
-			if startTime == nil {
-				startTime = NSDate()
-			}
-			startTime = startTime?.sameTimeOnLastSunday()
-			if let time:NSDate? = chartData[0].time {
-				let interval:NSTimeInterval = time!.timeIntervalSinceDate(startTime!)
-				let weeks = floor(interval / oneWeek)
-				startTime = NSDate(timeInterval: weeks*oneWeek, sinceDate: startTime!)
-			}
-			else {
-				return
-			}
-			for i in 0 ..< self.chartData.count {
-				if let time:NSDate? = chartData[i].time {
-					let interval:NSTimeInterval = time!.timeIntervalSinceDate(startTime!)
-					if interval >= oneWeek {
-						self.verticalLinesX.append(self.pointData[i].x+0.5)
-						startTime = time
-						self.verticalTimes.append(self.chartData[i].time!)
-					}
+				if chartType == "week" {
+					// 1 day, 1 line
+					let interval:NSTimeInterval = time0!.timeIntervalSinceDate(startTime!)
+					let days = floor(interval / gap)
+					startTime = NSDate(timeInterval: days*gap, sinceDate: startTime!)
+				}
+				else if chartType == "month" {
+					// 1 week, 1 line
+					startTime = startTime?.sameTimeOnLastSunday()
+					let interval:NSTimeInterval = time0!.timeIntervalSinceDate(startTime!)
+					let weeks = floor(interval / gap)
+					startTime = NSDate(timeInterval: weeks*gap, sinceDate: startTime!)
+				}
+				else {
+					startTime = chartData.first?.time
 				}
 				
+				for i in 0 ..< self.chartData.count {
+					if let time:NSDate? = chartData[i].time {
+						let interval:NSTimeInterval = time!.timeIntervalSinceDate(startTime!)
+						if interval > gap*0.99 {
+							self.verticalLinesX.append(self.pointData[i].x+0.5)
+							startTime = time
+							self.verticalTimes.append(self.chartData[i].time!)
+						}
+					}
+				}
 			}
 		}
+		
 	}
 	
 // MARK: render
@@ -384,8 +383,13 @@ class StockChartView: UIView {
 		let height = rect.height
 		let width = rect.width
 		let dateFormatter = NSDateFormatter()
+		var textWidth:CGFloat = 28.0
 		if chartType == "week" || chartType == "month" {
 			dateFormatter.dateFormat = "MM/dd"
+		}
+		else if chartType == "10m" {
+			dateFormatter.dateFormat = "HH:mm:ss"
+			textWidth = 35.0
 		}
 		else {
 			dateFormatter.dateFormat = "HH:mm"
@@ -402,7 +406,6 @@ class StockChartView: UIView {
 			NSFontAttributeName: textFont!,
 			NSParagraphStyleAttributeName: textStyle,
 		]
-		let textWidth:CGFloat = 30.0
 		let textY = height-bottomMargin+2
 		leftText.drawInRect(CGRect(x: 0, y: textY, width: textWidth, height: 10), withAttributes: attributes)
 		rightText.drawInRect(CGRect(x: width-textWidth, y: textY, width: textWidth, height: 10), withAttributes: attributes)

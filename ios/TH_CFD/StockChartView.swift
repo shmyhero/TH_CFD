@@ -99,8 +99,7 @@ class StockChartView: UIView {
 		let columnYPoint = { (graphPoint:Double) -> CGFloat in
 			var y:CGFloat = graphHeight/2
 			if (maxValue > minValue) {
-				y = CGFloat(graphPoint-minValue) /
-					CGFloat(maxValue - minValue) * graphHeight
+				y = CGFloat(graphPoint-minValue) / CGFloat(maxValue - minValue) * graphHeight
 			}
 			y = graphHeight + topBorder - y // Flip the graph
 			return y

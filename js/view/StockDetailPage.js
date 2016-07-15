@@ -217,13 +217,27 @@ var StockDetailPage = React.createClass({
 		WebSocketModule.registerCallbacks(
 			(realtimeStockInfo) => {
 				for (var i = 0; i < realtimeStockInfo.length; i++) {
-					if (this.props.stockCode == realtimeStockInfo[i].id &&
-								this.state.stockPrice !== realtimeStockInfo[i].last) {
-						this.setState({
-							stockPrice: realtimeStockInfo[i].last,
-							stockPriceAsk: realtimeStockInfo[i].ask,
-							stockPriceBid: realtimeStockInfo[i].bid,
-						})
+					if (this.props.stockCode == realtimeStockInfo[i].id ) {
+						if (this.state.chartType === NetConstants.PARAMETER_CHARTTYPE_TEN_MINUTE
+							 && this.state.stockInfo != undefined
+							 && this.state.stockInfo.priceData != undefined) {
+							var stockinfo = this.state.stockInfo
+							var price = realtimeStockInfo[i].last
+							stockinfo.priceData.push({"p":price,"time":realtimeStockInfo[i].time})
+							this.setState({
+								stockInfo: stockinfo,
+								stockPrice: realtimeStockInfo[i].last,
+								stockPriceAsk: realtimeStockInfo[i].ask,
+								stockPriceBid: realtimeStockInfo[i].bid,
+							})
+						}
+						else if(this.state.stockPrice !== realtimeStockInfo[i].last) {
+							this.setState({
+								stockPrice: realtimeStockInfo[i].last,
+								stockPriceAsk: realtimeStockInfo[i].ask,
+								stockPriceBid: realtimeStockInfo[i].bid,
+							})
+						}
 						break;
 					}
 				};
@@ -377,8 +391,6 @@ var StockDetailPage = React.createClass({
 
 						{this.renderHeader()}
 
-						{/*this.renderTradeStrength()*/}
-
 						{this.renderChartHeader()}
 
 						<View style={{flex: 3.5, marginTop:5}}>
@@ -466,42 +478,6 @@ var StockDetailPage = React.createClass({
 				</View>
 			</TouchableOpacity>
 		)
-	},
-
-	renderTradeStrength: function() {
-		if (this.state.stockInfo.longPct !== undefined) {
-			var upPercentage = (this.state.stockInfo.longPct * 100).toFixed(2)
-			var downPercentage = 100 - upPercentage
-			return (
-				<View>
-					<View style={{flexDirection: 'row', alignItems: 'center'}}>
-					<Text style={styles.tradeStrengthText}>
-						{upPercentage}
-					</Text>
-					<Text style={styles.tradeStrengthTextSmall}>
-						% 买涨
-					</Text>
-					</View>
-					<View style={styles.tradeStrength}>
-						<View style={{flex: upPercentage * 100, marginRight: 5, backgroundColor: "#c65972"}} />
-						<View style={{flex: downPercentage * 100, backgroundColor: "#29af72"}} />
-					</View>
-				</View>
-			)
-		} else {
-			return (
-				<View>
-					<Text style={styles.tradeStrengthTextSmall}>
-						-- % 买涨
-					</Text>
-					<View style={styles.tradeStrength}>
-						<View style={{flex: 1, marginRight: 5, backgroundColor: "#c65972"}} />
-						<View style={{flex: 1, backgroundColor: "#29af72"}} />
-					</View>
-				</View>
-			)
-		}
-
 	},
 
 	renderTradeButton: function() {

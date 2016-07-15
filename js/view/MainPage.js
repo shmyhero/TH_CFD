@@ -232,13 +232,14 @@ var MainPage = React.createClass({
 			hideTabbar()
 			var step = route.step
 			var Page = OpenAccountPages[step]
+			var showBackButton = (step !== OpenAccountPages.length-1)
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title={OpenAccountTitles[step]}
 						titleStyle={{marginLeft:-20, marginRight:-20}}
-						showBackButton={true}
+						showBackButton={showBackButton}
 						backgroundColor={ColorConstants.TITLE_DARK_BLUE}
-						textOnRight={'取消'}
+						textOnRight={showBackButton?'取消':''}
 						rightTextOnClick={()=>_navigator.popToTop()}
 						navigator={navigationOperations}/>
 					<Page navigator={navigationOperations} />

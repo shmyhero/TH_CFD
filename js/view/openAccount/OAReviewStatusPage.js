@@ -45,7 +45,7 @@ var OAReviewStatusPage = React.createClass({
 					onPress={this.gotoNext}
 					textContainerStyle={styles.buttonView}
 					textStyle={styles.buttonText}
-					text='返回首页' />
+					text='完成' />
 			</View>
 		);
 	},

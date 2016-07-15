@@ -167,7 +167,36 @@ var LoginPage = React.createClass({
 		)
 	},
 
-	loginPressed: function() {
+	loginWithPasswordPressed: function() {
+		this.setState({
+			phoneLoginButtonEnabled: false
+		})
+		NetworkModule.fetchTHUrl(
+			NetConstants.PHONE_NUM_LOGIN_API,
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json; charset=UTF-8'
+				},
+				body: JSON.stringify({
+					phone: this.state.phoneNumber,
+					verifyCode: this.state.validationCode,
+				}),
+				showLoading: true,
+			},
+			(responseJson) => {
+				this.loginSuccess(responseJson);
+			},
+			(errorMessage) => {
+				this.setState({
+					phoneLoginButtonEnabled: true
+				})
+				Alert.alert('提示',errorMessage);
+			}
+		)
+	},
+
+	loginWithCodePressed: function() {
 		if (!this.state.phoneLoginButtonEnabled) {
 			return
 		}
@@ -361,7 +390,7 @@ var LoginPage = React.createClass({
 										placeholder='登录密码'
 										placeholderTextColor='white'
 										underlineColorAndroid='transparent'
-										maxLength={4}
+										secureTextEntry={true}
 										keyboardType='numeric'/>
 								</View>
 							</View>
@@ -377,7 +406,7 @@ var LoginPage = React.createClass({
 							</View>
 
 							<View style={[styles.liveRowWrapper, {marginTop: 0, backgroundColor: 'transparent'}]}>
-								<TouchableOpacity style={styles.loginClickableArea} onPress={this.loginPressed}>
+								<TouchableOpacity style={styles.loginClickableArea} onPress={this.loginWithPasswordPressed}>
 									<View style={styles.loginTextView}>
 										<Text style={styles.loginText}>
 											登录
@@ -452,7 +481,7 @@ var LoginPage = React.createClass({
 							</View>
 
 							<View style={[styles.rowWrapper, {marginTop: 20, backgroundColor: 'transparent'}]}>
-								<TouchableOpacity style={styles.loginClickableArea} onPress={this.loginPressed}>
+								<TouchableOpacity style={styles.loginClickableArea} onPress={this.loginWithCodePressed}>
 									<View style={styles.loginTextView}>
 										<Text style={styles.loginText}>
 											登录

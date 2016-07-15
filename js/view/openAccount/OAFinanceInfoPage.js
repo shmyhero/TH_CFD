@@ -82,7 +82,6 @@ var OAFinanceInfoPage = React.createClass({
 	},
 
 	onPressSwitch: function(value, rowID) {
-		console.log(value, rowID)
 		if(rowID >= 0) {
 			listRawData[rowID].value = value
 			this.setState({
@@ -151,6 +150,13 @@ var OAFinanceInfoPage = React.createClass({
 
 	render: function() {
 		var pickerModal = null
+		var enabled = true
+		for (var i = 0; i < listRawData.length; i++) {
+			if (listRawData[i].type === "choice" && listRawData[i].value === "") {
+				enabled = false
+				break
+			} 
+		};
 		if (this.state.selectedPicker>=0) {
 			var pickerValue = listRawData[this.state.selectedPicker].value
 			pickerModal = (<View style={styles.pickerContainer}>
@@ -173,7 +179,7 @@ var OAFinanceInfoPage = React.createClass({
 					renderSeparator={this.renderSeparator} />
 				<View style={styles.bottomArea}>
 					<Button style={styles.buttonArea}
-						enabled={true}
+						enabled={enabled}
 						onPress={this.gotoNext}
 						textContainerStyle={styles.buttonView}
 						textStyle={styles.buttonText}

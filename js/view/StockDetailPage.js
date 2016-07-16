@@ -338,13 +338,12 @@ var StockDetailPage = React.createClass({
 	renderChartHeader: function() {
 		var tabs = tabData.map(
 			(data, i) =>
-			<TouchableHighlight style={{width:width/tabData.length}} key={i}
+			<TouchableOpacity style={{width:width/tabData.length}} key={i}
 					onPress={() => this.pressChartHeaderTab(data.type)}>
 				<Text style={this.state.chartType == data.type? styles.chartTitleTextHighlighted : styles.chartTitleText}>
 					{data.name}
 				</Text>
-
-			</TouchableHighlight>
+			</TouchableOpacity>
 		)
 		return(
 			<ScrollView horizontal={true} style={{flex: 0,marginTop: 6}}>

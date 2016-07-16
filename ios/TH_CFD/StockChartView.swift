@@ -32,6 +32,7 @@ class StockChartView: UIView {
 	var bottomLineY:CGFloat = 0
 	var usingRealTimeX = false
 	var drawPreCloseLine = false
+	var showPeriod:Double = 0		//only work when usingRealTimeX
 	
 // MARK: deal with raw data
 	var data:String? { // use for RN manager
@@ -54,6 +55,7 @@ class StockChartView: UIView {
 		willSet {
 			usingRealTimeX = newValue == "10m"
 			drawPreCloseLine = newValue == "today"
+			showPeriod = newValue == "10m" ? 600 : 0
 		}
 	}
 	// MARK: calculation
@@ -92,7 +94,7 @@ class StockChartView: UIView {
 		
 		
 		// calculate the y point
-		let topBorder:CGFloat = size.height * 0.12
+		let topBorder:CGFloat = size.height * 0.15
 		let bottomBorder:CGFloat = size.height * 0.15
 		let graphHeight = size.height - topBorder - bottomBorder
 		
@@ -121,9 +123,13 @@ class StockChartView: UIView {
 		self.pointData = []
 		
 		if self.usingRealTimeX {
-			let timeStart:NSDate! = chartData.first!.time
+			var timeStart:NSDate! = chartData.first!.time
 			let timeEnd:NSDate! = chartData.last!.time
-			let timeGap:NSTimeInterval = timeEnd!.timeIntervalSinceDate(timeStart!)
+			var timeGap:NSTimeInterval = timeEnd!.timeIntervalSinceDate(timeStart!)
+			if showPeriod > 0 && timeGap > showPeriod {
+				timeGap = showPeriod
+				timeStart = NSDate(timeInterval: -showPeriod, sinceDate: timeEnd)
+			}
 			
 			let columnTimeXPoint = { (pointTime:NSDate) -> CGFloat in
 				//Calculate gap between points
@@ -163,16 +169,21 @@ class StockChartView: UIView {
 		
 		if let time0:NSDate? = chartData.first?.time {
 			if self.usingRealTimeX {
+				var timeStart:NSDate! = time0!
 				let timeEnd:NSDate! = chartData.last!.time
-				let timePeriod:NSTimeInterval! = timeEnd.timeIntervalSinceDate(time0!)
+				var timeGap:NSTimeInterval = timeEnd!.timeIntervalSinceDate(timeStart!)
+				if showPeriod > 0 && timeGap > showPeriod {
+					timeStart = NSDate(timeInterval: -showPeriod, sinceDate: timeEnd)
+				}
+				let timePeriod:NSTimeInterval! = timeEnd.timeIntervalSinceDate(timeStart!)
 				var time:NSDate! = NSDate(timeInterval: -gap, sinceDate: timeEnd)
-				var timeGap = time.timeIntervalSinceDate(time0!)
+				timeGap = time.timeIntervalSinceDate(timeStart!)
 				while timeGap > 0 {
 						let x:CGFloat = self.margin + (size.width - self.margin*2) * CGFloat(timeGap / timePeriod)
 						self.verticalLinesX.insert(x+0.5, atIndex: 0)
 						self.verticalTimes.insert(time, atIndex: 0)
 						time = NSDate(timeInterval: -gap, sinceDate: time)
-						timeGap = time.timeIntervalSinceDate(time0!)
+						timeGap = time.timeIntervalSinceDate(timeStart!)
 				}
 			}
 			else {
@@ -318,7 +329,7 @@ class StockChartView: UIView {
 			graphPath.addLineToPoint(nextPoint)
 		}
 		
-		let context = UIGraphicsGetCurrentContext()
+		var context = UIGraphicsGetCurrentContext()
 		CGContextSaveGState(context)
 		
 		let clippingPath = graphPath.copy() as! UIBezierPath
@@ -334,6 +345,9 @@ class StockChartView: UIView {
 		
 		//4 - add the clipping path to the context
 		clippingPath.addClip()
+		
+		let clippingBox:UIBezierPath = UIBezierPath.init(rect: CGRect(x: margin-1, y: topMargin-1, width: width-margin*2+2, height: height-bottomMargin-topMargin+2))
+		clippingBox.addClip()
 		
 		let colors = [startColor.CGColor, endColor.CGColor]
 		//set up the color space
@@ -358,9 +372,16 @@ class StockChartView: UIView {
 		self.drawHorizontalLines(rect)
 		self.drawVerticalLines(rect)
 		
+		
+		context = UIGraphicsGetCurrentContext()
+		CGContextSaveGState(context)
+		clippingBox.addClip()
+		
 		//draw the line on top of the clipped gradient
 		graphPath.lineWidth = 1.0
 		graphPath.stroke()
+		
+		CGContextRestoreGState(context)
 
 		//Draw the circles on right top of graph stroke
 		

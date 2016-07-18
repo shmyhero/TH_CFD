@@ -108,19 +108,19 @@ class StockChartView: UIView {
 		}
 	}
 	
-	func shouldShowInView(chartData: ChartData) -> Bool{
-		var result = true
-		if (usingRealTimeX) {
-			let intervalSinceEnd = chartData.time?.timeIntervalSinceDate(currentTimeEndOnPan)
-			if ( intervalSinceEnd > 0) {
-				result = false
-			}
-			else if (intervalSinceEnd < -showPeriod) {
-				result = false
-			}
-		}
-		return result
-	}
+//	func shouldShowInView(chartData: ChartData) -> Bool{
+//		var result = true
+//		if (usingRealTimeX) {
+//			let intervalSinceEnd = chartData.time?.timeIntervalSinceDate(currentTimeEndOnPan)
+//			if ( intervalSinceEnd > 0) {
+//				result = false
+//			}
+//			else if (intervalSinceEnd < -showPeriod) {
+//				result = false
+//			}
+//		}
+//		return result
+//	}
 	
 	// MARK: calculation
 	func calculatePoint() {
@@ -151,6 +151,7 @@ class StockChartView: UIView {
 			maxValue = maxValue < preClose ? preClose! : maxValue
 			minValue = minValue > preClose ? preClose! : minValue
 		}
+		
 		//calculate the x point
 		let lastIndex = self.chartData.count - 1
 		let columnXPoint = { (column:Int) -> CGFloat in
@@ -164,7 +165,7 @@ class StockChartView: UIView {
 		
 		
 		// calculate the y point
-		let topBorder:CGFloat = size.height * 0.15
+		let topBorder:CGFloat = size.height * 0.12
 		let bottomBorder:CGFloat = size.height * 0.15
 		let graphHeight = size.height - topBorder - bottomBorder
 		
@@ -349,6 +350,16 @@ class StockChartView: UIView {
 		var linePath = UIBezierPath()
 		let context = UIGraphicsGetCurrentContext()
 		CGContextSaveGState(context)
+		
+//		let size = self.bounds.size
+//		let topBorder:CGFloat = size.height * 0.15
+//		let bottomBorder:CGFloat = size.height * 0.15
+//		//top line
+//		linePath.moveToPoint(CGPoint(x:margin, y: topBorder + 0.5))
+//		linePath.addLineToPoint(CGPoint(x: width - margin, y:topBorder + 0.5))
+//		//bottom line
+//		linePath.moveToPoint(CGPoint(x:margin-0.5, y:height - bottomBorder + 0.5))
+//		linePath.addLineToPoint(CGPoint(x:width - margin+0.5, y:height - bottomBorder + 0.5))
 		
 		//top line
 		linePath.moveToPoint(CGPoint(x:margin, y: topMargin + 0.5))

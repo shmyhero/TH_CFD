@@ -102,7 +102,7 @@ class StockChartView: UIView {
 		willSet {
 			usingRealTimeX = newValue == "10m"
 			drawPreCloseLine = newValue == "today"
-			showPeriod = newValue == "10m" ? 400 : 0
+			showPeriod = newValue == "10m" ? 600 : 0
 			panPeriod = 0
 			lastPanPeriod = 0
 		}

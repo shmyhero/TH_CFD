@@ -33,12 +33,59 @@ class StockChartView: UIView {
 	var usingRealTimeX = false
 	var drawPreCloseLine = false
 	var showPeriod:Double = 0		//only work when usingRealTimeX
+	var panPeriod:Double = 0		//time period panned.
+	var lastPanPeriod:Double = 0
+	var currentTimeEndOnPan:NSDate = NSDate()
+
+	override init(frame: CGRect) {
+		super.init(frame: frame)
+		// add touch function
+		self.userInteractionEnabled = true
+		let panGesture:UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(StockChartView.pan(_:)))
+		self.addGestureRecognizer(panGesture)
+	}
+	required init?(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
+	}
+	
+// MARK: action
+	func pan(sender: UIPanGestureRecognizer) {
+		if(showPeriod > 0) {
+			let size = self.bounds.size
+			let translation : CGPoint = sender.translationInView(self)
+			let rate = showPeriod/Double(size.width-margin*2)
+			panPeriod = lastPanPeriod - Double(translation.x) * rate	//pan right means go earlier
+						let timeStart:NSDate! = chartData.first!.time
+			let timeEnd:NSDate! = chartData.last!.time
+			let maxPanPeriod = timeStart.timeIntervalSinceDate(timeEnd) + showPeriod	//this is a minus value
+			if(panPeriod < maxPanPeriod) {
+				panPeriod = maxPanPeriod
+			}
+			if(panPeriod > 0) {
+				panPeriod = 0
+			}
+			currentTimeEndOnPan = NSDate(timeInterval: panPeriod, sinceDate: chartData.last!.time!)
+
+			self.calculatePoint()
+			self.setNeedsDisplay()
+			if (sender.state == UIGestureRecognizerState.Ended) {
+				if(panPeriod > -1) {
+					panPeriod = 0
+				}
+				lastPanPeriod = panPeriod
+			}
+		}
+	}
 	
 // MARK: deal with raw data
 	var data:String? { // use for RN manager
 		willSet {
 			self.chartDataJson = newValue
 			self.chartData = ChartDataManager.singleton.chartDataFromJson(self.chartDataJson)
+			if panPeriod > -1 && chartData.count > 0 && lastPanPeriod == 0 {
+				// using 2 point as get end mark
+				currentTimeEndOnPan = (chartData.last?.time)!
+			}
 			self.calculatePoint()
 			self.setNeedsDisplay()
 		}
@@ -55,9 +102,26 @@ class StockChartView: UIView {
 		willSet {
 			usingRealTimeX = newValue == "10m"
 			drawPreCloseLine = newValue == "today"
-			showPeriod = newValue == "10m" ? 600 : 0
+			showPeriod = newValue == "10m" ? 400 : 0
+			panPeriod = 0
+			lastPanPeriod = 0
 		}
 	}
+	
+	func shouldShowInView(chartData: ChartData) -> Bool{
+		var result = true
+		if (usingRealTimeX) {
+			let intervalSinceEnd = chartData.time?.timeIntervalSinceDate(currentTimeEndOnPan)
+			if ( intervalSinceEnd > 0) {
+				result = false
+			}
+			else if (intervalSinceEnd < -showPeriod) {
+				result = false
+			}
+		}
+		return result
+	}
+	
 	// MARK: calculation
 	func calculatePoint() {
 		let size = self.bounds.size
@@ -73,9 +137,15 @@ class StockChartView: UIView {
 		var maxValue = chartData.reduce(0) { (max, data) -> Double in
 			(max < data.price) ? data.price : max
 		}
+//		var maxValue = chartData.reduce(0) { (max, data) -> Double in
+//			(max < data.price) ? (shouldShowInView(data) ? data.price : max) : max
+//		}
 		var minValue = chartData.reduce(100000000.0) { (min, data) -> Double in
 			(min > data.price) ? data.price : min
 		}
+//		var minValue = chartData.reduce(100000000.0) { (min, data) -> Double in
+//			(min > data.price) ? (shouldShowInView(data) ? data.price : min) : min
+//		}
 		let preClose = ChartDataManager.singleton.stockData?.preClose
 		if (preClose > 0 && drawPreCloseLine) {
 			maxValue = maxValue < preClose ? preClose! : maxValue
@@ -124,9 +194,10 @@ class StockChartView: UIView {
 		
 		if self.usingRealTimeX {
 			var timeStart:NSDate! = chartData.first!.time
-			let timeEnd:NSDate! = chartData.last!.time
+			let timeEnd:NSDate! = currentTimeEndOnPan
 			var timeGap:NSTimeInterval = timeEnd!.timeIntervalSinceDate(timeStart!)
 			if showPeriod > 0 && timeGap > showPeriod {
+				// can pan
 				timeGap = showPeriod
 				timeStart = NSDate(timeInterval: -showPeriod, sinceDate: timeEnd)
 			}
@@ -170,7 +241,7 @@ class StockChartView: UIView {
 		if let time0:NSDate? = chartData.first?.time {
 			if self.usingRealTimeX {
 				var timeStart:NSDate! = time0!
-				let timeEnd:NSDate! = chartData.last!.time
+				let timeEnd:NSDate! = currentTimeEndOnPan
 				var timeGap:NSTimeInterval = timeEnd!.timeIntervalSinceDate(timeStart!)
 				if showPeriod > 0 && timeGap > showPeriod {
 					timeStart = NSDate(timeInterval: -showPeriod, sinceDate: timeEnd)
@@ -221,7 +292,38 @@ class StockChartView: UIView {
 				}
 			}
 		}
-		
+	}
+	
+	func findHighlightPoint() -> CGPoint {
+		var point = self.pointData.last!
+		if(panPeriod != 0) {
+			var firstLatePointIndex = 0
+			var firstLateInterval:NSTimeInterval = 0
+			for i in 0..<chartData.count {
+				let interval:NSTimeInterval = chartData[i].time!.timeIntervalSinceDate(currentTimeEndOnPan)
+				if (interval >= 0) {
+					// 找到目前滑动后最右边的点
+					firstLatePointIndex = i
+					firstLateInterval = interval
+					break
+				}
+			}
+			if firstLatePointIndex == 0 {
+				point = pointData.first!
+			}
+			else if(firstLateInterval == panPeriod) {
+				point = pointData[firstLatePointIndex]
+			}
+			else {
+				let size = self.bounds.size
+				let lastInterval:NSTimeInterval = chartData[firstLatePointIndex-1].time!.timeIntervalSinceDate((chartData.last?.time)!)
+				let y0 = pointData[firstLatePointIndex-1].y
+				let y1 = pointData[firstLatePointIndex].y
+				let y = y0+(y1-y0)*CGFloat(panPeriod-lastInterval)/CGFloat(firstLateInterval-lastInterval)
+				point = CGPoint(x: size.width - margin, y: y)
+			}
+		}
+		return point
 	}
 	
 // MARK: render
@@ -391,7 +493,7 @@ class StockChartView: UIView {
 		let pointGradient = CGGradientCreateWithColors(colorSpace,
 			circleColors, colorLocations)
 		
-		let centerPoint =  self.pointData.last!
+		let centerPoint = findHighlightPoint()
 		let startRadius: CGFloat = 2
 		let endRadius: CGFloat = 6
 		
@@ -414,8 +516,21 @@ class StockChartView: UIView {
 		else {
 			dateFormatter.dateFormat = "HH:mm"
 		}
-		let leftText: NSString = dateFormatter.stringFromDate((self.chartData.first?.time)!)
-		let rightText = dateFormatter.stringFromDate((self.chartData.last?.time)!)
+		var timeStart:NSDate = (self.chartData.first?.time)!
+		var timeEnd:NSDate = (self.chartData.last?.time)!
+		if(showPeriod > 0) {
+			timeEnd = currentTimeEndOnPan
+			let timeGap:NSTimeInterval = timeEnd.timeIntervalSinceDate(timeStart)
+			if timeGap > showPeriod {
+				timeStart = NSDate(timeInterval: -showPeriod, sinceDate: timeEnd)
+			}
+			else {
+				timeStart = NSDate(timeInterval: panPeriod, sinceDate: timeStart)
+			}
+		}
+		
+		let leftText: NSString = dateFormatter.stringFromDate(timeStart)
+		let rightText = dateFormatter.stringFromDate(timeEnd)
 		let textColor = UIColor(hex: 0x70a5ff)
 		let textFont = UIFont(name: "Helvetica Neue", size: 8)
 		let textStyle = NSMutableParagraphStyle()

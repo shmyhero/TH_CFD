@@ -38,9 +38,17 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
 
     private static final String REACT_CLASS = "LineChart";
     private enum CHART_TYPE {
-        today,
-        week,
-        month
+        today("today"),
+        tenM("10m"),
+        twoH("2h"),
+        week("week"),
+        month("month");
+
+        private String name;
+
+        CHART_TYPE(String name) {
+            this.name = name;
+        }
     };
     private CHART_TYPE mChartType = CHART_TYPE.today;
     private static int CHART_BORDER_COLOR = 0xff497bce;
@@ -168,7 +176,7 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                 chart.setData(data);
 
                 // Set the xAxis with the prev close price line
-                if (mChartType == CHART_TYPE.today) {
+                if (mChartType == CHART_TYPE.today || mChartType == CHART_TYPE.tenM || mChartType == CHART_TYPE.twoH) {
                     LimitLine line = new LimitLine((float) stockInfoObject.getDouble("preClose"));
                     line.setLineColor(CHART_LINE_COLOR);
                     line.setLineWidth(0.5f);
@@ -183,6 +191,12 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                 int gapLineUnitAddMount = 1;
                 if (mChartType == CHART_TYPE.today) {
                     gapLineUnit = Calendar.HOUR_OF_DAY;
+                } else if (mChartType == CHART_TYPE.tenM) {
+                    gapLineUnit = Calendar.MINUTE;
+                    gapLineUnitAddMount = 2;
+                } else if (mChartType == CHART_TYPE.twoH){
+                    gapLineUnit = Calendar.MINUTE;
+                    gapLineUnitAddMount = 30;
                 } else if (mChartType == CHART_TYPE.week) {
                     gapLineUnit = Calendar.DAY_OF_MONTH;
                 } else if (mChartType == CHART_TYPE.month) {
@@ -246,7 +260,7 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                     }
 
                     SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-                    if (mChartType != CHART_TYPE.today) {
+                    if (mChartType == CHART_TYPE.week || mChartType == CHART_TYPE.month) {
                         format = new SimpleDateFormat("MM/dd");
                     }
 
@@ -289,7 +303,13 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
 
     @ReactProp(name = "chartType")
     public void setChartType(ReactLineChart chart, String type) {
-        mChartType = CHART_TYPE.valueOf(type);
+        CHART_TYPE[] allType = CHART_TYPE.values();
+        for (int i = 0; i < allType.length; i ++) {
+            if (allType[i].name.equals(type)) {
+                mChartType = allType[i];
+                break;
+            }
+        }
     }
 
     @ReactProp(name = "description")

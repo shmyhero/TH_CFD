@@ -27,7 +27,7 @@ var originalName = null;
 var NOTE_STATE_NORMAL = 0;
 var NOTE_STATE_NORMAL_WECHAT = 1;
 
-var UpdateUserInfoPage = React.createClass({
+var OALiveUpdateUserInfoPage = React.createClass({
 
 	getInitialState: function() {
 		return {
@@ -340,4 +340,4 @@ var styles = StyleSheet.create({
 	},
 });
 
-module.exports = UpdateUserInfoPage
+module.exports = OALiveUpdateUserInfoPage

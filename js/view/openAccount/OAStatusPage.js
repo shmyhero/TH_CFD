@@ -28,8 +28,9 @@ var ds = new ViewPager.DataSource({
 	pageHasChanged: (p1, p2) => p1 !== p2,
 });
 
+var imageHeight = 311 / 750 * width
 
-var OAStartPage = React.createClass({
+var OAStatusPage = React.createClass({
 
 	getInitialState: function() {
 		return {
@@ -53,7 +54,7 @@ var OAStartPage = React.createClass({
 		pageID: number | string,) {
 		return (
 			<Image
-				style={[styles.image, {height: 311 / 750 * width, width: width}]}
+				style={[styles.image, {height: imageHeight, width: width}]}
 				source={BANNERS[pageID % 2]}/>
 		);
 	},
@@ -61,12 +62,16 @@ var OAStartPage = React.createClass({
 	render: function() {
 		return (
 			<View style={styles.wrapper}>
-				<ViewPager
-					style={{backgroundColor:'transparent'}}
-					dataSource={this.state.dataSource}
-					renderPage={this._renderPage}
-					isLoop={false}
-					autoPlay={false}/>
+				<Image
+					style={[styles.backgroundImage, {height: imageHeight, width: width}]}
+					source={BANNERS[0]} >
+					<ViewPager
+						style={{backgroundColor:'transparent'}}
+						dataSource={this.state.dataSource}
+						renderPage={this._renderPage}
+						isLoop={false}
+						autoPlay={false}/>
+				</Image>
 
 				<Image style={styles.image} source={require('../../../images/live_register_sub_banner.png')}/>
 
@@ -158,4 +163,4 @@ var styles = StyleSheet.create({
 });
 
 
-module.exports = OAStartPage;
+module.exports = OAStatusPage;

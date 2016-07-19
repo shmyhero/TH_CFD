@@ -33,7 +33,7 @@ var rowHeight = 40;
 var fontSize = 16;
 var MAX_ValidationCodeCountdown = 60
 
-var LoginPage = React.createClass({
+var OALiveRegisterPage = React.createClass({
 	mixins: [TimerMixin],
 
 	getInitialState: function() {
@@ -394,4 +394,4 @@ var styles = StyleSheet.create({
 })
 
 
-module.exports = LoginPage;
+module.exports = OALiveRegisterPage;

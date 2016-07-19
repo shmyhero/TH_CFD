@@ -54,14 +54,15 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
     private static int CHART_BORDER_COLOR = 0xff497bce;
     private static int CHART_LINE_COLOR = 0Xff759de2;
     private static int CHART_TEXT_COLOR = 0Xff70a5ff;
+    private static int TEN_MINUTE_POINT_NUMBER = 600;
 
     @Override
     protected ReactLineChart createViewInstance(ThemedReactContext reactContext) {
         ReactLineChart chart = new ReactLineChart(reactContext);
 
         chart.setDrawGridBackground(false);
-        chart.setDragEnabled(false);
-        chart.setScaleEnabled(false);
+        chart.setDragEnabled(true);
+        chart.setScaleEnabled(true);
         chart.setTouchEnabled(false);
         chart.getLegend().setEnabled(false);
         chart.setExtraLeftOffset(12);
@@ -104,26 +105,62 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                 final JSONArray chartDataList = stockInfoObject.getJSONArray("priceData");
 
                 ArrayList<String> xVals = new ArrayList<String>();
-                for (int i = 0; i < chartDataList.length(); i++) {
-                    xVals.add((i) + "");
-                }
-
                 ArrayList<Entry> yVals = new ArrayList<Entry>();
+
                 float minVal = Float.MAX_VALUE;
                 float maxVal = Float.MIN_VALUE;
 
-                for (int i = 0; i < chartDataList.length(); i++) {
-                    float val = (float) (chartDataList.getJSONObject(i).getDouble("p"));
-                    if (val > maxVal) {
-                        maxVal = val;
+                if (mChartType == CHART_TYPE.tenM) {
+                    Calendar firstDate = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
+                    Calendar lastDate = timeStringToCalendar(chartDataList.getJSONObject(chartDataList.length() - 1).getString("time"));
+                    long distance = (lastDate.getTimeInMillis() - firstDate.getTimeInMillis()) / 1000;
+
+                    if (distance > TEN_MINUTE_POINT_NUMBER) {
+                        firstDate.add(Calendar.MILLISECOND, (int)(1000 * (distance - TEN_MINUTE_POINT_NUMBER)));
+                        distance = TEN_MINUTE_POINT_NUMBER;
                     }
-                    if (val < minVal) {
-                        minVal = val;
+
+                    for (int i = 0; i < distance; i ++) {
+                        xVals.add((i) + "");
                     }
-                    yVals.add(new Entry(val, i));
+
+                    for (int i = 0; i < chartDataList.length(); i++) {
+                        Calendar date = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
+
+                        long distToStart = (date.getTimeInMillis() - firstDate.getTimeInMillis()) / 1000;
+
+                        if (distToStart >= 0) {
+
+                            float val = (float) (chartDataList.getJSONObject(i).getDouble("p"));
+                            if (val > maxVal) {
+                                maxVal = val;
+                            }
+                            if (val < minVal) {
+                                minVal = val;
+                            }
+
+                            yVals.add(new Entry(val, (int)distToStart));
+                        }
+                    }
+                } else {
+                    for (int i = 0; i < chartDataList.length(); i++) {
+                        xVals.add((i) + "");
+                    }
+                    for (int i = 0; i < chartDataList.length(); i++) {
+                        float val = (float) (chartDataList.getJSONObject(i).getDouble("p"));
+                        if (val > maxVal) {
+                            maxVal = val;
+                        }
+                        if (val < minVal) {
+                            minVal = val;
+                        }
+                        yVals.add(new Entry(val, i));
+                    }
+
+                    minVal = Math.min(minVal, (float)stockInfoObject.getDouble("preClose"));
+                    maxVal = Math.max(maxVal, (float) stockInfoObject.getDouble("preClose"));
                 }
-                minVal = Math.min(minVal, (float)stockInfoObject.getDouble("preClose"));
-                maxVal = Math.max(maxVal, (float) stockInfoObject.getDouble("preClose"));
+
                 minVal -= (maxVal - minVal) / 5;
                 maxVal += (maxVal - minVal) / 5;
 
@@ -264,11 +301,16 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                         format = new SimpleDateFormat("MM/dd");
                     }
 
+                    Calendar firstDate = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
                     for (int i = 0; i < limitLineAt.size(); i++) {
                         int index = limitLineAt.get(i);
                         Calendar calendar = limitLineCalender.get(i);
 
                         LimitLine gapLine = new LimitLine(index);
+                        if (mChartType == CHART_TYPE.tenM) {
+                            long dist = (calendar.getTimeInMillis() - firstDate.getTimeInMillis()) / 1000;
+                            gapLine = new LimitLine(dist);
+                        }
                         gapLine.setLineColor(CHART_LINE_COLOR);
                         gapLine.setLineWidth(0.5f);
                         gapLine.enableDashedLine(10f, 0f, 0f);
@@ -285,7 +327,7 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                     }
                 }
 
-                chart.invalidate();
+                chart.notifyDataSetChanged();
 
             } catch (JSONException e) {
                 e.printStackTrace();

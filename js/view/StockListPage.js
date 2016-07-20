@@ -21,7 +21,6 @@ var NetConstants = require('../NetConstants')
 var UIConstants = require('../UIConstants');
 var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
-var WebSocketModule = require('../module/WebSocketModule')
 var MainPage = require('./MainPage')
 var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 
@@ -82,14 +81,25 @@ var StockListPage = React.createClass({
 		if (hasUpdate) {
 			if(!this.state.isOwnStockPage) {
 				var ownData = LogicData.getOwnStocksData()
-				this.updateListDataWithLastInfo(ownData, realtimeStockInfo)
-				LogicData.setOwnStocksData(ownData)
+				var ownUpdate = this.updateListDataWithLastInfo(ownData, realtimeStockInfo)
+				if(ownUpdate) {
+					LogicData.setOwnStocksData(ownData)
+				}
 			}
 			this.setState({
 				stockInfo: ds.cloneWithRows(this.state.rowStockInfoData)
 			})
 		}
 	},
+
+	refreshData: function() {
+		if (this.props.isOwnStockPage) {
+			this.refreshOwnData()
+		}
+		else {
+			this.reFetchStockData()
+		}
+	}
 
 	reFetchStockData: function() {
 		if (this.state.rowStockInfoData.length === 0) {
@@ -128,6 +138,14 @@ var StockListPage = React.createClass({
 				}
 			})
 			.done()
+	},
+
+	refreshOwnData: function() {
+		var ownData = LogicData.getOwnStocksData()
+		this.setState({
+			rowStockInfoData: ownData,
+			stockInfo: ds.cloneWithRows(ownData)
+		})
 	},
 
 	fetchOwnData: function() {
@@ -204,30 +222,13 @@ var StockListPage = React.createClass({
 	},
 
 	onPageSelected: function() {
-		if (!this.props.isOwnStockPage){
-			this.reFetchStockData()
-		}
-		else {
-			this.refreshOwnData()
-		}
+		this.refreshData()
 	},
 
 	tabPressed: function() {
-		if (this.props.isOwnStockPage) {
-			this.refreshOwnData()
-		}
-		else {
-			this.reFetchStockData()
-		}
+		this.refreshData()
 	},
 
-	refreshOwnData: function() {
-		var ownData = LogicData.getOwnStocksData()
-		this.setState({
-			rowStockInfoData: ownData,
-			stockInfo: ds.cloneWithRows(ownData)
-		})
-	},
 
 	getInitialState: function() {
 		return {

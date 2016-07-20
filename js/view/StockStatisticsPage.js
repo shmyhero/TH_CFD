@@ -201,7 +201,12 @@ var StockStatisticsPage = React.createClass({
 					{barContent.name}
 				</Text>
 		)
-		if (hasData) {
+		var sumInvest = 0
+		for (var i = 0; i < this.state.statisticsSumInfo.length; i++) {
+			var barContent = this.state.statisticsSumInfo[i]
+			sumInvest += barContent.invest
+		}
+		if (hasData && sumInvest > 0) {
 			return (
 				<View style={styles.chart}>
 					{this.renderChartHeader()}

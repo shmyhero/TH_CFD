@@ -58,24 +58,33 @@ var StockListPage = React.createClass({
 		return result
 	},
 
-	handleStockInfo: function(realtimeStockInfo) {
+	updateListDataWithLastInfo: function(listData, info) {
 		var hasUpdate = false
-		for (var i = 0; i < this.state.rowStockInfoData.length; i++) {
-			for (var j = 0; j < realtimeStockInfo.length; j++) {
-				if (this.state.rowStockInfoData[i].id == realtimeStockInfo[j].id &&
-							this.state.rowStockInfoData[i].last !== realtimeStockInfo[j].last) {
-					this.state.rowStockInfoData[i].last = realtimeStockInfo[j].last;
-					this.state.rowStockInfoData[i].lastAsk = realtimeStockInfo[j].ask;
-					this.state.rowStockInfoData[i].lastBid = realtimeStockInfo[j].bid;
+		for (var i = 0; i < listData.length; i++) {
+			for (var j = 0; j < info.length; j++) {
+				if (listData[i].id == info[j].id &&
+							listData[i].last !== info[j].last) {
+					listData[i].last = info[j].last;
+					listData[i].lastAsk = info[j].ask;
+					listData[i].lastBid = info[j].bid;
 					hasUpdate = true;
 
 					break;
 				}
 			};
 		};
+		return hasUpdate
+	},
+
+	handleStockInfo: function(realtimeStockInfo) {
+		var hasUpdate = this.updateListDataWithLastInfo(this.state.rowStockInfoData, realtimeStockInfo)
 
 		if (hasUpdate) {
-			LogicData.setOwnStocksData(this.state.rowStockInfoData)
+			if(!this.state.isOwnStockPage) {
+				var ownData = LogicData.getOwnStocksData()
+				this.updateListDataWithLastInfo(ownData, realtimeStockInfo)
+				LogicData.setOwnStocksData(ownData)
+			}
 			this.setState({
 				stockInfo: ds.cloneWithRows(this.state.rowStockInfoData)
 			})

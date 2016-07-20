@@ -99,7 +99,7 @@ var StockListPage = React.createClass({
 		else {
 			this.reFetchStockData()
 		}
-	}
+	},
 
 	reFetchStockData: function() {
 		if (this.state.rowStockInfoData.length === 0) {

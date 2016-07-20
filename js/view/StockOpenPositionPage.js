@@ -19,7 +19,6 @@ import {
 } from 'react-native';
 var LayoutAnimation = require('LayoutAnimation')
 
-
 var LogicData = require('../LogicData')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
@@ -76,23 +75,7 @@ var StockOpenPositionPage = React.createClass({
 
 	tabPressed: function() {
 		this.loadOpenPositionInfo()
-		// this.showTutorial()
 	},
-
-	showTutorial: function() {
-		// show tutorial
-		StorageModule.loadTutorial()
-			.then((value) => {
-				var data = JSON.parse(value)
-				if(data === null || data['position'] === undefined) {
-					if (this.state.stockInfoRowData.length > 0) {
-						this.setState({selectedSubItem: 2, selectedRow: 0})
-						this.props.showTutorial('position')
-					}
-				}
-			})
-			.done()
-		},
 
 	loadOpenPositionInfo: function() {
 		var userData = LogicData.getUserData()

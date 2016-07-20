@@ -75,6 +75,7 @@ var StockListPage = React.createClass({
 		};
 
 		if (hasUpdate) {
+			LogicData.setOwnStocksData(this.state.rowStockInfoData)
 			this.setState({
 				stockInfo: ds.cloneWithRows(this.state.rowStockInfoData)
 			})
@@ -196,6 +197,9 @@ var StockListPage = React.createClass({
 	onPageSelected: function() {
 		if (!this.props.isOwnStockPage){
 			this.reFetchStockData()
+		}
+		else {
+			this.refreshOwnData()
 		}
 	},
 

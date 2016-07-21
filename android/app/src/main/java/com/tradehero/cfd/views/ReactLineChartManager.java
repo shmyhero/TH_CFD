@@ -203,7 +203,11 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                 // set data
                 chart.clear();
                 chart.getXAxis().removeAllLimitLines();
-                chart.getXAxis().setLabelsToSkip(chartDataList.length());
+                if (mChartType == CHART_TYPE.tenM) {
+                    chart.getXAxis().setLabelsToSkip(TEN_MINUTE_POINT_NUMBER);
+                } else {
+                    chart.getXAxis().setLabelsToSkip(chartDataList.length());
+                }
                 chart.getXAxis().setValueFormatter(new XAxisValueFormatter() {
                     @Override
                     public String getXValue(String original, int index, ViewPortHandler viewPortHandler) {
@@ -342,7 +346,6 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                         format = new SimpleDateFormat("MM/dd");
                     }
 
-                    Calendar firstDate = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
                     for (int i = 0; i < limitLineAt.size(); i++) {
                         int index = limitLineAt.get(i);
                         Calendar calendar = limitLineCalender.get(i);

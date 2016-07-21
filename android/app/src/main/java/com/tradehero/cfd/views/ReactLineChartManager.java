@@ -120,7 +120,7 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                         distance = TEN_MINUTE_POINT_NUMBER;
                     }
 
-                    for (int i = 0; i < distance; i ++) {
+                    for (int i = 0; i <= distance + 1; i ++) {
                         xVals.add((i) + "");
                     }
 
@@ -165,12 +165,12 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                 maxVal += (maxVal - minVal) / 5;
 
                 int[] circleColors = {Color.TRANSPARENT};
-                if (chartDataList.length() > 0 && stockInfoObject.getBoolean("isOpen")) {
-                    circleColors = new int[chartDataList.length()];
-                    for (int i = 0; i < chartDataList.length(); i++) {
+                if (yVals.size() > 0 && stockInfoObject.getBoolean("isOpen")) {
+                    circleColors = new int[yVals.size()];
+                    for (int i = 0; i < yVals.size(); i++) {
                         circleColors[i] = Color.TRANSPARENT;
                     }
-                    circleColors[circleColors.length - 1] = Color.WHITE;
+                    circleColors[yVals.size() - 1] = Color.WHITE;
                 }
 
                 // create a dataset and give it a type

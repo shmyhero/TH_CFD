@@ -139,7 +139,11 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                                 minVal = val;
                             }
 
-                            yVals.add(new Entry(val, (int)distToStart));
+                            if (yVals.size() == 0) {
+                                yVals.add(new Entry(val, 0));
+                            } else {
+                                yVals.add(new Entry(val, (int)distToStart));
+                            }
                         }
                     }
                 } else {
@@ -264,31 +268,68 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                 ArrayList<Calendar> limitLineCalender = new ArrayList<>();
                 if (chartDataList.length() > 0) {
 
-                    int firstLine = 0;
-                    limitLineAt.add(firstLine);
-                    limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(firstLine).getString("time")));
+                    if (mChartType == CHART_TYPE.tenM) {
+                        Calendar firstDate = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
+                        Calendar lastDate = timeStringToCalendar(chartDataList.getJSONObject(chartDataList.length() - 1).getString("time"));
+                        long distance = (lastDate.getTimeInMillis() - firstDate.getTimeInMillis()) / 1000;
 
-                    for(int i = 0; i < chartDataList.length(); i ++) {
-                        Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
-
-                        if (nextLineAt == null) {
-                            calendar.add(gapLineUnit, gapLineUnitAddMount);
-                            nextLineAt = calendar;
-                        } else if (calendar.after(nextLineAt)) {
-
-                            while(calendar.after(nextLineAt)) {
-                                nextLineAt.add(gapLineUnit, gapLineUnitAddMount);
-                            }
-
-                            limitLineAt.add(i);
-                            limitLineCalender.add(calendar);
+                        if (distance > TEN_MINUTE_POINT_NUMBER) {
+                            firstDate.add(Calendar.MILLISECOND, (int)(1000 * (distance - TEN_MINUTE_POINT_NUMBER)));
                         }
-                    }
 
-                    if (mChartType != CHART_TYPE.week || !stockInfoObject.getBoolean("isOpen")) {
-                        int lastLine = chartDataList.length() - 1;
-                        limitLineAt.add(lastLine);
-                        limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
+                        int firstLine = 0;
+                        limitLineAt.add(firstLine);
+                        limitLineCalender.add(firstDate);
+
+                        nextLineAt = (Calendar) firstDate.clone();
+                        nextLineAt.add(gapLineUnit, gapLineUnitAddMount);
+
+                        for(int i = 0; i < chartDataList.length(); i ++) {
+                            Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
+
+                            if (nextLineAt == null) {
+                                calendar.add(gapLineUnit, gapLineUnitAddMount);
+                                nextLineAt = calendar;
+                            } else if (calendar.after(nextLineAt)) {
+
+                                while(calendar.after(nextLineAt)) {
+                                    nextLineAt.add(gapLineUnit, gapLineUnitAddMount);
+                                }
+
+                                long distToStart = (calendar.getTimeInMillis() - firstDate.getTimeInMillis()) / 1000;
+
+                                limitLineAt.add((int)distToStart);
+                                limitLineCalender.add(calendar);
+                            }
+                        }
+
+                    } else {
+                        int firstLine = 0;
+                        limitLineAt.add(firstLine);
+                        limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(firstLine).getString("time")));
+
+                        for(int i = 0; i < chartDataList.length(); i ++) {
+                            Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
+
+                            if (nextLineAt == null) {
+                                calendar.add(gapLineUnit, gapLineUnitAddMount);
+                                nextLineAt = calendar;
+                            } else if (calendar.after(nextLineAt)) {
+
+                                while(calendar.after(nextLineAt)) {
+                                    nextLineAt.add(gapLineUnit, gapLineUnitAddMount);
+                                }
+
+                                limitLineAt.add(i);
+                                limitLineCalender.add(calendar);
+                            }
+                        }
+
+                        if (mChartType != CHART_TYPE.week || !stockInfoObject.getBoolean("isOpen")) {
+                            int lastLine = chartDataList.length() - 1;
+                            limitLineAt.add(lastLine);
+                            limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
+                        }
                     }
 
                     boolean needSkipLabel = false;
@@ -307,10 +348,6 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                         Calendar calendar = limitLineCalender.get(i);
 
                         LimitLine gapLine = new LimitLine(index);
-                        if (mChartType == CHART_TYPE.tenM) {
-                            long dist = (calendar.getTimeInMillis() - firstDate.getTimeInMillis()) / 1000;
-                            gapLine = new LimitLine(dist);
-                        }
                         gapLine.setLineColor(CHART_LINE_COLOR);
                         gapLine.setLineWidth(0.5f);
                         gapLine.enableDashedLine(10f, 0f, 0f);

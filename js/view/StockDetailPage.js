@@ -559,7 +559,7 @@ var StockDetailPage = React.createClass({
 		return (
 			<View style={[styles.rowView, {height:20}]}>
 				<Text style={styles.smallLabel}>本金（美元）</Text>
-				<Text style={styles.smallLabel}>杠杠（倍）</Text>
+				<Text style={styles.smallLabel}>杠杆（倍）</Text>
 			</View>
 		)
 	},

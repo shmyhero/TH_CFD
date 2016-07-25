@@ -1,6 +1,6 @@
 'use strict'
 
-const SERVER_IP = 'http://cfd-webapi.chinacloudapp.cn'
+const SERVER_IP = 'https://api.typhoontechnology.hk'
 const GZT_SERVER_IP = 'http://124.192.161.110:8080'
 
 export const GET_OUT_RIGHT_API = SERVER_IP + '/api/security/fx/outright'

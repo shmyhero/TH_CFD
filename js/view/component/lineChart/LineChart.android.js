@@ -3,6 +3,9 @@
 import React from 'react';
 var View = require('View');
 
+
+var Touchable = require('Touchable');
+var TouchableWithoutFeedback = require('TouchableWithoutFeedback');
 var NativeMethodsMixin = require('NativeMethodsMixin');
 var requireNativeComponent = require('requireNativeComponent');
 
@@ -11,10 +14,12 @@ var LineChartYAxisPosition = require('./LineChartYAxisPosition');
 
 
 var LineChart = React.createClass({
-	mixins: [NativeMethodsMixin],
+	mixins: [Touchable.Mixin, NativeMethodsMixin],
 
 	propTypes: {
 		...View.propTypes,
+
+		...TouchableWithoutFeedback.propTypes,
 
 		data: React.PropTypes.string,	// JSON format
 
@@ -87,6 +92,12 @@ var LineChart = React.createClass({
 		};
 	},
 
+	getInitialState: function() {
+		return {
+			...this.touchableGetInitialState(),
+		};
+	},
+
 	statics: {
 		xAxisPosition: LineChartXAxisPosition,
 		yAxisPosition: LineChartYAxisPosition,
@@ -94,7 +105,13 @@ var LineChart = React.createClass({
 
 	render: function() {
 		return (
-			<LineChartNative {...this.props}/>
+			<LineChartNative {...this.props}
+				onStartShouldSetResponder={this.touchableHandleStartShouldSetResponder}
+				onResponderTerminationRequest={this.touchableHandleResponderTerminationRequest}
+				onResponderGrant={this.touchableHandleResponderGrant}
+				onResponderMove={this.touchableHandleResponderMove}
+				onResponderRelease={this.touchableHandleResponderRelease}
+				onResponderTerminate={this.touchableHandleResponderTerminate}/>
 		);
 	}
 });

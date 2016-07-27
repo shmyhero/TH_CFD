@@ -50,6 +50,12 @@
         <meta-data
             android:name="BUGLY_ENABLE_DEBUG"
             android:value="true" />
+        <meta-data
+            android:name="TD_APP_ID"
+            android:value="9E5885AAFCB333653031970C2AF5614E"/>
+        <meta-data
+            android:name="TD_CHANNEL_ID"
+            android:value="channel" />
     </application>
 
 </manifest>

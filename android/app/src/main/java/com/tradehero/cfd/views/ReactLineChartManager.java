@@ -61,8 +61,8 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
         ReactLineChart chart = new ReactLineChart(reactContext);
 
         chart.setDrawGridBackground(false);
-        chart.setDragEnabled(true);
-        chart.setScaleEnabled(true);
+        chart.setDragEnabled(false);
+        chart.setScaleEnabled(false);
         chart.setTouchEnabled(false);
         chart.getLegend().setEnabled(false);
         chart.setExtraLeftOffset(12);
@@ -367,6 +367,8 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                     }
                 }
 
+//                chart.setVisibleXRangeMaximum(600);
+//                chart.moveViewToX(0);
                 chart.notifyDataSetChanged();
 
             } catch (JSONException e) {

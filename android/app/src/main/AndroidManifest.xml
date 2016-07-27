@@ -43,7 +43,7 @@
             android:value="900028261" /> <!-- 配置APP版本号 -->
         <meta-data
             android:name="BUGLY_APP_VERSION"
-            android:value="${version_name}" /> <!-- 配置APP渠道号 -->
+            android:value="${VERSION_NAME}" /> <!-- 配置APP渠道号 -->
         <meta-data
             android:name="BUGLY_APP_CHANNEL"
             android:value="360" /> <!-- 配置Bugly调试模式(true或者false)-->
@@ -52,10 +52,10 @@
             android:value="true" />
         <meta-data
             android:name="TD_APP_ID"
-            android:value="9E5885AAFCB333653031970C2AF5614E"/>
+            android:value="${TD_APP_ID}"/>
         <meta-data
             android:name="TD_CHANNEL_ID"
-            android:value="channel" />
+            android:value="${TD_CHANNEL_ID}" />
     </application>
 
 </manifest>

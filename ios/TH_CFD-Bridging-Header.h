@@ -10,3 +10,5 @@
 #import "RCTBridge.h"
 #import "RCTEventDispatcher.h"
 #import "RCTHotUpdate.h"
+
+#import "TalkingData.h"

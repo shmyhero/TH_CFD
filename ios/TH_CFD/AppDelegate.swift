@@ -27,6 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 		// Override point for customization after application launch.
+		TalkingData.sessionStarted("9E5885AAFCB333653031970C2AF5614E", withChannelId: "AppStore")
 		
 		// initialize the rootView to fetch JS from the dev server
 		/**

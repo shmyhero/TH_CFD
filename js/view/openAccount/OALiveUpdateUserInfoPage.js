@@ -18,7 +18,7 @@ var NetConstants = require('../../NetConstants')
 var LogicData = require('../../LogicData')
 var MainPage = require('../MainPage')
 var NetworkModule = require('../../module/NetworkModule')
-var TalkingdataModule = require('../module/TalkingdataModule')
+var TalkingdataModule = require('../../module/TalkingdataModule')
 
 var rowHeight = 40;
 var fontSize = 16;

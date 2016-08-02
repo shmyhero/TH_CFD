@@ -24,6 +24,11 @@
 		3D2A3A0A1C7C44C50085264D /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A3A091C7C44C50085264D /* CoreTelephony.framework */; };
 		3D3E1EFF1C9F9C1C0064F187 /* SwiftNotice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3E1EFE1C9F9C1C0064F187 /* SwiftNotice.swift */; };
 		3D47CB491C897882000EF6EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D47CB481C897882000EF6EF /* AppDelegate.swift */; };
+		3D4B37971D504942004BD09C /* libTalkingData.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4B37941D504942004BD09C /* libTalkingData.a */; };
+		3D4B37AA1D5049B6004BD09C /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4B37A91D5049B6004BD09C /* AdSupport.framework */; };
+		3D4B37AC1D5049C8004BD09C /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4B37AB1D5049C8004BD09C /* CoreMotion.framework */; };
+		3D4B37AE1D5049FD004BD09C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4B37AD1D5049FD004BD09C /* Security.framework */; };
+		3D4B37B01D504A06004BD09C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4B37AF1D504A06004BD09C /* SystemConfiguration.framework */; };
 		3D5C46C81C92B51000BF6FD3 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 3D5C46C71C92B51000BF6FD3 /* main.jsbundle */; };
 		3D61C5CB1C9909CB0037816A /* EditOwnStocksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */; };
 		3D61C5F11C9931810037816A /* EditOwnStockCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D61C5F01C9931810037816A /* EditOwnStockCell.swift */; };
@@ -37,6 +42,7 @@
 		3DC618051CA29F9900F36541 /* StockChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC618041CA29F9900F36541 /* StockChartView.swift */; };
 		3DC6182D1CA3922A00F36541 /* StockChartViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC6182C1CA3922A00F36541 /* StockChartViewManager.m */; };
 		3DD744771CCE18040021304F /* myhero.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3DD744761CCE18040021304F /* myhero.ttf */; };
+		3DE90F481D505035004D264A /* RCTTalkingData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DE90F471D505035004D264A /* RCTTalkingData.m */; };
 		73DFEAF21CDB242700234CE8 /* libbz2.1.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 73DFEAF01CDB22A500234CE8 /* libbz2.1.0.tbd */; };
 		73FD306D1D0574FD00D77EFC /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73FD306C1D0574C200D77EFC /* libRNFS.a */; };
 		80BCA2B8147C419E82DF3DFB /* libRCTHotUpdate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADAFAB0527AA419A8350A2B3 /* libRCTHotUpdate.a */; };
@@ -184,6 +190,13 @@
 		3D3E1EFE1C9F9C1C0064F187 /* SwiftNotice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftNotice.swift; path = TH_CFD/SwiftNotice.swift; sourceTree = "<group>"; };
 		3D47CB471C897879000EF6EF /* TH_CFD-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TH_CFD-Bridging-Header.h"; sourceTree = "<group>"; };
 		3D47CB481C897882000EF6EF /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = TH_CFD/AppDelegate.swift; sourceTree = "<group>"; };
+		3D4B37941D504942004BD09C /* libTalkingData.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTalkingData.a; sourceTree = "<group>"; };
+		3D4B37951D504942004BD09C /* TalkingData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TalkingData.h; sourceTree = "<group>"; };
+		3D4B37961D504942004BD09C /* TalkingDataSMS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TalkingDataSMS.h; sourceTree = "<group>"; };
+		3D4B37A91D5049B6004BD09C /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		3D4B37AB1D5049C8004BD09C /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		3D4B37AD1D5049FD004BD09C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		3D4B37AF1D504A06004BD09C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		3D5C46C71C92B51000BF6FD3 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditOwnStocksViewController.swift; path = TH_CFD/EditOwnStocksViewController.swift; sourceTree = "<group>"; };
 		3D61C5F01C9931810037816A /* EditOwnStockCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditOwnStockCell.swift; path = TH_CFD/EditOwnStockCell.swift; sourceTree = "<group>"; };
@@ -200,6 +213,8 @@
 		3DC6182B1CA3922A00F36541 /* StockChartViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StockChartViewManager.h; path = TH_CFD/StockChartViewManager.h; sourceTree = "<group>"; };
 		3DC6182C1CA3922A00F36541 /* StockChartViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StockChartViewManager.m; path = TH_CFD/StockChartViewManager.m; sourceTree = "<group>"; };
 		3DD744761CCE18040021304F /* myhero.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = myhero.ttf; sourceTree = "<group>"; };
+		3DE90F461D505035004D264A /* RCTTalkingData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCTTalkingData.h; path = TH_CFD/RCTTalkingData.h; sourceTree = "<group>"; };
+		3DE90F471D505035004D264A /* RCTTalkingData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCTTalkingData.m; path = TH_CFD/RCTTalkingData.m; sourceTree = "<group>"; };
 		58602275B1F14B899E56D44F /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
 		5EE2CE709A38445E9875FCBD /* libRealmReact.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRealmReact.a; sourceTree = "<group>"; };
 		603E112CF5294E05A10661EE /* RCTWeChat.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTWeChat.xcodeproj; path = "../node_modules/react-native-wx/ios/RCTWeChat.xcodeproj"; sourceTree = "<group>"; };
@@ -219,8 +234,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				73FD306D1D0574FD00D77EFC /* libRNFS.a in Frameworks */,
+				3D4B37B01D504A06004BD09C /* SystemConfiguration.framework in Frameworks */,
+				3D4B37AE1D5049FD004BD09C /* Security.framework in Frameworks */,
 				3D2A3A0A1C7C44C50085264D /* CoreTelephony.framework in Frameworks */,
+				3D4B37AC1D5049C8004BD09C /* CoreMotion.framework in Frameworks */,
+				3D4B37AA1D5049B6004BD09C /* AdSupport.framework in Frameworks */,
+				73FD306D1D0574FD00D77EFC /* libRNFS.a in Frameworks */,
 				3D2A3A011C7C3EE70085264D /* libz.tbd in Frameworks */,
 				73DFEAF21CDB242700234CE8 /* libbz2.1.0.tbd in Frameworks */,
 				3D2A39FF1C7C3EDA0085264D /* libc++.tbd in Frameworks */,
@@ -237,6 +256,7 @@
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				E30C3760AD2343E4BF815D6D /* libBVLinearGradient.a in Frameworks */,
 				C5971F975A91415B996BBB9C /* libRealmReact.a in Frameworks */,
+				3D4B37971D504942004BD09C /* libTalkingData.a in Frameworks */,
 				80BCA2B8147C419E82DF3DFB /* libRCTHotUpdate.a in Frameworks */,
 				CBDAB12CB32E43B38DF342E5 /* libRCTWeChat.a in Frameworks */,
 				D5C95DE6EB174E6896A7067C /* libRNImagePicker.a in Frameworks */,
@@ -309,6 +329,7 @@
 				3DD744761CCE18040021304F /* myhero.ttf */,
 				3D3E1F0C1C9F9C340064F187 /* Swift */,
 				3D3E1F0B1C9F9C240064F187 /* ObjC */,
+				3D4B37A81D504961004BD09C /* TalkingData */,
 				3D5C46C71C92B51000BF6FD3 /* main.jsbundle */,
 				3D47CB481C897882000EF6EF /* AppDelegate.swift */,
 				3D47CB471C897879000EF6EF /* TH_CFD-Bridging-Header.h */,
@@ -331,6 +352,8 @@
 		3D3E1F0B1C9F9C240064F187 /* ObjC */ = {
 			isa = PBXGroup;
 			children = (
+				3DE90F461D505035004D264A /* RCTTalkingData.h */,
+				3DE90F471D505035004D264A /* RCTTalkingData.m */,
 				3D6A23E31C9AA93F00FF1306 /* NativeScene.h */,
 				3D6A23E41C9AA93F00FF1306 /* NativeScene.m */,
 				3D6A24071C9AB90000FF1306 /* NativeData.h */,
@@ -355,6 +378,16 @@
 			name = Swift;
 			sourceTree = "<group>";
 		};
+		3D4B37A81D504961004BD09C /* TalkingData */ = {
+			isa = PBXGroup;
+			children = (
+				3D4B37941D504942004BD09C /* libTalkingData.a */,
+				3D4B37951D504942004BD09C /* TalkingData.h */,
+				3D4B37961D504942004BD09C /* TalkingDataSMS.h */,
+			);
+			name = TalkingData;
+			sourceTree = "<group>";
+		};
 		3DC618111CA38B0A00F36541 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -374,6 +407,10 @@
 		43D0F270D79E4680AD511CD9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3D4B37AF1D504A06004BD09C /* SystemConfiguration.framework */,
+				3D4B37AD1D5049FD004BD09C /* Security.framework */,
+				3D4B37AB1D5049C8004BD09C /* CoreMotion.framework */,
+				3D4B37A91D5049B6004BD09C /* AdSupport.framework */,
 				73DFEAF01CDB22A500234CE8 /* libbz2.1.0.tbd */,
 			);
 			name = Frameworks;
@@ -751,6 +788,7 @@
 				3D61C5F11C9931810037816A /* EditOwnStockCell.swift in Sources */,
 				3DC618051CA29F9900F36541 /* StockChartView.swift in Sources */,
 				3D6A240B1C9ABDE900FF1306 /* StockDataManager.swift in Sources */,
+				3DE90F481D505035004D264A /* RCTTalkingData.m in Sources */,
 				3D3E1EFF1C9F9C1C0064F187 /* SwiftNotice.swift in Sources */,
 				3DC6182D1CA3922A00F36541 /* StockChartViewManager.m in Sources */,
 				3DC618011CA2747E00F36541 /* ChartDataManager.swift in Sources */,
@@ -807,6 +845,7 @@
 					"\"$(SRCROOT)/TH_CFD\"",
 					"\"$(SRCROOT)/TH_CFD\"",
 					"\"$(SRCROOT)/TH_CFD\"",
+					"$(PROJECT_DIR)",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.typhoon.technology.CFD;
@@ -847,6 +886,7 @@
 					"\"$(SRCROOT)/TH_CFD\"",
 					"\"$(SRCROOT)/TH_CFD\"",
 					"\"$(SRCROOT)/TH_CFD\"",
+					"$(PROJECT_DIR)",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.typhoon.technology.CFD;

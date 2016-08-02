@@ -6,6 +6,11 @@ const nativeModule = NativeModules.TalkingDataAPI;
 
 export const LIVE_LOGIN_EVENT = '实盘登录'
 export const LIVE_REGISTER_EVENT = '实盘注册'
+export const SIMULATOR_LOGIN_EVENT = '模拟注册登录'
+export const TRADE_EVENT = '交易下单'
+export const ADD_TO_MY_LIST_EVENT = '添加自选'
+export const REMOVE_FROM_MY_LIST_EVENT = '删除自选'
+
 
 export function trackPageBegin(page_name) {
   nativeModule.trackPageBegin(page_name);

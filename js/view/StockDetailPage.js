@@ -27,6 +27,7 @@ var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
+var TalkingdataModule = require('../module/TalkingdataModule')
 var NavBar = require('../view/NavBar')
 var InputAccessory = require('./component/InputAccessory')
 var MainPage = require('./MainPage')
@@ -273,12 +274,14 @@ var StockDetailPage = React.createClass({
 			this.setState({
 				isAddedToMyList: false,
 			})
+			TalkingdataModule.trackEvent(TalkingdataModule.ADD_TO_MY_LIST_EVENT, '', {'stockCode': this.props.stockCode.toString()})
 		} else {
 			LogicData.addStockToOwn(stock)
 			NetworkModule.addToOwnStocks([stock])
 			this.setState({
 				isAddedToMyList: true,
 			})
+			TalkingdataModule.trackEvent(TalkingdataModule.REMOVE_FROM_MY_LIST_EVENT, '', {'stockCode': this.props.stockCode.toString()})
 		}
 	},
 
@@ -763,14 +766,24 @@ var StockDetailPage = React.createClass({
 				})
 				// refresh balcance data
 				NetworkModule.loadUserBalance(true, this.updateUserBalance)
+
+				var eventParam = {
+					'securityId': responseJson.security.id.toString(),
+					'securityName': responseJson.security.name,
+					'invest': this.state.money,
+					'leverage': responseJson.leverage,
+					'isLong': responseJson.isLong,
+					'time': responseJson.createAt,
+				}
+
+				TalkingdataModule.trackEvent(TalkingdataModule.TRADE_EVENT, '', eventParam)
 			},
 			(errorMessage) => {
 				Alert.alert('', errorMessage,
-				[
-					{text: 'OK', onPress: () => this.setState({tradingInProgress: false})}
-				]
-			);
-
+					[
+						{text: 'OK', onPress: () => this.setState({tradingInProgress: false})}
+					]
+				);
 			}
 		)
 	},

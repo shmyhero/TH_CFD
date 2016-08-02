@@ -202,6 +202,7 @@ var LoginPage = React.createClass({
 		if (!this.state.phoneLoginButtonEnabled) {
 			return
 		}
+		TalkingdataModule.trackEvent(TalkingdataModule.SIMULATOR_LOGIN_EVENT)
 		this.setState({
 			phoneLoginButtonEnabled: false
 		})

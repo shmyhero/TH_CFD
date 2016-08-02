@@ -18,6 +18,7 @@ var NetConstants = require('../../NetConstants')
 var LogicData = require('../../LogicData')
 var MainPage = require('../MainPage')
 var NetworkModule = require('../../module/NetworkModule')
+var TalkingdataModule = require('../module/TalkingdataModule')
 
 var rowHeight = 40;
 var fontSize = 16;
@@ -134,6 +135,8 @@ var OALiveUpdateUserInfoPage = React.createClass({
 	},
 
 	savePressed: function() {
+		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_REGISTER_EVENT)
+
 		var userData = LogicData.getUserData()
 
 		NetworkModule.fetchTHUrl(

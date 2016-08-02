@@ -4,6 +4,8 @@ import { NativeModules } from 'react-native';
 
 const nativeModule = NativeModules.TalkingDataAPI;
 
+export const LIVE_LOGIN_EVENT = '实盘登录'
+export const LIVE_REGISTER_EVENT = '实盘注册'
 
 export function trackPageBegin(page_name) {
   nativeModule.trackPageBegin(page_name);

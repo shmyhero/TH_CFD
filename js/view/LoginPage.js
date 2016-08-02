@@ -29,6 +29,7 @@ var WechatModule = require('../module/WechatModule')
 var WebSocketModule = require('../module/WebSocketModule')
 var MainPage = require('./MainPage')
 var dismissKeyboard = require('dismissKeyboard');
+var TalkingdataModule = require('../module/TalkingdataModule')
 
 
 var rowHeight = 40;
@@ -171,6 +172,7 @@ var LoginPage = React.createClass({
 		this.setState({
 			phoneLoginButtonEnabled: false
 		})
+		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_LOGIN_EVENT)
 		NetworkModule.fetchTHUrl(
 			NetConstants.PHONE_NUM_LOGIN_API,
 			{

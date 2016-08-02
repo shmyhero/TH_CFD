@@ -10,6 +10,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.rnfs.RNFSPackage;
 import com.tradehero.cfd.RNNativeModules.RNNativePackage;
+import com.tradehero.cfd.talkingdata.TalkingDataPackage;
 import com.zyu.ReactNativeWheelPickerPackage;
 
 import java.util.Arrays;
@@ -42,7 +43,8 @@ public class RNManager {
                     new LinearGradientPackage(),
                     new UpdatePackage(),
                     new RNFSPackage(),
-                    new ImagePickerPackage()
+                    new ImagePickerPackage(),
+                    new TalkingDataPackage()
             );
 
             for (ReactPackage reactPackage : packages) {

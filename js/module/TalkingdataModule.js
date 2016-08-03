@@ -26,6 +26,9 @@ export const SIMULATOR_LOGIN_EVENT = '模拟注册登录'
 export const TRADE_EVENT = '交易下单'
 export const ADD_TO_MY_LIST_EVENT = '添加自选'
 export const REMOVE_FROM_MY_LIST_EVENT = '删除自选'
+export const SOLD_EVENT = '平仓'
+export const SET_STOP_PROFIT_LOSS_EVENT = '止盈止损设置'
+export const SEARCH_EVENT = '搜索'
 
 
 export function trackPageBegin(page_name) {

@@ -23,6 +23,7 @@ var LogicData = require('../LogicData')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
+var TalkingdataModule = require('../module/TalkingdataModule')
 var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
 var StockTransactionConfirmPage = require('./StockTransactionConfirmPage')
@@ -360,6 +361,20 @@ var StockOpenPositionPage = React.createClass({
 					selectedSubItem: 0,
 				})
 				isWaiting = false
+
+				var eventParam = {
+					'securityId': responseJson.id.toString(),
+					'securityName': rowData.security.name,
+					'isLong': rowData.isLong,
+					'invest': rowData.invest,
+					'leverage': responseJson.leverage,
+					'openPrice': rowData.settlePrice,
+					'openTime': rowData.createAt,
+					'closePrice': responseJson.settlePrice,
+					'closeTime': responseJson.createAt,
+					'profit': responseJson.pl,
+				}
+				TalkingdataModule.trackEvent(TalkingdataModule.SOLD_EVENT, '', eventParam)
 			},
 			(errorMessage) => {
 				Alert.alert('', errorMessage);
@@ -411,6 +426,14 @@ var StockOpenPositionPage = React.createClass({
 	switchConfrim: function(rowData) {
 		var userData = LogicData.getUserData()
 		var url = NetConstants.STOP_PROFIT_LOSS_API
+
+		var eventParam = {
+			'stopProfitSwitchOn': this.state.stopProfitSwitchIsOn,
+			'stopLossSwitchOff': this.state.stopLossSwitchIsOn,
+			'stopProfit': stopProfitUpdated && this.state.stopProfitSwitchIsOn ? stopProfitPercent : '-',
+			'stopLoss': stopLossUpdated && this.state.stopLossSwitchIsOn ? stopLossPercent : '-',
+		}
+		TalkingdataModule.trackEvent(TalkingdataModule.SET_STOP_PROFIT_LOSS_EVENT, '', eventParam)
 
 		// STOP LOSS
 		if (stopLossUpdated) {

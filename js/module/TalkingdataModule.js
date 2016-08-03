@@ -28,7 +28,9 @@ export const ADD_TO_MY_LIST_EVENT = '添加自选'
 export const REMOVE_FROM_MY_LIST_EVENT = '删除自选'
 export const SOLD_EVENT = '平仓'
 export const SET_STOP_PROFIT_LOSS_EVENT = '止盈止损设置'
-export const SEARCH_EVENT = '搜索'
+export const SEARCH_AND_ADD_TO_MY_LIST_EVENT = '搜索添加自选'
+export const SEARCH_AND_LOOK_EVENT = '搜索进入'
+export const SEARCH_WITH_NO_RESULT_EVENT = '搜索无结果'
 
 
 export function trackPageBegin(page_name) {

@@ -22,6 +22,7 @@ var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
 var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
+var TalkingdataModule = require('../module/TalkingdataModule')
 var TimerMixin = require('react-timer-mixin');
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -110,6 +111,10 @@ var StockSearchPage = React.createClass({
 						this.setState({
 							searchFailedText: '搜索无结果',
 						})
+						var eventParam = {
+							'searchText': text,
+						}
+						TalkingdataModule.trackEvent(TalkingdataModule.SEARCH_WITH_NO_RESULT_EVENT, '', eventParam)
 					} else {
 						this.setState({
 							searchStockRawInfo: responseJson,
@@ -138,6 +143,11 @@ var StockSearchPage = React.createClass({
 		this.setState({
 			searchStockInfo: ds.cloneWithRows(this.state.searchStockRawInfo)
 		})
+
+		var eventParam = {
+			'securityId': stockData.id,
+		}
+		TalkingdataModule.trackEvent(TalkingdataModule.SEARCH_AND_ADD_TO_MY_LIST_EVENT, '', eventParam)
 	},
 
 	addToMyListPressedFromHistory: function(rowID) {
@@ -189,6 +199,11 @@ var StockSearchPage = React.createClass({
 			name: MainPage.STOCK_DETAIL_ROUTE,
 			stockRowData: rowData
 		});
+
+		var eventParam = {
+			'securityId': rowData.id,
+		}
+		TalkingdataModule.trackEvent(TalkingdataModule.SEARCH_AND_LOOK_EVENT, '', eventParam)
   	},
 
 	renderRowHistory: function(rowData, sectionID, rowID, highlightRow) {

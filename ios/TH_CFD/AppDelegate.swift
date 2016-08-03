@@ -99,30 +99,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func applicationWillTerminate(application: UIApplication) {
 		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 	}
-	
-	func loadBundle() -> NSURL {
-		// find local code bundle
-		let documentPath = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true).first!
-		let bundleFilePath = documentPath+"/main.jsbundle"
-		
-		let fileManager = NSFileManager.defaultManager()
-		let isExist = fileManager.fileExistsAtPath(bundleFilePath)
-		var jsCodeLocation:NSURL?
-		if (isExist) {
-			// code file in document folder exist, use it
-			jsCodeLocation = NSURL(fileURLWithPath: bundleFilePath)
-		}
-		else {
-			//code file not exist in document folder, copy it from bundle
-			do{
-				jsCodeLocation = NSBundle.mainBundle().URLForResource("main", withExtension: "jsbundle")
-				try fileManager.copyItemAtPath(jsCodeLocation!.path!, toPath: bundleFilePath)
-			}catch{
-				print(error)
-			}
-		}
-		
-		return jsCodeLocation!
-	}
+
+//	// Only if your app is using [Universal Links](https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/AppSearch/UniversalLinks.html).
+//	func application(application: UIApplication, continueUserActivity userActivity: NSUserActivity, restorationHandler: ([AnyObject]?) -> Void) -> Bool {
+//		return RCTLinkingManager.application(application, continueUserActivity: userActivity, restorationHandler: restorationHandler)
+//	}
 }
 

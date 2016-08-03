@@ -65,16 +65,22 @@ var StockExchangePage = React.createClass({
 	onTabChanged: function(){
 		var userData = LogicData.getUserData()
 		var loggined = Object.keys(userData).length !== 0
-		// if (loggined && this.refs['page' + this.state.currentSelectedTab]) {
-		// 	this.refs['page' + this.state.currentSelectedTab].tabPressed()
-		// }
-		// this.forceUpdate()
+
 		if (loggined && this.refs['page0']){
-			this.refs['tabPages'].tabClicked(0)
+			var currentTab = MainPage.initExchangeTab
+			this.refs['tabPages'].tabClicked(currentTab)
 			this.setState({
-				currentSelectedTab: 0
+				currentSelectedTab: currentTab
 			})
-			this.refs['page0'].tabPressed()
+			if(currentTab === 2) {
+				this.refs['page2'].tabPressed()
+			}
+			else if(currentTab === 1) {
+				this.refs['page1'].tabPressed()
+			}
+			else {
+				this.refs['page0'].tabPressed()
+			}
 		}
 	},
 

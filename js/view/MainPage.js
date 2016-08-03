@@ -8,6 +8,7 @@ import {
     Text,
     StatusBar,
     Navigator,
+    Linking,
 } from 'react-native';
 
 import Tabbar, { Tab, RawContent, Icon, IconWithBar, glypyMapMaker } from 'react-native-tabbar';
@@ -93,6 +94,9 @@ const glypy = glypyMapMaker({
 
 const systemBlue = '#1a61dd'
 const iconGrey = '#888f9c'
+
+export var initExchangeTab = 0
+export var initStockListTab = 1
 
 var hideTabbar
 var showTabbar
@@ -319,6 +323,54 @@ var MainPage = React.createClass({
 
 	componentDidMount: function() {
 		this.initTabbarEvent()
+
+		var url = Linking.getInitialURL().then((url) => {
+			if (url) {
+				console.log('Initial url is: ' + url);
+				this._handleDeepLink(url)
+			}
+		}).catch(err => console.error('An deep link error occurred', err));
+
+		Linking.addEventListener('url', this._handleOpenURL);
+	},
+
+	componentWillUnmount: function() {
+		Linking.removeEventListener('url', this._handleOpenURL);
+	},
+
+	_handleOpenURL: function(event) {
+		console.log("url:", event.url);
+		this._handleDeepLink(event.url)
+	},
+
+	_handleDeepLink: function(url) {
+		_navigator.popToTop()
+		if(url==='cfd://page/1') {//首页
+			this.refs['myTabbar'].gotoTab("home")
+		}
+		else if(url==='cfd://page/2') {//行情首页
+			this.refs['myTabbar'].gotoTab("trend")
+		}
+		else if(url==='cfd://page/3') {//行情自选
+			initStockListTab = 0
+			this.refs['myTabbar'].gotoTab("trend")
+		}
+		else if(url==='cfd://page/4') {
+			this.refs['myTabbar'].gotoTab("trade")
+			EventCenter.emitExchangeTabPressEvent()
+		}
+		else if(url==='cfd://page/5') {
+			initExchangeTab = 1
+			this.refs['myTabbar'].gotoTab("trade")
+			EventCenter.emitExchangeTabPressEvent()
+		}
+		else if(url==='cfd://page/6') {
+			initExchangeTab = 2
+			this.refs['myTabbar'].gotoTab("trade")
+			EventCenter.emitExchangeTabPressEvent()
+		}
+		initExchangeTab = 0
+		initStockListTab = 1
 	},
 
 	render: function() {
@@ -341,7 +393,7 @@ var MainPage = React.createClass({
 								renderScene={this.RouteMapper} />
 			          	</RawContent>
 			        </Tab>
-			        <Tab name="camera">
+			        <Tab name="trend">
 			          	<Icon label="行情" type={glypy.Camera} from={'myhero'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
 			          	<RawContent style={{width: 100}} ref="stockContent">
 		            		<Navigator
@@ -351,7 +403,7 @@ var MainPage = React.createClass({
 								renderScene={this.RouteMapper} />
 			          	</RawContent>
 			        </Tab>
-			        <Tab name="stats">
+			        <Tab name="trade">
 			          	<Icon label="交易" type={glypy.Stat} from={'myhero'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
 			        	<RawContent ref="exchangeContent">
 			            	<Navigator
@@ -361,7 +413,7 @@ var MainPage = React.createClass({
 								renderScene={this.RouteMapper} />
 			          	</RawContent>
 			        </Tab>
-			        <Tab name="settings">
+			        <Tab name="qa">
 			          	<Icon label="问答" type={glypy.Settings} from={'myhero'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
 			          	<RawContent ref="qaContent">
 							<Navigator

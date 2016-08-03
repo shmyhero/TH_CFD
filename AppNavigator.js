@@ -71,8 +71,10 @@ var GUIDE_SLIDES = [
 	require('./images/Guide-page01.png'),
 	require('./images/Guide-page02.png'),
 	require('./images/Guide-page03.png'),
+	require('./images/Guide-page04.png'),
+	require('./images/Guide-page05.png'),
 ];
-var GUIDE_VERSION = {version: 1}
+var GUIDE_VERSION = {version: 2}
 
 var LOADING_PHASE = 'loading'
 var GUIDE_PHASE = 'guide'
@@ -229,7 +231,7 @@ var AppNavigator = React.createClass({
 			for (var i = 0; i < GUIDE_SLIDES.length; i++) {
 				slides.push(
 					<View style={[styles.guideContainer, {height: height}]} key={i}>
-						<View style={{flex: 5, justifyContent: 'flex-end'}}>
+						<View style={{flex: 6, justifyContent: 'flex-end'}}>
 							<Image
 								style={styles.guideImage}
 								source={GUIDE_SLIDES[i]}/>
@@ -291,8 +293,8 @@ var styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	guideImage: {
-		height: 375,
-		width: 413,
+		height: 445,
+		width: 375,
 		resizeMode: Image.resizeMode.contain,
 	},
 	guideActiveDot: {

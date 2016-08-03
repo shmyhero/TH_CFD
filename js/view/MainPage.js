@@ -34,6 +34,7 @@ var QAPage = require('./QAPage')
 var LiveRegisterPage = require('./openAccount/OALiveRegisterPage')
 var LiveUpdateUserInfoPage = require('./openAccount/OALiveUpdateUserInfoPage')
 var LiveRegisterStatusPage = require('./openAccount/OAStatusPage')
+var TalkingdataModule = require('../module/TalkingdataModule')
 
 var TutorialPage = require('./TutorialPage');
 var OpenAccountPages = [
@@ -238,9 +239,13 @@ var MainPage = React.createClass({
 					<NavBar title={OpenAccountTitles[step]}
 						titleStyle={{marginLeft:-20, marginRight:-20}}
 						showBackButton={showBackButton}
+						backButtonOnClick={()=>TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_BACK, TalkingdataModule.LABEL_OPEN_ACCOUNT)}
 						backgroundColor={ColorConstants.TITLE_DARK_BLUE}
 						textOnRight={showBackButton?'取消':''}
-						rightTextOnClick={()=>_navigator.popToTop()}
+						rightTextOnClick={()=>{
+							_navigator.popToTop()
+							TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_QUIT, TalkingdataModule.LABEL_OPEN_ACCOUNT)
+						}}
 						navigator={navigationOperations}/>
 					<Page navigator={navigationOperations} />
 				</View>

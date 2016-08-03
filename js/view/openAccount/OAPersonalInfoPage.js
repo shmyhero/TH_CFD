@@ -14,6 +14,7 @@ var Button = require('../component/Button')
 var MainPage = require('../MainPage')
 var LogicData = require('../../LogicData')
 var ColorConstants = require('../../ColorConstants')
+var TalkingdataModule = require('../../module/TalkingdataModule')
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
@@ -49,6 +50,7 @@ var OAPersonalInfoPage = React.createClass({
 	},
 
 	gotoNext: function() {
+		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP3, TalkingdataModule.LABEL_OPEN_ACCOUNT)
 		//TODO, check
 		this.props.navigator.push({
 			name: MainPage.OPEN_ACCOUNT_ROUTE,

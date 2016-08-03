@@ -19,6 +19,7 @@ var MainPage = require('../MainPage')
 var ColorConstants = require('../../ColorConstants')
 var NetConstants = require('../../NetConstants');
 var NetworkModule = require('../../module/NetworkModule')
+var TalkingdataModule = require('../../module/TalkingdataModule')
 var {height, width} = Dimensions.get('window')
 
 const ID_CARD_FRONT = 1
@@ -60,10 +61,13 @@ var OAIdPhotoPage = React.createClass({
 	},
 
 	pressAddImage: function(idCardIndex) {
+		var eventParam = (idCardIndex==ID_CARD_FRONT) ? {"类型":"正面"} : {"类型":"反面"}
+		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_UPLOAD_ID_IMAGE, TalkingdataModule.LABEL_OPEN_ACCOUNT, eventParam)
 		ImagePicker.showImagePicker(options, (response) => {
 			console.log('Response = ', response);
 
 			if (response.didCancel) {
+				TalkingdataModule.trackEvent(TalkingdataModule.LIVE_UPLOAD_ID_IMAGE_CANCEL, TalkingdataModule.LABEL_OPEN_ACCOUNT, eventParam)
 				console.log('User cancelled image picker');
 			}
 			else if (response.error) {
@@ -108,6 +112,7 @@ var OAIdPhotoPage = React.createClass({
 					if (responseJson.result == 0) {
 						LogicData.setCertificateIdCardInfo(responseJson)
 
+						TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP2, TalkingdataModule.LABEL_OPEN_ACCOUNT)
 						this.props.navigator.push({
 							name: MainPage.OPEN_ACCOUNT_ROUTE,
 							step: 2,
@@ -121,6 +126,7 @@ var OAIdPhotoPage = React.createClass({
 				}
 			)
 		} else {
+			TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP2, TalkingdataModule.LABEL_OPEN_ACCOUNT)
 			this.props.navigator.push({
 				name: MainPage.OPEN_ACCOUNT_ROUTE,
 				step: 2,

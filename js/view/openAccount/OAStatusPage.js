@@ -14,6 +14,7 @@ var ViewPager = require('react-native-viewpager-es6');
 var Button = require('../component/Button')
 var MainPage = require('../MainPage')
 var ColorConstants = require('../../ColorConstants')
+var TalkingdataModule = require('../../module/TalkingdataModule')
 
 var {height, width} = Dimensions.get('window')
 var PAGES = [
@@ -39,6 +40,7 @@ var OAStatusPage = React.createClass({
 	},
 
 	gotoNext: function() {
+		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_START, TalkingdataModule.LABEL_OPEN_ACCOUNT)
 		this.props.navigator.push({
 			name: MainPage.OPEN_ACCOUNT_ROUTE,
 			step: 0,

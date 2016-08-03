@@ -15,6 +15,7 @@ var Button = require('../component/Button')
 var CheckBoxButton = require('../component/CheckBoxButton')
 var MainPage = require('../MainPage')
 var ColorConstants = require('../../ColorConstants')
+var TalkingdataModule = require('../../module/TalkingdataModule')
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
@@ -36,6 +37,7 @@ var OADocumentInfoPage = React.createClass({
 	},
 
 	gotoNext: function() {
+		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP5, TalkingdataModule.LABEL_OPEN_ACCOUNT)
 		if (this.state.enabled) {
 			this.props.navigator.push({
 				name: MainPage.OPEN_ACCOUNT_ROUTE,

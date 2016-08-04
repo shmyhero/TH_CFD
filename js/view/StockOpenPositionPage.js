@@ -920,7 +920,7 @@ var StockOpenPositionPage = React.createClass({
 			var profitPercentage = (lastPrice - rowData.settlePrice) / rowData.settlePrice * rowData.leverage
 			profitPercentage *= (rowData.isLong ? 1 : -1)
 			profitAmount = profitPercentage * rowData.invest
-			if (rowData.fxData.ask) {
+			if (rowData.fxData && rowData.fxData.ask) {
 				profitAmount = this.calculateProfitWithOutright(profitAmount, rowData)
 			}
 			else {
@@ -1033,7 +1033,7 @@ var StockOpenPositionPage = React.createClass({
 			profitPercentage = (this.getLastPrice(rowData) - rowData.settlePrice) / rowData.settlePrice * rowData.leverage
 			profitPercentage *= (rowData.isLong ? 1 : -1)
 			profitAmount = profitPercentage * rowData.invest
-			if (rowData.fxData.ask) {
+			if (rowData.fxData && rowData.fxData.ask) {
 				profitAmount = this.calculateProfitWithOutright(profitAmount, rowData)
 			}
 			else {

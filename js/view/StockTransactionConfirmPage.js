@@ -17,8 +17,8 @@ var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
 
 var {height, width} = Dimensions.get('window');
-var itemTitleFontSize = 16//Math.round(16*width/375)
-var itemValueFontSize = 14//Math.round(14*width/375)
+var itemTitleFontSize = Math.round(16*width/375)
+var itemValueFontSize = Math.round(14*width/375)
 
 var StockTransactionConfirmPage = React.createClass({
 	mixins: [Touchable.Mixin],
@@ -269,11 +269,12 @@ var styles = StyleSheet.create({
 		fontSize: itemValueFontSize,
 		textAlign: 'center',
 		color: '#000000',
+		paddingTop: 4,
 	},
 
 	longImage: {
-		width: itemValueFontSize*1.5,
-		height: itemValueFontSize*1.5,
+		width: itemValueFontSize+5,
+		height: itemValueFontSize+5,
 	},
 
 	line: {

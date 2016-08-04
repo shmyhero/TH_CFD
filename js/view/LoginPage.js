@@ -53,7 +53,7 @@ var LoginPage = React.createClass({
 
 	getInitialState: function() {
 		return {
-			tabSelected: TAB_LIVE,
+			tabSelected: TAB_SIMULATOR,
 			wechatInstalled: false,
 			phoneNumber: '',
 			validationCode: '',
@@ -518,7 +518,7 @@ var LoginPage = React.createClass({
 
 		return (
 			<LinearGradient colors={gradientColors} style={[styles.wrapper, {height: height}]}>
-				{this.renderTab()}
+				{/* {this.renderTab()} */}
 				{this.renderLoginContent()}
 			</LinearGradient>
 		)

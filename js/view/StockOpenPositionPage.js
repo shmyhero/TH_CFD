@@ -16,6 +16,7 @@ import {
   	Switch,
   	Slider,
   	TextInput,
+  	ScrollView,
 } from 'react-native';
 var LayoutAnimation = require('LayoutAnimation')
 
@@ -31,6 +32,12 @@ var TimerMixin = require('react-timer-mixin');
 var StorageModule = require('../module/StorageModule')
 
 var {height, width} = Dimensions.get('window');
+var tabData = [
+			{"type":NetConstants.PARAMETER_CHARTTYPE_TODAY, "name":'分时'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_TEN_MINUTE, "name":'10分钟'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_TWO_HOUR, "name":'2小时'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_WEEK, "name":'5日'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_MONTH, "name":'1月'}]
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {
 		return r1.id !== r2.id || r1.profitPercentage!==r2.profitPercentage || r1.hasSelected!==r2.hasSelected
 	}});
@@ -170,6 +177,8 @@ var StockOpenPositionPage = React.createClass({
 
 	handleStockInfo: function(realtimeStockInfo) {
 		var hasUpdate = false
+		var hasUpdateDetail = false
+		var sdi = this.state.stockDetailInfo
 		for (var i = 0; i < this.state.stockInfoRowData.length; i++) {
 			for (var j = 0; j < realtimeStockInfo.length; j++) {
 				if (this.state.stockInfoRowData[i].security.id == realtimeStockInfo[j].id &&
@@ -190,6 +199,16 @@ var StockOpenPositionPage = React.createClass({
 						hasUpdate = true;
 					}
 				}
+				if (this.state.chartType === NetConstants.PARAMETER_CHARTTYPE_TEN_MINUTE
+						&& this.state.stockDetailInfo != undefined
+						&& this.state.stockDetailInfo.priceData != undefined
+						&& this.state.stockDetailInfo.id == realtimeStockInfo[j].id
+						&& !hasUpdateDetail
+						) {
+					var price = realtimeStockInfo[j].last
+					sdi.priceData.push({"p":price,"time":realtimeStockInfo[j].time})
+					hasUpdateDetail = true
+				}
 			};
 		};
 
@@ -197,6 +216,10 @@ var StockOpenPositionPage = React.createClass({
 			this.setState({
 				stockInfo: ds.cloneWithRows(this.state.stockInfoRowData)
 			})
+		}
+
+		if (hasUpdateDetail) {
+			this.setState({stockDetailInfo: sdi})
 		}
 	},
 
@@ -611,25 +634,20 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	renderChartHeader: function(rowData) {
+		var tabs = tabData.map(
+			(data, i) =>
+			<TouchableOpacity style={{width:width/tabData.length}} key={i}
+					onPress={() => this.pressChartHeaderTab(data.type, rowData)}>
+				<Text style={this.state.chartType == data.type? styles.chartTitleTextHighlighted : styles.chartTitleText}>
+					{data.name}
+				</Text>
+			</TouchableOpacity>
+		)
 		return(
-			<View style={{flexDirection: 'row', marginTop: 6, marginBottom: 5}} >
-				<TouchableOpacity style={{flex:1}} onPress={()=>this.pressChartHeaderTab(NetConstants.PARAMETER_CHARTTYPE_TODAY, rowData)}>
-					<Text style={this.state.chartType===NetConstants.PARAMETER_CHARTTYPE_TODAY ? styles.chartTitleTextHighlighted : styles.chartTitleText} >
-						分时
-					</Text>
-				</TouchableOpacity>
-				<TouchableOpacity style={{flex:1}} onPress={()=>this.pressChartHeaderTab(NetConstants.PARAMETER_CHARTTYPE_WEEK, rowData)}>
-					<Text style={this.state.chartType===NetConstants.PARAMETER_CHARTTYPE_WEEK ? styles.chartTitleTextHighlighted : styles.chartTitleText} >
-						5日
-					</Text>
-				</TouchableOpacity>
-				<TouchableOpacity style={{flex:1}} onPress={()=>this.pressChartHeaderTab(NetConstants.PARAMETER_CHARTTYPE_MONTH, rowData)}>
-					<Text style={this.state.chartType===NetConstants.PARAMETER_CHARTTYPE_MONTH ? styles.chartTitleTextHighlighted : styles.chartTitleText} >
-						1月
-					</Text>
-				</TouchableOpacity>
-			</View>
-		);
+			<ScrollView horizontal={true} style={{flex: 0, paddingBottom: 5, marginTop: 6}}>
+				{tabs}
+			</ScrollView>
+			);
 	},
 
 	renderStockMaxPriceInfo: function(maxPrice, maxPercentage, isTop) {

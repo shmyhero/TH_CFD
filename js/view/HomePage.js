@@ -22,7 +22,7 @@ var FSModule = require('../module/FSModule');
 var LogicData = require('../LogicData');
 var WebSocketModule = require('../module/WebSocketModule');
 
-var RECOMMAND_URL = 'http://cn.tradehero.mobi/TH_CFD_WEB/detailslider.html?pageid='
+var RECOMMAND_URL = 'http://cn.tradehero.mobi/TH_CFD_WEB/detailslider.php?id='
 var PAGES = [
 	{name: 'Page0', url: RECOMMAND_URL + "1"},
 	{name: 'Page1', url: RECOMMAND_URL + "1"},

@@ -293,8 +293,8 @@ var styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	guideImage: {
-		height: 445,
-		width: 375,
+		height: 445 * SCREEN_WIDTH / 375,
+		width: SCREEN_WIDTH,
 		resizeMode: Image.resizeMode.contain,
 	},
 	guideActiveDot: {

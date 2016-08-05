@@ -371,7 +371,7 @@ var LoginPage = React.createClass({
 					<View>
 						<Image style={styles.ayondoLogoImage} source={require('../../images/ayondo_logo.png')}/>
 						<Text style={{alignSelf: 'center', fontSize: 35, color: 'white'}}>ayondo</Text>
-						<Text style={{alignSelf: 'center', fontSize: 11, color: '#2a3f43', marginTop: 20}}>您正在登录券商ayondo</Text>
+						<Text style={{alignSelf: 'center', fontSize: 11, color: '#2a3f43', marginTop: 30}}>您正在登录券商ayondo</Text>
 
 						<View style={styles.phoneLoginContainer}>
 							<View style={styles.liveRowWrapper}>
@@ -452,8 +452,9 @@ var LoginPage = React.createClass({
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
 				<View style={{flex: 1, justifyContent: 'space-between'}}>
 					<View>
-						<Image style={styles.logoImage} source={require('../../images/login_logo.png')}/>
-						<Text style={{alignSelf: 'center', fontSize: 20, color: 'white'}}>体验十万模拟资金</Text>
+						<Image style={styles.ayondoLogoImage} source={require('../../images/ayondo_logo.png')}/>
+						<Text style={{alignSelf: 'center', fontSize: 35, color: 'white'}}>ayondo</Text>
+						<Text style={{alignSelf: 'center', fontSize: 11, color: '#2a3f43', marginTop: 30}}>您正在登录券商ayondo</Text>
 
 						<View style={styles.phoneLoginContainer}>
 							<View style={styles.rowWrapper}>
@@ -519,6 +520,11 @@ var LoginPage = React.createClass({
 		return (
 			<LinearGradient colors={gradientColors} style={[styles.wrapper, {height: height}]}>
 				{/* {this.renderTab()} */}
+				<View style={styles.tabContainer}>
+					<Text style={{fontSize: 18, textAlign: 'center', color: '#ffffff',}}>
+						我的交易
+					</Text>
+				</View>
 				{this.renderLoginContent()}
 			</LinearGradient>
 		)
@@ -565,7 +571,7 @@ var styles = StyleSheet.create({
 		height: 190,
 	},
 	ayondoLogoImage: {
-		marginTop: 50,
+		marginTop: 20,
 		alignSelf: 'center',
 		width: 89,
 		height: 48,
@@ -575,7 +581,7 @@ var styles = StyleSheet.create({
 		alignItems:'stretch',
 	},
 	phoneLoginContainer: {
-		paddingTop: 20,
+		paddingTop: 10,
 		alignItems: 'stretch',
 	},
 	fastLoginContainer: {

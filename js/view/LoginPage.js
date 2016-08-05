@@ -275,9 +275,6 @@ var LoginPage = React.createClass({
 							<Image
 								style={styles.wechatIcon}
 								source={require('../../images/wechat_icon.png')}/>
-							<Text style={styles.wechatTitle}>
-								微信
-							</Text>
 						</View>
 					</TouchableOpacity>
 				</View>

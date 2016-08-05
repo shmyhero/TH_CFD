@@ -24,8 +24,8 @@ var WebSocketModule = require('../module/WebSocketModule');
 
 var RECOMMAND_URL = 'http://cn.tradehero.mobi/TH_CFD_WEB/detailslider.html?pageid='
 var PAGES = [
-	{name: 'Page0'},
-	{name: 'Page1'},
+	{name: 'Page0', url: RECOMMAND_URL + "1"},
+	{name: 'Page1', url: RECOMMAND_URL + "1"},
 ];
 var BANNERS = [
 	require('../../images/bannar01.png'),
@@ -81,6 +81,10 @@ var HomePage = React.createClass({
 			return
 		}
 		var imagePath = images[index].imgUrl
+		var targetUrl = images[index].url
+		if (targetUrl == '') {
+			targetUrl = RECOMMAND_URL + images[index].id
+		}
 
 		FSModule.getBannerImageLocalPath(imagePath)
 			.then(filePath => {
@@ -89,6 +93,7 @@ var HomePage = React.createClass({
 						PAGES.push({name: 'PAGE' + PAGES.length})
 					}
 					PAGES[index].imgUrl = filePath
+					PAGES[index].url = targetUrl
 					this.setState({
 						dataSource: ds.cloneWithPages(PAGES)
 					})
@@ -100,6 +105,7 @@ var HomePage = React.createClass({
 								PAGES.push({name: 'PAGE' + PAGES.length})
 							}
 							PAGES[index].imgUrl = filePath
+							PAGES[index].url = targetUrl
 							this.setState({
 								dataSource: ds.cloneWithPages(PAGES)
 							})
@@ -116,8 +122,8 @@ var HomePage = React.createClass({
 		if (data.imgUrl !== undefined && data.imgUrl !== null) {
 			return (
 				<TouchableOpacity
-					activeOpacity = {0.7}
-					onPress={() => this.gotoRecommandPage(pageID)}>
+					activeOpacity = {1.0}
+					onPress={() => this.gotoRecommandPage(pageID, data.url)}>
 					<Image
 						style={[styles.image, {height: imageHeight, width: width}]}
 						source={{uri: 'file://' + data.imgUrl}}/>
@@ -126,7 +132,7 @@ var HomePage = React.createClass({
 		} else {
 			return (
 				<TouchableOpacity
-					onPress={() => this.gotoRecommandPage(pageID)}>
+					onPress={() => this.gotoRecommandPage(pageID, data.url)}>
 					<Image
 						style={[styles.image, {height: imageHeight, width: width}]}
 						source={BANNERS[pageID % 2]}/>
@@ -135,11 +141,11 @@ var HomePage = React.createClass({
 		}
 	},
 
-	gotoRecommandPage: function(pageID) {
+	gotoRecommandPage: function(pageID, url) {
 		pageID = parseInt(pageID) + 1
 		this.props.navigator.push({
 			name: MainPage.HOMEPAGE_RECOMMAND_ROUTE,
-			url: RECOMMAND_URL + pageID,
+			url: url,
 		});
 	},
 

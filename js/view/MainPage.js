@@ -9,6 +9,7 @@ import {
     StatusBar,
     Navigator,
     Linking,
+	Platform,
 } from 'react-native';
 
 import Tabbar, { Tab, RawContent, Icon, IconWithBar, glypyMapMaker } from 'react-native-tabbar';
@@ -331,11 +332,16 @@ var MainPage = React.createClass({
 			}
 		}).catch(err => console.error('An deep link error occurred', err));
 
-		Linking.addEventListener('url', this._handleOpenURL);
+		if (Platform.OS === 'ios') {
+			Linking.addEventListener('url', this._handleOpenURL);
+		}
+
 	},
 
 	componentWillUnmount: function() {
-		Linking.removeEventListener('url', this._handleOpenURL);
+		if (Platform.OS === 'ios') {
+			Linking.removeEventListener('url', this._handleOpenURL);
+		}
 	},
 
 	_handleOpenURL: function(event) {

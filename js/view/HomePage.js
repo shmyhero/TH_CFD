@@ -9,6 +9,7 @@ import {
 	TouchableOpacity,
 	Dimensions,
 	Platform,
+	ListView,
 } from 'react-native';
 
 var ViewPager = require('react-native-viewpager-es6');
@@ -38,6 +39,8 @@ var ds = new ViewPager.DataSource({
 	pageHasChanged: (p1, p2) => p1 !== p2,
 });
 
+var bsds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
 var magicCode = ""
 var NO_MAGIC = false
 
@@ -45,6 +48,7 @@ var HomePage = React.createClass({
 	getInitialState: function() {
 		return {
 			dataSource: ds.cloneWithPages(PAGES),
+			buysellInfo: bsds.cloneWithRows(['albb', 'google', 'baidu']),
 		};
 	},
 
@@ -181,26 +185,46 @@ var HomePage = React.createClass({
 		})
 	},
 
-	render: function() {
+	renderBuySellRow: function(rowData, sectionID, rowID, highlightRow) {
 		return (
-			<View style={{width: width, height: height - UIConstants.TAB_BAR_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER}}>
+			<View >
+				<Text>{rowData}</Text>
+			</View>)
+	},
 
-				<View style={{width: width, height: imageHeight}}>
-					<Image
-						style={[styles.backgroundImage, {height: imageHeight, width: width}]}
-						source={BANNERS[0]} >
+	renderSeparator:function(sectionID, rowID, adjacentRowHighlighted) {
+		return(<View key={rowID} style={styles.horiLine}/>)
+	},
 
-						<ViewPager
-							style={{backgroundColor:'transparent'}}
-							dataSource={this.state.dataSource}
-							renderPage={this._renderPage}
-							renderPageIndicator={false}
-							isLoop={this.state.dataSource.getPageCount() > 1}
-							autoPlay={this.state.dataSource.getPageCount() > 1}/>
+	renderBuySellCompare: function() {
+		return (
+		<View style={{flex:1}}>
+			<View style={styles.rowContainer}>
+				<Text>
+					多空博弈
+				</Text>
+				<TouchableOpacity>
+					<Text>
+						更多 >
+					</Text>
+				</TouchableOpacity>
+			</View>
+			<View style={styles.horiLine}/>
+			<ListView
+				style={styles.buyselllist}
+				ref="buyselllist"
+				initialListSize={3}
+				dataSource={this.state.buysellInfo}
+				enableEmptySections={true}
+				renderRow={this.renderBuySellRow}
+				renderSeparator={this.renderSeparator}/>
+		</View>
+		)
+	},
 
-					</Image>
-				</View>
-
+	renderBottomViews: function() {
+		return (
+			<View style={{flex:1}}>
 				<View style={styles.rowContainer}>
 					<TouchableOpacity style={styles.blockContainer} activeOpacity={0.95} onPress={()=>this.magicButtonPress(1)}>
 					<View style={styles.blockContainer}>
@@ -253,6 +277,33 @@ var HomePage = React.createClass({
 					</TouchableOpacity>
 				</View>
 			</View>
+		)
+	},
+
+	render: function() {
+		return (
+			<View style={{width: width, height: height - UIConstants.TAB_BAR_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER}}>
+
+				<View style={{width: width, height: imageHeight}}>
+					<Image
+						style={[styles.backgroundImage, {height: imageHeight, width: width}]}
+						source={BANNERS[0]} >
+
+						<ViewPager
+							style={{backgroundColor:'transparent'}}
+							dataSource={this.state.dataSource}
+							renderPage={this._renderPage}
+							renderPageIndicator={false}
+							isLoop={this.state.dataSource.getPageCount() > 1}
+							autoPlay={this.state.dataSource.getPageCount() > 1}/>
+
+					</Image>
+				</View>
+
+				{//this.renderBuySellCompare()
+				}
+				{this.renderBottomViews()}
+			</View>
 
 		);
 	},
@@ -300,7 +351,11 @@ var styles = StyleSheet.create({
 	},
 	backgroundImage: {
 		flex: 1,
-	}
+	},
+
+	buyselllist: {
+		flex: 4,
+	},
 });
 
 module.exports = HomePage;

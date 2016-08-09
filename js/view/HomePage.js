@@ -33,6 +33,7 @@ var BANNERS = [
 	require('../../images/bannar02.png'),
 ];
 var {height, width} = Dimensions.get('window');
+var barWidth = Math.round(width/3)-12
 var imageHeight = 478 / 750 * width
 
 var ds = new ViewPager.DataSource({
@@ -48,7 +49,7 @@ var HomePage = React.createClass({
 	getInitialState: function() {
 		return {
 			dataSource: ds.cloneWithPages(PAGES),
-			buysellInfo: bsds.cloneWithRows(['albb', 'google', 'baidu']),
+			buysellInfo: bsds.cloneWithRows(['albb', 'USD/CAD', 'google']),
 		};
 	},
 
@@ -186,30 +187,49 @@ var HomePage = React.createClass({
 	},
 
 	renderBuySellRow: function(rowData, sectionID, rowID, highlightRow) {
+		var percent = 0.4
+		var buyWidth = barWidth * percent
+		var sellWidth = barWidth * (1-percent)
 		return (
-			<View >
-				<Text>{rowData}</Text>
+			<View style={styles.buysellRowContainer}>
+				<View style={styles.buysellRowLeft}>
+					<Text style={styles.buyTitle}>买涨 {percent*100}%</Text>
+					<View style={[styles.grayBar, {width:barWidth}]}>
+						<View style={[styles.redBar, {width:buyWidth}]}/>
+					</View>
+				</View>
+				<View style={styles.buysellRowCenter}>
+					<Text style={styles.stockName}>{rowData}</Text>
+					<Text style={styles.stockCode}>{rowData}</Text>
+					<Text style={styles.stockPeople}>90人参与</Text>
+				</View>
+				<View style={styles.buysellRowRight}>
+					<Text style={styles.sellTitle}>买跌 {100-percent*100}%</Text>
+					<View style={[styles.grayBar, {width:barWidth}]}>
+						<View style={[styles.greenBar, {width:sellWidth}]}/>
+					</View>
+				</View>
 			</View>)
 	},
 
 	renderSeparator:function(sectionID, rowID, adjacentRowHighlighted) {
-		return(<View key={rowID} style={styles.horiLine}/>)
+		return(<View key={rowID} style={styles.separator}/>)
 	},
 
 	renderBuySellCompare: function() {
 		return (
-		<View style={{flex:1}}>
-			<View style={styles.rowContainer}>
-				<Text>
+		<View style={{height:241, backgroundColor:'white'}}>
+			<View style={styles.buysellHeaderContainer}>
+				<Text style={styles.buySellTitle}>
 					多空博弈
 				</Text>
 				<TouchableOpacity>
-					<Text>
+					<Text style={styles.more}>
 						更多 >
 					</Text>
 				</TouchableOpacity>
 			</View>
-			<View style={styles.horiLine}/>
+			<View style={styles.separator}/>
 			<ListView
 				style={styles.buyselllist}
 				ref="buyselllist"
@@ -300,7 +320,7 @@ var HomePage = React.createClass({
 					</Image>
 				</View>
 
-				{//this.renderBuySellCompare()
+				{this.renderBuySellCompare()
 				}
 				{this.renderBottomViews()}
 			</View>
@@ -353,9 +373,90 @@ var styles = StyleSheet.create({
 		flex: 1,
 	},
 
-	buyselllist: {
-		flex: 4,
+	buysellHeaderContainer:{
+		height:40,
+		flexDirection: 'row',
+		alignItems: 'center',
 	},
+	buysellRowContainer:{
+		height:66,
+		flexDirection: 'row',
+		alignItems: 'center',
+	},
+	buySellTitle: {
+		flex: 1,
+		fontSize: 17,
+		marginLeft: 12,
+		color: "#3f3f3f",
+		alignItems: 'flex-start',
+	},
+	more: {
+		flex: 1,
+		fontSize: 14,
+		color: "#9f9f9f",
+		alignItems: 'flex-end',
+		marginRight: 12,
+	},
+	buyselllist: {
+		height:200,
+	},
+	separator: {
+		height: 1,
+		backgroundColor: '#efeff4',
+	},
+	buysellRowLeft: {
+		flex: 1,
+		alignItems: 'flex-start',
+		marginLeft: 12,
+	},
+	buysellRowCenter: {
+		flex: 1,
+		alignItems: 'center',
+	},
+	buysellRowRight: {
+		flex: 1,
+		alignItems: 'flex-end',
+		marginRight: 12,
+	},
+	buyTitle: {
+		color: ColorConstants.STOCK_RISE_RED,
+		fontSize: 12,
+		paddingBottom: 2,
+	},
+	sellTitle: {
+		color: ColorConstants.STOCK_DOWN_GREEN,
+		fontSize: 12,
+		paddingBottom: 2,
+	},
+	grayBar: {
+		height: 8,
+		backgroundColor: '#e5e5e5',
+		borderRadius: 4,
+	},
+	redBar: {
+		height: 8,
+		backgroundColor: ColorConstants.STOCK_RISE_RED,
+		borderRadius: 4,
+	},
+	greenBar: {
+		height: 8,
+		backgroundColor: ColorConstants.STOCK_DOWN_GREEN,
+		borderRadius: 4,
+		alignSelf: 'flex-end',
+	},
+	stockName: {
+		fontSize: 14, 
+		color: "#1862df",
+		paddingBottom: 2,
+	},
+	stockCode: {
+		fontSize: 12,
+		color: "#525252",
+	},
+	stockPeople: {
+		fontSize: 11,
+		color: "#bebebe",
+	}
 });
 
 module.exports = HomePage;

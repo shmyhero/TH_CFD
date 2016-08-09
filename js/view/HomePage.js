@@ -83,8 +83,12 @@ var HomePage = React.createClass({
 				method: 'GET',
 			},
 			(responseJson) => {
+				var listdata = responseJson
+				if (listdata.length > 3) {
+					listdata = listdata.slice(0,3)
+				}
 				this.setState({
-					popularityInfo: bsds.cloneWithRows(responseJson)
+					popularityInfo: bsds.cloneWithRows(listdata)
 				})
 			},
 			(errorMessage) => {
@@ -242,6 +246,12 @@ var HomePage = React.createClass({
 		return(<View key={rowID} style={styles.separator}/>)
 	},
 
+	showPopularityDetail: function() {
+		this.props.navigator.push({
+			name: MainPage.STOCK_POPULARITY_ROUTE,
+		});
+	},
+
 	renderPopularityView: function() {
 		return (
 		<View style={{height:241, backgroundColor:'white'}}>
@@ -249,7 +259,7 @@ var HomePage = React.createClass({
 				<Text style={styles.popularityTitle}>
 					多空博弈
 				</Text>
-				<TouchableOpacity>
+				<TouchableOpacity onPress={this.showPopularityDetail}>
 					<Text style={styles.more}>
 						更多 >
 					</Text>
@@ -260,6 +270,7 @@ var HomePage = React.createClass({
 				style={styles.popularitylist}
 				ref="popularitylist"
 				initialListSize={3}
+				scrollEnabled={false}
 				dataSource={this.state.popularityInfo}
 				enableEmptySections={true}
 				renderRow={this.renderPopularityRow}

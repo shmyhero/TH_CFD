@@ -36,6 +36,8 @@ var QAPage = require('./QAPage')
 var LiveRegisterPage = require('./openAccount/OALiveRegisterPage')
 var LiveUpdateUserInfoPage = require('./openAccount/OALiveUpdateUserInfoPage')
 var LiveRegisterStatusPage = require('./openAccount/OAStatusPage')
+var StockPopularityPage = require('./StockPopularityPage')
+
 var TalkingdataModule = require('../module/TalkingdataModule')
 
 var TutorialPage = require('./TutorialPage');
@@ -84,6 +86,7 @@ export let OPEN_ACCOUNT_ROUTE = 'openAccount'
 export let LIVE_REGISTER_ROUTE = 'liveRegister'
 export let LIVE_UPDATE_USER_INFO_ROUTE = 'liveUpdateUserInfo'
 export let LIVE_REGISTER_STATUS_ROUTE = 'liveRegisterStatus'
+export let STOCK_POPULARITY_ROUTE = 'stockPopularity'
 
 const glypy = glypyMapMaker({
   Home: 'f04f',
@@ -282,6 +285,15 @@ var MainPage = React.createClass({
 						backgroundColor={ColorConstants.TITLE_DARK_BLUE}
 						navigator={navigationOperations}/>
 					<LiveRegisterStatusPage navigator={navigationOperations}/>
+				</View>
+			)
+		} else if (route.name === STOCK_POPULARITY_ROUTE) {
+			hideTabbar()
+			return (
+				<View style={{flex: 1}}>
+					<NavBar title='多空博弈' showBackButton={true}
+						navigator={navigationOperations}/>
+					<StockPopularityPage navigator={navigationOperations}/>
 				</View>
 			)
 		}

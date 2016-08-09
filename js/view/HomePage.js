@@ -10,6 +10,7 @@ import {
 	Dimensions,
 	Platform,
 	ListView,
+	Alert,
 } from 'react-native';
 
 var ViewPager = require('react-native-viewpager-es6');
@@ -49,7 +50,7 @@ var HomePage = React.createClass({
 	getInitialState: function() {
 		return {
 			dataSource: ds.cloneWithPages(PAGES),
-			buysellInfo: bsds.cloneWithRows(['albb', 'USD/CAD', 'google']),
+			popularityInfo: bsds.cloneWithRows([]),
 		};
 	},
 
@@ -73,6 +74,21 @@ var HomePage = React.createClass({
 			},
 			(errorMessage) => {
 				// Ignore it.
+			}
+		);
+
+		NetworkModule.fetchTHUrl(
+			NetConstants.GET_POPULARITY_API,
+			{
+				method: 'GET',
+			},
+			(responseJson) => {
+				this.setState({
+					popularityInfo: bsds.cloneWithRows(responseJson)
+				})
+			},
+			(errorMessage) => {
+				Alert.alert('', errorMessage);
 			}
 		)
 	},
@@ -186,24 +202,34 @@ var HomePage = React.createClass({
 		})
 	},
 
-	renderBuySellRow: function(rowData, sectionID, rowID, highlightRow) {
-		var percent = 0.4
+	renderPopularityRow: function(rowData, sectionID, rowID, highlightRow) {
+		var percent = 0
+		var stockName = ""
+		var stockSymbol = ""
+		var peopleNum = 0
+		if(rowData.userCount !== undefined) {
+			percent = rowData.longCount / (rowData.longCount + rowData.shortCount)
+			percent = Math.round(100*percent)/100
+			stockName = rowData.name
+			stockSymbol = rowData.symbol
+			peopleNum = rowData.userCount
+		}
 		var buyWidth = barWidth * percent
 		var sellWidth = barWidth * (1-percent)
 		return (
-			<View style={styles.buysellRowContainer}>
-				<View style={styles.buysellRowLeft}>
+			<View style={styles.popularityRowContainer}>
+				<View style={styles.popularityRowLeft}>
 					<Text style={styles.buyTitle}>买涨 {percent*100}%</Text>
 					<View style={[styles.grayBar, {width:barWidth}]}>
 						<View style={[styles.redBar, {width:buyWidth}]}/>
 					</View>
 				</View>
-				<View style={styles.buysellRowCenter}>
-					<Text style={styles.stockName}>{rowData}</Text>
-					<Text style={styles.stockCode}>{rowData}</Text>
-					<Text style={styles.stockPeople}>90人参与</Text>
+				<View style={styles.popularityRowCenter}>
+					<Text style={styles.stockName}>{stockName}</Text>
+					<Text style={styles.stockCode}>{stockSymbol}</Text>
+					<Text style={styles.stockPeople}>{peopleNum}人参与</Text>
 				</View>
-				<View style={styles.buysellRowRight}>
+				<View style={styles.popularityRowRight}>
 					<Text style={styles.sellTitle}>买跌 {100-percent*100}%</Text>
 					<View style={[styles.grayBar, {width:barWidth}]}>
 						<View style={[styles.greenBar, {width:sellWidth}]}/>
@@ -216,11 +242,11 @@ var HomePage = React.createClass({
 		return(<View key={rowID} style={styles.separator}/>)
 	},
 
-	renderBuySellCompare: function() {
+	renderPopularityView: function() {
 		return (
 		<View style={{height:241, backgroundColor:'white'}}>
-			<View style={styles.buysellHeaderContainer}>
-				<Text style={styles.buySellTitle}>
+			<View style={styles.popularityHeaderContainer}>
+				<Text style={styles.popularityTitle}>
 					多空博弈
 				</Text>
 				<TouchableOpacity>
@@ -231,12 +257,12 @@ var HomePage = React.createClass({
 			</View>
 			<View style={styles.separator}/>
 			<ListView
-				style={styles.buyselllist}
-				ref="buyselllist"
+				style={styles.popularitylist}
+				ref="popularitylist"
 				initialListSize={3}
-				dataSource={this.state.buysellInfo}
+				dataSource={this.state.popularityInfo}
 				enableEmptySections={true}
-				renderRow={this.renderBuySellRow}
+				renderRow={this.renderPopularityRow}
 				renderSeparator={this.renderSeparator}/>
 		</View>
 		)
@@ -320,8 +346,7 @@ var HomePage = React.createClass({
 					</Image>
 				</View>
 
-				{this.renderBuySellCompare()
-				}
+				{this.renderPopularityView()}
 				{this.renderBottomViews()}
 			</View>
 
@@ -373,17 +398,17 @@ var styles = StyleSheet.create({
 		flex: 1,
 	},
 
-	buysellHeaderContainer:{
+	popularityHeaderContainer:{
 		height:40,
 		flexDirection: 'row',
 		alignItems: 'center',
 	},
-	buysellRowContainer:{
+	popularityRowContainer:{
 		height:66,
 		flexDirection: 'row',
 		alignItems: 'center',
 	},
-	buySellTitle: {
+	popularityTitle: {
 		flex: 1,
 		fontSize: 17,
 		marginLeft: 12,
@@ -397,23 +422,23 @@ var styles = StyleSheet.create({
 		alignItems: 'flex-end',
 		marginRight: 12,
 	},
-	buyselllist: {
+	popularitylist: {
 		height:200,
 	},
 	separator: {
 		height: 1,
 		backgroundColor: '#efeff4',
 	},
-	buysellRowLeft: {
+	popularityRowLeft: {
 		flex: 1,
 		alignItems: 'flex-start',
 		marginLeft: 12,
 	},
-	buysellRowCenter: {
+	popularityRowCenter: {
 		flex: 1,
 		alignItems: 'center',
 	},
-	buysellRowRight: {
+	popularityRowRight: {
 		flex: 1,
 		alignItems: 'flex-end',
 		marginRight: 12,

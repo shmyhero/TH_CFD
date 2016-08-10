@@ -11,6 +11,7 @@ import {
 	Platform,
 	ListView,
 	Alert,
+	ScrollView,
 } from 'react-native';
 
 var Swiper = require('react-native-swiper')
@@ -24,7 +25,7 @@ var FSModule = require('../module/FSModule');
 var LogicData = require('../LogicData');
 var WebSocketModule = require('../module/WebSocketModule');
 
-var RECOMMAND_URL = 'http://cn.tradehero.mobi/TH_CFD_WEB/detailslider.php?id='
+var RECOMMAND_URL = NetConstants.WEBVIEW_RECOMMAND_PAGE
 var PAGES = [
 	{name: 'Page0', url: RECOMMAND_URL + "1"},
 	{name: 'Page1', url: RECOMMAND_URL + "1"},
@@ -48,6 +49,7 @@ var HomePage = React.createClass({
 		return {
 			dataSource: ds.cloneWithRows(PAGES),
 			popularityInfo: bsds.cloneWithRows([]),
+			topNews: [], 
 		};
 	},
 
@@ -91,7 +93,22 @@ var HomePage = React.createClass({
 			(errorMessage) => {
 				Alert.alert('', errorMessage);
 			}
-		)
+		);
+		
+		NetworkModule.fetchTHUrl(
+			NetConstants.GET_TOP_NEWS_TOP10_API,
+			{
+				method: 'GET',
+			},
+			(responseJson) => {
+				this.setState({
+					topNews: responseJson,
+				})
+			},
+			(errorMessage) => {
+				Alert.alert('', errorMessage);
+			}
+		);
 	},
 
 	downloadBannerImages: function(images) {
@@ -138,12 +155,14 @@ var HomePage = React.createClass({
 			})
 	},
 
-	gotoRecommandPage: function(targetUrl) {
+	gotoWebviewPage: function(targetUrl, title) {
 		this.props.navigator.push({
-			name: MainPage.HOMEPAGE_RECOMMAND_ROUTE,
+			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			url: targetUrl,
+			title: title,
 		});
 	},
+
 
 	endsWith: function(str, suffix) {
 	    return str.indexOf(suffix, str.length - suffix.length) !== -1;
@@ -301,12 +320,60 @@ var HomePage = React.createClass({
 		return(
 			<TouchableOpacity
 				activeOpacity = {1.0}
-				onPress={() =>this.gotoRecommandPage(PAGES[i].url)} key={i}>
+				onPress={() =>this.gotoWebviewPage(PAGES[i].url, '推荐')} key={i}>
 				<Image
 					style={[styles.image, {height: imageHeight, width: width}]}
 					source={{uri: 'file://' + PAGES[i].imgUrl}}/>
 			</TouchableOpacity>
 		)
+	},
+
+	renderOneNews: function(news) {
+		var header = news.Header
+		var url = NetConstants.WEBVIEW_TOP_NEWS_PAGE
+		return(
+			<TouchableOpacity style={styles.newsContainer} onPress={() =>this.gotoWebviewPage(url, '每日头条')}>
+				<View style={styles.bluePoint}/>
+				<Text>{header}</Text>
+			</TouchableOpacity>
+		)
+	},
+
+	renderTopNews: function() {
+		var rowHeight = 60
+		var news = []
+		var len = this.state.topNews.length
+		var tlen = len%2===0 ? len : len*2
+		for (var i=0; i<len; i++) {
+			var news1 = this.state.topNews[i*2%len]
+			var news2 = this.state.topNews[(i*2+1)%len]
+			news.push(
+				<View style={{flex:1}} key={i+100}>
+					{this.renderOneNews(news1)}
+					{this.renderOneNews(news2)}
+				</View>
+			)
+		}
+		return (
+			<View style={[styles.topnewsContainer, {height: rowHeight}]}>
+				<Text 
+					style={styles.topnewsTitle}
+					numberOfLines={2}>
+					每日头条
+				</Text>
+				<View style={styles.topnewsVerticalLine}/>
+				<Swiper
+					horizontal={false}
+					height={rowHeight}
+					loop={true}
+					autoplay={true}
+					autoplayTimeout={5}
+					showsPagination={false}>
+					{news}
+				</Swiper>
+			</View>
+		)
+
 	},
 
 	render: function() {
@@ -321,7 +388,7 @@ var HomePage = React.createClass({
 			} else {
 				slides.push (
 					<TouchableOpacity
-						onPress={() => this.gotoRecommandPage(targetUrl)} key={i}>
+						onPress={() => this.gotoWebviewPage(targetUrl, '推荐')} key={i}>
 						<Image
 							style={[styles.image, {height: imageHeight, width: width}]}
 							source={BANNERS[i % 2]}/>
@@ -331,25 +398,31 @@ var HomePage = React.createClass({
 		}
 		return (
 			<View style={{width: width, height: height - UIConstants.TAB_BAR_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER}}>
+				<ScrollView>
+					<View style={{width: width, height: imageHeight}}>
+						<Swiper
+							height={imageHeight}
+							loop={true}
+							bounces={true}
+							autoplay={true}
+							autoplayTimeout={3}
+							paginationStyle={{
+								bottom: null, top: 23, left: null, right: 10,
+							}}
+							activeDot={activeDot}
+							dot={dot}>
+							{slides}
+						</Swiper>
+					</View>
 
-				<View style={{width: width, height: imageHeight}}>
-					<Swiper
-						height={imageHeight}
-						loop={true}
-						bounces={true}
-						autoplay={true}
-						autoplayTimeout={3}
-						paginationStyle={{
-							bottom: null, top: 23, left: null, right: 10,
-						}}
-						activeDot={activeDot}
-						dot={dot}>
-						{slides}
-					</Swiper>
-				</View>
+					{this.renderTopNews()}
+					<View style={styles.bigSeparator}/>
 
-				{this.renderPopularityView()}
-				{this.renderBottomViews()}
+					{this.renderPopularityView()}
+					<View style={styles.bigSeparator}/>
+
+					{this.renderBottomViews()}
+				</ScrollView>
 			</View>
 
 		);
@@ -504,6 +577,46 @@ var styles = StyleSheet.create({
 		marginTop: 3,
 		marginBottom: 20,
 	},
+
+	topnewsContainer:{
+		flexDirection: 'row',
+		width: width,
+		backgroundColor: 'white',
+		alignItems: 'center',
+	},
+	topnewsTitle: {
+		width: 36,
+		fontSize: 17,
+		fontWeight: '900',
+		color: '#1962dd',
+		marginLeft: 22,
+		marginRight: 14,
+	},
+	topnewsVerticalLine:{
+		width: 1,
+		height: 50,
+		backgroundColor: '#efeff4',
+	},
+	newsContainer: {
+		flex: 1,
+		flexDirection: 'row',
+		alignItems: 'center',
+	},
+	bigSeparator: {
+		height: 10,
+		backgroundColor: '#efeff4',
+	},
+	bluePoint: {
+		width: 4,
+		height: 4,
+		backgroundColor: '#1962dd',
+		marginLeft: 10,
+		marginRight: 5,
+	},
+	newsText: {
+		fontSize: 14,
+		color: '#333333',
+	}
 });
 
 module.exports = HomePage;

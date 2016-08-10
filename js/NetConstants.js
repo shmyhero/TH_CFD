@@ -2,6 +2,7 @@
 
 const SERVER_IP = 'https://api.typhoontechnology.hk'
 const GZT_SERVER_IP = 'http://124.192.161.110:8080'
+const TRADEHERO_SERVER_IP = 'http://cn.tradehero.mobi'
 
 export const GET_OUT_RIGHT_API = SERVER_IP + '/api/security/fx/outright'
 export const GET_PHONE_CODE_API = SERVER_IP + '/api/sendCode'
@@ -29,8 +30,14 @@ export const ADD_REMOVE_STOP_PROFIT_API = SERVER_IP + '/api/position/order/take'
 export const GET_USER_BALANCE_API = SERVER_IP + '/api/user/balance'
 export const GET_USER_STATISTICS_API = SERVER_IP + '/api/user/plReport'
 export const GET_POPULARITY_API = SERVER_IP + '/api/security/byPopularity'
+export const GET_TOP_NEWS_TOP10_API = SERVER_IP + '/api/headline/top10'
 
 export const GZT_OCR_CHECK_API = GZT_SERVER_IP + '/ocrCheck'
+
+export const WEBVIEW_RECOMMAND_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/detailslider.php?id='
+export const WEBVIEW_TOP_NEWS_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/FocusSlider.php'
+export const WEBVIEW_QA_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/wenda.html'
+
 
 export const PARAMETER_PHONE = 'phone'
 export const PARAMETER_VERFICATION_CODE = 'verifyCode'

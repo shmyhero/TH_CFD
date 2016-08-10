@@ -80,7 +80,7 @@ export let STOCK_LIST_VIEW_PAGER_ROUTE = 'stockListViewPager'
 export let STOCK_SEARCH_ROUTE = 'stockSearch'
 export let STOCK_DETAIL_ROUTE = 'stockDetail'
 export let STOCK_EXCHANGE_ROUTE = 'stockExchange'
-export let HOMEPAGE_RECOMMAND_ROUTE = 'homepageRecommand'
+export let NAVIGATOR_WEBVIEW_ROUTE = 'webviewpage'
 export let QA_ROUTE = 'q&a'
 export let OPEN_ACCOUNT_ROUTE = 'openAccount'
 export let LIVE_REGISTER_ROUTE = 'liveRegister'
@@ -225,11 +225,11 @@ var MainPage = React.createClass({
 				<StockExchangePage navigator={navigationOperations}
 					showTutorial={this.showTutorial}/>
 			)
-		} else if (route.name === HOMEPAGE_RECOMMAND_ROUTE) {
+		} else if (route.name === NAVIGATOR_WEBVIEW_ROUTE) {
 			hideTabbar()
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title='推荐' showBackButton={true} navigator={navigationOperations}/>
+					<NavBar title={route.title} showBackButton={true} navigator={navigationOperations}/>
 					<WebViewPage url={route.url}/>
 				</View>
 			)

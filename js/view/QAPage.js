@@ -16,6 +16,7 @@ var WEBVIEW_REF = 'qawebview';
 var {EventCenter, EventConst} = require('../EventCenter')
 var ColorConstants = require('../ColorConstants')
 var NavBar = require('../view/NavBar')
+var NetConstants = require('../NetConstants');
 
 // var didTabSelectSubscription = null;
 var {height, width} = Dimensions.get('window')
@@ -26,7 +27,7 @@ var QAPage = React.createClass({
 
 	getDefaultProps() {
 		return {
-			url: 'http://cn.tradehero.mobi/TH_CFD_WEB/wenda.html',
+			url: NetConstants.WEBVIEW_QA_PAGE,
 		}
 	},
 

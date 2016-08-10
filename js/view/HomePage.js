@@ -13,7 +13,7 @@ import {
 	Alert,
 } from 'react-native';
 
-var ViewPager = require('react-native-viewpager-es6');
+var Swiper = require('react-native-swiper')
 var ColorConstants = require('../ColorConstants')
 var MainPage = require('./MainPage')
 var NetConstants = require('../NetConstants');
@@ -37,10 +37,7 @@ var {height, width} = Dimensions.get('window');
 var barWidth = Math.round(width/3)-12
 var imageHeight = 478 / 750 * width
 
-var ds = new ViewPager.DataSource({
-	pageHasChanged: (p1, p2) => p1 !== p2,
-});
-
+var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var bsds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var magicCode = ""
@@ -49,7 +46,7 @@ var NO_MAGIC = false
 var HomePage = React.createClass({
 	getInitialState: function() {
 		return {
-			dataSource: ds.cloneWithPages(PAGES),
+			dataSource: ds.cloneWithRows(PAGES),
 			popularityInfo: bsds.cloneWithRows([]),
 		};
 	},
@@ -120,7 +117,7 @@ var HomePage = React.createClass({
 					PAGES[index].imgUrl = filePath
 					PAGES[index].url = targetUrl
 					this.setState({
-						dataSource: ds.cloneWithPages(PAGES)
+						dataSource: ds.cloneWithRows(PAGES)
 					})
 					this.downloadOneBannerImage(images, index + 1)
 				} else {
@@ -132,7 +129,7 @@ var HomePage = React.createClass({
 							PAGES[index].imgUrl = filePath
 							PAGES[index].url = targetUrl
 							this.setState({
-								dataSource: ds.cloneWithPages(PAGES)
+								dataSource: ds.cloneWithRows(PAGES)
 							})
 						}
 						this.downloadOneBannerImage(images, index + 1)
@@ -141,36 +138,10 @@ var HomePage = React.createClass({
 			})
 	},
 
-	_renderPage: function(
-		data: Object,
-		pageID: number | string,) {
-		if (data.imgUrl !== undefined && data.imgUrl !== null) {
-			return (
-				<TouchableOpacity
-					activeOpacity = {1.0}
-					onPress={() => this.gotoRecommandPage(pageID, data.url)}>
-					<Image
-						style={[styles.image, {height: imageHeight, width: width}]}
-						source={{uri: 'file://' + data.imgUrl}}/>
-				</TouchableOpacity>
-			);
-		} else {
-			return (
-				<TouchableOpacity
-					onPress={() => this.gotoRecommandPage(pageID, data.url)}>
-					<Image
-						style={[styles.image, {height: imageHeight, width: width}]}
-						source={BANNERS[pageID % 2]}/>
-				</TouchableOpacity>
-			);
-		}
-	},
-
-	gotoRecommandPage: function(pageID, url) {
-		pageID = parseInt(pageID) + 1
+	gotoRecommandPage: function(targetUrl) {
 		this.props.navigator.push({
 			name: MainPage.HOMEPAGE_RECOMMAND_ROUTE,
-			url: url,
+			url: targetUrl,
 		});
 	},
 
@@ -220,6 +191,7 @@ var HomePage = React.createClass({
 		}
 		var buyWidth = barWidth * percent
 		var sellWidth = barWidth * (1-percent)
+
 		return (
 			<View style={styles.popularityRowContainer}>
 				<View style={styles.popularityRowLeft}>
@@ -285,25 +257,19 @@ var HomePage = React.createClass({
 				<View style={styles.rowContainer}>
 					<TouchableOpacity style={styles.blockContainer} activeOpacity={0.95} onPress={()=>this.magicButtonPress(1)}>
 					<View style={styles.blockContainer}>
-						<Image style={styles.blockImage} source={require('../../images/updown.png')}/>
 						<Text style={styles.blockTitleText}>
 							涨跌双盈
 						</Text>
-						<Text style={styles.blockTitleContent}>
-							{'市场行情的涨跌动态都是\n盈利时机'}
-						</Text>
+						<Image style={styles.blockImage} source={require('../../images/updown.png')}/>
 					</View>
 					</TouchableOpacity>
 					<View style={styles.vertLine}/>
 					<TouchableOpacity style={styles.blockContainer} activeOpacity={0.95} onPress={()=>this.magicButtonPress(2)}>
 					<View style={styles.blockContainer}>
-						<Image style={styles.blockImage} source={require('../../images/smallbig.png')}/>
 						<Text style={styles.blockTitleText}>
 							以小搏大
 						</Text>
-						<Text style={styles.blockTitleContent}>
-							{'盈利无上限 亏损有底线\n杠杆收益'}
-						</Text>
+						<Image style={styles.blockImage} source={require('../../images/smallbig.png')}/>
 					</View>
 					</TouchableOpacity>
 				</View>
@@ -311,25 +277,19 @@ var HomePage = React.createClass({
 				<View style={styles.rowContainer}>
 					<TouchableOpacity style={styles.blockContainer} activeOpacity={0.95} onPress={()=>this.magicButtonPress(3)}>
 					<View style={styles.blockContainer}>
-						<Image style={styles.blockImage} source={require('../../images/markets.png')}/>
 						<Text style={styles.blockTitleText}>
 							实时行情
 						</Text>
-						<Text style={styles.blockTitleContent}>
-							{'市场同步的行情助您掌控\n涨跌趋势'}
-						</Text>
+						<Image style={styles.blockImage} source={require('../../images/markets.png')}/>
 					</View>
 					</TouchableOpacity>
 					<View style={styles.vertLine}/>
 					<TouchableOpacity style={styles.blockContainer} activeOpacity={0.95} onPress={()=>this.magicButtonPress(4)}>
 					<View style={styles.blockContainer}>
-						<Image style={styles.blockImage} source={require('../../images/advantage.png')}/>
 						<Text style={styles.blockTitleText}>
 							体验简单
 						</Text>
-						<Text style={styles.blockTitleContent}>
-							{'选择涨跌 本金和杠杆三步\n便捷交易'}
-						</Text>
+						<Image style={styles.blockImage} source={require('../../images/advantage.png')}/>
 					</View>
 					</TouchableOpacity>
 				</View>
@@ -337,24 +297,55 @@ var HomePage = React.createClass({
 		)
 	},
 
+	renderBannar: function(i) {
+		return(
+			<TouchableOpacity
+				activeOpacity = {1.0}
+				onPress={() =>this.gotoRecommandPage(PAGES[i].url)} key={i}>
+				<Image
+					style={[styles.image, {height: imageHeight, width: width}]}
+					source={{uri: 'file://' + PAGES[i].imgUrl}}/>
+			</TouchableOpacity>
+		)
+	},
+
 	render: function() {
+		var activeDot = <View style={styles.guideActiveDot} />
+		var dot = <View style={styles.guideDot} />
+		var slides = []
+		for (var i = 0; i < PAGES.length; i++) {
+			if (PAGES[i].imgUrl !== undefined && PAGES[i].imgUrl !== null) {
+				slides.push (
+					this.renderBannar(i)
+				);
+			} else {
+				slides.push (
+					<TouchableOpacity
+						onPress={() => this.gotoRecommandPage(targetUrl)} key={i}>
+						<Image
+							style={[styles.image, {height: imageHeight, width: width}]}
+							source={BANNERS[i % 2]}/>
+					</TouchableOpacity>
+				);
+			}
+		}
 		return (
 			<View style={{width: width, height: height - UIConstants.TAB_BAR_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER}}>
 
 				<View style={{width: width, height: imageHeight}}>
-					<Image
-						style={[styles.backgroundImage, {height: imageHeight, width: width}]}
-						source={BANNERS[0]} >
-
-						<ViewPager
-							style={{backgroundColor:'transparent'}}
-							dataSource={this.state.dataSource}
-							renderPage={this._renderPage}
-							renderPageIndicator={false}
-							isLoop={this.state.dataSource.getPageCount() > 1}
-							autoPlay={this.state.dataSource.getPageCount() > 1}/>
-
-					</Image>
+					<Swiper
+						height={imageHeight}
+						loop={true}
+						bounces={true}
+						autoplay={true}
+						autoplayTimeout={3}
+						paginationStyle={{
+							bottom: null, top: 23, left: null, right: 10,
+						}}
+						activeDot={activeDot}
+						dot={dot}>
+						{slides}
+					</Swiper>
 				</View>
 
 				{this.renderPopularityView()}
@@ -386,6 +377,7 @@ var styles = StyleSheet.create({
 	},
 	blockContainer: {
 		flex: 1,
+		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
 		backgroundColor: '#0079ff',
@@ -408,7 +400,6 @@ var styles = StyleSheet.create({
 	backgroundImage: {
 		flex: 1,
 	},
-
 	popularityHeaderContainer:{
 		height:40,
 		flexDirection: 'row',
@@ -481,7 +472,7 @@ var styles = StyleSheet.create({
 		alignSelf: 'flex-end',
 	},
 	stockName: {
-		fontSize: 14, 
+		fontSize: 14,
 		color: "#1862df",
 		paddingBottom: 2,
 	},
@@ -492,7 +483,27 @@ var styles = StyleSheet.create({
 	stockPeople: {
 		fontSize: 11,
 		color: "#bebebe",
-	}
+	},
+	guideActiveDot: {
+		backgroundColor: 'rgba(255, 255, 255, 0.8)',
+		width: 6,
+		height: 6,
+		borderRadius: 3,
+		marginLeft: 3,
+		marginRight: 3,
+		marginTop: 3,
+		marginBottom: 20,
+	},
+	guideDot: {
+		backgroundColor:'rgba(0,0,0,.2)',
+		width: 6,
+		height: 6,
+		borderRadius: 3,
+		marginLeft: 3,
+		marginRight: 3,
+		marginTop: 3,
+		marginBottom: 20,
+	},
 });
 
 module.exports = HomePage;

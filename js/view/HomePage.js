@@ -122,7 +122,7 @@ var HomePage = React.createClass({
 		didTabSelectSubscription = EventCenter.getEventEmitter().
 			addListener(EventConst.HOME_TAB_RESS_EVENT, this.onTabChanged);
 	},
-	
+
 	componentWillUnmount: function() {
 		didTabSelectSubscription && didTabSelectSubscription.remove();
 	},
@@ -222,6 +222,13 @@ var HomePage = React.createClass({
 		})
 	},
 
+	gotoStockDetail: function(rowData) {
+  		this.props.navigator.push({
+			name: MainPage.STOCK_DETAIL_ROUTE,
+			stockRowData: rowData
+		});
+	},
+
 	renderPopularityRow: function(rowData, sectionID, rowID, highlightRow) {
 		var percent = 0
 		var stockName = ""
@@ -238,7 +245,7 @@ var HomePage = React.createClass({
 		var sellWidth = barWidth * (1-percent)
 
 		return (
-			<View style={styles.popularityRowContainer}>
+			<TouchableOpacity style={styles.popularityRowContainer} onPress={()=>this.gotoStockDetail(rowData)}>
 				<View style={styles.popularityRowLeft}>
 					<Text style={styles.buyTitle}>买涨 {percent*100}%</Text>
 					<View style={[styles.grayBar, {width:barWidth}]}>
@@ -256,7 +263,7 @@ var HomePage = React.createClass({
 						<View style={[styles.greenBar, {width:sellWidth}]}/>
 					</View>
 				</View>
-			</View>)
+			</TouchableOpacity>)
 	},
 
 	renderSeparator:function(sectionID, rowID, adjacentRowHighlighted) {

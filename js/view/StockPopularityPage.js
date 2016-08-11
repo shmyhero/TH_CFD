@@ -8,6 +8,7 @@ import {
 	Dimensions,
 	ListView,
 	Alert,
+	TouchableOpacity,
 } from 'react-native';
 
 var MainPage = require('./MainPage')
@@ -44,6 +45,13 @@ var StockPopularityPage = React.createClass({
 		)
 	},
 
+	gotoStockDetail: function(rowData) {
+  		this.props.navigator.push({
+			name: MainPage.STOCK_DETAIL_ROUTE,
+			stockRowData: rowData
+		});
+	},
+
 	renderPopularityRow: function(rowData, sectionID, rowID, highlightRow) {
 		var percent = 0
 		var stockName = ""
@@ -59,7 +67,7 @@ var StockPopularityPage = React.createClass({
 		var buyWidth = barWidth * percent
 		var sellWidth = barWidth * (1-percent)
 		return (
-			<View style={styles.popularityRowContainer}>
+			<TouchableOpacity style={styles.popularityRowContainer} onPress={()=>this.gotoStockDetail(rowData)}>
 				<View style={styles.popularityRowLeft}>
 					<Text style={styles.buyTitle}>买涨 {percent*100}%</Text>
 					<View style={[styles.grayBar, {width:barWidth}]}>
@@ -77,7 +85,7 @@ var StockPopularityPage = React.createClass({
 						<View style={[styles.greenBar, {width:sellWidth}]}/>
 					</View>
 				</View>
-			</View>)
+			</TouchableOpacity>)
 	},
 
 	renderSeparator:function(sectionID, rowID, adjacentRowHighlighted) {

@@ -25,6 +25,8 @@ var FSModule = require('../module/FSModule');
 var LogicData = require('../LogicData');
 var WebSocketModule = require('../module/WebSocketModule');
 var NavBar = require('./NavBar')
+var {EventCenter, EventConst} = require('../EventCenter')
+
 
 var RECOMMAND_URL = NetConstants.WEBVIEW_RECOMMAND_PAGE
 var PAGES = [
@@ -44,6 +46,7 @@ var bsds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var magicCode = ""
 var NO_MAGIC = false
+var didTabSelectSubscription = null
 
 var HomePage = React.createClass({
 	getInitialState: function() {
@@ -76,7 +79,10 @@ var HomePage = React.createClass({
 				// Ignore it.
 			}
 		);
+		this.loadHomeData()
+	},
 
+	loadHomeData: function() {
 		NetworkModule.fetchTHUrl(
 			NetConstants.GET_POPULARITY_API,
 			{
@@ -110,6 +116,19 @@ var HomePage = React.createClass({
 				Alert.alert('', errorMessage);
 			}
 		);
+	},
+
+	componentDidMount: function() {
+		didTabSelectSubscription = EventCenter.getEventEmitter().
+			addListener(EventConst.HOME_TAB_RESS_EVENT, this.onTabChanged);
+	},
+	
+	componentWillUnmount: function() {
+		didTabSelectSubscription && didTabSelectSubscription.remove();
+	},
+
+	onTabChanged: function(){
+		this.loadHomeData()
 	},
 
 	downloadBannerImages: function(images) {
@@ -352,11 +371,7 @@ var HomePage = React.createClass({
 		}
 		return (
 			<View style={[styles.topnewsContainer, {height: rowHeight}]}>
-				<Text 
-					style={styles.topnewsTitle}
-					numberOfLines={2}>
-					每日头条
-				</Text>
+				<Image style={styles.topnewsImage} source={require('../../images/topnews.png')}/>
 				<View style={styles.topnewsVerticalLine}/>
 				<Swiper
 					horizontal={false}
@@ -588,11 +603,9 @@ var styles = StyleSheet.create({
 		backgroundColor: 'white',
 		alignItems: 'center',
 	},
-	topnewsTitle: {
-		width: 36,
-		fontSize: 17,
-		fontWeight: '900',
-		color: '#1962dd',
+	topnewsImage: {
+		width: 38,
+		height: 40,
 		marginLeft: 22,
 		marginRight: 14,
 	},

@@ -324,6 +324,9 @@ var MainPage = React.createClass({
 	},
 
 	initTabbarEvent() {
+		var homeRef = this.refs['homeContent'].refs['wrap'].getWrappedRef()
+		homeRef.tabWillFocus = EventCenter.emitHomeTabPressEvent;
+
 		var stockRef = this.refs['stockContent'].refs['wrap'].getWrappedRef()
 		stockRef.tabWillFocus = EventCenter.emitStockTabPressEvent;
 
@@ -399,7 +402,7 @@ var MainPage = React.createClass({
 		      	<Tabbar ref="myTabbar" barColor={'#f7f7f7'} style={{alignItems: 'stretch'}}>
 			        <Tab name="home">
 			          	<Icon label="首页" type={glypy.Home} from={'myhero'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
-			          	<RawContent>
+			          	<RawContent ref="homeContent">
 		            		<Navigator
 								style={styles.container}
 								initialRoute={{name: HOME_PAGE_ROUTE,

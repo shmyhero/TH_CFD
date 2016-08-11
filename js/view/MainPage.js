@@ -293,7 +293,7 @@ var MainPage = React.createClass({
 				<View style={{flex: 1}}>
 					<NavBar title='多空博弈' showBackButton={true}
 						navigator={navigationOperations}/>
-					<StockPopularityPage navigator={navigationOperations}/>
+					<StockPopularityPage navigator={navigationOperations} initialInfo={route.data}/>
 				</View>
 			)
 		}

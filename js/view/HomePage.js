@@ -52,6 +52,7 @@ var HomePage = React.createClass({
 	getInitialState: function() {
 		return {
 			dataSource: ds.cloneWithRows(PAGES),
+			rawPopularityInfo: [],
 			popularityInfo: bsds.cloneWithRows([]),
 			topNews: [], 
 		};
@@ -94,6 +95,7 @@ var HomePage = React.createClass({
 					listdata = listdata.slice(0,3)
 				}
 				this.setState({
+					rawPopularityInfo: responseJson,
 					popularityInfo: bsds.cloneWithRows(listdata)
 				})
 			},
@@ -273,6 +275,7 @@ var HomePage = React.createClass({
 	showPopularityDetail: function() {
 		this.props.navigator.push({
 			name: MainPage.STOCK_POPULARITY_ROUTE,
+			data: this.state.rawPopularityInfo,
 		});
 	},
 

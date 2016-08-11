@@ -15,6 +15,7 @@ var MainPage = require('./MainPage')
 var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants');
 var NetworkModule = require('../module/NetworkModule');
+var TimerMixin = require('react-timer-mixin');
 
 var {height, width} = Dimensions.get('window')
 var barWidth = Math.round(width/3)-12
@@ -22,27 +23,40 @@ var barWidth = Math.round(width/3)-12
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var StockPopularityPage = React.createClass({
+	mixins: [TimerMixin],
+
+	propTypes: {
+		initialInfo: React.PropTypes.array,
+	},
+
 	getInitialState: function() {
 		return {
+			rawInfo: [],
 			popularityInfo: ds.cloneWithRows([]),
 		};
 	},
 
-	componentWillMount: function() {
-		NetworkModule.fetchTHUrl(
-			NetConstants.GET_POPULARITY_API,
-			{
-				method: 'GET',
-			},
-			(responseJson) => {
-				this.setState({
-					popularityInfo: ds.cloneWithRows(responseJson)
-				})
-			},
-			(errorMessage) => {
-				Alert.alert('', errorMessage);
-			}
-		)
+	componentDidMount: function() {
+		this.setTimeout(
+			() => {
+				NetworkModule.fetchTHUrl(
+					NetConstants.GET_POPULARITY_API,
+					{
+						method: 'GET',
+					},
+					(responseJson) => {
+						this.setState({
+							rawInfo: responseJson,
+							popularityInfo: ds.cloneWithRows(responseJson),
+						})
+					},
+					(errorMessage) => {
+						Alert.alert('', errorMessage);
+					}
+				)
+			 },
+			2000
+		);
 	},
 
 	gotoStockDetail: function(rowData) {
@@ -93,12 +107,13 @@ var StockPopularityPage = React.createClass({
 	},
 
 	render: function() {
+		var dataSource = this.state.rawInfo.length < 0 ? this.state.popularityInfo : ds.cloneWithRows(this.props.initialInfo)
 		return (
 			<View style={styles.wrapper}>
 				<ListView
 					style={styles.popularitylist}
 					ref="popularitylist"
-					dataSource={this.state.popularityInfo}
+					dataSource={dataSource}
 					enableEmptySections={true}
 					renderRow={this.renderPopularityRow}
 					renderSeparator={this.renderSeparator}/>

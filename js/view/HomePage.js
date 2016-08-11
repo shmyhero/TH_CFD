@@ -332,7 +332,7 @@ var HomePage = React.createClass({
 				<View style={styles.rowContainer}>
 					{this.renderIntroduceView(3, '实时行情','免费实时全球行情',require('../../images/markets.png'))}
 					<View style={styles.vertLine}/>
-					{this.renderIntroduceView(4, '体验简单','急简交易三步骤',require('../../images/advantage.png'))}
+					{this.renderIntroduceView(4, '体验简单','极简交易三步骤',require('../../images/advantage.png'))}
 				</View>
 			</View>
 		)
@@ -356,7 +356,11 @@ var HomePage = React.createClass({
 		return(
 			<TouchableOpacity style={styles.newsContainer} onPress={() =>this.gotoWebviewPage(url, '每日头条')}>
 				<View style={styles.bluePoint}/>
-				<Text>{header}</Text>
+				<Text style={styles.newsText}
+					ellipsizeMode={true}
+					numberOfLines={1}>
+					{header}
+				</Text>
 			</TouchableOpacity>
 		)
 	},
@@ -613,7 +617,7 @@ var styles = StyleSheet.create({
 	topnewsImage: {
 		width: 38,
 		height: 40,
-		marginLeft: 22,
+		marginLeft: 16,
 		marginRight: 14,
 	},
 	topnewsVerticalLine:{
@@ -638,8 +642,10 @@ var styles = StyleSheet.create({
 		marginRight: 5,
 	},
 	newsText: {
+		width: width-100,
 		fontSize: 14,
 		color: '#333333',
+		marginRight: 10,
 	}
 });
 

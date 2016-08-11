@@ -37,6 +37,7 @@ var StockPopularityPage = React.createClass({
 	},
 
 	componentDidMount: function() {
+		// delay 3 seconds to load again.
 		this.setTimeout(
 			() => {
 				NetworkModule.fetchTHUrl(
@@ -55,7 +56,7 @@ var StockPopularityPage = React.createClass({
 					}
 				)
 			 },
-			2000
+			3000
 		);
 	},
 
@@ -107,7 +108,7 @@ var StockPopularityPage = React.createClass({
 	},
 
 	render: function() {
-		var dataSource = this.state.rawInfo.length < 0 ? this.state.popularityInfo : ds.cloneWithRows(this.props.initialInfo)
+		var dataSource = this.state.rawInfo.length > 0 ? this.state.popularityInfo : ds.cloneWithRows(this.props.initialInfo)
 		return (
 			<View style={styles.wrapper}>
 				<ListView

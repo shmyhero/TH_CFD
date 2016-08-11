@@ -35,7 +35,7 @@ export const GET_TOP_NEWS_TOP10_API = SERVER_IP + '/api/headline/top10'
 export const GZT_OCR_CHECK_API = GZT_SERVER_IP + '/ocrCheck'
 
 export const WEBVIEW_RECOMMAND_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/detailslider.php?id='
-export const WEBVIEW_TOP_NEWS_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/FocusSlider.php'
+export const WEBVIEW_TOP_NEWS_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/FocusSlider.php?id='
 export const WEBVIEW_QA_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/wenda.html'
 
 

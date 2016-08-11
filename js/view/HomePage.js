@@ -24,6 +24,7 @@ var StorageModule = require('../module/StorageModule');
 var FSModule = require('../module/FSModule');
 var LogicData = require('../LogicData');
 var WebSocketModule = require('../module/WebSocketModule');
+var NavBar = require('./NavBar')
 
 var RECOMMAND_URL = NetConstants.WEBVIEW_RECOMMAND_PAGE
 var PAGES = [
@@ -36,7 +37,7 @@ var BANNERS = [
 ];
 var {height, width} = Dimensions.get('window');
 var barWidth = Math.round(width/3)-12
-var imageHeight = 478 / 750 * width
+var imageHeight = 300 / 750 * width
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var bsds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -172,18 +173,24 @@ var HomePage = React.createClass({
 		if (NO_MAGIC) {
 			return
 		}
-		magicCode += ""+index
+		// magicCode += ""+index
 
-		if(this.endsWith(magicCode, "12341234")){
-			// open account
-			this.props.navigator.push({
-				name: MainPage.OPEN_ACCOUNT_ROUTE,
-				step: 0,
-			});
-		}
-		else if(this.endsWith(magicCode, "41414141")) {
-			this.logoutPress()
-		}
+		// if(this.endsWith(magicCode, "12341234")){
+		// 	// open account
+		// 	this.props.navigator.push({
+		// 		name: MainPage.OPEN_ACCOUNT_ROUTE,
+		// 		step: 0,
+		// 	});
+		// }
+		// else if(this.endsWith(magicCode, "41414141")) {
+		// 	this.logoutPress()
+		// }
+		var targetUrl = 'http://cn.tradehero.mobi/TH_CFD_WEB/detail0'+index+'.html'
+		this.props.navigator.push({
+			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			url: targetUrl,
+			title: '',
+		});
 	},
 
 	logoutPress: function() {
@@ -270,47 +277,36 @@ var HomePage = React.createClass({
 		)
 	},
 
+	renderIntroduceView: function(index, head, body, image) {
+		return (
+			<TouchableOpacity style={styles.blockContainer} activeOpacity={0.95} onPress={()=>this.magicButtonPress(index)}>
+				<View style={styles.blockContainer}>
+					<View style={styles.blockTextContainer}>
+						<Text style={styles.blockTitleText}>
+							{head}
+						</Text>
+						<Text style={styles.blockBodyContent}>
+							{body}
+						</Text>
+					</View>
+					<Image style={styles.blockImage} source={image}/>
+				</View>
+			</TouchableOpacity>
+		)
+	},
 	renderBottomViews: function() {
 		return (
 			<View style={{flex:1}}>
 				<View style={styles.rowContainer}>
-					<TouchableOpacity style={styles.blockContainer} activeOpacity={0.95} onPress={()=>this.magicButtonPress(1)}>
-					<View style={styles.blockContainer}>
-						<Text style={styles.blockTitleText}>
-							涨跌双盈
-						</Text>
-						<Image style={styles.blockImage} source={require('../../images/updown.png')}/>
-					</View>
-					</TouchableOpacity>
+					{this.renderIntroduceView(1, '涨跌双盈','买对趋势就是盈利',require('../../images/updown.png'))}
 					<View style={styles.vertLine}/>
-					<TouchableOpacity style={styles.blockContainer} activeOpacity={0.95} onPress={()=>this.magicButtonPress(2)}>
-					<View style={styles.blockContainer}>
-						<Text style={styles.blockTitleText}>
-							以小搏大
-						</Text>
-						<Image style={styles.blockImage} source={require('../../images/smallbig.png')}/>
-					</View>
-					</TouchableOpacity>
+					{this.renderIntroduceView(2, '以小搏大','本金加上杠杆交易',require('../../images/smallbig.png'))}
 				</View>
 				<View style={styles.horiLine}/>
 				<View style={styles.rowContainer}>
-					<TouchableOpacity style={styles.blockContainer} activeOpacity={0.95} onPress={()=>this.magicButtonPress(3)}>
-					<View style={styles.blockContainer}>
-						<Text style={styles.blockTitleText}>
-							实时行情
-						</Text>
-						<Image style={styles.blockImage} source={require('../../images/markets.png')}/>
-					</View>
-					</TouchableOpacity>
+					{this.renderIntroduceView(3, '实时行情','免费实时全球行情',require('../../images/markets.png'))}
 					<View style={styles.vertLine}/>
-					<TouchableOpacity style={styles.blockContainer} activeOpacity={0.95} onPress={()=>this.magicButtonPress(4)}>
-					<View style={styles.blockContainer}>
-						<Text style={styles.blockTitleText}>
-							体验简单
-						</Text>
-						<Image style={styles.blockImage} source={require('../../images/advantage.png')}/>
-					</View>
-					</TouchableOpacity>
+					{this.renderIntroduceView(4, '体验简单','急简交易三步骤',require('../../images/advantage.png'))}
 				</View>
 			</View>
 		)
@@ -329,8 +325,8 @@ var HomePage = React.createClass({
 	},
 
 	renderOneNews: function(news) {
-		var header = news.Header
-		var url = NetConstants.WEBVIEW_TOP_NEWS_PAGE
+		var header = news.header
+		var url = NetConstants.WEBVIEW_TOP_NEWS_PAGE+news.id
 		return(
 			<TouchableOpacity style={styles.newsContainer} onPress={() =>this.gotoWebviewPage(url, '每日头条')}>
 				<View style={styles.bluePoint}/>
@@ -398,6 +394,7 @@ var HomePage = React.createClass({
 		}
 		return (
 			<View style={{width: width, height: height - UIConstants.TAB_BAR_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER}}>
+				<NavBar title="首页"/>
 				<ScrollView>
 					<View style={{width: width, height: imageHeight}}>
 						<Swiper
@@ -407,7 +404,7 @@ var HomePage = React.createClass({
 							autoplay={true}
 							autoplayTimeout={3}
 							paginationStyle={{
-								bottom: null, top: 23, left: null, right: 10,
+								bottom: null, top: 12, left: null, right: 10,
 							}}
 							activeDot={activeDot}
 							dot={dot}>
@@ -442,33 +439,40 @@ var styles = StyleSheet.create({
 	},
 	horiLine: {
 		height: 1,
-		backgroundColor: '#268dff',
+		backgroundColor: '#efeff4',
 	},
 	vertLine: {
 		width: 1,
-		backgroundColor: '#268dff',
+		backgroundColor: '#efeff4',
 	},
 	blockContainer: {
 		flex: 1,
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
-		backgroundColor: '#0079ff',
+		backgroundColor: 'white',
+		height: 70,
 	},
 	blockImage: {
-		width: 39,
-		height: 39,
-		marginBottom: 15,
+		width: 36,
+		height: 36,
+		alignSelf: 'center',
+		marginRight: 10,
+	},
+	blockTextContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		backgroundColor: 'white',
+		marginLeft: 12,
 	},
 	blockTitleText: {
-		color: '#ffe400',
-		fontSize: 22,
+		color: '#1862df',
+		fontSize: 14,
 		marginBottom: 10,
 	},
-	blockTitleContent: {
-		color: '#dde8ff',
-		fontSize: 12,
-		textAlign: 'center',
+	blockBodyContent: {
+		color: '#525252',
+		fontSize: 11,
 	},
 	backgroundImage: {
 		flex: 1,

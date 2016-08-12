@@ -229,7 +229,8 @@ var MainPage = React.createClass({
 			hideTabbar()
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title={route.title} showBackButton={true} navigator={navigationOperations}/>
+					<NavBar title={route.title} showBackButton={true} navigator={navigationOperations}
+						backButtonOnClick={()=>this.backAndShowTabbar(navigationOperations)}/>
 					<WebViewPage url={route.url}/>
 				</View>
 			)
@@ -292,6 +293,7 @@ var MainPage = React.createClass({
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title='多空博弈' showBackButton={true}
+						backButtonOnClick={()=>this.backAndShowTabbar(navigationOperations)}
 						navigator={navigationOperations}/>
 					<StockPopularityPage navigator={navigationOperations} initialInfo={route.data}/>
 				</View>
@@ -305,6 +307,11 @@ var MainPage = React.createClass({
 
 	hideTutorial: function(){
 		this.setState({showTutorial: false})
+	},
+
+	backAndShowTabbar: function(navigator) {
+		this.showTabbar()
+		navigator.pop();
 	},
 
 	showTabbar() {

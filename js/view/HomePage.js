@@ -54,7 +54,7 @@ var HomePage = React.createClass({
 			dataSource: ds.cloneWithRows(PAGES),
 			rawPopularityInfo: [],
 			popularityInfo: bsds.cloneWithRows([]),
-			topNews: [], 
+			topNews: [],
 		};
 	},
 
@@ -103,7 +103,7 @@ var HomePage = React.createClass({
 				Alert.alert('', errorMessage);
 			}
 		);
-		
+
 		NetworkModule.fetchTHUrl(
 			NetConstants.GET_TOP_NEWS_TOP10_API,
 			{
@@ -178,6 +178,18 @@ var HomePage = React.createClass({
 	},
 
 	gotoWebviewPage: function(targetUrl, title) {
+		var userData = LogicData.getUserData()
+		var userId = userData.userId
+		if (userId == undefined) {
+			userId = 0
+		}
+
+		if (targetUrl.indexOf('?') !== -1) {
+			targetUrl = targetUrl + '&userId=' + userId
+		} else {
+			targetUrl = targetUrl + '?userId=' + userId
+		}
+
 		this.props.navigator.push({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			url: targetUrl,

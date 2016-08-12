@@ -252,7 +252,7 @@ var AppNavigator = React.createClass({
 				)
 			}
 			return (
-				<View style={{width: width, height: height, backgroundColor: '#0079ff', marginTop: 20}}>
+				<View style={{width: width, height: height, backgroundColor: '#0079ff'}}>
 					{statusBar}
 					<Swiper loop={false} bounces={true} activeDot={activeDot} dot={dot}>
 						{slides}

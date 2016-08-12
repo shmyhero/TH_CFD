@@ -82,7 +82,7 @@ var StockPopularityPage = React.createClass({
 		var buyWidth = barWidth * percent
 		var sellWidth = barWidth * (1-percent)
 		return (
-			<TouchableOpacity style={styles.popularityRowContainer} onPress={()=>this.gotoStockDetail(rowData)}>
+			<TouchableOpacity style={[styles.popularityRowContainer, {width: width}]} onPress={()=>this.gotoStockDetail(rowData)}>
 				<View style={styles.popularityRowLeft}>
 					<Text style={styles.buyTitle}>买涨 {percent*100}%</Text>
 					<View style={[styles.grayBar, {width:barWidth}]}>
@@ -184,7 +184,7 @@ var styles = StyleSheet.create({
 		alignSelf: 'flex-end',
 	},
 	stockName: {
-		fontSize: 14, 
+		fontSize: 14,
 		color: "#1862df",
 		paddingBottom: 2,
 	},

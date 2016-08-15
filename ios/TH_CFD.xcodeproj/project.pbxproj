@@ -29,6 +29,7 @@
 		3D4B37AC1D5049C8004BD09C /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4B37AB1D5049C8004BD09C /* CoreMotion.framework */; };
 		3D4B37AE1D5049FD004BD09C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4B37AD1D5049FD004BD09C /* Security.framework */; };
 		3D4B37B01D504A06004BD09C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4B37AF1D504A06004BD09C /* SystemConfiguration.framework */; };
+		3D4C814B1D61A56900A58712 /* libTalkingDataAppCpa.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4C81491D61A56900A58712 /* libTalkingDataAppCpa.a */; };
 		3D5C46C81C92B51000BF6FD3 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 3D5C46C71C92B51000BF6FD3 /* main.jsbundle */; };
 		3D61C5CB1C9909CB0037816A /* EditOwnStocksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */; };
 		3D61C5F11C9931810037816A /* EditOwnStockCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D61C5F01C9931810037816A /* EditOwnStockCell.swift */; };
@@ -197,6 +198,8 @@
 		3D4B37AB1D5049C8004BD09C /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		3D4B37AD1D5049FD004BD09C /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		3D4B37AF1D504A06004BD09C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		3D4C81491D61A56900A58712 /* libTalkingDataAppCpa.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTalkingDataAppCpa.a; sourceTree = "<group>"; };
+		3D4C814A1D61A56900A58712 /* TalkingDataAppCpa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TalkingDataAppCpa.h; sourceTree = "<group>"; };
 		3D5C46C71C92B51000BF6FD3 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditOwnStocksViewController.swift; path = TH_CFD/EditOwnStocksViewController.swift; sourceTree = "<group>"; };
 		3D61C5F01C9931810037816A /* EditOwnStockCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditOwnStockCell.swift; path = TH_CFD/EditOwnStockCell.swift; sourceTree = "<group>"; };
@@ -256,6 +259,7 @@
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				E30C3760AD2343E4BF815D6D /* libBVLinearGradient.a in Frameworks */,
 				C5971F975A91415B996BBB9C /* libRealmReact.a in Frameworks */,
+				3D4C814B1D61A56900A58712 /* libTalkingDataAppCpa.a in Frameworks */,
 				3D4B37971D504942004BD09C /* libTalkingData.a in Frameworks */,
 				80BCA2B8147C419E82DF3DFB /* libRCTHotUpdate.a in Frameworks */,
 				CBDAB12CB32E43B38DF342E5 /* libRCTWeChat.a in Frameworks */,
@@ -381,6 +385,8 @@
 		3D4B37A81D504961004BD09C /* TalkingData */ = {
 			isa = PBXGroup;
 			children = (
+				3D4C81491D61A56900A58712 /* libTalkingDataAppCpa.a */,
+				3D4C814A1D61A56900A58712 /* TalkingDataAppCpa.h */,
 				3D4B37941D504942004BD09C /* libTalkingData.a */,
 				3D4B37951D504942004BD09C /* TalkingData.h */,
 				3D4B37961D504942004BD09C /* TalkingDataSMS.h */,

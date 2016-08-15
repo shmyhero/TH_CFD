@@ -12,3 +12,4 @@
 #import "RCTHotUpdate.h"
 
 #import "TalkingData.h"
+#import "TalkingDataAppCpa.h"

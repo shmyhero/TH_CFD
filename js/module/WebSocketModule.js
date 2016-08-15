@@ -98,11 +98,13 @@ export function stop() {
 }
 
 export function registerCallbacks(stockInfoCallback, alertCallback) {
+	// console.log("register call backs")
 	wsStockInfoCallback = stockInfoCallback
 	wsAlertCallback = alertCallback
 }
 
 export function registerInterestedStocks(stockList) {
+	// console.log("register interested backs")
 	if (webSocketConnection.state == 1 && stockPriceWebSocketProxy !== null && stockList !== null && stockList.length > 0) {
 		console.log('Send stockList to websocket server: ' + stockList)
 		previousInterestedStocks = stockList
@@ -118,6 +120,12 @@ export function registerInterestedStocks(stockList) {
 		    	}
 			});
 	}
+}
+
+export function cleanRegisteredCallbacks() {
+	// console.log("clean registerCallbacks")
+	wsStockInfoCallback = null
+	wsAlertCallback = null
 }
 
 export function alertServiceLogin(token) {

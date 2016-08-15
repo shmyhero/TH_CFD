@@ -16,6 +16,7 @@ var ColorPropType = require('ColorPropType');
 var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
 var MainPage = require('./MainPage')
+var WebSocketModule = require('../module/WebSocketModule');
 
 var NavBar = React.createClass({
 	propTypes: {
@@ -56,6 +57,7 @@ var NavBar = React.createClass({
 
 	backOnClick: function() {
 		this.props.navigator.pop();
+		WebSocketModule.cleanRegisteredCallbacks()
 		if (this.props.backButtonOnClick) {
 			this.props.backButtonOnClick()
 		}

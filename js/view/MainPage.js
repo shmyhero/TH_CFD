@@ -39,6 +39,7 @@ var LiveRegisterStatusPage = require('./openAccount/OAStatusPage')
 var StockPopularityPage = require('./StockPopularityPage')
 
 var TalkingdataModule = require('../module/TalkingdataModule')
+var WebSocketModule = require('../module/WebSocketModule');
 
 var TutorialPage = require('./TutorialPage');
 var OpenAccountPages = [
@@ -61,6 +62,7 @@ var _navigator;
 BackAndroid.addEventListener('hardwareBackPress', () => {
 	if (_navigator && _navigator.getCurrentRoutes().length > 1) {
 		_navigator.pop();
+		WebSocketModule.cleanRegisteredCallbacks()
 		return true;
 	}
 	return false;

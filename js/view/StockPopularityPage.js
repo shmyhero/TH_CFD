@@ -37,27 +37,28 @@ var StockPopularityPage = React.createClass({
 	},
 
 	componentDidMount: function() {
+		// todo, push to refresh.
 		// delay 3 seconds to load again.
-		this.setTimeout(
-			() => {
-				NetworkModule.fetchTHUrl(
-					NetConstants.GET_POPULARITY_API,
-					{
-						method: 'GET',
-					},
-					(responseJson) => {
-						this.setState({
-							rawInfo: responseJson,
-							popularityInfo: ds.cloneWithRows(responseJson),
-						})
-					},
-					(errorMessage) => {
-						Alert.alert('', errorMessage);
-					}
-				)
-			 },
-			3000
-		);
+		// this.setTimeout(
+		// 	() => {
+		// 		NetworkModule.fetchTHUrl(
+		// 			NetConstants.GET_POPULARITY_API,
+		// 			{
+		// 				method: 'GET',
+		// 			},
+		// 			(responseJson) => {
+		// 				this.setState({
+		// 					rawInfo: responseJson,
+		// 					popularityInfo: ds.cloneWithRows(responseJson),
+		// 				})
+		// 			},
+		// 			(errorMessage) => {
+		// 				Alert.alert('', errorMessage);
+		// 			}
+		// 		)
+		// 	 },
+		// 	3000
+		// );
 	},
 
 	gotoStockDetail: function(rowData) {

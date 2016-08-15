@@ -30,6 +30,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		TalkingData.sessionStarted("9E5885AAFCB333653031970C2AF5614E", withChannelId: "AppStore")
 		TalkingDataAppCpa.init("605dc6928f4c4244a889282a7ee132cf", withChannelId: "AppStore")
 		
+		// register push notification
+		application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound] , categories: nil))
+		application.registerForRemoteNotifications()
+		
+		if (!TalkingData.handlePushMessage(launchOptions)) {
+			// 非来自TalkingData的消息，可以在此处处理该消息。
+		}
 		// initialize the rootView to fetch JS from the dev server
 		/**
 		* Loading JavaScript code - uncomment the one you want.
@@ -105,5 +112,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //	func application(application: UIApplication, continueUserActivity userActivity: NSUserActivity, restorationHandler: ([AnyObject]?) -> Void) -> Bool {
 //		return RCTLinkingManager.application(application, continueUserActivity: userActivity, restorationHandler: restorationHandler)
 //	}
+
+	func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+		print("Device token:", deviceToken)
+		TalkingData.setDeviceToken(deviceToken)
+	}
+	
+	func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+		if (!TalkingData.handlePushMessage(userInfo)) {
+			// 非来自TalkingData的消息，可以在此处处理该消息。
+		}
+	}
+	
+	func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+		print("Register remote notification failed")
+		print("no device token")
+	}
+
 }
 

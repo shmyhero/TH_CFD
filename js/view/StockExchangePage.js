@@ -27,12 +27,6 @@ var didTabSelectSubscription = null
 
 var StockExchangePage = React.createClass({
 
-	registerPressed: function() {
-		this.props.navigator.push({
-			name: MainPage.LOGIN_ROUTE,
-		});
-	},
-
 	getInitialState: function() {
 		return {
 			currentSelectedTab : 0,

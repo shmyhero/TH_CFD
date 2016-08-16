@@ -32,6 +32,7 @@ var dismissKeyboard = require('dismissKeyboard');
 var TalkingdataModule = require('../module/TalkingdataModule')
 
 
+var {height, width} = Dimensions.get('window')
 var rowHeight = 40;
 var fontSize = 16;
 var MAX_ValidationCodeCountdown = 60
@@ -42,6 +43,15 @@ const TAB_SIMULATOR = 2
 var LoginPage = React.createClass({
 	mixins: [TimerMixin],
 
+	propTypes: {
+		showCancelButton: React.PropTypes.bool,
+	},
+
+	getDefaultProps() {
+		return {
+			showCancelButton: false,
+		}
+	},
 	componentWillMount: function() {
 		WechatModule.isWechatInstalled()
 		.then((installed) => {
@@ -518,17 +528,39 @@ var LoginPage = React.createClass({
 			<LinearGradient colors={gradientColors} style={[styles.wrapper, {height: height}]}>
 				{/* {this.renderTab()} */}
 				<View style={styles.tabContainer}>
-					<Text style={{fontSize: 18, textAlign: 'center', color: '#ffffff',}}>
+					<Text style={{flex: 1, fontSize: 18, textAlign: 'center', color: '#ffffff'}}>
 						我的交易
 					</Text>
+					{this.renderCancelButton()}
 				</View>
 				{this.renderLoginContent()}
 			</LinearGradient>
 		)
-	}
+	},
+
+	renderCancelButton: function() {
+		if (this.props.showCancelButton) {
+			return (
+				<TouchableOpacity
+					onPress={()=>this.props.navigator.pop()}>
+						<Text style={styles.cancel}>
+							取消
+						</Text>
+				</TouchableOpacity>
+			);
+		}
+	},
+
 })
 
 var styles = StyleSheet.create({
+	cancel: {
+		color: 'white',
+		paddingLeft: 15,
+		width: 60,
+		marginLeft: -width,
+	},
+
 	tabContainer: {
 		height: UIConstants.HEADER_HEIGHT,
 		flexDirection: 'row',

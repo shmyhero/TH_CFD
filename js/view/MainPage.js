@@ -155,7 +155,7 @@ var MainPage = React.createClass({
 		} else if (route.name === LOGIN_ROUTE) {
 			hideTabbar()
 			return (
-				<LoginPage navigator={navigationOperations}/>
+				<LoginPage navigator={navigationOperations} showCancelButton={true}/>
 			);
 		} else if (route.name === UPDATE_USER_INFO_ROUTE) {
 			return (
@@ -454,7 +454,7 @@ var MainPage = React.createClass({
 			          	<RawContent ref="qaContent">
 							<Navigator
 								style={styles.container}
-								initialRoute={{name: ME_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
+								initialRoute={{name: QA_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
 								configureScene={() => Navigator.SceneConfigs.PushFromRight}
 								renderScene={this.RouteMapper} />
 			          	</RawContent>

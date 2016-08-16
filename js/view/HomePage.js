@@ -257,11 +257,11 @@ var HomePage = React.createClass({
 		}
 		var buyWidth = barWidth * percent
 		var sellWidth = barWidth * (1-percent)
-
+		percent = Math.round(percent*100)
 		return (
 			<TouchableOpacity style={styles.popularityRowContainer} onPress={()=>this.gotoStockDetail(rowData)}>
 				<View style={styles.popularityRowLeft}>
-					<Text style={styles.buyTitle}>买涨 {percent*100}%</Text>
+					<Text style={styles.buyTitle}>买涨 {percent}%</Text>
 					<View style={[styles.grayBar, {width:barWidth}]}>
 						<View style={[styles.redBar, {width:buyWidth}]}/>
 					</View>
@@ -272,7 +272,7 @@ var HomePage = React.createClass({
 					<Text style={styles.stockPeople}>{peopleNum}人参与</Text>
 				</View>
 				<View style={styles.popularityRowRight}>
-					<Text style={styles.sellTitle}>买跌 {100-percent*100}%</Text>
+					<Text style={styles.sellTitle}>买跌 {100-percent}%</Text>
 					<View style={[styles.grayBar, {width:barWidth}]}>
 						<View style={[styles.greenBar, {width:sellWidth}]}/>
 					</View>

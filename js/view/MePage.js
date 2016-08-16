@@ -18,7 +18,7 @@ var MainPage = require('./MainPage')
 
 var {height, width} = Dimensions.get('window')
 var listRawData = [{'type':'account'},
-{'type':'button'},
+{'type':'button','title':'开设实盘账户'},
 {'type':'normal','title':'帮助中心', 'image':require('../../images/markets.png'), 'subtype':''},
 {'type':'normal','title':'线上咨询', 'image':require('../../images/markets.png'), 'subtype':''},
 {'type':'normal','title':'产品反馈', 'image':require('../../images/markets.png'), 'subtype':''},
@@ -73,13 +73,17 @@ var MePage = React.createClass({
 						onPress={this.gotoOpenAccount}
 						textContainerStyle={styles.buttonView}
 						textStyle={styles.buttonText}
-						text='开设实盘账户' />
+						text= {rowData.title}/>
 				</View>
 			)
 		}
 		else {
+			// account
 			return(
 				<View style={styles.rowWrapper}>
+					<Image source={require('../../images/markets.png')} style={styles.image} />
+					<Text style={styles.defaultText}>手机号/微信号登录</Text>
+					<Text style={styles.more}> > </Text>
 				</View>
 			)
 		}
@@ -163,6 +167,12 @@ var styles = StyleSheet.create({
 		textAlign: 'center',
 		color: '#ffffff',
 	},
+
+	defaultText: {
+		flex: 1,
+		marginLeft: 10,
+		color: '#6d6d6d',
+	}
 });
 
 

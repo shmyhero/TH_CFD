@@ -454,7 +454,7 @@ var MainPage = React.createClass({
 			          	<RawContent ref="qaContent">
 							<Navigator
 								style={styles.container}
-								initialRoute={{name: QA_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
+								initialRoute={{name: ME_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
 								configureScene={() => Navigator.SceneConfigs.PushFromRight}
 								renderScene={this.RouteMapper} />
 			          	</RawContent>

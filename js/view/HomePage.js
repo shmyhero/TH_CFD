@@ -533,13 +533,10 @@ var styles = StyleSheet.create({
 		fontSize: 17,
 		marginLeft: 12,
 		color: "#3f3f3f",
-		alignItems: 'flex-start',
 	},
 	more: {
-		flex: 1,
 		fontSize: 14,
 		color: "#9f9f9f",
-		alignItems: 'flex-end',
 		marginRight: 12,
 	},
 	popularitylist: {

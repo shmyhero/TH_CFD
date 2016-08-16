@@ -33,6 +33,7 @@ var StockDetailPage = require('./StockDetailPage')
 var StockExchangePage = require('./StockExchangePage')
 var WebViewPage = require('./WebViewPage');
 var QAPage = require('./QAPage')
+var MePage = require('./MePage')
 var LiveRegisterPage = require('./openAccount/OALiveRegisterPage')
 var LiveUpdateUserInfoPage = require('./openAccount/OALiveUpdateUserInfoPage')
 var LiveRegisterStatusPage = require('./openAccount/OAStatusPage')
@@ -84,6 +85,7 @@ export let STOCK_DETAIL_ROUTE = 'stockDetail'
 export let STOCK_EXCHANGE_ROUTE = 'stockExchange'
 export let NAVIGATOR_WEBVIEW_ROUTE = 'webviewpage'
 export let QA_ROUTE = 'q&a'
+export let ME_ROUTE = 'me'
 export let OPEN_ACCOUNT_ROUTE = 'openAccount'
 export let LIVE_REGISTER_ROUTE = 'liveRegister'
 export let LIVE_UPDATE_USER_INFO_ROUTE = 'liveUpdateUserInfo'
@@ -239,6 +241,10 @@ var MainPage = React.createClass({
 		} else if (route.name === QA_ROUTE) {
 			return (
 				<QAPage />
+			)
+		} else if (route.name === ME_ROUTE) {
+			return (
+				<MePage navigator={navigationOperations} />
 			)
 		} else if (route.name === OPEN_ACCOUNT_ROUTE) {
 			hideTabbar()
@@ -448,7 +454,7 @@ var MainPage = React.createClass({
 			          	<RawContent ref="qaContent">
 							<Navigator
 								style={styles.container}
-								initialRoute={{name: QA_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
+								initialRoute={{name: ME_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
 								configureScene={() => Navigator.SceneConfigs.PushFromRight}
 								renderScene={this.RouteMapper} />
 			          	</RawContent>

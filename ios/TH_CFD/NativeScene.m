@@ -25,6 +25,21 @@ RCT_EXPORT_MODULE();
 	}
 	if([sceneName isEqualToString:@"MeiQia"]) {
 		MQChatViewManager *chatViewManager = [[MQChatViewManager alloc] init];
+		MQChatViewStyle *style = chatViewManager.chatViewStyle;
+		style.navBarColor = [UIColor colorWithHex:0x1962dd];
+		style.navBarTintColor = [UIColor whiteColor];
+		style.navTitleColor = [UIColor whiteColor];
+		style.enableRoundAvatar = YES;
+		style.enableOutgoingAvatar = YES;
+		style.backgroundColor = [UIColor colorWithHex:0xf0f0f0];
+		style.incomingBubbleColor = [UIColor whiteColor];
+		style.incomingMsgTextColor = [UIColor blackColor];
+		style.outgoingBubbleColor = [UIColor colorWithHex:0xcef2ff];
+		style.outgoingMsgTextColor = [UIColor blackColor];
+		
+		[chatViewManager setChatViewStyle:style];
+		[chatViewManager enableEvaluationButton:NO];
+		[chatViewManager setNavTitleText: @"盈盈在线"];
 		AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 		[chatViewManager pushMQChatViewControllerInViewController:delegate.rnRootViewController];
 	}

@@ -241,8 +241,6 @@ var MainPage = React.createClass({
 		} else if (route.name === QA_ROUTE) {
 			return (
 				<View style={{flex: 1}}>
-					<NavBar showBackButton={true} navigator={navigationOperations}
-						backButtonOnClick={()=>this.backAndShowTabbar(navigationOperations)}/>
 					<QAPage />
 				</View>
 			)

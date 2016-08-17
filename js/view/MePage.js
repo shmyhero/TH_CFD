@@ -23,8 +23,8 @@ var listRawData = [{'type':'account'},
 {'type':'normal','title':'帮助中心', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'helpcenter'},
 {'type':'normal','title':'线上咨询', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':''},
 {'type':'normal','title':'产品反馈', 'image':require('../../images/icon_response.png'), 'subtype':''},
-{'type':'normal','title':'关于我们', 'image':require('../../images/icon_aboutus.png'), 'subtype':''},
-{'type':'normal','title':'设置', 'image':require('../../images/icon_config.png'), 'subtype':''}]
+{'type':'normal','title':'关于我们', 'image':require('../../images/icon_aboutus.png'), 'subtype':'aboutus'},
+{'type':'normal','title':'设置', 'image':require('../../images/icon_config.png'), 'subtype':'config'}]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -45,6 +45,16 @@ var MePage = React.createClass({
 	onSelectNormalRow: function(rowData) {
 		//todo
 		if(rowData.subtype === 'helpcenter') {
+			this.props.navigator.push({
+				name: MainPage.QA_ROUTE,
+			});
+		}
+		else if(rowData.subtype === 'aboutus') {
+			this.props.navigator.push({
+				name: MainPage.QA_ROUTE,
+			});
+		}
+		else if(rowData.subtype === 'config') {
 			this.props.navigator.push({
 				name: MainPage.QA_ROUTE,
 			});

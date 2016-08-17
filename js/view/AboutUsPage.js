@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 var {height, width} = Dimensions.get('window');
-
+var UIConstants = require('../UIConstants');
 var AboutUsPage = React.createClass({
 
 
@@ -114,7 +114,7 @@ var styles = StyleSheet.create({
 	scrollView: {
 		flex:1,
 		backgroundColor: 'white',
-		height:height - 138,
+		height:height - 110 - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER,
 	},
 
 	center:{

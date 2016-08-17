@@ -37,6 +37,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		if (!TalkingData.handlePushMessage(launchOptions)) {
 			// 非来自TalkingData的消息，可以在此处处理该消息。
 		}
+		
+		// meiqia
+		MQManager.initWithAppkey("2a59beff6f1875815ea399fdad79a46e", completion:{ (clientId, error) in
+			if((error) != nil) {
+				print("init meiqia error:", error)
+			}
+			else {
+				print("init meiqia completion:", clientId)
+			}
+		})
+		
 		// initialize the rootView to fetch JS from the dev server
 		/**
 		* Loading JavaScript code - uncomment the one you want.
@@ -94,10 +105,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func applicationDidEnterBackground(application: UIApplication) {
 		// Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
 		// If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+		MQManager.closeMeiqiaService()
 	}
 	
 	func applicationWillEnterForeground(application: UIApplication) {
 		// Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+		MQManager.openMeiqiaService()
 	}
 	
 	func applicationDidBecomeActive(application: UIApplication) {
@@ -116,6 +129,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
 		print("Device token:", deviceToken)
 		TalkingData.setDeviceToken(deviceToken)
+		MQManager.registerDeviceToken(deviceToken)
 	}
 	
 	func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {

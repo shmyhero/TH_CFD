@@ -15,11 +15,11 @@ class StockChartView: UIView {
 	var topMargin:CGFloat = 2.0
 	var bottomMargin:CGFloat = 15.0
 	
-	@IBInspectable var startColor: UIColor = UIColor(hex: 0x7daeff)
-	@IBInspectable var endColor: UIColor = UIColor(hex: 0x1954b9)
-	@IBInspectable var lineColor: UIColor = UIColor(hex: 0xbbceed)
-	@IBInspectable var bgLineColor: UIColor = UIColor(hex: 0x497bce)
-	@IBInspectable var middleLineColor: UIColor = UIColor(hex: 0xffffff, alpha: 0.5)
+	@IBInspectable var startColor: UIColor = UIColor(hexInt: 0x7daeff)
+	@IBInspectable var endColor: UIColor = UIColor(hexInt: 0x1954b9)
+	@IBInspectable var lineColor: UIColor = UIColor(hexInt: 0xbbceed)
+	@IBInspectable var bgLineColor: UIColor = UIColor(hexInt: 0x497bce)
+	@IBInspectable var middleLineColor: UIColor = UIColor(hexInt: 0xffffff, alpha: 0.5)
 	
 	var chartDataJson: String! = ""
 	
@@ -93,8 +93,8 @@ class StockChartView: UIView {
 	
 	var colorType:Int=0 {
 		willSet {
-			self.bgLineColor = newValue == 1 ? UIColor(hex: 0xffffff, alpha: 0.5) : UIColor(hex: 0x497bce)
-			self.lineColor = newValue == 1 ? UIColor(hex: 0xffffff, alpha: 0.5) : UIColor(hex: 0xbbceed	)
+			self.bgLineColor = newValue == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0x497bce)
+			self.lineColor = newValue == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0xbbceed	)
 		}
 	}
 	
@@ -499,7 +499,7 @@ class StockChartView: UIView {
 		//Draw the circles on right top of graph stroke
 		
 		let circleColors = [UIColor.whiteColor().CGColor,
-			UIColor(hex:0x1954B9, alpha:0.3).CGColor]
+			UIColor(hexInt:0x1954B9, alpha:0.3).CGColor]
 		
 		let pointGradient = CGGradientCreateWithColors(colorSpace,
 			circleColors, colorLocations)
@@ -542,7 +542,7 @@ class StockChartView: UIView {
 		
 		let leftText: NSString = dateFormatter.stringFromDate(timeStart)
 		let rightText = dateFormatter.stringFromDate(timeEnd)
-		let textColor = UIColor(hex: 0x70a5ff)
+		let textColor = UIColor(hexInt: 0x70a5ff)
 		let textFont = UIFont(name: "Helvetica Neue", size: 8)
 		let textStyle = NSMutableParagraphStyle()
 		textStyle.alignment = .Center

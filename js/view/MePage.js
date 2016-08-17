@@ -15,13 +15,14 @@ var ColorConstants = require('../ColorConstants')
 var NavBar = require('./NavBar')
 var Button = require('./component/Button')
 var MainPage = require('./MainPage')
+var NativeSceneModule = require('../module/NativeSceneModule')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 var listRawData = [{'type':'account'},
 {'type':'button','title':'开设实盘账户'},
 {'type':'normal','title':'帮助中心', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'helpcenter'},
-{'type':'normal','title':'线上咨询', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':''},
+{'type':'normal','title':'线上咨询', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':'onlinehelp'},
 {'type':'normal','title':'产品反馈', 'image':require('../../images/icon_response.png'), 'subtype':''},
 {'type':'normal','title':'关于我们', 'image':require('../../images/icon_aboutus.png'), 'subtype':'aboutus'},
 {'type':'normal','title':'设置', 'image':require('../../images/icon_config.png'), 'subtype':'config'}]
@@ -48,6 +49,9 @@ var MePage = React.createClass({
 			this.props.navigator.push({
 				name: MainPage.QA_ROUTE,
 			});
+		}
+		else if(rowData.subtype === 'onlinehelp') {
+			NativeSceneModule.launchNativeScene('MeiQia')
 		}
 		else if(rowData.subtype === 'aboutus') {
 			this.props.navigator.push({

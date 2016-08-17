@@ -13,3 +13,5 @@
 
 #import "TalkingData.h"
 #import "TalkingDataAppCpa.h"
+
+#import "MQChatViewManager.h"

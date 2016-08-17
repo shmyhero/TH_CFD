@@ -8,6 +8,7 @@
 
 #import "NativeScene.h"
 #import "TH_CFD-swift.h"
+#import "MQChatViewManager.h"
 
 @implementation NativeScene
 
@@ -21,6 +22,11 @@ RCT_EXPORT_MODULE();
 		EditOwnStocksViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"EditOwnStocksViewController"];
 		AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 		[delegate.rnRootViewController presentViewController:vc animated:YES completion:nil];
+	}
+	if([sceneName isEqualToString:@"MeiQia"]) {
+		MQChatViewManager *chatViewManager = [[MQChatViewManager alloc] init];
+		AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+		[chatViewManager pushMQChatViewControllerInViewController:delegate.rnRootViewController];
 	}
 }
 

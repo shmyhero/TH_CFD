@@ -16,6 +16,7 @@ var TimerMixin = require('react-timer-mixin');
 var LogicData = require('../LogicData')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
+var ColorConstants = require('../ColorConstants')
 
 var {height, width} = Dimensions.get('window');
 
@@ -342,7 +343,7 @@ var styles = StyleSheet.create({
 	separator: {
 		marginLeft: 15,
 		height: 0.5,
-		backgroundColor: '#ececec',
+		backgroundColor: ColorConstants.SEPARATOR_GRAY,
 	},
 
 	container: {

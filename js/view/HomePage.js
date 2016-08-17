@@ -536,7 +536,7 @@ var styles = StyleSheet.create({
 	},
 	more: {
 		fontSize: 14,
-		color: "#9f9f9f",
+		color: ColorConstants.MORE_ICON,
 		marginRight: 12,
 	},
 	popularitylist: {
@@ -652,6 +652,7 @@ var styles = StyleSheet.create({
 		backgroundColor: '#1962dd',
 		marginLeft: 10,
 		marginRight: 5,
+		borderRadius: 2,
 	},
 	newsText: {
 		width: width-100,

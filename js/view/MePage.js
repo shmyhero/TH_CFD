@@ -17,13 +17,14 @@ var Button = require('./component/Button')
 var MainPage = require('./MainPage')
 
 var {height, width} = Dimensions.get('window')
+var heightRate = height/667.0
 var listRawData = [{'type':'account'},
 {'type':'button','title':'开设实盘账户'},
-{'type':'normal','title':'帮助中心', 'image':require('../../images/markets.png'), 'subtype':''},
-{'type':'normal','title':'线上咨询', 'image':require('../../images/markets.png'), 'subtype':''},
-{'type':'normal','title':'产品反馈', 'image':require('../../images/markets.png'), 'subtype':''},
-{'type':'normal','title':'关于我们', 'image':require('../../images/markets.png'), 'subtype':''},
-{'type':'normal','title':'设置', 'image':require('../../images/markets.png'), 'subtype':''}]
+{'type':'normal','title':'帮助中心', 'image':require('../../images/icon_helpcenter.png'), 'subtype':''},
+{'type':'normal','title':'线上咨询', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':''},
+{'type':'normal','title':'产品反馈', 'image':require('../../images/icon_response.png'), 'subtype':''},
+{'type':'normal','title':'关于我们', 'image':require('../../images/icon_aboutus.png'), 'subtype':''},
+{'type':'normal','title':'设置', 'image':require('../../images/icon_config.png'), 'subtype':''}]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -46,9 +47,13 @@ var MePage = React.createClass({
 	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
+		var marginLeft = 0
+		if (rowID > 1 && rowID < 6){
+			marginLeft = 15
+		}
 		return (
 			<View style={styles.line} key={rowID}>
-				<View style={styles.separator}/>
+				<View style={[styles.separator, {marginLeft: marginLeft}]}/>
 			</View>
 			)
 	},
@@ -57,17 +62,17 @@ var MePage = React.createClass({
 		if (rowData.type === 'normal') {
 			return(
 				<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectRow(rowData)}>
-					<View style={styles.rowWrapper}>
+					<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
 						<Image source={rowData.image} style={styles.image} />
 						<Text style={styles.title}>{rowData.title}</Text>
-						<Text style={styles.more}> > </Text>
+						<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
 					</View>
 				</TouchableOpacity>
 			)
 		}
 		else if (rowData.type === 'button'){
 			return(
-				<View style={styles.rowWrapper}>
+				<View style={[styles.rowWrapper, {height:Math.round(68*heightRate)}]}>
 					<Button style={styles.buttonArea}
 						enabled={true}
 						onPress={this.gotoOpenAccount}
@@ -80,10 +85,10 @@ var MePage = React.createClass({
 		else {
 			// account
 			return(
-				<View style={styles.rowWrapper}>
-					<Image source={require('../../images/markets.png')} style={styles.image} />
+				<View style={[styles.rowWrapper, {height:Math.round(88*heightRate)}]}>
+					<Image source={require('../../images/head_portrait.png')} style={styles.headImage} />
 					<Text style={styles.defaultText}>手机号/微信号登录</Text>
-					<Text style={styles.more}> > </Text>
+					<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
 				</View>
 			)
 		}
@@ -123,43 +128,43 @@ var styles = StyleSheet.create({
 		paddingRight: 15,
 		paddingBottom: 5,
 		paddingTop: 5,
-		backgroundColor: 'transparent',
+		backgroundColor: 'white',
 	},
 	line: {
 		height: 0.5,
-		backgroundColor: 'transparent',
+		backgroundColor: 'white',
 	},
 	separator: {
-		marginLeft: 15,
 		height: 0.5,
-		backgroundColor: '#d0d0d0',
+		backgroundColor: ColorConstants.SEPARATOR_GRAY,
 	},
 
 	image: {
-		width: 15,
-		height: 15,
+		marginLeft: -10,
+		width: 40,
+		height: 40,
 	},
 	title: {
 		flex: 1,
 		fontSize: 14,
 		marginLeft: 10,
+		color: '#303030',
 	},
-	more: {
-		fontSize: 14,
-		color: "#9f9f9f",
+	
+	moreImage: {
+		alignSelf: 'center',
+		width: 7.5,
+		height: 12.5,
 	},
 
 	buttonArea: {
 		flex: 1,
-		marginLeft: 15,
-		marginRight: 15,
-		marginBottom: 16,
 		borderRadius: 3,
 	},
 	buttonView: {
-		height: 40,
+		height: Math.round(44*heightRate),
 		borderRadius: 3,
-		backgroundColor: '#4567a4',
+		backgroundColor: ColorConstants.TITLE_BLUE,
 		justifyContent: 'center',
 	},
 	buttonText: {
@@ -172,7 +177,11 @@ var styles = StyleSheet.create({
 		flex: 1,
 		marginLeft: 10,
 		color: '#6d6d6d',
-	}
+	},
+	headImage: {
+		width: Math.round(62*heightRate),
+		height: Math.round(62*heightRate),
+	},
 });
 
 

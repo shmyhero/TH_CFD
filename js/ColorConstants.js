@@ -9,6 +9,8 @@ var colors = {
 	STOCK_DOWN_GREEN: '#40c19a',
 	STOCK_UNCHANGED_GRAY: '#a0a6aa',
 	LIST_BACKGROUND_GREY: '#f0eff5',
+	SEPARATOR_GRAY: '#ececec',
+	MORE_ICON: '#9f9f9f',
 
 	stock_color: function(change) {
 		if (change > 0) {

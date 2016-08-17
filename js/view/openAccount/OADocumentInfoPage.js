@@ -127,7 +127,7 @@ var styles = StyleSheet.create({
 	separator: {
 		marginLeft: 0,
 		height: 0.5,
-		backgroundColor: '#ececec',
+		backgroundColor: ColorConstants.SEPARATOR_GRAY,
 	},
 	rowTitle:{
 		fontSize: fontSize,

@@ -369,7 +369,7 @@ var styles = StyleSheet.create({
 	separator: {
 		marginLeft: 15,
 		height: 0.5,
-		backgroundColor: '#ececec',
+		backgroundColor: ColorConstants.SEPARATOR_GRAY,
 	},
 
 	rowWrapper: {

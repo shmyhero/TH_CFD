@@ -18,6 +18,7 @@ import com.facebook.react.ReactRootView;
 import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.tencent.bugly.crashreport.CrashReport;
+import com.tendcloud.appcpa.TalkingDataAppCpa;
 import com.tradehero.cfd.talkingdata.TalkingDataModule;
 
 import butterknife.Bind;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
         CrashReport.initCrashReport(getApplicationContext());
         TalkingDataModule.register(getApplicationContext(), null, null, true);
+        TalkingDataAppCpa.init(this.getApplicationContext(), "d505985d4e8e494fbd59aab89d4b8b96", null);
 
         mReactInstanceManager = RNManager.getInstanceManager(getApplication());
         setContentView(R.layout.react_activity_container);

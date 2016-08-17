@@ -33,6 +33,7 @@ var StockDetailPage = require('./StockDetailPage')
 var StockExchangePage = require('./StockExchangePage')
 var WebViewPage = require('./WebViewPage');
 var QAPage = require('./QAPage')
+var AboutUsPage = require('./AboutUsPage');
 var MePage = require('./MePage')
 var LiveRegisterPage = require('./openAccount/OALiveRegisterPage')
 var LiveUpdateUserInfoPage = require('./openAccount/OALiveUpdateUserInfoPage')
@@ -86,6 +87,7 @@ export let STOCK_EXCHANGE_ROUTE = 'stockExchange'
 export let NAVIGATOR_WEBVIEW_ROUTE = 'webviewpage'
 export let QA_ROUTE = 'q&a'
 export let ME_ROUTE = 'me'
+export let ABOUT_US = 'aboutUs'
 export let OPEN_ACCOUNT_ROUTE = 'openAccount'
 export let LIVE_REGISTER_ROUTE = 'liveRegister'
 export let LIVE_UPDATE_USER_INFO_ROUTE = 'liveUpdateUserInfo'
@@ -244,6 +246,14 @@ var MainPage = React.createClass({
 					<NavBar showBackButton={true} navigator={navigationOperations}
 						backButtonOnClick={()=>this.backAndShowTabbar(navigationOperations)}/>
 					<QAPage />
+				</View>
+			)
+		} else if (route.name === ABOUT_US) {
+			return (
+				<View style={{flex: 1}}>
+					<NavBar title="关于我们" showBackButton={true} navigator={navigationOperations}
+						backButtonOnClick={()=>this.backAndShowTabbar(navigationOperations)}/>
+					<AboutUsPage />
 				</View>
 			)
 		} else if (route.name === ME_ROUTE) {

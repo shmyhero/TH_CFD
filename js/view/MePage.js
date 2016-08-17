@@ -55,7 +55,7 @@ var MePage = React.createClass({
 		}
 		else if(rowData.subtype === 'aboutus') {
 			this.props.navigator.push({
-				name: MainPage.QA_ROUTE,
+				name: MainPage.ABOUT_US,
 			});
 		}
 		else if(rowData.subtype === 'config') {
@@ -135,7 +135,7 @@ var styles = StyleSheet.create({
     	justifyContent: 'space-around',
 		backgroundColor: ColorConstants.BACKGROUND_GREY,
 	},
-	
+
 	list: {
 		flex: 1,
 		// borderWidth: 1,
@@ -170,7 +170,7 @@ var styles = StyleSheet.create({
 		marginLeft: 10,
 		color: '#303030',
 	},
-	
+
 	moreImage: {
 		alignSelf: 'center',
 		width: 7.5,

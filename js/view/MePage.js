@@ -111,6 +111,7 @@ var MePage = React.createClass({
 var styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
+		width: width,
    		alignItems: 'stretch',
     	justifyContent: 'space-around',
 		backgroundColor: ColorConstants.BACKGROUND_GREY,
@@ -146,7 +147,7 @@ var styles = StyleSheet.create({
 	},
 	title: {
 		flex: 1,
-		fontSize: 14,
+		fontSize: 17,
 		marginLeft: 10,
 		color: '#303030',
 	},
@@ -175,6 +176,7 @@ var styles = StyleSheet.create({
 
 	defaultText: {
 		flex: 1,
+		fontSize: 17,
 		marginLeft: 10,
 		color: '#6d6d6d',
 	},

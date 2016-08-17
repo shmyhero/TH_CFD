@@ -12,6 +12,19 @@
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
 
+    <!-- 允许App开机启动，来接收推送 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
+    <!--发送持久广播 -->
+    <uses-permission android:name="android.permission.BROADCAST_STICKY"></uses-permission>
+    <!-- 修改全局系统设置-->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"></uses-permission>
+    <!-- 允许振动，在接收推送时提示客户 -->
+    <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
+    <!-- 侦测Wifi 变化，以针对不同 Wifi 控制最佳心跳频率，确保push的通道稳定 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
+    <!-- 此权限用于在接到推送时，可唤醒屏幕，可选择性添加权限 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+
     <application
         android:allowBackup="true"
         android:label="@string/app_name"
@@ -42,6 +55,34 @@
         <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
 
         <activity android:name=".NativeViewActivity"/>
+
+        <service
+            android:name="com.apptalkingdata.push.service.PushService"
+            android:process=":push"
+            android:exported="true">
+        </service>
+
+        <receiver android:name="com.apptalkingdata.push.service.PushServiceReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.CMD"></action>
+                <action android:name="android.talkingdata.action.notification.SHOW"></action>
+                <action android:name="android.talkingdata.action.media.MESSAGE"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"></action>
+                <action android:name="android.intent.action.USER_PRESENT"></action>
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.tendcloud.tenddata.TalkingDataAppMessageReceiver" android:enabled="true">
+            <intent-filter>
+                <action android:name="android.talkingdata.action.media.SILENT"></action>
+                <action android:name="android.talkingdata.action.media.TD.TOKEN"></action>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.talkingdata.notification.click"></action>
+                <action android:name="com.talkingdata.message.click"></action>
+            </intent-filter>
+        </receiver>
+
         <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data

@@ -20,7 +20,7 @@ var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 var listRawData = [{'type':'account'},
 {'type':'button','title':'开设实盘账户'},
-{'type':'normal','title':'帮助中心', 'image':require('../../images/icon_helpcenter.png'), 'subtype':''},
+{'type':'normal','title':'帮助中心', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'helpcenter'},
 {'type':'normal','title':'线上咨询', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':''},
 {'type':'normal','title':'产品反馈', 'image':require('../../images/icon_response.png'), 'subtype':''},
 {'type':'normal','title':'关于我们', 'image':require('../../images/icon_aboutus.png'), 'subtype':''},
@@ -42,8 +42,13 @@ var MePage = React.createClass({
 
 	},
 
-	onSelectRow: function(rowData) {
+	onSelectNormalRow: function(rowData) {
 		//todo
+		if(rowData.subtype === 'helpcenter') {
+			this.props.navigator.push({
+				name: MainPage.QA_ROUTE,
+			});
+		}
 	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
@@ -61,7 +66,7 @@ var MePage = React.createClass({
 	renderRow: function(rowData, sectionID, rowID) {
 		if (rowData.type === 'normal') {
 			return(
-				<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectRow(rowData)}>
+				<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
 					<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
 						<Image source={rowData.image} style={styles.image} />
 						<Text style={styles.title}>{rowData.title}</Text>

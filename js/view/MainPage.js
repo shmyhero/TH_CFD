@@ -248,7 +248,11 @@ var MainPage = React.createClass({
 			)
 		} else if (route.name === QA_ROUTE) {
 			return (
-				<MePage navigator={navigationOperations}/>
+				<View style={{flex: 1}}>
+					<NavBar showBackButton={true} navigator={navigationOperations}
+						backButtonOnClick={()=>this.backAndShowTabbar(navigationOperations)}/>
+					<QAPage />
+				</View>
 			)
 		} else if (route.name === ABOUT_US) {
 			hideTabbar();

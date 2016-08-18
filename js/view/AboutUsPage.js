@@ -114,7 +114,7 @@ var styles = StyleSheet.create({
 	scrollView: {
 		flex:1,
 		backgroundColor: 'white',
-		height:height - 110 - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER,
+		height:height - 60 - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER,
 	},
 
 	center:{
@@ -150,7 +150,7 @@ var styles = StyleSheet.create({
 	},
 
 	textSub:{
-		color:'#5d5d5d',
+		color:'#868686',
 		fontSize:15,
 		marginLeft:10,
 		lineHeight:24,

@@ -1,22 +1,20 @@
 package com.tradehero.cfd;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactRootView;
-import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
+import com.meiqia.core.callback.OnInitCallback;
+import com.meiqia.meiqiasdk.util.MQConfig;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tendcloud.appcpa.TalkingDataAppCpa;
 import com.tradehero.cfd.talkingdata.TalkingDataModule;
@@ -45,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         CrashReport.initCrashReport(getApplicationContext());
         TalkingDataModule.register(getApplicationContext(), null, null, true);
         TalkingDataAppCpa.init(this.getApplicationContext(), "d505985d4e8e494fbd59aab89d4b8b96", null);
+
+        initMeiQia();
 
         mReactInstanceManager = RNManager.getInstanceManager(getApplication());
         setContentView(R.layout.react_activity_container);
@@ -127,5 +127,21 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         mReactInstanceManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void initMeiQia(){
+        MQConfig.init(this, "2a59beff6f1875815ea399fdad79a46e", new OnInitCallback() {
+            @Override
+            public void onSuccess(String clientId) {
+                Toast.makeText(MainActivity.this, "init success", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(int code, String message) {
+                Toast.makeText(MainActivity.this, "int failure", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 }

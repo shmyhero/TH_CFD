@@ -249,14 +249,15 @@ var MainPage = React.createClass({
 				</View>
 			)
 		} else if (route.name === ABOUT_US) {
+			hideTabbar();
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title="关于我们" showBackButton={true} navigator={navigationOperations}
-						backButtonOnClick={()=>this.backAndShowTabbar(navigationOperations)}/>
+					<NavBar title="关于我们" showBackButton={true} navigator={navigationOperations}/>
 					<AboutUsPage />
 				</View>
 			)
 		} else if (route.name === ME_ROUTE) {
+			showTabbar();
 			return (
 				<MePage navigator={navigationOperations} />
 			)

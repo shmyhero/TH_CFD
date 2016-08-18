@@ -165,4 +165,10 @@ dependencies {
     compile 'com.tencent.bugly:crashreport:latest.release'
     compile 'com.tencent.bugly:nativecrashreport:latest.release'
 
+    // -------------------- 以下四个库是美洽依赖的 ----------------------------
+    compile 'com.meiqia:meiqiasdk:3.2.8@aar'
+    compile 'com.android.support:support-v4:23.1.1'
+    compile 'com.squareup.okhttp3:okhttp:3.3.1'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+
 }

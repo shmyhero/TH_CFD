@@ -99,9 +99,10 @@ var QAPage = React.createClass({
 });
 
 var styles = StyleSheet.create({
+
 	webView: {
 		backgroundColor: 'white',
-		marginBottom: 50,
+		marginBottom: 0,
 	},
 
 	containerView: {
@@ -110,6 +111,7 @@ var styles = StyleSheet.create({
 		alignSelf: 'stretch',
 		justifyContent: 'space-around',
 	},
+
 	image: {
 		width: 170,
 		height: 180,

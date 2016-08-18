@@ -42,6 +42,7 @@ var LiveRegisterPage = require('./openAccount/OALiveRegisterPage')
 var LiveUpdateUserInfoPage = require('./openAccount/OALiveUpdateUserInfoPage')
 var LiveRegisterStatusPage = require('./openAccount/OAStatusPage')
 var StockPopularityPage = require('./StockPopularityPage')
+var FeedbackPage = require('./FeedbackPage')
 
 var TalkingdataModule = require('../module/TalkingdataModule')
 var WebSocketModule = require('../module/WebSocketModule');
@@ -99,6 +100,7 @@ export let LIVE_REGISTER_ROUTE = 'liveRegister'
 export let LIVE_UPDATE_USER_INFO_ROUTE = 'liveUpdateUserInfo'
 export let LIVE_REGISTER_STATUS_ROUTE = 'liveRegisterStatus'
 export let STOCK_POPULARITY_ROUTE = 'stockPopularity'
+export let FEEDBACK_ROUTE = 'feedback'
 
 const glypy = glypyMapMaker({
   Home: 'f04f',
@@ -247,9 +249,10 @@ var MainPage = React.createClass({
 				</View>
 			)
 		} else if (route.name === QA_ROUTE) {
+			hideTabbar();
 			return (
 				<View style={{flex: 1}}>
-					<NavBar showBackButton={true} navigator={navigationOperations}
+					<NavBar title='帮助中心' showBackButton={true} navigator={navigationOperations}
 						backButtonOnClick={()=>this.backAndShowTabbar(navigationOperations)}/>
 					<QAPage />
 				</View>
@@ -258,7 +261,7 @@ var MainPage = React.createClass({
 			hideTabbar();
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title="关于我们" showBackButton={true} navigator={navigationOperations}/>
+					<NavBar title='关于我们' showBackButton={true} navigator={navigationOperations}/>
 					<AboutUsPage />
 				</View>
 			)
@@ -350,6 +353,13 @@ var MainPage = React.createClass({
 						navigator={navigationOperations}/>
 					<StockPopularityPage navigator={navigationOperations} initialInfo={route.data}/>
 				</View>
+			)
+		}
+		else if (route.name === FEEDBACK_ROUTE) {
+			hideTabbar()
+			return (
+				<FeedbackPage navigator={navigationOperations}
+					showTabbar={showTabbar}/>
 			)
 		}
 	},

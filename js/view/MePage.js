@@ -23,7 +23,7 @@ var listRawData = [{'type':'account'},
 {'type':'button','title':'开设实盘账户'},
 {'type':'normal','title':'帮助中心', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'helpcenter'},
 {'type':'normal','title':'线上咨询', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':'onlinehelp'},
-{'type':'normal','title':'产品反馈', 'image':require('../../images/icon_response.png'), 'subtype':''},
+{'type':'normal','title':'产品反馈', 'image':require('../../images/icon_response.png'), 'subtype':'feedback'},
 {'type':'normal','title':'关于我们', 'image':require('../../images/icon_aboutus.png'), 'subtype':'aboutus'},
 {'type':'normal','title':'设置', 'image':require('../../images/icon_config.png'), 'subtype':'config'}]
 
@@ -40,11 +40,9 @@ var MePage = React.createClass({
 		this.props.navigator.push({
 			name: MainPage.LOGIN_ROUTE,
 		});
-
 	},
 
 	onSelectNormalRow: function(rowData) {
-		//todo
 		if(rowData.subtype === 'helpcenter') {
 			this.props.navigator.push({
 				name: MainPage.QA_ROUTE,
@@ -61,6 +59,11 @@ var MePage = React.createClass({
 		else if(rowData.subtype === 'config') {
 			this.props.navigator.push({
 				name: MainPage.ME_CONFIG_ROUTE,
+			});
+		}
+		else if(rowData.subtype === 'feedback') {
+			this.props.navigator.push({
+				name: MainPage.FEEDBACK_ROUTE,
 			});
 		}
 	},

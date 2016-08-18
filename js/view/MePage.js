@@ -60,7 +60,7 @@ var MePage = React.createClass({
 		}
 		else if(rowData.subtype === 'config') {
 			this.props.navigator.push({
-				name: MainPage.QA_ROUTE,
+				name: MainPage.ME_CONFIG_ROUTE,
 			});
 		}
 	},

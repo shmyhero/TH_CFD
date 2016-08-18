@@ -35,6 +35,9 @@ var WebViewPage = require('./WebViewPage');
 var QAPage = require('./QAPage')
 var AboutUsPage = require('./AboutUsPage');
 var MePage = require('./MePage')
+var MeConfigPage = require('./MeConfigPage')
+var MePushConfigPage = require('./MePushConfigPage')
+var MeAccountBindingPage = require('./MeAccountBindingPage')
 var LiveRegisterPage = require('./openAccount/OALiveRegisterPage')
 var LiveUpdateUserInfoPage = require('./openAccount/OALiveUpdateUserInfoPage')
 var LiveRegisterStatusPage = require('./openAccount/OAStatusPage')
@@ -88,6 +91,9 @@ export let NAVIGATOR_WEBVIEW_ROUTE = 'webviewpage'
 export let QA_ROUTE = 'q&a'
 export let ME_ROUTE = 'me'
 export let ABOUT_US = 'aboutUs'
+export let ME_CONFIG_ROUTE = 'meConfig'
+export let ME_PUSH_CONFIG_ROUTE = 'mePushConfig'
+export let ME_ACCOUNT_BINDING_ROUTE = 'meAccountBinding'
 export let OPEN_ACCOUNT_ROUTE = 'openAccount'
 export let LIVE_REGISTER_ROUTE = 'liveRegister'
 export let LIVE_UPDATE_USER_INFO_ROUTE = 'liveUpdateUserInfo'
@@ -242,11 +248,7 @@ var MainPage = React.createClass({
 			)
 		} else if (route.name === QA_ROUTE) {
 			return (
-				<View style={{flex: 1}}>
-					<NavBar showBackButton={true} navigator={navigationOperations}
-						backButtonOnClick={()=>this.backAndShowTabbar(navigationOperations)}/>
-					<QAPage />
-				</View>
+				<MePage navigator={navigationOperations}/>
 			)
 		} else if (route.name === ABOUT_US) {
 			hideTabbar();
@@ -260,6 +262,27 @@ var MainPage = React.createClass({
 			showTabbar();
 			return (
 				<MePage navigator={navigationOperations} />
+			)
+		} else if(route.name === ME_CONFIG_ROUTE){
+			return (
+				<View style={{flex: 1}}>
+					<NavBar title="设置" showBackButton={true} navigator={navigationOperations}/>
+					<MeConfigPage navigator={navigationOperations} />
+				</View>
+			)
+		} else if(route.name === ME_PUSH_CONFIG_ROUTE){
+			return (
+				<View style={{flex: 1}}>
+					<NavBar title="推送设置" showBackButton={true} navigator={navigationOperations}/>
+					<MePushConfigPage navigator={navigationOperations} />
+				</View>
+			)
+		} else if(route.name === ME_ACCOUNT_BINDING_ROUTE){
+			return (
+				<View style={{flex: 1}}>
+					<NavBar title="账号绑定" showBackButton={true} navigator={navigationOperations}/>
+					<MeAccountBindingPage navigator={navigationOperations} />
+				</View>
 			)
 		} else if (route.name === OPEN_ACCOUNT_ROUTE) {
 			hideTabbar()

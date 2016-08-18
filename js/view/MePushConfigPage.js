@@ -13,7 +13,11 @@ import {
 	TouchableOpacity,
 } from 'react-native';
 
+var LoginPage = require('./LoginPage');
+var LogicData = require('../LogicData')
 var ColorConstants = require('../ColorConstants')
+var NetConstants = require('../NetConstants')
+var NetworkModule = require('../module/NetworkModule')
 var NavBar = require('./NavBar')
 var MainPage = require('./MainPage')
 
@@ -32,22 +36,80 @@ var MePushConfigPage = React.createClass({
 	getInitialState: function() {
 		return {
 			dataSource: ds.cloneWithRows(listRawData),
-			closePositionPushSwitchIsOn: true,
-			closePositionPushSwitchUpdated: false	//TODO: Use real data
+			autoCloseAlertIsOn: false,
 		};
+	},
+
+	componentDidMount: function() {
+		//Once user moves into this page, check server setting.
+		this.loadPushConfigInfo()
 	},
 
 	onSelectNormalRow: function(rowData) {
 		//DO NOTHING!
 	},
 
+	loadPushConfigInfo: function(){
+		var userData = LogicData.getUserData()
+		var notLogin = Object.keys(userData).length === 0
+
+		if (!notLogin) {
+			NetworkModule.fetchTHUrl(
+				NetConstants.GET_USER_INFO_API,
+				{
+					method: 'GET',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					},
+				},
+				function(responseJson) {
+					var autoCloseAlert = responseJson.autoCloseAlert
+					this.setState({
+						autoCloseAlertIsOn: autoCloseAlert,
+						dataSource: ds.cloneWithRows(listRawData),
+					});
+				}.bind(this),
+				function(errorMessage) {
+					Alert.alert('提示',errorMessage);
+				}
+			)
+		}
+	},
+
+	changeAutoCloseAlertSetting: function(value){
+		var userData = LogicData.getUserData()
+		var notLogin = Object.keys(userData).length === 0
+		if (notLogin) {
+		}else{
+			var url = NetConstants.AUTO_CLOSE_ALERT_API
+			url = url.replace(/<setting>/, value)
+
+			NetworkModule.fetchTHUrl(
+				url,
+				{
+					method: 'POST',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					},
+				},
+				function(responseJson) {
+					//Do nothing?
+				}.bind(this),
+				function(errorMessage) {
+					Alert.alert('提示',errorMessage);
+				}
+			)
+		}
+	},
+
 	onSwitchPressed: function(value, rowData) {
 		if(rowData.subtype === 'closepositionpush'){
 			this.setState({
 				dataSource: ds.cloneWithRows(listRawData),
-				closePositionPushSwitchIsOn: value
+				autoCloseAlertIsOn: value
 			})
-			console.log(this.state.closePositionPushSwitchIsOn)
+
+			this.changeAutoCloseAlertSetting(value);
 		}
 	},
 
@@ -82,14 +144,14 @@ var MePushConfigPage = React.createClass({
 
 	renderRow: function(rowData, sectionID, rowID) {
 		if (rowData.type === 'normal') {
-			var switchIsOn = this.state.closePositionPushSwitchIsOn;
+			var switchIsOn = this.state.autoCloseAlertIsOn;
 			return(
 				<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
 					<Text style={styles.title}>{rowData.title}</Text>
 					<View style={styles.extendRight}>
 						<Switch
 							onValueChange={(value) => this.onSwitchPressed(value, rowData)}
-							value={this.state.closePositionPushSwitchIsOn}
+							value={switchIsOn}
 							onTintColor={ColorConstants.TITLE_BLUE} />
 					</View>
 				</View>
@@ -104,12 +166,26 @@ var MePushConfigPage = React.createClass({
 	},
 
 	render: function() {
+		var userData = LogicData.getUserData()
+		var loggined = Object.keys(userData).length !== 0
+		if(loggined){
+
+
+		}else{
+			this.props.navigator.push({
+				name: MainPage.LOGIN_ROUTE,
+			});
+
+		}
+
 		return (
-			    <ListView
-			    	style={styles.list}
-						dataSource={this.state.dataSource}
-						renderRow={this.renderRow}
-						renderSeparator={this.renderSeparator} />
+			<View style={styles.wrapper}>
+				<ListView
+					style={styles.list}
+					dataSource={this.state.dataSource}
+					renderRow={this.renderRow}
+					renderSeparator={this.renderSeparator} />
+			</View>
 		);
 	},
 });

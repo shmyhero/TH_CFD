@@ -268,6 +268,7 @@ var MainPage = React.createClass({
 				<MePage navigator={navigationOperations} />
 			)
 		} else if(route.name === ME_CONFIG_ROUTE){
+			showTabbar()
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title="设置" showBackButton={true} navigator={navigationOperations}/>
@@ -275,6 +276,7 @@ var MainPage = React.createClass({
 				</View>
 			)
 		} else if(route.name === ME_PUSH_CONFIG_ROUTE){
+			showTabbar()
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title="推送设置" showBackButton={true} navigator={navigationOperations}/>
@@ -282,6 +284,7 @@ var MainPage = React.createClass({
 				</View>
 			)
 		} else if(route.name === ME_ACCOUNT_BINDING_ROUTE){
+			showTabbar()
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title="账号绑定" showBackButton={true} navigator={navigationOperations}/>

@@ -6,12 +6,15 @@ import {
 	View,
 	Dimensions,
 	ListView,
+	Alert,
 	Text,
 	Image,
 	TouchableOpacity,
 } from 'react-native';
 
 var LogicData = require('../LogicData')
+var NetConstants = require('../NetConstants')
+var NetworkModule = require('../module/NetworkModule')
 var ColorConstants = require('../ColorConstants')
 var NavBar = require('./NavBar')
 var Button = require('./component/Button')
@@ -21,8 +24,8 @@ var WechatModule = require('../module/WechatModule')
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 var listRawData = [
-{'type':'mobile','title':'手机号', 'subtype': 'mobile'},
-{'type':'wechat','title':'微信', 'subtype': 'bindWeChat'},
+{'type':'mobile','title':'手机号', 'subtype': 'bindMobile'},
+{'type':'wechat','title':'微信', 'subtype': 'bindWeChat'}
 ]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -31,25 +34,88 @@ var MeAccountBindingPage = React.createClass({
 	getInitialState: function() {
 		return {
 			dataSource: ds.cloneWithRows(listRawData),
+			phoneNumber: null,
+			wechatBinded: false
 		};
 	},
 
+	componentDidMount: function() {
+		//Once user moves into this page, check server setting.
+		this.loadAccountBindingInfo()
+	},
+
 	onSelectNormalRow: function(rowData) {
-		//todo
 		if(rowData.subtype === 'bindWeChat') {
 			this.wechatPressed();
+		}else if(rowData.subtype === 'bindMobile'){
+			this.props.navigator.push({
+				name: MainPage.LOGIN_ROUTE,
+			});
 		}
 	},
 
+	loadAccountBindingInfo: function(){
+		var userData = LogicData.getUserData()
+		var notLogin = Object.keys(userData).length === 0
+		if (notLogin) {
+			console.log("not loggined");
+
+			this.setState({
+				phoneNumber: null,
+			});
+			this.hideWechatIfNotInstalled();
+
+		}else{
+			NetworkModule.fetchTHUrl(
+				NetConstants.GET_USER_INFO_API,
+				{
+					method: 'GET',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					},
+				},
+				function(responseJson) {
+					var phoneNumber = responseJson.phone
+					var weChatOpenId = responseJson.weChatOpenId
+					var isWechatBinded = weChatOpenId != null
+
+					this.setState({
+						phoneNumber: phoneNumber,
+						wechatBinded: isWechatBinded,
+						dataSource: ds.cloneWithRows(listRawData),
+					});
+
+					if(!isWechatBinded){
+						this.hideWechatIfNotInstalled()
+					}
+				}.bind(this),
+				function(errorMessage) {
+					Alert.alert('提示',errorMessage);
+				}
+			)
+		}
+	},
+
+	hideWechatIfNotInstalled: function() {
+		if(!WechatModule.isWechatInstalled()){
+			//WHAT'S WRONG?
+			if(listRawData.length > 1){
+				listRawData.slice(1, 1);
+			}
+		}else{
+		}
+	},
 
 	wechatPressed: function() {
+		/*
 		WechatModule.wechatLogin(
 			() => {
 				this.wechatLogin()
 			},
 
 			function() {}.bind(this)
-		)
+		)*/
+		this.wechatLogin();
 	},
 
 	wechatLogin: function() {
@@ -84,11 +150,24 @@ var MeAccountBindingPage = React.createClass({
 		)
 	},
 
+	loginSuccess: function(userData) {
+		StorageModule.setUserData(JSON.stringify(userData))
+		LogicData.setUserData(userData);
+		console.log(LogicData.getUserData());
+
+		NetworkModule.syncOwnStocks(userData)
+		WebSocketModule.alertServiceLogin(userData.userId + '_' + userData.token)
+
+		this.setState({
+			phoneLoginButtonEnabled: true
+		});
+		this.props.navigator.push({
+			name: MainPage.UPDATE_USER_INFO_ROUTE,
+		});
+	},
+
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
 		var marginLeft = 0
-		//if (rowID > 1 && rowID < 3){
-		//	marginLeft = 15
-		//}
 		return (
 			<View style={styles.line} key={rowID}>
 				<View style={[styles.separator, {marginLeft: marginLeft}]}/>
@@ -97,68 +176,18 @@ var MeAccountBindingPage = React.createClass({
 	},
 
 	renderRow: function(rowData, sectionID, rowID) {
-		//TODO: Move to outside?
-		var userData = LogicData.getUserData();
-
-		var wechatUserData = LogicData.getWechatUserData()
-		var notLogin = Object.keys(userData).length === 0
-		if (notLogin) {
-			console.log("not loggined");
-		}else{
-			var out = Object.keys(userData).map(function(data){
-				return [data, userData[data]]
-			})
-			console.log(out);
-		}
-		var wechatBinded = false;
-		if (LogicData.getWechatUserData().nickname !== undefined) {
-			wechatBinded = true;
-			this.setState({
-				noteState: NOTE_STATE_NORMAL_WECHAT,
-			})
-		}
-
-		var lastMobile = 13817293749;
-
-		//todo: judge has mobile key.
-		//todo: judge has wechat key
-
 		if (rowData.type === 'mobile'){
 			//TODO: Use Real Data
-			if(lastMobile != null){
+			if(this.state.phoneNumber != null){
 				return(
-					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
-						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-							<Text style={styles.title}>{rowData.title}</Text>
-							<View style={styles.extendRight}>
-								<Text style={styles.message}>{lastMobile}</Text>
-							</View>
+					<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
+						<Text style={styles.title}>{rowData.title}</Text>
+						<View style={styles.extendRight}>
+							<Text style={styles.message}>{this.state.phoneNumber}</Text>
 						</View>
-					</TouchableOpacity>
+					</View>
 				);
 			}else{
-				return(
-					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
-						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-							<Text style={styles.title}>{rowData.title}</Text>
-							<View style={styles.extendRight}>
-								<Text style={styles.message}>未绑定</Text>
-								<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
-							</View>
-						</View>
-					</TouchableOpacity>
-				);
-			}
-		}else if (rowData.type === 'wechat'){
-			if(wechatBinded){
-				return(
-					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
-						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-							<Text style={styles.title}>{rowData.title}</Text>
-						</View>
-					</TouchableOpacity>
-				);
-			} else {
 				return(
 					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
 						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
@@ -170,6 +199,26 @@ var MeAccountBindingPage = React.createClass({
 						</View>
 					</TouchableOpacity>
 				);
+			}
+		}else if (rowData.type === 'wechat'){
+			if(this.state.wechatBinded){
+				return(
+					<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
+						<Text style={styles.title}>{rowData.title}</Text>
+					</View>
+				);
+			} else {
+					return(
+						<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
+							<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
+								<Text style={styles.title}>{rowData.title}</Text>
+								<View style={styles.extendRight}>
+									<Text style={styles.clickableMessage}>未绑定</Text>
+								</View>
+								<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
+							</View>
+						</TouchableOpacity>
+					);
 			}
 		}
 	},
@@ -227,6 +276,13 @@ var styles = StyleSheet.create({
 		fontSize: 17,
 		marginLeft: 10,
 		color: '#303030',
+	},
+	message:{
+		flex: 1,
+		fontSize: 17,
+		marginLeft: 10,
+		marginRight: 10,
+		color: '#757575',
 	},
 	clickableMessage: {
 		flex: 1,

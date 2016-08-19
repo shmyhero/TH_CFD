@@ -50,7 +50,7 @@ var MePushConfigPage = React.createClass({
 	getInitialState: function() {
 		return {
 			dataSource: ds.cloneWithRows(listRawData),
-			autoCloseAlertIsOn: false,
+			autoCloseAlertIsOn: true,
 		};
 	},
 
@@ -204,7 +204,9 @@ var MePushConfigPage = React.createClass({
 		}else{
 			return (<Navigator
 				style={styles.container}
-				initialRoute={{name: MainPage.LOGIN_ROUTE, popToRoute: MainPage.ME_PUSH_CONFIG_ROUTE}}
+				initialRoute={{name: MainPage.LOGIN_ROUTE,
+					popToRoute: MainPage.ME_PUSH_CONFIG_ROUTE,
+					onPopToRoute: this.loadPushConfigInfo}}
 				configureScene={() => Navigator.SceneConfigs.PushFromRight}
 				renderScene={this.props.routeMapper} />);
 		}

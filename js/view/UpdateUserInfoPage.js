@@ -29,11 +29,13 @@ var NOTE_STATE_NORMAL_WECHAT = 1;
 var UpdateUserInfoPage = React.createClass({
 	propTypes: {
 		popToRoute: React.PropTypes.string,
+		onPopToRoute: React.PropTypes.func,
 	},
 
 	getDefaultProps() {
 		return {
 			popToRoute: null,
+			onPopToRoute: null,
 		}
 	},
 
@@ -113,6 +115,10 @@ var UpdateUserInfoPage = React.createClass({
 					}
 
 					if(backRoute!=null){
+						if(this.props.onPopToRoute){
+							this.props.onPopToRoute();
+						}
+
 						this.props.navigator.popToRoute(backRoute)
 					}else{
 						this.props.navigator.pop()

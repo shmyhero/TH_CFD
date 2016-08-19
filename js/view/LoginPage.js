@@ -211,6 +211,12 @@ var LoginPage = React.createClass({
 	},
 
 	loginWithCodePressed: function() {
+		this.props.navigator.push({
+			name: MainPage.UPDATE_USER_INFO_ROUTE,
+			popToRoute: this.props.popToRoute,
+			onPopToRoute: this.props.onPopToRoute,
+		});
+		return;
 		if (!this.state.phoneLoginButtonEnabled) {
 			return
 		}
@@ -263,6 +269,7 @@ var LoginPage = React.createClass({
 		this.props.navigator.push({
 			name: MainPage.UPDATE_USER_INFO_ROUTE,
 			popToRoute: this.props.popToRoute,
+			onPopToRoute: this.props.onPopToRoute,
 		});
 	},
 

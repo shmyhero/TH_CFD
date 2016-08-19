@@ -153,7 +153,9 @@ static CGFloat const kMQChatViewInputBarHeight = 80.0;
     [super viewWillAppear:animated];
     [UIView setAnimationsEnabled:YES];
     [[[UIApplication sharedApplication] keyWindow] endEditing:YES];
-    [chatViewService fillTextDraftToFiledIfExists:(UITextField *)[(MQTabInputContentView *)self.chatInputBar.contentView textField]];
+	[chatViewService fillTextDraftToFiledIfExists:(UITextField *)[(MQTabInputContentView *)self.chatInputBar.contentView textField]];
+	
+	self.navigationController.navigationBar.translucent = NO;
 }
 
 - (void)didReceiveMemoryWarning {

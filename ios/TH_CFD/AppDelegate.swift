@@ -90,6 +90,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
 		self.window?.rootViewController = rootViewController
 		self.window?.makeKeyAndVisible()
+		
+		let home = NSHomeDirectory()
+		print(home)
 		return true
 	}
 	

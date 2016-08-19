@@ -46,7 +46,8 @@ RCT_EXPORT_MODULE();
 		[chatViewManager enableMessageSound:NO];
 		
 		AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-		[chatViewManager pushMQChatViewControllerInViewController:delegate.rnRootViewController];
+		MQChatViewController* viewController = [chatViewManager pushMQChatViewControllerInViewController:delegate.rnRootViewController];
+		viewController.navigationController.navigationBar.translucent = NO;
 	}
 }
 

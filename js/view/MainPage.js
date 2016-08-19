@@ -46,6 +46,7 @@ var FeedbackPage = require('./FeedbackPage')
 
 var TalkingdataModule = require('../module/TalkingdataModule')
 var WebSocketModule = require('../module/WebSocketModule');
+var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 
 var TutorialPage = require('./TutorialPage');
 var OpenAccountPages = [
@@ -121,6 +122,8 @@ var hideTabbar
 var showTabbar
 export var hideProgress
 export var showProgress
+
+var recevieDataSubscription = null
 
 var MainPage = React.createClass({
 
@@ -419,13 +422,23 @@ var MainPage = React.createClass({
 
 		if (Platform.OS === 'ios') {
 			Linking.addEventListener('url', this._handleOpenURL);
+		} else {
+			this.recevieDataSubscription = RCTNativeAppEventEmitter.addListener(
+				'nativeSendDataToRN',
+				(args) => {
+					if (args[0] == 'openURL') {
+						this._handleDeepLink(args[1])
+					}
+				}
+			)
 		}
-
 	},
 
 	componentWillUnmount: function() {
 		if (Platform.OS === 'ios') {
 			Linking.removeEventListener('url', this._handleOpenURL);
+		} else {
+			this.recevieDataSubscription.remove();
 		}
 	},
 
@@ -435,6 +448,7 @@ var MainPage = React.createClass({
 	},
 
 	_handleDeepLink: function(url) {
+		console.log('handleDeeplink: ' + url)
 		_navigator.popToTop()
 		if(url==='cfd://page/1') {//首页
 			this.refs['myTabbar'].gotoTab("home")

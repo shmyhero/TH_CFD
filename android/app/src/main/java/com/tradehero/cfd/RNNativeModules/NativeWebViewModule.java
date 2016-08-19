@@ -103,8 +103,15 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
                     url.startsWith("mms:") ||
                     url.startsWith("mmsto:")) {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                reactContext.startActivity(intent);
-                view.reload();
+                if (intent.resolveActivity(reactContext.getPackageManager()) != null) {
+                    reactContext.startActivity(intent);
+                    view.reload();
+                }
+
+                return true;
+            } else if (url.startsWith("cfd://")) {
+                NativeDataModule.passDataToRN(reactContext, "openURL", url);
+
                 return true;
             }
 

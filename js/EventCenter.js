@@ -9,7 +9,7 @@ const EventConst = {
 	HOME_TAB_RESS_EVENT: 'homeTabPress',
 	STOCK_TAB_PRESS_EVENT : 'stockTabEvent',
 	EXCHANGE_TAB_PRESS_EVENT : 'exchangeTabEvent',
-	QA_TAB_PRESS_EVENT : 'qaTabEvent',
+	ME_TAB_PRESS_EVENT : 'meTabEvent',
 }
 
 var EventCenter = {
@@ -31,8 +31,8 @@ var EventCenter = {
 		eventEmitter.emit(EventConst.EXCHANGE_TAB_PRESS_EVENT)
 	},
 
-	emitQATabPressEvent: function(){
-		eventEmitter.emit(EventConst.QA_TAB_PRESS_EVENT)
+	emitMeTabPressEvent: function(){
+		eventEmitter.emit(EventConst.ME_TAB_PRESS_EVENT)
 	},
 }
 

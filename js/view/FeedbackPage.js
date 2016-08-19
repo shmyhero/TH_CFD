@@ -16,6 +16,7 @@ var NavBar = require('./NavBar')
 var Button = require('./component/Button')
 var MainPage = require('./MainPage')
 var NativeSceneModule = require('../module/NativeSceneModule')
+var ImagePicker = require('react-native-image-picker');
 
 var {height, width} = Dimensions.get('window')
 var imageSize = width >= 375 ? 65 : Math.floor(width/5-10)

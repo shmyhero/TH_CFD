@@ -248,18 +248,14 @@ var MainPage = React.createClass({
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title={route.title} showBackButton={true} navigator={navigationOperations}
-						backButtonOnClick={()=>this.backAndShowTabbar(navigationOperations)}/>
+						backButtonOnClick={()=>this.backAndShowTabbar()}/>
 					<WebViewPage url={route.url}/>
 				</View>
 			)
 		} else if (route.name === QA_ROUTE) {
 			hideTabbar();
 			return (
-				<View style={{flex: 1}}>
-					<NavBar title='帮助中心' showBackButton={true} navigator={navigationOperations}
-						backButtonOnClick={()=>this.backAndShowTabbar(navigationOperations)}/>
-					<QAPage />
-				</View>
+				<QAPage />
 			)
 		} else if (route.name === ABOUT_US) {
 			hideTabbar();
@@ -352,7 +348,7 @@ var MainPage = React.createClass({
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title='多空博弈' showBackButton={true}
-						backButtonOnClick={()=>this.backAndShowTabbar(navigationOperations)}
+						backButtonOnClick={()=>this.backAndShowTabbar()}
 						navigator={navigationOperations}/>
 					<StockPopularityPage navigator={navigationOperations} initialInfo={route.data}/>
 				</View>
@@ -375,9 +371,9 @@ var MainPage = React.createClass({
 		this.setState({showTutorial: false})
 	},
 
-	backAndShowTabbar: function(navigator) {
+	backAndShowTabbar: function() {
 		this.showTabbar()
-		navigator.pop();
+		_navigator.pop();
 	},
 
 	showTabbar() {
@@ -406,8 +402,8 @@ var MainPage = React.createClass({
 		var exchangeRef = this.refs['exchangeContent'].refs['wrap'].getWrappedRef()
 		exchangeRef.tabWillFocus = EventCenter.emitExchangeTabPressEvent;
 
-		var qaRef = this.refs['qaContent'].refs['wrap'].getWrappedRef()
-		qaRef.tabWillFocus = EventCenter.emitQATabPressEvent;
+		var meRef = this.refs['meContent'].refs['wrap'].getWrappedRef()
+		meRef.tabWillFocus = EventCenter.emitMeTabPressEvent;
 	},
 
 	componentDidMount: function() {
@@ -474,6 +470,12 @@ var MainPage = React.createClass({
 			this.refs['myTabbar'].gotoTab("trade")
 			EventCenter.emitExchangeTabPressEvent()
 		}
+		else if(url==='cfd://page/me') {
+			this.refs['myTabbar'].gotoTab("me")
+		}
+		else if(url==='cfd://page/back') {
+			this.backAndShowTabbar()
+		}
 		initExchangeTab = 0
 		initStockListTab = 1
 	},
@@ -518,9 +520,9 @@ var MainPage = React.createClass({
 								renderScene={this.RouteMapper} />
 			          	</RawContent>
 			        </Tab>
-			        <Tab name="qa">
-			          	<Icon label="问答" type={glypy.Settings} from={'myhero'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
-			          	<RawContent ref="qaContent">
+			        <Tab name="me">
+			          	<Icon label="我的" type={glypy.Settings} from={'myhero'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
+			          	<RawContent ref="meContent">
 							<Navigator
 								style={styles.container}
 								initialRoute={{name: ME_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}

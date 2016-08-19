@@ -48,10 +48,6 @@ var QAPage = React.createClass({
 		);
 	},
 
-	// componentWillMount: function() {
-	// 	this.didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.QA_TAB_PRESS_EVENT, this.onTabPressed);
-	// },
-
 	componentWillUnmount: function() {
     	NetInfo.isConnected.removeEventListener(
 			'change',

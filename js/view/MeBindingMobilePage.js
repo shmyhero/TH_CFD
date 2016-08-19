@@ -40,16 +40,20 @@ var MAX_ValidationCodeCountdown = 60
 const TAB_LIVE = 1
 const TAB_SIMULATOR = 2
 
-var LoginPage = React.createClass({
+var MeBindingMobilePage = React.createClass({
 	mixins: [TimerMixin],
 
 	propTypes: {
 		showCancelButton: React.PropTypes.bool,
+		onPopBack: React.PropTypes.func,
+		existingMobile: React.PropTypes.string
 	},
 
 	getDefaultProps() {
 		return {
 			showCancelButton: false,
+			onPopBack: null,
+			existingMobile: null,
 		}
 	},
 	componentWillMount: function() {
@@ -248,50 +252,19 @@ var LoginPage = React.createClass({
 	},
 
 	loginSuccess: function(userData) {
-		StorageModule.setUserData(JSON.stringify(userData))
-		LogicData.setUserData(userData);
-		console.log(LogicData.getUserData());
-
-		NetworkModule.syncOwnStocks(userData)
-		WebSocketModule.alertServiceLogin(userData.userId + '_' + userData.token)
-
 		this.setState({
 			phoneLoginButtonEnabled: true
 		});
-		this.props.navigator.push({
-			name: MainPage.UPDATE_USER_INFO_ROUTE,
-		});
+
+		if(this.props.onPopBack){
+			this.props.onPopBack();
+		}
+
+		this.props.navigator.pop();
 	},
 
 	forgetPassword: function() {
 
-	},
-
-	renderFastLogin: function() {
-		if (this.state.wechatInstalled) {
-			return (
-				<View style={styles.fastLoginContainer}>
-					<View style={styles.fastLoginRowWrapper}>
-						<View style={styles.line}/>
-						<Text style={styles.fastLoginTitle}>
-							快速登录
-						</Text>
-						<View style={styles.line}/>
-					</View>
-
-					<TouchableOpacity style={styles.wechatClickableArea}
-						onPress={this.wechatPressed}>
-						<View>
-							<Image
-								style={styles.wechatIcon}
-								source={require('../../images/wechat_icon.png')}/>
-						</View>
-					</TouchableOpacity>
-				</View>
-			);
-		} else {
-			return <View style={{flex: 1}}/>;
-		}
 	},
 
 	renderGetValidationCodeButton: function() {
@@ -370,90 +343,7 @@ var LoginPage = React.createClass({
 		)
 	},
 
-	renderLiveLoginContent: function() {
-		var {height, width} = Dimensions.get('window');
-		return (
-			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
-				<View style={{flex: 1, justifyContent: 'space-between'}}>
-					<View>
-						<Image style={styles.ayondoLogoImage} source={require('../../images/ayondo_logo.png')}/>
-						<Text style={{alignSelf: 'center', fontSize: 35, color: 'white'}}>ayondo</Text>
-						<Text style={{alignSelf: 'center', fontSize: 11, color: '#2a3f43', marginTop: 30}}>您正在登录券商ayondo</Text>
-
-						<View style={styles.phoneLoginContainer}>
-							<View style={styles.liveRowWrapper}>
-								<View style={[styles.phoneNumberInputView]}>
-									<TextInput style={styles.phoneNumberInput}
-										onChangeText={(text) => this.setPhoneNumber(text)}
-										placeholder='手机号'
-										placeholderTextColor='white'
-										underlineColorAndroid='transparent'
-										maxLength={11}
-										keyboardType='numeric'/>
-								</View>
-							</View>
-
-							<View style={[styles.liveRowWrapper, {marginTop: 2}]}>
-								<View style={[styles.validationCodeInputView]}>
-									<TextInput style={styles.validationCodeInput}
-										onChangeText={(text) => this.setValidationCode(text)}
-										placeholder='登录密码'
-										placeholderTextColor='white'
-										underlineColorAndroid='transparent'
-										secureTextEntry={true}
-										keyboardType='numeric'/>
-								</View>
-							</View>
-
-							<View style={[styles.liveRowWrapper, {justifyContent: 'space-between', marginTop: 10, paddingVertical: 0, backgroundColor: 'transparent'}]}>
-								<View style={{alignSelf: 'stretch', justifyContent: 'center'}}>
-									<Text style={{fontSize: 15, color: 'white'}}>
-										记住我
-									</Text>
-								</View>
-
-								{this.renderRememberUserCheckbox()}
-							</View>
-
-							<View style={[styles.liveRowWrapper, {marginTop: 0, backgroundColor: 'transparent'}]}>
-								<TouchableOpacity style={styles.loginClickableArea} onPress={this.loginWithPasswordPressed}>
-									<View style={styles.loginTextView}>
-										<Text style={styles.loginText}>
-											登录
-										</Text>
-									</View>
-								</TouchableOpacity>
-							</View>
-
-							<View style={[styles.liveRowWrapper, {marginTop: 10, backgroundColor: 'transparent'}]}>
-								<TouchableOpacity style={styles.loginClickableArea} onPress={this.liveRegisterPressed}>
-									<View style={styles.registerTextView}>
-										<Text style={styles.registerText}>
-											注册
-										</Text>
-									</View>
-								</TouchableOpacity>
-							</View>
-						</View>
-					</View>
-
-					<View style={styles.fastLoginContainer}>
-						<View style={styles.fastLoginRowWrapper}>
-							<View style={styles.forgetPasswordLine}/>
-							<TouchableOpacity style={{padding: 5}} onPress={this.forgetPassword}>
-								<Text style={styles.forgetPasswordTitle}>
-									 忘记密码
-								</Text>
-							</TouchableOpacity>
-							<View style={styles.forgetPasswordLine}/>
-						</View>
-					</View>
-				</View>
-			</TouchableWithoutFeedback>
-		)
-	},
-
-	renderSimulatorLoginContent: function() {
+	renderMobileLoginContent: function() {
 		var {height, width} = Dimensions.get('window');
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
@@ -495,7 +385,7 @@ var LoginPage = React.createClass({
 								<TouchableOpacity style={styles.loginClickableArea} onPress={this.loginWithCodePressed}>
 									<View style={styles.loginTextView}>
 										<Text style={styles.loginText}>
-											登录
+											确认
 										</Text>
 									</View>
 								</TouchableOpacity>
@@ -503,18 +393,13 @@ var LoginPage = React.createClass({
 						</View>
 					</View>
 
-					{this.renderFastLogin()}
 				</View>
 			</TouchableWithoutFeedback>
 		)
 	},
 
 	renderLoginContent: function() {
-		if (this.state.tabSelected == TAB_LIVE) {
-			return this.renderLiveLoginContent()
-		} else {
-			return this.renderSimulatorLoginContent()
-		}
+			return this.renderMobileLoginContent()
 	},
 
 	render: function() {
@@ -529,7 +414,7 @@ var LoginPage = React.createClass({
 				{/* {this.renderTab()} */}
 				<View style={styles.tabContainer}>
 					<Text style={{flex: 1, fontSize: 18, textAlign: 'center', color: '#ffffff'}}>
-						我的交易
+						绑定手机号
 					</Text>
 					{this.renderCancelButton()}
 				</View>
@@ -743,4 +628,4 @@ var styles = StyleSheet.create({
 })
 
 
-module.exports = LoginPage;
+module.exports = MeBindingMobilePage;

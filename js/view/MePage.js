@@ -11,6 +11,9 @@ import {
 	TouchableOpacity,
 } from 'react-native';
 
+var {EventCenter, EventConst} = require('../EventCenter')
+
+var LogicData = require('../LogicData')
 var ColorConstants = require('../ColorConstants')
 var NavBar = require('./NavBar')
 var Button = require('./component/Button')
@@ -19,21 +22,56 @@ var NativeSceneModule = require('../module/NativeSceneModule')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
+var configRowData = {'type':'normal','title':'设置', 'image':require('../../images/icon_config.png'), 'subtype':'config'}
 var listRawData = [{'type':'account'},
 {'type':'button','title':'开设实盘账户'},
 {'type':'normal','title':'帮助中心', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'helpcenter'},
 {'type':'normal','title':'线上咨询', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':'onlinehelp'},
 {'type':'normal','title':'产品反馈', 'image':require('../../images/icon_response.png'), 'subtype':'feedback'},
 {'type':'normal','title':'关于我们', 'image':require('../../images/icon_aboutus.png'), 'subtype':'aboutus'},
-{'type':'normal','title':'设置', 'image':require('../../images/icon_config.png'), 'subtype':'config'}]
+configRowData,]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
+var didTabSelectSubscription = null
 
 var MePage = React.createClass({
 	getInitialState: function() {
 		return {
 			dataSource: ds.cloneWithRows(listRawData),
 		};
+	},
+
+	componentDidMount: function(){
+		didTabSelectSubscription = EventCenter.getEventEmitter().
+			addListener(EventConst.ME_TAB_PRESS_EVENT, this.onTabChanged);
+	},
+
+	componentWillUnmount: function() {
+		didTabSelectSubscription && didTabSelectSubscription.remove();
+	},
+
+	onTabChanged: function(){
+		//Check if the config row need to be shown.
+		var userData = LogicData.getUserData()
+		var notLogin = Object.keys(userData).length === 0
+		var i = listRawData.indexOf(configRowData)
+
+		if (notLogin) {
+			if(i != -1){
+				listRawData.splice(i, 1);
+				this.setState({
+					dataSource: ds.cloneWithRows(listRawData),
+				});
+			}
+		}else{
+			if(i == -1){
+				listRawData.push(configRowData);
+				this.setState({
+					dataSource: ds.cloneWithRows(listRawData),
+				});
+			}
+		}
 	},
 
 	gotoOpenAccount: function() {

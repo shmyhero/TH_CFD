@@ -27,18 +27,6 @@ var NOTE_STATE_NORMAL = 0;
 var NOTE_STATE_NORMAL_WECHAT = 1;
 
 var UpdateUserInfoPage = React.createClass({
-	propTypes: {
-		popToRoute: React.PropTypes.string,
-		onPopToRoute: React.PropTypes.func,
-	},
-
-	getDefaultProps() {
-		return {
-			popToRoute: null,
-			onPopToRoute: null,
-		}
-	},
-
 	getInitialState: function() {
 		return {
 			noteState: NOTE_STATE_NORMAL,
@@ -103,29 +91,7 @@ var UpdateUserInfoPage = React.createClass({
 				},
 			},
 			function(responseJson) {
-				if(this.props.popToRoute != null){
-					var routes = this.props.navigator.getCurrentRoutes();
-					var backRoute = null;
-
-					for (var i=0; i<routes.length; ++i) {
-						if(routes[i].name === this.props.popToRoute){
-							backRoute = routes[i];
-							break;
-						}
-					}
-
-					if(backRoute!=null){
-						if(this.props.onPopToRoute){
-							this.props.onPopToRoute();
-						}
-
-						this.props.navigator.popToRoute(backRoute)
-					}else{
-						this.props.navigator.pop()
-					}
-				}else{
 					this.props.navigator.pop()
-				}
 			}.bind(this),
 			function(errorMessage) {
 				Alert.alert('提示',errorMessage);

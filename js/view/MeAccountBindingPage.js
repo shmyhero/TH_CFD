@@ -39,19 +39,27 @@ var MeAccountBindingPage = React.createClass({
 	getInitialState: function() {
 		return {
 			dataSource: ds.cloneWithRows(listRawData),
+			userid: null,
 			phoneNumber: null,
-			wechatBinded: false,
+			weChatOpenId: null,
 			wechatInstalled: false,
 		};
 	},
 
 	componentWillMount: function(){
+		var userData = LogicData.getUserData()
+		var notLogin = Object.keys(userData).length === 0
+		if(!notLogin){
+			this.setState({
+				userid: userData.userId
+			});
+		}
 		WechatModule.isWechatInstalled()
 		.then((installed) => {
 			this.setState({
 				wechatInstalled: installed
 			})
-			this.loadAccountBindingInfo()
+			this.loadAccountBindingInfo(userData)
 		})
 	},
 
@@ -60,59 +68,40 @@ var MeAccountBindingPage = React.createClass({
 			this.wechatPressed();
 		}else if(rowData.subtype === 'bindMobile'){
 			this.props.navigator.push({
-				name: MainPage.LOGIN_ROUTE,
-				popToRoute: MainPage.ME_ACCOUNT_BINDING_ROUTE,
-				onPopToRoute: this.loadAccountBindingInfo
+				name: MainPage.ME_BINDING_MOBILE_ROUTE,
+				onPopToRoute: this.loadAccountBindingInfo,
+				existingMobile: this.state.existingMobile,
 			});
 		}
 	},
 
-	loadAccountBindingInfo: function(){
-		var userData = LogicData.getUserData()
-		var notLogin = Object.keys(userData).length === 0
-
-		if (notLogin) {
-			this.hideWechatIfNotInstalled()
-
-			this.setState({
-				phoneNumber: null,
-				dataSource: ds.cloneWithRows(listRawData),
-			});
-		}else{
-
-			var out = Object.keys(userData).map(function(data){
-				return [data, userData[data]]
-			})
-			//alert(out);
-
-			NetworkModule.fetchTHUrl(
-				NetConstants.GET_USER_INFO_API,
-				{
-					method: 'GET',
-					headers: {
-						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-					},
+	loadAccountBindingInfo: function(userData){
+		NetworkModule.fetchTHUrl(
+			NetConstants.GET_USER_INFO_API,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 				},
-				function(responseJson) {
-					var phoneNumber = responseJson.phone
-					var weChatOpenId = responseJson.weChatOpenId
-					var isWechatBinded = weChatOpenId != null
+			},
+			function(responseJson) {
+				var phoneNumber = responseJson.phone
+				var weChatOpenId = responseJson.weChatOpenId
 
-					if(!isWechatBinded){
-						this.hideWechatIfNotInstalled()
-					}
-					this.setState({
-						phoneNumber: phoneNumber,
-						wechatBinded: isWechatBinded,
-						dataSource: ds.cloneWithRows(listRawData),
-					});
-
-				}.bind(this),
-				function(errorMessage) {
-					Alert.alert('提示',errorMessage);
+				if(weChatOpenId == null){
+					this.hideWechatIfNotInstalled()
 				}
-			)
-		}
+				this.setState({
+					phoneNumber: phoneNumber,
+					weChatOpenId: weChatOpenId,
+					dataSource: ds.cloneWithRows(listRawData),
+				});
+
+			}.bind(this),
+			function(errorMessage) {
+				Alert.alert('提示',errorMessage);
+			}
+		)
 	},
 
 	hideWechatIfNotInstalled: function() {
@@ -217,7 +206,7 @@ var MeAccountBindingPage = React.createClass({
 				);
 			}
 		}else if (rowData.type === 'wechat'){
-			if(this.state.wechatBinded){
+			if(this.state.weChatOpenId != null){
 				return(
 					<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
 						<Text style={styles.title}>{rowData.title}</Text>

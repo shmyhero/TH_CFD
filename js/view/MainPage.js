@@ -38,6 +38,7 @@ var MePage = require('./MePage')
 var MeConfigPage = require('./MeConfigPage')
 var MePushConfigPage = require('./MePushConfigPage')
 var MeAccountBindingPage = require('./MeAccountBindingPage')
+var MeBindingMobilePage = require('./MeBindingMobilePage')
 var LiveRegisterPage = require('./openAccount/OALiveRegisterPage')
 var LiveUpdateUserInfoPage = require('./openAccount/OALiveUpdateUserInfoPage')
 var LiveRegisterStatusPage = require('./openAccount/OAStatusPage')
@@ -97,6 +98,7 @@ export let ABOUT_US = 'aboutUs'
 export let ME_CONFIG_ROUTE = 'meConfig'
 export let ME_PUSH_CONFIG_ROUTE = 'mePushConfig'
 export let ME_ACCOUNT_BINDING_ROUTE = 'meAccountBinding'
+export let ME_BINDING_MOBILE_ROUTE = 'MeBindingMobilePage'
 export let OPEN_ACCOUNT_ROUTE = 'openAccount'
 export let LIVE_REGISTER_ROUTE = 'liveRegister'
 export let LIVE_UPDATE_USER_INFO_ROUTE = 'liveUpdateUserInfo'
@@ -169,17 +171,13 @@ var MainPage = React.createClass({
 		} else if (route.name === LOGIN_ROUTE) {
 			hideTabbar()
 			return (
-				<LoginPage navigator={navigationOperations} showCancelButton={true}
-				popToRoute={route.popToRoute}
-				onPopToRoute={route.onPopToRoute}/>
+				<LoginPage navigator={navigationOperations} showCancelButton={true}/>
 			);
 		} else if (route.name === UPDATE_USER_INFO_ROUTE) {
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title="设置昵称"/>
-					<UpdateUserInfoPage navigator={navigationOperations}
-					 popToRoute={route.popToRoute}
-					 onPopToRoute={route.onPopToRoute}/>
+					<UpdateUserInfoPage navigator={navigationOperations}/>
 				</View>
 			);
 		} else if (route.name === MY_HOME_ROUTE) {
@@ -297,7 +295,17 @@ var MainPage = React.createClass({
 					<MeAccountBindingPage navigator={navigationOperations} />
 				</View>
 			)
-		} else if (route.name === OPEN_ACCOUNT_ROUTE) {
+		} else if(route.name === ME_BINDING_MOBILE_ROUTE){
+			hideTabbar()
+			return (
+				<View style={{flex: 1}}>
+					<MeBindingMobilePage navigator={navigationOperations}
+						showCancelButton={true}
+						popToRoute={route.popToRoute}
+						onPopToRoute={route.onPopToRoute}/>
+				</View>
+			)
+		}else if (route.name === OPEN_ACCOUNT_ROUTE) {
 			hideTabbar()
 			var step = route.step
 			var Page = OpenAccountPages[step]

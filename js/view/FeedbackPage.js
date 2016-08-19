@@ -20,6 +20,7 @@ var ImagePicker = require('react-native-image-picker');
 
 var {height, width} = Dimensions.get('window')
 var imageSize = width >= 375 ? 65 : Math.floor(width/5-10)
+var add_image = require("../../images/feedback_add.png")
 
 var FeedbackPage = React.createClass({
 	getInitialState: function() {
@@ -27,6 +28,7 @@ var FeedbackPage = React.createClass({
 			commitButtonEnabled: true,
 			text: '',
 			phoneNumber: '',
+			imagesSource: [add_image],
 		};
 	},
 
@@ -40,7 +42,19 @@ var FeedbackPage = React.createClass({
 		//todo
 	},
 
+	pressAddImage: function(index) {
+		//todo
+	},
+
 	render: function() {
+		var images = this.state.imagesSource.map(
+			(source, i) =>
+				<TouchableOpacity onPress={() => this.pressAddImage(i)} key={i}>
+					<View style={styles.imageArea}>
+						<Image style={styles.image} source={source}/>
+					</View>
+				</TouchableOpacity>
+			)
 		var limit = 240
     	var remainder = limit - this.state.text.length;
 		return (
@@ -58,11 +72,7 @@ var FeedbackPage = React.createClass({
 					onChangeText={(text) => {this.setState({text});}}
 					value={this.state.text}/>
 				<View style={styles.rowWrapper}>
-					<Image style={styles.image} source={require("../../images/feedback_add.png")} />
-					<Image style={styles.image} source={require("../../images/feedback_add.png")} />
-					<Image style={styles.image} source={require("../../images/feedback_add.png")} />
-					<Image style={styles.image} source={require("../../images/feedback_add.png")} />
-					<Image style={styles.image} source={require("../../images/feedback_add.png")} />
+					{images}
 				</View>
 				<Text style={styles.wordNumberText}>{remainder}</Text>
 				<View style={[styles.rowWrapper, {backgroundColor: 'white', flex: 0.3}]}>

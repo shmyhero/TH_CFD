@@ -495,8 +495,8 @@ var styles = StyleSheet.create({
 		height: 70,
 	},
 	blockImage: {
-		width: 36,
-		height: 36,
+		width: 37,
+		height: 37,
 		alignSelf: 'center',
 		marginRight: 10,
 	},

@@ -45,11 +45,13 @@ var LoginPage = React.createClass({
 
 	propTypes: {
 		showCancelButton: React.PropTypes.bool,
+		popToRoute: React.PropTypes.string,
 	},
 
 	getDefaultProps() {
 		return {
 			showCancelButton: false,
+			popToRoute: null,
 		}
 	},
 	componentWillMount: function() {
@@ -260,6 +262,7 @@ var LoginPage = React.createClass({
 		});
 		this.props.navigator.push({
 			name: MainPage.UPDATE_USER_INFO_ROUTE,
+			popToRoute: this.props.popToRoute,
 		});
 	},
 

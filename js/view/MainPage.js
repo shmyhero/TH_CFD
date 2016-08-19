@@ -78,6 +78,7 @@ export let MAIN_PAGE_ROUTE = 'main'
 export let HOME_PAGE_ROUTE = 'homepage'
 export let LANDING_ROUTE = 'landing'
 export let LOGIN_ROUTE = 'login'
+export let LOGIN_AND_POP_ROUTE = 'loginAndPop'
 export let UPDATE_USER_INFO_ROUTE = 'updateUserInfo'
 export let MY_HOME_ROUTE = 'myhome'
 export let MY_NOTIFICATION_ROUTE = 'myNotifications'
@@ -165,13 +166,13 @@ var MainPage = React.createClass({
 		} else if (route.name === LOGIN_ROUTE) {
 			hideTabbar()
 			return (
-				<LoginPage navigator={navigationOperations} showCancelButton={true}/>
+				<LoginPage navigator={navigationOperations} showCancelButton={true} popToRoute={route.popToRoute}/>
 			);
 		} else if (route.name === UPDATE_USER_INFO_ROUTE) {
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title="设置昵称"/>
-					<UpdateUserInfoPage navigator={navigationOperations}/>
+					<UpdateUserInfoPage navigator={navigationOperations} popToRoute={route.popToRoute}/>
 				</View>
 			);
 		} else if (route.name === MY_HOME_ROUTE) {
@@ -282,8 +283,7 @@ var MainPage = React.createClass({
 			showTabbar()
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title="推送设置" showBackButton={true} navigator={navigationOperations}/>
-					<MePushConfigPage navigator={navigationOperations} />
+					<MePushConfigPage navigator={navigationOperations} routeMapper={this.RouteMapper}/>
 				</View>
 			)
 		} else if(route.name === ME_ACCOUNT_BINDING_ROUTE){

@@ -50,6 +50,7 @@ var MeAccountBindingPage = React.createClass({
 		}else if(rowData.subtype === 'bindMobile'){
 			this.props.navigator.push({
 				name: MainPage.LOGIN_ROUTE,
+				popToRoute: MainPage.ME_ACCOUNT_BINDING_ROUTE,
 			});
 		}
 	},
@@ -57,15 +58,20 @@ var MeAccountBindingPage = React.createClass({
 	loadAccountBindingInfo: function(){
 		var userData = LogicData.getUserData()
 		var notLogin = Object.keys(userData).length === 0
-		if (notLogin) {
-			console.log("not loggined");
 
+		if (notLogin) {
 			this.setState({
 				phoneNumber: null,
 			});
 			this.hideWechatIfNotInstalled();
 
 		}else{
+
+			var out = Object.keys(userData).map(function(data){
+				return [data, userData[data]]
+			})
+			//alert(out);
+
 			NetworkModule.fetchTHUrl(
 				NetConstants.GET_USER_INFO_API,
 				{
@@ -98,24 +104,24 @@ var MeAccountBindingPage = React.createClass({
 
 	hideWechatIfNotInstalled: function() {
 		if(!WechatModule.isWechatInstalled()){
+//			alert('wechat not found')
 			//WHAT'S WRONG?
 			if(listRawData.length > 1){
 				listRawData.slice(1, 1);
 			}
 		}else{
+			//alert("you have wechat")
 		}
 	},
 
 	wechatPressed: function() {
-		/*
 		WechatModule.wechatLogin(
 			() => {
 				this.wechatLogin()
 			},
 
 			function() {}.bind(this)
-		)*/
-		this.wechatLogin();
+		)
 	},
 
 	wechatLogin: function() {
@@ -162,7 +168,7 @@ var MeAccountBindingPage = React.createClass({
 			phoneLoginButtonEnabled: true
 		});
 		this.props.navigator.push({
-			name: MainPage.UPDATE_USER_INFO_ROUTE,
+			name: MainPage.UPDATE_USER_INFO_ROUTE
 		});
 	},
 

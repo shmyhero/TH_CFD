@@ -27,6 +27,15 @@ var NOTE_STATE_NORMAL = 0;
 var NOTE_STATE_NORMAL_WECHAT = 1;
 
 var UpdateUserInfoPage = React.createClass({
+	propTypes: {
+		popToRoute: React.PropTypes.string,
+	},
+
+	getDefaultProps() {
+		return {
+			popToRoute: null,
+		}
+	},
 
 	getInitialState: function() {
 		return {
@@ -92,7 +101,25 @@ var UpdateUserInfoPage = React.createClass({
 				},
 			},
 			function(responseJson) {
-				this.props.navigator.pop()
+				if(this.props.popToRoute != null){
+					var routes = this.props.navigator.getCurrentRoutes();
+					var backRoute = null;
+
+					for (var i=0; i<routes.length; ++i) {
+						if(routes[i].name === this.props.popToRoute){
+							backRoute = routes[i];
+							break;
+						}
+					}
+
+					if(backRoute!=null){
+						this.props.navigator.popToRoute(backRoute)
+					}else{
+						this.props.navigator.pop()
+					}
+				}else{
+					this.props.navigator.pop()
+				}
 			}.bind(this),
 			function(errorMessage) {
 				Alert.alert('提示',errorMessage);

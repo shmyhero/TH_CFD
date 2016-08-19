@@ -7,6 +7,7 @@ import {
 	Dimensions,
 	ListView,
 	Platform,
+	Navigator,
 	Switch,
 	Text,
 	Image,
@@ -33,6 +34,19 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var closePositionPushUpdated = false
 
 var MePushConfigPage = React.createClass({
+
+	propTypes: {
+		routeMapper: React.PropTypes.func,
+	},
+
+	getDefaultProps() {
+		return {
+			routeMapper: function(route, navigationOperations, onComponentRef) {
+
+			},
+		}
+	},
+
 	getInitialState: function() {
 		return {
 			dataSource: ds.cloneWithRows(listRawData),
@@ -43,6 +57,15 @@ var MePushConfigPage = React.createClass({
 	componentDidMount: function() {
 		//Once user moves into this page, check server setting.
 		this.loadPushConfigInfo()
+
+		var userData = LogicData.getUserData()
+		var notLogin = Object.keys(userData).length === 0
+
+		if (notLogin) {
+			this.props.navigator.push({
+				name: MainPage.LOGIN_ROUTE,
+			});
+		}
 	},
 
 	onSelectNormalRow: function(rowData) {
@@ -169,24 +192,22 @@ var MePushConfigPage = React.createClass({
 		var userData = LogicData.getUserData()
 		var loggined = Object.keys(userData).length !== 0
 		if(loggined){
-
-
-		}else{
-			this.props.navigator.push({
-				name: MainPage.LOGIN_ROUTE,
-			});
-
-		}
-
-		return (
-			<View style={styles.wrapper}>
+			return (<View style={styles.wrapper}>
+				<NavBar title="推送设置" showBackButton={true} navigator={this.props.navigator}/>
 				<ListView
 					style={styles.list}
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
 					renderSeparator={this.renderSeparator} />
 			</View>
-		);
+			);
+		}else{
+			return (<Navigator
+				style={styles.container}
+				initialRoute={{name: MainPage.LOGIN_ROUTE, popToRoute: MainPage.ME_PUSH_CONFIG_ROUTE}}
+				configureScene={() => Navigator.SceneConfigs.PushFromRight}
+				renderScene={this.props.routeMapper} />);
+		}
 	},
 });
 

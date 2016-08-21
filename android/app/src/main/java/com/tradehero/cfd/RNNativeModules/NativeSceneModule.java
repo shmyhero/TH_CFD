@@ -7,6 +7,7 @@ import android.content.Intent;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.meiqia.meiqiasdk.activity.MQMessageFormActivity;
 import com.meiqia.meiqiasdk.util.MQIntentBuilder;
 import com.tradehero.cfd.MainActivity;
 import com.tradehero.cfd.NativeViewActivity;
@@ -43,7 +44,12 @@ public class NativeSceneModule extends ReactContextBaseJavaModule {
     }
 
     public void startMeiQia(Context context) {
+        //对话模式
         Intent intent = new MQIntentBuilder(context).build();
         context.startActivity(intent);
+
+
+        //留言模式
+//        context.startActivity(new Intent(context, MQMessageFormActivity.class));
     }
 }

@@ -133,12 +133,12 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         MQConfig.init(this, "2a59beff6f1875815ea399fdad79a46e", new OnInitCallback() {
             @Override
             public void onSuccess(String clientId) {
-                Toast.makeText(MainActivity.this, "init success", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, "init success", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int code, String message) {
-                Toast.makeText(MainActivity.this, "int failure", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, "int failure", Toast.LENGTH_SHORT).show();
             }
         });
 

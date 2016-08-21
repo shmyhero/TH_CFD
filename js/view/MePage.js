@@ -23,7 +23,7 @@ var NativeSceneModule = require('../module/NativeSceneModule')
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 var configRowData = {'type':'normal','title':'设置', 'image':require('../../images/icon_config.png'), 'subtype':'config'}
-var listRawData = [{'type':'account'},
+var listRawData = [{'type':'account','subtype':'accountInfo'},
 {'type':'button','title':'开设实盘账户'},
 {'type':'normal','title':'帮助中心', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'helpcenter'},
 {'type':'normal','title':'线上咨询', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':'onlinehelp'},
@@ -91,7 +91,7 @@ var MePage = React.createClass({
 		}
 		else if(rowData.subtype === 'aboutus') {
 			this.props.navigator.push({
-				name: MainPage.ABOUT_US,
+				name: MainPage.ABOUT_US_ROUTE,
 			});
 		}
 		else if(rowData.subtype === 'config') {
@@ -102,6 +102,11 @@ var MePage = React.createClass({
 		else if(rowData.subtype === 'feedback') {
 			this.props.navigator.push({
 				name: MainPage.FEEDBACK_ROUTE,
+			});
+		}
+		else if(rowData.subtype === 'accountInfo') {
+			this.props.navigator.push({
+				name: MainPage.ACCOUNT_INFO_ROUTE,
 			});
 		}
 	},
@@ -145,11 +150,13 @@ var MePage = React.createClass({
 		else {
 			// account
 			return(
+				<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
 				<View style={[styles.rowWrapper, {height:Math.round(88*heightRate)}]}>
 					<Image source={require('../../images/head_portrait.png')} style={styles.headImage} />
 					<Text style={styles.defaultText}>手机号/微信号登录</Text>
 					<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
 				</View>
+				</TouchableOpacity>
 			)
 		}
 	},

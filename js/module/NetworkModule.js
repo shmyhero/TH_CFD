@@ -11,6 +11,10 @@ import {
 var alertShow = false
 
 export function fetchTHUrl(url, params, successCallback, errorCallback) {
+	fetchTHUrlWithNoInternetCallback(url, params, successCallback, errorCallback, null)
+}
+
+export function fetchTHUrlWithNoInternetCallback(url, params, successCallback, errorCallback, internetErrorCallback) {
 	var requestSuccess = true;
 
 	console.log('fetching: ' + url + ' with params: ')
@@ -57,7 +61,9 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 			if(message.toLowerCase() === "network request failed"){
 				message = "网络连接已断开，请检查设置"
 			}
-			// errorCallback(message);
+			if(internetErrorCallback){
+				internetErrorCallback(message);
+			}
 			if (!alertShow) {
 				alertShow = true
 				Alert.alert('', message, [{text: 'OK', onPress: () => alertShow=false}])
@@ -204,4 +210,3 @@ export function loadUserBalance(force, successCallback) {
 		)
 	}
 }
-

@@ -20,6 +20,8 @@ var Button = require('./component/Button')
 var MainPage = require('./MainPage')
 var NativeSceneModule = require('../module/NativeSceneModule')
 var StorageModule = require('../module/StorageModule')
+var NetConstants = require('../NetConstants')
+var NetworkModule = require('../module/NetworkModule')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
@@ -45,13 +47,33 @@ var MePage = React.createClass({
 	},
 
 	componentWillMount: function(){
-		StorageModule.loadMeData()
-		.then((value) => {
-			if (value !== null) {
-				LogicData.setMeData(JSON.parse(value))
-				this.reloadMeData();
-			}
-		});
+		var userData = LogicData.getUserData()
+		var notLogin = Object.keys(userData).length === 0
+		if(!notLogin){
+			//If previously logged in, fetch me data from server.
+			NetworkModule.fetchTHUrlWithNoInternetCallback(
+				NetConstants.GET_USER_INFO_API,
+				{
+					method: 'GET',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					},
+				},
+				function(responseJson) {
+					StorageModule.setMeData(JSON.stringify(responseJson))
+					LogicData.setMeData(responseJson);
+					this.reloadMeData();
+				}.bind(this),
+				function(errorMessage) {
+					this.reloadMeDataFromStorage();
+				}.bind(this),
+				function(errorMessage) {
+					this.reloadMeDataFromStorage();
+				}.bind(this)
+			)
+		}else{
+			this.reloadMeDataFromStorage();
+		}
 	},
 
 	componentDidMount: function(){
@@ -61,6 +83,16 @@ var MePage = React.createClass({
 
 	componentWillUnmount: function() {
 		didTabSelectSubscription && didTabSelectSubscription.remove();
+	},
+
+	reloadMeDataFromStorage: function(){
+		StorageModule.loadMeData()
+		.then(function(value) {
+			if (value !== null) {
+				LogicData.setMeData(JSON.parse(value))
+				this.reloadMeData();
+			}
+		}.bind(this));
 	},
 
 	reloadMeData: function(){
@@ -349,6 +381,7 @@ var styles = StyleSheet.create({
 		textAlign: 'left',
 		fontSize: 17,
 		marginLeft: 10,
+		marginTop: 9,
 		color: '#757575',
 	},
 

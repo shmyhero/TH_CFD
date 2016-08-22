@@ -288,7 +288,8 @@ var MainPage = React.createClass({
 			return (
 				<View style={{flex: 1}}>
 					{/* <NavBar title='我的昵称' showBackButton={true} navigator={navigationOperations}/> */}
-					<AccountNameModifyPage navigator={navigationOperations}/>
+					<AccountNameModifyPage navigator={navigationOperations}
+						onReturnToPage={route.onReturnToPage}/>
 				</View>
 			)
 		} else if (route.name === ME_ROUTE) {

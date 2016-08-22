@@ -95,6 +95,12 @@ var MePage = React.createClass({
 	gotoOpenAccount: function() {
 		this.props.navigator.push({
 			name: MainPage.LOGIN_ROUTE,
+		});
+	},
+
+	gotoLogin: function(){
+		this.props.navigator.push({
+			name: MainPage.LOGIN_ROUTE,
 			popToRoute: MainPage.ME_ROUTE,	//Set to destination page
 			onPopToRoute: this.reloadMeData,
 		});
@@ -103,7 +109,7 @@ var MePage = React.createClass({
 	gotoUserInfoPage: function() {
 		//TODO: Use real page.
 		this.props.navigator.push({
-			name: MainPage.ME_ACCOUNT_BINDING_ROUTE,
+			name: MainPage.ACCOUNT_INFO_ROUTE,
 			//popToRoute: MainPage.ME_PUSH_CONFIG_ROUTE,	//Set to destination page
 		});
 	},
@@ -157,7 +163,7 @@ var MePage = React.createClass({
 			return (
 				<View style={[styles.userInfoWrapper]}>
 					<Text style={styles.userNameText}>{meData.nickname}</Text>
-					<Text style={styles.userNameText}>{meData.phone}</Text>
+					<Text style={styles.phoneText}>{"账号: " + meData.phone}</Text>
 				</View>
 			);
 		}
@@ -175,7 +181,7 @@ var MePage = React.createClass({
 		if(meData.picUrl != null){
 			//TODO: Download image...
 			return (
-				<Image source={require(meData.picUrl)} style={styles.headImage} />
+				<Image source={{uri: meData.picUrl}} style={styles.headImage} />
 			);
 		}else{
 			return (
@@ -226,7 +232,7 @@ var MePage = React.createClass({
 				return this.renderUserInfoView();
 			}else{
 				return(
-					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.gotoOpenAccount(rowData)}>
+					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.gotoLogin()}>
 						<View style={[styles.rowWrapper, {height:Math.round(88*heightRate)}]}>
 							<Image source={require('../../images/head_portrait.png')} style={styles.headImage} />
 							<Text style={styles.defaultText}>手机号/微信号登录</Text>
@@ -278,7 +284,6 @@ var styles = StyleSheet.create({
 	userInfoWrapper: {
 		flex: 1,
 		flexDirection: 'column',
-		alignItems: 'center',
 		backgroundColor: 'white',
 		alignItems: 'flex-start',
 	},
@@ -338,6 +343,14 @@ var styles = StyleSheet.create({
 		fontSize: 17,
 		marginLeft: 10,
 		color: '#303030',
+	},
+
+	phoneText: {
+		flex: 1,
+		textAlign: 'left',
+		fontSize: 17,
+		marginLeft: 10,
+		color: '#757575',
 	},
 
 	headImage: {

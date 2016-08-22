@@ -134,7 +134,7 @@ var MeAccountBindingPage = React.createClass({
 		console.log(out);
 
 		var url = NetConstants.BIND_WECHAT_API;
-		url = url.replace(/<wechatOpenId>/, wechatUserData.wechatOpenId)
+		url = url.replace(/<wechatOpenId>/, wechatUserData.openid)
 
 		NetworkModule.fetchTHUrl(
 			url,
@@ -161,9 +161,11 @@ var MeAccountBindingPage = React.createClass({
 		this.setState({
 			wechatBinded: true
 		});
+		/*
 		this.props.navigator.push({
 			name: MainPage.UPDATE_USER_INFO_ROUTE
 		});
+		*/
 	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){

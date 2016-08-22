@@ -12,6 +12,7 @@ import {
 	ListView,
 } from 'react-native';
 
+var LogicData = require('../LogicData')
 var {height, width} = Dimensions.get('window');
 var MainPage = require('./MainPage');
 var UIConstants = require('../UIConstants');
@@ -21,23 +22,35 @@ var heightRate = height/667.0;
 var listRawData = [
 {'type':'head','title':'头像', 'subtype': 'head'},
 {'type':'nickName','title':'昵称', 'subtype': 'nickName'},
+{'type':'mobile','title':'账号', 'subtype': 'mobile'},
 ];
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
-
 
 var AccountInfoPage = React.createClass({
 	getInitialState: function() {
 		return {
 			dataSource: ds.cloneWithRows(listRawData),
 			headUrl:'',
-			nickName:'刘大鹏',
+			nickName:'',
+			mobile: '',
 		};
+	},
+
+	componentWillMount: function(){
+		var meData = LogicData.getMeData()
+		var notLogin = Object.keys(meData).length === 0
+		if(!notLogin){
+				this.setState({
+					headUrl: meData.picUrl,
+					nickName: meData.nickname,
+					mobile: meData.phone
+				})
+		}
 	},
 
 	onSelectNormalRow: function(rowData) {
 		if(rowData.subtype === 'head') {
-			 alert('选择头像');
+			alert('选择头像');
 		}else if(rowData.subtype === 'nickName') {
 			this.gotoAccountNameModifyPage();
 		}
@@ -53,7 +66,8 @@ var AccountInfoPage = React.createClass({
 	},
 
 	renderRow: function(rowData, sectionID, rowID) {
-
+		var meData = LogicData.getMeData()
+		//headUrl: meData.picUrl,
 			if(rowData.type === 'head'){
 				return(
 					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
@@ -69,10 +83,17 @@ var AccountInfoPage = React.createClass({
 					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
 						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
 							<Text style={styles.title}>{rowData.title}</Text>
-							<Text style={styles.contentValue}>{this.state.nickName}</Text>
+							<Text style={styles.contentValue}>{meData.nickname}</Text>
 							<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
 						</View>
 					</TouchableOpacity>
+				);
+			}else if(rowData.subtype === 'mobile') {
+				return(
+					<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
+						<Text style={styles.title}>{rowData.title}</Text>
+						<Text style={styles.contentValue}>{meData.phone}</Text>
+					</View>
 				);
 			}
 
@@ -92,6 +113,7 @@ var AccountInfoPage = React.createClass({
 	gotoAccountNameModifyPage(){
 		this.props.navigator.push({
 			name: MainPage.ACCOUNT_NAME_MODIFY_ROUTE,
+			onReturnToPage: this.componentWillMount
 		});
 	},
 });

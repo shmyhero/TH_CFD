@@ -74,6 +74,7 @@ var MePushConfigPage = React.createClass({
 	},
 
 	loadPushConfigInfo: function(){
+		var userData = LogicData.getUserData()
 		var meData = LogicData.getMeData()
 		var notLogin = Object.keys(meData).length === 0
 

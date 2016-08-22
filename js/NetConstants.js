@@ -35,6 +35,7 @@ export const FEEDBACK_API = SERVER_IP + '/api/feedback_pic'
 export const AUTO_CLOSE_ALERT_API = SERVER_IP + '/alert/<setting>'
 export const BIND_MOBILE_API = SERVER_IP + '/api/user/bindphone'
 export const BIND_WECHAT_API = SERVER_IP + '/api/user/bindwechat?openid=<wechatOpenId>'
+export const UPDATE_HEAD_PHOTO = SERVER_IP + '/api/user/photo'
 
 export const GZT_OCR_CHECK_API = GZT_SERVER_IP + '/ocrCheck'
 

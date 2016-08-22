@@ -10,9 +10,11 @@ import {
 	Image,
 	TouchableOpacity,
 	ListView,
+	Alert,
 } from 'react-native';
 
-
+var NetConstants = require('../NetConstants')
+var NetworkModule = require('../module/NetworkModule')
 var LogicData = require('../LogicData')
 var NavBar = require('./NavBar')
 var {height, width} = Dimensions.get('window');
@@ -75,6 +77,8 @@ var AccountInfoPage = React.createClass({
 			headUrl:meData.picUrl,
 			nickname:meData.nickname,
 			mobile: meData.phone,
+			headSource:'',
+			headSourceData:'',
 		};
 	},
 
@@ -99,6 +103,7 @@ var AccountInfoPage = React.createClass({
 					nickname: meData.nickname,
 					mobile: meData.phone,
 					dataSource: ds.cloneWithRows(listRawData),
+
 				})
 		}
 	},
@@ -127,14 +132,44 @@ var AccountInfoPage = React.createClass({
 				// You can display the image using either data:
 				const source = {uri: 'data:image/jpeg;base64,' + response.data};
 
-					//
-					// this.setState({
-					// 	// idCardFront: source,
-					// 	// idCardFrontData: response.data,
-					// });
-					//
+					this.setState({
+						headSource: source,
+						headSourceData: response.data,
+						dataSource: ds.cloneWithRows(listRawData),
+					});
+
+					this.commitHeadPhoto();
 			}
 		});
+	},
+
+	commitHeadPhoto: function() {
+
+		var userData = LogicData.getUserData();
+		var url = NetConstants.UPDATE_HEAD_PHOTO;
+		NetworkModule.fetchTHUrl(
+			url,
+			{
+				method: 'POST',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Content-Type': 'application/json; charset=utf-8',
+				},
+				body:this.state.headSourceData,
+				showLoading: true,
+			},
+			(responseJson) => {
+				Alert.alert('设置头像', '头像设置成功',
+					[{text:'确定', onPress: ()=>this.confirmOfSuccess()}]);
+			},
+			(errorMessage) => {
+				Alert.alert('设置头像', errorMessage);
+			}
+		)
+	},
+
+	confirmOfSuccess(){
+
 	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
@@ -147,14 +182,20 @@ var AccountInfoPage = React.createClass({
 	},
 
 	renderRow: function(rowData, sectionID, rowID) {
-		// var meData = LogicData.getMeData()
-		//headUrl: meData.picUrl,
+
+			var source = require('../../images/head_portrait.png');
+			if(this.state.headSource){
+				source = this.state.headSource;
+			}else if(this.state.headUrl){
+				source = {uri:this.state.headUrl};
+			}
+
 			if(rowData.type === 'head'){
 				return(
 					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
 						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
 							<Text style={styles.title}>{rowData.title}</Text>
-							<Image source={require('../../images/head_portrait.png')} style={[styles.headImage,{marginRight:5}]} />
+							<Image source={source} borderRadius={24*heightRate} style={[styles.headImage,{marginRight:5}]} />
 							<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
 						</View>
 					</TouchableOpacity>
@@ -285,6 +326,7 @@ var styles = StyleSheet.create({
 	headImage: {
 		width: Math.round(48*heightRate),
 		height: Math.round(48*heightRate),
+
 	},
 
 });

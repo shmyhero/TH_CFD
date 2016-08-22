@@ -87,10 +87,6 @@ var AccountNameModifyPage = React.createClass({
 		})
 	},
 
-	onCancel: function(){
-		this.props.navigator.pop();
-	},
-
 	render: function() {
 
 		var marginLeft = 0;
@@ -126,7 +122,6 @@ var AccountNameModifyPage = React.createClass({
 
 		return (
 			<NavBar showBackButton={true} navigator={this.props.navigator}
-				backButtonOnClick={this.onCancel}
 				barStyle={{height: barHeight}}	titleStyle={{fontSize:18}}
 				title='我的昵称'
 				subTitleStyle={styles.subTitle}

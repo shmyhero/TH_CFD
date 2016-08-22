@@ -16,6 +16,7 @@ import {
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var LogicData = require('../LogicData')
+var StorageModule = require('../module/StorageModule')
 var NavBar = require('./NavBar')
 var {height, width} = Dimensions.get('window');
 var MainPage = require('./MainPage');
@@ -143,6 +144,29 @@ var AccountInfoPage = React.createClass({
 		});
 	},
 
+	updateMeData(userData, onSuccess){
+		NetworkModule.fetchTHUrl(
+			NetConstants.GET_USER_INFO_API,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+			},
+			function(responseJson) {
+				StorageModule.setMeData(JSON.stringify(responseJson))
+				LogicData.setMeData(responseJson);
+
+				if(onSuccess){
+					onSuccess()
+				}
+			}.bind(this),
+			function(errorMessage) {
+				Alert.alert('提示',errorMessage);
+			}
+		)
+	},
+
 	commitHeadPhoto: function() {
 
 		var userData = LogicData.getUserData();
@@ -159,8 +183,10 @@ var AccountInfoPage = React.createClass({
 				showLoading: true,
 			},
 			(responseJson) => {
-				Alert.alert('设置头像', '头像设置成功',
-					[{text:'确定', onPress: ()=>this.confirmOfSuccess()}]);
+				this.updateMeData(userData, function(){
+					Alert.alert('设置头像', '头像设置成功',
+						[{text:'确定', onPress: ()=>this.confirmOfSuccess()}]);
+				}.bind(this));
 			},
 			(errorMessage) => {
 				Alert.alert('设置头像', errorMessage);

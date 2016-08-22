@@ -157,6 +157,7 @@ var MeBindingMobilePage = React.createClass({
 				method: 'POST',
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Content-Type': 'application/json; charset=UTF-8'
 				},
 				body: JSON.stringify({
 					phone: this.state.phoneNumber,
@@ -183,15 +184,32 @@ var MeBindingMobilePage = React.createClass({
 	},
 
 	loginSuccess: function(userData) {
-		this.setState({
-			phoneLoginButtonEnabled: true
-		});
+		NetworkModule.fetchTHUrl(
+			NetConstants.GET_USER_INFO_API,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+			},
+			function(responseJson) {
+				StorageModule.setMeData(JSON.stringify(responseJson))
+				LogicData.setMeData(responseJson);
 
-		if(this.props.onPopBack){
-			this.props.onPopBack();
-		}
+				this.setState({
+					phoneLoginButtonEnabled: true
+				});
 
-		this.props.navigator.pop();
+				if(this.props.onPopBack){
+					this.props.onPopBack();
+				}
+
+				this.props.navigator.pop();
+			}.bind(this),
+			function(errorMessage) {
+				Alert.alert('提示',errorMessage);
+			}
+		)
 	},
 
 	forgetPassword: function() {

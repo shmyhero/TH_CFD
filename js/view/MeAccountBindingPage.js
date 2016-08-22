@@ -18,7 +18,6 @@ var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
 var ColorConstants = require('../ColorConstants')
-var NavBar = require('./NavBar')
 var Button = require('./component/Button')
 var MainPage = require('./MainPage')
 var WechatModule = require('../module/WechatModule')
@@ -39,7 +38,6 @@ var MeAccountBindingPage = React.createClass({
 	getInitialState: function() {
 		return {
 			dataSource: ds.cloneWithRows(listRawData),
-			userid: null,
 			phoneNumber: null,
 			weChatOpenId: null,
 			wechatInstalled: false,
@@ -49,11 +47,6 @@ var MeAccountBindingPage = React.createClass({
 	componentWillMount: function(){
 		var userData = LogicData.getUserData()
 		var notLogin = Object.keys(userData).length === 0
-		if(!notLogin){
-			this.setState({
-				userid: userData.userId
-			});
-		}
 		WechatModule.isWechatInstalled()
 		.then((installed) => {
 			this.setState({
@@ -69,13 +62,25 @@ var MeAccountBindingPage = React.createClass({
 		}else if(rowData.subtype === 'bindMobile'){
 			this.props.navigator.push({
 				name: MainPage.ME_BINDING_MOBILE_ROUTE,
-				onPopToRoute: this.loadAccountBindingInfo,
+				onPopBack: this.loadAccountBindingInfo,
 				existingMobile: this.state.existingMobile,
 			});
 		}
 	},
 
 	loadAccountBindingInfo: function(userData){
+		var meData = LogicData.getMeData();
+		if(meData.phone){
+			this.setState({
+				phoneNumber: meData.phone,
+			})
+		}
+		if(meData.weChatOpenId){
+			this.setState({
+				weChatOpenId: meData.weChatOpenId,
+			})
+		}
+		/*
 		NetworkModule.fetchTHUrl(
 			NetConstants.GET_USER_INFO_API,
 			{
@@ -102,6 +107,7 @@ var MeAccountBindingPage = React.createClass({
 				Alert.alert('提示',errorMessage);
 			}
 		)
+		*/
 	},
 
 	hideWechatIfNotInstalled: function() {
@@ -146,7 +152,7 @@ var MeAccountBindingPage = React.createClass({
 				showLoading: true,
 			},
 			(responseJson) => {
-				this.loginSuccess(responseJson);
+				this.bindWechatSuccess(responseJson);
 			},
 			(errorMessage) => {
 				Alert.alert('提示',errorMessage);
@@ -154,13 +160,26 @@ var MeAccountBindingPage = React.createClass({
 		)
 	},
 
-	loginSuccess: function(userData) {
+	bindWechatSuccess: function(userData) {
+		NetworkModule.fetchTHUrl(
+			NetConstants.GET_USER_INFO_API,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+			},
+			function(responseJson) {
+				StorageModule.setMeData(JSON.stringify(responseJson))
+				LogicData.setMeData(responseJson);
 
-		console.log(LogicData.getUserData());
+				this.loadAccountBindingInfo(responseJson)
 
-		this.setState({
-			wechatBinded: true
-		});
+			}.bind(this),
+			function(errorMessage) {
+				Alert.alert('提示',errorMessage);
+			}
+		)
 		/*
 		this.props.navigator.push({
 			name: MainPage.UPDATE_USER_INFO_ROUTE
@@ -230,7 +249,7 @@ var MeAccountBindingPage = React.createClass({
 
 	render: function() {
 		return (
-	    <ListView
+			<ListView
 	    	style={styles.list}
 				dataSource={this.state.dataSource}
 				renderRow={this.renderRow}

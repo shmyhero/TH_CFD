@@ -279,8 +279,7 @@ var MainPage = React.createClass({
 			hideTabbar();
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title='帐号信息' showBackButton={true} navigator={navigationOperations}/>
-					<AccountInfoPage navigator={navigationOperations}/>
+					<AccountInfoPage navigator={navigationOperations} backButtonOnClick={route.backButtonOnClick}/>
 				</View>
 			)
 		} else if (route.name === ACCOUNT_NAME_MODIFY_ROUTE) {
@@ -298,7 +297,7 @@ var MainPage = React.createClass({
 				<MePage navigator={navigationOperations} />
 			)
 		} else if(route.name === ME_CONFIG_ROUTE){
-			showTabbar()
+			hideTabbar();
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title="设置" showBackButton={true} navigator={navigationOperations}/>
@@ -306,18 +305,18 @@ var MainPage = React.createClass({
 				</View>
 			)
 		} else if(route.name === ME_PUSH_CONFIG_ROUTE){
-			showTabbar()
+			hideTabbar();
 			return (
 				<View style={{flex: 1}}>
 					<MePushConfigPage navigator={navigationOperations} routeMapper={this.RouteMapper}/>
 				</View>
 			)
 		} else if(route.name === ME_ACCOUNT_BINDING_ROUTE){
-			showTabbar()
+			hideTabbar();
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title="账号绑定" showBackButton={true} navigator={navigationOperations}/>
-					<MeAccountBindingPage navigator={navigationOperations} />
+					<MeAccountBindingPage navigator={navigationOperations} onPopBack={route.onPopBack}/>
 				</View>
 			)
 		} else if(route.name === ME_BINDING_MOBILE_ROUTE){

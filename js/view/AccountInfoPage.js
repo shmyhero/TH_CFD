@@ -12,7 +12,9 @@ import {
 	ListView,
 } from 'react-native';
 
-var LogicData = require('../LogicData');
+
+var LogicData = require('../LogicData')
+var NavBar = require('./NavBar')
 var {height, width} = Dimensions.get('window');
 var MainPage = require('./MainPage');
 var UIConstants = require('../UIConstants');
@@ -54,6 +56,18 @@ var options = {
 };
 
 var AccountInfoPage = React.createClass({
+	propTypes: {
+		backButtonOnClick: React.PropTypes.func,
+	},
+
+	getDefaultProps() {
+		return {
+			backButtonOnClick: function() {
+
+			},
+		}
+	},
+
 	getInitialState: function() {
 		var meData = LogicData.getMeData()
 		return {
@@ -84,7 +98,8 @@ var AccountInfoPage = React.createClass({
 					headUrl: meData.picUrl,
 					nickname: meData.nickname,
 					mobile: meData.phone,
-				});
+					dataSource: ds.cloneWithRows(listRawData),
+				})
 		}
 	},
 
@@ -168,11 +183,15 @@ var AccountInfoPage = React.createClass({
 
 	render: function() {
 		return (
-			<ListView
-				style={styles.list}
-				dataSource={this.state.dataSource}
-				renderRow={this.renderRow}
-				renderSeparator={this.renderSeparator} />
+			<View style={styles.wrapper}>
+				<NavBar title='帐号信息' showBackButton={true} navigator={this.props.navigator}
+					backButtonOnClick={this.props.backButtonOnClick}/>
+				<ListView
+					style={styles.list}
+					dataSource={this.state.dataSource}
+					renderRow={this.renderRow}
+					renderSeparator={this.renderSeparator} />
+			</View>
 		);
 	},
 

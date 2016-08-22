@@ -75,9 +75,6 @@ var MePage = React.createClass({
 			})
 			if(i != -1){
 				listRawData.splice(i, 1);
-				this.setState({
-					dataSource: ds.cloneWithRows(listRawData),
-				});
 			}
 		}else{
 			this.setState({
@@ -85,11 +82,12 @@ var MePage = React.createClass({
 			})
 			if(i == -1){
 				listRawData.push(configRowData);
-				this.setState({
-					dataSource: ds.cloneWithRows(listRawData),
-				});
 			}
 		}
+
+		this.setState({
+			dataSource: ds.cloneWithRows(listRawData),
+		});
 	},
 
 	gotoOpenAccount: function() {
@@ -110,6 +108,7 @@ var MePage = React.createClass({
 		//TODO: Use real page.
 		this.props.navigator.push({
 			name: MainPage.ACCOUNT_INFO_ROUTE,
+			backButtonOnClick: this.reloadMeData,
 			//popToRoute: MainPage.ME_PUSH_CONFIG_ROUTE,	//Set to destination page
 		});
 	},
@@ -356,6 +355,7 @@ var styles = StyleSheet.create({
 	headImage: {
 		width: Math.round(62*heightRate),
 		height: Math.round(62*heightRate),
+		borderRadius: Math.round(31*heightRate),
 	},
 });
 

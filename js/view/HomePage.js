@@ -384,33 +384,40 @@ var HomePage = React.createClass({
 		var rowHeight = 60
 		var news = []
 		var len = this.state.topNews.length
-		var tlen = len%2===0 ? len : len*2
-		for (var i=0; i<len; i++) {
-			var news1 = this.state.topNews[i*2%len]
-			var news2 = this.state.topNews[(i*2+1)%len]
-			news.push(
-				<View style={{flex:1}} key={i+100}>
-					{this.renderOneNews(news1)}
-					{this.renderOneNews(news2)}
+		if (len > 0) {
+			for (var i=0; i<len; i++) {
+				var news1 = this.state.topNews[i*2%len]
+				var news2 = this.state.topNews[(i*2+1)%len]
+				news.push(
+					<View style={{flex:1}} key={i+100}>
+						{this.renderOneNews(news1)}
+						{this.renderOneNews(news2)}
+					</View>
+				)
+			}
+			return (
+				<View style={[styles.topnewsContainer, {height: rowHeight}]}>
+					<Image style={styles.topnewsImage} source={require('../../images/topnews.png')}/>
+					<View style={styles.topnewsVerticalLine}/>
+					<Swiper
+						horizontal={false}
+						height={rowHeight}
+						loop={true}
+						autoplay={true}
+						autoplayTimeout={5}
+						showsPagination={false}>
+						{news}
+					</Swiper>
+				</View>
+			)
+		} else {
+			return (
+				<View style={[styles.topnewsContainer, {height: rowHeight}]}>
+					<Image style={styles.topnewsImage} source={require('../../images/topnews.png')}/>
+					<View style={styles.topnewsVerticalLine}/>
 				</View>
 			)
 		}
-		return (
-			<View style={[styles.topnewsContainer, {height: rowHeight}]}>
-				<Image style={styles.topnewsImage} source={require('../../images/topnews.png')}/>
-				<View style={styles.topnewsVerticalLine}/>
-				<Swiper
-					horizontal={false}
-					height={rowHeight}
-					loop={true}
-					autoplay={true}
-					autoplayTimeout={5}
-					showsPagination={false}>
-					{news}
-				</Swiper>
-			</View>
-		)
-
 	},
 
 	render: function() {

@@ -63,6 +63,9 @@ var FeedbackPage = React.createClass({
 		};
 	},
 
+	componentWillMount: function() {
+		imageNumber = 0
+	},
 
 	pressBackButton: function() {
 		this.props.showTabbar()
@@ -88,7 +91,7 @@ var FeedbackPage = React.createClass({
 				body: JSON.stringify({
 					text: this.state.text,
 					phone: this.state.phoneNumber,
-					images: this.state.imagesData,
+					photos: this.state.imagesData,
 				}),
 				showLoading: true,
 			},

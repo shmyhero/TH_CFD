@@ -218,6 +218,7 @@ var styles = StyleSheet.create({
 	nickNameInputView:{
 		color:'#303030',
 		height:Math.round(64*heightRate),
+		backgroundColor:'transparent',
 		marginLeft: 15,
 	},
 

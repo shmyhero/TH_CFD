@@ -80,6 +80,9 @@ var MeAccountBindingPage = React.createClass({
 				weChatOpenId: meData.weChatOpenId,
 			})
 		}
+		this.setState({
+			dataSource: ds.cloneWithRows(listRawData),
+		})
 		/*
 		NetworkModule.fetchTHUrl(
 			NetConstants.GET_USER_INFO_API,

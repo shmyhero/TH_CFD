@@ -326,7 +326,7 @@ var MainPage = React.createClass({
 					<MeBindingMobilePage navigator={navigationOperations}
 						showCancelButton={true}
 						popToRoute={route.popToRoute}
-						onPopToRoute={route.onPopToRoute}/>
+						onPopBack={route.onPopBack}/>
 				</View>
 			)
 		}else if (route.name === OPEN_ACCOUNT_ROUTE) {

@@ -23,7 +23,7 @@ var ColorConstants = require('../ColorConstants');
 var heightRate = height/667.0;
 var NavBar = require('../view/NavBar')
 
-
+var maxNickNameLength = 8;
 class ErrorMsg extends Component{
 	constructor(prop){
 		super(prop);
@@ -45,7 +45,7 @@ class ErrorMsg extends Component{
 		if(this.props.showView){
 			return (
 				<View style={styles.errorMsg}>
-						<Image source={require('../../images/error_dot.png')} style={[styles.error_dot,{marginLeft:5}]}/>
+						<Image source={require('../../images/error_dot.png')} style={[styles.errorDot]}/>
 						<Text style={styles.errorText}>{this.props.showText}</Text>
 				</View>
 			);
@@ -89,8 +89,6 @@ var AccountNameModifyPage = React.createClass({
 
 	render: function() {
 
-		var marginLeft = 0;
-
 		return (
 			<View style={{flex:1,backgroundColor:'white'}}>
 
@@ -100,12 +98,12 @@ var AccountNameModifyPage = React.createClass({
 					onChangeText={(text) => this.setNickName(text)}
 					placeholder='请输入昵称'
 					placeholderTextColor='grey'
-					maxLength={8}
+					maxLength={maxNickNameLength}
 					value={this.state.nickName}
 					/>
 
 					<View style={styles.line}>
-						<View style={[styles.separator, {marginLeft: marginLeft}]}/>
+						<View style={[styles.separator, {marginLeft: 15, marginRight: 15}]}/>
 					</View>
 
 					<ErrorMsg showView={this.state.isShowError} showText={this.state.errorText}/>
@@ -132,14 +130,30 @@ var AccountNameModifyPage = React.createClass({
 	renderComplete: function() {
 		return (
 			<TouchableOpacity onPress={this.onComplete}>
-						<Text style={styles.subTitle}>
-							保存
-						</Text>
+				<Text style={styles.subTitle}>
+					保存
+				</Text>
 			</TouchableOpacity>
 		)
 	},
 
 	onComplete(){
+		//Check if the new value is valid.
+
+		if(!this.state.nickName || this.state.nickName.length==0 ){
+			this.setState({
+				isShowError:true,
+				errorText:"昵称不能为空",
+			});
+			return;
+		}else if(this.state.nickName.length > maxNickNameLength){
+			this.setState({
+				isShowError:true,
+				errorText: "昵称不能超过" + maxNickNameLength + "个字段",
+			});
+			return;
+		}
+
 		var userData = LogicData.getUserData()
 		NetworkModule.fetchTHUrl(
 			NetConstants.SET_USER_NICKNAME_API + '?' + NetConstants.PARAMETER_NICKNAME + '=' + this.state.nickName,
@@ -158,12 +172,11 @@ var AccountNameModifyPage = React.createClass({
 				}.bind(this))
 			}.bind(this),
 			function(errorMessage) {
-				alert(errorMessage)
 				this.setState({
 					isShowError:true,
 					errorText:errorMessage,
 				});
-			}
+			}.bind(this)
 		)
 	},
 
@@ -202,34 +215,33 @@ var AccountNameModifyPage = React.createClass({
 
 
 var styles = StyleSheet.create({
+	nickNameInputView:{
+		color:'#303030',
+		height:Math.round(64*heightRate),
+		marginLeft: 15,
+	},
 
-	 nickNameInputView:{
-		 color:'#303030',
-		 height:Math.round(64*heightRate),
-		 margin:5,
-	 },
+	line: {
+		height: 0.5,
+		backgroundColor: 'white',
+	},
 
+	separator: {
+		height: 0.5,
+		backgroundColor: ColorConstants.SEPARATOR_GRAY,
+	},
 
+	errorDot: {
+		width: 16,
+		height: 16,
+ 		marginLeft: 15,
+	},
 
-	 line: {
-		 height: 0.5,
-		 backgroundColor: 'white',
-	 },
-
-	 separator: {
-		 height: 0.5,
-		 backgroundColor: ColorConstants.SEPARATOR_GRAY,
-	 },
-
-	 errorDot: {
- 	width: 16,
- 	height: 16,
-  },
-
-  errorText:{
- 	 fontSize:12,
- 	 color:'red',
- 	},
+	errorText:{
+		fontSize:12,
+		color:'red',
+		marginLeft:10
+	},
 
 	subTitle: {
 		fontSize: 17,
@@ -238,10 +250,11 @@ var styles = StyleSheet.create({
 		marginRight:10,
 	},
 
-  errorMsg:{
- 		flexDirection: 'row',
- 		alignItems: 'center',
- 	},
+	errorMsg:{
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginTop: 10
+	},
 
 });
 

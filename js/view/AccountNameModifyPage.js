@@ -123,17 +123,8 @@ var AccountNameModifyPage = React.createClass({
 				barStyle={{height: barHeight}}	titleStyle={{fontSize:18}}
 				title='我的昵称'
 				subTitleStyle={styles.subTitle}
-				rightCustomContent={() => this.renderComplete()}/>
-		)
-	},
-
-	renderComplete: function() {
-		return (
-			<TouchableOpacity onPress={this.onComplete}>
-				<Text style={styles.subTitle}>
-					保存
-				</Text>
-			</TouchableOpacity>
+				textOnRight='完成'
+				rightTextOnClick={this.onComplete}/>
 		)
 	},
 

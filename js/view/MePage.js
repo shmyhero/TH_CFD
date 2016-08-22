@@ -19,6 +19,7 @@ var NavBar = require('./NavBar')
 var Button = require('./component/Button')
 var MainPage = require('./MainPage')
 var NativeSceneModule = require('../module/NativeSceneModule')
+var StorageModule = require('../module/StorageModule')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
@@ -38,26 +39,40 @@ var didTabSelectSubscription = null
 var MePage = React.createClass({
 	getInitialState: function() {
 		return {
+			loggedIn: false,
 			dataSource: ds.cloneWithRows(listRawData),
 		};
 	},
 
+	componentWillMount: function(){
+		StorageModule.loadMeData()
+		.then((value) => {
+			if (value !== null) {
+				LogicData.setMeData(JSON.parse(value))
+				this.reloadMeData();
+			}
+		});
+	},
+
 	componentDidMount: function(){
 		didTabSelectSubscription = EventCenter.getEventEmitter().
-			addListener(EventConst.ME_TAB_PRESS_EVENT, this.onTabChanged);
+			addListener(EventConst.ME_TAB_PRESS_EVENT, this.reloadMeData);
 	},
 
 	componentWillUnmount: function() {
 		didTabSelectSubscription && didTabSelectSubscription.remove();
 	},
 
-	onTabChanged: function(){
-		//Check if the config row need to be shown.
-		var userData = LogicData.getUserData()
-		var notLogin = Object.keys(userData).length === 0
+	reloadMeData: function(){
+		//Check if the user has logged in and the config row need to be shown.
+		var meData = LogicData.getMeData()
+		var notLogin = Object.keys(meData).length === 0
 		var i = listRawData.indexOf(configRowData)
 
 		if (notLogin) {
+			this.setState({
+				loggedIn: false,
+			})
 			if(i != -1){
 				listRawData.splice(i, 1);
 				this.setState({
@@ -65,6 +80,9 @@ var MePage = React.createClass({
 				});
 			}
 		}else{
+			this.setState({
+				loggedIn: true,
+			})
 			if(i == -1){
 				listRawData.push(configRowData);
 				this.setState({
@@ -77,6 +95,16 @@ var MePage = React.createClass({
 	gotoOpenAccount: function() {
 		this.props.navigator.push({
 			name: MainPage.LOGIN_ROUTE,
+			popToRoute: MainPage.ME_ROUTE,	//Set to destination page
+			onPopToRoute: this.reloadMeData,
+		});
+	},
+
+	gotoUserInfoPage: function() {
+		//TODO: Use real page.
+		this.props.navigator.push({
+			name: MainPage.ME_ACCOUNT_BINDING_ROUTE,
+			//popToRoute: MainPage.ME_PUSH_CONFIG_ROUTE,	//Set to destination page
 		});
 	},
 
@@ -118,6 +146,51 @@ var MePage = React.createClass({
 			)
 	},
 
+	renderUserNameView: function(){
+		var meData = LogicData.getMeData();
+		if(meData.phone != null){
+			return (
+				<View style={[styles.userInfoWrapper]}>
+					<Text style={styles.userNameText}>{meData.nickname}</Text>
+					<Text style={styles.userNameText}>{meData.phone}</Text>
+				</View>
+			);
+		}
+		else{
+			return(
+				<View style={[styles.userInfoWrapper]}>
+					<Text style={styles.userNameText}>{meData.nickName}</Text>
+				</View>
+			)
+		}
+	},
+
+	renderUserPortraitView: function(){
+		var meData = LogicData.getMeData();
+		if(meData.picUrl != null){
+			//TODO: Download image...
+			return (
+				<Image source={require(meData.picUrl)} style={styles.headImage} />
+			);
+		}else{
+			return (
+				<Image source={require('../../images/head_portrait.png')} style={styles.headImage} />
+			);
+		}
+	},
+
+	renderUserInfoView: function(){
+		return(
+			<TouchableOpacity activeOpacity={0.5} onPress={()=>this.gotoUserInfoPage()}>
+				<View style={[styles.rowWrapper, {height:Math.round(88*heightRate)}]}>
+					{this.renderUserPortraitView()}
+					{this.renderUserNameView()}
+					<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
+				</View>
+			</TouchableOpacity>
+		);
+	},
+
 	renderRow: function(rowData, sectionID, rowID) {
 		if (rowData.type === 'normal') {
 			return(
@@ -144,13 +217,19 @@ var MePage = React.createClass({
 		}
 		else {
 			// account
-			return(
-				<View style={[styles.rowWrapper, {height:Math.round(88*heightRate)}]}>
-					<Image source={require('../../images/head_portrait.png')} style={styles.headImage} />
-					<Text style={styles.defaultText}>手机号/微信号登录</Text>
-					<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
-				</View>
-			)
+			if(this.state.loggedIn){
+				return this.renderUserInfoView();
+			}else{
+				return(
+					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.gotoOpenAccount(rowData)}>
+						<View style={[styles.rowWrapper, {height:Math.round(88*heightRate)}]}>
+							<Image source={require('../../images/head_portrait.png')} style={styles.headImage} />
+							<Text style={styles.defaultText}>手机号/微信号登录</Text>
+							<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
+						</View>
+					</TouchableOpacity>
+				)
+			}
 		}
 	},
 
@@ -190,6 +269,13 @@ var styles = StyleSheet.create({
 		paddingBottom: 5,
 		paddingTop: 5,
 		backgroundColor: 'white',
+	},
+	userInfoWrapper: {
+		flex: 1,
+		flexDirection: 'column',
+		alignItems: 'center',
+		backgroundColor: 'white',
+		alignItems: 'flex-start',
 	},
 	line: {
 		height: 0.5,
@@ -240,6 +326,15 @@ var styles = StyleSheet.create({
 		marginLeft: 10,
 		color: '#6d6d6d',
 	},
+
+	userNameText: {
+		flex: 1,
+		textAlign: 'left',
+		fontSize: 17,
+		marginLeft: 10,
+		color: '#303030',
+	},
+
 	headImage: {
 		width: Math.round(62*heightRate),
 		height: Math.round(62*heightRate),

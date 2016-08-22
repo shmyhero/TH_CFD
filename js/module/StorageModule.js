@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 
 var USER_DATA_STORAGE_KEY = '@TH_CFD:userData';
+var ME_DATA_STORAGE_KEY = '@TH_CFD:meData';
 var OWN_STOCKS_DATA_STORAGE_KEY = '@TH_CFD:ownStocksData';
 var SEARCH_HISTORY_KEY = '@TH_CFD:searchHistory';
 var BANNER_STORAGE_KEY = '@TH_CFD:bannerData';
@@ -32,6 +33,32 @@ export async function setUserData(selectedValue) {
 export async function removeUserData() {
 	try {
 		await AsyncStorage.removeItem(USER_DATA_STORAGE_KEY);
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+
+export async function loadMeData() {
+	try {
+		var value = await AsyncStorage.getItem(ME_DATA_STORAGE_KEY);
+		return value;
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function setMeData(selectedValue) {
+	try {
+		await AsyncStorage.setItem(ME_DATA_STORAGE_KEY, selectedValue);
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function removeMeData() {
+	try {
+		await AsyncStorage.removeItem(ME_DATA_STORAGE_KEY);
 	} catch (error) {
 		console.log('AsyncStorage error: ' + error.message);
 	}

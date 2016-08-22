@@ -45,11 +45,13 @@ var LoginPage = React.createClass({
 
 	propTypes: {
 		showCancelButton: React.PropTypes.bool,
+		popToRoute: React.PropTypes.string,
 	},
 
 	getDefaultProps() {
 		return {
 			showCancelButton: false,
+			popToRoute: null,
 		}
 	},
 	componentWillMount: function() {
@@ -250,6 +252,7 @@ var LoginPage = React.createClass({
 	loginSuccess: function(userData) {
 		StorageModule.setUserData(JSON.stringify(userData))
 		LogicData.setUserData(userData);
+
 		console.log(LogicData.getUserData());
 
 		NetworkModule.syncOwnStocks(userData)
@@ -258,9 +261,40 @@ var LoginPage = React.createClass({
 		this.setState({
 			phoneLoginButtonEnabled: true
 		});
-		this.props.navigator.push({
-			name: MainPage.UPDATE_USER_INFO_ROUTE,
-		});
+
+		this.updateMeData(
+			userData,
+			function(){
+				this.props.navigator.push({
+					name: MainPage.UPDATE_USER_INFO_ROUTE,
+					popToRoute: this.props.popToRoute,
+					onPopToRoute: this.props.onPopToRoute,
+				});
+			}.bind(this)
+		)
+	},
+
+	updateMeData: function(userData, onSuccess){
+		NetworkModule.fetchTHUrl(
+			NetConstants.GET_USER_INFO_API,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+			},
+			function(responseJson) {
+				StorageModule.setMeData(JSON.stringify(responseJson))
+				LogicData.setMeData(responseJson);
+
+				if(onSuccess){
+					onSuccess()
+				}
+			}.bind(this),
+			function(errorMessage) {
+				Alert.alert('提示',errorMessage);
+			}
+		)
 	},
 
 	forgetPassword: function() {

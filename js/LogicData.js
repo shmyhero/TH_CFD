@@ -3,6 +3,7 @@
 var StorageModule = require('./module/StorageModule')
 
 var userData = {};
+var meData = {};
 var wechatAuthData = {};
 var wechatUserData = {};
 var ownStocksData = [];
@@ -19,6 +20,14 @@ var LogicData = {
 
 	getUserData: function() {
 		return userData;
+	},
+
+	setMeData: function(data){
+		meData = data;
+	},
+	
+	getMeData: function(){
+		return meData;
 	},
 
     removeUserData: function() {

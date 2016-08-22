@@ -64,6 +64,7 @@ var MePushConfigPage = React.createClass({
 		if (notLogin) {
 			this.props.navigator.push({
 				name: MainPage.LOGIN_ROUTE,
+				popToRoute: MainPage.ME_PUSH_CONFIG_ROUTE,
 			});
 		}
 	},
@@ -73,8 +74,8 @@ var MePushConfigPage = React.createClass({
 	},
 
 	loadPushConfigInfo: function(){
-		var userData = LogicData.getUserData()
-		var notLogin = Object.keys(userData).length === 0
+		var meData = LogicData.getMeData()
+		var notLogin = Object.keys(meData).length === 0
 
 		if (!notLogin) {
 			NetworkModule.fetchTHUrl(

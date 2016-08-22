@@ -32,6 +32,8 @@ export const GET_USER_STATISTICS_API = SERVER_IP + '/api/user/plReport'
 export const GET_POPULARITY_API = SERVER_IP + '/api/security/byPopularity'
 export const GET_TOP_NEWS_TOP10_API = SERVER_IP + '/api/headline/top10'
 export const AUTO_CLOSE_ALERT_API = SERVER_IP + '/alert/<setting>'
+export const BIND_MOBILE_API = SERVER_IP + '/api/user/bindphone'
+export const BIND_WECHAT_API = SERVER_IP + '/api/user/bindwechat?<wechatOpenId>'
 
 export const GZT_OCR_CHECK_API = GZT_SERVER_IP + '/ocrCheck'
 

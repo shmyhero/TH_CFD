@@ -116,14 +116,16 @@ var MeAccountBindingPage = React.createClass({
 	wechatPressed: function() {
 		WechatModule.wechatLogin(
 			() => {
-				this.wechatLogin()
+				this.bindWechat()
 			},
 
 			function() {}.bind(this)
 		)
 	},
 
-	wechatLogin: function() {
+	bindWechat: function() {
+		//TODO: Use MeData.
+		var userData = LogicData.getUserData()
 		var wechatUserData = LogicData.getWechatUserData()
 
 		var out = Object.keys(wechatUserData).map(function(data){
@@ -131,19 +133,16 @@ var MeAccountBindingPage = React.createClass({
 		})
 		console.log(out);
 
+		var url = NetConstants.BIND_WECHAT_API;
+		url = url.replace(/<wechatOpenId>/, wechatUserData.wechatOpenId)
+
 		NetworkModule.fetchTHUrl(
-			NetConstants.WECHAT_LOGIN_API,
+			url,
 			{
 				method: 'POST',
 				headers: {
-					'Content-Type': 'application/json; charset=UTF-8'
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 				},
-				body: JSON.stringify({
-					openid: wechatUserData.openid,
-					unionid: wechatUserData.unionid,
-					nickname: wechatUserData.nickname,
-					headimgurl: wechatUserData.headimgurl,
-				}),
 				showLoading: true,
 			},
 			(responseJson) => {
@@ -156,12 +155,8 @@ var MeAccountBindingPage = React.createClass({
 	},
 
 	loginSuccess: function(userData) {
-		StorageModule.setUserData(JSON.stringify(userData))
-		LogicData.setUserData(userData);
-		console.log(LogicData.getUserData());
 
-		NetworkModule.syncOwnStocks(userData)
-		WebSocketModule.alertServiceLogin(userData.userId + '_' + userData.token)
+		console.log(LogicData.getUserData());
 
 		this.setState({
 			wechatBinded: true

@@ -29,8 +29,6 @@ var WechatModule = require('../module/WechatModule')
 var WebSocketModule = require('../module/WebSocketModule')
 var MainPage = require('./MainPage')
 var dismissKeyboard = require('dismissKeyboard');
-var TalkingdataModule = require('../module/TalkingdataModule')
-
 
 var {height, width} = Dimensions.get('window')
 var rowHeight = 40;
@@ -145,87 +143,20 @@ var MeBindingMobilePage = React.createClass({
 		);
 	},
 
-	wechatPressed: function() {
-		WechatModule.wechatLogin(
-			() => {
-				this.wechatLogin()
-			},
-
-			function() {}.bind(this)
-		)
-	},
-
-	wechatLogin: function() {
-		var wechatUserData = LogicData.getWechatUserData()
-
-		NetworkModule.fetchTHUrl(
-			NetConstants.WECHAT_LOGIN_API,
-			{
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json; charset=UTF-8'
-				},
-				body: JSON.stringify({
-					openid: wechatUserData.openid,
-					unionid: wechatUserData.unionid,
-					nickname: wechatUserData.nickname,
-					headimgurl: wechatUserData.headimgurl,
-				}),
-				showLoading: true,
-			},
-			(responseJson) => {
-				this.loginSuccess(responseJson);
-			},
-			(errorMessage) => {
-				Alert.alert('提示',errorMessage);
-			}
-		)
-	},
-
-	loginWithPasswordPressed: function() {
-		this.setState({
-			phoneLoginButtonEnabled: false
-		})
-		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_LOGIN_EVENT)
-		NetworkModule.fetchTHUrl(
-			NetConstants.PHONE_NUM_LOGIN_API,
-			{
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json; charset=UTF-8'
-				},
-				body: JSON.stringify({
-					phone: this.state.phoneNumber,
-					verifyCode: this.state.validationCode,
-				}),
-				showLoading: true,
-			},
-			(responseJson) => {
-				this.loginSuccess(responseJson);
-			},
-			(errorMessage) => {
-				this.setState({
-					phoneLoginButtonEnabled: true
-				})
-				Alert.alert('提示',errorMessage);
-			}
-		)
-	},
-
-	loginWithCodePressed: function() {
+	bindWithCode: function() {
 		if (!this.state.phoneLoginButtonEnabled) {
 			return
 		}
-		TalkingdataModule.trackEvent(TalkingdataModule.SIMULATOR_LOGIN_EVENT)
+		var userData = LogicData.getUserData()
 		this.setState({
 			phoneLoginButtonEnabled: false
 		})
 		NetworkModule.fetchTHUrl(
-			NetConstants.PHONE_NUM_LOGIN_API,
+			NetConstants.BIND_MOBILE_API,
 			{
 				method: 'POST',
 				headers: {
-					'Content-Type': 'application/json; charset=UTF-8'
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 				},
 				body: JSON.stringify({
 					phone: this.state.phoneNumber,
@@ -382,7 +313,7 @@ var MeBindingMobilePage = React.createClass({
 							</View>
 
 							<View style={[styles.rowWrapper, {marginTop: 20, backgroundColor: 'transparent'}]}>
-								<TouchableOpacity style={styles.loginClickableArea} onPress={this.loginWithCodePressed}>
+								<TouchableOpacity style={styles.loginClickableArea} onPress={this.bindWithCode}>
 									<View style={styles.loginTextView}>
 										<Text style={styles.loginText}>
 											确认

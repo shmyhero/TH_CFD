@@ -156,8 +156,8 @@ var AccountNameModifyPage = React.createClass({
 			},
 			function(responseJson) {
 				this.updateMeData(userData, function(){
-					if(this.props.navigator.onReturnToPage){
-						this.props.navigator.onReturnToPage()
+					if(this.props.onReturnToPage){
+						this.props.onReturnToPage()
 					}
 					this.props.navigator.pop();
 				}.bind(this))
@@ -240,7 +240,7 @@ var styles = StyleSheet.create({
 		fontSize: 17,
 		textAlign: 'center',
 		color: 'white',
-		marginRight:5,
+		marginRight:10,
 	},
 
   errorMsg:{

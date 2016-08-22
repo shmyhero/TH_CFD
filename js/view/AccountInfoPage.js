@@ -12,7 +12,7 @@ import {
 	ListView,
 } from 'react-native';
 
-var LogicData = require('../LogicData')
+var LogicData = require('../LogicData');
 var {height, width} = Dimensions.get('window');
 var MainPage = require('./MainPage');
 var UIConstants = require('../UIConstants');
@@ -26,34 +26,100 @@ var listRawData = [
 ];
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
+var ImagePicker = require('react-native-image-picker');
+
+const imageWidth = Math.round(width * 0.85);
+const imageHeight = Math.round(height * 0.3);
+
+var options = {
+	title: null, // specify null or empty string to remove the title
+	cancelButtonTitle: '取消',
+	takePhotoButtonTitle: '拍照', // specify null or empty string to remove this button
+	chooseFromLibraryButtonTitle: '照片图库', // specify null or empty string to remove this button
+
+	cameraType: 'back', // 'front' or 'back'
+	mediaType: 'photo', // 'photo' or 'video'
+	maxWidth: imageWidth * 3, // photos only
+	maxHeight: imageHeight * 3, // photos only
+	aspectX: 3, // android only - aspectX:aspectY, the cropping image's ratio of width to height
+	aspectY: 2, // android only - aspectX:aspectY, the cropping image's ratio of width to height
+	quality: 1, // 0 to 1, photos only
+	angle: 0, // android only, photos only
+	allowsEditing: false, // Built in functionality to resize/reposition the image after selection
+	noData: false, // photos only - disables the base64 `data` field from being generated (greatly improves performance on large photos)
+	storageOptions: { // if this key is provided, the image will get saved in the documents directory on ios, and the pictures directory on android (rather than a temporary directory)
+		skipBackup: true, // ios only - image will NOT be backed up to icloud
+		path: 'images' // ios only - will save image at /Documents/images rather than the root
+	},
+};
+
 var AccountInfoPage = React.createClass({
 	getInitialState: function() {
+		var meData = LogicData.getMeData()
 		return {
 			dataSource: ds.cloneWithRows(listRawData),
-			headUrl:'',
-			nickName:'',
-			mobile: '',
+			headUrl:meData.picUrl,
+			nickname:meData.nickname,
+			mobile: meData.phone,
 		};
 	},
 
-	componentWillMount: function(){
+	// componentWillMount: function(){
+	// 	var meData = LogicData.getMeData()
+	// 	var notLogin = Object.keys(meData).length === 0
+	// 	if(!notLogin){
+	// 			this.setState({
+	// 				headUrl: meData.picUrl,
+	// 				nickName: meData.nickname,
+	// 				mobile: meData.phone
+	// 			})
+	// 	}
+	// },
+
+	onReturnToPage:function(){
 		var meData = LogicData.getMeData()
 		var notLogin = Object.keys(meData).length === 0
 		if(!notLogin){
 				this.setState({
 					headUrl: meData.picUrl,
-					nickName: meData.nickname,
-					mobile: meData.phone
-				})
+					nickname: meData.nickname,
+					mobile: meData.phone,
+				});
 		}
 	},
 
+
 	onSelectNormalRow: function(rowData) {
 		if(rowData.subtype === 'head') {
-			alert('选择头像');
+			this.pressAddImage();
 		}else if(rowData.subtype === 'nickName') {
 			this.gotoAccountNameModifyPage();
 		}
+	},
+
+	pressAddImage: function() {
+
+		ImagePicker.showImagePicker(options, (response) => {
+			console.log('Response = ', response);
+
+			if (response.didCancel) {
+				console.log('User cancelled image picker');
+			}
+			else if (response.error) {
+				console.log('ImagePicker Error: ', response.error);
+			}
+			else {
+				// You can display the image using either data:
+				const source = {uri: 'data:image/jpeg;base64,' + response.data};
+
+					//
+					// this.setState({
+					// 	// idCardFront: source,
+					// 	// idCardFrontData: response.data,
+					// });
+					//
+			}
+		});
 	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
@@ -66,7 +132,7 @@ var AccountInfoPage = React.createClass({
 	},
 
 	renderRow: function(rowData, sectionID, rowID) {
-		var meData = LogicData.getMeData()
+		// var meData = LogicData.getMeData()
 		//headUrl: meData.picUrl,
 			if(rowData.type === 'head'){
 				return(
@@ -83,7 +149,7 @@ var AccountInfoPage = React.createClass({
 					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
 						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
 							<Text style={styles.title}>{rowData.title}</Text>
-							<Text style={styles.contentValue}>{meData.nickname}</Text>
+							<Text style={styles.contentValue}>{this.state.nickname}</Text>
 							<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
 						</View>
 					</TouchableOpacity>
@@ -92,7 +158,7 @@ var AccountInfoPage = React.createClass({
 				return(
 					<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
 						<Text style={styles.title}>{rowData.title}</Text>
-						<Text style={styles.contentValue}>{meData.phone}</Text>
+						<Text style={styles.contentValue}>{this.state.mobile}</Text>
 					</View>
 				);
 			}
@@ -113,7 +179,7 @@ var AccountInfoPage = React.createClass({
 	gotoAccountNameModifyPage(){
 		this.props.navigator.push({
 			name: MainPage.ACCOUNT_NAME_MODIFY_ROUTE,
-			onReturnToPage: this.componentWillMount
+			onReturnToPage: this.onReturnToPage,
 		});
 	},
 });

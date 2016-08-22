@@ -114,7 +114,7 @@ const glypy = glypyMapMaker({
   Home: 'f04f',
   Camera: 'f04e',
   Stat: 'f050',
-  Settings: 'f052',
+  Settings: 'f054',
   Favorite: 'f051'
 });
 

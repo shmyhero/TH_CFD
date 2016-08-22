@@ -34,6 +34,8 @@ var StockExchangePage = require('./StockExchangePage')
 var WebViewPage = require('./WebViewPage');
 var QAPage = require('./QAPage')
 var AboutUsPage = require('./AboutUsPage');
+var AccountInfoPage = require('./AccountInfoPage');
+var AccountNameModifyPage = require('./AccountNameModifyPage');
 var MePage = require('./MePage')
 var MeConfigPage = require('./MeConfigPage')
 var MePushConfigPage = require('./MePushConfigPage')
@@ -94,7 +96,9 @@ export let STOCK_EXCHANGE_ROUTE = 'stockExchange'
 export let NAVIGATOR_WEBVIEW_ROUTE = 'webviewpage'
 export let QA_ROUTE = 'q&a'
 export let ME_ROUTE = 'me'
-export let ABOUT_US = 'aboutUs'
+export let ABOUT_US_ROUTE = 'aboutUs'
+export let ACCOUNT_INFO_ROUTE = 'accountInfo'
+export let ACCOUNT_NAME_MODIFY_ROUTE = 'accountNameModify'
 export let ME_CONFIG_ROUTE = 'meConfig'
 export let ME_PUSH_CONFIG_ROUTE = 'mePushConfig'
 export let ME_ACCOUNT_BINDING_ROUTE = 'meAccountBinding'
@@ -263,12 +267,28 @@ var MainPage = React.createClass({
 			return (
 				<QAPage />
 			)
-		} else if (route.name === ABOUT_US) {
+		} else if (route.name === ABOUT_US_ROUTE) {
 			hideTabbar();
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title='关于我们' showBackButton={true} navigator={navigationOperations}/>
 					<AboutUsPage />
+				</View>
+			)
+		} else if (route.name === ACCOUNT_INFO_ROUTE) {
+			hideTabbar();
+			return (
+				<View style={{flex: 1}}>
+					<NavBar title='帐号信息' showBackButton={true} navigator={navigationOperations}/>
+					<AccountInfoPage navigator={navigationOperations}/>
+				</View>
+			)
+		} else if (route.name === ACCOUNT_NAME_MODIFY_ROUTE) {
+			hideTabbar();
+			return (
+				<View style={{flex: 1}}>
+					{/* <NavBar title='我的昵称' showBackButton={true} navigator={navigationOperations}/> */}
+					<AccountNameModifyPage navigator={navigationOperations}/>
 				</View>
 			)
 		} else if (route.name === ME_ROUTE) {

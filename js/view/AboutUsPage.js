@@ -12,6 +12,7 @@ import {
 
 var {height, width} = Dimensions.get('window');
 var UIConstants = require('../UIConstants');
+var ColorConstants = require('../ColorConstants');
 var AboutUsPage = React.createClass({
 
 
@@ -22,7 +23,7 @@ var AboutUsPage = React.createClass({
 				<View style = {styles.center} >
 
 				<Image
-				style={styles.imageHead}
+				  style={styles.imageHead}
           source={require('../../images/about_us.png')}
         />
 
@@ -114,7 +115,7 @@ var styles = StyleSheet.create({
 	scrollView: {
 		flex:1,
 		backgroundColor: 'white',
-		height:height - 60 - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER,
+	  height:height - UIConstants.HEADER_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER ,
 	},
 
 	center:{

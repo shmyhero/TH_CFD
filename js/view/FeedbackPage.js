@@ -9,6 +9,7 @@ import {
 	TextInput,
 	Image,
 	TouchableOpacity,
+	Alert,
 } from 'react-native';
 
 var ColorConstants = require('../ColorConstants')
@@ -17,6 +18,9 @@ var Button = require('./component/Button')
 var MainPage = require('./MainPage')
 var NativeSceneModule = require('../module/NativeSceneModule')
 var ImagePicker = require('react-native-image-picker');
+var LogicData = require('../LogicData')
+var NetConstants = require('../NetConstants')
+var NetworkModule = require('../module/NetworkModule')
 
 var {height, width} = Dimensions.get('window')
 var imageSize = width >= 375 ? 65 : Math.floor(width/5-10)
@@ -55,6 +59,7 @@ var FeedbackPage = React.createClass({
 			text: '',
 			phoneNumber: '',
 			imagesSource: [add_image],
+			imagesData: [],
 		};
 	},
 
@@ -65,7 +70,36 @@ var FeedbackPage = React.createClass({
 	},
 
 	pressCommitButton: function() {
-		//todo
+		if(this.state.text.length == 0) {
+			Alert.alert('', '反馈内容不能为空');
+			return
+		}
+
+		var userData = LogicData.getUserData()
+		var url = NetConstants.FEEDBACK_API
+		NetworkModule.fetchTHUrl(
+			url,
+			{
+				method: 'POST',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Content-Type': 'application/json; charset=utf-8',
+				},
+				body: JSON.stringify({
+					text: this.state.text,
+					phone: this.state.phoneNumber,
+					images: this.state.imagesData,
+				}),
+				showLoading: true,
+			},
+			(responseJson) => {
+				Alert.alert('提交成功', '感谢你的反馈',
+					[{text:'确定', onPress: ()=>this.pressBackButton()}]);
+			},
+			(errorMessage) => {
+				Alert.alert('', errorMessage);
+			}
+		)
 	},
 
 	pressAddImage: function(index) {
@@ -79,20 +113,22 @@ var FeedbackPage = React.createClass({
 				console.log('ImagePicker Error: ', response.error);
 			}
 			else {
-				// You can display the image using either data:
 				const source = {uri: 'data:image/jpeg;base64,' + response.data};
 
 				if (index === imageNumber && imageNumber < MaxImageNumber) {
 					// last one, can add 1 more
 					this.state.imagesSource.splice(index, 0, source)
 					imageNumber += 1
+					this.state.imagesData.splice(index, 0, response.data)
 				}
 				else {
 					// replace this one
 					this.state.imagesSource.splice(index, 1, source)
+					this.state.imagesData.splice(index, 1, response.data)
 				}
 				this.setState({
 					imagesSource: this.state.imagesSource,
+					imagesData: this.state.imagesData,
 				})
 			}
 		});
@@ -100,10 +136,12 @@ var FeedbackPage = React.createClass({
 
 	pressDeleteImage: function(index) {
 		this.state.imagesSource.splice(index, 1)
+		this.state.imagesData.splice(index, 1)
 		imageNumber -=  1
 
 		this.setState({
 			imagesSource: this.state.imagesSource,
+			imagesData: this.state.imagesData,
 		})
 	},
 

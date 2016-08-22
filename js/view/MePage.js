@@ -25,7 +25,7 @@ var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 var configRowData = {'type':'normal','title':'设置', 'image':require('../../images/icon_config.png'), 'subtype':'config'}
 var listRawData = [{'type':'account','subtype':'accountInfo'},
-{'type':'button','title':'开设实盘账户'},
+// {'type':'button','title':'开设实盘账户'},
 {'type':'normal','title':'帮助中心', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'helpcenter'},
 {'type':'normal','title':'线上咨询', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':'onlinehelp'},
 {'type':'normal','title':'产品反馈', 'image':require('../../images/icon_response.png'), 'subtype':'feedback'},

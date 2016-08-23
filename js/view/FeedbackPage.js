@@ -25,6 +25,7 @@ var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 
 var {height, width} = Dimensions.get('window')
+var scrollHeight = height - UIConstants.HEADER_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
 var imageSize = width >= 375 ? 65 : Math.floor(width/5-10)
 const add_image = require("../../images/feedback_add.png")
 const delete_image = require("../../images/close.png")
@@ -197,7 +198,8 @@ var FeedbackPage = React.createClass({
 					rightTextOnClick={this.pressCommitButton}
 					enableRightText={this.state.text.length>0}
 					navigator={this.props.navigator}/>
-				<ScrollView style={styles.scrollWrapper}>
+				<ScrollView style={styles.scrollWrapper} 
+					contentContainerStyle={styles.scrollWrapper}>
 					<TextInput style={styles.textInput}
 						autoCapitalize="none"
 						multiline={true}
@@ -233,7 +235,7 @@ var styles = StyleSheet.create({
 		backgroundColor: ColorConstants.BACKGROUND_GREY,
 	},
 	scrollWrapper: {
-		height:height - UIConstants.HEADER_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER ,
+		height:scrollHeight ,
 	},
 	textInput: {
 		fontSize: 17,

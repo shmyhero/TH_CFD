@@ -1,6 +1,6 @@
 'use strict'
 
-import React from 'react';
+import React, { Component } from 'react';
 import {
 	StyleSheet,
 	View,
@@ -16,8 +16,9 @@ var Button = require('./component/Button')
 var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
 var LogicData = require('../LogicData')
+var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
-
+var UIConstants = require('../UIConstants')
 var rowHeight = 40;
 var fontSize = 16;
 
@@ -25,6 +26,28 @@ var originalName = null;
 
 var NOTE_STATE_NORMAL = 0;
 var NOTE_STATE_NORMAL_WECHAT = 1;
+
+class ErrorMsg extends Component{
+	constructor(prop){
+		super(prop);
+	}
+
+	render(){
+		if(this.props.showView){
+			return (
+				<View style={styles.errorMsg}>
+						<Image source={require('../../images/error_dot.png')} style={[styles.errorDot]}/>
+						<Text style={styles.errorText}>{this.props.showText}</Text>
+				</View>
+			);
+		}else {
+			return(
+				<View></View>
+			);
+		}
+	}
+
+}
 
 var UpdateUserInfoPage = React.createClass({
 	propTypes: {
@@ -70,6 +93,9 @@ var UpdateUserInfoPage = React.createClass({
 					nickName: originalName ,
 					saveButtonEnabled: true
 				});
+
+				this.verifyNickName(originalName)
+
 			}.bind(this),
 			function(errorMessage) {
 				Alert.alert('提示',errorMessage);
@@ -82,12 +108,23 @@ var UpdateUserInfoPage = React.createClass({
 			nickName: name
 		})
 
-		var buttonEnabled = false
-		if (name.length > 0) {
-			buttonEnabled = true
+		this.verifyNickName(name);
+	},
+
+	verifyNickName: function(name) {
+		var errorMsg = undefined
+
+		if (name.length == 0) {
+			errorMsg = "昵称不能为空"
 		}
+		else if(name.length > UIConstants.MAX_NICKNAME_LENGTH){
+			errorMsg = "昵称不能超过" + UIConstants.MAX_NICKNAME_LENGTH + "个字段"
+		}
+
 		this.setState({
-			saveButtonEnabled: buttonEnabled
+			isShowError: errorMsg != undefined,
+			errorText: errorMsg,
+			saveButtonEnabled: errorMsg == undefined
 		})
 	},
 
@@ -103,28 +140,69 @@ var UpdateUserInfoPage = React.createClass({
 				},
 			},
 			function(responseJson) {
-				if(this.props.popToRoute != null){
-					var routes = this.props.navigator.getCurrentRoutes();
-					var backRoute = null;
+				this.updateMeData(userData, function(){
+					if(this.props.popToRoute != null){
+						var routes = this.props.navigator.getCurrentRoutes();
+						var backRoute = null;
 
-					for (var i=0; i<routes.length; ++i) {
-						if(routes[i].name === this.props.popToRoute){
-							backRoute = routes[i];
-							break;
-						}
-					}
-
-					if(backRoute!=null){
-						if(this.props.onPopToRoute){
-							this.props.onPopToRoute();
+						for (var i=0; i<routes.length; ++i) {
+							if(routes[i].name === this.props.popToRoute){
+								backRoute = routes[i];
+								break;
+							}
 						}
 
-						this.props.navigator.popToRoute(backRoute)
+						if(backRoute!=null){
+							if(this.props.onPopToRoute){
+								this.props.onPopToRoute();
+							}
+
+							this.props.navigator.popToRoute(backRoute)
+						}else{
+							this.props.navigator.pop()
+						}
 					}else{
 						this.props.navigator.pop()
 					}
-				}else{
-					this.props.navigator.pop()
+				}.bind(this));
+			}.bind(this),
+			function(errorMessage) {
+				Alert.alert('提示',errorMessage);
+			}
+		)
+	},
+
+	renderHintOrError: function(){
+		if(this.state.isShowError){
+			return (
+				<ErrorMsg showView={this.state.isShowError} showText={this.state.errorText}/>
+			);
+		}else{
+				return (
+					<View style={styles.noteView}>
+						<Text style={styles.noteText}>
+							请设置一个您喜欢的昵称！
+						</Text>
+					</View>
+				);
+		}
+	},
+
+	updateMeData(userData, onSuccess){
+		NetworkModule.fetchTHUrl(
+			NetConstants.GET_USER_INFO_API,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+			},
+			function(responseJson) {
+				StorageModule.setMeData(JSON.stringify(responseJson))
+				LogicData.setMeData(responseJson);
+
+				if(onSuccess){
+					onSuccess()
 				}
 			}.bind(this),
 			function(errorMessage) {
@@ -135,13 +213,7 @@ var UpdateUserInfoPage = React.createClass({
 
 	renderNotes: function() {
 		if (this.state.noteState == NOTE_STATE_NORMAL) {
-			return (
-				<View style={styles.noteView}>
-					<Text style={styles.noteText}>
-						请设置一个您喜欢的昵称！
-					</Text>
-				</View>
-			);
+			return this.renderHintOrError();
 		} else if(this.state.noteState == NOTE_STATE_NORMAL_WECHAT) {
 			return (
 				<View style={styles.noteView}>
@@ -172,6 +244,7 @@ var UpdateUserInfoPage = React.createClass({
 							autoFocus={true}
 							onChangeText={(text) => this.setUserName(text)}
 							underlineColorAndroid='#ffffff'
+							maxLength={UIConstants.MAX_NICKNAME_LENGTH}
 							value={this.state.nickName}/>
 					</View>
 
@@ -274,6 +347,21 @@ var styles = StyleSheet.create({
 		fontSize: 14,
 		textAlign: 'center',
 		color: '#c7c7cd',
+	},
+	errorDot: {
+		width: 15,
+		height: 15,
+ 		marginLeft: 15,
+	},
+	errorText:{
+		fontSize:12,
+		color:'red',
+		marginLeft:10
+	},
+	errorMsg:{
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginTop: 10
 	},
 });
 

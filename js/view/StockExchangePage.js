@@ -60,20 +60,30 @@ var StockExchangePage = React.createClass({
 		var userData = LogicData.getUserData()
 		var loggined = Object.keys(userData).length !== 0
 
-		if (loggined && this.refs['page0']){
+		if (loggined){
+
 			var currentTab = MainPage.initExchangeTab
-			this.refs['tabPages'].tabClicked(currentTab)
-			this.setState({
-				currentSelectedTab: currentTab
-			})
-			if(currentTab === 2) {
-				this.refs['page2'].tabPressed()
+			if(this.refs['page0']){
+				//If user has goes into this tab before...
+				this.refs['tabPages'].tabClicked(currentTab)
+				this.setState({
+					currentSelectedTab: currentTab
+				})
+				if(currentTab === 2) {
+					this.refs['page2'].tabPressed()
+				}
+				else if(currentTab === 1) {
+					this.refs['page1'].tabPressed()
+				}
+				else {
+					this.refs['page0'].tabPressed()
+				}
 			}
-			else if(currentTab === 1) {
-				this.refs['page1'].tabPressed()
-			}
-			else {
-				this.refs['page0'].tabPressed()
+			else{
+				//It is the first time user goes into this tab! Just trigger the render!
+				this.setState({
+					currentSelectedTab: 0
+				})
 			}
 		}
 	},

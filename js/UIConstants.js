@@ -11,3 +11,5 @@ export let ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER = Platform.OS === 'android' ? 2
 
 export var USD_CURRENCY = 'USD'
 export let CURRENCY_CODE_LIST = {"CAD":"加元", "CHF":"瑞士法郎", "EUR":"欧元", "GBP":"英镑", "HKD":"港元", "JPY":"日元", "SEK":"瑞典克朗", "USD":"美元"}
+
+export let MAX_NICKNAME_LENGTH = 8

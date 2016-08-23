@@ -26,10 +26,9 @@ var LoadingIndicator = require('./LoadingIndicator')
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 
-var wechatRowData = {'type':'wechat','title':'微信', 'subtype': 'bindWeChat'}
 var listRawData = [
 {'type':'mobile','title':'手机号', 'subtype': 'bindMobile'},
-wechatRowData
+{'type':'wechat','title':'微信', 'subtype': 'bindWeChat'}
 ]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -70,6 +69,8 @@ var MeAccountBindingPage = React.createClass({
 
 	loadAccountBindingInfo: function(userData){
 		var meData = LogicData.getMeData();
+		console.log(JSON.stringify(meData))
+
 		if(meData.phone){
 			this.setState({
 				phoneNumber: meData.phone,
@@ -113,15 +114,6 @@ var MeAccountBindingPage = React.createClass({
 		*/
 	},
 
-	hideWechatIfNotInstalled: function() {
-		if(!this.state.wechatInstalled){
-			var i = listRawData.indexOf(wechatRowData)
-			if(i != -1){
-				listRawData.splice(i, 1);
-			}
-		}
-	},
-
 	wechatPressed: function() {
 		WechatModule.wechatLogin(
 			() => {
@@ -137,10 +129,7 @@ var MeAccountBindingPage = React.createClass({
 		var userData = LogicData.getUserData()
 		var wechatUserData = LogicData.getWechatUserData()
 
-		var out = Object.keys(wechatUserData).map(function(data){
-			return [data, wechatUserData[data]]
-		})
-		console.log(out);
+		console.log(JSON.stringify(userData))
 
 		var url = NetConstants.BIND_WECHAT_API;
 		url = url.replace(/<wechatOpenId>/, wechatUserData.openid)
@@ -213,8 +202,8 @@ var MeAccountBindingPage = React.createClass({
 				);
 			}else{
 				return(
-					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
-						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
+					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)} showView={false}>
+						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]} showView={false}>
 							<Text style={styles.title}>{rowData.title}</Text>
 							<View style={styles.extendRight}>
 								<Text style={styles.clickableMessage}>未绑定</Text>
@@ -234,7 +223,7 @@ var MeAccountBindingPage = React.createClass({
 						</View>
 					</View>
 				);
-			} else {
+			} else if(this.state.wechatInstalled){
 					return(
 						<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
 							<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
@@ -246,6 +235,8 @@ var MeAccountBindingPage = React.createClass({
 							</View>
 						</TouchableOpacity>
 					);
+			}else{
+				return (<View></View>)
 			}
 		}
 	},

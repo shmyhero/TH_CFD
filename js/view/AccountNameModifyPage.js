@@ -22,8 +22,7 @@ var UIConstants = require('../UIConstants');
 var ColorConstants = require('../ColorConstants');
 var heightRate = height/667.0;
 var NavBar = require('../view/NavBar')
-
-var maxNickNameLength = 8;
+var UIConstants = require('../UIConstants')
 class ErrorMsg extends Component{
 	constructor(prop){
 		super(prop);
@@ -98,7 +97,7 @@ var AccountNameModifyPage = React.createClass({
 					onChangeText={(text) => this.setNickName(text)}
 					placeholder='请输入昵称'
 					placeholderTextColor='grey'
-					maxLength={maxNickNameLength}
+					maxLength={UIConstants.MAX_NICKNAME_LENGTH}
 					value={this.state.nickName}
 					/>
 
@@ -137,10 +136,10 @@ var AccountNameModifyPage = React.createClass({
 				errorText:"昵称不能为空",
 			});
 			return;
-		}else if(this.state.nickName.length > maxNickNameLength){
+		}else if(this.state.nickName.length > UIConstants.MAX_NICKNAME_LENGTH){
 			this.setState({
 				isShowError:true,
-				errorText: "昵称不能超过" + maxNickNameLength + "个字段",
+				errorText: "昵称不能超过" + UIConstants.MAX_NICKNAME_LENGTH + "个字段",
 			});
 			return;
 		}

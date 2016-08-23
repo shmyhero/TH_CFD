@@ -25,7 +25,7 @@ var NetworkModule = require('../module/NetworkModule')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
-var configRowData = {'type':'normal','title':'设置', 'image':require('../../images/icon_config.png'), 'subtype':'config'}
+
 var listRawData = [{'type':'account','subtype':'accountInfo'},
 // {'type':'button','title':'开设实盘账户'},
 {'type':'Separator', 'height':10},
@@ -33,7 +33,7 @@ var listRawData = [{'type':'account','subtype':'accountInfo'},
 {'type':'normal','title':'线上咨询', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':'onlinehelp'},
 {'type':'normal','title':'产品反馈', 'image':require('../../images/icon_response.png'), 'subtype':'feedback'},
 {'type':'normal','title':'关于我们', 'image':require('../../images/icon_aboutus.png'), 'subtype':'aboutus'},
-configRowData,]
+{'type':'normal','title':'设置', 'image':require('../../images/icon_config.png'), 'subtype':'config'},]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -100,22 +100,14 @@ var MePage = React.createClass({
 		//Check if the user has logged in and the config row need to be shown.
 		var meData = LogicData.getMeData()
 		var notLogin = Object.keys(meData).length === 0
-		var i = listRawData.indexOf(configRowData)
-
 		if (notLogin) {
 			this.setState({
 				loggedIn: false,
 			})
-			if(i != -1){
-				listRawData.splice(i, 1);
-			}
 		}else{
 			this.setState({
 				loggedIn: true,
 			})
-			if(i == -1){
-				listRawData.push(configRowData);
-			}
 		}
 
 		this.setState({
@@ -173,9 +165,7 @@ var MePage = React.createClass({
 			});
 		}
 		else if(rowData.subtype === 'accountInfo') {
-			this.props.navigator.push({
-				name: MainPage.ACCOUNT_INFO_ROUTE,
-			});
+			this.gotoUserInfoPage()
 		}
 	},
 
@@ -238,15 +228,21 @@ var MePage = React.createClass({
 
 	renderRow: function(rowData, sectionID, rowID) {
 		if (rowData.type === 'normal') {
-			return(
-				<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
-					<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-						<Image source={rowData.image} style={styles.image} />
-						<Text style={styles.title}>{rowData.title}</Text>
-						<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
-					</View>
-				</TouchableOpacity>
-			)
+			if(rowData.subtype === 'config' && !this.state.loggedIn){
+				return (
+					<View></View>
+				);
+			}else{
+				return(
+					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
+						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
+							<Image source={rowData.image} style={styles.image} />
+							<Text style={styles.title}>{rowData.title}</Text>
+							<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
+						</View>
+					</TouchableOpacity>
+				)
+			}
 		}
 		else if (rowData.type === 'button'){
 			return(

@@ -166,8 +166,10 @@ var MePage = React.createClass({
 			});
 		}
 		else if(rowData.subtype === 'feedback') {
+			var meData = LogicData.getMeData();
 			this.props.navigator.push({
 				name: MainPage.FEEDBACK_ROUTE,
+				phone: meData.phone,
 			});
 		}
 		else if(rowData.subtype === 'accountInfo') {

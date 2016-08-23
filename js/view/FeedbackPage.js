@@ -10,9 +10,11 @@ import {
 	Image,
 	TouchableOpacity,
 	Alert,
+	ScrollView,
 } from 'react-native';
 
 var ColorConstants = require('../ColorConstants')
+var UIConstants = require('../UIConstants');
 var NavBar = require('./NavBar')
 var Button = require('./component/Button')
 var MainPage = require('./MainPage')
@@ -65,6 +67,11 @@ var FeedbackPage = React.createClass({
 
 	componentWillMount: function() {
 		imageNumber = 0
+		if(this.props.phone !== undefined) {
+			this.setState({
+				phoneNumber: this.props.phone,
+			})
+		}
 	},
 
 	pressBackButton: function() {
@@ -190,27 +197,30 @@ var FeedbackPage = React.createClass({
 					rightTextOnClick={this.pressCommitButton}
 					enableRightText={this.state.text.length>0}
 					navigator={this.props.navigator}/>
-				<TextInput style={styles.textInput}
-					autoCapitalize="none"
-					multiline={true}
-					maxLength={limit}
-					placeholder={'请描述您的问题'}
-					onChangeText={(text) => {this.setState({text});}}
-					value={this.state.text}/>
-				<View style={styles.rowWrapper}>
-					{images}
-				</View>
-				<Text style={styles.wordNumberText}>{remainder}</Text>
-				<View style={[styles.rowWrapper, {backgroundColor: 'white', flex: 0.3}]}>
-					<Text style={styles.phoneText}>手机号</Text>
-					<TextInput style={styles.phoneTextInput}
-						multiline={false}
-						maxLength={11}
-						placeholder={'选填，便于我们给你答复'}
-						onChangeText={(phoneNumber) => {this.setState({phoneNumber});}}>
-					</TextInput>
-				</View>
-				<View style={{flex:2}}/>
+				<ScrollView style={styles.scrollWrapper}>
+					<TextInput style={styles.textInput}
+						autoCapitalize="none"
+						multiline={true}
+						maxLength={limit}
+						placeholder={'请描述您的问题'}
+						onChangeText={(text) => {this.setState({text});}}
+						value={this.state.text}/>
+					<View style={styles.rowWrapper}>
+						{images}
+					</View>
+					<Text style={styles.wordNumberText}>{remainder}</Text>
+					<View style={[styles.rowWrapper, {backgroundColor: 'white', flex: 0.3}]}>
+						<Text style={styles.phoneText}>手机号</Text>
+						<TextInput style={styles.phoneTextInput}
+							multiline={false}
+							maxLength={11}
+							placeholder={'选填，便于我们给你答复'}
+							onChangeText={(phoneNumber) => {this.setState({phoneNumber});}}
+							value={this.state.phoneNumber}>
+						</TextInput>
+					</View>
+					<View style={{flex:2}}/>
+					</ScrollView>
 			</View>
 		);
 	},
@@ -220,14 +230,16 @@ var styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
 		width: width,
-   		alignItems: 'stretch',
 		backgroundColor: ColorConstants.BACKGROUND_GREY,
+	},
+	scrollWrapper: {
+		height:height - UIConstants.HEADER_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER ,
 	},
 	textInput: {
 		fontSize: 17,
 		flex: 1,
 		padding: 15,
-		marginTop: 8,
+		marginTop: 0,
 	},
 	rowWrapper: {
 		flexDirection: 'row',

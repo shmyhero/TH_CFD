@@ -394,7 +394,7 @@ var MainPage = React.createClass({
 			hideTabbar()
 			return (
 				<FeedbackPage navigator={navigationOperations}
-					showTabbar={showTabbar}/>
+					showTabbar={showTabbar} phone={route.phone}/>
 			)
 		}
 	},

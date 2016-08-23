@@ -35,6 +35,7 @@ var NavBar = React.createClass({
 		rightCustomContent: React.PropTypes.func,
 		barStyle: View.propTypes.style,
 		titleStyle: Text.propTypes.style,
+		enableRightText: React.PropTypes.bool
 	},
 
 	getDefaultProps() {
@@ -51,6 +52,7 @@ var NavBar = React.createClass({
 			subTitle: null,
 			backgroundColor: ColorConstants.TITLE_BLUE,
 			rightCustomContent: null,
+			enableRightText: true,
 		}
 	},
 
@@ -162,17 +164,26 @@ var NavBar = React.createClass({
 
 	renderRightText: function() {
 		if (this.props.textOnRight !== null) {
-			return (
-				<TouchableHighlight
-					onPress={this.rightTextOnClick}
-					underlayColor={ColorConstants.TITLE_BLUE}>
+			if(this.props.enableRightText) {
+				return (
+					<TouchableHighlight
+						onPress={this.rightTextOnClick}
+						underlayColor={ColorConstants.TITLE_BLUE}>
 
-					<Text style={styles.textOnRight}>
+						<Text style={styles.textOnRight}>
+							{this.props.textOnRight}
+						</Text>
+
+					</TouchableHighlight>
+				);
+			}
+			else {
+				return (
+					<Text style={styles.disabledTextOnRight}>
 						{this.props.textOnRight}
 					</Text>
-
-				</TouchableHighlight>
-			);
+					)
+			}
 		}
 	},
 
@@ -268,6 +279,12 @@ var styles = StyleSheet.create({
 		fontSize: 15,
 		textAlign: 'center',
 		color: '#ffffff',
+		marginRight: 10,
+	},
+	disabledTextOnRight: {
+		fontSize: 15,
+		textAlign: 'center',
+		color: '#3e86ff',
 		marginRight: 10,
 	},
 });

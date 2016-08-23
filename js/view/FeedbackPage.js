@@ -118,7 +118,7 @@ var FeedbackPage = React.createClass({
 			else {
 				const source = {uri: 'data:image/jpeg;base64,' + response.data};
 
-				if (index === imageNumber && imageNumber < MaxImageNumber) {
+				if (index === imageNumber && imageNumber < MaxImageNumber-1) {
 					// last one, can add 1 more
 					this.state.imagesSource.splice(index, 0, source)
 					imageNumber += 1
@@ -127,7 +127,13 @@ var FeedbackPage = React.createClass({
 				else {
 					// replace this one
 					this.state.imagesSource.splice(index, 1, source)
-					this.state.imagesData.splice(index, 1, response.data)
+					if(imageNumber === MaxImageNumber - 1) {
+						imageNumber += 1
+						this.state.imagesData.splice(index, 0, response.data)
+					}
+					else {
+						this.state.imagesData.splice(index, 1, response.data)
+					}
 				}
 				this.setState({
 					imagesSource: this.state.imagesSource,
@@ -139,8 +145,12 @@ var FeedbackPage = React.createClass({
 
 	pressDeleteImage: function(index) {
 		this.state.imagesSource.splice(index, 1)
-		this.state.imagesData.splice(index, 1)
+		if(imageNumber === MaxImageNumber) {
+			// add the add button back
+			this.state.imagesSource.splice(imageNumber-1, 0, add_image)
+		}
 		imageNumber -=  1
+		this.state.imagesData.splice(index, 1)
 
 		this.setState({
 			imagesSource: this.state.imagesSource,
@@ -178,11 +188,13 @@ var FeedbackPage = React.createClass({
 					backButtonOnClick={this.pressBackButton}
 					textOnRight='提交'
 					rightTextOnClick={this.pressCommitButton}
+					enableRightText={this.state.text.length>0}
 					navigator={this.props.navigator}/>
 				<TextInput style={styles.textInput}
 					autoCapitalize="none"
 					multiline={true}
-					maxLength={limit} 
+					maxLength={limit}
+					placeholder={'请描述您的问题'}
 					onChangeText={(text) => {this.setState({text});}}
 					value={this.state.text}/>
 				<View style={styles.rowWrapper}>
@@ -212,6 +224,7 @@ var styles = StyleSheet.create({
 		backgroundColor: ColorConstants.BACKGROUND_GREY,
 	},
 	textInput: {
+		fontSize: 17,
 		flex: 1,
 		padding: 15,
 		marginTop: 8,

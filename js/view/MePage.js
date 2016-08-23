@@ -202,7 +202,7 @@ var MePage = React.createClass({
 		else{
 			return(
 				<View style={[styles.userInfoWrapper]}>
-					<Text style={styles.userNameText}>{meData.nickName}</Text>
+					<Text style={styles.userNameText}>{meData.nickname}</Text>
 				</View>
 			)
 		}

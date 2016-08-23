@@ -575,7 +575,7 @@ var LoginPage = React.createClass({
 	renderCancelButton: function() {
 		if (this.props.showCancelButton) {
 			return (
-				<TouchableOpacity
+				<TouchableOpacity style={styles.cancelContainer}
 					onPress={()=>this.props.navigator.pop()}>
 						<Text style={styles.cancel}>
 							取消
@@ -590,9 +590,9 @@ var LoginPage = React.createClass({
 var styles = StyleSheet.create({
 	cancel: {
 		color: 'white',
-		paddingLeft: 15,
+		margin: 5,
+		marginLeft: 15,
 		width: 60,
-		marginLeft: -width,
 	},
 
 	tabContainer: {
@@ -602,6 +602,13 @@ var styles = StyleSheet.create({
 		justifyContent: 'center',
 		paddingTop: (Platform.OS === 'ios') ? 15 : 0,
 	},
+
+	cancelContainer: {
+		top: (Platform.OS === 'ios') ? 25 : 9,
+	 	left: 0,
+		position: 'absolute',
+	},
+
 	liveTab: {
 		backgroundColor: 'white',
 		borderColor: 'white',

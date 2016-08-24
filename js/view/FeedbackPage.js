@@ -198,15 +198,15 @@ var FeedbackPage = React.createClass({
 					rightTextOnClick={this.pressCommitButton}
 					enableRightText={this.state.text.length>0}
 					navigator={this.props.navigator}/>
-				<ScrollView style={styles.scrollWrapper} 
+				<ScrollView style={styles.scrollWrapper}
 					contentContainerStyle={styles.scrollWrapper}>
-					<TextInput style={styles.textInput}
-						autoCapitalize="none"
-						multiline={true}
-						maxLength={limit}
-						placeholder={'请描述您的问题'}
-						onChangeText={(text) => {this.setState({text});}}
-						value={this.state.text}/>
+					  <TextInput style={styles.textInput}
+							autoCapitalize="none"
+							multiline={true}
+							maxLength={limit}
+							placeholder={'请描述您的问题'}
+							onChangeText={(text) => {this.setState({text});}}
+							value={this.state.text}/>
 					<View style={styles.rowWrapper}>
 						{images}
 					</View>
@@ -217,6 +217,7 @@ var FeedbackPage = React.createClass({
 							multiline={false}
 							maxLength={11}
 							placeholder={'选填，便于我们给你答复'}
+							keyboardType='numeric'
 							onChangeText={(phoneNumber) => {this.setState({phoneNumber});}}
 							value={this.state.phoneNumber}>
 						</TextInput>
@@ -242,6 +243,8 @@ var styles = StyleSheet.create({
 		flex: 1,
 		padding: 15,
 		marginTop: 0,
+		backgroundColor:'transparent',
+		textAlignVertical:'top',
 	},
 	rowWrapper: {
 		flexDirection: 'row',
@@ -252,11 +255,12 @@ var styles = StyleSheet.create({
 	image: {
 		width: imageSize,
 		height: imageSize,
+		marginTop:10,
 		marginRight: 5,
 	},
 	wordNumberText: {
 		flex: 0.3,
-		paddingRight: 15,
+		marginRight: 15,
 		marginTop: 10,
 		// borderWidth: 1,
 		textAlign: 'right',
@@ -269,7 +273,7 @@ var styles = StyleSheet.create({
 		color: '#7f7f7f',
 	},
 	phoneTextInput:{
-		flex: 1,
+		flex: 1.5,
 		fontSize: 14,
 		textAlign: 'right',
 		color: '#3f3f3f',

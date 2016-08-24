@@ -18,21 +18,20 @@ var NetworkModule = require('../module/NetworkModule')
 var LogicData = require('../LogicData')
 var StorageModule = require('../module/StorageModule')
 var NavBar = require('./NavBar')
-var {height, width} = Dimensions.get('window');
 var MainPage = require('./MainPage');
 var UIConstants = require('../UIConstants');
 var ColorConstants = require('../ColorConstants');
 var {height, width} = Dimensions.get('window');
 var heightRate = height/667.0;
+
 var listRawData = [
-{'type':'head','title':'头像', 'subtype': 'head'},
-{'type':'nickName','title':'昵称', 'subtype': 'nickName'},
-{'type':'mobile','title':'账号', 'subtype': 'mobile'},
+	{'type':'head','title':'头像', 'subtype': 'head'},
+	{'type':'nickName','title':'昵称', 'subtype': 'nickName'},
+	{'type':'mobile','title':'账号', 'subtype': 'mobile'},
 ];
+
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
 var ImagePicker = require('react-native-image-picker');
-
 const imageWidth = Math.round(width * 0.85);
 const imageHeight = Math.round(height * 0.3);
 
@@ -41,7 +40,6 @@ var options = {
 	cancelButtonTitle: '取消',
 	takePhotoButtonTitle: '拍照', // specify null or empty string to remove this button
 	chooseFromLibraryButtonTitle: '照片图库', // specify null or empty string to remove this button
-
 	cameraType: 'back', // 'front' or 'back'
 	mediaType: 'photo', // 'photo' or 'video'
 	maxWidth: imageWidth * 3, // photos only
@@ -59,6 +57,7 @@ var options = {
 };
 
 var AccountInfoPage = React.createClass({
+
 	propTypes: {
 		backButtonOnClick: React.PropTypes.func,
 	},

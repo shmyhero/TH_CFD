@@ -22,6 +22,7 @@ var NativeSceneModule = require('../module/NativeSceneModule')
 var StorageModule = require('../module/StorageModule')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
+var UrlConstants = require('../UrlConstants')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
@@ -148,9 +149,10 @@ var MePage = React.createClass({
 			NativeSceneModule.launchNativeScene('MeiQia')
 		}
 		else if(rowData.subtype === 'aboutus') {
-			this.props.navigator.push({
-				name: MainPage.ABOUT_US_ROUTE,
-			});
+			// this.props.navigator.push({
+			// 	name: MainPage.ABOUT_US_ROUTE,
+			// });
+			this.gotoWebviewPage(UrlConstants.WEB_URL_ABOUT_US, '关于我们');
 		}
 		else if(rowData.subtype === 'config') {
 			this.props.navigator.push({
@@ -280,6 +282,26 @@ var MePage = React.createClass({
 			</View>
 				)
 		}
+	},
+
+	gotoWebviewPage: function(targetUrl, title) {
+		var userData = LogicData.getUserData()
+		var userId = userData.userId
+		if (userId == undefined) {
+			userId = 0
+		}
+
+		if (targetUrl.indexOf('?') !== -1) {
+			targetUrl = targetUrl + '&userId=' + userId
+		} else {
+			targetUrl = targetUrl + '?userId=' + userId
+		}
+
+		this.props.navigator.push({
+			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			url: targetUrl,
+			title: title,
+		});
 	},
 
 	render: function() {

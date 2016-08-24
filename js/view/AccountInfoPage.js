@@ -32,21 +32,19 @@ var listRawData = [
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var ImagePicker = require('react-native-image-picker');
-const imageWidth = Math.round(width * 0.85);
-const imageHeight = Math.round(height * 0.3);
 
-var options = {
+const Options = {
 	title: null, // specify null or empty string to remove the title
 	cancelButtonTitle: '取消',
 	takePhotoButtonTitle: '拍照', // specify null or empty string to remove this button
 	chooseFromLibraryButtonTitle: '照片图库', // specify null or empty string to remove this button
 	cameraType: 'back', // 'front' or 'back'
 	mediaType: 'photo', // 'photo' or 'video'
-	maxWidth: imageWidth * 3, // photos only
-	maxHeight: imageHeight * 3, // photos only
+	maxWidth: Math.floor(width), // photos only
+	maxHeight: Math.floor(height), // photos only
 	aspectX: 3, // android only - aspectX:aspectY, the cropping image's ratio of width to height
 	aspectY: 2, // android only - aspectX:aspectY, the cropping image's ratio of width to height
-	quality: 1, // 0 to 1, photos only
+	quality: 0.7, // 0 to 1, photos only
 	angle: 0, // android only, photos only
 	allowsEditing: false, // Built in functionality to resize/reposition the image after selection
 	noData: false, // photos only - disables the base64 `data` field from being generated (greatly improves performance on large photos)

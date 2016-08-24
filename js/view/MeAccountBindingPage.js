@@ -13,9 +13,9 @@ import {
 } from 'react-native';
 
 var LogicData = require('../LogicData')
-var StorageModule = require('../module/StorageModule')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
+var LocalDataUpdateModule = require('../module/LocalDataUpdateModule')
 var WebSocketModule = require('../module/WebSocketModule')
 var ColorConstants = require('../ColorConstants')
 var Button = require('./component/Button')
@@ -153,30 +153,9 @@ var MeAccountBindingPage = React.createClass({
 	},
 
 	bindWechatSuccess: function(userData) {
-		NetworkModule.fetchTHUrl(
-			NetConstants.GET_USER_INFO_API,
-			{
-				method: 'GET',
-				headers: {
-					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-				},
-			},
-			function(responseJson) {
-				StorageModule.setMeData(JSON.stringify(responseJson))
-				LogicData.setMeData(responseJson);
-
-				this.loadAccountBindingInfo(responseJson)
-
-			}.bind(this),
-			function(errorMessage) {
-				Alert.alert('提示',errorMessage);
-			}
-		)
-		/*
-		this.props.navigator.push({
-			name: MainPage.UPDATE_USER_INFO_ROUTE
-		});
-		*/
+		LocalDataUpdateModule.updateMeData(userData, ()=>{
+			this.loadAccountBindingInfo(responseJson)
+		})
 	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){

@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 
 var LogicData = require('../LogicData')
-var StorageModule = require('../module/StorageModule')
+var LocalDataUpdateModule = require('../module/LocalDataUpdateModule')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var {height, width} = Dimensions.get('window');
@@ -154,7 +154,7 @@ var AccountNameModifyPage = React.createClass({
 				},
 			},
 			function(responseJson) {
-				this.updateMeData(userData, function(){
+				LocalDataUpdateModule.updateMeData(userData, function(){
 					if(this.props.onReturnToPage){
 						this.props.onReturnToPage()
 					}
@@ -167,29 +167,6 @@ var AccountNameModifyPage = React.createClass({
 					errorText:errorMessage,
 				});
 			}.bind(this)
-		)
-	},
-
-	updateMeData(userData, onSuccess){
-		NetworkModule.fetchTHUrl(
-			NetConstants.GET_USER_INFO_API,
-			{
-				method: 'GET',
-				headers: {
-					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-				},
-			},
-			function(responseJson) {
-				StorageModule.setMeData(JSON.stringify(responseJson))
-				LogicData.setMeData(responseJson);
-
-				if(onSuccess){
-					onSuccess()
-				}
-			}.bind(this),
-			function(errorMessage) {
-				Alert.alert('提示',errorMessage);
-			}
 		)
 	},
 

@@ -30,7 +30,7 @@ var WebSocketModule = require('../module/WebSocketModule')
 var MainPage = require('./MainPage')
 var dismissKeyboard = require('dismissKeyboard');
 var TalkingdataModule = require('../module/TalkingdataModule')
-
+var LocalDataUpdateModule = require('../module/LocalDataUpdateModule')
 
 var {height, width} = Dimensions.get('window')
 var rowHeight = 40;
@@ -262,7 +262,7 @@ var LoginPage = React.createClass({
 			phoneLoginButtonEnabled: true
 		});
 
-		this.updateMeData(
+		LocalDataUpdateModule.updateMeData(
 			userData,
 			function(){
 				this.props.navigator.push({
@@ -271,29 +271,6 @@ var LoginPage = React.createClass({
 					onPopToRoute: this.props.onPopToRoute,
 				});
 			}.bind(this)
-		)
-	},
-
-	updateMeData: function(userData, onSuccess){
-		NetworkModule.fetchTHUrl(
-			NetConstants.GET_USER_INFO_API,
-			{
-				method: 'GET',
-				headers: {
-					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-				},
-			},
-			function(responseJson) {
-				StorageModule.setMeData(JSON.stringify(responseJson))
-				LogicData.setMeData(responseJson);
-
-				if(onSuccess){
-					onSuccess()
-				}
-			}.bind(this),
-			function(errorMessage) {
-				Alert.alert('提示',errorMessage);
-			}
 		)
 	},
 

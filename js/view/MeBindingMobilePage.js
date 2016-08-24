@@ -19,7 +19,7 @@ var TimerMixin = require('react-timer-mixin');
 
 var LogicData = require('../LogicData')
 var MyHomePage = require('./MyHomePage')
-var StorageModule = require('../module/StorageModule')
+var LocalDataUpdateModule = require('../module/LocalDataUpdateModule')
 var NetworkModule = require('../module/NetworkModule')
 var LoadingIndicator = require('./LoadingIndicator')
 var ColorConstants = require('../ColorConstants')
@@ -166,7 +166,15 @@ var MeBindingMobilePage = React.createClass({
 				showLoading: true,
 			},
 			(responseJson) => {
-				this.loginSuccess(responseJson);
+				LocalDataUpdateModule.updateMeData(responseJson, ()=>{
+					this.setState({
+						phoneLoginButtonEnabled: true
+					});
+
+					if(this.props.onPopBack){
+						this.props.onPopBack();
+					}
+				});
 			},
 			(errorMessage) => {
 				this.setState({
@@ -181,35 +189,6 @@ var MeBindingMobilePage = React.createClass({
 		this.props.navigator.push({
 			name: MainPage.LIVE_REGISTER_ROUTE,
 		});
-	},
-
-	loginSuccess: function(userData) {
-		NetworkModule.fetchTHUrl(
-			NetConstants.GET_USER_INFO_API,
-			{
-				method: 'GET',
-				headers: {
-					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-				},
-			},
-			function(responseJson) {
-				StorageModule.setMeData(JSON.stringify(responseJson))
-				LogicData.setMeData(responseJson);
-
-				this.setState({
-					phoneLoginButtonEnabled: true
-				});
-
-				if(this.props.onPopBack){
-					this.props.onPopBack();
-				}
-
-				this.props.navigator.pop();
-			}.bind(this),
-			function(errorMessage) {
-				Alert.alert('提示',errorMessage);
-			}
-		)
 	},
 
 	forgetPassword: function() {

@@ -16,7 +16,7 @@ import {
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var LogicData = require('../LogicData')
-var StorageModule = require('../module/StorageModule')
+var LocalDataUpdateModule = require('../module/LocalDataUpdateModule')
 var NavBar = require('./NavBar')
 var MainPage = require('./MainPage');
 var UIConstants = require('../UIConstants');
@@ -141,29 +141,6 @@ var AccountInfoPage = React.createClass({
 		});
 	},
 
-	updateMeData(userData, onSuccess){
-		NetworkModule.fetchTHUrl(
-			NetConstants.GET_USER_INFO_API,
-			{
-				method: 'GET',
-				headers: {
-					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-				},
-			},
-			function(responseJson) {
-				StorageModule.setMeData(JSON.stringify(responseJson))
-				LogicData.setMeData(responseJson);
-
-				if(onSuccess){
-					onSuccess()
-				}
-			}.bind(this),
-			function(errorMessage) {
-				Alert.alert('提示',errorMessage);
-			}
-		)
-	},
-
 	commitHeadPhoto: function() {
 
 		var userData = LogicData.getUserData();
@@ -180,7 +157,7 @@ var AccountInfoPage = React.createClass({
 				showLoading: true,
 			},
 			(responseJson) => {
-				this.updateMeData(userData, function(){
+				LocalDataUpdateModule.updateMeData(userData, function(){
 					Alert.alert('设置头像', '头像设置成功',
 						[{text:'确定', onPress: ()=>this.confirmOfSuccess()}]);
 				}.bind(this));
@@ -234,12 +211,18 @@ var AccountInfoPage = React.createClass({
 					</TouchableOpacity>
 				);
 			}else if(rowData.subtype === 'mobile') {
-				return(
-					<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-						<Text style={styles.title}>{rowData.title}</Text>
-						<Text style={styles.contentValue}>{this.state.mobile}</Text>
-					</View>
-				);
+				if(this.state.mobile){
+					return(
+						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
+							<Text style={styles.title}>{rowData.title}</Text>
+							<Text style={styles.contentValue}>{this.state.mobile}</Text>
+						</View>
+					);
+				}else{
+					return(
+						<View/>
+					);
+				}
 			}
 
 

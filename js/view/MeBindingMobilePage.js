@@ -166,7 +166,7 @@ var MeBindingMobilePage = React.createClass({
 				showLoading: true,
 			},
 			(responseJson) => {
-				LocalDataUpdateModule.updateMeData(responseJson, ()=>{
+				LocalDataUpdateModule.updateMeData(userData, ()=>{
 					this.setState({
 						phoneLoginButtonEnabled: true
 					});
@@ -174,6 +174,8 @@ var MeBindingMobilePage = React.createClass({
 					if(this.props.onPopBack){
 						this.props.onPopBack();
 					}
+
+					this.props.navigator.pop();
 				});
 			},
 			(errorMessage) => {
@@ -183,16 +185,6 @@ var MeBindingMobilePage = React.createClass({
 				Alert.alert('提示',errorMessage);
 			}
 		)
-	},
-
-	liveRegisterPressed: function() {
-		this.props.navigator.push({
-			name: MainPage.LIVE_REGISTER_ROUTE,
-		});
-	},
-
-	forgetPassword: function() {
-
 	},
 
 	renderGetValidationCodeButton: function() {
@@ -530,18 +522,6 @@ var styles = StyleSheet.create({
 		fontSize: 14,
 		textAlign: 'center',
 		color: '#1c5fcf',
-	},
-	forgetPasswordLine: {
-		flex: 1,
-		marginLeft: 5,
-		marginRight: 5,
-		borderWidth: 0.5,
-		borderColor: '#415a87',
-	},
-	forgetPasswordTitle: {
-		fontSize: 14,
-		textAlign: 'center',
-		color: '#415a87',
 	},
 	wechatClickableArea: {
 		marginTop: 5,

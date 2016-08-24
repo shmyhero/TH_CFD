@@ -144,18 +144,14 @@ var MeAccountBindingPage = React.createClass({
 				showLoading: true,
 			},
 			(responseJson) => {
-				this.bindWechatSuccess(responseJson);
+				LocalDataUpdateModule.updateMeData(userData, ()=>{
+					this.loadAccountBindingInfo(responseJson)
+				})
 			},
 			(errorMessage) => {
 				Alert.alert('提示',errorMessage);
 			}
 		)
-	},
-
-	bindWechatSuccess: function(userData) {
-		LocalDataUpdateModule.updateMeData(userData, ()=>{
-			this.loadAccountBindingInfo(responseJson)
-		})
 	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){

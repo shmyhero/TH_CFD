@@ -22,7 +22,6 @@ var NativeSceneModule = require('../module/NativeSceneModule')
 var StorageModule = require('../module/StorageModule')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
-var UrlConstants = require('../UrlConstants')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
@@ -152,7 +151,7 @@ var MePage = React.createClass({
 			// this.props.navigator.push({
 			// 	name: MainPage.ABOUT_US_ROUTE,
 			// });
-			this.gotoWebviewPage(UrlConstants.WEB_URL_ABOUT_US, '关于我们');
+			this.gotoWebviewPage(NetConstants.WEBVIEW_URL_ABOUT_US, '关于我们');
 		}
 		else if(rowData.subtype === 'config') {
 			this.props.navigator.push({

@@ -35,6 +35,7 @@
 		3D61C5CB1C9909CB0037816A /* EditOwnStocksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */; };
 		3D61C5F11C9931810037816A /* EditOwnStockCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D61C5F01C9931810037816A /* EditOwnStockCell.swift */; };
 		3D61C5F31C9931A10037816A /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D61C5F21C9931A10037816A /* MainStoryboard.storyboard */; };
+		3D682D3A1D6DAB26003A1203 /* head_portrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D682D391D6DAB26003A1203 /* head_portrait@2x.png */; };
 		3D6A23E51C9AA93F00FF1306 /* NativeScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A23E41C9AA93F00FF1306 /* NativeScene.m */; };
 		3D6A24091C9AB90000FF1306 /* NativeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A24081C9AB90000FF1306 /* NativeData.m */; };
 		3D6A240B1C9ABDE900FF1306 /* StockDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */; };
@@ -321,6 +322,7 @@
 		3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditOwnStocksViewController.swift; path = TH_CFD/EditOwnStocksViewController.swift; sourceTree = "<group>"; };
 		3D61C5F01C9931810037816A /* EditOwnStockCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditOwnStockCell.swift; path = TH_CFD/EditOwnStockCell.swift; sourceTree = "<group>"; };
 		3D61C5F21C9931A10037816A /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MainStoryboard.storyboard; path = TH_CFD/MainStoryboard.storyboard; sourceTree = "<group>"; };
+		3D682D391D6DAB26003A1203 /* head_portrait@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "head_portrait@2x.png"; sourceTree = "<group>"; };
 		3D6A23E31C9AA93F00FF1306 /* NativeScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NativeScene.h; path = TH_CFD/NativeScene.h; sourceTree = "<group>"; };
 		3D6A23E41C9AA93F00FF1306 /* NativeScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NativeScene.m; path = TH_CFD/NativeScene.m; sourceTree = "<group>"; };
 		3D6A24071C9AB90000FF1306 /* NativeData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NativeData.h; path = TH_CFD/NativeData.h; sourceTree = "<group>"; };
@@ -687,6 +689,7 @@
 				3DB98C0E1CE1CF1A00DB3FA5 /* frontPage.jpg */,
 				3DD744761CCE18040021304F /* myhero.ttf */,
 				3D2474211D66ECDB007EA605 /* back@2x.png */,
+				3D682D391D6DAB26003A1203 /* head_portrait@2x.png */,
 				3D3E1F0C1C9F9C340064F187 /* Swift */,
 				3D3E1F0B1C9F9C240064F187 /* ObjC */,
 				3D4B37A81D504961004BD09C /* TalkingData */,
@@ -1759,6 +1762,7 @@
 				3DD744771CCE18040021304F /* myhero.ttf in Resources */,
 				3DB9F1B91D64483B00DC5C63 /* MQChatViewAsset.bundle in Resources */,
 				3D5C46C81C92B51000BF6FD3 /* main.jsbundle in Resources */,
+				3D682D3A1D6DAB26003A1203 /* head_portrait@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

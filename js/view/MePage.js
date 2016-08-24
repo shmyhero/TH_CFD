@@ -18,6 +18,7 @@ var ColorConstants = require('../ColorConstants')
 var NavBar = require('./NavBar')
 var Button = require('./component/Button')
 var MainPage = require('./MainPage')
+var NativeDataModule = require('../module/NativeDataModule')
 var NativeSceneModule = require('../module/NativeSceneModule')
 var StorageModule = require('../module/StorageModule')
 var NetConstants = require('../NetConstants')
@@ -63,6 +64,7 @@ var MePage = React.createClass({
 				function(responseJson) {
 					StorageModule.setMeData(JSON.stringify(responseJson))
 					LogicData.setMeData(responseJson);
+
 					this.reloadMeData();
 				}.bind(this),
 				function(errorMessage) {
@@ -105,6 +107,9 @@ var MePage = React.createClass({
 				loggedIn: false,
 			})
 		}else{
+			if(meData.picUrl !== undefined){
+				NativeDataModule.passRawDataToNative('myLogo', meData.picUrl)
+			}
 			this.setState({
 				loggedIn: true,
 			})

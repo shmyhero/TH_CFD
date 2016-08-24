@@ -45,6 +45,7 @@ RCT_EXPORT_MODULE();
 			[chatViewManager enableEvaluationButton:NO];
 			[chatViewManager setNavTitleText: @"盈盈在线"];
 			[chatViewManager enableMessageSound:NO];
+			[chatViewManager setoutgoingDefaultAvatarImage:[[StockDataManager sharedInstance] logoImage]];
 			[MQCustomizedUIText setCustomiedTextForKey:MQUITextKeyNoAgentTip text:@"当前所有客服都在工作中，请稍后再试"];
 			
 			AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];

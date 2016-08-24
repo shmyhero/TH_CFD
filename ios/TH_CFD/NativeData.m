@@ -27,9 +27,22 @@ RCT_EXPORT_MODULE();
 {
 	AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 	delegate.nativeData = self;
-	
 	StockDataManager *manager = [StockDataManager sharedInstance];
-	[manager loadOwnStocksData:jsonData];
+	
+	if([dataName isEqualToString:@"myList"]) {
+		[manager loadOwnStocksData:jsonData];
+	}
+}
+
+- (void)receiveRawDataFromRN:(NSString *)dataName data:(id)data
+{
+	AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+	delegate.nativeData = self;
+	StockDataManager *manager = [StockDataManager sharedInstance];
+	
+	if([dataName isEqualToString:@"myLogo"]) {
+		[manager loadUserLogo:(NSString *)data];
+	}
 }
 
 - (void)sendDataToRN:(NSString *)dataName data:(NSString *)jsonData
@@ -40,6 +53,10 @@ RCT_EXPORT_MODULE();
 #pragma mark RCT_EXPORT
 RCT_EXPORT_METHOD(passDataToNative:(NSString *)dataName data:(NSString *)jsonData) {
 	[self receiveDataFromRN:dataName data:jsonData];
+}
+
+RCT_EXPORT_METHOD(passRawDataToNative:(NSString *)dataName data:(id)data) {
+	[self receiveRawDataFromRN:dataName data:data];
 }
 
 

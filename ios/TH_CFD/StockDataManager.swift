@@ -64,13 +64,23 @@ class StockDataManager: NSObject {
 	static let singleton = StockDataManager()
 	
 	var stockDataArray = [StockData]()
+	var logoImage: UIImage? = UIImage.init(named: "head_portrait")
 	
 	class func sharedInstance() ->StockDataManager {
 		return StockDataManager.singleton
 	}
 	
+	func loadUserLogo(jsonString:String) -> Void {
+		if(jsonString != "default") {
+			if let url = NSURL(string: jsonString){
+				let data = NSData(contentsOfURL: url)!
+				logoImage = UIImage.init(data: data)
+			}
+		}
+	}
+	
 	func loadOwnStocksData(jsonString:String) -> Void {
-		
+		// load stocks data from RN
 		let nsData: NSData = jsonString.dataUsingEncoding(NSUTF8StringEncoding)!
 		stockDataArray = []
 		do {

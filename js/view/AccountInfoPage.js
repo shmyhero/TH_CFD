@@ -317,7 +317,7 @@ var styles = StyleSheet.create({
 	contentValue: {
 		fontSize: 17,
 		marginRight: 5,
-		color: '#303030',
+		color: '#757575',
 	},
 
 	moreImage: {

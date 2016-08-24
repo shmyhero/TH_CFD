@@ -41,8 +41,7 @@ export const GZT_OCR_CHECK_API = GZT_SERVER_IP + '/ocrCheck'
 
 export const WEBVIEW_RECOMMAND_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/detailslider.php?id='
 export const WEBVIEW_TOP_NEWS_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/FocusSlider.php?id='
-export const WEBVIEW_QA_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/wenda.html'
-
+export const WEBVIEW_QA_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/wenda<version>.html'
 
 export const PARAMETER_PHONE = 'phone'
 export const PARAMETER_VERFICATION_CODE = 'verifyCode'

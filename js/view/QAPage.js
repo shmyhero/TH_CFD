@@ -17,6 +17,7 @@ var {EventCenter, EventConst} = require('../EventCenter')
 var ColorConstants = require('../ColorConstants')
 var NavBar = require('../view/NavBar')
 var NetConstants = require('../NetConstants');
+var VersionConstants = require('../VersionConstants')
 
 // var didTabSelectSubscription = null;
 var {height, width} = Dimensions.get('window')
@@ -26,8 +27,11 @@ var QAPage = React.createClass({
 	},
 
 	getDefaultProps() {
+		var url = NetConstants.WEBVIEW_QA_PAGE;
+		url = url.replace('<version>', VersionConstants.WEBVIEW_QA_VERSION);
+
 		return {
-			url: NetConstants.WEBVIEW_QA_PAGE,
+			url: url,
 		}
 	},
 

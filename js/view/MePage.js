@@ -206,7 +206,8 @@ var MePage = React.createClass({
 		if(meData.picUrl != null){
 			//TODO: Download image...
 			return (
-				<Image source={{uri: meData.picUrl}} style={styles.headImage} />
+				<Image source={{uri: meData.picUrl}} style={styles.headImage}
+				defaultSource={require('../../images/head_portrait.png')}/>
 			);
 		}else{
 			return (

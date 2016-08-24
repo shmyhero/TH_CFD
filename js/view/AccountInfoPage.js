@@ -218,7 +218,7 @@ var AccountInfoPage = React.createClass({
 					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
 						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
 							<Text style={styles.title}>{rowData.title}</Text>
-							<Image source={source} borderRadius={24*heightRate} style={[styles.headImage,{marginRight:5}]} />
+							<Image source={source} defaultSource={require('../../images/head_portrait.png')} borderRadius={24*heightRate} style={[styles.headImage,{marginRight:5}]} />
 							<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
 						</View>
 					</TouchableOpacity>

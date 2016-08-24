@@ -820,6 +820,7 @@ var styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
 		alignItems: 'stretch',
+		width:width,
 	},
 	rowView: {
 		flexDirection: 'row',

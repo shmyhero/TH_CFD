@@ -15,7 +15,7 @@ RNFS.exists(bannerImagePath)
 
 export function getBannerImageLocalPath(remotePath) {
 	var fileName = remotePath.substring(remotePath.lastIndexOf('/') + 1)
-
+	fileName = decodeURIComponent(fileName)	// fix bug with files have Chinese name.
 	return RNFS.exists(bannerImagePath + '/' + fileName)
 		.then(exists => {
 			if (exists) {
@@ -28,6 +28,7 @@ export function getBannerImageLocalPath(remotePath) {
 
 export function downloadBannerImage(remotePath, finishCallback) {
 	var fileName = remotePath.substring(remotePath.lastIndexOf('/') + 1)
+	fileName = decodeURIComponent(fileName)
 	var targetFilePath = bannerImagePath + '/' + fileName
 
 	RNFS.downloadFile({ fromUrl: remotePath, toFile: targetFilePath})

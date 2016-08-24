@@ -117,7 +117,7 @@ var AccountInfoPage = React.createClass({
 
 	pressAddImage: function() {
 
-		ImagePicker.showImagePicker(options, (response) => {
+		ImagePicker.showImagePicker(Options, (response) => {
 			console.log('Response = ', response);
 
 			if (response.didCancel) {

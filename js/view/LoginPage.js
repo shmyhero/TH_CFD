@@ -46,12 +46,14 @@ var LoginPage = React.createClass({
 	propTypes: {
 		showCancelButton: React.PropTypes.bool,
 		popToRoute: React.PropTypes.string,
+		onPopToRoute: React.PropTypes.func,
 	},
 
 	getDefaultProps() {
 		return {
 			showCancelButton: false,
 			popToRoute: null,
+			onPopToRoute: ()=>{},
 		}
 	},
 	componentWillMount: function() {
@@ -109,10 +111,10 @@ var LoginPage = React.createClass({
 			{
 				method: 'POST',
 			},
-			function(responseJson) {
+			(responseJson) => {
 				// Nothing to do.
-			}.bind(this),
-			function(errorMessage) {
+			},
+			(errorMessage) => {
 				Alert.alert('提示',errorMessage);
 			}
 		)
@@ -148,8 +150,7 @@ var LoginPage = React.createClass({
 			() => {
 				this.wechatLogin()
 			},
-
-			function() {}.bind(this)
+			() => {}
 		)
 	},
 
@@ -262,15 +263,21 @@ var LoginPage = React.createClass({
 			phoneLoginButtonEnabled: true
 		});
 
-		LocalDataUpdateModule.updateMeData(
-			userData,
-			function(){
-				this.props.navigator.push({
-					name: MainPage.UPDATE_USER_INFO_ROUTE,
-					popToRoute: this.props.popToRoute,
-					onPopToRoute: this.props.onPopToRoute,
-				});
-			}.bind(this)
+		LocalDataUpdateModule.updateMeData(userData, ()=>{
+				if(userData.isNewUser){
+					this.props.navigator.push({
+						name: MainPage.UPDATE_USER_INFO_ROUTE,
+						popToRoute: this.props.popToRoute,
+						onPopToRoute: this.props.onPopToRoute,
+					});
+				}else{
+					if(this.props.onPopToRoute){
+						this.props.onPopToRoute();
+					}
+
+					this.props.navigator.pop();
+				}
+			}
 		)
 	},
 

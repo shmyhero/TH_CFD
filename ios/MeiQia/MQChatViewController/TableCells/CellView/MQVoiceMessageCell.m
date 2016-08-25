@@ -44,7 +44,7 @@
         isLoadVoiceSuccess = false;
         //初始化头像
         avatarImageView = [[UIImageView alloc] init];
-        avatarImageView.contentMode = UIViewContentModeScaleAspectFit;
+		avatarImageView.contentMode = UIViewContentModeScaleAspectFill;//UIViewContentModeScaleAspectFit;
         [self.contentView addSubview:avatarImageView];
         //初始化气泡
         bubbleImageView = [[UIImageView alloc] init];

@@ -9,9 +9,11 @@ import org.json.JSONException;
 public class LogicData {
 
     public static final String MY_LIST = "myList";
+    public static final String MY_LOGO = "myLogo";
 
     private static LogicData mInstance;
     private JSONArray mMyList;
+    private String myLogo;
 
 
     public static LogicData getInstance() {
@@ -29,10 +31,17 @@ public class LogicData {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }else if(dataName.equals(MY_LOGO)){
+            myLogo = data;
         }
     }
 
     public JSONArray getMyList() {
         return mMyList;
     }
+
+    public String getMyLogo(){
+        return myLogo;
+    }
+
 }

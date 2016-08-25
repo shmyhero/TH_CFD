@@ -31,6 +31,11 @@ public class NativeDataModule extends ReactContextBaseJavaModule {
         LogicData.getInstance().setData(dataName, data);
     }
 
+    @ReactMethod
+    public void passRawDataToNative(String dataName, String data){
+        LogicData.getInstance().setData(dataName, data);
+    }
+
     public static void passDataToRN(ReactContext context, String dataName, String data) {
         WritableArray args = Arguments.createArray();
         args.pushString(dataName);

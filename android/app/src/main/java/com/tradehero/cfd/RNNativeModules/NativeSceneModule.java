@@ -8,9 +8,13 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.meiqia.meiqiasdk.activity.MQMessageFormActivity;
+import com.meiqia.meiqiasdk.util.MQConfig;
 import com.meiqia.meiqiasdk.util.MQIntentBuilder;
 import com.tradehero.cfd.MainActivity;
 import com.tradehero.cfd.NativeViewActivity;
+import com.tradehero.cfd.module.LogicData;
+
+import java.util.HashMap;
 
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
@@ -45,9 +49,22 @@ public class NativeSceneModule extends ReactContextBaseJavaModule {
 
     public void startMeiQia(Context context) {
         //对话模式
-        Intent intent = new MQIntentBuilder(context).build();
-        context.startActivity(intent);
+//        Intent intent = new MQIntentBuilder(context).build();
+//        context.startActivity(intent);
 
+        HashMap<String, String> clientInfo = new HashMap<>();
+//        clientInfo.put("name", "富坚义博");
+        String headUrl = LogicData.getInstance().getMyLogo();
+        if(headUrl!=null && headUrl.length()!=0){
+            clientInfo.put("avatar", headUrl);
+        }else{
+            MQConfig.isShowClientAvatar = false;
+        }
+
+        Intent intent = new MQIntentBuilder(context)
+                .setClientInfo(clientInfo)
+                .build();
+        context.startActivity(intent);
 
         //留言模式
 //        context.startActivity(new Intent(context, MQMessageFormActivity.class));

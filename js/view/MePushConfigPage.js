@@ -14,7 +14,6 @@ import {
 	TouchableOpacity,
 } from 'react-native';
 
-var LoginPage = require('./LoginPage');
 var LogicData = require('../LogicData')
 var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
@@ -65,6 +64,7 @@ var MePushConfigPage = React.createClass({
 			this.props.navigator.push({
 				name: MainPage.LOGIN_ROUTE,
 				popToRoute: MainPage.ME_PUSH_CONFIG_ROUTE,
+				onPopToRoute: this.loadPushConfigInfo
 			});
 		}
 	},

@@ -118,7 +118,8 @@ var StockExchangePage = React.createClass({
 		}
 		else {
 			return (
-				<LoginPage navigator={this.props.navigator}/>
+				<LoginPage navigator={this.props.navigator}
+									onPopToRoute={this.onPageSelected}/>
 			)
 		}
 	},

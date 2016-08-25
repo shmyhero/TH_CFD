@@ -19,6 +19,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Picker from 'react-native-wheel-picker';
 var PickerItem = Picker.Item;
 
+var MainPage = require('./MainPage')
 var LineChart = require('./component/lineChart/LineChart');
 var dismissKeyboard = require('dismissKeyboard');
 var LogicData = require('../LogicData')
@@ -535,6 +536,7 @@ var StockDetailPage = React.createClass({
 		} else {
 			this.props.navigator.push({
 				name: MainPage.LOGIN_ROUTE,
+				popToRoute: MainPage.STOCK_DETAIL_ROUTE,
 			});
 		}
 	},
@@ -554,6 +556,7 @@ var StockDetailPage = React.createClass({
 		} else {
 			this.props.navigator.push({
 				name: MainPage.LOGIN_ROUTE,
+				popToRoute: MainPage.STOCK_DETAIL_ROUTE,
 			});
 		}
 	},

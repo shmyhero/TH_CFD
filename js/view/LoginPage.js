@@ -11,6 +11,7 @@ import {
 	Alert,
 	Dimensions,
 	Image,
+	ScrollView,
 	TouchableWithoutFeedback,
 } from 'react-native';
 
@@ -542,17 +543,22 @@ var LoginPage = React.createClass({
 			gradientColors = ['#415a87', '#36496a']
 		}
 
+		//ScrollView need to be wrapped with a non-styled view...
 		return (
-			<LinearGradient colors={gradientColors} style={[styles.wrapper, {height: height}]}>
-				{/* {this.renderTab()} */}
-				<View style={styles.tabContainer}>
-					<Text style={{flex: 1, fontSize: 18, textAlign: 'center', color: '#ffffff'}}>
-						我的交易
-					</Text>
-					{this.renderCancelButton()}
-				</View>
-				{this.renderLoginContent()}
-			</LinearGradient>
+			<View style={{flex:1}}>
+				<ScrollView style={{flex:1}}>
+					<LinearGradient colors={gradientColors} style={[styles.wrapper, {height: height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER}]}>
+						{/* {this.renderTab()} */}
+						<View style={styles.tabContainer}>
+							<Text style={{flex: 1, fontSize: 18, textAlign: 'center', color: '#ffffff'}}>
+								我的交易
+							</Text>
+							{this.renderCancelButton()}
+						</View>
+						{this.renderLoginContent()}
+					</LinearGradient>
+				</ScrollView>
+			</View>
 		)
 	},
 

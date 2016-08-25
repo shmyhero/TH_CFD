@@ -12,6 +12,7 @@ import {
 	Dimensions,
 	Image,
 	TouchableWithoutFeedback,
+	ScrollView,
 } from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
@@ -330,16 +331,20 @@ var MeBindingMobilePage = React.createClass({
 		}
 
 		return (
-			<LinearGradient colors={gradientColors} style={[styles.wrapper, {height: height}]}>
-				{/* {this.renderTab()} */}
-				<View style={styles.tabContainer}>
-					<Text style={{flex: 1, fontSize: 18, textAlign: 'center', color: '#ffffff'}}>
-						绑定手机号
-					</Text>
-					{this.renderCancelButton()}
-				</View>
-				{this.renderLoginContent()}
-			</LinearGradient>
+			<View style={{flex:1}}>
+				<ScrollView style={{flex:1}}>
+					<LinearGradient colors={gradientColors} style={[styles.wrapper, {height: height}]}>
+						{/* {this.renderTab()} */}
+						<View style={styles.tabContainer}>
+							<Text style={{flex: 1, fontSize: 18, textAlign: 'center', color: '#ffffff'}}>
+								绑定手机号
+							</Text>
+							{this.renderCancelButton()}
+						</View>
+						{this.renderLoginContent()}
+					</LinearGradient>
+				</ScrollView>
+			</View>
 		)
 	},
 

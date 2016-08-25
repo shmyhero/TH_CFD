@@ -67,6 +67,10 @@ var HomePage = React.createClass({
 			})
 			.done()
 
+		this.reloadBanner();
+	},
+
+	reloadBanner: function() {
 		NetworkModule.fetchTHUrl(
 			NetConstants.GET_HOMEPAGE_BANNER_API,
 			{
@@ -80,7 +84,8 @@ var HomePage = React.createClass({
 				// Ignore it.
 			}
 		);
-		this.loadHomeData()
+
+		this.loadHomeData();
 	},
 
 	loadHomeData: function() {
@@ -130,7 +135,7 @@ var HomePage = React.createClass({
 	},
 
 	onTabChanged: function(){
-		this.loadHomeData()
+		this.reloadBanner();
 	},
 
 	downloadBannerImages: function(images) {

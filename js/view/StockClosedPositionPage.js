@@ -336,7 +336,11 @@ var StockClosedPositionPage = React.createClass({
 
 	render: function() {
 		var viewStyle = Platform.OS === 'android' ?
-			{width: width, height: height - UIConstants.TAB_BAR_HEIGHT - UIConstants.HEADER_HEIGHT - UIConstants.SCROLL_TAB_HEIGHT,} :
+		{width: width, height: height
+			- UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
+			- UIConstants.HEADER_HEIGHT
+			- UIConstants.SCROLL_TAB_HEIGHT
+			- UIConstants.TAB_BAR_HEIGHT} :
 			{width: width, flex: 1}
 		return (
 			<View style={viewStyle}>

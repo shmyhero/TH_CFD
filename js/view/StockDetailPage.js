@@ -19,7 +19,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import Picker from 'react-native-wheel-picker';
 var PickerItem = Picker.Item;
 
-var MainPage = require('./MainPage')
 var LineChart = require('./component/lineChart/LineChart');
 var dismissKeyboard = require('dismissKeyboard');
 var LogicData = require('../LogicData')

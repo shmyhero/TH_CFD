@@ -91,7 +91,7 @@ var MePage = React.createClass({
 	reloadMeDataFromStorage: function(){
 		StorageModule.loadMeData()
 		.then(function(value) {
-			if (value !== null) {
+			if (value) {
 				LogicData.setMeData(JSON.parse(value))
 				this.reloadMeData();
 			}
@@ -189,7 +189,7 @@ var MePage = React.createClass({
 
 	renderUserNameView: function(){
 		var meData = LogicData.getMeData();
-		if(meData.phone != null){
+		if(meData.phone){
 			return (
 				<View style={[styles.userInfoWrapper]}>
 					<Text style={styles.userNameText}>{meData.nickname}</Text>
@@ -208,8 +208,7 @@ var MePage = React.createClass({
 
 	renderUserPortraitView: function(){
 		var meData = LogicData.getMeData();
-		if(meData.picUrl != null){
-			//TODO: Download image...
+		if(meData.picUrl){
 			return (
 				<Image source={{uri: meData.picUrl}} style={styles.headImage}
 				defaultSource={require('../../images/head_portrait.png')}/>

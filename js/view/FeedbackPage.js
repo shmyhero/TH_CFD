@@ -29,8 +29,8 @@ var scrollHeight = height - UIConstants.HEADER_HEIGHT - UIConstants.ANDROID_LIST
 var imageSize = width >= 375 ? 65 : Math.floor(width/5-10)
 const add_image = require("../../images/feedback_add.png")
 const delete_image = require("../../images/close.png")
-const MaxImageNumber = 240
-const MaxTextNumber = 10
+const MaxImageNumber = 5
+const MaxTextNumber = 240
 
 const Options = {
 	title: null, // specify null or empty string to remove the title

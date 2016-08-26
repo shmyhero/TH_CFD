@@ -73,8 +73,9 @@ class StockDataManager: NSObject {
 	func loadUserLogo(jsonString:String) -> Void {
 		if(jsonString != "default") {
 			if let url = NSURL(string: jsonString){
-				let data = NSData(contentsOfURL: url)!
-				logoImage = UIImage.init(data: data)
+				if let data = NSData(contentsOfURL: url) {
+					logoImage = UIImage.init(data: data)
+				}
 			}
 		}
 	}

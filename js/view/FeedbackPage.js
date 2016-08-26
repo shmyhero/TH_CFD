@@ -29,7 +29,8 @@ var scrollHeight = height - UIConstants.HEADER_HEIGHT - UIConstants.ANDROID_LIST
 var imageSize = width >= 375 ? 65 : Math.floor(width/5-10)
 const add_image = require("../../images/feedback_add.png")
 const delete_image = require("../../images/close.png")
-const MaxImageNumber = 5
+const MaxImageNumber = 240
+const MaxTextNumber = 10
 
 const Options = {
 	title: null, // specify null or empty string to remove the title
@@ -175,6 +176,13 @@ var FeedbackPage = React.createClass({
 		}
 	},
 
+	updateText: function(text) {
+		if(text.length > MaxTextNumber){
+			text = text.slice(0, MaxTextNumber)
+		}
+		this.setState({text});
+	},
+
 	render: function() {
 		var images = this.state.imagesSource.map(
 			(source, i) =>
@@ -186,7 +194,7 @@ var FeedbackPage = React.createClass({
 					</View>
 				</TouchableOpacity>
 			)
-		var limit = 240
+		var limit = MaxTextNumber
     	var remainder = limit - this.state.text.length;
 		return (
 			<View style={styles.wrapper}>
@@ -204,7 +212,7 @@ var FeedbackPage = React.createClass({
 							multiline={true}
 							maxLength={limit}
 							placeholder={'请描述您的问题'}
-							onChangeText={(text) => {this.setState({text});}}
+							onChangeText={(text) => {this.updateText(text)}}
 							value={this.state.text}/>
 					<View style={styles.rowWrapper}>
 						{images}

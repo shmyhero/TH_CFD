@@ -644,7 +644,8 @@ var StockDetailPage = React.createClass({
 				<View/>
 				<Picker style={{width: pickerWidth, height: pickerHeight}}
 					selectedValue={this.state.money}
-					itemStyle={{color:"white", fontSize:26}}
+					itemSpace={30}
+					itemStyle={{color:"white", fontSize:32}}
 					onValueChange={(value) => this.onPikcerSelect(value, 1)}>
 					{moneyArray.map((value) => (
 					  <PickerItem label={value} value={parseInt(value)} key={"money"+value}/>
@@ -653,7 +654,8 @@ var StockDetailPage = React.createClass({
 				<View/>
 				<Picker style={{width: pickerWidth, height: pickerHeight}}
 					selectedValue={this.state.leverage}
-					itemStyle={{color:"white", fontSize:26}}
+					itemSpace={30}
+					itemStyle={{color:"white", fontSize:32}}
 					onValueChange={(value) => this.onPikcerSelect(value, 2)}>
 					{leverageArray.map((value) => (
 					  <PickerItem label={this.parseLeverage(value)} value={value} key={"lever"+value}/>

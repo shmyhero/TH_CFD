@@ -37,7 +37,7 @@ import java.util.GregorianCalendar;
 public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
 
     private float LINE_WIDTH = 0.5f; //竖线 分割 ｜分时｜10分钟｜2小时｜5日｜1月｜
-    private float LINE_WIDTH_PRICE = 2.0f; //行情走势曲线线粗
+    private float LINE_WIDTH_PRICE = 1.5f; //行情走势曲线线粗
     private static final String REACT_CLASS = "LineChart";
     private enum CHART_TYPE {
         today("today"),

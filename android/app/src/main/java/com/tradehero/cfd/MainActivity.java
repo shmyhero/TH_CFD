@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        preferences.edit().putString("debug_http_host", "192.168.20.46:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.114:8081").apply();
 
         super.onCreate(null);
 
@@ -141,6 +141,9 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 //                Toast.makeText(MainActivity.this, "int failure", Toast.LENGTH_SHORT).show();
             }
         });
+
+        MQConfig.isShowClientAvatar = true;
+
 
 
     }

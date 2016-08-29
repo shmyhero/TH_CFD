@@ -36,6 +36,8 @@ import java.util.GregorianCalendar;
  */
 public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
 
+    private float LINE_WIDTH = 0.5f; //竖线 分割 ｜分时｜10分钟｜2小时｜5日｜1月｜
+    private float LINE_WIDTH_PRICE = 2.0f; //行情走势曲线线粗
     private static final String REACT_CLASS = "LineChart";
     private enum CHART_TYPE {
         today("today"),
@@ -185,7 +187,7 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                 // set the line to be drawn like this "- - - - - -"
                 set1.enableDashedLine(10f, 0f, 0f);
                 set1.setColor(Color.WHITE);
-                set1.setLineWidth(1f);
+                set1.setLineWidth(LINE_WIDTH_PRICE);
                 set1.setDrawCircles(true);
                 set1.setDrawCircleHole(false);
                 set1.setCircleColors(circleColors);
@@ -224,7 +226,7 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                 if (mChartType == CHART_TYPE.today || mChartType == CHART_TYPE.tenM) {
                     LimitLine line = new LimitLine((float) stockInfoObject.getDouble("preClose"));
                     line.setLineColor(CHART_LINE_COLOR);
-                    line.setLineWidth(0.5f);
+                    line.setLineWidth(LINE_WIDTH);
                     line.enableDashedLine(10f, 10f, 0f);
                     line.setTextSize(0f);
 
@@ -352,7 +354,7 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
 
                         LimitLine gapLine = new LimitLine(index);
                         gapLine.setLineColor(CHART_LINE_COLOR);
-                        gapLine.setLineWidth(0.5f);
+                        gapLine.setLineWidth(LINE_WIDTH);
                         gapLine.enableDashedLine(10f, 0f, 0f);
                         gapLine.setTextSize(8f);
                         gapLine.setTextColor(CHART_TEXT_COLOR);

@@ -43,6 +43,7 @@ var tabData = [
 			{"type":NetConstants.PARAMETER_CHARTTYPE_MONTH, "name":'1月'}]
 var didFocusSubscription = null;
 var updateStockInfoTimer = null;
+var flashButtonTimer = null;
 
 var StockDetailPage = React.createClass({
 	mixins: [TimerMixin],
@@ -89,6 +90,7 @@ var StockDetailPage = React.createClass({
 			isAddedToMyList: false,
 			tradingInProgress: false,
 			chartType: NetConstants.PARAMETER_CHARTTYPE_TODAY,
+			flashTimes:0,
 		};
 	},
 
@@ -497,7 +499,7 @@ var StockDetailPage = React.createClass({
 			<View style={[styles.rowView, {alignItems:'stretch'}]}>
 				<TouchableHighlight
 					underlayColor={upSelected ? '#6da2fc': '#356dce'}
-					onPress={() => this.state.stockInfo.isOpen && this.buyPress()} style={[styles.tradeButtonView, upSelected&&styles.tradeButtonViewSelected]}>
+					onPress={() => this.state.stockInfo.isOpen && this.buyPress()} style={[styles.tradeButtonView,(this.state.flashTimes>0 && this.state.flashTimes%2==0)?styles.flashBorder:null , upSelected&&styles.tradeButtonViewSelected]}>
 					<View style={styles.tradeButtonContainer}>
 						<Text style={[styles.tradeButtonText, {color: upTextColor}]}>
 							{this.state.stockPriceAsk}
@@ -508,7 +510,7 @@ var StockDetailPage = React.createClass({
 				</TouchableHighlight>
 				<TouchableHighlight
 					underlayColor={downSelected ? '#6da2fc': '#356dce'}
-					onPress={() => this.state.stockInfo.isOpen && this.sellPress()} style={[styles.tradeButtonView, downSelected&&styles.tradeButtonViewSelected]}>
+					onPress={() => this.state.stockInfo.isOpen && this.sellPress()} style={[styles.tradeButtonView,(this.state.flashTimes>0 && this.state.flashTimes%2==0)?styles.flashBorder:null ,downSelected&&styles.tradeButtonViewSelected]}>
 					<View style={styles.tradeButtonContainer}>
 						<Text style={[styles.tradeButtonText, {color: downTextColor}]}>
 							{this.state.stockPriceBid}
@@ -645,7 +647,7 @@ var StockDetailPage = React.createClass({
 				<Picker style={{width: pickerWidth, height: pickerHeight}}
 					selectedValue={this.state.money}
 					itemSpace={30}
-					itemStyle={{color:"white", fontSize:32}}
+					itemStyle={{color:"white", fontSize: Platform.OS === 'ios' ? 26 : 32 }}
 					onValueChange={(value) => this.onPikcerSelect(value, 1)}>
 					{moneyArray.map((value) => (
 					  <PickerItem label={value} value={parseInt(value)} key={"money"+value}/>
@@ -655,7 +657,7 @@ var StockDetailPage = React.createClass({
 				<Picker style={{width: pickerWidth, height: pickerHeight}}
 					selectedValue={this.state.leverage}
 					itemSpace={30}
-					itemStyle={{color:"white", fontSize:32}}
+					itemStyle={{color:"white", fontSize: Platform.OS === 'ios' ? 26 : 32 }}
 					onValueChange={(value) => this.onPikcerSelect(value, 2)}>
 					{leverageArray.map((value) => (
 					  <PickerItem label={this.parseLeverage(value)} value={value} key={"lever"+value}/>
@@ -687,7 +689,7 @@ var StockDetailPage = React.createClass({
 		return (
 			<TouchableOpacity
 				activeOpacity={0.85}
-				onPress={() => buttonEnable && this.okPress()}
+				onPress={() => buttonEnable ? this.okPress():this.okPressInDisable()}
 				style={[styles.okView, !buttonEnable && styles.okViewDisabled, !this.state.stockInfo.isOpen && styles.okViewNotOpened]}>
 				<Text style={[styles.okButton, !buttonEnable && styles.okButtonDisabled, !this.state.stockInfo.isOpen && styles.okButtonNotOpened]}>
 					{this.state.stockInfo.isOpen ? '确认' : '未开市'}
@@ -724,6 +726,35 @@ var StockDetailPage = React.createClass({
 			tradingInProgress: false,
 			tradeDirection: 0,
 		})
+	},
+
+	okPressInDisable: function(){
+		var isNeedButtonFlash = this.state.tradeDirection === 0 && this.state.tradingInProgress;
+		if(flashButtonTimer !== null) {
+			this.clearInterval(flashButtonTimer)
+		}
+		this.setState({
+			flashTimes : 2,//设置闪烁2的倍数次
+		})
+		flashButtonTimer = this.setInterval(
+			() => {
+				this.doFlash();
+			},
+			500
+		);
+	},
+
+	doFlash:function(){
+		console.log("doFlash = " + this.state.flashTimes);
+		if(this.state.flashTimes>0){
+			this.setState({
+				flashTimes : this.state.flashTimes - 1,
+			})
+		}else{
+			if(flashButtonTimer !== null) {
+				this.clearInterval(flashButtonTimer)
+			}
+		}
 	},
 
 	okPress: function() {
@@ -832,6 +863,7 @@ var styles = StyleSheet.create({
 		alignItems: 'center',
 		paddingTop: 5,
 		paddingBottom: 5,
+		marginTop:5,
 		justifyContent: 'space-around',
 	},
 	lineChart: {
@@ -852,6 +884,9 @@ var styles = StyleSheet.create({
 		backgroundColor: '#356dce',
 		alignItems: 'center',
 		justifyContent: 'space-around',
+	},
+	flashBorder: {
+	  borderColor: '#bfd4f7',
 	},
 	tradeButtonContainer: {
 		alignSelf: 'stretch',
@@ -887,6 +922,7 @@ var styles = StyleSheet.create({
 	},
 	scrollView: {
 		height: 100,
+		marginTop:5,
 		overflow: 'hidden',
 	},
 	leftMoneyLabel: {

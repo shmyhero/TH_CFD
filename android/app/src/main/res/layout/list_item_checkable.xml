@@ -49,6 +49,22 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/notificationSwitch"
+        android:layout_toLeftOf="@+id/pushToTop"
+        android:layout_width="50dp"
+        android:layout_marginRight="40dp"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/notifyIndicator"
+            android:background="@drawable/notification_off"
+            android:layout_width="22dp"
+            android:layout_height="22dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/pushToTop"
         android:layout_toLeftOf="@id/drag_handle"
         android:layout_width="50dp"

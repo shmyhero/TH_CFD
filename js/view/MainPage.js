@@ -47,6 +47,7 @@ var LiveRegisterStatusPage = require('./openAccount/OAStatusPage')
 var StockPopularityPage = require('./StockPopularityPage')
 var FeedbackPage = require('./FeedbackPage')
 var EditOwnStocksPage = require('./EditOwnStocksPage')
+var SharePage = require('./SharePage')
 
 var TalkingdataModule = require('../module/TalkingdataModule')
 var WebSocketModule = require('../module/WebSocketModule');
@@ -111,6 +112,7 @@ export let LIVE_REGISTER_STATUS_ROUTE = 'liveRegisterStatus'
 export let STOCK_POPULARITY_ROUTE = 'stockPopularity'
 export let FEEDBACK_ROUTE = 'feedback'
 export let EDIT_OWN_STOCKS_ROUTE = 'editownstocks'
+export let SHARE_ROUTE = 'share'
 
 const glypy = glypyMapMaker({
   Home: 'f04f',
@@ -132,6 +134,7 @@ export var hideProgress
 export var showProgress
 
 var recevieDataSubscription = null
+var SHARE_PAGE = 'SharePage'
 
 var MainPage = React.createClass({
 
@@ -258,11 +261,11 @@ var MainPage = React.createClass({
 		} else if (route.name === NAVIGATOR_WEBVIEW_ROUTE) {
 			hideTabbar()
 			return (
-				<View style={{flex: 1}}>
-					<NavBar title={route.title} showBackButton={true} navigator={navigationOperations}
-						backButtonOnClick={()=>this.backAndShowTabbar()}/>
-					<WebViewPage url={route.url}/>
-				</View>
+				<WebViewPage url={route.url}
+										 showTabbar={showTabbar}
+										 title={route.title} navigator={navigationOperations}
+										 showShareButton={route.showShareButton}
+										 shareFunction={this._doShare}/>
 			)
 		} else if (route.name === QA_ROUTE) {
 			hideTabbar();
@@ -405,6 +408,13 @@ var MainPage = React.createClass({
 				<EditOwnStocksPage navigator={navigationOperations} showTabbar={showTabbar} />
 				)
 		}
+		else if(route.name === SHARE_ROUTE){
+			return (
+				<View style={{flex: 1}}>
+					<SharePage navigator={navigationOperations} routeMapper={this.RouteMapper}/>
+				</View>
+			)
+		}
 	},
 
 	showTutorial: function(type){
@@ -487,47 +497,72 @@ var MainPage = React.createClass({
 		this._handleDeepLink(event.url)
 	},
 
+	_doShare: function(data){
+		this.refs[SHARE_PAGE].showWithData(data);
+	},
+
 	_handleDeepLink: function(url) {
 		console.log('handleDeeplink: ' + url)
-		_navigator.popToTop()
-		if(url==='cfd://page/1') {//首页
-			this.refs['myTabbar'].gotoTab("home")
+		if(url.startsWith('cfd://page/share')) {
+			var json = this.getJsonFromUrl(url)
+			this.refs[SHARE_PAGE].showWithData(json);
+		}else{
+			_navigator.popToTop()
+			if(url==='cfd://page/1') {//首页
+				this.refs['myTabbar'].gotoTab("home")
+			}
+			else if(url==='cfd://page/2') {//行情首页
+				this.refs['myTabbar'].gotoTab("trend")
+			}
+			else if(url==='cfd://page/3') {//行情自选
+				initStockListTab = 0
+				this.refs['myTabbar'].gotoTab("trend")
+			}
+			else if(url==='cfd://page/4') {
+				this.refs['myTabbar'].gotoTab("trade")
+				EventCenter.emitExchangeTabPressEvent()
+			}
+			else if(url==='cfd://page/5') {
+				initExchangeTab = 1
+				this.refs['myTabbar'].gotoTab("trade")
+				EventCenter.emitExchangeTabPressEvent()
+			}
+			else if(url==='cfd://page/6') {
+				initExchangeTab = 2
+				this.refs['myTabbar'].gotoTab("trade")
+				EventCenter.emitExchangeTabPressEvent()
+			}
+			else if(url==='cfd://page/me') {
+				this.refs['myTabbar'].gotoTab("me")
+			}
+			else if(url==='cfd://page/back') {
+				this.backAndShowTabbar()
+			}
+			initExchangeTab = 0
+			initStockListTab = 1
 		}
-		else if(url==='cfd://page/2') {//行情首页
-			this.refs['myTabbar'].gotoTab("trend")
-		}
-		else if(url==='cfd://page/3') {//行情自选
-			initStockListTab = 0
-			this.refs['myTabbar'].gotoTab("trend")
-		}
-		else if(url==='cfd://page/4') {
-			this.refs['myTabbar'].gotoTab("trade")
-			EventCenter.emitExchangeTabPressEvent()
-		}
-		else if(url==='cfd://page/5') {
-			initExchangeTab = 1
-			this.refs['myTabbar'].gotoTab("trade")
-			EventCenter.emitExchangeTabPressEvent()
-		}
-		else if(url==='cfd://page/6') {
-			initExchangeTab = 2
-			this.refs['myTabbar'].gotoTab("trade")
-			EventCenter.emitExchangeTabPressEvent()
-		}
-		else if(url==='cfd://page/me') {
-			this.refs['myTabbar'].gotoTab("me")
-		}
-		else if(url==='cfd://page/back') {
-			this.backAndShowTabbar()
-		}
-		initExchangeTab = 0
-		initStockListTab = 1
+	},
+
+	getJsonFromUrl: function(url) {
+	  var result = {};
+	  url.split("&").forEach(function(part) {
+	    var item = part.split("=");
+	    result[item[0]] = decodeURIComponent(item[1]);
+	  });
+	  return result;
+	},
+
+	renderShareView: function(){
+		return (
+			<SharePage ref={SHARE_PAGE}/>
+		);
 	},
 
 	render: function() {
 
 	    return (
 	    	<View style={styles.container}>
+					{this.renderShareView()}
 		    	<StatusBar barStyle="light-content" backgroundColor='#1962dd'/>
 		      	<Tabbar ref="myTabbar" barColor={'#f7f7f7'} style={{alignItems: 'stretch'}}>
 			        <Tab name="home">

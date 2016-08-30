@@ -64,7 +64,7 @@ class StockDataManager: NSObject {
 	static let singleton = StockDataManager()
 	
 	var stockDataArray = [StockData]()
-	var logoImage: UIImage? = UIImage.init(named: "head_portrait")
+	var logoImage: UIImage? = UIImage.init(named: "Head_portrait")
 	
 	class func sharedInstance() ->StockDataManager {
 		return StockDataManager.singleton

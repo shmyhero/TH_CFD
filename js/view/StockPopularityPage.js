@@ -141,8 +141,8 @@ var styles = StyleSheet.create({
 		flex: 1,
 	},
 	separator: {
-		height: 1,
-		backgroundColor: '#efeff4',
+		height: 0.5,
+		backgroundColor: ColorConstants.SEPARATOR_GRAY,
 	},
 	popularityRowLeft: {
 		flex: 1,

@@ -47,6 +47,7 @@ var LiveRegisterStatusPage = require('./openAccount/OAStatusPage')
 var StockPopularityPage = require('./StockPopularityPage')
 var FeedbackPage = require('./FeedbackPage')
 var EditOwnStocksPage = require('./EditOwnStocksPage')
+var EditAlertPage = require('./EditAlertPage')
 var SharePage = require('./SharePage')
 
 var TalkingdataModule = require('../module/TalkingdataModule')
@@ -112,6 +113,7 @@ export let LIVE_REGISTER_STATUS_ROUTE = 'liveRegisterStatus'
 export let STOCK_POPULARITY_ROUTE = 'stockPopularity'
 export let FEEDBACK_ROUTE = 'feedback'
 export let EDIT_OWN_STOCKS_ROUTE = 'editownstocks'
+export let EDIT_ALERT_ROUTE = 'editalert'
 export let SHARE_ROUTE = 'share'
 
 const glypy = glypyMapMaker({
@@ -406,6 +408,11 @@ var MainPage = React.createClass({
 			hideTabbar()
 			return (
 				<EditOwnStocksPage navigator={navigationOperations} showTabbar={showTabbar} />
+				)
+		}
+		else if (route.name === EDIT_ALERT_ROUTE) {
+			return (
+				<EditAlertPage navigator={navigationOperations} showTabbar={showTabbar} />
 				)
 		}
 		else if(route.name === SHARE_ROUTE){

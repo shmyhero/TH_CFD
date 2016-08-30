@@ -33,7 +33,7 @@ RCT_EXPORT_MODULE();
 			style.navBarTintColor = [UIColor whiteColor];
 			style.navTitleColor = [UIColor whiteColor];
 			style.navTitleFont = [UIFont systemFontOfSize:18];
-			style.navBackButtonImage = [UIImage imageNamed:@"back"];
+			style.navBackButtonImage = [UIImage imageNamed:@"Back"];
 			style.enableRoundAvatar = YES;
 			style.backgroundColor = [UIColor colorWithHex:0xf0f0f0];
 			style.incomingBubbleColor = [UIColor whiteColor];

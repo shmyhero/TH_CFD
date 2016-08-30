@@ -298,7 +298,7 @@ var HomePage = React.createClass({
 
 	renderPopularityView: function() {
 		return (
-		<View style={{height:241, backgroundColor:'white'}}>
+		<View style={{height:239, backgroundColor:'white'}}>
 			<View style={styles.popularityHeaderContainer}>
 				<Text style={styles.popularityTitle}>
 					多空博弈
@@ -491,12 +491,12 @@ var styles = StyleSheet.create({
 		alignItems: 'stretch',
 	},
 	horiLine: {
-		height: 1,
-		backgroundColor: '#efeff4',
+		height: 0.5,
+		backgroundColor: ColorConstants.SEPARATOR_GRAY,
 	},
 	vertLine: {
-		width: 1,
-		backgroundColor: '#efeff4',
+		width: 0.5,
+		backgroundColor: ColorConstants.SEPARATOR_GRAY,
 	},
 	blockContainer: {
 		flex: 1,
@@ -555,8 +555,8 @@ var styles = StyleSheet.create({
 		height:200,
 	},
 	separator: {
-		height: 1,
-		backgroundColor: '#efeff4',
+		height: 0.5,
+		backgroundColor: ColorConstants.SEPARATOR_GRAY,
 	},
 	popularityRowLeft: {
 		flex: 1,
@@ -645,9 +645,9 @@ var styles = StyleSheet.create({
 		marginRight: 14,
 	},
 	topnewsVerticalLine:{
-		width: 1,
+		width: 0.5,
 		height: 50,
-		backgroundColor: '#efeff4',
+		backgroundColor: ColorConstants.SEPARATOR_GRAY,
 	},
 	newsContainer: {
 		flex: 1,
@@ -656,7 +656,7 @@ var styles = StyleSheet.create({
 	},
 	bigSeparator: {
 		height: 10,
-		backgroundColor: '#efeff4',
+		backgroundColor: ColorConstants.SEPARATOR_GRAY,
 	},
 	bluePoint: {
 		width: 4,

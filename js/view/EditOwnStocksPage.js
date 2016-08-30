@@ -4,12 +4,9 @@ import React from 'react';
 import {
 	StyleSheet,
 	View,
-	Text,
-	Image,
 	Dimensions,
 } from 'react-native';
 
-var Button = require('./component/Button')
 var MainPage = require('./MainPage')
 var ColorConstants = require('../ColorConstants')
 var NavBar = require('./NavBar')
@@ -30,7 +27,7 @@ var EditOwnStocksPage = React.createClass({
 	gotoEditAlertPage: function(alertData) {
 		//todo
 		this.props.navigator.push({
-			name: MainPage.ABOUT_US_ROUTE,
+			name: MainPage.EDIT_ALERT_ROUTE,
 		})
 	},
 

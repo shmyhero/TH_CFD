@@ -14,6 +14,7 @@ class EditOwnStockCell: UITableViewCell {
 	@IBOutlet weak var codeLabel: UILabel!
 	@IBOutlet weak var tagLabel: UILabel!
 	@IBOutlet weak var topButton: UIButton!
+	@IBOutlet weak var alertButton: UIButton!
 	@IBOutlet weak var codeLabelLeftConstraint: NSLayoutConstraint!
 	
 	var stockData: StockData?
@@ -39,6 +40,7 @@ class EditOwnStockCell: UITableViewCell {
 	typealias callbackfunc=(selectStock:StockData)->Void
 	var tapTop = callbackfunc?()
 	var tapSelect = callbackfunc?()
+	var tapAlert = callbackfunc?()
 	
 	func moveToTop( tapTopFunction:callbackfunc ){
 		tapTop = tapTopFunction
@@ -46,6 +48,10 @@ class EditOwnStockCell: UITableViewCell {
 	
 	func selectCell( tapSelectButton:callbackfunc ){
 		tapSelect = tapSelectButton
+	}
+	
+	func pushAlert( tapAlertButton:callbackfunc) {
+		tapAlert = tapAlertButton
 	}
 	
 	override func awakeFromNib() {
@@ -63,6 +69,10 @@ class EditOwnStockCell: UITableViewCell {
 	
 	@IBAction func tapTopButton(sender: AnyObject) {
 		tapTop!(selectStock: stockData!);
+	}
+	
+	@IBAction func tapAlertButton(sender: AnyObject) {
+		tapAlert!(selectStock: stockData!);
 	}
 }
 

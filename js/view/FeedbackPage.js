@@ -17,7 +17,6 @@ var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
 var NavBar = require('./NavBar')
 var Button = require('./component/Button')
-var MainPage = require('./MainPage')
 var NativeSceneModule = require('../module/NativeSceneModule')
 var ImagePicker = require('react-native-image-picker');
 var LogicData = require('../LogicData')

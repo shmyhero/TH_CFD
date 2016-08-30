@@ -8,16 +8,22 @@
 
 import UIKit
 
+@objc protocol EditOwnStocksViewControllerDelegate: class {
+	func onClickEditAlert(sender: EditOwnStocksViewController, alertData:AnyObject )
+}
+
 class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 	
 	@IBOutlet weak var editTableView: UITableView!
 	@IBOutlet weak var allButton: UIButton!
 	@IBOutlet weak var deleteButton: UIButton!
 	
+	weak var delegate:EditOwnStocksViewControllerDelegate?
+	
 	var allSelect:Bool = false
 	
 	var rawData:[StockData] = []
-	var statusView:UIView = UIView()
+//	var statusView:UIView = UIView()
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -32,14 +38,14 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 	
 	override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)
-		if (self.statusView.frame.size.height == 0) {
-			self.statusView = UIView(frame:
-				CGRect(x: 0.0, y: 0.0, width: UIScreen.mainScreen().bounds.size.width, height: 20.0)
-			)
-			view.backgroundColor = UIColor(hex: 0x1A61DD)
-			self.view.addSubview(self.statusView)
-			self.view.sendSubviewToBack(self.statusView)
-		}
+//		if (self.statusView.frame.size.height == 0) {
+//			self.statusView = UIView(frame:
+//				CGRect(x: 0.0, y: 0.0, width: UIScreen.mainScreen().bounds.size.width, height: 20.0)
+//			)
+//			view.backgroundColor = UIColor(hex: 0x1A61DD)
+//			self.view.addSubview(self.statusView)
+//			self.view.sendSubviewToBack(self.statusView)
+//		}
 		rawData = StockDataManager.sharedInstance().stockDataArray
 		allButton.layer.cornerRadius = 4
 		deleteButton.layer.cornerRadius = 4
@@ -48,8 +54,13 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 	
 	override func viewWillDisappear(animated: Bool) {
 		super.viewWillDisappear(animated)
-		self.statusView.removeFromSuperview()
-		self.statusView = UIView()
+//		self.statusView.removeFromSuperview()
+//		self.statusView = UIView()
+		
+		StockDataManager.sharedInstance().stockDataArray = rawData
+		let dataString:String = StockDataManager.sharedInstance().jsonOwnStockData()
+		let delegate:AppDelegate! = UIApplication.sharedApplication().delegate as! AppDelegate
+		delegate!.nativeData!.sendDataToRN("myList", data: dataString)
 	}
 	
 	override func didReceiveMemoryWarning() {
@@ -114,6 +125,10 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		
 		cell.selectCell { (selectStock) -> Void in
 			self.updateButtons()
+		}
+		
+		cell.pushAlert { (selectStock) in
+			//todo
 		}
 		
 		return cell

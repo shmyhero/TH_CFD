@@ -46,6 +46,7 @@ var LiveUpdateUserInfoPage = require('./openAccount/OALiveUpdateUserInfoPage')
 var LiveRegisterStatusPage = require('./openAccount/OAStatusPage')
 var StockPopularityPage = require('./StockPopularityPage')
 var FeedbackPage = require('./FeedbackPage')
+var EditOwnStocksPage = require('./EditOwnStocksPage')
 
 var TalkingdataModule = require('../module/TalkingdataModule')
 var WebSocketModule = require('../module/WebSocketModule');
@@ -109,6 +110,7 @@ export let LIVE_UPDATE_USER_INFO_ROUTE = 'liveUpdateUserInfo'
 export let LIVE_REGISTER_STATUS_ROUTE = 'liveRegisterStatus'
 export let STOCK_POPULARITY_ROUTE = 'stockPopularity'
 export let FEEDBACK_ROUTE = 'feedback'
+export let EDIT_OWN_STOCKS_ROUTE = 'editownstocks'
 
 const glypy = glypyMapMaker({
   Home: 'f04f',
@@ -396,6 +398,12 @@ var MainPage = React.createClass({
 				<FeedbackPage navigator={navigationOperations}
 					showTabbar={showTabbar} phone={route.phone}/>
 			)
+		}
+		else if (route.name === EDIT_OWN_STOCKS_ROUTE) {
+			hideTabbar()
+			return (
+				<EditOwnStocksPage navigator={navigationOperations} showTabbar={showTabbar} />
+				)
 		}
 	},
 

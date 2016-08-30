@@ -90,7 +90,10 @@ var StockListViewPager = React.createClass({
 
 	editButtonClicked: function() {
 		NativeDataModule.passDataToNative('myList', LogicData.getOwnStocksData())
-		NativeSceneModule.launchNativeScene('StockEditFragment')
+		// NativeSceneModule.launchNativeScene('StockEditFragment')
+		this.props.navigator.push({
+			name: MainPage.EDIT_OWN_STOCKS_ROUTE,
+		});
 	},
 
 	onPageSelected: function(index) {

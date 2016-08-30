@@ -159,7 +159,9 @@
 		3DC618011CA2747E00F36541 /* ChartDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC618001CA2747E00F36541 /* ChartDataManager.swift */; };
 		3DC618051CA29F9900F36541 /* StockChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC618041CA29F9900F36541 /* StockChartView.swift */; };
 		3DC6182D1CA3922A00F36541 /* StockChartViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC6182C1CA3922A00F36541 /* StockChartViewManager.m */; };
+		3DCE765D1D743375008BA33D /* EditOwnStocksViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DCE765C1D743375008BA33D /* EditOwnStocksViewManager.m */; };
 		3DD744771CCE18040021304F /* myhero.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3DD744761CCE18040021304F /* myhero.ttf */; };
+		3DE8F4581D75236C00B07DFC /* EditOwnStocksView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DE8F4571D75236C00B07DFC /* EditOwnStocksView.m */; };
 		3DE90F481D505035004D264A /* RCTTalkingData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DE90F471D505035004D264A /* RCTTalkingData.m */; };
 		73DFEAF21CDB242700234CE8 /* libbz2.1.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 73DFEAF01CDB22A500234CE8 /* libbz2.1.0.tbd */; };
 		73FD306D1D0574FD00D77EFC /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73FD306C1D0574C200D77EFC /* libRNFS.a */; };
@@ -565,7 +567,11 @@
 		3DC618041CA29F9900F36541 /* StockChartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StockChartView.swift; path = TH_CFD/StockChartView.swift; sourceTree = "<group>"; };
 		3DC6182B1CA3922A00F36541 /* StockChartViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StockChartViewManager.h; path = TH_CFD/StockChartViewManager.h; sourceTree = "<group>"; };
 		3DC6182C1CA3922A00F36541 /* StockChartViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StockChartViewManager.m; path = TH_CFD/StockChartViewManager.m; sourceTree = "<group>"; };
+		3DCE765B1D743375008BA33D /* EditOwnStocksViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditOwnStocksViewManager.h; path = TH_CFD/EditOwnStocksViewManager.h; sourceTree = "<group>"; };
+		3DCE765C1D743375008BA33D /* EditOwnStocksViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditOwnStocksViewManager.m; path = TH_CFD/EditOwnStocksViewManager.m; sourceTree = "<group>"; };
 		3DD744761CCE18040021304F /* myhero.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = myhero.ttf; sourceTree = "<group>"; };
+		3DE8F4561D75236C00B07DFC /* EditOwnStocksView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditOwnStocksView.h; path = TH_CFD/EditOwnStocksView.h; sourceTree = "<group>"; };
+		3DE8F4571D75236C00B07DFC /* EditOwnStocksView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditOwnStocksView.m; path = TH_CFD/EditOwnStocksView.m; sourceTree = "<group>"; };
 		3DE90F461D505035004D264A /* RCTTalkingData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCTTalkingData.h; path = TH_CFD/RCTTalkingData.h; sourceTree = "<group>"; };
 		3DE90F471D505035004D264A /* RCTTalkingData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCTTalkingData.m; path = TH_CFD/RCTTalkingData.m; sourceTree = "<group>"; };
 		58602275B1F14B899E56D44F /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
@@ -723,6 +729,10 @@
 				3D6A24081C9AB90000FF1306 /* NativeData.m */,
 				3DC6182B1CA3922A00F36541 /* StockChartViewManager.h */,
 				3DC6182C1CA3922A00F36541 /* StockChartViewManager.m */,
+				3DCE765B1D743375008BA33D /* EditOwnStocksViewManager.h */,
+				3DCE765C1D743375008BA33D /* EditOwnStocksViewManager.m */,
+				3DE8F4561D75236C00B07DFC /* EditOwnStocksView.h */,
+				3DE8F4571D75236C00B07DFC /* EditOwnStocksView.m */,
 			);
 			name = ObjC;
 			sourceTree = "<group>";
@@ -1808,6 +1818,7 @@
 				3DB9F1E91D64483B00DC5C63 /* MQVoiceMessageCell.m in Sources */,
 				3DB9F1DD1D64483B00DC5C63 /* MQBotAnswerCell.m in Sources */,
 				3DB9F1D61D64483B00DC5C63 /* MQFileDownloadCellModel.m in Sources */,
+				3DE8F4581D75236C00B07DFC /* EditOwnStocksView.m in Sources */,
 				3D6A24091C9AB90000FF1306 /* NativeData.m in Sources */,
 				3DB9F1E81D64483B00DC5C63 /* MQTipsCell.m in Sources */,
 				3DB9F23D1D64493900DC5C63 /* MQMessageFormConfig.m in Sources */,
@@ -1851,6 +1862,7 @@
 				3D3E1EFF1C9F9C1C0064F187 /* SwiftNotice.swift in Sources */,
 				3DB9F1F81D64483B00DC5C63 /* MEIQIA_FBBitmapFontView.m in Sources */,
 				3DB9F1ED1D64483B00DC5C63 /* MQChatAudioRecorder.m in Sources */,
+				3DCE765D1D743375008BA33D /* EditOwnStocksViewManager.m in Sources */,
 				3DB9F1EF1D64483B00DC5C63 /* MQChatEmojize.m in Sources */,
 				3DB9F1D81D64483B00DC5C63 /* MQMessageDateCellModel.m in Sources */,
 				3DB9F1C41D64483B00DC5C63 /* MQChatViewStyleDark.m in Sources */,
@@ -1980,8 +1992,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: TYPHOON TECHNOLOGY LIMITED (6WN74CZ95F)";
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2092,7 +2104,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: TYPHOON TECHNOLOGY LIMITED (6WN74CZ95F)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_BITCODE = YES;
 				ENABLE_NS_ASSERTIONS = NO;

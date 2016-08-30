@@ -194,11 +194,11 @@ var HomePage = React.createClass({
 		} else {
 			targetUrl = targetUrl + '?userId=' + userId
 		}
-
 		this.props.navigator.push({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			url: targetUrl,
 			title: title,
+			showShareButton: true,
 		});
 	},
 
@@ -437,7 +437,7 @@ var HomePage = React.createClass({
 			} else {
 				slides.push (
 					<TouchableOpacity
-						onPress={() => this.gotoWebviewPage(targetUrl, '推荐')} key={i}>
+						onPress={() => this.gotoWebviewPage(PAGES[i].imgUrl, '推荐')} key={i}>
 						<Image
 							style={[styles.image, {height: imageHeight, width: width}]}
 							source={BANNERS[i % 2]}/>

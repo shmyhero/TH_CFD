@@ -101,3 +101,45 @@ function wechatGetUserInfo() {
 		MainPage.hideProgress && MainPage.hideProgress()
 	});
 }
+
+export const WECHAT_SESSION = 'session'
+export const WECHAT_TIMELINE = 'timeline'
+
+//type must be one of {"session", "timeline"}
+export function wechatShare(data, type, successCallback, errorCallback) {
+
+	MainPage.showProgress && MainPage.showProgress()
+	WechatAPI.isWXAppInstalled()
+	.then((installed) => {
+		if (installed) {
+			var promise;
+			if(type == WECHAT_SESSION){
+				promise = WechatAPI.shareToTimeline(data)
+			}else if(type == WECHAT_TIMELINE){
+				promise	= WechatAPI.shareToTimeline(data)
+			}
+
+			if(promise){
+				promise.then((response) => {
+					MainPage.hideProgress && MainPage.hideProgress()
+					console.log("wechatShareToSession success")
+					successCallback();
+				})
+				.catch((e) => {
+					MainPage.hideProgress && MainPage.hideProgress()
+					alert("wechat shareTo error catches: " + e)
+					console.log('wechat shareTo error catches: ' + e)
+					errorCallback(e.message);
+				})
+				.done();
+			}else{
+				MainPage.hideProgress && MainPage.hideProgress()
+			}
+		}
+	})
+	.catch((e) => {
+
+		alert("wechat shareTo error catches: " + e)
+		errorCallback(e.message);
+	})
+}

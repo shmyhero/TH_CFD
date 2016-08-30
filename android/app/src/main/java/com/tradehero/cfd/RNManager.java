@@ -19,6 +19,7 @@ import java.util.List;
 import cn.reactnative.modules.update.UpdateContext;
 import cn.reactnative.modules.update.UpdatePackage;
 import cn.reactnative.modules.wx.WeChatPackage;
+import com.github.alinz.reactnativewebviewbridge.WebViewBridgePackage;
 
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
@@ -44,7 +45,8 @@ public class RNManager {
                     new UpdatePackage(),
                     new RNFSPackage(),
                     new ImagePickerPackage(),
-                    new TalkingDataPackage()
+                    new TalkingDataPackage(),
+                    new WebViewBridgePackage()
             );
 
             for (ReactPackage reactPackage : packages) {

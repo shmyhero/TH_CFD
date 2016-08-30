@@ -240,6 +240,7 @@ public class StockEditFragment extends Fragment {
             TextView name = (TextView) view.findViewById(R.id.name);
             TextView symbol = (TextView) view.findViewById(R.id.symbol);
             ViewGroup pushToTop = (ViewGroup) view.findViewById(R.id.pushToTop);
+            ViewGroup notificationSwitch = (ViewGroup) view.findViewById(R.id.notificationSwitch);
 
             checkBox.setChecked(mStockInfo.get(position).mChecked);
             name.setText(mStockInfo.get(position).mName);
@@ -260,6 +261,13 @@ public class StockEditFragment extends Fragment {
                     StockInfo info = remove(position);
                     insert(info, 0);
                     Toast.makeText(getActivity(), R.string.pushed_to_top, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            notificationSwitch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //TODO
                 }
             });
 

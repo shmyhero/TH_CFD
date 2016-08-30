@@ -19,6 +19,7 @@
     "react-native-wheel-picker": "1.0.1",
     "react-native-wx": "1.0.9",
     "react-timer-mixin": "0.13.3",
-    "realm": "0.11.1"
+    "realm": "0.11.1",
+    "react-native-webview-bridge": "0.20.3"
   }
 }

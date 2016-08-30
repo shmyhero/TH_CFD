@@ -152,6 +152,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'asia.ivity.android:drag-sort-listview:1.0'
+    compile project(':react-native-webview-bridge')
 
     compile project(':realm')
     compile project(':react-native-wx')

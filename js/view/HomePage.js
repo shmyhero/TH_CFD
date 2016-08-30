@@ -372,7 +372,7 @@ var HomePage = React.createClass({
 		return(
 			<TouchableOpacity
 				activeOpacity = {1.0}
-				onPress={() =>this.gotoWebviewPage('http://cn.tradehero.mobi/TH_CFD_WEBTEST/detailslider.php?id=25',
+				onPress={() =>this.gotoWebviewPage(PAGES[i].url,
 					'推荐',
 					title,
 					description)} key={i}>
@@ -458,7 +458,7 @@ var HomePage = React.createClass({
 
 				slides.push (
 					<TouchableOpacity
-						onPress={() => this.gotoWebviewPage('http://cn.tradehero.mobi/TH_CFD_WEBTEST/detailslider.php?id=25', '推荐',
+						onPress={() => this.gotoWebviewPage(PAGES[i].url, '推荐',
 						title, description)} key={i}>
 						<Image
 							style={[styles.image, {height: imageHeight, width: width}]}

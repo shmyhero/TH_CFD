@@ -128,7 +128,6 @@ export function wechatShare(title,
 			if(type == WECHAT_SESSION){
 				WechatAPI.shareToSession(data)
 				.then((response) => {
-					alert("1")
 					console.log("wechatShareToSession success")
 					successCallback();
 				})
@@ -141,13 +140,11 @@ export function wechatShare(title,
 			}else if(type == WECHAT_TIMELINE){
 				promise	= WechatAPI.shareToTimeline(data)
 				.then((response) => {
-					alert("1")
 					console.log("wechatShareToSession success")
 					successCallback();
 				})
 				.catch((e) => {
 					MainPage.hideProgress && MainPage.hideProgress()
-					alert("wechat shareTo error catches: " + e)
 					console.log('wechat shareTo error catches: ' + e)
 					errorCallback(e.message);
 				})
@@ -156,8 +153,6 @@ export function wechatShare(title,
 		}
 	})
 	.catch((e) => {
-
-		alert("wechat shareTo error catches: " + e)
 		errorCallback(e.message);
 	})
 }

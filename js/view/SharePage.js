@@ -113,7 +113,11 @@ var SharePage = React.createClass({
 	        ()=>{ },
 	        ()=>{ })
 	    }else{
-	      WechatModule.wechatShare(this.data, WechatModule.WECHAT_TIMELINE,
+	      WechatModule.wechatShare(this.data.title,
+							this.data.description,
+							this.data.webpageUrl,
+							this.data.imageUrl,
+							WechatModule.WECHAT_TIMELINE,
 	        ()=>{ },
 	        ()=>{ })
 	    }
@@ -135,8 +139,7 @@ var styles = StyleSheet.create({
 		alignSelf: 'center',
     color: '#FFFFFF',
 		fontSize: 18,
-		height:45,
-
+		height:35,
 	},
 
   shareText: {

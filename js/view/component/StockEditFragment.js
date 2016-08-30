@@ -5,7 +5,7 @@ import {requireNativeComponent} from 'react-native';
 
 var StockEditFragment = React.createClass ({
 	propTypes: {
-		data: React.PropTypes.string,
+		onTapEditAlert: React.PropTypes.func,
 	},
 
 	getDefaultProps(): Object {
@@ -13,8 +13,15 @@ var StockEditFragment = React.createClass ({
 		};
 	},
 
+	onTapAlertButton: function(event) {
+		if (!this.props.onTapEditAlert) {
+			return;
+		}
+		this.props.onTapEditAlert(event.nativeEvent.data);
+	},
+
 	render() {
-		return <StockEditFragmentNative {...this.props}/>;
+		return <StockEditFragmentNative {...this.props} onTapAlertButton={this.onTapAlertButton}/>;
 	}
 });
 

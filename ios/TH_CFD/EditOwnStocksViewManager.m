@@ -33,5 +33,16 @@ RCT_EXPORT_MODULE(StockEditFragment);
 #pragma mark EditOwnStocksViewControllerDelegate
 - (void) onClickEditAlert:(EditOwnStocksViewController *)sender alertData:(id)alertData
 {
+	[self.bridge.eventDispatcher sendInputEventWithName:@"TapAlertButton"
+												   body:@{
+														  @"target": _editOwnStocksView.reactTag,
+														  @"data": @{},
+														  }];
+}
+
+- (NSArray<NSString *> *)customBubblingEventTypes {
+	return @[
+			 @"TapAlertButton",
+			 ];
 }
 @end

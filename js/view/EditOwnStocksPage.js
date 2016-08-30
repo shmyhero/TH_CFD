@@ -27,6 +27,13 @@ var EditOwnStocksPage = React.createClass({
 		this.props.navigator.pop()
 	},
 
+	gotoEditAlertPage: function(alertData) {
+		//todo
+		this.props.navigator.push({
+			name: MainPage.ABOUT_US_ROUTE,
+		})
+	},
+
 	render: function() {
 		return (
 			<View style={styles.wrapper}>
@@ -34,7 +41,7 @@ var EditOwnStocksPage = React.createClass({
 					leftTextOnClick={this.pressBackButton}
 					textOnLeft='完成'
 					navigator={this.props.navigator}/>
-				<StockEditFragment style={{flex: 1}} />
+				<StockEditFragment style={{flex: 1}} onTapEditAlert={this.gotoEditAlertPage}/>
 			</View>
 		);
 	},
@@ -43,6 +50,7 @@ var EditOwnStocksPage = React.createClass({
 var styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
+		width: width,
    		alignItems: 'stretch',
     	justifyContent: 'space-around',
 		backgroundColor: ColorConstants.BACKGROUND_GREY,

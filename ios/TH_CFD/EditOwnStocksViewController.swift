@@ -128,7 +128,7 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		}
 		
 		cell.pushAlert { (selectStock) in
-			//todo
+			self.delegate?.onClickEditAlert(self, alertData: selectStock)
 		}
 		
 		return cell

@@ -267,6 +267,9 @@ var MainPage = React.createClass({
 										 showTabbar={showTabbar}
 										 title={route.title} navigator={navigationOperations}
 										 showShareButton={route.showShareButton}
+										 shareID={route.shareID}
+										 shareTitle={route.shareTitle}
+										 shareDescription={route.shareDescription}
 										 shareFunction={this._doShare}/>
 			)
 		} else if (route.name === QA_ROUTE) {

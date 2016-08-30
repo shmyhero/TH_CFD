@@ -15,17 +15,18 @@ var SHARE_PAGE = 'SharePage'
 var SharePage = require('./SharePage')
 var NavBar = require('./NavBar')
 var WebViewBridge = require('react-native-webview-bridge');
+var NetConstants = require('../NetConstants')
 
 //Cannot find a soluWebViewBridge
 const injectScript = `
 (function () {
 	if (WebViewBridge) {
 	  WebViewBridge.onMessage = function (message) {
-	    if (message === "get-share-info") {
+			if (message === "get-share-info") {
 				shareinfo();
 				//WebViewBridge.send('{"webpageUrl":"1", "imageUrl":"2", "title":"3", "description":"4"}');
-	    }
-	  };
+    	}
+		}
 	}
 }());
 `;
@@ -33,7 +34,9 @@ const injectScript = `
 var WebViewPage = React.createClass({
 	propTypes: {
 		url: React.PropTypes.string,
-		showShareButton: React.PropTypes.bool,
+		shareID: React.PropTypes.string,
+		shareTitle: React.PropTypes.string,
+		shareDescription: React.PropTypes.string,
 		showTabbar: React.PropTypes.func,
 		shareFunction: React.PropTypes.func,
 	},
@@ -41,7 +44,9 @@ var WebViewPage = React.createClass({
 	getDefaultProps() {
 		return {
 			url: 'http://www.baidu.com',
-			showShareButton: false,
+			shareID: null,
+			shareTitle: null,
+			shareDescription: null,
 			showTabbar: ()=>{},
 			shareFunction: ()=>{},
 		}
@@ -83,19 +88,22 @@ var WebViewPage = React.createClass({
 	},
 
 	pressShareButton: function(){
-		//Need to get title, img url, description...
-		this.refs[WEBVIEW_REF].sendToBridge("get-share-info");
-		/*var data = {
-			webpageUrl:'http://google.com',
-			imageUrl:'https://www.google.co.kr/images/nav_logo242_hr.png',
-			title:'sadfsdafa',
-			description:'314342423'}
+		//Have some issue on Android...
+		//this.refs[WEBVIEW_REF].sendToBridge("get-share-info");
+		var url = NetConstants.SHARE_URL;
+		url = url.replace('<id>', this.props.shareID);
+
+		var data = {
+			webpageUrl: url,
+			imageUrl: 'ic_launcher.png',
+			title: this.props.shareTitle,
+			description: this.props.shareDescription,
+		}
 		this.props.shareFunction(data);
-		*/
 	},
 
+	//Do not use the bridge for now since the bridge (0.20.3) currently does not support Android...
 	onBridgeMessage: function(message){
-		alert(message)
 		var data = JSON.parse(message)
 		this.props.shareFunction(data);
 	},
@@ -115,7 +123,6 @@ var WebViewPage = React.createClass({
 					onBridgeMessage={this.onBridgeMessage}
 					injectedJavaScript={injectScript}
 				 	/>
-	//				source={{uri: this.props.url}}
 			)
 		}
 		else {
@@ -128,7 +135,7 @@ var WebViewPage = React.createClass({
 	},
 
 	renderNavBar: function() {
-		if(this.props.showShareButton){
+		if(this.props.shareID && (this.props.shareTitle || this.props.hareDescription)){
 			return(
 			<NavBar title={this.props.title}
 				showBackButton={true}

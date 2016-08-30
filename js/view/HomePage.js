@@ -182,7 +182,7 @@ var HomePage = React.createClass({
 			})
 	},
 
-	gotoWebviewPage: function(targetUrl, title) {
+	gotoWebviewPage: function(targetUrl, title, shareID, shareTitle, shareDescription) {
 		var userData = LogicData.getUserData()
 		var userId = userData.userId
 		if (userId == undefined) {
@@ -198,7 +198,9 @@ var HomePage = React.createClass({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			url: targetUrl,
 			title: title,
-			showShareButton: true,
+			shareID: shareID,
+			shareTitle: shareTitle,
+			shareDescription: shareDescription,
 		});
 	},
 
@@ -359,10 +361,21 @@ var HomePage = React.createClass({
 	},
 
 	renderBannar: function(i) {
+		var title, description;
+		if(PAGES[i].title){
+			title = PAGES[i].title;
+		}
+		if(PAGES[i].description){
+			description = PAGES[i].description;
+		}
+
 		return(
 			<TouchableOpacity
 				activeOpacity = {1.0}
-				onPress={() =>this.gotoWebviewPage(PAGES[i].url, '推荐')} key={i}>
+				onPress={() =>this.gotoWebviewPage('http://cn.tradehero.mobi/TH_CFD_WEBTEST/detailslider.php?id=25',
+					'推荐',
+					title,
+					description)} key={i}>
 				<Image
 					style={[styles.image, {height: imageHeight, width: width}]}
 					source={{uri: 'file://' + PAGES[i].imgUrl}}/>
@@ -374,7 +387,7 @@ var HomePage = React.createClass({
 		var header = news.header
 		var url = NetConstants.WEBVIEW_TOP_NEWS_PAGE+news.id
 		return(
-			<TouchableOpacity style={styles.newsContainer} onPress={() =>this.gotoWebviewPage(url, '每日头条')}>
+			<TouchableOpacity style={styles.newsContainer} onPress={() =>this.gotoWebviewPage(url, '每日头条', false)}>
 				<View style={styles.bluePoint}/>
 				<Text style={styles.newsText}
 					ellipsizeMode={true}
@@ -435,9 +448,18 @@ var HomePage = React.createClass({
 					this.renderBannar(i)
 				);
 			} else {
+				var title, description;
+				if(PAGES[i].title){
+					title = PAGES[i].title;
+				}
+				if(PAGES[i].description){
+					description = PAGES[i].description;
+				}
+
 				slides.push (
 					<TouchableOpacity
-						onPress={() => this.gotoWebviewPage(PAGES[i].imgUrl, '推荐')} key={i}>
+						onPress={() => this.gotoWebviewPage('http://cn.tradehero.mobi/TH_CFD_WEBTEST/detailslider.php?id=25', '推荐',
+						title, description)} key={i}>
 						<Image
 							style={[styles.image, {height: imageHeight, width: width}]}
 							source={BANNERS[i % 2]}/>

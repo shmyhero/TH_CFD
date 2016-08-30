@@ -43,6 +43,7 @@ export const WEBVIEW_RECOMMAND_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/details
 export const WEBVIEW_TOP_NEWS_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/FocusSlider.php?id='
 export const WEBVIEW_QA_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/wenda<version>.html'
 export const WEBVIEW_URL_ABOUT_US = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/about.html'
+export const SHARE_URL = TRADEHERO_SERVER_IP + '/TH_CFD_WEBTEST/detailShare.php?id=<id>'
 
 export const PARAMETER_PHONE = 'phone'
 export const PARAMETER_VERFICATION_CODE = 'verifyCode'

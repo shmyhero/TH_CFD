@@ -73,7 +73,7 @@ var SharePage = React.createClass({
           animationType={"slide"}
           transparent={true}
           visible={this.state.modalVisible}
-          onRequestClose={() => {alert("Modal has been closed.")}}
+          onRequestClose={() => {this._setModalVisible(!this.state.modalVisible)}}
 					style={{height: height, width: width}}
           >
           <TouchableOpacity style={{flex:1, width: width}}
@@ -105,24 +105,19 @@ var SharePage = React.createClass({
   shareToWeChat: function(type){
 	  if(this.data){
 	    if(type == "session"){
-	      WechatModule.wechatShare(this.data, WechatModule.WECHAT_SESSION,
-	        ()=>{
-	          hide();
-	        },
-	        ()=>{
-	          //Ignore error
-	          hide();
-	        })
+	      WechatModule.wechatShare(this.data.title,
+							this.data.description,
+							this.data.webpageUrl,
+							this.data.imageUrl,
+							WechatModule.WECHAT_SESSION,
+	        ()=>{ },
+	        ()=>{ })
 	    }else{
 	      WechatModule.wechatShare(this.data, WechatModule.WECHAT_TIMELINE,
-	        ()=>{
-	          hide();
-	        },
-	        ()=>{
-	          //Ignore error
-	          hide();
-	        })
+	        ()=>{ },
+	        ()=>{ })
 	    }
+		  this.hide();
 		}
   },
 });

@@ -106,22 +106,42 @@ export const WECHAT_SESSION = 'session'
 export const WECHAT_TIMELINE = 'timeline'
 
 //type must be one of {"session", "timeline"}
-export function wechatShare(data, type, successCallback, errorCallback) {
+export function wechatShare(title,
+			description,
+			webpageUrl,
+			imageUrl,
+			type,
+			successCallback,
+			errorCallback) {
+	var data = {
+		type: 'news',
+		title : title,
+		description : description,
+		webpageUrl : webpageUrl,
+		imageUrl: imageUrl,
+	}
 
-	MainPage.showProgress && MainPage.showProgress()
 	WechatAPI.isWXAppInstalled()
 	.then((installed) => {
 		if (installed) {
 			var promise;
 			if(type == WECHAT_SESSION){
-				promise = WechatAPI.shareToTimeline(data)
+				WechatAPI.shareToSession(data)
+				.then((response) => {
+					alert("1")
+					console.log("wechatShareToSession success")
+					successCallback();
+				})
+				.catch((e) => {
+					MainPage.hideProgress && MainPage.hideProgress()
+					console.log('wechat shareTo error catches: ' + e)
+					errorCallback(e.message);
+				})
+				.done();
 			}else if(type == WECHAT_TIMELINE){
 				promise	= WechatAPI.shareToTimeline(data)
-			}
-
-			if(promise){
-				promise.then((response) => {
-					MainPage.hideProgress && MainPage.hideProgress()
+				.then((response) => {
+					alert("1")
 					console.log("wechatShareToSession success")
 					successCallback();
 				})
@@ -132,8 +152,6 @@ export function wechatShare(data, type, successCallback, errorCallback) {
 					errorCallback(e.message);
 				})
 				.done();
-			}else{
-				MainPage.hideProgress && MainPage.hideProgress()
 			}
 		}
 	})

@@ -230,7 +230,7 @@ var StockOpenPositionPage = React.createClass({
 				newExtendHeight = extendHeight
 			}
 			var rowID = this.state.selectedRow
-			var maxY = (height-114)*20/21 - newExtendHeight
+			var maxY = (height-114-UIConstants.LIST_HEADER_BAR_HEIGHT)*20/21 - newExtendHeight
 			var currentY = rowHeight*(parseInt(rowID)+1)
 			if (currentY > maxY) {
 				this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
@@ -592,6 +592,22 @@ var StockOpenPositionPage = React.createClass({
 		var lastPrice = rowData.isLong ? rowData.security.bid : rowData.security.ask
 		// console.log(rowData.security.bid, rowData.security.ask)
 		return lastPrice === undefined ? rowData.security.last : lastPrice
+	},
+
+	renderHeaderBar: function() {
+			return (
+				<View style={styles.headerBar}>
+					<View style={[styles.rowLeftPart, {	paddingTop: 5,}]}>
+						<Text style={styles.headerTextLeft}>产品</Text>
+					</View>
+					<View style={[styles.rowCenterPart, {	paddingRight: 5,}]}>
+						<Text style={[styles.headerTextLeft, {	paddingRight: 5,}]}>亏盈</Text>
+					</View>
+					<View style={styles.rowRightPart}>
+						<Text style={styles.headerTextLeft}>收益率</Text>
+					</View>
+				</View>
+			);
 	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
@@ -1114,6 +1130,7 @@ var StockOpenPositionPage = React.createClass({
 			{width: width, flex: 1}
 		return (
 			<View style={viewStyle}>
+				{this.renderHeaderBar()}
 				{this.renderLoadingText()}
 				<ListView
 					style={styles.list}
@@ -1407,6 +1424,33 @@ var styles = StyleSheet.create({
 	loadingText: {
 		fontSize: 13,
 		color: '#9f9f9f'
+	},
+
+	headerBar: {
+		flexDirection: 'row',
+		backgroundColor: '#d9e6f3',
+		height: UIConstants.LIST_HEADER_BAR_HEIGHT,
+		paddingLeft: 15,
+		paddingRight: 15,
+		paddingTop:2,
+	},
+	headerCell: {
+		flexDirection: 'row',
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		// borderWidth: 1,
+	},
+	headerText: {
+		fontSize: 14,
+		textAlign: 'center',
+		color:'#576b95',
+	},
+
+	headerTextLeft: {
+		fontSize: 14,
+		textAlign: 'left',
+		color:'#576b95',
 	},
 });
 

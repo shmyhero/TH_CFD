@@ -138,23 +138,6 @@ var MePushConfigPage = React.createClass({
 		}
 	},
 
-	doScrollAnimation: function() {
-		if (Platform.OS === 'ios') {
-			var newExtendHeight = this.currentExtendHeight(this.state.selectedSubItem)
-			if (newExtendHeight < extendHeight) {
-				newExtendHeight = extendHeight
-			}
-			var rowID = this.state.selectedRow
-			var maxY = (height-114)*20/21 - newExtendHeight
-			var currentY = rowHeight*(parseInt(rowID)+1)
-			if (currentY > maxY) {
-				this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
-			}
-			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-			extendHeight = newExtendHeight
-		}
-	},
-
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
 		var marginLeft = 0
 		//if (rowID > 1 && rowID < 3){

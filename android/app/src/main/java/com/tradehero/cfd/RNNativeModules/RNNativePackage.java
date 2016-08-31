@@ -6,6 +6,7 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.tradehero.cfd.views.ReactLineChartManager;
+import com.tradehero.cfd.views.ReactStockEditFragmentNativeManager;
 import com.zyu.ReactWheelCurvedPickerManager;
 
 import java.util.Arrays;
@@ -33,7 +34,8 @@ public class RNNativePackage implements ReactPackage {
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
                 new ReactLineChartManager(),
-                new NativeWebViewModule()
+                new NativeWebViewModule(),
+                new ReactStockEditFragmentNativeManager()
         );
     }
 }

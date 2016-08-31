@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/rlTop"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:padding="10dp"
@@ -55,7 +56,7 @@
             android:id="@+id/notificationSwitch"
             android:layout_toLeftOf="@id/pushToTop"
             android:layout_width="50dp"
-            android:layout_marginRight="50dp"
+            android:layout_marginRight="20dp"
             android:layout_height="match_parent"
             android:gravity="center">
 
@@ -71,7 +72,7 @@
             android:id="@+id/pushToTop"
             android:layout_toLeftOf="@id/drag_handle"
             android:layout_width="50dp"
-            android:layout_marginRight="40dp"
+            android:layout_marginRight="20dp"
             android:layout_height="match_parent"
             android:gravity="center">
 
@@ -86,31 +87,11 @@
 
     </RelativeLayout>
 
-    <com.mobeta.android.dslv.DragSortListView
-        xmlns:dslv="http://schemas.android.com/apk/res/com.tradehero.cfd"
-        android:id="@+id/stockList"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="3dp"
-        android:choiceMode="multipleChoice"
-        android:dividerHeight="1px"
-        android:padding="3dp"
-        dslv:click_remove_id="@id/click_remove"
-        dslv:collapsed_height="1px"
-        dslv:drag_enabled="true"
-        dslv:drag_handle_id="@id/drag_handle"
-        dslv:drag_scroll_start="0.33"
-        dslv:drag_start_mode="onDown"
-        dslv:float_alpha="0.6"
-        dslv:float_background_color="#ffffff"
-        dslv:remove_enabled="true"
-        dslv:remove_mode="clickRemove"
-        dslv:slide_shuffle_speed="0.3" />
-
     <LinearLayout
+        android:id="@+id/rlBottom"
         android:layout_width="match_parent"
         android:background="#efefef"
+        android:layout_alignParentBottom="true"
         android:layout_height="60dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
@@ -143,4 +124,29 @@
 
     </LinearLayout>
 
-</LinearLayout>
+    <com.mobeta.android.dslv.DragSortListView
+        xmlns:dslv="http://schemas.android.com/apk/res/com.tradehero.cfd"
+        android:id="@+id/stockList"
+        android:layout_below="@id/rlTop"
+        android:layout_above="@id/rlBottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="3dp"
+        android:choiceMode="multipleChoice"
+        android:dividerHeight="1px"
+        android:padding="3dp"
+        dslv:click_remove_id="@id/click_remove"
+        dslv:collapsed_height="1px"
+        dslv:drag_enabled="true"
+        dslv:drag_handle_id="@id/drag_handle"
+        dslv:drag_scroll_start="0.33"
+        dslv:drag_start_mode="onDown"
+        dslv:float_alpha="0.6"
+        dslv:float_background_color="#ffffff"
+        dslv:remove_enabled="true"
+        dslv:remove_mode="clickRemove"
+        dslv:slide_shuffle_speed="0.3" />
+
+
+
+</RelativeLayout>

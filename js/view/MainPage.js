@@ -148,6 +148,7 @@ var MainPage = React.createClass({
 	},
 
 	RouteMapper : function(route, navigationOperations, onComponentRef) {
+		console.log("Current Router ===>  " + route.name);
 		_navigator = navigationOperations;
 		if (route.showTabbar !== undefined) {
 			showTabbar = route.showTabbar

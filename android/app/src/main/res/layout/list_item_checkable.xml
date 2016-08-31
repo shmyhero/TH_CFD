@@ -52,7 +52,7 @@
         android:id="@+id/notificationSwitch"
         android:layout_toLeftOf="@+id/pushToTop"
         android:layout_width="50dp"
-        android:layout_marginRight="40dp"
+        android:layout_marginRight="20dp"
         android:layout_height="match_parent"
         android:gravity="center">
 
@@ -68,7 +68,7 @@
         android:id="@+id/pushToTop"
         android:layout_toLeftOf="@id/drag_handle"
         android:layout_width="50dp"
-        android:layout_marginRight="40dp"
+        android:layout_marginRight="20dp"
         android:layout_height="match_parent"
         android:gravity="center">
 

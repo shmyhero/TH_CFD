@@ -25,7 +25,7 @@ var LogicData = {
 	setMeData: function(data){
 		meData = data;
 	},
-	
+
 	getMeData: function(){
 		return meData;
 	},

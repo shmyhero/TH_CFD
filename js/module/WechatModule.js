@@ -113,6 +113,7 @@ export function wechatShare(title,
 			type,
 			successCallback,
 			errorCallback) {
+
 	var data = {
 		type: 'news',
 		title : title,
@@ -124,35 +125,42 @@ export function wechatShare(title,
 	WechatAPI.isWXAppInstalled()
 	.then((installed) => {
 		if (installed) {
-			var promise;
 			if(type == WECHAT_SESSION){
 				WechatAPI.shareToSession(data)
 				.then((response) => {
 					console.log("wechatShareToSession success")
-					successCallback();
+					if(successCallback){
+						successCallback();
+					}
 				})
 				.catch((e) => {
-					MainPage.hideProgress && MainPage.hideProgress()
 					console.log('wechat shareTo error catches: ' + e)
-					errorCallback(e.message);
+					if(errorCallback){
+						errorCallback(e.message);
+					}
 				})
 				.done();
 			}else if(type == WECHAT_TIMELINE){
-				promise	= WechatAPI.shareToTimeline(data)
+				WechatAPI.shareToTimeline(data)
 				.then((response) => {
 					console.log("wechatShareToSession success")
-					successCallback();
+					if(successCallback){
+						successCallback();
+					}
 				})
 				.catch((e) => {
-					MainPage.hideProgress && MainPage.hideProgress()
 					console.log('wechat shareTo error catches: ' + e)
-					errorCallback(e.message);
+					if(errorCallback){
+						errorCallback(e.message);
+					}
 				})
 				.done();
 			}
 		}
 	})
 	.catch((e) => {
-		errorCallback(e.message);
+		if(errorCallback){
+			errorCallback(e.message);
+		}
 	})
 }

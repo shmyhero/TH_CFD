@@ -77,6 +77,7 @@ var HomePage = React.createClass({
 				method: 'GET',
 			},
 			(responseJson) => {
+				console.log(JSON.stringify(responseJson))
 				this.downloadBannerImages(responseJson)
 				StorageModule.setBanners(JSON.stringify(responseJson))
 			},
@@ -151,15 +152,20 @@ var HomePage = React.createClass({
 		if (targetUrl == '') {
 			targetUrl = RECOMMAND_URL + images[index].id
 		}
-
+		var header = images[index].header
+		var digest = images[index].digest
+		var id = images[index].id
 		FSModule.getBannerImageLocalPath(imagePath)
 			.then(filePath => {
 				if (filePath !== null) {
 					while(PAGES.length <= index) {
 						PAGES.push({name: 'PAGE' + PAGES.length})
 					}
+					PAGES[index].id = id
 					PAGES[index].imgUrl = filePath
 					PAGES[index].url = targetUrl
+					PAGES[index].header = header
+					PAGES[index].digest = digest
 					this.setState({
 						dataSource: ds.cloneWithRows(PAGES)
 					})
@@ -170,8 +176,11 @@ var HomePage = React.createClass({
 							while(PAGES.length <= index) {
 								PAGES.push({name: 'PAGE' + PAGES.length})
 							}
+							PAGES[index].id = id
 							PAGES[index].imgUrl = filePath
 							PAGES[index].url = targetUrl
+							PAGES[index].header = header
+							PAGES[index].digest = digest
 							this.setState({
 								dataSource: ds.cloneWithRows(PAGES)
 							})
@@ -188,7 +197,6 @@ var HomePage = React.createClass({
 		if (userId == undefined) {
 			userId = 0
 		}
-
 		if (targetUrl.indexOf('?') !== -1) {
 			targetUrl = targetUrl + '&userId=' + userId
 		} else {
@@ -361,21 +369,14 @@ var HomePage = React.createClass({
 	},
 
 	renderBannar: function(i) {
-		var title, description;
-		if(PAGES[i].title){
-			title = PAGES[i].title;
-		}
-		if(PAGES[i].description){
-			description = PAGES[i].description;
-		}
-
 		return(
 			<TouchableOpacity
 				activeOpacity = {1.0}
 				onPress={() =>this.gotoWebviewPage(PAGES[i].url,
 					'推荐',
-					title,
-					description)} key={i}>
+					PAGES[i].id,
+					PAGES[i].header,
+					PAGES[i].digest)} key={i}>
 				<Image
 					style={[styles.image, {height: imageHeight, width: width}]}
 					source={{uri: 'file://' + PAGES[i].imgUrl}}/>
@@ -448,18 +449,12 @@ var HomePage = React.createClass({
 					this.renderBannar(i)
 				);
 			} else {
-				var title, description;
-				if(PAGES[i].title){
-					title = PAGES[i].title;
-				}
-				if(PAGES[i].description){
-					description = PAGES[i].description;
-				}
-
 				slides.push (
 					<TouchableOpacity
 						onPress={() => this.gotoWebviewPage(PAGES[i].url, '推荐',
-						title, description)} key={i}>
+						PAGES[i].id,
+						PAGES[i].header,
+						PAGES[i].digest)} key={i}>
 						<Image
 							style={[styles.image, {height: imageHeight, width: width}]}
 							source={BANNERS[i % 2]}/>

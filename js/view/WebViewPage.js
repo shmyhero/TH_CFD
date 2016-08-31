@@ -34,7 +34,7 @@ const injectScript = `
 var WebViewPage = React.createClass({
 	propTypes: {
 		url: React.PropTypes.string,
-		shareID: React.PropTypes.string,
+		shareID: React.PropTypes.number,
 		shareTitle: React.PropTypes.string,
 		shareDescription: React.PropTypes.string,
 		showTabbar: React.PropTypes.func,
@@ -95,7 +95,7 @@ var WebViewPage = React.createClass({
 
 		var data = {
 			webpageUrl: url,
-			imageUrl: 'ic_launcher.png',
+			imageUrl: NetConstants.SHARE_LOGO_URL,
 			title: this.props.shareTitle,
 			description: this.props.shareDescription,
 		}
@@ -110,8 +110,10 @@ var WebViewPage = React.createClass({
 
 	renderWebView: function(){
 		if(this.state.isNetConnected) {
+
+			//onBridgeMessage={this.onBridgeMessage}
 			return (
-				<WebViewBridge
+				<WebView
 					ref={WEBVIEW_REF}
 					style={styles.webView}
 					javaScriptEnabled={true}
@@ -120,7 +122,6 @@ var WebViewPage = React.createClass({
 					automaticallyAdjustContentInsets={true}
 					decelerationRate="normal"
 					source={{uri: this.props.url}}
-					onBridgeMessage={this.onBridgeMessage}
 					injectedJavaScript={injectScript}
 				 	/>
 			)

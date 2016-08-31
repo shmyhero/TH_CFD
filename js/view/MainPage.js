@@ -513,6 +513,7 @@ var MainPage = React.createClass({
 
 	_handleDeepLink: function(url) {
 		console.log('handleDeeplink: ' + url)
+
 		if(url.startsWith('cfd://page/share')) {
 			var json = this.getJsonFromUrl(url)
 			this.refs[SHARE_PAGE].showWithData(json);
@@ -555,7 +556,8 @@ var MainPage = React.createClass({
 
 	getJsonFromUrl: function(url) {
 	  var result = {};
-	  url.split("&").forEach(function(part) {
+
+	  url.slice(url.indexOf("?")+1).split("&").forEach(function(part) {
 	    var item = part.split("=");
 	    result[item[0]] = decodeURIComponent(item[1]);
 	  });

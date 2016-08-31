@@ -44,7 +44,7 @@ export const WEBVIEW_TOP_NEWS_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/FocusSli
 export const WEBVIEW_QA_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/wenda<version>.html'
 export const WEBVIEW_URL_ABOUT_US = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/about.html'
 export const SHARE_URL = TRADEHERO_SERVER_IP + '/TH_CFD_WEBTEST/detailShare.php?id=<id>'
-
+export const SHARE_LOGO_URL = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/images/ShareLogo.png'
 export const PARAMETER_PHONE = 'phone'
 export const PARAMETER_VERFICATION_CODE = 'verifyCode'
 export const PARAMETER_NICKNAME = 'nickname'

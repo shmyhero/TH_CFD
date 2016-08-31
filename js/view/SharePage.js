@@ -17,7 +17,7 @@ import {
 var WechatModule = require('../module/WechatModule')
 
 var {height, width} = Dimensions.get('window')
-
+var SHARE_CONTAINER_HEIGHT = 150;
 var SharePage = React.createClass({
   propTypes: {
     title: React.PropTypes.string,
@@ -39,6 +39,7 @@ var SharePage = React.createClass({
       animationType: 'none',
       modalVisible: false,
       transparent: false,
+			fadeAnim: new Animated.Value(0),
 		};
 	},
 
@@ -47,10 +48,30 @@ var SharePage = React.createClass({
   showWithData: function(data) {
 		this.data = data;
     this._setModalVisible(true);
+		Animated.timing(       // Uses easing functions
+			this.state.fadeAnim, // The value to drive
+			{
+				toValue: 1,        // Target
+				duration: 200,    // Configuration
+			},
+		).start();
   },
 
   hide: function(){
-    this._setModalVisible(false);
+		var callbackId = this.state.fadeAnim.addListener(function(){
+			if(this.state.fadeAnim._value == 0){
+				this.state.fadeAnim.removeListener(callbackId)
+				this._setModalVisible(false);
+			}
+		}.bind(this))
+		Animated.timing(       // Uses easing functions
+			this.state.fadeAnim, // The value to drive
+			{
+				toValue: 0,        // Target
+				duration: 200,    // Configuration
+			},
+		).start();
+
   },
 
   _setModalVisible: function(visible) {
@@ -66,10 +87,11 @@ var SharePage = React.createClass({
   },
 
   render: function() {
-
+		//BUGBUG: The status bar cannot be hidden beforn RN 0.27...
+		//So make the animation in our code until we update RN.
     return (
         <Modal
-					animated={true}
+					animated={false}
           animationType={"slide"}
           transparent={true}
           visible={this.state.modalVisible}
@@ -78,11 +100,12 @@ var SharePage = React.createClass({
           >
           <TouchableOpacity style={{flex:1, width: width}}
 						onPress={() => {
-	            this._setModalVisible(!this.state.modalVisible)
+		          this.hide();
 	          }}>
 						<View style={{flex:1, width: width}}/>
 					</TouchableOpacity>
-          <View style={styles.shareContainer}>
+
+          <Animated.View style={[styles.shareContainer, {opacity: this.state.fadeAnim}]}>
             <Text style={styles.shareTitleText}>分享到</Text>
             <View style={styles.shareItemContainer}>
 	            <TouchableOpacity onPress={()=>{this.shareToWeChat("session")}}>
@@ -96,8 +119,7 @@ var SharePage = React.createClass({
 	              <Text style={styles.shareText}>朋友圈</Text>
 	            </TouchableOpacity>
             </View>
-
-          </View>
+          </Animated.View>
          </Modal>
     );
   },
@@ -132,7 +154,7 @@ var styles = StyleSheet.create({
     alignItems: 'stretch',
     padding: 20,
     backgroundColor: 'rgba(77,77,77,0.5)',
-    height: 150,
+    height: SHARE_CONTAINER_HEIGHT,
   },
 
 	shareTitleText: {

@@ -26,11 +26,12 @@ var EditAlertPage = React.createClass({
 		stockId:React.PropTypes.number,
 		stockInfo: React.PropTypes.object,
 		stockAlert: React.PropTypes.object,
+		onAlertSetComplete: React.PropTypes.func,
 	},
 
 	getDefaultProps() {
 		return {
-		
+
 		}
 	},
 
@@ -256,6 +257,7 @@ var EditAlertPage = React.createClass({
 				showLoading: true,
 			},
 			(responseJson) => {
+				this.props.onAlertSetComplete()
 				this.props.navigator.pop()
 			},
 			(errorMessage) => {

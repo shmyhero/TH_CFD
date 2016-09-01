@@ -43,6 +43,7 @@ var EditOwnStocksPage = React.createClass({
       		stockId: alertData,
 					stockInfo: stockInfo,
 					stockAlert: stockAlert,
+					onAlertSetComplete: this.onAlertSetComplete,
 		})
 	},
 
@@ -60,6 +61,10 @@ var EditOwnStocksPage = React.createClass({
 				<StockEditFragment style={{flex: 1}} isLogin = {!notLogin} onTapEditAlert={this.gotoEditAlertPage}/>
 			</View>
 		);
+	},
+
+	onAlertSetComplete: function() {
+		this.loadAlertList();
 	},
 
  	componentDidMount: function() {

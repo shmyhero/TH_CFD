@@ -419,7 +419,8 @@ var MainPage = React.createClass({
 				<EditAlertPage navigator={navigationOperations} showTabbar={showTabbar}
 				stockId={route.stockId}
 				stockInfo={route.stockInfo}
-				stockAlert={route.stockAlert}/>
+				stockAlert={route.stockAlert}
+				onAlertSetComplete={route.onAlertSetComplete}/>
 				)
 		}
 		else if(route.name === SHARE_ROUTE){

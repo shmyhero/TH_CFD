@@ -1,5 +1,7 @@
 package com.tradehero.cfd.module;
 
+import com.tradehero.cfd.views.ReactStockEditFragmentNative;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -36,6 +38,9 @@ public class LogicData {
         }else if(dataName.equals(MY_ALERT_LIST)){
             try {
                 mMyAlertList = new JSONArray(data);
+                if(ReactStockEditFragmentNative.instance !=null){
+                    ReactStockEditFragmentNative.instance.makeDataRefresh();
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

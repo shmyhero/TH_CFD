@@ -3,7 +3,6 @@ package com.tradehero.cfd.views;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -41,14 +40,14 @@ import java.util.List;
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
  */
-public class ReactStockEditFragmentNative extends RelativeLayout {
+public class ReactStockEditFragmentNative extends RelativeLayout{
 
     private Context mContext;
     EventDispatcher mEventDispatcher;
     private boolean isLogin = false;
+    public static ReactStockEditFragmentNative instance = null;
 
     public ReactStockEditFragmentNative(Context context) {
-
         this(context, null);
     }
 
@@ -57,6 +56,7 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
 
         this.mContext = context;
         LayoutInflater.from(context).inflate(R.layout.stock_edit_native_content, this, true);
+        instance = this;
     }
 
     public void refresh() {
@@ -206,6 +206,31 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
             selectAllPicked = false;
             selectAll.setText(R.string.select_all);
         }
+    }
+
+    public void makeDataRefresh(){
+        myAlertListArray = LogicData.getInstance().getMyAlertList();
+        if(stockInfo != null && myAlertListArray!=null){
+            for(int i = 0;i<stockInfo.size();i++){
+              for(int j = 0;j<myAlertListArray.length();j++){
+                  try{
+
+                      if(stockInfo.get(i).mId == myAlertListArray.getJSONObject(j).getInt("SecurityId")){
+                          JSONObject alertItem = myAlertListArray.getJSONObject(j);
+                          boolean isAlert = false;
+                          if(alertItem.getBoolean("HighEnabled") || alertItem.getBoolean("LowEnabled")){
+                              isAlert = true;
+                          }
+                        stockInfo.get(i).mIsAlert = isAlert;
+                      }
+                  }catch (Exception e){
+                      Log.e("makeDataRefresh  e ==> ",e.toString());
+                  }
+              }
+            }
+        }
+
+        refresh();
     }
 
 

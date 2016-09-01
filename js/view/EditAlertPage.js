@@ -8,6 +8,8 @@ import {
 	Text,
 	TextInput,
 	Switch,
+	UIManager,
+	Image,
 } from 'react-native';
 
 var MainPage = require('./MainPage')
@@ -20,6 +22,9 @@ var WebSocketModule = require('../module/WebSocketModule')
 var UIConstants = require('../UIConstants')
 var {height, width} = Dimensions.get('window')
 
+var UP_INPUT_REF = "upInput"
+var DOWN_INPUT_REF = "downInput"
+
 var EditAlertPage = React.createClass({
 
 	propTypes: {
@@ -30,7 +35,7 @@ var EditAlertPage = React.createClass({
 
 	getDefaultProps() {
 		return {
-		
+
 		}
 	},
 
@@ -49,10 +54,42 @@ var EditAlertPage = React.createClass({
 		};
 	},
 
+	upInputPosition: {},
+	downInputPosition: {},
+
 	componentDidMount: function(){
 		console.log("test data")
 		console.log(this.props.stockInfo)
 		console.log(this.props.stockAlert)
+
+		var currentX = 0;
+
+		//Bug fix. The measure function may fail if not wrapped with settimeout...
+		setTimeout(()=>{
+			this.refs[UP_INPUT_REF].measure((fx, fy, width, height, px, py) => {
+				this.upInputPosition = {
+					fx: fx,
+					fy: fy,
+					width: width,
+					height: height,
+					px: px,
+					py: py,
+				}
+			});
+
+			this.refs[DOWN_INPUT_REF].measure((fx, fy, width, height, px, py) => {
+				this.downInputPosition = {
+					fx: fx,
+					fy: fy,
+					width: width,
+					height: height,
+					px: px,
+					py: py,
+				}
+			})
+		}, 0);
+
+
 
 		if(this.props.stockAlert){
 			this.setState({
@@ -145,7 +182,7 @@ var EditAlertPage = React.createClass({
 
 
 	componentWillUnmount: function(){
-		WebSocketModule.cleanRegisteredCallbacks();
+		//WebSocketModule.cleanRegisteredCallbacks();
 	},
 
 	gotoNext: function() {
@@ -157,23 +194,36 @@ var EditAlertPage = React.createClass({
 	},
 
 	validateInputData: function(){
-		this.updatePrice(1, this.state.HighPrice)
-		this.updatePrice(2, this.state.LowPrice)
+		this.validatePrice(1, this.state.HighPrice)
+		this.validatePrice(2, this.state.LowPrice)
 	},
 
-	updatePrice: function(type, text){
+	validatePrice: function(type, text){
 		var value = parseFloat(text);
+		var error = null
 		if(type === 1){
-			//Up
+			//High
+			if(value < this.state.stockPriceAsk){
+				error = "低于当前价";
+			}
+			if(this.state.HighEnabled && !value){
+				error = "输入不能为空";
+			}
 			this.setState({
 				HighPrice: text,
-				upError: value < this.state.stockPriceAsk ? "低于当前价" : null
+				upError: error
 			});
 		}else{
-			//Down
+			//Low
+			if(value > this.state.stockPriceBid){
+				error = "高于当前价";
+			}
+			if(this.state.LowEnabled && !value){
+				error = "输入不能为空";
+			}
 			this.setState({
 				LowPrice: text,
-				downError: value > this.state.stockPriceBid ? "高于当前价" : null
+				downError: error
 			});
 		}
 	},
@@ -192,15 +242,17 @@ var EditAlertPage = React.createClass({
 		var textColor = "black";
 		var text = null;
 		var inputEnable = false;
+		var ref;
 		if(type === 1){
 			textColor = this.state.upError ? "red" : "black";
 			text = this.state.HighPrice ? this.state.HighPrice.toString() : null;
 			inputEnable = this.state.HighEnabled;
+			ref = UP_INPUT_REF;
 		}else{
 			textColor = this.state.downError ? "red" : "black";
 			text = this.state.LowPrice ? this.state.LowPrice.toString() : null;
 			inputEnable = this.state.LowEnabled;
-
+			ref = DOWN_INPUT_REF;
 		}
 
 		return(
@@ -209,7 +261,8 @@ var EditAlertPage = React.createClass({
 					{title}
 				</Text>
 				<TextInput style={[styles.cellInput, {color: textColor}]}
-				 					 onChangeText={(text) => this.updatePrice(type, text)}
+									 ref={ref}
+				 					 onChangeText={(text) => this.validatePrice(type, text)}
 									 value={text}
 									 editable={inputEnable}
 									 keyboardType='numeric'>
@@ -256,6 +309,10 @@ var EditAlertPage = React.createClass({
 				showLoading: true,
 			},
 			(responseJson) => {
+				//Only clean the callback when press ok...
+
+
+				WebSocketModule.cleanRegisteredCallbacks();
 				this.props.navigator.pop()
 			},
 			(errorMessage) => {
@@ -265,18 +322,45 @@ var EditAlertPage = React.createClass({
 	},
 
 	hasError: function(){
-		if(this.state.LowEnabled && !this.state.LowPrice){
-			return true;
-		}
-		if(this.state.HighEnabled && !this.state.HighPrice){
-			return true;
-		}
 		return this.state.upError || this.state.downError ? true : false;
+	},
+
+	renderErrorBubble: function(offsetX, offsetY, errorText){
+		return (
+			<View style={[styles.tooltip, {top: offsetY - 42, left: offsetX - 5}]}>
+				<Image
+					style={styles.bubbleImage}
+					source={require('../../images/error_bubble.png')}
+				/>
+				<Text style={styles.errorText}>
+					{errorText}
+				</Text>
+			</View>
+		)
+	},
+
+	//Silly way! But cannot find a better solution..
+	renderUpperErrorHint: function(){
+		if(this.state.upError){
+			if(this.upInputPosition){
+				return this.renderErrorBubble(this.upInputPosition.px, this.upInputPosition.py, this.state.upError)
+			}
+		}
+		return (<View/>)
+	},
+
+	renderDownErrorHint: function(){
+		if(this.state.downError){
+			if(this.upInputPosition){
+				return this.renderErrorBubble(this.downInputPosition.px, this.downInputPosition.py, this.state.downError)
+			}
+		}
+		return (<View/>)
 	},
 
 	render: function() {
 		return (
-			<View style={styles.wrapper}>
+			<View style={styles.wrapper} ref="root">
 				<NavBar title='提醒设置'
 					showBackButton={true}
 					textOnRight='完成'
@@ -299,6 +383,8 @@ var EditAlertPage = React.createClass({
 				<Text style={styles.bottomText}>
 					虽然全力以赴传递通知，却也不能保证。
 				</Text>
+				{this.renderUpperErrorHint()}
+				{this.renderDownErrorHint()}
 			</View>
 		);
 	},
@@ -357,6 +443,20 @@ var styles = StyleSheet.create({
 		marginLeft: 12,
 		fontSize: 12,
 		color: '#8d8d8d',
+	},
+	tooltip:{
+    position :'absolute',
+	},
+	bubbleImage:{
+		width: 118,
+		height: 42,
+	},
+	errorText:{
+		position: 'absolute',
+		top:10,
+		right: 12,
+		color: 'red',
+		backgroundColor: 'transparent'
 	}
 });
 

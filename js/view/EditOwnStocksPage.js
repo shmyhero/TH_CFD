@@ -19,6 +19,8 @@ var NetConstants = require('../NetConstants')
 var {height, width} = Dimensions.get('window')
 var didFocusSubscription = null;
 
+var stockAlertList = [];
+
 var EditOwnStocksPage = React.createClass({
 
 	gotoNext: function() {
@@ -32,11 +34,12 @@ var EditOwnStocksPage = React.createClass({
 	gotoEditAlertPage: function(alertData) {
 
     var stockInfo = LogicData.getStockFromOwnStockData(alertData);
-
+		var stockAlert = stockAlertList.find((alert)=>{return alert.SecurityId === alertData})
 		this.props.navigator.push({
 			name: MainPage.EDIT_ALERT_ROUTE,
       		stockId: alertData,
 					stockInfo: stockInfo,
+					stockAlert: stockAlert,
 		})
 	},
 
@@ -74,7 +77,7 @@ var EditOwnStocksPage = React.createClass({
 				 },
 			 },
 			 (responseJson) => {
-			 		console.log('load alert list success');
+				 	stockAlertList = responseJson;
 			 },
 			 (errorMessage) => {
 				 Alert.alert('', errorMessage);
@@ -83,7 +86,11 @@ var EditOwnStocksPage = React.createClass({
 		}
 	},
 
+
+
 });
+
+
 
 var styles = StyleSheet.create({
 	wrapper: {

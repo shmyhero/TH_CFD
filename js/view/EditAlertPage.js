@@ -20,6 +20,7 @@ var EditAlertPage = React.createClass({
 
 	propTypes: {
 		stockName: React.PropTypes.string,
+		stockId:React.PropTypes.number,
 		stockPrice: React.PropTypes.number,
 		stockPriceAsk: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
 		stockPriceBid: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
@@ -79,7 +80,7 @@ var EditAlertPage = React.createClass({
 					navigator={this.props.navigator}/>
 				<View style={styles.headerView}>
 					<Text style={styles.nameText}>
-						{this.props.stockName}
+						{this.props.stockId}
 					</Text>
 					<Text style={styles.priceText}>
 						当前买涨价格 {this.state.currentUp} 当前买跌价格 {this.state.currentDwon}

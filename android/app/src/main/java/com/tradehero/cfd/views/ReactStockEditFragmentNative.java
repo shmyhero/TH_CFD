@@ -161,7 +161,7 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
             for (int i = 0; i < myList.length(); i++) {
                 JSONObject oneItem = myList.getJSONObject(i);
 
-                StockInfo info = new StockInfo(oneItem.getString("name"), oneItem.getString("symbol"));
+                StockInfo info = new StockInfo(oneItem.getString("name"), oneItem.getString("symbol"),oneItem.getInt("id"));
                 result.add(info);
             }
         } catch (JSONException e) {
@@ -194,10 +194,12 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
         boolean mChecked;
         String mName;
         String mSymbol;
+        int mId;
 
-        public StockInfo(String name, String symbol) {
+        public StockInfo(String name, String symbol,int id) {
             mName = name;
             mSymbol = symbol;
+            mId = id;
             mChecked = false;
         }
     }
@@ -279,7 +281,7 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
 
         public void setAlert(StockInfo item) {
             mEventDispatcher.dispatchEvent(
-                    new TapAlertEvent(getId(), SystemClock.uptimeMillis(), item.mName));
+                    new TapAlertEvent(getId(), SystemClock.uptimeMillis(), item.mId));
         }
 
         public void insert(StockInfo item, int to) {
@@ -365,9 +367,9 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
 
         public static final String EVENT_NAME = "TapAlertEvent";
 
-        private final String mValue;
+        private final int mValue;//Stock id is int like 黄金 mValue is 34821
 
-        protected TapAlertEvent(int viewTag, long timestampMs, String value) {
+        protected TapAlertEvent(int viewTag, long timestampMs, int value) {
             super(viewTag, timestampMs);
             mValue = value;
         }
@@ -384,7 +386,7 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
 
         private WritableMap serializeEventData() {
             WritableMap eventData = Arguments.createMap();
-            eventData.putString("data", mValue);
+            eventData.putInt("data", mValue);
             return eventData;
         }
     }

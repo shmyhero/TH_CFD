@@ -1,5 +1,7 @@
 package com.tradehero.cfd.module;
 
+import com.tradehero.cfd.views.ReactStockEditFragmentNative;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -10,9 +12,11 @@ public class LogicData {
 
     public static final String MY_LIST = "myList";
     public static final String MY_LOGO = "myLogo";
+    public static final String MY_ALERT_LIST = "myAlertList";
 
     private static LogicData mInstance;
     private JSONArray mMyList;
+    private JSONArray mMyAlertList;
     private String myLogo;
 
 
@@ -31,6 +35,15 @@ public class LogicData {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }else if(dataName.equals(MY_ALERT_LIST)){
+            try {
+                mMyAlertList = new JSONArray(data);
+                if(ReactStockEditFragmentNative.instance !=null){
+                    ReactStockEditFragmentNative.instance.makeDataRefresh();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }else if(dataName.equals(MY_LOGO)){
             myLogo = data;
         }
@@ -42,6 +55,10 @@ public class LogicData {
 
     public String getMyLogo(){
         return myLogo;
+    }
+
+    public JSONArray getMyAlertList(){
+        return mMyAlertList;
     }
 
 }

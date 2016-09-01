@@ -9,10 +9,10 @@
 import UIKit
 
 @objc protocol EditOwnStocksViewControllerDelegate: class {
-	func onClickEditAlert(sender: EditOwnStocksViewController, alertData:AnyObject )
+	optional func onClickEditAlert(sender: EditOwnStocksViewController, alertData:AnyObject )
 }
 
-class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, StockAlertDataDelegate{
 	
 	@IBOutlet weak var editTableView: UITableView!
 	@IBOutlet weak var allButton: UIButton!
@@ -22,7 +22,7 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 	@IBOutlet weak var topLabelTrailConstraint: NSLayoutConstraint!
 	weak var delegate:EditOwnStocksViewControllerDelegate?
 	
-	var showAlert:Bool = true
+	var showAlert:Bool = false
 	var allSelect:Bool = false
 	
 	var rawData:[StockData] = []
@@ -33,6 +33,7 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		editTableView.editing = true
 		// remove empty lines
 		editTableView.tableFooterView = UIView()
+		StockDataManager.sharedInstance().alertDelegate = self;
 	}
 	
 	override func viewDidAppear(animated: Bool) {
@@ -135,11 +136,16 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		}
 		
 		cell.pushAlert { (selectStock) in
-			self.delegate?.onClickEditAlert(self, alertData: selectStock.stockId)
+			self.delegate?.onClickEditAlert!(self, alertData: selectStock.stockId)
 		}
 		
 		cell.alertButton.hidden = !showAlert
 		cell.topButtonTrailConstraint.constant = showAlert ? 40:10
+		
+		if showAlert {
+			let hasAlert = StockDataManager.sharedInstance().alertEnabled(stock.stockId)
+			cell.setAlert(hasAlert)
+		}
 		
 		return cell
 	}
@@ -212,6 +218,13 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		let delegate:AppDelegate! = UIApplication.sharedApplication().delegate as! AppDelegate
 		delegate!.nativeData!.sendDataToRN("myList", data: dataString)
 		delegate!.rnRootViewController.dismissViewControllerAnimated(true, completion: { () -> Void in
+		})
+	}
+	
+	// MARK: - StockAlertDataDelegate
+	func didUpdateAlertData(sender: StockDataManager) {
+		dispatch_async(dispatch_get_main_queue(), {
+			self.editTableView.reloadData()
 		})
 	}
 }

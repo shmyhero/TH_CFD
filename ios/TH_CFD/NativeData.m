@@ -32,6 +32,9 @@ RCT_EXPORT_MODULE();
 	if([dataName isEqualToString:@"myList"]) {
 		[manager loadOwnStocksData:jsonData];
 	}
+	else if([dataName isEqualToString:@"myAlertList"]) {
+		[manager loadOwnAlertData:jsonData];
+	}
 }
 
 - (void)receiveRawDataFromRN:(NSString *)dataName data:(id)data

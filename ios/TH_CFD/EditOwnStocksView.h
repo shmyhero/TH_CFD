@@ -12,5 +12,6 @@
 @interface EditOwnStocksView : UIView
 
 @property (nonatomic, assign) EditOwnStocksViewManager *manager;
+@property (nonatomic, assign) BOOL isLogin;
 
 @end

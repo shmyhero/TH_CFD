@@ -15,6 +15,7 @@ var StockEditFragment = require('./component/StockEditFragment');
 var LogicData = require('../LogicData')
 var NetworkModule = require('../module/NetworkModule')
 var NetConstants = require('../NetConstants')
+var NativeDataModule = require('../module/NativeDataModule')
 
 var {height, width} = Dimensions.get('window')
 var didFocusSubscription = null;
@@ -35,11 +36,14 @@ var EditOwnStocksPage = React.createClass({
 
     var stockInfo = LogicData.getStockFromOwnStockData(alertData);
 		var stockAlert = stockAlertList.find((alert)=>{return alert.SecurityId === alertData})
+
+
 		this.props.navigator.push({
 			name: MainPage.EDIT_ALERT_ROUTE,
       		stockId: alertData,
-					stockInfo: stockInfo,
-					stockAlert: stockAlert,
+			stockInfo: stockInfo,
+			stockAlert: stockAlert,
+			onAlertSetComplete: this.onAlertSetComplete,
 		})
 	},
 
@@ -57,6 +61,10 @@ var EditOwnStocksPage = React.createClass({
 				<StockEditFragment style={{flex: 1}} isLogin = {!notLogin} onTapEditAlert={this.gotoEditAlertPage}/>
 			</View>
 		);
+	},
+
+	onAlertSetComplete: function() {
+		this.loadAlertList();
 	},
 
  	componentDidMount: function() {
@@ -78,6 +86,7 @@ var EditOwnStocksPage = React.createClass({
 			 },
 			 (responseJson) => {
 				 	stockAlertList = responseJson;
+					NativeDataModule.passDataToNative('myAlertList', stockAlertList);
 			 },
 			 (errorMessage) => {
 				 Alert.alert('', errorMessage);

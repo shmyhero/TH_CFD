@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol StockAlertDataDelegate: class {
+	func didUpdateAlertData(sender: StockDataManager)
+}
+
 class StockData: NSObject {
 	var stockId: Int = 0
 	var symbol: String!
@@ -60,24 +64,36 @@ class StockData: NSObject {
 	}
 }
 
+class AlertData: NSObject {
+	var securityId: Int = 0
+	var high: Double?
+	var low: Double?
+	var highEnabled: Bool = false
+	var lowEnabled: Bool = false
+	
+	func initWithDictionay(dict:NSDictionary) -> Void {
+		self.securityId = dict["SecurityId"] as! Int
+		self.lowEnabled = dict["LowEnabled"] as! Bool
+		self.highEnabled = dict["HighEnabled"] as! Bool
+		self.low = dict["LowPrice"] as? Double
+		self.high = dict["HighPrice"] as? Double
+	}
+	
+	func enabled() -> Bool {
+		return self.highEnabled || self.lowEnabled
+	}
+}
+
 class StockDataManager: NSObject {
 	static let singleton = StockDataManager()
+	weak var alertDelegate:StockAlertDataDelegate?
 	
 	var stockDataArray = [StockData]()
+	var alertDataArray = [AlertData]()
 	var logoImage: UIImage? = UIImage.init(named: "Head_portrait")
 	
 	class func sharedInstance() ->StockDataManager {
 		return StockDataManager.singleton
-	}
-	
-	func loadUserLogo(jsonString:String) -> Void {
-		if(jsonString != "default") {
-			if let url = NSURL(string: jsonString){
-				if let data = NSData(contentsOfURL: url) {
-					logoImage = UIImage.init(data: data)
-				}
-			}
-		}
 	}
 	
 	func loadOwnStocksData(jsonString:String) -> Void {
@@ -114,5 +130,47 @@ class StockDataManager: NSObject {
 			print("error serializing data: \(error)")
 		}
 		return dataString
+	}
+	
+	func loadUserLogo(jsonString:String) -> Void {
+		if(jsonString != "default") {
+			if let url = NSURL(string: jsonString){
+				if let data = NSData(contentsOfURL: url) {
+					logoImage = UIImage.init(data: data)
+				}
+			}
+		}
+	}
+	
+	func loadOwnAlertData(jsonString:String) -> Void {
+		// load alert data from RN
+		let nsData: NSData = jsonString.dataUsingEncoding(NSUTF8StringEncoding)!
+		alertDataArray = []
+		do {
+			let json: AnyObject? = try NSJSONSerialization.JSONObjectWithData(nsData, options: NSJSONReadingOptions.MutableLeaves)
+			if let jsonArray = json as? NSArray {
+				for data in jsonArray {
+					let alertData:AlertData = AlertData()
+					alertData.initWithDictionay(data as! NSDictionary)
+					alertDataArray.append(alertData)
+				}
+				if alertDataArray.count > 0 {
+					self.alertDelegate?.didUpdateAlertData(self)
+				}
+			}
+		}
+		catch {
+			print("error serializing alert JSON: \(error)")
+		}
+	}
+	
+	func alertEnabled(securityId: Int) -> Bool {
+		var enabled = false
+		for alert in alertDataArray {
+			if (alert.securityId == securityId) {
+				enabled = alert.enabled()
+			}
+		}
+		return enabled
 	}
 }

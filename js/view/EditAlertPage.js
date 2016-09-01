@@ -31,6 +31,7 @@ var EditAlertPage = React.createClass({
 		stockId:React.PropTypes.number,
 		stockInfo: React.PropTypes.object,
 		stockAlert: React.PropTypes.object,
+		onAlertSetComplete: React.PropTypes.func,
 	},
 
 	getDefaultProps() {
@@ -309,10 +310,8 @@ var EditAlertPage = React.createClass({
 				showLoading: true,
 			},
 			(responseJson) => {
-				//Only clean the callback when press ok...
-
-
 				WebSocketModule.cleanRegisteredCallbacks();
+				this.props.onAlertSetComplete()
 				this.props.navigator.pop()
 			},
 			(errorMessage) => {

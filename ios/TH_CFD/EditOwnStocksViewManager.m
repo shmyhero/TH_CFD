@@ -22,6 +22,7 @@
 }
 
 RCT_EXPORT_MODULE(StockEditFragment);
+RCT_EXPORT_VIEW_PROPERTY(isLogin, BOOL)
 
 - (UIView *)view
 {

@@ -38,6 +38,11 @@ class EditOwnStockCell: UITableViewCell {
 		self.selectButton.setImage(UIImage.init(named: name), forState: .Normal)
 	}
 	
+	func setAlert(hasAlert: Bool) {
+		let name:String = hasAlert ? "Reminder01":"Reminder"
+		self.alertButton.setImage(UIImage.init(named: name), forState: .Normal)
+	}
+	
 	typealias callbackfunc=(selectStock:StockData)->Void
 	var tapTop = callbackfunc?()
 	var tapSelect = callbackfunc?()

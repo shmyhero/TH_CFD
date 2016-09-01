@@ -31,4 +31,9 @@
 	_manager = manager;
 	_editViewController.delegate = manager;
 }
+
+- (void)setIsLogin:(BOOL)isLogin
+{
+	_editViewController.showAlert = isLogin;
+}
 @end

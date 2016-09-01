@@ -10,6 +10,7 @@ import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.ViewGroupManager;
+import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.Event;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
@@ -59,6 +60,11 @@ public class ReactStockEditFragmentNativeManager extends ViewGroupManager<ReactS
     }
 
 
-
+    @ReactProp(name = "isLogin")
+    public void setIsLogin(ReactStockEditFragmentNative reactStockEditFragmentNative, boolean isLogin) {
+        if (reactStockEditFragmentNative != null) {
+            reactStockEditFragmentNative.setIsLogin(isLogin);
+        }
+    }
 
 }

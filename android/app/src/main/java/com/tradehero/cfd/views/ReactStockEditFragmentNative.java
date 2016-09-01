@@ -43,6 +43,7 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
 
     private Context mContext;
     EventDispatcher mEventDispatcher;
+    private boolean isLogin = false;
 
     public ReactStockEditFragmentNative(Context context) {
 
@@ -418,5 +419,10 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         saveStockData();
+    }
+
+    public void setIsLogin(boolean isLogin){
+        this.isLogin = isLogin;
+        Log.d("ReactSto","setIsLogin : " + isLogin);
     }
 }

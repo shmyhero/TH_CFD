@@ -223,6 +223,8 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 	
 	// MARK: - StockAlertDataDelegate
 	func didUpdateAlertData(sender: StockDataManager) {
-		editTableView.reloadData()
+		dispatch_async(dispatch_get_main_queue(), {
+			self.editTableView.reloadData()
+		})
 	}
 }

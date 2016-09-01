@@ -41,9 +41,9 @@ var EditOwnStocksPage = React.createClass({
 		this.props.navigator.push({
 			name: MainPage.EDIT_ALERT_ROUTE,
       		stockId: alertData,
-					stockInfo: stockInfo,
-					stockAlert: stockAlert,
-					onAlertSetComplete: this.onAlertSetComplete,
+			stockInfo: stockInfo,
+			stockAlert: stockAlert,
+			onAlertSetComplete: this.onAlertSetComplete,
 		})
 	},
 

@@ -1,4 +1,5 @@
 'use strict'
+var VersionConstants = require('./VersionConstants');
 
 const SERVER_IP = 'https://api.typhoontechnology.hk'
 const GZT_SERVER_IP = 'http://124.192.161.110:8080'
@@ -36,14 +37,16 @@ export const AUTO_CLOSE_ALERT_API = SERVER_IP + '/alert/<setting>'
 export const BIND_MOBILE_API = SERVER_IP + '/api/user/bindphone'
 export const BIND_WECHAT_API = SERVER_IP + '/api/user/bindwechat?openid=<wechatOpenId>'
 export const UPDATE_HEAD_PHOTO = SERVER_IP + '/api/user/photo'
+export const GET_ALL_STOCK_ALERT = SERVER_IP + '/api/user/stockAlert/all'
+export const UPDATE_STOCK_ALERT = SERVER_IP + '/api/user/stockAlert'
 
 export const GZT_OCR_CHECK_API = GZT_SERVER_IP + '/ocrCheck'
 
 export const WEBVIEW_RECOMMAND_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/detailslider.php?id='
-export const WEBVIEW_TOP_NEWS_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/FocusSlider.php?id='
+export const WEBVIEW_TOP_NEWS_PAGE = TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER + '/FocusSlider.php?id='
 export const WEBVIEW_QA_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/wenda<version>.html'
 export const WEBVIEW_URL_ABOUT_US = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/about.html'
-export const SHARE_URL = TRADEHERO_SERVER_IP + '/TH_CFD_WEBTEST/detailShare.php?id=<id>'
+export const SHARE_URL = TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER + '/detailShare.php?id=<id>'
 export const SHARE_LOGO_URL = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/images/ShareLogo.png'
 export const PARAMETER_PHONE = 'phone'
 export const PARAMETER_VERFICATION_CODE = 'verifyCode'

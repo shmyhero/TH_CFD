@@ -202,6 +202,17 @@ var HomePage = React.createClass({
 		} else {
 			targetUrl = targetUrl + '?userId=' + userId
 		}
+
+		if(!shareID){
+			shareID = null
+		}
+		if(!shareTitle){
+			shareTitle = null
+		}
+		if(!shareDescription){
+			shareDescription = null
+		}
+
 		this.props.navigator.push({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			url: targetUrl,

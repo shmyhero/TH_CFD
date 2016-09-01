@@ -11,8 +11,12 @@ import {
 } from 'react-native';
 
 var MainPage = require('./MainPage')
+var NetworkModule = require('../module/NetworkModule')
 var ColorConstants = require('../ColorConstants')
 var NavBar = require('./NavBar')
+var NetConstants = require('../NetConstants')
+var LogicData = require('../LogicData')
+var WebSocketModule = require('../module/WebSocketModule')
 
 var {height, width} = Dimensions.get('window')
 
@@ -24,15 +28,81 @@ var EditAlertPage = React.createClass({
 		stockPrice: React.PropTypes.number,
 		stockPriceAsk: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
 		stockPriceBid: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
+		currentUp: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
+		currentDwon: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
+		switchHigh: React.PropTypes.bool,
+		switchLow: React.PropTypes.bool,
+	},
+
+	getDefaultProps() {
+		return {
+			currentUp: 0,
+			currentDwon: 0,
+			switchHigh: false,
+			switchLow: false,
+		}
 	},
 
 	getInitialState: function() {
 		return {
-			currentUp: 1024.34,
-			currentDwon: 1024.12,
-			switchHigh:false,
-			switchLow:false,
+			currentUp: this.props.currentUp,
+			currentDwon: this.props.currentDwon,
+			switchHigh: this.props.switchHigh,
+			switchLow: this.props.switchLow,
+			stockInfo: {},
+			stockPrice: 0,	//TODO: use real price
+			stockPriceAsk: 0,
+			stockPriceBid: 0,
 		};
+	},
+
+	componentDidMount: function(){
+		WebSocketModule.registerCallbacks(
+			(realtimeStockInfo) => {
+				console.log("update stock info: " + JSON.stringify(realtimeStockInfo))
+				for (var i = 0; i < realtimeStockInfo.length; i++) {
+					if (this.props.stockCode == realtimeStockInfo[i].id ) {
+						if (this.state.chartType === NetConstants.PARAMETER_CHARTTYPE_TEN_MINUTE
+							 && this.state.stockInfo != undefined
+							 && this.state.stockInfo.priceData != undefined) {
+							var stockinfo = this.state.stockInfo
+							var price = realtimeStockInfo[i].last
+							stockinfo.priceData.push({"p":price,"time":realtimeStockInfo[i].time})
+							this.setState({
+								stockInfo: stockinfo,
+								stockPrice: realtimeStockInfo[i].last,
+								stockPriceAsk: realtimeStockInfo[i].ask,
+								stockPriceBid: realtimeStockInfo[i].bid,
+							})
+						}
+						else if(this.state.stockPrice !== realtimeStockInfo[i].last) {
+							this.setState({
+								stockPrice: realtimeStockInfo[i].last,
+								stockPriceAsk: realtimeStockInfo[i].ask,
+								stockPriceBid: realtimeStockInfo[i].bid,
+							})
+						}
+						break;
+					}
+				};
+
+				if (this.state.stockInfo.fxData) {
+					var fxId = this.state.stockInfo.fxData.id
+					for (var i = 0; i < realtimeStockInfo.length; i++) {
+						if (fxId == realtimeStockInfo[i].id &&
+									this.state.stockCurrencyPrice !== realtimeStockInfo[i].last) {
+							this.setState({
+								stockCurrencyPrice: realtimeStockInfo[i].last,
+							})
+							break;
+						}
+					};
+				}
+			})
+	},
+
+	componentWillUnmount: function(){
+		WebSocketModule.cleanRegisteredCallbacks();
 	},
 
 	gotoNext: function() {
@@ -41,6 +111,16 @@ var EditAlertPage = React.createClass({
 	pressBackButton: function() {
 		this.props.showTabbar()
 		this.props.navigator.pop()
+	},
+
+	updatePrice: function(type, text){
+		if(type === 1){
+			//Up
+			this.state.currentUp = parseInt(text);
+		}else{
+			//Down
+			this.state.currentDown = parseInt(text);
+		}
 	},
 
 	renderSeparator: function(marginLeft) {
@@ -59,7 +139,8 @@ var EditAlertPage = React.createClass({
 				<Text style={styles.cellTitle}>
 					{title}
 				</Text>
-				<TextInput style={styles.cellInput}>
+				<TextInput style={styles.cellInput} onChangeText={(text) => this.updatePrice(type, text)}
+									 keyboardType='numeric'>
 				</TextInput>
 				<Switch
 				  value={type===1 ? this.state.switchHigh : this.state.switchLow}
@@ -67,6 +148,38 @@ var EditAlertPage = React.createClass({
 				/>
 			</View>
 			)
+	},
+
+	onComplete: function(){
+		var userData = LogicData.getUserData();
+
+		var alertData = {
+    	"SecurityId": this.props.stockId,
+    	"HighPrice": this.state.currentUp,
+    	"HighEnabled": this.state.switchHigh,
+    	"LowPrice": this.state.currentDwon,
+    	"LowEnabled": this.state.switchLow
+		}
+
+		NetworkModule.fetchTHUrl(
+			NetConstants.UPDATE_STOCK_ALERT,
+			{
+				method: 'PUT',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Accept': 'application/json',
+					'Content-Type': 'application/json',
+				},
+				body:JSON.stringify(alertData),
+				showLoading: true,
+			},
+			(responseJson) => {
+				this.props.navigator.pop()
+			},
+			(errorMessage) => {
+				Alert.alert('提醒设置', errorMessage);
+			}
+		)
 	},
 
 	render: function() {
@@ -83,7 +196,7 @@ var EditAlertPage = React.createClass({
 						{this.props.stockId}
 					</Text>
 					<Text style={styles.priceText}>
-						当前买涨价格 {this.state.currentUp} 当前买跌价格 {this.state.currentDwon}
+						当前买涨价格 {this.state.stockPriceAsk} 当前买跌价格 {this.state.stockPriceBid}
 					</Text>
 				</View>
 				{this.renderSeparator(0)}

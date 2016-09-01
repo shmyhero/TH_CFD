@@ -18,6 +18,10 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
+		3D2A16D91D78047200FEB181 /* libGeTuiSdk-1.4.3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A16D81D78047200FEB181 /* libGeTuiSdk-1.4.3.a */; };
+		3D2A16EC1D7804E600FEB181 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A16EB1D7804E600FEB181 /* JavaScriptCore.framework */; };
+		3D2A16EE1D7804F600FEB181 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A16ED1D7804F600FEB181 /* CoreLocation.framework */; };
+		3D2A16F01D7804FD00FEB181 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A16EF1D7804FD00FEB181 /* CoreBluetooth.framework */; };
 		3D2A39F31C7C3ECD0085264D /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A39F21C7C3ECD0085264D /* libsqlite3.tbd */; };
 		3D2A39FF1C7C3EDA0085264D /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A39FE1C7C3EDA0085264D /* libc++.tbd */; };
 		3D2A3A011C7C3EE70085264D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A3A001C7C3EE70085264D /* libz.tbd */; };
@@ -309,6 +313,11 @@
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		22F5EC88B9014CDA85FEBFBA /* RCTHotUpdate.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTHotUpdate.xcodeproj; path = "../node_modules/react-native-update/ios/RCTHotUpdate.xcodeproj"; sourceTree = "<group>"; };
 		283667F11BD6472A9A1A8BAE /* libRCTWeChat.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTWeChat.a; sourceTree = "<group>"; };
+		3D2A16D71D78047200FEB181 /* GeTuiSdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeTuiSdk.h; sourceTree = "<group>"; };
+		3D2A16D81D78047200FEB181 /* libGeTuiSdk-1.4.3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libGeTuiSdk-1.4.3.a"; sourceTree = "<group>"; };
+		3D2A16EB1D7804E600FEB181 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		3D2A16ED1D7804F600FEB181 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		3D2A16EF1D7804FD00FEB181 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		3D2A39F21C7C3ECD0085264D /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		3D2A39FE1C7C3EDA0085264D /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		3D2A3A001C7C3EE70085264D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -598,6 +607,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D2A16F01D7804FD00FEB181 /* CoreBluetooth.framework in Frameworks */,
+				3D2A16EE1D7804F600FEB181 /* CoreLocation.framework in Frameworks */,
+				3D2A16EC1D7804E600FEB181 /* JavaScriptCore.framework in Frameworks */,
 				418F21EB1D75264800E2119A /* libReact-Native-Webview-Bridge.a in Frameworks */,
 				3DB9F24E1D6449CA00DC5C63 /* MobileCoreServices.framework in Frameworks */,
 				3DB9F24C1D6449AA00DC5C63 /* AVFoundation.framework in Frameworks */,
@@ -631,6 +643,7 @@
 				80BCA2B8147C419E82DF3DFB /* libRCTHotUpdate.a in Frameworks */,
 				CBDAB12CB32E43B38DF342E5 /* libRCTWeChat.a in Frameworks */,
 				D5C95DE6EB174E6896A7067C /* libRNImagePicker.a in Frameworks */,
+				3D2A16D91D78047200FEB181 /* libGeTuiSdk-1.4.3.a in Frameworks */,
 				3DB9F1B41D64483B00DC5C63 /* MeiQiaSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -697,6 +710,7 @@
 		13B07FAE1A68108700A75B9A /* TH_CFD */ = {
 			isa = PBXGroup;
 			children = (
+				3D2A16D61D78047200FEB181 /* GtSdkLib */,
 				3DB9EF2C1D6445F700DC5C63 /* MeiQia */,
 				3DB98C0E1CE1CF1A00DB3FA5 /* frontPage.jpg */,
 				3DD744761CCE18040021304F /* myhero.ttf */,
@@ -720,6 +734,15 @@
 				146834041AC3E56700842450 /* libReact.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		3D2A16D61D78047200FEB181 /* GtSdkLib */ = {
+			isa = PBXGroup;
+			children = (
+				3D2A16D71D78047200FEB181 /* GeTuiSdk.h */,
+				3D2A16D81D78047200FEB181 /* libGeTuiSdk-1.4.3.a */,
+			);
+			path = GtSdkLib;
 			sourceTree = "<group>";
 		};
 		3D3E1F0B1C9F9C240064F187 /* ObjC */ = {
@@ -1429,6 +1452,9 @@
 		43D0F270D79E4680AD511CD9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3D2A16EF1D7804FD00FEB181 /* CoreBluetooth.framework */,
+				3D2A16ED1D7804F600FEB181 /* CoreLocation.framework */,
+				3D2A16EB1D7804E600FEB181 /* JavaScriptCore.framework */,
 				3DB9F24D1D6449CA00DC5C63 /* MobileCoreServices.framework */,
 				3DB9F24B1D6449AA00DC5C63 /* AVFoundation.framework */,
 				3DB9F2491D64499800DC5C63 /* libicucore.tbd */,
@@ -1570,6 +1596,11 @@
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 6WN74CZ95F;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -1999,6 +2030,7 @@
 					"\"$(SRCROOT)/TH_CFD\"",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/MeiQia/MQChatViewController/Vendors/MLAudioRecorder/amr_en_de/lib",
+					"$(PROJECT_DIR)/GtSdkLib",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.typhoon.technology.CFD;
@@ -2045,6 +2077,7 @@
 					"\"$(SRCROOT)/TH_CFD\"",
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/MeiQia/MQChatViewController/Vendors/MLAudioRecorder/amr_en_de/lib",
+					"$(PROJECT_DIR)/GtSdkLib",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.typhoon.technology.CFD;

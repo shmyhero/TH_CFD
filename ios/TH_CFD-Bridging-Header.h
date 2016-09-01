@@ -15,3 +15,5 @@
 #import "TalkingDataAppCpa.h"
 
 #import "MQChatViewManager.h"
+
+#import "GeTuiSdk.h"

@@ -32,6 +32,7 @@ var EditAlertPage = React.createClass({
 		currentDwon: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
 		switchHigh: React.PropTypes.bool,
 		switchLow: React.PropTypes.bool,
+		stockInfo: React.PropTypes.object,
 	},
 
 	getDefaultProps() {
@@ -183,7 +184,6 @@ var EditAlertPage = React.createClass({
 	},
 
 	render: function() {
-
 		return (
 			<View style={styles.wrapper}>
 				<NavBar title='提醒设置'

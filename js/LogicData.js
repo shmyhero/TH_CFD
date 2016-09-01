@@ -78,6 +78,15 @@ var LogicData = {
     	return ownStocksData
     },
 
+		getStockFromOwnStockData: function(stockId){
+			var index = ownStocksData.findIndex((stock)=>{return stock.id === stockId})
+    	if (index != -1) {
+    		 return ownStocksData[index]
+    	}else{
+				 return undefined
+			}
+		},
+
     setSearchStockHistory: function(stocksData){
         searchStockHistory = stocksData
         StorageModule.setSearchHistory(JSON.stringify(stocksData))

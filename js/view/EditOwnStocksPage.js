@@ -30,9 +30,13 @@ var EditOwnStocksPage = React.createClass({
 	},
 
 	gotoEditAlertPage: function(alertData) {
+
+    var stockInfo = LogicData.getStockFromOwnStockData(alertData);
+
 		this.props.navigator.push({
 			name: MainPage.EDIT_ALERT_ROUTE,
       		stockId: alertData,
+					stockInfo: stockInfo,
 		})
 	},
 

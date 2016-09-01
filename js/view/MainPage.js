@@ -416,7 +416,8 @@ var MainPage = React.createClass({
 		}
 		else if (route.name === EDIT_ALERT_ROUTE) {
 			return (
-				<EditAlertPage navigator={navigationOperations} showTabbar={showTabbar} />
+				<EditAlertPage navigator={navigationOperations} showTabbar={showTabbar}
+				stockName={route.stockName}/>
 				)
 		}
 		else if(route.name === SHARE_ROUTE){

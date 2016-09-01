@@ -136,36 +136,6 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
             }
         });
 
-//        final NativeViewActivity activity = (NativeViewActivity) getActivity();
-//        activity.setHeadLeftCallback(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                JSONArray result = new JSONArray();
-//
-//                try {
-//                    for (int i = 0; i < adapter.getCount(); i++) {
-//                        StockInfo info = adapter.getItem(i);
-//
-//                        for (int j = 0; j < myListArray.length(); j++) {
-//                            JSONObject stockObject = myListArray.getJSONObject(j);
-//
-//                            if (stockObject.getString("name").equals(info.mName)) {
-//                                result.put(stockObject);
-//                                break;
-//                            }
-//                        }
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                ReactContext context = RNManager.getInstanceManager(getActivity().getApplication()).getCurrentReactContext();
-//
-//                NativeDataModule.passDataToRN(context, LogicData.MY_LIST, result.toString());
-//
-//                activity.finish();
-//            }
-//        });
 
 
     }
@@ -296,7 +266,7 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
                 @Override
                 public void onClick(View v) {
                     //TODO
-                    setAlert(mStockInfo.get(position), position);
+                    setAlert(mStockInfo.get(position));
                 }
             });
 
@@ -307,9 +277,9 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
             return mStockInfo.remove(index);
         }
 
-        public void setAlert(StockInfo item, int index) {
+        public void setAlert(StockInfo item) {
             mEventDispatcher.dispatchEvent(
-                    new TapAlertEvent(getId(), SystemClock.uptimeMillis(), index));
+                    new TapAlertEvent(getId(), SystemClock.uptimeMillis(), item.mName));
         }
 
         public void insert(StockInfo item, int to) {
@@ -395,9 +365,9 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
 
         public static final String EVENT_NAME = "TapAlertEvent";
 
-        private final int mValue;
+        private final String mValue;
 
-        protected TapAlertEvent(int viewTag, long timestampMs, int value) {
+        protected TapAlertEvent(int viewTag, long timestampMs, String value) {
             super(viewTag, timestampMs);
             mValue = value;
         }
@@ -414,7 +384,7 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
 
         private WritableMap serializeEventData() {
             WritableMap eventData = Arguments.createMap();
-            eventData.putInt("data", mValue);
+            eventData.putString("data", mValue);
             return eventData;
         }
     }

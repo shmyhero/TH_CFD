@@ -28,6 +28,7 @@ var EditOwnStocksPage = React.createClass({
 		//todo
 		this.props.navigator.push({
 			name: MainPage.EDIT_ALERT_ROUTE,
+      stockName: alertData,
 		})
 	},
 

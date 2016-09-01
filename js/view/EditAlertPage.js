@@ -18,10 +18,19 @@ var {height, width} = Dimensions.get('window')
 
 var EditAlertPage = React.createClass({
 
+	propTypes: {
+		stockName: React.PropTypes.string,
+		stockPrice: React.PropTypes.number,
+		stockPriceAsk: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
+		stockPriceBid: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
+	},
+
 	getInitialState: function() {
 		return {
-			up: 1024.34,
-			down: 1024.12,
+			currentUp: 1024.34,
+			currentDwon: 1024.12,
+			switchHigh:false,
+			switchLow:false,
 		};
 	},
 
@@ -51,13 +60,16 @@ var EditAlertPage = React.createClass({
 				</Text>
 				<TextInput style={styles.cellInput}>
 				</TextInput>
-				<Switch />
+				<Switch
+				  value={type===1 ? this.state.switchHigh : this.state.switchLow}
+					onValueChange={(value) => this.setState(type===1 ? {switchHigh:value} : {switchLow:value})}
+				/>
 			</View>
 			)
 	},
 
 	render: function() {
-		var name = '股票名称'
+
 		return (
 			<View style={styles.wrapper}>
 				<NavBar title='提醒设置'
@@ -67,10 +79,10 @@ var EditAlertPage = React.createClass({
 					navigator={this.props.navigator}/>
 				<View style={styles.headerView}>
 					<Text style={styles.nameText}>
-						{name}
+						{this.props.stockName}
 					</Text>
 					<Text style={styles.priceText}>
-						买涨价格高于 {this.state.up} 买跌价格低于 {this.state.down}
+						当前买涨价格 {this.state.currentUp} 当前买跌价格 {this.state.currentDwon}
 					</Text>
 				</View>
 				{this.renderSeparator(0)}
@@ -103,6 +115,7 @@ var styles = StyleSheet.create({
 	nameText: {
 		fontSize: 17,
 		color: 'black',
+		marginBottom: 10,
 	},
 	priceText: {
 		fontSize: 16,
@@ -124,16 +137,18 @@ var styles = StyleSheet.create({
 	},
 	cellInput: {
 		fontSize: 17,
-		borderWidth: 0.5,
+		borderWidth: 1.0,
 		borderRadius: 2,
 		borderColor: '#efeff4',
-		height: 23,
+		height: 28,
+		padding: 0,
 		width: Math.round(width/3),
 		alignSelf: 'center',
+		textAlignVertical:'center',
 	},
 	bottomText: {
-		paddingLeft:15,
-		paddingTop: 12,
+		marginTop:15,
+		marginLeft: 12,
 		fontSize: 12,
 		color: '#8d8d8d',
 	}

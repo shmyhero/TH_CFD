@@ -15,7 +15,6 @@ var StockEditFragment = React.createClass ({
 	propTypes: {
 		...View.propTypes,
 		onTapEditAlert: React.PropTypes.func,
-		onNativeRefresh: React.PropTypes.func,
 	},
 
 	getInitialState: function() {
@@ -34,6 +33,7 @@ var StockEditFragment = React.createClass ({
 		if (!this.props.onTapEditAlert) {
 			return;
 		}
+		console.log("onTapAlert: " + event.nativeEvent.data);
 		this.props.onTapEditAlert(event.nativeEvent.data);
 	},
 

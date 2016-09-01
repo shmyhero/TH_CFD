@@ -33,6 +33,7 @@ var EditAlertPage = React.createClass({
 		switchHigh: React.PropTypes.bool,
 		switchLow: React.PropTypes.bool,
 		stockInfo: React.PropTypes.object,
+		stockAlert: React.PropTypes.object,
 	},
 
 	getDefaultProps() {

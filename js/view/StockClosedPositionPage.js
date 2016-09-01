@@ -97,7 +97,7 @@ var StockClosedPositionPage = React.createClass({
 			})
 			if (Platform.OS === 'android') {
 				var listHeight = this.refs['listview'].getMetrics().contentLength
-				var currentY = listHeight/this.state.stockInfoRowData.length*(parseInt(rowID))
+				var currentY = listHeight/this.state.stockInfoRowData.length*(parseInt(rowID)) + UIConstants.LIST_HEADER_BAR_HEIGHT
 				this.setTimeout(
 					() => {
 						if (currentY > 300 && currentY + 3 * rowHeight > this.refs['listview'].getMetrics().contentLength) {
@@ -108,7 +108,11 @@ var StockClosedPositionPage = React.createClass({
 				);
 			}
 		} else {
-			var maxY = (height-114)*20/21 - extendHeight
+			var maxY = Platform.OS === 'android' ?
+			(height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER - UIConstants.HEADER_HEIGHT
+				- UIConstants.SCROLL_TAB_HEIGHT - UIConstants.LIST_HEADER_BAR_HEIGHT - UIConstants.TAB_BAR_HEIGHT)*20/21
+				- extendHeight
+			: (height- 114 - UIConstants.LIST_HEADER_BAR_HEIGHT)*20/21 - extendHeight
 			var listHeight = this.refs['listview'].getMetrics().contentLength
 			if (this.state.selectedRow !== -1) {
 				listHeight -= extendHeight
@@ -121,7 +125,7 @@ var StockClosedPositionPage = React.createClass({
 					if (currentY > maxY && parseInt(previousSelectedRow) < parseInt(rowID)) {
 						this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
 					}
-				 },
+				},
 				Platform.OS === 'android' ? 1000 : 0
 			);
 
@@ -334,6 +338,22 @@ var StockClosedPositionPage = React.createClass({
 		}
 	},
 
+	renderHeaderBar: function() {
+			return (
+				<View style={styles.headerBar}>
+					<View style={[styles.rowLeftPart, {	paddingTop: 5,}]}>
+						<Text style={styles.headerTextLeft}>产品</Text>
+					</View>
+					<View style={[styles.rowCenterPart, {	paddingRight: 5,}]}>
+						<Text style={[styles.headerTextLeft, {	paddingRight: 5,}]}>亏盈</Text>
+					</View>
+					<View style={styles.rowRightPart}>
+						<Text style={styles.headerTextLeft}>收益率</Text>
+					</View>
+				</View>
+			);
+	},
+
 	render: function() {
 		var viewStyle = Platform.OS === 'android' ?
 		{width: width, height: height
@@ -344,6 +364,7 @@ var StockClosedPositionPage = React.createClass({
 			{width: width, flex: 1}
 		return (
 			<View style={viewStyle}>
+				{this.renderHeaderBar()}
 				{this.renderLoadingText()}
 				<ListView
 					style={styles.list}
@@ -505,6 +526,33 @@ var styles = StyleSheet.create({
 	loadingText: {
 		fontSize: 13,
 		color: '#9f9f9f'
+	},
+
+	headerBar: {
+		flexDirection: 'row',
+		backgroundColor: '#d9e6f3',
+		height: UIConstants.LIST_HEADER_BAR_HEIGHT,
+		paddingLeft: 15,
+		paddingRight: 15,
+		paddingTop:2,
+	},
+	headerCell: {
+		flexDirection: 'row',
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		// borderWidth: 1,
+	},
+	headerText: {
+		fontSize: 14,
+		textAlign: 'center',
+		color:'#576b95',
+	},
+
+	headerTextLeft: {
+		fontSize: 14,
+		textAlign: 'left',
+		color:'#576b95',
 	},
 });
 

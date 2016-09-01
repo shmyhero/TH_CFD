@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,11 +80,15 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
     private StockListAdapter adapter;
     private List<StockInfo> stockInfo;
     private JSONArray myListArray;
+    private LinearLayout notificationSwitch;
 
     public void initView() {
         list = (DragSortListView) findViewById(R.id.stockList);
         selectAll = (TextView) findViewById(R.id.selectAll);
         deleteSelected = (TextView) findViewById(R.id.deleteSelected);
+        notificationSwitch = (LinearLayout) findViewById(R.id.notificationSwitch);
+
+
 
         myListArray = LogicData.getInstance().getMyList();
         stockInfo = generateStockInfoList(myListArray);
@@ -265,13 +270,19 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
                 }
             });
 
-            notificationSwitch.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //TODO
-                    setAlert(mStockInfo.get(position));
-                }
-            });
+            if(isLogin){
+                notificationSwitch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //TODO
+                        setAlert(mStockInfo.get(position));
+                    }
+                });
+            }
+
+            if(!isLogin){
+                notificationSwitch.setVisibility(View.GONE);
+            }
 
             return view;
         }
@@ -423,6 +434,10 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
 
     public void setIsLogin(boolean isLogin){
         this.isLogin = isLogin;
-        Log.d("ReactSto","setIsLogin : " + isLogin);
+
+        if(notificationSwitch != null && !isLogin){
+            notificationSwitch.setVisibility(View.GONE);
+        }
     }
+
 }

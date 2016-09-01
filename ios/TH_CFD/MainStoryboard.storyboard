@@ -156,6 +156,7 @@
                                             <outlet property="selectButton" destination="TGt-XL-eg5" id="TyC-NK-puf"/>
                                             <outlet property="tagLabel" destination="TkX-2n-Hbe" id="g2H-N2-iQF"/>
                                             <outlet property="topButton" destination="cXW-WS-D2N" id="oce-BH-gBe"/>
+                                            <outlet property="topButtonTrailConstraint" destination="Mo1-ID-w44" id="HA2-kh-PCe"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -224,9 +225,11 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="alertHeaderLabel" destination="Sbg-mV-MQL" id="NEd-fl-jDv"/>
                         <outlet property="allButton" destination="YtX-PF-eiI" id="lfI-D8-MAm"/>
                         <outlet property="deleteButton" destination="Xu9-Ut-wRa" id="xY6-2T-Xxj"/>
                         <outlet property="editTableView" destination="9Dc-ei-Pxv" id="7i2-67-Sqc"/>
+                        <outlet property="topLabelTrailConstraint" destination="NVJ-Ph-uPb" id="zpn-1a-rH1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jnq-2V-39B" userLabel="First Responder" sceneMemberID="firstResponder"/>

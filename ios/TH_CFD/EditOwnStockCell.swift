@@ -16,6 +16,7 @@ class EditOwnStockCell: UITableViewCell {
 	@IBOutlet weak var topButton: UIButton!
 	@IBOutlet weak var alertButton: UIButton!
 	@IBOutlet weak var codeLabelLeftConstraint: NSLayoutConstraint!
+	@IBOutlet weak var topButtonTrailConstraint: NSLayoutConstraint!
 	
 	var stockData: StockData?
 	

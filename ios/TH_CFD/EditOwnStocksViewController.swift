@@ -18,8 +18,11 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 	@IBOutlet weak var allButton: UIButton!
 	@IBOutlet weak var deleteButton: UIButton!
 	
+	@IBOutlet weak var alertHeaderLabel: UILabel!
+	@IBOutlet weak var topLabelTrailConstraint: NSLayoutConstraint!
 	weak var delegate:EditOwnStocksViewControllerDelegate?
 	
+	var showAlert:Bool = true
 	var allSelect:Bool = false
 	
 	var rawData:[StockData] = []
@@ -46,6 +49,10 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 //			self.view.addSubview(self.statusView)
 //			self.view.sendSubviewToBack(self.statusView)
 //		}
+		
+		self.alertHeaderLabel.hidden = !showAlert
+		topLabelTrailConstraint.constant = showAlert ? 0:-30
+		
 		rawData = StockDataManager.sharedInstance().stockDataArray
 		allButton.layer.cornerRadius = 4
 		deleteButton.layer.cornerRadius = 4
@@ -130,6 +137,9 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		cell.pushAlert { (selectStock) in
 			self.delegate?.onClickEditAlert(self, alertData: selectStock.stockId)
 		}
+		
+		cell.alertButton.hidden = !showAlert
+		cell.topButtonTrailConstraint.constant = showAlert ? 40:10
 		
 		return cell
 	}

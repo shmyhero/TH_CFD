@@ -36,7 +36,7 @@ RCT_EXPORT_MODULE(StockEditFragment);
 	[self.bridge.eventDispatcher sendInputEventWithName:@"TapAlertButton"
 												   body:@{
 														  @"target": _editOwnStocksView.reactTag,
-														  @"data": @{},
+														  @"data": alertData,
 														  }];
 }
 

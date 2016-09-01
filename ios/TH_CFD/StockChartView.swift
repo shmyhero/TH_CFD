@@ -491,7 +491,7 @@ class StockChartView: UIView {
 		clippingBox.addClip()
 		
 		//draw the line on top of the clipped gradient
-		graphPath.lineWidth = 1.0
+		graphPath.lineWidth = 1.5
 		graphPath.stroke()
 		
 		CGContextRestoreGState(context)

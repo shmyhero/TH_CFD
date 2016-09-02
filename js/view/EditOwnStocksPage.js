@@ -20,9 +20,15 @@ var NativeDataModule = require('../module/NativeDataModule')
 var {height, width} = Dimensions.get('window')
 var didFocusSubscription = null;
 
-var stockAlertList = [];
+// var stockAlertList = [];
 
 var EditOwnStocksPage = React.createClass({
+
+	getInitialState: function() {
+		return {
+			stockAlertList: [],
+		};
+	},
 
 	gotoNext: function() {
 	},
@@ -35,8 +41,7 @@ var EditOwnStocksPage = React.createClass({
 	gotoEditAlertPage: function(alertData) {
 
     var stockInfo = LogicData.getStockFromOwnStockData(alertData);
-		var stockAlert = stockAlertList.find((alert)=>{return alert.SecurityId === alertData})
-
+		var stockAlert = this.state.stockAlertList.find((alert)=>{return alert.SecurityId === alertData})
 
 		this.props.navigator.push({
 			name: MainPage.EDIT_ALERT_ROUTE,
@@ -58,7 +63,10 @@ var EditOwnStocksPage = React.createClass({
 					leftTextOnClick={this.pressBackButton}
 					textOnLeft='完成'
 					navigator={this.props.navigator}/>
-				<StockEditFragment style={{flex: 1}} isLogin = {!notLogin} onTapEditAlert={this.gotoEditAlertPage}/>
+				<StockEditFragment style={{flex: 1}}
+					isLogin = {!notLogin}
+					onTapEditAlert={this.gotoEditAlertPage}
+					alertData={JSON.stringify(this.state.stockAlertList)}/>
 			</View>
 		);
 	},
@@ -85,8 +93,10 @@ var EditOwnStocksPage = React.createClass({
 				 },
 			 },
 			 (responseJson) => {
-				 	stockAlertList = responseJson;
-					NativeDataModule.passDataToNative('myAlertList', stockAlertList);
+					NativeDataModule.passDataToNative('myAlertList', responseJson);
+					this.setState({
+						stockAlertList : responseJson,
+					});
 			 },
 			 (errorMessage) => {
 				 Alert.alert('', errorMessage);

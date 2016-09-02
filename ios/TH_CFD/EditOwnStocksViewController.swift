@@ -12,7 +12,7 @@ import UIKit
 	optional func onClickEditAlert(sender: EditOwnStocksViewController, alertData:AnyObject )
 }
 
-class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, StockAlertDataDelegate{
+class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
 	
 	@IBOutlet weak var editTableView: UITableView!
 	@IBOutlet weak var allButton: UIButton!
@@ -33,7 +33,6 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		editTableView.editing = true
 		// remove empty lines
 		editTableView.tableFooterView = UIView()
-		StockDataManager.sharedInstance().alertDelegate = self;
 	}
 	
 	override func viewDidAppear(animated: Bool) {
@@ -221,8 +220,7 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		})
 	}
 	
-	// MARK: - StockAlertDataDelegate
-	func didUpdateAlertData(sender: StockDataManager) {
+	func refresh() {
 		dispatch_async(dispatch_get_main_queue(), {
 			self.editTableView.reloadData()
 		})

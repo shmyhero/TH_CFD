@@ -8,10 +8,6 @@
 
 import UIKit
 
-protocol StockAlertDataDelegate: class {
-	func didUpdateAlertData(sender: StockDataManager)
-}
-
 class StockData: NSObject {
 	var stockId: Int = 0
 	var symbol: String!
@@ -86,7 +82,6 @@ class AlertData: NSObject {
 
 class StockDataManager: NSObject {
 	static let singleton = StockDataManager()
-	weak var alertDelegate:StockAlertDataDelegate?
 	
 	var stockDataArray = [StockData]()
 	var alertDataArray = [AlertData]()
@@ -153,9 +148,6 @@ class StockDataManager: NSObject {
 					let alertData:AlertData = AlertData()
 					alertData.initWithDictionay(data as! NSDictionary)
 					alertDataArray.append(alertData)
-				}
-				if alertDataArray.count > 0 {
-					self.alertDelegate?.didUpdateAlertData(self)
 				}
 			}
 		}

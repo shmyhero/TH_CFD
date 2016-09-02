@@ -33,6 +33,7 @@ RCT_EXPORT_MODULE();
 		[manager loadOwnStocksData:jsonData];
 	}
 	else if([dataName isEqualToString:@"myAlertList"]) {
+		// depreciated
 		[manager loadOwnAlertData:jsonData];
 	}
 }

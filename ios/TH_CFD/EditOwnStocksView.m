@@ -36,4 +36,12 @@
 {
 	_editViewController.showAlert = isLogin;
 }
+
+- (void)setAlertData:(NSString *)alertData
+{
+	if (alertData.length > 0) {
+		[[StockDataManager sharedInstance] loadOwnAlertData:alertData];
+		[_editViewController refresh];
+	}
+}
 @end

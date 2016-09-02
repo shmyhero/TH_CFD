@@ -13,5 +13,6 @@
 
 @property (nonatomic, assign) EditOwnStocksViewManager *manager;
 @property (nonatomic, assign) BOOL isLogin;
+@property (nonatomic, retain) NSString *alertData;
 
 @end

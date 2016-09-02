@@ -16,6 +16,7 @@ var StockEditFragment = React.createClass ({
 		...View.propTypes,
 		onTapEditAlert: React.PropTypes.func,
 		isLogin: React.PropTypes.bool,
+		alertData: React.PropTypes.string,
 	},
 
 	getInitialState: function() {
@@ -46,7 +47,10 @@ var StockEditFragment = React.createClass ({
 	render() {
 	  return (
 			<View style = {styles.wrapper}>
-				<StockEditFragmentNative style = {styles.wrapper} {...this.props} onTapAlertButton={this.onTapAlertButton} onNativeRefresh={this.onNativeRefresh}/>
+				<StockEditFragmentNative style = {styles.wrapper} {...this.props}
+					onTapAlertButton={this.onTapAlertButton}
+					onNativeRefresh={this.onNativeRefresh}
+					/>
 				<Text style = {{fontSize:1}}> currentIndex =  {this.state.currentIndex} </Text>
 			</View>
 		);

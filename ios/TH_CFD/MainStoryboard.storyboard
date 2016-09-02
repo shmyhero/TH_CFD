@@ -42,7 +42,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="提醒" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sbg-mV-MQL">
-                                        <rect key="frame" x="219" y="0.0" width="32" height="20"/>
+                                        <rect key="frame" x="211" y="0.0" width="32" height="20"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <color key="textColor" red="0.6705882353" green="0.79215686269999996" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -58,7 +58,7 @@
                                     <constraint firstAttribute="bottom" secondItem="dhq-GU-dFC" secondAttribute="bottom" constant="7" id="gOG-Lw-3Kj"/>
                                     <constraint firstItem="KCJ-vF-tJa" firstAttribute="centerY" secondItem="dhq-GU-dFC" secondAttribute="centerY" id="hDW-h5-lQb"/>
                                     <constraint firstItem="KCJ-vF-tJa" firstAttribute="leading" secondItem="ezc-LV-pIO" secondAttribute="leading" constant="41" id="nIJ-Il-zN5"/>
-                                    <constraint firstItem="dhq-GU-dFC" firstAttribute="centerX" secondItem="Sbg-mV-MQL" secondAttribute="centerX" constant="49" id="nPP-a8-Ujb"/>
+                                    <constraint firstItem="Sbg-mV-MQL" firstAttribute="centerX" secondItem="dhq-GU-dFC" secondAttribute="centerX" multiplier="0.8" id="nPP-a8-Ujb"/>
                                     <constraint firstItem="Sbg-mV-MQL" firstAttribute="baseline" secondItem="dhq-GU-dFC" secondAttribute="baseline" id="pLR-oA-ItT"/>
                                 </constraints>
                             </view>
@@ -111,7 +111,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="emP-fR-UTC" userLabel="Alert Button">
-                                                    <rect key="frame" x="247" y="6" width="44" height="44"/>
+                                                    <rect key="frame" x="232" y="6" width="44" height="44"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="44" id="dEX-3B-gPS"/>
                                                         <constraint firstAttribute="width" constant="44" id="plZ-WK-OBJ"/>
@@ -141,7 +141,7 @@
                                                 <constraint firstItem="TGt-XL-eg5" firstAttribute="leading" secondItem="mkn-Ki-hfN" secondAttribute="leadingMargin" constant="-8" id="NLb-GS-Qfh"/>
                                                 <constraint firstItem="cXW-WS-D2N" firstAttribute="centerY" secondItem="mkn-Ki-hfN" secondAttribute="centerY" id="TZM-W2-gb8"/>
                                                 <constraint firstItem="TGt-XL-eg5" firstAttribute="centerY" secondItem="mkn-Ki-hfN" secondAttribute="centerY" id="UWm-wY-cxq"/>
-                                                <constraint firstItem="cXW-WS-D2N" firstAttribute="leading" secondItem="emP-fR-UTC" secondAttribute="trailing" constant="5" id="Vvt-q2-Q02"/>
+                                                <constraint firstItem="emP-fR-UTC" firstAttribute="centerX" secondItem="cXW-WS-D2N" secondAttribute="centerX" multiplier="0.8" id="Vvt-q2-Q02"/>
                                                 <constraint firstItem="gfz-EQ-g5m" firstAttribute="top" secondItem="TGt-XL-eg5" secondAttribute="centerY" constant="3" id="cNw-9Q-gV4"/>
                                                 <constraint firstItem="TkX-2n-Hbe" firstAttribute="leading" secondItem="QcP-IO-3zC" secondAttribute="leading" id="sV2-kZ-fvW"/>
                                                 <constraint firstItem="emP-fR-UTC" firstAttribute="centerY" secondItem="TGt-XL-eg5" secondAttribute="centerY" id="sXw-aW-prN"/>

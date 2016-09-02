@@ -142,6 +142,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		var token = deviceToken.description.stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: "<>"));
 		token = token.stringByReplacingOccurrencesOfString(" ", withString: "")
 		GeTuiSdk.registerDeviceToken(token);
+		
+//		self.nativeData!.sendDataToRN("deviceToken", data: token)
 	}
 	
 	func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {

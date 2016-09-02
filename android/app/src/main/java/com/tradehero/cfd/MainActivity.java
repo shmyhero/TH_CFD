@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.react.ReactInstanceManager;
@@ -36,6 +37,9 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
     @Bind(R.id.react_root_view)
     ReactRootView reactRootView;
+
+    @Bind(R.id.tvVersion)
+    TextView tvVersion;
 
     private ReactInstanceManager mReactInstanceManager;
     private boolean mDoRefresh = false;
@@ -67,6 +71,17 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         ButterKnife.bind(this);
 
         reactRootView.startReactApplication(mReactInstanceManager, "TH_CFD", null);
+
+
+        try {
+            String pkName = this.getPackageName();
+            String versionName = this.getPackageManager().getPackageInfo(
+                    pkName, 0).versionName;
+            tvVersion.setText("V"+versionName+" 版本");
+        } catch (Exception e) {
+        }
+
+
     }
 
     @Override

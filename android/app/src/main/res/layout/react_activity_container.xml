@@ -11,4 +11,15 @@
         android:layout_height="match_parent"
         android:id="@+id/react_root_view"/>
 
+    <TextView android:id="@+id/tvVersion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:layout_alignParentBottom="true"
+        android:textColor="#f0f0f0"
+        android:gravity="center"
+        android:layout_marginBottom="2dp"
+        android:text="V1.0 版本">
+    </TextView>
+
 </RelativeLayout>

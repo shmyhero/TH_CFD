@@ -25,6 +25,13 @@
     <!-- 此权限用于在接到推送时，可唤醒屏幕，可选择性添加权限 -->
     <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
 
+    <!-- 个推 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <uses-permission android:name="android.permission.REQUEST_PERMISSION"></uses-permission>
+
+
+
     <application
         android:allowBackup="true"
         android:label="@string/app_name"

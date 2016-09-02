@@ -2,10 +2,15 @@ package com.tradehero.cfd;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -13,6 +18,7 @@ import android.widget.Toast;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactRootView;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
+import com.igexin.sdk.PushManager;
 import com.meiqia.core.callback.OnInitCallback;
 import com.meiqia.meiqiasdk.util.MQConfig;
 import com.tencent.bugly.crashreport.CrashReport;
@@ -33,10 +39,18 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     private ReactInstanceManager mReactInstanceManager;
     private boolean mDoRefresh = false;
 
+    // SDK参数，会自动从Manifest文件中读取，第三方无需修改下列变量，请修改AndroidManifest.xml文件中相应的meta-data信息。
+    // 修改方式参见个推SDK文档
+    private String appkey = "";
+    private String appsecret = "";
+    private String appid = "";
+
+    private static final int REQUEST_PERMISSION = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        preferences.edit().putString("debug_http_host", "192.168.20.114:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.126:8081").apply();
 
         super.onCreate(null);
 
@@ -45,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         TalkingDataAppCpa.init(this.getApplicationContext(), "d505985d4e8e494fbd59aab89d4b8b96", null);
 
         initMeiQia();
+        initGeTui();
 
         mReactInstanceManager = RNManager.getInstanceManager(getApplication());
         setContentView(R.layout.react_activity_container);
@@ -144,7 +159,61 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
         MQConfig.isShowClientAvatar = true;
 
+    }
+
+    public void initGeTui(){
+        // 从AndroidManifest.xml的meta-data中读取SDK配置信息
+        String packageName = getApplicationContext().getPackageName();
+        try {
+            ApplicationInfo appInfo = getPackageManager().getApplicationInfo(packageName, PackageManager.GET_META_DATA);
+            if (appInfo.metaData != null) {
+                appid = appInfo.metaData.getString("PUSH_APPID");
+                appsecret = appInfo.metaData.getString("PUSH_APPSECRET");
+                appkey = appInfo.metaData.getString("PUSH_APPKEY");
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // SDK初始化，第三方程序启动时，都要进行SDK初始化工作
+        Log.d("GetuiSdk", "initializing sdk...");
+        PackageManager pkgManager = getPackageManager();
+        // 读写 sd card 权限非常重要, android6.0默认禁止的, 建议初始化之前就弹窗让用户赋予该权限
+        boolean sdCardWritePermission =
+                pkgManager.checkPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, getPackageName()) == PackageManager.PERMISSION_GRANTED;
 
 
+        // read phone state用于获取 imei 设备信息
+        boolean phoneSatePermission =
+                pkgManager.checkPermission(android.Manifest.permission.READ_PHONE_STATE, getPackageName()) == PackageManager.PERMISSION_GRANTED;
+
+        if (Build.VERSION.SDK_INT >= 23 && !sdCardWritePermission || !phoneSatePermission) {
+            requestPermission();
+        } else {
+            // SDK初始化，第三方程序启动时，都要进行SDK初始化工作
+            PushManager.getInstance().initialize(this.getApplicationContext());
+        }
+    }
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(this, new String[] {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_PHONE_STATE},
+                REQUEST_PERMISSION);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == REQUEST_PERMISSION) {
+            if ((grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
+                PushManager.getInstance().initialize(this.getApplicationContext());
+            } else {
+                Log.e("GetuiSdkDemo",
+                        "we highly recommend that you need to grant the special permissions before initializing the SDK, otherwise some "
+                                + "functions will not work");
+                PushManager.getInstance().initialize(this.getApplicationContext());
+            }
+        } else {
+            onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 }

@@ -52,6 +52,7 @@ var EditAlertPage = React.createClass({
 			downError: null,
 			stockPriceAsk: 0,
 			stockPriceBid: 0,
+			isFinishButtonEnabled: true,
 		};
 	},
 
@@ -59,12 +60,26 @@ var EditAlertPage = React.createClass({
 	downInputPosition: {},
 
 	componentDidMount: function(){
-		console.log("test data")
 		console.log(this.props.stockInfo)
 		console.log(this.props.stockAlert)
 
+		this.calculateInputPosition();
+
 		var currentX = 0;
 
+		if(this.props.stockAlert){
+			this.setState({
+				HighPrice: this.props.stockAlert.HighPrice,
+				LowPrice: this.props.stockAlert.LowPrice,
+				HighEnabled: this.props.stockAlert.HighEnabled,
+				LowEnabled: this.props.stockAlert.LowEnabled,
+			});
+		}
+
+		this.loadStockInfo();
+	},
+
+	calculateInputPosition(onFinish){
 		//Bug fix. The measure function may fail if not wrapped with settimeout...
 		setTimeout(()=>{
 			this.refs[UP_INPUT_REF].measure((fx, fy, width, height, px, py) => {
@@ -87,21 +102,13 @@ var EditAlertPage = React.createClass({
 					px: px,
 					py: py,
 				}
-			})
-		}, 0);
-
-
-
-		if(this.props.stockAlert){
-			this.setState({
-				HighPrice: this.props.stockAlert.HighPrice,
-				LowPrice: this.props.stockAlert.LowPrice,
-				HighEnabled: this.props.stockAlert.HighEnabled,
-				LowEnabled: this.props.stockAlert.LowEnabled
 			});
-		}
 
-		this.loadStockInfo();
+			console.log(JSON.stringify(this.upInputPosition))
+			if(onFinish){
+				onFinish();
+			}
+		}, 0);
 	},
 
 	loadStockInfo: function() {
@@ -181,20 +188,13 @@ var EditAlertPage = React.createClass({
 			})
 	},
 
-
-	componentWillUnmount: function(){
-		//WebSocketModule.cleanRegisteredCallbacks();
-	},
-
-	gotoNext: function() {
-	},
-
 	pressBackButton: function() {
 		this.props.showTabbar()
 		this.props.navigator.pop()
 	},
 
 	validateInputData: function(){
+		console.log("EditAlertPage validateInputData: " + this.state.HighPrice + ", " + this.state.LowPrice);
 		this.validatePrice(1, this.state.HighPrice)
 		this.validatePrice(2, this.state.LowPrice)
 	},
@@ -207,9 +207,7 @@ var EditAlertPage = React.createClass({
 			if(value < this.state.stockPriceAsk){
 				error = "低于当前价";
 			}
-			if(this.state.HighEnabled && !value){
-				error = "输入不能为空";
-			}
+			console.log("EditAlertPage upvalue: " + text);
 			this.setState({
 				HighPrice: text,
 				upError: error
@@ -219,13 +217,39 @@ var EditAlertPage = React.createClass({
 			if(value > this.state.stockPriceBid){
 				error = "高于当前价";
 			}
-			if(this.state.LowEnabled && !value){
-				error = "输入不能为空";
-			}
+			console.log("EditAlertPage downvalue: " + text);
 			this.setState({
 				LowPrice: text,
 				downError: error
 			});
+		}
+	},
+
+	onTextFocus: function(type){
+		if(type === 1){
+			//High
+			if(!this.state.HighPrice){
+				this.setState({HighEnabled:false})
+			}
+		}else{
+			//Low
+			if(!this.state.LowPrice){
+				this.setState({LowEnabled:false})
+			}
+		}
+	},
+
+	onTextBlur: function(type){
+		if(type === 1){
+			//High
+			if(!this.state.HighPrice){
+				this.setState({HighEnabled:false})
+			}
+		}else{
+			//Low
+			if(!this.state.LowPrice){
+				this.setState({LowEnabled:false})
+			}
 		}
 	},
 
@@ -246,16 +270,19 @@ var EditAlertPage = React.createClass({
 		var ref;
 		if(type === 1){
 			textColor = this.state.upError ? "red" : "black";
-			text = this.state.HighPrice ? this.state.HighPrice.toString() : null;
+			text = this.state.HighPrice ? this.state.HighPrice.toString() : "";
 			inputEnable = this.state.HighEnabled;
 			ref = UP_INPUT_REF;
+			console.log("EditAlertPage up:" + text)
 		}else{
 			textColor = this.state.downError ? "red" : "black";
-			text = this.state.LowPrice ? this.state.LowPrice.toString() : null;
+			text = this.state.LowPrice ? this.state.LowPrice.toString() : "";;
 			inputEnable = this.state.LowEnabled;
 			ref = DOWN_INPUT_REF;
+
 		}
 
+		//editable={inputEnable}
 		return(
 			<View style={styles.cellWrapper}>
 				<Text style={styles.cellTitle}>
@@ -264,19 +291,27 @@ var EditAlertPage = React.createClass({
 				<TextInput style={[styles.cellInput, {color: textColor}]}
 									 ref={ref}
 				 					 onChangeText={(text) => this.validatePrice(type, text)}
+									 onFocus={() => this.setState(type === 1 ? {HighEnabled:true} : {LowEnabled:true})}
+									 onBlur={() => this.onTextBlur(type)}
 									 value={text}
-									 editable={inputEnable}
+
 									 keyboardType='numeric'>
 				</TextInput>
 				<Switch
 				  value={type===1 ? this.state.HighEnabled : this.state.LowEnabled}
 					onValueChange={(value) => this.setState(type === 1 ? {HighEnabled:value} : {LowEnabled:value})}
+					onTintColor={ColorConstants.TITLE_BLUE}
+
 				/>
 			</View>
 			)
 	},
 
 	onComplete: function(){
+		this.setState({
+			isFinishButtonEnabled: false
+		});
+
 		var userData = LogicData.getUserData();
 
 		var highPrice = null;
@@ -289,12 +324,15 @@ var EditAlertPage = React.createClass({
 			lowPrice = parseFloat(this.state.LowPrice);
 		}
 
+		var highEnabled = highPrice ? this.state.HighEnabled : false;
+		var lowEnabled = lowPrice ? this.state.LowEnabled : false;
+
 		var alertData = {
     	"SecurityId": this.props.stockId,
     	"HighPrice": highPrice,
-    	"HighEnabled": this.state.HighEnabled,
+    	"HighEnabled": highEnabled,
     	"LowPrice": lowPrice,
-    	"LowEnabled": this.state.LowEnabled
+    	"LowEnabled": lowEnabled
 		}
 
 		NetworkModule.fetchTHUrl(
@@ -341,8 +379,15 @@ var EditAlertPage = React.createClass({
 	//Silly way! But cannot find a better solution..
 	renderUpperErrorHint: function(){
 		if(this.state.upError){
-			if(this.upInputPosition){
+			//Sometimes the position calculation will fail...So we may need to update the position...
+			if(this.upInputPosition && (this.upInputPosition.py != 0 && this.upInputPosition.px < width)) {
 				return this.renderErrorBubble(this.upInputPosition.px, this.upInputPosition.py, this.state.upError)
+			} else{
+				this.calculateInputPosition(()=>{
+					this.setState({
+						upError: this.state.upError,
+					})
+				})
 			}
 		}
 		return (<View/>)
@@ -352,6 +397,12 @@ var EditAlertPage = React.createClass({
 		if(this.state.downError){
 			if(this.upInputPosition){
 				return this.renderErrorBubble(this.downInputPosition.px, this.downInputPosition.py, this.state.downError)
+			}else{
+				this.calculateInputPosition(()=>{
+					this.setState({
+						downError: this.state.downError,
+					})
+				})
 			}
 		}
 		return (<View/>)
@@ -364,7 +415,7 @@ var EditAlertPage = React.createClass({
 					showBackButton={true}
 					textOnRight='完成'
 					rightTextOnClick={this.onComplete}
-					enableRightText={!this.hasError()}
+					enableRightText={!this.hasError() && this.state.isFinishButtonEnabled}
 					navigator={this.props.navigator}/>
 				<View style={styles.headerView}>
 					<Text style={styles.nameText}>

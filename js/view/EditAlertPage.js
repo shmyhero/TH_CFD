@@ -46,13 +46,15 @@ var EditAlertPage = React.createClass({
 			LowPrice: 0,
 			HighEnabled: false,
 			LowEnabled: false,
+			HighError: null,
+			LowError: null,
 			stockInfo: this.props.stockInfo,
 			stockPrice: 0,	//TODO: use real price
-			upError: null,
-			downError: null,
 			stockPriceAsk: 0,
 			stockPriceBid: 0,
 			isFinishButtonEnabled: true,
+			HighFocused: false,
+			LowFocused: false,
 		};
 	},
 
@@ -204,23 +206,23 @@ var EditAlertPage = React.createClass({
 		var error = null
 		if(type === 1){
 			//High
-			if(value < this.state.stockPriceAsk){
+			if(text && value < this.state.stockPriceAsk){
 				error = "低于当前价";
 			}
 			console.log("EditAlertPage upvalue: " + text);
 			this.setState({
 				HighPrice: text,
-				upError: error
+				HighError: error
 			});
 		}else{
 			//Low
-			if(value > this.state.stockPriceBid){
+			if(text && value > this.state.stockPriceBid){
 				error = "高于当前价";
 			}
 			console.log("EditAlertPage downvalue: " + text);
 			this.setState({
 				LowPrice: text,
-				downError: error
+				LowError: error
 			});
 		}
 	},
@@ -228,14 +230,18 @@ var EditAlertPage = React.createClass({
 	onTextFocus: function(type){
 		if(type === 1){
 			//High
-			if(!this.state.HighPrice){
-				this.setState({HighEnabled:false})
-			}
+			this.setState(
+			{
+				HighFocused: true,
+				HighEnabled:true
+			})
 		}else{
 			//Low
-			if(!this.state.LowPrice){
-				this.setState({LowEnabled:false})
-			}
+			this.setState(
+			{
+				LowFocused: true,
+				LowEnabled:true
+			})
 		}
 	},
 
@@ -245,11 +251,33 @@ var EditAlertPage = React.createClass({
 			if(!this.state.HighPrice){
 				this.setState({HighEnabled:false})
 			}
+			if(this.state.HighError){
+				this.setState({
+					HighError: null,
+					HighPrice: null,
+					HighEnabled: false,
+				})
+			}
+			this.setState(
+			{
+				HighFocused: false
+			})
 		}else{
 			//Low
 			if(!this.state.LowPrice){
 				this.setState({LowEnabled:false})
 			}
+			if(this.state.LowError){
+				this.setState({
+					LowError: null,
+					LowPrice: null,
+					LowEnabled: false,
+				})
+			}
+			this.setState(
+			{
+				LowFocused: false
+			})
 		}
 	},
 
@@ -269,17 +297,15 @@ var EditAlertPage = React.createClass({
 		var inputEnable = false;
 		var ref;
 		if(type === 1){
-			textColor = this.state.upError ? "red" : "black";
+			textColor = this.state.HighError ? "red" : "black";
 			text = this.state.HighPrice ? this.state.HighPrice.toString() : "";
 			inputEnable = this.state.HighEnabled;
 			ref = UP_INPUT_REF;
-			console.log("EditAlertPage up:" + text)
 		}else{
-			textColor = this.state.downError ? "red" : "black";
+			textColor = this.state.LowError ? "red" : "black";
 			text = this.state.LowPrice ? this.state.LowPrice.toString() : "";;
 			inputEnable = this.state.LowEnabled;
 			ref = DOWN_INPUT_REF;
-
 		}
 
 		//editable={inputEnable}
@@ -291,7 +317,7 @@ var EditAlertPage = React.createClass({
 				<TextInput style={[styles.cellInput, {color: textColor}]}
 									 ref={ref}
 				 					 onChangeText={(text) => this.validatePrice(type, text)}
-									 onFocus={() => this.setState(type === 1 ? {HighEnabled:true} : {LowEnabled:true})}
+									 onFocus={() => this.onTextFocus(type)}
 									 onBlur={() => this.onTextBlur(type)}
 									 value={text}
 
@@ -359,7 +385,7 @@ var EditAlertPage = React.createClass({
 	},
 
 	hasError: function(){
-		return this.state.upError || this.state.downError ? true : false;
+		return this.state.HighError || this.state.LowError ? true : false;
 	},
 
 	renderErrorBubble: function(offsetX, offsetY, errorText){
@@ -377,15 +403,16 @@ var EditAlertPage = React.createClass({
 	},
 
 	//Silly way! But cannot find a better solution..
-	renderUpperErrorHint: function(){
-		if(this.state.upError){
+	renderHighErrorHint: function(){
+		console.log("renderHighErrorHint this.state.HighFocused: " + this.state.HighFocused + ", y: " + this.upInputPosition.py + ", x: " + this.upInputPosition.px)
+		if(this.state.HighError && this.state.HighFocused){
 			//Sometimes the position calculation will fail...So we may need to update the position...
 			if(this.upInputPosition && (this.upInputPosition.py != 0 && this.upInputPosition.px < width)) {
-				return this.renderErrorBubble(this.upInputPosition.px, this.upInputPosition.py, this.state.upError)
+				return this.renderErrorBubble(this.upInputPosition.px, this.upInputPosition.py, this.state.HighError)
 			} else{
 				this.calculateInputPosition(()=>{
 					this.setState({
-						upError: this.state.upError,
+						HighError: this.state.HighError,
 					})
 				})
 			}
@@ -393,14 +420,14 @@ var EditAlertPage = React.createClass({
 		return (<View/>)
 	},
 
-	renderDownErrorHint: function(){
-		if(this.state.downError){
+	renderLowErrorHint: function(){
+		if(this.state.LowError && this.state.LowFocused){
 			if(this.upInputPosition){
-				return this.renderErrorBubble(this.downInputPosition.px, this.downInputPosition.py, this.state.downError)
+				return this.renderErrorBubble(this.downInputPosition.px, this.downInputPosition.py, this.state.LowError)
 			}else{
 				this.calculateInputPosition(()=>{
 					this.setState({
-						downError: this.state.downError,
+						LowError: this.state.LowError,
 					})
 				})
 			}
@@ -433,8 +460,8 @@ var EditAlertPage = React.createClass({
 				<Text style={styles.bottomText}>
 					虽然全力以赴传递通知，却也不能保证。
 				</Text>
-				{this.renderUpperErrorHint()}
-				{this.renderDownErrorHint()}
+				{this.renderHighErrorHint()}
+				{this.renderLowErrorHint()}
 			</View>
 		);
 	},

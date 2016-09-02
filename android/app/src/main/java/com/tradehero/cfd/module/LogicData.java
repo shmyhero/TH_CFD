@@ -38,9 +38,9 @@ public class LogicData {
         }else if(dataName.equals(MY_ALERT_LIST)){
             try {
                 mMyAlertList = new JSONArray(data);
-                if(ReactStockEditFragmentNative.instance !=null){
-                    ReactStockEditFragmentNative.instance.makeDataRefresh();
-                }
+//                if(ReactStockEditFragmentNative.instance !=null){
+//                    ReactStockEditFragmentNative.instance.makeDataRefresh();
+//                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

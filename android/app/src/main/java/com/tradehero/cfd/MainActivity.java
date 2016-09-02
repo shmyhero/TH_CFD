@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        preferences.edit().putString("debug_http_host", "192.168.20.126:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.125:8081").apply();
 
         super.onCreate(null);
 
@@ -161,7 +162,15 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
     }
 
+
+    public static String ANDOIRD_ID = "";
+
+    public static String getAndroidID(){
+        return ANDOIRD_ID;
+    }
     public void initGeTui(){
+        ANDOIRD_ID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        Log.d("CFD LOG","Android ID : "+ ANDOIRD_ID);
         // 从AndroidManifest.xml的meta-data中读取SDK配置信息
         String packageName = getApplicationContext().getPackageName();
         try {

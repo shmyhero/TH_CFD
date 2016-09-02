@@ -67,4 +67,11 @@ public class ReactStockEditFragmentNativeManager extends ViewGroupManager<ReactS
         }
     }
 
+
+    @ReactProp(name = "alertData")
+    public void alertData(ReactStockEditFragmentNative reactStockEditFragmentNative, String alertData) {
+        if (reactStockEditFragmentNative != null) {
+            reactStockEditFragmentNative.setAlertData(alertData);
+        }
+    }
 }

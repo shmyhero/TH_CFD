@@ -93,7 +93,7 @@ var EditOwnStocksPage = React.createClass({
 				 },
 			 },
 			 (responseJson) => {
-					NativeDataModule.passDataToNative('myAlertList', responseJson);
+					//NativeDataModule.passDataToNative('myAlertList', responseJson);
 					this.setState({
 						stockAlertList : responseJson,
 					});

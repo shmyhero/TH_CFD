@@ -483,4 +483,9 @@ public class ReactStockEditFragmentNative extends RelativeLayout{
         }
     }
 
+    public void setAlertData(String alertData){
+        LogicData.getInstance().setData(LogicData.MY_ALERT_LIST , alertData);
+        makeDataRefresh();
+    }
+
 }

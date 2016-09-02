@@ -39,6 +39,8 @@ export const BIND_WECHAT_API = SERVER_IP + '/api/user/bindwechat?openid=<wechatO
 export const UPDATE_HEAD_PHOTO = SERVER_IP + '/api/user/photo'
 export const GET_ALL_STOCK_ALERT = SERVER_IP + '/api/user/stockAlert/all'
 export const UPDATE_STOCK_ALERT = SERVER_IP + '/api/user/stockAlert'
+export const POST_PUSH_TOKEN = SERVER_IP + '/api/user/pushtoken'
+export const POST_PUSH_TOKEN_AUTH = SERVER_IP + '/api/user/pushtokenauth'
 
 export const GZT_OCR_CHECK_API = GZT_SERVER_IP + '/ocrCheck'
 

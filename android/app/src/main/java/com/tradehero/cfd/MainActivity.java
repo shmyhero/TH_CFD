@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
@@ -19,12 +20,15 @@ import android.widget.Toast;
 
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactRootView;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.igexin.sdk.PushManager;
 import com.meiqia.core.callback.OnInitCallback;
 import com.meiqia.meiqiasdk.util.MQConfig;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tendcloud.appcpa.TalkingDataAppCpa;
+import com.tradehero.cfd.RNNativeModules.NativeDataModule;
+import com.tradehero.cfd.module.LogicData;
 import com.tradehero.cfd.talkingdata.TalkingDataModule;
 
 import butterknife.Bind;
@@ -44,11 +48,6 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     private ReactInstanceManager mReactInstanceManager;
     private boolean mDoRefresh = false;
 
-    // SDK参数，会自动从Manifest文件中读取，第三方无需修改下列变量，请修改AndroidManifest.xml文件中相应的meta-data信息。
-    // 修改方式参见个推SDK文档
-    private String appkey = "";
-    private String appsecret = "";
-    private String appid = "";
 
     private static final int REQUEST_PERMISSION = 0;
 
@@ -82,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         }
 
 
+        handler.sendEmptyMessageDelayed(0,1000);
+
     }
 
     @Override
@@ -111,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
             mReactInstanceManager.onHostResume(this, this);
         }
     }
+
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
@@ -178,26 +180,36 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     }
 
 
-    public static String ANDOIRD_ID = "";
-
-    public static String getAndroidID(){
-        return ANDOIRD_ID;
-    }
-    public void initGeTui(){
-        ANDOIRD_ID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        Log.d("CFD LOG","Android ID : "+ ANDOIRD_ID);
-        // 从AndroidManifest.xml的meta-data中读取SDK配置信息
-        String packageName = getApplicationContext().getPackageName();
-        try {
-            ApplicationInfo appInfo = getPackageManager().getApplicationInfo(packageName, PackageManager.GET_META_DATA);
-            if (appInfo.metaData != null) {
-                appid = appInfo.metaData.getString("PUSH_APPID");
-                appsecret = appInfo.metaData.getString("PUSH_APPSECRET");
-                appkey = appInfo.metaData.getString("PUSH_APPKEY");
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            initDeviceToken();
         }
+    };
+
+    public void initDeviceToken(){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    String ANDOIRD_ID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+                    Log.d("CFD LOG","Android ID : "+ ANDOIRD_ID);
+                    ReactContext context = mReactInstanceManager.getCurrentReactContext();
+
+                    NativeDataModule.passDataToRN(context, "deviceToken", ANDOIRD_ID);
+                    Log.d("","initDeviceToken : " + ANDOIRD_ID);
+                }catch (Exception e){
+                    Log.d("","initDeviceToken : error");
+                }
+            }
+        }).start();
+
+    }
+
+    public void initGeTui(){
+
 
         // SDK初始化，第三方程序启动时，都要进行SDK初始化工作
         Log.d("GetuiSdk", "initializing sdk...");

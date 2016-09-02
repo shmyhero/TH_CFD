@@ -12,6 +12,7 @@ import {
 	Dimensions,
 	TouchableOpacity,
 	Alert,
+	Linking,
 } from 'react-native';
 
 import {
@@ -31,6 +32,9 @@ const {appKey} = _updateConfig[Platform.OS];
 
 var buildStyleInterpolator = require('buildStyleInterpolator');
 var UIManager = require('UIManager');
+
+var recevieDataSubscription = null
+var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 
 require('./js/utils/dateUtils')
 
@@ -153,7 +157,88 @@ var AppNavigator = React.createClass({
 				console.log(errorMessage)
 			}
 		)
+
+
+
+
+		if (Platform.OS === 'ios') {
+						 Linking.addEventListener('deviceToken', this._handleDeviceToken);
+		} else {
+						this.recevieDataSubscription = RCTNativeAppEventEmitter.addListener(
+							'nativeSendDataToRN',
+							(args) => {
+								if (args[0] == 'deviceToken') {
+									this._handleDeviceToken(args[1])
+								}
+							}
+						)
+					}
+
 	},
+
+
+	componentWillUnmount: function() {
+
+		if (Platform.OS === 'ios') {
+			Linking.removeEventListener('deviceToken', this._handleDeviceToken);
+		} else {
+			this.recevieDataSubscription.remove();
+		}
+	},
+
+	_handleDeviceToken: function(event) {
+		console.log("deviceToken from native:", event);
+		this.sendDeviceTokenToServer(event);
+	},
+
+	sendDeviceTokenToServer: function(event){
+		var userData = LogicData.getUserData()
+		var notLogin = Object.keys(userData).length === 0
+		var alertData = {
+			"deviceToken": event,
+			"deviceType": Platform.OS === 'ios' ? 2 : 1,
+		}
+		if(!notLogin){//if login
+		 NetworkModule.fetchTHUrl(
+			 NetConstants.POST_PUSH_TOKEN_AUTH,
+			 {
+				 method: 'POST',
+				 headers: {
+					 'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					 'Accept': 'application/json',
+					 'Content-Type': 'application/json',
+				 },
+			 },
+			 (responseJson) => {
+				//  Alert.alert('set deviceToken success auth： ' + alertData.deviceToken +" * " +alertData.deviceType);
+				 console.log('set deviceToken success auth： ' + alertData.deviceToken +" * " +alertData.deviceType);
+			 },
+			 (errorMessage) => {
+				 console.log('errorMessage');
+			 }
+		 )
+	 }else{//if not login
+		 NetworkModule.fetchTHUrl(
+			 NetConstants.POST_PUSH_TOKEN,
+			 {
+				 method: 'POST',
+				 headers: {
+					 'Accept': 'application/json',
+					 'Content-Type': 'application/json',
+				 },
+				 body:JSON.stringify(alertData),
+			 },
+			 (responseJson) => {
+				// Alert.alert('set deviceToken success ： ' + alertData.deviceToken +" * " +alertData.deviceType);
+				console.log('set deviceToken success ： ' + alertData.deviceToken +" * " +alertData.deviceType);
+			 },
+			 (errorMessage) => {
+				console.log('errorMessage');
+			 }
+		 )
+	 }
+	},
+
 
 	enterMainPage: function() {
 		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);

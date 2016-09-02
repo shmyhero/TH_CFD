@@ -153,7 +153,7 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'stretch',
     padding: 20,
-    backgroundColor: 'rgba(77,77,77,0.5)',
+    backgroundColor: 'rgba(77,77,77,0.7)',
     height: SHARE_CONTAINER_HEIGHT,
   },
 

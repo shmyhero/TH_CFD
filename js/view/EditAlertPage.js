@@ -314,15 +314,17 @@ var EditAlertPage = React.createClass({
 				<Text style={styles.cellTitle}>
 					{title}
 				</Text>
-				<TextInput style={[styles.cellInput, {color: textColor}]}
-									 ref={ref}
-				 					 onChangeText={(text) => this.validatePrice(type, text)}
-									 onFocus={() => this.onTextFocus(type)}
-									 onBlur={() => this.onTextBlur(type)}
-									 value={text}
-
-									 keyboardType='numeric'>
-				</TextInput>
+				<View style={[styles.cellInputWrapper]}>
+					<TextInput style={[styles.cellInput, {color: textColor}]}
+										 ref={ref}
+					 					 onChangeText={(text) => this.validatePrice(type, text)}
+										 onFocus={() => this.onTextFocus(type)}
+										 onBlur={() => this.onTextBlur(type)}
+										 value={text}
+										 underlineColorAndroid='transparent'
+										 keyboardType='numeric'>
+					</TextInput>
+				</View>
 				<Switch
 				  value={type===1 ? this.state.HighEnabled : this.state.LowEnabled}
 					onValueChange={(value) => this.setState(type === 1 ? {HighEnabled:value} : {LowEnabled:value})}
@@ -506,14 +508,17 @@ var styles = StyleSheet.create({
 	},
 	cellInput: {
 		fontSize: 17,
-		borderWidth: 1.0,
-		borderRadius: 2,
-		borderColor: '#efeff4',
-		height: 28,
 		padding: 0,
 		width: Math.round(width/3),
 		alignSelf: 'center',
 		textAlignVertical:'center',
+		flex:1,
+	},
+	cellInputWrapper: {
+		borderWidth: 1.0,
+		borderRadius: 2,
+		borderColor: '#efeff4',
+		height: 31,
 	},
 	bottomText: {
 		marginTop:15,

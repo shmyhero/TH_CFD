@@ -11,6 +11,7 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -55,8 +56,10 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        preferences.edit().putString("debug_http_host", "192.168.20.113:8081").apply();
+
+        preferences.edit().putString("debug_http_host", "192.168.20.112:8081").apply();
 
         super.onCreate(null);
 
@@ -73,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
         reactRootView.startReactApplication(mReactInstanceManager, "TH_CFD", null);
 
-
         try {
             String pkName = this.getPackageName();
             String versionName = this.getPackageManager().getPackageInfo(
@@ -85,6 +87,14 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
         handler.sendEmptyMessageDelayed(0,1000);
 
+        if(getIntent() != null && getIntent().getExtras()!= null)
+        {
+            String data = getIntent().getExtras().getString(GeTuiBroadcastReceiver.KEY_PUSH_DATA);
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setMessage(data)
+                    .create();
+            dialog.show();
+        }
     }
 
     @Override

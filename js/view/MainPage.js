@@ -491,6 +491,7 @@ var MainPage = React.createClass({
 			this.recevieDataSubscription = RCTNativeAppEventEmitter.addListener(
 				'nativeSendDataToRN',
 				(args) => {
+					alert(JSON.stringify(args))
 					if (args[0] == 'openURL') {
 						this._handleDeepLink(args[1])
 					}

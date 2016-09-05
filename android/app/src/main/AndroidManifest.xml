@@ -36,7 +36,8 @@
         android:allowBackup="true"
         android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name=".CFDApplication">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -73,6 +74,14 @@
             android:process=":push"
             android:exported="true">
         </service>
+        <receiver
+            android:name=".GeTuiBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <!-- APPID需要替换为相应的个推应用ID -->
+                <action android:name="com.igexin.sdk.action.${GETUI_APP_ID}" />
+            </intent-filter>
+        </receiver>
 
         <receiver android:name="com.apptalkingdata.push.service.PushServiceReceiver" android:exported="true">
             <intent-filter>

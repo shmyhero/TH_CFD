@@ -285,11 +285,11 @@ var LoginPage = React.createClass({
 		)
 	},
 
-	initTokenForGeTui:function(userData){
+	initTokenForGeTui:function(){
 		var userData = LogicData.getUserData()
 
 		var alertData = {
-			"deviceToken": AppNavigator.GE_TUI_TOKEN,
+			"deviceToken": LogicData.getGeTuiToken(),
 			"deviceType": Platform.OS === 'ios' ? 2 : 1,
 		}
 

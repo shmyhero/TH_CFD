@@ -11,6 +11,7 @@ var searchStockHistory = [];
 var balanceData = null;
 var fxData = [];
 var certificateIdCardInfo = null;
+var getui_token = '';
 
 var LogicData = {
 
@@ -116,6 +117,14 @@ var LogicData = {
 
 	setFxData: function(data) {
 		fxData = data
+	},
+
+	setGeTuiToken(token){
+		getui_token = token
+	},
+
+	getGeTuiToken(){
+		return getui_token
 	},
 
 	getFxDataBySymbol: function(symbol) {

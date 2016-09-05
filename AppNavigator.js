@@ -39,8 +39,6 @@ var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 require('./js/utils/dateUtils')
 
 
-var GE_TUI_TOKEN = '';
-
 var SCREEN_WIDTH = Dimensions.get('window').width;
 var ToTheLeft = {
 	opacity: {
@@ -115,7 +113,7 @@ var AppNavigator = React.createClass({
 				if (value !== null) {
 					LogicData.setUserData(JSON.parse(value))
 
-					this.sendDeviceTokenToServer(GE_TUI_TOKEN);
+					this.sendDeviceTokenToServer(LogicData.getGeTuiToken());
 				}
 				this.checkUpdate()
 
@@ -194,11 +192,11 @@ var AppNavigator = React.createClass({
 
 
 	sendDeviceTokenToServer: function(event){
-		GE_TUI_TOKEN = event
+		LogicData.setGeTuiToken(event);
 		var userData = LogicData.getUserData()
 		var notLogin = Object.keys(userData).length === 0
 		var alertData = {
-			"deviceToken": GE_TUI_TOKEN,
+			"deviceToken": event,
 			"deviceType": Platform.OS === 'ios' ? 2 : 1,
 		}
 		if(!notLogin){//if login

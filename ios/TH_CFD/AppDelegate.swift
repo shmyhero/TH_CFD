@@ -28,6 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 	var rnRootViewController: UIViewController!
 	var window: UIWindow?
 	var nativeData: NativeData?
+	var getuiID: String?
 	
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 		// Override point for customization after application launch.
@@ -142,8 +143,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		var token = deviceToken.description.stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: "<>"));
 		token = token.stringByReplacingOccurrencesOfString(" ", withString: "")
 		GeTuiSdk.registerDeviceToken(token);
-		
-//		self.nativeData!.sendDataToRN("deviceToken", data: token)
 	}
 	
 	func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
@@ -162,6 +161,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 	func GeTuiSdkDidRegisterClient(clientId: String!) {
 		// [4-EXT-1]: 个推SDK已注册，返回clientId
 		NSLog("\n>>>[GeTuiSdk RegisterClient]:%@\n\n", clientId);
+		getuiID = clientId;
+		if (self.nativeData != nil) {
+			self.nativeData!.sendDataToRN("deviceToken", data: clientId)
+		}
 	}
 	
 	/** SDK遇到错误回调 */

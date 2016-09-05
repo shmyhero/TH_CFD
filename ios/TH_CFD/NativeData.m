@@ -36,6 +36,11 @@ RCT_EXPORT_MODULE();
 		// depreciated
 		[manager loadOwnAlertData:jsonData];
 	}
+	else if([dataName isEqualToString:@"getui"]) {
+		if (delegate.getuiID) {
+			[self sendDataToRN:@"deviceToken" data: delegate.getuiID];
+		}
+	}
 }
 
 - (void)receiveRawDataFromRN:(NSString *)dataName data:(id)data

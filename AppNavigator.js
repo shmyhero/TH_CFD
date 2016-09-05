@@ -72,6 +72,7 @@ var FSModule = require('./js/module/FSModule')
 var LogicData = require('./js/LogicData')
 var MainPage = require('./js/view/MainPage')
 var AskForRestartPage = require('./js/view/AskForRestartPage')
+var NativeDataModule = require('./js/module/NativeDataModule')
 
 var GUIDE_SLIDES = [
 	require('./images/Guide-page01.png'),
@@ -102,6 +103,8 @@ var AppNavigator = React.createClass({
 	},
 
 	componentDidMount: function() {
+		NativeDataModule.passDataToNative('getui', "")
+
 		if (isFirstTime) {
 			markSuccess()
 		}
@@ -166,30 +169,20 @@ var AppNavigator = React.createClass({
 			}
 		)
 
-
-		if (Platform.OS === 'ios') {
-						 Linking.addEventListener('deviceToken', this._handleDeviceToken);
-		} else {
-						this.recevieDataSubscription = RCTNativeAppEventEmitter.addListener(
-							'nativeSendDataToRN',
-							(args) => {
-								if (args[0] == 'deviceToken') {
-									this._handleDeviceToken(args[1])
-								}
-							}
-						)
-					}
+		this.recevieDataSubscription = RCTNativeAppEventEmitter.addListener(
+			'nativeSendDataToRN',
+			(args) => {
+				if (args[0] == 'deviceToken') {
+					this._handleDeviceToken(args[1])
+				}
+			}
+		)
 
 	},
 
 
 	componentWillUnmount: function() {
-
-		if (Platform.OS === 'ios') {
-			Linking.removeEventListener('deviceToken', this._handleDeviceToken);
-		} else {
-			this.recevieDataSubscription.remove();
-		}
+		this.recevieDataSubscription.remove();
 	},
 
 	_handleDeviceToken: function(event) {

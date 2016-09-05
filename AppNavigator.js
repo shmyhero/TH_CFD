@@ -39,6 +39,8 @@ var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 require('./js/utils/dateUtils')
 
 
+var GE_TUI_TOKEN = '';
+
 var SCREEN_WIDTH = Dimensions.get('window').width;
 var ToTheLeft = {
 	opacity: {
@@ -83,6 +85,9 @@ var GUIDE_VERSION = {version: 2}
 var LOADING_PHASE = 'loading'
 var GUIDE_PHASE = 'guide'
 var MAIN_PAGE_PHASE = 'mainPage'
+
+
+
 var AppNavigator = React.createClass({
 
 	mixins: [TimerMixin],
@@ -106,6 +111,8 @@ var AppNavigator = React.createClass({
 			.then((value) => {
 				if (value !== null) {
 					LogicData.setUserData(JSON.parse(value))
+
+					this.sendDeviceTokenToServer(GE_TUI_TOKEN);
 				}
 				this.checkUpdate()
 
@@ -125,6 +132,7 @@ var AppNavigator = React.createClass({
 						 },
 						200
 					);
+
 				})
 				.done()
 			})
@@ -159,8 +167,6 @@ var AppNavigator = React.createClass({
 		)
 
 
-
-
 		if (Platform.OS === 'ios') {
 						 Linking.addEventListener('deviceToken', this._handleDeviceToken);
 		} else {
@@ -188,14 +194,18 @@ var AppNavigator = React.createClass({
 
 	_handleDeviceToken: function(event) {
 		console.log("deviceToken from native:", event);
+
 		this.sendDeviceTokenToServer(event);
 	},
 
+
+
 	sendDeviceTokenToServer: function(event){
+		GE_TUI_TOKEN = event
 		var userData = LogicData.getUserData()
 		var notLogin = Object.keys(userData).length === 0
 		var alertData = {
-			"deviceToken": event,
+			"deviceToken": GE_TUI_TOKEN,
 			"deviceType": Platform.OS === 'ios' ? 2 : 1,
 		}
 		if(!notLogin){//if login
@@ -208,6 +218,7 @@ var AppNavigator = React.createClass({
 					 'Accept': 'application/json',
 					 'Content-Type': 'application/json',
 				 },
+				 body:JSON.stringify(alertData),
 			 },
 			 (responseJson) => {
 				//  Alert.alert('set deviceToken success auth： ' + alertData.deviceToken +" * " +alertData.deviceType);

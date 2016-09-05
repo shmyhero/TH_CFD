@@ -32,6 +32,7 @@ var MainPage = require('./MainPage')
 var dismissKeyboard = require('dismissKeyboard');
 var TalkingdataModule = require('../module/TalkingdataModule')
 var LocalDataUpdateModule = require('../module/LocalDataUpdateModule')
+var AppNavigator = require('../../AppNavigator')
 
 var {height, width} = Dimensions.get('window')
 var rowHeight = 40;
@@ -257,6 +258,8 @@ var LoginPage = React.createClass({
 
 		console.log(LogicData.getUserData());
 
+		this.initTokenForGeTui();
+
 		NetworkModule.syncOwnStocks(userData)
 		WebSocketModule.alertServiceLogin(userData.userId + '_' + userData.token)
 
@@ -280,6 +283,35 @@ var LoginPage = React.createClass({
 				}
 			}
 		)
+	},
+
+	initTokenForGeTui:function(userData){
+		var userData = LogicData.getUserData()
+
+		var alertData = {
+			"deviceToken": AppNavigator.GE_TUI_TOKEN,
+			"deviceType": Platform.OS === 'ios' ? 2 : 1,
+		}
+
+		 NetworkModule.fetchTHUrl(
+			 NetConstants.POST_PUSH_TOKEN_AUTH,
+			 {
+				 method: 'POST',
+				 headers: {
+					 'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					 'Accept': 'application/json',
+					 'Content-Type': 'application/json',
+				 },
+				 body:JSON.stringify(alertData),
+			 },
+			 (responseJson) => {
+				//  Alert.alert('set deviceToken success auth： ' + alertData.deviceToken +" * " +alertData.deviceType);
+				 console.log('set deviceToken success auth： ' + alertData.deviceToken +" * " +alertData.deviceType);
+			 },
+			 (errorMessage) => {
+				 console.log('errorMessage');
+			 }
+		 )
 	},
 
 	forgetPassword: function() {

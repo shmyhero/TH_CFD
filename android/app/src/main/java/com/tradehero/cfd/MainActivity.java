@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
     private ReactInstanceManager mReactInstanceManager;
     private boolean mDoRefresh = false;
+    public static String mClientIDTeTui = "";
 
 
     private static final int REQUEST_PERMISSION = 0;
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        preferences.edit().putString("debug_http_host", "192.168.20.125:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.113:8081").apply();
 
         super.onCreate(null);
 
@@ -194,12 +195,18 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
             @Override
             public void run() {
                 try{
-                    String ANDOIRD_ID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-                    Log.d("CFD LOG","Android ID : "+ ANDOIRD_ID);
-                    ReactContext context = mReactInstanceManager.getCurrentReactContext();
+//                    String ANDOIRD_ID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+//                    Log.d("CFD LOG","Android ID : "+ ANDOIRD_ID);
+//                    ReactContext context = mReactInstanceManager.getCurrentReactContext();
+//                    Log.d("","initDeviceToken : " + ANDOIRD_ID);
 
-                    NativeDataModule.passDataToRN(context, "deviceToken", ANDOIRD_ID);
-                    Log.d("","initDeviceToken : " + ANDOIRD_ID);
+                    ReactContext context = mReactInstanceManager.getCurrentReactContext();
+                    if(mClientIDTeTui!=null){
+                        NativeDataModule.passDataToRN(context, "deviceToken", mClientIDTeTui);
+                        Log.d("GeTui","NativeDataModule deviceToken : " + mClientIDTeTui);
+                    }
+
+
                 }catch (Exception e){
                     Log.d("","initDeviceToken : error");
                 }
@@ -229,6 +236,12 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
             // SDK初始化，第三方程序启动时，都要进行SDK初始化工作
             PushManager.getInstance().initialize(this.getApplicationContext());
         }
+
+        mClientIDTeTui = PushManager.getInstance().getClientid(this);
+        if(mClientIDTeTui!=null){
+            Log.d("GeTui",""+mClientIDTeTui);
+        }
+
     }
 
     private void requestPermission() {

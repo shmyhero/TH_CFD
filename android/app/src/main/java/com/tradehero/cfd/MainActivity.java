@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.react.LifecycleState;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactRootView;
 import com.facebook.react.bridge.ReactContext;
@@ -38,7 +39,8 @@ import butterknife.ButterKnife;
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
  */
-public class MainActivity extends AppCompatActivity implements DefaultHardwareBackBtnHandler {
+public class MainActivity extends AppCompatActivity implements DefaultHardwareBackBtnHandler,
+        ReactInstanceManager.ReactInstanceEventListener{
 
     @Bind(R.id.react_root_view)
     ReactRootView reactRootView;
@@ -75,21 +77,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
         reactRootView.startReactApplication(mReactInstanceManager, "TH_CFD", null);
 
-        mReactInstanceManager.addReactInstanceEventListener(new ReactInstanceManager.ReactInstanceEventListener() {
-            @Override
-            public void onReactContextInitialized(ReactContext context) {
-                //Send GeTui Client ID to RN
-
-                initDeviceToken();
-
-                if(getIntent() != null && getIntent().getExtras()!= null) {
-                    String data = getIntent().getExtras().getString(GeTuiBroadcastReceiver.KEY_PUSH_DATA);
-                    if (data != null) {
-                        showPushDetail(data);
-                    }
-                }
-            }
-        });
+        mReactInstanceManager.addReactInstanceEventListener(this);
 
         try {
             String pkName = this.getPackageName();
@@ -102,14 +90,48 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     }
 
     @Override
+    public void onReactContextInitialized(ReactContext context) {
+        //Send GeTui Client ID to RN
+        initDeviceToken();
+
+        if(mReactInstanceManager.getLifecycleState() == LifecycleState.RESUMED){
+
+        }
+
+        if(getIntent() != null && getIntent().getExtras()!= null) {
+            final String data = getIntent().getExtras().getString(GeTuiBroadcastReceiver.KEY_PUSH_DATA);
+            if (data != null) {
+                sendPushDetailMessageWhenAvailable(data);
+                mReactInstanceManager.removeReactInstanceEventListener(this);
+            }
+
+        }
+    }
+
+    String pushData = null;
+
+    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if(intent != null && intent.getExtras()!= null)
-        {
+
+
+        if (intent != null && intent.getExtras() != null) {
             String data = intent.getExtras().getString(GeTuiBroadcastReceiver.KEY_PUSH_DATA);
-            if(data!=null) {
-                showPushDetail(data);
+            if (data != null) {
+                sendPushDetailMessageWhenAvailable(data);
             }
+        }
+    }
+
+    private void sendPushDetailMessageWhenAvailable(String data){
+        if(mReactInstanceManager.getLifecycleState() != LifecycleState.RESUMED) {
+            Log.i(TAG, "send data to RN. RN is paused so let's wait.");
+            //RN instance is paused or not started.
+            //So store the data for now and wait until onResume, otherwise the RN instance is still paused.
+            pushData = data;
+        }else{
+            Log.i(TAG, "send data to RN immediately.");
+            showPushDetail(data);
         }
     }
 
@@ -149,9 +171,13 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         super.onResume();
         if (mReactInstanceManager != null) {
             mReactInstanceManager.onHostResume(this, this);
+
+            if (pushData != null) {
+                showPushDetail(pushData);
+                pushData = null;
+            }
         }
     }
-
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {

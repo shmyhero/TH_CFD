@@ -51,7 +51,7 @@ var StockListViewPager = React.createClass({
 
 		this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', (event) => this.onDidFocus(event));
 		this.didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.STOCK_TAB_PRESS_EVENT, () => {
-  		this.onTabChanged() 
+  		this.onTabChanged()
 		});
 	},
 

@@ -315,8 +315,8 @@ var AppNavigator = React.createClass({
 	  		data.title,
 	  		data.message,
 				  [
-				    {text: '取消', onPress: () => this.cancelAlert()},
-				    {text: '查看', onPress: () => this.actionForPush(data)},
+				    {text: '忽略', onPress: () => this.cancelAlert()},
+				    {text: '立即查看', onPress: () => this.actionForPush(data)},
 				  ]
 				)
 		 }else {

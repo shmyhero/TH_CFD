@@ -51,7 +51,7 @@ var StockListViewPager = React.createClass({
 
 		this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', (event) => this.onDidFocus(event));
 		this.didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.STOCK_TAB_PRESS_EVENT, () => {
-			this.onTabChanged()
+  		this.onTabChanged() 
 		});
 	},
 
@@ -70,12 +70,12 @@ var StockListViewPager = React.createClass({
 			this._handleConnectivityChange
 		);
 	},
-	
+
 	onTabChanged: function() {
 		this.setState({currentSelectedTab: this.state.currentSelectedTab});
 		this.refs['page' + this.state.currentSelectedTab].tabPressed()
 		LogicData.setTabIndex(1);
-		WebSocketModule.registerCallbacks((stockInfo) => { 
+		WebSocketModule.registerCallbacks((stockInfo) => {
 			this.refs['page' + this.state.currentSelectedTab] && this.refs['page' + this.state.currentSelectedTab].handleStockInfo(stockInfo)
 		})
 	},

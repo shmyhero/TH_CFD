@@ -310,6 +310,7 @@ var AppNavigator = React.createClass({
 
 	//收到NativePush后弹出Alert后跳转
 	alertForPush: function(data){
+
 			Alert.alert(
 	  		data.title,
 	  		data.message,
@@ -318,20 +319,23 @@ var AppNavigator = React.createClass({
 				    {text: '查看', onPress: () => this.actionForPush(data)},
 				  ]
 				)
+
 	},
 
 	//收到NativePush后直接打开响应界面
 	actionForPush: function(data){
-		console.log('actionForPush '+ data.title);
+			if(data.type === '1' || data.type === '2' ){//1,2 type 是 平仓 和 股价提醒
+				console.log('actionForPush '+ data.title);
 
-		LogicData.setPushData(data);
+				LogicData.setPushData(data);
 
-		this.setState(
-			{
-				isPushAction:true,
-				pushData:data,
+				this.setState(
+					{
+						isPushAction:true,
+						pushData:data,
+					}
+				)
 			}
-		)
 	},
 
 	cancelAlert:function(){

@@ -172,12 +172,17 @@ var AppNavigator = React.createClass({
 		this.recevieDataSubscription = RCTNativeAppEventEmitter.addListener(
 			'nativeSendDataToRN',
 			(args) => {
-				if (args[0] == 'deviceToken') {
-					this._handleDeviceToken(args[1])
-				}else if (args[0] == 'PushShowDialog') {
-					this.alertForPush(JSON.parse(args[1]));
-				}else if (args[0] == 'PushShowDetail') {
-					this.actionForPush(JSON.parse(args[1]));
+				try{
+					if (args[0] == 'deviceToken') {
+						this._handleDeviceToken(args[1])
+					}else if (args[0] == 'PushShowDialog') {
+						this.alertForPush(JSON.parse(args[1]));
+					}else if (args[0] == 'PushShowDetail') {
+						this.actionForPush(JSON.parse(args[1]));
+					}
+				}
+				catch (e) {
+					console.log(e)
 				}
 			}
 		)

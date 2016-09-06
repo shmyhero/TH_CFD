@@ -12,6 +12,7 @@ var balanceData = null;
 var fxData = [];
 var certificateIdCardInfo = null;
 var getui_token = '';
+var pushData;
 
 var LogicData = {
 
@@ -125,6 +126,16 @@ var LogicData = {
 
 	getGeTuiToken(){
 		return getui_token
+	},
+
+	setPushData(data){
+		pushData = data
+	},
+
+	getPushData(){
+		var data = pushData
+		pushData = null 
+		return data
 	},
 
 	getFxDataBySymbol: function(symbol) {

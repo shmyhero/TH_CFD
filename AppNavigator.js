@@ -97,6 +97,8 @@ var AppNavigator = React.createClass({
 			showAskForRestart: false,
 			updateDescription: '',
 			updateHash: '',
+			isPushAction: false,
+			pushData: null,
 		};
 	},
 
@@ -175,6 +177,11 @@ var AppNavigator = React.createClass({
 				}
 			}
 		)
+
+
+		var alertData = {'title':'盈交易','msg':'打开苹果股票详情','type':'1','stockName':'苹果', 'stockId':'600021' };
+
+		this.alertForPush(alertData);
 
 	},
 
@@ -299,6 +306,36 @@ var AppNavigator = React.createClass({
 		}
 	},
 
+	//收到NativePush后弹出Alert后跳转
+	alertForPush: function(data){
+			Alert.alert(
+	  		data.title,
+	  		data.msg,
+				  [
+				    {text: 'Cancel', onPress: () => this.cancelAlert()},
+				    {text: 'OK', onPress: () => this.actionForPush(data)},
+				  ]
+				)
+	},
+
+	//收到NativePush后直接打开响应界面
+	actionForPush: function(data){
+		console.log('actionForPush '+ data.title);
+
+		LogicData.setPushData(data);
+
+		this.setState(
+			{
+				isPushAction:true,
+				pushData:data,
+			}
+		)
+	},
+
+	cancelAlert:function(){
+		console.log("cancelAlert");
+	},
+
 	render: function() {
 		var {height, width} = Dimensions.get('window')
 		var statusBar = <StatusBar barStyle="light-content"/>
@@ -307,7 +344,7 @@ var AppNavigator = React.createClass({
 			return (
 				<View style={styles.container}>
 					{statusBar}
-					<MainPage />
+					<MainPage isPushAction={this.state.isPushAction} pushData={this.state.pushData}/>
 					{this.renderAskForRestart()}
 				</View>
 			)

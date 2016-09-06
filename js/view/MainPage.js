@@ -49,6 +49,7 @@ var FeedbackPage = require('./FeedbackPage')
 var EditOwnStocksPage = require('./EditOwnStocksPage')
 var EditAlertPage = require('./EditAlertPage')
 var SharePage = require('./SharePage')
+var LogicData = require('../LogicData')
 
 var TalkingdataModule = require('../module/TalkingdataModule')
 var WebSocketModule = require('../module/WebSocketModule');
@@ -72,6 +73,9 @@ var OpenAccountTitles = [
 		"审核状态"]
 
 var _navigator;
+var _navigators = [];
+var currentNavigatorIndex = 0;
+
 BackAndroid.addEventListener('hardwareBackPress', () => {
 	if (_navigator && _navigator.getCurrentRoutes().length > 1) {
 		_navigator.pop();
@@ -149,6 +153,9 @@ var MainPage = React.createClass({
 
 	RouteMapper : function(route, navigationOperations, onComponentRef) {
 		console.log("Current Router ===>  " + route.name);
+
+		_navigators[route.__navigatorRouteID] = navigationOperations;
+
 		_navigator = navigationOperations;
 		if (route.showTabbar !== undefined) {
 			showTabbar = route.showTabbar
@@ -573,6 +580,35 @@ var MainPage = React.createClass({
 		return (
 			<SharePage ref={SHARE_PAGE}/>
 		);
+	},
+
+
+	gotoStockDetail: function(pushData) {
+		  console.log("push gotoStockDetail");
+			console.log("push " + currentNavigatorIndex);
+
+			//  if(_navigators[currentNavigatorIndex]){
+			// 	 _navigators[currentNavigatorIndex].push({
+ 		// 		name: MainPage.STOCK_DETAIL_ROUTE,
+ 		// 	  stockRowData: pushData,
+ 		// 		});
+			//  }
+
+		 _navigator.push({
+		 		name: MainPage.STOCK_DETAIL_ROUTE,
+		 		stockRowData: pushData,
+		 });
+
+	},
+
+	componentDidUpdate: function(){
+
+	  console.log('push componentWillReceiveProps');
+		var pushData = LogicData.getPushData();
+		if(pushData != null){
+			this.gotoStockDetail(pushData);
+		}
+
 	},
 
 	render: function() {

@@ -174,14 +174,16 @@ var AppNavigator = React.createClass({
 			(args) => {
 				if (args[0] == 'deviceToken') {
 					this._handleDeviceToken(args[1])
+				}else if (args[0] == 'PushShowDialog') {
+					this.alertForPush(JSON.parse(args[1]));
+				}else if (args[0] == 'PushShowDetail') {
+					this.actionForPush(JSON.parse(args[1]));
 				}
 			}
 		)
 
-
-		var alertData = {'title':'盈交易','msg':'打开苹果股票详情','type':'1','stockName':'苹果', 'stockId':'600021' };
-
-		this.alertForPush(alertData);
+		// var alertData = {'title':'盈交易','msg':'打开苹果股票详情','type':'1','stockName':'英国100', 'stockId':34854};
+		// this.alertForPush(alertData);
 
 	},
 
@@ -310,10 +312,10 @@ var AppNavigator = React.createClass({
 	alertForPush: function(data){
 			Alert.alert(
 	  		data.title,
-	  		data.msg,
+	  		data.message,
 				  [
-				    {text: 'Cancel', onPress: () => this.cancelAlert()},
-				    {text: 'OK', onPress: () => this.actionForPush(data)},
+				    {text: '取消', onPress: () => this.cancelAlert()},
+				    {text: '查看', onPress: () => this.actionForPush(data)},
 				  ]
 				)
 	},

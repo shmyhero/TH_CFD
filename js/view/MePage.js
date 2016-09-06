@@ -101,6 +101,7 @@ var MePage = React.createClass({
 	reloadMeData: function(){
 		//Check if the user has logged in and the config row need to be shown.
 		var meData = LogicData.getMeData()
+		LogicData.setTabIndex(3);
 		var notLogin = Object.keys(meData).length === 0
 		if (notLogin) {
 			this.setState({

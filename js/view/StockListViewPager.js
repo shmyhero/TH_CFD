@@ -54,6 +54,7 @@ var StockListViewPager = React.createClass({
 			this.setState({currentSelectedTab: this.state.currentSelectedTab});
 			this.refs['page' + this.state.currentSelectedTab].tabPressed()
 			WebSocketModule.registerCallbacks((stockInfo) => {
+				LogicData.setTabIndex(1);
 				this.refs['page' + this.state.currentSelectedTab] && this.refs['page' + this.state.currentSelectedTab].handleStockInfo(stockInfo)
 			})
 		});

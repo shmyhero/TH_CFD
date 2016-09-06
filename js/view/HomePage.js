@@ -137,6 +137,7 @@ var HomePage = React.createClass({
 
 	onTabChanged: function(){
 		this.reloadBanner();
+		LogicData.setTabIndex(0);
 	},
 
 	downloadBannerImages: function(images) {

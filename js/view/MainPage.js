@@ -74,7 +74,6 @@ var OpenAccountTitles = [
 
 var _navigator;
 var _navigators = [];
-var currentNavigatorIndex = 0;
 
 BackAndroid.addEventListener('hardwareBackPress', () => {
 	if (_navigator && _navigator.getCurrentRoutes().length > 1) {
@@ -155,6 +154,7 @@ var MainPage = React.createClass({
 		console.log("Current Router ===>  " + route.name);
 
 		_navigators[route.__navigatorRouteID] = navigationOperations;
+
 
 		_navigator = navigationOperations;
 		if (route.showTabbar !== undefined) {
@@ -584,20 +584,22 @@ var MainPage = React.createClass({
 
 
 	gotoStockDetail: function(pushData) {
+
+		var currentNavigatorIndex = LogicData.getTabIndex();
 		  console.log("push gotoStockDetail");
 			console.log("push " + currentNavigatorIndex);
 
-			//  if(_navigators[currentNavigatorIndex]){
-			// 	 _navigators[currentNavigatorIndex].push({
- 		// 		name: MainPage.STOCK_DETAIL_ROUTE,
- 		// 	  stockRowData: pushData,
- 		// 		});
-			//  }
+			var stockRowData = {
+				name: pushData.CName,
+				id: pushData.StockID,
+			}
 
-		 _navigator.push({
-		 		name: MainPage.STOCK_DETAIL_ROUTE,
-		 		stockRowData: pushData,
-		 });
+			 if(_navigators[currentNavigatorIndex]){
+				 _navigators[currentNavigatorIndex].push({
+ 				name: STOCK_DETAIL_ROUTE,
+ 			  stockRowData: stockRowData,
+ 				});
+			 }
 
 	},
 

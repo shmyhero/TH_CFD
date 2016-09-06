@@ -13,6 +13,7 @@ var fxData = [];
 var certificateIdCardInfo = null;
 var getui_token = '';
 var pushData;
+var tabIndex = 0;
 
 var LogicData = {
 
@@ -134,8 +135,16 @@ var LogicData = {
 
 	getPushData(){
 		var data = pushData
-		pushData = null 
+		pushData = null
 		return data
+	},
+
+	setTabIndex(index){
+		tabIndex = index
+	},
+
+	getTabIndex(){
+		return tabIndex
 	},
 
 	getFxDataBySymbol: function(symbol) {

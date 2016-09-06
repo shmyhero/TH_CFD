@@ -57,6 +57,7 @@ var StockExchangePage = React.createClass({
 	},
 
 	onTabChanged: function(){
+				LogicData.setTabIndex(2);
 		var userData = LogicData.getUserData()
 		var loggined = Object.keys(userData).length !== 0
 

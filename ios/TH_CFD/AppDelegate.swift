@@ -152,7 +152,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 	}
 	
 	func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
-		NSLog("\n>>>[DeviceToken Error]:%@\n\n",error.description);
+		NSLog("\n>>>[DeviceToken Error]:%@\n\n",error.description)
 	}
 	
 	// MARK: - GeTuiSdkDelegate
@@ -160,7 +160,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 	/** SDK启动成功返回cid */
 	func GeTuiSdkDidRegisterClient(clientId: String!) {
 		// [4-EXT-1]: 个推SDK已注册，返回clientId
-		NSLog("\n>>>[GeTuiSdk RegisterClient]:%@\n\n", clientId);
+		NSLog("\n>>>[GeTuiSdk RegisterClient]:%@\n\n", clientId)
 		getuiID = clientId;
 		if (self.nativeData != nil) {
 			self.nativeData!.sendDataToRN("deviceToken", data: clientId)
@@ -170,26 +170,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 	/** SDK遇到错误回调 */
 	func GeTuiSdkDidOccurError(error: NSError!) {
 		// [EXT]:个推错误报告，集成步骤发生的任何错误都在这里通知，如果集成后，无法正常收到消息，查看这里的通知。
-		NSLog("\n>>>[GeTuiSdk error]:%@\n\n", error.localizedDescription);
+		NSLog("\n>>>[GeTuiSdk error]:%@\n\n", error.localizedDescription)
 	}
 	
 	/** SDK收到sendMessage消息回调 */
 	func GeTuiSdkDidSendMessage(messageId: String!, result: Int32) {
 		// [4-EXT]:发送上行消息结果反馈
-		let msg:String = "sendmessage=\(messageId),result=\(result)";
-		NSLog("\n>>>[GeTuiSdk DidSendMessage]:%@\n\n",msg);
+		let msg:String = "sendmessage=\(messageId),result=\(result)"
+		NSLog("\n>>>[GeTuiSdk DidSendMessage]:%@\n\n",msg)
 	}
 	
 	func GeTuiSdkDidReceivePayloadData(payloadData: NSData!, andTaskId taskId: String!, andMsgId msgId: String!, andOffLine offLine: Bool, fromGtAppId appId: String!) {
 		
-		var payloadMsg = "";
+		var payloadMsg = ""
 		if((payloadData) != nil) {
-			payloadMsg = String.init(data: payloadData, encoding: NSUTF8StringEncoding)!;
+			payloadMsg = String.init(data: payloadData, encoding: NSUTF8StringEncoding)!
 		}
 		
-		let msg:String = "Receive Payload: \(payloadMsg), taskId:\(taskId), messageId:\(msgId)";
+		let msg:String = "Receive Payload: \(payloadMsg), taskId:\(taskId), messageId:\(msgId)"
 		
-		NSLog("\n>>>[GeTuiSdk DidReceivePayload]:%@\n\n",msg);
+		NSLog("\n>>>[GeTuiSdk DidReceivePayload]:%@\n\n",msg)
+		if(self.nativeData != nil) {
+			self.nativeData!.sendDataToRN("PushShowDialog", data: payloadMsg)
+		}
 	}
 
 }

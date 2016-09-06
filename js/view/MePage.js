@@ -81,7 +81,7 @@ var MePage = React.createClass({
 
 	componentDidMount: function(){
 		didTabSelectSubscription = EventCenter.getEventEmitter().
-			addListener(EventConst.ME_TAB_PRESS_EVENT, this.reloadMeData);
+			addListener(EventConst.ME_TAB_PRESS_EVENT, this.onTabChanged);
 	},
 
 	componentWillUnmount: function() {
@@ -98,10 +98,14 @@ var MePage = React.createClass({
 		}.bind(this));
 	},
 
+	onTabChanged: function(){
+		LogicData.setTabIndex(3);
+		this.reloadMeData()
+	},
+
 	reloadMeData: function(){
 		//Check if the user has logged in and the config row need to be shown.
 		var meData = LogicData.getMeData()
-		LogicData.setTabIndex(3);
 		var notLogin = Object.keys(meData).length === 0
 		if (notLogin) {
 			this.setState({

@@ -94,10 +94,6 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         //Send GeTui Client ID to RN
         initDeviceToken();
 
-        if(mReactInstanceManager.getLifecycleState() == LifecycleState.RESUMED){
-
-        }
-
         if(getIntent() != null && getIntent().getExtras()!= null) {
             final String data = getIntent().getExtras().getString(GeTuiBroadcastReceiver.KEY_PUSH_DATA);
             if (data != null) {

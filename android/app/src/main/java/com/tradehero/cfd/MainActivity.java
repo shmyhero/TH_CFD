@@ -11,7 +11,6 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     private ReactInstanceManager mReactInstanceManager;
     private boolean mDoRefresh = false;
     public static String mClientIDTeTui = "";
-
+    final static String TAG = "MainActivity";
 
     private static final int REQUEST_PERMISSION = 0;
 
@@ -59,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.20.112:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.117:8081").apply();
 
         super.onCreate(null);
 
@@ -76,6 +75,22 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
         reactRootView.startReactApplication(mReactInstanceManager, "TH_CFD", null);
 
+        mReactInstanceManager.addReactInstanceEventListener(new ReactInstanceManager.ReactInstanceEventListener() {
+            @Override
+            public void onReactContextInitialized(ReactContext context) {
+                //Send GeTui Client ID to RN
+
+                initDeviceToken();
+
+                if(getIntent() != null && getIntent().getExtras()!= null) {
+                    String data = getIntent().getExtras().getString(GeTuiBroadcastReceiver.KEY_PUSH_DATA);
+                    if (data != null) {
+                        showPushDetail(data);
+                    }
+                }
+            }
+        });
+
         try {
             String pkName = this.getPackageName();
             String versionName = this.getPackageManager().getPackageInfo(
@@ -84,16 +99,28 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         } catch (Exception e) {
         }
 
+    }
 
-        handler.sendEmptyMessageDelayed(0,1000);
-
-        if(getIntent() != null && getIntent().getExtras()!= null)
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if(intent != null && intent.getExtras()!= null)
         {
-            String data = getIntent().getExtras().getString(GeTuiBroadcastReceiver.KEY_PUSH_DATA);
-            AlertDialog dialog = new AlertDialog.Builder(this)
-                    .setMessage(data)
-                    .create();
-            dialog.show();
+            String data = intent.getExtras().getString(GeTuiBroadcastReceiver.KEY_PUSH_DATA);
+            if(data!=null) {
+                showPushDetail(data);
+            }
+        }
+    }
+
+    private void showPushDetail(final String pushJsonString){
+        try {
+            ReactContext context = mReactInstanceManager.getCurrentReactContext();
+            if(context!=null) {
+                NativeDataModule.passDataToRN(context, GeTuiBroadcastReceiver.ACTION_SHOW_DETAIL, pushJsonString);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "passDataToRN : error", e);
         }
     }
 
@@ -191,39 +218,23 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
     }
 
-
-    Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            initDeviceToken();
-        }
-    };
-
     public void initDeviceToken(){
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
+        try{
 //                    String ANDOIRD_ID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 //                    Log.d("CFD LOG","Android ID : "+ ANDOIRD_ID);
 //                    ReactContext context = mReactInstanceManager.getCurrentReactContext();
 //                    Log.d("","initDeviceToken : " + ANDOIRD_ID);
 
-                    ReactContext context = mReactInstanceManager.getCurrentReactContext();
-                    if(mClientIDTeTui!=null){
-                        NativeDataModule.passDataToRN(context, "deviceToken", mClientIDTeTui);
-                        Log.d("GeTui","NativeDataModule deviceToken : " + mClientIDTeTui);
-                    }
-
-
-                }catch (Exception e){
-                    Log.d("","initDeviceToken : error");
-                }
+            ReactContext context = mReactInstanceManager.getCurrentReactContext();
+            if(mClientIDTeTui!=null){
+                NativeDataModule.passDataToRN(context, "deviceToken", mClientIDTeTui);
+                Log.d("GeTui","NativeDataModule deviceToken : " + mClientIDTeTui);
             }
-        }).start();
 
+
+        }catch (Exception e){
+            Log.d("","initDeviceToken : error");
+        }
     }
 
     public void initGeTui(){

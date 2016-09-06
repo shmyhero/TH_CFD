@@ -5,7 +5,7 @@ import android.app.Application;
 import android.os.Bundle;
 
 /**
- * Created by Rambo on 16/9/5.
+ * Created by Neko on 16/9/5.
  */
 public class CFDApplication extends Application implements Application.ActivityLifecycleCallbacks {
 

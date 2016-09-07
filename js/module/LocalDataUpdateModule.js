@@ -32,3 +32,10 @@ export function updateMeData(userData, onSuccess){
 		}
 	)
 }
+
+export function removeUserData(){
+  StorageModule.setUserData("");
+  LogicData.setUserData("");
+  StorageModule.setMeData("");
+  LogicData.setMeData("");
+}

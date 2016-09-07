@@ -37,6 +37,7 @@ var AboutUsPage = require('./AboutUsPage');
 var AccountInfoPage = require('./AccountInfoPage');
 var AccountNameModifyPage = require('./AccountNameModifyPage');
 var MePage = require('./MePage')
+var MyIncomePage = require('./MyIncomePage')
 var MeConfigPage = require('./MeConfigPage')
 var MePushConfigPage = require('./MePushConfigPage')
 var MeAccountBindingPage = require('./MeAccountBindingPage')
@@ -50,7 +51,7 @@ var EditOwnStocksPage = require('./EditOwnStocksPage')
 var EditAlertPage = require('./EditAlertPage')
 var SharePage = require('./SharePage')
 var LogicData = require('../LogicData')
-var IncomePage = require('./IncomePage')
+var RegisterSuccessPage = require('./RegisterSuccessPage')
 
 var TalkingdataModule = require('../module/TalkingdataModule')
 var WebSocketModule = require('../module/WebSocketModule');
@@ -103,6 +104,7 @@ export let STOCK_EXCHANGE_ROUTE = 'stockExchange'
 export let NAVIGATOR_WEBVIEW_ROUTE = 'webviewpage'
 export let QA_ROUTE = 'q&a'
 export let ME_ROUTE = 'me'
+export let MY_INCOME_ROUTE = 'myIncome'
 export let ABOUT_US_ROUTE = 'aboutUs'
 export let ACCOUNT_INFO_ROUTE = 'accountInfo'
 export let ACCOUNT_NAME_MODIFY_ROUTE = 'accountNameModify'
@@ -321,6 +323,14 @@ var MainPage = React.createClass({
 			showTabbar();
 			return (
 				<MePage navigator={navigationOperations} />
+			)
+		} else if(route.name === MY_INCOME_ROUTE) {
+			hideTabbar();
+			return (
+				<View style={{flex: 1}}>
+					<NavBar title='我的交易金' showBackButton={true} navigator={navigationOperations}/>
+					<MyIncomePage navigator={navigationOperations} />
+				</View>
 			)
 		} else if(route.name === ME_CONFIG_ROUTE){
 			hideTabbar();
@@ -595,9 +605,9 @@ var MainPage = React.createClass({
 		);
 	},
 
-	renderIncomeDialog: function(){
+	renderRegisterSuccessPage: function(){
 		return (
-			<IncomePage ref={INCOME_DIALOG}
+			<RegisterSuccessPage ref={INCOME_DIALOG}
 			shareFunction={this._doShare}/>
 		);
 	},
@@ -684,9 +694,10 @@ var MainPage = React.createClass({
 			          	</RawContent>
 		        	</Tab>
 		      	</Tabbar>
-				<LoadingIndicator ref='progressBar'/>
-				{this.state.showTutorial ? <TutorialPage type={this.state.tutorialType} hideTutorial={this.hideTutorial}/> : null }
-	      	</View>
+					<LoadingIndicator ref='progressBar'/>
+					{this.state.showTutorial ? <TutorialPage type={this.state.tutorialType} hideTutorial={this.hideTutorial}/> : null }
+					{this.renderRegisterSuccessPage()}
+      	</View>
 		);
 	}
 });

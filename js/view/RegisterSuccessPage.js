@@ -17,9 +17,9 @@ var {height, width} = Dimensions.get('window');
 var ColorConstants = require("../ColorConstants")
 var NetConstants = require("../NetConstants")
 
-var top_image = require("../../images/about_us.png")
+var top_image = require("../../images/register_success.png")
 
-var IncomePage = React.createClass({
+var RegisterSuccessPage = React.createClass({
   propTypes: {
     shareFunction: React.PropTypes.func,
   },
@@ -156,27 +156,29 @@ const styles = StyleSheet.create({
 		justifyContent: 'center'
   },
   container: {
-    height: 200,
+    height: 180,
 		borderRadius: 10,
     backgroundColor: 'white',
-
   },
 	image:{
-		marginTop: -30,
-		height:100,
-		marginLeft: 12,
-		marginRight: 12
+		position: 'absolute',
+		top:-100,
+		left:0,
+		right:0,
+		height:200,
+		width: width - 12 * 4,
 	},
 	textContainer:{
 		flex: 1,
-		alignItems: 'center'
+		alignItems: 'center',
+		marginTop: 70,
 	},
 	titleText:{
 		fontWeight: 'bold',
 		color: ColorConstants.TITLE_BLUE,
 	},
 	descriptionText:{
-		marginTop: 24,
+		marginTop: 12,
 	},
   buttonContainer:{
     margin: 12,
@@ -205,4 +207,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-module.exports = IncomePage;
+module.exports = RegisterSuccessPage;

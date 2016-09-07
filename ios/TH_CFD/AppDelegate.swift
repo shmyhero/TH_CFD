@@ -30,6 +30,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 	var nativeData: NativeData?
 	var getuiID: String?
 	var payloadMsg: String?
+	var remoteMsgGmid: String?
+	var allMsg = [[String]]()
 	
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 		// Override point for customization after application launch.
@@ -148,8 +150,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 	}
 	
 	func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+		NSLog("receive remote notification: %@", [userInfo .description])
 		if (!TalkingData.handlePushMessage(userInfo)) {
 			// 非来自TalkingData的消息，可以在此处处理该消息。
+			if let gmid = userInfo["_gmid_"] as? String {
+				self.remoteMsgGmid = gmid
+				for i in 0..<allMsg.count {
+					let getuiData = self.allMsg[i]
+					let taskId:String! = getuiData[0]
+					let msgId:String! = getuiData[1]
+					let msg:String! = getuiData[2]
+					if (gmid.containsString(taskId) && gmid.containsString(msgId)) {
+						if(self.nativeData != nil) {
+							self.nativeData!.sendDataToRN("PushShowDetail", data: msg)
+							self.payloadMsg = nil
+						}
+						else {
+							self.payloadMsg = msg
+						}
+						self.allMsg.removeAtIndex(i)
+						break
+					}
+				}
+			}
 		}
 	}
 	
@@ -193,8 +216,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		
 		NSLog("\n>>>[GeTuiSdk DidReceivePayload]:%@\n\n",msg)
 		if(self.nativeData != nil) {
-			self.nativeData!.sendDataToRN(offLine ? "PushShowDetail" : "PushShowDialog", data: payloadMsg)
-			self.payloadMsg = nil
+			if (offLine) {
+				if(self.remoteMsgGmid != nil) {
+					if(self.remoteMsgGmid!.containsString(taskId) && self.remoteMsgGmid!.containsString(msgId)) {
+						self.nativeData!.sendDataToRN("PushShowDetail", data: payloadMsg)
+						self.remoteMsgGmid = nil
+						return
+					}
+				}
+				
+				self.allMsg.append([taskId, msgId, payloadMsg])
+			}
+			else {
+				self.nativeData!.sendDataToRN("PushShowDialog", data: payloadMsg)
+				self.payloadMsg = nil
+			}
 		}
 		else {
 			self.payloadMsg = payloadMsg

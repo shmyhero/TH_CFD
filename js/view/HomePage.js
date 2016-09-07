@@ -37,6 +37,10 @@ var BANNERS = [
 	require('../../images/bannar01.png'),
 	require('../../images/bannar02.png'),
 ];
+const check_in_image = require("../../images/close.png")
+const movie_image = require("../../images/close.png")
+const hot_image = require("../../images/about_us.png")
+
 var {height, width} = Dimensions.get('window');
 var barWidth = Math.round(width/3)-12
 var imageHeight = 300 / 750 * width
@@ -451,6 +455,56 @@ var HomePage = React.createClass({
 		}
 	},
 
+	renderEventItem: function(i){
+		var title;
+		var description;
+		var onPress;
+		if(i == 1){
+			title = "影票来袭";
+			description = "每日模拟交易前三名";
+			onPress = () => this.gotoWebviewPage(PAGES[0].url, '推荐',
+				PAGES[0].id,
+				PAGES[0].header,
+				PAGES[0].digest);
+		}else{
+			title = "每日签到";
+			description = "签到可赚取实盘资金";
+			onPress = () => this.gotoWebviewPage(PAGES[0].url, '推荐',
+				PAGES[0].id,
+				PAGES[0].header,
+				PAGES[0].digest);
+		}
+		return(
+			<TouchableOpacity style={[styles.eventsItemContainer]}
+				onPress={onPress}>
+				<View style={{flexDirection: 'row'}}>
+					<View style={[styles.eventsTextContainer]}>
+						<Text style={styles.eventsTitleText}>
+							{title}
+						</Text>
+						<Text style={styles.eventsDescriptionText}>
+							{description}
+						</Text>
+					</View>
+					<Image
+						style={[styles.eventsIcon]}
+						source={movie_image}/>
+					<Image style={[styles.eventsHotIcon]}
+						source={hot_image}/>
+				</View>
+			</TouchableOpacity>
+		)
+	},
+
+	renderEventsRow: function(){
+		return (
+			<View style={[styles.eventsRowContainer]}>
+				{this.renderEventItem(1)}
+				{this.renderEventItem(2)}
+			</View>
+		)
+	},
+
 	render: function() {
 		var activeDot = <View style={styles.guideActiveDot} />
 		var dot = <View style={styles.guideDot} />
@@ -495,6 +549,9 @@ var HomePage = React.createClass({
 					</View>
 
 					{this.renderTopNews()}
+					<View style={styles.bigSeparator}/>
+
+					{this.renderEventsRow()}
 					<View style={styles.bigSeparator}/>
 
 					{this.renderPopularityView()}
@@ -700,6 +757,43 @@ var styles = StyleSheet.create({
 		fontSize: 14,
 		color: '#333333',
 		marginRight: 10,
+	},
+	eventsRowContainer:{
+		flexDirection: 'row',
+		height: 60,
+		width: width,
+		backgroundColor: 'white',
+	},
+	eventsItemContainer:{
+		flex:1,
+	},
+	eventsTextContainer: {
+		paddingTop: 10,
+		paddingBottom: 10,
+		paddingLeft:12,
+		flexDirection: 'column',
+		flex:1,
+		alignSelf:'center',
+	},
+	eventsTitleText:{
+		fontSize: 16,
+		fontWeight: 'bold',
+	},
+	eventsDescriptionText: {
+		fontSize: 12,
+	},
+	eventsIcon: {
+		width:40,
+		height:40,
+		alignSelf: 'center',
+		marginRight:12,
+	},
+	eventsHotIcon: {
+		top:0,
+		right:0,
+		position: 'absolute',
+		width:20,
+		height:20
 	}
 });
 

@@ -140,6 +140,7 @@ export var showProgress
 
 var recevieDataSubscription = null
 var SHARE_PAGE = 'SharePage'
+var INCOME_DIALOG = 'IncomeDialog'
 
 var MainPage = React.createClass({
 
@@ -189,10 +190,16 @@ var MainPage = React.createClass({
 			);
 		} else if (route.name === LOGIN_ROUTE) {
 			hideTabbar()
+			var popToRoute = ()=>{
+				if(route.onPopToRoute){
+					route.onPopToRoute();
+				}
+				showIncomeDialogWhenNecessary();
+			}
 			return (
 				<LoginPage navigator={navigationOperations} showCancelButton={true}
 					popToRoute={route.popToRoute}
-  				onPopToRoute={route.onPopToRoute}/>
+  				onPopToRoute={popToRoute}/>
 			);
 		} else if (route.name === UPDATE_USER_INFO_ROUTE) {
 			return (
@@ -468,6 +475,10 @@ var MainPage = React.createClass({
 		this.refs['progressBar'] && this.refs['progressBar'].hide()
 	},
 
+	showIncomeDialogWhenNecessary() {
+		this.refs[INCOME_DIALOG] && this.refs[INCOME_DIALOG].show();
+	},
+
 	initTabbarEvent() {
 		var homeRef = this.refs['homeContent'].refs['wrap'].getWrappedRef()
 		homeRef.tabWillFocus = EventCenter.emitHomeTabPressEvent;
@@ -582,6 +593,11 @@ var MainPage = React.createClass({
 		);
 	},
 
+	renderIncomeDialog: function(){
+		return (
+			<IncomePage ref={INCOME_DIALOG}/>
+		);
+	},
 
 	gotoStockDetail: function(pushData) {
 

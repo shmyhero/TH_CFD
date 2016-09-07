@@ -148,7 +148,10 @@ var EditAlertPage = React.createClass({
 					stockPriceAsk: responseJson.ask,
 				})
 
-				this.connectWebSocket()
+				this.connectWebSocket();
+
+				this.validatePrice(1, this.state.HighPrice)
+				this.validatePrice(2, this.state.LowPrice)
 			},
 			(errorMessage) => {
 				Alert.alert('', errorMessage);

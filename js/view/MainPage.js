@@ -529,7 +529,12 @@ var MainPage = React.createClass({
 		if(url.startsWith('cfd://page/share')) {
 			var json = this.getJsonFromUrl(url)
 			this.refs[SHARE_PAGE].showWithData(json);
-		}else{
+		}
+		else if(url.startsWith('wx')){
+			// callback from wx
+			// do nothing.
+		}
+		else{
 			_navigator.popToTop()
 			if(url==='cfd://page/1') {//首页
 				this.refs['myTabbar'].gotoTab("home")

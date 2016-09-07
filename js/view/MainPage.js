@@ -3,12 +3,12 @@
 import React from 'react';
 import {
 	BackAndroid,
-    StyleSheet,
-    View,
-    Text,
-    StatusBar,
-    Navigator,
-    Linking,
+  StyleSheet,
+  View,
+  Text,
+  StatusBar,
+  Navigator,
+  Linking,
 	Platform,
 } from 'react-native';
 
@@ -50,6 +50,7 @@ var EditOwnStocksPage = require('./EditOwnStocksPage')
 var EditAlertPage = require('./EditAlertPage')
 var SharePage = require('./SharePage')
 var LogicData = require('../LogicData')
+var IncomePage = require('./IncomePage')
 
 var TalkingdataModule = require('../module/TalkingdataModule')
 var WebSocketModule = require('../module/WebSocketModule');
@@ -476,6 +477,7 @@ var MainPage = React.createClass({
 	},
 
 	showIncomeDialogWhenNecessary() {
+		//TODO: Check by call up the corresponding api
 		this.refs[INCOME_DIALOG] && this.refs[INCOME_DIALOG].show();
 	},
 
@@ -595,7 +597,8 @@ var MainPage = React.createClass({
 
 	renderIncomeDialog: function(){
 		return (
-			<IncomePage ref={INCOME_DIALOG}/>
+			<IncomePage ref={INCOME_DIALOG}
+			shareFunction={this._doShare}/>
 		);
 	},
 

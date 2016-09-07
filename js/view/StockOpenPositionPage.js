@@ -733,21 +733,21 @@ var StockOpenPositionPage = React.createClass({
 		return this.priceToPercent(price, rowData.settlePrice, leverage, type, rowData.isLong)
 	},
 
-	calculateProfitWithOutright: function(profitAmount, rowData) {
+	calculateProfitWithOutright: function(profitAmount, fxData) {
 		if (profitAmount > 0) {//want to sell XXX and buy USD
 			var fxPrice
-			if (rowData.fxData.symbol.substring(UIConstants.USD_CURRENCY.length) != UIConstants.USD_CURRENCY) {//USD/XXX
-				fxPrice = 1 / rowData.fxData.ask
+			if (fxData.symbol.substring(UIConstants.USD_CURRENCY.length) != UIConstants.USD_CURRENCY) {//USD/XXX
+				fxPrice = 1 / fxData.ask
 			} else {// XXX/USD
-				fxPrice = rowData.fxData.bid
+				fxPrice = fxData.bid
 			}
 			profitAmount *= fxPrice
 		} else {// Want to buy XXX and sell USD
 			var fxPrice
-			if (rowData.fxData.symbol.substring(UIConstants.USD_CURRENCY.length) != UIConstants.USD_CURRENCY) { // USD/XXX
-				fxPrice = 1 / rowData.fxData.bid
+			if (fxData.symbol.substring(UIConstants.USD_CURRENCY.length) != UIConstants.USD_CURRENCY) { // USD/XXX
+				fxPrice = 1 / fxData.bid
 			} else { // XXX/USD
-				fxPrice = rowData.fxData.ask
+				fxPrice = fxData.ask
 			}
 			profitAmount *= fxPrice
 		}
@@ -952,12 +952,16 @@ var StockOpenPositionPage = React.createClass({
 		if (rowData.settlePrice !== 0) {
 			var lastPrice = this.getLastPrice(rowData)
 			var profitPercentage = (lastPrice - rowData.settlePrice) / rowData.settlePrice * rowData.leverage
+
 			profitPercentage *= (rowData.isLong ? 1 : -1)
 			profitAmount = profitPercentage * rowData.invest
 			if (rowData.fxData && rowData.fxData.ask) {
-				profitAmount = this.calculateProfitWithOutright(profitAmount, rowData)
+				profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxData)
 			}
-			else {
+			else if(rowData.fxoutright && rowData.fxoutright.ask){
+				profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxoutright)
+			} else {
+				//Error below! Use the upl will make the percentage and price not synchronized...
 				profitAmount = rowData.upl
 			}
 		}
@@ -1068,7 +1072,9 @@ var StockOpenPositionPage = React.createClass({
 			profitPercentage *= (rowData.isLong ? 1 : -1)
 			profitAmount = profitPercentage * rowData.invest
 			if (rowData.fxData && rowData.fxData.ask) {
-				profitAmount = this.calculateProfitWithOutright(profitAmount, rowData)
+				profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxData)
+			}	else if(rowData.fxoutright && rowData.fxoutright.ask){
+				profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxoutright)
 			}
 			else {
 				profitAmount = rowData.upl

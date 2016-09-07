@@ -14,15 +14,6 @@
 RCT_EXPORT_MODULE();
 @synthesize bridge = _bridge;
 
-//+ (id)sharedInstance {
-//	static NativeData *sharedInstance = nil;
-//	static dispatch_once_t onceToken;
-//	dispatch_once(&onceToken, ^{
-//		sharedInstance = [[self alloc] init];
-//	});
-//	return sharedInstance;
-//}
-
 - (void)receiveDataFromRN:(NSString *)dataName data:(NSString *)jsonData
 {
 	AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -39,6 +30,9 @@ RCT_EXPORT_MODULE();
 	else if([dataName isEqualToString:@"getui"]) {
 		if (delegate.getuiID) {
 			[self sendDataToRN:@"deviceToken" data: delegate.getuiID];
+		}
+		if (delegate.payloadMsg) {
+			[self sendDataToRN:@"PushShowDialog" data:delegate.payloadMsg];
 		}
 	}
 }

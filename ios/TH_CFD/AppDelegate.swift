@@ -29,15 +29,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 	var window: UIWindow?
 	var nativeData: NativeData?
 	var getuiID: String?
+	var payloadMsg: String?
 	
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 		// Override point for customization after application launch.
 		TalkingData.sessionStarted("9E5885AAFCB333653031970C2AF5614E", withChannelId: "AppStore")
 		TalkingDataAppCpa.init("605dc6928f4c4244a889282a7ee132cf", withChannelId: "AppStore")
 		
-//		// register push notification
-//		application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound] , categories: nil))
-//		application.registerForRemoteNotifications()
+		// register push notification
+		if((launchOptions) != nil) {
+			self.payloadMsg = String(launchOptions)
+		}
 		
 		if (!TalkingData.handlePushMessage(launchOptions)) {
 			// 非来自TalkingData的消息，可以在此处处理该消息。
@@ -66,7 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		} else {
             jsCodeLocation = RCTHotUpdate.bundleURL();
 //			jsCodeLocation = NSBundle.mainBundle().URLForResource("main", withExtension: "jsbundle")
-//			jsCodeLocation = NSURL(string: "http://192.168.20.140:8081/index.ios.bundle?platform=ios&dev=true")
+//			jsCodeLocation = NSURL(string: "http://192.168.20.146:8081/index.ios.bundle?platform=ios&dev=true")
 		}
 		
 		let rootView = RCTRootView(bundleURL:jsCodeLocation,moduleName: "TH_CFD",initialProperties:nil,launchOptions:launchOptions)
@@ -192,6 +194,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		NSLog("\n>>>[GeTuiSdk DidReceivePayload]:%@\n\n",msg)
 		if(self.nativeData != nil) {
 			self.nativeData!.sendDataToRN("PushShowDialog", data: payloadMsg)
+		}
+		else {
+			self.payloadMsg = payloadMsg
 		}
 	}
 

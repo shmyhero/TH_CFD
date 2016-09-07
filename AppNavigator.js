@@ -332,20 +332,20 @@ var AppNavigator = React.createClass({
 
 	//收到NativePush后直接打开响应界面
 	actionForPush: function(data){
-			if(data.type === '1' || data.type === '2' ){//1,2 type 是 平仓 和 股价提醒
-				console.log('actionForPush '+ data.title);
-
-				LogicData.setPushData(data);
-
+		if(data.type === '1' || data.type === '2' ){//1,2 type 是 平仓 和 股价提醒
+			console.log('actionForPush '+ data.title);
+			LogicData.setPushData(data);
+			if (this.state.startUpPhase == MAIN_PAGE_PHASE) {
 				this.setState(
 					{
 						isPushAction:true,
 						pushData:data,
 					}
 				)
-			}else {
- 			 Alert.alert( data );
- 		 }
+			}
+		}else {
+			Alert.alert( data );
+		}
 	},
 
 	cancelAlert:function(){

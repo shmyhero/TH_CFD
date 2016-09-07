@@ -32,7 +32,7 @@ RCT_EXPORT_MODULE();
 			[self sendDataToRN:@"deviceToken" data: delegate.getuiID];
 		}
 		if (delegate.payloadMsg) {
-			[self sendDataToRN:@"PushShowDialog" data:delegate.payloadMsg];
+			[self sendDataToRN:@"PushShowDetail" data:delegate.payloadMsg];
 		}
 	}
 }

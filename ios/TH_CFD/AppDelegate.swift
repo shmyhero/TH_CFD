@@ -193,7 +193,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		
 		NSLog("\n>>>[GeTuiSdk DidReceivePayload]:%@\n\n",msg)
 		if(self.nativeData != nil) {
-			self.nativeData!.sendDataToRN("PushShowDialog", data: payloadMsg)
+			self.nativeData!.sendDataToRN(offLine ? "PushShowDetail" : "PushShowDialog", data: payloadMsg)
+			self.payloadMsg = nil
 		}
 		else {
 			self.payloadMsg = payloadMsg

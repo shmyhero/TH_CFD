@@ -504,6 +504,7 @@ var MainPage = React.createClass({
 				}
 			)
 		}
+		this.showNotification()
 	},
 
 	componentWillUnmount: function() {
@@ -608,14 +609,15 @@ var MainPage = React.createClass({
 
 	},
 
-	componentDidUpdate: function(){
-
-	  console.log('push componentWillReceiveProps');
+	showNotification: function() {
 		var pushData = LogicData.getPushData();
 		if(pushData != null){
 			this.gotoStockDetail(pushData);
 		}
+	},
 
+	componentDidUpdate: function(){
+		this.showNotification()
 	},
 
 	render: function() {

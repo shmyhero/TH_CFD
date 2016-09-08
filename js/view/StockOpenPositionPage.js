@@ -955,14 +955,18 @@ var StockOpenPositionPage = React.createClass({
 
 			profitPercentage *= (rowData.isLong ? 1 : -1)
 			profitAmount = profitPercentage * rowData.invest
-			if (rowData.fxData && rowData.fxData.ask) {
-				profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxData)
-			}
-			else if(rowData.fxoutright && rowData.fxoutright.ask){
-				profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxoutright)
-			} else {
-				//Error below! Use the upl will make the percentage and price not synchronized...
-				profitAmount = rowData.upl
+
+			//Only use the fxdata for non-usd
+			if (rowData.security.ccy != UIConstants.USD_CURRENCY) {
+				if (rowData.fxData && rowData.fxData.ask) {
+					profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxData)
+				}
+				else if(rowData.fxoutright && rowData.fxoutright.ask){
+					profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxoutright)
+				} else {
+					//Error below! Use the upl will make the percentage and price not synchronized...
+					profitAmount = rowData.upl
+				}
 			}
 		}
 
@@ -1071,13 +1075,16 @@ var StockOpenPositionPage = React.createClass({
 			profitPercentage = (this.getLastPrice(rowData) - rowData.settlePrice) / rowData.settlePrice * rowData.leverage
 			profitPercentage *= (rowData.isLong ? 1 : -1)
 			profitAmount = profitPercentage * rowData.invest
-			if (rowData.fxData && rowData.fxData.ask) {
-				profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxData)
-			}	else if(rowData.fxoutright && rowData.fxoutright.ask){
-				profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxoutright)
-			}
-			else {
-				profitAmount = rowData.upl
+
+			//Only use the fxdata for non-usd
+			if (rowData.security.ccy != UIConstants.USD_CURRENCY) {
+				if (rowData.fxData && rowData.fxData.ask) {
+					profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxData)
+				}	else if(rowData.fxoutright && rowData.fxoutright.ask){
+					profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxoutright)
+				} else {
+					profitAmount = rowData.upl
+				}
 			}
 		}
 		var bgcolor = this.state.selectedRow == rowID ? '#e6e5eb' : 'white'

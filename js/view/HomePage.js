@@ -37,9 +37,9 @@ var BANNERS = [
 	require('../../images/bannar01.png'),
 	require('../../images/bannar02.png'),
 ];
-const check_in_image = require("../../images/close.png")
-const movie_image = require("../../images/close.png")
-const hot_image = require("../../images/about_us.png")
+const check_in_image = require("../../images/check_in.png")
+const movie_image = require("../../images/movie.png")
+const hot_image = require("../../images/hot.png")
 
 var {height, width} = Dimensions.get('window');
 var barWidth = Math.round(width/3)-12
@@ -60,6 +60,16 @@ var HomePage = React.createClass({
 			popularityInfo: bsds.cloneWithRows([]),
 			topNews: [],
 		};
+	},
+
+	propTypes: {
+		showIncomeDialogWhenNecessary: React.PropTypes.func,
+	},
+
+	getDefaultProps: function() {
+		return {
+			showIncomeDialogWhenNecessary: ()=>{}
+		}
 	},
 
 	componentWillMount: function() {
@@ -228,6 +238,24 @@ var HomePage = React.createClass({
 		});
 	},
 
+	gotoCheckinPage: function(){
+		var userData = LogicData.getUserData()
+		var notLogin = Object.keys(userData).length === 0
+		if(notLogin){
+			this.props.navigator.push({
+				name: MainPage.LOGIN_ROUTE,
+				popToRoute: MainPage.HOME_PAGE_ROUTE,	//Set to destination page
+				onPopToRoute: this.showCheckInPage,
+			});
+		}else{
+			this.showCheckInPage();
+		}
+	},
+
+	showCheckInPage: function(){
+		//TODO: use the real check in page.
+		this.props.showIncomeDialogWhenNecessary();
+	},
 
 	endsWith: function(str, suffix) {
 	    return str.indexOf(suffix, str.length - suffix.length) !== -1;
@@ -459,9 +487,11 @@ var HomePage = React.createClass({
 		var title;
 		var description;
 		var onPress;
+		var image;
 		if(i == 1){
 			title = "影票来袭";
 			description = "每日模拟交易前三名";
+			image = movie_image;
 			onPress = () => this.gotoWebviewPage(PAGES[0].url, '推荐',
 				PAGES[0].id,
 				PAGES[0].header,
@@ -469,10 +499,8 @@ var HomePage = React.createClass({
 		}else{
 			title = "每日签到";
 			description = "签到可赚取实盘资金";
-			onPress = () => this.gotoWebviewPage(PAGES[0].url, '推荐',
-				PAGES[0].id,
-				PAGES[0].header,
-				PAGES[0].digest);
+			image = check_in_image;
+			onPress = () => this.gotoCheckinPage();
 		}
 		return(
 			<TouchableOpacity style={[styles.eventsItemContainer]}
@@ -488,7 +516,7 @@ var HomePage = React.createClass({
 					</View>
 					<Image
 						style={[styles.eventsIcon]}
-						source={movie_image}/>
+						source={image}/>
 					<Image style={[styles.eventsHotIcon]}
 						source={hot_image}/>
 				</View>
@@ -760,12 +788,13 @@ var styles = StyleSheet.create({
 	},
 	eventsRowContainer:{
 		flexDirection: 'row',
-		height: 60,
+		height: 80,
 		width: width,
 		backgroundColor: 'white',
 	},
 	eventsItemContainer:{
 		flex:1,
+		justifyContent: 'center',
 	},
 	eventsTextContainer: {
 		paddingTop: 10,
@@ -777,10 +806,11 @@ var styles = StyleSheet.create({
 	},
 	eventsTitleText:{
 		fontSize: 16,
-		fontWeight: 'bold',
+		color: '#4c4c4c'
 	},
 	eventsDescriptionText: {
-		fontSize: 12,
+		fontSize: 11,
+		color: '#626262'
 	},
 	eventsIcon: {
 		width:40,

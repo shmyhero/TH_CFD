@@ -39,12 +39,29 @@ var MyIncomePage = React.createClass({
 
 	getInitialState: function() {
 		return {
-
+      totalIncome: '--',
 		};
 	},
 
 	componentDidMount: function(){
-
+    var userData = LogicData.getUserData();
+    NetworkModule.fetchTHUrl(
+      NetConstants.GET_TOTAL_UNPAID,
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+        },
+      },
+      (responseJson) => {
+        this.setState({
+          totalIncome: responseJson,
+        });
+      },
+      (errorMessage) => {
+        console.log(errorMessage)
+      }
+    )
 	},
 
 	pressBackButton: function() {
@@ -59,7 +76,7 @@ var MyIncomePage = React.createClass({
           总计交易金(元)
         </Text>
         <Text style={styles.totalIncomeText}>
-          233
+          {this.state.totalIncome}
         </Text>
       </View>
     );

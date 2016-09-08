@@ -184,7 +184,8 @@ var MainPage = React.createClass({
 		} else if (route.name == HOME_PAGE_ROUTE) {
 			showTabbar()
 			return (
-				<HomePage navigator={navigationOperations}/>
+				<HomePage navigator={navigationOperations}
+				showIncomeDialogWhenNecessary={this.showIncomeDialogWhenNecessary}/>
 			)
 		} else if (route.name === LANDING_ROUTE) {
 			showTabbar()
@@ -197,7 +198,7 @@ var MainPage = React.createClass({
 				if(route.onPopToRoute){
 					route.onPopToRoute();
 				}
-				showIncomeDialogWhenNecessary();
+				this.showIncomeDialogWhenNecessary();
 			}
 			return (
 				<LoginPage navigator={navigationOperations} showCancelButton={true}
@@ -337,7 +338,7 @@ var MainPage = React.createClass({
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title="设置" showBackButton={true} navigator={navigationOperations}/>
-					<MeConfigPage navigator={navigationOperations} />
+					<MeConfigPage navigator={navigationOperations} onPopBack={route.onPopBack}/>
 				</View>
 			)
 		} else if(route.name === ME_PUSH_CONFIG_ROUTE){

@@ -19,6 +19,12 @@ var NetConstants = require("../NetConstants")
 
 var top_image = require("../../images/register_success.png")
 
+var DIALOG_WIDTH = width - 30;
+var DIALOG_HEIGHT = DIALOG_WIDTH / 1.5;
+var HEADER_IMAGE_WIDTH = DIALOG_WIDTH;
+var HEADER_IMAGE_HEIGHT = HEADER_IMAGE_WIDTH / 1.5;
+var DIALOG_OFFSET = HEADER_IMAGE_HEIGHT / 2;
+
 var RegisterSuccessPage = React.createClass({
   propTypes: {
     shareFunction: React.PropTypes.func,
@@ -34,6 +40,7 @@ var RegisterSuccessPage = React.createClass({
     return {
       dialogVisible: false,
       fadeAnim: new Animated.Value(1),
+			modalVisible: false,
     };
   },
 
@@ -49,6 +56,8 @@ var RegisterSuccessPage = React.createClass({
 				duration: 200,    // Configuration
 			},
 		).start();
+
+		this._setModalVisible(true)
   },
 
   hide: function() {
@@ -68,6 +77,7 @@ var RegisterSuccessPage = React.createClass({
 			},
 		).start();
 
+		this._setModalVisible(false);
   },
 
   shareInfo: function(){
@@ -83,8 +93,12 @@ var RegisterSuccessPage = React.createClass({
     }
   },
 
+  _setModalVisible(visible) {
+    this.setState({modalVisible: visible});
+  },
+
   render: function() {
-    if(this.state.dialogVisible){
+		if(this.state.dialogVisible){
       //
       //style={{height: height, width: width, backgroundColor: '#fff'}}
       return (
@@ -96,38 +110,41 @@ var RegisterSuccessPage = React.createClass({
             onPress={() => {
               this.hide();
             }}>
-            <TouchableOpacity style={styles.container}
+            <TouchableOpacity
+							style={styles.dialogContainer}
               activeOpacity={1}
               onPress={() => {
               }}>
-							<Image source={top_image} style={styles.image}/>
-							<View style={styles.textContainer}>
-	              <Text style={styles.titleText}>
-									注册成功
-	              </Text>
-								<Text style={styles.descriptionText}>
-									恭喜您获得了20元交易金
-								</Text>
+							<View style={styles.container}>
+								<View style={styles.textContainer}>
+		              <Text style={styles.titleText}>
+										注册成功
+		              </Text>
+									<Text style={styles.descriptionText}>
+										恭喜您获得了20元交易金
+									</Text>
+								</View>
+	              <View style={styles.buttonContainer}>
+	                <TouchableOpacity style={styles.greyButton}
+	                  onPress={() => {
+	                    this.hide();
+	                  }}>
+	                  <Text style={styles.buttonText}>
+	                    知道了
+	                  </Text>
+	                </TouchableOpacity>
+	                <TouchableOpacity style={styles.blueButton}
+	                  onPress={() => {
+	                    this.hide();
+	                    this.shareInfo()
+	                  }}>
+	                  <Text style={styles.buttonText}>
+	                    炫耀一下
+	                  </Text>
+	                </TouchableOpacity>
+	              </View>
 							</View>
-              <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.greyButton}
-                  onPress={() => {
-                    this.hide();
-                  }}>
-                  <Text style={styles.buttonText}>
-                    知道了
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.blueButton}
-                  onPress={() => {
-                    this.hide();
-                    this.shareInfo()
-                  }}>
-                  <Text style={styles.buttonText}>
-                    炫耀一下
-                  </Text>
-                </TouchableOpacity>
-              </View>
+							<Image resizeMode="contain" source={top_image} style={styles.image}/>
             </TouchableOpacity>
           </TouchableOpacity>
         </Animated.View>
@@ -138,6 +155,46 @@ var RegisterSuccessPage = React.createClass({
 
   },
 });
+
+/*
+var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  innerContainer: {
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  row: {
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    marginBottom: 20,
+  },
+  rowTitle: {
+    flex: 1,
+    fontWeight: 'bold',
+  },
+  button: {
+    borderRadius: 5,
+    flex: 1,
+    height: 44,
+    alignSelf: 'stretch',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  buttonText: {
+    fontSize: 18,
+    margin: 5,
+    textAlign: 'center',
+  },
+  modalButton: {
+    marginTop: 10,
+  },
+});
+*/
 
 const styles = StyleSheet.create({
   outsideContainer:{
@@ -152,47 +209,55 @@ const styles = StyleSheet.create({
     width: width,
     height: height,
 		backgroundColor: '#0000007f',
-    padding:20,
+		alignItems: 'center',
 		justifyContent: 'center'
   },
+	dialogContainer:{
+		height: DIALOG_HEIGHT + DIALOG_OFFSET,
+	},
   container: {
-    height: 180,
+		top: DIALOG_OFFSET,
+    height: DIALOG_HEIGHT,
+		width: DIALOG_WIDTH,
 		borderRadius: 10,
     backgroundColor: 'white',
   },
 	image:{
-		position: 'absolute',
-		top:-100,
-		left:0,
-		right:0,
-		height:200,
-		width: width - 12 * 4,
+		position:'absolute',
+		top:0,
+		alignSelf:'stretch',
+		height: HEADER_IMAGE_HEIGHT,
+		width: HEADER_IMAGE_WIDTH,
 	},
 	textContainer:{
 		flex: 1,
 		alignItems: 'center',
-		marginTop: 70,
+		marginTop: HEADER_IMAGE_HEIGHT * 0.35,
 	},
 	titleText:{
 		fontWeight: 'bold',
+		fontSize: 20,
 		color: ColorConstants.TITLE_BLUE,
 	},
 	descriptionText:{
 		marginTop: 12,
+		fontSize: 18,
 	},
   buttonContainer:{
     margin: 12,
-    height: 36,
+    height: 43,
+    alignItems: 'stretch',
     flexDirection: 'row',
 		alignSelf: 'stretch',
-    alignItems: 'stretch',
+		justifyContent: 'space-around',
   },
   greyButton: {
     flex:1,
     backgroundColor: ColorConstants.STOCK_UNCHANGED_GRAY,
     alignItems: 'center',
 		borderRadius: 5,
-		justifyContent: 'center'
+		justifyContent: 'center',
+		width: 151,
   },
   blueButton: {
     flex:1,
@@ -200,7 +265,8 @@ const styles = StyleSheet.create({
     marginLeft:12,
     alignItems: 'center',
   	borderRadius: 5,
-		justifyContent: 'center'
+		justifyContent: 'center',
+		width: 151,
   },
 	buttonText: {
 		color: 'white'

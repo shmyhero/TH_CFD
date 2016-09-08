@@ -29,6 +29,17 @@ var listRawData = [
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var MeConfigPage = React.createClass({
+
+	propTypes: {
+		onPopBack: React.PropTypes.func,
+	},
+
+	getDefaultProps: function(){
+		return {
+				onPopBack: ()=>{}
+		};
+	},
+
 	getInitialState: function() {
 		return {
 			dataSource: ds.cloneWithRows(listRawData),
@@ -64,6 +75,10 @@ var MeConfigPage = React.createClass({
 
 	logoutCurrentAccount: function(){
 		LocalDataUpdateModule.removeUserData();
+		this.props.navigator.pop();
+		if(this.props.onPopBack){
+			this.props.onPopBack();
+		}
 	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){

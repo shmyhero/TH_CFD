@@ -268,8 +268,7 @@ var LoginPage = React.createClass({
 		});
 
 		LocalDataUpdateModule.updateMeData(userData, ()=>{
-			//BUGBUG: TEST!!!
-				if(true){
+				if(userData.isNewUser){
 					this.props.navigator.push({
 						name: MainPage.UPDATE_USER_INFO_ROUTE,
 						popToRoute: this.props.popToRoute,

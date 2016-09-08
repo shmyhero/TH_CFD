@@ -172,6 +172,7 @@ var MePage = React.createClass({
 		else if(rowData.subtype === 'config') {
 			this.props.navigator.push({
 				name: MainPage.ME_CONFIG_ROUTE,
+				onPopBack: this.reloadMeData
 			});
 		}
 		else if(rowData.subtype === 'feedback') {

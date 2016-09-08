@@ -41,6 +41,7 @@ export const GET_ALL_STOCK_ALERT = SERVER_IP + '/api/user/stockAlert/all'
 export const UPDATE_STOCK_ALERT = SERVER_IP + '/api/user/stockAlert'
 export const POST_PUSH_TOKEN = SERVER_IP + '/api/user/pushtoken'
 export const POST_PUSH_TOKEN_AUTH = SERVER_IP + '/api/user/pushtokenauth'
+export const GET_TOTAL_UNPAID = SERVER_IP + 'api/user/reward/unpaid'
 
 export const GZT_OCR_CHECK_API = GZT_SERVER_IP + '/ocrCheck'
 

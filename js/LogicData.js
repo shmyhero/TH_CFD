@@ -25,6 +25,10 @@ var LogicData = {
 		return userData;
 	},
 
+  removeUserData: function() {
+    userData = {}
+  },
+
 	setMeData: function(data){
 		meData = data;
 	},
@@ -33,81 +37,84 @@ var LogicData = {
 		return meData;
 	},
 
-    removeUserData: function() {
-        userData = {}
-    },
+	removeMeData: function(){
+		meData = {}
+	},
+  setWechatAuthData: function(authData) {
+      wechatAuthData = authData;
+  },
 
-    setWechatAuthData: function(authData) {
-        wechatAuthData = authData;
-    },
+  getWechatAuthData: function() {
+      return wechatAuthData;
+  },
 
-    getWechatAuthData: function() {
-        return wechatAuthData;
-    },
+  setWechatUserData: function(userData) {
+      wechatUserData = userData
+  },
 
-    setWechatUserData: function(userData) {
-        wechatUserData = userData
-    },
+  getWechatUserData: function() {
+      return wechatUserData
+  },
 
-    getWechatUserData: function() {
-        return wechatUserData
-    },
+  setOwnStocksData: function(stocksData) {
+    ownStocksData = stocksData
+		StorageModule.setOwnStocksData(JSON.stringify(stocksData))
+  },
 
-    setOwnStocksData: function(stocksData) {
-        ownStocksData = stocksData
- 		StorageModule.setOwnStocksData(JSON.stringify(stocksData))
-    },
+  getOwnStocksData: function() {
+      return ownStocksData
+  },
 
-    getOwnStocksData: function() {
-        return ownStocksData
-    },
+	removeOwnStocksData: function(){
+		ownStocksData = [];
+	},
 
-    addStockToOwn: function(stockData) {
-    	var findResult = ownStocksData.find((stock)=>{return stock.id === stockData.id})
-    	if (findResult === undefined) {
-    		ownStocksData.unshift(stockData)
- 			StorageModule.setOwnStocksData(JSON.stringify(ownStocksData))
-    	}
-    	// if exist, not update.
-    	return ownStocksData
-    },
+  addStockToOwn: function(stockData) {
+  	var findResult = ownStocksData.find((stock)=>{return stock.id === stockData.id})
+  	if (findResult === undefined) {
+  		ownStocksData.unshift(stockData)
+			StorageModule.setOwnStocksData(JSON.stringify(ownStocksData))
+  	}
+  	// if exist, not update.
+  	return ownStocksData
+  },
 
-    removeStockFromOwn: function(stockData) {
-    	var index = ownStocksData.findIndex((stock)=>{return stock.id === stockData.id})
-    	if (index != -1) {
-    		ownStocksData.splice(index, 1)
- 			StorageModule.setOwnStocksData(JSON.stringify(ownStocksData))
-    	}
-    	return ownStocksData
-    },
+  removeStockFromOwn: function(stockData) {
+  	var index = ownStocksData.findIndex((stock)=>{return stock.id === stockData.id})
+  	if (index != -1) {
+  		ownStocksData.splice(index, 1)
+			StorageModule.setOwnStocksData(JSON.stringify(ownStocksData))
+  	}
+  	return ownStocksData
+  },
 
-		getStockFromOwnStockData: function(stockId){
-			var index = ownStocksData.findIndex((stock)=>{return stock.id === stockId})
-    	if (index != -1) {
-    		 return ownStocksData[index]
-    	}else{
-				 return undefined
-			}
-		},
+	getStockFromOwnStockData: function(stockId){
+		var index = ownStocksData.findIndex((stock)=>{return stock.id === stockId})
+  	if (index != -1) {
+  		 return ownStocksData[index]
+  	}else{
+			 return undefined
+		}
+	},
 
-    setSearchStockHistory: function(stocksData){
-        searchStockHistory = stocksData
-        StorageModule.setSearchHistory(JSON.stringify(stocksData))
-    },
+  setSearchStockHistory: function(stocksData){
+      searchStockHistory = stocksData
+      StorageModule.setSearchHistory(JSON.stringify(stocksData))
+  },
 
-    getSearchStockHistory: function() {
-        return searchStockHistory
-    },
+  getSearchStockHistory: function() {
+      return searchStockHistory
+  },
 
-    addStockToSearchHistory: function(stockData) {
-        var findResult = searchStockHistory.find((stock)=>{return stock.id === stockData.id})
-        if (findResult === undefined) {
-            searchStockHistory.unshift(stockData)
-            StorageModule.setSearchHistory(JSON.stringify(searchStockHistory))
-        }
-        // if exist, not update.
-        return searchStockHistory
-    },
+  addStockToSearchHistory: function(stockData) {
+      var findResult = searchStockHistory.find((stock)=>{return stock.id === stockData.id})
+      if (findResult === undefined) {
+          searchStockHistory.unshift(stockData)
+          StorageModule.setSearchHistory(JSON.stringify(searchStockHistory))
+      }
+      // if exist, not update.
+      return searchStockHistory
+  },
 
 	setBalanceData: function(data) {
 		balanceData = data

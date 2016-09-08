@@ -30,6 +30,7 @@ var StockExchangePage = React.createClass({
 	getInitialState: function() {
 		return {
 			currentSelectedTab : 0,
+			loggined: false,
 		}
 	},
 
@@ -62,7 +63,9 @@ var StockExchangePage = React.createClass({
 		var loggined = Object.keys(userData).length !== 0
 
 		if (loggined){
-
+			this.setState({
+				loggined: true,
+			})
 			var currentTab = MainPage.initExchangeTab
 			if(this.refs['page0']){
 				//If user has goes into this tab before...
@@ -86,6 +89,10 @@ var StockExchangePage = React.createClass({
 					currentSelectedTab: 0
 				})
 			}
+		}else{
+			this.setState({
+				loggined: false,
+			});
 		}
 	},
 

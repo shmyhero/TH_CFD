@@ -165,6 +165,7 @@
 		3DD744771CCE18040021304F /* myhero.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3DD744761CCE18040021304F /* myhero.ttf */; };
 		3DE8F4581D75236C00B07DFC /* EditOwnStocksView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DE8F4571D75236C00B07DFC /* EditOwnStocksView.m */; };
 		3DE90F481D505035004D264A /* RCTTalkingData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DE90F471D505035004D264A /* RCTTalkingData.m */; };
+		3DFABFF31D81180E007DB853 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DFABFF21D81180E007DB853 /* NotificationManager.swift */; };
 		418F21EB1D75264800E2119A /* libReact-Native-Webview-Bridge.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 418F21EA1D75262F00E2119A /* libReact-Native-Webview-Bridge.a */; };
 		73DFEAF21CDB242700234CE8 /* libbz2.1.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 73DFEAF01CDB22A500234CE8 /* libbz2.1.0.tbd */; };
 		73FD306D1D0574FD00D77EFC /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73FD306C1D0574C200D77EFC /* libRNFS.a */; };
@@ -587,6 +588,7 @@
 		3DE8F4571D75236C00B07DFC /* EditOwnStocksView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditOwnStocksView.m; path = TH_CFD/EditOwnStocksView.m; sourceTree = "<group>"; };
 		3DE90F461D505035004D264A /* RCTTalkingData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCTTalkingData.h; path = TH_CFD/RCTTalkingData.h; sourceTree = "<group>"; };
 		3DE90F471D505035004D264A /* RCTTalkingData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCTTalkingData.m; path = TH_CFD/RCTTalkingData.m; sourceTree = "<group>"; };
+		3DFABFF21D81180E007DB853 /* NotificationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationManager.swift; path = TH_CFD/NotificationManager.swift; sourceTree = "<group>"; };
 		418F21E51D75262E00E2119A /* React-Native-Webview-Bridge.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "React-Native-Webview-Bridge.xcodeproj"; path = "../node_modules/react-native-webview-bridge/ios/React-Native-Webview-Bridge.xcodeproj"; sourceTree = "<group>"; };
 		58602275B1F14B899E56D44F /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
 		5EE2CE709A38445E9875FCBD /* libRealmReact.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRealmReact.a; sourceTree = "<group>"; };
@@ -774,6 +776,7 @@
 				3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */,
 				3DC618001CA2747E00F36541 /* ChartDataManager.swift */,
 				3DC618041CA29F9900F36541 /* StockChartView.swift */,
+				3DFABFF21D81180E007DB853 /* NotificationManager.swift */,
 			);
 			name = Swift;
 			sourceTree = "<group>";
@@ -1955,6 +1958,7 @@
 				3D47CB491C897882000EF6EF /* AppDelegate.swift in Sources */,
 				3DB9F1DC1D64483B00DC5C63 /* MQVoiceCellModel.m in Sources */,
 				3DB9F2101D64483B00DC5C63 /* MQInputContentView.m in Sources */,
+				3DFABFF31D81180E007DB853 /* NotificationManager.swift in Sources */,
 				3DB9F1BC1D64483B00DC5C63 /* UIColor+MQHex.m in Sources */,
 				3DB9F1E01D64483B00DC5C63 /* MQEvaluationCell.m in Sources */,
 				3DB9F1D71D64483B00DC5C63 /* MQImageCellModel.m in Sources */,

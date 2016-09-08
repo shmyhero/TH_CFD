@@ -31,9 +31,7 @@ RCT_EXPORT_MODULE();
 		if (delegate.getuiID) {
 			[self sendDataToRN:@"deviceToken" data: delegate.getuiID];
 		}
-		if (delegate.payloadMsg) {
-			[self sendDataToRN:@"PushShowDetail" data:delegate.payloadMsg];
-		}
+		[[NotificationManager sharedInstance] showNotification];
 	}
 }
 

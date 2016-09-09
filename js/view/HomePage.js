@@ -275,8 +275,9 @@ var HomePage = React.createClass({
 	},
 
 	showCheckInPage: function(){
-		//TODO: use the real check in page.
-		this.props.showIncomeDialogWhenNecessary(200);
+		this.props.navigator.push({
+			name:MainPage.DAY_SIGN_ROUTE,
+		});
 	},
 
 	endsWith: function(str, suffix) {
@@ -366,14 +367,10 @@ var HomePage = React.createClass({
 	},
 
 	showPopularityDetail: function() {
-		// this.props.navigator.push({
-		// 	name: MainPage.STOCK_POPULARITY_ROUTE,
-		// 	data: this.state.rawPopularityInfo,
-		// });
-
 		this.props.navigator.push({
-			name:MainPage.DAY_SIGN_ROUTE,
-			});
+		 	name: MainPage.STOCK_POPULARITY_ROUTE,
+			data: this.state.rawPopularityInfo,
+		});
 	},
 
 	renderPopularityView: function() {

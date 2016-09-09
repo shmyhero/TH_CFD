@@ -312,10 +312,14 @@ var HomePage = React.createClass({
 	},
 
 	showPopularityDetail: function() {
+		// this.props.navigator.push({
+		// 	name: MainPage.STOCK_POPULARITY_ROUTE,
+		// 	data: this.state.rawPopularityInfo,
+		// });
+
 		this.props.navigator.push({
-			name: MainPage.STOCK_POPULARITY_ROUTE,
-			data: this.state.rawPopularityInfo,
-		});
+			name:MainPage.DAY_SIGN_ROUTE,
+			});
 	},
 
 	renderPopularityView: function() {

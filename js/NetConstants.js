@@ -41,6 +41,9 @@ export const GET_ALL_STOCK_ALERT = SERVER_IP + '/api/user/stockAlert/all'
 export const UPDATE_STOCK_ALERT = SERVER_IP + '/api/user/stockAlert'
 export const POST_PUSH_TOKEN = SERVER_IP + '/api/user/pushtoken'
 export const POST_PUSH_TOKEN_AUTH = SERVER_IP + '/api/user/pushtokenauth'
+export const GET_USER_DAILY_SIGN_INFO = SERVER_IP + '/api/user/dailysign/info'//获取每日签到页面所需信息（需身份验证）
+export const GET_USER_DAILY_SIGN_MONTH = SERVER_IP + '/api/user/dailysign/month'//获取当前月份的签到情况(需要身份验证)
+export const USER_DAILY_SIGN = SERVER_IP + '/api/user/dailysign'//每日签到 (需要身份验证)
 
 export const GZT_OCR_CHECK_API = GZT_SERVER_IP + '/ocrCheck'
 

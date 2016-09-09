@@ -2,14 +2,14 @@
 
 import React from 'react';
 import {
-	BackAndroid,
+	  BackAndroid,
     StyleSheet,
     View,
     Text,
     StatusBar,
     Navigator,
     Linking,
-	Platform,
+	  Platform,
 } from 'react-native';
 
 import Tabbar, { Tab, RawContent, Icon, IconWithBar, glypyMapMaker } from 'react-native-tabbar';
@@ -50,6 +50,8 @@ var EditOwnStocksPage = require('./EditOwnStocksPage')
 var EditAlertPage = require('./EditAlertPage')
 var SharePage = require('./SharePage')
 var LogicData = require('../LogicData')
+var DaySignPage = require('./DaySignPage')
+
 
 var TalkingdataModule = require('../module/TalkingdataModule')
 var WebSocketModule = require('../module/WebSocketModule');
@@ -118,6 +120,7 @@ export let FEEDBACK_ROUTE = 'feedback'
 export let EDIT_OWN_STOCKS_ROUTE = 'editownstocks'
 export let EDIT_ALERT_ROUTE = 'editalert'
 export let SHARE_ROUTE = 'share'
+export let DAY_SIGN_ROUTE = 'daySign'
 
 const glypy = glypyMapMaker({
   Home: 'f04f',
@@ -291,6 +294,14 @@ var MainPage = React.createClass({
 				<View style={{flex: 1}}>
 					<NavBar title='关于我们' showBackButton={true} navigator={navigationOperations}/>
 					<AboutUsPage />
+				</View>
+			)
+		} else if (route.name === DAY_SIGN_ROUTE) {
+			hideTabbar();
+			return (
+				<View style={{flex: 1}}>
+					<NavBar title='每日签到' showBackButton={true} navigator={navigationOperations}/>
+					<DaySignPage />
 				</View>
 			)
 		} else if (route.name === ACCOUNT_INFO_ROUTE) {

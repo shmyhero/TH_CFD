@@ -2,22 +2,19 @@ package com.tradehero.cfd;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.react.LifecycleState;
 import com.facebook.react.ReactInstanceManager;
@@ -30,8 +27,9 @@ import com.meiqia.meiqiasdk.util.MQConfig;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tendcloud.appcpa.TalkingDataAppCpa;
 import com.tradehero.cfd.RNNativeModules.NativeDataModule;
-import com.tradehero.cfd.module.LogicData;
 import com.tradehero.cfd.talkingdata.TalkingDataModule;
+
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -40,7 +38,7 @@ import butterknife.ButterKnife;
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
  */
 public class MainActivity extends AppCompatActivity implements DefaultHardwareBackBtnHandler,
-        ReactInstanceManager.ReactInstanceEventListener{
+        ReactInstanceManager.ReactInstanceEventListener {
 
     @Bind(R.id.react_root_view)
     ReactRootView reactRootView;
@@ -54,13 +52,14 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     final static String TAG = "MainActivity";
 
     private static final int REQUEST_PERMISSION = 0;
+    public static MainActivity mInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.20.117:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.116:8081").apply();
 
         super.onCreate(null);
 
@@ -70,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
         initMeiQia();
         initGeTui();
+        initSound();
 
         mReactInstanceManager = RNManager.getInstanceManager(getApplication());
         setContentView(R.layout.react_activity_container);
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
             String pkName = this.getPackageName();
             String versionName = this.getPackageManager().getPackageInfo(
                     pkName, 0).versionName;
-            tvVersion.setText("V"+versionName+" 版本");
+            tvVersion.setText("V" + versionName + " 版本");
         } catch (Exception e) {
         }
 
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         //Send GeTui Client ID to RN
         initDeviceToken();
 
-        if(getIntent() != null && getIntent().getExtras()!= null) {
+        if (getIntent() != null && getIntent().getExtras() != null) {
             final String data = getIntent().getExtras().getString(GeTuiBroadcastReceiver.KEY_PUSH_DATA);
             if (data != null) {
                 sendPushDetailMessageWhenAvailable(data);
@@ -119,22 +119,22 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         }
     }
 
-    private void sendPushDetailMessageWhenAvailable(String data){
-        if(mReactInstanceManager.getLifecycleState() != LifecycleState.RESUMED) {
+    private void sendPushDetailMessageWhenAvailable(String data) {
+        if (mReactInstanceManager.getLifecycleState() != LifecycleState.RESUMED) {
             Log.i(TAG, "send data to RN. RN is paused so let's wait.");
             //RN instance is paused or not started.
             //So store the data for now and wait until onResume, otherwise the RN instance is still paused.
             pushData = data;
-        }else{
+        } else {
             Log.i(TAG, "send data to RN immediately.");
             showPushDetail(data);
         }
     }
 
-    private void showPushDetail(final String pushJsonString){
+    private void showPushDetail(final String pushJsonString) {
         try {
             ReactContext context = mReactInstanceManager.getCurrentReactContext();
-            if(context!=null) {
+            if (context != null) {
                 NativeDataModule.passDataToRN(context, GeTuiBroadcastReceiver.ACTION_SHOW_DETAIL, pushJsonString);
             }
         } catch (Exception e) {
@@ -218,12 +218,12 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         super.onBackPressed();
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mReactInstanceManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void initMeiQia(){
+    public void initMeiQia() {
         MQConfig.init(this, "2a59beff6f1875815ea399fdad79a46e", new OnInitCallback() {
             @Override
             public void onSuccess(String clientId) {
@@ -240,26 +240,26 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
     }
 
-    public void initDeviceToken(){
-        try{
+    public void initDeviceToken() {
+        try {
 //                    String ANDOIRD_ID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 //                    Log.d("CFD LOG","Android ID : "+ ANDOIRD_ID);
 //                    ReactContext context = mReactInstanceManager.getCurrentReactContext();
 //                    Log.d("","initDeviceToken : " + ANDOIRD_ID);
 
             ReactContext context = mReactInstanceManager.getCurrentReactContext();
-            if(mClientIDTeTui!=null){
+            if (mClientIDTeTui != null) {
                 NativeDataModule.passDataToRN(context, "deviceToken", mClientIDTeTui);
-                Log.d("GeTui","NativeDataModule deviceToken : " + mClientIDTeTui);
+                Log.d("GeTui", "NativeDataModule deviceToken : " + mClientIDTeTui);
             }
 
 
-        }catch (Exception e){
-            Log.d("","initDeviceToken : error");
+        } catch (Exception e) {
+            Log.d("", "initDeviceToken : error");
         }
     }
 
-    public void initGeTui(){
+    public void initGeTui() {
 
 
         // SDK初始化，第三方程序启动时，都要进行SDK初始化工作
@@ -282,14 +282,14 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         }
 
         mClientIDTeTui = PushManager.getInstance().getClientid(this);
-        if(mClientIDTeTui!=null){
-            Log.d("GeTui",""+mClientIDTeTui);
+        if (mClientIDTeTui != null) {
+            Log.d("GeTui", "" + mClientIDTeTui);
         }
 
     }
 
     private void requestPermission() {
-        ActivityCompat.requestPermissions(this, new String[] {android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_PHONE_STATE},
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_PHONE_STATE},
                 REQUEST_PERMISSION);
 
     }
@@ -308,5 +308,34 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         } else {
             onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    //播放声音index
+    public void playSound(int index ) {
+        try{
+            int loop = 1;
+            AudioManager am = (AudioManager) this
+                    .getSystemService(mInstance.AUDIO_SERVICE);
+            float audioMaxVolumn = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+            float volumnCurrent = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+            float volumnRatio = volumnCurrent / audioMaxVolumn;
+
+            sp.play(spMap.get(index), volumnRatio, volumnRatio, 1, loop, 1f);
+        }catch(Exception e){
+           Log.e("","play sound error " + e.toString());
+        }
+
+    }
+
+
+    SoundPool sp;
+    HashMap<Integer, Integer> spMap;
+
+    public void initSound() {
+        sp = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+        spMap = new HashMap<Integer, Integer>();
+        spMap.put(0, sp.load(this, R.raw.coin, 1));
+//        spMap.put(2, sp.load(this, R.raw.hit, 1));
+
     }
 }

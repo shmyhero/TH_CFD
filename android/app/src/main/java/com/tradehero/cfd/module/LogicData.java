@@ -1,5 +1,6 @@
 package com.tradehero.cfd.module;
 
+import com.tradehero.cfd.MainActivity;
 import com.tradehero.cfd.views.ReactStockEditFragmentNative;
 
 import org.json.JSONArray;
@@ -13,6 +14,7 @@ public class LogicData {
     public static final String MY_LIST = "myList";
     public static final String MY_LOGO = "myLogo";
     public static final String MY_ALERT_LIST = "myAlertList";
+    public static final String PLAY_SOUND = "playSound";
 
     private static LogicData mInstance;
     private JSONArray mMyList;
@@ -46,6 +48,8 @@ public class LogicData {
             }
         }else if(dataName.equals(MY_LOGO)){
             myLogo = data;
+        }else if(dataName.equals(PLAY_SOUND)){
+            playSound(0);
         }
     }
 
@@ -59,6 +63,12 @@ public class LogicData {
 
     public JSONArray getMyAlertList(){
         return mMyAlertList;
+    }
+
+    public void playSound(int index){
+        if(MainActivity.mInstance!=null){
+            MainActivity.mInstance.playSound(index);
+        }
     }
 
 }

@@ -21,6 +21,7 @@ var ColorConstants = require('../ColorConstants');
 var LogicData = require('../LogicData');
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
+var NativeDataModule = require('../module/NativeDataModule')
 
 var {height, width} = Dimensions.get('window');
 var heightRate = height/667.0;
@@ -29,6 +30,7 @@ var roundR = 150
 var roundDayMargin = 5
 var roundDayLength = 11
 var roundDay =  (width - roundDayMargin * roundDayLength * 2) / roundDayLength
+
 
 var DaySignPage = React.createClass({
 
@@ -66,6 +68,8 @@ var DaySignPage = React.createClass({
 
 	_actionAni:function(){
 		console.log('_actionAni');
+		this._playSound();
+
 		 this.state.bounceValue.setValue(0);
      this.state.rotateValue.setValue(0);
 		 this.state.fadeInValue.setValue(0);
@@ -104,6 +108,10 @@ var DaySignPage = React.createClass({
 
 	       //调用start启动动画,start可以回调一个函数,从而实现动画循环
 	   ]).start();
+	},
+
+	_playSound:function(){
+		NativeDataModule.passDataToNative('playSound', "0")
 	},
 
 	//获取当天的签到状态
@@ -560,7 +568,6 @@ var styles = StyleSheet.create({
 		fontSize:10,
 		color:'#ffffff',
 		paddingRight:10,
-		textAlign:'center',
 		flex:1,
 		// borderTopLeftRadius:10,
 		// borderBottomLeftRadius:10,

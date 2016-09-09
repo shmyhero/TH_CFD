@@ -250,10 +250,6 @@ var MePage = React.createClass({
 				return (
 					<View></View>
 				);
-			}if(rowData.subtype === 'income' && !this.state.loggedIn){
-				return (
-					<View></View>
-				);
 			}else{
 				return(
 					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>

@@ -41,7 +41,7 @@ export const GET_ALL_STOCK_ALERT = SERVER_IP + '/api/user/stockAlert/all'
 export const UPDATE_STOCK_ALERT = SERVER_IP + '/api/user/stockAlert'
 export const POST_PUSH_TOKEN = SERVER_IP + '/api/user/pushtoken'
 export const POST_PUSH_TOKEN_AUTH = SERVER_IP + '/api/user/pushtokenauth'
-export const GET_TOTAL_UNPAID = SERVER_IP + 'api/user/reward/unpaid'
+export const GET_TOTAL_UNPAID = SERVER_IP + '/api/user/reward/unpaid'
 
 export const GZT_OCR_CHECK_API = GZT_SERVER_IP + '/ocrCheck'
 
@@ -51,6 +51,7 @@ export const WEBVIEW_QA_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/wenda<version>
 export const WEBVIEW_URL_ABOUT_US = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/about.html'
 export const SHARE_URL = TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER + '/detailShare.php?id=<id>'
 export const SHARE_LOGO_URL = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/images/ShareLogo.png'
+export const INCOME_URL = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/checkinRule.php'
 export const PARAMETER_PHONE = 'phone'
 export const PARAMETER_VERFICATION_CODE = 'verifyCode'
 export const PARAMETER_NICKNAME = 'nickname'

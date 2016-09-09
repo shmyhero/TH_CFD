@@ -276,14 +276,20 @@ var StockDetailPage = React.createClass({
 			this.setState({
 				isAddedToMyList: false,
 			})
-			TalkingdataModule.trackEvent(TalkingdataModule.ADD_TO_MY_LIST_EVENT, '', {'stockCode': this.props.stockCode.toString()})
+
+      var parameters = {};
+      parameters[TalkingdataModule.KEY_STOCK_ID] = this.props.stockCode.toString();
+			TalkingdataModule.trackEvent(TalkingdataModule.ADD_TO_MY_LIST_EVENT, '', parameters)
 		} else {
 			LogicData.addStockToOwn(stock)
 			NetworkModule.addToOwnStocks([stock])
 			this.setState({
 				isAddedToMyList: true,
 			})
-			TalkingdataModule.trackEvent(TalkingdataModule.REMOVE_FROM_MY_LIST_EVENT, '', {'stockCode': this.props.stockCode.toString()})
+
+      var parameters = {};
+      parameters[TalkingdataModule.KEY_STOCK_ID] = this.props.stockCode.toString();
+			TalkingdataModule.trackEvent(TalkingdataModule.REMOVE_FROM_MY_LIST_EVENT, '', parameters)
 		}
 	},
 
@@ -802,14 +808,14 @@ var StockDetailPage = React.createClass({
 				// refresh balcance data
 				NetworkModule.loadUserBalance(true, this.updateUserBalance)
 
-				var eventParam = {
-					'securityId': responseJson.security.id.toString(),
-					'securityName': responseJson.security.name,
-					'invest': this.state.money,
-					'leverage': responseJson.leverage,
-					'isLong': responseJson.isLong,
-					'time': responseJson.createAt,
-				}
+				var eventParam = {};
+
+				eventParam[TalkingdataModule.KEY_SECURITY_ID] =  responseJson.security.id.toString(),
+				eventParam[TalkingdataModule.KEY_SECURITY_NAME] = responseJson.security.name;
+				eventParam[TalkingdataModule.KEY_INVEST] = this.state.money;
+				eventParam[TalkingdataModule.KEY_LEVERAGE] = responseJson.leverage;
+				eventParam[TalkingdataModule.KEY_IS_LONG] = responseJson.isLong;
+				eventParam[TalkingdataModule.KEY_TIME] = responseJson.createAt;
 
 				TalkingdataModule.trackEvent(TalkingdataModule.TRADE_EVENT, '', eventParam)
 			},

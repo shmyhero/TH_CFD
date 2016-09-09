@@ -40,28 +40,51 @@ var MyIncomePage = React.createClass({
 	getInitialState: function() {
 		return {
       totalIncome: '--',
+			totalDailySign: '--',
+			demoTransaction: '--',
+			demoRegister: '--',
 		};
 	},
 
 	componentDidMount: function(){
+
     var userData = LogicData.getUserData();
-    NetworkModule.fetchTHUrl(
-      NetConstants.GET_TOTAL_UNPAID,
-      {
-        method: 'GET',
-        headers: {
-          'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-        },
-      },
-      (responseJson) => {
-        this.setState({
-          totalIncome: responseJson,
-        });
-      },
-      (errorMessage) => {
-        console.log(errorMessage)
-      }
-    )
+		var notLogin = Object.keys(userData).length === 0
+		if(!notLogin){
+	    NetworkModule.fetchTHUrl(
+	      NetConstants.GET_TOTAL_UNPAID,
+	      {
+	        method: 'GET',
+	        headers: {
+	          'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						'Content-Type': 'application/json; charset=UTF-8',
+	        },
+	      },
+	      (responseJson) => {
+					console.log("my unpaid income: " + JSON.stringify(responseJson));
+
+					var totalDailySign = responseJson.totalDailySign;
+					var demoTransaction = responseJson.totalDemoTransaction;
+					var demoRegister = responseJson.demoRegister;
+	        this.setState({
+	          totalIncome: totalDailySign + demoTransaction + demoRegister,
+						totalDailySign : totalDailySign,
+						demoTransaction: demoTransaction,
+						demoRegister: demoRegister,
+	        });
+	      },
+	      (errorMessage) => {
+	        console.log(errorMessage)
+	      }
+	    )
+		}else{
+			this.setState({
+				totalIncome: 0,
+				totalDailySign: 0,
+				demoTransaction: 0,
+				demoRegister: 0,
+			})
+		}
 	},
 
 	pressBackButton: function() {
@@ -86,15 +109,15 @@ var MyIncomePage = React.createClass({
     var title, value;
     if(type == 1){
       title = "签到交易金(元)";
-      value = 138.5;
+      value = this.state.totalDailySign;
     }
     if(type == 2){
       title = "模拟交易金(元)";
-      value = 100.5;
+      value = this.state.demoTransaction;
     }
     if(type == 3){
       title = "注册交易金(元)";
-      value = 20;
+      value = this.state.demoRegister;
     }
 
     return(

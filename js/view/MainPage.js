@@ -143,7 +143,7 @@ export var showProgress
 
 var recevieDataSubscription = null
 var SHARE_PAGE = 'SharePage'
-var INCOME_DIALOG = 'IncomeDialog'
+var REGISTER_SUCCESS_DIALOG = 'RegisterSuccessDialog'
 
 var MainPage = React.createClass({
 
@@ -185,7 +185,7 @@ var MainPage = React.createClass({
 			showTabbar()
 			return (
 				<HomePage navigator={navigationOperations}
-				showIncomeDialogWhenNecessary={this.showIncomeDialogWhenNecessary}/>
+				showIncomeDialogWhenNecessary={this.showRegisterSuccessDialog}/>
 			)
 		} else if (route.name === LANDING_ROUTE) {
 			showTabbar()
@@ -193,25 +193,20 @@ var MainPage = React.createClass({
 				<LandingPage navigator={navigationOperations} />
 			);
 		} else if (route.name === LOGIN_ROUTE) {
-			hideTabbar()
-			var popToRoute = ()=>{
-				if(route.onPopToRoute){
-					route.onPopToRoute();
-				}
-				this.showIncomeDialogWhenNecessary();
-			}
+			hideTabbar();
 			return (
 				<LoginPage navigator={navigationOperations} showCancelButton={true}
 					popToRoute={route.popToRoute}
-  				onPopToRoute={popToRoute}/>
+  				onPopToRoute={route.onPopToRoute}
+					showRegisterSuccessDialog={this.showRegisterSuccessDialog}/>
 			);
 		} else if (route.name === UPDATE_USER_INFO_ROUTE) {
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title="设置昵称"/>
 					<UpdateUserInfoPage navigator={navigationOperations}
 					popToRoute={route.popToRoute}
-  				onPopToRoute={route.onPopToRoute}/>
+  				onPopToRoute={route.onPopToRoute}
+					showRegisterSuccessDialog={this.showRegisterSuccessDialog}/>
 				</View>
 			);
 		} else if (route.name === MY_HOME_ROUTE) {
@@ -289,7 +284,8 @@ var MainPage = React.createClass({
 										 shareID={route.shareID}
 										 shareTitle={route.shareTitle}
 										 shareDescription={route.shareDescription}
-										 shareFunction={this._doShare}/>
+										 shareFunction={this._doShare}
+										 shareTrackingEvent={route.shareTrackingEvent}/>
 			)
 		} else if (route.name === QA_ROUTE) {
 			hideTabbar();
@@ -487,9 +483,10 @@ var MainPage = React.createClass({
 		this.refs['progressBar'] && this.refs['progressBar'].hide()
 	},
 
-	showIncomeDialogWhenNecessary() {
-		//TODO: Check by call up the corresponding api
-		this.refs[INCOME_DIALOG] && this.refs[INCOME_DIALOG].show();
+	showRegisterSuccessDialog(rewardAmount) {
+		if(rewardAmount){
+			this.refs[REGISTER_SUCCESS_DIALOG] && this.refs[REGISTER_SUCCESS_DIALOG].show(rewardAmount);
+		}
 	},
 
 	initTabbarEvent() {
@@ -551,6 +548,8 @@ var MainPage = React.createClass({
 		console.log('handleDeeplink: ' + url)
 
 		if(url.startsWith('cfd://page/share')) {
+			TalkingdataModule.trackCurrentEvent();
+
 			var json = this.getJsonFromUrl(url)
 			this.refs[SHARE_PAGE].showWithData(json);
 		}else{
@@ -608,7 +607,7 @@ var MainPage = React.createClass({
 
 	renderRegisterSuccessPage: function(){
 		return (
-			<RegisterSuccessPage ref={INCOME_DIALOG}
+			<RegisterSuccessPage ref={REGISTER_SUCCESS_DIALOG}
 			shareFunction={this._doShare}/>
 		);
 	},

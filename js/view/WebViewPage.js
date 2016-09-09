@@ -16,6 +16,7 @@ var SharePage = require('./SharePage')
 var NavBar = require('./NavBar')
 var WebViewBridge = require('react-native-webview-bridge');
 var NetConstants = require('../NetConstants')
+var TalkingdataModule = require('../module/TalkingdataModule')
 
 //Cannot find a soluWebViewBridge
 const injectScript = `
@@ -39,6 +40,7 @@ var WebViewPage = React.createClass({
 		shareDescription: React.PropTypes.string,
 		showTabbar: React.PropTypes.func,
 		shareFunction: React.PropTypes.func,
+		shareTrackingEvent: React.PropTypes.string,
 	},
 
 	getDefaultProps() {
@@ -49,6 +51,7 @@ var WebViewPage = React.createClass({
 			shareDescription: null,
 			showTabbar: ()=>{},
 			shareFunction: ()=>{},
+			shareTrackingEvent: null,
 		}
 	},
 
@@ -59,6 +62,10 @@ var WebViewPage = React.createClass({
 	},
 
 	componentDidMount: function() {
+		if(this.props.shareTrackingEvent){
+			TalkingdataModule.setCurrentTrackingEvent(this.props.shareTrackingEvent);
+		}
+
 		NetInfo.isConnected.addEventListener(
 			'change',
 			this._handleConnectivityChange
@@ -70,11 +77,15 @@ var WebViewPage = React.createClass({
 	},
 
 	componentWillUnmount: function() {
-    	NetInfo.isConnected.removeEventListener(
+		if(this.props.shareTrackingEvent){
+			TalkingdataModule.clearCurrentTrackingEvent()
+		}
+
+  	NetInfo.isConnected.removeEventListener(
 			'change',
 			this._handleConnectivityChange
 		);
-    },
+  },
 
 	_handleConnectivityChange: function(isConnected) {
 		this.setState({isNetConnected: isConnected})
@@ -90,6 +101,11 @@ var WebViewPage = React.createClass({
 	pressShareButton: function(){
 		//Have some issue on Android...
 		//this.refs[WEBVIEW_REF].sendToBridge("get-share-info");
+
+		if(this.props.shareTrackingEvent){
+			TalkingdataModule.trackEvent(this.props.shareTrackingEvent);
+		}
+
 		var url = NetConstants.SHARE_URL;
 		url = url.replace('<id>', this.props.shareID);
 

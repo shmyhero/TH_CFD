@@ -16,6 +16,7 @@ import {
 var {height, width} = Dimensions.get('window');
 var ColorConstants = require("../ColorConstants")
 var NetConstants = require("../NetConstants")
+var TalkingdataModule = require("../module/TalkingdataModule")
 
 var top_image = require("../../images/register_success.png")
 
@@ -41,12 +42,14 @@ var RegisterSuccessPage = React.createClass({
       dialogVisible: false,
       fadeAnim: new Animated.Value(1),
 			modalVisible: false,
+			rewardAmount: 20,
     };
   },
 
-  show: function() {
+  show: function(rewardAmount) {
     this.setState({
       dialogVisible: true,
+			rewardAmount: rewardAmount,
     })
 
 		Animated.timing(       // Uses easing functions
@@ -81,13 +84,15 @@ var RegisterSuccessPage = React.createClass({
   },
 
   shareInfo: function(){
+		TalkingdataModule.trackEvent(TalkingdataModule.REGISTER_INCOME_SHARE_EVENT);
+
     if(this.props.shareFunction){
       //TODO: use real data.
   		var data = {
-  			webpageUrl: NetConstants.SHARE_URL,
+  			webpageUrl: NetConstants.INCOME_URL,
   			imageUrl: NetConstants.SHARE_LOGO_URL,
-  			title: "模拟注册获得20元交易金",
-  			description: "模拟注册可专区20元；每日签到可赚取0.5元；每日模拟交易可赚取0.5元。",
+  			title: "模拟注册获得" + this.state.rewardAmount + "元交易金",
+  			description: "模拟注册可专区" + this.state.rewardAmount + "元；每日签到可赚取0.5元；每日模拟交易可赚取0.5元。",
   		}
       this.props.shareFunction(data);
     }
@@ -121,7 +126,7 @@ var RegisterSuccessPage = React.createClass({
 										注册成功
 		              </Text>
 									<Text style={styles.descriptionText}>
-										恭喜您获得了20元交易金
+										恭喜您获得了{this.state.rewardAmount}元交易金
 									</Text>
 								</View>
 	              <View style={styles.buttonContainer}>

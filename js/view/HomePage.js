@@ -25,8 +25,8 @@ var FSModule = require('../module/FSModule');
 var LogicData = require('../LogicData');
 var WebSocketModule = require('../module/WebSocketModule');
 var NavBar = require('./NavBar')
+var TalkingdataModule = require('../module/TalkingdataModule')
 var {EventCenter, EventConst} = require('../EventCenter')
-
 
 var RECOMMAND_URL = NetConstants.WEBVIEW_RECOMMAND_PAGE
 var PAGES = [
@@ -37,6 +37,10 @@ var BANNERS = [
 	require('../../images/bannar01.png'),
 	require('../../images/bannar02.png'),
 ];
+const check_in_image = require("../../images/check_in.png")
+const movie_image = require("../../images/movie.png")
+const hot_image = require("../../images/hot.png")
+
 var {height, width} = Dimensions.get('window');
 var barWidth = Math.round(width/3)-12
 var imageHeight = 300 / 750 * width
@@ -56,6 +60,16 @@ var HomePage = React.createClass({
 			popularityInfo: bsds.cloneWithRows([]),
 			topNews: [],
 		};
+	},
+
+	propTypes: {
+		showIncomeDialogWhenNecessary: React.PropTypes.func,
+	},
+
+	getDefaultProps: function() {
+		return {
+			showIncomeDialogWhenNecessary: ()=>{}
+		}
 	},
 
 	componentWillMount: function() {
@@ -192,7 +206,18 @@ var HomePage = React.createClass({
 			})
 	},
 
-	gotoWebviewPage: function(targetUrl, title, shareID, shareTitle, shareDescription) {
+	goToBannerPage: function(i) {
+		var trackingData = {"Banner页面": PAGES[i].header};
+		TalkingdataModule.trackEvent(TalkingdataModule.BANNERS, "", trackingData)
+		this.gotoWebviewPage(PAGES[i].url,
+			'推荐',
+			PAGES[i].id,
+			PAGES[i].header,
+			PAGES[i].digest,
+			TalkingdataModule.BANNER_SHARE_EVENT)
+	},
+
+	gotoWebviewPage: function(targetUrl, title, shareID, shareTitle, shareDescription, sharingTrackingEvent) {
 		var userData = LogicData.getUserData()
 		var userId = userData.userId
 		if (userId == undefined) {
@@ -221,9 +246,38 @@ var HomePage = React.createClass({
 			shareID: shareID,
 			shareTitle: shareTitle,
 			shareDescription: shareDescription,
+			shareTrackingEvent: sharingTrackingEvent,
 		});
 	},
 
+	gotoMoviePage: function(){
+		TalkingdataModule.trackEvent(TalkingdataModule.MOVIE_ACTIVITY_EVENT);
+		this.gotoWebviewPage(PAGES[0].url, '推荐',
+			PAGES[0].id,
+			PAGES[0].header,
+			PAGES[0].digest,
+			TalkingdataModule.MOVIE_SHARE_EVENT);
+	},
+
+	gotoCheckinPage: function(){
+		TalkingdataModule.trackEvent(TalkingdataModule.CHECK_IN_ACTIVITY_EVENT);
+		var userData = LogicData.getUserData()
+		var notLogin = Object.keys(userData).length === 0
+		if(notLogin){
+			this.props.navigator.push({
+				name: MainPage.LOGIN_ROUTE,
+				popToRoute: MainPage.HOME_PAGE_ROUTE,	//Set to destination page
+				onPopToRoute: this.showCheckInPage,
+			});
+		}else{
+			this.showCheckInPage();
+		}
+	},
+
+	showCheckInPage: function(){
+		//TODO: use the real check in page.
+		this.props.showIncomeDialogWhenNecessary(200);
+	},
 
 	endsWith: function(str, suffix) {
 	    return str.indexOf(suffix, str.length - suffix.length) !== -1;
@@ -388,11 +442,7 @@ var HomePage = React.createClass({
 		return(
 			<TouchableOpacity
 				activeOpacity = {1.0}
-				onPress={() =>this.gotoWebviewPage(PAGES[i].url,
-					'推荐',
-					PAGES[i].id,
-					PAGES[i].header,
-					PAGES[i].digest)} key={i}>
+				onPress={() => this.goToBannerPage(i)} key={i}>
 				<Image
 					style={[styles.image, {height: imageHeight, width: width}]}
 					source={{uri: 'file://' + PAGES[i].imgUrl}}/>
@@ -404,7 +454,12 @@ var HomePage = React.createClass({
 		var header = news.header
 		var url = NetConstants.WEBVIEW_TOP_NEWS_PAGE+news.id
 		return(
-			<TouchableOpacity style={styles.newsContainer} onPress={() =>this.gotoWebviewPage(url, '每日头条', false)}>
+			<TouchableOpacity style={styles.newsContainer} onPress={() =>this.gotoWebviewPage(url,
+				'每日头条',
+				false,
+				null,
+				null,
+				TalkingdataModule.HEADER_SHARE_EVENT)}>
 				<View style={styles.bluePoint}/>
 				<Text style={styles.newsText}
 					ellipsizeMode={true}
@@ -455,6 +510,58 @@ var HomePage = React.createClass({
 		}
 	},
 
+	renderEventItem: function(i){
+		var title;
+		var description;
+		var onPress;
+		var image;
+		if(i == 1){
+			title = "影票来袭";
+			description = "每日模拟交易前三名";
+			image = movie_image;
+			onPress = () => this.gotoMoviePage();
+		}else{
+			title = "每日签到";
+			description = "签到可赚取实盘资金";
+			image = check_in_image;
+			onPress = () => this.gotoCheckinPage();
+		}
+		return(
+			<TouchableOpacity style={[styles.eventsItemContainer]}
+				onPress={onPress}>
+				<View style={{flexDirection: 'row', flex:1}}>
+					<View style={[styles.eventsTextContainer]}>
+						<Text style={styles.eventsTitleText}>
+							{title}
+						</Text>
+						<Text style={styles.eventsDescriptionText}>
+							{description}
+						</Text>
+					</View>
+					<Image
+						style={[styles.eventsIcon]}
+						source={image}/>
+					<Image style={[styles.eventsHotIcon]}
+						source={hot_image}/>
+				</View>
+			</TouchableOpacity>
+		)
+	},
+
+	renderEventSeparator: function(){
+		return(<View style={styles.eventSeparator}/>);
+	},
+
+	renderEventsRow: function(){
+		return (
+			<View style={[styles.eventsRowContainer]}>
+				{this.renderEventItem(1)}
+				{this.renderEventSeparator()}
+				{this.renderEventItem(2)}
+			</View>
+		)
+	},
+
 	render: function() {
 		var activeDot = <View style={styles.guideActiveDot} />
 		var dot = <View style={styles.guideDot} />
@@ -467,10 +574,7 @@ var HomePage = React.createClass({
 			} else {
 				slides.push (
 					<TouchableOpacity
-						onPress={() => this.gotoWebviewPage(PAGES[i].url, '推荐',
-						PAGES[i].id,
-						PAGES[i].header,
-						PAGES[i].digest)} key={i}>
+						onPress={() => this.goToBannerPage(i)} key={i}>
 						<Image
 							style={[styles.image, {height: imageHeight, width: width}]}
 							source={BANNERS[i % 2]}/>
@@ -499,6 +603,9 @@ var HomePage = React.createClass({
 					</View>
 
 					{this.renderTopNews()}
+					<View style={styles.bigSeparator}/>
+
+					{this.renderEventsRow()}
 					<View style={styles.bigSeparator}/>
 
 					{this.renderPopularityView()}
@@ -704,6 +811,50 @@ var styles = StyleSheet.create({
 		fontSize: 14,
 		color: '#333333',
 		marginRight: 10,
+	},
+	eventsRowContainer:{
+		flexDirection: 'row',
+		height: 80,
+		width: width,
+		backgroundColor: 'white',
+	},
+	eventsItemContainer:{
+		flex:1,
+		justifyContent: 'center',
+	},
+	eventSeparator: {
+		width: 0.5,
+		backgroundColor: ColorConstants.SEPARATOR_GRAY,
+	},
+	eventsTextContainer: {
+		paddingTop: 10,
+		paddingBottom: 10,
+		paddingLeft:12,
+		flexDirection: 'column',
+		flex:1,
+		alignSelf:'center',
+	},
+	eventsTitleText:{
+		fontSize: 16,
+		color: '#4c4c4c'
+	},
+	eventsDescriptionText: {
+		fontSize: 9,
+		marginTop: 7,
+		color: '#626262'
+	},
+	eventsIcon: {
+		width:53,
+		height:53,
+		alignSelf: 'center',
+		marginRight:6,
+	},
+	eventsHotIcon: {
+		top:0,
+		right:0,
+		position: 'absolute',
+		width:27,
+		height:27
 	}
 });
 

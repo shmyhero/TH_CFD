@@ -30,6 +30,7 @@ var heightRate = height/667.0
 var listRawData = [{'type':'account','subtype':'accountInfo'},
 // {'type':'button','title':'开设实盘账户'},
 {'type':'Separator', 'height':10},
+{'type':'normal','title':'我的交易金', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'income'},
 {'type':'normal','title':'帮助中心', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'helpcenter'},
 {'type':'normal','title':'线上咨询', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':'onlinehelp'},
 {'type':'normal','title':'产品反馈', 'image':require('../../images/icon_response.png'), 'subtype':'feedback'},
@@ -149,7 +150,12 @@ var MePage = React.createClass({
 	},
 
 	onSelectNormalRow: function(rowData) {
-		if(rowData.subtype === 'helpcenter') {
+		if(rowData.subtype === 'income'){
+			this.props.navigator.push({
+				name: MainPage.MY_INCOME_ROUTE,
+			})
+		}
+		else if(rowData.subtype === 'helpcenter') {
 			this.props.navigator.push({
 				name: MainPage.QA_ROUTE,
 			});
@@ -166,6 +172,7 @@ var MePage = React.createClass({
 		else if(rowData.subtype === 'config') {
 			this.props.navigator.push({
 				name: MainPage.ME_CONFIG_ROUTE,
+				onPopBack: this.reloadMeData
 			});
 		}
 		else if(rowData.subtype === 'feedback') {

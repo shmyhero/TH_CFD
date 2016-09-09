@@ -9,23 +9,37 @@ import {
 	Text,
 	Image,
 	TouchableOpacity,
+	Alert,
 } from 'react-native';
 
 var ColorConstants = require('../ColorConstants')
 var NavBar = require('./NavBar')
 var Button = require('./component/Button')
 var MainPage = require('./MainPage')
+var LocalDataUpdateModule = require('../module/LocalDataUpdateModule')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 var listRawData = [
 {'type':'normal','title':'推送设置', 'subtype': 'pushconfig'},
 {'type':'normal','title':'账号绑定', 'subtype': 'accountbinding'},
+{'type':'normal','title':'退出当前账号', 'subtype': 'logout'},
 ]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var MeConfigPage = React.createClass({
+
+	propTypes: {
+		onPopBack: React.PropTypes.func,
+	},
+
+	getDefaultProps: function(){
+		return {
+				onPopBack: ()=>{}
+		};
+	},
+
 	getInitialState: function() {
 		return {
 			dataSource: ds.cloneWithRows(listRawData),
@@ -42,6 +56,28 @@ var MeConfigPage = React.createClass({
 			this.props.navigator.push({
 				name: MainPage.ME_ACCOUNT_BINDING_ROUTE,
 			});
+		}else if(rowData.subtype === 'logout'){
+			this.logout();
+		}
+	},
+
+	logout: function(){
+		//TODO
+		Alert.alert(
+			"提示",
+			"",
+				[
+					{text: '取消'},
+					{text: '确认退出', onPress: () => this.logoutCurrentAccount()},
+				]
+			)
+	},
+
+	logoutCurrentAccount: function(){
+		LocalDataUpdateModule.removeUserData();
+		this.props.navigator.pop();
+		if(this.props.onPopBack){
+			this.props.onPopBack();
 		}
 	},
 

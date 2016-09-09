@@ -44,6 +44,7 @@ export const POST_PUSH_TOKEN_AUTH = SERVER_IP + '/api/user/pushtokenauth'
 export const GET_USER_DAILY_SIGN_INFO = SERVER_IP + '/api/user/dailysign/info'//获取每日签到页面所需信息（需身份验证）
 export const GET_USER_DAILY_SIGN_MONTH = SERVER_IP + '/api/user/dailysign/month'//获取当前月份的签到情况(需要身份验证)
 export const USER_DAILY_SIGN = SERVER_IP + '/api/user/dailysign'//每日签到 (需要身份验证)
+export const GET_TOTAL_UNPAID = SERVER_IP + '/api/user/reward/unpaid'
 
 export const GZT_OCR_CHECK_API = GZT_SERVER_IP + '/ocrCheck'
 
@@ -53,6 +54,7 @@ export const WEBVIEW_QA_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/wenda<version>
 export const WEBVIEW_URL_ABOUT_US = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/about.html'
 export const SHARE_URL = TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER + '/detailShare.php?id=<id>'
 export const SHARE_LOGO_URL = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/images/ShareLogo.png'
+export const INCOME_URL = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/checkinRule.php'
 export const PARAMETER_PHONE = 'phone'
 export const PARAMETER_VERFICATION_CODE = 'verifyCode'
 export const PARAMETER_NICKNAME = 'nickname'

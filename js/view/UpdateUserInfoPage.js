@@ -19,6 +19,8 @@ var LogicData = require('../LogicData')
 var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
 var UIConstants = require('../UIConstants')
+var LocalDataUpdateModule = require('../module/LocalDataUpdateModule')
+var NavBar = require('./NavBar')
 var rowHeight = 40;
 var fontSize = 16;
 
@@ -53,12 +55,14 @@ var UpdateUserInfoPage = React.createClass({
 	propTypes: {
 		popToRoute: React.PropTypes.string,
 		onPopToRoute: React.PropTypes.func,
+		showRegisterSuccessDialog: React.PropTypes.func,
 	},
 
 	getDefaultProps() {
 		return {
 			popToRoute: null,
 			onPopToRoute: null,
+			showRegisterSuccessDialog: ()=>{},
 		}
 	},
 
@@ -70,7 +74,11 @@ var UpdateUserInfoPage = React.createClass({
 		};
 	},
 
+	initialMeData: null,
+
 	componentDidMount: function() {
+		this.initialMeData = LogicData.getMeData();
+
 		if (LogicData.getWechatUserData().nickname !== undefined) {
 			this.setState({
 				noteState: NOTE_STATE_NORMAL_WECHAT,
@@ -129,8 +137,9 @@ var UpdateUserInfoPage = React.createClass({
 	},
 
 	savePressed: function() {
-		var userData = LogicData.getUserData()
+		var userData = LogicData.getUserData();
 
+		//Use the old me data since the reward amount only occur once.
 		NetworkModule.fetchTHUrl(
 			NetConstants.SET_USER_NICKNAME_API + '?' + NetConstants.PARAMETER_NICKNAME + '=' + this.state.nickName,
 			{
@@ -140,30 +149,8 @@ var UpdateUserInfoPage = React.createClass({
 				},
 			},
 			function(responseJson) {
-				this.updateMeData(userData, function(){
-					if(this.props.popToRoute != null){
-						var routes = this.props.navigator.getCurrentRoutes();
-						var backRoute = null;
-
-						for (var i=0; i<routes.length; ++i) {
-							if(routes[i].name === this.props.popToRoute){
-								backRoute = routes[i];
-								break;
-							}
-						}
-
-						if(backRoute!=null){
-							if(this.props.onPopToRoute){
-								this.props.onPopToRoute();
-							}
-
-							this.props.navigator.popToRoute(backRoute)
-						}else{
-							this.props.navigator.pop()
-						}
-					}else{
-						this.props.navigator.pop()
-					}
+				LocalDataUpdateModule.updateMeData(userData, function(){
+					this.backButtonPressed();
 				}.bind(this));
 			}.bind(this),
 			function(errorMessage) {
@@ -188,29 +175,6 @@ var UpdateUserInfoPage = React.createClass({
 		}
 	},
 
-	updateMeData(userData, onSuccess){
-		NetworkModule.fetchTHUrl(
-			NetConstants.GET_USER_INFO_API,
-			{
-				method: 'GET',
-				headers: {
-					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-				},
-			},
-			function(responseJson) {
-				StorageModule.setMeData(JSON.stringify(responseJson))
-				LogicData.setMeData(responseJson);
-
-				if(onSuccess){
-					onSuccess()
-				}
-			}.bind(this),
-			function(errorMessage) {
-				Alert.alert('提示',errorMessage);
-			}
-		)
-	},
-
 	renderNotes: function() {
 		if (this.state.noteState == NOTE_STATE_NORMAL) {
 			return this.renderHintOrError();
@@ -225,46 +189,79 @@ var UpdateUserInfoPage = React.createClass({
 		}
 	},
 
+	backButtonPressed: function(){
+		if(this.props.popToRoute != null){
+			var routes = this.props.navigator.getCurrentRoutes();
+			var backRoute = null;
+
+			for (var i=0; i<routes.length; ++i) {
+				if(routes[i].name === this.props.popToRoute){
+					backRoute = routes[i];
+					break;
+				}
+			}
+
+			if(backRoute!=null){
+				if(this.props.onPopToRoute){
+					this.props.onPopToRoute();
+				}
+				this.props.navigator.popToRoute(backRoute)
+			}else{
+				this.props.navigator.pop()
+			}
+		}else{
+			this.props.navigator.pop()
+		}
+
+		if(this.props.showRegisterSuccessDialog){
+			this.props.showRegisterSuccessDialog(this.initialMeData.rewardAmount);
+		}
+	},
+
 	render: function() {
 		var {height, width} = Dimensions.get('window');
 
 		return (
-			<View style={[styles.wrapper, {height: height}]}>
+			<View>
+				<NavBar title="设置昵称" textOnLeft="返回"
+							leftTextOnClick={this.backButtonPressed}/>
 
-				<View style={styles.upperContainer}>
+				<View style={[styles.wrapper, {height: height}]}>
+					<View style={styles.upperContainer}>
 
-					<View style={styles.rowWrapperWithBorder}>
-						<View style={styles.nickNameTextView}>
-							<Text style={styles.nickNameText}>
-								昵称
-							</Text>
+						<View style={styles.rowWrapperWithBorder}>
+							<View style={styles.nickNameTextView}>
+								<Text style={styles.nickNameText}>
+									昵称
+								</Text>
+							</View>
+
+							<TextInput style={styles.nickNameInput}
+								autoFocus={true}
+								onChangeText={(text) => this.setUserName(text)}
+								underlineColorAndroid='#ffffff'
+								maxLength={UIConstants.MAX_NICKNAME_LENGTH}
+								value={this.state.nickName}/>
 						</View>
 
-						<TextInput style={styles.nickNameInput}
-							autoFocus={true}
-							onChangeText={(text) => this.setUserName(text)}
-							underlineColorAndroid='#ffffff'
-							maxLength={UIConstants.MAX_NICKNAME_LENGTH}
-							value={this.state.nickName}/>
+						{this.renderNotes()}
+
+						<View style={styles.rowWrapper}>
+							<Button style={styles.saveClickableArea}
+								enabled={this.state.saveButtonEnabled}
+								onPress={this.savePressed}
+								textContainerStyle={styles.saveTextView}
+								textStyle={styles.saveText}
+								text='保存' />
+						</View>
+
 					</View>
 
-					{this.renderNotes()}
+					<View style={styles.lowerContainer}>
 
-					<View style={styles.rowWrapper}>
-						<Button style={styles.saveClickableArea}
-							enabled={this.state.saveButtonEnabled}
-							onPress={this.savePressed}
-							textContainerStyle={styles.saveTextView}
-							textStyle={styles.saveText}
-							text='保存' />
 					</View>
 
 				</View>
-
-				<View style={styles.lowerContainer}>
-
-				</View>
-
 			</View>
 		)
 	},

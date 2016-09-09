@@ -49,6 +49,7 @@ var LoginPage = React.createClass({
 		showCancelButton: React.PropTypes.bool,
 		popToRoute: React.PropTypes.string,
 		onPopToRoute: React.PropTypes.func,
+		showRegisterSuccessDialog: React.PropTypes.func,
 	},
 
 	getDefaultProps() {
@@ -56,6 +57,7 @@ var LoginPage = React.createClass({
 			showCancelButton: false,
 			popToRoute: null,
 			onPopToRoute: ()=>{},
+			showRegisterSuccessDialog: ()=>{},
 		}
 	},
 	componentWillMount: function() {
@@ -268,21 +270,25 @@ var LoginPage = React.createClass({
 		});
 
 		LocalDataUpdateModule.updateMeData(userData, ()=>{
-				if(userData.isNewUser){
-					this.props.navigator.push({
-						name: MainPage.UPDATE_USER_INFO_ROUTE,
-						popToRoute: this.props.popToRoute,
-						onPopToRoute: this.props.onPopToRoute,
-					});
-				}else{
-					if(this.props.onPopToRoute){
-						this.props.onPopToRoute();
-					}
+			var meData = LogicData.getMeData();
+			if(userData.isNewUser){
+				this.props.navigator.push({
+					name: MainPage.UPDATE_USER_INFO_ROUTE,
+					popToRoute: this.props.popToRoute,
+					onPopToRoute: this.props.onPopToRoute,
+				});
+			}else{
+				if(this.props.onPopToRoute){
+					this.props.onPopToRoute();
+				}
 
-					this.props.navigator.pop();
+				this.props.navigator.pop();
+
+				if(this.props.showRegisterSuccessDialog){
+					this.props.showRegisterSuccessDialog(meData.rewardAmount);
 				}
 			}
-		)
+		})
 	},
 
 	initTokenForGeTui:function(){

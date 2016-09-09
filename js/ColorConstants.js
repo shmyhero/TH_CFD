@@ -11,6 +11,8 @@ var colors = {
 	LIST_BACKGROUND_GREY: '#f0eff5',
 	SEPARATOR_GRAY: '#ececec',
 	MORE_ICON: '#9f9f9f',
+	MAIN_CONTENT_BLUE: '#1b65e1',
+	SUB_TITLE_WHITE: '#bbd3ff',
 
 	stock_color: function(change) {
 		if (change > 0) {

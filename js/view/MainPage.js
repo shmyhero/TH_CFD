@@ -2,14 +2,14 @@
 
 import React from 'react';
 import {
-	  BackAndroid,
-    StyleSheet,
-    View,
-    Text,
-    StatusBar,
-    Navigator,
-    Linking,
-	  Platform,
+	BackAndroid,
+  StyleSheet,
+  View,
+  Text,
+  StatusBar,
+  Navigator,
+  Linking,
+	Platform,
 } from 'react-native';
 
 import Tabbar, { Tab, RawContent, Icon, IconWithBar, glypyMapMaker } from 'react-native-tabbar';
@@ -37,6 +37,7 @@ var AboutUsPage = require('./AboutUsPage');
 var AccountInfoPage = require('./AccountInfoPage');
 var AccountNameModifyPage = require('./AccountNameModifyPage');
 var MePage = require('./MePage')
+var MyIncomePage = require('./MyIncomePage')
 var MeConfigPage = require('./MeConfigPage')
 var MePushConfigPage = require('./MePushConfigPage')
 var MeAccountBindingPage = require('./MeAccountBindingPage')
@@ -51,7 +52,7 @@ var EditAlertPage = require('./EditAlertPage')
 var SharePage = require('./SharePage')
 var LogicData = require('../LogicData')
 var DaySignPage = require('./DaySignPage')
-
+var RegisterSuccessPage = require('./RegisterSuccessPage')
 
 var TalkingdataModule = require('../module/TalkingdataModule')
 var WebSocketModule = require('../module/WebSocketModule');
@@ -104,6 +105,7 @@ export let STOCK_EXCHANGE_ROUTE = 'stockExchange'
 export let NAVIGATOR_WEBVIEW_ROUTE = 'webviewpage'
 export let QA_ROUTE = 'q&a'
 export let ME_ROUTE = 'me'
+export let MY_INCOME_ROUTE = 'myIncome'
 export let ABOUT_US_ROUTE = 'aboutUs'
 export let ACCOUNT_INFO_ROUTE = 'accountInfo'
 export let ACCOUNT_NAME_MODIFY_ROUTE = 'accountNameModify'
@@ -143,6 +145,7 @@ export var showProgress
 
 var recevieDataSubscription = null
 var SHARE_PAGE = 'SharePage'
+var REGISTER_SUCCESS_DIALOG = 'RegisterSuccessDialog'
 
 var MainPage = React.createClass({
 
@@ -183,7 +186,8 @@ var MainPage = React.createClass({
 		} else if (route.name == HOME_PAGE_ROUTE) {
 			showTabbar()
 			return (
-				<HomePage navigator={navigationOperations}/>
+				<HomePage navigator={navigationOperations}
+				showIncomeDialogWhenNecessary={this.showRegisterSuccessDialog}/>
 			)
 		} else if (route.name === LANDING_ROUTE) {
 			showTabbar()
@@ -191,19 +195,20 @@ var MainPage = React.createClass({
 				<LandingPage navigator={navigationOperations} />
 			);
 		} else if (route.name === LOGIN_ROUTE) {
-			hideTabbar()
+			hideTabbar();
 			return (
 				<LoginPage navigator={navigationOperations} showCancelButton={true}
 					popToRoute={route.popToRoute}
-  				onPopToRoute={route.onPopToRoute}/>
+  				onPopToRoute={route.onPopToRoute}
+					showRegisterSuccessDialog={this.showRegisterSuccessDialog}/>
 			);
 		} else if (route.name === UPDATE_USER_INFO_ROUTE) {
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title="设置昵称"/>
 					<UpdateUserInfoPage navigator={navigationOperations}
 					popToRoute={route.popToRoute}
-  				onPopToRoute={route.onPopToRoute}/>
+  				onPopToRoute={route.onPopToRoute}
+					showRegisterSuccessDialog={this.showRegisterSuccessDialog}/>
 				</View>
 			);
 		} else if (route.name === MY_HOME_ROUTE) {
@@ -281,7 +286,8 @@ var MainPage = React.createClass({
 										 shareID={route.shareID}
 										 shareTitle={route.shareTitle}
 										 shareDescription={route.shareDescription}
-										 shareFunction={this._doShare}/>
+										 shareFunction={this._doShare}
+										 shareTrackingEvent={route.shareTrackingEvent}/>
 			)
 		} else if (route.name === QA_ROUTE) {
 			hideTabbar();
@@ -325,12 +331,20 @@ var MainPage = React.createClass({
 			return (
 				<MePage navigator={navigationOperations} />
 			)
+		} else if(route.name === MY_INCOME_ROUTE) {
+			hideTabbar();
+			return (
+				<View style={{flex: 1}}>
+					<NavBar title='我的交易金' showBackButton={true} navigator={navigationOperations}/>
+					<MyIncomePage navigator={navigationOperations} />
+				</View>
+			)
 		} else if(route.name === ME_CONFIG_ROUTE){
 			hideTabbar();
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title="设置" showBackButton={true} navigator={navigationOperations}/>
-					<MeConfigPage navigator={navigationOperations} />
+					<MeConfigPage navigator={navigationOperations} onPopBack={route.onPopBack}/>
 				</View>
 			)
 		} else if(route.name === ME_PUSH_CONFIG_ROUTE){
@@ -479,6 +493,12 @@ var MainPage = React.createClass({
 		this.refs['progressBar'] && this.refs['progressBar'].hide()
 	},
 
+	showRegisterSuccessDialog(rewardAmount) {
+		if(rewardAmount){
+			this.refs[REGISTER_SUCCESS_DIALOG] && this.refs[REGISTER_SUCCESS_DIALOG].show(rewardAmount);
+		}
+	},
+
 	initTabbarEvent() {
 		var homeRef = this.refs['homeContent'].refs['wrap'].getWrappedRef()
 		homeRef.tabWillFocus = EventCenter.emitHomeTabPressEvent;
@@ -539,6 +559,8 @@ var MainPage = React.createClass({
 		console.log('handleDeeplink: ' + url)
 
 		if(url.startsWith('cfd://page/share')) {
+			TalkingdataModule.trackCurrentEvent();
+
 			var json = this.getJsonFromUrl(url)
 			this.refs[SHARE_PAGE].showWithData(json);
 		}
@@ -599,6 +621,12 @@ var MainPage = React.createClass({
 		);
 	},
 
+	renderRegisterSuccessPage: function(){
+		return (
+			<RegisterSuccessPage ref={REGISTER_SUCCESS_DIALOG}
+			shareFunction={this._doShare}/>
+		);
+	},
 
 	gotoStockDetail: function(pushData) {
 
@@ -683,9 +711,10 @@ var MainPage = React.createClass({
 			          	</RawContent>
 		        	</Tab>
 		      	</Tabbar>
-				<LoadingIndicator ref='progressBar'/>
-				{this.state.showTutorial ? <TutorialPage type={this.state.tutorialType} hideTutorial={this.hideTutorial}/> : null }
-	      	</View>
+					<LoadingIndicator ref='progressBar'/>
+					{this.state.showTutorial ? <TutorialPage type={this.state.tutorialType} hideTutorial={this.hideTutorial}/> : null }
+					{this.renderRegisterSuccessPage()}
+      	</View>
 		);
 	}
 });

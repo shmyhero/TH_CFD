@@ -9,6 +9,7 @@ var LogicData = require('../LogicData')
 var StorageModule = require('../module/StorageModule')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
+var WebSocketModule = require('../module/WebSocketModule')
 
 export function updateMeData(userData, onSuccess){
 	NetworkModule.fetchTHUrl(
@@ -31,4 +32,17 @@ export function updateMeData(userData, onSuccess){
 			Alert.alert('提示',errorMessage);
 		}
 	)
+}
+
+export function removeUserData(){
+  StorageModule.removeUserData();
+  LogicData.removeUserData();
+  StorageModule.removeMeData();
+  LogicData.removeMeData();
+  StorageModule.removeOwnStocksData();
+  LogicData.removeOwnStocksData();
+  
+  //Restart the web socket.
+  //WebSocketModule.stop();
+  WebSocketModule.start();
 }

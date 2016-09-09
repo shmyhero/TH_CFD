@@ -32,6 +32,24 @@ export const SEARCH_AND_ADD_TO_MY_LIST_EVENT = '搜索添加自选'
 export const SEARCH_AND_LOOK_EVENT = '搜索进入'
 export const SEARCH_WITH_NO_RESULT_EVENT = '搜索无结果'
 
+export const MOVIE_ACTIVITY_EVENT = "点击影票来袭入口按钮"
+export const CHECK_IN_ACTIVITY_EVENT = "点击每日签到入口按钮"
+export const BANNER_EVENT = "访问BANNER"
+
+export const BANNER_SHARE_EVENT = "BANNER分享"
+export const CHECK_IN_SHARE_EVENT = "签到页面分享"
+export const MOVIE_SHARE_EVENT = "影票来袭分享"
+export const HEADER_SHARE_EVENT = "每日头条分享"
+export const REGISTER_INCOME_SHARE_EVENT = "炫耀一下"
+
+export const KEY_STOCK_ID = "ID";
+
+export const KEY_SECURITY_ID = "ID";
+export const KEY_SECURITY_NAME = "名字";
+export const KEY_INVEST = "本金";
+export const KEY_LEVERAGE = "杠杆";
+export const KEY_IS_LONG = "是否买涨";
+export const KEY_TIME = "下单时间";
 
 export function trackPageBegin(page_name) {
   nativeModule.trackPageBegin(page_name);
@@ -61,4 +79,21 @@ export async function applyAuthCode(countryCode, mobile, requestId) {
 
 export async function verifyAuthCode(countryCode, mobile, authCode) {
   return await nativeModule.verifyAuthCode(countryCode, mobile, authCode);
+}
+
+var currentTrackingEventName;
+var currentTrackingEventLabel;
+var currentTrackingEventParameters;
+export async function setCurrentTrackingEvent(event_name, event_label, parameters) {
+  currentTrackingEventName = event_name;
+  currentTrackingEventLabel = event_label;
+  currentTrackingEventParameters = parameters;
+}
+export async function clearCurrentTrackingEvent(){
+  currentTrackingEvent = null;
+}
+export async function trackCurrentEvent(){
+  if(currentTrackingEventName){
+    trackEvent(currentTrackingEventName, currentTrackingEventLabel, currentTrackingEventParameters);
+  }
 }

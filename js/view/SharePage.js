@@ -30,7 +30,6 @@ var SharePage = React.createClass({
       url: "",
       description: "",
       imgUrl: "",
-		  offSet: new Animated.Value(height),
     }
   },
 

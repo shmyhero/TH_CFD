@@ -292,7 +292,7 @@ var DaySignPage = React.createClass({
 						},
 					},
 					(responseJson) =>{
-						Alert.alert('签到成功')
+						// Alert.alert('签到成功')
 						this.setState(
 							{isSignedToday:true}
 						)

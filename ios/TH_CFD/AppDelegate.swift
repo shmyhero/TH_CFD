@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		// register push notification
 		if((launchOptions) != nil) {
 			if let dict = launchOptions![UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {
-				NotificationManager.sharedInstance().gmid = dict["_gmid_"] as? String
+				NotificationManager.sharedInstance().gmid = dict["payload"] as? String
 			}
 		}
 		
@@ -159,7 +159,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		NSLog("receive remote notification: %@", [userInfo .description])
 		if (!TalkingData.handlePushMessage(userInfo)) {
 			// 非来自TalkingData的消息，可以在此处处理该消息。
-			if let gmid = userInfo["_gmid_"] as? String {
+			if let gmid = userInfo["payload"] as? String {
 				NotificationManager.sharedInstance().showNotificationWithGmid(gmid)
 			}
 		}

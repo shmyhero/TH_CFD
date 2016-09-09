@@ -53,7 +53,8 @@ class NotificationManager: NSObject {
 	func showNotification(data:NotificationData!){
 		if (delegate.nativeData != nil) {
 			if data.offline! {
-				if (self.gmid != nil && gmid!.containsString(data.taskId!) && gmid!.containsString(data.msgId!)) {
+				if(gmid!.containsString(data.payload!)) {
+//				if (self.gmid != nil && gmid!.containsString(data.taskId!) && gmid!.containsString(data.msgId!)) {
 					delegate.nativeData!.sendDataToRN("PushShowDetail", data: data.payload)
 				}
 				else {
@@ -82,7 +83,8 @@ class NotificationManager: NSObject {
 		}
 		for index in 0..<notificationArray.count {
 			let data = notificationArray[index]
-			if(gmid!.containsString(data.taskId!) && gmid!.containsString(data.msgId!)) {
+			if(gmid!.containsString(data.payload!)) {
+//			if(gmid!.containsString(data.taskId!) && gmid!.containsString(data.msgId!)) {
 				if(data.offline!) {
 					delegate.nativeData!.sendDataToRN("PushShowDetail", data: data.payload)
 				}

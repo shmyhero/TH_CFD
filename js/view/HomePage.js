@@ -266,8 +266,7 @@ var HomePage = React.createClass({
 		if(notLogin){
 			this.props.navigator.push({
 				name: MainPage.LOGIN_ROUTE,
-				popToRoute: MainPage.HOME_PAGE_ROUTE,	//Set to destination page
-				onPopToRoute: this.showCheckInPage,
+				popToRoute: MainPage.DAY_SIGN_ROUTE,	//Set to destination page
 			});
 		}else{
 			this.showCheckInPage();

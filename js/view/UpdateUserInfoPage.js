@@ -20,6 +20,7 @@ var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
 var UIConstants = require('../UIConstants')
 var LocalDataUpdateModule = require('../module/LocalDataUpdateModule')
+var MainPage = require('./MainPage')
 var NavBar = require('./NavBar')
 var rowHeight = 40;
 var fontSize = 16;
@@ -194,10 +195,14 @@ var UpdateUserInfoPage = React.createClass({
 			var routes = this.props.navigator.getCurrentRoutes();
 			var backRoute = null;
 
+			var currentRouteIndex = -1;
 			for (var i=0; i<routes.length; ++i) {
 				if(routes[i].name === this.props.popToRoute){
 					backRoute = routes[i];
 					break;
+				}
+				if(routes[i].name === MainPage.LOGIN_ROUTE){
+					currentRouteIndex = i;
 				}
 			}
 
@@ -205,12 +210,23 @@ var UpdateUserInfoPage = React.createClass({
 				if(this.props.onPopToRoute){
 					this.props.onPopToRoute();
 				}
-				this.props.navigator.popToRoute(backRoute)
+				this.props.navigator.popToRoute(backRoute);
+			}else if(currentRouteIndex >= 0 ){
+				if(this.props.onPopToRoute){
+					this.props.onPopToRoute();
+				}
+				var route = {name: this.props.popToRoute};
+				this.props.navigator.replaceAtIndex(route, currentRouteIndex, ()=>{
+					this.props.navigator.popToRoute(route);
+				});
 			}else{
-				this.props.navigator.pop()
+				this.props.navigator.pop();
 			}
 		}else{
-			this.props.navigator.pop()
+			this.props.navigator.pop();
+			if(this.props.onPopToRoute){
+				this.props.onPopToRoute();
+			}
 		}
 
 		if(this.props.showRegisterSuccessDialog){

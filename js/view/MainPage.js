@@ -306,8 +306,7 @@ var MainPage = React.createClass({
 			hideTabbar();
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title='每日签到' showBackButton={true} navigator={navigationOperations}/>
-					<DaySignPage />
+					<DaySignPage navigator={navigationOperations} shareFunction={this._doShare}/>
 				</View>
 			)
 		} else if (route.name === ACCOUNT_INFO_ROUTE) {

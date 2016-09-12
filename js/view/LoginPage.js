@@ -278,11 +278,42 @@ var LoginPage = React.createClass({
 					onPopToRoute: this.props.onPopToRoute,
 				});
 			}else{
-				if(this.props.onPopToRoute){
-					this.props.onPopToRoute();
-				}
 
-				this.props.navigator.pop();
+				if(this.props.popToRoute != null){
+					var routes = this.props.navigator.getCurrentRoutes();
+					var backRoute = null;
+
+					var currentRouteIndex = -1;
+					for (var i=0; i<routes.length; ++i) {
+						if(routes[i].name === this.props.popToRoute){
+							backRoute = routes[i];
+							break;
+						}
+						if(routes[i].name === MainPage.LOGIN_ROUTE){
+							currentRouteIndex = i;
+						}
+					}
+
+					if(backRoute!=null){
+						if(this.props.onPopToRoute){
+							this.props.onPopToRoute();
+						}
+						this.props.navigator.popToRoute(backRoute);
+					}else if(currentRouteIndex >= 0 ){
+						if(this.props.onPopToRoute){
+							this.props.onPopToRoute();
+						}
+						this.props.navigator.replaceAtIndex({name: this.props.popToRoute}, currentRouteIndex);
+					}else{
+						this.props.navigator.pop();
+					}
+				}else{
+					if(this.props.onPopToRoute){
+						this.props.onPopToRoute();
+					}
+
+					this.props.navigator.pop();
+				}
 
 				if(this.props.showRegisterSuccessDialog){
 					this.props.showRegisterSuccessDialog(meData.rewardAmount);

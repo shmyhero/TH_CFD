@@ -22,6 +22,7 @@ var LogicData = require('../LogicData');
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var NativeDataModule = require('../module/NativeDataModule')
+var NavBar = require('./NavBar')
 
 var {height, width} = Dimensions.get('window');
 var heightRate = height/667.0;
@@ -33,6 +34,15 @@ var roundDay =  (width - roundDayMargin * roundDayLength * 2) / roundDayLength
 
 
 var DaySignPage = React.createClass({
+	propTypes: {
+    shareFunction: React.PropTypes.func,
+  },
+
+  getDefaultProps: function(){
+    return {
+      shareFunction: ()=>{}
+    }
+  },
 
 	getInitialState() {
     return {
@@ -180,6 +190,19 @@ var DaySignPage = React.createClass({
 		}
 	},
 
+	_share: function(){
+    if(this.props.shareFunction){
+      //TODO: use real data.
+  		var data = {
+  			webpageUrl: NetConstants.INCOME_URL,
+  			imageUrl: NetConstants.SHARE_LOGO_URL,
+  			title: "签到赚取实盘资金",
+  			description: "模拟注册可赚取20元；每日签到可赚取0.5元；每日模拟交易可赚取0.5元。",
+  		}
+
+      this.props.shareFunction(data);
+    }
+	},
 
 	renderTop: function(){
 			return(
@@ -414,13 +437,18 @@ var DaySignPage = React.createClass({
 
 	render: function() {
 		return (
-			<View style = {styles.scrollView}>
+			<View>
+				<NavBar title='每日签到' showBackButton={true} navigator={this.props.navigator}
+							imageOnRight={require('../../images/share01.png')}
+							rightImageOnClick={this._share}/>
+				<View style = {styles.scrollView}>
 
-				  {this.renderModal()}
-					{this.renderTop()}
-					{this.renderMiddle()}
-				  {this.renderBottom()}
+					  {this.renderModal()}
+						{this.renderTop()}
+						{this.renderMiddle()}
+					  {this.renderBottom()}
 
+				</View>
 			</View>
 
 		);

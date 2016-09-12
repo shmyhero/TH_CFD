@@ -111,9 +111,8 @@ var StockSearchPage = React.createClass({
 						this.setState({
 							searchFailedText: '搜索无结果',
 						})
-						var eventParam = {
-							'searchText': text,
-						}
+						var eventParam = {};
+						eventParam[TalkingdataModule.KEY_SEARCH_TEXT] = text;
 						TalkingdataModule.trackEvent(TalkingdataModule.SEARCH_WITH_NO_RESULT_EVENT, '', eventParam)
 					} else {
 						this.setState({
@@ -144,9 +143,8 @@ var StockSearchPage = React.createClass({
 			searchStockInfo: ds.cloneWithRows(this.state.searchStockRawInfo)
 		})
 
-		var eventParam = {
-			'securityId': stockData.id,
-		}
+		var eventParam = {};
+		eventParam[TalkingdataModule.KEY_STOCK_ID] = stockData.id,
 		TalkingdataModule.trackEvent(TalkingdataModule.SEARCH_AND_ADD_TO_MY_LIST_EVENT, '', eventParam)
 	},
 
@@ -200,9 +198,8 @@ var StockSearchPage = React.createClass({
 			stockRowData: rowData
 		});
 
-		var eventParam = {
-			'securityId': rowData.id,
-		}
+		var eventParam = {};
+		eventParam[TalkingdataModule.KEY_STOCK_ID] = rowData.id,
 		TalkingdataModule.trackEvent(TalkingdataModule.SEARCH_AND_LOOK_EVENT, '', eventParam)
   	},
 

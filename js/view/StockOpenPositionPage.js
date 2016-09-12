@@ -385,18 +385,18 @@ var StockOpenPositionPage = React.createClass({
 				})
 				isWaiting = false
 
-				var eventParam = {
-					'securityId': responseJson.id.toString(),
-					'securityName': rowData.security.name,
-					'isLong': rowData.isLong,
-					'invest': rowData.invest,
-					'leverage': responseJson.leverage,
-					'openPrice': rowData.settlePrice,
-					'openTime': rowData.createAt,
-					'closePrice': responseJson.settlePrice,
-					'closeTime': responseJson.createAt,
-					'profit': responseJson.pl,
-				}
+				var eventParam = {};
+				eventParam[TalkingdataModule.KEY_SECURITY_ID] = responseJson.id.toString();
+				eventParam[TalkingdataModule.KEY_SECURITY_NAME] = rowData.security.name;
+				eventParam[TalkingdataModule.KEY_IS_LONG] = rowData.isLong;
+				eventParam[TalkingdataModule.KEY_INVEST] = rowData.invest;
+				eventParam[TalkingdataModule.KEY_LEVERAGE] = responseJson.leverage;
+				eventParam[TalkingdataModule.KEY_OPEN_PRICE]= rowData.settlePrice;
+				eventParam[TalkingdataModule.KEY_OPEN_TIME]= rowData.createAt;
+				eventParam[TalkingdataModule.KEY_CLOSE_PRICE]= responseJson.settlePrice;
+				eventParam[TalkingdataModule.KEY_CLOSE_TIME]= responseJson.createAt;
+				eventParam[TalkingdataModule.KEY_PROFIT]= responseJson.pl;
+
 				TalkingdataModule.trackEvent(TalkingdataModule.SOLD_EVENT, '', eventParam)
 			},
 			(errorMessage) => {
@@ -450,12 +450,12 @@ var StockOpenPositionPage = React.createClass({
 		var userData = LogicData.getUserData()
 		var url = NetConstants.STOP_PROFIT_LOSS_API
 
-		var eventParam = {
-			'stopProfitSwitchOn': this.state.stopProfitSwitchIsOn,
-			'stopLossSwitchOff': this.state.stopLossSwitchIsOn,
-			'stopProfit': stopProfitUpdated && this.state.stopProfitSwitchIsOn ? stopProfitPercent : '-',
-			'stopLoss': stopLossUpdated && this.state.stopLossSwitchIsOn ? stopLossPercent : '-',
-		}
+		var eventParam = {};
+		eventParam[TalkingdataModule.KEY_STOP_PROFIT_SWITCH_ON] = this.state.stopProfitSwitchIsOn;
+		eventParam[TalkingdataModule.KEY_STOP_LOSS_SWITCH_OFF] = this.state.stopLossSwitchIsOn;
+		eventParam[TalkingdataModule.KEY_STOP_PROFIT] = stopProfitUpdated && this.state.stopProfitSwitchIsOn ? stopProfitPercent : '-';
+		eventParam[TalkingdataModule.KEY_STOP_LOSS] = stopLossUpdated && this.state.stopLossSwitchIsOn ? stopLossPercent : '-';
+
 		TalkingdataModule.trackEvent(TalkingdataModule.SET_STOP_PROFIT_LOSS_EVENT, '', eventParam)
 
 		// STOP LOSS

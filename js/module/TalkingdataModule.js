@@ -43,6 +43,12 @@ export const MOVIE_SHARE_EVENT = "影票来袭分享"
 export const HEADER_SHARE_EVENT = "每日头条分享"
 export const REGISTER_INCOME_SHARE_EVENT = "炫耀一下"
 
+export const KEY_TYPE = "类型"
+export const VALUE_FRONT = "正面"
+export const VALUE_REAR = "反面"
+
+export const KEY_BANNER_PAGE = "Banner页面"
+
 export const KEY_STOCK_ID = "ID";
 
 export const KEY_SECURITY_ID = "ID";
@@ -51,6 +57,18 @@ export const KEY_INVEST = "本金";
 export const KEY_LEVERAGE = "杠杆";
 export const KEY_IS_LONG = "是否买涨";
 export const KEY_TIME = "下单时间";
+export const KEY_STOP_PROFIT_SWITCH_ON = "止盈开关";
+export const KEY_STOP_LOSS_SWITCH_OFF = "止损开关";
+export const KEY_STOP_PROFIT = "止盈比例";
+export const KEY_STOP_LOSS = "止损比例";
+export const KEY_OPEN_PRICE = "开仓价格";
+export const KEY_OPEN_TIME = "开仓时间";
+export const KEY_CLOSE_PRICE = "平仓价格";
+export const KEY_CLOSE_TIME = "平仓时间";
+export const KEY_PROFIT = "盈利";
+
+export const KEY_SEARCH_TEXT = "搜索字段";
+export const KEY_SEARCH_TEXT_FAILED = "搜索字段失败";
 
 export function trackPageBegin(page_name) {
   nativeModule.trackPageBegin(page_name);

@@ -61,7 +61,8 @@ var OAIdPhotoPage = React.createClass({
 	},
 
 	pressAddImage: function(idCardIndex) {
-		var eventParam = (idCardIndex==ID_CARD_FRONT) ? {"类型":"正面"} : {"类型":"反面"}
+		var eventParam = {};
+		eventParam[TalkingdataModule.KEY_TYPE] = (idCardIndex==ID_CARD_FRONT) ? "正面" : "反面";
 		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_UPLOAD_ID_IMAGE, TalkingdataModule.LABEL_OPEN_ACCOUNT, eventParam)
 		ImagePicker.showImagePicker(options, (response) => {
 			console.log('Response = ', response);

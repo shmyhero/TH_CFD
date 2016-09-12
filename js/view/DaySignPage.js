@@ -51,6 +51,8 @@ var DaySignPage = React.createClass({
       modalVisible: false,
 			modalCoinVisible: false,
       modalTransparent: true,
+			monthToday: '-',
+			monthDays:31,
 
 			totalUnpaidAmount: 0, //总计交易金
   		totalSignDays: 0, //累计签到天数
@@ -184,14 +186,18 @@ var DaySignPage = React.createClass({
 					},
 				},
 				(responseJson) =>{
-					if(responseJson!==null && responseJson.length>0){
+
+
+					if(responseJson!==null && responseJson.days!=null && responseJson.days.length>0){
 						var _days = this.state.days
-						for( var i = 0;i<responseJson.length;i++){
-							_days[responseJson[i].Day - 1] = true
+						for( var i = 0;i<responseJson.days.length;i++){
+							_days[responseJson.days[i].day - 1] = true
 						}
 						this.setState(
 							{
-								days:_days
+								monthToday: responseJson.month,
+								monthDays:responseJson.monthDayCount,
+								days:_days.splice(0,responseJson.monthDayCount)
 							}
 						)
 					}
@@ -361,15 +367,15 @@ var DaySignPage = React.createClass({
 		// var days = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
 		var daysView = this.state.days.map(
 			(day, i) =>
-					<View style = {[styles.day , {backgroundColor:this._isSignedDay(i)?'#4c88f1':'transparent'} ]} key={i}>
-						<Text style = {styles.textDayNumber,{color:this._isSignedDay(i)?'#FFFFFF':'#B6B6B6'}}>{i+1}</Text>
+					<View style = {[styles.day ,  {backgroundColor:this._isSignedDay(i)?'#4c88f1':'transparent'}  ]} key={i}>
+						<Text style = {[styles.textDayNumber,{color:this._isSignedDay(i)?'#FFFFFF':'#B6B6B6'}]}>{i+1}</Text>
 					</View>
 			)
 
 		return(
 			<View style = {styles.calendar}>
 			<TouchableOpacity onPress={() => this._actionAni()}>
-				<Text style = {styles.textMonth}> ---9月签到日历--- </Text>
+				<Text style = {styles.textMonth}> ---{this.state.monthToday}月签到日历--- </Text>
 			</TouchableOpacity>
 				<View style = {styles.calendarContainer}>
 					{daysView}
@@ -588,8 +594,7 @@ var styles = StyleSheet.create({
 	},
 
 	textDayNumber:{
-		fontSize:8,
-
+		fontSize:10,
 		textAlign:'center',
 	},
 

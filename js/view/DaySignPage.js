@@ -49,6 +49,7 @@ var DaySignPage = React.createClass({
     return {
       modalAnimated: true,
       modalVisible: false,
+			modalCoinVisible: false,
       modalTransparent: true,
 
 			totalUnpaidAmount: 0, //总计交易金
@@ -79,7 +80,10 @@ var DaySignPage = React.createClass({
 
 	_actionAni:function(){
 		console.log('_actionAni');
-		this._playSound();
+		this.setState({
+			modalCoinVisible:true,
+		})
+		// this._playSound();
 
 		 this.state.bounceValue.setValue(0);
      this.state.rotateValue.setValue(0);
@@ -104,6 +108,14 @@ var DaySignPage = React.createClass({
 	       })
 	       //调用start启动动画,start可以回调一个函数,从而实现动画循环
 	   ]).start(()=>this._actionAni2());
+
+
+		// Animated.timing(this.state.fadeInValue, {
+		//             toValue: 1, // 目标值
+		//             duration: 2500, // 动画时间
+		//             easing: Easing.linear // 缓动函数
+		//         }).start();
+
 	},
 
 	_actionAni2:function(){
@@ -114,11 +126,11 @@ var DaySignPage = React.createClass({
 	   Animated.parallel([
 				 Animated.timing(this.state.fadeInValue, {
 	           toValue: 0,
-	           duration: 1000,
+	           duration: 200,
 	       }),
 
 	       //调用start启动动画,start可以回调一个函数,从而实现动画循环
-	   ]).start();
+	   ]).start(()=>this.setState({modalCoinVisible:false}));
 	},
 
 	_playSound:function(){
@@ -234,21 +246,14 @@ var DaySignPage = React.createClass({
 									 alignItems: 'center',
 									 opacity: this.state.fadeInValue,
 									 transform: [
-												 //将初始化值绑定到动画目标的style属性上
-												 {scale: this.state.bounceValue },
-											  //使用interpolate插值函数,实现了从数值单位的映射转换
-												//  {rotateZ: this.state.rotateValue.interpolate({
-												//  inputRange: [0,1],
-												//  outputRange: ['0deg', '3600deg'],
-												//  })},
-
+												{scale: this.state.bounceValue },
 												{translateY:this.state.rotateValue.interpolate({
 												inputRange: [0,0.5,1],
-												outputRange: [0, -15,-150],
+												outputRange: [0, -15,-200],
 												})},
 												{translateX:this.state.rotateValue.interpolate({
 												inputRange: [0,0.8,1],
-												outputRange: [0, -1,-10],
+												outputRange: [0, -5,-80],
 												})},
 										 ]
 									 }}>
@@ -264,8 +269,6 @@ var DaySignPage = React.createClass({
 	renderMiddle: function(){
 		return(
 			<View style = {styles.middleLayout}>
-
-
 					<View style = {styles.signLayout}>
 						<View style = {styles.roundButtonBoard}>
 						<TouchableOpacity onPress={() => this._clickSign()}>
@@ -274,7 +277,6 @@ var DaySignPage = React.createClass({
 								<Text style = {styles.textSignIntro}>赚{this.state.amountToday}元</Text>
 						 </View>
 						 </TouchableOpacity>
-						 {this.renderCoin()}
 	     			</View>
 						<View style={{flex:1,justifyContent:'flex-end',flexDirection:'row'}}>
 
@@ -435,9 +437,33 @@ var DaySignPage = React.createClass({
 		);
 	},
 
+	renderModalCoin:function(){
+		return(
+			<Modal
+				animated={false}
+				transparent={true}
+			  visible={this.state.modalCoinVisible}
+				// animationType={"slide"}
+				style={{height: height, width: width}}
+				onRequestClose={() => {this._setModalCoinVisible(false)}}
+				>
+				<View style={[styles.modalCoinContainer]}>
+					{this.renderCoin()}
+				</View>
+
+			</Modal>
+		);
+	},
+
+
 	_setModalVisible(visible) {
 	 this.setState({modalVisible: visible});
  },
+
+ _setModalCoinVisible(visible) {
+ 	 this.setState({modalCoinVisible: visible});
+  },
+
 
 	render: function() {
 		return (
@@ -446,13 +472,11 @@ var DaySignPage = React.createClass({
 							imageOnRight={require('../../images/share01.png')}
 							rightImageOnClick={this._share}/>
 				<View style = {styles.scrollView}>
-
-					  {this.renderModal()}
-						{this.renderTop()}
-						{this.renderMiddle()}
-					  {this.renderBottom()}
-
-				</View>
+				  {this.renderModal()}
+					{this.renderModalCoin()}
+					{this.renderTop()}
+					{this.renderMiddle()}
+				  {this.renderBottom()}
 			</View>
 
 		);
@@ -675,6 +699,13 @@ var styles = StyleSheet.create({
 		// paddingBottom:height/2,
 	},
 
+	modalCoinContainer:{
+		flex: 1,
+		justifyContent: 'center',
+		backgroundColor:'rgba(0, 0, 0, 0.0)',
+		// paddingBottom:height/2,
+	},
+
 	modalInnerContainer: {
     borderRadius: 4,
     alignItems: 'center',
@@ -735,9 +766,9 @@ var styles = StyleSheet.create({
 	imgCoin:{
 		width:48,
 		height:48,
-		position: 'absolute',
-		top:-roundR/2 + 12,
-		left:-24,
+		// position: 'absolute',
+		// top:height/2 - roundR/2,
+		// left:width/2-24
 	},
 
 

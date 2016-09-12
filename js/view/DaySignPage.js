@@ -206,15 +206,25 @@ var DaySignPage = React.createClass({
 	_share: function(){
 		TalkingdataModule.trackEvent(TalkingdataModule.CHECK_IN_SHARE_EVENT);
     if(this.props.shareFunction){
-      //TODO: use real data.
-  		var data = {
-  			webpageUrl: NetConstants.INCOME_URL,
-  			imageUrl: NetConstants.SHARE_LOGO_URL,
-  			title: "签到赚取实盘资金",
-  			description: "模拟注册可赚取20元；每日签到可赚取0.5元；每日模拟交易可赚取0.5元。",
-  		}
-
-      this.props.shareFunction(data);
+			NetworkModule.fetchTHUrl(
+				NetConstants.GET_CHECK_IN_SHARE_DATA,
+				{
+					method: 'GET',
+				},
+				(responseJson) => {
+					console.log("shareInfo: " + JSON.stringify(responseJson));
+					var data = {
+						webpageUrl: responseJson.url,
+						imageUrl: responseJson.imgUrl,
+						title: responseJson.title,
+						description: responseJson.text,
+					}
+					this.props.shareFunction(data);
+				},
+				(errorMessage) => {
+					// Ignore it.
+				}
+			);
     }
 	},
 

@@ -44,7 +44,9 @@ export const POST_PUSH_TOKEN_AUTH = SERVER_IP + '/api/user/pushtokenauth'
 export const GET_USER_DAILY_SIGN_INFO = SERVER_IP + '/api/user/dailysign/info'//获取每日签到页面所需信息（需身份验证）
 export const GET_USER_DAILY_SIGN_MONTH = SERVER_IP + '/api/user/dailysign/month'//获取当前月份的签到情况(需要身份验证)
 export const USER_DAILY_SIGN = SERVER_IP + '/api/user/dailysign'//每日签到 (需要身份验证)
-export const GET_TOTAL_UNPAID = SERVER_IP + '/api/user/reward/unpaid'
+export const GET_TOTAL_UNPAID = SERVER_IP + '/api/reward/unpaid'
+export const GET_CHECK_IN_SHARE_DATA = SERVER_IP + '/api/reward/checkIn/share'
+export const GET_REGISTER_SHARE_DATA = SERVER_IP + '/api/reward/demoReg/share'
 
 export const GZT_OCR_CHECK_API = GZT_SERVER_IP + '/ocrCheck'
 

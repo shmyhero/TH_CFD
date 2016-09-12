@@ -17,7 +17,7 @@ var {height, width} = Dimensions.get('window');
 var ColorConstants = require("../ColorConstants")
 var NetConstants = require("../NetConstants")
 var TalkingdataModule = require("../module/TalkingdataModule")
-
+var NetworkModule = require("../module/NetworkModule")
 var top_image = require("../../images/register_success.png")
 
 var DIALOG_WIDTH = width - 30;
@@ -87,14 +87,25 @@ var RegisterSuccessPage = React.createClass({
 		TalkingdataModule.trackEvent(TalkingdataModule.REGISTER_INCOME_SHARE_EVENT);
 
     if(this.props.shareFunction){
-      //TODO: use real data.
-  		var data = {
-  			webpageUrl: NetConstants.INCOME_URL,
-  			imageUrl: NetConstants.SHARE_LOGO_URL,
-  			title: "模拟注册获得" + this.state.rewardAmount + "元交易金",
-  			description: "模拟注册可专区" + this.state.rewardAmount + "元；每日签到可赚取0.5元；每日模拟交易可赚取0.5元。",
-  		}
-      this.props.shareFunction(data);
+			NetworkModule.fetchTHUrl(
+				NetConstants.GET_REGISTER_SHARE_DATA,
+				{
+					method: 'GET',
+				},
+				(responseJson) => {
+					console.log("shareInfo: " + JSON.stringify(responseJson));
+					var data = {
+		  			webpageUrl: responseJson.url,
+		  			imageUrl: responseJson.imgUrl,
+		  			title: responseJson.title,
+		  			description: responseJson.text,
+		  		}
+		      this.props.shareFunction(data);
+				},
+				(errorMessage) => {
+					// Ignore it.
+				}
+			);
     }
   },
 

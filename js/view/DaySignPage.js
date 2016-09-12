@@ -477,8 +477,8 @@ var DaySignPage = React.createClass({
 					{this.renderTop()}
 					{this.renderMiddle()}
 				  {this.renderBottom()}
+				</View>
 			</View>
-
 		);
 	},
 });

@@ -34,6 +34,7 @@
 		3D4B37AE1D5049FD004BD09C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4B37AD1D5049FD004BD09C /* Security.framework */; };
 		3D4B37B01D504A06004BD09C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4B37AF1D504A06004BD09C /* SystemConfiguration.framework */; };
 		3D4C814B1D61A56900A58712 /* libTalkingDataAppCpa.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4C81491D61A56900A58712 /* libTalkingDataAppCpa.a */; };
+		3D4EA75E1D865636009D2C45 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4EA75D1D865636009D2C45 /* SoundManager.swift */; };
 		3D5C46C81C92B51000BF6FD3 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 3D5C46C71C92B51000BF6FD3 /* main.jsbundle */; };
 		3D61C5CB1C9909CB0037816A /* EditOwnStocksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */; };
 		3D61C5F11C9931810037816A /* EditOwnStockCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D61C5F01C9931810037816A /* EditOwnStockCell.swift */; };
@@ -163,6 +164,7 @@
 		3DC6182D1CA3922A00F36541 /* StockChartViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC6182C1CA3922A00F36541 /* StockChartViewManager.m */; };
 		3DCE765D1D743375008BA33D /* EditOwnStocksViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DCE765C1D743375008BA33D /* EditOwnStocksViewManager.m */; };
 		3DD744771CCE18040021304F /* myhero.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3DD744761CCE18040021304F /* myhero.ttf */; };
+		3DDB311C1D868476009E1D01 /* coin.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3DDB311B1D868476009E1D01 /* coin.mp3 */; };
 		3DE8F4581D75236C00B07DFC /* EditOwnStocksView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DE8F4571D75236C00B07DFC /* EditOwnStocksView.m */; };
 		3DE90F481D505035004D264A /* RCTTalkingData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DE90F471D505035004D264A /* RCTTalkingData.m */; };
 		3DFABFF31D81180E007DB853 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DFABFF21D81180E007DB853 /* NotificationManager.swift */; };
@@ -335,6 +337,7 @@
 		3D4B37AF1D504A06004BD09C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		3D4C81491D61A56900A58712 /* libTalkingDataAppCpa.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTalkingDataAppCpa.a; sourceTree = "<group>"; };
 		3D4C814A1D61A56900A58712 /* TalkingDataAppCpa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TalkingDataAppCpa.h; sourceTree = "<group>"; };
+		3D4EA75D1D865636009D2C45 /* SoundManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SoundManager.swift; path = TH_CFD/SoundManager.swift; sourceTree = "<group>"; };
 		3D5C46C71C92B51000BF6FD3 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditOwnStocksViewController.swift; path = TH_CFD/EditOwnStocksViewController.swift; sourceTree = "<group>"; };
 		3D61C5F01C9931810037816A /* EditOwnStockCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditOwnStockCell.swift; path = TH_CFD/EditOwnStockCell.swift; sourceTree = "<group>"; };
@@ -584,6 +587,7 @@
 		3DCE765B1D743375008BA33D /* EditOwnStocksViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditOwnStocksViewManager.h; path = TH_CFD/EditOwnStocksViewManager.h; sourceTree = "<group>"; };
 		3DCE765C1D743375008BA33D /* EditOwnStocksViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditOwnStocksViewManager.m; path = TH_CFD/EditOwnStocksViewManager.m; sourceTree = "<group>"; };
 		3DD744761CCE18040021304F /* myhero.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = myhero.ttf; sourceTree = "<group>"; };
+		3DDB311B1D868476009E1D01 /* coin.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = coin.mp3; sourceTree = "<group>"; };
 		3DE8F4561D75236C00B07DFC /* EditOwnStocksView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditOwnStocksView.h; path = TH_CFD/EditOwnStocksView.h; sourceTree = "<group>"; };
 		3DE8F4571D75236C00B07DFC /* EditOwnStocksView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditOwnStocksView.m; path = TH_CFD/EditOwnStocksView.m; sourceTree = "<group>"; };
 		3DE90F461D505035004D264A /* RCTTalkingData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCTTalkingData.h; path = TH_CFD/RCTTalkingData.h; sourceTree = "<group>"; };
@@ -712,6 +716,7 @@
 		13B07FAE1A68108700A75B9A /* TH_CFD */ = {
 			isa = PBXGroup;
 			children = (
+				3DDB311B1D868476009E1D01 /* coin.mp3 */,
 				3D2A16D61D78047200FEB181 /* GtSdkLib */,
 				3DB9EF2C1D6445F700DC5C63 /* MeiQia */,
 				3DB98C0E1CE1CF1A00DB3FA5 /* frontPage.jpg */,
@@ -777,6 +782,7 @@
 				3DC618001CA2747E00F36541 /* ChartDataManager.swift */,
 				3DC618041CA29F9900F36541 /* StockChartView.swift */,
 				3DFABFF21D81180E007DB853 /* NotificationManager.swift */,
+				3D4EA75D1D865636009D2C45 /* SoundManager.swift */,
 			);
 			name = Swift;
 			sourceTree = "<group>";
@@ -1829,6 +1835,7 @@
 				3DD744771CCE18040021304F /* myhero.ttf in Resources */,
 				3DB9F1B91D64483B00DC5C63 /* MQChatViewAsset.bundle in Resources */,
 				3D5C46C81C92B51000BF6FD3 /* main.jsbundle in Resources */,
+				3DDB311C1D868476009E1D01 /* coin.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1937,6 +1944,7 @@
 				3D61C5CB1C9909CB0037816A /* EditOwnStocksViewController.swift in Sources */,
 				3DB9F1CB1D64483B00DC5C63 /* MQBotMenuMessage.m in Sources */,
 				3D6A23E51C9AA93F00FF1306 /* NativeScene.m in Sources */,
+				3D4EA75E1D865636009D2C45 /* SoundManager.swift in Sources */,
 				3DB9F2121D64483B00DC5C63 /* MQInputToolBar.m in Sources */,
 				3DB9F1B81D64483B00DC5C63 /* MQTransitioningAnimation.m in Sources */,
 				3DB9F1E51D64483B00DC5C63 /* MQMessageDateCell.m in Sources */,

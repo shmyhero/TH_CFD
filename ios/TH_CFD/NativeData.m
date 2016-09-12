@@ -33,6 +33,9 @@ RCT_EXPORT_MODULE();
 		}
 		[[NotificationManager sharedInstance] showNotification];
 	}
+	else if([dataName isEqualToString:@"playSound"]) {
+		[[SoundManager sharedInstance] playSound:jsonData];
+	}
 }
 
 - (void)receiveRawDataFromRN:(NSString *)dataName data:(id)data

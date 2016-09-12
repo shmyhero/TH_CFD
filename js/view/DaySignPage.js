@@ -96,7 +96,7 @@ var DaySignPage = React.createClass({
 	},
 
 	_actionAni2:function(){
-		console.log('_actionAni');
+		console.log('_actionAni2');
 		 this.state.fadeInValue.setValue(1);
 		 this.state.bounceValue.setValue(1);
 
@@ -708,9 +708,6 @@ var styles = StyleSheet.create({
 		left:-24,
 	},
 
-	aniView:{
-		backgroundColor:'#000000',
-	},
 
 });
 

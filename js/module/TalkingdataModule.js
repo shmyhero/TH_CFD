@@ -35,6 +35,7 @@ export const SEARCH_WITH_NO_RESULT_EVENT = '搜索无结果'
 export const MOVIE_ACTIVITY_EVENT = "点击影票来袭入口按钮"
 export const CHECK_IN_ACTIVITY_EVENT = "点击每日签到入口按钮"
 export const BANNER_EVENT = "访问BANNER"
+export const CHECK_IN_BUTTON_EVENT = "点击签到按钮"
 
 export const BANNER_SHARE_EVENT = "BANNER分享"
 export const CHECK_IN_SHARE_EVENT = "签到页面分享"

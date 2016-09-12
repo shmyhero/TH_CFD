@@ -23,6 +23,7 @@ var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var NativeDataModule = require('../module/NativeDataModule')
 var NavBar = require('./NavBar')
+var TalkingdataModule = require('../module/TalkingdataModule')
 
 var {height, width} = Dimensions.get('window');
 var heightRate = height/667.0;
@@ -191,6 +192,7 @@ var DaySignPage = React.createClass({
 	},
 
 	_share: function(){
+		TalkingdataModule.trackEvent(TalkingdataModule.CHECK_IN_SHARE_EVENT);
     if(this.props.shareFunction){
       //TODO: use real data.
   		var data = {
@@ -306,6 +308,8 @@ var DaySignPage = React.createClass({
 			var userData = LogicData.getUserData()
 			var notLogin = Object.keys(userData).length === 0
 			if(!notLogin){
+				TalkingdataModule.trackEvent(TalkingdataModule.CHECK_IN_BUTTON_EVENT);
+
 				NetworkModule.fetchTHUrlWithNoInternetCallback(
 					NetConstants.USER_DAILY_SIGN,
 					{

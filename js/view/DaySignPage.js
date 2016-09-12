@@ -34,6 +34,10 @@ var roundDayLength = 11
 var roundDay =  (width - roundDayMargin * roundDayLength * 2) / roundDayLength
 
 
+var imgWidth = width*4/5;
+var imgHeight = imgWidth * 72 /264 ;
+var modelTextW = width/28;
+
 var DaySignPage = React.createClass({
 	propTypes: {
     shareFunction: React.PropTypes.func,
@@ -570,8 +574,6 @@ var styles = StyleSheet.create({
 		justifyContent:'center',
 	},
 
-
-
 	calendarContainer:{
 		flexDirection:'row',
 		flexWrap:'wrap',
@@ -599,7 +601,7 @@ var styles = StyleSheet.create({
 	},
 
 	textDayNumber2:{
-		fontSize:8,
+		fontSize:10,
 		color:'#FFFFFF',
 		textAlign:'center',
 	},
@@ -731,20 +733,22 @@ var styles = StyleSheet.create({
 	imgSignTexContainer:{
 		alignItems: 'flex-start',
 		backgroundColor: '#fffdf4',
-		width:210,
-		height:230,
-		paddingTop:60,
+		width:imgWidth * 0.8,
+		height:imgWidth * 0.9,
+		paddingTop:imgWidth / 5,
 		paddingLeft:10,
 		paddingRight:10,
 		marginBottom:0,
 	},
 
 	imgSignStratgy:{
-		width:264,
-		height:72,
+		// width:264,
+		// height:72,
+		width:imgWidth,
+		height:imgHeight,
 		position: 'absolute',
 		top:22,
-		left:(width - 264 - 40) / 2,
+		left:(width - imgWidth - 40) / 2,
 	},
 
 	imgSignStratgyClose:{
@@ -755,8 +759,8 @@ var styles = StyleSheet.create({
 	},
 
 	textModal:{
-		fontSize:12,
-		width:170,
+		fontSize:modelTextW,
+		width:imgWidth*0.65,
 		color:'#b7b7b7',
 	},
 
@@ -768,8 +772,8 @@ var styles = StyleSheet.create({
 	},
 
 	number:{
-		width:14,
-		height:14,
+		width:15,
+		height:15,
 		marginRight:5,
 		backgroundColor:'#4c88f1',
 		borderRadius:roundDay/2,

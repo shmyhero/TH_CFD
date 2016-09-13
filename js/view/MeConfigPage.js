@@ -68,7 +68,7 @@ var MeConfigPage = React.createClass({
 			"是否确认退出？",
 				[
 					{text: '取消'},
-					{text: '确认退出', onPress: () => this.logoutCurrentAccount()},
+					{text: '确定', onPress: () => this.logoutCurrentAccount()},
 				]
 			)
 	},

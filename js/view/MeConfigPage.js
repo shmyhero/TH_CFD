@@ -65,7 +65,7 @@ var MeConfigPage = React.createClass({
 		//TODO
 		Alert.alert(
 			"提示",
-			"",
+			"是否确认退出？",
 				[
 					{text: '取消'},
 					{text: '确认退出', onPress: () => this.logoutCurrentAccount()},

@@ -50,6 +50,7 @@ var LoginPage = React.createClass({
 		popToRoute: React.PropTypes.string,
 		onPopToRoute: React.PropTypes.func,
 		showRegisterSuccessDialog: React.PropTypes.func,
+		isTabbarShown: React.PropTypes.func,
 	},
 
 	getDefaultProps() {
@@ -58,13 +59,20 @@ var LoginPage = React.createClass({
 			popToRoute: null,
 			onPopToRoute: ()=>{},
 			showRegisterSuccessDialog: ()=>{},
+			isTabbarShown: ()=>{},
 		}
 	},
 	componentWillMount: function() {
+		var isTabbarShown = this.props.isTabbarShown();
+		if(!isTabbarShown){
+			this.setState({
+				quickLoginBottomMargin: 15,
+			})
+		}
 		WechatModule.isWechatInstalled()
 		.then((installed) => {
 			this.setState({
-				wechatInstalled: installed
+				wechatInstalled: installed,
 			})
 		})
 	},
@@ -80,6 +88,7 @@ var LoginPage = React.createClass({
 			getValidationCodeButtonEnabled: false,
 			phoneLoginButtonEnabled: false,
 			liveLoginRememberUserName: true,
+			quickLoginBottomMargin: 70,
 		};
 	},
 
@@ -357,8 +366,9 @@ var LoginPage = React.createClass({
 
 	renderFastLogin: function() {
 		if (this.state.wechatInstalled) {
+			//console.log("renderFastLogin: " + quickLoginBottomMargin)
 			return (
-				<View style={styles.fastLoginContainer}>
+				<View style={[styles.fastLoginContainer, {paddingBottom: this.state.quickLoginBottomMargin}]}>
 					<View style={styles.fastLoginRowWrapper}>
 						<View style={styles.line}/>
 						<Text style={styles.fastLoginTitle}>
@@ -714,7 +724,6 @@ var styles = StyleSheet.create({
 		alignItems: 'stretch',
 	},
 	fastLoginContainer: {
-		paddingBottom: 70,
 		alignItems: 'stretch',
 	},
 	rowWrapper: {

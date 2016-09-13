@@ -146,9 +146,8 @@ export var showProgress
 var recevieDataSubscription = null
 var SHARE_PAGE = 'SharePage'
 var REGISTER_SUCCESS_DIALOG = 'RegisterSuccessDialog'
-
+var isTabbarShown = true
 var MainPage = React.createClass({
-
 	getInitialState: function() {
 		return {
 			showTutorial: false,
@@ -200,7 +199,8 @@ var MainPage = React.createClass({
 				<LoginPage navigator={navigationOperations} showCancelButton={true}
 					popToRoute={route.popToRoute}
   				onPopToRoute={route.onPopToRoute}
-					showRegisterSuccessDialog={this.showRegisterSuccessDialog}/>
+					showRegisterSuccessDialog={this.showRegisterSuccessDialog}
+					isTabbarShown={this.getIsTabbarShown}/>
 			);
 		} else if (route.name === UPDATE_USER_INFO_ROUTE) {
 			return (
@@ -477,11 +477,24 @@ var MainPage = React.createClass({
 	},
 
 	showTabbar() {
-		this.refs['myTabbar'] && this.refs['myTabbar'].getBarRef().show(true);
+		if(this.refs['myTabbar']){
+			isTabbarShown = true;
+			console.log("showTabbar")
+			this.refs['myTabbar'].getBarRef().show(true);
+	 	}
 	},
 
 	hideTabbar() {
-		this.refs['myTabbar'] && this.refs['myTabbar'].getBarRef().show(false);
+		if(this.refs['myTabbar']){
+			isTabbarShown = false;
+			console.log("hideTabbar")
+			this.refs['myTabbar'].getBarRef().show(false);
+		}
+	},
+
+	getIsTabbarShown() {
+		console.log("getIsTabbarShown " + isTabbarShown)
+		return isTabbarShown;
 	},
 
 	showProgress() {

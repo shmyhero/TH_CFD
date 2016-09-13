@@ -71,6 +71,7 @@ var LogicData = require('./js/LogicData')
 var MainPage = require('./js/view/MainPage')
 var AskForRestartPage = require('./js/view/AskForRestartPage')
 var NativeDataModule = require('./js/module/NativeDataModule')
+var VersionConstants = require('./js/VersionConstants')
 
 var GUIDE_SLIDES = [
 	require('./images/Guide-page01.png'),
@@ -103,7 +104,7 @@ var AppNavigator = React.createClass({
 	},
 
 	componentDidMount: function() {
-		NativeDataModule.passDataToNative('getui', "")
+		NativeDataModule.passDataToNative('getui', "");
 
 		if (isFirstTime) {
 			markSuccess()
@@ -179,13 +180,17 @@ var AppNavigator = React.createClass({
 						this.alertForPush(JSON.parse(args[1]));
 					}else if (args[0] == 'PushShowDetail') {
 						this.actionForPush(JSON.parse(args[1]));
+					}else if (args[0] == 'isProductServer') {
+						this.setIsProduct(args[1]);
 					}
 				}
 				catch (e) {
 					console.log(e)
 				}
 			}
-		)
+		);
+
+		NativeDataModule.passDataToNative('isProduct', "");
 
 		// var alertData = {'title':'盈交易','msg':'打开苹果股票详情','type':'1','stockName':'英国100', 'stockId':34854};
 		// this.alertForPush(alertData);
@@ -195,6 +200,12 @@ var AppNavigator = React.createClass({
 
 	componentWillUnmount: function() {
 		this.recevieDataSubscription.remove();
+	},
+
+	setIsProduct: function(isProductServer){
+		var value = (isProductServer == "true" ? true : false);
+		console.log("setIsProduct: " + isProductServer);
+		VersionConstants.setIsProductServer(value);
 	},
 
 	_handleDeviceToken: function(event) {

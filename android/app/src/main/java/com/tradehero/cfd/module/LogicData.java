@@ -15,6 +15,7 @@ public class LogicData {
     public static final String MY_LOGO = "myLogo";
     public static final String MY_ALERT_LIST = "myAlertList";
     public static final String PLAY_SOUND = "playSound";
+    public static final String IS_PRODUCT = "isProduct";
 
     private static LogicData mInstance;
     private JSONArray mMyList;
@@ -50,6 +51,8 @@ public class LogicData {
             myLogo = data;
         }else if(dataName.equals(PLAY_SOUND)){
             playSound(0);
+        }else if(dataName.equals(IS_PRODUCT)){
+            checkIsProduct();
         }
     }
 
@@ -71,4 +74,9 @@ public class LogicData {
         }
     }
 
+    public void checkIsProduct(){
+        if(MainActivity.mInstance!=null){
+            MainActivity.mInstance.passIsProductServerToRN();
+        }
+    }
 }

@@ -4,6 +4,16 @@ export const WEBVIEW_QA_VERSION = '1.4' //Only update this version when QA Page 
 export const WEBPAGE_VERSION = '1.5'    //Only update this version when Web Page version is updated!
 export const WEBPAGE_FOLDER = 'TH_CFD_WEB' + WEBPAGE_VERSION
 
+//TODO: use development server in the future
+var isProductServer = false;
+export function isProductServer(){
+  return isProductServer;
+}
+export function setIsProductServer(value){
+  console.log("setIsProductServer " + value);
+  isProductServer = value;
+}
+
 //TODO: There will be product and development environment  in later version..
 //export const IS_DEVELOPMENT_ENVIRONMENT = true
 //export const WEBPAGE_PRODUCT_VERSION = 'TH_CFD_WEB'

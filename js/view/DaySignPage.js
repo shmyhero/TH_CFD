@@ -378,9 +378,9 @@ var DaySignPage = React.createClass({
 
 		return(
 			<View style = {styles.calendar}>
-			<TouchableOpacity onPress={() => this._actionAni()}>
+
 				<Text style = {styles.textMonth}> ---{this.state.monthToday}月签到日历--- </Text>
-			</TouchableOpacity>
+		 
 				<View style = {styles.calendarContainer}>
 					{daysView}
 				</View>

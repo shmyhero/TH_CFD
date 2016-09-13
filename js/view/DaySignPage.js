@@ -28,10 +28,10 @@ var TalkingdataModule = require('../module/TalkingdataModule')
 var {height, width} = Dimensions.get('window');
 var heightRate = height/667.0;
 var heightShow = height - UIConstants.HEADER_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
-var roundR = 150
+var roundR = (width-10)/2
 var roundDayMargin = 5
 var roundDayLength = 11
-var roundDay =  (width - roundDayMargin * roundDayLength * 2) / roundDayLength
+var roundDay =  (width - roundDayMargin * roundDayLength * 2 - 5)  / roundDayLength
 
 
 var imgWidth = width*4/5;
@@ -380,7 +380,7 @@ var DaySignPage = React.createClass({
 			<View style = {styles.calendar}>
 
 				<Text style = {styles.textMonth}> ---{this.state.monthToday}月签到日历--- </Text>
-		 
+
 				<View style = {styles.calendarContainer}>
 					{daysView}
 				</View>
@@ -668,7 +668,7 @@ var styles = StyleSheet.create({
 		width:80,
 		height:24,
 		marginRight:-5,
-		borderRadius:5,
+		borderRadius:10,
 		backgroundColor:'#5a92f6',
 		alignItems:'center',
 	  justifyContent:'center',
@@ -687,7 +687,7 @@ var styles = StyleSheet.create({
 		textAlign:'center',
 		marginTop:15,
 		marginBottom:15,
-		fontSize:15,
+		fontSize:18,
 	},
 
 	roundButtonBoard:{

@@ -20,6 +20,7 @@ var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var NavBar = require('./NavBar')
 var MainPage = require('./MainPage')
+var UIConstants = require('../UIConstants')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
@@ -245,7 +246,7 @@ var styles = StyleSheet.create({
 	title: {
 		flex: 1,
 		fontSize: 17,
-		marginLeft: 10,
+		marginLeft: UIConstants.LIST_ITEM_LEFT_MARGIN,
 		color: '#303030',
 	},
 

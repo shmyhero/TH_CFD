@@ -17,6 +17,7 @@ var NavBar = require('./NavBar')
 var Button = require('./component/Button')
 var MainPage = require('./MainPage')
 var LocalDataUpdateModule = require('../module/LocalDataUpdateModule')
+var UIConstants = require('../UIConstants')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
@@ -146,16 +147,10 @@ var styles = StyleSheet.create({
 		height: 0.5,
 		backgroundColor: ColorConstants.SEPARATOR_GRAY,
 	},
-
-	image: {
-		marginLeft: -10,
-		width: 40,
-		height: 40,
-	},
 	title: {
 		flex: 1,
 		fontSize: 17,
-		marginLeft: 10,
+		marginLeft: UIConstants.LIST_ITEM_LEFT_MARGIN,
 		color: '#303030',
 	},
 

@@ -109,7 +109,9 @@ export async function setCurrentTrackingEvent(event_name, event_label, parameter
   currentTrackingEventParameters = parameters;
 }
 export async function clearCurrentTrackingEvent(){
-  currentTrackingEvent = null;
+  currentTrackingEventName = null;
+  currentTrackingEventLabel = null;
+  currentTrackingEventParameters = null;
 }
 export async function trackCurrentEvent(){
   if(currentTrackingEventName){

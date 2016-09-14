@@ -37,6 +37,7 @@ var roundDay =  (width - roundDayMargin * roundDayLength * 2 - 5)  / roundDayLen
 var imgWidth = width*4/5;
 var imgHeight = imgWidth * 72 /264 ;
 var modelTextW = width/28;
+var signEnable = true;//防止网络不畅多次点击事件发生
 
 var DaySignPage = React.createClass({
 	propTypes: {
@@ -249,6 +250,10 @@ var DaySignPage = React.createClass({
 								<Text style = {styles.textTopLine2}>{this.state.totalUnpaidAmount}</Text>
 
 							</View>
+
+							<View style = {styles.lineLittleTop}>
+							</View>
+
 							<View style = {styles.topSep}>
 								<Text style = {styles.textTopLine1}>累计签到数(天)</Text>
 								<Text style = {styles.textTopLine2}>{this.state.totalSignDays}</Text>
@@ -326,12 +331,12 @@ var DaySignPage = React.createClass({
 	},
 
 	_clickSign:function(){
-		if(!this.state.isSignedToday){
+		if(!this.state.isSignedToday && signEnable){
 			var userData = LogicData.getUserData()
 			var notLogin = Object.keys(userData).length === 0
 			if(!notLogin){
 				TalkingdataModule.trackEvent(TalkingdataModule.CHECK_IN_BUTTON_EVENT);
-
+				signEnable = false
 				NetworkModule.fetchTHUrlWithNoInternetCallback(
 					NetConstants.USER_DAILY_SIGN,
 					{
@@ -349,6 +354,7 @@ var DaySignPage = React.createClass({
 						this._actionAni()
 					},
 					(error) => {
+						signEnable = true
 						Alert.alert(error)
 						// this._actionAni()
 					}
@@ -379,8 +385,11 @@ var DaySignPage = React.createClass({
 		return(
 			<View style = {styles.calendar}>
 
-				<Text style = {styles.textMonth}> ---{this.state.monthToday}月签到日历--- </Text>
-
+			<View style = {styles.lineLeftRightTextContainer}>
+			  <Image style = {styles.lineLeftRight} source = {require('../../images/line_left.png')} ></Image>
+				<Text style = {styles.textMonth}>{this.state.monthToday}月签到日历</Text>
+				<Image style = {styles.lineLeftRight} source = {require('../../images/line_right.png')} ></Image>
+		  </View>
 				<View style = {styles.calendarContainer}>
 					{daysView}
 				</View>
@@ -391,13 +400,18 @@ var DaySignPage = React.createClass({
 	renderBottom: function(){
 		return(
 			<View style = {styles.bottomLayout}>
-					<Text style = {[styles.textBottom]}>更多交易金获取方式</Text>
+					<View style = {styles.lineLeftRightTextContainer}>
+						<Image style = {styles.lineLeftRight} source = {require('../../images/line_left.png')} ></Image>
+     			 	<Text style = {[styles.textBottom]}>更多交易金获取方式</Text>
+						<Image style = {styles.lineLeftRight} source = {require('../../images/line_right.png')} ></Image>
+     			</View>
+
 					<View style = {styles.bottomSepContainer}>
 						<View style = {styles.bottomSep}>
 							<View style = {styles.lineLittle}></View>
 							<Text style = {styles.textBottom}>每日模拟交易送0.5元</Text>
 						</View>
-						<View style = {styles.bottomSep}>
+						<View style = {styles.bottomSep2}>
 							<View style = {styles.lineLittle}></View>
 							<Text style = {styles.textBottom}>注册盈交易即送20元</Text>
 						</View>
@@ -514,12 +528,12 @@ var styles = StyleSheet.create({
 	},
 
 	topLayout:{
-		height:heightShow*(1*0.30),
+		height:heightShow*(1*0.33),
 		backgroundColor: ColorConstants.TITLE_BLUE,
 	},
 
 	middleLayout:{
-		height:heightShow*(1*0.58) + (roundR/2),
+		height:heightShow*(1*0.57) + (roundR/2),
 		marginTop:-roundR/2,
 		// marginLeft:(width-roundR)/2,
 		backgroundColor: '#00000000',
@@ -546,7 +560,18 @@ var styles = StyleSheet.create({
 		flexDirection:'row',
 		width:width/2,
 		alignItems:'center',
-		justifyContent:'center',
+		justifyContent:'flex-start',
+		paddingLeft:15,
+		marginTop:5,
+	},
+
+	bottomSep2:{
+		flex:1,
+		flexDirection:'row',
+		width:width/2,
+		alignItems:'center',
+		justifyContent:'flex-end',
+		paddingRight:15,
 		marginTop:5,
 	},
 
@@ -555,7 +580,7 @@ var styles = StyleSheet.create({
 		width:width/2,
 		alignItems:'center',
 		justifyContent:'center',
-		marginTop:10,
+		marginTop:20,
 	},
 
 	calendar:{
@@ -584,14 +609,21 @@ var styles = StyleSheet.create({
 
 	lineLittle:{
 		width:1.5,
-		height:8,
+		height:10,
 		backgroundColor:'#aaaaaa',
 		marginRight:5,
 	},
 
+	lineLittleTop:{
+		width:1,
+		height:40,
+		backgroundColor:'#4c86ec',
+		marginTop:25,
+	},
+
 	textBottom:{
-    textAlign:'center',
-		fontSize:12,
+    // textAlign:'left',
+		fontSize:13,
 		color:'#aaaaaa',
 	},
 
@@ -608,14 +640,14 @@ var styles = StyleSheet.create({
 
 	textTopLine1:{
 		textAlign:'center',
-		fontSize:15,
+		fontSize:17,
 		marginBottom:5,
 		color:'#E0E0E0',
 	},
 
 	textTopLine2:{
 		textAlign:'center',
-		fontSize:15,
+		fontSize:21,
 		color:'#FFFFFF',
 	},
 
@@ -623,6 +655,7 @@ var styles = StyleSheet.create({
 		color:'#bebebe',
 		marginTop:10,
 		marginBottom:10,
+		fontSize:14,
 	},
 
 	belowSign:{
@@ -632,15 +665,15 @@ var styles = StyleSheet.create({
 
 	textSign:{
 		textAlign:'center',
-		fontSize:28,
+		fontSize:34,
 		backgroundColor:'transparent',
 		color:'#FFFFFF',
 	},
 
 	textSignStrategy:{
-		fontSize:10,
+		fontSize:14,
 		color:'#ffffff',
-		paddingRight:10,
+		paddingRight:8,
 		flex:1,
 		// borderTopLeftRadius:10,
 		// borderBottomLeftRadius:10,
@@ -657,7 +690,7 @@ var styles = StyleSheet.create({
 			width:2,
 			height:2,
 			borderRadius:2,
-			backgroundColor:'#ff0000',
+			backgroundColor:'#f6b044',
 			marginLeft:-10,
 			marginRight:12,
 			marginBottom:8,
@@ -687,7 +720,7 @@ var styles = StyleSheet.create({
 		textAlign:'center',
 		marginTop:15,
 		marginBottom:15,
-		fontSize:18,
+		fontSize:19,
 	},
 
 	roundButtonBoard:{
@@ -761,6 +794,7 @@ var styles = StyleSheet.create({
 	textModal:{
 		fontSize:modelTextW,
 		width:imgWidth*0.65,
+		marginTop:5,
 		color:'#b7b7b7',
 	},
 
@@ -775,6 +809,7 @@ var styles = StyleSheet.create({
 		width:15,
 		height:15,
 		marginRight:5,
+		marginTop:5,
 		backgroundColor:'#4c88f1',
 		borderRadius:roundDay/2,
 		alignItems:'center',
@@ -790,6 +825,18 @@ var styles = StyleSheet.create({
 		// left:width/2-24
 	},
 
+	lineLeftRightTextContainer:{
+			justifyContent:'center',
+			flexDirection:'row',
+			alignItems:'center',
+
+	},
+
+	lineLeftRight:{
+		 	width:45,
+			height:1,
+			margin:5,
+	},
 
 });
 

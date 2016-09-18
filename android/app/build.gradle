@@ -80,6 +80,11 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 
+def BOOLEAN = "boolean"
+def TRUE = "true"
+def FALSE = "false"
+def IS_PRODUCT_ENVIRONMENT = "IS_PRODUCT_ENVIRONMENT"
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -132,6 +137,14 @@ android {
             zipAlignEnabled true
             shrinkResources false
             signingConfig signingConfigs.release
+        }
+    }
+    productFlavors {
+        development {
+            buildConfigField BOOLEAN, IS_PRODUCT_ENVIRONMENT, FALSE
+        }
+        product {
+            buildConfigField BOOLEAN, IS_PRODUCT_ENVIRONMENT, TRUE
         }
     }
     // applicationVariants are e.g. debug, release

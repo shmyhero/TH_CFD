@@ -56,7 +56,7 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
     private static int CHART_BORDER_COLOR = 0xff497bce;
     private static int CHART_LINE_COLOR = 0Xff759de2;
     private static int CHART_TEXT_COLOR = 0Xff70a5ff;
-    private static int TEN_MINUTE_POINT_NUMBER = 600;
+    private static int TEN_MINUTE_POINT_NUMBER = 600;//60s*10
 
     @Override
     protected ReactLineChart createViewInstance(ThemedReactContext reactContext) {

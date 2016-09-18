@@ -78,6 +78,7 @@ var DaySignPage = React.createClass({
 
 	componentDidMount:function(){
 		this._refresh()
+	  signEnable = true
 	},
 
 	_refresh:function() {

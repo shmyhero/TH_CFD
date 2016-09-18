@@ -209,7 +209,7 @@ var HomePage = React.createClass({
 	goToBannerPage: function(i) {
 		var trackingData = {};
 		trackingData[TalkingdataModule.KEY_BANNER_PAGE] = PAGES[i].header;
-		TalkingdataModule.trackEvent(TalkingdataModule.BANNERS, "", trackingData)
+		TalkingdataModule.trackEvent(TalkingdataModule.BANNER_EVENT, "", trackingData)
 		this.gotoWebviewPage(PAGES[i].url,
 			'推荐',
 			PAGES[i].id,

@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.20.139:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.103:8081").apply();
 
         super.onCreate(null);
 
@@ -336,6 +336,16 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         spMap = new HashMap<Integer, Integer>();
         spMap.put(0, sp.load(this, R.raw.coin, 1));
 //        spMap.put(2, sp.load(this, R.raw.hit, 1));
+
+    }
+
+    public void passIsProductServerToRN(){
+        ReactContext context = mReactInstanceManager.getCurrentReactContext();
+        if (context != null) {
+            Boolean isProductEnvironment = BuildConfig.IS_PRODUCT_ENVIRONMENT;
+            NativeDataModule.passDataToRN(context, "isProductServer", isProductEnvironment.toString());
+            Log.d("IsProductServer", "NativeDataModule IsProductServer: " + mClientIDTeTui);
+        }
 
     }
 }

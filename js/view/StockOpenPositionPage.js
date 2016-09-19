@@ -34,10 +34,11 @@ var StorageModule = require('../module/StorageModule')
 var {height, width} = Dimensions.get('window');
 var tabData = [
 			{"type":NetConstants.PARAMETER_CHARTTYPE_TODAY, "name":'分时'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_TEN_MINUTE, "name":'10分钟'},
+			// {"type":NetConstants.PARAMETER_CHARTTYPE_TEN_MINUTE, "name":'10分钟'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_TWO_HOUR, "name":'2小时'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_WEEK, "name":'5日'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_MONTH, "name":'1月'}]
+			{"type":NetConstants.PARAMETER_CHARTTYPE_MONTH, "name":'日K'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'5分钟'},]
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {
 		return r1.id !== r2.id || r1.profitPercentage!==r2.profitPercentage || r1.hasSelected!==r2.hasSelected
 	}});

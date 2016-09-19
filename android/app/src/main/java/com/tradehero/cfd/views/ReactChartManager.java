@@ -3,19 +3,24 @@ package com.tradehero.cfd.views;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.CandleData;
+import com.github.mikephil.charting.data.CandleDataSet;
+import com.github.mikephil.charting.data.CandleEntry;
+import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.XAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ICandleDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.tradehero.cfd.R;
@@ -34,39 +39,50 @@ import java.util.GregorianCalendar;
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
  */
-public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
+public class ReactChartManager extends ViewGroupManager<ReactChart> {
 
     private float LINE_WIDTH = 0.5f; //竖线 分割 ｜分时｜10分钟｜2小时｜5日｜1月｜
     private float LINE_WIDTH_PRICE = 1.5f; //行情走势曲线线粗
     private static final String REACT_CLASS = "LineChart";
+
     private enum CHART_TYPE {
         today("today"),
-        tenM("10m"),
+        //        tenM("10m"),
         twoH("2h"),
         week("week"),
-        month("month");
+        month("month"),
+        fiveM("5m");
 
         private String name;
 
         CHART_TYPE(String name) {
             this.name = name;
         }
-    };
+    }
+
+    ;
     private CHART_TYPE mChartType = CHART_TYPE.today;
     private static int CHART_BORDER_COLOR = 0xff497bce;
     private static int CHART_LINE_COLOR = 0Xff759de2;
     private static int CHART_TEXT_COLOR = 0Xff70a5ff;
     private static int TEN_MINUTE_POINT_NUMBER = 600;//60s*10
 
-    @Override
-    protected ReactLineChart createViewInstance(ThemedReactContext reactContext) {
-        ReactLineChart chart = new ReactLineChart(reactContext);
+    private static int CANDEL_NEUTRAL = 0xffffffff;//平白
+    private static int CANDEL_DECREASE = 0xff30c296;//跌绿
+    private static int CANDEL_INCREASE = 0xffe34b4f;//涨红
 
+    @Override
+    protected ReactChart createViewInstance(ThemedReactContext reactContext) {
+
+        ReactChart chart = new ReactChart(reactContext);
         chart.setDrawGridBackground(false);
-        chart.setDragEnabled(false);
-        chart.setScaleEnabled(false);
-        chart.setTouchEnabled(false);
+        chart.setDragEnabled(true);
+        chart.setScaleEnabled(true);
+//        chart.setTouchEnabled(true);
         chart.getLegend().setEnabled(false);
+        chart.setDoubleTapToZoomEnabled(false);
+
+
         chart.setExtraLeftOffset(12);
         chart.setExtraRightOffset(12);
 
@@ -92,10 +108,11 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
         chart.getAxisRight().setSpaceBottom(20);
 
         return chart;
+
     }
 
     @ReactProp(name = "data")
-    public void setData(ReactLineChart chart, String stockInfoData) {
+    public void setData(ReactChart chart, String stockInfoData) {
         if (chart != null && stockInfoData != null && stockInfoData.length() > 0) {
 
             try {
@@ -104,68 +121,73 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                     return;
                 }
 
-                final JSONArray chartDataList = stockInfoObject.getJSONArray("priceData");
+                JSONArray chartDataList = stockInfoObject.getJSONArray("priceData");
+
 
                 ArrayList<String> xVals = new ArrayList<String>();
-                ArrayList<Entry> yVals = new ArrayList<Entry>();
+                ArrayList<CandleEntry> yVals = new ArrayList<CandleEntry>();
+                ArrayList<Entry> yVals2 = new ArrayList<Entry>();
 
                 float minVal = Float.MAX_VALUE;
                 float maxVal = Float.MIN_VALUE;
 
-                if (mChartType == CHART_TYPE.tenM) {
-                    Calendar firstDate = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
-                    Calendar lastDate = timeStringToCalendar(chartDataList.getJSONObject(chartDataList.length() - 1).getString("time"));
-                    long distance = (lastDate.getTimeInMillis() - firstDate.getTimeInMillis()) / 1000;
-
-                    if (distance > TEN_MINUTE_POINT_NUMBER) {
-                        firstDate.add(Calendar.MILLISECOND, (int)(1000 * (distance - TEN_MINUTE_POINT_NUMBER)));
-                        distance = TEN_MINUTE_POINT_NUMBER;
-                    }
-
-                    for (int i = 0; i <= distance + 1; i ++) {
-                        xVals.add((i) + "");
-                    }
-
-                    for (int i = 0; i < chartDataList.length(); i++) {
-                        Calendar date = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
-
-                        long distToStart = (date.getTimeInMillis() - firstDate.getTimeInMillis()) / 1000;
-
-                        if (distToStart >= 0) {
-
-                            float val = (float) (chartDataList.getJSONObject(i).getDouble("p"));
-                            if (val > maxVal) {
-                                maxVal = val;
-                            }
-                            if (val < minVal) {
-                                minVal = val;
-                            }
-
-                            if (yVals.size() == 0) {
-                                yVals.add(new Entry(val, 0));
-                            } else {
-                                yVals.add(new Entry(val, (int)distToStart));
-                            }
-                        }
-                    }
-                } else {
-                    for (int i = 0; i < chartDataList.length(); i++) {
-                        xVals.add((i) + "");
-                    }
-                    for (int i = 0; i < chartDataList.length(); i++) {
-                        float val = (float) (chartDataList.getJSONObject(i).getDouble("p"));
-                        if (val > maxVal) {
-                            maxVal = val;
-                        }
-                        if (val < minVal) {
-                            minVal = val;
-                        }
-                        yVals.add(new Entry(val, i));
-                    }
-
-                    minVal = Math.min(minVal, (float)stockInfoObject.getDouble("preClose"));
-                    maxVal = Math.max(maxVal, (float) stockInfoObject.getDouble("preClose"));
+//                if (mChartType == CHART_TYPE.tenM) {
+//                    Calendar firstDate = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
+//                    Calendar lastDate = timeStringToCalendar(chartDataList.getJSONObject(chartDataList.length() - 1).getString("time"));
+//                    long distance = (lastDate.getTimeInMillis() - firstDate.getTimeInMillis()) / 1000;
+//
+//                    if (distance > TEN_MINUTE_POINT_NUMBER) {
+//                        firstDate.add(Calendar.MILLISECOND, (int) (1000 * (distance - TEN_MINUTE_POINT_NUMBER)));
+//                        distance = TEN_MINUTE_POINT_NUMBER;
+//                    }
+//
+//                    for (int i = 0; i <= distance + 1; i++) {
+//                        xVals.add((i) + "");
+//                    }
+//
+//                    for (int i = 0; i < chartDataList.length(); i++) {
+//                        Calendar date = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
+//
+//                        long distToStart = (date.getTimeInMillis() - firstDate.getTimeInMillis()) / 1000;
+//
+//                        if (distToStart >= 0) {
+//
+//                            float val = (float) (chartDataList.getJSONObject(i).getDouble("p"));
+//                            if (val > maxVal) {
+//                                maxVal = val;
+//                            }
+//                            if (val < minVal) {
+//                                minVal = val;
+//                            }
+//
+//                            if (yVals.size() == 0) {
+//                                yVals.add(new CandleEntry(0, val + 2, val - 1, val + 1, val - 1));
+//                                yVals2.add(new Entry(val, 0));
+//                            } else {
+//                                yVals.add(new CandleEntry((int) distToStart, val + 2, val - 2, val + 1, val - 1));
+//                                yVals2.add(new Entry(val, (int) distToStart));
+//                            }
+//                        }
+//                    }
+//                } else {
+                for (int i = 0; i < chartDataList.length(); i++) {
+                    xVals.add((i) + "");
                 }
+                for (int i = 0; i < chartDataList.length(); i++) {
+                    float val = (float) (chartDataList.getJSONObject(i).getDouble("p"));
+                    if (val > maxVal) {
+                        maxVal = val;
+                    }
+                    if (val < minVal) {
+                        minVal = val;
+                    }
+                    yVals.add(new CandleEntry(i, val + 2, val - 2, val + 1, val - 1));
+                    yVals2.add(new Entry(val, i));
+                }
+
+                minVal = Math.min(minVal, (float) stockInfoObject.getDouble("preClose"));
+                maxVal = Math.max(maxVal, (float) stockInfoObject.getDouble("preClose"));
+//                }
 
                 minVal -= (maxVal - minVal) / 5;
                 maxVal += (maxVal - minVal) / 5;
@@ -174,42 +196,61 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                 if (yVals.size() > 0 && stockInfoObject.getBoolean("isOpen")) {
                     circleColors = new int[yVals.size()];
                     for (int i = 0; i < yVals.size(); i++) {
-                        circleColors[i] =  Color.TRANSPARENT;
+                        circleColors[i] = Color.TRANSPARENT;
                     }
                     circleColors[yVals.size() - 1] = Color.WHITE;
                 }
 
                 // create a dataset and give it a type
-                LineDataSet set1 = new LineDataSet(yVals, "DataSet 1");
-                // set1.setFillAlpha(110);
-                // set1.setFillColor(Color.RED);
-
-                // set the line to be drawn like this "- - - - - -"
-                set1.enableDashedLine(10f, 0f, 0f);
-                set1.setColor(Color.WHITE);
-                set1.setLineWidth(LINE_WIDTH_PRICE);
-                set1.setDrawCircles(true);
-                set1.setDrawCircleHole(false);
-                set1.setCircleColors(circleColors);
-                set1.setValueTextSize(0f);
-                Drawable drawable = ContextCompat.getDrawable(chart.getContext(), R.drawable.stock_price_fill_color);
-                set1.setFillDrawable(drawable);
-                set1.setDrawFilled(true);
-
-                ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
+                CandleDataSet set1 = new CandleDataSet(yVals, "DataSet 1");
+                ArrayList<ICandleDataSet> dataSets = new ArrayList<ICandleDataSet>();
+                set1.setNeutralColor(CANDEL_NEUTRAL);//平
+                set1.setDecreasingColor(CANDEL_DECREASE);//跌
+                set1.setIncreasingColor(CANDEL_INCREASE);//涨
+                set1.setShadowColorSameAsCandle(true);
                 dataSets.add(set1); // add the datasets
+                CandleData candleData = new CandleData(xVals, dataSets);
+                candleData.setValueTextSize(0f);
 
-                // create a data object with the datasets
-                LineData data = new LineData(xVals, dataSets);
+
+                // create a dataset and give it a type
+                LineDataSet set2 = new LineDataSet(yVals2, "DataSet 2");
+                // set the line to be drawn like this "- - - - - -"
+                set2.enableDashedLine(10f, 0f, 0f);
+                set2.setColor(Color.WHITE);
+                set2.setLineWidth(LINE_WIDTH_PRICE);
+                set2.setDrawCircles(true);
+                set2.setDrawCircleHole(false);
+                set2.setCircleColors(circleColors);
+                set2.setValueTextSize(0f);
+                Drawable drawable = ContextCompat.getDrawable(chart.getContext(), R.drawable.stock_price_fill_color);
+                set2.setFillDrawable(drawable);
+                set2.setDrawFilled(true);
+                ArrayList<ILineDataSet> dataSets2 = new ArrayList<ILineDataSet>();
+                dataSets2.add(set2);
+                LineData lineData = new LineData(xVals, dataSets2);
+
+                CombinedData data = new CombinedData(xVals);
+                float zoom = getZoomValue(xVals.size());
+                if (mChartType == CHART_TYPE.month || mChartType == CHART_TYPE.fiveM) {
+                    data.setData(candleData);
+                    chart.fitScreen();
+                    chart.zoom(zoom, 1.0f, xVals.size() * zoom, 0f);
+
+                } else {
+                    data.setData(lineData);
+                    chart.zoom(1/chart.getScaleX(), 1.0f, 0f, 0f);
+
+                }
 
                 // set data
                 chart.clear();
                 chart.getXAxis().removeAllLimitLines();
-                if (mChartType == CHART_TYPE.tenM) {
-                    chart.getXAxis().setLabelsToSkip(TEN_MINUTE_POINT_NUMBER);
-                } else {
-                    chart.getXAxis().setLabelsToSkip(chartDataList.length());
-                }
+//                if (mChartType == CHART_TYPE.tenM) {
+//                    chart.getXAxis().setLabelsToSkip(TEN_MINUTE_POINT_NUMBER);
+//                } else {
+                chart.getXAxis().setLabelsToSkip(chartDataList.length());
+//                }
                 chart.getXAxis().setValueFormatter(new XAxisValueFormatter() {
                     @Override
                     public String getXValue(String original, int index, ViewPortHandler viewPortHandler) {
@@ -222,14 +263,14 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                 chart.getAxisLeft().setAxisMaxValue(maxVal);
                 chart.setData(data);
 
+
                 // Set the xAxis with the prev close price line
-                if (mChartType == CHART_TYPE.today || mChartType == CHART_TYPE.tenM) {
+                if (mChartType == CHART_TYPE.today /*|| mChartType == CHART_TYPE.tenM */) {
                     LimitLine line = new LimitLine((float) stockInfoObject.getDouble("preClose"));
                     line.setLineColor(CHART_LINE_COLOR);
                     line.setLineWidth(LINE_WIDTH);
                     line.enableDashedLine(10f, 10f, 0f);
                     line.setTextSize(0f);
-
                     chart.getAxisLeft().addLimitLine(line);
                 }
 
@@ -238,10 +279,12 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                 int gapLineUnitAddMount = 1;
                 if (mChartType == CHART_TYPE.today) {
                     gapLineUnit = Calendar.HOUR_OF_DAY;
-                } else if (mChartType == CHART_TYPE.tenM) {
-                    gapLineUnit = Calendar.MINUTE;
-                    gapLineUnitAddMount = 2;
-                } else if (mChartType == CHART_TYPE.twoH){
+                }
+//                else if (mChartType == CHART_TYPE.tenM) {
+//                    gapLineUnit = Calendar.MINUTE;
+//                    gapLineUnitAddMount = 2;
+//                }
+                else if (mChartType == CHART_TYPE.twoH) {
                     gapLineUnit = Calendar.MINUTE;
                     gapLineUnitAddMount = 30;
                 } else if (mChartType == CHART_TYPE.week) {
@@ -274,69 +317,69 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
                 ArrayList<Calendar> limitLineCalender = new ArrayList<>();
                 if (chartDataList.length() > 0) {
 
-                    if (mChartType == CHART_TYPE.tenM) {
-                        Calendar firstDate = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
-                        Calendar lastDate = timeStringToCalendar(chartDataList.getJSONObject(chartDataList.length() - 1).getString("time"));
-                        long distance = (lastDate.getTimeInMillis() - firstDate.getTimeInMillis()) / 1000;
+//                    if (mChartType == CHART_TYPE.tenM) {
+//                        Calendar firstDate = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
+//                        Calendar lastDate = timeStringToCalendar(chartDataList.getJSONObject(chartDataList.length() - 1).getString("time"));
+//                        long distance = (lastDate.getTimeInMillis() - firstDate.getTimeInMillis()) / 1000;
+//
+//                        if (distance > TEN_MINUTE_POINT_NUMBER) {
+//                            firstDate.add(Calendar.MILLISECOND, (int) (1000 * (distance - TEN_MINUTE_POINT_NUMBER)));
+//                        }
+//
+//                        int firstLine = 0;
+//                        limitLineAt.add(firstLine);
+//                        limitLineCalender.add(firstDate);
+//
+//                        nextLineAt = (Calendar) firstDate.clone();
+//                        nextLineAt.add(gapLineUnit, gapLineUnitAddMount);
+//
+//                        for (int i = 0; i < chartDataList.length(); i++) {
+//                            Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
+//
+//                            if (nextLineAt == null) {
+//                                calendar.add(gapLineUnit, gapLineUnitAddMount);
+//                                nextLineAt = calendar;
+//                            } else if (calendar.after(nextLineAt)) {
+//
+//                                while (calendar.after(nextLineAt)) {
+//                                    nextLineAt.add(gapLineUnit, gapLineUnitAddMount);
+//                                }
+//
+//                                long distToStart = (calendar.getTimeInMillis() - firstDate.getTimeInMillis()) / 1000;
+//
+//                                limitLineAt.add((int) distToStart);
+//                                limitLineCalender.add(calendar);
+//                            }
+//                        }
+//
+//                    } else {
+                    int firstLine = 0;
+                    limitLineAt.add(firstLine);
+                    limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(firstLine).getString("time")));
 
-                        if (distance > TEN_MINUTE_POINT_NUMBER) {
-                            firstDate.add(Calendar.MILLISECOND, (int)(1000 * (distance - TEN_MINUTE_POINT_NUMBER)));
-                        }
+                    for (int i = 0; i < chartDataList.length(); i++) {
+                        Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
 
-                        int firstLine = 0;
-                        limitLineAt.add(firstLine);
-                        limitLineCalender.add(firstDate);
+                        if (nextLineAt == null) {
+                            calendar.add(gapLineUnit, gapLineUnitAddMount);
+                            nextLineAt = calendar;
+                        } else if (calendar.after(nextLineAt)) {
 
-                        nextLineAt = (Calendar) firstDate.clone();
-                        nextLineAt.add(gapLineUnit, gapLineUnitAddMount);
-
-                        for(int i = 0; i < chartDataList.length(); i ++) {
-                            Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
-
-                            if (nextLineAt == null) {
-                                calendar.add(gapLineUnit, gapLineUnitAddMount);
-                                nextLineAt = calendar;
-                            } else if (calendar.after(nextLineAt)) {
-
-                                while(calendar.after(nextLineAt)) {
-                                    nextLineAt.add(gapLineUnit, gapLineUnitAddMount);
-                                }
-
-                                long distToStart = (calendar.getTimeInMillis() - firstDate.getTimeInMillis()) / 1000;
-
-                                limitLineAt.add((int)distToStart);
-                                limitLineCalender.add(calendar);
+                            while (calendar.after(nextLineAt)) {
+                                nextLineAt.add(gapLineUnit, gapLineUnitAddMount);
                             }
-                        }
 
-                    } else {
-                        int firstLine = 0;
-                        limitLineAt.add(firstLine);
-                        limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(firstLine).getString("time")));
-
-                        for(int i = 0; i < chartDataList.length(); i ++) {
-                            Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
-
-                            if (nextLineAt == null) {
-                                calendar.add(gapLineUnit, gapLineUnitAddMount);
-                                nextLineAt = calendar;
-                            } else if (calendar.after(nextLineAt)) {
-
-                                while(calendar.after(nextLineAt)) {
-                                    nextLineAt.add(gapLineUnit, gapLineUnitAddMount);
-                                }
-
-                                limitLineAt.add(i);
-                                limitLineCalender.add(calendar);
-                            }
-                        }
-
-                        if (mChartType != CHART_TYPE.week || !stockInfoObject.getBoolean("isOpen")) {
-                            int lastLine = chartDataList.length() - 1;
-                            limitLineAt.add(lastLine);
-                            limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
+                            limitLineAt.add(i);
+                            limitLineCalender.add(calendar);
                         }
                     }
+
+                    if (mChartType != CHART_TYPE.week || !stockInfoObject.getBoolean("isOpen")) {
+                        int lastLine = chartDataList.length() - 1;
+                        limitLineAt.add(lastLine);
+                        limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
+                    }
+//                    }
 
                     boolean needSkipLabel = false;
                     if (limitLineAt.size() > 10) {//如果竖线密度太大，竖线条数大于10，则隔一个隐藏一个gapLine.setLable("");
@@ -380,7 +423,7 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
     }
 
     @ReactProp(name = "colorType")
-    public void setColorType(ReactLineChart chart, int type) {
+    public void setColorType(ReactChart chart, int type) {
         if (type == 1) {
             CHART_BORDER_COLOR = Color.WHITE;
             CHART_LINE_COLOR = Color.WHITE;
@@ -388,9 +431,9 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
     }
 
     @ReactProp(name = "chartType")
-    public void setChartType(ReactLineChart chart, String type) {
+    public void setChartType(ReactChart chart, String type) {
         CHART_TYPE[] allType = CHART_TYPE.values();
-        for (int i = 0; i < allType.length; i ++) {
+        for (int i = 0; i < allType.length; i++) {
             if (allType[i].name.equals(type)) {
                 mChartType = allType[i];
                 break;
@@ -399,21 +442,21 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
     }
 
     @ReactProp(name = "description")
-    public void setDescription(ReactLineChart chart, String description) {
+    public void setDescription(ReactChart chart, String description) {
         if (chart != null) {
             chart.setDescription(description);
         }
     }
 
     @ReactProp(name = "noDataText")
-    public void setNoDataText(ReactLineChart chart, String text) {
+    public void setNoDataText(ReactChart chart, String text) {
         if (chart != null) {
             chart.setNoDataText(text);
         }
     }
 
     @ReactProp(name = "noDataTextDescription")
-    public void setNoDataTextDescription(ReactLineChart chart, String description) {
+    public void setNoDataTextDescription(ReactChart chart, String description) {
         if (chart != null) {
             if (description != null) {
                 chart.setNoDataTextDescription(description);
@@ -422,93 +465,93 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
     }
 
     @ReactProp(name = "padding", defaultFloat = 0.0f)
-    public void setPadding(ReactLineChart chart, float padding) {
+    public void setPadding(ReactChart chart, float padding) {
         if (chart != null) {
             chart.setMinOffset(padding);
         }
     }
 
     @ReactProp(name = "xAxisPosition")
-    public void setXAxisPosition(ReactLineChart chart, String position) {
+    public void setXAxisPosition(ReactChart chart, String position) {
         if (chart != null) {
             chart.getXAxis().setPosition(XAxis.XAxisPosition.valueOf(position));
         }
     }
 
     @ReactProp(name = "xAxisStep", defaultInt = 1)
-    public void setXAxisStep(ReactLineChart chart, int step) {
+    public void setXAxisStep(ReactChart chart, int step) {
         if (chart != null) {
             chart.getXAxis().setLabelsToSkip(step - 1);
         }
     }
 
     @ReactProp(name = "xAxisTextSize", defaultFloat = 10.0f)
-    public void setXAxisTextSize(ReactLineChart chart, float size) {
+    public void setXAxisTextSize(ReactChart chart, float size) {
         if (chart != null) {
             chart.getXAxis().setTextSize(size);
         }
     }
 
     @ReactProp(name = "xAxisDrawLabel")
-    public void setXAxisDrawLabel(ReactLineChart chart, boolean drawEnabled) {
+    public void setXAxisDrawLabel(ReactChart chart, boolean drawEnabled) {
         if (chart != null) {
             chart.getXAxis().setDrawLabels(drawEnabled);
         }
     }
 
     @ReactProp(name = "leftAxisEnabled", defaultBoolean = true)
-    public void setLeftAxisEnabled(ReactLineChart chart, boolean enabled) {
+    public void setLeftAxisEnabled(ReactChart chart, boolean enabled) {
         if (chart != null) {
             chart.getAxisLeft().setEnabled(enabled);
         }
     }
 
     @ReactProp(name = "leftAxisMaxValue")
-    public void setLeftAxisMaxValue(ReactLineChart chart, float value) {
+    public void setLeftAxisMaxValue(ReactChart chart, float value) {
         if (chart != null) {
             chart.getAxisLeft().setAxisMaxValue(value);
         }
     }
 
     @ReactProp(name = "leftAxisMinValue")
-    public void setLeftAxisMinValue(ReactLineChart chart, float value) {
+    public void setLeftAxisMinValue(ReactChart chart, float value) {
         if (chart != null) {
             chart.getAxisLeft().setAxisMinValue(value);
         }
     }
 
     @ReactProp(name = "leftAxisPosition")
-    public void setLeftAxisPosition(ReactLineChart chart, String position) {
+    public void setLeftAxisPosition(ReactChart chart, String position) {
         if (chart != null) {
             chart.getAxisLeft().setPosition(YAxis.YAxisLabelPosition.valueOf(position));
         }
     }
 
     @ReactProp(name = "leftAxisLabelCount")
-    public void setLeftAxisLabelCount(ReactLineChart chart, int num) {
+    public void setLeftAxisLabelCount(ReactChart chart, int num) {
         if (chart != null) {
             chart.getAxisLeft().setLabelCount(num, true);
         }
     }
 
     @ReactProp(name = "leftAxisTextSize", defaultFloat = 10.0f)
-    public void setLeftAxisTextSize(ReactLineChart chart, float size) {
+    public void setLeftAxisTextSize(ReactChart chart, float size) {
         if (chart != null) {
             chart.getAxisLeft().setTextSize(size);
         }
     }
 
     @ReactProp(name = "leftAxisDrawLabel")
-    public void setLeftAxisDrawLabel(ReactLineChart chart, boolean drawEnabled) {
+    public void setLeftAxisDrawLabel(ReactChart chart, boolean drawEnabled) {
         if (chart != null) {
             chart.getAxisLeft().setDrawLabels(drawEnabled);
         }
     }
 
     @ReactProp(name = "leftAxisLimitLines")
-    public void setLeftAxisLimitLines(ReactLineChart chart, ReadableArray lines) {
+    public void setLeftAxisLimitLines(ReactChart chart, ReadableArray lines) {
         if (chart != null) {
-            for (int i = 0; i < lines.size(); i ++) {
+            for (int i = 0; i < lines.size(); i++) {
                 LimitLine line = new LimitLine(lines.getInt(i));
                 line.setLineColor(Color.GRAY);
                 line.setLineWidth(0.5f);
@@ -521,49 +564,49 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
     }
 
     @ReactProp(name = "rightAxisEnabled", defaultBoolean = true)
-    public void setRightAxisEnabled(ReactLineChart chart, boolean enabled) {
+    public void setRightAxisEnabled(ReactChart chart, boolean enabled) {
         if (chart != null) {
             chart.getAxisRight().setEnabled(enabled);
         }
     }
 
     @ReactProp(name = "rightAxisMaxValue")
-    public void setRightAxisMaxValue(ReactLineChart chart, float value) {
+    public void setRightAxisMaxValue(ReactChart chart, float value) {
         if (chart != null) {
             chart.getAxisRight().setAxisMaxValue(value);
         }
     }
 
     @ReactProp(name = "rightAxisMinValue")
-    public void setRightAxisMinValue(ReactLineChart chart, float value) {
+    public void setRightAxisMinValue(ReactChart chart, float value) {
         if (chart != null) {
             chart.getAxisRight().setAxisMinValue(value);
         }
     }
 
     @ReactProp(name = "rightAxisPosition")
-    public void setRightAxisPosition(ReactLineChart chart, String position) {
+    public void setRightAxisPosition(ReactChart chart, String position) {
         if (chart != null) {
             chart.getAxisRight().setPosition(YAxis.YAxisLabelPosition.valueOf(position));
         }
     }
 
     @ReactProp(name = "rightAxisLabelCount")
-    public void setRightAxisLabelCount(ReactLineChart chart, int num) {
+    public void setRightAxisLabelCount(ReactChart chart, int num) {
         if (chart != null) {
             chart.getAxisRight().setLabelCount(num, true);
         }
     }
 
     @ReactProp(name = "rightAxisTextSize", defaultFloat = 10.0f)
-    public void setRightAxisTextSize(ReactLineChart chart, float size) {
+    public void setRightAxisTextSize(ReactChart chart, float size) {
         if (chart != null) {
             chart.getAxisRight().setTextSize(size);
         }
     }
 
     @ReactProp(name = "rightAxisDrawLabel")
-    public void setRightAxisDrawLabel(ReactLineChart chart, boolean drawEnabled) {
+    public void setRightAxisDrawLabel(ReactChart chart, boolean drawEnabled) {
         if (chart != null) {
             chart.getAxisRight().setDrawLabels(drawEnabled);
         }
@@ -597,5 +640,19 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
         }
 
         return calendar;
+    }
+
+
+    private static final int SIZE_IN_SCREEN = 40;
+
+    private static float getZoomValue(float length) {
+        float zoom = 1.0f;
+        if (length < SIZE_IN_SCREEN) {
+            zoom = 1.0f;
+        } else {
+            zoom = length / SIZE_IN_SCREEN;
+        }
+        Log.d("", "getZoomValue: length = " + length + " size = " + SIZE_IN_SCREEN + " zoom = " + zoom);
+        return zoom;
     }
 }

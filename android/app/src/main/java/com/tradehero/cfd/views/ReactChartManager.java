@@ -37,8 +37,8 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
         chart.setDoubleTapToZoomEnabled(false);
 
 
-        chart.setExtraLeftOffset(12);
-        chart.setExtraRightOffset(12);
+        chart.setExtraLeftOffset(0);
+        chart.setExtraRightOffset(0);
 
         chart.getAxisLeft().removeAllLimitLines();
         chart.getAxisRight().removeAllLimitLines();
@@ -60,6 +60,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
         chart.getAxisLeft().setSpaceBottom(20);
         chart.getAxisRight().setSpaceTop(20);
         chart.getAxisRight().setSpaceBottom(20);
+
 
         return chart;
 

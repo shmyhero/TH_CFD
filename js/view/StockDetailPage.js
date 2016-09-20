@@ -431,7 +431,7 @@ var StockDetailPage = React.createClass({
 
 						{this.renderChartHeader()}
 
-						<View style={{flex: 3.5, marginTop:5}}>
+						<View style={{flex: 3.5, marginTop:5,marginLeft:12,marginRight:12}}>
 							<LineChart style={styles.lineChart}
 								data={JSON.stringify(this.state.stockInfo)}
 								chartType={this.state.chartType}>

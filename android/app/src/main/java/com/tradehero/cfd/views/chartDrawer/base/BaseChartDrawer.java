@@ -20,12 +20,12 @@ import java.util.GregorianCalendar;
 /**
  * Created by Neko on 16/9/19.
  */
-public abstract class BaseChartDrawer implements IChartDrawer{
+public abstract class BaseChartDrawer implements IChartDrawer {
     protected float minVal = Float.MAX_VALUE;
     protected float maxVal = Float.MIN_VALUE;
 
     @Override
-    public void draw(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException{
+    public void draw(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
         minVal = Float.MAX_VALUE;
         maxVal = Float.MIN_VALUE;
 
@@ -42,18 +42,20 @@ public abstract class BaseChartDrawer implements IChartDrawer{
     }
 
     //region detail draw methods which may override by child class
+
     /**
      * Override the methods if you want to do something before draw chart.
+     *
      * @param chart
      */
-    protected void resetChart(CombinedChart chart){
+    protected void resetChart(CombinedChart chart) {
         chart.clear();
         chart.getXAxis().removeAllLimitLines();
         chart.getAxisLeft().removeAllLimitLines();
         chart.getAxisRight().removeAllLimitLines();
         chart.resetTracking();
         chart.fitScreen();
-        if(chart.getScaleX() != 1 && chart.getScaleX() > 0) {
+        if (chart.getScaleX() != 1 && chart.getScaleX() > 0) {
             chart.zoom(1 / chart.getScaleX(), 1, 0, 0);
         }
     }
@@ -61,6 +63,7 @@ public abstract class BaseChartDrawer implements IChartDrawer{
 
     /**
      * Override the methods to generate data for chart
+     *
      * @param chart
      * @param stockInfoObject
      * @param chartDataList
@@ -69,18 +72,22 @@ public abstract class BaseChartDrawer implements IChartDrawer{
 
     /**
      * Returns the calender indicates the first gap line. Returns null so that the base drawer will calculate the line by its rule.
+     *
      * @param stockInfoObject
      * @param chartDataList
      * @throws JSONException
      */
-    protected Calendar getStartUpTimeLine(JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException{ return null;}
+    protected Calendar getStartUpTimeLine(JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
+        return null;
+    }
 
     /**
      * Override the methods to draw the start up gap line. If not, there'll be no start up gap line.
+     *
      * @param stockInfoObject
      * @throws JSONException
      */
-    protected boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException{
+    protected boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException {
         return false;
     }
 
@@ -92,11 +99,12 @@ public abstract class BaseChartDrawer implements IChartDrawer{
     /**
      * Set limit line for x-Axis.
      * Override this method to set limit lines with your rules.
+     *
      * @param stockInfoObject
      * @param chartDataList
      * @throws JSONException
      */
-    protected LimitLineInfo calculateLimitLinesPosition(Calendar startUpLine, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException{
+    protected LimitLineInfo calculateLimitLinesPosition(Calendar startUpLine, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
         ArrayList<Integer> limitLineAt = new ArrayList<>();
         ArrayList<Calendar> limitLineCalender = new ArrayList<>();
 
@@ -106,7 +114,7 @@ public abstract class BaseChartDrawer implements IChartDrawer{
         limitLineAt.add(firstLine);
         limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(firstLine).getString("time")));
 
-        for(int i = 0; i < chartDataList.length(); i ++) {
+        for (int i = 0; i < chartDataList.length(); i++) {
             Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
 
             if (nextLineAt == null) {
@@ -114,7 +122,7 @@ public abstract class BaseChartDrawer implements IChartDrawer{
                 nextLineAt = calendar;
             } else if (calendar.after(nextLineAt)) {
 
-                while(calendar.after(nextLineAt)) {
+                while (calendar.after(nextLineAt)) {
                     nextLineAt.add(getGapLineUnit(), getGapLineUnitAddMount());
                 }
 
@@ -137,6 +145,7 @@ public abstract class BaseChartDrawer implements IChartDrawer{
 
     /**
      * Return true if the chart need to draw a horizontal pre-close line. Else false.
+     *
      * @return
      */
     protected boolean needDrawPreCloseLine() {
@@ -145,6 +154,7 @@ public abstract class BaseChartDrawer implements IChartDrawer{
 
     /**
      * Return the gap line unit for the chart. Default is hour.
+     *
      * @return
      */
     protected int getGapLineUnit() {
@@ -153,6 +163,7 @@ public abstract class BaseChartDrawer implements IChartDrawer{
 
     /**
      * Returns the count of the gap line which will be skip. Default is 1.
+     *
      * @return
      */
     protected int getGapLineUnitAddMount() {
@@ -161,6 +172,7 @@ public abstract class BaseChartDrawer implements IChartDrawer{
 
     /**
      * Returns the gap line text format. Override this if you want to customize for your chart.
+     *
      * @return
      */
     protected SimpleDateFormat getGapLineFormat() {
@@ -169,14 +181,16 @@ public abstract class BaseChartDrawer implements IChartDrawer{
 
     /**
      * Returns the labels count which should be skip on x axis. Override to define the skip labels count the chart needs.
+     *
      * @return
      */
-    protected int getLablesToSkip(JSONArray chartDataList){
+    protected int getLablesToSkip(JSONArray chartDataList) {
         return chartDataList.length();
     }
 
     /**
      * Zoom if necessary
+     *
      * @param chart
      * @param data
      */
@@ -188,11 +202,12 @@ public abstract class BaseChartDrawer implements IChartDrawer{
 
     /**
      * Draw the pre close gap line. This method won't be changed.
+     *
      * @param chart
      * @param stockInfoObject
      * @throws JSONException
      */
-    private void drawPreCloseLine(CombinedChart chart, JSONObject stockInfoObject) throws JSONException{
+    private void drawPreCloseLine(CombinedChart chart, JSONObject stockInfoObject) throws JSONException {
         LimitLine line = new LimitLine((float) stockInfoObject.getDouble("preClose"));
         line.setLineColor(ChartDrawerConstants.CHART_LINE_COLOR);
         line.setLineWidth(ChartDrawerConstants.LINE_WIDTH);
@@ -217,12 +232,12 @@ public abstract class BaseChartDrawer implements IChartDrawer{
         chart.getAxisLeft().setAxisMaxValue(maxVal);
     }
 
-    protected interface OnLimitLinesPositionCalculatedHandler{
+    protected interface OnLimitLinesPositionCalculatedHandler {
         void OnLimitLinesPositionCalculated();
     }
 
     private void drawLimitLine(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
-        if (needDrawPreCloseLine()){
+        if (needDrawPreCloseLine()) {
             drawPreCloseLine(chart, stockInfoObject);
         }
 
@@ -252,13 +267,23 @@ public abstract class BaseChartDrawer implements IChartDrawer{
                 if (needSkipLabel && i < limitLineInfo.limitLineAt.size() - 1 && i % 2 == 1) {
                     gapLine.setLabel("");
                 } else {
-                    gapLine.setLabel(format.format(calendar.getTime()));
+                    String label = format.format(calendar.getTime());
+                    if (i == 0) {
+                        label = getLableBlank() + label;
+                    } else if (i == limitLineInfo.limitLineAt.size() - 1) {
+                        label = label + getLableBlank();
+                    }
+                    gapLine.setLabel(label);
                 }
                 gapLine.setLabelPosition(LimitLine.LimitLabelPosition.BELOW_BOTTOM);
 
                 chart.getXAxis().addLimitLine(gapLine);
             }
         }
+    }
+
+    public String getLableBlank() {
+        return "";
     }
 
     public Calendar timeStringToCalendar(String timeStr) {

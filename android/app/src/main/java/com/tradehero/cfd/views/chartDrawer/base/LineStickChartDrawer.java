@@ -94,4 +94,9 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
         return data;
         //LineData data = new LineData(xVals, dataSets);
     }
+
+    @Override
+    public String getLableBlank() {
+        return "          ";
+    }
 }

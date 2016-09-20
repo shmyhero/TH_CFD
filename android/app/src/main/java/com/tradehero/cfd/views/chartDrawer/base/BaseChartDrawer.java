@@ -26,6 +26,11 @@ public abstract class BaseChartDrawer implements IChartDrawer {
 
     @Override
     public void draw(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
+
+        if (chartDataList == null || chartDataList.length() == 0) {
+            return;
+        }
+
         minVal = Float.MAX_VALUE;
         maxVal = Float.MIN_VALUE;
 

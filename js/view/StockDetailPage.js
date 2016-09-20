@@ -92,6 +92,10 @@ var StockDetailPage = React.createClass({
 			tradingInProgress: false,
 			chartType: NetConstants.PARAMETER_CHARTTYPE_TODAY,
 			flashTimes:0,
+			minPrice: 0,
+			maxPrice: 0,
+			maxPercentage: 0,
+			minPercentage: 0,
 		};
 	},
 
@@ -197,15 +201,14 @@ var StockDetailPage = React.createClass({
 		if(this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE){
 			url = NetConstants.GET_STOCK_KLINE_FIVE_M;
 			url = url.replace(/<securityId>/, this.props.stockCode);
-		}else
-		 {
+		} else {
 			 url = url.replace(/<stockCode>/, this.props.stockCode)
 			 url = url.replace(/<chartType>/, this.state.chartType)
 
 			 if(this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_MONTH){
-			//Wait api
+				//Wait api
+			}
 		}
-	}
 
 		NetworkModule.fetchTHUrl(
 			url,
@@ -216,8 +219,47 @@ var StockDetailPage = React.createClass({
 			(responseJson) => {
 				var tempStockInfo = this.state.stockInfo
 				tempStockInfo.priceData = responseJson
+
+				var maxPrice = undefined
+				var minPrice = undefined
+				var maxPercentage = undefined
+				var minPercentage = undefined
+
+				if (tempStockInfo.priceData != undefined && tempStockInfo.priceData.length > 0) {
+					var lastClose = tempStockInfo.preClose
+
+					maxPrice = Number.MIN_VALUE
+					minPrice = Number.MAX_VALUE
+
+					for (var i = 0; i < tempStockInfo.priceData.length; i ++) {
+						var price = 0;
+						if(this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE){
+							price = tempStockInfo.priceData[i].Close
+						}else{
+							price = tempStockInfo.priceData[i].p
+						}
+						if (price > maxPrice) {
+							maxPrice = price
+						}
+						if (price < minPrice) {
+							minPrice = price
+						}
+					}
+					var maxPercentage = (maxPrice - lastClose) / lastClose * 100
+					var minPercentage = (minPrice - lastClose) / lastClose * 100
+					if(maxPercentage){
+						maxPercentage = maxPercentage.toFixed(2)
+					}
+					if(minPercentage){
+						minPercentage = minPercentage.toFixed(2)
+					}
+				}
 				this.setState({
 					stockInfo: tempStockInfo,
+					maxPrice: maxPrice,
+					minPrice: minPrice,
+					maxPercentage: maxPercentage,
+					minPercentage: minPercentage,
 				})
 
 				this.connectWebSocket()
@@ -376,32 +418,6 @@ var StockDetailPage = React.createClass({
 	},
 
 	render: function() {
-		var priceData = this.state.stockInfo.priceData
-		var maxPrice = undefined
-		var minPrice = undefined
-		var maxPercentage = undefined
-		var minPercentage = undefined
-
-		if (priceData != undefined && priceData.length > 0) {
-			var lastClose = this.state.stockInfo.preClose
-			maxPrice = Number.MIN_VALUE
-			minPrice = Number.MAX_VALUE
-
-			for (var i = 0; i < priceData.length; i ++) {
-				var price = priceData[i].p
-				if (price > maxPrice) {
-					maxPrice = price
-				}
-				if (price < minPrice) {
-					minPrice = price
-				}
-			}
-			var maxPercentage = (maxPrice - lastClose) / lastClose * 100
-			var minPercentage = (minPrice - lastClose) / lastClose * 100
-			maxPercentage = maxPercentage.toFixed(2)
-			minPercentage = minPercentage.toFixed(2)
-		}
-
 		// 0.06%, limit to 0.01
 		var leftMoney = this.state.totalMoney - this.state.money
 		var charge = 0
@@ -419,8 +435,8 @@ var StockDetailPage = React.createClass({
 							<LineChart style={styles.lineChart}
 								data={JSON.stringify(this.state.stockInfo)}
 								chartType={this.state.chartType}>
-							{this.renderStockMaxPriceInfo(maxPrice, maxPercentage)}
-							{this.renderStockMinPriceInfo(minPrice, minPercentage)}
+							{this.renderStockMaxPriceInfo(this.state.maxPrice, this.state.maxPercentage)}
+							{this.renderStockMinPriceInfo(this.state.minPrice, this.state.minPercentage)}
 							</LineChart>
 
 						</View>

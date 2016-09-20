@@ -23,14 +23,14 @@ import java.util.ArrayList;
 public abstract class LineStickChartDrawer extends BaseChartDrawer {
 
     @Override
-    public void initializeChart(CombinedChart chart) {
+    protected void resetChart(CombinedChart chart) {
+        super.resetChart(chart);
         chart.setDragEnabled(false);
         chart.setTouchEnabled(false);
-        chart.zoom(1 / chart.getScaleX(), 1, 0, 0);
     }
 
     @Override
-    public CombinedData generateData(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
+    protected CombinedData generateData(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
         ArrayList<String> xVals = new ArrayList<String>();
         ArrayList<Entry> yVals = new ArrayList<Entry>();
 
@@ -51,7 +51,6 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
 
         minVal = Math.min(minVal, (float)stockInfoObject.getDouble("preClose"));
         maxVal = Math.max(maxVal, (float)stockInfoObject.getDouble("preClose"));
-
 
         minVal -= (maxVal - minVal) / 5;
         maxVal += (maxVal - minVal) / 5;
@@ -74,7 +73,7 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
         // set the line to be drawn like this "- - - - - -"
         set1.enableDashedLine(10f, 0f, 0f);
         set1.setColor(Color.WHITE);
-        set1.setLineWidth(ChartDrawerManager.LINE_WIDTH_PRICE);
+        set1.setLineWidth(ChartDrawerConstants.LINE_WIDTH_PRICE);
         set1.setDrawCircles(true);
         set1.setDrawCircleHole(false);
         set1.setCircleColors(circleColors);

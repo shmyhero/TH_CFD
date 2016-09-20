@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by Neko on 16/9/19.
@@ -24,33 +25,29 @@ import java.util.ArrayList;
 public abstract class CandleChartDrawer extends BaseChartDrawer {
 
     @Override
-    public void initializeChart(CombinedChart chart) {
+    protected void resetChart(CombinedChart chart) {
+        super.resetChart(chart);
         chart.setDragEnabled(true);
         chart.setTouchEnabled(true);
-        chart.setFocusableInTouchMode(false);
-        chart.fitScreen();
     }
 
     @Override
-    public CombinedData generateData(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
+    protected CombinedData generateData(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
         ArrayList<CandleEntry> yVals1 = new ArrayList<>();
 
         ArrayList<String> labels = new ArrayList<>();
 
         for (int i = 0; i < chartDataList.length(); i++) {
-            //TODO: use real data
-            float val = (float)chartDataList.getJSONObject(i).getDouble("p");
+            float open = (float)chartDataList.getJSONObject(i).getDouble("Open");
+            float close = (float)chartDataList.getJSONObject(i).getDouble("Close");
 
-            float open = val;
-            float close = val + (float) (Math.random() * 100) - 50f;
-
-            float high = (float)( Math.max(open, close) + 50 * Math.random());
-            float low = (float)( Math.max(open, close) - 50 * Math.random());
+            float high = (float)chartDataList.getJSONObject(i).getDouble("High");
+            float low = (float)chartDataList.getJSONObject(i).getDouble("Low");
 
             yVals1.add(new CandleEntry(i, high, low, open,
                     close));
 
-            labels.add(chartDataList.getJSONObject(i).getString("time"));
+            labels.add(chartDataList.getJSONObject(i).getString("Time"));
         }
 
         CandleDataSet set1 = new CandleDataSet(yVals1, "Data Set");
@@ -62,13 +59,13 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
         set1.setShadowWidth(1f);
         //set1.setBarSpace(3f);
 
-        set1.setDecreasingColor(ChartDrawerManager.CANDEL_DECREASE);
+        set1.setDecreasingColor(ChartDrawerConstants.CANDEL_DECREASE);
         set1.setDecreasingPaintStyle(Paint.Style.FILL);
-        set1.setIncreasingColor(ChartDrawerManager.CANDEL_INCREASE);
+        set1.setIncreasingColor(ChartDrawerConstants.CANDEL_INCREASE);
         set1.setIncreasingPaintStyle(Paint.Style.FILL);
         set1.setDrawValues(true);
-        set1.setNeutralColor(ChartDrawerManager.CANDEL_NEUTRAL);
-        set1.setHighlightLineWidth(2.5f);
+        set1.setNeutralColor(ChartDrawerConstants.CANDEL_NEUTRAL);
+        set1.setHighlightEnabled(false);
         set1.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
@@ -90,20 +87,65 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
         return data;
     }
 
+    //TODO: remove this function when api returns "time" instead of "Time".
     @Override
-    public void calculateZoom(CombinedChart chart, CombinedData data) {
+    protected LimitLineInfo calculateLimitLinesPosition(Calendar startUpLine, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException{
+        ArrayList<Integer> limitLineAt = new ArrayList<>();
+        ArrayList<Calendar> limitLineCalender = new ArrayList<>();
+
+        Calendar nextLineAt = startUpLine;
+
+        int firstLine = 0;
+        limitLineAt.add(firstLine);
+        limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(firstLine).getString("Time")));
+
+        for(int i = 0; i < chartDataList.length(); i ++) {
+            Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("Time"));
+
+            if (nextLineAt == null) {
+                calendar.add(getGapLineUnit(), getGapLineUnitAddMount());
+                nextLineAt = calendar;
+            } else if (calendar.after(nextLineAt)) {
+
+                while(calendar.after(nextLineAt)) {
+                    nextLineAt.add(getGapLineUnit(), getGapLineUnitAddMount());
+                }
+
+                limitLineAt.add(i);
+                limitLineCalender.add(calendar);
+            }
+        }
+
+        if (needDrawEndLine(stockInfoObject)) {
+            int lastLine = chartDataList.length() - 1;
+            limitLineAt.add(lastLine);
+            limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
+        }
+
+        LimitLineInfo info = new LimitLineInfo();
+        info.limitLineAt = limitLineAt;
+        info.limitLineCalender = limitLineCalender;
+        return info;
+    }
+
+    @Override
+    protected void calculateZoom(CombinedChart chart, CombinedData data) {
         int dpi = chart.getResources().getDisplayMetrics().densityDpi;
         int totalWidth = chart.getWidth();
 
+        //Wrong calculation!
         int candleWidthDP = 5;
-        int candleSpaceDP = 3;
-        int candleWidth = (int)(candleWidthDP * dpi / 160);
-        int candleSpace = (int)(candleSpaceDP * dpi / 160);
-        int candleCount = (int)totalWidth / (candleWidth + candleSpace);
+        //int candleSpaceDP = 3;
+        int candleWidth = (candleWidthDP * dpi / 160);
+        //int candleSpace = (candleSpaceDP * dpi / 160);
+        int perScreenCandleCount = totalWidth / (candleWidth /*+ candleSpace*/);
 
         //Make sure each screen only show 60 candles.
-        int count = data.getXValCount();
-        float scale = (float)count / candleCount;
-        chart.zoom(scale, 1, count * scale, 0);
+        int totalCandleCount = data.getXValCount();
+
+        if(perScreenCandleCount < totalCandleCount) {
+            float scale = (float) totalCandleCount / perScreenCandleCount;
+            chart.zoom(scale, 1, totalCandleCount * scale, 0);
+        }
     }
 }

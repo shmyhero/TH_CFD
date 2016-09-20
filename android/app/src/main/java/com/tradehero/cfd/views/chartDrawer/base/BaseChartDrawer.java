@@ -10,9 +10,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by Neko on 16/9/19.
@@ -21,14 +24,13 @@ public abstract class BaseChartDrawer implements IChartDrawer{
     protected float minVal = Float.MAX_VALUE;
     protected float maxVal = Float.MIN_VALUE;
 
-    protected ArrayList<Integer> limitLineAt = new ArrayList<>();
-    protected ArrayList<Calendar> limitLineCalender = new ArrayList<>();
-    protected Calendar nextLineAt = null;
-
     @Override
     public void draw(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException{
+        minVal = Float.MAX_VALUE;
+        maxVal = Float.MIN_VALUE;
 
-        initializeChart(chart);
+        resetChart(chart);
+
         CombinedData data = generateData(chart, stockInfoObject, chartDataList);
         calculateAxis(chart, chartDataList, data);
 
@@ -44,7 +46,18 @@ public abstract class BaseChartDrawer implements IChartDrawer{
      * Override the methods if you want to do something before draw chart.
      * @param chart
      */
-    abstract void initializeChart(CombinedChart chart);
+    protected void resetChart(CombinedChart chart){
+        chart.clear();
+        chart.getXAxis().removeAllLimitLines();
+        chart.getAxisLeft().removeAllLimitLines();
+        chart.getAxisRight().removeAllLimitLines();
+        chart.resetTracking();
+        chart.fitScreen();
+        if(chart.getScaleX() != 1 && chart.getScaleX() > 0) {
+            chart.zoom(1 / chart.getScaleX(), 1, 0, 0);
+        }
+    }
+
 
     /**
      * Override the methods to generate data for chart
@@ -55,12 +68,12 @@ public abstract class BaseChartDrawer implements IChartDrawer{
     abstract CombinedData generateData(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException;
 
     /**
-     * Override the methods to draw the start up gap line. If not, there'll be no start up gap line.
+     * Returns the calender indicates the first gap line. Returns null so that the base drawer will calculate the line by its rule.
      * @param stockInfoObject
      * @param chartDataList
      * @throws JSONException
      */
-    protected void drawStartUpGapLine(JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException{ }
+    protected Calendar getStartUpTimeLine(JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException{ return null;}
 
     /**
      * Override the methods to draw the start up gap line. If not, there'll be no start up gap line.
@@ -71,6 +84,11 @@ public abstract class BaseChartDrawer implements IChartDrawer{
         return false;
     }
 
+    public class LimitLineInfo {
+        public ArrayList<Integer> limitLineAt;
+        public ArrayList<Calendar> limitLineCalender;
+    }
+
     /**
      * Set limit line for x-Axis.
      * Override this method to set limit lines with your rules.
@@ -78,16 +96,18 @@ public abstract class BaseChartDrawer implements IChartDrawer{
      * @param chartDataList
      * @throws JSONException
      */
-    protected void getLimitLine(JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException{
-        limitLineAt = new ArrayList<>();
-        limitLineCalender = new ArrayList<>();
+    protected LimitLineInfo calculateLimitLinesPosition(Calendar startUpLine, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException{
+        ArrayList<Integer> limitLineAt = new ArrayList<>();
+        ArrayList<Calendar> limitLineCalender = new ArrayList<>();
+
+        Calendar nextLineAt = startUpLine;
 
         int firstLine = 0;
         limitLineAt.add(firstLine);
-        limitLineCalender.add(ChartDrawerManager.timeStringToCalendar(chartDataList.getJSONObject(firstLine).getString("time")));
+        limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(firstLine).getString("time")));
 
         for(int i = 0; i < chartDataList.length(); i ++) {
-            Calendar calendar = ChartDrawerManager.timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
+            Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
 
             if (nextLineAt == null) {
                 calendar.add(getGapLineUnit(), getGapLineUnitAddMount());
@@ -106,8 +126,13 @@ public abstract class BaseChartDrawer implements IChartDrawer{
         if (needDrawEndLine(stockInfoObject)) {
             int lastLine = chartDataList.length() - 1;
             limitLineAt.add(lastLine);
-            limitLineCalender.add(ChartDrawerManager.timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
+            limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
         }
+
+        LimitLineInfo info = new LimitLineInfo();
+        info.limitLineAt = limitLineAt;
+        info.limitLineCalender = limitLineCalender;
+        return info;
     }
 
     /**
@@ -119,7 +144,7 @@ public abstract class BaseChartDrawer implements IChartDrawer{
     }
 
     /**
-     * Return the gap line unit for the chart.
+     * Return the gap line unit for the chart. Default is hour.
      * @return
      */
     protected int getGapLineUnit() {
@@ -127,7 +152,7 @@ public abstract class BaseChartDrawer implements IChartDrawer{
     }
 
     /**
-     * Returns the gap line unit add mount.
+     * Returns the count of the gap line which will be skip. Default is 1.
      * @return
      */
     protected int getGapLineUnitAddMount() {
@@ -155,7 +180,7 @@ public abstract class BaseChartDrawer implements IChartDrawer{
      * @param chart
      * @param data
      */
-    public void calculateZoom(CombinedChart chart, CombinedData data) {
+    protected void calculateZoom(CombinedChart chart, CombinedData data) {
         //Do nothing
     }
     //endregion
@@ -167,17 +192,17 @@ public abstract class BaseChartDrawer implements IChartDrawer{
      * @param stockInfoObject
      * @throws JSONException
      */
-    protected void drawPreCloseLine(CombinedChart chart, JSONObject stockInfoObject) throws JSONException{
+    private void drawPreCloseLine(CombinedChart chart, JSONObject stockInfoObject) throws JSONException{
         LimitLine line = new LimitLine((float) stockInfoObject.getDouble("preClose"));
-        line.setLineColor(ChartDrawerManager.CHART_LINE_COLOR);
-        line.setLineWidth(ChartDrawerManager.LINE_WIDTH);
+        line.setLineColor(ChartDrawerConstants.CHART_LINE_COLOR);
+        line.setLineWidth(ChartDrawerConstants.LINE_WIDTH);
         line.enableDashedLine(10f, 10f, 0f);
         line.setTextSize(0f);
 
         chart.getAxisLeft().addLimitLine(line);
     }
 
-    protected void calculateAxis(CombinedChart chart, JSONArray chartDataList, CombinedData data) {
+    private void calculateAxis(CombinedChart chart, JSONArray chartDataList, CombinedData data) {
         chart.getXAxis().setLabelsToSkip(getLablesToSkip(chartDataList));
 
         chart.getXAxis().setValueFormatter(new XAxisValueFormatter() {
@@ -192,41 +217,39 @@ public abstract class BaseChartDrawer implements IChartDrawer{
         chart.getAxisLeft().setAxisMaxValue(maxVal);
     }
 
-    protected void drawLimitLine(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
+    protected interface OnLimitLinesPositionCalculatedHandler{
+        void OnLimitLinesPositionCalculated();
+    }
+
+    private void drawLimitLine(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
         if (needDrawPreCloseLine()){
             drawPreCloseLine(chart, stockInfoObject);
         }
 
         // Set the yAxis lines with 1 hour in between.
-        int gapLineUnit = getGapLineUnit();
-        int gapLineUnitAddMount = getGapLineUnitAddMount();
-
-        nextLineAt = null;
-
-        drawStartUpGapLine(stockInfoObject, chartDataList);
-
+        Calendar startUpLine = getStartUpTimeLine(stockInfoObject, chartDataList);
 
         if (chartDataList.length() > 0) {
-            getLimitLine(stockInfoObject, chartDataList);
+            LimitLineInfo limitLineInfo = calculateLimitLinesPosition(startUpLine, stockInfoObject, chartDataList);
 
             boolean needSkipLabel = false;
-            if (limitLineAt.size() > 10) {
+            if (limitLineInfo.limitLineAt.size() > 10) {
                 needSkipLabel = true;
             }
 
             SimpleDateFormat format = getGapLineFormat();
 
-            for (int i = 0; i < limitLineAt.size(); i++) {
-                int index = limitLineAt.get(i);
-                Calendar calendar = limitLineCalender.get(i);
+            for (int i = 0; i < limitLineInfo.limitLineAt.size(); i++) {
+                int index = limitLineInfo.limitLineAt.get(i);
+                Calendar calendar = limitLineInfo.limitLineCalender.get(i);
 
                 LimitLine gapLine = new LimitLine(index);
-                gapLine.setLineColor(ChartDrawerManager.CHART_LINE_COLOR);
-                gapLine.setLineWidth(ChartDrawerManager.LINE_WIDTH);
+                gapLine.setLineColor(ChartDrawerConstants.CHART_LINE_COLOR);
+                gapLine.setLineWidth(ChartDrawerConstants.LINE_WIDTH);
                 gapLine.enableDashedLine(10f, 0f, 0f);
                 gapLine.setTextSize(8f);
-                gapLine.setTextColor(ChartDrawerManager.CHART_TEXT_COLOR);
-                if (needSkipLabel && i < limitLineAt.size() - 1 && i % 2 == 1) {
+                gapLine.setTextColor(ChartDrawerConstants.CHART_TEXT_COLOR);
+                if (needSkipLabel && i < limitLineInfo.limitLineAt.size() - 1 && i % 2 == 1) {
                     gapLine.setLabel("");
                 } else {
                     gapLine.setLabel(format.format(calendar.getTime()));
@@ -236,5 +259,29 @@ public abstract class BaseChartDrawer implements IChartDrawer{
                 chart.getXAxis().addLimitLine(gapLine);
             }
         }
+    }
+
+    public Calendar timeStringToCalendar(String timeStr) {
+        Calendar calendar = GregorianCalendar.getInstance();
+        String s = timeStr.replace("Z", "+00:00");
+        try {
+            int lastColonPos = s.lastIndexOf(":");
+            s = s.substring(0, lastColonPos) + s.substring(lastColonPos + 1);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+
+            if (s.indexOf(".") > 0) {
+                format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+            }
+
+            Date date = format.parse(s);
+            calendar.setTime(date);
+
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return calendar;
     }
 }

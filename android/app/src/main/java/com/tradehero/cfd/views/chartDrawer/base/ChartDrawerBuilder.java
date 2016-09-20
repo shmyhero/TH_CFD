@@ -11,7 +11,7 @@ import com.tradehero.cfd.views.chartDrawer.WeekChartDrawer;
  * Created by Neko on 16/9/19.
  */
 public class ChartDrawerBuilder {
-    public static IChartDrawer createDrawer(ChartDrawerManager.CHART_TYPE type){
+    public static IChartDrawer createDrawer(ChartDrawerConstants.CHART_TYPE type){
         switch (type){
             case today:
                 return new TodayChartDrawer();

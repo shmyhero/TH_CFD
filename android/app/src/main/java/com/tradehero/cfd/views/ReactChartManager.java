@@ -26,6 +26,9 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.tradehero.cfd.MainActivity;
 import com.tradehero.cfd.R;
+import com.tradehero.cfd.views.chartDrawer.base.ChartDrawerBuilder;
+import com.tradehero.cfd.views.chartDrawer.base.ChartDrawerConstants;
+import com.tradehero.cfd.views.chartDrawer.base.IChartDrawer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,31 +50,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
     private float LINE_WIDTH_PRICE = 1.5f; //行情走势曲线线粗
     private static final String REACT_CLASS = "LineChart";
 
-    private enum CHART_TYPE {
-        today("today"),
-        //        tenM("10m"),
-        twoH("2h"),
-        week("week"),
-        month("month"),
-        fiveM("5m");
-
-        private String name;
-
-        CHART_TYPE(String name) {
-            this.name = name;
-        }
-    }
-
-    ;
-    private CHART_TYPE mChartType = CHART_TYPE.today;
-    private static int CHART_BORDER_COLOR = 0xff497bce;
-    private static int CHART_LINE_COLOR = 0Xff759de2;
-    private static int CHART_TEXT_COLOR = 0Xff70a5ff;
-    private static int TEN_MINUTE_POINT_NUMBER = 600;//60s*10
-
-    private static int CANDEL_NEUTRAL = 0xffffffff;//平白
-    private static int CANDEL_DECREASE = 0xff30c296;//跌绿
-    private static int CANDEL_INCREASE = 0xffe34b4f;//涨红
+    private ChartDrawerConstants.CHART_TYPE mChartType = ChartDrawerConstants.CHART_TYPE.today;
 
     @Override
     protected ReactChart createViewInstance(ThemedReactContext reactContext) {
@@ -97,12 +76,12 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
         chart.getAxisLeft().setDrawGridLines(false);
         chart.getAxisRight().setDrawGridLines(false);
         chart.getXAxis().setDrawGridLines(true);
-        chart.getAxisLeft().setAxisLineColor(CHART_BORDER_COLOR);
-        chart.getAxisRight().setAxisLineColor(CHART_BORDER_COLOR);
-        chart.getXAxis().setAxisLineColor(CHART_BORDER_COLOR);
-        chart.getAxisLeft().setTextColor(CHART_TEXT_COLOR);
-        chart.getAxisRight().setTextColor(CHART_TEXT_COLOR);
-        chart.getXAxis().setTextColor(CHART_TEXT_COLOR);
+        chart.getAxisLeft().setAxisLineColor(ChartDrawerConstants.CHART_BORDER_COLOR);
+        chart.getAxisRight().setAxisLineColor(ChartDrawerConstants.CHART_BORDER_COLOR);
+        chart.getXAxis().setAxisLineColor(ChartDrawerConstants.CHART_BORDER_COLOR);
+        chart.getAxisLeft().setTextColor(ChartDrawerConstants.CHART_TEXT_COLOR);
+        chart.getAxisRight().setTextColor(ChartDrawerConstants.CHART_TEXT_COLOR);
+        chart.getXAxis().setTextColor(ChartDrawerConstants.CHART_TEXT_COLOR);
         chart.getXAxis().setTextSize(8f);
         chart.getAxisLeft().setSpaceTop(20);
         chart.getAxisLeft().setSpaceBottom(20);
@@ -132,6 +111,15 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
 
                 float minVal = Float.MAX_VALUE;
                 float maxVal = Float.MIN_VALUE;
+
+                //TODO: If you want to enable Drawer, undo-comment the following lines.
+                /*
+                IChartDrawer drawer = ChartDrawerBuilder.createDrawer(mChartType);
+                if(drawer != null){
+                    drawer.draw(chart, stockInfoObject, chartDataList);
+                    return;
+                }
+                */
 
 //                if (mChartType == CHART_TYPE.tenM) {
 //                    Calendar firstDate = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
@@ -233,9 +221,9 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
                 // create a dataset and give it a type
                 CandleDataSet set1 = new CandleDataSet(yVals, "DataSet 1");
                 ArrayList<ICandleDataSet> dataSets = new ArrayList<ICandleDataSet>();
-                set1.setNeutralColor(CANDEL_NEUTRAL);//平
-                set1.setDecreasingColor(CANDEL_DECREASE);//跌
-                set1.setIncreasingColor(CANDEL_INCREASE);//涨
+                set1.setNeutralColor(ChartDrawerConstants.CANDEL_NEUTRAL);//平
+                set1.setDecreasingColor(ChartDrawerConstants.CANDEL_DECREASE);//跌
+                set1.setIncreasingColor(ChartDrawerConstants.CANDEL_INCREASE);//涨
                 set1.setIncreasingPaintStyle(Paint.Style.FILL);
                 set1.setDecreasingPaintStyle(Paint.Style.FILL);
                 set1.setShadowColorSameAsCandle(true);
@@ -264,7 +252,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
 
                 CombinedData data = new CombinedData(xVals);
                 float zoom = getZoomValue(xVals.size());
-                if (mChartType == CHART_TYPE.month || mChartType == CHART_TYPE.fiveM) {
+                if (mChartType == ChartDrawerConstants.CHART_TYPE.month || mChartType == ChartDrawerConstants.CHART_TYPE.fiveM) {
                     data.setData(candleData);
                     chart.fitScreen();
                     chart.zoom(zoom, 1.0f, xVals.size() * zoom, 0f);
@@ -297,9 +285,9 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
 
 
                 // Set the xAxis with the prev close price line
-                if (mChartType == CHART_TYPE.today /*|| mChartType == CHART_TYPE.tenM */) {
+                if (mChartType == ChartDrawerConstants.CHART_TYPE.today /*|| mChartType == CHART_TYPE.tenM */) {
                     LimitLine line = new LimitLine((float) stockInfoObject.getDouble("preClose"));
-                    line.setLineColor(CHART_LINE_COLOR);
+                    line.setLineColor(ChartDrawerConstants.CHART_LINE_COLOR);
                     line.setLineWidth(LINE_WIDTH);
                     line.enableDashedLine(10f, 10f, 0f);
                     line.setTextSize(0f);
@@ -309,26 +297,26 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
                 // Set the yAxis lines with 1 hour in between.
                 int gapLineUnit = Calendar.HOUR_OF_DAY;
                 int gapLineUnitAddMount = 1;
-                if (mChartType == CHART_TYPE.today) {
+                if (mChartType == ChartDrawerConstants.CHART_TYPE.today) {
                     gapLineUnit = Calendar.HOUR_OF_DAY;
                 }
 //                else if (mChartType == CHART_TYPE.tenM) {
 //                    gapLineUnit = Calendar.MINUTE;
 //                    gapLineUnitAddMount = 2;
 //                }
-                else if (mChartType == CHART_TYPE.twoH) {
+                else if (mChartType == ChartDrawerConstants.CHART_TYPE.twoH) {
                     gapLineUnit = Calendar.MINUTE;
                     gapLineUnitAddMount = 30;
-                } else if (mChartType == CHART_TYPE.week) {
+                } else if (mChartType == ChartDrawerConstants.CHART_TYPE.week) {
                     gapLineUnit = Calendar.DAY_OF_MONTH;
-                } else if (mChartType == CHART_TYPE.month) {
+                } else if (mChartType == ChartDrawerConstants.CHART_TYPE.month) {
                     gapLineUnit = Calendar.WEEK_OF_MONTH;
-                } else if (mChartType == CHART_TYPE.fiveM) {
+                } else if (mChartType == ChartDrawerConstants.CHART_TYPE.fiveM) {
                     gapLineUnit = Calendar.MINUTE;
                     gapLineUnitAddMount = 60;
                 }
                 Calendar nextLineAt = null;
-                if (mChartType == CHART_TYPE.week) {
+                if (mChartType == ChartDrawerConstants.CHART_TYPE.week) {
                     Calendar lastOpen = timeStringToCalendar(stockInfoObject.getString("lastOpen"));
                     Calendar firstDataDate = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
                     nextLineAt = (Calendar) firstDataDate.clone();
@@ -337,7 +325,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
                     nextLineAt.set(Calendar.MILLISECOND, lastOpen.get(Calendar.MILLISECOND));
 
                     nextLineAt.add(gapLineUnit, 1);
-                } else if (mChartType == CHART_TYPE.month) {
+                } else if (mChartType == ChartDrawerConstants.CHART_TYPE.month) {
                     nextLineAt = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
 
                     nextLineAt.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
@@ -412,7 +400,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
                         }
                     }
 
-                    if (mChartType != CHART_TYPE.week || !stockInfoObject.getBoolean("isOpen")) {
+                    if (mChartType != ChartDrawerConstants.CHART_TYPE.week || !stockInfoObject.getBoolean("isOpen")) {
                         int lastLine = chartDataList.length() - 1;
                         limitLineAt.add(lastLine);
                         limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString(TIME)));
@@ -425,7 +413,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
                     }
 
                     SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-                    if (mChartType == CHART_TYPE.week || mChartType == CHART_TYPE.month) {
+                    if (mChartType == ChartDrawerConstants.CHART_TYPE.week || mChartType == ChartDrawerConstants.CHART_TYPE.month) {
                         format = new SimpleDateFormat("MM/dd");
                     }
 
@@ -434,11 +422,11 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
                         Calendar calendar = limitLineCalender.get(i);
 
                         LimitLine gapLine = new LimitLine(index);
-                        gapLine.setLineColor(CHART_LINE_COLOR);
+                        gapLine.setLineColor(ChartDrawerConstants.CHART_LINE_COLOR);
                         gapLine.setLineWidth(LINE_WIDTH);
                         gapLine.enableDashedLine(10f, 0f, 0f);
                         gapLine.setTextSize(8f);
-                        gapLine.setTextColor(CHART_TEXT_COLOR);
+                        gapLine.setTextColor(ChartDrawerConstants.CHART_TEXT_COLOR);
                         if (needSkipLabel && i < limitLineAt.size() - 1 && i % 2 == 1) {
                             gapLine.setLabel("");
                         } else {
@@ -463,16 +451,16 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
     @ReactProp(name = "colorType")
     public void setColorType(ReactChart chart, int type) {
         if (type == 1) {
-            CHART_BORDER_COLOR = Color.WHITE;
-            CHART_LINE_COLOR = Color.WHITE;
+            ChartDrawerConstants.CHART_BORDER_COLOR = Color.WHITE;
+            ChartDrawerConstants.CHART_LINE_COLOR = Color.WHITE;
         }
     }
 
     @ReactProp(name = "chartType")
     public void setChartType(ReactChart chart, String type) {
-        CHART_TYPE[] allType = CHART_TYPE.values();
+        ChartDrawerConstants.CHART_TYPE[] allType = ChartDrawerConstants.CHART_TYPE.values();
         for (int i = 0; i < allType.length; i++) {
-            if (allType[i].name.equals(type)) {
+            if (allType[i].getName().equals(type)) {
                 mChartType = allType[i];
                 break;
             }
@@ -699,6 +687,6 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
     }
 
     private boolean isCandleChart(){
-        return mChartType == CHART_TYPE.fiveM || mChartType == CHART_TYPE.month;
+        return mChartType == ChartDrawerConstants.CHART_TYPE.fiveM || mChartType == ChartDrawerConstants.CHART_TYPE.month;
     }
 }

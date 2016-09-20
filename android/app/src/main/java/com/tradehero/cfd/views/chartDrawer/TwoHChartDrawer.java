@@ -23,6 +23,6 @@ public class TwoHChartDrawer extends LineStickChartDrawer {
 
     @Override
     public boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException{
-        return !stockInfoObject.getBoolean("isOpen");
+        return true;
     }
 }

@@ -1,7 +1,7 @@
 package com.tradehero.cfd.views.chartDrawer;
 
 import com.tradehero.cfd.views.chartDrawer.base.CandleChartDrawer;
-import com.tradehero.cfd.views.chartDrawer.base.ChartDrawerManager;
+import com.tradehero.cfd.views.chartDrawer.base.ChartDrawerConstants;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,8 +30,8 @@ public class DayCandleChartDrawer extends CandleChartDrawer {
     }
 
     @Override
-    public void drawStartUpGapLine(JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException{
-        Calendar nextLineAt = ChartDrawerManager.timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
+    public Calendar getStartUpTimeLine(JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException{
+        Calendar nextLineAt = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
 
         nextLineAt.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
         nextLineAt.set(Calendar.HOUR_OF_DAY, 8);
@@ -39,10 +39,11 @@ public class DayCandleChartDrawer extends CandleChartDrawer {
         nextLineAt.set(Calendar.MILLISECOND, 0);
 
         nextLineAt.add(getGapLineUnit(), 1);
+        return nextLineAt;
     }
 
     @Override
-    public boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException {
-        return !stockInfoObject.getBoolean("isOpen");
+    public boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException{
+        return true;
     }
 }

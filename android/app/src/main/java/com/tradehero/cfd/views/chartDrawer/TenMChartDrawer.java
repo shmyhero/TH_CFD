@@ -10,7 +10,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.tradehero.cfd.R;
-import com.tradehero.cfd.views.chartDrawer.base.ChartDrawerManager;
+import com.tradehero.cfd.views.chartDrawer.base.ChartDrawerConstants;
 import com.tradehero.cfd.views.chartDrawer.base.LineStickChartDrawer;
 
 import org.json.JSONArray;
@@ -41,7 +41,7 @@ public class TenMChartDrawer extends LineStickChartDrawer {
 
     @Override
     public int getLablesToSkip(JSONArray chartDataList) {
-        return ChartDrawerManager.TEN_MINUTE_POINT_NUMBER;
+        return ChartDrawerConstants.TEN_MINUTE_POINT_NUMBER;
     }
 
     @Override
@@ -49,24 +49,28 @@ public class TenMChartDrawer extends LineStickChartDrawer {
         return !stockInfoObject.getBoolean("isOpen");
     }
 
-    public void getLimitLine(JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException{
-        Calendar firstDate = ChartDrawerManager.timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
-        Calendar lastDate = ChartDrawerManager.timeStringToCalendar(chartDataList.getJSONObject(chartDataList.length() - 1).getString("time"));
+    @Override
+    protected LimitLineInfo calculateLimitLinesPosition(Calendar startUpLine, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
+        ArrayList<Integer> limitLineAt = new ArrayList<>();
+        ArrayList<Calendar> limitLineCalender = new ArrayList<>();
+
+        Calendar firstDate = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
+        Calendar lastDate = timeStringToCalendar(chartDataList.getJSONObject(chartDataList.length() - 1).getString("time"));
         long distance = (lastDate.getTimeInMillis() - firstDate.getTimeInMillis()) / 1000;
 
-        if (distance > ChartDrawerManager.TEN_MINUTE_POINT_NUMBER) {
-            firstDate.add(Calendar.MILLISECOND, (int)(1000 * (distance - ChartDrawerManager.TEN_MINUTE_POINT_NUMBER)));
+        if (distance > ChartDrawerConstants.TEN_MINUTE_POINT_NUMBER) {
+            firstDate.add(Calendar.MILLISECOND, (int)(1000 * (distance - ChartDrawerConstants.TEN_MINUTE_POINT_NUMBER)));
         }
 
         int firstLine = 0;
         limitLineAt.add(firstLine);
         limitLineCalender.add(firstDate);
 
-        nextLineAt = (Calendar) firstDate.clone();
+        Calendar nextLineAt = (Calendar) firstDate.clone();
         nextLineAt.add(getGapLineUnit(), getGapLineUnitAddMount());
 
         for(int i = 0; i < chartDataList.length(); i ++) {
-            Calendar calendar = ChartDrawerManager.timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
+            Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
 
             if (nextLineAt == null) {
                 calendar.add(getGapLineUnit(), getGapLineUnitAddMount());
@@ -83,6 +87,11 @@ public class TenMChartDrawer extends LineStickChartDrawer {
                 limitLineCalender.add(calendar);
             }
         }
+
+        LimitLineInfo limitLineInfo = new LimitLineInfo();
+        limitLineInfo.limitLineAt = limitLineAt;
+        limitLineInfo.limitLineCalender = limitLineCalender;
+        return limitLineInfo;
     }
 
     @Override
@@ -90,13 +99,13 @@ public class TenMChartDrawer extends LineStickChartDrawer {
         ArrayList<String> xVals = new ArrayList<String>();
         ArrayList<Entry> yVals = new ArrayList<Entry>();
 
-        Calendar firstDate = ChartDrawerManager.timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
-        Calendar lastDate = ChartDrawerManager.timeStringToCalendar(chartDataList.getJSONObject(chartDataList.length() - 1).getString("time"));
+        Calendar firstDate = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
+        Calendar lastDate = timeStringToCalendar(chartDataList.getJSONObject(chartDataList.length() - 1).getString("time"));
         long distance = (lastDate.getTimeInMillis() - firstDate.getTimeInMillis()) / 1000;
 
-        if (distance > ChartDrawerManager.TEN_MINUTE_POINT_NUMBER) {
-            firstDate.add(Calendar.MILLISECOND, (int)(1000 * (distance - ChartDrawerManager.TEN_MINUTE_POINT_NUMBER)));
-            distance = ChartDrawerManager.TEN_MINUTE_POINT_NUMBER;
+        if (distance > ChartDrawerConstants.TEN_MINUTE_POINT_NUMBER) {
+            firstDate.add(Calendar.MILLISECOND, (int)(1000 * (distance - ChartDrawerConstants.TEN_MINUTE_POINT_NUMBER)));
+            distance = ChartDrawerConstants.TEN_MINUTE_POINT_NUMBER;
         }
 
         for (int i = 0; i <= distance + 1; i ++) {
@@ -104,7 +113,7 @@ public class TenMChartDrawer extends LineStickChartDrawer {
         }
 
         for (int i = 0; i < chartDataList.length(); i++) {
-            Calendar date = ChartDrawerManager.timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
+            Calendar date = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
 
             long distToStart = (date.getTimeInMillis() - firstDate.getTimeInMillis()) / 1000;
 
@@ -147,7 +156,7 @@ public class TenMChartDrawer extends LineStickChartDrawer {
         // set the line to be drawn like this "- - - - - -"
         set1.enableDashedLine(10f, 0f, 0f);
         set1.setColor(Color.WHITE);
-        set1.setLineWidth(ChartDrawerManager.LINE_WIDTH_PRICE);
+        set1.setLineWidth(ChartDrawerConstants.LINE_WIDTH_PRICE);
         set1.setDrawCircles(true);
         set1.setDrawCircleHole(false);
         set1.setCircleColors(circleColors);

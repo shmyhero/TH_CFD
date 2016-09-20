@@ -192,9 +192,20 @@ var StockDetailPage = React.createClass({
 	},
 
 	loadStockPriceToday: function(showLoading) {
-		var url = NetConstants.GET_STOCK_PRICE_TODAY_API
-		url = url.replace(/<stockCode>/, this.props.stockCode)
-		url = url.replace(/<chartType>/, this.state.chartType)
+		var url = NetConstants.GET_STOCK_PRICE_TODAY_API;
+
+		if(this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE){
+			url = NetConstants.GET_STOCK_KLINE_FIVE_M;
+			url = url.replace(/<securityId>/, this.props.stockCode);
+		}else
+		 {
+			 url = url.replace(/<stockCode>/, this.props.stockCode)
+			 url = url.replace(/<chartType>/, this.state.chartType)
+
+			 if(this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_MONTH){
+			//Wait api
+		}
+	}
 
 		NetworkModule.fetchTHUrl(
 			url,

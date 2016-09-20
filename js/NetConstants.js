@@ -41,6 +41,7 @@ export const GET_ALL_STOCK_ALERT = SERVER_IP + '/api/user/stockAlert/all'
 export const UPDATE_STOCK_ALERT = SERVER_IP + '/api/user/stockAlert'
 export const POST_PUSH_TOKEN = SERVER_IP + '/api/user/pushtoken'
 export const POST_PUSH_TOKEN_AUTH = SERVER_IP + '/api/user/pushtokenauth'
+export const GET_STOCK_KLINE_FIVE_M = SERVER_IP + '/api/quote/<securityId>/kline/5m'
 
 export const GET_USER_DAILY_SIGN_INFO = SERVER_IP + '/api/reward/summary'//获取每日签到页面所需信息（需身份验证）
 export const GET_USER_DAILY_SIGN_MONTH = SERVER_IP + '/api/reward/checkIn/month'//获取当前月份的签到情况(需要身份验证)

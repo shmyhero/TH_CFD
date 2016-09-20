@@ -38,11 +38,11 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
         ArrayList<String> labels = new ArrayList<>();
 
         for (int i = 0; i < chartDataList.length(); i++) {
-            float open = (float)chartDataList.getJSONObject(i).getDouble("Open");
-            float close = (float)chartDataList.getJSONObject(i).getDouble("Close");
+            float open = (float) chartDataList.getJSONObject(i).getDouble("Open");
+            float close = (float) chartDataList.getJSONObject(i).getDouble("Close");
 
-            float high = (float)chartDataList.getJSONObject(i).getDouble("High");
-            float low = (float)chartDataList.getJSONObject(i).getDouble("Low");
+            float high = (float) chartDataList.getJSONObject(i).getDouble("High");
+            float low = (float) chartDataList.getJSONObject(i).getDouble("Low");
 
             yVals1.add(new CandleEntry(i, high, low, open,
                     close));
@@ -89,7 +89,7 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
 
     //TODO: remove this function when api returns "time" instead of "Time".
     @Override
-    protected LimitLineInfo calculateLimitLinesPosition(Calendar startUpLine, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException{
+    protected LimitLineInfo calculateLimitLinesPosition(Calendar startUpLine, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
         ArrayList<Integer> limitLineAt = new ArrayList<>();
         ArrayList<Calendar> limitLineCalender = new ArrayList<>();
 
@@ -99,7 +99,7 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
         limitLineAt.add(firstLine);
         limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(firstLine).getString("Time")));
 
-        for(int i = 0; i < chartDataList.length(); i ++) {
+        for (int i = 0; i < chartDataList.length(); i++) {
             Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("Time"));
 
             if (nextLineAt == null) {
@@ -107,7 +107,7 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
                 nextLineAt = calendar;
             } else if (calendar.after(nextLineAt)) {
 
-                while(calendar.after(nextLineAt)) {
+                while (calendar.after(nextLineAt)) {
                     nextLineAt.add(getGapLineUnit(), getGapLineUnitAddMount());
                 }
 
@@ -130,22 +130,21 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
 
     @Override
     protected void calculateZoom(CombinedChart chart, CombinedData data) {
-        int dpi = chart.getResources().getDisplayMetrics().densityDpi;
-        int totalWidth = chart.getWidth();
+        float density = chart.getResources().getDisplayMetrics().density;
+        float totalWidth = chart.getWidth() / density;
 
-        //Wrong calculation!
-        int candleWidthDP = 5;
-        //int candleSpaceDP = 3;
-        int candleWidth = (candleWidthDP * dpi / 160);
-        //int candleSpace = (candleSpaceDP * dpi / 160);
-        int perScreenCandleCount = totalWidth / (candleWidth /*+ candleSpace*/);
+        int candleWidthDP = 6;
+        int candleSpaceDP = 4;
+        int perScreenCandleCount = (int) (totalWidth - 12 * 2) / (candleWidthDP + candleSpaceDP);
 
-        //Make sure each screen only show 60 candles.
         int totalCandleCount = data.getXValCount();
 
-        if(perScreenCandleCount < totalCandleCount) {
+        if (perScreenCandleCount < totalCandleCount) {
             float scale = (float) totalCandleCount / perScreenCandleCount;
             chart.zoom(scale, 1, totalCandleCount * scale, 0);
+            chart.moveViewToX(totalCandleCount * scale);
         }
     }
+
+
 }

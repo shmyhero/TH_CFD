@@ -22,6 +22,7 @@ class StockChartView: UIView {
 	@IBInspectable var middleLineColor: UIColor = UIColor(hexInt: 0xffffff, alpha: 0.5)
 	
 	var chartDataJson: String! = ""
+	var chartCategory: String! = "Line"
 	
 	var chartData:[ChartData] = []
 	var pointData:[CGPoint] = []
@@ -36,6 +37,8 @@ class StockChartView: UIView {
 	var panPeriod:Double = 0		//time period panned.
 	var lastPanPeriod:Double = 0
 	var currentTimeEndOnPan:NSDate = NSDate()
+	
+	var colorSet:ColorSet = ColorSet()
 
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -77,7 +80,7 @@ class StockChartView: UIView {
 		}
 	}
 	
-// MARK: deal with raw data
+// MARK: deal with raw data from RN
 	var data:String? { // use for RN manager
 		willSet {
 			self.chartDataJson = newValue
@@ -94,7 +97,8 @@ class StockChartView: UIView {
 	var colorType:Int=0 {
 		willSet {
 			self.bgLineColor = newValue == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0x497bce)
-			self.lineColor = newValue == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0xbbceed	)
+			self.lineColor = newValue == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0xbbceed)
+			colorSet = ColorSet.init(type: colorType)
 		}
 	}
 	
@@ -105,22 +109,11 @@ class StockChartView: UIView {
 			showPeriod = newValue == "10m" ? 600 : 0
 			panPeriod = 0
 			lastPanPeriod = 0
+			
+			//todo,
+//			self.chartCategory = "Candles"
 		}
 	}
-	
-//	func shouldShowInView(chartData: ChartData) -> Bool{
-//		var result = true
-//		if (usingRealTimeX) {
-//			let intervalSinceEnd = chartData.time?.timeIntervalSinceDate(currentTimeEndOnPan)
-//			if ( intervalSinceEnd > 0) {
-//				result = false
-//			}
-//			else if (intervalSinceEnd < -showPeriod) {
-//				result = false
-//			}
-//		}
-//		return result
-//	}
 	
 	// MARK: calculation
 	func calculatePoint() {
@@ -137,15 +130,11 @@ class StockChartView: UIView {
 		var maxValue = chartData.reduce(0) { (max, data) -> Double in
 			(max < data.price) ? data.price : max
 		}
-//		var maxValue = chartData.reduce(0) { (max, data) -> Double in
-//			(max < data.price) ? (shouldShowInView(data) ? data.price : max) : max
-//		}
+
 		var minValue = chartData.reduce(100000000.0) { (min, data) -> Double in
 			(min > data.price) ? data.price : min
 		}
-//		var minValue = chartData.reduce(100000000.0) { (min, data) -> Double in
-//			(min > data.price) ? (shouldShowInView(data) ? data.price : min) : min
-//		}
+
 		let preClose = ChartDataManager.singleton.stockData?.preClose
 		if (preClose > 0 && drawPreCloseLine) {
 			maxValue = maxValue < preClose ? preClose! : maxValue
@@ -333,184 +322,194 @@ class StockChartView: UIView {
 			self.calculatePoint()
 		}
 		// draw line chart
+		let context:CGContext! = UIGraphicsGetCurrentContext()
 		if self.chartData.isEmpty {
 			// no data, only draw lines
-			self.drawHorizontalLines(rect)
-			self.drawVerticalLines(rect)
+			let render = BaseRender.init(view: self, rect: rect)
+			render.render(context)
+//			self.drawHorizontalLines(rect)
+//			self.drawVerticalLines(rect)
 		} else {
-			self.drawLineChart(rect)
-			self.drawTimeText(rect)
-		}
-	}
-	
-	func drawHorizontalLines(rect: CGRect) -> Void {
-		let width = rect.width
-		let height = rect.height
-		//Draw horizontal graph lines on the top of everything
-		var linePath = UIBezierPath()
-		let context = UIGraphicsGetCurrentContext()
-		CGContextSaveGState(context)
-		
-//		let size = self.bounds.size
-//		let topBorder:CGFloat = size.height * 0.15
-//		let bottomBorder:CGFloat = size.height * 0.15
-//		//top line
-//		linePath.moveToPoint(CGPoint(x:margin, y: topBorder + 0.5))
-//		linePath.addLineToPoint(CGPoint(x: width - margin, y:topBorder + 0.5))
-//		//bottom line
-//		linePath.moveToPoint(CGPoint(x:margin-0.5, y:height - bottomBorder + 0.5))
-//		linePath.addLineToPoint(CGPoint(x:width - margin+0.5, y:height - bottomBorder + 0.5))
-		
-		//top line
-		linePath.moveToPoint(CGPoint(x:margin, y: topMargin + 0.5))
-		linePath.addLineToPoint(CGPoint(x: width - margin, y:topMargin + 0.5))
-		
-		//bottom line
-		linePath.moveToPoint(CGPoint(x:margin-0.5, y:height - bottomMargin + 0.5))
-		linePath.addLineToPoint(CGPoint(x:width - margin+0.5, y:height - bottomMargin + 0.5))
-		
-		bgLineColor.setStroke()
-		linePath.lineWidth = 1
-		linePath.stroke()
-		
-		if (middleLineY > 0) {
-			linePath = UIBezierPath()
-			//center line
-			let centerY = CGFloat(roundf(Float(middleLineY)))
-			linePath.moveToPoint(CGPoint(x:margin, y: centerY + 0.5))
-			linePath.addLineToPoint(CGPoint(x:width - margin, y: centerY + 0.5))
-			
-			middleLineColor.setStroke()
-			linePath.lineWidth = 1
-			linePath.setLineDash([5,3], count: 2, phase: 0)
-			linePath.stroke()
-		}
-		CGContextRestoreGState(context)
-	}
-	
-	
-	func drawVerticalLines(rect: CGRect) -> Void {
-		let width = rect.width
-		let height = rect.height
-		//Draw horizontal graph lines on the top of everything
-		let linePath = UIBezierPath()
-		let context = UIGraphicsGetCurrentContext()
-		CGContextSaveGState(context)
-		
-		//left line
-		linePath.moveToPoint(CGPoint(x:margin - 0.5, y: topMargin))
-		linePath.addLineToPoint(CGPoint(x:margin - 0.5, y:height - bottomMargin))
-		
-		if !self.chartData.isEmpty {
-			//center lines, calculate time length
-			for i in 0..<self.verticalLinesX.count {
-				let px = self.verticalLinesX[i]
-				linePath.moveToPoint(CGPoint(x: px, y: topMargin))
-				linePath.addLineToPoint(CGPoint(x:px, y:height - bottomMargin))
+			if (self.chartCategory == "Candles") {
+				self.drawCandleChart(rect)
+			}
+			else {
+				let render = LineChartRender.init(view: self, rect: rect)
+				render.render(context)
+//				self.drawLineChart(rect)
+//				self.drawTimeText(rect)
 			}
 		}
-		
-		//right line
-		linePath.moveToPoint(CGPoint(x:width - margin + 0.5, y:topMargin))
-		linePath.addLineToPoint(CGPoint(x:width - margin + 0.5, y:height - bottomMargin))
-
-		bgLineColor.setStroke()
-		linePath.lineWidth = 1
-		linePath.stroke()
-		
-		CGContextRestoreGState(context)
 	}
 	
-	func drawLineChart(rect: CGRect) -> Void {
-		
-		let width = rect.width
-		let height = rect.height
-		
-		// draw the line graph
-		lineColor.setFill()
-		lineColor.setStroke()
-		
-		//set up the points line
-		let graphPath = UIBezierPath()
-		//go to start of line
-		graphPath.moveToPoint(pointData[0])
-		
-		//add points for each item in the graphPoints array
-		//at the correct (x, y) for the point
-		for i in 1..<self.chartData.count {
-			let nextPoint = pointData[i]
-			graphPath.addLineToPoint(nextPoint)
-		}
-		
-		var context = UIGraphicsGetCurrentContext()
-		CGContextSaveGState(context)
-		
-		let clippingPath = graphPath.copy() as! UIBezierPath
-		
-		//3 - add lines to the copied path to complete the clip area
-		clippingPath.addLineToPoint(CGPoint(
-			x: pointData.last!.x,
-			y:height))
-		clippingPath.addLineToPoint(CGPoint(
-			x: pointData[0].x,
-			y:height))
-		clippingPath.closePath()
-		
-		//4 - add the clipping path to the context
-		clippingPath.addClip()
-		
-		let clippingBox:UIBezierPath = UIBezierPath.init(rect: CGRect(x: margin-1, y: topMargin-1, width: width-margin*2+2, height: height-bottomMargin-topMargin+2))
-		clippingBox.addClip()
-		
-		let colors = [startColor.CGColor, endColor.CGColor]
-		//set up the color space
-		let colorSpace = CGColorSpaceCreateDeviceRGB()
-		//set up the color stops
-		let colorLocations:[CGFloat] = [0.0, 1.0]
-		if(self.pointData.count > 1) {
-			// draw gradients
-			let highestYPoint = topLineY
-			let startPoint = CGPoint(x:margin, y: highestYPoint)
-			let endPoint = CGPoint(x:margin, y:height-bottomMargin)
-			
-			//create the gradient
-			let gradient = CGGradientCreateWithColors(colorSpace,
-				colors,
-				colorLocations)
-			
-			CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, .DrawsBeforeStartLocation)
-			CGContextRestoreGState(context)
-		}
-		
-		self.drawHorizontalLines(rect)
-		self.drawVerticalLines(rect)
-		
-		
-		context = UIGraphicsGetCurrentContext()
-		CGContextSaveGState(context)
-		clippingBox.addClip()
-		
-		//draw the line on top of the clipped gradient
-		graphPath.lineWidth = 1.5
-		graphPath.stroke()
-		
-		CGContextRestoreGState(context)
-
-		//Draw the circles on right top of graph stroke
-		
-		let circleColors = [UIColor.whiteColor().CGColor,
-			UIColor(hexInt:0x1954B9, alpha:0.3).CGColor]
-		
-		let pointGradient = CGGradientCreateWithColors(colorSpace,
-			circleColors, colorLocations)
-		
-		let centerPoint = findHighlightPoint()
-		let startRadius: CGFloat = 2
-		let endRadius: CGFloat = 6
-		
-		CGContextDrawRadialGradient(context, pointGradient, centerPoint,
-			startRadius, centerPoint, endRadius, .DrawsBeforeStartLocation)
-	}
+//	func drawHorizontalLines(rect: CGRect) -> Void {
+//		let width = rect.width
+//		let height = rect.height
+//		//Draw horizontal graph lines on the top of everything
+//		var linePath = UIBezierPath()
+//		let context = UIGraphicsGetCurrentContext()
+//		CGContextSaveGState(context)
+//		
+////		let size = self.bounds.size
+////		let topBorder:CGFloat = size.height * 0.15
+////		let bottomBorder:CGFloat = size.height * 0.15
+////		//top line
+////		linePath.moveToPoint(CGPoint(x:margin, y: topBorder + 0.5))
+////		linePath.addLineToPoint(CGPoint(x: width - margin, y:topBorder + 0.5))
+////		//bottom line
+////		linePath.moveToPoint(CGPoint(x:margin-0.5, y:height - bottomBorder + 0.5))
+////		linePath.addLineToPoint(CGPoint(x:width - margin+0.5, y:height - bottomBorder + 0.5))
+//		
+//		//top line
+//		linePath.moveToPoint(CGPoint(x:margin, y: topMargin + 0.5))
+//		linePath.addLineToPoint(CGPoint(x: width - margin, y:topMargin + 0.5))
+//		
+//		//bottom line
+//		linePath.moveToPoint(CGPoint(x:margin-0.5, y:height - bottomMargin + 0.5))
+//		linePath.addLineToPoint(CGPoint(x:width - margin+0.5, y:height - bottomMargin + 0.5))
+//		
+//		bgLineColor.setStroke()
+//		linePath.lineWidth = 1
+//		linePath.stroke()
+//		
+//		if (middleLineY > 0) {
+//			linePath = UIBezierPath()
+//			//center line
+//			let centerY = CGFloat(roundf(Float(middleLineY)))
+//			linePath.moveToPoint(CGPoint(x:margin, y: centerY + 0.5))
+//			linePath.addLineToPoint(CGPoint(x:width - margin, y: centerY + 0.5))
+//			
+//			middleLineColor.setStroke()
+//			linePath.lineWidth = 1
+//			linePath.setLineDash([5,3], count: 2, phase: 0)
+//			linePath.stroke()
+//		}
+//		CGContextRestoreGState(context)
+//	}
+//	
+//	
+//	func drawVerticalLines(rect: CGRect) -> Void {
+//		let width = rect.width
+//		let height = rect.height
+//		//Draw horizontal graph lines on the top of everything
+//		let linePath = UIBezierPath()
+//		let context = UIGraphicsGetCurrentContext()
+//		CGContextSaveGState(context)
+//		
+//		//left line
+//		linePath.moveToPoint(CGPoint(x:margin - 0.5, y: topMargin))
+//		linePath.addLineToPoint(CGPoint(x:margin - 0.5, y:height - bottomMargin))
+//		
+//		if !self.chartData.isEmpty {
+//			//center lines, calculate time length
+//			for i in 0..<self.verticalLinesX.count {
+//				let px = self.verticalLinesX[i]
+//				linePath.moveToPoint(CGPoint(x: px, y: topMargin))
+//				linePath.addLineToPoint(CGPoint(x:px, y:height - bottomMargin))
+//			}
+//		}
+//		
+//		//right line
+//		linePath.moveToPoint(CGPoint(x:width - margin + 0.5, y:topMargin))
+//		linePath.addLineToPoint(CGPoint(x:width - margin + 0.5, y:height - bottomMargin))
+//
+//		bgLineColor.setStroke()
+//		linePath.lineWidth = 1
+//		linePath.stroke()
+//		
+//		CGContextRestoreGState(context)
+//	}
+//	
+//	func drawLineChart(rect: CGRect) -> Void {
+//		
+//		let width = rect.width
+//		let height = rect.height
+//		
+//		// draw the line graph
+//		lineColor.setFill()
+//		lineColor.setStroke()
+//		
+//		//set up the points line
+//		let graphPath = UIBezierPath()
+//		//go to start of line
+//		graphPath.moveToPoint(pointData[0])
+//		
+//		//add points for each item in the graphPoints array
+//		//at the correct (x, y) for the point
+//		for i in 1..<self.chartData.count {
+//			let nextPoint = pointData[i]
+//			graphPath.addLineToPoint(nextPoint)
+//		}
+//		
+//		var context = UIGraphicsGetCurrentContext()
+//		CGContextSaveGState(context)
+//		
+//		let clippingPath = graphPath.copy() as! UIBezierPath
+//		
+//		//3 - add lines to the copied path to complete the clip area
+//		clippingPath.addLineToPoint(CGPoint(
+//			x: pointData.last!.x,
+//			y:height))
+//		clippingPath.addLineToPoint(CGPoint(
+//			x: pointData[0].x,
+//			y:height))
+//		clippingPath.closePath()
+//		
+//		//4 - add the clipping path to the context
+//		clippingPath.addClip()
+//		
+//		let clippingBox:UIBezierPath = UIBezierPath.init(rect: CGRect(x: margin-1, y: topMargin-1, width: width-margin*2+2, height: height-bottomMargin-topMargin+2))
+//		clippingBox.addClip()
+//		
+//		let colors = [startColor.CGColor, endColor.CGColor]
+//		//set up the color space
+//		let colorSpace = CGColorSpaceCreateDeviceRGB()
+//		//set up the color stops
+//		let colorLocations:[CGFloat] = [0.0, 1.0]
+//		if(self.pointData.count > 1) {
+//			// draw gradients
+//			let highestYPoint = topLineY
+//			let startPoint = CGPoint(x:margin, y: highestYPoint)
+//			let endPoint = CGPoint(x:margin, y:height-bottomMargin)
+//			
+//			//create the gradient
+//			let gradient = CGGradientCreateWithColors(colorSpace,
+//				colors,
+//				colorLocations)
+//			
+//			CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, .DrawsBeforeStartLocation)
+//			CGContextRestoreGState(context)
+//		}
+//		
+//		self.drawHorizontalLines(rect)
+//		self.drawVerticalLines(rect)
+//		
+//		
+//		context = UIGraphicsGetCurrentContext()
+//		CGContextSaveGState(context)
+//		clippingBox.addClip()
+//		
+//		//draw the line on top of the clipped gradient
+//		graphPath.lineWidth = 1.5
+//		graphPath.stroke()
+//		
+//		CGContextRestoreGState(context)
+//
+//		//Draw the circles on right top of graph stroke
+//		
+//		let circleColors = [UIColor.whiteColor().CGColor,
+//			UIColor(hexInt:0x1954B9, alpha:0.3).CGColor]
+//		
+//		let pointGradient = CGGradientCreateWithColors(colorSpace,
+//			circleColors, colorLocations)
+//		
+//		let centerPoint = findHighlightPoint()
+//		let startRadius: CGFloat = 2
+//		let endRadius: CGFloat = 6
+//		
+//		CGContextDrawRadialGradient(context, pointGradient, centerPoint,
+//			startRadius, centerPoint, endRadius, .DrawsBeforeStartLocation)
+//	}
 	
 	func drawTimeText(rect: CGRect) -> Void {
 		let height = rect.height
@@ -566,5 +565,96 @@ class StockChartView: UIView {
 			text.drawInRect(rect, withAttributes: attributes)
 			lastX = self.verticalLinesX[i]
 		}
+	}
+	
+	func drawCandleChart(rect: CGRect) -> Void {
+		
+//		let width = rect.width
+//		let height = rect.height
+//		
+//		// draw the line graph
+//		lineColor.setFill()
+//		lineColor.setStroke()
+//		
+//		//set up the points line
+//		let graphPath = UIBezierPath()
+//		//go to start of line
+//		graphPath.moveToPoint(pointData[0])
+//		
+//		//add points for each item in the graphPoints array
+//		//at the correct (x, y) for the point
+//		for i in 1..<self.chartData.count {
+//			let nextPoint = pointData[i]
+//			graphPath.addLineToPoint(nextPoint)
+//		}
+//		
+//		var context = UIGraphicsGetCurrentContext()
+//		CGContextSaveGState(context)
+//		
+//		let clippingPath = graphPath.copy() as! UIBezierPath
+//		
+//		//3 - add lines to the copied path to complete the clip area
+//		clippingPath.addLineToPoint(CGPoint(
+//			x: pointData.last!.x,
+//			y:height))
+//		clippingPath.addLineToPoint(CGPoint(
+//			x: pointData[0].x,
+//			y:height))
+//		clippingPath.closePath()
+//		
+//		//4 - add the clipping path to the context
+//		clippingPath.addClip()
+//		
+//		let clippingBox:UIBezierPath = UIBezierPath.init(rect: CGRect(x: margin-1, y: topMargin-1, width: width-margin*2+2, height: height-bottomMargin-topMargin+2))
+//		clippingBox.addClip()
+//		
+//		let colors = [startColor.CGColor, endColor.CGColor]
+//		//set up the color space
+//		let colorSpace = CGColorSpaceCreateDeviceRGB()
+//		//set up the color stops
+//		let colorLocations:[CGFloat] = [0.0, 1.0]
+//		if(self.pointData.count > 1) {
+//			// draw gradients
+//			let highestYPoint = topLineY
+//			let startPoint = CGPoint(x:margin, y: highestYPoint)
+//			let endPoint = CGPoint(x:margin, y:height-bottomMargin)
+//			
+//			//create the gradient
+//			let gradient = CGGradientCreateWithColors(colorSpace,
+//			                                          colors,
+//			                                          colorLocations)
+//			
+//			CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, .DrawsBeforeStartLocation)
+//			CGContextRestoreGState(context)
+//		}
+//		
+//		self.drawHorizontalLines(rect)
+//		self.drawVerticalLines(rect)
+//		
+//		
+//		context = UIGraphicsGetCurrentContext()
+//		CGContextSaveGState(context)
+//		clippingBox.addClip()
+//		
+//		//draw the line on top of the clipped gradient
+//		graphPath.lineWidth = 1.5
+//		graphPath.stroke()
+//		
+//		CGContextRestoreGState(context)
+//		
+//		//Draw the circles on right top of graph stroke
+//		
+//		let circleColors = [UIColor.whiteColor().CGColor,
+//		                    UIColor(hexInt:0x1954B9, alpha:0.3).CGColor]
+//		
+//		let pointGradient = CGGradientCreateWithColors(colorSpace,
+//		                                               circleColors, colorLocations)
+//		
+//		let centerPoint = findHighlightPoint()
+//		let startRadius: CGFloat = 2
+//		let endRadius: CGFloat = 6
+//		
+//		CGContextDrawRadialGradient(context, pointGradient, centerPoint,
+//		                            startRadius, centerPoint, endRadius, .DrawsBeforeStartLocation)
 	}
 }

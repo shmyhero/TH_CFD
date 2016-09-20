@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.EditText;
@@ -53,13 +54,16 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
     private static final int REQUEST_PERMISSION = 0;
     public static MainActivity mInstance;
+    public static float SCREEN_W;
+    public static float SCREEN_H;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.20.103:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.141:8081").apply();
+
 
         super.onCreate(null);
 
@@ -87,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         } catch (Exception e) {
         }
 
+        getScreenWH();
     }
 
     @Override
@@ -311,8 +316,8 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     }
 
     //播放声音index
-    public void playSound(int index ) {
-        try{
+    public void playSound(int index) {
+        try {
             int loop = 1;
             AudioManager am = (AudioManager) this
                     .getSystemService(mInstance.AUDIO_SERVICE);
@@ -321,8 +326,8 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
             float volumnRatio = volumnCurrent / audioMaxVolumn;
 
             sp.play(spMap.get(index), volumnRatio, volumnRatio, 1, loop, 1f);
-        }catch(Exception e){
-           Log.e("","play sound error " + e.toString());
+        } catch (Exception e) {
+            Log.e("", "play sound error " + e.toString());
         }
 
     }
@@ -339,13 +344,24 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
     }
 
-    public void passIsProductServerToRN(){
+    public void passIsProductServerToRN() {
         ReactContext context = mReactInstanceManager.getCurrentReactContext();
         if (context != null) {
             Boolean isProductEnvironment = BuildConfig.IS_PRODUCT_ENVIRONMENT;
             NativeDataModule.passDataToRN(context, "isProductServer", isProductEnvironment.toString());
             Log.d("IsProductServer", "NativeDataModule IsProductServer: " + mClientIDTeTui);
         }
+    }
+
+
+    public void getScreenWH() {
+
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        SCREEN_W = dm.widthPixels/dm.density;
+        SCREEN_H = dm.heightPixels/dm.density;
+
+        Log.d("MainActivity", "SrceenW:" + SCREEN_W + " ScreenH:" + SCREEN_H);
 
     }
 }

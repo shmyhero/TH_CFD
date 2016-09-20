@@ -1,6 +1,7 @@
 package com.tradehero.cfd.views;
 
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.github.mikephil.charting.formatter.XAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ICandleDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.tradehero.cfd.MainActivity;
 import com.tradehero.cfd.R;
 
 import org.json.JSONArray;
@@ -174,15 +176,42 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
                     xVals.add((i) + "");
                 }
                 for (int i = 0; i < chartDataList.length(); i++) {
-                    float val = (float) (chartDataList.getJSONObject(i).getDouble("p"));
-                    if (val > maxVal) {
-                        maxVal = val;
+
+
+                    if(isCandleChart()){
+                        float open = (float) (chartDataList.getJSONObject(i).getDouble("Open"));
+                        float close = (float) (chartDataList.getJSONObject(i).getDouble("Close"));
+                        float high = (float) (chartDataList.getJSONObject(i).getDouble("High"));
+                        float low = (float) (chartDataList.getJSONObject(i).getDouble("Low"));
+
+
+                        if (high > maxVal) {
+                            maxVal = high;
+                        }
+                        if (high < minVal) {
+                            minVal = high;
+                        }
+
+                        if (low > maxVal) {
+                            maxVal = low;
+                        }
+                        if (low < minVal) {
+                            minVal = low;
+                        }
+
+                        yVals.add(new CandleEntry(i, high, low, open, close));
+
+                    }else {
+                        float val = (float) (chartDataList.getJSONObject(i).getDouble("p"));
+                        yVals2.add(new Entry(val, i));
+                        if (val > maxVal) {
+                            maxVal = val;
+                        }
+                        if (val < minVal) {
+                            minVal = val;
+                        }
                     }
-                    if (val < minVal) {
-                        minVal = val;
-                    }
-                    yVals.add(new CandleEntry(i, val + 2, val - 2, val + 1, val - 1));
-                    yVals2.add(new Entry(val, i));
+
                 }
 
                 minVal = Math.min(minVal, (float) stockInfoObject.getDouble("preClose"));
@@ -207,7 +236,10 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
                 set1.setNeutralColor(CANDEL_NEUTRAL);//平
                 set1.setDecreasingColor(CANDEL_DECREASE);//跌
                 set1.setIncreasingColor(CANDEL_INCREASE);//涨
+                set1.setIncreasingPaintStyle(Paint.Style.FILL);
+                set1.setDecreasingPaintStyle(Paint.Style.FILL);
                 set1.setShadowColorSameAsCandle(true);
+
                 dataSets.add(set1); // add the datasets
                 CandleData candleData = new CandleData(xVals, dataSets);
                 candleData.setValueTextSize(0f);
@@ -236,7 +268,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
                     data.setData(candleData);
                     chart.fitScreen();
                     chart.zoom(zoom, 1.0f, xVals.size() * zoom, 0f);
-
+                    chart.moveViewToX(xVals.size()*zoom);
                 } else {
                     data.setData(lineData);
                     chart.zoom(1/chart.getScaleX(), 1.0f, 0f, 0f);
@@ -291,6 +323,9 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
                     gapLineUnit = Calendar.DAY_OF_MONTH;
                 } else if (mChartType == CHART_TYPE.month) {
                     gapLineUnit = Calendar.WEEK_OF_MONTH;
+                } else if (mChartType == CHART_TYPE.fiveM) {
+                    gapLineUnit = Calendar.MINUTE;
+                    gapLineUnitAddMount = 60;
                 }
                 Calendar nextLineAt = null;
                 if (mChartType == CHART_TYPE.week) {
@@ -353,12 +388,15 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
 //                        }
 //
 //                    } else {
+
+                    String TIME = isCandleChart()?"Time":"time";
+
                     int firstLine = 0;
                     limitLineAt.add(firstLine);
-                    limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(firstLine).getString("time")));
+                    limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(firstLine).getString(TIME)));
 
                     for (int i = 0; i < chartDataList.length(); i++) {
-                        Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
+                        Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString(TIME));
 
                         if (nextLineAt == null) {
                             calendar.add(gapLineUnit, gapLineUnitAddMount);
@@ -377,7 +415,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
                     if (mChartType != CHART_TYPE.week || !stockInfoObject.getBoolean("isOpen")) {
                         int lastLine = chartDataList.length() - 1;
                         limitLineAt.add(lastLine);
-                        limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
+                        limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString(TIME)));
                     }
 //                    }
 
@@ -643,9 +681,13 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
     }
 
 
-    private static final int SIZE_IN_SCREEN = 40;
+    private static int SIZE_IN_SCREEN = 36;
 
     private static float getZoomValue(float length) {
+
+        float SW = MainActivity.SCREEN_W;
+        SIZE_IN_SCREEN = (int)((SW - 12*2)/10);
+
         float zoom = 1.0f;
         if (length < SIZE_IN_SCREEN) {
             zoom = 1.0f;
@@ -654,5 +696,9 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
         }
         Log.d("", "getZoomValue: length = " + length + " size = " + SIZE_IN_SCREEN + " zoom = " + zoom);
         return zoom;
+    }
+
+    private boolean isCandleChart(){
+        return mChartType == CHART_TYPE.fiveM || mChartType == CHART_TYPE.month;
     }
 }

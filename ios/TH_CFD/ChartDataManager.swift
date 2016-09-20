@@ -5,6 +5,7 @@
 //  Created by william on 16/3/23.
 //  Copyright © 2016年 Facebook. All rights reserved.
 //
+//  This class is used to manager data for RN and iOS.
 
 class ChartData: NSObject {
 	var price: Double = 0

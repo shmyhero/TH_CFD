@@ -99,4 +99,9 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
     public String getLableBlank() {
         return "          ";
     }
+
+    @Override
+    protected void calculateZoom(CombinedChart chart, CombinedData data) {
+        chart.setVisibleXRangeMinimum(1);
+    }
 }

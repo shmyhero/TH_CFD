@@ -41,7 +41,14 @@ export function removeUserData(){
   LogicData.removeMeData();
   StorageModule.removeOwnStocksData();
   LogicData.removeOwnStocksData();
-  
+
+  var date = new Date().getDateString();
+  var data = {
+    "lastDate": date,
+    "isCheckInDialogShown": false
+  };
+  StorageModule.setLastSuperPriorityHintData(JSON.stringify(data));
+
   //Restart the web socket.
   //WebSocketModule.stop();
   WebSocketModule.start();

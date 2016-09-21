@@ -13,3 +13,17 @@ Date.prototype.Format = function (fmt) { //author: meizz
     if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
 }
+
+Date.prototype.getDateString = function(){
+  var dd = this.getDate();
+  var mm = this.getMonth()+1; //January is 0!
+  var yyyy = this.getFullYear();
+  if(dd<10) {
+      dd='0'+dd
+  }
+  if(mm<10) {
+      mm='0'+mm
+  }
+  today = mm+'/'+dd+'/'+yyyy;
+  return today;
+}

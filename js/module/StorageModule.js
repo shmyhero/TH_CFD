@@ -12,6 +12,7 @@ var SEARCH_HISTORY_KEY = '@TH_CFD:searchHistory';
 var BANNER_STORAGE_KEY = '@TH_CFD:bannerData';
 var GUIDE_STORAGE_KEY = '@TH_CFD:guideData';
 var TUTORIAL_KEY = '@TH_CFD:tutorialData';
+var LAST_SUPER_PRIORITY_HINT_DATE = '@TH_CFD:lastSuperPriorityDateData'
 
 export async function loadUserData() {
 	try {
@@ -165,6 +166,23 @@ export async function loadTutorial() {
 	// {trade: true, openclose: false}
 	try {
 		var value = await AsyncStorage.getItem(TUTORIAL_KEY);
+		return value;
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function setLastSuperPriorityHintData(data){
+  try {
+		await AsyncStorage.setItem(LAST_SUPER_PRIORITY_HINT_DATE, data)
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function loadLastSuperPriorityHintData(){
+  try {
+		var value = await AsyncStorage.getItem(LAST_SUPER_PRIORITY_HINT_DATE);
 		return value;
 	} catch (error) {
 		console.log('AsyncStorage error: ' + error.message);

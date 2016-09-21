@@ -53,10 +53,12 @@ var SharePage = require('./SharePage')
 var LogicData = require('../LogicData')
 var DaySignPage = require('./DaySignPage')
 var RegisterSuccessPage = require('./RegisterSuccessPage')
+var SuperPriorityHintPage = require('./SuperPriorityHintPage')
 
 var TalkingdataModule = require('../module/TalkingdataModule')
 var WebSocketModule = require('../module/WebSocketModule');
 var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
+var StorageModule = require('../module/StorageModule')
 
 var TutorialPage = require('./TutorialPage');
 var OpenAccountPages = [
@@ -91,7 +93,6 @@ export let MAIN_PAGE_ROUTE = 'main'
 export let HOME_PAGE_ROUTE = 'homepage'
 export let LANDING_ROUTE = 'landing'
 export let LOGIN_ROUTE = 'login'
-export let LOGIN_AND_POP_ROUTE = 'loginAndPop'
 export let UPDATE_USER_INFO_ROUTE = 'updateUserInfo'
 export let MY_HOME_ROUTE = 'myhome'
 export let MY_NOTIFICATION_ROUTE = 'myNotifications'
@@ -146,6 +147,7 @@ export var showProgress
 var recevieDataSubscription = null
 var SHARE_PAGE = 'SharePage'
 var REGISTER_SUCCESS_DIALOG = 'RegisterSuccessDialog'
+var SUPER_PRIORITY_HINT = 'SuperPriorityHint'
 var isTabbarShown = true
 var MainPage = React.createClass({
 	getInitialState: function() {
@@ -528,6 +530,11 @@ var MainPage = React.createClass({
 	componentDidMount: function() {
 		this.initTabbarEvent()
 
+		var currentNavigatorIndex = LogicData.getTabIndex();
+		if(_navigators && _navigators.length > currentNavigatorIndex){
+			_navigator = _navigators[currentNavigatorIndex];
+		}
+
 		var url = Linking.getInitialURL().then((url) => {
 			if (url) {
 				console.log('Initial url is: ' + url);
@@ -548,6 +555,40 @@ var MainPage = React.createClass({
 			)
 		}
 		this.showNotification()
+
+		/*
+		Data format:
+		{
+			"lastDate": "9/20/2016",
+			"isCheckInDialogShown": true
+		};
+		*/
+
+
+		StorageModule.loadLastSuperPriorityHintData()
+		.then((lastDateInfo) => {
+			var needShowDialog = false;
+			if(lastDateInfo){
+				//lastDateInfo = `{"lastDate":"09/19/2016","isCheckInDialogShown":false}`
+				var data = JSON.parse(lastDateInfo);
+				var lastDate = data["lastDate"];
+				var userData = LogicData.getUserData();
+	      var isLogin = Object.keys(userData).length != 0;
+				var today = new Date().getDateString();
+
+				//Dialog will only show up once a day.
+				//If user login today, the dialog won't show until the next day.
+				if(today != lastDate && ((!isLogin) || (isLogin && !data["isCheckInDialogShown"]))){
+					needShowDialog = true;
+				}
+			}else{
+				needShowDialog = true;
+			}
+
+			if(needShowDialog){
+				this.refs[SUPER_PRIORITY_HINT].show();
+			}
+		})
 	},
 
 	componentWillUnmount: function() {
@@ -640,6 +681,17 @@ var MainPage = React.createClass({
 		);
 	},
 
+	getNavigator: function(){
+		return _navigator;
+	},
+
+	renderSuperPriorityHintPage: function(){
+		return (
+			<SuperPriorityHintPage ref={SUPER_PRIORITY_HINT}
+				getNavigator={this.getNavigator}/>
+		);
+	},
+
 	gotoStockDetail: function(pushData) {
 
 		var currentNavigatorIndex = LogicData.getTabIndex();
@@ -726,6 +778,7 @@ var MainPage = React.createClass({
 					<LoadingIndicator ref='progressBar'/>
 					{this.state.showTutorial ? <TutorialPage type={this.state.tutorialType} hideTutorial={this.hideTutorial}/> : null }
 					{this.renderRegisterSuccessPage()}
+					{this.renderSuperPriorityHintPage()}
       	</View>
 		);
 	}

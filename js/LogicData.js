@@ -14,6 +14,7 @@ var certificateIdCardInfo = null;
 var getui_token = '';
 var pushData;
 var tabIndex = 0;
+var lastSuperPriorityHintDate = '';
 
 var LogicData = {
 
@@ -183,6 +184,14 @@ var LogicData = {
 
 	getCertificateIdCardInfo: function() {
 		return certificateIdCardInfo
+	},
+
+	setLastSuperPriorityHintData(data){
+		lastSuperPriorityHintDate = data;
+	},
+
+	getLastSuperPriorityHintData: function(){
+		return lastSuperPriorityHintDate;
 	}
 };
 

@@ -8,7 +8,17 @@
 
 protocol LineChartDataProvider: BaseDataProvider
 {
+	func hasData() ->Bool
 	func findHighlightPoint() -> CGPoint
+	func showPreCloseLine() -> Bool
+	func periodShowTime() -> Double
+	func periodPanTime() -> Double
+	func pointData() -> [CGPoint]
+	func yPosOfMiddleLine() ->CGFloat
+	func xValuesOfVerticalLine() -> [CGFloat]
+	func timesOnBottom() -> [NSDate]
+	func firstTime() -> NSDate?
+	func lastTime() -> NSDate?
 }
 
 class LineData: BaseData {
@@ -23,6 +33,19 @@ class LineData: BaseData {
 class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 	var _lineData = [LineData]()
 	var stockData:StockData?
+	
+	var _pointData:[CGPoint] = []
+	var verticalLinesX:[CGFloat] = []
+	var verticalTimes:[NSDate] = []
+	var middleLineY:CGFloat = 0
+	var topLineY:CGFloat = 0
+	var bottomLineY:CGFloat = 0
+	
+	var usingRealTimeX = false
+	var drawPreCloseLine = false
+	var showPeriod:Double = 0		//only work when usingRealTimeX
+	var panPeriod:Double = 0		//time period panned.
+	var lastPanPeriod:Double = 0
 	
 	override func parseJson() {
 		// demo:{\"lastOpen\":\"2016-03-24T13:31:00Z\",\"preClose\":100.81,\"longPct\":0.415537619225466,\"id\":14993,\"symbol\":\"CVS UN\",\"name\":\"CVS\",\"open\":0,\"last\":101.48,\"isOpen\":false,\"priceData\":[{\"p\":100.56,\"time\":\"2016-03-24T13:30:00Z\"},{\"p\":100.84,\"time\":\"2016-03-24T13:31:00Z\"}]}
@@ -49,6 +72,20 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 		}
 	}
 	
+	override func setChartType(newValue:String) {
+		super.setChartType(newValue)
+		
+		usingRealTimeX = newValue == "10m"
+		drawPreCloseLine = newValue == "today"
+		showPeriod = newValue == "10m" ? 600 : 0
+		panPeriod = 0
+		lastPanPeriod = 0
+	}
+	
+	override func isEmpty() -> Bool {
+		return _lineData.isEmpty
+	}
+	
 	override func calculateData() {
 		let width = _rect.width
 		let height = _rect.height
@@ -70,7 +107,7 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 		}
 		
 		let preClose = self.stockData?.preClose
-		if (preClose > 0 && _renderView.drawPreCloseLine) {
+		if (preClose > 0 && drawPreCloseLine) {
 			maxValue = maxValue < preClose ? preClose! : maxValue
 			minValue = minValue > preClose ? preClose! : minValue
 		}
@@ -101,26 +138,26 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 			return y
 		}
 		if (preClose > 0 && maxValue > minValue) {
-			_renderView.middleLineY = (height-topBorder-bottomBorder) * CGFloat(maxValue - preClose!) / CGFloat(maxValue - minValue)+topBorder
+			middleLineY = (height-topBorder-bottomBorder) * CGFloat(maxValue - preClose!) / CGFloat(maxValue - minValue)+topBorder
 		}
 		else {
-			_renderView.middleLineY = height/2
+			middleLineY = height/2
 		}
 		
-		if !_renderView.drawPreCloseLine {
-			_renderView.middleLineY = 0		// do not draw this line
+		if !drawPreCloseLine {
+			middleLineY = 0		// do not draw this line
 		}
 		
-		_renderView.pointData = []
+		_pointData = []
 		
-		if _renderView.usingRealTimeX {
+		if usingRealTimeX {
 			var timeStart:NSDate! = _lineData.first!.time
 			let timeEnd:NSDate! = _renderView.currentTimeEndOnPan
 			var timeGap:NSTimeInterval = timeEnd!.timeIntervalSinceDate(timeStart!)
-			if _renderView.showPeriod > 0 && timeGap > _renderView.showPeriod {
+			if showPeriod > 0 && timeGap > showPeriod {
 				// can pan
-				timeGap = _renderView.showPeriod
-				timeStart = NSDate(timeInterval: -_renderView.showPeriod, sinceDate: timeEnd)
+				timeGap = showPeriod
+				timeStart = NSDate(timeInterval: -showPeriod, sinceDate: timeEnd)
 			}
 			
 			let columnTimeXPoint = { (pointTime:NSDate) -> CGFloat in
@@ -133,7 +170,7 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 				let x = columnTimeXPoint(_lineData[i].time!)
 				let y = columnYPoint(_lineData[i].price)
 				let point:CGPoint = CGPoint(x:x, y:y)
-				_renderView.pointData.append(point)
+				_pointData.append(point)
 			}
 		}
 		else {
@@ -141,7 +178,7 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 				let x = columnXPoint(i)
 				let y = columnYPoint(_lineData[i].price)
 				let point:CGPoint = CGPoint(x:x, y:y)
-				_renderView.pointData.append(point)
+				_pointData.append(point)
 			}
 		}
 		
@@ -154,27 +191,27 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 		if (width == 0 || _lineData.isEmpty) {
 			return
 		}
-		_renderView.verticalLinesX = []
-		_renderView.verticalTimes = []
+		verticalLinesX = []
+		verticalTimes = []
 		
 		let gaps = ["today":3600.0, "2h":1800.0, "week":3600.0*24, "month":3600.0*24*7, "10m":120.0]
 		let gap = gaps[_renderView.chartType]!		// gap between two lines
 		
 		if let time0:NSDate? = _lineData.first?.time {
-			if _renderView.usingRealTimeX {
+			if usingRealTimeX {
 				var timeStart:NSDate! = time0!
 				let timeEnd:NSDate! = _renderView.currentTimeEndOnPan
 				var timeGap:NSTimeInterval = timeEnd!.timeIntervalSinceDate(timeStart!)
-				if _renderView.showPeriod > 0 && timeGap > _renderView.showPeriod {
-					timeStart = NSDate(timeInterval: -_renderView.showPeriod, sinceDate: timeEnd)
+				if showPeriod > 0 && timeGap > showPeriod {
+					timeStart = NSDate(timeInterval: -showPeriod, sinceDate: timeEnd)
 				}
 				let timePeriod:NSTimeInterval! = timeEnd.timeIntervalSinceDate(timeStart!)
 				var time:NSDate! = NSDate(timeInterval: -gap, sinceDate: timeEnd)
 				timeGap = time.timeIntervalSinceDate(timeStart!)
 				while timeGap > 0 {
 					let x:CGFloat = _renderView.margin + (width - _renderView.margin*2) * CGFloat(timeGap / timePeriod)
-					_renderView.verticalLinesX.insert(x+0.5, atIndex: 0)
-					_renderView.verticalTimes.insert(time, atIndex: 0)
+					verticalLinesX.insert(x+0.5, atIndex: 0)
+					verticalTimes.insert(time, atIndex: 0)
 					time = NSDate(timeInterval: -gap, sinceDate: time)
 					timeGap = time.timeIntervalSinceDate(timeStart!)
 				}
@@ -206,9 +243,9 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 					if let time:NSDate? = _lineData[i].time {
 						let interval:NSTimeInterval = time!.timeIntervalSinceDate(startTime!)
 						if interval > gap*0.99 {
-							_renderView.verticalLinesX.append(_renderView.pointData[i].x+0.5)
+							verticalLinesX.append(_pointData[i].x+0.5)
 							startTime = time
-							_renderView.verticalTimes.append(self._lineData[i].time!)
+							verticalTimes.append(self._lineData[i].time!)
 						}
 					}
 				}
@@ -216,11 +253,16 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 		}
 	}
 	
+//	override func needUpdate() -> Bool {
+//		return _lineData.count > 0 && _pointData.isEmpty
+//	}
+	
+// MARK: delegate
 	func findHighlightPoint() -> CGPoint {
 		let width = _rect.width
 //		let height = _rect.height
-		var point = _renderView.pointData.last!
-		if(_renderView.panPeriod != 0) {
+		var point = _pointData.last!
+		if(panPeriod != 0) {
 			var firstLatePointIndex = 0
 			var firstLateInterval:NSTimeInterval = 0
 			for i in 0..<_lineData.count {
@@ -233,19 +275,59 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 				}
 			}
 			if firstLatePointIndex == 0 {
-				point = _renderView.pointData.first!
+				point = _pointData.first!
 			}
-			else if(firstLateInterval == _renderView.panPeriod) {
-				point = _renderView.pointData[firstLatePointIndex]
+			else if(firstLateInterval == panPeriod) {
+				point = _pointData[firstLatePointIndex]
 			}
 			else {
 				let lastInterval:NSTimeInterval = _lineData[firstLatePointIndex-1].time!.timeIntervalSinceDate((_lineData.last?.time)!)
-				let y0 = _renderView.pointData[firstLatePointIndex-1].y
-				let y1 = _renderView.pointData[firstLatePointIndex].y
-				let y = y0+(y1-y0)*CGFloat(_renderView.panPeriod-lastInterval)/CGFloat(firstLateInterval-lastInterval)
+				let y0 = _pointData[firstLatePointIndex-1].y
+				let y1 = _pointData[firstLatePointIndex].y
+				let y = y0+(y1-y0)*CGFloat(panPeriod-lastInterval)/CGFloat(firstLateInterval-lastInterval)
 				point = CGPoint(x: width - _renderView.margin, y: y)
 			}
 		}
 		return point
+	}
+	
+	func hasData() -> Bool {
+		return isEmpty()
+	}
+	
+	func showPreCloseLine() -> Bool {
+		return drawPreCloseLine
+	}
+	
+	func periodShowTime() ->Double {
+		return showPeriod
+	}
+	
+	func periodPanTime() ->Double {
+		return panPeriod
+	}
+	
+	func pointData() -> [CGPoint] {
+		return _pointData
+	}
+	
+	func yPosOfMiddleLine() ->CGFloat {
+		return middleLineY
+	}
+	
+	func xValuesOfVerticalLine() -> [CGFloat] {
+		return verticalLinesX
+	}
+	
+	func timesOnBottom() -> [NSDate] {
+		return verticalTimes
+	}
+	
+	func firstTime() -> NSDate? {
+		return _lineData.first?.time
+	}
+	
+	func lastTime() -> NSDate? {
+		return _lineData.last?.time
 	}
 }

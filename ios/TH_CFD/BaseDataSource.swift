@@ -8,6 +8,7 @@
 
 protocol BaseDataProvider : class
 {
+	func chartType() -> String
 }
 
 class BaseData: NSObject {
@@ -26,6 +27,8 @@ class BaseDataSource: NSObject, BaseDataProvider {
 	var _rect = CGRectZero
 	var _renderView:StockChartView
 	
+	var _chartType:String="today"
+	
 	init(json:String, rect:CGRect, view:StockChartView) {
 		_jsonString = json
 		_rect = rect
@@ -33,14 +36,30 @@ class BaseDataSource: NSObject, BaseDataProvider {
 		super.init()
 		
 		self.parseJson()
-		self.calculateData()
 	}
 	
 	func parseJson() {
 		// child class should override this function to init data
 	}
 	
+	func isEmpty() -> Bool {
+		return _data.isEmpty
+	}
+	
 	func calculateData() {
 		
+	}
+	
+	func setChartType(type:String) {
+		_chartType = type
+	}
+	
+//	func needUpdate() -> Bool {
+//		return false
+//	}
+	
+// MARK: BaseDataProvider
+	func chartType() -> String {
+		return _chartType
 	}
 }

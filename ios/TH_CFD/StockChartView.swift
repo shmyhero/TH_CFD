@@ -15,22 +15,22 @@ class StockChartView: UIView {
 	var topMargin:CGFloat = 2.0
 	var bottomMargin:CGFloat = 15.0
 	
-	var chartDataJson: String! = ""
-	var chartCategory: String! = "Line"
+//	var chartDataJson: String! = ""
+//	var chartCategory: String! = "Line"
 	
-	var chartData:[ChartData] = []
-	var pointData:[CGPoint] = []
-	var verticalLinesX:[CGFloat] = []
-	var verticalTimes:[NSDate] = []
-	var middleLineY:CGFloat = 0
-	var topLineY:CGFloat = 0
-	var bottomLineY:CGFloat = 0
+//	var chartData:[ChartData] = []
+//	var pointData:[CGPoint] = []
+//	var verticalLinesX:[CGFloat] = []
+//	var verticalTimes:[NSDate] = []
+//	var middleLineY:CGFloat = 0
+//	var topLineY:CGFloat = 0
+//	var bottomLineY:CGFloat = 0
 	
-	var usingRealTimeX = false
-	var drawPreCloseLine = false
-	var showPeriod:Double = 0		//only work when usingRealTimeX
-	var panPeriod:Double = 0		//time period panned.
-	var lastPanPeriod:Double = 0
+//	var usingRealTimeX = false
+//	var drawPreCloseLine = false
+//	var showPeriod:Double = 0		//only work when usingRealTimeX
+//	var panPeriod:Double = 0		//time period panned.
+//	var lastPanPeriod:Double = 0
 	var currentTimeEndOnPan:NSDate = NSDate()
 	
 	var colorSet:ColorSet = ColorSet()
@@ -50,48 +50,57 @@ class StockChartView: UIView {
 	
 // MARK: action
 	func pan(sender: UIPanGestureRecognizer) {
-		if(showPeriod > 0) {
-			let size = self.bounds.size
-			let translation : CGPoint = sender.translationInView(self)
-			let rate = showPeriod/Double(size.width-margin*2)
-			panPeriod = lastPanPeriod - Double(translation.x) * rate	//pan right means go earlier
-						let timeStart:NSDate! = chartData.first!.time
-			let timeEnd:NSDate! = chartData.last!.time
-			let maxPanPeriod = timeStart.timeIntervalSinceDate(timeEnd) + showPeriod	//this is a minus value
-			if(panPeriod < maxPanPeriod) {
-				panPeriod = maxPanPeriod
-			}
-			if(panPeriod > 0) {
-				panPeriod = 0
-			}
-			currentTimeEndOnPan = NSDate(timeInterval: panPeriod, sinceDate: chartData.last!.time!)
-			
-			dataSource?.calculateData()
-			self.setNeedsDisplay()
-			if (sender.state == UIGestureRecognizerState.Ended) {
-				if(panPeriod > -1) {
-					panPeriod = 0
-				}
-				lastPanPeriod = panPeriod
-			}
-		}
+		//todo
+//		if(showPeriod > 0) {
+//			let size = self.bounds.size
+//			let translation : CGPoint = sender.translationInView(self)
+//			let rate = showPeriod/Double(size.width-margin*2)
+//			panPeriod = lastPanPeriod - Double(translation.x) * rate	//pan right means go earlier
+//						let timeStart:NSDate! = chartData.first!.time
+//			let timeEnd:NSDate! = chartData.last!.time
+//			let maxPanPeriod = timeStart.timeIntervalSinceDate(timeEnd) + showPeriod	//this is a minus value
+//			if(panPeriod < maxPanPeriod) {
+//				panPeriod = maxPanPeriod
+//			}
+//			if(panPeriod > 0) {
+//				panPeriod = 0
+//			}
+//			currentTimeEndOnPan = NSDate(timeInterval: panPeriod, sinceDate: chartData.last!.time!)
+//			
+//			dataSource?.calculateData()
+//			self.setNeedsDisplay()
+//			if (sender.state == UIGestureRecognizerState.Ended) {
+//				if(panPeriod > -1) {
+//					panPeriod = 0
+//				}
+//				lastPanPeriod = panPeriod
+//			}
+//		}
 	}
 	
 // MARK: deal with raw data from RN
 	var data:String? { // use for RN manager
 		willSet {
 			if (newValue != nil) {
-				if (chartType != "5m"){
+				if (chartType == "5m"){
+					dataSource = CandleChartDataSource.init(json:newValue!, rect: self.bounds, view:self)
+				}
+				else {
 					dataSource = LineChartDataSource.init(json:newValue!, rect: self.bounds, view:self)
 				}
 			}
-			
-			self.chartDataJson = newValue
-			self.chartData = ChartDataManager.singleton.chartDataFromJson(self.chartDataJson)
-			if panPeriod > -1 && chartData.count > 0 && lastPanPeriod == 0 {
-				// using 2 point as get end mark
-				currentTimeEndOnPan = (chartData.last?.time)!
+			else {
+				dataSource = BaseDataSource.init(json: "", rect: self.bounds, view: self)
 			}
+			
+//			self.chartDataJson = newValue
+//			self.chartData = ChartDataManager.singleton.chartDataFromJson(self.chartDataJson)
+//			if panPeriod > -1 && chartData.count > 0 && lastPanPeriod == 0 {
+//				// using 2 point as get end mark
+//				currentTimeEndOnPan = (chartData.last?.time)!
+//			}
+			
+			dataSource?.setChartType(chartType)
 			dataSource?.calculateData()
 			self.setNeedsDisplay()
 		}
@@ -103,36 +112,34 @@ class StockChartView: UIView {
 		}
 	}
 	
-	var chartType:String="today" {
-		willSet {
-			usingRealTimeX = newValue == "10m"
-			drawPreCloseLine = newValue == "today"
-			showPeriod = newValue == "10m" ? 600 : 0
-			panPeriod = 0
-			lastPanPeriod = 0
-		}
-	}
+	var chartType:String="today"
+//	{
+//		willSet {
+//			usingRealTimeX = newValue == "10m"
+//			drawPreCloseLine = newValue == "today"
+//			showPeriod = newValue == "10m" ? 600 : 0
+//			panPeriod = 0
+//			lastPanPeriod = 0
+//		}
+//	}
 	
 // MARK: render
 	override func drawRect(rect: CGRect) {
-		if (self.pointData.isEmpty) {
-			dataSource?.calculateData()
-		}
 		// draw line chart
 		let context:CGContext! = UIGraphicsGetCurrentContext()
-		if self.chartData.isEmpty {
+		if dataSource == nil || dataSource!.isEmpty() {
 			// no data, only draw box
 			render = BaseRender.init(view: self, rect: rect)
 			render!.render(context)
 		} else {
-			if (self.chartCategory == "Candles") {
+			if dataSource!.isKindOfClass(CandleChartDataSource) {
 				render = CandleChartRender.init(view: self, rect: rect)
 				render!.render(context)
 			}
 			else {
 				render = LineChartRender.init(view: self, rect: rect)
-				render!.render(context)
 				render?.dataProvider = dataSource
+				render!.render(context)
 			}
 		}
 	}

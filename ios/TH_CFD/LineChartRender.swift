@@ -15,6 +15,11 @@ class LineChartRender: BaseRender {
 	}
 	
 	override func render(context: CGContext) {
+		if (lineDataProvider == nil) {
+			return
+		}
+		let pointData = lineDataProvider!.pointData()
+		
 		let width = _rect.width
 		let height = _rect.height
 		
@@ -25,12 +30,12 @@ class LineChartRender: BaseRender {
 		//set up the points line
 		let graphPath = UIBezierPath()
 		//go to start of line
-		graphPath.moveToPoint(_renderView.pointData[0])
+		graphPath.moveToPoint(pointData[0])
 		
 		//add points for each item in the graphPoints array
 		//at the correct (x, y) for the point
-		for i in 1..<_renderView.chartData.count {
-			let nextPoint = _renderView.pointData[i]
+		for i in 1..<pointData.count {
+			let nextPoint = pointData[i]
 			graphPath.addLineToPoint(nextPoint)
 		}
 		
@@ -40,10 +45,10 @@ class LineChartRender: BaseRender {
 		
 		//3 - add lines to the copied path to complete the clip area
 		clippingPath.addLineToPoint(CGPoint(
-			x: _renderView.pointData.last!.x,
+			x: pointData.last!.x,
 			y:height))
 		clippingPath.addLineToPoint(CGPoint(
-			x: _renderView.pointData[0].x,
+			x: pointData[0].x,
 			y:height))
 		clippingPath.closePath()
 		
@@ -58,7 +63,7 @@ class LineChartRender: BaseRender {
 		let colorSpace = CGColorSpaceCreateDeviceRGB()
 		//set up the color stops
 		let colorLocations:[CGFloat] = [0.0, 1.0]
-		if(_renderView.pointData.count > 1) {
+		if(pointData.count > 1) {
 			// draw gradients
 			let highestYPoint = height*0.12//topLineY
 			let startPoint = CGPoint(x:_margin, y: highestYPoint)
@@ -93,25 +98,28 @@ class LineChartRender: BaseRender {
 		let pointGradient = CGGradientCreateWithColors(colorSpace,
 		                                               circleColors, colorLocations)
 		
-		if let centerPoint = lineDataProvider?.findHighlightPoint() {
-			let startRadius: CGFloat = 2
-			let endRadius: CGFloat = 6
-			
-			CGContextDrawRadialGradient(context, pointGradient, centerPoint,
-										startRadius, centerPoint, endRadius, .DrawsBeforeStartLocation)
-		}
+		let centerPoint = lineDataProvider!.findHighlightPoint()
+		let startRadius: CGFloat = 2
+		let endRadius: CGFloat = 6
+		
+		CGContextDrawRadialGradient(context, pointGradient, centerPoint,
+									startRadius, centerPoint, endRadius, .DrawsBeforeStartLocation)
 		
 		self.drawExtraText(context)
 	}
 	
 	func drawMiddleLines(context: CGContext) {
+		if (lineDataProvider == nil) {
+			return
+		}
 		CGContextSaveGState(context)
 		//center line
 		var linePath = UIBezierPath()
 		let width = _rect.width
 		let height = _rect.height
-		if (_renderView.middleLineY > 0) {
-			let centerY = CGFloat(roundf(Float(_renderView.middleLineY)))
+		let middleLineY = lineDataProvider?.yPosOfMiddleLine()
+		if (middleLineY > 0) {
+			let centerY = CGFloat(roundf(Float(middleLineY!)))
 			linePath.moveToPoint(CGPoint(x:_margin, y: centerY + 0.5))
 			linePath.addLineToPoint(CGPoint(x:width - _margin, y: centerY + 0.5))
 			
@@ -123,10 +131,11 @@ class LineChartRender: BaseRender {
 		
 		// vertical lines
 		linePath = UIBezierPath()
-		if !_renderView.chartData.isEmpty {
+		if !lineDataProvider!.hasData() {
 			//center lines, calculate time length
-			for i in 0..<_renderView.verticalLinesX.count {
-				let px = _renderView.verticalLinesX[i]
+			let verticalLinesX = lineDataProvider!.xValuesOfVerticalLine()
+			for i in 0..<verticalLinesX.count {
+				let px = verticalLinesX[i]
 				linePath.moveToPoint(CGPoint(x: px, y: _topMargin))
 				linePath.addLineToPoint(CGPoint(x:px, y:height - _bottomMargin))
 			}
@@ -138,30 +147,35 @@ class LineChartRender: BaseRender {
 	}
 	
 	override func drawExtraText(context:CGContext) -> Void {
+		if (lineDataProvider == nil) {
+			return
+		}
 		let height = _rect.height
 		let width = _rect.width
 		let dateFormatter = NSDateFormatter()
 		var textWidth:CGFloat = 28.0
-		if _renderView.chartType == "week" || _renderView.chartType == "month" {
+		let chartType = lineDataProvider!.chartType()
+		if chartType == "week" || chartType == "month" {
 			dateFormatter.dateFormat = "MM/dd"
 		}
-		else if _renderView.chartType == "10m" {
+		else if chartType == "10m" {
 			dateFormatter.dateFormat = "HH:mm:ss"
 			textWidth = 35.0
 		}
 		else {
 			dateFormatter.dateFormat = "HH:mm"
 		}
-		var timeStart:NSDate = (_renderView.chartData.first?.time)!
-		var timeEnd:NSDate = (_renderView.chartData.last?.time)!
-		if(_renderView.showPeriod > 0) {
+		var timeStart:NSDate = (lineDataProvider!.firstTime())!
+		var timeEnd:NSDate = (lineDataProvider!.lastTime())!
+		let showPeriod = lineDataProvider!.periodShowTime()
+		if (showPeriod > 0) {
 			timeEnd = _renderView.currentTimeEndOnPan
 			let timeGap:NSTimeInterval = timeEnd.timeIntervalSinceDate(timeStart)
-			if timeGap > _renderView.showPeriod {
-				timeStart = NSDate(timeInterval: -_renderView.showPeriod, sinceDate: timeEnd)
+			if timeGap > showPeriod {
+				timeStart = NSDate(timeInterval: -showPeriod, sinceDate: timeEnd)
 			}
 			else {
-				timeStart = NSDate(timeInterval: _renderView.panPeriod, sinceDate: timeStart)
+				timeStart = NSDate(timeInterval: lineDataProvider!.periodPanTime(), sinceDate: timeStart)
 			}
 		}
 		
@@ -182,14 +196,16 @@ class LineChartRender: BaseRender {
 		rightText.drawInRect(CGRect(x: width-textWidth, y: textY, width: textWidth, height: 10), withAttributes: attributes)
 		
 		var lastX:CGFloat = textWidth/2	//center x of last text
-		for i in 0..<_renderView.verticalTimes.count {
-			if _renderView.verticalLinesX[i] < lastX+textWidth-5 || _renderView.verticalLinesX[i]>width-textWidth*1.5+8 {
+		let verticalLinesX = lineDataProvider!.xValuesOfVerticalLine()
+		let verticalTimes = lineDataProvider!.timesOnBottom()
+		for i in 0..<verticalTimes.count {
+			if verticalLinesX[i] < lastX+textWidth-5 || verticalLinesX[i]>width-textWidth*1.5+8 {
 				continue
 			}
-			let text:NSString = dateFormatter.stringFromDate(_renderView.verticalTimes[i])
-			let rect = CGRect(x: _renderView.verticalLinesX[i]-textWidth/2, y: textY, width: textWidth, height: 10)
+			let text:NSString = dateFormatter.stringFromDate(verticalTimes[i])
+			let rect = CGRect(x: verticalLinesX[i]-textWidth/2, y: textY, width: textWidth, height: 10)
 			text.drawInRect(rect, withAttributes: attributes)
-			lastX = _renderView.verticalLinesX[i]
+			lastX = verticalLinesX[i]
 		}
 	}
 }

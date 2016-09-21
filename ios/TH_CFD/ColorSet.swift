@@ -19,5 +19,6 @@ class ColorSet: NSObject {
 		_type = type;
 		bgLineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0x497bce)
 		lineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0xbbceed)
+		super.init()
 	}
 }

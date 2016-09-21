@@ -14,15 +14,19 @@ class BaseRender: NSObject {
 	
 	var _colorSet:ColorSet
 	var _renderView:StockChartView
+	weak var dataProvider:BaseDataProvider?
 	
 	init(view:StockChartView, rect:CGRect) {
 		_rect = rect
 		_renderView = view
 		_colorSet = view.colorSet
+		dataProvider = view.dataSource
+		super.init()
 	}
 	
 	func render(context: CGContext) {
 		self.drawBorderLines(context)
+		self.drawExtraText(context)
 	}
 	
 	func drawBorderLines(context: CGContext) -> Void {
@@ -55,4 +59,7 @@ class BaseRender: NSObject {
 		CGContextRestoreGState(context)
 	}
 	
+	func drawExtraText(context:CGContext) -> Void {
+		
+	}
 }

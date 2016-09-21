@@ -42,4 +42,9 @@ public class ReactChart extends CombinedChart {
         // No-op, terminate `requestLayout` here, UIManagerModule handles laying out children and
         // `layout` is called on all RN-managed views by `NativeViewHierarchyManager`
     }
+
+    @Override
+    public void computeScroll(){
+        return;
+    }
 }

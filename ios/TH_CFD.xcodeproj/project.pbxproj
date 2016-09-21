@@ -18,6 +18,9 @@
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
+		3D02CECF1D922B3100BA9160 /* BaseDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D02CECE1D922B3100BA9160 /* BaseDataSource.swift */; };
+		3D02CEE21D9237C000BA9160 /* LineChartDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D02CEE11D9237C000BA9160 /* LineChartDataSource.swift */; };
+		3D02CEE41D926C7700BA9160 /* CandleChartDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D02CEE31D926C7700BA9160 /* CandleChartDataSource.swift */; };
 		3D2A16D91D78047200FEB181 /* libGeTuiSdk-1.4.3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A16D81D78047200FEB181 /* libGeTuiSdk-1.4.3.a */; };
 		3D2A16EC1D7804E600FEB181 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A16EB1D7804E600FEB181 /* JavaScriptCore.framework */; };
 		3D2A16EE1D7804F600FEB181 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A16ED1D7804F600FEB181 /* CoreLocation.framework */; };
@@ -320,6 +323,9 @@
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		22F5EC88B9014CDA85FEBFBA /* RCTHotUpdate.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTHotUpdate.xcodeproj; path = "../node_modules/react-native-update/ios/RCTHotUpdate.xcodeproj"; sourceTree = "<group>"; };
 		283667F11BD6472A9A1A8BAE /* libRCTWeChat.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTWeChat.a; sourceTree = "<group>"; };
+		3D02CECE1D922B3100BA9160 /* BaseDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseDataSource.swift; path = TH_CFD/BaseDataSource.swift; sourceTree = "<group>"; };
+		3D02CEE11D9237C000BA9160 /* LineChartDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LineChartDataSource.swift; path = TH_CFD/LineChartDataSource.swift; sourceTree = "<group>"; };
+		3D02CEE31D926C7700BA9160 /* CandleChartDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CandleChartDataSource.swift; path = TH_CFD/CandleChartDataSource.swift; sourceTree = "<group>"; };
 		3D2A16D71D78047200FEB181 /* GeTuiSdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeTuiSdk.h; sourceTree = "<group>"; };
 		3D2A16D81D78047200FEB181 /* libGeTuiSdk-1.4.3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libGeTuiSdk-1.4.3.a"; sourceTree = "<group>"; };
 		3D2A16EB1D7804E600FEB181 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -1466,6 +1472,9 @@
 				3DC7D1CA1D90DBE2001B2406 /* BaseRender.swift */,
 				3D5080D41D9123E400914327 /* LineChartRender.swift */,
 				3D5080D61D91385C00914327 /* CandleChartRender.swift */,
+				3D02CECE1D922B3100BA9160 /* BaseDataSource.swift */,
+				3D02CEE11D9237C000BA9160 /* LineChartDataSource.swift */,
+				3D02CEE31D926C7700BA9160 /* CandleChartDataSource.swift */,
 			);
 			name = charts;
 			sourceTree = "<group>";
@@ -1886,6 +1895,7 @@
 				3DB9F20A1D64483B00DC5C63 /* MQKeyboardController.m in Sources */,
 				3DB9F1FC1D64483B00DC5C63 /* MEIQIA_FBSquareFont.m in Sources */,
 				3DB9F1D01D64483B00DC5C63 /* MQTextMessage.m in Sources */,
+				3D02CECF1D922B3100BA9160 /* BaseDataSource.swift in Sources */,
 				3DB9F1FB1D64483B00DC5C63 /* MEIQIA_FBLCDFontView.m in Sources */,
 				3DB9F1C61D64483B00DC5C63 /* MQChatViewController.m in Sources */,
 				3DB9F1F01D64483B00DC5C63 /* MQChatFileUtil.m in Sources */,
@@ -1999,8 +2009,10 @@
 				3DB9F1E71D64483B00DC5C63 /* MQTextMessageCell.m in Sources */,
 				3DB9F2071D64483B00DC5C63 /* amrFileCodec.mm in Sources */,
 				3DB9F20E1D64483B00DC5C63 /* MQRecorderView.m in Sources */,
+				3D02CEE21D9237C000BA9160 /* LineChartDataSource.swift in Sources */,
 				3DB9F1F91D64483B00DC5C63 /* MEIQIA_FBFontSymbol.m in Sources */,
 				3DB9F1E21D64483B00DC5C63 /* MQEventMessageCell.m in Sources */,
+				3D02CEE41D926C7700BA9160 /* CandleChartDataSource.swift in Sources */,
 				3D6A24181C9C026200FF1306 /* SwiftExtensions.swift in Sources */,
 				3DB9F2441D64493900DC5C63 /* MQMessageFormViewService.m in Sources */,
 				3DB9F1E41D64483B00DC5C63 /* MQImageMessageCell.m in Sources */,

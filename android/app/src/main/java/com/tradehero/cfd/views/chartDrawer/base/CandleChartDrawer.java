@@ -44,8 +44,7 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
             float high = (float) chartDataList.getJSONObject(i).getDouble("high");
             float low = (float) chartDataList.getJSONObject(i).getDouble("low");
 
-            yVals1.add(new CandleEntry(i, high, low, open,
-                    close));
+            yVals1.add(new CandleEntry(i, high, low, open,close));
 
             labels.add(chartDataList.getJSONObject(i).getString("time"));
         }
@@ -81,6 +80,7 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
 
         maxVal = data.getYMax();
         minVal = data.getYMin();
+
         minVal -= (maxVal - minVal) / 5;
         maxVal += (maxVal - minVal) / 5;
 
@@ -135,14 +135,17 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
 
         int candleWidthDP = 6;
         int candleSpaceDP = 4;
-        int perScreenCandleCount = (int) (totalWidth - 12 * 2) / (candleWidthDP + candleSpaceDP);
+        float perScreenCandleCount = (totalWidth - 12 * 2) / (candleWidthDP + candleSpaceDP);
 
         int totalCandleCount = data.getXValCount();
 
         if (perScreenCandleCount < totalCandleCount) {
+            chart.setVisibleXRangeMinimum(1 / perScreenCandleCount);
             float scale = (float) totalCandleCount / perScreenCandleCount;
             chart.zoom(scale, 1, totalCandleCount * scale, 0);
             chart.moveViewToX(totalCandleCount * scale);
+        } else {
+            chart.setVisibleXRangeMinimum(perScreenCandleCount);
         }
     }
 

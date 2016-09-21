@@ -29,12 +29,13 @@ var content_image_4 = require("../../images/super_priority_icon_4.png")
 var top_image = require("../../images/super_priority_top.png")
 var background_image = require("../../images/super_priority_bg.png")
 
-var DIALOG_WIDTH = width - 30;
+var DIALOG_WIDTH = width - 50;
+var CONTENT_TOP_MARGIN = 30
 var NOT_LOGIN_DIALOG_HEIGHT = DIALOG_WIDTH /670 * 760;
 var LOGIN_DIALOG_HEIGHT = DIALOG_WIDTH /670 * 514;
 var HEADER_IMAGE_WIDTH = DIALOG_WIDTH;
-var HEADER_IMAGE_HEIGHT = HEADER_IMAGE_WIDTH / 646 * 349;
-var DIALOG_OFFSET = HEADER_IMAGE_HEIGHT / 2;
+var HEADER_IMAGE_HEIGHT = HEADER_IMAGE_WIDTH / 646 * 323;
+var DIALOG_OFFSET = HEADER_IMAGE_HEIGHT - CONTENT_TOP_MARGIN;
 var BACKGROUD_LIGHT_HEIGHT = height / 3 * 2;
 
 var SuperPriorityHintPage = React.createClass({
@@ -236,7 +237,7 @@ var SuperPriorityHintPage = React.createClass({
             onPress={() => {
               this.hide();
             }}>
-            <Image source={background_image} style={{position:'absolute', height:300, width: width }}/>
+            <Image source={background_image} style={{position:'absolute', height:300, width: width}}/>
             <TouchableOpacity
   						style={[styles.dialogContainer, {height: dialogContainerHeight}]}
               activeOpacity={1}
@@ -307,8 +308,8 @@ const styles = StyleSheet.create({
 		flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
-		marginTop: HEADER_IMAGE_HEIGHT * 0.35,
-    padding: 10,
+		marginTop: 30,
+		paddingBottom: 26,
 	},
   bodyImage:{
     flex: 1,
@@ -316,12 +317,12 @@ const styles = StyleSheet.create({
   },
   bodyRowContainer:{
     flexDirection: 'row',
-    flex:1
+    flex:1,
+    paddingTop: 26,
   },
   bodyContent:{
     flex:1,
     alignItems:'center',
-    paddingTop: 26,
   },
   bodyTextContainer:{
     marginTop:23,
@@ -335,17 +336,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#ff3333'
   },
-	titleText:{
-		fontWeight: 'bold',
-		fontSize: 20,
-		color: ColorConstants.TITLE_BLUE,
-	},
-	descriptionText:{
-		marginTop: 12,
-		fontSize: 18,
-	},
   buttonContainer:{
-    margin: 12,
+    marginLeft: 20,
+		marginRight: 20,
+		marginBottom: 23,
     height: 43,
     alignItems: 'stretch',
     flexDirection: 'row',

@@ -201,13 +201,12 @@ var StockDetailPage = React.createClass({
 		if(this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE){
 			url = NetConstants.GET_STOCK_KLINE_FIVE_M;
 			url = url.replace(/<securityId>/, this.props.stockCode);
-		} else {
+		}else if(this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_MONTH){
+			url = NetConstants.GET_STOCK_KLINE_DAY;
+			url = url.replace(/<securityId>/, this.props.stockCode);
+		}else {
 			 url = url.replace(/<stockCode>/, this.props.stockCode)
 			 url = url.replace(/<chartType>/, this.state.chartType)
-
-			 if(this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_MONTH){
-				//Wait api
-			}
 		}
 
 		NetworkModule.fetchTHUrl(
@@ -233,8 +232,9 @@ var StockDetailPage = React.createClass({
 
 					for (var i = 0; i < tempStockInfo.priceData.length; i ++) {
 						var price = 0;
-						if(this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE){
-							price = tempStockInfo.priceData[i].Close
+						if(this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE||
+						   this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_MONTH){
+							price = tempStockInfo.priceData[i].close
 						}else{
 							price = tempStockInfo.priceData[i].p
 						}

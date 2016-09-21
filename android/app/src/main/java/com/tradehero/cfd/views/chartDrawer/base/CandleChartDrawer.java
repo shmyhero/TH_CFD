@@ -38,16 +38,16 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
         ArrayList<String> labels = new ArrayList<>();
 
         for (int i = 0; i < chartDataList.length(); i++) {
-            float open = (float) chartDataList.getJSONObject(i).getDouble("Open");
-            float close = (float) chartDataList.getJSONObject(i).getDouble("Close");
+            float open = (float) chartDataList.getJSONObject(i).getDouble("open");
+            float close = (float) chartDataList.getJSONObject(i).getDouble("close");
 
-            float high = (float) chartDataList.getJSONObject(i).getDouble("High");
-            float low = (float) chartDataList.getJSONObject(i).getDouble("Low");
+            float high = (float) chartDataList.getJSONObject(i).getDouble("high");
+            float low = (float) chartDataList.getJSONObject(i).getDouble("low");
 
             yVals1.add(new CandleEntry(i, high, low, open,
                     close));
 
-            labels.add(chartDataList.getJSONObject(i).getString("Time"));
+            labels.add(chartDataList.getJSONObject(i).getString("time"));
         }
 
         CandleDataSet set1 = new CandleDataSet(yVals1, "Data Set");
@@ -97,10 +97,10 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
 
         int firstLine = 0;
         limitLineAt.add(firstLine);
-        limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(firstLine).getString("Time")));
+        limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(firstLine).getString("time")));
 
         for (int i = 0; i < chartDataList.length(); i++) {
-            Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("Time"));
+            Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
 
             if (nextLineAt == null) {
                 calendar.add(getGapLineUnit(), getGapLineUnitAddMount());

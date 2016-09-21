@@ -42,7 +42,7 @@ public class FiveMCandleChartDrawer extends CandleChartDrawer {
         //Only return the hour.
         for(int i = 0; i < chartDataList.length(); i ++) {
             //TODO: use "time" if api returns it instead of Uppercase one.
-            Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("Time"));
+            Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
             if (calendar.getTime().getMinutes() == 0){
                 limitLineAt.add(i);
                 limitLineCalender.add(calendar);

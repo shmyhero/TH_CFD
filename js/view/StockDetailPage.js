@@ -348,6 +348,24 @@ var StockDetailPage = React.createClass({
 	},
 
 	pressChartHeaderTab: function(type) {
+		switch(type){
+			case NetConstants.PARAMETER_CHARTTYPE_TODAY:
+				TalkingdataModule.trackEvent(TalkingdataModule.STOCK_DETAIL_TAB_TODAY);
+				break;
+			case NetConstants.PARAMETER_CHARTTYPE_TWO_HOUR:
+				TalkingdataModule.trackEvent(TalkingdataModule.STOCK_DETAIL_TAB_TWOH);
+				break;
+			case NetConstants.PARAMETER_CHARTTYPE_WEEK:
+				TalkingdataModule.trackEvent(TalkingdataModule.STOCK_DETAIL_TAB_FIVED);
+				break;
+			case NetConstants.PARAMETER_CHARTTYPE_MONTH:
+				TalkingdataModule.trackEvent(TalkingdataModule.STOCK_DETAIL_TAB_DAY_CANDLE);
+				break;
+			case NetConstants.PARAMETER_CHARTTYPE_5_MINUTE:
+				TalkingdataModule.trackEvent(TalkingdataModule.STOCK_DETAIL_TAB_FIVEM_CANDLE);
+				break;
+		}
+
 		this.setState({
 			chartType: type
 		})

@@ -116,8 +116,6 @@ var SuperPriorityHintPage = React.createClass({
   },
 
 	_goToCheckInPage: function(){
-		TalkingdataModule.trackEvent(TalkingdataModule.CHECK_IN_ACTIVITY_EVENT);
-
 		var navigator = this.props.getNavigator();
 		navigator.push({
 			name:MainPage.DAY_SIGN_ROUTE,

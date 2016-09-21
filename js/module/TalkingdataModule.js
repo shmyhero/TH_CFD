@@ -32,6 +32,12 @@ export const SEARCH_AND_ADD_TO_MY_LIST_EVENT = '搜索添加自选'
 export const SEARCH_AND_LOOK_EVENT = '搜索进入'
 export const SEARCH_WITH_NO_RESULT_EVENT = '搜索无结果'
 
+export const STOCK_DETAIL_TAB_TODAY = '选择分时图'
+export const STOCK_DETAIL_TAB_TWOH = '选择2小时图'
+export const STOCK_DETAIL_TAB_FIVED = '选择5日图'
+export const STOCK_DETAIL_TAB_DAY_CANDLE = '选择日K图'
+export const STOCK_DETAIL_TAB_FIVEM_CANDLE = '选择5分钟图'
+
 export const MOVIE_ACTIVITY_EVENT = "点击影票来袭入口按钮"
 export const CHECK_IN_ACTIVITY_EVENT = "点击每日签到入口按钮"
 export const BANNER_EVENT = "访问BANNER"

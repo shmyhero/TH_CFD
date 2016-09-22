@@ -65,7 +65,7 @@ class StockChartView: UIView {
 	var data:String? { // use for RN manager
 		willSet {
 			if (newValue != nil) {
-				if (chartType == "5m" || chartType == "month"){
+				if (chartType == "5m" || chartType == "day"){
 					dataSource = CandleChartDataSource.init(json:newValue!, rect: self.bounds)
 				}
 				else {
@@ -108,6 +108,7 @@ class StockChartView: UIView {
 		} else {
 			if dataSource!.isKindOfClass(CandleChartDataSource) {
 				render = CandleChartRender.init(view: self, rect: rect)
+				render?.dataProvider = dataSource
 				render!.render(context)
 			}
 			else {

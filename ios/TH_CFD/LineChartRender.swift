@@ -119,7 +119,7 @@ class LineChartRender: BaseRender {
 		let height = _rect.height
 		let middleLineY = lineDataProvider?.yPosOfMiddleLine()
 		if (middleLineY > 0) {
-			let centerY = CGFloat(roundf(Float(middleLineY!)))
+			let centerY = round(middleLineY!)
 			linePath.moveToPoint(CGPoint(x:_margin, y: centerY + 0.5))
 			linePath.addLineToPoint(CGPoint(x:width - _margin, y: centerY + 0.5))
 			
@@ -133,7 +133,7 @@ class LineChartRender: BaseRender {
 		linePath = UIBezierPath()
 		if !lineDataProvider!.hasData() {
 			//center lines, calculate time length
-			let verticalLinesX = lineDataProvider!.xValuesOfVerticalLine()
+			let verticalLinesX = lineDataProvider!.xVerticalLines()
 			for i in 0..<verticalLinesX.count {
 				let px = verticalLinesX[i]
 				linePath.moveToPoint(CGPoint(x: px, y: _topMargin))
@@ -196,7 +196,7 @@ class LineChartRender: BaseRender {
 		rightText.drawInRect(CGRect(x: width-textWidth, y: textY, width: textWidth, height: 10), withAttributes: attributes)
 		
 		var lastX:CGFloat = textWidth/2	//center x of last text
-		let verticalLinesX = lineDataProvider!.xValuesOfVerticalLine()
+		let verticalLinesX = lineDataProvider!.xVerticalLines()
 		let verticalTimes = lineDataProvider!.timesOnBottom()
 		for i in 0..<verticalTimes.count {
 			if verticalLinesX[i] < lastX+textWidth-5 || verticalLinesX[i]>width-textWidth*1.5+8 {

@@ -40,7 +40,7 @@ var tabData = [
 			// {"type":NetConstants.PARAMETER_CHARTTYPE_TEN_MINUTE, "name":'10分钟'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_TWO_HOUR, "name":'2小时'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_WEEK, "name":'5日'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_MONTH, "name":'日K'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_DAY, "name":'日K'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'5分钟'},]
 var didFocusSubscription = null;
 var updateStockInfoTimer = null;
@@ -201,7 +201,7 @@ var StockDetailPage = React.createClass({
 		if(this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE){
 			url = NetConstants.GET_STOCK_KLINE_FIVE_M;
 			url = url.replace(/<securityId>/, this.props.stockCode);
-		}else if(this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_MONTH){
+		}else if(this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_DAY){
 			url = NetConstants.GET_STOCK_KLINE_DAY;
 			url = url.replace(/<securityId>/, this.props.stockCode);
 		}else {
@@ -233,7 +233,7 @@ var StockDetailPage = React.createClass({
 					for (var i = 0; i < tempStockInfo.priceData.length; i ++) {
 						var price = 0;
 						if(this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE||
-						   this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_MONTH){
+						   this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_DAY){
 							price = tempStockInfo.priceData[i].close
 						}else{
 							price = tempStockInfo.priceData[i].p
@@ -358,7 +358,7 @@ var StockDetailPage = React.createClass({
 			case NetConstants.PARAMETER_CHARTTYPE_WEEK:
 				TalkingdataModule.trackEvent(TalkingdataModule.STOCK_DETAIL_TAB_FIVED);
 				break;
-			case NetConstants.PARAMETER_CHARTTYPE_MONTH:
+			case NetConstants.PARAMETER_CHARTTYPE_DAY:
 				TalkingdataModule.trackEvent(TalkingdataModule.STOCK_DETAIL_TAB_DAY_CANDLE);
 				break;
 			case NetConstants.PARAMETER_CHARTTYPE_5_MINUTE:

@@ -8,6 +8,8 @@
 
 protocol CandleChartDataProvider: BaseDataProvider
 {
+	func candleData() -> [CandlePositionData]
+	func xVerticalLines() -> [CGFloat]
 }
 
 class CandleData: BaseData {
@@ -26,13 +28,13 @@ class CandleData: BaseData {
 }
 
 class CandlePositionData: NSObject {
-	var open: Double = 0
-	var close: Double = 0
-	var high: Double = 0
-	var low: Double = 0
-	var x: Double = 0
+	var open: CGFloat = 0
+	var close: CGFloat = 0
+	var high: CGFloat = 0
+	var low: CGFloat = 0
+	var x: CGFloat = 0
 	
-	init(open:Double, close:Double, high:Double, low:Double, x:Double) {
+	init(open:CGFloat, close:CGFloat, high:CGFloat, low:CGFloat, x:CGFloat) {
 		super.init()
 		self.open = open
 		self.close = close
@@ -47,6 +49,9 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 	var stockData:StockData?
 	var enablePan:Bool = false
 	
+	
+	let candleWidth:CGFloat = 5.0
+	let spacer:CGFloat = 8.0
 	let margin:CGFloat = 15.0
 	var topMargin:CGFloat = 2.0
 	var bottomMargin:CGFloat = 15.0
@@ -90,38 +95,31 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 			return
 		}
 		
-		var maxValue = _candleData.reduce(0) { (max, data) -> Double in
+		let maxValue = _candleData.reduce(0) { (max, data) -> Double in
 			(max < data.high) ? data.high : max
 		}
 		
-		var minValue = _candleData.reduce(100000000.0) { (min, data) -> Double in
+		let minValue = _candleData.reduce(100000000.0) { (min, data) -> Double in
 			(min > data.low) ? data.low : min
 		}
 		
 		//calculate the x point
-		let lastIndex = _candleData.count - 1
-		let columnXPoint = { (column:Int) -> CGFloat in
-			//Calculate gap between points
-			let spacer = (width - self.margin*2) /
-				CGFloat((lastIndex))
-			var x:CGFloat = CGFloat(column) * spacer
-			x += self.margin
-			return x
-		}
-		
-		
-		// calculate the y point
 		let topBorder:CGFloat = height * 0.12
 		let bottomBorder:CGFloat = height * 0.15
-		let graphHeight = height - topBorder - bottomBorder
+		let graphHeight:CGFloat = height - topBorder - bottomBorder
 		
-		let columnYPoint = { (graphPoint:Double) -> CGFloat in
-			var y:CGFloat = graphHeight/2
+		let columnPosition = { (column:Int) -> CandlePositionData in
+			let candle:CandleData = self._candleData[column]
+			let x:CGFloat = width - CGFloat(column) * self.spacer - self.margin - self.spacer/2
+			let y:CGFloat = height/2
+			var high:CGFloat=y,low:CGFloat=y,open:CGFloat=y,close:CGFloat=y
 			if (maxValue > minValue) {
-				y = CGFloat(graphPoint-minValue) / CGFloat(maxValue - minValue) * graphHeight
+				high = graphHeight + topBorder - CGFloat((candle.high-minValue) / (maxValue - minValue)) * graphHeight
+				low = graphHeight + topBorder - CGFloat((candle.low-minValue) / (maxValue - minValue)) * graphHeight
+				open = graphHeight + topBorder - CGFloat((candle.open-minValue) / (maxValue - minValue)) * graphHeight
+				close = graphHeight + topBorder - CGFloat((candle.close-minValue) / (maxValue - minValue)) * graphHeight
 			}
-			y = graphHeight + topBorder - y // Flip the graph
-			return y
+			return CandlePositionData.init(open: round(open), close: round(close), high: round(high), low: round(low), x: x)
 		}
 		
 		_candlePositionData = []
@@ -150,12 +148,10 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 //			}
 		}
 		else {
-//			for i in 0..<_candleData.count {
-//				let x = columnXPoint(i)
-//				let y = columnYPoint(_candleData[i].price)
-//				let position:CandlePositionData = CGPoint(x:x, y:y)
-//				_candlePositionData.append(position)
-//			}
+			for i in 0..<_candleData.count {
+				let position:CandlePositionData = columnPosition(i)
+				_candlePositionData.append(position)
+			}
 		}
 		
 		self.calculateVerticalLines()
@@ -163,5 +159,17 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 	
 	func calculateVerticalLines() -> Void {
 		
+		let gaps = ["day":3600.0*24*7, "5m":120.0]
+		let gap = gaps[_chartType]!		// gap between two lines
+	}
+	
+	
+	// MARK: delegate
+	func candleData() -> [CandlePositionData] {
+		return _candlePositionData
+	}
+	
+	func xVerticalLines() -> [CGFloat] {
+		return []
 	}
 }

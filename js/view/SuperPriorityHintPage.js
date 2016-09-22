@@ -149,9 +149,6 @@ var SuperPriorityHintPage = React.createClass({
               <Text style={styles.bodyTextHighlight}>
               20元
               </Text>
-              <Text style={styles.bodyText}>
-              交易金
-              </Text>
             </View>
           </View>
         </View>)
@@ -171,9 +168,6 @@ var SuperPriorityHintPage = React.createClass({
             <Text style={styles.bodyTextHighlight}>
             0.5元
             </Text>
-            <Text style={styles.bodyText}>
-            交易金
-            </Text>
           </View>
         </View>
         <View style={styles.bodyContent}>
@@ -184,9 +178,6 @@ var SuperPriorityHintPage = React.createClass({
             </Text>
             <Text style={styles.bodyTextHighlight}>
             0.5元
-            </Text>
-            <Text style={styles.bodyText}>
-            交易金
             </Text>
           </View>
         </View>

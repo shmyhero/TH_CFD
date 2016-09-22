@@ -57,6 +57,7 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 	var bottomMargin:CGFloat = 15.0
 	
 	var _candlePositionData:[CandlePositionData] = []
+	var verticalLinesX:[CGFloat] = []
 	
 	override func parseJson() {
 		// demo:{\"lastOpen\":\"2016-03-24T13:31:00Z\",\"preClose\":100.81,\"longPct\":0.415537619225466,\"id\":14993,\"symbol\":\"CVS UN\",\"name\":\"CVS\",\"open\":0,\"last\":101.48,\"isOpen\":false,\"priceData\":[{\"p\":100.56,\"time\":\"2016-03-24T13:30:00Z\"},{\"p\":100.84,\"time\":\"2016-03-24T13:31:00Z\"}]}
@@ -72,6 +73,7 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 						let data:CandleData = CandleData.init(dict: chartDict as! NSDictionary)
 						_candleData.append(data)
 					}
+					_candleData = _candleData.reverse()
 				}
 				if _jsonString.rangeOfString("preClose") != nil {
 					self.stockData = StockData()
@@ -159,8 +161,23 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 	
 	func calculateVerticalLines() -> Void {
 		
-		let gaps = ["day":3600.0*24*7, "5m":120.0]
+		let gaps = ["5m":3600.0, "day":3600.0*24*14]
 		let gap = gaps[_chartType]!		// gap between two lines
+		
+		if let time0:NSDate? = _candleData.first?.time {
+			var endTime = time0
+			verticalLinesX = []
+			for i in 0 ..< _candleData.count {
+				if let time:NSDate? = _candleData[i].time {
+					let interval:NSTimeInterval = -time!.timeIntervalSinceDate(endTime!)
+					if interval > gap*0.99 {
+						verticalLinesX.append(_candlePositionData[i].x)
+						endTime = time
+//						verticalTimes.append(self._candleData[i].time!)
+					}
+				}
+			}
+		}
 	}
 	
 	
@@ -170,6 +187,6 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 	}
 	
 	func xVerticalLines() -> [CGFloat] {
-		return []
+		return verticalLinesX
 	}
 }

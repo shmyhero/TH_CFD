@@ -7,6 +7,7 @@
 //
 
 class CandleChartRender: BaseRender {
+	weak var candleDataProvider: CandleChartDataProvider?
 	
 	override func render(context: CGContext) {
 		self.drawBorderLines(context)

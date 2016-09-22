@@ -11,41 +11,24 @@ import UIKit
 //@IBDesignable
 class StockChartView: UIView {
 	
-	let margin:CGFloat = 15.0
-	var topMargin:CGFloat = 2.0
-	var bottomMargin:CGFloat = 15.0
-	
-//	var chartDataJson: String! = ""
-//	var chartCategory: String! = "Line"
-	
-//	var chartData:[ChartData] = []
-//	var pointData:[CGPoint] = []
-//	var verticalLinesX:[CGFloat] = []
-//	var verticalTimes:[NSDate] = []
-//	var middleLineY:CGFloat = 0
-//	var topLineY:CGFloat = 0
-//	var bottomLineY:CGFloat = 0
-	
-//	var usingRealTimeX = false
-//	var drawPreCloseLine = false
-//	var showPeriod:Double = 0		//only work when usingRealTimeX
-//	var panPeriod:Double = 0		//time period panned.
-//	var lastPanPeriod:Double = 0
-	var currentTimeEndOnPan:NSDate = NSDate()
-	
 	var colorSet:ColorSet = ColorSet()
 	var render:BaseRender?
 	var dataSource:BaseDataSource?
+	var panGesture:UIPanGestureRecognizer!
 
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		// add touch function
 		self.userInteractionEnabled = true
-		let panGesture:UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(StockChartView.pan(_:)))
+		panGesture = UIPanGestureRecognizer(target: self, action: #selector(StockChartView.pan(_:)))
 		self.addGestureRecognizer(panGesture)
 	}
 	required init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
+	}
+	
+	deinit {
+		self.removeGestureRecognizer(panGesture)
 	}
 	
 // MARK: action
@@ -82,15 +65,15 @@ class StockChartView: UIView {
 	var data:String? { // use for RN manager
 		willSet {
 			if (newValue != nil) {
-				if (chartType == "5m"){
-					dataSource = CandleChartDataSource.init(json:newValue!, rect: self.bounds, view:self)
+				if (chartType == "5m" || chartType == "month"){
+					dataSource = CandleChartDataSource.init(json:newValue!, rect: self.bounds)
 				}
 				else {
-					dataSource = LineChartDataSource.init(json:newValue!, rect: self.bounds, view:self)
+					dataSource = LineChartDataSource.init(json:newValue!, rect: self.bounds)
 				}
 			}
 			else {
-				dataSource = BaseDataSource.init(json: "", rect: self.bounds, view: self)
+				dataSource = BaseDataSource.init(json: "", rect: self.bounds)
 			}
 			
 //			self.chartDataJson = newValue
@@ -113,15 +96,6 @@ class StockChartView: UIView {
 	}
 	
 	var chartType:String="today"
-//	{
-//		willSet {
-//			usingRealTimeX = newValue == "10m"
-//			drawPreCloseLine = newValue == "today"
-//			showPeriod = newValue == "10m" ? 600 : 0
-//			panPeriod = 0
-//			lastPanPeriod = 0
-//		}
-//	}
 	
 // MARK: render
 	override func drawRect(rect: CGRect) {

@@ -9,6 +9,7 @@
 protocol BaseDataProvider : class
 {
 	func chartType() -> String
+	func hasData() ->Bool
 }
 
 class BaseData: NSObject {
@@ -25,14 +26,12 @@ class BaseDataSource: NSObject, BaseDataProvider {
 	var _jsonString:String
 	var _data = [BaseData]()
 	var _rect = CGRectZero
-	var _renderView:StockChartView
 	
 	var _chartType:String="today"
 	
-	init(json:String, rect:CGRect, view:StockChartView) {
+	init(json:String, rect:CGRect) {
 		_jsonString = json
 		_rect = rect
-		_renderView = view
 		super.init()
 		
 		self.parseJson()
@@ -61,5 +60,9 @@ class BaseDataSource: NSObject, BaseDataProvider {
 // MARK: BaseDataProvider
 	func chartType() -> String {
 		return _chartType
+	}
+	
+	func hasData() -> Bool {
+		return isEmpty()
 	}
 }

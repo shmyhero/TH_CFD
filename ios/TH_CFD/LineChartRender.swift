@@ -169,7 +169,7 @@ class LineChartRender: BaseRender {
 		var timeEnd:NSDate = (lineDataProvider!.lastTime())!
 		let showPeriod = lineDataProvider!.periodShowTime()
 		if (showPeriod > 0) {
-			timeEnd = _renderView.currentTimeEndOnPan
+			timeEnd = lineDataProvider!.currentPanEndTime()
 			let timeGap:NSTimeInterval = timeEnd.timeIntervalSinceDate(timeStart)
 			if timeGap > showPeriod {
 				timeStart = NSDate(timeInterval: -showPeriod, sinceDate: timeEnd)

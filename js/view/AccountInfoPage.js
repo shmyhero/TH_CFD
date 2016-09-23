@@ -269,7 +269,7 @@ var styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingLeft: 15,
+		paddingLeft: UIConstants.LIST_ITEM_LEFT_MARGIN,
 		paddingRight: 15,
 		paddingBottom: 5,
 		paddingTop: 5,
@@ -292,7 +292,6 @@ var styles = StyleSheet.create({
 	title: {
 		flex: 1,
 		fontSize: 17,
-		marginLeft: UIConstants.LIST_ITEM_LEFT_MARGIN,
 		color: '#303030',
 	},
 

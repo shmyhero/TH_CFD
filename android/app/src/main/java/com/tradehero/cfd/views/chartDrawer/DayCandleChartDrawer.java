@@ -31,6 +31,11 @@ public class DayCandleChartDrawer extends CandleChartDrawer {
     }
 
     @Override
+    public int getGapLineUnitAddMount() {
+        return 2;
+    }
+
+    @Override
     public Calendar getStartUpTimeLine(JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException{
         Calendar lastOpen = timeStringToCalendar(stockInfoObject.getString("lastOpen"));
         Calendar firstDataDate = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
@@ -39,14 +44,13 @@ public class DayCandleChartDrawer extends CandleChartDrawer {
         nextLineAt.set(Calendar.MINUTE, lastOpen.get(Calendar.MINUTE));
         nextLineAt.set(Calendar.MILLISECOND, lastOpen.get(Calendar.MILLISECOND));
 
-        nextLineAt.add(getGapLineUnit(), 1);
+        nextLineAt.add(getGapLineUnit(), getGapLineUnitAddMount());
         return nextLineAt;
     }
 
     @Override
     public boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException{
-        return true;
+        return false;
     }
-
 
 }

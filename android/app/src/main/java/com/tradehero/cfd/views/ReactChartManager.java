@@ -31,7 +31,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
         ReactChart chart = new ReactChart(reactContext);
         chart.setDrawGridBackground(false);
         chart.setDragEnabled(true);
-        chart.setScaleEnabled(true);
+        chart.setScaleEnabled(false);
 //        chart.setTouchEnabled(true);
         chart.getLegend().setEnabled(false);
         chart.setDoubleTapToZoomEnabled(false);
@@ -48,7 +48,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
         chart.getXAxis().setDrawLimitLinesBehindData(false);
         chart.getAxisLeft().setDrawGridLines(false);
         chart.getAxisRight().setDrawGridLines(false);
-        chart.getXAxis().setDrawGridLines(true);
+        chart.getXAxis().setDrawGridLines(false);
         chart.getAxisLeft().setAxisLineColor(ChartDrawerConstants.CHART_BORDER_COLOR);
         chart.getAxisRight().setAxisLineColor(ChartDrawerConstants.CHART_BORDER_COLOR);
         chart.getXAxis().setAxisLineColor(ChartDrawerConstants.CHART_BORDER_COLOR);

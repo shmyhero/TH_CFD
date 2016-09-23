@@ -35,6 +35,11 @@ public class FiveMCandleChartDrawer extends CandleChartDrawer {
     }
 
     @Override
+    public int getGapLineUnitAddMount() {
+        return 1;
+    }
+
+    @Override
     protected LimitLineInfo calculateLimitLinesPosition(Calendar startUpLine, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
         ArrayList<Integer> limitLineAt = new ArrayList<>();
         ArrayList<Calendar> limitLineCalender = new ArrayList<>();

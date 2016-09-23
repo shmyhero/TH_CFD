@@ -51,7 +51,7 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
 
         CandleDataSet set1 = new CandleDataSet(yVals1, "Data Set");
         set1.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set1.setDrawHighlightIndicators(true);
+//        set1.setDrawHighlightIndicators(true);
 
         set1.setShadowColorSameAsCandle(true);
         //set1.setShadowColor(Color.DKGRAY);
@@ -96,8 +96,8 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
         Calendar nextLineAt = startUpLine;
 
         int firstLine = 0;
-        limitLineAt.add(firstLine);
-        limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(firstLine).getString("time")));
+//        limitLineAt.add(firstLine);
+//        limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(firstLine).getString("time")));
 
         for (int i = 0; i < chartDataList.length(); i++) {
             Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
@@ -133,8 +133,8 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
         float density = chart.getResources().getDisplayMetrics().density;
         float totalWidth = chart.getWidth() / density;
 
-        int candleWidthDP = 6;
-        int candleSpaceDP = 4;
+        int candleWidthDP = 4;
+        int candleSpaceDP = 2;
         float perScreenCandleCount = (totalWidth - 12 * 2) / (candleWidthDP + candleSpaceDP);
 
         int totalCandleCount = data.getXValCount();

@@ -17,7 +17,7 @@ import java.util.Calendar;
 public class DayCandleChartDrawer extends CandleChartDrawer {
     @Override
     public boolean needDrawPreCloseLine() {
-        return true;
+        return false;
     }
 
     @Override

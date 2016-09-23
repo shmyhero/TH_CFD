@@ -16,7 +16,7 @@ import java.util.Calendar;
 public class FiveMCandleChartDrawer extends CandleChartDrawer {
     @Override
     public boolean needDrawPreCloseLine() {
-        return true;
+        return false;
     }
 
     @Override

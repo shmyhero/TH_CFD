@@ -19,7 +19,7 @@ public class ChartDrawerConstants {
     public static float LINE_WIDTH = 0.5f; //竖线 分割 ｜分时｜10分钟｜2小时｜5日｜1月｜
     public static float LINE_WIDTH_PRICE = 1.5f; //行情走势曲线线粗
 
-    public static int CANDEL_NEUTRAL = 0xffffffff;//平白
+    public static int CANDEL_NEUTRAL = 0xff30c296;//平绿
     public static int CANDEL_DECREASE = 0xff30c296;//跌绿
     public static int CANDEL_INCREASE = 0xffe34b4f;//涨红
 
@@ -29,6 +29,7 @@ public class ChartDrawerConstants {
         twoH("2h"),
         week("week"),
         month("month"),
+        day("day"),
         fiveM("5m");
 
         private String name;

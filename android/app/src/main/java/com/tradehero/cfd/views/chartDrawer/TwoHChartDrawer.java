@@ -17,6 +17,11 @@ public class TwoHChartDrawer extends LineStickChartDrawer {
     }
 
     @Override
+    public boolean needDrawPreCloseLine() {
+        return false;
+    }
+
+    @Override
     public int getGapLineUnitAddMount() {
         return 30;
     }

@@ -25,6 +25,11 @@ public class WeekChartDrawer extends LineStickChartDrawer{
     }
 
     @Override
+    public boolean needDrawPreCloseLine() {
+        return false;
+    }
+
+    @Override
     public Calendar getStartUpTimeLine(JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
         Calendar lastOpen = timeStringToCalendar(stockInfoObject.getString("lastOpen"));
         Calendar firstDataDate = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));

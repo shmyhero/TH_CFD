@@ -23,6 +23,8 @@ public class ChartDrawerBuilder {
                 return new WeekChartDrawer();
             case month:
                 return new DayCandleChartDrawer();
+            case day:
+                return new DayCandleChartDrawer();
             case fiveM:
                 return new FiveMCandleChartDrawer();
             default:

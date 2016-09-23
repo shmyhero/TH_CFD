@@ -103,13 +103,31 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 			return
 		}
 		
-		let maxValue = _candleData.reduce(0) { (max, data) -> Double in
-			(max < data.high) ? data.high : max
+		let needRender = { (column: Int) -> Bool in
+			let x:CGFloat = width - CGFloat(column) * self.oneSpacer() - self._margin + self.panX()
+			return x > self._margin && x < width - self._margin + self.oneSpacer()
+		}
+		var maxValue:Double = 0
+		var minValue:Double = 10000000
+		for i in 0 ..< _candleData.count {
+			if needRender(i) {
+				let data:CandleData = _candleData[i]
+				if (maxValue < data.high) {
+					maxValue = data.high
+				}
+				if (minValue > data.low) {
+					minValue = data.low
+				}
+			}
 		}
 		
-		let minValue = _candleData.reduce(100000000.0) { (min, data) -> Double in
-			(min > data.low) ? data.low : min
-		}
+//		let maxValue = _candleData.reduce(0) { (max, data) -> Double in
+//			(max < data.high) ? data.high : max
+//		}
+//		
+//		let minValue = _candleData.reduce(100000000.0) { (min, data) -> Double in
+//			(min > data.low) ? data.low : min
+//		}
 		
 		//calculate the x point
 		let topBorder:CGFloat = height * 0.12
@@ -118,7 +136,7 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		
 		let columnPosition = { (column:Int) -> CandlePositionData in
 			let candle:CandleData = self._candleData[column]
-			let x:CGFloat = width - CGFloat(column) * self.spacer * self.scale() - self._margin - self.spacer * self.scale()/2 + self.panX()
+			let x:CGFloat = width - CGFloat(column) * self.oneSpacer() - self._margin - self.oneSpacer()/2 + self.panX()
 			let y:CGFloat = height/2
 			var high:CGFloat=y,low:CGFloat=y,open:CGFloat=y,close:CGFloat=y
 			if (maxValue > minValue) {
@@ -179,7 +197,7 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 			return 0
 		}
 		else {
-			let allCandleWidth = CGFloat(_candleData.count) * spacer * scale()
+			let allCandleWidth = CGFloat(_candleData.count) * oneSpacer()
 			let viewWidth = _rect.width - _margin * 2
 			if allCandleWidth > viewWidth {
 				return allCandleWidth - viewWidth
@@ -233,5 +251,9 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 	
 	func oneCandleWidth() -> CGFloat {
 		return scale() * candleWidth
+	}
+	
+	func oneSpacer() -> CGFloat {
+		return scale() * spacer
 	}
 }

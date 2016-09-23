@@ -38,27 +38,6 @@ class StockChartView: UIView {
 			dataSource!.panTranslation(translation, isEnd: sender.state == UIGestureRecognizerState.Ended)
 			dataSource!.calculateData()
 			self.setNeedsDisplay()
-//			let rate = showPeriod/Double(size.width-margin*2)
-//			panPeriod = lastPanPeriod - Double(translation.x) * rate	//pan right means go earlier
-//						let timeStart:NSDate! = chartData.first!.time
-//			let timeEnd:NSDate! = chartData.last!.time
-//			let maxPanPeriod = timeStart.timeIntervalSinceDate(timeEnd) + showPeriod	//this is a minus value
-//			if(panPeriod < maxPanPeriod) {
-//				panPeriod = maxPanPeriod
-//			}
-//			if(panPeriod > 0) {
-//				panPeriod = 0
-//			}
-//			currentTimeEndOnPan = NSDate(timeInterval: panPeriod, sinceDate: chartData.last!.time!)
-//			
-//			dataSource?.calculateData()
-//			self.setNeedsDisplay()
-//			if (sender.state == UIGestureRecognizerState.Ended) {
-//				if(panPeriod > -1) {
-//					panPeriod = 0
-//				}
-//				lastPanPeriod = panPeriod
-//			}
 		}
 	}
 	
@@ -76,14 +55,6 @@ class StockChartView: UIView {
 			else {
 				dataSource = BaseDataSource.init(json: "", rect: self.bounds)
 			}
-			
-//			self.chartDataJson = newValue
-//			self.chartData = ChartDataManager.singleton.chartDataFromJson(self.chartDataJson)
-//			if panPeriod > -1 && chartData.count > 0 && lastPanPeriod == 0 {
-//				// using 2 point as get end mark
-//				currentTimeEndOnPan = (chartData.last?.time)!
-//			}
-			
 			dataSource?.setChartType(chartType)
 			dataSource?.calculateData()
 			self.setNeedsDisplay()

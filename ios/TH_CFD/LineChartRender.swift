@@ -17,6 +17,10 @@ class LineChartRender: BaseRender {
 	override func render(context: CGContext) {
 		if (lineDataProvider == nil) {
 			return
+		} else {
+			_margin = dataProvider!.margin()
+			_topMargin = dataProvider!.topMargin()
+			_bottomMargin = dataProvider!.bottomMargin()
 		}
 		let pointData = lineDataProvider!.pointData()
 		

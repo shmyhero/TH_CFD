@@ -10,6 +10,9 @@ protocol BaseDataProvider : class
 {
 	func chartType() -> String
 	func hasData() ->Bool
+	func margin() -> CGFloat
+	func topMargin() -> CGFloat
+	func bottomMargin() -> CGFloat
 }
 
 class BaseData: NSObject {
@@ -26,6 +29,9 @@ class BaseDataSource: NSObject, BaseDataProvider {
 	var _jsonString:String
 	var _data = [BaseData]()
 	var _rect = CGRectZero
+	let _margin:CGFloat = 15.0
+	let _topMargin:CGFloat = 2.0
+	let _bottomMargin:CGFloat = 15.0
 	
 	var _chartType:String="today"
 	
@@ -71,5 +77,17 @@ class BaseDataSource: NSObject, BaseDataProvider {
 	
 	func hasData() -> Bool {
 		return isEmpty()
+	}
+	
+	func margin() -> CGFloat {
+		return _margin
+	}
+	
+	func topMargin() -> CGFloat {
+		return _topMargin
+	}
+	
+	func bottomMargin() -> CGFloat {
+		return _bottomMargin
 	}
 }

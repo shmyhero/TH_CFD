@@ -8,13 +8,13 @@
 
 class BaseRender: NSObject {
 	var _rect:CGRect = CGRectMake(0, 0, 0, 0)
-	let _margin:CGFloat = 15.0
-	let _topMargin:CGFloat = 2.0
-	let _bottomMargin:CGFloat = 15.0
 	
 	var _colorSet:ColorSet
 	var _renderView:StockChartView
 	weak var dataProvider:BaseDataProvider?
+	var _margin:CGFloat = 0.0
+	var _topMargin:CGFloat = 0.0
+	var _bottomMargin:CGFloat = 0.0
 	
 	init(view:StockChartView, rect:CGRect) {
 		_rect = rect
@@ -25,6 +25,11 @@ class BaseRender: NSObject {
 	}
 	
 	func render(context: CGContext) {
+		if dataProvider != nil {
+			_margin = dataProvider!.margin()
+			_topMargin = dataProvider!.topMargin()
+			_bottomMargin = dataProvider!.bottomMargin()
+		}
 		self.drawBorderLines(context)
 		self.drawExtraText(context)
 	}

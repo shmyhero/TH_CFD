@@ -51,9 +51,6 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 	
 	let candleWidth:CGFloat = 5.0
 	let spacer:CGFloat = 8.0
-	let margin:CGFloat = 15.0
-	var topMargin:CGFloat = 2.0
-	var bottomMargin:CGFloat = 15.0
 	
 	var _candlePositionData:[CandlePositionData] = []
 	var verticalLinesX:[CGFloat] = []
@@ -119,7 +116,7 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		
 		let columnPosition = { (column:Int) -> CandlePositionData in
 			let candle:CandleData = self._candleData[column]
-			let x:CGFloat = width - CGFloat(column) * self.spacer - self.margin - self.spacer/2 + self.panX()
+			let x:CGFloat = width - CGFloat(column) * self.spacer - self._margin - self.spacer/2 + self.panX()
 			let y:CGFloat = height/2
 			var high:CGFloat=y,low:CGFloat=y,open:CGFloat=y,close:CGFloat=y
 			if (maxValue > minValue) {
@@ -181,7 +178,7 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		}
 		else {
 			let candleWidth = CGFloat(_candleData.count) * spacer
-			let viewWidth = _rect.width - margin * 2
+			let viewWidth = _rect.width - _margin * 2
 			if candleWidth > viewWidth {
 				return candleWidth - viewWidth
 			}

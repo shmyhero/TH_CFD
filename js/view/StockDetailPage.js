@@ -439,7 +439,7 @@ var StockDetailPage = React.createClass({
 		// 0.06%, limit to 0.01
 		var leftMoney = this.state.totalMoney - this.state.money
 		var charge = 0
-
+		var viewMargin = Platform.OS === 'ios' ? 0:15
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
 				<View style={styles.wrapper}>
@@ -449,7 +449,7 @@ var StockDetailPage = React.createClass({
 
 						{this.renderChartHeader()}
 
-						<View style={{flex: 3.5, marginTop:5,marginLeft:12,marginRight:12}}>
+						<View style={{flex: 3.5, marginTop:5,marginLeft:viewMargin,marginRight:viewMargin}}>
 							<LineChart style={styles.lineChart}
 								data={JSON.stringify(this.state.stockInfo)}
 								chartType={this.state.chartType}>

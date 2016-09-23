@@ -31,10 +31,6 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 	var _lineData = [LineData]()
 	var stockData:StockData?
 	
-	let margin:CGFloat = 15.0
-	var topMargin:CGFloat = 2.0
-	var bottomMargin:CGFloat = 15.0
-	
 	var _pointData:[CGPoint] = []
 	var verticalLinesX:[CGFloat] = []
 	var verticalTimes:[NSDate] = []
@@ -109,10 +105,10 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 		let lastIndex = _lineData.count - 1
 		let columnXPoint = { (column:Int) -> CGFloat in
 			//Calculate gap between points
-			let spacer = (width - self.margin*2) /
+			let spacer = (width - self._margin*2) /
 				CGFloat((lastIndex))
 			var x:CGFloat = CGFloat(column) * spacer
-			x += self.margin
+			x += self._margin
 			return x
 		}
 		

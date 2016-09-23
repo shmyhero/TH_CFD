@@ -397,7 +397,7 @@ public class ReactStockEditFragmentNative extends RelativeLayout{
         private final int mValue;
 
         protected NativeRefreshEvent(int viewTag, long timestampMs, int value) {
-            super(viewTag, timestampMs);
+            super(viewTag);
             mValue = value;
         }
 
@@ -425,7 +425,7 @@ public class ReactStockEditFragmentNative extends RelativeLayout{
         private final int mValue;//Stock id is int like 黄金 mValue is 34821
 
         protected TapAlertEvent(int viewTag, long timestampMs, int value) {
-            super(viewTag, timestampMs);
+            super(viewTag);
             mValue = value;
         }
 

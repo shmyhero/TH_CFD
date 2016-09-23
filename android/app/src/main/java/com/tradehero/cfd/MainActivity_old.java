@@ -186,6 +186,6 @@ public class MainActivity_old extends AppCompatActivity implements DefaultHardwa
 
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        mReactInstanceManager.onActivityResult(requestCode, resultCode, data);
+        mReactInstanceManager.onActivityResult(this, requestCode, resultCode, data);
     }
 }

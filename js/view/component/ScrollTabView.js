@@ -83,7 +83,10 @@ var ScrollTabView = React.createClass({
 	renderTabs: function() {
 		var tabs = this.props.tabNames.map(
 			(tabName, i) =>
-			<TouchableHighlight style={[styles.tabItemContainer, {width: width / this.props.tabNames.length, paddingBottom: 10}]} key={i}
+			<TouchableHighlight style={[styles.tabItemContainer,
+				{width: width / this.props.tabNames.length,
+					 paddingBottom: 10}
+			]} key={i}
 					underlayColor={ColorConstants.TITLE_BLUE}
 					onPress={() => this.tabClicked(i)}>
 
@@ -158,7 +161,7 @@ var styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'stretch',
 		alignSelf: 'stretch',
-		justifyContent: 'space-around',
+		justifyContent: 'flex-start',
 		backgroundColor: ColorConstants.BACKGROUND_GREY,
 	},
 

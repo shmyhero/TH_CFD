@@ -19,7 +19,6 @@ import java.util.List;
 import cn.reactnative.modules.update.UpdateContext;
 import cn.reactnative.modules.update.UpdatePackage;
 import cn.reactnative.modules.wx.WeChatPackage;
-import com.github.alinz.reactnativewebviewbridge.WebViewBridgePackage;
 
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
@@ -27,6 +26,21 @@ import com.github.alinz.reactnativewebviewbridge.WebViewBridgePackage;
 public class RNManager {
 
     private static ReactInstanceManager gReactInstanceManager;
+
+    public static List<ReactPackage> getRNPackages(){
+        List<ReactPackage> packages = Arrays.<ReactPackage>asList(
+                new MainReactPackage(),
+                new WeChatPackage(),
+                new RNNativePackage(),
+                new ReactNativeWheelPickerPackage(),
+                new LinearGradientPackage(),
+                new UpdatePackage(),
+                new RNFSPackage(),
+                new ImagePickerPackage(),
+                new TalkingDataPackage()
+        );
+        return packages;
+    }
 
     public synchronized static ReactInstanceManager getInstanceManager(Application application) {
         if (gReactInstanceManager == null) {
@@ -36,18 +50,7 @@ public class RNManager {
                     .setUseDeveloperSupport(BuildConfig.DEBUG)
                     .setInitialLifecycleState(LifecycleState.BEFORE_RESUME);
 
-            List<ReactPackage> packages = Arrays.<ReactPackage>asList(
-                    new MainReactPackage(),
-                    new WeChatPackage(),
-                    new RNNativePackage(),
-                    new ReactNativeWheelPickerPackage(),
-                    new LinearGradientPackage(),
-                    new UpdatePackage(),
-                    new RNFSPackage(),
-                    new ImagePickerPackage(),
-                    new TalkingDataPackage(),
-                    new WebViewBridgePackage()
-            );
+            List<ReactPackage> packages = getRNPackages();
 
             for (ReactPackage reactPackage : packages) {
                 builder.addPackage(reactPackage);

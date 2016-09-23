@@ -154,14 +154,14 @@ var StockDetailPage = React.createClass({
 						WebSocketModule.registerInterestedStocks(previousInterestedStocks)
 					}
 				}
-
+				console.log("loadStockInfo: " + JSON.stringify(responseJson))
 				this.setState({
 					stockInfo: responseJson,
 					stockPriceBid: responseJson.bid,
 					stockPriceAsk: responseJson.ask,
 				})
 
-				this.loadStockPriceToday(true)
+				this.loadStockPriceToday(true, this.state.chartType, responseJson)
 
 				if(updateStockInfoTimer !== null) {
 					this.clearInterval(updateStockInfoTimer)
@@ -189,24 +189,26 @@ var StockDetailPage = React.createClass({
 	},
 
 	updateStockInfo: function() {
+
+		console.log("updateStockInfo: " + this.state.chartType);
 		if (this.state.chartType !== NetConstants.PARAMETER_CHARTTYPE_TODAY)
 			return
 
-		this.loadStockPriceToday(false)
+		this.loadStockPriceToday(false, this.state.chartType, this.state.stockInfo)
 	},
 
-	loadStockPriceToday: function(showLoading) {
+	loadStockPriceToday: function(showLoading, chartType, stockInfo) {
 		var url = NetConstants.GET_STOCK_PRICE_TODAY_API;
 
-		if(this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE){
+		if(chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE){
 			url = NetConstants.GET_STOCK_KLINE_FIVE_M;
 			url = url.replace(/<securityId>/, this.props.stockCode);
-		}else if(this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_DAY){
+		}else if(chartType == NetConstants.PARAMETER_CHARTTYPE_DAY){
 			url = NetConstants.GET_STOCK_KLINE_DAY;
 			url = url.replace(/<securityId>/, this.props.stockCode);
 		}else {
 			 url = url.replace(/<stockCode>/, this.props.stockCode)
-			 url = url.replace(/<chartType>/, this.state.chartType)
+			 url = url.replace(/<chartType>/, chartType)
 		}
 
 		NetworkModule.fetchTHUrl(
@@ -216,7 +218,7 @@ var StockDetailPage = React.createClass({
 				showLoading: showLoading,
 			},
 			(responseJson) => {
-				var tempStockInfo = this.state.stockInfo
+				var tempStockInfo = stockInfo
 				tempStockInfo.priceData = responseJson
 
 				var maxPrice = undefined
@@ -232,8 +234,8 @@ var StockDetailPage = React.createClass({
 
 					for (var i = 0; i < tempStockInfo.priceData.length; i ++) {
 						var price = 0;
-						if(this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE||
-						   this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_DAY){
+						if(chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE||
+						   chartType == NetConstants.PARAMETER_CHARTTYPE_DAY){
 							price = tempStockInfo.priceData[i].close
 						}else{
 							price = tempStockInfo.priceData[i].p
@@ -369,7 +371,7 @@ var StockDetailPage = React.createClass({
 		this.setState({
 			chartType: type
 		})
-		this.loadStockPriceToday(true)
+		this.loadStockPriceToday(true, type, this.state.stockInfo)
 	},
 
 	renderStockMaxPriceInfo: function(maxPrice, maxPercentage) {
@@ -440,6 +442,7 @@ var StockDetailPage = React.createClass({
 		var leftMoney = this.state.totalMoney - this.state.money
 		var charge = 0
 		var viewMargin = Platform.OS === 'ios' ? 0:15
+		console.log("render: " + JSON.stringify(this.state.stockInfo))
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
 				<View style={styles.wrapper}>

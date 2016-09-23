@@ -459,7 +459,7 @@ var HomePage = React.createClass({
 				TalkingdataModule.HEADER_SHARE_EVENT)}>
 				<View style={styles.bluePoint}/>
 				<Text style={styles.newsText}
-					ellipsizeMode={true}
+					ellipsizeMode="tail"
 					numberOfLines={1}>
 					{header}
 				</Text>

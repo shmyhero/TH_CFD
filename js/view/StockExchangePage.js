@@ -48,7 +48,7 @@ var StockExchangePage = React.createClass({
 			currentSelectedTab: index,
 		})
 		if (index == 2) {
-			this.refs['page' + this.state.currentSelectedTab].playStartAnim()
+			this.refs['page' + index].playStartAnim()
 		}
 		var userData = LogicData.getUserData()
 		var loggined = Object.keys(userData).length !== 0

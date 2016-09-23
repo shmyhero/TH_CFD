@@ -858,9 +858,9 @@ var StockDetailPage = React.createClass({
 
 				eventParam[TalkingdataModule.KEY_SECURITY_ID] =  responseJson.security.id.toString(),
 				eventParam[TalkingdataModule.KEY_SECURITY_NAME] = responseJson.security.name;
-				eventParam[TalkingdataModule.KEY_INVEST] = this.state.money;
-				eventParam[TalkingdataModule.KEY_LEVERAGE] = responseJson.leverage;
-				eventParam[TalkingdataModule.KEY_IS_LONG] = responseJson.isLong;
+				eventParam[TalkingdataModule.KEY_INVEST] = this.state.money.toString();
+				eventParam[TalkingdataModule.KEY_LEVERAGE] = responseJson.leverage.toString();
+				eventParam[TalkingdataModule.KEY_IS_LONG] = responseJson.isLong ? "是" : "否";
 				eventParam[TalkingdataModule.KEY_TIME] = responseJson.createAt;
 
 				TalkingdataModule.trackEvent(TalkingdataModule.TRADE_EVENT, '', eventParam)

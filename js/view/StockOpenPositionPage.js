@@ -389,14 +389,14 @@ var StockOpenPositionPage = React.createClass({
 				var eventParam = {};
 				eventParam[TalkingdataModule.KEY_SECURITY_ID] = responseJson.id.toString();
 				eventParam[TalkingdataModule.KEY_SECURITY_NAME] = rowData.security.name;
-				eventParam[TalkingdataModule.KEY_IS_LONG] = rowData.isLong;
-				eventParam[TalkingdataModule.KEY_INVEST] = rowData.invest;
-				eventParam[TalkingdataModule.KEY_LEVERAGE] = responseJson.leverage;
-				eventParam[TalkingdataModule.KEY_OPEN_PRICE]= rowData.settlePrice;
+				eventParam[TalkingdataModule.KEY_IS_LONG] = rowData.isLong ? "是" : "否";
+				eventParam[TalkingdataModule.KEY_INVEST] = rowData.invest.toString();
+				eventParam[TalkingdataModule.KEY_LEVERAGE] = responseJson.leverage.toString();
+				eventParam[TalkingdataModule.KEY_OPEN_PRICE]= rowData.settlePrice.toString();
 				eventParam[TalkingdataModule.KEY_OPEN_TIME]= rowData.createAt;
-				eventParam[TalkingdataModule.KEY_CLOSE_PRICE]= responseJson.settlePrice;
+				eventParam[TalkingdataModule.KEY_CLOSE_PRICE]= responseJson.settlePrice.toString();
 				eventParam[TalkingdataModule.KEY_CLOSE_TIME]= responseJson.createAt;
-				eventParam[TalkingdataModule.KEY_PROFIT]= responseJson.pl;
+				eventParam[TalkingdataModule.KEY_PROFIT]= responseJson.pl.toString();
 
 				TalkingdataModule.trackEvent(TalkingdataModule.SOLD_EVENT, '', eventParam)
 			},

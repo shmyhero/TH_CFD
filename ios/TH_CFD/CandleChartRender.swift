@@ -101,4 +101,40 @@ class CandleChartRender: BaseRender {
 		linePath.stroke()
 		CGContextRestoreGState(context)
 	}
+	
+	override func drawExtraText(context:CGContext) -> Void {
+		if (candleDataProvider == nil) {
+			return
+		}
+		let height = _rect.height
+//		let width = _rect.width
+		let dateFormatter = NSDateFormatter()
+		let textWidth:CGFloat = 28.0
+		let chartType = candleDataProvider!.chartType()
+		if chartType == "day"{
+			dateFormatter.dateFormat = "MM/dd"
+		}
+		else {
+			dateFormatter.dateFormat = "HH:mm"
+		}
+		
+		let textColor = UIColor(hexInt: 0x70a5ff)
+		let textFont = UIFont(name: "Helvetica Neue", size: 8)
+		let textStyle = NSMutableParagraphStyle()
+		textStyle.alignment = .Center
+		let attributes: [String:AnyObject] = [
+			NSForegroundColorAttributeName: textColor,
+			NSFontAttributeName: textFont!,
+			NSParagraphStyleAttributeName: textStyle,
+			]
+		let textY = height-_bottomMargin+2
+		
+		let verticalLinesX = candleDataProvider!.xVerticalLines()
+		let verticalTimes = candleDataProvider!.timeVerticalLines()
+		for i in 0..<verticalTimes.count {
+			let text:NSString = dateFormatter.stringFromDate(verticalTimes[i])
+			let rect = CGRect(x: verticalLinesX[i]-textWidth/2, y: textY, width: textWidth, height: 10)
+			text.drawInRect(rect, withAttributes: attributes)
+		}
+	}
 }

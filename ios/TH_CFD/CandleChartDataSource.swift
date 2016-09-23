@@ -10,6 +10,7 @@ protocol CandleChartDataProvider: BaseDataProvider
 {
 	func candleData() -> [CandlePositionData]
 	func xVerticalLines() -> [CGFloat]
+	func timeVerticalLines() -> [NSDate]
 }
 
 class CandleData: BaseData {
@@ -58,6 +59,7 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 	
 	var _candlePositionData:[CandlePositionData] = []
 	var verticalLinesX:[CGFloat] = []
+	var verticalLinesTime:[NSDate] = []
 	
 	override func parseJson() {
 		// demo:{\"lastOpen\":\"2016-03-24T13:31:00Z\",\"preClose\":100.81,\"longPct\":0.415537619225466,\"id\":14993,\"symbol\":\"CVS UN\",\"name\":\"CVS\",\"open\":0,\"last\":101.48,\"isOpen\":false,\"priceData\":[{\"p\":100.56,\"time\":\"2016-03-24T13:30:00Z\"},{\"p\":100.84,\"time\":\"2016-03-24T13:31:00Z\"}]}
@@ -167,13 +169,14 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		if let time0:NSDate? = _candleData.first?.time {
 			var endTime = time0
 			verticalLinesX = []
+			verticalLinesTime = []
 			for i in 0 ..< _candleData.count {
 				if let time:NSDate? = _candleData[i].time {
 					let interval:NSTimeInterval = -time!.timeIntervalSinceDate(endTime!)
 					if interval > gap*0.99 {
 						verticalLinesX.append(_candlePositionData[i].x)
 						endTime = time
-//						verticalTimes.append(self._candleData[i].time!)
+						verticalLinesTime.append(self._candleData[i].time!)
 					}
 				}
 			}
@@ -188,5 +191,9 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 	
 	func xVerticalLines() -> [CGFloat] {
 		return verticalLinesX
+	}
+	
+	func timeVerticalLines() -> [NSDate] {
+		return verticalLinesTime
 	}
 }

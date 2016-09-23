@@ -48,8 +48,6 @@ class CandlePositionData: NSObject {
 class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 	var _candleData = [CandleData]()
 	var stockData:StockData?
-	var enablePan:Bool = false
-	
 	
 	let candleWidth:CGFloat = 5.0
 	let spacer:CGFloat = 8.0
@@ -60,6 +58,9 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 	var _candlePositionData:[CandlePositionData] = []
 	var verticalLinesX:[CGFloat] = []
 	var verticalLinesTime:[NSDate] = []
+	
+	var currentPanX:CGFloat = 0
+	var lastPanX:CGFloat = 0
 	
 	override func parseJson() {
 		// demo:{\"lastOpen\":\"2016-03-24T13:31:00Z\",\"preClose\":100.81,\"longPct\":0.415537619225466,\"id\":14993,\"symbol\":\"CVS UN\",\"name\":\"CVS\",\"open\":0,\"last\":101.48,\"isOpen\":false,\"priceData\":[{\"p\":100.56,\"time\":\"2016-03-24T13:30:00Z\"},{\"p\":100.84,\"time\":\"2016-03-24T13:31:00Z\"}]}
@@ -92,6 +93,10 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		return _candleData.isEmpty
 	}
 	
+	override func panEnable() -> Bool{
+		return true
+	}
+	
 	override func calculateData() {
 		let width = _rect.width
 		let height = _rect.height
@@ -114,7 +119,7 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		
 		let columnPosition = { (column:Int) -> CandlePositionData in
 			let candle:CandleData = self._candleData[column]
-			let x:CGFloat = width - CGFloat(column) * self.spacer - self.margin - self.spacer/2
+			let x:CGFloat = width - CGFloat(column) * self.spacer - self.margin - self.spacer/2 + self.panX()
 			let y:CGFloat = height/2
 			var high:CGFloat=y,low:CGFloat=y,open:CGFloat=y,close:CGFloat=y
 			if (maxValue > minValue) {
@@ -128,34 +133,9 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		
 		_candlePositionData = []
 		
-		if enablePan {
-//			var timeStart:NSDate! = _candleData.first!.time
-//			let timeEnd:NSDate! = _renderView.currentTimeEndOnPan
-//			var timeGap:NSTimeInterval = timeEnd!.timeIntervalSinceDate(timeStart!)
-//			if showPeriod > 0 && timeGap > showPeriod {
-//				// can pan
-//				timeGap = showPeriod
-//				timeStart = NSDate(timeInterval: -showPeriod, sinceDate: timeEnd)
-//			}
-//			
-//			let columnTimeXPoint = { (pointTime:NSDate) -> CGFloat in
-//				//Calculate gap between points
-//				let spacer = (width - self._renderView.margin*2)  * CGFloat((pointTime.timeIntervalSinceDate(timeStart)) / timeGap)
-//				let x:CGFloat = self._renderView.margin + spacer
-//				return x
-//			}
-//			for i in 0..<_candleData.count {
-//				let x = columnTimeXPoint(_candleData[i].time!)
-//				let y = columnYPoint(_candleData[i].price)
-//				let point:CGPoint = CGPoint(x:x, y:y)
-//				_candlePositionData.append(point)
-//			}
-		}
-		else {
-			for i in 0..<_candleData.count {
-				let position:CandlePositionData = columnPosition(i)
-				_candlePositionData.append(position)
-			}
+		for i in 0..<_candleData.count {
+			let position:CandlePositionData = columnPosition(i)
+			_candlePositionData.append(position)
 		}
 		
 		self.calculateVerticalLines()
@@ -183,8 +163,45 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		}
 	}
 	
+	override func panTranslation(translation: CGPoint, isEnd:Bool = false) {
+		currentPanX = translation.x	//pan right means go earlier
+		
+		if (isEnd) {
+			lastPanX = panX()
+			if lastPanX < 1 {
+				lastPanX = 0
+			}
+			currentPanX = 0
+		}
+	}
 	
-	// MARK: delegate
+	func maxPanX() -> CGFloat {
+		if (isEmpty()) {
+			return 0
+		}
+		else {
+			let candleWidth = CGFloat(_candleData.count) * spacer
+			let viewWidth = _rect.width - margin * 2
+			if candleWidth > viewWidth {
+				return candleWidth - viewWidth
+			}
+			else {
+				return 0
+			}
+		}
+	}
+	
+	func panX() -> CGFloat {
+		var panx = currentPanX + lastPanX
+		if panx < 0 {
+			panx = 0
+		} else if panx > maxPanX() {
+			panx = maxPanX()
+		}
+		return panx
+	}
+	
+// MARK: delegate
 	func candleData() -> [CandlePositionData] {
 		return _candlePositionData
 	}

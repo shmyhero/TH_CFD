@@ -107,7 +107,7 @@ class CandleChartRender: BaseRender {
 			return
 		}
 		let height = _rect.height
-//		let width = _rect.width
+		let width = _rect.width
 		let dateFormatter = NSDateFormatter()
 		let textWidth:CGFloat = 28.0
 		let chartType = candleDataProvider!.chartType()
@@ -132,9 +132,13 @@ class CandleChartRender: BaseRender {
 		let verticalLinesX = candleDataProvider!.xVerticalLines()
 		let verticalTimes = candleDataProvider!.timeVerticalLines()
 		for i in 0..<verticalTimes.count {
+			if (verticalLinesX[i] < _margin || verticalLinesX[i] > width - _margin) {
+				continue
+			}
 			let text:NSString = dateFormatter.stringFromDate(verticalTimes[i])
 			let rect = CGRect(x: verticalLinesX[i]-textWidth/2, y: textY, width: textWidth, height: 10)
 			text.drawInRect(rect, withAttributes: attributes)
 		}
 	}
+	
 }

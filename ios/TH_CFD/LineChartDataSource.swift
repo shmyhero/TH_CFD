@@ -10,9 +10,6 @@ protocol LineChartDataProvider: BaseDataProvider
 {
 	func findHighlightPoint() -> CGPoint
 	func showPreCloseLine() -> Bool
-	func periodShowTime() -> Double
-	func periodPanTime() -> Double
-	func currentPanEndTime() -> NSDate
 	func pointData() -> [CGPoint]
 	func yPosOfMiddleLine() ->CGFloat
 	func xVerticalLines() -> [CGFloat]
@@ -45,12 +42,7 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 	var topLineY:CGFloat = 0
 	var bottomLineY:CGFloat = 0
 	
-	var currentTimeEndOnPan:NSDate = NSDate()
-	var usingRealTimeX = false
 	var drawPreCloseLine = false
-	var showPeriod:Double = 0		//only work when usingRealTimeX
-	var panPeriod:Double = 0		//time period panned.
-	var lastPanPeriod:Double = 0
 	
 	override func parseJson() {
 		// demo:{\"lastOpen\":\"2016-03-24T13:31:00Z\",\"preClose\":100.81,\"longPct\":0.415537619225466,\"id\":14993,\"symbol\":\"CVS UN\",\"name\":\"CVS\",\"open\":0,\"last\":101.48,\"isOpen\":false,\"priceData\":[{\"p\":100.56,\"time\":\"2016-03-24T13:30:00Z\"},{\"p\":100.84,\"time\":\"2016-03-24T13:31:00Z\"}]}
@@ -79,12 +71,8 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 	
 	override func setChartType(newValue:String) {
 		super.setChartType(newValue)
-		
-		usingRealTimeX = newValue == "10m"
+
 		drawPreCloseLine = newValue == "today"
-		showPeriod = newValue == "10m" ? 600 : 0
-		panPeriod = 0
-		lastPanPeriod = 0
 	}
 	
 	override func isEmpty() -> Bool {
@@ -155,36 +143,11 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 		
 		_pointData = []
 		
-		if usingRealTimeX {
-			var timeStart:NSDate! = _lineData.first!.time
-			let timeEnd:NSDate! = currentTimeEndOnPan
-			var timeGap:NSTimeInterval = timeEnd!.timeIntervalSinceDate(timeStart!)
-			if showPeriod > 0 && timeGap > showPeriod {
-				// can pan
-				timeGap = showPeriod
-				timeStart = NSDate(timeInterval: -showPeriod, sinceDate: timeEnd)
-			}
-			
-			let columnTimeXPoint = { (pointTime:NSDate) -> CGFloat in
-				//Calculate gap between points
-				let spacer = (width - self.margin*2)  * CGFloat((pointTime.timeIntervalSinceDate(timeStart)) / timeGap)
-				let x:CGFloat = self.margin + spacer
-				return x
-			}
-			for i in 0..<_lineData.count {
-				let x = columnTimeXPoint(_lineData[i].time!)
-				let y = columnYPoint(_lineData[i].price)
-				let point:CGPoint = CGPoint(x:x, y:y)
-				_pointData.append(point)
-			}
-		}
-		else {
-			for i in 0..<_lineData.count {
-				let x = columnXPoint(i)
-				let y = columnYPoint(_lineData[i].price)
-				let point:CGPoint = CGPoint(x:x, y:y)
-				_pointData.append(point)
-			}
+		for i in 0..<_lineData.count {
+			let x = columnXPoint(i)
+			let y = columnYPoint(_lineData[i].price)
+			let point:CGPoint = CGPoint(x:x, y:y)
+			_pointData.append(point)
 		}
 		
 		self.calculateVerticalLines()
@@ -203,112 +166,49 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 		let gap = gaps[_chartType]!		// gap between two lines
 		
 		if let time0:NSDate? = _lineData.first?.time {
-			if usingRealTimeX {
-				var timeStart:NSDate! = time0!
-				let timeEnd:NSDate! = currentTimeEndOnPan
-				var timeGap:NSTimeInterval = timeEnd!.timeIntervalSinceDate(timeStart!)
-				if showPeriod > 0 && timeGap > showPeriod {
-					timeStart = NSDate(timeInterval: -showPeriod, sinceDate: timeEnd)
-				}
-				let timePeriod:NSTimeInterval! = timeEnd.timeIntervalSinceDate(timeStart!)
-				var time:NSDate! = NSDate(timeInterval: -gap, sinceDate: timeEnd)
-				timeGap = time.timeIntervalSinceDate(timeStart!)
-				while timeGap > 0 {
-					let x:CGFloat = margin + (width - margin*2) * CGFloat(timeGap / timePeriod)
-					verticalLinesX.insert(x+0.5, atIndex: 0)
-					verticalTimes.insert(time, atIndex: 0)
-					time = NSDate(timeInterval: -gap, sinceDate: time)
-					timeGap = time.timeIntervalSinceDate(timeStart!)
-				}
+			var startTime = stockData?.lastOpen
+			if startTime == nil {
+				startTime = NSDate()
+			}
+			
+			if _chartType == "week" {
+				// 1 day, 1 line
+				let interval:NSTimeInterval = time0!.timeIntervalSinceDate(startTime!)
+				let days = floor(interval / gap)
+				startTime = NSDate(timeInterval: days*gap, sinceDate: startTime!)
+			}
+			else if _chartType == "month" {
+				// 1 week, 1 line
+				startTime = startTime?.sameTimeOnLastSunday()
+				let interval:NSTimeInterval = time0!.timeIntervalSinceDate(startTime!)
+				let weeks = floor(interval / gap)
+				startTime = NSDate(timeInterval: weeks*gap, sinceDate: startTime!)
 			}
 			else {
-				var startTime = stockData?.lastOpen
-				if startTime == nil {
-					startTime = NSDate()
-				}
-				
-				if _chartType == "week" {
-					// 1 day, 1 line
-					let interval:NSTimeInterval = time0!.timeIntervalSinceDate(startTime!)
-					let days = floor(interval / gap)
-					startTime = NSDate(timeInterval: days*gap, sinceDate: startTime!)
-				}
-				else if _chartType == "month" {
-					// 1 week, 1 line
-					startTime = startTime?.sameTimeOnLastSunday()
-					let interval:NSTimeInterval = time0!.timeIntervalSinceDate(startTime!)
-					let weeks = floor(interval / gap)
-					startTime = NSDate(timeInterval: weeks*gap, sinceDate: startTime!)
-				}
-				else {
-					startTime = _lineData.first?.time
-				}
-				
-				for i in 0 ..< _lineData.count {
-					if let time:NSDate? = _lineData[i].time {
-						let interval:NSTimeInterval = time!.timeIntervalSinceDate(startTime!)
-						if interval > gap*0.99 {
-							verticalLinesX.append(_pointData[i].x+0.5)
-							startTime = time
-							verticalTimes.append(self._lineData[i].time!)
-						}
+				startTime = _lineData.first?.time
+			}
+			
+			for i in 0 ..< _lineData.count {
+				if let time:NSDate? = _lineData[i].time {
+					let interval:NSTimeInterval = time!.timeIntervalSinceDate(startTime!)
+					if interval > gap*0.99 {
+						verticalLinesX.append(_pointData[i].x+0.5)
+						startTime = time
+						verticalTimes.append(self._lineData[i].time!)
 					}
 				}
 			}
 		}
 	}
 	
-//	override func needUpdate() -> Bool {
-//		return _lineData.count > 0 && _pointData.isEmpty
-//	}
-	
 // MARK: delegate
 	func findHighlightPoint() -> CGPoint {
-		let width = _rect.width
-//		let height = _rect.height
-		var point = _pointData.last!
-		if(panPeriod != 0) {
-			var firstLatePointIndex = 0
-			var firstLateInterval:NSTimeInterval = 0
-			for i in 0..<_lineData.count {
-				let interval:NSTimeInterval = _lineData[i].time!.timeIntervalSinceDate(currentTimeEndOnPan)
-				if (interval >= 0) {
-					// 找到目前滑动后最右边的点
-					firstLatePointIndex = i
-					firstLateInterval = interval
-					break
-				}
-			}
-			if firstLatePointIndex == 0 {
-				point = _pointData.first!
-			}
-			else if(firstLateInterval == panPeriod) {
-				point = _pointData[firstLatePointIndex]
-			}
-			else {
-				let lastInterval:NSTimeInterval = _lineData[firstLatePointIndex-1].time!.timeIntervalSinceDate((_lineData.last?.time)!)
-				let y0 = _pointData[firstLatePointIndex-1].y
-				let y1 = _pointData[firstLatePointIndex].y
-				let y = y0+(y1-y0)*CGFloat(panPeriod-lastInterval)/CGFloat(firstLateInterval-lastInterval)
-				point = CGPoint(x: width - margin, y: y)
-			}
-		}
+		let point = _pointData.last!
 		return point
 	}
 	
 	func showPreCloseLine() -> Bool {
 		return drawPreCloseLine
-	}
-	
-	func periodShowTime() ->Double {
-		return showPeriod
-	}
-	
-	func periodPanTime() ->Double {
-		return panPeriod
-	}
-	func currentPanEndTime() -> NSDate {
-		return currentTimeEndOnPan
 	}
 	
 	func pointData() -> [CGPoint] {

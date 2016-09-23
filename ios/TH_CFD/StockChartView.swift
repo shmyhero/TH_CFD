@@ -33,10 +33,11 @@ class StockChartView: UIView {
 	
 // MARK: action
 	func pan(sender: UIPanGestureRecognizer) {
-		//todo
-//		if(showPeriod > 0) {
-//			let size = self.bounds.size
-//			let translation : CGPoint = sender.translationInView(self)
+		if dataSource != nil && dataSource!.panEnable() {
+			let translation : CGPoint = sender.translationInView(self)
+			dataSource!.panTranslation(translation, isEnd: sender.state == UIGestureRecognizerState.Ended)
+			dataSource!.calculateData()
+			self.setNeedsDisplay()
 //			let rate = showPeriod/Double(size.width-margin*2)
 //			panPeriod = lastPanPeriod - Double(translation.x) * rate	//pan right means go earlier
 //						let timeStart:NSDate! = chartData.first!.time
@@ -58,7 +59,7 @@ class StockChartView: UIView {
 //				}
 //				lastPanPeriod = panPeriod
 //			}
-//		}
+		}
 	}
 	
 // MARK: deal with raw data from RN

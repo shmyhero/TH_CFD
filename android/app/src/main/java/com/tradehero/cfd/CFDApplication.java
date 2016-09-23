@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 
+import com.facebook.infer.annotation.Assertions;
+import com.facebook.react.LifecycleState;
+import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 
@@ -13,12 +16,25 @@ import java.util.List;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 
+import javax.annotation.Nullable;
+
 /**
  * Created by Neko on 16/9/5.
  */
 public class CFDApplication extends Application implements Application.ActivityLifecycleCallbacks, ReactApplication {
 
     private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+        @Override
+        protected String getJSMainModuleName() {
+            return "index.android";
+        }
+
+        @Nullable
+        @Override
+        protected String getBundleAssetName() {
+            return "index.android.bundle";
+        }
+
         @Override
         protected boolean getUseDeveloperSupport() {
             return BuildConfig.DEBUG;

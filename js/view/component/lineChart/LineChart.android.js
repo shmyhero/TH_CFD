@@ -6,7 +6,7 @@ var View = require('View');
 
 var Touchable = require('Touchable');
 var TouchableWithoutFeedback = require('TouchableWithoutFeedback');
-var NativeMethodsMixin = require('NativeMethodsMixin');
+//var NativeMethodsMixin = require('NativeMethodsMixin');
 var requireNativeComponent = require('requireNativeComponent');
 
 var LineChartXAxisPosition = require('./LineChartXAxisPosition');
@@ -14,7 +14,7 @@ var LineChartYAxisPosition = require('./LineChartYAxisPosition');
 
 
 var LineChart = React.createClass({
-	mixins: [Touchable.Mixin, NativeMethodsMixin],
+	mixins: [Touchable.Mixin, /*NativeMethodsMixin*/],
 
 	propTypes: {
 		...View.propTypes,

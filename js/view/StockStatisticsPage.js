@@ -17,6 +17,7 @@ var LogicData = require('../LogicData')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var ColorConstants = require('../ColorConstants')
+var UIConstants = require('../UIConstants')
 
 var {height, width} = Dimensions.get('window');
 
@@ -70,8 +71,8 @@ var StockStatisticsPage = React.createClass({
 			barAnimPlayed: true,
 		})
 		var maxBarSize = 1
-		for (var i = 0; i < this.state.statisticsBarInfo.length; i++) {
-			var barContent = this.state.statisticsBarInfo[i]
+		for (var i = 0; i < statisticsInfo.length; i++) {
+			var barContent = statisticsInfo[i]
 			if (maxBarSize < barContent.invest + barContent.pl) {
 				maxBarSize = barContent.invest + barContent.pl
 			}
@@ -248,7 +249,10 @@ var StockStatisticsPage = React.createClass({
 
 var styles = StyleSheet.create({
 	wrapper: {
-		flex: 1,
+		height: height
+				- UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
+				- UIConstants.HEADER_HEIGHT
+				- UIConstants.SCROLL_TAB_HEIGHT,
 		alignItems: 'stretch',
 		paddingBottom: Platform.OS === 'android' ? 40 : 0,
 	},

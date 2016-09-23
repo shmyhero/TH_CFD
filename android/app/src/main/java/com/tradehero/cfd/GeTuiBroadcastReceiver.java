@@ -63,7 +63,7 @@ public class GeTuiBroadcastReceiver extends BroadcastReceiver{
     }
 
     private void showPushDialog(Application application, String pushJsonString){
-        ReactContext rnContext = RNManager.getInstanceManager(application).getCurrentReactContext();
+        ReactContext rnContext = ((CFDApplication)application).getReactNativeHost().getReactInstanceManager().getCurrentReactContext();
         NativeDataModule.passDataToRN(rnContext, ACTION_PUSH_DIALOG, pushJsonString);
     }
 

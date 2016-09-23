@@ -59,11 +59,10 @@ class BaseDataSource: NSObject, BaseDataProvider {
 		_chartType = type
 	}
 	
-	func panEnable() -> Bool{
-		return false
+	func panTranslation(translation:CGPoint, isEnd:Bool = false) {
 	}
 	
-	func panTranslation(translation:CGPoint, isEnd:Bool = false) {
+	func pinchScale(scale:CGFloat, isEnd:Bool = false) {
 	}
 	
 //	func needUpdate() -> Bool {

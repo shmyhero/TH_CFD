@@ -11,6 +11,7 @@ protocol CandleChartDataProvider: BaseDataProvider
 	func candleData() -> [CandlePositionData]
 	func xVerticalLines() -> [CGFloat]
 	func timeVerticalLines() -> [NSDate]
+	func oneCandleWidth() -> CGFloat
 }
 
 class CandleData: BaseData {
@@ -59,6 +60,11 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 	var currentPanX:CGFloat = 0
 	var lastPanX:CGFloat = 0
 	
+	var currentScale:CGFloat = 1
+	var lastScale:CGFloat = 1
+	let MIN_SCALE:CGFloat = 0.5
+	let MAX_SCALE:CGFloat = 3
+	
 	override func parseJson() {
 		// demo:{\"lastOpen\":\"2016-03-24T13:31:00Z\",\"preClose\":100.81,\"longPct\":0.415537619225466,\"id\":14993,\"symbol\":\"CVS UN\",\"name\":\"CVS\",\"open\":0,\"last\":101.48,\"isOpen\":false,\"priceData\":[{\"p\":100.56,\"time\":\"2016-03-24T13:30:00Z\"},{\"p\":100.84,\"time\":\"2016-03-24T13:31:00Z\"}]}
 		let nsData: NSData = _jsonString.dataUsingEncoding(NSUTF8StringEncoding)!
@@ -90,10 +96,6 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		return _candleData.isEmpty
 	}
 	
-	override func panEnable() -> Bool{
-		return true
-	}
-	
 	override func calculateData() {
 		let width = _rect.width
 		let height = _rect.height
@@ -116,7 +118,7 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		
 		let columnPosition = { (column:Int) -> CandlePositionData in
 			let candle:CandleData = self._candleData[column]
-			let x:CGFloat = width - CGFloat(column) * self.spacer - self._margin - self.spacer/2 + self.panX()
+			let x:CGFloat = width - CGFloat(column) * self.spacer * self.scale() - self._margin - self.spacer * self.scale()/2 + self.panX()
 			let y:CGFloat = height/2
 			var high:CGFloat=y,low:CGFloat=y,open:CGFloat=y,close:CGFloat=y
 			if (maxValue > minValue) {
@@ -177,10 +179,10 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 			return 0
 		}
 		else {
-			let candleWidth = CGFloat(_candleData.count) * spacer
+			let allCandleWidth = CGFloat(_candleData.count) * spacer * scale()
 			let viewWidth = _rect.width - _margin * 2
-			if candleWidth > viewWidth {
-				return candleWidth - viewWidth
+			if allCandleWidth > viewWidth {
+				return allCandleWidth - viewWidth
 			}
 			else {
 				return 0
@@ -198,6 +200,24 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		return panx
 	}
 	
+	override func pinchScale(scale:CGFloat, isEnd:Bool = false) {
+		currentScale = scale
+		if (isEnd) {
+			lastScale = self.scale()
+			currentScale = 1
+		}
+	}
+	
+	func scale() -> CGFloat {
+		var scale = currentScale * lastScale
+		if scale < MIN_SCALE {
+			scale = MIN_SCALE
+		} else if scale > MAX_SCALE {
+			scale = MAX_SCALE
+		}
+		return scale
+	}
+	
 // MARK: delegate
 	func candleData() -> [CandlePositionData] {
 		return _candlePositionData
@@ -209,5 +229,9 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 	
 	func timeVerticalLines() -> [NSDate] {
 		return verticalLinesTime
+	}
+	
+	func oneCandleWidth() -> CGFloat {
+		return scale() * candleWidth
 	}
 }

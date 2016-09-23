@@ -38,9 +38,9 @@ class CandleChartRender: BaseRender {
 		let graphPathThinDown = UIBezierPath()
 		graphPathThinDown.lineWidth = 1
 		let graphPathFatUp = UIBezierPath()
-		graphPathFatUp.lineWidth = 5
+		graphPathFatUp.lineWidth = candleDataProvider!.oneCandleWidth()
 		let graphPathFatDown = UIBezierPath()
-		graphPathFatDown.lineWidth = 5
+		graphPathFatDown.lineWidth = candleDataProvider!.oneCandleWidth()
 		
 		// draw the sticks
 		for i in 0..<candleData.count {

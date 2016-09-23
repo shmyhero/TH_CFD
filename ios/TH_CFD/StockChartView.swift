@@ -14,28 +14,50 @@ class StockChartView: UIView {
 	var colorSet:ColorSet = ColorSet()
 	var render:BaseRender?
 	var dataSource:BaseDataSource?
-	var panGesture:UIPanGestureRecognizer!
+	var panGesture:UIPanGestureRecognizer?
+	var pinchGesture:UIPinchGestureRecognizer?
 
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		// add touch function
 		self.userInteractionEnabled = true
 		panGesture = UIPanGestureRecognizer(target: self, action: #selector(StockChartView.pan(_:)))
-		self.addGestureRecognizer(panGesture)
+		pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(StockChartView.pinch(_:)))
+		
+		if panGesture != nil {
+			self.addGestureRecognizer(panGesture!)
+		}
+		if pinchGesture != nil {
+			self.addGestureRecognizer(pinchGesture!)
+		}
 	}
 	required init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
 	}
 	
 	deinit {
-		self.removeGestureRecognizer(panGesture)
+		if panGesture != nil {
+			self.removeGestureRecognizer(panGesture!)
+		}
+		if pinchGesture != nil {
+			self.removeGestureRecognizer(pinchGesture!)
+		}
 	}
 	
 // MARK: action
 	func pan(sender: UIPanGestureRecognizer) {
-		if dataSource != nil && dataSource!.panEnable() {
+		if dataSource != nil {
 			let translation : CGPoint = sender.translationInView(self)
 			dataSource!.panTranslation(translation, isEnd: sender.state == UIGestureRecognizerState.Ended)
+			dataSource!.calculateData()
+			self.setNeedsDisplay()
+		}
+	}
+	
+	func pinch(sender: UIPinchGestureRecognizer) {
+		if dataSource != nil {
+			let scale : CGFloat = sender.scale
+			dataSource!.pinchScale(scale, isEnd: sender.state == UIGestureRecognizerState.Ended)
 			dataSource!.calculateData()
 			self.setNeedsDisplay()
 		}

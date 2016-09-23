@@ -1,7 +1,16 @@
 'use strict';
 
 import React from 'react';
-import {View, DeviceEventEmitter, Dimensions, TouchableOpacity, LayoutAnimation, StyleSheet, Text, Platform} from 'react-native';
+import {View,
+	DeviceEventEmitter,
+	Dimensions,
+	TouchableOpacity,
+	LayoutAnimation,
+	StyleSheet,
+	Text,
+	Platform,
+	Keyboard
+} from 'react-native';
 const dismissKeyboard = require('dismissKeyboard');
 var INPUT_ACCESSORY_HEIGHT = 40;
 
@@ -23,12 +32,12 @@ var InputAccessory = React.createClass({
 	//For some reason, this gives warnings?
 	componentWillMount() {
 		if (Platform.OS === 'ios') {
-			DeviceEventEmitter.addListener('keyboardWillShow', this.keyboardDidShow)
-			DeviceEventEmitter.addListener('keyboardWillHide', this.keyboardDidHide)
+			Keyboard.addListener('keyboardWillShow', this.keyboardDidShow)
+			Keyboard.addListener('keyboardWillHide', this.keyboardDidHide)
 		}
 		else {
-			DeviceEventEmitter.addListener('keyboardDidShow', this.keyboardDidShow)
-			DeviceEventEmitter.addListener('keyboardDidHide', this.keyboardDidHide)
+			Keyboard.addListener('keyboardDidShow', this.keyboardDidShow)
+			Keyboard.addListener('keyboardDidHide', this.keyboardDidHide)
 		}
 	},
 
@@ -41,12 +50,12 @@ var InputAccessory = React.createClass({
 			})
 		// dismissKeyboardHandler();
 		if (Platform.OS === 'ios') {
-			DeviceEventEmitter.removeAllListeners('keyboardWillShow');
-			DeviceEventEmitter.removeAllListeners('keyboardWillHide');
+			Keyboard.removeAllListeners('keyboardWillShow');
+			Keyboard.removeAllListeners('keyboardWillHide');
 		}
 		else {
-			DeviceEventEmitter.removeAllListeners('keyboardDidShow');
-			DeviceEventEmitter.removeAllListeners('keyboardDidHide');
+			Keyboard.removeAllListeners('keyboardDidShow');
+			Keyboard.removeAllListeners('keyboardDidHide');
 		}
 	},
 

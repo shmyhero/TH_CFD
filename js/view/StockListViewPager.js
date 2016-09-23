@@ -133,7 +133,6 @@ var StockListViewPager = React.createClass({
 		return (
 			<View style={[styles.wrapper, {width: width}]}>
 				{this.renderNavBar()}
-
 				<ScrollTabView
 						tabNames={tabNames}
 						viewPages={viewPages}

@@ -92,10 +92,10 @@ var LoginPage = React.createClass({
 		};
 	},
 
-	checkButtonsEnable: function() {
+	checkButtonsEnable: function(phoneNumber, validationCode) {
 		this.setState({
-			getValidationCodeButtonEnabled: (this.state.phoneNumber.length === 11 && this.state.validationCodeCountdown < 0),
-			phoneLoginButtonEnabled: (this.state.phoneNumber.length === 11 && this.state.validationCode.length === 4),
+			getValidationCodeButtonEnabled: (phoneNumber.length === 11 && this.state.validationCodeCountdown < 0),
+			phoneLoginButtonEnabled: (phoneNumber.length === 11 && validationCode.length === 4),
 		})
 	},
 
@@ -104,7 +104,7 @@ var LoginPage = React.createClass({
 			phoneNumber: text
 		})
 
-		this.checkButtonsEnable()
+		this.checkButtonsEnable(text, this.state.validationCode)
 	},
 
 	setValidationCode: function(text: string) {
@@ -112,13 +112,14 @@ var LoginPage = React.createClass({
 			validationCode: text
 		})
 
-		this.checkButtonsEnable()
+		this.checkButtonsEnable(this.state.phoneNumber, text)
 	},
 
 	getValidationCodePressed: function() {
 		if (! this.state.getValidationCodeButtonEnabled) {
 			return
 		}
+
 		NetworkModule.fetchTHUrl(
 			NetConstants.GET_PHONE_CODE_API + '?' + NetConstants.PARAMETER_PHONE + "=" + this.state.phoneNumber,
 			{
@@ -145,6 +146,7 @@ var LoginPage = React.createClass({
 						validationCodeCountdown: this.state.validationCodeCountdown - 1
 					})
 				} else {
+
 					if (this.state.phoneNumber.length == 11) {
 						this.setState({
 							getValidationCodeButtonEnabled: true,

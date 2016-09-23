@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.facebook.react.LifecycleState;
+import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactRootView;
 import com.facebook.react.bridge.ReactContext;
@@ -38,7 +39,7 @@ import butterknife.ButterKnife;
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
  */
-public class MainActivity extends AppCompatActivity implements DefaultHardwareBackBtnHandler,
+public class MainActivity extends ReactActivity implements DefaultHardwareBackBtnHandler,
         ReactInstanceManager.ReactInstanceEventListener {
 
     @Bind(R.id.react_root_view)
@@ -46,6 +47,16 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
     @Bind(R.id.tvVersion)
     TextView tvVersion;
+
+
+    /**
+     * Returns the name of the main component registered from JavaScript.
+     * This is used to schedule rendering of the component.
+     */
+    @Override
+    protected String getMainComponentName() {
+        return "TH_CFD";
+    }
 
     private ReactInstanceManager mReactInstanceManager;
     private boolean mDoRefresh = false;
@@ -62,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.20.141:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.139:8081").apply();
 
 
         super.onCreate(null);
@@ -75,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         initGeTui();
         initSound();
 
-        mReactInstanceManager = RNManager.getInstanceManager(getApplication());
+        mReactInstanceManager = ((CFDApplication)getApplication()).getReactNativeHost().getReactInstanceManager();
         setContentView(R.layout.react_activity_container);
         ButterKnife.bind(this);
 
@@ -112,9 +123,8 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     String pushData = null;
 
     @Override
-    protected void onNewIntent(Intent intent) {
+    public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-
 
         if (intent != null && intent.getExtras() != null) {
             String data = intent.getExtras().getString(GeTuiBroadcastReceiver.KEY_PUSH_DATA);
@@ -225,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mReactInstanceManager.onActivityResult(requestCode, resultCode, data);
+        mReactInstanceManager.onActivityResult(this, requestCode, resultCode, data);
     }
 
     public void initMeiQia() {

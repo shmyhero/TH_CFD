@@ -139,7 +139,6 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
                     webView,
                     new TopLoadingStartEvent(
                             webView.getId(),
-                            SystemClock.nanoTime(),
                             createWebViewEvent(webView, url)));
         }
 
@@ -162,7 +161,7 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
 
             dispatchEvent(
                     webView,
-                    new TopLoadingErrorEvent(webView.getId(), SystemClock.nanoTime(), eventData));
+                    new TopLoadingErrorEvent(webView.getId(), eventData));
         }
 
         @Override
@@ -173,7 +172,6 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
                     webView,
                     new TopLoadingStartEvent(
                             webView.getId(),
-                            SystemClock.nanoTime(),
                             createWebViewEvent(webView, url)));
         }
 
@@ -182,7 +180,6 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
                     webView,
                     new TopLoadingFinishEvent(
                             webView.getId(),
-                            SystemClock.nanoTime(),
                             createWebViewEvent(webView, url)));
         }
 

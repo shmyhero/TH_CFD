@@ -90,7 +90,6 @@ var SharePage = React.createClass({
 		//So make the animation in our code until we update RN.
     return (
         <Modal
-					animated={false}
           animationType={"slide"}
           transparent={true}
           visible={this.state.modalVisible}

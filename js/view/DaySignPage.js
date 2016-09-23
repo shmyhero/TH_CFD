@@ -424,7 +424,6 @@ var DaySignPage = React.createClass({
 	renderModal:function(){
 		return(
 			<Modal
-				animated={true}
 				transparent={true}
 				visible={this.state.modalVisible}
 				animationType={"slide"}
@@ -475,10 +474,9 @@ var DaySignPage = React.createClass({
 	renderModalCoin:function(){
 		return(
 			<Modal
-				animated={false}
 				transparent={true}
 			  visible={this.state.modalCoinVisible}
-				// animationType={"slide"}
+				animationType={"slide"}
 				style={{height: height, width: width}}
 				onRequestClose={() => {this._setModalCoinVisible(false)}}
 				>

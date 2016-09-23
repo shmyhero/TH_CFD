@@ -14,23 +14,8 @@ var SHARE_PAGE = 'SharePage'
 
 var SharePage = require('./SharePage')
 var NavBar = require('./NavBar')
-var WebViewBridge = require('react-native-webview-bridge');
 var NetConstants = require('../NetConstants')
 var TalkingdataModule = require('../module/TalkingdataModule')
-
-//Cannot find a soluWebViewBridge
-const injectScript = `
-(function () {
-	if (WebViewBridge) {
-	  WebViewBridge.onMessage = function (message) {
-			if (message === "get-share-info") {
-				shareinfo();
-				//WebViewBridge.send('{"webpageUrl":"1", "imageUrl":"2", "title":"3", "description":"4"}');
-    	}
-		}
-	}
-}());
-`;
 
 var WebViewPage = React.createClass({
 	propTypes: {
@@ -138,7 +123,6 @@ var WebViewPage = React.createClass({
 					automaticallyAdjustContentInsets={true}
 					decelerationRate="normal"
 					source={{uri: this.props.url}}
-					injectedJavaScript={injectScript}
 				 	/>
 			)
 		}

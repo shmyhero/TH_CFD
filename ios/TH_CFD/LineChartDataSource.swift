@@ -15,7 +15,7 @@ protocol LineChartDataProvider: BaseDataProvider
 	func currentPanEndTime() -> NSDate
 	func pointData() -> [CGPoint]
 	func yPosOfMiddleLine() ->CGFloat
-	func xValuesOfVerticalLine() -> [CGFloat]
+	func xVerticalLines() -> [CGFloat]
 	func timesOnBottom() -> [NSDate]
 	func firstTime() -> NSDate?
 	func lastTime() -> NSDate?
@@ -319,7 +319,7 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 		return middleLineY
 	}
 	
-	func xValuesOfVerticalLine() -> [CGFloat] {
+	func xVerticalLines() -> [CGFloat] {
 		return verticalLinesX
 	}
 	

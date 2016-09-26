@@ -39,7 +39,8 @@ import butterknife.ButterKnife;
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
  */
-public class MainActivity extends ReactActivity implements DefaultHardwareBackBtnHandler,
+//BUGBUG: how to use the 0.33 way ReactActivity with a splash screen?
+public class MainActivity extends AppCompatActivity implements DefaultHardwareBackBtnHandler,
         ReactInstanceManager.ReactInstanceEventListener {
 
     @Bind(R.id.react_root_view)
@@ -53,10 +54,10 @@ public class MainActivity extends ReactActivity implements DefaultHardwareBackBt
      * Returns the name of the main component registered from JavaScript.
      * This is used to schedule rendering of the component.
      */
-    @Override
+    /*@Override
     protected String getMainComponentName() {
         return "TH_CFD";
-    }
+    }*/
 
     private ReactInstanceManager mReactInstanceManager;
     private boolean mDoRefresh = false;

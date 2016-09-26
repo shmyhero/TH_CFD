@@ -30,7 +30,8 @@ var top_image = require("../../images/super_priority_top.png")
 var background_image = require("../../images/super_priority_bg.png")
 
 var DIALOG_WIDTH = width - 50;
-var CONTENT_TOP_MARGIN = 30
+var CONTENT_TOP_MARGIN = 30;
+var CONTENT_IMAGE_SIZE = DIALOG_WIDTH / 2 - 100;
 var NOT_LOGIN_DIALOG_HEIGHT = DIALOG_WIDTH /670 * 760;
 var LOGIN_DIALOG_HEIGHT = DIALOG_WIDTH /670 * 514;
 var HEADER_IMAGE_WIDTH = DIALOG_WIDTH;
@@ -156,11 +157,10 @@ var SuperPriorityHintPage = React.createClass({
   },
 
   renderTradingLine: function(){
-      //flex:1,
     return (
       <View style={styles.bodyRowContainer}>
         <View style={styles.bodyContent}>
-          <Image resizeMode="contain" source={content_image_3} style={styles.bodyImage}/>
+					<Image resizeMode="contain" source={content_image_3} style={styles.bodyImage}/>
           <View style={styles.bodyTextContainer}>
             <Text style={styles.bodyText}>
             签到日送
@@ -213,7 +213,7 @@ var SuperPriorityHintPage = React.createClass({
   	if(this.state.dialogVisible){
       var userData = LogicData.getUserData();
       var isLogin = Object.keys(userData).length != 0
-      //notLogin = false
+
       var dialogContainerHeight = (isLogin ? LOGIN_DIALOG_HEIGHT : NOT_LOGIN_DIALOG_HEIGHT) + DIALOG_OFFSET;
       var containerHeight = isLogin ? LOGIN_DIALOG_HEIGHT : NOT_LOGIN_DIALOG_HEIGHT;
 
@@ -285,6 +285,7 @@ const styles = StyleSheet.create({
 		width: DIALOG_WIDTH,
 		borderRadius: 10,
     backgroundColor: 'white',
+		flexDirection: 'column',
   },
 	topImage:{
 		position:'absolute',
@@ -296,22 +297,23 @@ const styles = StyleSheet.create({
 	bodyContainer:{
 		flex: 1,
     flexDirection: 'column',
-    justifyContent: 'space-between',
 		marginTop: 30,
-		paddingBottom: 26,
+		marginBottom: 26,
 	},
-  bodyImage:{
-    flex: 1,
-		alignItems: 'center',
-  },
-  bodyRowContainer:{
-    flexDirection: 'row',
-    flex:1,
-    paddingTop: 26,
-  },
   bodyContent:{
     flex:1,
     alignItems:'center',
+		flexDirection: 'column'
+  },
+  bodyImage:{
+		//flex:1
+		width: CONTENT_IMAGE_SIZE,
+		height: CONTENT_IMAGE_SIZE,
+  },
+  bodyRowContainer:{
+		flex: 1,
+    flexDirection: 'row',
+    marginTop: 26,
   },
   bodyTextContainer:{
     marginTop:23,

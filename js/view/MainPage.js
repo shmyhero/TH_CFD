@@ -80,15 +80,6 @@ var OpenAccountTitles = [
 var _navigator;
 var _navigators = [];
 
-BackAndroid.addEventListener('hardwareBackPress', () => {
-	if (_navigator && _navigator.getCurrentRoutes().length > 1) {
-		_navigator.pop();
-		WebSocketModule.cleanRegisteredCallbacks()
-		return true;
-	}
-	return false;
-});
-
 export let MAIN_PAGE_ROUTE = 'main'
 export let HOME_PAGE_ROUTE = 'homepage'
 export let LANDING_ROUTE = 'landing'
@@ -591,12 +582,31 @@ var MainPage = React.createClass({
 		})
 	},
 
+	backAndroidHandler: function(){
+		console.log("hardwareBackPress");
+		if (_navigator && _navigator.getCurrentRoutes().length > 1) {
+			_navigator.pop();
+			WebSocketModule.cleanRegisteredCallbacks()
+
+			console.log("hardwareBackPress return true");
+			return true;
+		}
+
+		console.log("hardwareBackPress return false");
+		return false;
+	},
+
+	componentWillMount: function(){
+ 		BackAndroid.addEventListener('hardwareBackPress', this.backAndroidHandler);
+	},
+
 	componentWillUnmount: function() {
 		if (Platform.OS === 'ios') {
 			Linking.removeEventListener('url', this._handleOpenURL);
 		} else {
 			this.recevieDataSubscription.remove();
 		}
+		BackAndroid.removeEventListener('hardwareBackPress', this.backAndroidHandler);
 	},
 
 	_handleOpenURL: function(event) {

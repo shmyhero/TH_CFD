@@ -967,6 +967,7 @@ var styles = StyleSheet.create({
 	inputText: {
 		width: 30,
 		height: 30,
+		backgroundColor:'transparent',
 		color: 'transparent',
 	},
 	smallLabel: {

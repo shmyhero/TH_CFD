@@ -153,10 +153,21 @@ var StockOpenPositionPage = React.createClass({
 		)
 	},
 
-	loadStockDetailInfo: function(stockCode) {
+	loadStockDetailInfo: function(chartType,stockCode) {
 		var url = NetConstants.GET_STOCK_PRICE_TODAY_API
-		url = url.replace(/<stockCode>/, stockCode)
-		url = url.replace(/<chartType>/, this.state.chartType)
+		// url = url.replace(/<stockCode>/, stockCode)
+		// url = url.replace(/<chartType>/, this.state.chartType)
+
+		if(chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE){
+			url = NetConstants.GET_STOCK_KLINE_FIVE_M;
+			url = url.replace(/<securityId>/, stockCode);
+		}else if(chartType == NetConstants.PARAMETER_CHARTTYPE_DAY){
+			url = NetConstants.GET_STOCK_KLINE_DAY;
+			url = url.replace(/<securityId>/, stockCode);
+		}else {
+			 url = url.replace(/<stockCode>/, stockCode)
+			 url = url.replace(/<chartType>/, chartType)
+		}
 
 		NetworkModule.fetchTHUrl(
 			url,
@@ -315,7 +326,7 @@ var StockOpenPositionPage = React.createClass({
 			this.setState({
 				stockDetailInfo: rowData.security
 			})
-			this.loadStockDetailInfo(stockid)
+			this.loadStockDetailInfo(this.state.chartType,stockid)
 		}
 		this.doScrollAnimation()
 	},
@@ -411,7 +422,7 @@ var StockOpenPositionPage = React.createClass({
 		this.setState({
 			chartType: type
 		})
-		this.loadStockDetailInfo(rowData.security.id)
+		this.loadStockDetailInfo(type,rowData.security.id)
 	},
 
 	currentExtendHeight: function(subItem) {
@@ -892,7 +903,15 @@ var StockOpenPositionPage = React.createClass({
 				minPrice = Number.MAX_VALUE
 
 				for (var i = 0; i < priceData.length; i ++) {
-					var price = priceData[i].p
+					var price = 0
+
+					if(this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE||
+					  this.state.chartType == NetConstants.PARAMETER_CHARTTYPE_DAY){
+						price = priceData[i].close
+					}else{
+						price = priceData[i].p
+					}
+
 					if (price > maxPrice) {
 						maxPrice = price
 					}

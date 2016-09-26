@@ -31,11 +31,13 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
         ReactChart chart = new ReactChart(reactContext);
         chart.setDrawGridBackground(false);
         chart.setDragEnabled(true);
-        chart.setScaleEnabled(false);
+        chart.setScaleEnabled(true);
 //        chart.setTouchEnabled(true);
         chart.getLegend().setEnabled(false);
         chart.setDoubleTapToZoomEnabled(false);
-
+        chart.setScaleXEnabled(true);
+        chart.setScaleMinima(0.5f,1.0f);
+        chart.setScaleYEnabled(false);
 
         chart.setExtraLeftOffset(0);
         chart.setExtraRightOffset(0);

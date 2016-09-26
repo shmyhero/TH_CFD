@@ -612,8 +612,8 @@ var StockOpenPositionPage = React.createClass({
 					<View style={[styles.rowLeftPart, {	paddingTop: 5,}]}>
 						<Text style={styles.headerTextLeft}>产品</Text>
 					</View>
-					<View style={[styles.rowCenterPart, {	paddingRight: 5,}]}>
-						<Text style={[styles.headerTextLeft, {	paddingRight: 5,}]}>亏盈</Text>
+					<View style={[styles.rowCenterPart, {	paddingRight: 10,}]}>
+						<Text style={[styles.headerTextLeft, {paddingRight: 0,}]}>亏盈</Text>
 					</View>
 					<View style={styles.rowRightPart}>
 						<Text style={styles.headerTextLeft}>收益率</Text>
@@ -864,7 +864,7 @@ var StockOpenPositionPage = React.createClass({
 					<Text style={styles.extendLeft}>{titleText}</Text>
 					{
 						switchIsOn ?
-						<View style={[styles.extendMiddle, {flexDirection: 'row', flex:3}]}>
+						<View style={[styles.extendMiddle, {flexDirection: 'row', flex:3,paddingTop:0}]}>
 							<TextInput editable={false} ref={component => this.bindRef(type, component, 1)} defaultValue={percent.toFixed(1)+'%'}
 								style={{flex:3, textAlign:'right', fontSize:17, color: color}}
 								underlineColorAndroid='transparent'/>

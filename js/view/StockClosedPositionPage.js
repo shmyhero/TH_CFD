@@ -344,8 +344,8 @@ var StockClosedPositionPage = React.createClass({
 					<View style={[styles.rowLeftPart, {	paddingTop: 5,}]}>
 						<Text style={styles.headerTextLeft}>产品</Text>
 					</View>
-					<View style={[styles.rowCenterPart, {	paddingRight: 5,}]}>
-						<Text style={[styles.headerTextLeft, {	paddingRight: 5,}]}>亏盈</Text>
+					<View style={[styles.rowCenterPart, {	paddingRight: 10,}]}>
+						<Text style={[styles.headerTextLeft, {	paddingRight: 0,}]}>亏盈</Text>
 					</View>
 					<View style={styles.rowRightPart}>
 						<Text style={styles.headerTextLeft}>收益率</Text>

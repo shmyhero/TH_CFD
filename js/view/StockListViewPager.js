@@ -37,6 +37,7 @@ var urls = [
 
 var didFocusSubscription = null;
 var didTabSelectSubscription = null;
+var _currentSelectedTab = 0;
 
 var StockListViewPager = React.createClass({
 
@@ -72,24 +73,24 @@ var StockListViewPager = React.createClass({
 	},
 
 	onTabChanged: function() {
-		this.setState({currentSelectedTab: this.state.currentSelectedTab});
-		this.refs['page' + this.state.currentSelectedTab].tabPressed()
+		this.setState({currentSelectedTab: _currentSelectedTab});
+		this.refs['page' + _currentSelectedTab].tabPressed()
 		LogicData.setTabIndex(1);
 		WebSocketModule.registerCallbacks((stockInfo) => {
-			this.refs['page' + this.state.currentSelectedTab] && this.refs['page' + this.state.currentSelectedTab].handleStockInfo(stockInfo)
+			this.refs['page' + _currentSelectedTab] && this.refs['page' + _currentSelectedTab].handleStockInfo(stockInfo)
 		})
 	},
 
 	_handleConnectivityChange: function(isConnected) {
 		if (isConnected) {
-			this.refs['page' + this.state.currentSelectedTab].onPageSelected()
+			this.refs['page' + _currentSelectedTab].onPageSelected()
 		}
 	},
 
 	onDidFocus: function(event) {
         if (MainPage.STOCK_LIST_VIEW_PAGER_ROUTE === event.data.route.name) {
             WebSocketModule.registerCallbacks((stockInfo) => {
-				this.refs['page' + this.state.currentSelectedTab] && this.refs['page' + this.state.currentSelectedTab].handleStockInfo(stockInfo)
+				this.refs['page' + _currentSelectedTab] && this.refs['page' + _currentSelectedTab].handleStockInfo(stockInfo)
 			})
         }
 	},
@@ -106,16 +107,17 @@ var StockListViewPager = React.createClass({
 		this.setState({
 			currentSelectedTab: index,
 		})
-		this.refs['page' + this.state.currentSelectedTab].onPageSelected()
+		_currentSelectedTab = index,
+		this.refs['page' + _currentSelectedTab].onPageSelected()
 
-		WebSocketModule.registerInterestedStocks(this.refs['page' + this.state.currentSelectedTab].getShownStocks())
+		WebSocketModule.registerInterestedStocks(this.refs['page' + _currentSelectedTab].getShownStocks())
 	},
 
 	renderNavBar: function() {
 		var hasOwnStocks = LogicData.getOwnStocksData().length !== 0
 		return (
 			<NavBar title="行情"
-				textOnLeft={(this.state.currentSelectedTab==0 && hasOwnStocks) ? '编辑' : null}
+				textOnLeft={(_currentSelectedTab==0 && hasOwnStocks) ? '编辑' : null}
 				leftTextOnClick={this.editButtonClicked}
 				showSearchButton={true}
 				navigator={this.props.navigator}/>

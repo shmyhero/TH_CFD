@@ -271,14 +271,15 @@ var styles = StyleSheet.create({
 		color: '#303030',
 	},
 	message:{
-		flex: 1,
 		fontSize: 17,
 		marginLeft: 10,
 		marginRight: 10,
 		color: '#757575',
 	},
+	extendRight: {
+		alignItems: 'center',
+	},
 	clickableMessage: {
-		flex: 1,
 		fontSize: 17,
 		marginLeft: 10,
 		marginRight: 10,
@@ -289,7 +290,6 @@ var styles = StyleSheet.create({
 		width: 7.5,
 		height: 12.5,
 	},
-
 	buttonArea: {
 		flex: 1,
 		borderRadius: 3,

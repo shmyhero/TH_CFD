@@ -167,7 +167,7 @@ var MePushConfigPage = React.createClass({
 			);
 		}else if (rowData.type === 'text'){
 			return(
-				<View style={[styles.hintWrapper, {flex:1, flexDirection:'column', alignItems:'flex-start'}]}>
+				<View style={styles.hintWrapper}>
 						<Text style={styles.hintText}>{rowData.title}</Text>
 				</View>
 			);
@@ -223,10 +223,8 @@ var styles = StyleSheet.create({
 		backgroundColor: 'white',
 	},
 	hintWrapper: {
-		flex: 1,
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingLeft: 15,
+		//flex: 1,
+		paddingLeft: UIConstants.LIST_ITEM_LEFT_MARGIN,
 		paddingTop: 12,
 	},
 	line: {
@@ -266,9 +264,9 @@ var styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	hintText: {
+		flex:1,
 		fontSize: 12,
 		textAlign: 'left',
-		marginLeft: 10,
 		color: '#8d8d8d',
 	},
 	extendRight: {

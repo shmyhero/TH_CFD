@@ -414,7 +414,6 @@ var styles = StyleSheet.create({
 	},
 
 	userNameText: {
-		flex: 1,
 		textAlign: 'left',
 		fontSize: 17,
 		marginLeft: 10,
@@ -422,7 +421,7 @@ var styles = StyleSheet.create({
 	},
 
 	phoneText: {
-		flex: 1,
+
 		textAlign: 'left',
 		fontSize: 17,
 		marginLeft: 10,

@@ -10,7 +10,7 @@ import {
 	TouchableOpacity,
 } from 'react-native';
 
-var ViewPager = require('react-native-viewpager-es6');
+// var ViewPager = require('react-native-viewpager-es6');
 var Button = require('../component/Button')
 var MainPage = require('../MainPage')
 var ColorConstants = require('../../ColorConstants')
@@ -25,9 +25,9 @@ var BANNERS = [
 	require('../../../images/live_register_banner01.png'),
 	require('../../../images/live_register_banner02.png'),
 ];
-var ds = new ViewPager.DataSource({
-	pageHasChanged: (p1, p2) => p1 !== p2,
-});
+// var ds = new ViewPager.DataSource({
+// 	pageHasChanged: (p1, p2) => p1 !== p2,
+// });
 
 var imageHeight = 311 / 750 * width
 
@@ -67,12 +67,14 @@ var OAStatusPage = React.createClass({
 				<Image
 					style={[styles.backgroundImage, {height: imageHeight, width: width}]}
 					source={BANNERS[0]} >
-					<ViewPager
-						style={{backgroundColor:'transparent'}}
-						dataSource={this.state.dataSource}
-						renderPage={this._renderPage}
-						isLoop={false}
-						autoPlay={false}/>
+					{
+					// <ViewPager
+					// 	style={{backgroundColor:'transparent'}}
+					// 	dataSource={this.state.dataSource}
+					// 	renderPage={this._renderPage}
+					// 	isLoop={false}
+					// 	autoPlay={false}/>
+					}
 				</Image>
 
 				<Image style={styles.image} source={require('../../../images/live_register_sub_banner.png')}/>

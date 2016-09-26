@@ -175,7 +175,6 @@
 		3DE8F4581D75236C00B07DFC /* EditOwnStocksView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DE8F4571D75236C00B07DFC /* EditOwnStocksView.m */; };
 		3DE90F481D505035004D264A /* RCTTalkingData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DE90F471D505035004D264A /* RCTTalkingData.m */; };
 		3DFABFF31D81180E007DB853 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DFABFF21D81180E007DB853 /* NotificationManager.swift */; };
-		418F21EB1D75264800E2119A /* libReact-Native-Webview-Bridge.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 418F21EA1D75262F00E2119A /* libReact-Native-Webview-Bridge.a */; };
 		73DFEAF21CDB242700234CE8 /* libbz2.1.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 73DFEAF01CDB22A500234CE8 /* libbz2.1.0.tbd */; };
 		73FD306D1D0574FD00D77EFC /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73FD306C1D0574C200D77EFC /* libRNFS.a */; };
 		80BCA2B8147C419E82DF3DFB /* libRCTHotUpdate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADAFAB0527AA419A8350A2B3 /* libRCTHotUpdate.a */; };
@@ -250,6 +249,13 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = BVLinearGradient;
 		};
+		3DCDB68A1D98F14B004B4765 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4487FACCDD89490AA4A8E7F9 /* RealmReact.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F60690131CA2766F0003FB26;
+			remoteInfo = RealmReact;
+		};
 		3DE8F6761D115922008A0D49 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 603E112CF5294E05A10661EE /* RCTWeChat.xcodeproj */;
@@ -257,26 +263,12 @@
 			remoteGlobalIDString = 86D238421BD0BB9E00C75D01;
 			remoteInfo = RCTWeChat;
 		};
-		418F21E91D75262F00E2119A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 418F21E51D75262E00E2119A /* React-Native-Webview-Bridge.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 4114DC4C1C187C3A003CD988;
-			remoteInfo = "React-Native-Webview-Bridge";
-		};
 		737363661D17CCFA00476488 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FC36C2CB97CE4D7DBE61CD48 /* RNImagePicker.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 014A3B5C1C6CF33500B6D375;
 			remoteInfo = RNImagePicker;
-		};
-		737CC9B51CD30DFE00166A6A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8BCBE68C9A854D14A920EAD9 /* RealmReact.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F60690131CA2766F0003FB26;
-			remoteInfo = RealmReact;
 		};
 		73DFEAE41CDB21FA00234CE8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -607,7 +599,7 @@
 		3DE90F461D505035004D264A /* RCTTalkingData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCTTalkingData.h; path = TH_CFD/RCTTalkingData.h; sourceTree = "<group>"; };
 		3DE90F471D505035004D264A /* RCTTalkingData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCTTalkingData.m; path = TH_CFD/RCTTalkingData.m; sourceTree = "<group>"; };
 		3DFABFF21D81180E007DB853 /* NotificationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NotificationManager.swift; path = TH_CFD/NotificationManager.swift; sourceTree = "<group>"; };
-		418F21E51D75262E00E2119A /* React-Native-Webview-Bridge.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "React-Native-Webview-Bridge.xcodeproj"; path = "../node_modules/react-native-webview-bridge/ios/React-Native-Webview-Bridge.xcodeproj"; sourceTree = "<group>"; };
+		4487FACCDD89490AA4A8E7F9 /* RealmReact.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RealmReact.xcodeproj; path = "../node_modules/realm/react-native/ios/RealmReact.xcodeproj"; sourceTree = "<group>"; };
 		58602275B1F14B899E56D44F /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
 		5EE2CE709A38445E9875FCBD /* libRealmReact.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRealmReact.a; sourceTree = "<group>"; };
 		603E112CF5294E05A10661EE /* RCTWeChat.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTWeChat.xcodeproj; path = "../node_modules/react-native-wx/ios/RCTWeChat.xcodeproj"; sourceTree = "<group>"; };
@@ -616,7 +608,6 @@
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		7D8780BF57DD4DB28D4B30A9 /* libRNImagePicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNImagePicker.a; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
-		8BCBE68C9A854D14A920EAD9 /* RealmReact.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RealmReact.xcodeproj; path = "../node_modules/realm/react-native/ios/RealmReact.xcodeproj"; sourceTree = "<group>"; };
 		ADAFAB0527AA419A8350A2B3 /* libRCTHotUpdate.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTHotUpdate.a; sourceTree = "<group>"; };
 		D8E9B8FF0CA943FB9D049E93 /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
 		FC36C2CB97CE4D7DBE61CD48 /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
@@ -630,7 +621,6 @@
 				3D2A16F01D7804FD00FEB181 /* CoreBluetooth.framework in Frameworks */,
 				3D2A16EE1D7804F600FEB181 /* CoreLocation.framework in Frameworks */,
 				3D2A16EC1D7804E600FEB181 /* JavaScriptCore.framework in Frameworks */,
-				418F21EB1D75264800E2119A /* libReact-Native-Webview-Bridge.a in Frameworks */,
 				3DB9F24E1D6449CA00DC5C63 /* MobileCoreServices.framework in Frameworks */,
 				3DB9F24C1D6449AA00DC5C63 /* AVFoundation.framework in Frameworks */,
 				3DB9F24A1D64499800DC5C63 /* libicucore.tbd in Frameworks */,
@@ -1457,6 +1447,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		3DCDB67A1D98F14B004B4765 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3DCDB68B1D98F14B004B4765 /* libRealmReact.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		3DE8F6681D115922008A0D49 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -1477,14 +1475,6 @@
 				3D02CEE31D926C7700BA9160 /* CandleChartDataSource.swift */,
 			);
 			name = charts;
-			sourceTree = "<group>";
-		};
-		418F21E61D75262E00E2119A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				418F21EA1D75262F00E2119A /* libReact-Native-Webview-Bridge.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		43D0F270D79E4680AD511CD9 /* Frameworks */ = {
@@ -1509,14 +1499,6 @@
 			isa = PBXGroup;
 			children = (
 				737363671D17CCFA00476488 /* libRNImagePicker.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		737CC9A61CD30DFE00166A6A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				737CC9B61CD30DFE00166A6A /* libRealmReact.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1548,7 +1530,6 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				418F21E51D75262E00E2119A /* React-Native-Webview-Bridge.xcodeproj */,
 				73FD30591D0574C200D77EFC /* RNFS.xcodeproj */,
 				3D2A3A091C7C44C50085264D /* CoreTelephony.framework */,
 				3D2A3A001C7C3EE70085264D /* libz.tbd */,
@@ -1565,10 +1546,10 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				58602275B1F14B899E56D44F /* BVLinearGradient.xcodeproj */,
-				8BCBE68C9A854D14A920EAD9 /* RealmReact.xcodeproj */,
 				22F5EC88B9014CDA85FEBFBA /* RCTHotUpdate.xcodeproj */,
 				603E112CF5294E05A10661EE /* RCTWeChat.xcodeproj */,
 				FC36C2CB97CE4D7DBE61CD48 /* RNImagePicker.xcodeproj */,
+				4487FACCDD89490AA4A8E7F9 /* RealmReact.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1703,16 +1684,12 @@
 					ProjectRef = 603E112CF5294E05A10661EE /* RCTWeChat.xcodeproj */;
 				},
 				{
-					ProductGroup = 418F21E61D75262E00E2119A /* Products */;
-					ProjectRef = 418F21E51D75262E00E2119A /* React-Native-Webview-Bridge.xcodeproj */;
-				},
-				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
 				{
-					ProductGroup = 737CC9A61CD30DFE00166A6A /* Products */;
-					ProjectRef = 8BCBE68C9A854D14A920EAD9 /* RealmReact.xcodeproj */;
+					ProductGroup = 3DCDB67A1D98F14B004B4765 /* Products */;
+					ProjectRef = 4487FACCDD89490AA4A8E7F9 /* RealmReact.xcodeproj */;
 				},
 				{
 					ProductGroup = 73FD305A1D0574C200D77EFC /* Products */;
@@ -1794,6 +1771,13 @@
 			remoteRef = 3DC618141CA38B0A00F36541 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		3DCDB68B1D98F14B004B4765 /* libRealmReact.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRealmReact.a;
+			remoteRef = 3DCDB68A1D98F14B004B4765 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		3DE8F6771D115922008A0D49 /* libRCTWeChat.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1801,25 +1785,11 @@
 			remoteRef = 3DE8F6761D115922008A0D49 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		418F21EA1D75262F00E2119A /* libReact-Native-Webview-Bridge.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libReact-Native-Webview-Bridge.a";
-			remoteRef = 418F21E91D75262F00E2119A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		737363671D17CCFA00476488 /* libRNImagePicker.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRNImagePicker.a;
 			remoteRef = 737363661D17CCFA00476488 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		737CC9B61CD30DFE00166A6A /* libRealmReact.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRealmReact.a;
-			remoteRef = 737CC9B51CD30DFE00166A6A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		73DFEAE51CDB21FA00234CE8 /* libRCTHotUpdate.a */ = {
@@ -2064,6 +2034,7 @@
 					"$(SRCROOT)/../node_modules/react-native-update/ios/RCTHotUpdate/**",
 					"$(SRCROOT)/../node_modules/react-native-wx/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios/**",
+					"$(SRCROOT)/../node_modules/realm/src/**",
 				);
 				INFOPLIST_FILE = TH_CFD/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -2111,6 +2082,7 @@
 					"$(SRCROOT)/../node_modules/react-native-update/ios/RCTHotUpdate/**",
 					"$(SRCROOT)/../node_modules/react-native-wx/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios/**",
+					"$(SRCROOT)/../node_modules/realm/src/**",
 				);
 				INFOPLIST_FILE = TH_CFD/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -2181,6 +2153,7 @@
 					"$(SRCROOT)/../node_modules/react-native-update/ios/RCTHotUpdate/**",
 					"$(SRCROOT)/../node_modules/react-native-wx/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios/**",
+					"$(SRCROOT)/../node_modules/realm/src/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -2229,6 +2202,7 @@
 					"$(SRCROOT)/../node_modules/react-native-update/ios/RCTHotUpdate/**",
 					"$(SRCROOT)/../node_modules/react-native-wx/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios/**",
+					"$(SRCROOT)/../node_modules/realm/src/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;

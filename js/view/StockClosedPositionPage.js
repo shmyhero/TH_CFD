@@ -344,8 +344,8 @@ var StockClosedPositionPage = React.createClass({
 					<View style={[styles.rowLeftPart, {	paddingTop: 5,}]}>
 						<Text style={styles.headerTextLeft}>产品</Text>
 					</View>
-					<View style={[styles.rowCenterPart, {	paddingRight: 10,}]}>
-						<Text style={[styles.headerTextLeft, {	paddingRight: 0,}]}>亏盈</Text>
+					<View style={[styles.rowCenterPart]}>
+						<Text style={[styles.headerTextLeft]}>亏盈</Text>
 					</View>
 					<View style={styles.rowRightPart}>
 						<Text style={styles.headerTextLeft}>收益率</Text>
@@ -551,7 +551,7 @@ var styles = StyleSheet.create({
 
 	headerTextLeft: {
 		fontSize: 14,
-		textAlign: 'left',
+		textAlign: 'center',
 		color:'#576b95',
 	},
 });

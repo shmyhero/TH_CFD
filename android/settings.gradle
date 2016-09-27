@@ -9,8 +9,7 @@ include ':realm'
 include ':react-native-update'
 include ':react-native-fs'
 include ':react-native-image-picker'
-include ':react-native-webview-bridge'
-
+include ':react-native-smart-swipe-refresh-layout'
 project(':react-native-wx').projectDir = new File(settingsDir, '../node_modules/react-native-wx/android')
 project(':MPChartLib').projectDir = new File(settingsDir, './MPChartLib')
 project(':react-native-wheel-picker').projectDir = new File(settingsDir, '../node_modules/react-native-wheel-picker/android')
@@ -19,3 +18,4 @@ project(':realm').projectDir = new File(rootProject.projectDir, '../node_modules
 project(':react-native-update').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-update/android')
 project(':react-native-fs').projectDir = new File(settingsDir, '../node_modules/react-native-fs/android')
 project(':react-native-image-picker').projectDir = new File(settingsDir, '../node_modules/react-native-image-picker/android')
+project(':react-native-smart-swipe-refresh-layout').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-smart-pull-to-refresh-listview/android')

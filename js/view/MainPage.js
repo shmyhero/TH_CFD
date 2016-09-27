@@ -54,6 +54,7 @@ var LogicData = require('../LogicData')
 var DaySignPage = require('./DaySignPage')
 var RegisterSuccessPage = require('./RegisterSuccessPage')
 var SuperPriorityHintPage = require('./SuperPriorityHintPage')
+var MyMessagesPage = require('./MyMessagesPage')
 
 var TalkingdataModule = require('../module/TalkingdataModule')
 var WebSocketModule = require('../module/WebSocketModule');
@@ -115,6 +116,7 @@ export let EDIT_OWN_STOCKS_ROUTE = 'editownstocks'
 export let EDIT_ALERT_ROUTE = 'editalert'
 export let SHARE_ROUTE = 'share'
 export let DAY_SIGN_ROUTE = 'daySign'
+export let MY_MESSAGES_ROUTE = 'myMessages'
 
 const glypy = glypyMapMaker({
   Home: 'f04f',
@@ -454,6 +456,17 @@ var MainPage = React.createClass({
 				</View>
 			)
 		}
+		else if(route.name === MY_MESSAGES_ROUTE){
+			hideTabbar()
+			return(
+				<View style={{flex: 1}}>
+					<NavBar title='我的消息' showBackButton={true}
+						backButtonOnClick={()=>this.backAndShowTabbar()}
+						navigator={navigationOperations}/>
+					<MyMessagesPage navigator={navigationOperations} routeMapper={this.RouteMapper}/>
+				</View>
+			)
+		}
 	},
 
 	showTutorial: function(type){
@@ -705,20 +718,22 @@ var MainPage = React.createClass({
 	gotoStockDetail: function(pushData) {
 
 		var currentNavigatorIndex = LogicData.getTabIndex();
-		  console.log("push gotoStockDetail");
-			console.log("push " + currentNavigatorIndex);
+	  console.log("push gotoStockDetail");
+		console.log("push " + currentNavigatorIndex);
 
-			var stockRowData = {
-				name: pushData.CName,
-				id: pushData.StockID,
-			}
+		var stockRowData = {
+			name: pushData.CName,
+			id: pushData.StockID,
+		}
 
-			 if(_navigators[currentNavigatorIndex]){
-				 _navigators[currentNavigatorIndex].push({
- 				name: STOCK_DETAIL_ROUTE,
- 			  stockRowData: stockRowData,
- 				});
-			 }
+
+		 if(_navigators[currentNavigatorIndex]){
+			 console.log("aaaa");
+			 _navigators[currentNavigatorIndex].push({
+				name: STOCK_DETAIL_ROUTE,
+			  stockRowData: stockRowData,
+				});
+		 }
 
 	},
 

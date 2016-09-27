@@ -320,15 +320,39 @@ var MePage = React.createClass({
 		});
 	},
 
+	goToMailPage: function(){
+		this.props.navigator.push({
+			name: MainPage.MY_MESSAGES_ROUTE,
+		});
+	},
+
+	renderNavBar: function(){
+		var userData = LogicData.getUserData()
+		var notLogin = Object.keys(userData).length === 0
+		if(!notLogin){
+			return(
+				<NavBar title="我的" imageOnRight={require('../../images/icon_my_message.png')}
+					rightImageOnClick={this.goToMailPage}
+					navigator={this.props.navigator}/>
+			)
+		}else{
+			return(
+				<NavBar title="我的"
+					navigator={this.props.navigator}/>
+			);
+		}
+	},
+
 	render: function() {
+
 		return (
 			<View style={styles.wrapper}>
-				<NavBar title="我的" />
-			    <ListView
-			    	style={styles.list}
-					dataSource={this.state.dataSource}
-					renderRow={this.renderRow}
-					renderSeparator={this.renderSeparator} />
+				{this.renderNavBar()}
+		    <ListView
+		    	style={styles.list}
+				dataSource={this.state.dataSource}
+				renderRow={this.renderRow}
+				renderSeparator={this.renderSeparator} />
 			</View>
 		);
 	},

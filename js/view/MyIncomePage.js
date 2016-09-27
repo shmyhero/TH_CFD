@@ -10,6 +10,7 @@ import {
 	Switch,
 	UIManager,
 	Image,
+	ListView,
 } from 'react-native';
 
 var MainPage = require('./MainPage')
@@ -21,9 +22,18 @@ var LogicData = require('../LogicData')
 var WebSocketModule = require('../module/WebSocketModule')
 var UIConstants = require('../UIConstants')
 var {height, width} = Dimensions.get('window')
+var heightRate = height/667.0
 
 var UP_INPUT_REF = "upInput"
 var DOWN_INPUT_REF = "downInput"
+
+var listRawData = [
+{'type':'header'},
+{'type':'normal','title':'签到交易金(元)', 'subtype': 'totalDailySign'},
+{'type':'normal','title':'模拟交易金(元)', 'subtype': 'demoTransaction'},
+{'type':'normal','title':'注册交易金(元)', 'subtype': 'demoRegister'}
+]
+var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var MyIncomePage = React.createClass({
 
@@ -43,6 +53,7 @@ var MyIncomePage = React.createClass({
 			totalDailySign: '--',
 			demoTransaction: '--',
 			demoRegister: '--',
+			dataSource: ds.cloneWithRows(listRawData),
 		};
 	},
 
@@ -105,55 +116,58 @@ var MyIncomePage = React.createClass({
     );
   },
 
-  renderDetailIncome: function(type){
-    var title, value;
-    if(type == 1){
-      title = "签到交易金(元)";
-      value = this.state.totalDailySign;
-    }
-    if(type == 2){
-      title = "模拟交易金(元)";
-      value = this.state.demoTransaction;
-    }
-    if(type == 3){
-      title = "注册交易金(元)";
-      value = this.state.demoRegister;
-    }
+	renderRow: function(rowData, sectionID, rowID) {
+		if(rowData.type == 'header'){
+			return (
+					<View style={styles.headerWrapper}>
+						{this.renderTotalIncome()}
+					</View>
+			);
+		}
+		else if(rowData.type == 'normal'){
+			var value;
+			if(rowData.subtype == 'totalDailySign'){
+				value = this.state.totalDailySign;
+			}
+			if(rowData.subtype == 'demoTransaction'){
+				value = this.state.demoTransaction;
+			}
+			if(rowData.subtype == 'demoRegister'){
+				value = this.state.demoRegister;
+			}
 
-    return(
-      <View style={styles.detailTextContainer}>
-        <Text style={styles.detailIncomeTitleText}>
-          {title}
-        </Text>
-        <Text style={styles.detailIncomeText}>
-          {value}
-        </Text>
-      </View>
-    );
-  },
+			return(
+				<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
+					<Text style={styles.title}>{rowData.title}</Text>
+					<Text style={styles.contentValue}>{value}</Text>
+				</View>
+			);
+		}
+	},
 
-  renderSeparator: function(){
-    return(
-      <View style={styles.separator}>
-
-      </View>
-    );
-  },
+	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
+		if(rowID == 0){
+			return (
+				<View style={[styles.line, {height: 10}]} key={rowID}>
+					<View style={[styles.separator]}/>
+				</View>
+				)
+		}else{
+			return (
+				<View style={styles.line} key={rowID}>
+					<View style={[styles.separator]}/>
+				</View>
+				)
+		}
+	},
 
 	render: function() {
 		return (
-			<View style={styles.wrapper}>
-        <View style={styles.headerWrapper}>
-  				{this.renderTotalIncome()}
-          <View style={styles.detailsContainer}>
-  				    {this.renderDetailIncome(1)}
-              {this.renderSeparator()}
-      		    {this.renderDetailIncome(2)}
-              {this.renderSeparator()}
-          		{this.renderDetailIncome(3)}
-          </View>
-        </View>
-			</View>
+			<ListView
+				style={styles.list}
+				dataSource={this.state.dataSource}
+				renderRow={this.renderRow}
+				renderSeparator={this.renderSeparator} />
 		);
 	},
 });
@@ -167,23 +181,23 @@ var styles = StyleSheet.create({
 	headerWrapper: {
 		backgroundColor: ColorConstants.MAIN_CONTENT_BLUE,
     height: 186,
-    justifyContent: 'space-around',
 	},
   totalTextContainer:{
     flexDirection: 'column',
     alignItems:'center',
   },
   totalIncomeTitleText:{
-    fontSize: 17,
+    fontSize: 14,
+		marginTop: 41,
     color: ColorConstants.SUB_TITLE_WHITE,
   },
   totalIncomeText:{
-    fontSize: 26,
+    fontSize: 46,
+		marginTop: 23,
     color: 'white',
   },
   detailsContainer:{
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: 'column',
   },
   detailTextContainer:{
     flexDirection: 'column',
@@ -197,11 +211,43 @@ var styles = StyleSheet.create({
     fontSize: 17,
     color: 'white',
   },
-  separator: {
-    height: 34,
-    width: 0.5,
-    backgroundColor: '#3878e5',
-  },
+	rowWrapper: {
+		flex: 1,
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingLeft: UIConstants.LIST_ITEM_LEFT_MARGIN,
+		paddingRight: 15,
+		paddingBottom: 5,
+		paddingTop: 5,
+		backgroundColor: 'white',
+	},
+	title: {
+		flex: 1,
+		fontSize: 17,
+		color: '#303030',
+	},
+	extendRight: {
+		flex: 1,
+		alignItems: 'flex-end',
+		marginRight: 15,
+		paddingTop: 8,
+		paddingBottom: 8,
+	},
+
+	contentValue: {
+		fontSize: 17,
+		marginRight: 5,
+		color: '#757575',
+	},
+	line: {
+		height: 0.5,
+		backgroundColor: 'white',
+	},
+	separator: {
+		flex: 1,
+		backgroundColor: ColorConstants.SEPARATOR_GRAY,
+	},
+
 });
 
 

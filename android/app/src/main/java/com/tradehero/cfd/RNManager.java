@@ -7,6 +7,7 @@ import com.facebook.react.LifecycleState;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
+import com.reactnativecomponent.swiperefreshlayout.RCTSwipeRefreshLayoutPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.rnfs.RNFSPackage;
 import com.tradehero.cfd.RNNativeModules.RNNativePackage;
@@ -37,7 +38,8 @@ public class RNManager {
                 new UpdatePackage(),
                 new RNFSPackage(),
                 new ImagePickerPackage(),
-                new TalkingDataPackage()
+                new TalkingDataPackage(),
+                new RCTSwipeRefreshLayoutPackage()
         );
         return packages;
     }

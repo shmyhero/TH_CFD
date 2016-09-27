@@ -210,6 +210,7 @@ var FeedbackPage = React.createClass({
 							autoCapitalize="none"
 							multiline={true}
 							maxLength={limit}
+							underlineColorAndroid="transparent"
 							placeholder={'请描述您的问题'}
 							onChangeText={(text) => {this.updateText(text)}}
 							value={this.state.text}/>
@@ -223,6 +224,7 @@ var FeedbackPage = React.createClass({
 							multiline={false}
 							maxLength={11}
 							placeholder={'选填，便于我们给你答复'}
+							underlineColorAndroid="transparent"
 							keyboardType='numeric'
 							onChangeText={(phoneNumber) => {this.setState({phoneNumber});}}
 							value={this.state.phoneNumber}>

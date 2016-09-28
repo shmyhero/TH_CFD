@@ -343,7 +343,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
 		borderRadius: 5,
 		justifyContent: 'center',
-		width: 151,
   },
   blueButton: {
     flex:1,
@@ -352,7 +351,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   	borderRadius: 5,
 		justifyContent: 'center',
-		width: 151,
   },
 	buttonText: {
 		color: 'white'

@@ -31,6 +31,7 @@ var NetworkModule = require('../module/NetworkModule')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
+var emptyImageHintTop = height / 2 - 40;
 
 var testMessages = [
   { type: '1', message: '天啊你真高', date: '2016/1/2', time: "19:20", isNew: true},
@@ -62,6 +63,74 @@ export default class MyMessagesPage extends Component {
 
   componentDidMount () {
     this._pullToRefreshListView.beginRefresh()
+  }
+
+  _onRefresh = () => {
+		//TODO: Use Real Data
+  	setTimeout( () => {
+			if(this._pullToRefreshListView){
+	      var addNum = 20
+				//TEST
+				if(this.state.first){
+					addNum = 0;
+				}
+
+	      let refreshedDataList = []
+	      for(let i = 0; i < addNum; i++) {
+	        refreshedDataList.push(testMessages[i%4])
+	      }
+
+				var noMessage = refreshedDataList.length == 0;
+	      this.setState({
+	        dataList: refreshedDataList,
+	        dataSource: this._dataSource.cloneWithRows(refreshedDataList),
+					first: false,
+					noMessage: noMessage
+	      });
+	      this._pullToRefreshListView.endRefresh();
+			}
+    }, 2000);
+  }
+
+  _onLoadMore = () => {
+		if(this.state.noMessage){
+			return;
+		}
+    console.log('outside _onLoadMore start...')
+		this.currentPage ++;
+    setTimeout( () => {
+			if(this._pullToRefreshListView){
+	      //console.log('outside _onLoadMore end...')
+
+	      let length = this.state.dataList.length
+	      let addNum = 20
+	      let addedDataList = []
+				if(length >= 43){
+					addNum = 0;
+				}else if(length >= 40) {
+	      	addNum = 3
+	      }
+
+	      for(let i = length; i < length + addNum; i++) {
+	          addedDataList.push(testMessages[i%4])
+	      }
+	      let newDataList = this.state.dataList.concat(addedDataList)
+	      this.setState({
+	          dataList: newDataList,
+	          dataSource: this._dataSource.cloneWithRows(newDataList),
+	      })
+
+	      let loadedAll
+	      if(length >= 43) {
+	          loadedAll = true
+	          this._pullToRefreshListView.endLoadMore(loadedAll)
+	      }
+	      else {
+	          loadedAll = false
+	          this._pullToRefreshListView.endLoadMore(loadedAll)
+	      }
+			}
+    }, 1000)
   }
 
 	_onSelectNormalRow = (rowData) => {
@@ -129,12 +198,13 @@ export default class MyMessagesPage extends Component {
 
   render() {
     return (
-			<View style={{flex: 1}}>
+			<View style={{flex: 1,}}>
 				{this.renderEmptyView()}
 	      <PullToRefreshListView
 	        ref={ (component) => this._pullToRefreshListView = component }
 	        viewType={PullToRefreshListView.constants.viewType.listView}
-	        style={styles.list}
+	        style={[styles.list,
+					]}
 	        initialListSize={20}
 	        enableEmptySections={true}
 	        dataSource={this.state.dataSource}
@@ -217,70 +287,6 @@ export default class MyMessagesPage extends Component {
     }
   }
 
-  _onRefresh = () => {
-		//TODO: Use Real Data
-  	setTimeout( () => {
-      var addNum = 20
-			//TEST
-			if(this.state.first){
-				addNum = 0;
-			}
-
-      let refreshedDataList = []
-      for(let i = 0; i < addNum; i++) {
-        refreshedDataList.push(testMessages[i%4])
-      }
-
-			var noMessage = refreshedDataList.length == 0;
-      this.setState({
-        dataList: refreshedDataList,
-        dataSource: this._dataSource.cloneWithRows(refreshedDataList),
-				first: false,
-				noMessage: noMessage
-      });
-      this._pullToRefreshListView.endRefresh();
-    }, 2000);
-  }
-
-  _onLoadMore = () => {
-		if(this.state.noMessage){
-			return;
-		}
-    console.log('outside _onLoadMore start...')
-		this.currentPage ++;
-    setTimeout( () => {
-      //console.log('outside _onLoadMore end...')
-
-      let length = this.state.dataList.length
-      let addNum = 20
-      let addedDataList = []
-			if(length >= 43){
-				addNum = 0;
-			}else if(length >= 40) {
-      	addNum = 3
-      }
-
-      for(let i = length; i < length + addNum; i++) {
-          addedDataList.push(testMessages[i%4])
-      }
-      let newDataList = this.state.dataList.concat(addedDataList)
-      this.setState({
-          dataList: newDataList,
-          dataSource: this._dataSource.cloneWithRows(newDataList),
-      })
-
-      let loadedAll
-      if(length >= 43) {
-          loadedAll = true
-          this._pullToRefreshListView.endLoadMore(loadedAll)
-      }
-      else {
-          loadedAll = false
-          this._pullToRefreshListView.endLoadMore(loadedAll)
-      }
-    }, 1000)
-  }
-
   _renderActivityIndicator() {
 		var color = "#7a7987";
 		var styleAttr = 'small' //or "large"
@@ -354,11 +360,7 @@ const styles = StyleSheet.create({
   },
 
   list: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
+		flex: 1,
   },
   rowWrapper: {
     flex: 1,
@@ -378,7 +380,7 @@ const styles = StyleSheet.create({
   image: {
     width: 6,
     height: 6,
-		marginTop: Platform.OS == 'android' ? 22 : 5,
+		marginTop: 6,
   },
   title: {
       fontSize: 17,
@@ -403,7 +405,10 @@ const styles = StyleSheet.create({
     color: '#4d88be',
   },
   emptyContent: {
-    flex:10,
+		position: 'absolute',
+		top: 200,
+		left: 0,
+		right: 0,
     alignItems:'center',
     justifyContent: 'center'
   },

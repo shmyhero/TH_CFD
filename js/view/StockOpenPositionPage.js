@@ -931,9 +931,10 @@ var StockOpenPositionPage = React.createClass({
 					<LineChart style={styles.lineChart}
 						data={JSON.stringify(this.state.stockDetailInfo)}
 						chartType={this.state.chartType}
-						colorType={1}>
-						{this.renderStockMaxPriceInfo(maxPrice, maxPercentage, true)}
-						{this.renderStockMaxPriceInfo(minPrice, minPercentage, false)}
+						colorType={1}
+						descriptionColor={1}>
+						{/* {this.renderStockMaxPriceInfo(maxPrice, maxPercentage, true)}
+						{this.renderStockMaxPriceInfo(minPrice, minPercentage, false)} */}
 					</LineChart>
 				</View>
 			);

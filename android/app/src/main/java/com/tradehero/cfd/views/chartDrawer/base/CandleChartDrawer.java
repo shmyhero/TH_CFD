@@ -1,6 +1,9 @@
 package com.tradehero.cfd.views.chartDrawer.base;
 
 import android.graphics.Paint;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.YAxis;
@@ -11,6 +14,7 @@ import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.tradehero.cfd.StringUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,11 +28,74 @@ import java.util.Calendar;
  */
 public abstract class CandleChartDrawer extends BaseChartDrawer {
 
+
+    int _perScreenCandleCount = 30;
+
     @Override
-    protected void resetChart(CombinedChart chart) {
+    protected void resetChart(final CombinedChart chart) {
         super.resetChart(chart);
         chart.setDragEnabled(true);
         chart.setTouchEnabled(true);
+        chart.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        resetChartInScreen(chart, false);
+                        break;
+                }
+                return false;
+            }
+        });
+    }
+
+    public void resetChartInScreen(final CombinedChart chart, boolean isShowEnd) {
+        float minV = Float.MAX_VALUE;
+        float maxV = Float.MIN_VALUE;
+        float maxY = chart.getYChartMax();
+        float minY = chart.getYChartMin();
+        int highIndex = chart.getHighestVisibleXIndex();
+        int lowIndex = chart.getLowestVisibleXIndex();
+        if (isShowEnd) {
+            highIndex = chart.getData().getXValCount();
+            lowIndex = highIndex - _perScreenCandleCount;
+        }
+
+        try {
+            for (int i = lowIndex - 2; i < highIndex + 2; i++) {
+                if (i >= 0 && i < chart.getData().getXValCount()) {
+                    float high = (float) mChartDataList.getJSONObject(i).getDouble("high");
+                    float low = (float) mChartDataList.getJSONObject(i).getDouble("low");
+                    minV = Math.min(low, minV);
+                    maxV = Math.max(high, maxV);
+                }
+            }
+        } catch (Exception e) {
+            Log.e("resetChartInScreen", e.toString());
+        }
+
+        if (chart.getScaleY() > 0) {
+            chart.zoom(1, 1 / chart.getScaleY(), 0, 0);
+        }
+
+        float ScaleY = (maxY - minY) / (maxV - minV);
+        chart.zoom(1, ScaleY * 0.6f, 0f, 0f);
+        int indexCenter = Math.round((chart.getLowestVisibleXIndex() + chart.getHighestVisibleXIndex()) / 2);
+        if (isShowEnd) {
+            indexCenter = chart.getData().getXValCount();
+        }
+        chart.centerViewTo(indexCenter, (maxV + minV) / 2, YAxis.AxisDependency.LEFT);
+
+        if (preClose != 0) {
+            float maxPrice = maxV;
+            float minPrice = minV;
+            float maxPercentage = (maxPrice - preClose) / preClose * 100;
+            float minPercentage = (minPrice - preClose) / preClose * 100;
+            setDescription(chart, StringUtils.formatNumber(maxPrice), StringUtils.formatNumber(minPrice), StringUtils.formatNumber(maxPercentage) + "%", StringUtils.formatNumber(minPercentage) + "%");
+        } else {
+            setDescription(chart, "", "", "", "");
+        }
+
     }
 
     @Override
@@ -36,6 +103,7 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
         ArrayList<CandleEntry> yVals1 = new ArrayList<>();
 
         ArrayList<String> labels = new ArrayList<>();
+        mChartDataList = chartDataList;
 
         for (int i = 0; i < chartDataList.length(); i++) {
             float open = (float) chartDataList.getJSONObject(i).getDouble("open");
@@ -44,7 +112,7 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
             float high = (float) chartDataList.getJSONObject(i).getDouble("high");
             float low = (float) chartDataList.getJSONObject(i).getDouble("low");
 
-            yVals1.add(new CandleEntry(i, high, low, open,close));
+            yVals1.add(new CandleEntry(i, high, low, open, close));
 
             labels.add(chartDataList.getJSONObject(i).getString("time"));
         }
@@ -137,6 +205,12 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
         int candleSpaceDP = 2;
         float perScreenCandleCount = (totalWidth - 12 * 2) / (candleWidthDP + candleSpaceDP);
 
+        perScreenCandleCount = (float) Math.ceil(perScreenCandleCount);
+        if (perScreenCandleCount % 2 == 0) {
+            perScreenCandleCount += 1;
+            _perScreenCandleCount = (int) perScreenCandleCount;
+        }
+
         int totalCandleCount = data.getXValCount();
 
         if (perScreenCandleCount < totalCandleCount) {
@@ -147,6 +221,10 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
         } else {
             chart.setVisibleXRangeMinimum(perScreenCandleCount);
         }
+
+        resetChartInScreen(chart, true);
+
+
     }
 
 

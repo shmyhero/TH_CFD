@@ -62,6 +62,9 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
         chart.getAxisLeft().setSpaceBottom(20);
         chart.getAxisRight().setSpaceTop(20);
         chart.getAxisRight().setSpaceBottom(20);
+        chart.setDragDecelerationEnabled(false);//设置拖拽后放开,无惯性移动。
+        chart.setDragEnabled(false);
+
 
 
         return chart;
@@ -117,6 +120,13 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
     public void setDescription(ReactChart chart, String description) {
         if (chart != null) {
             chart.setDescription(description);
+        }
+    }
+
+    @ReactProp(name = "descriptionColor")
+    public void setDescriptionColor(ReactChart chart, int type) {
+        if (chart != null) {
+            chart.setDescriptionColorLRTB(type);
         }
     }
 
@@ -283,6 +293,8 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
             chart.getAxisRight().setDrawLabels(drawEnabled);
         }
     }
+
+
 
     @Override
     public String getName() {

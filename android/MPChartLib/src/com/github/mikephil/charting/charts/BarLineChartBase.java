@@ -282,6 +282,7 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
         drawMarkers(canvas);
 
         drawDescription(canvas);
+        drawDescriptionLRTB(canvas);
 
         if (mLogEnabled) {
             long drawtime = (System.currentTimeMillis() - starttime);

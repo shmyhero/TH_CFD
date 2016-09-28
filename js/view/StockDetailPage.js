@@ -456,8 +456,8 @@ var StockDetailPage = React.createClass({
 							<LineChart style={styles.lineChart}
 								data={JSON.stringify(this.state.stockInfo)}
 								chartType={this.state.chartType}>
-							{this.renderStockMaxPriceInfo(this.state.maxPrice, this.state.maxPercentage)}
-							{this.renderStockMinPriceInfo(this.state.minPrice, this.state.minPercentage)}
+							{/* {this.renderStockMaxPriceInfo(this.state.maxPrice, this.state.maxPercentage)}
+							{this.renderStockMinPriceInfo(this.state.minPrice, this.state.minPercentage)} */}
 							</LineChart>
 
 						</View>

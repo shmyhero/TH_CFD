@@ -17,3 +17,4 @@
 #import "MQChatViewManager.h"
 
 #import "GeTuiSdk.h"
+#import <TongDaoUILibrary/TongDaoUiCore.h>

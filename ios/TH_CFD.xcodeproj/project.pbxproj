@@ -49,6 +49,7 @@
 		3D6A24091C9AB90000FF1306 /* NativeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A24081C9AB90000FF1306 /* NativeData.m */; };
 		3D6A240B1C9ABDE900FF1306 /* StockDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */; };
 		3D6A24181C9C026200FF1306 /* SwiftExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A24171C9C026200FF1306 /* SwiftExtensions.swift */; };
+		3D74A5491D9BC16F003D15AA /* RCTTongDao.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D74A5481D9BC16F003D15AA /* RCTTongDao.m */; };
 		3DB98C0F1CE1CF1A00DB3FA5 /* frontPage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3DB98C0E1CE1CF1A00DB3FA5 /* frontPage.jpg */; };
 		3DB9F1B41D64483B00DC5C63 /* MeiQiaSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DB9F0C31D64483B00DC5C63 /* MeiQiaSDK.framework */; };
 		3DB9F1B51D64483B00DC5C63 /* MQServiceToViewInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB9F0C61D64483B00DC5C63 /* MQServiceToViewInterface.m */; };
@@ -360,6 +361,8 @@
 		3D6A24081C9AB90000FF1306 /* NativeData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NativeData.m; path = TH_CFD/NativeData.m; sourceTree = "<group>"; };
 		3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StockDataManager.swift; path = TH_CFD/StockDataManager.swift; sourceTree = "<group>"; };
 		3D6A24171C9C026200FF1306 /* SwiftExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftExtensions.swift; path = TH_CFD/SwiftExtensions.swift; sourceTree = "<group>"; };
+		3D74A5471D9BC16F003D15AA /* RCTTongDao.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCTTongDao.h; path = TH_CFD/RCTTongDao.h; sourceTree = "<group>"; };
+		3D74A5481D9BC16F003D15AA /* RCTTongDao.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCTTongDao.m; path = TH_CFD/RCTTongDao.m; sourceTree = "<group>"; };
 		3DB98C0E1CE1CF1A00DB3FA5 /* frontPage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = frontPage.jpg; path = ../images/frontPage.jpg; sourceTree = "<group>"; };
 		3DB9F0C31D64483B00DC5C63 /* MeiQiaSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MeiQiaSDK.framework; sourceTree = "<group>"; };
 		3DB9F0C51D64483B00DC5C63 /* MQServiceToViewInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQServiceToViewInterface.h; sourceTree = "<group>"; };
@@ -776,6 +779,8 @@
 		3D3E1F0B1C9F9C240064F187 /* ObjC */ = {
 			isa = PBXGroup;
 			children = (
+				3D74A5471D9BC16F003D15AA /* RCTTongDao.h */,
+				3D74A5481D9BC16F003D15AA /* RCTTongDao.m */,
 				3DE90F461D505035004D264A /* RCTTalkingData.h */,
 				3DE90F471D505035004D264A /* RCTTalkingData.m */,
 				3D6A23E31C9AA93F00FF1306 /* NativeScene.h */,
@@ -2002,6 +2007,7 @@
 				3DB9F1C81D64483B00DC5C63 /* MQChatViewTableDataSource.m in Sources */,
 				3DB9F1DB1D64483B00DC5C63 /* MQTipsCellModel.m in Sources */,
 				3DB9F2401D64493900DC5C63 /* MQMessageFormViewStyleBlue.m in Sources */,
+				3D74A5491D9BC16F003D15AA /* RCTTongDao.m in Sources */,
 				3DB9F23F1D64493900DC5C63 /* MQMessageFormViewStyle.m in Sources */,
 				3DB9F1BF1D64483B00DC5C63 /* MQCustomizedUIText.m in Sources */,
 				3DB9F1F71D64483B00DC5C63 /* MEIQIA_FBBitmapFont.m in Sources */,

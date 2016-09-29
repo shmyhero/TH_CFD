@@ -97,7 +97,7 @@ var StockClosedPositionPage = React.createClass({
 			})
 			if (Platform.OS === 'android') {
 				var listHeight = this.refs['listview'].getMetrics().contentLength
-				var currentY = listHeight/this.state.stockInfoRowData.length*(parseInt(rowID)) + UIConstants.LIST_HEADER_BAR_HEIGHT
+				var currentY = listHeight/newData.length*(parseInt(rowID)) + UIConstants.LIST_HEADER_BAR_HEIGHT
 				this.setTimeout(
 					() => {
 						if (currentY > 300 && currentY + 3 * rowHeight > this.refs['listview'].getMetrics().contentLength) {
@@ -129,7 +129,10 @@ var StockClosedPositionPage = React.createClass({
 				Platform.OS === 'android' ? 1000 : 0
 			);
 
-			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+			//RN 3.3 Android list view has a bug when the spring animation shows up... Disable it for now
+			if(Platform.OS === 'ios'){
+				LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+			}
 			newData[rowID].hasSelected = true
 			this.setState({
 				stockInfo: this.state.stockInfo.cloneWithRows(newData),

@@ -247,7 +247,11 @@ var StockOpenPositionPage = React.createClass({
 			if (currentY > maxY) {
 				this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
 			}
-			LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+
+			//Disable the spring animation on Android for now since the RN 3.3 list view has a bug.
+			if(Platform.OS === 'ios'){
+				LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+			}
 			extendHeight = newExtendHeight
 		}
 	},

@@ -36,20 +36,9 @@ var listRawData = [
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var MyIncomePage = React.createClass({
-
-	propTypes: {
-
-	},
-
-	getDefaultProps() {
-		return {
-
-		}
-	},
-
 	getInitialState: function() {
 		return {
-      totalIncome: '--',
+			totalIncome: '--',
 			totalDailySign: '--',
 			demoTransaction: '--',
 			demoRegister: '--',
@@ -58,7 +47,6 @@ var MyIncomePage = React.createClass({
 	},
 
 	componentDidMount: function(){
-
     var userData = LogicData.getUserData();
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
@@ -77,11 +65,17 @@ var MyIncomePage = React.createClass({
 					var totalDailySign = responseJson.totalDailySign;
 					var demoTransaction = responseJson.totalDemoTransaction;
 					var demoRegister = responseJson.demoRegister;
+					var totalIncome = totalDailySign + demoTransaction + demoRegister;
+					console.log("totalIncome: " + totalIncome.toString())
+					console.log("totalDailySign: " + totalDailySign.toString())
+					console.log("demoTransaction: " + demoTransaction.toString())
+					console.log("demoRegister: " + demoRegister.toString())
 	        this.setState({
-	          totalIncome: totalDailySign + demoTransaction + demoRegister,
-						totalDailySign : totalDailySign,
-						demoTransaction: demoTransaction,
-						demoRegister: demoRegister,
+	          totalIncome: totalIncome.toString(),
+						totalDailySign : totalDailySign.toString(),
+						demoTransaction: demoTransaction.toString(),
+						demoRegister: demoRegister.toString(),
+						dataSource: ds.cloneWithRows(listRawData),
 	        });
 	      },
 	      (errorMessage) => {
@@ -94,6 +88,7 @@ var MyIncomePage = React.createClass({
 				totalDailySign: 0,
 				demoTransaction: 0,
 				demoRegister: 0,
+				dataSource: ds.cloneWithRows(listRawData),
 			})
 		}
 	},

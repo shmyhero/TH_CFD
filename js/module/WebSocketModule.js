@@ -47,7 +47,9 @@ export function start() {
 	//receives broadcast messages from a hub function, called "broadcastMessage"
 	// StockInfo data structure: {"Symbol":"MSFT","Price":31.97,"DayOpen":30.31,"Change":1.66,"PercentChange":0.0519}
 	stockPriceWebSocketProxy.on(serverListenerName, (stockInfo) => {
+		console.log("socketUpdate! " + JSON.stringify(stockInfo))
 		if (wsStockInfoCallback !== null) {
+			console.log("socketUpdate! wsStockInfoCallback != null")
 			wsStockInfoCallback(stockInfo)
 		}
 	});
@@ -119,6 +121,9 @@ export function registerInterestedStocks(stockList) {
 		    		wsErrorCallback(error.message)
 		    	}
 			});
+	}else{
+		console.log('Send stockList to websocket server later: ' + stockList)
+		previousInterestedStocks = stockList;
 	}
 }
 

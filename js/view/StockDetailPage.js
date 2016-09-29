@@ -150,7 +150,11 @@ var StockDetailPage = React.createClass({
 						var fxId = fxData.id
 						responseJson.fxData = fxData
 						var previousInterestedStocks = WebSocketModule.getPreviousInterestedStocks()
-						previousInterestedStocks += ',' + fxId
+						if(previousInterestedStocks){
+							previousInterestedStocks += ',' + fxId
+						}else{
+							previousInterestedStocks = fxId;
+						}
 						WebSocketModule.registerInterestedStocks(previousInterestedStocks)
 					}
 				}
@@ -264,7 +268,19 @@ var StockDetailPage = React.createClass({
 					minPercentage: minPercentage,
 				})
 
-				this.connectWebSocket()
+				var previousInterestedStocks = WebSocketModule.getPreviousInterestedStocks()
+				var lastInterestedStocks = previousInterestedStocks;
+				if(previousInterestedStocks){
+					if(!previousInterestedStocks.includes(tempStockInfo.id)){
+						previousInterestedStocks += ',' + tempStockInfo.id;
+					}
+				}else{
+					previousInterestedStocks = tempStockInfo.id;
+				}
+				if(previousInterestedStocks != lastInterestedStocks){
+					WebSocketModule.registerInterestedStocks(previousInterestedStocks)
+				}
+				this.connectWebSocket();
 			},
 			(errorMessage) => {
 				Alert.alert('', errorMessage);

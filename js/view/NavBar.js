@@ -22,6 +22,7 @@ var NavBar = React.createClass({
 	propTypes: {
 		showBackButton: React.PropTypes.bool,
 		showSearchButton: React.PropTypes.bool,
+		imageOnLeft: React.PropTypes.number,
 		textOnLeft: React.PropTypes.string,
 		textOnRight: React.PropTypes.string,
 		imageOnRight: React.PropTypes.number,
@@ -42,6 +43,7 @@ var NavBar = React.createClass({
 		return {
 			showBackButton: false,
 			showSearchButton: false,
+			imageOnLeft: null,
 			textOnLeft: null,
 			textOnRight: null,
 			imageOnRight: null,
@@ -116,6 +118,11 @@ var NavBar = React.createClass({
 
 	renderBackButton: function() {
 		if (this.props.showBackButton) {
+			var imageOnLeft = require('../../images/back.png');
+			if(this.props.imageOnLeft){
+				imageOnLeft = this.props.imageOnLeft;
+			}
+
 			return (
 				<TouchableHighlight
 					onPress={this.backOnClick}
@@ -123,7 +130,7 @@ var NavBar = React.createClass({
 					<View style={{padding: 5}}>
 						<Image
 							style={styles.backButton}
-							source={require('../../images/back.png')}/>
+							source={imageOnLeft}/>
 					</View>
 				</TouchableHighlight>
 			);

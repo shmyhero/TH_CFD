@@ -346,6 +346,12 @@ var AppNavigator = React.createClass({
 		if(data.type === '1' || data.type === '2' ){//1,2 type 是 平仓 和 股价提醒
 			console.log('actionForPush '+ data.title);
 			LogicData.setPushData(data);
+
+			//TODO: mark the message as read. Ignore the response
+			if(data.id){
+				this.setMessageRead(data.id);
+			}
+
 			if (this.state.startUpPhase == MAIN_PAGE_PHASE) {
 				this.setState(
 					{
@@ -357,6 +363,27 @@ var AppNavigator = React.createClass({
 		}else {
 			Alert.alert( data );
 		}
+	},
+
+	setMessageRead : function(id) {
+		var userData = LogicData.getUserData();
+		var url = NetConstants.SET_MESSAGE_READ;
+		url = url.replace('<id>', id);
+		NetworkModule.fetchTHUrl(
+			url,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+			},
+			(responseJson) =>{
+				//Ignore the result!
+			},
+			(error) => {
+				Alert.alert(error)
+			}
+		)
 	},
 
 	cancelAlert:function(){

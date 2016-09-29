@@ -43,6 +43,9 @@ export const POST_PUSH_TOKEN = SERVER_IP + '/api/user/pushtoken'
 export const POST_PUSH_TOKEN_AUTH = SERVER_IP + '/api/user/pushtokenauth'
 export const GET_STOCK_KLINE_FIVE_M = SERVER_IP + '/api/quote/<securityId>/kline/5m'
 export const GET_STOCK_KLINE_DAY = SERVER_IP + '/api/quote/<securityId>/kline/day'
+export const GET_MY_MESSAGES = SERVER_IP + '/api/user/message?pageNum=<pageNum>&pageSize=<pageSize>'
+export const SET_MESSAGE_READ = SERVER_IP + '/api/user/message/<id>'
+export const GET_UNREAD_MESSAGE = SERVER_IP + '/api/user/message/unread'
 
 export const GET_USER_DAILY_SIGN_INFO = SERVER_IP + '/api/reward/summary'//获取每日签到页面所需信息（需身份验证）
 export const GET_USER_DAILY_SIGN_MONTH = SERVER_IP + '/api/reward/checkIn/month'//获取当前月份的签到情况(需要身份验证)

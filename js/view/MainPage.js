@@ -461,9 +461,11 @@ var MainPage = React.createClass({
 			return(
 				<View style={{flex: 1}}>
 					<NavBar title='我的消息' showBackButton={true}
+						imageOnLeft={require('../../images/icon_return_default.png')}
 						backButtonOnClick={()=>this.backAndShowTabbar()}
 						navigator={navigationOperations}/>
-					<MyMessagesPage navigator={navigationOperations} routeMapper={this.RouteMapper}/>
+					<MyMessagesPage navigator={navigationOperations} routeMapper={this.RouteMapper}
+  					onPopToRoute={route.onPopToRoute}/>
 				</View>
 			)
 		}

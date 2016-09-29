@@ -45,6 +45,7 @@ var MePage = React.createClass({
 	getInitialState: function() {
 		return {
 			loggedIn: false,
+			hasUnreadMessage: false,
 			dataSource: ds.cloneWithRows(listRawData),
 		};
 	},
@@ -106,6 +107,7 @@ var MePage = React.createClass({
 
 	reloadMeData: function(){
 		//Check if the user has logged in and the config row need to be shown.
+		var userData = LogicData.getUserData();
 		var meData = LogicData.getMeData()
 		var notLogin = Object.keys(meData).length === 0
 		if (notLogin) {
@@ -119,11 +121,44 @@ var MePage = React.createClass({
 			this.setState({
 				loggedIn: true,
 			})
+
+			NetworkModule.fetchTHUrlWithNoInternetCallback(
+				NetConstants.GET_UNREAD_MESSAGE,
+				{
+					method: 'GET',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					},
+				},
+				function(response) {
+					this.setState(
+						{
+							hasUnreadMessage: response > 0,
+						}
+					)					
+				}.bind(this),
+				function(errorMessage) {
+					this.reloadMeDataFromStorage();
+				}.bind(this),
+				function(errorMessage) {
+					this.reloadMeDataFromStorage();
+				}.bind(this)
+			);
 		}
 
+		var datasource = ds.cloneWithRows(listRawData);
 		this.setState({
-			dataSource: ds.cloneWithRows(listRawData),
-		});
+			dataSource: datasource,
+		}, ()=>{
+			//A fix for the Me page shows nothing after login/logout.
+			//Since there's only one simulator encountered the issue, do not enable the fix for now.
+			/*
+			this._scrollView.scrollTo({x: 0, y: 1, animated: false});
+			setTimeout(()=>{
+				this._scrollView.scrollTo({x: 0, y: 0, animated: false});
+			}, 1);
+			*/
+		})
 	},
 
 	gotoOpenAccount: function() {
@@ -146,6 +181,33 @@ var MePage = React.createClass({
 			name: MainPage.ACCOUNT_INFO_ROUTE,
 			backButtonOnClick: this.reloadMeData,
 			//popToRoute: MainPage.ME_PUSH_CONFIG_ROUTE,	//Set to destination page
+		});
+	},
+
+	gotoWebviewPage: function(targetUrl, title) {
+		var userData = LogicData.getUserData()
+		var userId = userData.userId
+		if (userId == undefined) {
+			userId = 0
+		}
+
+		if (targetUrl.indexOf('?') !== -1) {
+			targetUrl = targetUrl + '&userId=' + userId
+		} else {
+			targetUrl = targetUrl + '?userId=' + userId
+		}
+
+		this.props.navigator.push({
+			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			url: targetUrl,
+			title: title,
+		});
+	},
+
+	goToMailPage: function(){
+		this.props.navigator.push({
+			name: MainPage.MY_MESSAGES_ROUTE,
+			onPopToRoute: this.reloadMeData,
 		});
 	},
 
@@ -300,38 +362,19 @@ var MePage = React.createClass({
 		}
 	},
 
-	gotoWebviewPage: function(targetUrl, title) {
-		var userData = LogicData.getUserData()
-		var userId = userData.userId
-		if (userId == undefined) {
-			userId = 0
-		}
-
-		if (targetUrl.indexOf('?') !== -1) {
-			targetUrl = targetUrl + '&userId=' + userId
-		} else {
-			targetUrl = targetUrl + '?userId=' + userId
-		}
-
-		this.props.navigator.push({
-			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
-			url: targetUrl,
-			title: title,
-		});
-	},
-
-	goToMailPage: function(){
-		this.props.navigator.push({
-			name: MainPage.MY_MESSAGES_ROUTE,
-		});
-	},
-
 	renderNavBar: function(){
 		var userData = LogicData.getUserData()
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
+			var image;
+			console.log("this.state.hasUnreadMessage: " + this.state.hasUnreadMessage)
+			if(this.state.hasUnreadMessage){
+				image = require('../../images/icon_my_messages_new.png');
+			}else{
+				image = require('../../images/icon_my_message.png');
+			}
 			return(
-				<NavBar title="我的" imageOnRight={require('../../images/icon_my_message.png')}
+				<NavBar title="我的" imageOnRight={image}
 					rightImageOnClick={this.goToMailPage}
 					navigator={this.props.navigator}/>
 			)
@@ -349,10 +392,11 @@ var MePage = React.createClass({
 			<View style={styles.wrapper}>
 				{this.renderNavBar()}
 		    <ListView
+          ref={(scrollView) => { this._scrollView = scrollView; }}
 		    	style={styles.list}
-				dataSource={this.state.dataSource}
-				renderRow={this.renderRow}
-				renderSeparator={this.renderSeparator} />
+					dataSource={this.state.dataSource}
+					renderRow={this.renderRow}
+					renderSeparator={this.renderSeparator} />
 			</View>
 		);
 	},

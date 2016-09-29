@@ -2,6 +2,7 @@
 
 import React, {
   Component,
+  PropTypes,
 } from 'react'
 import {
   View,
@@ -28,155 +29,174 @@ var MainPage = require('./MainPage')
 var StorageModule = require('../module/StorageModule')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
+var dateFormat = require('dateformat');
+var LogicData = require('../LogicData')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 var emptyImageHintTop = height / 2 - 40;
 
-var testMessages = [
-  { type: '1', message: '天啊你真高', date: '2016/1/2', time: "19:20", isNew: true},
-  { type: '2', message: '啊，美丽的大自然', date: '2016/1/2', time: "19:20", isNew: false},
-  { type: '1', message: '美元/日元已经被系统自动平仓，平仓价格：133.93，盈利+123214.32美元', date: '2016/1/2', time: "19:20", isNew: true},
-  { type: '3', message: '美国科技股100于02:43买跌价格达到3912.22，低于您设置的3913。', date: '2016/1/2', time: "19:20", isNew: false},
-];
-
 export default class MyMessagesPage extends Component {
 
 	currentPage = 0;
+
+  static propTypes = {
+    onPopToRoute: PropTypes.func,
+  }
+
+  static defaultProps = {
+    onPopToRoute: ()=>{}
+  }
 
 	constructor(props) {
 	  super(props);
 
 	  this._dataSource = new ListView.DataSource({
-	      rowHasChanged: (r1, r2) => r1 !== r2 ,
-	      //sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
+	      rowHasChanged: (r1, r2) => r1 !== r2,
 	  });
 
     let dataList = []
     this.state = {
-        first: true,
-				noMessage: false,
-        dataList: dataList,
-        dataSource: this._dataSource.cloneWithRows(dataList),
+      isStartUp: true,
+			noMessage: false,
+      dataList: dataList,
+      dataSource: this._dataSource.cloneWithRows(dataList),
     }
   }
 
   componentDidMount () {
-    this._pullToRefreshListView.beginRefresh()
+    //setTimeout(()=>{
+    //  this._pullToRefreshListView.beginRefresh();
+    //}, 200);
+    this.fetchMessages(false);
+  }
+
+  componentWillUnmount (){
+    if(this.props.onPopToRoute){
+      this.props.onPopToRoute();
+    }
+  }
+
+  currentIndex = 1;
+
+  fetchMessages = (isRefresh) => {
+    var userData = LogicData.getUserData();
+    var url = NetConstants.GET_MY_MESSAGES;
+    url = url.replace("<pageNum>", this.currentIndex);
+    url = url.replace("<pageSize>", 20);
+    NetworkModule.fetchTHUrlWithNoInternetCallback(
+      url,
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+        },
+      },
+      (responseJson) => {
+        if(this._pullToRefreshListView){
+          let refreshedDataList = isRefresh ? [] : this.state.dataList;
+          refreshedDataList = refreshedDataList.concat(responseJson);
+
+          var noMessage = refreshedDataList.length == 0;
+          this.setState({
+            dataList: refreshedDataList,
+            dataSource: this._dataSource.cloneWithRows(refreshedDataList),
+            noMessage: noMessage,
+            isStartUp: false,
+          });
+
+          if(isRefresh){
+            this._pullToRefreshListView.endRefresh();
+          }else{
+    	      if(responseJson.length < 20) {
+    	          this._pullToRefreshListView.endLoadMore(true)
+    	      }
+    	      else {
+    	          this._pullToRefreshListView.endLoadMore(false)
+    	      }
+          }
+        }
+      },
+      (error) => {
+        Alert.alert(error)
+      }
+    );
+    this.currentIndex++;
+  }
+
+  setMessageRead = (id) => {
+    var userData = LogicData.getUserData();
+    var url = NetConstants.SET_MESSAGE_READ;
+    url = url.replace('<id>', id);
+    NetworkModule.fetchTHUrl(
+      url,
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+        },
+      },
+      (responseJson) =>{
+        //Ignore the result!
+      },
+      (error) => {
+        Alert.alert(error)
+      }
+    )
   }
 
   _onRefresh = () => {
-		//TODO: Use Real Data
-  	setTimeout( () => {
-			if(this._pullToRefreshListView){
-	      var addNum = 20
-				//TEST
-				if(this.state.first){
-					addNum = 0;
-				}
-
-	      let refreshedDataList = []
-	      for(let i = 0; i < addNum; i++) {
-	        refreshedDataList.push(testMessages[i%4])
-	      }
-
-				var noMessage = refreshedDataList.length == 0;
-	      this.setState({
-	        dataList: refreshedDataList,
-	        dataSource: this._dataSource.cloneWithRows(refreshedDataList),
-					first: false,
-					noMessage: noMessage
-	      });
-	      this._pullToRefreshListView.endRefresh();
-			}
-    }, 2000);
+    this.currentIndex = 1;
+    this.fetchMessages(true);
   }
 
   _onLoadMore = () => {
-		if(this.state.noMessage){
-			return;
-		}
-    console.log('outside _onLoadMore start...')
-		this.currentPage ++;
-    setTimeout( () => {
-			if(this._pullToRefreshListView){
-	      //console.log('outside _onLoadMore end...')
-
-	      let length = this.state.dataList.length
-	      let addNum = 20
-	      let addedDataList = []
-				if(length >= 43){
-					addNum = 0;
-				}else if(length >= 40) {
-	      	addNum = 3
-	      }
-
-	      for(let i = length; i < length + addNum; i++) {
-	          addedDataList.push(testMessages[i%4])
-	      }
-	      let newDataList = this.state.dataList.concat(addedDataList)
-	      this.setState({
-	          dataList: newDataList,
-	          dataSource: this._dataSource.cloneWithRows(newDataList),
-	      })
-
-	      let loadedAll
-	      if(length >= 43) {
-	          loadedAll = true
-	          this._pullToRefreshListView.endLoadMore(loadedAll)
-	      }
-	      else {
-	          loadedAll = false
-	          this._pullToRefreshListView.endLoadMore(loadedAll)
-	      }
-			}
-    }, 1000)
+    if(this.state.noMessage){
+      this._pullToRefreshListView.endLoadMore(true);
+      return;
+    }
+    this.fetchMessages(false);
   }
 
-	_onSelectNormalRow = (rowData) => {
-		if(rowData.isNew){
-			var dataList = this.state.dataList;
-			var index = dataList.indexOf(rowData);
+  _onSelectNormalRow = (rowData) => {
+    if(!rowData.isReaded){
+      var dataList = this.state.dataList;
+      var index = dataList.indexOf(rowData);
+      if(index >=0){
+        dataList[index].isReaded = true;
 
-			if(index >=0){
-				dataList[index] = {
-					type: dataList[index].type,
-					message: dataList[index].message,
-					date: dataList[index].date,
-					time: dataList[index].time,
-					isNew: false
-				};
-			}
-			this.setState({
-				dataList: dataList,
-				dataSource: this._dataSource.cloneWithRows(dataList),
-			})
-		}
-	}
+        this.setState({
+          dataList: dataList,
+          dataSource: this._dataSource.cloneWithRows(dataList),
+        });
+
+        //Silently sends the read property to server and ignore the result
+        this.setMessageRead(rowData.id);
+      }
+    }
+  }
 
 	renderRow(rowData, sectionID, rowID) {
     var title;
-    if (rowData.type === '1') {
-      title = "平仓消息"
-    }
-    else if (rowData.type === '2'){
-      title = "止盈消息"
-    }
-    else if (rowData.type === '3'){
-      title = "价格消息"
-    }
+
+    var datetime = rowData.createdAt;
+    var dt = new Date(datetime);
+    var month = dt.getMonth()+1;
+    var dateString = dateFormat(dt, "yyyy.mm.dd");
+    var timeString = dateFormat(dt, "HH:MM")
+
     return(
       <TouchableOpacity activeOpacity={0.5} onPress={()=>this._onSelectNormalRow(rowData)}>
         <View style={styles.rowWrapper}>
       		{this._renderNewHint(rowData)}
 	      	<View style={styles.messageWrapper}>
-	          <Text style={styles.title}>{title}</Text>
-		        <Text style={styles.message}>{rowData.message}</Text>
+	          <Text style={styles.title}>{rowData.title}</Text>
+		        <Text style={styles.message}>{rowData.body}</Text>
 		        <View style={styles.datetime}>
 		          <Text style={styles.date}>
-		            {rowData.date}
+		            {dateString}
 		            <Text> </Text>
-		            <Text style={styles.time}>{rowData.time}</Text>
+		            <Text style={styles.time}>{timeString}</Text>
 		          </Text>
 		        </View>
 		      </View>
@@ -197,14 +217,19 @@ export default class MyMessagesPage extends Component {
 	}
 
   render() {
+    var pullUpDistance = 35;
+    var pullUpStayDistance = 50;
+    var pullDownDistance = 35;
+    var pullDownStayDistance = 50;
+
     return (
 			<View style={{flex: 1,}}>
 				{this.renderEmptyView()}
+        {this._renderStartUpActivityIndicator()}
 	      <PullToRefreshListView
 	        ref={ (component) => this._pullToRefreshListView = component }
 	        viewType={PullToRefreshListView.constants.viewType.listView}
-	        style={[styles.list,
-					]}
+	        style={[styles.list,]}
 	        initialListSize={20}
 	        enableEmptySections={true}
 	        dataSource={this.state.dataSource}
@@ -214,18 +239,17 @@ export default class MyMessagesPage extends Component {
 	        renderFooter={this._renderFooter.bind(this)}
 	        onRefresh={this._onRefresh.bind(this)}
 	        onLoadMore={this._onLoadMore.bind(this)}
-	        pullUpDistance={35}
-	        pullUpStayDistance={50}
-	        pullDownDistance={35}
-	        pullDownStayDistance={50}
+	        pullUpDistance={pullUpDistance}
+	        pullUpStayDistance={pullUpStayDistance}
+	        pullDownDistance={pullDownDistance}
+	        pullDownStayDistance={pullDownStayDistance}
 	      />
 			</View>
 		)
   }
 
 	_renderNewHint = (rowData) => {
-		console.log("_renderNewHint: " + JSON.stringify(rowData))
-		if(rowData.isNew){
+		if(!rowData.isReaded){
 			return (
 				<Image source={require('../../images/icon_new.png')} style={styles.image}/>
 			);
@@ -245,9 +269,9 @@ export default class MyMessagesPage extends Component {
 			case refresh_idle:
 			case will_refresh:
         return (
-            <View style={{height: 35, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={styles.refreshTextStyle}>下拉刷新</Text>
-            </View>
+          <View style={{height: 35, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={styles.refreshTextStyle}>下拉刷新</Text>
+          </View>
         )
       case refreshing:
         return (
@@ -285,6 +309,19 @@ export default class MyMessagesPage extends Component {
 					<View/>
         )
     }
+  }
+
+  _renderStartUpActivityIndicator(){
+    if(this.state.isStartUp){
+      return (
+        <View style={{marginTop: 10}}>
+          {this._renderActivityIndicator()}
+        </View>
+    );
+    }
+    return (
+      <View/>
+    )
   }
 
   _renderActivityIndicator() {

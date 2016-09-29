@@ -99,11 +99,17 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      */
     protected ValueFormatter mDefaultFormatter;
 
+    private int mDesColor = Color.WHITE;
+
     /**
      * paint object used for drawing the description text in the bottom right
      * corner of the chart
      */
     protected Paint mDescPaint;
+    protected Paint mDescPaintLT;
+    protected Paint mDescPaintLB;
+    protected Paint mDescPaintRT;
+    protected Paint mDescPaintRB;
 
     /**
      * paint object for drawing the information text when there are no values in
@@ -115,6 +121,11 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
      * description text that appears in the bottom right corner of the chart
      */
     protected String mDescription = "Description";
+
+    protected String mDescriptionLT = "";
+    protected String mDescriptionLB = "";
+    protected String mDescriptionRT = "";
+    protected String mDescriptionRB = "";
 
     /**
      * the number of x-values the chart displays
@@ -243,6 +254,23 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
         mDescPaint.setColor(Color.BLACK);
         mDescPaint.setTextAlign(Align.RIGHT);
         mDescPaint.setTextSize(Utils.convertDpToPixel(9f));
+
+        mDescPaintLT = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mDescPaintLT.setColor(mDesColor);
+        mDescPaintLT.setTextAlign(Align.LEFT);
+        mDescPaintLT.setTextSize(Utils.convertDpToPixel(9f));
+        mDescPaintLB = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mDescPaintLB.setColor(mDesColor);
+        mDescPaintLB.setTextAlign(Align.LEFT);
+        mDescPaintLB.setTextSize(Utils.convertDpToPixel(9f));
+        mDescPaintRT = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mDescPaintRT.setColor(mDesColor);
+        mDescPaintRT.setTextAlign(Align.RIGHT);
+        mDescPaintRT.setTextSize(Utils.convertDpToPixel(9f));
+        mDescPaintRB = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mDescPaintRB.setColor(mDesColor);
+        mDescPaintRB.setTextAlign(Align.RIGHT);
+        mDescPaintRB.setTextSize(Utils.convertDpToPixel(9f));
 
         mInfoPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mInfoPaint.setColor(Color.rgb(247, 189, 51)); // orange
@@ -469,6 +497,31 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
             } else {
                 c.drawText(mDescription, mDescriptionPosition.x, mDescriptionPosition.y, mDescPaint);
             }
+        }
+    }
+
+    /**
+     * draws the description text in the left right bottom top corner of the chart
+     */
+    protected void drawDescriptionLRTB(Canvas c) {
+
+        if (!mDescriptionLT.equals("")) {
+            c.drawText(mDescriptionLT, mViewPortHandler.offsetLeft() + 20,
+                    mViewPortHandler.offsetTop() + 50, mDescPaintLT);
+        }
+        if (!mDescriptionLB.equals("")) {
+            c.drawText(mDescriptionLB, mViewPortHandler.offsetLeft() + 20,
+                    getHeight() - mViewPortHandler.offsetBottom()
+                            - 20, mDescPaintLB);
+        }
+        if (!mDescriptionRT.equals("")) {
+            c.drawText(mDescriptionRT, getWidth() - mViewPortHandler.offsetRight() - 20,
+                    mViewPortHandler.offsetTop() + 50, mDescPaintRT);
+        }
+        if (!mDescriptionRB.equals("")) {
+            c.drawText(mDescriptionRB, getWidth() - mViewPortHandler.offsetRight() - 20,
+                    getHeight() - mViewPortHandler.offsetBottom()
+                            - 20, mDescPaintRB);
         }
     }
 
@@ -1032,6 +1085,32 @@ public abstract class Chart<T extends ChartData<? extends IDataSet<? extends Ent
         if (desc == null)
             desc = "";
         this.mDescription = desc;
+    }
+
+    public int mDesColorType = 0;
+    public void setDescriptionColorLRTB(int type){
+        mDesColorType = type;
+        if(type == 1) {
+            mDesColor = Color.BLACK;
+            mDescPaintLT.setColor(mDesColor);
+            mDescPaintLB.setColor(mDesColor);
+            mDescPaintRT.setColor(mDesColor);
+            mDescPaintRB.setColor(mDesColor);
+        }else{
+            mDesColor = Color.WHITE;
+            mDescPaintLT.setColor(mDesColor);
+            mDescPaintLB.setColor(mDesColor);
+            mDescPaintRT.setColor(mDesColor);
+            mDescPaintRB.setColor(mDesColor);
+        }
+    }
+
+    public void setDescription(String descLT, String descLB, String descRT, String descRB) {
+
+        this.mDescriptionLT = (descLT == null ? "" : descLT);
+        this.mDescriptionLB = (descLB == null ? "" : descLB);
+        this.mDescriptionRT = (descRT == null ? "" : descRT);
+        this.mDescriptionRB = (descRB == null ? "" : descRB);
     }
 
     /**

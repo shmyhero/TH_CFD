@@ -10,6 +10,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.tradehero.cfd.R;
+import com.tradehero.cfd.StringUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -103,5 +104,15 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
     @Override
     protected void calculateZoom(CombinedChart chart, CombinedData data) {
         chart.setVisibleXRangeMinimum(1);
+        if (preClose != 0) {
+            float maxPrice = data.getYMax();
+            float minPrice = data.getYMin();
+            float maxPercentage = (maxPrice - preClose) / preClose * 100;
+            float minPercentage = (minPrice - preClose) / preClose * 100;
+            setDescription(chart, StringUtils.formatNumber(maxPrice), StringUtils.formatNumber(minPrice), StringUtils.formatNumber(maxPercentage) + "%", StringUtils.formatNumber(minPercentage) + "%");
+        } else {
+            setDescription(chart, "", "", "", "");
+        }
+
     }
 }

@@ -49,6 +49,7 @@
 		3D6A24091C9AB90000FF1306 /* NativeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A24081C9AB90000FF1306 /* NativeData.m */; };
 		3D6A240B1C9ABDE900FF1306 /* StockDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */; };
 		3D6A24181C9C026200FF1306 /* SwiftExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A24171C9C026200FF1306 /* SwiftExtensions.swift */; };
+		3D74A5491D9BC16F003D15AA /* RCTTongDao.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D74A5481D9BC16F003D15AA /* RCTTongDao.m */; };
 		3DB98C0F1CE1CF1A00DB3FA5 /* frontPage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3DB98C0E1CE1CF1A00DB3FA5 /* frontPage.jpg */; };
 		3DB9F1B41D64483B00DC5C63 /* MeiQiaSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DB9F0C31D64483B00DC5C63 /* MeiQiaSDK.framework */; };
 		3DB9F1B51D64483B00DC5C63 /* MQServiceToViewInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DB9F0C61D64483B00DC5C63 /* MQServiceToViewInterface.m */; };
@@ -169,6 +170,13 @@
 		3DC618051CA29F9900F36541 /* StockChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC618041CA29F9900F36541 /* StockChartView.swift */; };
 		3DC6182D1CA3922A00F36541 /* StockChartViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC6182C1CA3922A00F36541 /* StockChartViewManager.m */; };
 		3DC7D1CB1D90DBE2001B2406 /* BaseRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC7D1CA1D90DBE2001B2406 /* BaseRender.swift */; };
+		3DCBF85D1D9B7A2A0045BC95 /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DCBF8561D9B7A2A0045BC95 /* arrow.png */; };
+		3DCBF85E1D9B7A2A0045BC95 /* arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DCBF8571D9B7A2A0045BC95 /* arrow@2x.png */; };
+		3DCBF85F1D9B7A2A0045BC95 /* arrow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DCBF8581D9B7A2A0045BC95 /* arrow@3x.png */; };
+		3DCBF8601D9B7A2A0045BC95 /* lq_x@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DCBF8591D9B7A2A0045BC95 /* lq_x@2x.png */; };
+		3DCBF8611D9B7A2A0045BC95 /* td_in_app_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DCBF85A1D9B7A2A0045BC95 /* td_in_app_icon.png */; };
+		3DCBF8621D9B7A2A0045BC95 /* TongDaoSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DCBF85B1D9B7A2A0045BC95 /* TongDaoSDK.framework */; };
+		3DCBF8631D9B7A2A0045BC95 /* TongDaoUILibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DCBF85C1D9B7A2A0045BC95 /* TongDaoUILibrary.framework */; };
 		3DCE765D1D743375008BA33D /* EditOwnStocksViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DCE765C1D743375008BA33D /* EditOwnStocksViewManager.m */; };
 		3DD744771CCE18040021304F /* myhero.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3DD744761CCE18040021304F /* myhero.ttf */; };
 		3DDB311C1D868476009E1D01 /* coin.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3DDB311B1D868476009E1D01 /* coin.mp3 */; };
@@ -353,6 +361,8 @@
 		3D6A24081C9AB90000FF1306 /* NativeData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NativeData.m; path = TH_CFD/NativeData.m; sourceTree = "<group>"; };
 		3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StockDataManager.swift; path = TH_CFD/StockDataManager.swift; sourceTree = "<group>"; };
 		3D6A24171C9C026200FF1306 /* SwiftExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftExtensions.swift; path = TH_CFD/SwiftExtensions.swift; sourceTree = "<group>"; };
+		3D74A5471D9BC16F003D15AA /* RCTTongDao.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCTTongDao.h; path = TH_CFD/RCTTongDao.h; sourceTree = "<group>"; };
+		3D74A5481D9BC16F003D15AA /* RCTTongDao.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCTTongDao.m; path = TH_CFD/RCTTongDao.m; sourceTree = "<group>"; };
 		3DB98C0E1CE1CF1A00DB3FA5 /* frontPage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = frontPage.jpg; path = ../images/frontPage.jpg; sourceTree = "<group>"; };
 		3DB9F0C31D64483B00DC5C63 /* MeiQiaSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MeiQiaSDK.framework; sourceTree = "<group>"; };
 		3DB9F0C51D64483B00DC5C63 /* MQServiceToViewInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQServiceToViewInterface.h; sourceTree = "<group>"; };
@@ -590,6 +600,13 @@
 		3DC6182B1CA3922A00F36541 /* StockChartViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StockChartViewManager.h; path = TH_CFD/StockChartViewManager.h; sourceTree = "<group>"; };
 		3DC6182C1CA3922A00F36541 /* StockChartViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StockChartViewManager.m; path = TH_CFD/StockChartViewManager.m; sourceTree = "<group>"; };
 		3DC7D1CA1D90DBE2001B2406 /* BaseRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseRender.swift; path = TH_CFD/BaseRender.swift; sourceTree = "<group>"; };
+		3DCBF8561D9B7A2A0045BC95 /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
+		3DCBF8571D9B7A2A0045BC95 /* arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow@2x.png"; sourceTree = "<group>"; };
+		3DCBF8581D9B7A2A0045BC95 /* arrow@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow@3x.png"; sourceTree = "<group>"; };
+		3DCBF8591D9B7A2A0045BC95 /* lq_x@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "lq_x@2x.png"; sourceTree = "<group>"; };
+		3DCBF85A1D9B7A2A0045BC95 /* td_in_app_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = td_in_app_icon.png; sourceTree = "<group>"; };
+		3DCBF85B1D9B7A2A0045BC95 /* TongDaoSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TongDaoSDK.framework; sourceTree = "<group>"; };
+		3DCBF85C1D9B7A2A0045BC95 /* TongDaoUILibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TongDaoUILibrary.framework; sourceTree = "<group>"; };
 		3DCE765B1D743375008BA33D /* EditOwnStocksViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditOwnStocksViewManager.h; path = TH_CFD/EditOwnStocksViewManager.h; sourceTree = "<group>"; };
 		3DCE765C1D743375008BA33D /* EditOwnStocksViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditOwnStocksViewManager.m; path = TH_CFD/EditOwnStocksViewManager.m; sourceTree = "<group>"; };
 		3DD744761CCE18040021304F /* myhero.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = myhero.ttf; sourceTree = "<group>"; };
@@ -632,6 +649,8 @@
 				3D4B37AA1D5049B6004BD09C /* AdSupport.framework in Frameworks */,
 				73FD306D1D0574FD00D77EFC /* libRNFS.a in Frameworks */,
 				3D2A3A011C7C3EE70085264D /* libz.tbd in Frameworks */,
+				3DCBF8631D9B7A2A0045BC95 /* TongDaoUILibrary.framework in Frameworks */,
+				3DCBF8621D9B7A2A0045BC95 /* TongDaoSDK.framework in Frameworks */,
 				73DFEAF21CDB242700234CE8 /* libbz2.1.0.tbd in Frameworks */,
 				3D2A39FF1C7C3EDA0085264D /* libc++.tbd in Frameworks */,
 				3D2A39F31C7C3ECD0085264D /* libsqlite3.tbd in Frameworks */,
@@ -720,6 +739,7 @@
 		13B07FAE1A68108700A75B9A /* TH_CFD */ = {
 			isa = PBXGroup;
 			children = (
+				3DCBF8541D9B7A2A0045BC95 /* TongDao */,
 				3DDB311B1D868476009E1D01 /* coin.mp3 */,
 				3D2A16D61D78047200FEB181 /* GtSdkLib */,
 				3DB9EF2C1D6445F700DC5C63 /* MeiQia */,
@@ -759,6 +779,8 @@
 		3D3E1F0B1C9F9C240064F187 /* ObjC */ = {
 			isa = PBXGroup;
 			children = (
+				3D74A5471D9BC16F003D15AA /* RCTTongDao.h */,
+				3D74A5481D9BC16F003D15AA /* RCTTongDao.m */,
 				3DE90F461D505035004D264A /* RCTTalkingData.h */,
 				3DE90F471D505035004D264A /* RCTTalkingData.m */,
 				3D6A23E31C9AA93F00FF1306 /* NativeScene.h */,
@@ -1447,6 +1469,28 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		3DCBF8541D9B7A2A0045BC95 /* TongDao */ = {
+			isa = PBXGroup;
+			children = (
+				3DCBF8551D9B7A2A0045BC95 /* Td_Image_bundle */,
+				3DCBF85B1D9B7A2A0045BC95 /* TongDaoSDK.framework */,
+				3DCBF85C1D9B7A2A0045BC95 /* TongDaoUILibrary.framework */,
+			);
+			path = TongDao;
+			sourceTree = "<group>";
+		};
+		3DCBF8551D9B7A2A0045BC95 /* Td_Image_bundle */ = {
+			isa = PBXGroup;
+			children = (
+				3DCBF8561D9B7A2A0045BC95 /* arrow.png */,
+				3DCBF8571D9B7A2A0045BC95 /* arrow@2x.png */,
+				3DCBF8581D9B7A2A0045BC95 /* arrow@3x.png */,
+				3DCBF8591D9B7A2A0045BC95 /* lq_x@2x.png */,
+				3DCBF85A1D9B7A2A0045BC95 /* td_in_app_icon.png */,
+			);
+			path = Td_Image_bundle;
+			sourceTree = "<group>";
+		};
 		3DCDB67A1D98F14B004B4765 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -1827,11 +1871,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DCBF8611D9B7A2A0045BC95 /* td_in_app_icon.png in Resources */,
+				3DCBF8601D9B7A2A0045BC95 /* lq_x@2x.png in Resources */,
 				3DB98C0F1CE1CF1A00DB3FA5 /* frontPage.jpg in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				3D61C5F31C9931A10037816A /* MainStoryboard.storyboard in Resources */,
+				3DCBF85D1D9B7A2A0045BC95 /* arrow.png in Resources */,
+				3DCBF85F1D9B7A2A0045BC95 /* arrow@3x.png in Resources */,
 				3DD744771CCE18040021304F /* myhero.ttf in Resources */,
+				3DCBF85E1D9B7A2A0045BC95 /* arrow@2x.png in Resources */,
 				3DB9F1B91D64483B00DC5C63 /* MQChatViewAsset.bundle in Resources */,
 				3D5C46C81C92B51000BF6FD3 /* main.jsbundle in Resources */,
 				3DDB311C1D868476009E1D01 /* coin.mp3 in Resources */,
@@ -1958,6 +2007,7 @@
 				3DB9F1C81D64483B00DC5C63 /* MQChatViewTableDataSource.m in Sources */,
 				3DB9F1DB1D64483B00DC5C63 /* MQTipsCellModel.m in Sources */,
 				3DB9F2401D64493900DC5C63 /* MQMessageFormViewStyleBlue.m in Sources */,
+				3D74A5491D9BC16F003D15AA /* RCTTongDao.m in Sources */,
 				3DB9F23F1D64493900DC5C63 /* MQMessageFormViewStyle.m in Sources */,
 				3DB9F1BF1D64483B00DC5C63 /* MQCustomizedUIText.m in Sources */,
 				3DB9F1F71D64483B00DC5C63 /* MEIQIA_FBBitmapFont.m in Sources */,
@@ -2019,10 +2069,11 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/MeiQia",
+					"$(PROJECT_DIR)/TongDao",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2067,10 +2118,11 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: TYPHOON TECHNOLOGY LIMITED (6WN74CZ95F)";
-				ENABLE_BITCODE = YES;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/MeiQia",
+					"$(PROJECT_DIR)/TongDao",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",

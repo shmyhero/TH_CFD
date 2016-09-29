@@ -23,6 +23,8 @@ import java.util.GregorianCalendar;
 public abstract class BaseChartDrawer implements IChartDrawer {
     protected float minVal = Float.MAX_VALUE;
     protected float maxVal = Float.MIN_VALUE;
+    protected JSONArray mChartDataList;
+    protected float preClose;
 
     @Override
     public void draw(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
@@ -33,6 +35,12 @@ public abstract class BaseChartDrawer implements IChartDrawer {
 
         minVal = Float.MAX_VALUE;
         maxVal = Float.MIN_VALUE;
+        try{
+            preClose = (float) stockInfoObject.getDouble("preClose");
+        }catch (Exception e){
+
+        }
+
 
         resetChart(chart);
 
@@ -313,5 +321,10 @@ public abstract class BaseChartDrawer implements IChartDrawer {
         }
 
         return calendar;
+    }
+
+    //设置 左上左下右上右下 文本描述
+    public void setDescription(CombinedChart chart, String lt, String lb, String rt, String rb) {
+        chart.setDescription(lt, lb, rt, rb);
     }
 }

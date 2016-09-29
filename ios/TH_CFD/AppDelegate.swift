@@ -68,6 +68,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 			}
 		})
 		
+		// tongdao
+		TongDaoUiCore.sharedManager().initSdkWithAppKey("126b767625e6d0df67333fb01749143f")
+		
 		// initialize the rootView to fetch JS from the dev server
 		let jsCodeLocation:NSURL?
 		if Platform.isSimulator {

@@ -38,7 +38,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>weixin</string>
@@ -59,8 +59,10 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>YES</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>YES</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>myhero.ttf</string>

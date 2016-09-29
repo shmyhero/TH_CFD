@@ -43,8 +43,8 @@ public class ReactChart extends CombinedChart {
         // `layout` is called on all RN-managed views by `NativeViewHierarchyManager`
     }
 
-    @Override
-    public void computeScroll(){
-        return;
-    }
+//    @Override
+//    public void computeScroll(){
+//        return;
+//    }
 }

@@ -23,6 +23,11 @@ class LineChartRender: BaseRender {
 			_bottomMargin = dataProvider!.bottomMargin()
 		}
 		let pointData = lineDataProvider!.pointData()
+		if(pointData.count == 0){
+			// should not occurred.
+			print ("Alert, should not happen!")
+			return
+		}
 		
 		let width = _rect.width
 		let height = _rect.height

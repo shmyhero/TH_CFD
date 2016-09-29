@@ -91,6 +91,15 @@ class StockChartView: UIView {
 	
 	var chartType:String="today"
 	
+	override func didMoveToWindow() {
+		if dataSource?._rect == CGRectZero {
+			// sometimes when the data is updated, the view do not finished inited.
+			// so need to recalculate again.
+			dataSource?._rect = self.bounds
+			dataSource?.calculateData()
+		}
+	}
+	
 // MARK: render
 	override func drawRect(rect: CGRect) {
 		// draw line chart

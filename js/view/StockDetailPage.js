@@ -293,20 +293,7 @@ var StockDetailPage = React.createClass({
 			(realtimeStockInfo) => {
 				for (var i = 0; i < realtimeStockInfo.length; i++) {
 					if (this.props.stockCode == realtimeStockInfo[i].id ) {
-						if (this.state.chartType === NetConstants.PARAMETER_CHARTTYPE_5_MINUTE
-							 && this.state.stockInfo != undefined
-							 && this.state.stockInfo.priceData != undefined) {
-							var stockinfo = this.state.stockInfo
-							var price = realtimeStockInfo[i].last
-							stockinfo.priceData.push({"p":price,"time":realtimeStockInfo[i].time})
-							this.setState({
-								stockInfo: stockinfo,
-								stockPrice: realtimeStockInfo[i].last,
-								stockPriceAsk: realtimeStockInfo[i].ask,
-								stockPriceBid: realtimeStockInfo[i].bid,
-							})
-						}
-						else if(this.state.stockPrice !== realtimeStockInfo[i].last) {
+						if(this.state.stockPrice !== realtimeStockInfo[i].last) {
 							this.setState({
 								stockPrice: realtimeStockInfo[i].last,
 								stockPriceAsk: realtimeStockInfo[i].ask,
@@ -458,7 +445,7 @@ var StockDetailPage = React.createClass({
 		var leftMoney = this.state.totalMoney - this.state.money
 		var charge = 0
 		var viewMargin = Platform.OS === 'ios' ? 0:15
-		console.log("render: " + JSON.stringify(this.state.stockInfo))
+		// console.log("render: " + JSON.stringify(this.state.stockInfo))
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
 				<View style={styles.wrapper}>

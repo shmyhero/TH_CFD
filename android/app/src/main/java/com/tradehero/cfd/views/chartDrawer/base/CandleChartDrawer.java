@@ -86,7 +86,7 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
         }
         chart.centerViewTo(indexCenter, (maxV + minV) / 2, YAxis.AxisDependency.LEFT);
 
-        if (preClose != 0) {
+        if (preClose != 0 && _perScreenCandleCount > 0) {
             float maxPrice = maxV;
             float minPrice = minV;
             float maxPercentage = (maxPrice - preClose) / preClose * 100;
@@ -208,8 +208,8 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
         perScreenCandleCount = (float) Math.ceil(perScreenCandleCount);
         if (perScreenCandleCount % 2 == 0) {
             perScreenCandleCount += 1;
-            _perScreenCandleCount = (int) perScreenCandleCount;
         }
+        _perScreenCandleCount = (int) perScreenCandleCount;
 
         int totalCandleCount = data.getXValCount();
 

@@ -135,7 +135,7 @@ var MePage = React.createClass({
 						{
 							hasUnreadMessage: response > 0,
 						}
-					)					
+					)
 				}.bind(this),
 				function(errorMessage) {
 					this.reloadMeDataFromStorage();
@@ -151,13 +151,10 @@ var MePage = React.createClass({
 			dataSource: datasource,
 		}, ()=>{
 			//A fix for the Me page shows nothing after login/logout.
-			//Since there's only one simulator encountered the issue, do not enable the fix for now.
-			/*
 			this._scrollView.scrollTo({x: 0, y: 1, animated: false});
 			setTimeout(()=>{
 				this._scrollView.scrollTo({x: 0, y: 0, animated: false});
 			}, 1);
-			*/
 		})
 	},
 

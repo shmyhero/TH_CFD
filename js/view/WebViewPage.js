@@ -26,6 +26,7 @@ var WebViewPage = React.createClass({
 		showTabbar: React.PropTypes.func,
 		shareFunction: React.PropTypes.func,
 		shareTrackingEvent: React.PropTypes.string,
+		shareUrl: React.PropTypes.string,
 	},
 
 	getDefaultProps() {
@@ -37,6 +38,7 @@ var WebViewPage = React.createClass({
 			showTabbar: ()=>{},
 			shareFunction: ()=>{},
 			shareTrackingEvent: null,
+			shareUrl: null,
 		}
 	},
 
@@ -92,7 +94,11 @@ var WebViewPage = React.createClass({
 		}
 
 		var url = NetConstants.SHARE_URL;
-		url = url.replace('<id>', this.props.shareID);
+		if(this.props.shareUrl){
+			url = this.props.shareUrl;
+		}else{
+			url = url.replace('<id>', this.props.shareID);
+		}
 
 		var data = {
 			webpageUrl: url,
@@ -137,7 +143,7 @@ var WebViewPage = React.createClass({
 	},
 
 	renderNavBar: function() {
-		if(this.props.shareID && (this.props.shareTitle || this.props.hareDescription)){
+		if((this.props.shareID || this.props.shareUrl) && (this.props.shareTitle || this.props.hareDescription)){
 			return(
 			<NavBar title={this.props.title}
 				showBackButton={true}

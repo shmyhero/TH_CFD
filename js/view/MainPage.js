@@ -279,6 +279,7 @@ var MainPage = React.createClass({
 										 title={route.title} navigator={navigationOperations}
 										 showShareButton={route.showShareButton}
 										 shareID={route.shareID}
+										 shareUrl={route.shareUrl}
 										 shareTitle={route.shareTitle}
 										 shareDescription={route.shareDescription}
 										 shareFunction={this._doShare}

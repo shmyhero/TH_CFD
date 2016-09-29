@@ -46,6 +46,7 @@ export const GET_STOCK_KLINE_DAY = SERVER_IP + '/api/quote/<securityId>/kline/da
 export const GET_MY_MESSAGES = SERVER_IP + '/api/user/message?pageNum=<pageNum>&pageSize=<pageSize>'
 export const SET_MESSAGE_READ = SERVER_IP + '/api/user/message/<id>'
 export const GET_UNREAD_MESSAGE = SERVER_IP + '/api/user/message/unread'
+export const GET_MOVIE_RANK = SERVER_IP + '/api/competition/1/user/<userId>/rank'
 
 export const GET_USER_DAILY_SIGN_INFO = SERVER_IP + '/api/reward/summary'//获取每日签到页面所需信息（需身份验证）
 export const GET_USER_DAILY_SIGN_MONTH = SERVER_IP + '/api/reward/checkIn/month'//获取当前月份的签到情况(需要身份验证)
@@ -61,8 +62,11 @@ export const WEBVIEW_TOP_NEWS_PAGE = TRADEHERO_SERVER_IP + '/' + VersionConstant
 export const WEBVIEW_QA_PAGE = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/wenda<version>.html'
 export const WEBVIEW_URL_ABOUT_US = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/about.html'
 export const SHARE_URL = TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER + '/detailShare.php?id=<id>'
+export const SHARE_MOVIE_WIN_TICKET_URL = TRADEHERO_SERVER_IP + '/CDF_BSY/sucess.php?hjcode=0'
+export const SHARE_MOVIE_NOT_WIN_TICKET_URL = TRADEHERO_SERVER_IP + '/CDF_BSY/sucess.php?hjcode=1'
 export const SHARE_LOGO_URL = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/images/ShareLogo.png'
 export const INCOME_URL = TRADEHERO_SERVER_IP + '/TH_CFD_WEB/checkinRule.php'
+export const MOVIE_WIN_TICKET_URL = TRADEHERO_SERVER_IP + '/CDF_BSY/index.php?userId=<userId>'
 export const PARAMETER_PHONE = 'phone'
 export const PARAMETER_VERFICATION_CODE = 'verifyCode'
 export const PARAMETER_NICKNAME = 'nickname'

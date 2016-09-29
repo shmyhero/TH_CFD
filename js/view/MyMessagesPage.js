@@ -65,10 +65,8 @@ export default class MyMessagesPage extends Component {
   }
 
   componentDidMount () {
-    //setTimeout(()=>{
-    //  this._pullToRefreshListView.beginRefresh();
-    //}, 200);
-    this.fetchMessages(false);
+    this._pullToRefreshListView.beginRefresh();
+    //this.fetchMessages(false);
   }
 
   componentWillUnmount (){
@@ -80,6 +78,17 @@ export default class MyMessagesPage extends Component {
   currentIndex = 1;
 
   fetchMessages = (isRefresh) => {
+    if(this.state.isStartUp){
+      //The quick loading will cause a display bug on the listview.
+      setTimeout(()=>{
+        this.fetchAllMessages(isRefresh);
+      }, 500);
+    }else{
+      this.fetchAllMessages(isRefresh);
+    }
+  }
+
+  fetchAllMessages = (isRefresh) => {
     var userData = LogicData.getUserData();
     var url = NetConstants.GET_MY_MESSAGES;
     url = url.replace("<pageNum>", this.currentIndex);
@@ -222,10 +231,10 @@ export default class MyMessagesPage extends Component {
     var pullDownDistance = 35;
     var pullDownStayDistance = 50;
 
+    //{this._renderStartUpActivityIndicator()}
     return (
 			<View style={{flex: 1,}}>
 				{this.renderEmptyView()}
-        {this._renderStartUpActivityIndicator()}
 	      <PullToRefreshListView
 	        ref={ (component) => this._pullToRefreshListView = component }
 	        viewType={PullToRefreshListView.constants.viewType.listView}

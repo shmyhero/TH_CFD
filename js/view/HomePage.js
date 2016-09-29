@@ -59,6 +59,7 @@ var HomePage = React.createClass({
 			rawPopularityInfo: [],
 			popularityInfo: bsds.cloneWithRows([]),
 			topNews: [],
+			winMovieTicket: false,
 		};
 	},
 
@@ -85,6 +86,8 @@ var HomePage = React.createClass({
 	},
 
 	reloadBanner: function() {
+		var userData = LogicData.getUserData();
+
 		NetworkModule.fetchTHUrl(
 			NetConstants.GET_HOMEPAGE_BANNER_API,
 			{
@@ -100,6 +103,26 @@ var HomePage = React.createClass({
 			}
 		);
 
+		var url = NetConstants.GET_MOVIE_RANK;
+		url = url.replace("<userId>", userData.userId);
+		NetworkModule.fetchTHUrl(
+			url,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Content-Type': 'application/json; charset=UTF-8',
+				},
+			},
+			(responseJson) => {
+				this.setState({
+					winMovieTicket: responseJson.rank <= 3,
+				})
+			},
+			(errorMessage) => {
+				// Ignore it.
+			}
+		);
 		this.loadHomeData();
 	},
 
@@ -218,16 +241,19 @@ var HomePage = React.createClass({
 			TalkingdataModule.BANNER_SHARE_EVENT)
 	},
 
-	gotoWebviewPage: function(targetUrl, title, shareID, shareTitle, shareDescription, sharingTrackingEvent) {
+	gotoWebviewPage: function(targetUrl, title, shareID, shareTitle, shareDescription, sharingTrackingEvent, shareUrl) {
 		var userData = LogicData.getUserData()
 		var userId = userData.userId
 		if (userId == undefined) {
 			userId = 0
 		}
-		if (targetUrl.indexOf('?') !== -1) {
-			targetUrl = targetUrl + '&userId=' + userId
-		} else {
-			targetUrl = targetUrl + '?userId=' + userId
+
+		if(!targetUrl.includes('userId')){
+			if (targetUrl.indexOf('?') !== -1) {
+				targetUrl = targetUrl + '&userId=' + userId
+			} else {
+				targetUrl = targetUrl + '?userId=' + userId
+			}
 		}
 
 		if(!shareID){
@@ -239,12 +265,15 @@ var HomePage = React.createClass({
 		if(!shareDescription){
 			shareDescription = null
 		}
-
+		if(!shareUrl){
+			shareUrl = null
+		}
 		this.props.navigator.push({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			url: targetUrl,
 			title: title,
 			shareID: shareID,
+			shareUrl: shareUrl,
 			shareTitle: shareTitle,
 			shareDescription: shareDescription,
 			shareTrackingEvent: sharingTrackingEvent,
@@ -253,11 +282,30 @@ var HomePage = React.createClass({
 
 	gotoMoviePage: function(){
 		TalkingdataModule.trackEvent(TalkingdataModule.MOVIE_ACTIVITY_EVENT);
-		this.gotoWebviewPage(PAGES[0].url, '推荐',
-			PAGES[0].id,
-			PAGES[0].header,
-			PAGES[0].digest,
-			TalkingdataModule.MOVIE_SHARE_EVENT);
+		
+		var url = NetConstants.MOVIE_WIN_TICKET_URL;
+		var userData = LogicData.getUserData();
+		url = url.replace("<userId>", userData.userId);
+
+		var shareUrl;
+		if(this.state.winMovieTicket){
+			shareUrl = NetConstants.SHARE_MOVIE_WIN_TICKET_URL;
+		}else{
+			shareUrl = NetConstants.SHARE_MOVIE_NOT_WIN_TICKET_URL;
+		}
+		var message;
+		if(this.state.winMovieTicket){
+			message = "朕的投资收益率排名前3，快快赞我！";
+		}else{
+			message = "俺的模拟投资战绩不佳，求大侠支招，助我拿到电影票！";
+		}
+
+		this.gotoWebviewPage(url, '推荐',
+			null,
+			"一大波影券来啦",
+			message,
+			TalkingdataModule.MOVIE_SHARE_EVENT,
+			shareUrl);
 	},
 
 	gotoCheckinPage: function(){

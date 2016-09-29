@@ -239,7 +239,7 @@ var StockDetailPage = React.createClass({
 					for (var i = 0; i < tempStockInfo.priceData.length; i ++) {
 						var price = 0;
 						if(chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE||
-						   chartType == NetConstants.PARAMETER_CHARTTYPE_DAY){
+							chartType == NetConstants.PARAMETER_CHARTTYPE_DAY){
 							price = tempStockInfo.priceData[i].close
 						}else{
 							price = tempStockInfo.priceData[i].p
@@ -270,13 +270,14 @@ var StockDetailPage = React.createClass({
 
 				var previousInterestedStocks = WebSocketModule.getPreviousInterestedStocks()
 				var lastInterestedStocks = previousInterestedStocks;
-				if(previousInterestedStocks){
+				if(previousInterestedStocks && tempStockInfo.id){
 					if(!previousInterestedStocks.includes(tempStockInfo.id)){
 						previousInterestedStocks += ',' + tempStockInfo.id;
 					}
 				}else{
-					previousInterestedStocks = tempStockInfo.id;
+					previousInterestedStocks = '' + tempStockInfo.id;
 				}
+
 				if(previousInterestedStocks != lastInterestedStocks){
 					WebSocketModule.registerInterestedStocks(previousInterestedStocks)
 				}

@@ -118,6 +118,7 @@ var WebViewPage = React.createClass({
 					ref={WEBVIEW_REF}
 					style={styles.webView}
 					javaScriptEnabled={true}
+					startInLoadingState={true}
 					domStorageEnabled={true}
 					scalesPageToFit={true}
 					automaticallyAdjustContentInsets={true}

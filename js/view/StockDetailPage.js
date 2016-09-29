@@ -277,7 +277,7 @@ var StockDetailPage = React.createClass({
 			(realtimeStockInfo) => {
 				for (var i = 0; i < realtimeStockInfo.length; i++) {
 					if (this.props.stockCode == realtimeStockInfo[i].id ) {
-						if (this.state.chartType === NetConstants.PARAMETER_CHARTTYPE_TEN_MINUTE
+						if (this.state.chartType === NetConstants.PARAMETER_CHARTTYPE_5_MINUTE
 							 && this.state.stockInfo != undefined
 							 && this.state.stockInfo.priceData != undefined) {
 							var stockinfo = this.state.stockInfo

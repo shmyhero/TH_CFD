@@ -9,6 +9,7 @@ import {
 	Text,
 	Image,
 	TouchableOpacity,
+	ScrollView,
 } from 'react-native';
 
 var {EventCenter, EventConst} = require('../EventCenter')
@@ -149,12 +150,6 @@ var MePage = React.createClass({
 		var datasource = ds.cloneWithRows(listRawData);
 		this.setState({
 			dataSource: datasource,
-		}, ()=>{
-			//A fix for the Me page shows nothing after login/logout.
-			this._scrollView.scrollTo({x: 0, y: 1, animated: false});
-			setTimeout(()=>{
-				this._scrollView.scrollTo({x: 0, y: 0, animated: false});
-			}, 1);
 		})
 	},
 
@@ -383,17 +378,39 @@ var MePage = React.createClass({
 		}
 	},
 
-	render: function() {
+	renderListView: function(){
+		var listDataView = listRawData.map((data, i)=>{
+			return(
+				<View key={i}>
+					{this.renderRow(data, 's1', i)}
+					{this.renderSeparator('s1', i, false)}
+				</View>
+			);
+		})
 
+		return (
+			<View>
+				{listDataView}
+			</View>);
+	},
+
+	render: function() {
+		//Do not use List view with image inside under RN 3.3
+		//since there's a serious bug that the portrait won't update if user changes.
+		/*
+		<ListView
+			ref={(scrollView) => { this._scrollView = scrollView; }}
+			style={styles.list}
+			dataSource={this.state.dataSource}
+			renderRow={this.renderRow}
+			renderSeparator={this.renderSeparator} />
+		*/
 		return (
 			<View style={styles.wrapper}>
 				{this.renderNavBar()}
-		    <ListView
-          ref={(scrollView) => { this._scrollView = scrollView; }}
-		    	style={styles.list}
-					dataSource={this.state.dataSource}
-					renderRow={this.renderRow}
-					renderSeparator={this.renderSeparator} />
+				<ScrollView>
+					{this.renderListView()}
+				</ScrollView>
 			</View>
 		);
 	},

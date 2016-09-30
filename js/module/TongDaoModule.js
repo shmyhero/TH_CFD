@@ -49,3 +49,22 @@ export function trackEvent(event_name, values) {
 export function trackRegistration() {
 	nativeModule.trackRegistration();
 }
+
+export function trackOpenPositionEvent(data, money) {
+	var values = {}
+	values["升／跌"] = data.isLong ? "升":"跌"
+	values["品类"] = data.security.name
+	values["资金"] = ""+money
+	values["杠杆"] = ""+data.leverage
+	trackEvent(TD_OPEN_POSITION, values)
+}
+
+export function trackClosePositionEvent(data) {
+	var values = {}
+	console.log("tongdao:", data)
+	values["升／跌"] = data.isLong ? "升":"跌"
+	values["品类"] = data.security.name
+	values["获利"] = ""+money
+	values["杠杆"] = ""+data.pl
+	trackEvent(TD_CLOSE_POSITION, values)
+}

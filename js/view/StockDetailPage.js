@@ -28,6 +28,7 @@ var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
 var TalkingdataModule = require('../module/TalkingdataModule')
+var TongDaoModule = require('../module/TongDaoModule')
 var NavBar = require('../view/NavBar')
 var InputAccessory = require('./component/InputAccessory')
 var MainPage = require('./MainPage')
@@ -871,6 +872,7 @@ var StockDetailPage = React.createClass({
 				eventParam[TalkingdataModule.KEY_TIME] = responseJson.createAt;
 
 				TalkingdataModule.trackEvent(TalkingdataModule.TRADE_EVENT, '', eventParam)
+				TongDaoModule.trackOpenPositionEvent(responseJson, this.state.money)
 			},
 			(errorMessage) => {
 				Alert.alert('', errorMessage,

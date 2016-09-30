@@ -189,7 +189,7 @@ var StockOpenPositionPage = React.createClass({
 
 	handleStockInfo: function(realtimeStockInfo) {
 		var hasUpdate = false
-		var hasUpdateDetail = false
+		// var hasUpdateDetail = false
 		var sdi = this.state.stockDetailInfo
 		for (var i = 0; i < this.state.stockInfoRowData.length; i++) {
 			for (var j = 0; j < realtimeStockInfo.length; j++) {
@@ -211,16 +211,16 @@ var StockOpenPositionPage = React.createClass({
 						hasUpdate = true;
 					}
 				}
-				if (this.state.chartType === NetConstants.PARAMETER_CHARTTYPE_TEN_MINUTE
-						&& this.state.stockDetailInfo != undefined
-						&& this.state.stockDetailInfo.priceData != undefined
-						&& this.state.stockDetailInfo.id == realtimeStockInfo[j].id
-						&& !hasUpdateDetail
-						) {
-					var price = realtimeStockInfo[j].last
-					sdi.priceData.push({"p":price,"time":realtimeStockInfo[j].time})
-					hasUpdateDetail = true
-				}
+				// if (this.state.chartType === NetConstants.PARAMETER_CHARTTYPE_TEN_MINUTE
+				// 		&& this.state.stockDetailInfo != undefined
+				// 		&& this.state.stockDetailInfo.priceData != undefined
+				// 		&& this.state.stockDetailInfo.id == realtimeStockInfo[j].id
+				// 		&& !hasUpdateDetail
+				// 		) {
+				// 	var price = realtimeStockInfo[j].last
+				// 	sdi.priceData.push({"p":price,"time":realtimeStockInfo[j].time})
+				// 	hasUpdateDetail = true
+				// }
 			};
 		};
 
@@ -230,9 +230,9 @@ var StockOpenPositionPage = React.createClass({
 			})
 		}
 
-		if (hasUpdateDetail) {
-			this.setState({stockDetailInfo: sdi})
-		}
+		// if (hasUpdateDetail) {
+		// 	this.setState({stockDetailInfo: sdi})
+		// }
 	},
 
 	doScrollAnimation: function() {

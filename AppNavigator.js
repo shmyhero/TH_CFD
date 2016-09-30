@@ -72,6 +72,7 @@ var MainPage = require('./js/view/MainPage')
 var AskForRestartPage = require('./js/view/AskForRestartPage')
 var NativeDataModule = require('./js/module/NativeDataModule')
 var VersionConstants = require('./js/VersionConstants')
+var TongDaoModule = require('./js/module/TongDaoModule')
 
 var GUIDE_SLIDES = [
 	require('./images/Guide-page01.png'),
@@ -117,6 +118,10 @@ var AppNavigator = React.createClass({
 					LogicData.setUserData(JSON.parse(value))
 
 					this.sendDeviceTokenToServer(LogicData.getGeTuiToken());
+
+					var userData = LogicData.getUserData()
+					console.log("tong dao", userData)
+					TongDaoModule.setUserId(userData.userId)
 				}
 				this.checkUpdate()
 

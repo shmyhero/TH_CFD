@@ -24,6 +24,7 @@ var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
 var TalkingdataModule = require('../module/TalkingdataModule')
 var TimerMixin = require('react-timer-mixin');
+var TongDaoModule = require('../module/TongDaoModule')
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var searchText = ""
@@ -374,6 +375,8 @@ var styles = StyleSheet.create({
 		marginRight: 10,
 		paddingLeft: 10,
 		color: '#ffffff',
+		paddingTop: 0,
+		paddingBottom: 0,
 	},
 
 	cancelText: {

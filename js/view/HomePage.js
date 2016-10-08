@@ -26,6 +26,8 @@ var LogicData = require('../LogicData');
 var WebSocketModule = require('../module/WebSocketModule');
 var NavBar = require('./NavBar')
 var TalkingdataModule = require('../module/TalkingdataModule')
+var TongDaoModule = require('../module/TongDaoModule')
+
 var {EventCenter, EventConst} = require('../EventCenter')
 
 var RECOMMAND_URL = NetConstants.WEBVIEW_RECOMMAND_PAGE
@@ -495,16 +497,21 @@ var HomePage = React.createClass({
 		)
 	},
 
+	tapTopNews: function(url) {
+		this.gotoWebviewPage(url,
+			'每日头条',
+			false,
+			null,
+			null,
+			TalkingdataModule.HEADER_SHARE_EVENT)
+		TongDaoModule.trackTopNewsEvent()
+	},
+
 	renderOneNews: function(news) {
 		var header = news.header
 		var url = NetConstants.WEBVIEW_TOP_NEWS_PAGE+news.id
 		return(
-			<TouchableOpacity style={styles.newsContainer} onPress={() =>this.gotoWebviewPage(url,
-				'每日头条',
-				false,
-				null,
-				null,
-				TalkingdataModule.HEADER_SHARE_EVENT)}>
+			<TouchableOpacity style={styles.newsContainer} onPress={() => this.tapTopNews(url)}>
 				<View style={styles.bluePoint}/>
 				<Text style={styles.newsText}
 					ellipsizeMode="tail"

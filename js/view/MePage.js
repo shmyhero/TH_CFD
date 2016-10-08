@@ -139,10 +139,10 @@ var MePage = React.createClass({
 					)
 				}.bind(this),
 				function(errorMessage) {
-					this.reloadMeDataFromStorage();
+					console.log(errorMessage)
 				}.bind(this),
 				function(errorMessage) {
-					this.reloadMeDataFromStorage();
+					console.log(errorMessage)
 				}.bind(this)
 			);
 		}

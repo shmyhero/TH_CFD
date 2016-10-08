@@ -702,7 +702,7 @@ var styles = StyleSheet.create({
 		width:80,
 		height:24,
 		marginRight:-5,
-		borderRadius:10,
+		borderRadius:5,
 		backgroundColor:'#5a92f6',
 		alignItems:'center',
 	  justifyContent:'center',
@@ -767,7 +767,7 @@ var styles = StyleSheet.create({
 	imgSignTexContainer:{
 		alignItems: 'flex-start',
 		backgroundColor: '#fffdf4',
-		width:imgWidth * 0.8,
+		width:imgWidth * 0.85,
 		height:imgWidth * 0.9,
 		paddingTop:imgWidth / 5,
 		paddingLeft:10,

@@ -61,6 +61,7 @@ var HomePage = React.createClass({
 			rawPopularityInfo: [],
 			popularityInfo: bsds.cloneWithRows([]),
 			topNews: [],
+			attendedMovieEvent: false,
 			winMovieTicket: false,
 		};
 	},
@@ -117,9 +118,17 @@ var HomePage = React.createClass({
 				},
 			},
 			(responseJson) => {
-				this.setState({
-					winMovieTicket: responseJson.rank <= 3,
-				})
+				if(responseJson.rank){
+					this.setState({
+						attendedMovieEvent: true,
+						winMovieTicket: responseJson.rank <= 3,
+					})
+				}else{
+					this.setState({
+						attendedMovieEvent: false,
+						winMovieTicket: false,
+					})
+				}
 			},
 			(errorMessage) => {
 				// Ignore it.
@@ -243,6 +252,24 @@ var HomePage = React.createClass({
 			TalkingdataModule.BANNER_SHARE_EVENT)
 	},
 
+	getShareMovieEventInfo: function(){
+		var info = {};
+		if(!this.state.attendedMovieEvent){
+			info.shareUrl = NetConstants.SHARE_MOVIE_WIN_TICKET_URL;
+			info.message = "朕的投资收益率排名前3，快快赞我！";
+		}else{
+			if(this.state.winMovieTicket){
+				info.shareUrl = NetConstants.SHARE_MOVIE_WIN_TICKET_URL;
+				info.message = "朕的投资收益率排名前3，快快赞我！";
+			}else{
+				info.shareUrl = NetConstants.SHARE_MOVIE_NOT_WIN_TICKET_URL;
+				info.message = "俺的模拟投资战绩不佳，求大侠支招，助我拿到电影票！";
+			}
+		}
+		info.title = "一大波影券来啦";
+		return info;
+	},
+
 	gotoWebviewPage: function(targetUrl, title, shareID, shareTitle, shareDescription, sharingTrackingEvent, shareUrl) {
 		var userData = LogicData.getUserData()
 		var userId = userData.userId
@@ -256,6 +283,13 @@ var HomePage = React.createClass({
 			} else {
 				targetUrl = targetUrl + '?userId=' + userId
 			}
+		}
+
+		if(!shareUrl && targetUrl.startsWith(NetConstants.MOVIE_WIN_TICKET_URL)){
+			var shareInfo = this.getShareMovieEventInfo();
+			shareUrl = shareInfo.shareUrl;
+			shareDescription = shareInfo.message;
+			shareTitle = shareInfo.title;
 		}
 
 		if(!shareID){
@@ -284,30 +318,18 @@ var HomePage = React.createClass({
 
 	gotoMoviePage: function(){
 		TalkingdataModule.trackEvent(TalkingdataModule.MOVIE_ACTIVITY_EVENT);
-		
+
 		var url = NetConstants.MOVIE_WIN_TICKET_URL;
 		var userData = LogicData.getUserData();
-		url = url.replace("<userId>", userData.userId);
+		url = url + '?userId=' + userData.userId;
 
-		var shareUrl;
-		if(this.state.winMovieTicket){
-			shareUrl = NetConstants.SHARE_MOVIE_WIN_TICKET_URL;
-		}else{
-			shareUrl = NetConstants.SHARE_MOVIE_NOT_WIN_TICKET_URL;
-		}
-		var message;
-		if(this.state.winMovieTicket){
-			message = "朕的投资收益率排名前3，快快赞我！";
-		}else{
-			message = "俺的模拟投资战绩不佳，求大侠支招，助我拿到电影票！";
-		}
-
+		var info = this.getShareMovieEventInfo();
 		this.gotoWebviewPage(url, '推荐',
 			null,
-			"一大波影券来啦",
-			message,
+			info.title,
+			info.message,
 			TalkingdataModule.MOVIE_SHARE_EVENT,
-			shareUrl);
+			info.shareUrl);
 	},
 
 	gotoCheckinPage: function(){

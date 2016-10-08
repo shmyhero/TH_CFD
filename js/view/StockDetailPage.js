@@ -338,9 +338,11 @@ var StockDetailPage = React.createClass({
 				isAddedToMyList: false,
 			})
 
-      var parameters = {};
-      parameters[TalkingdataModule.KEY_STOCK_ID] = this.props.stockCode.toString();
-			TalkingdataModule.trackEvent(TalkingdataModule.ADD_TO_MY_LIST_EVENT, '', parameters)
+			var parameters = {};
+    		parameters[TalkingdataModule.KEY_STOCK_ID] = this.props.stockCode.toString();
+			TalkingdataModule.trackEvent(TalkingdataModule.REMOVE_FROM_MY_LIST_EVENT, '', parameters)
+
+			TongDaoModule.trackAddRemoveOwnStockEvent(this.props.stockCode.toString(), false)
 		} else {
 			LogicData.addStockToOwn(stock)
 			NetworkModule.addToOwnStocks([stock])
@@ -348,9 +350,11 @@ var StockDetailPage = React.createClass({
 				isAddedToMyList: true,
 			})
 
-      var parameters = {};
-      parameters[TalkingdataModule.KEY_STOCK_ID] = this.props.stockCode.toString();
-			TalkingdataModule.trackEvent(TalkingdataModule.REMOVE_FROM_MY_LIST_EVENT, '', parameters)
+			var parameters = {};
+			parameters[TalkingdataModule.KEY_STOCK_ID] = this.props.stockCode.toString();
+			TalkingdataModule.trackEvent(TalkingdataModule.ADD_TO_MY_LIST_EVENT, '', parameters)
+
+			TongDaoModule.trackAddRemoveOwnStockEvent(this.props.stockCode.toString(), true)
 		}
 	},
 

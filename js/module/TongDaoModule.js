@@ -68,3 +68,25 @@ export function trackClosePositionEvent(data) {
 	values["杠杆"] = ""+data.pl
 	trackEvent(TD_CLOSE_POSITION, values)
 }
+
+export function trackAddRemoveOwnStockEvent(stockid, isAdd) {
+	var values = {"品类" : stockid}
+	var type = isAdd ? TD_ADD_OWN_STOCK : TD_REMOVE_OWN_STOCK
+	trackEvent(type, values)
+}
+
+export function trackSearchStockEvent(text, hasResult) {
+	var result = hasResult ? "有" : "没有"
+	var values = {"搜索字段" : stockid, "有/没结果" : result}
+	trackEvent(TD_SEARCH_STOCK, values)
+}
+
+export function trackDaySignEvent(signed) {
+	var result = signed ? "参与过" : "未参与过"
+	var values = {"参与过/未参与过" : result}
+	trackEvent(TD_CHECK_IN, values)
+}
+
+export function trackTopNewsEvent() {
+	trackEvent(TD_TOP_NEWS, null)
+}

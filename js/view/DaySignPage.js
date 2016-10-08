@@ -24,6 +24,7 @@ var NetworkModule = require('../module/NetworkModule')
 var NativeDataModule = require('../module/NativeDataModule')
 var NavBar = require('./NavBar')
 var TalkingdataModule = require('../module/TalkingdataModule')
+var TongDaoModule = require('../module/TongDaoModule')
 
 var {height, width} = Dimensions.get('window');
 var heightRate = height/667.0;
@@ -338,6 +339,7 @@ var DaySignPage = React.createClass({
 			if(!notLogin){
 				TalkingdataModule.trackEvent(TalkingdataModule.CHECK_IN_BUTTON_EVENT);
 				signEnable = false
+				TongDaoModule.trackDaySignEvent(this.state.totalSignDays>0)
 				NetworkModule.fetchTHUrlWithNoInternetCallback(
 					NetConstants.USER_DAILY_SIGN,
 					{

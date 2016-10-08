@@ -114,12 +114,15 @@ var StockSearchPage = React.createClass({
 						var eventParam = {};
 						eventParam[TalkingdataModule.KEY_SEARCH_TEXT] = text;
 						TalkingdataModule.trackEvent(TalkingdataModule.SEARCH_WITH_NO_RESULT_EVENT, '', eventParam)
+
+						TongDaoModule.trackSearchStockEvent(text, false)
 					} else {
 						this.setState({
 							searchStockRawInfo: responseJson,
 							searchStockInfo: ds.cloneWithRows(responseJson),
 							searchFailedText: null,
 						})
+						TongDaoModule.trackSearchStockEvent(text, true)
 					}
 				},
 				(errorMessage) => {
@@ -146,6 +149,8 @@ var StockSearchPage = React.createClass({
 		var eventParam = {};
 		eventParam[TalkingdataModule.KEY_STOCK_ID] = stockData.id,
 		TalkingdataModule.trackEvent(TalkingdataModule.SEARCH_AND_ADD_TO_MY_LIST_EVENT, '', eventParam)
+
+		TongDaoModule.trackAddRemoveOwnStockEvent(stockData.id.toString(), true)
 	},
 
 	addToMyListPressedFromHistory: function(rowID) {

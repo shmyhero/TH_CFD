@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  lq_gb_icon这个属性很重要请不要修改   -->
+    <string name="lq_gb_icon">lqbz</string>
+    <string name="lq_loading">正在下载，请稍候&#8230;</string>
+</resources>

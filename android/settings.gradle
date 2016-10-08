@@ -1,6 +1,6 @@
 rootProject.name = 'TH_CFD'
 
-include ':app'
+include ':app', ':sdk-ui'
 include ':react-native-wx'
 include ':MPChartLib'
 include ':react-native-linear-gradient'
@@ -10,6 +10,7 @@ include ':react-native-update'
 include ':react-native-fs'
 include ':react-native-image-picker'
 include ':react-native-smart-swipe-refresh-layout'
+
 project(':react-native-wx').projectDir = new File(settingsDir, '../node_modules/react-native-wx/android')
 project(':MPChartLib').projectDir = new File(settingsDir, './MPChartLib')
 project(':react-native-wheel-picker').projectDir = new File(settingsDir, '../node_modules/react-native-wheel-picker/android')

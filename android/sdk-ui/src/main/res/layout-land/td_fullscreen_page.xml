@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/td_root_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#db000000"
+    android:gravity="center">
+
+    <RelativeLayout
+        android:id="@+id/td_message_root"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/lq_full_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/lq_gb_icon"
+            android:scaleType="fitXY" />
+
+        <FrameLayout
+            android:id="@+id/lq_btn_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <View
+                android:id="@+id/lq_fake_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <FrameLayout
+                android:id="@+id/lq_temp_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/td_btn1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"></Button>
+
+                <Button
+                    android:id="@+id/td_btn2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"></Button>
+            </FrameLayout>
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/lq_page_close_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:contentDescription="@string/lq_gb_icon"
+            android:scaleType="fitXY"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
+</RelativeLayout>

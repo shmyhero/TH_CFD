@@ -2,6 +2,7 @@ package com.tradehero.cfd;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -35,6 +36,11 @@ import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.tongdao.sdk.ui.TongDaoUiCore;
+import com.tradehero.cfd.tongdao.TongDaoModule;
+
+import static android.content.pm.PackageManager.GET_META_DATA;
+import static com.tencent.bugly.crashreport.CrashReport.getUserId;
 
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
@@ -74,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.20.139:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.88.235:8081").apply();
 
 
         super.onCreate(null);
@@ -84,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         TalkingDataAppCpa.init(this.getApplicationContext(), "d505985d4e8e494fbd59aab89d4b8b96", null);
 
         initMeiQia();
+        initTongDao();
         initGeTui();
         initSound();
 
@@ -267,6 +274,9 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
             if (mClientIDTeTui != null) {
                 NativeDataModule.passDataToRN(context, "deviceToken", mClientIDTeTui);
                 Log.d("GeTui", "NativeDataModule deviceToken : " + mClientIDTeTui);
+
+                //Set the push token with TongDao sdk.
+                TongDaoUiCore.identifyPushToken(mClientIDTeTui);
             }
 
 
@@ -276,8 +286,6 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     }
 
     public void initGeTui() {
-
-
         // SDK初始化，第三方程序启动时，都要进行SDK初始化工作
         Log.d("GetuiSdk", "initializing sdk...");
         PackageManager pkgManager = getPackageManager();
@@ -300,8 +308,26 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         mClientIDTeTui = PushManager.getInstance().getClientid(this);
         if (mClientIDTeTui != null) {
             Log.d("GeTui", "" + mClientIDTeTui);
+
+            TongDaoUiCore.identifyPushToken(mClientIDTeTui);
+        }
+    }
+
+    public void initTongDao(){
+         String appKey = null;
+        try {
+            ApplicationInfo applicationInfo = getPackageManager().getApplicationInfo(getPackageName(), GET_META_DATA);
+            if(applicationInfo != null && applicationInfo.metaData != null) {
+                appKey = applicationInfo.metaData.getString("TONGDAO_APP_KEY");
+                if(appKey != null) {
+                    appKey = appKey.trim();
+                }
+            }
+        } catch (Exception err) {
+            Log.e("Initialize TongDao|", err.toString());
         }
 
+        TongDaoUiCore.init(this, appKey);
     }
 
     private void requestPermission() {
@@ -360,7 +386,6 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         if (context != null) {
             Boolean isProductEnvironment = BuildConfig.IS_PRODUCT_ENVIRONMENT;
             NativeDataModule.passDataToRN(context, "isProductServer", isProductEnvironment.toString());
-            Log.d("IsProductServer", "NativeDataModule IsProductServer: " + mClientIDTeTui);
         }
     }
 

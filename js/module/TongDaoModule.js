@@ -59,13 +59,13 @@ export function trackOpenPositionEvent(data, money) {
 	trackEvent(TD_OPEN_POSITION, values)
 }
 
-export function trackClosePositionEvent(data) {
+export function trackClosePositionEvent(data, money) {
 	var values = {}
 	console.log("tongdao:", data)
 	values["升／跌"] = data.isLong ? "升":"跌"
 	values["品类"] = data.security.name
 	values["获利"] = ""+money
-	values["杠杆"] = ""+data.pl
+	values["杠杆"] = ""+data.leverage
 	trackEvent(TD_CLOSE_POSITION, values)
 }
 
@@ -77,7 +77,7 @@ export function trackAddRemoveOwnStockEvent(stockid, isAdd) {
 
 export function trackSearchStockEvent(text, hasResult) {
 	var result = hasResult ? "有" : "没有"
-	var values = {"搜索字段" : stockid, "有/没结果" : result}
+	var values = {"搜索字段" : text, "有/没结果" : result}
 	trackEvent(TD_SEARCH_STOCK, values)
 }
 

@@ -271,7 +271,9 @@ var StockDetailPage = React.createClass({
 
 				var previousInterestedStocks = WebSocketModule.getPreviousInterestedStocks()
 				var lastInterestedStocks = previousInterestedStocks;
-				if(previousInterestedStocks && tempStockInfo.id){
+				if(previousInterestedStocks
+					&& previousInterestedStocks.includes //The method may be empty???
+					&&tempStockInfo.id){
 					if(!previousInterestedStocks.includes(tempStockInfo.id)){
 						previousInterestedStocks += ',' + tempStockInfo.id;
 					}

@@ -81,11 +81,15 @@ var HomePage = React.createClass({
 			.then((value) => {
 				if (value !== null) {
 					this.downloadBannerImages(JSON.parse(value))
+					.then(()=>{
+						//Make sure the downloading synchronized.
+						this.reloadBanner();
+					})
+				}else{
+					this.reloadBanner();
 				}
 			})
 			.done()
-
-		this.reloadBanner();
 	},
 
 	reloadBanner: function() {
@@ -189,10 +193,8 @@ var HomePage = React.createClass({
 	},
 
 	downloadBannerImages: function(images) {
-		this.downloadOneBannerImage(images, 0)
 	},
 
-	downloadOneBannerImage: function(images, index) {
 		if (index >= images.length) {
 			return
 		}
@@ -218,7 +220,6 @@ var HomePage = React.createClass({
 					this.setState({
 						dataSource: ds.cloneWithRows(PAGES)
 					})
-					this.downloadOneBannerImage(images, index + 1)
 				} else {
 					FSModule.downloadBannerImage(imagePath, (filePath) => {
 						if (filePath !== null) {
@@ -234,7 +235,6 @@ var HomePage = React.createClass({
 								dataSource: ds.cloneWithRows(PAGES)
 							})
 						}
-						this.downloadOneBannerImage(images, index + 1)
 					})
 				}
 			})

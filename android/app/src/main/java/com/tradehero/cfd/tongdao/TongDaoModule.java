@@ -70,7 +70,7 @@ public class TongDaoModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void trackEvent(String eventName, ReadableMap parameters){
         if(parameters == null){
-            TongDaoUiCore.identify(eventName, null);
+            TongDaoUiCore.track(eventName, null);
         }else {
             HashMap map = new HashMap();
             ReadableMapKeySetIterator iterator = parameters.keySetIterator();
@@ -87,7 +87,7 @@ public class TongDaoModule extends ReactContextBaseJavaModule {
                     map.put(key, new Double(parameters.getDouble(key)));
                 }
             }
-            TongDaoUiCore.identify(eventName, map);
+            TongDaoUiCore.track(eventName, map);
         }
     }
 

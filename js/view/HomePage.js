@@ -193,9 +193,17 @@ var HomePage = React.createClass({
 	},
 
 	downloadBannerImages: function(images) {
+		var promise = new Promise((resolve, reject) => {
+		  // do a thing, possibly async, then…
+			this.downloadOneBannerImage(images, 0, resolve);
+		});
+		return promise;
 	},
 
+	downloadOneBannerImage: function(images, index, resolve) {
+		console.log("downloadOneBannerImage: " + index)
 		if (index >= images.length) {
+			resolve()
 			return
 		}
 		var imagePath = images[index].imgUrl
@@ -220,6 +228,7 @@ var HomePage = React.createClass({
 					this.setState({
 						dataSource: ds.cloneWithRows(PAGES)
 					})
+					this.downloadOneBannerImage(images, index + 1, resolve)
 				} else {
 					FSModule.downloadBannerImage(imagePath, (filePath) => {
 						if (filePath !== null) {
@@ -235,6 +244,7 @@ var HomePage = React.createClass({
 								dataSource: ds.cloneWithRows(PAGES)
 							})
 						}
+						this.downloadOneBannerImage(images, index + 1, resolve)
 					})
 				}
 			})

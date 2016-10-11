@@ -72,6 +72,10 @@ class NotificationManager: NSObject {
 	}
 	
 	func showNotification(payload:String!, taskId:String!, msgId:String!, offline:Bool?){
+		if payload.containsString("tongrd_type") {
+			print("not show tong dao notification:", payload)
+			return
+		}
 		let notification:NotificationData = NotificationData(payload: payload, taskId: taskId, msgId: msgId, offline: offline)
 		self.showNotification(notification)
 	}

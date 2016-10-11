@@ -110,7 +110,7 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
 
                 return true;
             } else if (url.startsWith("cfd://")) {
-                NativeDataModule.passDataToRN(reactContext, "openURL", url);
+                NativeDataModule.passDataToRN(reactContext, NativeActions.ACTION_OPEN_URL, url);
 
                 return true;
             }

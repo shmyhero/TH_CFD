@@ -22,6 +22,13 @@ public class TongDaoModule extends ReactContextBaseJavaModule {
         super(reactContext);
     }
 
+    static String pushToken;
+
+    static public void setPushToken(String pushToken){
+        TongDaoUiCore.identifyPushToken(pushToken);
+        TongDaoModule.pushToken = pushToken;
+    }
+
     @Override
     public String getName() {
         return "TongDaoAPI";

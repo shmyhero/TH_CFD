@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.facebook.react.bridge.ReactContext;
 import com.mobeta.android.dslv.DragSortListView;
+import com.tradehero.cfd.RNNativeModules.NativeActions;
 import com.tradehero.cfd.RNNativeModules.NativeDataModule;
 import com.tradehero.cfd.module.LogicData;
 
@@ -142,7 +143,7 @@ public class StockEditFragment extends Fragment {
 
                 ReactContext context = RNManager.getInstanceManager(getActivity().getApplication()).getCurrentReactContext();
 
-                NativeDataModule.passDataToRN(context, LogicData.MY_LIST, result.toString());
+                NativeDataModule.passDataToRN(context, NativeActions.ACTION_SEND_MY_LIST, result.toString());
 
                 activity.finish();
             }

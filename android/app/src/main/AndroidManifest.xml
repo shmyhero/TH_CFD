@@ -52,14 +52,20 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Accepts URIs that begin with "http://www.example.com/gizmos” -->
-                <data android:scheme="http"
-                    android:host="www.cfd.com"
-                    android:pathPrefix="/page" />
                 <!-- note that the leading "/" is required for pathPrefix-->
                 <!-- Accepts URIs that begin with "cfd://page” -->
                 <data android:scheme="cfd"
                     android:host="page" />
+
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "http://www.example.com/gizmos” -->
+                <data android:scheme="http"
+                    android:host="www.cfd.com"
+                    android:pathPrefix="/page" />
 
             </intent-filter>
         </activity>

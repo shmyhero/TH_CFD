@@ -26,6 +26,7 @@ import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.mobeta.android.dslv.DragSortListView;
 import com.tradehero.cfd.R;
+import com.tradehero.cfd.RNNativeModules.NativeActions;
 import com.tradehero.cfd.RNNativeModules.NativeDataModule;
 import com.tradehero.cfd.module.LogicData;
 
@@ -466,7 +467,7 @@ public class ReactStockEditFragmentNative extends RelativeLayout{
             e.printStackTrace();
         }
 
-        NativeDataModule.passDataToRN((ReactContext) mContext, LogicData.MY_LIST, result.toString());
+        NativeDataModule.passDataToRN((ReactContext) mContext, NativeActions.ACTION_SEND_MY_LIST, result.toString());
     }
 
     @Override

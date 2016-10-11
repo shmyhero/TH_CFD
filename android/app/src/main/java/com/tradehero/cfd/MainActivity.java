@@ -6,6 +6,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,7 +20,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.facebook.react.LifecycleState;
-import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactRootView;
 import com.facebook.react.bridge.ReactContext;
@@ -29,6 +29,7 @@ import com.meiqia.core.callback.OnInitCallback;
 import com.meiqia.meiqiasdk.util.MQConfig;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tendcloud.appcpa.TalkingDataAppCpa;
+import com.tradehero.cfd.RNNativeModules.NativeActions;
 import com.tradehero.cfd.RNNativeModules.NativeDataModule;
 import com.tradehero.cfd.talkingdata.TalkingDataModule;
 
@@ -40,7 +41,6 @@ import com.tongdao.sdk.ui.TongDaoUiCore;
 import com.tradehero.cfd.tongdao.TongDaoModule;
 
 import static android.content.pm.PackageManager.GET_META_DATA;
-import static com.tencent.bugly.crashreport.CrashReport.getUserId;
 
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.88.235:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.129:8081").apply();
 
 
         super.onCreate(null);
@@ -118,13 +118,15 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         //Send GeTui Client ID to RN
         initDeviceToken();
 
-        if (getIntent() != null && getIntent().getExtras() != null) {
-            final String data = getIntent().getExtras().getString(GeTuiBroadcastReceiver.KEY_PUSH_DATA);
-            if (data != null) {
-                sendPushDetailMessageWhenAvailable(data);
-                mReactInstanceManager.removeReactInstanceEventListener(this);
+        if(getIntent() != null){
+            if (getIntent().getExtras() != null) {
+                final String data = getIntent().getExtras().getString(GeTuiBroadcastReceiver.KEY_PUSH_DATA);
+                if (data != null) {
+                    sendPushDetailMessageWhenAvailable(data);
+                    mReactInstanceManager.removeReactInstanceEventListener(this);
+                }
             }
-
+            handlePossilbeDeepLink(getIntent());
         }
     }
 
@@ -134,11 +136,22 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        if (intent != null && intent.getExtras() != null) {
-            String data = intent.getExtras().getString(GeTuiBroadcastReceiver.KEY_PUSH_DATA);
-            if (data != null) {
-                sendPushDetailMessageWhenAvailable(data);
+        if(intent != null ) {
+            if (intent.getExtras() != null) {
+                String data = intent.getExtras().getString(GeTuiBroadcastReceiver.KEY_PUSH_DATA);
+                if (data != null) {
+                    sendPushDetailMessageWhenAvailable(data);
+                }
             }
+            handlePossilbeDeepLink(intent);
+        }
+    }
+
+    private void handlePossilbeDeepLink(Intent intent){
+        Uri uri = intent.getData();
+        if(uri!=null && uri.getScheme().equalsIgnoreCase("cfd")) {
+            String url = uri.toString();
+            NativeDataModule.passDataToRN(mReactInstanceManager.getCurrentReactContext(), NativeActions.ACTION_OPEN_URL, url);
         }
     }
 
@@ -158,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         try {
             ReactContext context = mReactInstanceManager.getCurrentReactContext();
             if (context != null) {
-                NativeDataModule.passDataToRN(context, GeTuiBroadcastReceiver.ACTION_SHOW_DETAIL, pushJsonString);
+                NativeDataModule.passDataToRN(context, NativeActions.ACTION_SHOW_DETAIL, pushJsonString);
             }
         } catch (Exception e) {
             Log.e(TAG, "passDataToRN : error", e);
@@ -180,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     @Override
     protected void onPause() {
         super.onPause();
+        TongDaoUiCore.onSessionEnd(this);
         if (mReactInstanceManager != null) {
             mReactInstanceManager.onHostPause();
         }
@@ -188,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     @Override
     protected void onResume() {
         super.onResume();
+        TongDaoUiCore.onSessionStart(this);
         if (mReactInstanceManager != null) {
             mReactInstanceManager.onHostResume(this, this);
 
@@ -272,11 +287,8 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
             ReactContext context = mReactInstanceManager.getCurrentReactContext();
             if (mClientIDTeTui != null) {
-                NativeDataModule.passDataToRN(context, "deviceToken", mClientIDTeTui);
+                NativeDataModule.passDataToRN(context, NativeActions.ACTION_DEVICE_TOKEN, mClientIDTeTui);
                 Log.d("GeTui", "NativeDataModule deviceToken : " + mClientIDTeTui);
-
-                //Set the push token with TongDao sdk.
-                TongDaoUiCore.identifyPushToken(mClientIDTeTui);
             }
 
 
@@ -309,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         if (mClientIDTeTui != null) {
             Log.d("GeTui", "" + mClientIDTeTui);
 
-            TongDaoUiCore.identifyPushToken(mClientIDTeTui);
+            TongDaoModule.setPushToken(mClientIDTeTui);
         }
     }
 
@@ -385,7 +397,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         ReactContext context = mReactInstanceManager.getCurrentReactContext();
         if (context != null) {
             Boolean isProductEnvironment = BuildConfig.IS_PRODUCT_ENVIRONMENT;
-            NativeDataModule.passDataToRN(context, "isProductServer", isProductEnvironment.toString());
+            NativeDataModule.passDataToRN(context, NativeActions.ACTION_SET_IS_PRODUCT_SERVER, isProductEnvironment.toString());
         }
     }
 

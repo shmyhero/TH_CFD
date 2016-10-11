@@ -8,7 +8,7 @@
 
 protocol CandleChartDataProvider: BaseDataProvider
 {
-	func candleData() -> [CandlePositionData]
+	func candleRenderData() -> [CandlePositionData]
 	func xVerticalLines() -> [CGFloat]
 	func timeVerticalLines() -> [NSDate]
 	func oneCandleWidth() -> CGFloat
@@ -237,7 +237,7 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 	}
 	
 // MARK: delegate
-	func candleData() -> [CandlePositionData] {
+	func candleRenderData() -> [CandlePositionData] {
 		return _candlePositionData
 	}
 	

@@ -24,7 +24,7 @@ class CandleChartRender: BaseRender {
 		if (candleDataProvider == nil) {
 			return
 		}
-		let candleData = candleDataProvider!.candleData()
+		let candleRenderData = candleDataProvider!.candleRenderData()
 		
 		CGContextSaveGState(context)
 		
@@ -43,15 +43,16 @@ class CandleChartRender: BaseRender {
 		graphPathFatDown.lineWidth = candleDataProvider!.oneCandleWidth()
 		
 		// draw the sticks
-		for i in 0..<candleData.count {
+		for i in 0..<candleRenderData.count {
 			//go to start of line
-			let candle = candleData[i]
+			let candle = candleRenderData[i]
 			let high = CGPoint(x: candle.x, y: candle.high+0.5)
 			let low = CGPoint(x: candle.x, y: candle.low+0.5)
 			let open = CGPoint(x: candle.x, y: candle.open+0.5)
 			let closeAdjY:CGFloat = candle.open == candle.close ? 1 : 0
 			let close = CGPoint(x: candle.x, y: candle.close+0.5+closeAdjY)
-			if(candle.open < candle.close) {
+			if(candle.open >= candle.close) {
+				// this is position data, so open large means price low.
 				graphPathThinUp.moveToPoint(high)
 				graphPathThinUp.addLineToPoint(low)
 				graphPathFatUp.moveToPoint(open)

@@ -261,7 +261,7 @@ public abstract class BaseChartDrawer implements IChartDrawer {
             LimitLineInfo limitLineInfo = calculateLimitLinesPosition(startUpLine, stockInfoObject, chartDataList);
 
             boolean needSkipLabel = false;
-            if (limitLineInfo.limitLineAt.size() > 10) {
+            if (limitLineInfo.limitLineAt.size() >= 7) {
                 needSkipLabel = true;
             }
 
@@ -277,7 +277,8 @@ public abstract class BaseChartDrawer implements IChartDrawer {
                 gapLine.enableDashedLine(10f, 0f, 0f);
                 gapLine.setTextSize(8f);
                 gapLine.setTextColor(ChartDrawerConstants.CHART_TEXT_COLOR);
-                if (needSkipLabel && i < limitLineInfo.limitLineAt.size() - 1 && i % 2 == 1) {
+//                if (needSkipLabel && i < limitLineInfo.limitLineAt.size() - 1 && i % 2 == 1) {
+                if (needSkipLabel && isNeedHide(i,limitLineInfo.limitLineAt.size())) {
                     gapLine.setLabel("");
                 } else {
                     String label = format.format(calendar.getTime());
@@ -293,6 +294,19 @@ public abstract class BaseChartDrawer implements IChartDrawer {
                 chart.getXAxis().addLimitLine(gapLine);
             }
         }
+    }
+
+    public boolean isNeedHide(int index,int count){
+        if(count % 2 == 0){//偶数
+            if(index == 0 || index == (count-1) || index%2 == 1){
+                return false;
+            }
+        }else{//奇数
+            if(index == 0 || index == (count-1) || index%2 == 0){
+                return false;
+            }
+        }
+        return true;
     }
 
     public String getLableBlank() {

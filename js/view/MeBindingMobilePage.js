@@ -66,7 +66,6 @@ var MeBindingMobilePage = React.createClass({
 
 	getInitialState: function() {
 		return {
-			tabSelected: TAB_SIMULATOR,
 			wechatInstalled: false,
 			phoneNumber: '',
 			validationCode: '',
@@ -88,17 +87,17 @@ var MeBindingMobilePage = React.createClass({
 	setPhoneNumber: function(text: string) {
 		this.setState({
 			phoneNumber: text
-		})
-
-		this.checkButtonsEnable()
+		}, ()=>{
+			this.checkButtonsEnable()
+		});
 	},
 
 	setValidationCode: function(text: string) {
 		this.setState({
 			validationCode: text
+		}, ()=>{
+			this.checkButtonsEnable();
 		})
-
-		this.checkButtonsEnable()
 	},
 
 	getValidationCodePressed: function() {
@@ -204,54 +203,6 @@ var MeBindingMobilePage = React.createClass({
 		);
 	},
 
-	renderTab: function() {
-		var liveTabAdditionalAttributes = {}
-		var liveTextAdditionalAttributes = {}
-		var simulatorTabAdditionalAttributes = {}
-		var simulatorTextAdditionalAttributes = {}
-		if (this.state.tabSelected == TAB_LIVE) {
-			liveTextAdditionalAttributes = {
-				color: '#415a87'
-			}
-			simulatorTabAdditionalAttributes = {
-				backgroundColor: 'transparent',
-				opacity: 0.5,
-			}
-			simulatorTextAdditionalAttributes = {
-				color: 'white'
-			}
-		} else {
-			liveTabAdditionalAttributes = {
-				backgroundColor: 'transparent',
-				opacity: 0.5,
-			}
-			liveTextAdditionalAttributes = {
-				color: 'white'
-			}
-			simulatorTextAdditionalAttributes = {
-				color: ColorConstants.TITLE_BLUE
-			}
-		}
-		return (
-			<View style={styles.tabContainer}>
-				<TouchableOpacity onPress={() => this.setState({tabSelected: TAB_LIVE})}>
-					<View style={[styles.liveTab, liveTabAdditionalAttributes]}>
-						<Text style={[styles.tabText, liveTextAdditionalAttributes]}>
-							实盘
-						</Text>
-					</View>
-				</TouchableOpacity>
-				<TouchableOpacity  onPress={() => this.setState({tabSelected: TAB_SIMULATOR})}>
-					<View style={[styles.simulatorTab, simulatorTabAdditionalAttributes]}>
-						<Text style={[styles.tabText, simulatorTextAdditionalAttributes]}>
-							模拟
-						</Text>
-					</View>
-				</TouchableOpacity>
-			</View>
-		)
-	},
-
 	renderRememberUserCheckbox: function() {
 		var checkBox = require('../../images/checkbox_unchecked.png')
 		if (this.state.liveLoginRememberUserName) {
@@ -326,15 +277,11 @@ var MeBindingMobilePage = React.createClass({
 	render: function() {
 		var {height, width} = Dimensions.get('window');
 		var gradientColors = ['#1c5fd1', '#123b80']
-		if (this.state.tabSelected == TAB_LIVE) {
-			gradientColors = ['#415a87', '#36496a']
-		}
 
 		return (
 			<View style={{flex:1}}>
 				<ScrollView style={{flex:1}}>
 				<LinearGradient colors={gradientColors} style={[styles.wrapper, {height: height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER}]}>
-					{/* {this.renderTab()} */}
 						<View style={styles.tabContainer}>
 							<Text style={{flex: 1, fontSize: 18, textAlign: 'center', color: '#ffffff'}}>
 								绑定手机号

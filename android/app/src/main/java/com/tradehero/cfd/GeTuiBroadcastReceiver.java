@@ -19,7 +19,6 @@ import com.tradehero.cfd.RNNativeModules.NativeDataModule;
 
 import org.json.JSONObject;
 
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -35,6 +34,9 @@ public class GeTuiBroadcastReceiver extends BroadcastReceiver{
     public final static int PUSH_TYPE_DEEP_LINK = 1;
 
     public final static String DEEP_LINK_KEY = "deepLink";
+
+    public final static String TONGDAO_TYPE_KEY = "tongrd_type";
+    public final static String TONGDAO_VALUE_KEY = "tongrd_value";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -52,6 +54,12 @@ public class GeTuiBroadcastReceiver extends BroadcastReceiver{
                     String data = new String(payload);
                     Log.i(TAG, "receive push data: " + data);
 
+                    //Check if it is TongDao's push data.
+                    if(parseTongDaoData(context, data)){
+                        return;
+                    }
+
+                    //So it's GeTui's push data. The format is on our own!
                     if(application.IsAppFront()){
                         showPushDialog(application, data);
                     }else{
@@ -64,22 +72,47 @@ public class GeTuiBroadcastReceiver extends BroadcastReceiver{
         }
     }
 
+    private boolean parseTongDaoData(Context context, String data){
+        try{
+            JSONObject jsonObject = new JSONObject(data);
+            if(jsonObject.has(TONGDAO_TYPE_KEY) && jsonObject.has(TONGDAO_VALUE_KEY)){
+                if(jsonObject.getString(TONGDAO_TYPE_KEY).equalsIgnoreCase("deeplink")){
+                    String url = jsonObject.getString(TONGDAO_VALUE_KEY);
+                    Uri uri = Uri.parse(url);
+                    Intent resultIntent = new Intent(Intent.ACTION_VIEW);
+                    resultIntent.addCategory(Intent.CATEGORY_BROWSABLE);
+                    resultIntent.setData(uri);
+                    resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(resultIntent);
+                    return true;
+                }
+            }
+        }catch (Exception e){
+            Log.e(TAG, "parseTongDaoData exception: ", e);
+            //Ignore the action?
+        }
+        return false;
+    }
+
     private void showPushDialog(Application application, String pushJsonString){
         int type = PUSH_TYPE_DIALOG;
+        String data = pushJsonString;
         try{
             JSONObject jsonObject = new JSONObject(pushJsonString);
             if(jsonObject.has(DEEP_LINK_KEY)){
                 type = PUSH_TYPE_DEEP_LINK;
+                data = jsonObject.getString(DEEP_LINK_KEY);
             }
         }catch (Exception e){
+            Log.e(TAG, "showPushDialog exception: ", e);
             //Ignore the action?
         }
 
         ReactContext rnContext = ((CFDApplication) application).getReactNativeHost().getReactInstanceManager().getCurrentReactContext();
         if(type == PUSH_TYPE_DEEP_LINK) {
-            NativeDataModule.passDataToRN(rnContext, NativeActions.ACTION_OPEN_URL, pushJsonString);
+            NativeDataModule.passDataToRN(rnContext, NativeActions.ACTION_OPEN_URL, data);
         }else {
-            NativeDataModule.passDataToRN(rnContext, NativeActions.ACTION_PUSH_DIALOG, pushJsonString);
+            NativeDataModule.passDataToRN(rnContext, NativeActions.ACTION_PUSH_DIALOG, data);
         }
     }
 

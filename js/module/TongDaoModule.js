@@ -15,7 +15,11 @@ export const TD_CHECK_IN = "签到事件"
 // export const TD_REGISTER_MOVIE_EVENT = "比收益事件"
 
 export function setUserId(userid) {
-	nativeModule.setUserId(""+userid)
+	if(userid){
+		nativeModule.setUserId(""+userid)
+	}else{
+		nativeModule.setUserId(null)
+	}
 }
 
 export function setUserName(name) {
@@ -89,4 +93,4 @@ export function trackDaySignEvent(signed) {
 
 export function trackTopNewsEvent() {
 	trackEvent(TD_TOP_NEWS, null)
-}
+} 

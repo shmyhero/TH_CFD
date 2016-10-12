@@ -51,6 +51,8 @@ export function removeUserData(){
   };
   StorageModule.setLastSuperPriorityHintData(JSON.stringify(data));
 
+  TongDaoModule.setUserId("");
+
   //Restart the web socket.
   //WebSocketModule.stop();
   WebSocketModule.start();

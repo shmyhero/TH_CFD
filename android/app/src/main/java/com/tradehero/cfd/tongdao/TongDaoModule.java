@@ -36,7 +36,11 @@ public class TongDaoModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setUserId(String userId){
-        TongDaoUiCore.setUserId(getReactApplicationContext(), userId);
+        if(userId == null || userId.isEmpty()){
+            TongDaoUiCore.setUserId(getReactApplicationContext(), null);
+        }else {
+            TongDaoUiCore.setUserId(getReactApplicationContext(), userId);
+        }
     }
 
     @ReactMethod

@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.20.129:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.121:8081").apply();
 
 
         super.onCreate(null);
@@ -203,6 +203,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     protected void onResume() {
         super.onResume();
         TongDaoUiCore.onSessionStart(this);
+        TongDaoUiCore.displayInAppMessage(this);
         if (mReactInstanceManager != null) {
             mReactInstanceManager.onHostResume(this, this);
 

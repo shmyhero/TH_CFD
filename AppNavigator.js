@@ -87,8 +87,6 @@ var LOADING_PHASE = 'loading'
 var GUIDE_PHASE = 'guide'
 var MAIN_PAGE_PHASE = 'mainPage'
 
-
-
 var AppNavigator = React.createClass({
 
 	mixins: [TimerMixin],
@@ -331,15 +329,18 @@ var AppNavigator = React.createClass({
 
 	//收到NativePush后弹出Alert后跳转
 	alertForPush: function(data){
-		if(data.type === '1' || data.type === '2' ){//1,2 type 是 平仓 和 股价提醒
-			Alert.alert(
-	  		data.title,
-	  		data.message,
+		if(data.type === '1' || data.type === '2' || data.type  === '3'){
+			//type: 1: 平仓, 2: 股价提醒, 3: deeplink
+			if(data.title && data.message){
+				Alert.alert(
+		  		data.title,
+		  		data.message,
 				  [
 				    {text: '忽略', onPress: () => this.cancelAlert()},
 				    {text: '立即查看', onPress: () => this.actionForPush(data)},
 				  ]
-				)
+				);
+			}
 		 }else {
 			 Alert.alert( data );
 		 }
@@ -348,8 +349,17 @@ var AppNavigator = React.createClass({
 
 	//收到NativePush后直接打开响应界面
 	actionForPush: function(data){
-		if(data.type === '1' || data.type === '2' ){//1,2 type 是 平仓 和 股价提醒
+		if(data.type === '1' || data.type === '2' || data.type  === '3'){
+			//type: 1: 平仓, 2: 股价提醒, 3: deeplink
 			console.log('actionForPush '+ data.title);
+
+			if(data.tongrd_type == 'deeplink' && data.type === '3'){
+				//TongDao data. We need to format it with our rules.
+				if(!data.deepLink){
+					data.deepLink = data.tongrd_value;
+				}
+			}
+
 			LogicData.setPushData(data);
 
 			//TODO: mark the message as read. Ignore the response
@@ -365,7 +375,7 @@ var AppNavigator = React.createClass({
 					}
 				)
 			}
-		}else {
+		} else {
 			Alert.alert( data );
 		}
 	},

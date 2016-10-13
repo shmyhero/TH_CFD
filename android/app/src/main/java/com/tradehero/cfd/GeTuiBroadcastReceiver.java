@@ -54,12 +54,14 @@ public class GeTuiBroadcastReceiver extends BroadcastReceiver{
                     String data = new String(payload);
                     Log.i(TAG, "receive push data: " + data);
 
-                    //Check if it is TongDao's push data.
+                    // Check if it is TongDao's push data. If it is, the Tongdao sdk will show the
+                    // notification. But the deep link has some issue wo we need to handle it in
+                    // our app.
                     if(parseTongDaoData(context, data)){
-                        return;
+                        break;
                     }
 
-                    //So it's GeTui's push data. The format is on our own!
+                    //So it is a Getui push.
                     if(application.IsAppFront()){
                         showPushDialog(application, data);
                     }else{
@@ -75,7 +77,10 @@ public class GeTuiBroadcastReceiver extends BroadcastReceiver{
     private boolean parseTongDaoData(Context context, String data){
         try{
             JSONObject jsonObject = new JSONObject(data);
+
             if(jsonObject.has(TONGDAO_TYPE_KEY) && jsonObject.has(TONGDAO_VALUE_KEY)){
+                //Do not handle deep link natively. Send all data to RN and leave all jobs done there.
+                /*
                 if(jsonObject.getString(TONGDAO_TYPE_KEY).equalsIgnoreCase("deeplink")){
                     String url = jsonObject.getString(TONGDAO_VALUE_KEY);
                     Uri uri = Uri.parse(url);
@@ -86,18 +91,30 @@ public class GeTuiBroadcastReceiver extends BroadcastReceiver{
                     context.startActivity(resultIntent);
                     return true;
                 }
+                */
+
+                Intent resultIntent = new Intent(context, MainActivity.class);
+
+                Bundle pushDataBundle = new Bundle();
+                pushDataBundle.putString(KEY_PUSH_DATA, data);
+
+                resultIntent.putExtras(pushDataBundle);
+                resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(resultIntent);
+                return true;
             }
         }catch (Exception e){
             Log.e(TAG, "parseTongDaoData exception: ", e);
             //Ignore the action?
         }
+
         return false;
     }
 
     private void showPushDialog(Application application, String pushJsonString){
         int type = PUSH_TYPE_DIALOG;
         String data = pushJsonString;
-        try{
+        /*try{
             JSONObject jsonObject = new JSONObject(pushJsonString);
             if(jsonObject.has(DEEP_LINK_KEY)){
                 type = PUSH_TYPE_DEEP_LINK;
@@ -114,6 +131,10 @@ public class GeTuiBroadcastReceiver extends BroadcastReceiver{
         }else {
             NativeDataModule.passDataToRN(rnContext, NativeActions.ACTION_PUSH_DIALOG, data);
         }
+        */
+
+        ReactContext rnContext = ((CFDApplication) application).getReactNativeHost().getReactInstanceManager().getCurrentReactContext();
+        NativeDataModule.passDataToRN(rnContext, NativeActions.ACTION_PUSH_DIALOG, data);
     }
 
     private void createNotification(Application application, String data){
@@ -130,21 +151,22 @@ public class GeTuiBroadcastReceiver extends BroadcastReceiver{
                             .setContentText(message);
 
             //Create the intent
-            Intent resultIntent = null;
-            if(jsonObject.has(DEEP_LINK_KEY)){
+
+            //Do not handle deep link here.
+            /*if(jsonObject.has(DEEP_LINK_KEY)){
                 String deepLinkUrl = jsonObject.getString(DEEP_LINK_KEY);
                 Uri uri = Uri.parse(deepLinkUrl);
                 resultIntent = new Intent(Intent.ACTION_VIEW);
                 resultIntent.addCategory(Intent.CATEGORY_BROWSABLE);
                 resultIntent.setData(uri);
-            }else{
-                resultIntent = new Intent(application, MainActivity.class);
+            }*/
 
-                Bundle pushDataBundle = new Bundle();
-                pushDataBundle.putString(KEY_PUSH_DATA, data);
+            Intent resultIntent = new Intent(application, MainActivity.class);
 
-                resultIntent.putExtras(pushDataBundle);
-            }
+            Bundle pushDataBundle = new Bundle();
+            pushDataBundle.putString(KEY_PUSH_DATA, data);
+
+            resultIntent.putExtras(pushDataBundle);
 
             PendingIntent notifyPendingIntent =
                     PendingIntent.getActivity(

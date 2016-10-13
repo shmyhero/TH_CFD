@@ -462,7 +462,6 @@ var MainPage = React.createClass({
 			return(
 				<View style={{flex: 1}}>
 					<NavBar title='我的消息' showBackButton={true}
-						imageOnLeft={require('../../images/icon_return_default.png')}
 						backButtonOnClick={()=>this.backAndShowTabbar()}
 						navigator={navigationOperations}/>
 					<MyMessagesPage navigator={navigationOperations} routeMapper={this.RouteMapper}
@@ -726,7 +725,7 @@ var MainPage = React.createClass({
 
 		var stockRowData = {
 			name: pushData.CName,
-			id: pushData.StockID,
+			id: parseInt(pushData.StockID),
 		}
 
 
@@ -743,7 +742,13 @@ var MainPage = React.createClass({
 	showNotification: function() {
 		var pushData = LogicData.getPushData();
 		if(pushData != null){
-			this.gotoStockDetail(pushData);
+			if(pushData.type == "1" || pushData.type == "2"){
+				this.gotoStockDetail(pushData);
+			}else if(pushData.type == "3" ){
+				if(pushData.deepLink){
+					this._handleDeepLink(pushData.deepLink);
+				}
+			}
 		}
 	},
 

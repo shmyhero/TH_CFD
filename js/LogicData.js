@@ -41,6 +41,7 @@ var LogicData = {
 	removeMeData: function(){
 		meData = {}
 	},
+
   setWechatAuthData: function(authData) {
       wechatAuthData = authData;
   },

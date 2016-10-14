@@ -52,6 +52,7 @@ var EditAlertPage = require('./EditAlertPage')
 var SharePage = require('./SharePage')
 var LogicData = require('../LogicData')
 var DaySignPage = require('./DaySignPage')
+var WeCollectPage = require('./WeCollectPage')
 var RegisterSuccessPage = require('./RegisterSuccessPage')
 var SuperPriorityHintPage = require('./SuperPriorityHintPage')
 var MyMessagesPage = require('./MyMessagesPage')
@@ -303,6 +304,7 @@ var MainPage = React.createClass({
 			return (
 				<View style={{flex: 1}}>
 					<DaySignPage navigator={navigationOperations} shareFunction={this._doShare}/>
+					{/* <WeCollectPage navigator={navigationOperations} shareFunction={this._doShare}/> */}
 				</View>
 			)
 		} else if (route.name === ACCOUNT_INFO_ROUTE) {

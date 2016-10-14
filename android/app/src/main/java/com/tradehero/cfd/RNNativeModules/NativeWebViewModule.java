@@ -20,8 +20,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.text.TextUtils;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -300,7 +302,6 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
         view.getSettings().setDomStorageEnabled(enabled);
     }
 
-
     @ReactProp(name = "userAgent")
     public void setUserAgent(WebView view, @Nullable String userAgent) {
         if (userAgent != null) {
@@ -364,6 +365,8 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
                     }
                 }
                 view.loadUrl(url, headerMap);
+                view.getSettings().setSupportZoom(true);
+                view.getSettings().setBuiltInZoomControls(true);
                 return;
             }
         }
@@ -373,7 +376,19 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
     @Override
     protected void addEventEmitters(ThemedReactContext reactContext, WebView view) {
         // Do not register default touch emitter and let WebView implementation handle touches
-        view.setWebViewClient(new ReactWebViewClient(reactContext));
+        view.setWebViewClient(new ReactWebViewClient(reactContext){
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+
+                // *** NEVER DO THIS!!! ***
+                // super.onReceivedSslError(view, handler, error);
+
+                // let's ignore ssl error
+                handler.proceed();
+            }
+        });
+
+
     }
 
     @Override

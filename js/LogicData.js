@@ -15,6 +15,7 @@ var getui_token = '';
 var pushData;
 var tabIndex = 0;
 var lastSuperPriorityHintDate = '';
+var accountState;//是否是实盘用户登陆状态 false:模拟盘  true:实盘
 
 var LogicData = {
 
@@ -29,6 +30,16 @@ var LogicData = {
   removeUserData: function() {
     userData = {}
   },
+
+	setAccountState: function(state){
+		accountState = state;
+		StorageModule.setAccountState(state)
+		console.log("setAccountState = " + state);
+	},
+
+	getAccountState: function(){
+		return accountState == true ? true: false;
+	},
 
 	setMeData: function(data){
 		meData = data;

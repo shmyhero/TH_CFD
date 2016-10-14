@@ -152,6 +152,12 @@ var AppNavigator = React.createClass({
 			})
 			.done()
 
+		StorageModule.loadAccountState().then((value) => {
+				if (value !== null) {
+					LogicData.setAccountState(JSON.parse(value))
+				}
+			})
+			.done()
 
 		StorageModule.loadSearchHistory().then((value) => {
 				if (value !== null) {

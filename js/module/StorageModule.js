@@ -13,6 +13,7 @@ var BANNER_STORAGE_KEY = '@TH_CFD:bannerData';
 var GUIDE_STORAGE_KEY = '@TH_CFD:guideData';
 var TUTORIAL_KEY = '@TH_CFD:tutorialData';
 var LAST_SUPER_PRIORITY_HINT_DATE = '@TH_CFD:lastSuperPriorityDateData'
+var ACCOUNT_STATE = '@TH_CFD:accountState'
 
 export async function loadUserData() {
 	try {
@@ -39,6 +40,22 @@ export async function removeUserData() {
 	}
 }
 
+export async function setAccountState(accountState) {
+	try {
+		await AsyncStorage.setItem(ACCOUNT_STATE, JSON.stringify(accountState));
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function loadAccountState() {
+	try {
+		var value = await AsyncStorage.getItem(ACCOUNT_STATE);
+		return value;
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
 
 export async function loadMeData() {
 	try {

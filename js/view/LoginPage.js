@@ -63,6 +63,7 @@ var LoginPage = React.createClass({
 			isTabbarShown: ()=>{},
 		}
 	},
+
 	componentWillMount: function() {
 		var isTabbarShown = this.props.isTabbarShown();
 		if(!isTabbarShown){

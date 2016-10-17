@@ -1,17 +1,60 @@
 'use strict'
 
+import {
+	Platform
+} from 'react-native';
+
+var StorageModule = require('./module/StorageModule')
+var NetConstants = require('./NetConstants')
+
 export const WEBVIEW_QA_VERSION = '1.4' //Only update this version when QA Page version is updated!
 export const WEBPAGE_VERSION = '1.5'    //Only update this version when Web Page version is updated!
 export const WEBPAGE_FOLDER = 'TH_CFD_WEB' + WEBPAGE_VERSION
 
-//TODO: use development server in the future
+//NEVER CHANGE THE PRODUCT SERVER IN PRODUCT APP!!!
 var isProductServer = false;
-export function isProductServer(){
+var isProductApp = false;
+
+export function setIsProductApp(value){
+  console.log("setIsProductApp " + value);
+  isProductApp = value
+}
+
+export function getIsProductApp(){
+  return isProductApp;
+}
+
+export function loadServerSettings(){
+	console.log("loadServerSettings ");
+  return new Promise((resolve, reject)=>{
+    StorageModule.loadIsProductServer().then((value) => {
+      if (value != null) {
+				console.log("loadIsProductServer result: " + value);
+        isProductServer = value === "1" ? true : false;
+        NetConstants.reloadCFDAPI();
+        resolve();
+      }else{
+				console.log("loadIsProductServer result is null ");
+        resolve();
+      }
+    })
+  })
+}
+
+export function getIsProductServer(){
+  console.log("getIsProductServer " + isProductServer);
   return isProductServer;
 }
+
 export function setIsProductServer(value){
-  console.log("setIsProductServer " + value);
-  isProductServer = value;
+  if(!isProductApp || Platform.OS === 'ios'){
+    console.log("setIsProductServer " + value);
+    if(isProductServer != value){
+      isProductServer = value;
+      StorageModule.setIsProductServer(value ? "1" : "0");
+      NetConstants.reloadCFDAPI();
+    }
+  }
 }
 
 //TODO: There will be product and development environment  in later version..

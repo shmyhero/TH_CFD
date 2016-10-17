@@ -85,7 +85,7 @@ var EditOwnStocksPage = React.createClass({
 	 	if(!notLogin){
 		 //If previously logged in, fetch me data from server.
 		 NetworkModule.fetchTHUrl(
-			 NetConstants.GET_ALL_STOCK_ALERT,
+			 NetConstants.CFD_API.GET_ALL_STOCK_ALERT,
 			 {
 				 method: 'GET',
 				 headers: {

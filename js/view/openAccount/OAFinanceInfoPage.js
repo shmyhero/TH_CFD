@@ -22,6 +22,7 @@ var CheckBoxButton = require('../component/CheckBoxButton')
 var MainPage = require('../MainPage')
 var ColorConstants = require('../../ColorConstants')
 var TalkingdataModule = require('../../module/TalkingdataModule')
+var OpenAccountRoutes = require('./OpenAccountRoutes')
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
@@ -51,14 +52,10 @@ var OAFinanceInfoPage = React.createClass({
 	},
 
 	gotoNext: function() {
-		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP4, TalkingdataModule.LABEL_OPEN_ACCOUNT)
-		//TODO, check
-		this.props.navigator.push({
-			name: MainPage.OPEN_ACCOUNT_ROUTE,
-			step: 4,
-		});
+		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP4, TalkingdataModule.LABEL_OPEN_ACCOUNT);
+		OpenAccountRoutes.goToNextRoute(this.props.navigator, {});
 	},
-	
+
 	onPressPicker: function(rowData,rowID) {
 		if (-1 !== this.state.selectedPicker) {
 			this.setState({
@@ -157,7 +154,7 @@ var OAFinanceInfoPage = React.createClass({
 			if (listRawData[i].type === "choice" && listRawData[i].value === "") {
 				enabled = false
 				break
-			} 
+			}
 		};
 		if (this.state.selectedPicker>=0) {
 			var pickerValue = listRawData[this.state.selectedPicker].value
@@ -200,7 +197,7 @@ var styles = StyleSheet.create({
     	justifyContent: 'space-around',
 		backgroundColor: ColorConstants.BACKGROUND_GREY,
 	},
-	
+
 	list: {
 		flex: 1,
 	},
@@ -259,7 +256,7 @@ var styles = StyleSheet.create({
 	},
 
 	bottomArea: {
-		height: 72, 
+		height: 72,
 		backgroundColor: 'white',
 		alignItems: 'flex-end',
 		flexDirection:'row'

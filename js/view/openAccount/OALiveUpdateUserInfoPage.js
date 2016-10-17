@@ -53,7 +53,7 @@ var OALiveUpdateUserInfoPage = React.createClass({
 		var userData = LogicData.getUserData()
 
 		NetworkModule.fetchTHUrl(
-			NetConstants.GET_USER_INFO_API,
+			NetConstants.CFD_API.GET_USER_INFO_API,
 			{
 				method: 'GET',
 				headers: {
@@ -140,7 +140,7 @@ var OALiveUpdateUserInfoPage = React.createClass({
 		var userData = LogicData.getUserData()
 
 		NetworkModule.fetchTHUrl(
-			NetConstants.SET_USER_NICKNAME_API + '?' + NetConstants.PARAMETER_NICKNAME + '=' + this.state.nickName,
+			NetConstants.CFD_API.SET_USER_NICKNAME_API + '?' + NetConstants.PARAMETER_NICKNAME + '=' + this.state.nickName,
 			{
 				method: 'POST',
 				headers: {

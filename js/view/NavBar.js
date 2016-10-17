@@ -27,6 +27,7 @@ var NavBar = React.createClass({
 		textOnRight: React.PropTypes.string,
 		imageOnRight: React.PropTypes.number,
 		leftTextOnClick: React.PropTypes.func,
+		leftButtonOnClick: React.PropTypes.func,
 		rightTextOnClick: React.PropTypes.func,
 		rightImageOnClick: React.PropTypes.func,
 		backButtonOnClick: React.PropTypes.func,
@@ -48,6 +49,7 @@ var NavBar = React.createClass({
 			textOnRight: null,
 			imageOnRight: null,
 			leftTextOnClick: null,
+			leftButtonOnClick: null,
 			rightTextOnClick: null,
 			rightImageOnClick: null,
 			backButtonOnClick: null,
@@ -60,7 +62,12 @@ var NavBar = React.createClass({
 
 
 	backOnClick: function() {
-		this.props.navigator.pop();
+		if(this.props.leftButtonOnClick){
+			this.props.leftButtonOnClick();
+		}else{
+			this.props.navigator.pop();
+		}
+
 		WebSocketModule.cleanRegisteredCallbacks()
 		if (this.props.backButtonOnClick) {
 			this.props.backButtonOnClick()

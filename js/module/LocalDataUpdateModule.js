@@ -14,7 +14,7 @@ var TongDaoModule = require('../module/TongDaoModule')
 
 export function updateMeData(userData, onSuccess){
 	NetworkModule.fetchTHUrl(
-		NetConstants.GET_USER_INFO_API,
+		NetConstants.CFD_API.GET_USER_INFO_API,
 		{
 			method: 'GET',
 			headers: {

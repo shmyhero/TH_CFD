@@ -22,7 +22,7 @@ var WechatLoginConfirmPage = React.createClass({
 		var userData = LogicData.getUserData()
 
 		NetworkModule.fetchTHUrl(
-			NetConstants.GET_USER_INFO_API, 
+			NetConstants.CFD_API.GET_USER_INFO_API, 
 			{
 				method: 'GET',
 				headers: {

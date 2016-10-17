@@ -93,7 +93,7 @@ var WebViewPage = React.createClass({
 			TalkingdataModule.trackEvent(this.props.shareTrackingEvent);
 		}
 
-		var url = NetConstants.SHARE_URL;
+		var url = NetConstants.TRADEHERO_API.SHARE_URL;
 		if(this.props.shareUrl){
 			url = this.props.shareUrl;
 		}else{
@@ -102,7 +102,7 @@ var WebViewPage = React.createClass({
 
 		var data = {
 			webpageUrl: url,
-			imageUrl: NetConstants.SHARE_LOGO_URL,
+			imageUrl: NetConstants.TRADEHERO_API.SHARE_LOGO_URL,
 			title: this.props.shareTitle,
 			description: this.props.shareDescription,
 		}

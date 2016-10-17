@@ -54,7 +54,7 @@ var StockClosedPositionPage = React.createClass({
 
 	loadClosedPositionInfo: function() {
 		var userData = LogicData.getUserData()
-		var url = NetConstants.GET_CLOSED_POSITION_API
+		var url = NetConstants.CFD_API.GET_CLOSED_POSITION_API
 		NetworkModule.fetchTHUrl(
 			url,
 			{

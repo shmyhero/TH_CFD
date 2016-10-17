@@ -153,7 +153,7 @@ var DaySignPage = React.createClass({
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
 			NetworkModule.fetchTHUrlWithNoInternetCallback(
-				NetConstants.GET_USER_DAILY_SIGN_INFO,
+				NetConstants.CFD_API.GET_USER_DAILY_SIGN_INFO,
 				{
 					method: 'GET',
 					headers: {
@@ -185,7 +185,7 @@ var DaySignPage = React.createClass({
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
 			NetworkModule.fetchTHUrlWithNoInternetCallback(
-				NetConstants.GET_USER_DAILY_SIGN_MONTH,
+				NetConstants.CFD_API.GET_USER_DAILY_SIGN_MONTH,
 				{
 					method: 'GET',
 					headers: {
@@ -220,7 +220,7 @@ var DaySignPage = React.createClass({
 		TalkingdataModule.trackEvent(TalkingdataModule.CHECK_IN_SHARE_EVENT);
     if(this.props.shareFunction){
 			NetworkModule.fetchTHUrl(
-				NetConstants.GET_CHECK_IN_SHARE_DATA,
+				NetConstants.CFD_API.GET_CHECK_IN_SHARE_DATA,
 				{
 					method: 'GET',
 				},
@@ -341,7 +341,7 @@ var DaySignPage = React.createClass({
 				signEnable = false
 				TongDaoModule.trackDaySignEvent(this.state.totalSignDays>0)
 				NetworkModule.fetchTHUrlWithNoInternetCallback(
-					NetConstants.USER_DAILY_SIGN,
+					NetConstants.CFD_API.USER_DAILY_SIGN,
 					{
 						method: 'GET',
 						headers: {

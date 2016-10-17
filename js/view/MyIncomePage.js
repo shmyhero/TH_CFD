@@ -51,7 +51,7 @@ var MyIncomePage = React.createClass({
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
 	    NetworkModule.fetchTHUrl(
-	      NetConstants.GET_TOTAL_UNPAID,
+	      NetConstants.CFD_API.GET_TOTAL_UNPAID,
 	      {
 	        method: 'GET',
 	        headers: {

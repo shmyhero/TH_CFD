@@ -123,7 +123,7 @@ var LoginPage = React.createClass({
 		}
 
 		NetworkModule.fetchTHUrl(
-			NetConstants.GET_PHONE_CODE_API + '?' + NetConstants.PARAMETER_PHONE + "=" + this.state.phoneNumber,
+			NetConstants.CFD_API.GET_PHONE_CODE_API + '?' + NetConstants.PARAMETER_PHONE + "=" + this.state.phoneNumber,
 			{
 				method: 'POST',
 			},
@@ -175,7 +175,7 @@ var LoginPage = React.createClass({
 		var wechatUserData = LogicData.getWechatUserData()
 
 		NetworkModule.fetchTHUrl(
-			NetConstants.WECHAT_LOGIN_API,
+			NetConstants.CFD_API.WECHAT_LOGIN_API,
 			{
 				method: 'POST',
 				headers: {
@@ -204,7 +204,7 @@ var LoginPage = React.createClass({
 		})
 		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_LOGIN_EVENT)
 		NetworkModule.fetchTHUrl(
-			NetConstants.PHONE_NUM_LOGIN_API,
+			NetConstants.CFD_API.PHONE_NUM_LOGIN_API,
 			{
 				method: 'POST',
 				headers: {
@@ -237,7 +237,7 @@ var LoginPage = React.createClass({
 			phoneLoginButtonEnabled: false
 		})
 		NetworkModule.fetchTHUrl(
-			NetConstants.PHONE_NUM_LOGIN_API,
+			NetConstants.CFD_API.PHONE_NUM_LOGIN_API,
 			{
 				method: 'POST',
 				headers: {
@@ -345,7 +345,7 @@ var LoginPage = React.createClass({
 		}
 
 		 NetworkModule.fetchTHUrl(
-			 NetConstants.POST_PUSH_TOKEN_AUTH,
+			 NetConstants.CFD_API.POST_PUSH_TOKEN_AUTH,
 			 {
 				 method: 'POST',
 				 headers: {

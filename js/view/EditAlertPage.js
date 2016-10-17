@@ -114,7 +114,7 @@ var EditAlertPage = React.createClass({
 	},
 
 	loadStockInfo: function() {
-		var url = NetConstants.GET_STOCK_DETAIL_API
+		var url = NetConstants.CFD_API.GET_STOCK_DETAIL_API
 		url = url.replace(/<stockCode>/, this.props.stockInfo.id)
 
 		NetworkModule.fetchTHUrl(
@@ -367,7 +367,7 @@ var EditAlertPage = React.createClass({
 		}
 
 		NetworkModule.fetchTHUrl(
-			NetConstants.UPDATE_STOCK_ALERT,
+			NetConstants.CFD_API.UPDATE_STOCK_ALERT,
 			{
 				method: 'PUT',
 				headers: {

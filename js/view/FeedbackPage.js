@@ -86,7 +86,7 @@ var FeedbackPage = React.createClass({
 		}
 
 		var userData = LogicData.getUserData()
-		var url = NetConstants.FEEDBACK_API
+		var url = NetConstants.CFD_API.FEEDBACK_API
 		NetworkModule.fetchTHUrl(
 			url,
 			{

@@ -145,7 +145,7 @@ var AccountInfoPage = React.createClass({
 	commitHeadPhoto: function() {
 
 		var userData = LogicData.getUserData();
-		var url = NetConstants.UPDATE_HEAD_PHOTO;
+		var url = NetConstants.CFD_API.UPDATE_HEAD_PHOTO;
 		NetworkModule.fetchTHUrl(
 			url,
 			{

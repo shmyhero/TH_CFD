@@ -46,7 +46,7 @@ var StockStatisticsPage = React.createClass({
 		})
 		var userData = LogicData.getUserData()
 		NetworkModule.fetchTHUrl(
-			NetConstants.GET_USER_STATISTICS_API,
+			NetConstants.CFD_API.GET_USER_STATISTICS_API,
 			{
 				method: 'GET',
 				headers: {

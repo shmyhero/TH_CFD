@@ -56,7 +56,7 @@ export function fetchTHUrlWithNoInternetCallback(url, params, successCallback, e
 			}
 		})
 		.catch((e) => {
-			console.log('fetchTHUrl catches: ' + e)
+			console.log('fetchTHUrl catches: ' + e);
 			var message = e.message
 			if(message.toLowerCase() === "network request failed"){
 				message = "网络连接已断开，请检查设置"
@@ -77,7 +77,7 @@ export function fetchTHUrlWithNoInternetCallback(url, params, successCallback, e
 export function syncOwnStocks(userData) {
 	var stockData = LogicData.getOwnStocksData()
 	fetchTHUrl(
-		NetConstants.OWN_STOCK_LIST_API,
+		NetConstants.CFD_API.OWN_STOCK_LIST_API,
 		{
 			method: 'GET',
 			headers: {
@@ -114,7 +114,7 @@ export function addToOwnStocks(stockData) {
 	})
 
 	fetchTHUrl(
-		NetConstants.OWN_STOCK_LIST_API+'?'+NetConstants.PARAMETER_STOCKIDS+'='+idList,
+		NetConstants.CFD_API.OWN_STOCK_LIST_API+'?'+NetConstants.PARAMETER_STOCKIDS+'='+idList,
 		{
 			method: 'POST',
 			headers: {
@@ -141,7 +141,7 @@ export function removeFromOwnStocks(stockData) {
 	})
 
 	fetchTHUrl(
-		NetConstants.OWN_STOCK_LIST_API+'?'+NetConstants.PARAMETER_STOCKIDS+'='+idList,
+		NetConstants.CFD_API.OWN_STOCK_LIST_API+'?'+NetConstants.PARAMETER_STOCKIDS+'='+idList,
 		{
 			method: 'DELETE',
 			headers: {
@@ -168,7 +168,7 @@ export function updateOwnStocks(stockData) {
 	})
 
 	fetchTHUrl(
-		NetConstants.OWN_STOCK_LIST_API+'?'+NetConstants.PARAMETER_STOCKIDS+'='+idList,
+		NetConstants.CFD_API.OWN_STOCK_LIST_API+'?'+NetConstants.PARAMETER_STOCKIDS+'='+idList,
 		{
 			method: 'PUT',
 			headers: {
@@ -191,7 +191,7 @@ export function loadUserBalance(force, successCallback) {
 		if (notLogin) {
 			return
 		}
-		var url = NetConstants.GET_USER_BALANCE_API
+		var url = NetConstants.CFD_API.GET_USER_BALANCE_API
 		this.fetchTHUrl(
 			url,
 			{

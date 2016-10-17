@@ -90,7 +90,7 @@ export default class MyMessagesPage extends Component {
 
   fetchAllMessages = (isRefresh) => {
     var userData = LogicData.getUserData();
-    var url = NetConstants.GET_MY_MESSAGES;
+    var url = NetConstants.CFD_API.GET_MY_MESSAGES;
     url = url.replace("<pageNum>", this.currentIndex);
     url = url.replace("<pageSize>", 20);
     NetworkModule.fetchTHUrlWithNoInternetCallback(
@@ -135,7 +135,7 @@ export default class MyMessagesPage extends Component {
 
   setMessageRead = (id) => {
     var userData = LogicData.getUserData();
-    var url = NetConstants.SET_MESSAGE_READ;
+    var url = NetConstants.CFD_API.SET_MESSAGE_READ;
     url = url.replace('<id>', id);
     NetworkModule.fetchTHUrl(
       url,

@@ -105,7 +105,7 @@ var MeBindingMobilePage = React.createClass({
 			return
 		}
 		NetworkModule.fetchTHUrl(
-			NetConstants.GET_PHONE_CODE_API + '?' + NetConstants.PARAMETER_PHONE + "=" + this.state.phoneNumber,
+			NetConstants.CFD_API.GET_PHONE_CODE_API + '?' + NetConstants.PARAMETER_PHONE + "=" + this.state.phoneNumber,
 			{
 				method: 'POST',
 			},
@@ -152,7 +152,7 @@ var MeBindingMobilePage = React.createClass({
 			phoneLoginButtonEnabled: false
 		})
 		NetworkModule.fetchTHUrl(
-			NetConstants.BIND_MOBILE_API,
+			NetConstants.CFD_API.BIND_MOBILE_API,
 			{
 				method: 'POST',
 				headers: {

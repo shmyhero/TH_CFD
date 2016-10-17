@@ -13,17 +13,15 @@ var Button = require('../component/Button')
 var MainPage = require('../MainPage')
 var ColorConstants = require('../../ColorConstants')
 var TalkingdataModule = require('../../module/TalkingdataModule')
+var OpenAccountRoutes = require('./OpenAccountRoutes')
 
 var {height, width} = Dimensions.get('window')
 
 var OAStartPage = React.createClass({
 
 	gotoNext: function() {
-		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP1, TalkingdataModule.LABEL_OPEN_ACCOUNT)
-		this.props.navigator.push({
-			name: MainPage.OPEN_ACCOUNT_ROUTE,
-			step: 1,
-		});
+		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP1, TalkingdataModule.LABEL_OPEN_ACCOUNT);
+		OpenAccountRoutes.goToNextRoute(this.props.navigator, {});
 	},
 
 	render: function() {
@@ -80,7 +78,7 @@ var styles = StyleSheet.create({
 	},
 
 	bottomArea: {
-		height: 72, 
+		height: 72,
 		backgroundColor: 'white',
 		alignItems: 'flex-end',
 		flexDirection:'row'

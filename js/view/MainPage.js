@@ -56,11 +56,13 @@ var WeCollectPage = require('./WeCollectPage')
 var RegisterSuccessPage = require('./RegisterSuccessPage')
 var SuperPriorityHintPage = require('./SuperPriorityHintPage')
 var MyMessagesPage = require('./MyMessagesPage')
+var DevelopPage = require('./DevelopPage')
 
 var TalkingdataModule = require('../module/TalkingdataModule')
 var WebSocketModule = require('../module/WebSocketModule');
 var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
-var StorageModule = require('../module/StorageModule')
+var StorageModule = require('../module/StorageModule');
+var OpenAccountRoutes = require('./openAccount/OpenAccountRoutes');
 
 var TutorialPage = require('./TutorialPage');
 var OpenAccountPages = [
@@ -118,6 +120,7 @@ export let EDIT_ALERT_ROUTE = 'editalert'
 export let SHARE_ROUTE = 'share'
 export let DAY_SIGN_ROUTE = 'daySign'
 export let MY_MESSAGES_ROUTE = 'myMessages'
+export let DEVELOP_ROUTE = 'develop'
 
 const glypy = glypyMapMaker({
   Home: 'f04f',
@@ -371,25 +374,9 @@ var MainPage = React.createClass({
 			)
 		}else if (route.name === OPEN_ACCOUNT_ROUTE) {
 			hideTabbar()
-			var step = route.step
-			var Page = OpenAccountPages[step]
-			var showBackButton = (step !== OpenAccountPages.length-1)
-			return (
-				<View style={{flex: 1}}>
-					<NavBar title={OpenAccountTitles[step]}
-						titleStyle={{marginLeft:-20, marginRight:-20}}
-						showBackButton={showBackButton}
-						backButtonOnClick={()=>TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_BACK, TalkingdataModule.LABEL_OPEN_ACCOUNT)}
-						backgroundColor={ColorConstants.TITLE_DARK_BLUE}
-						textOnRight={showBackButton?'取消':''}
-						rightTextOnClick={()=>{
-							_navigator.popToTop()
-							TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_QUIT, TalkingdataModule.LABEL_OPEN_ACCOUNT)
-						}}
-						navigator={navigationOperations}/>
-					<Page navigator={navigationOperations} />
-				</View>
-			)
+
+	    console.log("MainPage OPEN_ACCOUNT_ROUTE: " + route.step);
+			return OpenAccountRoutes.showOARoute(_navigator, route.step);
 		} else if (route.name === LIVE_REGISTER_ROUTE) {
 			// hideTabbar()
 			return (
@@ -470,6 +457,17 @@ var MainPage = React.createClass({
   					onPopToRoute={route.onPopToRoute}/>
 				</View>
 			)
+		}else if (route.name === DEVELOP_ROUTE){
+			hideTabbar();
+			return (
+				<View style={{flex: 1}}>
+					<NavBar title='测试' showBackButton={true}
+						backButtonOnClick={()=>this.backAndShowTabbar()}
+						navigator={navigationOperations}/>
+					<DevelopPage navigator={navigationOperations} routeMapper={this.RouteMapper}
+  					onPopToRoute={route.onPopToRoute}/>
+				</View>
+			);
 		}
 	},
 

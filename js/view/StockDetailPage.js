@@ -130,7 +130,7 @@ var StockDetailPage = React.createClass({
 	},
 
 	loadStockInfo: function() {
-		var url = NetConstants.GET_STOCK_DETAIL_API
+		var url = NetConstants.CFD_API.GET_STOCK_DETAIL_API
 		url = url.replace(/<stockCode>/, this.props.stockCode)
 
 		NetworkModule.fetchTHUrl(
@@ -203,13 +203,13 @@ var StockDetailPage = React.createClass({
 	},
 
 	loadStockPriceToday: function(showLoading, chartType, stockInfo) {
-		var url = NetConstants.GET_STOCK_PRICE_TODAY_API;
+		var url = NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_API;
 
 		if(chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE){
-			url = NetConstants.GET_STOCK_KLINE_FIVE_M;
+			url = NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M;
 			url = url.replace(/<securityId>/, this.props.stockCode);
 		}else if(chartType == NetConstants.PARAMETER_CHARTTYPE_DAY){
-			url = NetConstants.GET_STOCK_KLINE_DAY;
+			url = NetConstants.CFD_API.GET_STOCK_KLINE_DAY;
 			url = url.replace(/<securityId>/, this.props.stockCode);
 		}else {
 			 url = url.replace(/<stockCode>/, this.props.stockCode)
@@ -837,7 +837,7 @@ var StockDetailPage = React.createClass({
 		}
 
 		var userData = LogicData.getUserData()
-		var url = NetConstants.POST_CREATE_POSITION_API
+		var url = NetConstants.CFD_API.POST_CREATE_POSITION_API
 		this.setState({tradingInProgress: true})
 
 		NetworkModule.fetchTHUrl(

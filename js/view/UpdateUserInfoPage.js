@@ -89,7 +89,7 @@ var UpdateUserInfoPage = React.createClass({
 		var userData = LogicData.getUserData()
 
 		NetworkModule.fetchTHUrl(
-			NetConstants.GET_USER_INFO_API,
+			NetConstants.CFD_API.GET_USER_INFO_API,
 			{
 				method: 'GET',
 				headers: {
@@ -142,7 +142,7 @@ var UpdateUserInfoPage = React.createClass({
 
 		//Use the old me data since the reward amount only occur once.
 		NetworkModule.fetchTHUrl(
-			NetConstants.SET_USER_NICKNAME_API + '?' + NetConstants.PARAMETER_NICKNAME + '=' + this.state.nickName,
+			NetConstants.CFD_API.SET_USER_NICKNAME_API + '?' + NetConstants.PARAMETER_NICKNAME + '=' + this.state.nickName,
 			{
 				method: 'POST',
 				headers: {

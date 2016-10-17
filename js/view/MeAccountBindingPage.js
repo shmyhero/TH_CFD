@@ -72,11 +72,6 @@ var MeAccountBindingPage = React.createClass({
 		var meData = LogicData.getMeData();
 		console.log(JSON.stringify(meData))
 
-		if(meData.phone){
-			this.setState({
-				phoneNumber: meData.phone,
-			})
-		}
 		if(meData.weChatOpenId){
 			this.setState({
 				weChatOpenId: meData.weChatOpenId,
@@ -85,34 +80,6 @@ var MeAccountBindingPage = React.createClass({
 		this.setState({
 			dataSource: ds.cloneWithRows(listRawData),
 		})
-		/*
-		NetworkModule.fetchTHUrl(
-			NetConstants.GET_USER_INFO_API,
-			{
-				method: 'GET',
-				headers: {
-					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-				},
-			},
-			function(responseJson) {
-				var phoneNumber = responseJson.phone
-				var weChatOpenId = responseJson.weChatOpenId
-
-				if(weChatOpenId == null){
-					this.hideWechatIfNotInstalled()
-				}
-				this.setState({
-					phoneNumber: phoneNumber,
-					weChatOpenId: weChatOpenId,
-					dataSource: ds.cloneWithRows(listRawData),
-				});
-
-			}.bind(this),
-			function(errorMessage) {
-				Alert.alert('提示',errorMessage);
-			}
-		)
-		*/
 	},
 
 	wechatPressed: function() {
@@ -132,7 +99,7 @@ var MeAccountBindingPage = React.createClass({
 
 		console.log(JSON.stringify(userData))
 
-		var url = NetConstants.BIND_WECHAT_API;
+		var url = NetConstants.CFD_API.BIND_WECHAT_API;
 		url = url.replace(/<wechatOpenId>/, wechatUserData.openid)
 
 		NetworkModule.fetchTHUrl(

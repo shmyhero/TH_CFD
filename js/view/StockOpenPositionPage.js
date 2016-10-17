@@ -89,7 +89,7 @@ var StockOpenPositionPage = React.createClass({
 
 	loadOpenPositionInfo: function() {
 		var userData = LogicData.getUserData()
-		var url = NetConstants.GET_OPEN_POSITION_API
+		var url = NetConstants.CFD_API.GET_OPEN_POSITION_API
 		NetworkModule.fetchTHUrl(
 			url,
 			{
@@ -155,15 +155,15 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	loadStockDetailInfo: function(chartType,stockCode) {
-		var url = NetConstants.GET_STOCK_PRICE_TODAY_API
+		var url = NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_API
 		// url = url.replace(/<stockCode>/, stockCode)
 		// url = url.replace(/<chartType>/, this.state.chartType)
 
 		if(chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE){
-			url = NetConstants.GET_STOCK_KLINE_FIVE_M;
+			url = NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M;
 			url = url.replace(/<securityId>/, stockCode);
 		}else if(chartType == NetConstants.PARAMETER_CHARTTYPE_DAY){
-			url = NetConstants.GET_STOCK_KLINE_DAY;
+			url = NetConstants.CFD_API.GET_STOCK_KLINE_DAY;
 			url = url.replace(/<securityId>/, stockCode);
 		}else {
 			 url = url.replace(/<stockCode>/, stockCode)
@@ -354,7 +354,7 @@ var StockOpenPositionPage = React.createClass({
 		isWaiting = true
 
 		var userData = LogicData.getUserData()
-		var url = NetConstants.POST_DELETE_POSITION_API
+		var url = NetConstants.CFD_API.POST_DELETE_POSITION_API
 		NetworkModule.fetchTHUrl(
 			url,
 			{
@@ -466,7 +466,7 @@ var StockOpenPositionPage = React.createClass({
 
 	switchConfrim: function(rowData) {
 		var userData = LogicData.getUserData()
-		var url = NetConstants.STOP_PROFIT_LOSS_API
+		var url = NetConstants.CFD_API.STOP_PROFIT_LOSS_API
 
 		var eventParam = {};
 		eventParam[TalkingdataModule.KEY_STOP_PROFIT_SWITCH_ON] = this.state.stopProfitSwitchIsOn;
@@ -482,7 +482,7 @@ var StockOpenPositionPage = React.createClass({
 				Alert.alert('', '止损超过'+MAX_PERCENT+'%，无法设置');
 				return
 			}
-			url = NetConstants.STOP_PROFIT_LOSS_API
+			url = NetConstants.CFD_API.STOP_PROFIT_LOSS_API
 			var price = this.percentToPriceWithRow(stopLossPercent, rowData, 2)
 			if(!this.state.stopLossSwitchIsOn){
 				stopLossPercent=0
@@ -535,7 +535,7 @@ var StockOpenPositionPage = React.createClass({
 		if (stopProfitUpdated) {
 			if (rowData.takeOID === undefined) {
 				if (this.state.stopProfitSwitchIsOn) {
-					url = NetConstants.ADD_REMOVE_STOP_PROFIT_API
+					url = NetConstants.CFD_API.ADD_REMOVE_STOP_PROFIT_API
 					type = 'POST'
 					body = JSON.stringify({
 							posId: rowData.id,
@@ -559,7 +559,7 @@ var StockOpenPositionPage = React.createClass({
 					})
 				}
 				else {
-					url = NetConstants.ADD_REMOVE_STOP_PROFIT_API
+					url = NetConstants.CFD_API.ADD_REMOVE_STOP_PROFIT_API
 					type = 'DELETE'
 					body = JSON.stringify({
 							posId: rowData.id,

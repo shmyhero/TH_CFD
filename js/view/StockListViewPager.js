@@ -27,12 +27,12 @@ var MainPage = require('./MainPage')
 
 
 var tabNames = ['自选', '美股', '指数', '外汇', '商品']
-var urls = [
-	NetConstants.GET_USER_BOOKMARK_LIST_API,
-	NetConstants.GET_US_STOCK_TOP_GAIN_API,
-	NetConstants.GET_INDEX_LIST_API,
-	NetConstants.GET_FX_LIST_API,
-	NetConstants.GET_FUTURE_LIST_API
+var urlKeys = [
+	'GET_USER_BOOKMARK_LIST_API',
+	'GET_US_STOCK_TOP_GAIN_API',
+	'GET_INDEX_LIST_API',
+	'GET_FX_LIST_API',
+	'GET_FUTURE_LIST_API',
 ]
 
 var didFocusSubscription = null;
@@ -129,7 +129,7 @@ var StockListViewPager = React.createClass({
 		var viewPages = tabNames.map(
 			(tabName, i) =>
 			<View style={styles.slide} key={i}>
-				<StockListPage dataURL={urls[i]} ref={'page' + i} showHeaderBar={i==1} isOwnStockPage={i==0} navigator={this.props.navigator}/>
+				<StockListPage dataURL={NetConstants.getUrl(urlKeys[i])} ref={'page' + i} showHeaderBar={i==1} isOwnStockPage={i==0} navigator={this.props.navigator}/>
 			</View>
 		)
 		return (

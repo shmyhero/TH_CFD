@@ -14,6 +14,7 @@ var GUIDE_STORAGE_KEY = '@TH_CFD:guideData';
 var TUTORIAL_KEY = '@TH_CFD:tutorialData';
 var LAST_SUPER_PRIORITY_HINT_DATE = '@TH_CFD:lastSuperPriorityDateData'
 var ACCOUNT_STATE = '@TH_CFD:accountState'
+var IS_PRODUCT_SERVER = '@TH_CFD:isProductServer'
 
 export async function loadUserData() {
 	try {
@@ -204,4 +205,21 @@ export async function loadLastSuperPriorityHintData(){
 	} catch (error) {
 		console.log('AsyncStorage error: ' + error.message);
 	}
+}
+
+export async function setIsProductServer(data){
+  try {
+		await AsyncStorage.setItem(IS_PRODUCT_SERVER, data)
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function loadIsProductServer(){
+  try {
+    var value = await AsyncStorage.getItem(IS_PRODUCT_SERVER);
+    return value;
+  } catch (error) {
+    console.log('AsyncStorage error: ' + error.message);
+  }
 }

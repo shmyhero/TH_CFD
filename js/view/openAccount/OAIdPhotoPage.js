@@ -20,6 +20,7 @@ var ColorConstants = require('../../ColorConstants')
 var NetConstants = require('../../NetConstants');
 var NetworkModule = require('../../module/NetworkModule')
 var TalkingdataModule = require('../../module/TalkingdataModule')
+var OpenAccountRoutes = require('./OpenAccountRoutes')
 var {height, width} = Dimensions.get('window')
 
 const ID_CARD_FRONT = 1
@@ -96,7 +97,7 @@ var OAIdPhotoPage = React.createClass({
 	gotoNext: function() {
 		if (this.state.idCardFrontData != null && this.state.idCardBackData != null) {
 			NetworkModule.fetchTHUrl(
-				NetConstants.GZT_OCR_CHECK_API,
+				NetConstants.GZT_API.GZT_OCR_CHECK_API,
 				{
 					method: 'POST',
 					body: JSON.stringify({
@@ -114,10 +115,7 @@ var OAIdPhotoPage = React.createClass({
 						LogicData.setCertificateIdCardInfo(responseJson)
 
 						TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP2, TalkingdataModule.LABEL_OPEN_ACCOUNT)
-						this.props.navigator.push({
-							name: MainPage.OPEN_ACCOUNT_ROUTE,
-							step: 2,
-						});
+						OpenAccountRoutes.goToNextRoute(this.props.navigator, {});
 					} else {
 						Alert.alert('', decodeURIComponent(responseJson.message));
 					}
@@ -128,10 +126,7 @@ var OAIdPhotoPage = React.createClass({
 			)
 		} else {
 			TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP2, TalkingdataModule.LABEL_OPEN_ACCOUNT)
-			this.props.navigator.push({
-				name: MainPage.OPEN_ACCOUNT_ROUTE,
-				step: 2,
-			});
+			OpenAccountRoutes.goToNextRoute(this.props.navigator, {});
 		}
 	},
 

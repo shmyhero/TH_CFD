@@ -42,7 +42,7 @@ var StockPopularityPage = React.createClass({
 		// this.setTimeout(
 		// 	() => {
 		// 		NetworkModule.fetchTHUrl(
-		// 			NetConstants.GET_POPULARITY_API,
+		// 			NetConstants.CFD_API.GET_POPULARITY_API,
 		// 			{
 		// 				method: 'GET',
 		// 			},

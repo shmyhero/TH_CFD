@@ -41,7 +41,7 @@ var StockListPage = React.createClass({
 
 	getDefaultProps() {
 		return {
-			dataURL: NetConstants.GET_USER_BOOKMARK_LIST_API,
+			dataURL: NetConstants.CFD_API.GET_USER_BOOKMARK_LIST_API,
 			showHeaderBar: false,
 			isOwnStockPage: false,
 		}

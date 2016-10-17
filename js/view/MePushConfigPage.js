@@ -81,7 +81,7 @@ var MePushConfigPage = React.createClass({
 
 		if (!notLogin) {
 			NetworkModule.fetchTHUrl(
-				NetConstants.GET_USER_INFO_API,
+				NetConstants.CFD_API.GET_USER_INFO_API,
 				{
 					method: 'GET',
 					headers: {
@@ -107,7 +107,7 @@ var MePushConfigPage = React.createClass({
 		var notLogin = Object.keys(userData).length === 0
 		if (notLogin) {
 		}else{
-			var url = NetConstants.AUTO_CLOSE_ALERT_API
+			var url = NetConstants.CFD_API.AUTO_CLOSE_ALERT_API
 			url = url.replace(/<setting>/, value)
 
 			NetworkModule.fetchTHUrl(

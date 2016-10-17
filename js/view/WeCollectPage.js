@@ -154,7 +154,7 @@ var WeCollectPage = React.createClass({
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
 			NetworkModule.fetchTHUrlWithNoInternetCallback(
-				NetConstants.GET_USER_DAILY_SIGN_INFO,
+				NetConstants.CFD_API.GET_USER_DAILY_SIGN_INFO,
 				{
 					method: 'GET',
 					headers: {
@@ -186,7 +186,7 @@ var WeCollectPage = React.createClass({
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
 			NetworkModule.fetchTHUrlWithNoInternetCallback(
-				NetConstants.GET_USER_DAILY_SIGN_MONTH,
+				NetConstants.CFD_API.GET_USER_DAILY_SIGN_MONTH,
 				{
 					method: 'GET',
 					headers: {
@@ -221,7 +221,7 @@ var WeCollectPage = React.createClass({
 		TalkingdataModule.trackEvent(TalkingdataModule.CHECK_IN_SHARE_EVENT);
     if(this.props.shareFunction){
 			NetworkModule.fetchTHUrl(
-				NetConstants.GET_CHECK_IN_SHARE_DATA,
+				NetConstants.CFD_API.GET_CHECK_IN_SHARE_DATA,
 				{
 					method: 'GET',
 				},

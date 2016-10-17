@@ -57,7 +57,7 @@ var MePage = React.createClass({
 		if(!notLogin){
 			//If previously logged in, fetch me data from server.
 			NetworkModule.fetchTHUrlWithNoInternetCallback(
-				NetConstants.GET_USER_INFO_API,
+				NetConstants.CFD_API.GET_USER_INFO_API,
 				{
 					method: 'GET',
 					headers: {
@@ -124,7 +124,7 @@ var MePage = React.createClass({
 			})
 
 			NetworkModule.fetchTHUrlWithNoInternetCallback(
-				NetConstants.GET_UNREAD_MESSAGE,
+				NetConstants.CFD_API.GET_UNREAD_MESSAGE,
 				{
 					method: 'GET',
 					headers: {
@@ -221,7 +221,7 @@ var MePage = React.createClass({
 			// this.props.navigator.push({
 			// 	name: MainPage.ABOUT_US_ROUTE,
 			// });
-			this.gotoWebviewPage(NetConstants.WEBVIEW_URL_ABOUT_US, '关于我们');
+			this.gotoWebviewPage(NetConstants.TRADEHERO_API.WEBVIEW_URL_ABOUT_US, '关于我们');
 		}
 		else if(rowData.subtype === 'config') {
 			this.props.navigator.push({

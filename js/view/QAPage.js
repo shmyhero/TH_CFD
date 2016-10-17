@@ -27,7 +27,7 @@ var QAPage = React.createClass({
 	},
 
 	getDefaultProps() {
-		var url = NetConstants.WEBVIEW_QA_PAGE;
+		var url = NetConstants.TRADEHERO_API.WEBVIEW_QA_PAGE;
 		url = url.replace('<version>', VersionConstants.WEBVIEW_QA_VERSION);
 
 		return {

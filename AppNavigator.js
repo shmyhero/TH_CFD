@@ -110,6 +110,19 @@ var AppNavigator = React.createClass({
 		}
 
 		UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+
+		//Load the server setting should always be the first step.
+		console.log("loadServerSettings");
+		VersionConstants.loadServerSettings()
+		.then(()=>{
+			this.initializeApp();
+		},()=>{
+			this.initializeApp();
+		});
+	},
+
+	initializeApp: function(){
+		console.log("initializeApp");
 		StorageModule.loadUserData()
 			.then((value) => {
 				if (value !== null) {
@@ -167,7 +180,7 @@ var AppNavigator = React.createClass({
 			.done()
 
 		NetworkModule.fetchTHUrl(
-			NetConstants.GET_OUT_RIGHT_API + '?page=1&perPage=99',
+			NetConstants.CFD_API.GET_OUT_RIGHT_API + '?page=1&perPage=99',
 			{
 				method: 'GET',
 			},
@@ -214,7 +227,7 @@ var AppNavigator = React.createClass({
 	setIsProduct: function(isProductServer){
 		var value = (isProductServer == "true" ? true : false);
 		console.log("setIsProduct: " + isProductServer);
-		VersionConstants.setIsProductServer(value);
+		VersionConstants.setIsProductApp(value);
 	},
 
 	_handleDeviceToken: function(event) {
@@ -235,7 +248,7 @@ var AppNavigator = React.createClass({
 		}
 		if(!notLogin){//if login
 		 NetworkModule.fetchTHUrl(
-			 NetConstants.POST_PUSH_TOKEN_AUTH,
+			 NetConstants.CFD_API.POST_PUSH_TOKEN_AUTH,
 			 {
 				 method: 'POST',
 				 headers: {
@@ -255,7 +268,7 @@ var AppNavigator = React.createClass({
 		 )
 	 }else{//if not login
 		 NetworkModule.fetchTHUrl(
-			 NetConstants.POST_PUSH_TOKEN,
+			 NetConstants.CFD_API.POST_PUSH_TOKEN,
 			 {
 				 method: 'POST',
 				 headers: {
@@ -388,7 +401,7 @@ var AppNavigator = React.createClass({
 
 	setMessageRead : function(id) {
 		var userData = LogicData.getUserData();
-		var url = NetConstants.SET_MESSAGE_READ;
+		var url = NetConstants.CFD_API.SET_MESSAGE_READ;
 		url = url.replace('<id>', id);
 		NetworkModule.fetchTHUrl(
 			url,

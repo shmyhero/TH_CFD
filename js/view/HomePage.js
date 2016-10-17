@@ -27,10 +27,13 @@ var WebSocketModule = require('../module/WebSocketModule');
 var NavBar = require('./NavBar')
 var TalkingdataModule = require('../module/TalkingdataModule')
 var TongDaoModule = require('../module/TongDaoModule')
+var DevelopPage = require('./DevelopPage')
+var VersionConstants = require('../VersionConstants')
 
 var {EventCenter, EventConst} = require('../EventCenter')
 
-var RECOMMAND_URL = NetConstants.WEBVIEW_RECOMMAND_PAGE
+//Change URL may be wrong.
+var RECOMMAND_URL = NetConstants.TRADEHERO_API.WEBVIEW_RECOMMAND_PAGE
 var PAGES = [
 	{name: 'Page0', url: RECOMMAND_URL + "1"},
 	{name: 'Page1', url: RECOMMAND_URL + "1"},
@@ -96,7 +99,7 @@ var HomePage = React.createClass({
 		var userData = LogicData.getUserData();
 
 		NetworkModule.fetchTHUrl(
-			NetConstants.GET_HOMEPAGE_BANNER_API,
+			NetConstants.CFD_API.GET_HOMEPAGE_BANNER_API,
 			{
 				method: 'GET',
 			},
@@ -110,7 +113,7 @@ var HomePage = React.createClass({
 			}
 		);
 
-		var url = NetConstants.GET_MOVIE_RANK;
+		var url = NetConstants.CFD_API.GET_MOVIE_RANK;
 		url = url.replace("<userId>", userData.userId);
 		NetworkModule.fetchTHUrl(
 			url,
@@ -143,7 +146,7 @@ var HomePage = React.createClass({
 
 	loadHomeData: function() {
 		NetworkModule.fetchTHUrl(
-			NetConstants.GET_POPULARITY_API,
+			NetConstants.CFD_API.GET_POPULARITY_API,
 			{
 				method: 'GET',
 			},
@@ -163,7 +166,7 @@ var HomePage = React.createClass({
 		);
 
 		NetworkModule.fetchTHUrl(
-			NetConstants.GET_TOP_NEWS_TOP10_API,
+			NetConstants.CFD_API.GET_TOP_NEWS_TOP10_API,
 			{
 				method: 'GET',
 			},
@@ -265,14 +268,14 @@ var HomePage = React.createClass({
 	getShareMovieEventInfo: function(){
 		var info = {};
 		if(!this.state.attendedMovieEvent){
-			info.shareUrl = NetConstants.SHARE_MOVIE_WIN_TICKET_URL;
+			info.shareUrl = NetConstants.TRADEHERO_API.SHARE_MOVIE_WIN_TICKET_URL;
 			info.message = "朕的投资收益率排名前3，快快赞我！";
 		}else{
 			if(this.state.winMovieTicket){
-				info.shareUrl = NetConstants.SHARE_MOVIE_WIN_TICKET_URL;
+				info.shareUrl = NetConstants.TRADEHERO_API.SHARE_MOVIE_WIN_TICKET_URL;
 				info.message = "朕的投资收益率排名前3，快快赞我！";
 			}else{
-				info.shareUrl = NetConstants.SHARE_MOVIE_NOT_WIN_TICKET_URL;
+				info.shareUrl = NetConstants.TRADEHERO_API.SHARE_MOVIE_NOT_WIN_TICKET_URL;
 				info.message = "俺的模拟投资战绩不佳，求大侠支招，助我拿到电影票！";
 			}
 		}
@@ -295,7 +298,7 @@ var HomePage = React.createClass({
 			}
 		}
 
-		if(!shareUrl && targetUrl.startsWith(NetConstants.MOVIE_WIN_TICKET_URL)){
+		if(!shareUrl && targetUrl.startsWith(NetConstants.TRADEHERO_API.MOVIE_WIN_TICKET_URL)){
 			var shareInfo = this.getShareMovieEventInfo();
 			shareUrl = shareInfo.shareUrl;
 			shareDescription = shareInfo.message;
@@ -329,7 +332,7 @@ var HomePage = React.createClass({
 	gotoMoviePage: function(){
 		TalkingdataModule.trackEvent(TalkingdataModule.MOVIE_ACTIVITY_EVENT);
 
-		var url = NetConstants.MOVIE_WIN_TICKET_URL;
+		var url = NetConstants.TRADEHERO_API.MOVIE_WIN_TICKET_URL;
 		var userData = LogicData.getUserData();
 		url = url + '?userId=' + userData.userId;
 
@@ -370,6 +373,14 @@ var HomePage = React.createClass({
 		if (NO_MAGIC) {
 			return
 		}
+
+		if(!VersionConstants.getIsProductApp()){
+			this.props.navigator.push({
+				name: MainPage.DEVELOP_ROUTE,
+			});
+			return;
+		}
+
 		// magicCode += ""+index
 
 		// if(this.endsWith(magicCode, "12341234")){
@@ -541,7 +552,7 @@ var HomePage = React.createClass({
 
 	renderOneNews: function(news) {
 		var header = news.header
-		var url = NetConstants.WEBVIEW_TOP_NEWS_PAGE+news.id
+		var url = NetConstants.TRADEHERO_API.WEBVIEW_TOP_NEWS_PAGE+news.id
 		return(
 			<TouchableOpacity style={styles.newsContainer} onPress={() => this.tapTopNews(url)}>
 				<View style={styles.bluePoint}/>

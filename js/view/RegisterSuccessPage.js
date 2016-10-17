@@ -88,7 +88,7 @@ var RegisterSuccessPage = React.createClass({
 
     if(this.props.shareFunction){
 			NetworkModule.fetchTHUrl(
-				NetConstants.GET_REGISTER_SHARE_DATA,
+				NetConstants.CFD_API.GET_REGISTER_SHARE_DATA,
 				{
 					method: 'GET',
 				},

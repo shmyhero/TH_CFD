@@ -648,13 +648,31 @@ var HomePage = React.createClass({
 	},
 
 	renderEventsRow: function(){
-		return (
-			<View style={[styles.eventsRowContainer]}>
-				{this.renderEventItem(1)}
-				{this.renderEventSeparator()}
-				{this.renderEventItem(2)}
-			</View>
-		)
+		if(LogicData.getAccountState()){
+			return(
+				<View></View>
+			)
+		}else{
+			return (
+				<View style={[styles.eventsRowContainer]}>
+					{this.renderEventItem(1)}
+					{this.renderEventSeparator()}
+					{this.renderEventItem(2)}
+				</View>
+			)
+		}
+	},
+
+	renderEventSeparator2: function(){
+		if(LogicData.getAccountState()){
+			return(
+				<View></View>
+			)
+		}else{
+			return (
+			<View style={styles.bigSeparator}/>
+			)
+		}
 	},
 
 	render: function() {
@@ -701,7 +719,8 @@ var HomePage = React.createClass({
 					<View style={styles.bigSeparator}/>
 
 					{this.renderEventsRow()}
-					<View style={styles.bigSeparator}/>
+					{this.renderEventSeparator2()}
+
 
 					{this.renderPopularityView()}
 					<View style={styles.bigSeparator}/>

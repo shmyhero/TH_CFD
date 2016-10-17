@@ -39,6 +39,7 @@ var AccountNameModifyPage = require('./AccountNameModifyPage');
 var MePage = require('./MePage')
 var MyIncomePage = require('./MyIncomePage')
 var MeConfigPage = require('./MeConfigPage')
+var ModifyPwdPage = require('./ModifyPwdPage')
 var MePushConfigPage = require('./MePushConfigPage')
 var MeAccountBindingPage = require('./MeAccountBindingPage')
 var MeBindingMobilePage = require('./MeBindingMobilePage')
@@ -106,6 +107,7 @@ export let ABOUT_US_ROUTE = 'aboutUs'
 export let ACCOUNT_INFO_ROUTE = 'accountInfo'
 export let ACCOUNT_NAME_MODIFY_ROUTE = 'accountNameModify'
 export let ME_CONFIG_ROUTE = 'meConfig'
+export let ME_CONFIG_MODIFY_PWD_ROUTE = 'meConfigModifyPwd'
 export let ME_PUSH_CONFIG_ROUTE = 'mePushConfig'
 export let ME_ACCOUNT_BINDING_ROUTE = 'meAccountBinding'
 export let ME_BINDING_MOBILE_ROUTE = 'MeBindingMobilePage'
@@ -345,6 +347,14 @@ var MainPage = React.createClass({
 				<View style={{flex: 1}}>
 					<NavBar title="设置" showBackButton={true} navigator={navigationOperations}/>
 					<MeConfigPage navigator={navigationOperations} onPopBack={route.onPopBack}/>
+				</View>
+			)
+		} else if(route.name === ME_CONFIG_MODIFY_PWD_ROUTE){
+			hideTabbar();
+			return (
+				<View style={{flex: 1}}>
+					<NavBar title="修改登入密码" showBackButton={true} navigator={navigationOperations}/>
+					<ModifyPwdPage navigator={navigationOperations} onPopBack={route.onPopBack}/>
 				</View>
 			)
 		} else if(route.name === ME_PUSH_CONFIG_ROUTE){

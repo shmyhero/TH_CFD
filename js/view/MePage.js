@@ -10,6 +10,7 @@ import {
 	Image,
 	TouchableOpacity,
 	ScrollView,
+	Alert,
 } from 'react-native';
 
 var {EventCenter, EventConst} = require('../EventCenter')
@@ -31,12 +32,21 @@ var heightRate = height/667.0
 var listRawData = [{'type':'account','subtype':'accountInfo'},
 // {'type':'button','title':'开设实盘账户'},
 {'type':'Separator', 'height':10},
+{'type':'accountState'},
 {'type':'normal','title':'我的交易金', 'image':require('../../images/icon_income.png'), 'subtype':'income'},
 {'type':'normal','title':'帮助中心', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'helpcenter'},
 {'type':'normal','title':'线上咨询', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':'onlinehelp'},
 {'type':'normal','title':'产品反馈', 'image':require('../../images/icon_response.png'), 'subtype':'feedback'},
 {'type':'normal','title':'关于我们', 'image':require('../../images/icon_aboutus.png'), 'subtype':'aboutus'},
 {'type':'normal','title':'设置', 'image':require('../../images/icon_config.png'), 'subtype':'config'},]
+
+var accountInfoData = [
+	{type:'开通实盘账户',color:ColorConstants.TITLE_BLUE},
+	{type:'登入实盘账户',color:ColorConstants.TITLE_BLUE},
+	{type:'实盘开户审核中...',color:'#757575'},
+	{type:'继续开户',color:ColorConstants.TITLE_BLUE},
+	{type:'重新开户',color:ColorConstants.TITLE_BLUE}
+]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -176,6 +186,17 @@ var MePage = React.createClass({
 		});
 	},
 
+	gotoAccountStateExce:function(){
+		console.log("gotoAccountStateExce");
+		this.props.navigator.push({
+			name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			title:'实盘交易',
+			// url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state=guid'
+			url:'https://www.tradehub.net/live/yuefei-beta/login.html',
+		});
+
+	},
+
 	gotoWebviewPage: function(targetUrl, title) {
 		var userData = LogicData.getUserData()
 		var userId = userData.userId
@@ -222,12 +243,14 @@ var MePage = React.createClass({
 			// 	name: MainPage.ABOUT_US_ROUTE,
 			// });
 			this.gotoWebviewPage(NetConstants.TRADEHERO_API.WEBVIEW_URL_ABOUT_US, '关于我们');
+			LogicData.setAccountState(true)
 		}
 		else if(rowData.subtype === 'config') {
 			this.props.navigator.push({
 				name: MainPage.ME_CONFIG_ROUTE,
 				onPopBack: this.reloadMeData
 			});
+
 		}
 		else if(rowData.subtype === 'feedback') {
 			var meData = LogicData.getMeData();
@@ -235,6 +258,7 @@ var MePage = React.createClass({
 				name: MainPage.FEEDBACK_ROUTE,
 				phone: meData.phone,
 			});
+			LogicData.setAccountState(false)
 		}
 		else if(rowData.subtype === 'accountInfo') {
 			this.gotoUserInfoPage()
@@ -298,13 +322,31 @@ var MePage = React.createClass({
 		);
 	},
 
+	renderAccountStateView: function(){
+		return(
+			<TouchableOpacity activeOpacity={0.5} onPress={()=>this.gotoAccountStateExce()}>
+				<View style={styles.accoutStateLine}>
+						<View style={styles.accoutStateButton}>
+							<Text style={styles.accountStateInfo}>开通实盘账户</Text>
+					  </View>
+				</View>
+			</TouchableOpacity>
+		)
+	},
+
 	renderRow: function(rowData, sectionID, rowID) {
 		if (rowData.type === 'normal') {
 			if(rowData.subtype === 'config' && !this.state.loggedIn){
 				return (
 					<View></View>
 				);
-			}else{
+			}
+			else if(rowData.subtype == 'income' && LogicData.getAccountState()){
+				 return(
+					 <View></View>
+				 );
+			}
+			else{
 				return(
 					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
 						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
@@ -344,13 +386,28 @@ var MePage = React.createClass({
 				)
 			}
 		}
+		else if(rowData.type === 'accountState'){
+				if(this.state.loggedIn && LogicData.getAccountState()){
+					return this.renderAccountStateView()
+				}else{
+					return (
+						<View></View>
+					)
+				}
+		}
 		else {
 			// separator
-			return (
-			<View style={[styles.line, {height:rowData.height}]}>
-				<View style={[styles.separator, {height:rowData.height}]}/>
-			</View>
+			if(LogicData.getAccountState()){
+				return (
+					<View></View>
 				)
+			}else{
+				return (
+				<View style={[styles.line, {height:rowData.height}]}>
+					<View style={[styles.separator, {height:rowData.height}]}/>
+				</View>
+					)
+			}
 		}
 	},
 
@@ -515,6 +572,27 @@ var styles = StyleSheet.create({
 		width: Math.round(62*heightRate),
 		height: Math.round(62*heightRate),
 		borderRadius: Math.round(31*heightRate),
+	},
+
+	accoutStateLine:{
+		flex:1,
+		height:Math.round(60*heightRate),
+		alignItems:'center',
+		justifyContent: 'center',
+	},
+
+
+	accoutStateButton:{
+		width:width - 10 *2,
+		height:40*heightRate,
+		backgroundColor:ColorConstants.TITLE_BLUE,
+		justifyContent: 'center',
+		alignItems:'center',
+	},
+
+	accountStateInfo:{
+		fontSize:16,
+		color:'white',
 	},
 });
 

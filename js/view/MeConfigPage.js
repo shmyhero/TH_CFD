@@ -18,13 +18,17 @@ var Button = require('./component/Button')
 var MainPage = require('./MainPage')
 var LocalDataUpdateModule = require('../module/LocalDataUpdateModule')
 var UIConstants = require('../UIConstants')
+var LogicData = require('../LogicData')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 var listRawData = [
 {'type':'normal','title':'推送设置', 'subtype': 'pushconfig'},
 {'type':'normal','title':'账号绑定', 'subtype': 'accountbinding'},
-{'type':'normal','title':'退出当前账号', 'subtype': 'logout'},
+{'type':'normal','title':'切换到模拟账号', 'subtype': 'change2Simulator'},
+{'type':'normal','title':'退出盈交易', 'subtype': 'logout'},
+{'type':'normal','title':'登出实盘账号', 'subtype': 'logoutAccountActual'},
+{'type':'normal','title':'修改登入密码', 'subtype': 'modifyLoginActualPwd'},
 ]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -59,7 +63,38 @@ var MeConfigPage = React.createClass({
 			});
 		}else if(rowData.subtype === 'logout'){
 			this.logout();
+		}else if(rowData.subtype === 'change2Simulator'){
+			this.change2ActualOrSimu();
+		}else if(rowData.subtype === 'logoutAccountActual'){
+			this.logoutAccountActualAlert();
+		}else if(rowData.subtype === 'modifyLoginActualPwd'){
+			this.props.navigator.push({
+				name: MainPage.ME_CONFIG_MODIFY_PWD_ROUTE,
+			});
 		}
+	},
+
+
+	logoutAccountActualAlert:function(){
+		Alert.alert(
+			"提示",
+			"确认登出实盘账号？",
+				[
+					{text: '取消'},
+					{text: '确定', onPress: () => this.logoutAccountActual()},
+				]
+			)
+	},
+
+	change2ActualOrSimu:function() {
+		Alert.alert(
+			"提示",
+			"确认切换到模拟账号？",
+				[
+					{text: '取消'},
+					{text: '确定', onPress: () => this.logout2Simulator()},
+				]
+			)
 	},
 
 	logout: function(){
@@ -72,6 +107,20 @@ var MeConfigPage = React.createClass({
 					{text: '确定', onPress: () => this.logoutCurrentAccount()},
 				]
 			)
+	},
+
+	logoutAccountActual:function(){
+		this.props.navigator.pop();
+		if(this.props.onPopBack){
+			this.props.onPopBack();
+		}
+	},
+
+	logout2Simulator: function(){
+		this.props.navigator.pop();
+		if(this.props.onPopBack){
+			this.props.onPopBack();
+		}
 	},
 
 	logoutCurrentAccount: function(){
@@ -95,15 +144,26 @@ var MeConfigPage = React.createClass({
 	},
 
 	renderRow: function(rowData, sectionID, rowID) {
-		return(
-			<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
-				<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-					<Text style={styles.title}>{rowData.title}</Text>
-					<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
-				</View>
-			</TouchableOpacity>
-		);
+		if(!LogicData.getAccountState() &&
+		(rowData.subtype === 'change2Simulator' ||
+		 rowData.subtype === 'logoutAccountActual' ||
+		 rowData.subtype === 'modifyLoginActualPwd' )){
+			 return(
+				 <View></View>
+			 )
+		 }else{
+			 return(
+	 			<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
+	 				<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
+	 					<Text style={styles.title}>{rowData.title}</Text>
+	 					<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
+	 				</View>
+	 			</TouchableOpacity>
+	 		)
+		 }
+
 	},
+
 
 	render: function() {
 		return (

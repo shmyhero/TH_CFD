@@ -43,9 +43,25 @@ var listRawData = [
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var OAFinanceInfoPage = React.createClass({
-	getInitialState: function() {
+	propTypes: {
+		data: React.PropTypes.object,
+	},
+
+	getDefaultProps() {
 		return {
-			dataSource: ds.cloneWithRows(listRawData),
+			data: null,
+		}
+	},
+
+	getInitialState: function() {
+		var dataSource;
+		if(this.props.data){
+			dataSource = this.props.data;
+		}else{
+			dataSource = ds.cloneWithRows(listRawData);
+		}
+		return {
+			dataSource: dataSource,
 			pickerArray: [],
 			selectedPicker: -1,
 		};
@@ -53,7 +69,11 @@ var OAFinanceInfoPage = React.createClass({
 
 	gotoNext: function() {
 		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP4, TalkingdataModule.LABEL_OPEN_ACCOUNT);
-		OpenAccountRoutes.goToNextRoute(this.props.navigator, {});
+		OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData());
+	},
+
+	getData: function(){
+		return {};
 	},
 
 	onPressPicker: function(rowData,rowID) {

@@ -374,12 +374,15 @@ var HomePage = React.createClass({
 			return
 		}
 
+		//Use the code in next version.
+		/*
 		if(!VersionConstants.getIsProductApp()){
 			this.props.navigator.push({
 				name: MainPage.DEVELOP_ROUTE,
 			});
 			return;
 		}
+		*/
 
 		// magicCode += ""+index
 

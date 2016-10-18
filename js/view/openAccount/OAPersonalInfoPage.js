@@ -31,10 +31,21 @@ var listRawData = [
 		{"key":"有效期限", "value":""}];
 
 var OAPersonalInfoPage = React.createClass({
+
+	propTypes: {
+		data: React.PropTypes.object,
+	},
+
+	getDefaultProps() {
+		return {
+			data: null,
+		}
+	},
+
 	getInitialState: function() {
 		var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-		if (LogicData.getCertificateIdCardInfo() != null) {
-			var certificateIdCardInfo = LogicData.getCertificateIdCardInfo()
+		if (this.props.data != null) {
+			var certificateIdCardInfo = this.props.data;
 			listRawData = [
 					{"key":"姓名", "value": certificateIdCardInfo.real_name},
 					{"key":"性别", "value":certificateIdCardInfo.gender},
@@ -52,7 +63,11 @@ var OAPersonalInfoPage = React.createClass({
 
 	gotoNext: function() {
 		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP3, TalkingdataModule.LABEL_OPEN_ACCOUNT);
-		OpenAccountRoutes.goToNextRoute(this.props.navigator, listRawData);
+		OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData());
+	},
+
+	getData: function(){
+		return listRawData;
 	},
 
 	textInputChange: function(event, rowID) {

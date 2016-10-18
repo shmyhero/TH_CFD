@@ -12,8 +12,9 @@ export const WEBPAGE_VERSION = '1.5'    //Only update this version when Web Page
 export const WEBPAGE_FOLDER = 'TH_CFD_WEB' + WEBPAGE_VERSION
 
 //NEVER CHANGE THE PRODUCT SERVER IN PRODUCT APP!!!
-var isProductServer = false;
-var isProductApp = false;
+//DEFAULT settings are product settings.
+var isProductServer = true;
+var isProductApp = true;
 
 export function setIsProductApp(value){
   console.log("setIsProductApp " + value);

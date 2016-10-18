@@ -23,6 +23,7 @@ export const LIVE_UPLOAD_ID_IMAGE = '上传身份证照片'
 export const LIVE_UPLOAD_ID_IMAGE_CANCEL = '取消上传身份证照片'
 
 export const SIMULATOR_LOGIN_EVENT = '模拟注册登录'
+export const SIMULATOR_WECHAT_LOGIN_EVENT = '模拟注册登录(微信)'
 export const TRADE_EVENT = '交易下单操作'
 export const ADD_TO_MY_LIST_EVENT = '添加自选'
 export const REMOVE_FROM_MY_LIST_EVENT = '删除自选'

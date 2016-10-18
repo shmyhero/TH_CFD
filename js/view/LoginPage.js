@@ -163,6 +163,7 @@ var LoginPage = React.createClass({
 	},
 
 	wechatPressed: function() {
+		TalkingdataModule.trackEvent(TalkingdataModule.SIMULATOR_WECHAT_LOGIN_EVENT);
 		WechatModule.wechatLogin(
 			() => {
 				this.wechatLogin()

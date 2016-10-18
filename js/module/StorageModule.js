@@ -15,6 +15,7 @@ var TUTORIAL_KEY = '@TH_CFD:tutorialData';
 var LAST_SUPER_PRIORITY_HINT_DATE = '@TH_CFD:lastSuperPriorityDateData'
 var ACCOUNT_STATE = '@TH_CFD:accountState'
 var IS_PRODUCT_SERVER = '@TH_CFD:isProductServer'
+var OPEN_ACCOUNT_DATA = '@TH_CFD:openAccountDataStep<step>'
 
 export async function loadUserData() {
 	try {
@@ -222,4 +223,32 @@ export async function loadIsProductServer(){
   } catch (error) {
     console.log('AsyncStorage error: ' + error.message);
   }
+}
+
+export async function setOpenAccountData(step, data){
+  try {
+    var key = OPEN_ACCOUNT_DATA.replace("<step>", step);
+  	await AsyncStorage.setItem(key, data)
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function loadOpenAccountData(step){
+  try {
+    var key = OPEN_ACCOUNT_DATA.replace("<step>", step);
+    var value = await AsyncStorage.getItem(key);
+    return value;
+  } catch (error) {
+    console.log('AsyncStorage error: ' + error.message);
+  }
+}
+
+export async function removeOpenAccountData(step) {
+	try {
+    var key = OPEN_ACCOUNT_DATA.replace("<step>", step);
+		await AsyncStorage.removeItem(key);
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
 }

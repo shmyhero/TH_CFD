@@ -263,6 +263,8 @@ var HomePage = React.createClass({
 			PAGES[i].header,
 			PAGES[i].digest,
 			TalkingdataModule.BANNER_SHARE_EVENT)
+
+		TongDaoModule.trackTopBannerEvent()
 	},
 
 	getShareMovieEventInfo: function(){
@@ -550,7 +552,6 @@ var HomePage = React.createClass({
 			null,
 			null,
 			TalkingdataModule.HEADER_SHARE_EVENT)
-		TongDaoModule.trackTopNewsEvent()
 	},
 
 	renderOneNews: function(news) {

@@ -81,8 +81,8 @@ export function trackAddRemoveOwnStockEvent(stockid, isAdd) {
 }
 
 export function trackSearchStockEvent(text, hasResult) {
-	var result = hasResult ? "you" : "mei you"
-	var values = {"sou suo ci" : text, "you/mei jie guo" : result}
+	var result = hasResult ? "you" : "wu"
+	var values = {"sou suo ci" : text, "you jie guo/wu jie guo" : result}
 	trackEvent(TD_SEARCH_STOCK, values)
 }
 

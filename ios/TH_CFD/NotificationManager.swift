@@ -40,7 +40,7 @@ class NotificationData: NSObject {
 class NotificationManager: NSObject {
 	static let singleton = NotificationManager()
 	
-	var gmid:String?	// current open notification
+	var currentPayload:String?	// current open notification
 	var notificationArray = [NotificationData]()
 	var delegate:AppDelegate!
 
@@ -53,9 +53,11 @@ class NotificationManager: NSObject {
 	func showNotification(data:NotificationData!){
 		if (delegate.nativeData != nil) {
 			if data.offline! {
-				if(gmid!.containsString(data.payload!)) {
-//				if (self.gmid != nil && gmid!.containsString(data.taskId!) && gmid!.containsString(data.msgId!)) {
+				// background, goto the page directly.
+//				if(currentPayload!.containsString(data.payload!)) {
+				if(self.canShowNow(data)) {
 					delegate.nativeData!.sendDataToRN("PushShowDetail", data: data.payload)
+					currentPayload = nil
 				}
 				else {
 					self.notificationArray.append(data)
@@ -72,30 +74,26 @@ class NotificationManager: NSObject {
 	}
 	
 	func showNotification(payload:String!, taskId:String!, msgId:String!, offline:Bool?){
-		if payload.containsString("tongrd_type") {
-			print("not show tong dao notification:", payload)
-			return
-		}
 		let notification:NotificationData = NotificationData(payload: payload, taskId: taskId, msgId: msgId, offline: offline)
 		self.showNotification(notification)
 	}
 	
-	func showNotification() {
+	func showCurrentNotification() {
 		// show current notification
-		if self.gmid == nil {
+		if self.currentPayload == nil {
 			return
 		}
 		for index in 0..<notificationArray.count {
 			let data = notificationArray[index]
-			if(gmid!.containsString(data.payload!)) {
-//			if(gmid!.containsString(data.taskId!) && gmid!.containsString(data.msgId!)) {
+//			if(currentPayload!.containsString(data.payload!)) {
+			if(self.canShowNow(data)) {
 				if(data.offline!) {
 					delegate.nativeData!.sendDataToRN("PushShowDetail", data: data.payload)
 				}
 				else {
 					delegate.nativeData!.sendDataToRN("PushShowDialog", data: data.payload)
 				}
-				self.gmid = nil
+				self.currentPayload = nil
 				self.notificationArray.removeAtIndex(index)
 				break
 			}
@@ -104,8 +102,8 @@ class NotificationManager: NSObject {
 	}
 	
 	func showNotificationWithGmid(gmid:String!) -> Void {
-		self.gmid = gmid
-		self.showNotification()
+		self.currentPayload = gmid
+		self.showCurrentNotification()
 	}
 	
 	func saveNotificationData() {
@@ -123,5 +121,18 @@ class NotificationManager: NSObject {
 		else {
 			return [NotificationData]()
 		}
+	}
+	
+	func canShowNow(data:NotificationData) -> Bool{
+		var can = false
+		if self.currentPayload != nil {
+			can = currentPayload!.containsString(data.payload!)
+		}
+		else {
+			if data.payload != nil {
+				can = data.payload!.containsString("title") && data.payload!.containsString("message") && data.payload!.containsString("tongrd_")
+			}
+		}
+		return can
 	}
 }

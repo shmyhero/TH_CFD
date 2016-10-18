@@ -187,12 +187,18 @@ var MePage = React.createClass({
 	},
 
 	gotoAccountStateExce:function(){
-		console.log("gotoAccountStateExce");
+
+		var userData = LogicData.getUserData()
+		var userId = userData.userId
+		if (userId == undefined) {
+			userId = 0
+		}
+		console.log("gotoAccountStateExce userId = " + userId);
 		this.props.navigator.push({
 			name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			title:'实盘交易',
-			// url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state=guid'
-			url:'https://www.tradehub.net/live/yuefei-beta/login.html',
+			url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state=userId'
+			// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
 		});
 
 	},

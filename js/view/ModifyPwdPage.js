@@ -35,6 +35,7 @@ var TimerMixin = require('react-timer-mixin');
 var MainPage = require('./MainPage')
 
 var MAX_ValidationCodeCountdown = 60
+var getCompleteEnable = false;
 
 var ModifyPwdPage = React.createClass({
 	mixins: [TimerMixin],
@@ -49,7 +50,7 @@ var ModifyPwdPage = React.createClass({
 			oldPwd:'',
 			newPwd:'',
 			newPwdAgain:'',
-			getCompleteEnable:false,
+			count:0,
 		};
 	},
 
@@ -130,10 +131,13 @@ var ModifyPwdPage = React.createClass({
 					</View>
 
 					<TouchableOpacity onPress={this.getCompletePressed}>
-					<View style = {[styles.complete,{backgroundColor:this.state.getCompleteEnable?ColorConstants.TITLE_BLUE:'grey'}]}>
+					<View style = {[styles.complete,{backgroundColor:getCompleteEnable?ColorConstants.TITLE_BLUE:'grey'}]}>
 						<Text style = {styles.textComplete}>完成</Text>
 					</View>
 					</TouchableOpacity>
+
+					{/* just for render */}
+					<Text style = {{fontSize:1}}>{this.state.count}</Text>
 				</View>
 		);
 	},
@@ -141,35 +145,31 @@ var ModifyPwdPage = React.createClass({
 	setValidationCode:function(text){
 		this.setState({
 			validationCode:text,
-			getCompleteEnable:this.checkForCompleteEnable(),
-		})
+		},()=>{getCompleteEnable = this.checkForCompleteEnable()})
 	},
 
   setOldPwd:function(text){
 		this.setState({
 			oldPwd:text,
-			getCompleteEnable:this.checkForCompleteEnable(),
-		})
+		},()=>{getCompleteEnable = this.checkForCompleteEnable()})
 	},
 
 	setNewPwd:function(text){
 		this.setState({
 			newPwd:text,
-			getCompleteEnable:this.checkForCompleteEnable(),
-		})
+		},()=>{getCompleteEnable = this.checkForCompleteEnable()})
 	},
 
 	setNewPwdAgain:function(text){
 		this.setState({
 			newPwdAgain:text,
-			getCompleteEnable:this.checkForCompleteEnable(),
-		})
+		},()=>{getCompleteEnable = this.checkForCompleteEnable()})
 	},
 
 	setValidationPhoneNumber:function(phone){
 		this.setState({
 			phoneNumber:phone
-		})
+		},()=>{getCompleteEnable = this.checkForCompleteEnable()})
 
 		if(phone.length == 11 && this.state.validationCodeCountdown<=0){
 			this.setState({
@@ -180,29 +180,26 @@ var ModifyPwdPage = React.createClass({
 				getValidationCodeButtonEnabled:false
 			})
 		}
-
-		this.setState({
-			getCompleteEnable:this.checkForCompleteEnable(),
-		})
 	},
 
 	checkForCompleteEnable(){
+		this.setState({count:this.state.count++})
 		if(this.state.oldPwd.length<8){
 			return false;
 		}else if(this.state.newPwd.length<8){
 			return false;
 		}else if(this.state.newPwdAgain.length<8){
 			return false;
-		}else if(this.state.phoneNumber<11){
+		}else if(this.state.phoneNumber.length<11){
 			return false;
-		}else if(this.state.validationCode<4){
+		}else if(this.state.validationCode.length<4){
 			return false;
 		}
 		return true;
 	},
 
 	getCompletePressed(){
-		if(!this.state.getCompleteEnable){
+		if(!getCompleteEnable){
 			return
 		}
 

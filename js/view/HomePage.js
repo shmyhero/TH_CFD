@@ -957,13 +957,13 @@ var styles = StyleSheet.create({
 		color: '#4c4c4c'
 	},
 	eventsDescriptionText: {
-		fontSize: 9,
+		fontSize: width > 320 ? 11 : 9,	//iOS 5 fix
 		marginTop: 7,
 		color: '#626262'
 	},
 	eventsIcon: {
-		width:53,
-		height:53,
+		width: width > 320 ? 46 : 39,	//iOS 5 fix
+		height: width > 320 ? 46 : 39,
 		alignSelf: 'center',
 		marginRight:6,
 	},

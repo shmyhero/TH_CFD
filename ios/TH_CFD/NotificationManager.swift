@@ -57,7 +57,7 @@ class NotificationManager: NSObject {
 //				if(currentPayload!.containsString(data.payload!)) {
 				if(self.canShowNow(data)) {
 					delegate.nativeData!.sendDataToRN("PushShowDetail", data: data.payload)
-					currentPayload = nil
+//					currentPayload = nil
 				}
 				else {
 					self.notificationArray.append(data)

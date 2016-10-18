@@ -374,6 +374,10 @@ var StockListPage = React.createClass({
 	},
 
 	renderRow: function(rowData, sectionID, rowID, highlightRow) {
+		if (rowData === undefined) {
+			// strange, rowData should not become undefined.
+			return (<View />)
+		}
 		var percentChange = 0
 		if (rowData.preClose == 0) {
 			rowData.preClose = rowData.last

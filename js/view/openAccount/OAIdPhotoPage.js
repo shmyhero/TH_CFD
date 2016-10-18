@@ -53,11 +53,13 @@ var options = {
 var OAIdPhotoPage = React.createClass({
 	propTypes: {
 		data: React.PropTypes.object,
+		onPop: React.PropTypes.func,
 	},
 
 	getDefaultProps() {
 		return {
 			data: null,
+			onPop: ()=>{},
 		}
 	},
 
@@ -124,7 +126,7 @@ var OAIdPhotoPage = React.createClass({
 						LogicData.setCertificateIdCardInfo(responseJson)
 
 						TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP2, TalkingdataModule.LABEL_OPEN_ACCOUNT)
-						OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData());
+						OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
 					} else {
 						Alert.alert('', decodeURIComponent(responseJson.message));
 					}
@@ -135,7 +137,7 @@ var OAIdPhotoPage = React.createClass({
 			)
 		} else {
 			TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP2, TalkingdataModule.LABEL_OPEN_ACCOUNT)
-			OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData());
+			OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
 		}
 	},
 

@@ -16,9 +16,20 @@ var ColorConstants = require('../../ColorConstants')
 var {height, width} = Dimensions.get('window')
 
 var OAReviewStatusPage = React.createClass({
+	propTypes: {
+		data: React.PropTypes.object,
+		onPop: React.PropTypes.func,
+	},
+
+	getDefaultProps() {
+		return {
+			data: null,
+			onPop: ()=>{},
+		}
+	},
 
 	gotoNext: function() {
-		this.props.navigator.popToTop();
+		OpenAccountRoutes.goToNextRoute(this.props.navigator, {}, this.props.onPop);
 	},
 
 	render: function() {

@@ -16,21 +16,22 @@ var LogicData = require('../../LogicData')
 var ColorConstants = require('../../ColorConstants')
 var TalkingdataModule = require('../../module/TalkingdataModule')
 var OpenAccountRoutes = require('./OpenAccountRoutes')
+var ErrorBar = require('./ErrorBar')
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
 var fontSize = Math.round(16*width/375)
 var listRawData = [
-		{"key":"姓名", "value":""},
-		{"key":"性别", "value":""},
-		{"key":"出生日期", "value":""},
-		{"key":"民族", "value":""},
-		{"key":"身份证号", "value":""},
-		{"key":"证件地址", "value":""},
-		{"key":"签发机关", "value":""},
-		{"key":"有效期限", "value":""}];
+		{"key":"用户名", "value":"", "type": "userName"},
+		{"key":"登入密码", "value":"", "type": "pwd"},
+		{"key":"确认密码", "value":"", "type": "pwd"},
+		{"key":"常用邮箱", "value":"", "type": "email"},
+	];
+var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 });
 
-var OAPersonalInfoPage = React.createClass({
+var OAAccountBasicSettingsPage = React.createClass({
+	errorCount: 0,
+
 	propTypes: {
 		data: React.PropTypes.object,
 		onPop: React.PropTypes.func,
@@ -44,22 +45,13 @@ var OAPersonalInfoPage = React.createClass({
 	},
 
 	getInitialState: function() {
-		var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		if (this.props.data && this.props.data.listData) {
 			var certificateIdCardInfo = this.props.data.listData;
 			listRawData = certificateIdCardInfo;
-			/*[
-					{"key":"姓名", "value": certificateIdCardInfo.real_name},
-					{"key":"性别", "value":certificateIdCardInfo.gender},
-					{"key":"出生日期", "value":certificateIdCardInfo.birthday},
-					{"key":"民族", "value":certificateIdCardInfo.ethnic},
-					{"key":"身份证号", "value":certificateIdCardInfo.id_code},
-					{"key":"证件地址", "value":certificateIdCardInfo.addr},
-					{"key":"签发机关", "value":certificateIdCardInfo.issue_authority},
-					{"key":"有效期限", "value":certificateIdCardInfo.valid_period}];*/
 		}
 		return {
 			dataSource: ds.cloneWithRows(listRawData),
+			hasError: false,
 		};
 	},
 
@@ -72,20 +64,74 @@ var OAPersonalInfoPage = React.createClass({
 		return {listData: listRawData};
 	},
 
+	updateList: function(){
+		this.setState(
+			{
+				dataSource: ds.cloneWithRows(listRawData),
+			}
+		)
+	},
+
 	textInputChange: function(text, rowID) {
 		listRawData[rowID].value = text;
+
 		//alert(JSON.stringify(listRawData));
 	},
 
+	textInputEndChange: function(event, rowID){
+		if(listRawData[rowID].type === "userName"){
+			this.checkUserName(rowID);
+		}	else if(listRawData[rowID].type === "pwd"){
+			this.checkPassword(rowID);
+		}
+
+	},
+
+	checkUserName: function(rowID){
+		if(listRawData[rowID].value === "aaa"){
+			listRawData[rowID].error = "用户名已存在";
+			this.errorCount++;
+			this.updateList();
+		}else{
+			if(listRawData[rowID].error){
+				listRawData[rowID].error = null;
+				this.errorCount--;
+				this.updateList();
+			}
+		}
+	},
+
+
+	checkPassword: function(rowID){
+		if(listRawData[1].value !== listRawData[2].value){
+			listRawData[2].error = "2次输入密码不一致";
+			this.errorCount++;
+			this.updateList();
+		}else{
+			if(listRawData[rowID].error){
+				listRawData[rowID].error = null;
+				this.errorCount--;
+				this.updateList();
+			}
+		}
+	},
+
 	renderRow: function(rowData, sectionID, rowID) {
+		var secureTextEntry = rowData.type === "pwd";
+
 		return (
-			<View style={styles.rowWrapper}>
-				<Text style={styles.rowTitle}>{rowData.key}</Text>
-				<TextInput style={styles.valueText}
-					autoCapitalize="none"
-					autoCorrect={false}
-					defaultValue={rowData.value}
-					onChangeText={(text)=>this.textInputChange(text, rowID)} />
+			<View>
+				<View style={styles.rowWrapper}>
+					<Text style={styles.rowTitle}>{rowData.key}</Text>
+					<TextInput style={styles.valueText}
+						autoCapitalize="none"
+						autoCorrect={false}
+						secureTextEntry={secureTextEntry}
+						defaultValue={rowData.value}
+						onChangeText={(text)=>this.textInputChange(text, rowID)}
+						onEndEditing={(event)=>this.textInputEndChange(event, rowID)} />
+				</View>
+				<ErrorBar error={rowData.error}/>
 			</View>
 			)
 	},
@@ -99,6 +145,8 @@ var OAPersonalInfoPage = React.createClass({
 	},
 
 	render: function() {
+		var enabled = this.errorCount === 0;
+
 		return (
 			<View style={styles.wrapper}>
 			    <ListView
@@ -108,7 +156,7 @@ var OAPersonalInfoPage = React.createClass({
 					renderSeparator={this.renderSeparator} />
 				<View style={styles.bottomArea}>
 					<Button style={styles.buttonArea}
-						enabled={true}
+						enabled={enabled}
 						onPress={this.gotoNext}
 						textContainerStyle={styles.buttonView}
 						textStyle={styles.buttonText}
@@ -189,4 +237,4 @@ var styles = StyleSheet.create({
 });
 
 
-module.exports = OAPersonalInfoPage;
+module.exports = OAAccountBasicSettingsPage;

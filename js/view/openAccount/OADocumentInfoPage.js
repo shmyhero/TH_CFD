@@ -29,6 +29,22 @@ var listRawData = [
 		{"key":"交易通知说明", "url":""}];
 
 var OADocumentInfoPage = React.createClass({
+	propTypes: {
+		data: React.PropTypes.object,
+		onPop: React.PropTypes.func,
+	},
+
+	getDefaultProps() {
+		return {
+			data: null,
+			onPop: ()=>{},
+		}
+	},
+
+	getData: function(){
+		return {};
+	},
+
 	getInitialState: function() {
 		var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		return {
@@ -40,7 +56,7 @@ var OADocumentInfoPage = React.createClass({
 	gotoNext: function() {
 		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP5, TalkingdataModule.LABEL_OPEN_ACCOUNT)
 		if (this.state.enabled) {
-			OpenAccountRoutes.goToNextRoute(this.props.navigator, {});
+			OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
 		}
 	},
 

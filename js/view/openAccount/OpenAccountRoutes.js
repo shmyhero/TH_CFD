@@ -22,29 +22,31 @@ var MainPage = require('../MainPage')
 
 var OpenAccountInfos = [
 	{"title": "开户准备", "page": require('./OAStartPage')},
-	{"title": "上传身份证照片(1/4)", "page": require('./OAIdPhotoPage')},
-  {"title": "完善个人信息(2/4)", "page": require('./OAPersonalInfoPage')},
-  {"title": "完善财务信息(3/4)", "page": require('./OAFinanceInfoPage')},
-  {"title": "提交申请(4/4)", "page": require('./OADocumentInfoPage')},
+	{"title": "设置账户信息(1/5)", "page": require('./OAAccountBasicSettingsPage')},
+	{"title": "上传身份证照片(2/5)", "page": require('./OAIdPhotoPage')},
+  {"title": "完善个人信息(3/5)", "page": require('./OAPersonalInfoPage')},
+  {"title": "完善财务信息(4/5)", "page": require('./OAFinanceInfoPage')},
+  {"title": "提交申请(5/5)", "page": require('./OADocumentInfoPage')},
   {"title": "审核状态", "page": require('./OAReviewStatusPage')},
 ]
 
 var lastStoredData = null;
 
-export function backToPreviousRoute(navigator, data){
+export function backToPreviousRoute(navigator, data, onPop){
   var routes = navigator.getCurrentRoutes();
   var lastRoute = routes[routes.length-1];
   if(lastRoute){
     var currentStep = lastRoute.step;
     storeCurrentInputData(currentStep, data);
 
-    if(currentStep){
+    if(currentStep > 0){
       navigator.replace({
         name: MainPage.OPEN_ACCOUNT_ROUTE,
         step: currentStep - 1,
+        onPop: onPop,
       })
     }else{
-      navigator.pop();
+      popToLastPage(navigator, onPop);
     }
   }
 }
@@ -70,7 +72,7 @@ export function getLatestInputStep(){
   });
 }
 
-export function showOARoute(navigator, step){
+export function showOARoute(navigator, step, onPop){
   var info = OpenAccountInfos[step];
   var Page = info.page;
   var title = info.title;
@@ -82,18 +84,18 @@ export function showOARoute(navigator, step){
       <NavBar title={title}
         titleStyle={{marginLeft:-20, marginRight:-20}}
         showBackButton={showBackButton}
-        leftButtonOnClick={()=>backToPreviousRoute(navigator, page.getData())}
+        leftButtonOnClick={()=>backToPreviousRoute(navigator, page.getData(), onPop)}
         backButtonOnClick={()=>TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_BACK, TalkingdataModule.LABEL_OPEN_ACCOUNT)}
         backgroundColor={ColorConstants.TITLE_DARK_BLUE}
         textOnRight={showBackButton?'取消':''}
-        rightTextOnClick={()=>cancelOARoute(navigator)}
+        rightTextOnClick={()=>cancelOARoute(navigator, page.getData(), onPop)}
         navigator={navigator}/>
-      <Page navigator={navigator} ref={(ref) => page = ref} data={data}/>
+      <Page navigator={navigator} ref={(ref) => page = ref} data={data} onPop={onPop}/>
     </View>
   )
 }
 
-export function goToNextRoute(navigator, data){
+export function goToNextRoute(navigator, data, onPop){
   var routes = navigator.getCurrentRoutes();
   var lastRoute = routes[routes.length-1];
   if(lastRoute){
@@ -105,12 +107,13 @@ export function goToNextRoute(navigator, data){
 
     if(nextStep >= OpenAccountInfos.length){
       clearAllInputData();
-      navigator.pop();
+      popToLastPage();
     }else{
       console.log("goToNextRoute OPEN_ACCOUNT_ROUTE: " + nextStep);
       navigator.replace({
         name: MainPage.OPEN_ACCOUNT_ROUTE,
         step: nextStep,
+        onPop: onPop,
       });
     }
   }
@@ -123,10 +126,10 @@ function loadStoredInputData(data, step, resolve){
     then((value)=>{
       var handler = resolve ? resolve : r;
       console.log(step + " loadOpenAccountData: " + JSON.stringify(value));
-      step ++;
       if(value){
         data[step] = JSON.parse(value);
         if(step < OpenAccountInfos.length){
+          step ++;
           loadStoredInputData(data, step, handler);
         }else{
           handler(data);
@@ -169,9 +172,23 @@ function storeCurrentInputData(step, data){
     lastStoredData = {};
   }
   lastStoredData[step] = data;
+  console.log("storeCurrentInputData lastStoredData: " + JSON.stringify(lastStoredData));
 }
 
-function cancelOARoute(navigator){
-  navigator.popToTop()
-  TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_QUIT, TalkingdataModule.LABEL_OPEN_ACCOUNT)
+function cancelOARoute(navigator, data, onPop){
+  var routes = navigator.getCurrentRoutes();
+  var lastRoute = routes[routes.length-1];
+  if(lastRoute){
+    var currentStep = lastRoute.step;
+    storeCurrentInputData(currentStep, data);
+  }
+  TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_QUIT, TalkingdataModule.LABEL_OPEN_ACCOUNT);
+  popToLastPage(navigator, onPop);
+}
+
+function popToLastPage(navigator, onPop){
+  if(onPop){
+    onPop();
+  }
+  navigator.pop();
 }

@@ -66,21 +66,6 @@ var StorageModule = require('../module/StorageModule');
 var OpenAccountRoutes = require('./openAccount/OpenAccountRoutes');
 
 var TutorialPage = require('./TutorialPage');
-var OpenAccountPages = [
-		require('./openAccount/OAStartPage'),
-		require('./openAccount/OAIdPhotoPage'),
-		require('./openAccount/OAPersonalInfoPage'),
-		require('./openAccount/OAFinanceInfoPage'),
-		require('./openAccount/OADocumentInfoPage'),
-		require('./openAccount/OAReviewStatusPage'),
-	]
-var OpenAccountTitles = [
-		"开户准备",
-		"上传身份证照片(1/4)",
-		"完善个人信息(2/4)",
-		"完善财务信息(3/4)",
-		"提交申请(4/4)",
-		"审核状态"]
 
 var _navigator;
 var _navigators = [];
@@ -383,10 +368,9 @@ var MainPage = React.createClass({
 				</View>
 			)
 		}else if (route.name === OPEN_ACCOUNT_ROUTE) {
-			hideTabbar()
+			hideTabbar();
 
-	    console.log("MainPage OPEN_ACCOUNT_ROUTE: " + route.step);
-			return OpenAccountRoutes.showOARoute(_navigator, route.step);
+			return OpenAccountRoutes.showOARoute(_navigator, route.step, route.onPop);
 		} else if (route.name === LIVE_REGISTER_ROUTE) {
 			// hideTabbar()
 			return (

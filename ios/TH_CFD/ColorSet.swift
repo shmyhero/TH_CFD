@@ -15,8 +15,8 @@ class ColorSet: NSObject {
 	var bgLineColor: UIColor = UIColor(hexInt: 0x497bce)
 	var middleLineColor: UIColor = UIColor(hexInt: 0xffffff, alpha: 0.5)
 	
-	var upColor: UIColor = UIColor(hex: 0xe34b4f)
-	var downColor: UIColor = UIColor(hex: 0x30c296)
+	var upColor: UIColor = UIColor(hexInt: 0xe34b4f)
+	var downColor: UIColor = UIColor(hexInt: 0x30c296)
 	
 	init(type:Int=0) {
 		_type = type;

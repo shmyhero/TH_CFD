@@ -30,7 +30,7 @@ class SwiftNotice: NSObject {
 		window.backgroundColor = UIColor.clearColor()
 		let mainView = UIView()
 		mainView.layer.cornerRadius = 4
-		mainView.backgroundColor = UIColor(hex: 0xd0e3f3, alpha:0.7)
+		mainView.backgroundColor = UIColor(hexInt: 0xd0e3f3, alpha:0.7)
 		
 		var image = UIImage()
 		switch type {
@@ -47,7 +47,7 @@ class SwiftNotice: NSObject {
 		
 		let label = UILabel(frame: CGRectMake(0, 70, 105, 20))
 		label.font = UIFont.systemFontOfSize(17)
-		label.textColor = UIColor(hex: 0x4883e7)
+		label.textColor = UIColor(hexInt: 0x4883e7)
 		label.text = text
 		label.textAlignment = NSTextAlignment.Center
 		mainView.addSubview(label)

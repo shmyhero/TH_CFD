@@ -83,7 +83,7 @@ class LineChartRender: BaseRender {
 			                                          colors,
 			                                          colorLocations)
 			
-			CGContextDrawLinearGradient(context, gradient, startPoint, endPoint, .DrawsBeforeStartLocation)
+			CGContextDrawLinearGradient(context, gradient!, startPoint, endPoint, .DrawsBeforeStartLocation)
 			CGContextRestoreGState(context)
 		}
 		
@@ -111,7 +111,7 @@ class LineChartRender: BaseRender {
 		let startRadius: CGFloat = 2
 		let endRadius: CGFloat = 6
 		
-		CGContextDrawRadialGradient(context, pointGradient, centerPoint,
+		CGContextDrawRadialGradient(context, pointGradient!, centerPoint,
 									startRadius, centerPoint, endRadius, .DrawsBeforeStartLocation)
 		
 		self.drawExtraText(context)

@@ -82,15 +82,15 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		allSelect = selectedRows.count == rawData.count
 		allButton.setTitle(allSelect ? "取消":"全部", forState: .Normal)
 		allButton.enabled = rawData.count > 0
-		allButton.backgroundColor = allButton.enabled ? UIColor(hex: 0x1962DD) : UIColor(hex: 0xe0e0e0)
+		allButton.backgroundColor = allButton.enabled ? UIColor(hexInt: 0x1962DD) : UIColor(hexInt: 0xe0e0e0)
 		
 		deleteButton.enabled = selectedRows.count > 0
 		if deleteButton.enabled {
-			deleteButton.backgroundColor = UIColor(hex: 0xf1585c)
+			deleteButton.backgroundColor = UIColor(hexInt: 0xf1585c)
 			deleteButton.setTitle("删除(\(selectedRows.count))", forState: .Normal)
 		}
 		else {
-			deleteButton.backgroundColor = UIColor(hex: 0xe0e0e0)
+			deleteButton.backgroundColor = UIColor(hexInt: 0xe0e0e0)
 			deleteButton.setTitle("删除", forState: .Normal)
 		}
 	}

@@ -17,6 +17,9 @@ var MainPage = require('../MainPage')
 var ColorConstants = require('../../ColorConstants')
 var TalkingdataModule = require('../../module/TalkingdataModule')
 var OpenAccountRoutes = require('./OpenAccountRoutes')
+var LogicData = require('../../LogicData')
+var NetworkModule = require('../../module/NetworkModule')
+var NetConstants = require('../../NetConstants')
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
@@ -50,19 +53,91 @@ var OADocumentInfoPage = React.createClass({
 		return {
 			dataSource: ds.cloneWithRows(listRawData),
 			enabled: true,
+			hasRead: false,
+			validateInProgress: false,
 		};
 	},
 
 	gotoNext: function() {
 		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP5, TalkingdataModule.LABEL_OPEN_ACCOUNT)
-		if (this.state.enabled) {
-			OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
+
+		/*this.setState({
+			enabled: false,
+			validateInProgress: true,
+		});
+*/
+		var openAccountData = OpenAccountRoutes.getOpenAccountData();
+		/*{
+
+
+		//TEST:DATA
+		//Duplicate username error: api Error: Validation failed. Field 'UserName' failed  UserNameAvailableRule. Value: 'thcn1'.
+		"username": "thcn2",
+		"password": "abcd1234",
+		"email": "anonymous@tradehero.mobi",
+
+		"realName": "",
+		"gender": true,//男true 女false
+		"birthday": "1990.01.01",
+		"ethnic": "汉",
+		"idCode": "310104198501251234",
+		"addr": "上海市徐汇区徐汇路1号",
+		"issueAuth": "徐汇公安局",
+		"validPeriod": "2000.01.20-2016.01.19",
+
+		"annualIncome": 1,//参照AMS文档
+		"netWorth": 1,//参照AMS文档
+		"investPct": 1,//参照AMS文档
+		"empStatus":"Employed",//参照AMS文档
+		"investFrq": 1,//参照AMS文档
+		"hasProExp": false,
+		"hasAyondoExp":false,
+		"hasOtherQualif":false,
+		"expOTCDeriv":false,
+		"expDeriv":false,
+		"expShareBond":false
+
 		}
+		*/
+/*
+		var userData = LogicData.getUserData();
+		NetworkModule.fetchTHUrlWithNoInternetCallback(
+			NetConstants.CFD_API.REGISTER_LIVE_ACCOUNT,
+			{
+				method: 'POST',
+				body: JSON.stringify(
+					openAccountData
+					),
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Content-Type': 'application/json; charset=utf-8',
+				},
+			},
+			(responseJson) => {
+				this.setState({
+					enabled: true,
+					validateInProgress: false,
+				});
+				if(!responseJson.success){
+					alert(JSON.stringify(responseJson))
+				}else{
+					OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
+				}
+			},
+			(errorMessage) => {
+				console.log("api Error: " + errorMessage);
+			},
+			(errorMessage) => {
+				console.log("networkError: " + errorMessage);
+			}
+		)
+		*/
 	},
 
 	documentPressed: function(url) {
 		// todo
 	},
+
 	renderRow: function(rowData, sectionID, rowID ) {
 		return (
 			<TouchableHighlight onPress={() => this.documentPressed(rowData.url)}>
@@ -83,9 +158,10 @@ var OADocumentInfoPage = React.createClass({
 
 	onClickCheckbox: function(value){
 		this.setState({
-			enabled: value,
+			hasRead: value,
 		})
 	},
+
 	render: function() {
 		return (
 			<View style={styles.wrapper}>
@@ -97,16 +173,16 @@ var OADocumentInfoPage = React.createClass({
 				<View style={styles.checkboxView}>
 					<CheckBoxButton
 						text={"我已阅读并同意上述相关内容"}
-						defaultSelected={true}
+						defaultSelected={false}
 						onPress={(value)=>{this.onClickCheckbox(value)}}/>
 				</View>
 				<View style={styles.bottomArea}>
 					<Button style={styles.buttonArea}
-						enabled={this.state.enabled}
+						enabled={this.state.enabled && this.state.hasRead}
 						onPress={this.gotoNext}
 						textContainerStyle={styles.buttonView}
 						textStyle={styles.buttonText}
-						text='下一步' />
+						text={this.state.validateInProgress? "信息正在检查中...": '下一步'} />
 				</View>
 			</View>
 		);

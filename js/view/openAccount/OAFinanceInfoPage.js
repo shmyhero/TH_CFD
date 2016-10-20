@@ -23,28 +23,69 @@ var MainPage = require('../MainPage')
 var ColorConstants = require('../../ColorConstants')
 var TalkingdataModule = require('../../module/TalkingdataModule')
 var OpenAccountRoutes = require('./OpenAccountRoutes')
+var OpenAccountUtils = require('./OpenAccountUtils')
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
 var fontSize = Math.round(16*width/375)
 var fontSize2 = Math.round(15*width/375)
+
+var IncomeMapping = [
+	{"value": 0, "displayText": "15万以下"},
+	{"value": 15, "displayText": "15-40万"},
+	{"value": 40, "displayText": "40-70万"},
+	{"value": 70, "displayText": "70-100万"},
+	{"value": 100, "displayText": "100万以上"},
+];
+
+var NetWorthMapping = [
+	{"value": 0, "displayText": "15万以下"},
+	{"value": 15, "displayText": "15-40万"},
+	{"value": 40, "displayText": "40-70万"},
+	{"value": 70, "displayText": "70-100万"},
+	{"value": 100, "displayText": "100万-500万"},
+	{"value": 101, "displayText": "500万以上"},
+]
+
+var InvestmentPortfolioMapping = [
+	{"value": 0, "displayText": "占净资产25%"},
+	{"value": 25, "displayText": "占净资产50%"},
+	{"value": 50, "displayText": "占净资产75%"},
+	{"value": 75, "displayText": "占净资产100%"},
+]
+
+var EmploymengStatusMapping = [
+	{"value": "Employed", "displayText": "就业"},
+	{"value": "Self-Employed", "displayText": "自由职业"},
+	{"value": "UnEmployed", "displayText": "失业"},
+	{"value": "Retired", "displayText": "退休"},
+	{"value": "Student", "displayText": "学生"},
+	{"value": "Other", "displayText": "其他"},
+]
+
+var investFrqMappings = [
+	{"value": "Employed", "displayText": "短期（小于3年）"},
+	{"value": "Employed", "displayText": "中期（4到7年）"},
+	{"value": "Employed", "displayText": "长期（8年以上）"},
+]
+
 var listRawData = [
-		{"key":"年收入", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":["15万以下","15-30万","30-60万","60-120万","120万以上"]},
-		{"key":"净资产", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":["15万以下","15-30万","30-60万","60-120万","120万以上"]},
-		{"key":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":["占净资产10%","占净资产30%","占净资产50%","占净资产70%"]},
-		{"key":"就业", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":["受雇/创业","退休","学生","失业中"]},
-		{"key":"投资频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":["短期（小于3年）","中期（4到7年）","长期（8年以上）"]},
-		{"key":"你是否有一年以上与金融杠杆交易相关的职业经历", "value":false, "type":"switch"},
-		{"key":"你是否了解过ayondo的金融产品或使用ayondo模拟账户交易", "value":true, "type":"switch"},
-		{"key":"你是否有其它相关资质帮助理解ayondo的服务", "value":false, "type":"switch"},
-		{"key":"你有哪些产品的交易经验", "value":["场外衍生品","衍生产品","股票和债券"], "type":"options"},
+		{"key":"annualIncome", "title":"年收入", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":IncomeMapping},
+		{"key":"netWorth", "title":"净资产", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":NetWorthMapping},
+		{"key":"investPct", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":InvestmentPortfolioMapping},
+		{"key":"empStatus", "title":"就业", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":EmploymengStatusMapping},
+		{"key":"investFrq", "title":"投资频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings},
+		{"key":"hasProExp", "title":"你是否有一年以上与金融杠杆交易相关的职业经历", "value":false, "type":"switch"},
+		{"key":"hasAyondoExp", "title":"你是否了解过ayondo的金融产品或使用ayondo模拟账户交易", "value":true, "type":"switch"},
+		{"key":"hasOtherQualif", "title":"你是否有其它相关资质帮助理解ayondo的服务", "value":false, "type":"switch"},
+		{"title":"你有哪些产品的交易经验", "value":["场外衍生品","衍生产品","股票和债券"], "type":"options"},
 		]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var OAFinanceInfoPage = React.createClass({
 	propTypes: {
-		data: React.PropTypes.object,
+		data: React.PropTypes.array,
 		onPop: React.PropTypes.func,
 	},
 
@@ -57,10 +98,9 @@ var OAFinanceInfoPage = React.createClass({
 
 	getInitialState: function() {
 		var dataSource;
-		if(this.props.data && this.props.data.listData){
-			listRawData = this.props.data.listData;
+		if (this.props.data && this.props.data) {
+			OpenAccountUtils.getPageListRawDataFromData(listRawData, this.props.data);
 		}
-
 		dataSource = ds.cloneWithRows(listRawData);
 
 		return {
@@ -76,7 +116,7 @@ var OAFinanceInfoPage = React.createClass({
 	},
 
 	getData: function(){
-		return {listData: listRawData};
+		return OpenAccountUtils.getDataFromPageListRawData(listRawData);
 	},
 
 	onPressPicker: function(rowData,rowID) {
@@ -87,16 +127,25 @@ var OAFinanceInfoPage = React.createClass({
 			})
 		}
 		else {
+			var choices = [];
+			for(var i = 0; i < rowData.choices.length; i++){
+				choices.push(rowData.choices[i].displayText);
+			}
+
 			this.setState({
 				selectedPicker: rowID,
-				pickerArray: rowData.choices,
+				pickerArray: rowData.choices//choices,
 			})
 		}
 	},
 
 	onPikcerSelect: function(value) {
 		if (this.state.selectedPicker >= 0) {
-			listRawData[this.state.selectedPicker].value = value
+			console.log("onPikcerSelect: " + value);
+			listRawData[this.state.selectedPicker].value = parseInt(value);
+			if(!listRawData[this.state.selectedPicker].value && listRawData[this.state.selectedPicker].value != 0){
+				listRawData[this.state.selectedPicker].value = value;
+			}
 			this.setState({
 				dataSource: ds.cloneWithRows(listRawData),
 			})
@@ -114,17 +163,25 @@ var OAFinanceInfoPage = React.createClass({
 
 	renderRow: function(rowData, sectionID, rowID) {
 		if (rowData.type === "choice") {
+
+			var displayText = "";
+			for(var i = 0; i < rowData.choices.length; i++){
+				if(rowData.value == rowData.choices[i].value){
+					displayText = rowData.choices[i].displayText;
+				}
+			}
+
 			return (
 				<TouchableOpacity activeOpacity={0.9} onPress={() => this.onPressPicker(rowData, rowID)}>
 				<View style={styles.rowWrapper}>
-					<Text style={styles.rowTitle}>{rowData.key}</Text>
+					<Text style={styles.rowTitle}>{rowData.title}</Text>
 					<TextInput style={styles.valueText}
 						autoCapitalize="none"
 						autoCorrect={false}
 						editable={false}
 						placeholder={rowData.defaultValue}
 						placeholderTextColor={"#3f6dbd"}
-						value={rowData.value} />
+						value={displayText} />
 					<Image style={{width:17.5, height:13.5}} source={require("../../../images/icon_down_arrow.png")} />
 				</View>
 				</TouchableOpacity>
@@ -133,7 +190,7 @@ var OAFinanceInfoPage = React.createClass({
 		else if(rowData.type === "switch") {
 			return (
 				<View style={styles.rowWrapper}>
-					<Text style={styles.rowTitle}>{rowData.key}</Text>
+					<Text style={styles.rowTitle}>{rowData.title}</Text>
 					<Switch
 						onValueChange={(value) => this.onPressSwitch(value, rowID)}
 						style={{height: 16}}
@@ -148,7 +205,7 @@ var OAFinanceInfoPage = React.createClass({
 			)
 			return(
 				<View style={styles.rowWrapperOption}>
-					<Text style={styles.rowTitle}>{rowData.key}</Text>
+					<Text style={styles.rowTitle}>{rowData.title}</Text>
 					<View style={styles.checkboxView}>
 						{boxes}
 					</View>
@@ -157,7 +214,7 @@ var OAFinanceInfoPage = React.createClass({
 		else {
 			return(
 				<View style={styles.rowWrapper}>
-					<Text style={styles.rowTitle}>{rowData.key}</Text>
+					<Text style={styles.rowTitle}>{rowData.title}</Text>
 				</View>)
 		}
 	},
@@ -180,15 +237,29 @@ var OAFinanceInfoPage = React.createClass({
 			}
 		};
 		if (this.state.selectedPicker>=0) {
-			var pickerValue = listRawData[this.state.selectedPicker].value
+			var rowData = listRawData[this.state.selectedPicker];
+			var pickerValue = listRawData[this.state.selectedPicker].value;//.toString();
+			console.log("this.state.selectedPicker: " + this.state.selectedPicker + ", " + pickerValue);
+			//alert(listRawData[this.state.selectedPicker].value)
+			/*
+			for(var i = 0; i < rowData.choices.length; i++){
+				if(pickerValue == rowData.choices[i].value){
+					pickerValue = rowData.choices[i].value.toString();
+					break;
+				}
+			}*/
+
 			pickerModal = (<View style={styles.pickerContainer}>
 				<Picker ref={"picker"} style={{width: width, height: 150}}
 					itemStyle={{color:"black", fontSize:26}}
 					selectedValue={pickerValue}
 					onValueChange={(value) => this.onPikcerSelect(value)}>
-					{this.state.pickerArray.map((value) => (
-					  <PickerItem label={value} value={value} key={"lever"+value}/>
-					))}
+					{this.state.pickerArray.map((data) => {
+
+							//alert(data.value.toString());
+							return (
+					  <PickerItem label={data.displayText.toString()} value={data.value.toString()} key={"lever"+data.value.toString()}/>
+					)})}
 				</Picker>
 			</View>)
 		}

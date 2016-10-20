@@ -370,7 +370,7 @@ var MainPage = React.createClass({
 		}else if (route.name === OPEN_ACCOUNT_ROUTE) {
 			hideTabbar();
 
-			return OpenAccountRoutes.showOARoute(_navigator, route.step, route.onPop);
+			return OpenAccountRoutes.showOARoute(_navigator, route.step, route.onPop, route.data);
 		} else if (route.name === LIVE_REGISTER_ROUTE) {
 			// hideTabbar()
 			return (

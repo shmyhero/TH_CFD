@@ -24,7 +24,7 @@ export function getUrl(key){
 }
 
 function getCFDAPI(){
-  var CFD_API_SERVER = VersionConstants.getIsProductServer() ? PRODUCT_SERVER_IP : STAGING_SERVER_IP;
+  CFD_API_SERVER = VersionConstants.getIsProductServer() ? PRODUCT_SERVER_IP : STAGING_SERVER_IP;
   return {
     GET_OUT_RIGHT_API: CFD_API_SERVER + '/api/security/fx/outright',
     GET_PHONE_CODE_API: CFD_API_SERVER + '/api/sendCode',
@@ -77,8 +77,10 @@ function getCFDAPI(){
     GET_CHECK_IN_SHARE_DATA: CFD_API_SERVER + '/api/reward/checkIn/share',
     GET_REGISTER_SHARE_DATA: CFD_API_SERVER + '/api/reward/demoReg/share',
 
-    CHECK_LIVE_USERNAME: CFD_API_SERVER + 'api/user/live/checkUsername?username=<userName>',
-    REGISTER_LIVE_ACCOUNT: CFD_API_SERVER + 'api/user/live/signup', //实盘注册
+    CHECK_LIVE_USERNAME: CFD_API_SERVER + '/api/user/live/checkUsername?username=<userName>',
+    REGISTER_LIVE_ACCOUNT: CFD_API_SERVER + '/api/user/live/signup', //实盘注册
+
+    ID_CARD_OCR: CFD_API_SERVER + '/api/user/ocr', //身份证OCR
   }
 }
 

@@ -34,7 +34,7 @@ var OAStartPage = React.createClass({
 	},
 
 	getData: function(){
-		return {};
+		return [];
 	},
 
 	render: function() {

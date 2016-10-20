@@ -16,26 +16,23 @@ var LogicData = require('../../LogicData')
 var ColorConstants = require('../../ColorConstants')
 var TalkingdataModule = require('../../module/TalkingdataModule')
 var OpenAccountRoutes = require('./OpenAccountRoutes')
-var OpenAccountUtils = require('./OpenAccountUtils')
-var ErrorBar = require('./ErrorBar')
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
 var fontSize = Math.round(16*width/375)
 var listRawData = [
-		{"title":"姓名", "key": "realName", "value":""},	//TODO: add ignoreInRegistery when API is avaliable.
-		{"title":"性别", "key": "gender", "value":""},
-		{"title":"出生日期", "key": "birthday", "value":""},
-		{"title":"民族", "key": "ethnic", "value":""},
-		{"title":"身份证号", "key": "idCode", "value":""},
-		{"title":"证件地址", "key": "addr", "value":"", maxLine: 2},
-		{"title":"签发机关", "key": "issueAuth", "value":""},
-		{"title":"有效期限", "key": "validPeriod", "value":""}];
-var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 });
+		{"key":"姓名", "value":""},
+		{"key":"性别", "value":""},
+		{"key":"出生日期", "value":""},
+		{"key":"民族", "value":""},
+		{"key":"身份证号", "value":""},
+		{"key":"证件地址", "value":""},
+		{"key":"签发机关", "value":""},
+		{"key":"有效期限", "value":""}];
 
 var OAPersonalInfoPage = React.createClass({
 	propTypes: {
-		data: React.PropTypes.array,
+		data: React.PropTypes.object,
 		onPop: React.PropTypes.func,
 	},
 
@@ -47,60 +44,48 @@ var OAPersonalInfoPage = React.createClass({
 	},
 
 	getInitialState: function() {
-		if (this.props.data && this.props.data) {
-			OpenAccountUtils.getPageListRawDataFromData(listRawData, this.props.data);
+		var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+		if (this.props.data && this.props.data.listData) {
+			var certificateIdCardInfo = this.props.data.listData;
+			listRawData = certificateIdCardInfo;
+			/*[
+					{"key":"姓名", "value": certificateIdCardInfo.real_name},
+					{"key":"性别", "value":certificateIdCardInfo.gender},
+					{"key":"出生日期", "value":certificateIdCardInfo.birthday},
+					{"key":"民族", "value":certificateIdCardInfo.ethnic},
+					{"key":"身份证号", "value":certificateIdCardInfo.id_code},
+					{"key":"证件地址", "value":certificateIdCardInfo.addr},
+					{"key":"签发机关", "value":certificateIdCardInfo.issue_authority},
+					{"key":"有效期限", "value":certificateIdCardInfo.valid_period}];*/
 		}
 		return {
 			dataSource: ds.cloneWithRows(listRawData),
-			validateInProgress: false,
-			//error: "error!"
 		};
 	},
 
 	gotoNext: function() {
-		//TODO: GZT validation.
-		this.setState({
-			validateInProgress: true,
-		})
 		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP3, TalkingdataModule.LABEL_OPEN_ACCOUNT);
 		OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
 	},
 
 	getData: function(){
-		return OpenAccountUtils.getDataFromPageListRawData(listRawData);
+		return {listData: listRawData};
 	},
 
 	textInputChange: function(text, rowID) {
 		listRawData[rowID].value = text;
-		this.updateList();
-	},
-
-	updateList: function(){
-		this.setState({
-				dataSource: ds.cloneWithRows(listRawData),
-		});
+		//alert(JSON.stringify(listRawData));
 	},
 
 	renderRow: function(rowData, sectionID, rowID) {
-		var numberOfLines = 1;
-		var multiline = false;
-		var style = styles.rowWrapper;
-		if(rowData.maxLine && rowData.maxLine > 1){
-			multiline = true;
-			numberOfLines = rowData.maxLine;
-			style = styles.multilineRowWrapper;
-		}
 		return (
-			<View style={style}>
-				<Text style={styles.rowTitle}>{rowData.title}</Text>
+			<View style={styles.rowWrapper}>
+				<Text style={styles.rowTitle}>{rowData.key}</Text>
 				<TextInput style={styles.valueText}
 					autoCapitalize="none"
 					autoCorrect={false}
 					defaultValue={rowData.value}
-					multiline={multiline}
-					numberOfLines={numberOfLines}
-					onChangeText={(text)=>this.textInputChange(text, rowID)}
-					/>
+					onChangeText={(text)=>this.textInputChange(text, rowID)} />
 			</View>
 			)
 	},
@@ -114,23 +99,20 @@ var OAPersonalInfoPage = React.createClass({
 	},
 
 	render: function() {
-		var nextEnabled = OpenAccountUtils.canGoNext(listRawData);
-
 		return (
 			<View style={styles.wrapper}>
-				<ErrorBar error={this.state.error}/>
-		    <ListView
-		    	style={styles.list}
+			    <ListView
+			    	style={styles.list}
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
 					renderSeparator={this.renderSeparator} />
 				<View style={styles.bottomArea}>
 					<Button style={styles.buttonArea}
-						enabled={nextEnabled}
+						enabled={true}
 						onPress={this.gotoNext}
 						textContainerStyle={styles.buttonView}
 						textStyle={styles.buttonText}
-						text={this.state.validateInProgress? "信息正在检查中...": '下一步'} />
+						text='下一步' />
 				</View>
 			</View>
 		);
@@ -149,16 +131,6 @@ var styles = StyleSheet.create({
 		flex: 1,
 	},
 	rowWrapper: {
-		flexDirection: 'row',
-		alignSelf: 'stretch',
-		alignItems: 'center',
-		paddingLeft: 15,
-		paddingRight: 15,
-		paddingBottom: rowPadding,
-		paddingTop: rowPadding,
-		backgroundColor: '#ffffff',
-	},
-	multilineRowWrapper: {
 		flexDirection: 'row',
 		alignSelf: 'stretch',
 		alignItems: 'center',

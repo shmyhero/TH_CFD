@@ -49,7 +49,7 @@ export default class DevelopPage extends Component {
 					<Text style={styles.rowTitle}>打开测试服务器</Text>
 					<Switch
 						onValueChange={(value) => this.onPressSwitch(value)}
-						style={{height: 16}}
+						style={{height: 20}}
 						value={this.state.isDevelopServer} />
 				</View>
       </View>
@@ -60,7 +60,12 @@ export default class DevelopPage extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },  
+  },
+  rowTitle:{
+    color: '#333333',
+    flex: 1,
+    height: 20,
+  },
 });
 
 module.exports = DevelopPage;

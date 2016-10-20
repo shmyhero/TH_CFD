@@ -12,6 +12,9 @@ import {
 var Button = require('../component/Button')
 var MainPage = require('../MainPage')
 var ColorConstants = require('../../ColorConstants')
+var OpenAccountRoutes = require('./OpenAccountRoutes')
+var NetworkModule = require('../../module/NetworkModule')
+var NetConstants = require('../../NetConstants')
 
 var {height, width} = Dimensions.get('window')
 
@@ -35,7 +38,8 @@ var OAReviewStatusPage = React.createClass({
 	render: function() {
 		var startDate = new Date()
 		startDate.Format('yy/MM/dd')
-		var endDate = new Date(startDate.valueOf()+7*24*60*60*1000)
+		//var endDate = new Date(startDate.valueOf()+7*24*60*60*1000)
+		//endDate.Format('yy/MM/dd')+"\n"+startDate.Format('hh:mm:ss')
 		return (
 			<View style={styles.wrapper}>
 				<View />
@@ -48,9 +52,9 @@ var OAReviewStatusPage = React.createClass({
 				<View style={styles.rowWrapper}>
 					<Text style={styles.text2}>{"提交申请\n"+startDate.Format('yy/MM/dd')+"\n"+startDate.Format('hh:mm:ss')}</Text>
 					<Text style={styles.text2}>{"正在审核"}</Text>
-					<Text style={styles.text2}>{"预计审核时间\n"+endDate.Format('yy/MM/dd')+"\n"+startDate.Format('hh:mm:ss')}</Text>
+					<Text style={styles.text2}>{"预计审核时间\n3个工作日内"}</Text>
 				</View>
-				<Text style={styles.text3}>{"开户成功后，我们将以短信告知您的审核结果"}</Text>
+				<Text style={styles.text3}>{"开户成功后，我们将以短信告知您的审核结果，同时您将收到欢迎邮件"}</Text>
 				<Button style={styles.buttonArea}
 					enabled={true}
 					onPress={this.gotoNext}

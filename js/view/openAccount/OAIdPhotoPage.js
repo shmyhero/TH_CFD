@@ -21,6 +21,8 @@ var NetConstants = require('../../NetConstants');
 var NetworkModule = require('../../module/NetworkModule')
 var TalkingdataModule = require('../../module/TalkingdataModule')
 var OpenAccountRoutes = require('./OpenAccountRoutes')
+var ErrorBar = require('./ErrorBar')
+var OpenAccountUtils = require('./OpenAccountUtils')
 var {height, width} = Dimensions.get('window')
 
 const ID_CARD_FRONT = 1
@@ -28,6 +30,18 @@ const ID_CARD_BACK = 2
 const imageWidth = Math.round(width * 0.85)
 const imageHeight = Math.round(height * 0.3)
 
+const GZT_Ayondo_Key_Mappings = [
+	{"GZTKey": "real_name", "AyondoKey": "realName"},
+	{"GZTKey": "gender", "AyondoKey": "gender"},
+	{"GZTKey": "ethnic", "AyondoKey": "ethnic"},
+	{"GZTKey": "id_code", "AyondoKey": "idCode"},
+	{"GZTKey": "addr", "AyondoKey": "addr"},
+	{"GZTKey": "issue_authority", "AyondoKey": "issueAuth"},
+	{"GZTKey": "valid_period", "AyondoKey": "validPeriod"},
+];
+
+const defaultIDFront = require('../../../images/add_front.png');
+const defaultIDBack = require('../../../images/add_back.png');
 var options = {
 	title: null, // specify null or empty string to remove the title
 	cancelButtonTitle: '取消',
@@ -64,11 +78,29 @@ var OAIdPhotoPage = React.createClass({
 	},
 
 	getInitialState: function() {
+		var idCardFront = defaultIDFront;
+		var idCardBack = defaultIDBack;
+		var idCardFrontData = null;
+		var idCardBackData = null;
+
+		if(this.props.data && this.props.data.idCardFrontData){
+			idCardFront = {uri: 'data:image/jpeg;base64,' + this.props.data.idCardFrontData};
+			idCardFrontData = this.props.data.idCardFrontData;
+		}
+		if(this.props.data && this.props.data.idCardBackData){
+			idCardBack = {uri: 'data:image/jpeg;base64,' + this.props.data.idCardBackData};
+			idCardBackData = this.props.data.idCardBackData;
+		}
+
+		var nextEnabled = idCardFrontData != null && idCardBackData != null;
 		return {
-			idCardFront: require('../../../images/add_front.png'),
-			idCardBack: require('../../../images/add_back.png'),
-			idCardFrontData: null,
-			idCardBackData: null,
+			idCardFront: idCardFront,
+			idCardBack: idCardBack,
+			idCardFrontData: idCardFrontData,
+			idCardBackData: idCardBackData,
+			error: null,
+			nextEnabled: nextEnabled,
+			validateInProgress: false,
 		};
 	},
 
@@ -95,44 +127,102 @@ var OAIdPhotoPage = React.createClass({
 						idCardFront: source,
 						idCardFrontData: response.data,
 					});
+
+					if(this.state.idCardBackData){
+						this.setState({
+							nextEnabled: true,
+						});
+					}
 				} else if (idCardIndex == ID_CARD_BACK) {
 					this.setState({
 						idCardBack: source,
 						idCardBackData: response.data,
 					});
+
+					if(this.state.idCardFrontData){
+						this.setState({
+							nextEnabled: true,
+						});
+					}
 				}
 			}
 		});
 	},
 
 	gotoNext: function() {
+		//TOTO: Remove the test data!!!
+		//TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP2, TalkingdataModule.LABEL_OPEN_ACCOUNT)
+		/*var data = [
+			{"key":"realName","value":"谢辉"},
+			{"key":"idCode","value":"431225199107102411"},
+			{"key":"addr","value":"湖南省会同县堡子镇堡子村一组33号"},
+			{"key":"gender","value":"男"},
+			{"key":"ethnic","value":"侗"},
+			{"key":"issueAuth","value":"市公舍尺静安分局"},
+			{"key":"validPeriod","value":"2200.01.20-2015.01.20"},
+		];
+		OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop, data);
+		return;*/
+
 		if (this.state.idCardFrontData != null && this.state.idCardBackData != null) {
+			this.setState({
+				nextEnabled: false,
+				validateInProgress: true,
+			})
+			var userData = LogicData.getUserData();
 			NetworkModule.fetchTHUrl(
-				NetConstants.GZT_API.GZT_OCR_CHECK_API,
+				NetConstants.CFD_API.ID_CARD_OCR,
 				{
 					method: 'POST',
 					body: JSON.stringify({
-						accessId: 'shmhxx',
-						accessKey: 'SHMHAKQHSA',
 						frontImg: this.state.idCardFrontData,
 						frontImgExt: 'jpg',
 						backImg: this.state.idCardBackData,
 						backImgExt: 'jpg',
 					}),
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						'Content-Type': 'application/json; charset=utf-8',
+					},
 					showLoading: true,
 				},
 				(responseJson) => {
+					console.log("ID_CARD_OCR responseJson: " + responseJson);
+					this.setState({
+						nextEnabled: true,
+						validateInProgress: false,
+					})
+
 					if (responseJson.result == 0) {
-						LogicData.setCertificateIdCardInfo(responseJson)
+						//LogicData.setCertificateIdCardInfo(responseJson);
+
+						var dataList = [];
+
+						for(var key in responseJson){
+							var value = responseJson[key];
+							value = decodeURIComponent(value);
+
+							var ayondoData = OpenAccountUtils.getAyondoValueFromGZTKeyValue(key, value);
+							if(ayondoData){
+								dataList.push(ayondoData);
+							}
+						}
 
 						TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP2, TalkingdataModule.LABEL_OPEN_ACCOUNT)
-						OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
+						OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop, dataList);
 					} else {
-						Alert.alert('', decodeURIComponent(responseJson.message));
+						this.setState({
+							error: responseJson.Message
+						});
 					}
 				},
-				(errorJson) => {
-					Alert.alert('', decodeURIComponent(errorJson.message));
+				(error) => {
+					this.setState({
+						nextEnabled: true,
+					})
+					this.setState({
+						error: error
+					});
 				}
 			)
 		} else {
@@ -142,12 +232,26 @@ var OAIdPhotoPage = React.createClass({
 	},
 
 	getData: function(){
-		return {};
+		var idCardFrontData = null;
+		var idCardBackData = null;
+
+		if(this.state.idCardFront !== defaultIDFront){
+			idCardFrontData = this.state.idCardFrontData;
+		}
+		if(this.state.idCardBack !== defaultIDBack){
+			idCardBackData = this.state.idCardBackData;
+		}
+
+		return {
+			idCardFrontData: idCardFrontData,
+			idCardBackData: idCardBackData,
+		};
 	},
 
 	render: function() {
 		return (
 			<View style={styles.wrapper}>
+				<ErrorBar error={this.state.error}/>
 				<View style={{height: 15}} />
 				<TouchableOpacity onPress={() => this.pressAddImage(ID_CARD_FRONT)}>
 					<View style={styles.imageArea}>
@@ -159,15 +263,18 @@ var OAIdPhotoPage = React.createClass({
 						<Image style={styles.addImage} source={this.state.idCardBack}/>
 					</View>
 				</TouchableOpacity>
-				<Text style={styles.reminderText}>请保持身份证四边框清晰完整，背景干净
-				</Text>
+				<View style={styles.reminderArea}>
+					<Text style={styles.reminderText}>
+						请保持身份证四边框清晰完整，背景干净
+					</Text>
+				</View>
 				<View style={styles.bottomArea}>
 					<Button style={styles.buttonArea}
-						enabled={true}
+						enabled={this.state.nextEnabled}
 						onPress={this.gotoNext}
 						textContainerStyle={styles.buttonView}
 						textStyle={styles.buttonText}
-						text='下一步' />
+						text={this.state.validateInProgress? "信息正在检查中...": '下一步'} />
 				</View>
 			</View>
 		);
@@ -197,9 +304,12 @@ var styles = StyleSheet.create({
 
 	reminderText: {
 		marginTop: 10,
-		flex: 1,
 		textAlign: 'center',
 		fontSize: 14,
+	},
+
+	reminderArea:{
+		flex:1,
 	},
 
 	bottomArea: {
@@ -226,6 +336,12 @@ var styles = StyleSheet.create({
 		textAlign: 'center',
 		color: '#ffffff',
 	},
+	errorText:{
+		marginTop: 10,
+		fontSize: 14,
+		color: 'red',
+		textAlign: 'center',
+	}
 });
 
 

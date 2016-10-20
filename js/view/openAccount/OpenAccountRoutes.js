@@ -37,7 +37,9 @@ export function backToPreviousRoute(navigator, data, onPop){
   var lastRoute = routes[routes.length-1];
   if(lastRoute){
     var currentStep = lastRoute.step;
-    storeCurrentInputData(currentStep, data);
+
+    //Update: Do NOT store data if the next button is not clicked.
+    //storeCurrentInputData(currentStep, data);
 
     if(currentStep > 0){
       navigator.replace({
@@ -72,12 +74,13 @@ export function getLatestInputStep(){
   });
 }
 
-export function showOARoute(navigator, step, onPop){
+export function showOARoute(navigator, step, onPop, data){
+  console.log("showOARoute " + step);
   var info = OpenAccountInfos[step];
   var Page = info.page;
   var title = info.title;
   var showBackButton = (step !== OpenAccountInfos.length-1);
-  var data = lastStoredData ? lastStoredData[step] : null;
+  var data = data ? data : (lastStoredData ? lastStoredData[step] : null);
   var page;
   return (
     <View style={{flex: 1}}>
@@ -95,7 +98,7 @@ export function showOARoute(navigator, step, onPop){
   )
 }
 
-export function goToNextRoute(navigator, data, onPop){
+export function goToNextRoute(navigator, data, onPop, nextRouteData){
   var routes = navigator.getCurrentRoutes();
   var lastRoute = routes[routes.length-1];
   if(lastRoute){
@@ -107,25 +110,51 @@ export function goToNextRoute(navigator, data, onPop){
 
     if(nextStep >= OpenAccountInfos.length){
       clearAllInputData();
-      popToLastPage();
+      popToLastPage(navigator, onPop);
     }else{
       console.log("goToNextRoute OPEN_ACCOUNT_ROUTE: " + nextStep);
       navigator.replace({
         name: MainPage.OPEN_ACCOUNT_ROUTE,
         step: nextStep,
         onPop: onPop,
+        data: nextRouteData,
       });
     }
   }
 }
 
+export function getOpenAccountData(){
+  var userData = {};
+  if(lastStoredData){
+    for(var i = 0; i < OpenAccountInfos.length; i++){
+      if(lastStoredData[i]){
+        var dataArray = lastStoredData[i];
+        console.log("dataArray.length " + dataArray.length);
+        for( var j = 0; j < dataArray.length; j++){
+          console.log("dataArray[j]: j" + j + ", "+ JSON.stringify(dataArray[j]));
+          if(dataArray[j] && !dataArray[j].ignoreInRegistery){
+            console.log("getOpenAccountData: " + dataArray[j].key);
+            var key = dataArray[j].key;
+            if(key){
+              var value = dataArray[j].value;
+              userData[key] = value;
+            }
+          }
+        }
+      }
+    }
+  }
+  console.log("getUserInputData " + JSON.stringify(userData));
+  return userData;
+}
+
 function loadStoredInputData(data, step, resolve){
-  console.log(step + " loadStoredInputData: " + JSON.stringify(data));
+  //console.log(step + " loadStoredInputData: " + JSON.stringify(data));
   return new Promise((r)=>{
     StorageModule.loadOpenAccountData(step).
     then((value)=>{
       var handler = resolve ? resolve : r;
-      console.log(step + " loadOpenAccountData: " + JSON.stringify(value));
+      //console.log(step + " loadOpenAccountData: " + JSON.stringify(value));
       if(value){
         data[step] = JSON.parse(value);
         if(step < OpenAccountInfos.length){
@@ -141,7 +170,6 @@ function loadStoredInputData(data, step, resolve){
       console.log("error?");
     });
   })
-
 }
 
 function loadLastInputData(){
@@ -151,7 +179,7 @@ function loadLastInputData(){
       loadStoredInputData({}, 0)
       .then((data)=>{
         lastStoredData = data;
-        console.log("loadLastInputData: " + JSON.stringify(lastStoredData))
+        //console.log("loadLastInputData: " + JSON.stringify(lastStoredData))
         resolve();
       });
     }else{
@@ -162,11 +190,14 @@ function loadLastInputData(){
 
 function clearAllInputData(){
   for(var i = 0; i < OpenAccountInfos.length; i++){
-    StorageModule.removeOpenAccountData(step);
+    StorageModule.removeOpenAccountData(i);
   }
+  lastStoredData = null;
 }
 
 function storeCurrentInputData(step, data){
+  console.log("storeCurrentInputData lastStoredData: " + JSON.stringify(data));
+
   StorageModule.setOpenAccountData(step, JSON.stringify(data));
   if(lastStoredData==null){
     lastStoredData = {};
@@ -176,12 +207,14 @@ function storeCurrentInputData(step, data){
 }
 
 function cancelOARoute(navigator, data, onPop){
-  var routes = navigator.getCurrentRoutes();
+  //Update: Do NOT store data if the next button is not clicked.
+  /*var routes = navigator.getCurrentRoutes();
   var lastRoute = routes[routes.length-1];
   if(lastRoute){
     var currentStep = lastRoute.step;
     storeCurrentInputData(currentStep, data);
   }
+  */
   TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_QUIT, TalkingdataModule.LABEL_OPEN_ACCOUNT);
   popToLastPage(navigator, onPop);
 }

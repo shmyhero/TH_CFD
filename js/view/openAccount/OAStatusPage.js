@@ -15,6 +15,7 @@ var Button = require('../component/Button')
 var MainPage = require('../MainPage')
 var ColorConstants = require('../../ColorConstants')
 var TalkingdataModule = require('../../module/TalkingdataModule')
+var OpenAccountRoutes = require('./OpenAccountRoutes')
 
 var {height, width} = Dimensions.get('window')
 var PAGES = [

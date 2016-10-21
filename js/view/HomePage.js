@@ -56,6 +56,8 @@ var bsds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var magicCode = ""
 var NO_MAGIC = false
 var didTabSelectSubscription = null
+var didFocusSubscription = null
+var lastForceloopTime = 0
 
 var HomePage = React.createClass({
 	getInitialState: function() {
@@ -182,17 +184,43 @@ var HomePage = React.createClass({
 	},
 
 	componentDidMount: function() {
+		didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
 		didTabSelectSubscription = EventCenter.getEventEmitter().
 			addListener(EventConst.HOME_TAB_RESS_EVENT, this.onTabChanged);
 	},
 
 	componentWillUnmount: function() {
 		didTabSelectSubscription && didTabSelectSubscription.remove();
+		didFocusSubscription && didFocusSubscription.remove();
 	},
 
 	onTabChanged: function(){
 		this.reloadBanner();
 		LogicData.setTabIndex(0);
+		this.forceloopSwipers();
+	},
+
+	onDidFocus: function(event) {
+		//didfocus emit in componentDidMount
+		if (MainPage.HOME_PAGE_ROUTE === event.data.route.name) {
+			this.forceloopSwipers()
+		}
+	},
+
+	forceloopSwipers: function() {
+		if (Platform.OS === 'ios') {
+    		var nowTime = (new Date()).valueOf();
+    		if (nowTime - lastForceloopTime > 1200) {
+    			console.log("forceloop:"+nowTime)
+				if (this.refs["bannerswiper"] !== undefined) {
+					this.refs["bannerswiper"].forceloop()
+				}
+				if (this.refs["topnewsswiper"] !== undefined) {
+					this.refs["topnewsswiper"].forceloop()
+				}
+				lastForceloopTime = nowTime
+			}
+		}
 	},
 
 	downloadBannerImages: function(images) {
@@ -328,6 +356,7 @@ var HomePage = React.createClass({
 			shareTitle: shareTitle,
 			shareDescription: shareDescription,
 			shareTrackingEvent: sharingTrackingEvent,
+			backFunction: this.forceloopSwipers,
 		});
 	},
 
@@ -403,6 +432,7 @@ var HomePage = React.createClass({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			url: targetUrl,
 			title: '',
+			backFunction: this.forceloopSwipers,
 		});
 	},
 
@@ -419,7 +449,7 @@ var HomePage = React.createClass({
 	gotoStockDetail: function(rowData) {
   		this.props.navigator.push({
 			name: MainPage.STOCK_DETAIL_ROUTE,
-			stockRowData: rowData
+			stockRowData: rowData,
 		});
 	},
 
@@ -468,6 +498,7 @@ var HomePage = React.createClass({
 		this.props.navigator.push({
 		 	name: MainPage.STOCK_POPULARITY_ROUTE,
 			data: this.state.rawPopularityInfo,
+			backFunction: this.forceloopSwipers,
 		});
 	},
 
@@ -589,6 +620,7 @@ var HomePage = React.createClass({
 					<Image style={styles.topnewsImage} source={require('../../images/topnews.png')}/>
 					<View style={styles.topnewsVerticalLine}/>
 					<Swiper
+						ref="topnewsswiper"
 						horizontal={false}
 						height={rowHeight}
 						loop={true}
@@ -705,6 +737,7 @@ var HomePage = React.createClass({
 				<ScrollView>
 					<View style={{width: width, height: imageHeight}}>
 						<Swiper
+							ref="bannerswiper"
 							height={imageHeight}
 							loop={true}
 							bounces={true}

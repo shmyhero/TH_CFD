@@ -27,6 +27,7 @@ var WebViewPage = React.createClass({
 		shareFunction: React.PropTypes.func,
 		shareTrackingEvent: React.PropTypes.string,
 		shareUrl: React.PropTypes.string,
+		backFunction: React.PropTypes.func,
 	},
 
 	getDefaultProps() {
@@ -83,6 +84,7 @@ var WebViewPage = React.createClass({
 
 	pressBackButton: function() {
 		this.props.navigator.pop()
+		this.props.backFunction && this.props.backFunction()
 	},
 
 	pressShareButton: function(){

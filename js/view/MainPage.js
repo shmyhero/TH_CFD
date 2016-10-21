@@ -268,6 +268,12 @@ var MainPage = React.createClass({
 				<WebViewPage url={route.url}
 										 showTabbar={showTabbar}
 										 title={route.title} navigator={navigationOperations}
+										 backFunction={()=>{
+										 	if (route.backFunction) {
+										 		this.showTabbar()
+										 		route.backFunction()
+										 	}
+										 }}
 										 showShareButton={route.showShareButton}
 										 shareID={route.shareID}
 										 shareUrl={route.shareUrl}
@@ -405,7 +411,13 @@ var MainPage = React.createClass({
 			return (
 				<View style={{flex: 1}}>
 					<NavBar title='多空博弈' showBackButton={true}
-						backButtonOnClick={()=>this.backAndShowTabbar()}
+						backButtonOnClick={()=>{
+								this.backAndShowTabbar()
+								if(route.backFunction) {
+									route.backFunction()
+								}
+							}
+						}
 						navigator={navigationOperations}/>
 					<StockPopularityPage navigator={navigationOperations} initialInfo={route.data}/>
 				</View>

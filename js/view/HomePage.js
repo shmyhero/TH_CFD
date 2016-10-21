@@ -211,7 +211,7 @@ var HomePage = React.createClass({
 		if (Platform.OS === 'ios') {
     		var nowTime = (new Date()).valueOf();
     		if (nowTime - lastForceloopTime > 1200) {
-    			console.log("forceloop:"+nowTime)
+    			// console.log("forceloop:"+nowTime)
 				if (this.refs["bannerswiper"] !== undefined) {
 					this.refs["bannerswiper"].forceloop()
 				}

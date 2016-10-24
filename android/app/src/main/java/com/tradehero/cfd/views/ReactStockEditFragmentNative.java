@@ -41,12 +41,15 @@ import java.util.List;
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
  */
-public class ReactStockEditFragmentNative extends RelativeLayout{
+public class ReactStockEditFragmentNative extends RelativeLayout {
 
     private Context mContext;
     EventDispatcher mEventDispatcher;
     private boolean isLogin = false;
+    private boolean isAcutal = false;
     public static ReactStockEditFragmentNative instance = null;
+
+    public RelativeLayout rlTop;
 
     public ReactStockEditFragmentNative(Context context) {
         this(context, null);
@@ -90,11 +93,12 @@ public class ReactStockEditFragmentNative extends RelativeLayout{
         selectAll = (TextView) findViewById(R.id.selectAll);
         deleteSelected = (TextView) findViewById(R.id.deleteSelected);
         notificationSwitch = (LinearLayout) findViewById(R.id.notificationSwitch);
+        rlTop = (RelativeLayout) findViewById(R.id.rlTop);
 
         myListArray = LogicData.getInstance().getMyList();
         myAlertListArray = LogicData.getInstance().getMyAlertList();
 
-        stockInfo = generateStockInfoList(myListArray,myAlertListArray);
+        stockInfo = generateStockInfoList(myListArray, myAlertListArray);
         adapter = new StockListAdapter(mContext, R.layout.list_item_checkable, stockInfo);
         list.setAdapter(adapter);
 
@@ -162,7 +166,7 @@ public class ReactStockEditFragmentNative extends RelativeLayout{
             };
 
 
-    public List<StockInfo> generateStockInfoList(JSONArray myList,JSONArray myAlertList) {
+    public List<StockInfo> generateStockInfoList(JSONArray myList, JSONArray myAlertList) {
         List<StockInfo> result = new ArrayList<>();
 
         try {
@@ -170,18 +174,18 @@ public class ReactStockEditFragmentNative extends RelativeLayout{
                 JSONObject oneItem = myList.getJSONObject(i);
                 boolean isAlert = false;
 
-                if(myAlertList!=null){
-                    for(int j = 0;j< myAlertList.length();j++){
+                if (myAlertList != null) {
+                    for (int j = 0; j < myAlertList.length(); j++) {
                         JSONObject alertItem = myAlertList.getJSONObject(j);
-                        if(oneItem.getInt("id") == alertItem.getInt("SecurityId")){
-                            if(alertItem.getBoolean("HighEnabled") || alertItem.getBoolean("LowEnabled")){
+                        if (oneItem.getInt("id") == alertItem.getInt("SecurityId")) {
+                            if (alertItem.getBoolean("HighEnabled") || alertItem.getBoolean("LowEnabled")) {
                                 isAlert = true;
                             }
                         }
                     }
                 }
 
-                StockInfo info = new StockInfo(oneItem.getString("name"), oneItem.getString("symbol"), oneItem.getInt("id") , isAlert);
+                StockInfo info = new StockInfo(oneItem.getString("name"), oneItem.getString("symbol"), oneItem.getInt("id"), isAlert);
                 result.add(info);
             }
         } catch (JSONException e) {
@@ -209,25 +213,25 @@ public class ReactStockEditFragmentNative extends RelativeLayout{
         }
     }
 
-    public void makeDataRefresh(){
+    public void makeDataRefresh() {
         myAlertListArray = LogicData.getInstance().getMyAlertList();
-        if(stockInfo != null && myAlertListArray!=null){
-            for(int i = 0;i<stockInfo.size();i++){
-              for(int j = 0;j<myAlertListArray.length();j++){
-                  try{
+        if (stockInfo != null && myAlertListArray != null) {
+            for (int i = 0; i < stockInfo.size(); i++) {
+                for (int j = 0; j < myAlertListArray.length(); j++) {
+                    try {
 
-                      if(stockInfo.get(i).mId == myAlertListArray.getJSONObject(j).getInt("SecurityId")){
-                          JSONObject alertItem = myAlertListArray.getJSONObject(j);
-                          boolean isAlert = false;
-                          if(alertItem.getBoolean("HighEnabled") || alertItem.getBoolean("LowEnabled")){
-                              isAlert = true;
-                          }
-                        stockInfo.get(i).mIsAlert = isAlert;
-                      }
-                  }catch (Exception e){
-                      Log.e("makeDataRefresh  e ==> ",e.toString());
-                  }
-              }
+                        if (stockInfo.get(i).mId == myAlertListArray.getJSONObject(j).getInt("SecurityId")) {
+                            JSONObject alertItem = myAlertListArray.getJSONObject(j);
+                            boolean isAlert = false;
+                            if (alertItem.getBoolean("HighEnabled") || alertItem.getBoolean("LowEnabled")) {
+                                isAlert = true;
+                            }
+                            stockInfo.get(i).mIsAlert = isAlert;
+                        }
+                    } catch (Exception e) {
+                        Log.e("makeDataRefresh  e ==> ", e.toString());
+                    }
+                }
             }
         }
 
@@ -242,7 +246,7 @@ public class ReactStockEditFragmentNative extends RelativeLayout{
         boolean mIsAlert;
         int mId;
 
-        public StockInfo(String name, String symbol, int id,boolean isAlert) {
+        public StockInfo(String name, String symbol, int id, boolean isAlert) {
             mName = name;
             mSymbol = symbol;
             mId = id;
@@ -287,14 +291,17 @@ public class ReactStockEditFragmentNative extends RelativeLayout{
             TextView name = (TextView) view.findViewById(R.id.name);
             TextView symbol = (TextView) view.findViewById(R.id.symbol);
             ViewGroup pushToTop = (ViewGroup) view.findViewById(R.id.pushToTop);
+            ImageView ImgToTop = (ImageView) view.findViewById(R.id.ImgToTop);
             ViewGroup notificationSwitch = (ViewGroup) view.findViewById(R.id.notificationSwitch);
             ImageView notifyIndicator = (ImageView) view.findViewById(R.id.notifyIndicator);
 
             checkBox.setChecked(mStockInfo.get(position).mChecked);
+            checkBox.setBackground(isAcutal?getResources().getDrawable(R.drawable.stock_edit_checkbox_actual):getResources().getDrawable(R.drawable.stock_edit_checkbox));
+//          checkBox.setBackgroundResource(isAcutal ? R.drawable.stock_edit_checkbox_actual : R.drawable.stock_edit_checkbox);
             name.setText(mStockInfo.get(position).mName);
             symbol.setText(mStockInfo.get(position).mSymbol);
-            notifyIndicator.setBackgroundResource(mStockInfo.get(position).mIsAlert ? R.drawable.notification_on : R.drawable.notification_off);
-
+            notifyIndicator.setBackgroundResource(mStockInfo.get(position).mIsAlert ? (isAcutal ? R.drawable.notification_on_actual : R.drawable.notification_on) : (isAcutal ? R.drawable.notification_off_actual : R.drawable.notification_off));
+            ImgToTop.setBackgroundResource(isAcutal ? R.drawable.top_actual : R.drawable.top);
 
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -484,8 +491,17 @@ public class ReactStockEditFragmentNative extends RelativeLayout{
         }
     }
 
-    public void setAlertData(String alertData){
-        LogicData.getInstance().setData(LogicData.MY_ALERT_LIST , alertData);
+    public void setIsActual(boolean isActual) {
+        this.isAcutal = isActual;
+//        Toast.makeText(getContext(), "isActual = " + isActual, Toast.LENGTH_SHORT).show();
+        if (isActual) {
+            rlTop.setBackgroundResource(R.color.title_blue2);
+            selectAll.setBackground(getResources().getDrawable(R.drawable.blue_button2));
+        }
+    }
+
+    public void setAlertData(String alertData) {
+        LogicData.getInstance().setData(LogicData.MY_ALERT_LIST, alertData);
         makeDataRefresh();
     }
 

@@ -192,6 +192,10 @@ export function loadUserBalance(force, successCallback) {
 			return
 		}
 		var url = NetConstants.CFD_API.GET_USER_BALANCE_API
+		if(LogicData.getAccountState()){
+			url = NetConstants.CFD_API.GET_USER_BALANCE_LIVE_API
+			console.log('live', url );
+		}
 		this.fetchTHUrl(
 			url,
 			{
@@ -205,7 +209,7 @@ export function loadUserBalance(force, successCallback) {
 				successCallback && successCallback(responseJson)
 			},
 			(errorMessage) => {
-				Alert.alert('', errorMessage);
+				// Alert.alert('', errorMessage);
 			}
 		)
 	}

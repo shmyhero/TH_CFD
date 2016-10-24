@@ -3,34 +3,26 @@ package com.tradehero.cfd.RNNativeModules;
 /**
  * Copyright (c) 2015-present, Facebook, Inc.
  * All rights reserved.
- *
+ * <p>
  * This source code is licensed under the BSD-style license found in the
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-import javax.annotation.Nullable;
-
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
-
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.facebook.react.views.webview.WebViewConfig;
-import com.facebook.react.views.webview.events.TopLoadingErrorEvent;
-import com.facebook.react.views.webview.events.TopLoadingFinishEvent;
-import com.facebook.react.views.webview.events.TopLoadingStartEvent;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactContext;
@@ -39,7 +31,6 @@ import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
-import com.facebook.react.common.SystemClock;
 import com.facebook.react.common.build.ReactBuildConfig;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -47,6 +38,16 @@ import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.Event;
 import com.facebook.react.uimanager.events.EventDispatcher;
+import com.facebook.react.views.webview.WebViewConfig;
+import com.facebook.react.views.webview.events.TopLoadingErrorEvent;
+import com.facebook.react.views.webview.events.TopLoadingFinishEvent;
+import com.facebook.react.views.webview.events.TopLoadingStartEvent;
+
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Nullable;
 
 /**
  * Manages instances of {@link WebView}
@@ -136,12 +137,23 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
         public void onPageStarted(WebView webView, String url, Bitmap favicon) {
             super.onPageStarted(webView, url, favicon);
             mLastLoadFailed = false;
+            Log.d("WebView:", " URL = " + url);
 
             dispatchEvent(
                     webView,
                     new TopLoadingStartEvent(
                             webView.getId(),
                             createWebViewEvent(webView, url)));
+
+            if (url.contains("demo/oauth/ok")) {
+                //ayondo login success
+                NativeDataModule.passDataToRN(reactContext, NativeActions.ACTION_LOGIN_SUCCESS, "success");
+            } else if (url.contains(("demo/oauth/error"))) {
+                //ayondo login failed
+                NativeDataModule.passDataToRN(reactContext, NativeActions.ACTION_LOGIN_FAILED, "error");
+            }
+
+            webView.setWebContentsDebuggingEnabled(true);
         }
 
         @Override
@@ -211,7 +223,8 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
      * to call {@link WebView#destroy} on activty destroy event and also to clear the client
      */
     private static class ReactWebView extends WebView implements LifecycleEventListener {
-        private @Nullable
+        private
+        @Nullable
         String injectedJS;
 
         /**
@@ -284,6 +297,8 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
             WebView.setWebContentsDebuggingEnabled(true);
         }
 
+
+        removeAllCookie(webView);
         return webView;
     }
 
@@ -376,7 +391,7 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
     @Override
     protected void addEventEmitters(ThemedReactContext reactContext, WebView view) {
         // Do not register default touch emitter and let WebView implementation handle touches
-        view.setWebViewClient(new ReactWebViewClient(reactContext){
+        view.setWebViewClient(new ReactWebViewClient(reactContext) {
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
 
@@ -392,7 +407,8 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
     }
 
     @Override
-    public @Nullable
+    public
+    @Nullable
     Map<String, Integer> getCommandsMap() {
         return MapBuilder.of(
                 "goBack", COMMAND_GO_BACK,
@@ -420,5 +436,19 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
         super.onDropViewInstance(webView);
         ((ThemedReactContext) webView.getContext()).removeLifecycleEventListener((ReactWebView) webView);
         ((ReactWebView) webView).cleanupCallbacksAndDestroy();
+    }
+
+    private void removeAllCookie(WebView wb) {
+        CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(wb.getContext());
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.setAcceptCookie(true);
+        cookieManager.removeSessionCookie();
+
+        //String testcookie1 = cookieManager.getCookie(urlpath);
+
+        cookieManager.removeAllCookie();
+        cookieSyncManager.sync();
+
+        //String testcookie2 = cookieManager.getCookie(urlpath);
     }
 }

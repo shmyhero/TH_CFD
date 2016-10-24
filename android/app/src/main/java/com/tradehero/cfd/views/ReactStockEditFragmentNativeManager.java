@@ -60,6 +60,13 @@ public class ReactStockEditFragmentNativeManager extends ViewGroupManager<ReactS
     }
 
 
+    @ReactProp(name = "isActual")
+    public void setIsAcutal(ReactStockEditFragmentNative reactStockEditFragmentNative, boolean isLogin){
+        if (reactStockEditFragmentNative != null) {
+            reactStockEditFragmentNative.setIsActual(isLogin);
+        }
+    }
+
     @ReactProp(name = "isLogin")
     public void setIsLogin(ReactStockEditFragmentNative reactStockEditFragmentNative, boolean isLogin) {
         if (reactStockEditFragmentNative != null) {

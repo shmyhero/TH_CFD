@@ -3,6 +3,7 @@ package com.tradehero.cfd.views.chartDrawer.base;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.data.CombinedData;
@@ -11,6 +12,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.tradehero.cfd.R;
 import com.tradehero.cfd.StringUtils;
+import com.tradehero.cfd.views.ReactChart;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,8 +52,8 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
             yVals.add(new Entry(val, i));
         }
 
-        minVal = Math.min(minVal, (float)stockInfoObject.getDouble("preClose"));
-        maxVal = Math.max(maxVal, (float)stockInfoObject.getDouble("preClose"));
+        minVal = Math.min(minVal, (float) stockInfoObject.getDouble("preClose"));
+        maxVal = Math.max(maxVal, (float) stockInfoObject.getDouble("preClose"));
 
         minVal -= (maxVal - minVal) / 5;
         maxVal += (maxVal - minVal) / 5;
@@ -79,7 +81,13 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
         set1.setDrawCircleHole(false);
         set1.setCircleColors(circleColors);
         set1.setValueTextSize(0f);
-        Drawable drawable = ContextCompat.getDrawable(chart.getContext(), R.drawable.stock_price_fill_color);
+        boolean isActual = false;
+        try {
+            isActual = ((ReactChart) chart).isAcutal;
+        } catch (Exception e) {
+            Log.e("", e.toString());
+        }
+        Drawable drawable = ContextCompat.getDrawable(chart.getContext(), isActual ? R.drawable.stock_price_fill_color_actual : R.drawable.stock_price_fill_color);
         set1.setFillDrawable(drawable);
         set1.setDrawFilled(true);
 

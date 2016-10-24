@@ -17,6 +17,7 @@ var StockEditFragment = React.createClass ({
 		onTapEditAlert: React.PropTypes.func,
 		isLogin: React.PropTypes.bool,
 		alertData: React.PropTypes.string,
+		isActual: React.PropTypes.bool,
 	},
 
 	getInitialState: function() {

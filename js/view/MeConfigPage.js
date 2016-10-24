@@ -19,6 +19,8 @@ var MainPage = require('./MainPage')
 var LocalDataUpdateModule = require('../module/LocalDataUpdateModule')
 var UIConstants = require('../UIConstants')
 var LogicData = require('../LogicData')
+var NetworkModule = require('../module/NetworkModule')
+var NetConstants = require('../NetConstants')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
@@ -110,10 +112,37 @@ var MeConfigPage = React.createClass({
 	},
 
 	logoutAccountActual:function(){
+		var userData = LogicData.getUserData()
+
+		NetworkModule.fetchTHUrlWithNoInternetCallback(
+			NetConstants.CFD_API.USER_ACTUAL_LOGOUT,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+			},
+			function(responseJson) {
+			 this.logoutAccountActualNative()
+			 console.log('登出成功。。。');
+			}.bind(this),
+			function(errorMessage) {
+				this.logoutAccountActualNative()
+				console.log('登出失败 1');
+			}.bind(this),
+			function(errorMessage) {
+			  this.logoutAccountActualNative()
+				console.log('登出失败 2');
+			}.bind(this)
+		)
+	},
+
+	logoutAccountActualNative(){
 		this.props.navigator.pop();
 		if(this.props.onPopBack){
-			this.props.onPopBack();
+		 this.props.onPopBack();
 		}
+		LogicData.setActualLogin(false);
 	},
 
 	logout2Simulator: function(){
@@ -121,6 +150,7 @@ var MeConfigPage = React.createClass({
 		if(this.props.onPopBack){
 			this.props.onPopBack();
 		}
+		LogicData.setAccountState(false)
 	},
 
 	logoutCurrentAccount: function(){
@@ -129,6 +159,7 @@ var MeConfigPage = React.createClass({
 		if(this.props.onPopBack){
 			this.props.onPopBack();
 		}
+		LogicData.setAccountState(false)
 	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
@@ -151,7 +182,10 @@ var MeConfigPage = React.createClass({
 			 return(
 				 <View></View>
 			 )
-		 }else{
+		 } else if(LogicData.getAccountState() && (!LogicData.getActualLogin()) && rowData.subtype === 'logoutAccountActual'){
+			 	//实盘状态 实盘未登录 不显示 ‘登出实盘账号’
+				return(<View></View>)
+		 } else{
 			 return(
 	 			<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
 	 				<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
@@ -161,7 +195,6 @@ var MeConfigPage = React.createClass({
 	 			</TouchableOpacity>
 	 		)
 		 }
-
 	},
 
 

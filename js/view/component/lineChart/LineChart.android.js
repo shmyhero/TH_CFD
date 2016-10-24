@@ -27,6 +27,8 @@ var LineChart = React.createClass({
 
 		chartType: React.PropTypes.string,
 
+		chartIsActual: React.PropTypes.bool,
+
 		description: React.PropTypes.string,
 
 		descriptionColor: React.PropTypes.number,
@@ -81,6 +83,7 @@ var LineChart = React.createClass({
 			colorType: 0,
 			chartType: 'today',	//today, week, month
 			description: '',
+			chartIsActual: false,
 			descriptionColor: 0,
 			noDataText: '数据加载中...',
 			padding: 2,

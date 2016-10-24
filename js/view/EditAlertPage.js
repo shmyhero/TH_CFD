@@ -331,7 +331,7 @@ var EditAlertPage = React.createClass({
 				<Switch
 				  value={type===1 ? this.state.HighEnabled : this.state.LowEnabled}
 					onValueChange={(value) => this.setState(type === 1 ? {HighEnabled:value} : {LowEnabled:value})}
-					onTintColor={ColorConstants.TITLE_BLUE}
+					onTintColor={ColorConstants.title_blue()}
 
 				/>
 			</View>

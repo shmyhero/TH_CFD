@@ -17,7 +17,7 @@ var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
 var MainPage = require('./MainPage')
 var WebSocketModule = require('../module/WebSocketModule');
-
+var LogicData = require('../LogicData');
 var NavBar = React.createClass({
 	propTypes: {
 		showBackButton: React.PropTypes.bool,
@@ -100,7 +100,8 @@ var NavBar = React.createClass({
 
 	render: function() {
 		return (
-			<View style={[styles.container, {backgroundColor: this.props.backgroundColor}, this.props.barStyle]} >
+			// <View style={[styles.container, {backgroundColor: this.props.backgroundColor}, this.props.barStyle]} >
+			<View style={[styles.container, {backgroundColor: ColorConstants.title_blue()}, this.props.barStyle]} >
 				<View style={styles.leftContainer}>
 					{this.renderBackButton()}
 					{this.renderLeftText()}
@@ -133,7 +134,7 @@ var NavBar = React.createClass({
 			return (
 				<TouchableHighlight
 					onPress={this.backOnClick}
-					underlayColor={ColorConstants.TITLE_BLUE}>
+					underlayColor={ColorConstants.title_blue()}>
 					<View style={{padding: 5}}>
 						<Image
 							style={styles.backButton}
@@ -149,7 +150,7 @@ var NavBar = React.createClass({
 			return (
 				<TouchableHighlight
 					onPress={this.leftTextOnClick}
-					underlayColor={ColorConstants.TITLE_BLUE}>
+					underlayColor={ColorConstants.title_blue()}>
 
 					<Text style={styles.textOnLeft}>
 						{this.props.textOnLeft}
@@ -165,7 +166,7 @@ var NavBar = React.createClass({
 			return (
 				<TouchableHighlight
 					onPress={this.searchButtonClicked}
-					underlayColor={ColorConstants.TITLE_BLUE}>
+					underlayColor={ColorConstants.title_blue()}>
 
 					<Image
 						style={styles.rightImage}
@@ -182,7 +183,7 @@ var NavBar = React.createClass({
 				return (
 					<TouchableHighlight
 						onPress={this.rightTextOnClick}
-						underlayColor={ColorConstants.TITLE_BLUE}>
+						underlayColor={ColorConstants.title_blue()}>
 
 						<Text style={styles.textOnRight}>
 							{this.props.textOnRight}
@@ -206,7 +207,7 @@ var NavBar = React.createClass({
 			return (
 				<TouchableHighlight
 					onPress={this.rightImageOnClick}
-					underlayColor={ColorConstants.TITLE_BLUE}>
+					underlayColor={ColorConstants.title_blue()}>
 
 					<Image
 						style={styles.rightImage}

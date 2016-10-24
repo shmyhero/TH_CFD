@@ -119,6 +119,7 @@ const glypy = glypyMapMaker({
 
 const systemBlue = '#1a61dd'
 const iconGrey = '#888f9c'
+const systemBuleActual = '#425a85'
 
 export var initExchangeTab = 0
 export var initStockListTab = 1
@@ -263,7 +264,9 @@ var MainPage = React.createClass({
 					showTutorial={this.showTutorial}/>
 			)
 		} else if (route.name === NAVIGATOR_WEBVIEW_ROUTE) {
+
 			hideTabbar()
+
 			return (
 				<WebViewPage url={route.url}
 										 showTabbar={showTabbar}
@@ -496,6 +499,15 @@ var MainPage = React.createClass({
 			console.log("showTabbar")
 			this.refs['myTabbar'].getBarRef().show(true);
 	 	}
+	},
+
+	ayondoLoginResult(result){
+		this.backAndShowTabbar()
+		console.log('ayondo login result :' + result);
+		if(result){
+			LogicData.setAccountState(true)//实盘状态 true
+			LogicData.setActualLogin(true)//实盘登陆状态 true
+		}
 	},
 
 	hideTabbar() {
@@ -773,7 +785,7 @@ var MainPage = React.createClass({
 		    	<StatusBar barStyle="light-content" backgroundColor='#1962dd'/>
 		      	<Tabbar ref="myTabbar" barColor={'#f7f7f7'} style={{alignItems: 'stretch'}}>
 			        <Tab name="home">
-			          	<Icon label="首页" type={glypy.Home} from={'myhero'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
+			          	<Icon label="首页" type={glypy.Home} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
 			          	<RawContent ref="homeContent">
 		            		<Navigator
 								style={styles.container}
@@ -787,7 +799,7 @@ var MainPage = React.createClass({
 			          	</RawContent>
 			        </Tab>
 			        <Tab name="trend">
-			          	<Icon label="行情" type={glypy.Camera} from={'myhero'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
+			          	<Icon label="行情" type={glypy.Camera} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
 			          	<RawContent style={{width: 100}} ref="stockContent">
 		            		<Navigator
 								style={styles.container}
@@ -797,7 +809,7 @@ var MainPage = React.createClass({
 			          	</RawContent>
 			        </Tab>
 			        <Tab name="trade">
-			          	<Icon label="交易" type={glypy.Stat} from={'myhero'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
+			          	<Icon label="交易" type={glypy.Stat} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
 			        	<RawContent ref="exchangeContent">
 			            	<Navigator
 								style={styles.container}
@@ -807,7 +819,7 @@ var MainPage = React.createClass({
 			          	</RawContent>
 			        </Tab>
 			        <Tab name="me">
-			          	<Icon label="我的" type={glypy.Settings} from={'myhero'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>
+			          	<Icon label="我的" type={glypy.Settings} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
 			          	<RawContent ref="meContent">
 							<Navigator
 								style={styles.container}

@@ -43,16 +43,25 @@ function getCFDAPI(){
     GET_STOCK_DETAIL_API: CFD_API_SERVER + '/api/security/<stockCode>',
     GET_STOCK_PRICE_TODAY_API: CFD_API_SERVER + '/api/quote/<stockCode>/tick/<chartType>',
     GET_OPEN_POSITION_API: CFD_API_SERVER + '/api/position/open',
+    GET_OPEN_POSITION_LIVE_API: CFD_API_SERVER + '/api/position/live/open',//LIVE ok
     GET_CLOSED_POSITION_API: CFD_API_SERVER + '/api/position/closed',
+    GET_CLOSED_POSITION_LIVE_API: CFD_API_SERVER + '/api/position/live/closed',//LIVE ok
     GET_HOMEPAGE_BANNER_API: CFD_API_SERVER + '/api/banner2',
     OWN_STOCK_LIST_API: CFD_API_SERVER + '/api/security/bookmark',
     POST_CREATE_POSITION_API: CFD_API_SERVER + '/api/position',
+    POST_CREATE_POSITION_LIVE_API: CFD_API_SERVER + '/api/position/live',//LIVE ok
     POST_DELETE_POSITION_API: CFD_API_SERVER + '/api/position/net',
+    POST_DELETE_POSITION_LIVE_API: CFD_API_SERVER + '/api/position/live/net',
     STOP_PROFIT_LOSS_API: CFD_API_SERVER + '/api/position/order',
+    STOP_PROFIT_LOSS_LIVE_API: CFD_API_SERVER + '/api/position/live/order',//LIVE ok
     ADD_REMOVE_STOP_PROFIT_API: CFD_API_SERVER + '/api/position/order/take',
+    ADD_REMOVE_STOP_PROFIT_LIVE_API: CFD_API_SERVER + '/api/position/live/order/take',//LIVE ok
     GET_USER_BALANCE_API: CFD_API_SERVER + '/api/user/balance',
+    GET_USER_BALANCE_LIVE_API: CFD_API_SERVER + '/api/user/live/balance',//LIVE ok
     GET_USER_STATISTICS_API: CFD_API_SERVER + '/api/user/plReport',
+    GET_USER_STATISTICS_LIVE_API: CFD_API_SERVER + '/api/user/live/plReport',//LIVE ok
     GET_POPULARITY_API: CFD_API_SERVER + '/api/security/byPopularity',
+    GET_POPULARITY_LIVE_API: CFD_API_SERVER + '/api/security/live/byPopularity',//LIVE ok
     GET_TOP_NEWS_TOP10_API: CFD_API_SERVER + '/api/headline/top10',
     FEEDBACK_API: CFD_API_SERVER + '/api/feedback_pic',
     AUTO_CLOSE_ALERT_API: CFD_API_SERVER + '/api/user/alert/<setting>',
@@ -66,8 +75,11 @@ function getCFDAPI(){
     GET_STOCK_KLINE_FIVE_M: CFD_API_SERVER + '/api/quote/<securityId>/kline/5m',
     GET_STOCK_KLINE_DAY: CFD_API_SERVER + '/api/quote/<securityId>/kline/day',
     GET_MY_MESSAGES: CFD_API_SERVER + '/api/user/message?pageNum=<pageNum>&pageSize=<pageSize>',
+    GET_MY_MESSAGES_LIVE: CFD_API_SERVER + '/api/user/live/message?pageNum=<pageNum>&pageSize=<pageSize>',//LIVE ok
     SET_MESSAGE_READ: CFD_API_SERVER + '/api/user/message/<id>',
+    SET_MESSAGE_READ_LIVE: CFD_API_SERVER + '/api/user/live/message/<id>',//LIVE ok
     GET_UNREAD_MESSAGE: CFD_API_SERVER + '/api/user/message/unread',
+    GET_UNREAD_MESSAGE_LIVE: CFD_API_SERVER + '/api/user/live/message/unread',//LIVE ok
     GET_MOVIE_RANK: CFD_API_SERVER + '/api/competition/1/user/<userId>/rank',
 
     GET_USER_DAILY_SIGN_INFO: CFD_API_SERVER + '/api/reward/summary',//获取每日签到页面所需信息（需身份验证）
@@ -79,8 +91,9 @@ function getCFDAPI(){
 
     CHECK_LIVE_USERNAME: CFD_API_SERVER + '/api/user/live/checkUsername?username=<userName>',
     REGISTER_LIVE_ACCOUNT: CFD_API_SERVER + '/api/user/live/signup', //实盘注册
-
     ID_CARD_OCR: CFD_API_SERVER + '/api/user/ocr', //身份证OCR
+    USER_ACTUAL_LOGOUT: CFD_API_SERVER + '/api/user/demo/logout',
+
   }
 }
 
@@ -89,13 +102,15 @@ function getGZTAPI(){
     GZT_OCR_CHECK_API: GZT_SERVER_IP + '/ocrCheck',
   }
 }
-
+``
 function getTradeHeroAPI(){
   return {
     WEBVIEW_RECOMMAND_PAGE: TRADEHERO_SERVER_IP + '/TH_CFD_WEB/detailslider.php?id=',
     WEBVIEW_TOP_NEWS_PAGE: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER + '/FocusSlider.php?id=',
     WEBVIEW_QA_PAGE: TRADEHERO_SERVER_IP + '/TH_CFD_WEB/wenda<version>.html',
+    WEBVIEW_QA_PAGE_ACTUAL: TRADEHERO_SERVER_IP + '/TH_CFD_SP/wenda.html',
     WEBVIEW_URL_ABOUT_US: TRADEHERO_SERVER_IP + '/TH_CFD_WEB/about.html',
+    WEBVIEW_URL_ABOUT_US_ACTUAL: TRADEHERO_SERVER_IP + '/TH_CFD_SP/about.html',
     SHARE_URL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER + '/detailShare.php?id=<id>',
     SHARE_MOVIE_WIN_TICKET_URL: TRADEHERO_SERVER_IP + '/CDF_BSY/sucess.php?hjcode=0',
     SHARE_MOVIE_NOT_WIN_TICKET_URL: TRADEHERO_SERVER_IP + '/CDF_BSY/sucess.php?hjcode=1',
@@ -118,3 +133,5 @@ export let PARAMETER_CHARTTYPE_WEEK = 'week'
 export let PARAMETER_CHARTTYPE_MONTH = 'month'
 export let PARAMETER_CHARTTYPE_DAY = 'day'
 export let PARAMETER_CHARTTYPE_5_MINUTE = '5m'
+
+export let AUTH_ERROR = '需要OAuth授权'

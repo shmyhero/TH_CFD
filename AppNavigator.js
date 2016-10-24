@@ -204,6 +204,10 @@ var AppNavigator = React.createClass({
 						this.actionForPush(JSON.parse(args[1]));
 					}else if (args[0] == 'isProductServer') {
 						this.setIsProduct(args[1]);
+					}else if (args[0] == 'ayondoLoginSuccess'){
+						this.ayondoLoginResule(true)
+					}else if( args[0] == 'ayondoLoginError'){
+						this.ayondoLoginResule(false)
 					}
 				}
 				catch (e) {
@@ -228,6 +232,10 @@ var AppNavigator = React.createClass({
 		var value = (isProductServer == "true" ? true : false);
 		console.log("setIsProduct: " + isProductServer);
 		VersionConstants.setIsProductApp(value);
+	},
+
+	ayondoLoginResule:function(result){
+		this.refs['mainPage'].ayondoLoginResult(result)
 	},
 
 	_handleDeviceToken: function(event) {
@@ -402,6 +410,10 @@ var AppNavigator = React.createClass({
 	setMessageRead : function(id) {
 		var userData = LogicData.getUserData();
 		var url = NetConstants.CFD_API.SET_MESSAGE_READ;
+		if(LogicData.getAccountState()){
+			url = NetConstants.CFD_API.SET_MESSAGE_READ_LIVE
+			console.log('live', url );
+		}
 		url = url.replace('<id>', id);
 		NetworkModule.fetchTHUrl(
 			url,
@@ -432,7 +444,10 @@ var AppNavigator = React.createClass({
 			return (
 				<View style={styles.container}>
 					{statusBar}
-					<MainPage isPushAction={this.state.isPushAction} pushData={this.state.pushData}/>
+					<MainPage ref="mainPage"
+					isPushAction={this.state.isPushAction}
+					pushData={this.state.pushData}
+					/>
 					{this.renderAskForRestart()}
 				</View>
 			)

@@ -27,7 +27,7 @@ var OpenAccountInfos = [
   {"title": "完善个人信息(3/5)", "page": require('./OAPersonalInfoPage')},
   {"title": "完善财务信息(4/5)", "page": require('./OAFinanceInfoPage')},
   {"title": "提交申请(5/5)", "page": require('./OADocumentInfoPage')},
-  {"title": "审核状态", "page": require('./OAReviewStatusPage')},
+  {"title": "审核状态", "page": require('./OAReviewStatusPage'), "removeStoredData": true},
 ]
 
 var lastStoredData = null;
@@ -38,13 +38,17 @@ export function backToPreviousRoute(navigator, data, onPop){
   if(lastRoute){
     var currentStep = lastRoute.step;
 
+    var nextStep = currentStep - 1;
+    if(lastRoute.backToPage){
+      nextStep = lastRoute.backToPage;
+    }
     //Update: Do NOT store data if the next button is not clicked.
     //storeCurrentInputData(currentStep, data);
 
     if(currentStep > 0){
       navigator.replace({
         name: MainPage.OPEN_ACCOUNT_ROUTE,
-        step: currentStep - 1,
+        step: nextStep,
         onPop: onPop,
       })
     }else{
@@ -98,6 +102,25 @@ export function showOARoute(navigator, step, onPop, data){
   )
 }
 
+export function showErrorRoute(errorStep, navigator, onPop, nextRouteData){
+  var routes = navigator.getCurrentRoutes();
+  var lastRoute = routes[routes.length-1];
+  if(lastRoute){
+    var currentStep = lastRoute.step;
+    if(OpenAccountInfos[errorStep].removeStoredData){
+      clearAllInputData();
+    }
+    console.log("goToNextRoute OPEN_ACCOUNT_ROUTE: " + errorStep);
+    navigator.replace({
+      name: MainPage.OPEN_ACCOUNT_ROUTE,
+      step: errorStep,
+      onPop: onPop,
+      data: nextRouteData,
+      backToPage: currentStep,
+    });
+  }
+}
+
 export function goToNextRoute(navigator, data, onPop, nextRouteData){
   var routes = navigator.getCurrentRoutes();
   var lastRoute = routes[routes.length-1];
@@ -106,12 +129,18 @@ export function goToNextRoute(navigator, data, onPop, nextRouteData){
 
     storeCurrentInputData(currentStep, data);
 
-    var nextStep =  currentStep + 1;
+    var nextStep = currentStep + 1;
+    if(lastRoute.backToPage){
+      nextStep = lastRoute.backToPage;
+    }
 
     if(nextStep >= OpenAccountInfos.length){
       clearAllInputData();
       popToLastPage(navigator, onPop);
     }else{
+      if(OpenAccountInfos[nextStep].removeStoredData){
+        clearAllInputData();
+      }
       console.log("goToNextRoute OPEN_ACCOUNT_ROUTE: " + nextStep);
       navigator.replace({
         name: MainPage.OPEN_ACCOUNT_ROUTE,
@@ -144,8 +173,29 @@ export function getOpenAccountData(){
       }
     }
   }
-  console.log("getUserInputData " + JSON.stringify(userData));
+  //console.log("getUserInputData " + JSON.stringify(userData));
   return userData;
+}
+
+export function showError(errorList, navigator, onPop){
+  for(var i = 0; i < errorList.length; i++){
+    var errorKey = errorList[i].key;
+    var errorMessage = errorList[i].error;
+    for(var errorPageIndex = 0; errorPageIndex < OpenAccountInfos.length; errorPageIndex++){
+      var pageData = lastStoredData[errorPageIndex];
+      if(pageData){
+        for(var k = 0; k < pageData.length; k++){
+          if(pageData[k].key === errorKey){
+            pageData[k].error = errorMessage;
+            console.log("route: " + errorPageIndex + ", " + JSON.stringify(pageData))
+            showErrorRoute(errorPageIndex, navigator, onPop, pageData);
+            return true;
+          }
+        }
+      }
+    }
+  }
+  return false;
 }
 
 function loadStoredInputData(data, step, resolve){
@@ -196,14 +246,14 @@ function clearAllInputData(){
 }
 
 function storeCurrentInputData(step, data){
-  console.log("storeCurrentInputData lastStoredData: " + JSON.stringify(data));
+  //console.log("storeCurrentInputData lastStoredData: " + JSON.stringify(data));
 
   StorageModule.setOpenAccountData(step, JSON.stringify(data));
   if(lastStoredData==null){
     lastStoredData = {};
   }
   lastStoredData[step] = data;
-  console.log("storeCurrentInputData lastStoredData: " + JSON.stringify(lastStoredData));
+  //console.log("storeCurrentInputData lastStoredData: " + JSON.stringify(lastStoredData));
 }
 
 function cancelOARoute(navigator, data, onPop){

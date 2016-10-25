@@ -482,12 +482,12 @@ var LoginPage = React.createClass({
 
 	renderLiveLoginContent: function() {
 		var {height, width} = Dimensions.get('window');
+
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
 				<View style={{flex: 1, justifyContent: 'space-between'}}>
 					<View>
 						<Image style={styles.ayondoLogoImage} source={require('../../images/ayondo_logo.png')}/>
-						<Text style={{alignSelf: 'center', fontSize: 35, color: 'white'}}>ayondo</Text>
 						<Text style={{alignSelf: 'center', fontSize: 11, color: '#2a3f43', marginTop: 30}}>您正在登录券商ayondo</Text>
 
 						<View style={styles.phoneLoginContainer}>
@@ -570,7 +570,6 @@ var LoginPage = React.createClass({
 				<View style={{flex: 1, justifyContent: 'space-between'}}>
 					<View>
 						<Image style={styles.ayondoLogoImage} source={require('../../images/ayondo_logo.png')}/>
-						<Text style={{alignSelf: 'center', fontSize: 35, color: 'white'}}>ayondo</Text>
 						<Text style={{alignSelf: 'center', fontSize: 11, color: '#2a3f43', marginTop: 30}}>您正在登录券商ayondo</Text>
 
 						<View style={styles.phoneLoginContainer}>
@@ -724,8 +723,8 @@ var styles = StyleSheet.create({
 	ayondoLogoImage: {
 		marginTop: 20,
 		alignSelf: 'center',
-		width: 89,
-		height: 48,
+		width: 245,
+		height: 106,
 	},
 	wrapper: {
 		flex:1,

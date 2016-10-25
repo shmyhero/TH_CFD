@@ -79,6 +79,7 @@ function getCFDAPI(){
 
     CHECK_LIVE_USERNAME: CFD_API_SERVER + '/api/user/live/checkUsername?username=<userName>',
     REGISTER_LIVE_ACCOUNT: CFD_API_SERVER + '/api/user/live/signup', //实盘注册
+    DETELE_LIVE_ACCOUNT: CFD_API_SERVER + '/api/user/live/delete', //删除实盘账号绑定（测试用！)
 
     ID_CARD_OCR: CFD_API_SERVER + '/api/user/ocr', //身份证OCR
   }

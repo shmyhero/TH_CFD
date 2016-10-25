@@ -113,34 +113,39 @@ var HomePage = React.createClass({
 			}
 		);
 
-		var url = NetConstants.CFD_API.GET_MOVIE_RANK;
-		url = url.replace("<userId>", userData.userId);
-		NetworkModule.fetchTHUrl(
-			url,
-			{
-				method: 'GET',
-				headers: {
-					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-					'Content-Type': 'application/json; charset=UTF-8',
+		var userId = userData.userId
+		var login = Object.keys(userData).length !== 0
+		if(login){
+			var url = NetConstants.CFD_API.GET_MOVIE_RANK;
+			url = url.replace("<userId>", userId);
+
+			NetworkModule.fetchTHUrl(
+				url,
+				{
+					method: 'GET',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						'Content-Type': 'application/json; charset=UTF-8',
+					},
 				},
-			},
-			(responseJson) => {
-				if(responseJson.rank){
-					this.setState({
-						attendedMovieEvent: true,
-						winMovieTicket: responseJson.rank <= 3,
-					})
-				}else{
-					this.setState({
-						attendedMovieEvent: false,
-						winMovieTicket: false,
-					})
+				(responseJson) => {
+					if(responseJson.rank){
+						this.setState({
+							attendedMovieEvent: true,
+							winMovieTicket: responseJson.rank <= 3,
+						})
+					}else{
+						this.setState({
+							attendedMovieEvent: false,
+							winMovieTicket: false,
+						})
+					}
+				},
+				(errorMessage) => {
+					// Ignore it.
 				}
-			},
-			(errorMessage) => {
-				// Ignore it.
-			}
-		);
+			);
+		}
 		this.loadHomeData();
 	},
 
@@ -336,7 +341,11 @@ var HomePage = React.createClass({
 
 		var url = NetConstants.TRADEHERO_API.MOVIE_WIN_TICKET_URL;
 		var userData = LogicData.getUserData();
-		url = url + '?userId=' + userData.userId;
+		var userId = userData.userId;
+		if(userId == undefined){
+			userId = 0;
+		}
+		url = url + '?userId=' + userId;
 
 		var info = this.getShareMovieEventInfo();
 		this.gotoWebviewPage(url, '推荐',
@@ -375,16 +384,6 @@ var HomePage = React.createClass({
 		if (NO_MAGIC) {
 			return
 		}
-
-		//Use the code in next version.
-		/*
-		if(!VersionConstants.getIsProductApp()){
-			this.props.navigator.push({
-				name: MainPage.DEVELOP_ROUTE,
-			});
-			return;
-		}
-		*/
 
 		// magicCode += ""+index
 
@@ -679,6 +678,23 @@ var HomePage = React.createClass({
 		}
 	},
 
+	renderNavBar: function(){
+		if(!VersionConstants.getIsProductApp() || Platform.OS === "ios"){
+			return (
+				<TouchableOpacity onPress={
+						()=>{
+							this.props.navigator.push({
+								name: MainPage.DEVELOP_ROUTE,
+							});
+						}}
+					>
+					<NavBar title="首页"/>
+				</TouchableOpacity>);
+		}else{
+			return (<NavBar title="首页"/>);
+		}
+	},
+
 	render: function() {
 		var activeDot = <View style={styles.guideActiveDot} />
 		var dot = <View style={styles.guideDot} />
@@ -701,7 +717,7 @@ var HomePage = React.createClass({
 		}
 		return (
 			<View style={{width: width, height: height - UIConstants.TAB_BAR_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER}}>
-				<NavBar title="首页"/>
+				{this.renderNavBar()}
 				<ScrollView>
 					<View style={{width: width, height: imageHeight}}>
 						<Swiper

@@ -201,13 +201,13 @@ var OAAccountBasicSettingsPage = React.createClass({
 		return new Promise(resolve=>{
 			var hasError = false;
 			if(listRawData[1].value){
-				if(listRawData[1].value.length < 4){
-					listRawData[1].error = "密码必须是4位以上数字字母组合";
+				if(listRawData[1].value.length < 8){
+					listRawData[1].error = "密码必须是8位以上数字字母组合";
 					hasError = true;
 				}else{
 					var re = /^[0-9a-zA-Z\!\#\*\$\-\/\=\?\@\.\,\:\;]+$/;
 					if(!re.test(listRawData[1].value)){
-						listRawData[1].error = "密码必须是4位以上数字字母组合";
+						listRawData[1].error = "密码必须是8位以上数字字母组合";
 						hasError = true;
 					}
 				}
@@ -263,11 +263,14 @@ var OAAccountBasicSettingsPage = React.createClass({
 			)
 		}else{
 			var secureTextEntry = rowData.type === "pwd";
-
+			var style = styles.rowTitle;
+			if(rowData.error){
+				style = styles.errorTitleText;
+			}
 			return (
 				<View>
 					<View style={styles.rowWrapper}>
-						<Text style={styles.rowTitle}>{rowData.title}</Text>
+						<Text style={style}>{rowData.title}</Text>
 						<TextInput style={styles.valueText}
 							autoCapitalize="none"
 							autoCorrect={false}
@@ -349,6 +352,11 @@ var styles = StyleSheet.create({
 		color: '#333333',
 		flex: 1,
 	},
+	errorTitleText:{
+		fontSize: fontSize,
+		color: 'red',
+		flex: 1,
+	},
 	valueText: {
 		fontSize: fontSize,
 		color: '#333333',
@@ -356,7 +364,6 @@ var styles = StyleSheet.create({
 		marginTop: -rowPadding,
 		marginBottom: -rowPadding,
 	},
-
 	bottomArea: {
 		height: 72,
 		backgroundColor: 'white',
@@ -373,7 +380,7 @@ var styles = StyleSheet.create({
 	buttonView: {
 		height: 40,
 		borderRadius: 3,
-		backgroundColor: '#4567a4',
+		backgroundColor: ColorConstants.TITLE_DARK_BLUE,
 		justifyContent: 'center',
 	},
 	buttonText: {

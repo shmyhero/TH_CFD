@@ -64,9 +64,16 @@ var EmploymengStatusMapping = [
 ]
 
 var investFrqMappings = [
-	{"value": "Employed", "displayText": "短期（小于3年）"},
-	{"value": "Employed", "displayText": "中期（4到7年）"},
-	{"value": "Employed", "displayText": "长期（8年以上）"},
+	{"value": 0, "displayText": "基本没有"},
+	{"value": 1, "displayText": "每季度1-5次"},
+	{"value": 2, "displayText": "每季度6-10次"},
+	{"value": 3, "displayText": "每季度超过10次"},
+]
+
+var expierenceMappings = [
+	{"key": "expOTCDeriv", "displayText": "场外衍生品", "value": false},
+	{"key": "expDeriv", "displayText": "衍生产品", "value": false},
+	{"key": "expShareBond", "displayText": "股票和债券", "value": false},
 ]
 
 var listRawData = [
@@ -78,7 +85,7 @@ var listRawData = [
 		{"key":"hasProExp", "title":"你是否有一年以上与金融杠杆交易相关的职业经历", "value":false, "type":"switch"},
 		{"key":"hasAyondoExp", "title":"你是否了解过ayondo的金融产品或使用ayondo模拟账户交易", "value":true, "type":"switch"},
 		{"key":"hasOtherQualif", "title":"你是否有其它相关资质帮助理解ayondo的服务", "value":false, "type":"switch"},
-		{"title":"你有哪些产品的交易经验", "value":["场外衍生品","衍生产品","股票和债券"], "type":"options"},
+		{"optionsKey":"tradingExp" ,"title":"你有哪些产品的交易经验", "value":expierenceMappings, "type":"options"},
 		]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -127,14 +134,9 @@ var OAFinanceInfoPage = React.createClass({
 			})
 		}
 		else {
-			var choices = [];
-			for(var i = 0; i < rowData.choices.length; i++){
-				choices.push(rowData.choices[i].displayText);
-			}
-
 			this.setState({
 				selectedPicker: rowID,
-				pickerArray: rowData.choices//choices,
+				pickerArray: rowData.choices,
 			})
 		}
 	},
@@ -142,12 +144,10 @@ var OAFinanceInfoPage = React.createClass({
 	onPikcerSelect: function(value) {
 		if (this.state.selectedPicker >= 0) {
 			console.log("onPikcerSelect: " + value);
-			listRawData[this.state.selectedPicker].value = parseInt(value);
-			if(!listRawData[this.state.selectedPicker].value && listRawData[this.state.selectedPicker].value != 0){
-				listRawData[this.state.selectedPicker].value = value;
-			}
+			listRawData[this.state.selectedPicker].value = value;
 			this.setState({
 				dataSource: ds.cloneWithRows(listRawData),
+				selectedPicker: -1,
 			})
 		}
 	},
@@ -161,12 +161,16 @@ var OAFinanceInfoPage = React.createClass({
 		}
 	},
 
+	onCheckBoxPressed: function(data, selected){
+		data.value = selected;
+	},
+
 	renderRow: function(rowData, sectionID, rowID) {
 		if (rowData.type === "choice") {
 
 			var displayText = "";
 			for(var i = 0; i < rowData.choices.length; i++){
-				if(rowData.value == rowData.choices[i].value){
+				if(rowData.value === rowData.choices[i].value){
 					displayText = rowData.choices[i].displayText;
 				}
 			}
@@ -194,14 +198,20 @@ var OAFinanceInfoPage = React.createClass({
 					<Switch
 						onValueChange={(value) => this.onPressSwitch(value, rowID)}
 						style={{height: 16}}
-						value={rowData.value} />
+						value={rowData.value}
+						onTintColor={ColorConstants.TITLE_DARK_BLUE}/>
 				</View>)
 		}
 		else if(rowData.type === 'options'){
 			var boxes = rowData.value.map(
-				(title, i) =>
-				<CheckBoxButton key={i} text={title}>
-				</CheckBoxButton>
+				(title, i) =>{
+					var data = rowData.value[i];
+					return (<CheckBoxButton key={i} text={data.displayText}
+						defaultSelected={data.value}
+						onPress={(selected)=>this.onCheckBoxPressed(data, selected)}>
+						</CheckBoxButton>
+					);
+				}
 			)
 			return(
 				<View style={styles.rowWrapperOption}>
@@ -238,16 +248,11 @@ var OAFinanceInfoPage = React.createClass({
 		};
 		if (this.state.selectedPicker>=0) {
 			var rowData = listRawData[this.state.selectedPicker];
-			var pickerValue = listRawData[this.state.selectedPicker].value;//.toString();
+			var pickerValue = listRawData[this.state.selectedPicker].value;
+			//for(var i = 0; i < listRawData[this.state.selectedPicker].length; i++){
+				//if()
+			//}
 			console.log("this.state.selectedPicker: " + this.state.selectedPicker + ", " + pickerValue);
-			//alert(listRawData[this.state.selectedPicker].value)
-			/*
-			for(var i = 0; i < rowData.choices.length; i++){
-				if(pickerValue == rowData.choices[i].value){
-					pickerValue = rowData.choices[i].value.toString();
-					break;
-				}
-			}*/
 
 			pickerModal = (<View style={styles.pickerContainer}>
 				<Picker ref={"picker"} style={{width: width, height: 150}}
@@ -258,7 +263,7 @@ var OAFinanceInfoPage = React.createClass({
 
 							//alert(data.value.toString());
 							return (
-					  <PickerItem label={data.displayText.toString()} value={data.value.toString()} key={"lever"+data.value.toString()}/>
+					  <PickerItem label={data.displayText} value={data.value} key={"lever"+data.value.toString()}/>
 					)})}
 				</Picker>
 			</View>)
@@ -365,7 +370,7 @@ var styles = StyleSheet.create({
 	buttonView: {
 		height: 40,
 		borderRadius: 3,
-		backgroundColor: '#4567a4',
+		backgroundColor: ColorConstants.TITLE_DARK_BLUE,
 		justifyContent: 'center',
 	},
 	buttonText: {

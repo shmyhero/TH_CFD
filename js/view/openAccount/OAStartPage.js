@@ -106,7 +106,7 @@ var styles = StyleSheet.create({
 	buttonView: {
 		height: 40,
 		borderRadius: 3,
-		backgroundColor: '#4567a4',
+		backgroundColor: ColorConstants.TITLE_DARK_BLUE,
 		justifyContent: 'center',
 	},
 	buttonText: {

@@ -20,13 +20,11 @@ var {height, width} = Dimensions.get('window')
 
 var OAReviewStatusPage = React.createClass({
 	propTypes: {
-		data: React.PropTypes.object,
 		onPop: React.PropTypes.func,
 	},
 
 	getDefaultProps() {
 		return {
-			data: null,
 			onPop: ()=>{},
 		}
 	},
@@ -54,7 +52,7 @@ var OAReviewStatusPage = React.createClass({
 					<Text style={styles.text2}>{"正在审核"}</Text>
 					<Text style={styles.text2}>{"预计审核时间\n3个工作日内"}</Text>
 				</View>
-				<Text style={styles.text3}>{"开户成功后，我们将以短信告知您的审核结果，同时您将收到欢迎邮件"}</Text>
+				<Text style={styles.text3}>{"开户成功后，\n我们将以短信告知您的审核结果，同时您将收到欢迎邮件"}</Text>
 				<Button style={styles.buttonArea}
 					enabled={true}
 					onPress={this.gotoNext}
@@ -96,8 +94,8 @@ var styles = StyleSheet.create({
 	text3: {
 		fontSize: 13,
 		textAlign: 'center',
-		paddingTop: 15,
-		paddingBottom: 15,
+		padding: 15,
+		lineHeight: 20,
 	},
 	image: {
 		alignSelf: 'center',

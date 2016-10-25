@@ -20,7 +20,8 @@ var NavBar = require('./NavBar')
 var NetConstants = require('../NetConstants')
 var LogicData = require('../LogicData')
 var WebSocketModule = require('../module/WebSocketModule')
-var UIConstants = require('../UIConstants')
+var UIConstants = require('../UIConstants');
+var HeaderLineDialog = require('./HeaderLineDialog');
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 
@@ -34,8 +35,15 @@ var listRawData = [
 {'type':'normal','title':'注册交易金(元)', 'subtype': 'demoRegister'}
 ]
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
+var RULE_DIALOG = "ruleDialog";
 var MyIncomePage = React.createClass({
+	rules: [
+    "盈交易平台交易金等同于现金，用户获取的交易金，开通实盘账户后，会转入现金账户；",
+    "利用交易金获取的投资收益直接归用户所有；",
+    "用户累计交易金额达到5000元后，赠送的交易金本金即可提现；",
+    "盈交易交易金可以通过签到、模拟交易、实盘交易等多种方式获取。",
+  ],
+
 	getInitialState: function() {
 		return {
 			totalIncome: '--',
@@ -98,9 +106,13 @@ var MyIncomePage = React.createClass({
 		this.props.navigator.pop()
 	},
 
+	showDialog: function(){
+		this.refs[RULE_DIALOG].show();
+	},
+
   renderTotalIncome: function(){
     return(
-      <View style={styles.totalTextContainer}>
+			<View style={styles.totalTextContainer}>
         <Text style={styles.totalIncomeTitleText}>
           总计交易金(元)
         </Text>
@@ -158,11 +170,19 @@ var MyIncomePage = React.createClass({
 
 	render: function() {
 		return (
-			<ListView
-				style={styles.list}
-				dataSource={this.state.dataSource}
-				renderRow={this.renderRow}
-				renderSeparator={this.renderSeparator} />
+			<View style={{flex: 1}}>
+				<NavBar title='我的交易金' showBackButton={true} navigator={this.props.navigator}
+					textOnRight='规则'
+					rightTextOnClick={()=>this.showDialog()}/>
+				<ListView
+					style={styles.list}
+					dataSource={this.state.dataSource}
+					renderRow={this.renderRow}
+					renderSeparator={this.renderSeparator} />
+				<HeaderLineDialog ref={RULE_DIALOG}
+				headerImage={require('../../images/my_income_strategy.png')}
+				messageLines={this.rules}/>
+			</View>
 		);
 	},
 });
@@ -180,6 +200,7 @@ var styles = StyleSheet.create({
   totalTextContainer:{
     flexDirection: 'column',
     alignItems:'center',
+		flex:1,
   },
   totalIncomeTitleText:{
     fontSize: 14,

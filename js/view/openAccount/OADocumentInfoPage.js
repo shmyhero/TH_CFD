@@ -20,16 +20,17 @@ var OpenAccountRoutes = require('./OpenAccountRoutes')
 var LogicData = require('../../LogicData')
 var NetworkModule = require('../../module/NetworkModule')
 var NetConstants = require('../../NetConstants')
+var ErrorBar = require('./ErrorBar')
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
 var fontSize = Math.round(16*width/375)
 var listRawData = [
 		{"key":"交易条款说明", "url":"http://baidu.com"},
-		{"key":"风险与注意事项告知说明", "url":"2"},
-		{"key":"数据信息共享说明", "url":"3"},
-		{"key":"Ayondo服务协议说明", "url":""},
-		{"key":"交易通知说明", "url":""}];
+		{"key":"风险与注意事项告知说明", "url":"http://baidu.com"},
+		{"key":"数据信息共享说明", "url":"http://baidu.com"},
+		{"key":"Ayondo服务协议说明", "url":"http://baidu.com"},
+		{"key":"交易通知说明", "url":"http://baidu.com"}];
 
 var OADocumentInfoPage = React.createClass({
 	propTypes: {
@@ -61,86 +62,129 @@ var OADocumentInfoPage = React.createClass({
 	gotoNext: function() {
 		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP5, TalkingdataModule.LABEL_OPEN_ACCOUNT)
 
-		/*this.setState({
+		this.setState({
 			enabled: false,
 			validateInProgress: true,
+			error: null
 		});
-*/
+
 		var openAccountData = OpenAccountRoutes.getOpenAccountData();
-		/*{
+		//Test errors
+		//openAccountData["username"] = "username";
+		//openAccountData["password"] = "2";
+		//openAccountData["idCode"] = "9"
 
-
-		//TEST:DATA
-		//Duplicate username error: api Error: Validation failed. Field 'UserName' failed  UserNameAvailableRule. Value: 'thcn1'.
-		"username": "thcn2",
-		"password": "abcd1234",
-		"email": "anonymous@tradehero.mobi",
-
-		"realName": "",
-		"gender": true,//男true 女false
-		"birthday": "1990.01.01",
-		"ethnic": "汉",
-		"idCode": "310104198501251234",
-		"addr": "上海市徐汇区徐汇路1号",
-		"issueAuth": "徐汇公安局",
-		"validPeriod": "2000.01.20-2016.01.19",
-
-		"annualIncome": 1,//参照AMS文档
-		"netWorth": 1,//参照AMS文档
-		"investPct": 1,//参照AMS文档
-		"empStatus":"Employed",//参照AMS文档
-		"investFrq": 1,//参照AMS文档
-		"hasProExp": false,
-		"hasAyondoExp":false,
-		"hasOtherQualif":false,
-		"expOTCDeriv":false,
-		"expDeriv":false,
-		"expShareBond":false
-
-		}
-		*/
-/*
 		var userData = LogicData.getUserData();
-		NetworkModule.fetchTHUrlWithNoInternetCallback(
-			NetConstants.CFD_API.REGISTER_LIVE_ACCOUNT,
+
+		var url = NetConstants.CFD_API.CHECK_LIVE_USERNAME;
+		url = url.replace('<userName>', openAccountData["username"]);
+
+		NetworkModule.fetchTHUrl(
+			url,
 			{
-				method: 'POST',
-				body: JSON.stringify(
-					openAccountData
-					),
+				method: 'GET',
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-					'Content-Type': 'application/json; charset=utf-8',
 				},
 			},
 			(responseJson) => {
+				//User name duplication check success. Do register.
+				NetworkModule.fetchTHUrl(
+					NetConstants.CFD_API.REGISTER_LIVE_ACCOUNT,
+					{
+						method: 'POST',
+						body: JSON.stringify(openAccountData),
+						headers: {
+							'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+							'Content-Type': 'application/json; charset=utf-8',
+						},
+					},
+					(responseJson) => {
+						this.setState({
+							enabled: true,
+							validateInProgress: false,
+						});
+						if(!responseJson.success){
+							console.log(JSON.stringify(responseJson))
+							alert(JSON.stringify(responseJson))
+							this.parseError(responseJson.message);
+						}else{
+							//alert("success")
+							OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
+						}
+					},
+					(errorMessage) => {
+						console.log("api Error: " + errorMessage);
+						this.setState({
+							enabled: true,
+							validateInProgress: false,
+						});
+						this.parseError(errorMessage);
+					});
+			},
+			(errorMessage) => {
+				console.log("api Error: " + errorMessage);
 				this.setState({
 					enabled: true,
 					validateInProgress: false,
 				});
-				if(!responseJson.success){
-					alert(JSON.stringify(responseJson))
-				}else{
-					OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
-				}
-			},
-			(errorMessage) => {
-				console.log("api Error: " + errorMessage);
-			},
-			(errorMessage) => {
-				console.log("networkError: " + errorMessage);
+				var errorList = [];
+				errorList.push({"key": "username", "error": errorMessage});
+				OpenAccountRoutes.showError(errorList, this.props.navigator, this.props.onPop);
+
 			}
-		)
-		*/
+		);
 	},
 
-	documentPressed: function(url) {
-		// todo
+	parseError: function(errorMessage){
+		var regex1 = /Field '\w+'.+\./g; //1. Find "Filed 'xxx'""
+		var regex2 = /'(.+?)'/g; //2. Find key name.
+		var errorlines = errorMessage.match(regex1);
+		if(errorlines){
+			var errorList = [];
+			for(var i = 0 ; i < errorlines.length; i++){
+				var keys = errorlines[i].match(regex2);
+				if(keys.length){
+					//TODO: parse error?
+					var key = keys[0].toLowerCase();
+					key = key.replace("'", "").replace("'", "");
+					console.log("key: " + key)
+
+					var error = "格式不正确";
+					if(errorlines[i].indexOf("UserNameAvailableRule")){
+						error = "用户名已存在"
+					}
+
+					errorList.push({"key": key, "error": error});
+				}
+			}
+
+			if(errorList.length){
+				console.log(JSON.stringify(errorList));
+				if(!OpenAccountRoutes.showError(errorList, this.props.navigator, this.props.onPop)){
+					this.setState({
+						error: errorMessage
+					})
+				}
+			}
+		}else{
+			this.setState({
+				error: errorMessage
+			})
+		}
 	},
 
-	renderRow: function(rowData, sectionID, rowID ) {
+	documentPressed: function(rowData) {
+		this.props.navigator.push({
+			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			url: rowData.url,
+			title: rowData.key,
+		});
+	},
+
+	renderRow: function(rowData, sectionID, rowID) {
 		return (
-			<TouchableHighlight onPress={() => this.documentPressed(rowData.url)}>
+			<TouchableHighlight onPress={() => this.documentPressed(rowData)}>
 				<View style={styles.rowWrapper}>
 					<Text style={styles.rowTitle}>{rowData.key}</Text>
 					<Image style={styles.image} source={require("../../../images/icon_arrow_right.png")} />
@@ -165,6 +209,7 @@ var OADocumentInfoPage = React.createClass({
 	render: function() {
 		return (
 			<View style={styles.wrapper}>
+				<ErrorBar error={this.state.error}/>
 				<ListView
 			    	style={styles.list}
 					dataSource={this.state.dataSource}
@@ -252,7 +297,7 @@ var styles = StyleSheet.create({
 	buttonView: {
 		height: 40,
 		borderRadius: 3,
-		backgroundColor: '#4567a4',
+		backgroundColor: ColorConstants.TITLE_DARK_BLUE,
 		justifyContent: 'center',
 	},
 	buttonText: {

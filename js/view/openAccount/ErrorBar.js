@@ -34,7 +34,7 @@ export default class ErrorBar extends Component {
             <Image style={styles.image} source={errorHintImage}/>
           </View>
           <View style={styles.errorContainer}>
-            <Text style={styles.errorText}>{this.props.error}</Text>
+            <Text style={styles.errorText} ellipsizeMode="tail" numberOfLines={1}>{this.props.error}</Text>
           </View>
         </View>
       );

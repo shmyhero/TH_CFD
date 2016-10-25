@@ -321,10 +321,7 @@ var MainPage = React.createClass({
 		} else if(route.name === MY_INCOME_ROUTE) {
 			hideTabbar();
 			return (
-				<View style={{flex: 1}}>
-					<NavBar title='我的交易金' showBackButton={true} navigator={navigationOperations}/>
-					<MyIncomePage navigator={navigationOperations} />
-				</View>
+				<MyIncomePage navigator={navigationOperations} />
 			)
 		} else if(route.name === ME_CONFIG_ROUTE){
 			hideTabbar();

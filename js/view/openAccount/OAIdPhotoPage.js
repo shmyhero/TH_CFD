@@ -150,20 +150,6 @@ var OAIdPhotoPage = React.createClass({
 	},
 
 	gotoNext: function() {
-		//TOTO: Remove the test data!!!
-		//TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP2, TalkingdataModule.LABEL_OPEN_ACCOUNT)
-		/*var data = [
-			{"key":"realName","value":"谢辉"},
-			{"key":"idCode","value":"431225199107102411"},
-			{"key":"addr","value":"湖南省会同县堡子镇堡子村一组33号"},
-			{"key":"gender","value":"男"},
-			{"key":"ethnic","value":"侗"},
-			{"key":"issueAuth","value":"市公舍尺静安分局"},
-			{"key":"validPeriod","value":"2200.01.20-2015.01.20"},
-		];
-		OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop, data);
-		return;*/
-
 		if (this.state.idCardFrontData != null && this.state.idCardBackData != null) {
 			this.setState({
 				nextEnabled: false,
@@ -187,26 +173,13 @@ var OAIdPhotoPage = React.createClass({
 					showLoading: true,
 				},
 				(responseJson) => {
-					console.log("ID_CARD_OCR responseJson: " + responseJson);
 					this.setState({
 						nextEnabled: true,
 						validateInProgress: false,
 					})
 
 					if (responseJson.result == 0) {
-						//LogicData.setCertificateIdCardInfo(responseJson);
-
-						var dataList = [];
-
-						for(var key in responseJson){
-							var value = responseJson[key];
-							value = decodeURIComponent(value);
-
-							var ayondoData = OpenAccountUtils.getAyondoValueFromGZTKeyValue(key, value);
-							if(ayondoData){
-								dataList.push(ayondoData);
-							}
-						}
+						var dataList = OpenAccountUtils.getAyondoValuesFromGZTValue(responseJson);
 
 						TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP2, TalkingdataModule.LABEL_OPEN_ACCOUNT)
 						OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop, dataList);
@@ -328,7 +301,7 @@ var styles = StyleSheet.create({
 	buttonView: {
 		height: 40,
 		borderRadius: 3,
-		backgroundColor: '#4567a4',
+		backgroundColor: ColorConstants.TITLE_DARK_BLUE,
 		justifyContent: 'center',
 	},
 	buttonText: {

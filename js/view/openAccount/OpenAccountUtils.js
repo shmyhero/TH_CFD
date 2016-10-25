@@ -127,7 +127,7 @@ export function getAyondoValuesFromGZTValue(GZTresponse){
 	var dataList = [];
   for(var GZTkey in GZTresponse){
     var GZTvalue = decodeURIComponent(GZTresponse[GZTkey]);
-      console.log("GZTkey: " + GZTkey + " GZTvalue: " + GZTvalue);
+    console.log("GZTkey: " + GZTkey + " GZTvalue: " + GZTvalue);
     for(var i = 0; i < GZT_Ayondo_Key_Mappings.length; i++){
       if(GZTkey === GZT_Ayondo_Key_Mappings[i].GZTKey){
         var ayondoData = {
@@ -144,16 +144,18 @@ export function getAyondoValuesFromGZTValue(GZTresponse){
           dataList.push(ayondoData);
           break;
         case "real_name":
-          var firstName;
-          var lastName;
+          var firstName = "";
+          var lastName = "";
           console.log("realname: " + GZTvalue);
           if(GZTvalue && GZTvalue.length >= 1){
-            firstName = GZTvalue.substring(0,1);
+            if(GZTvalue.length <= 3){
+              firstName = GZTvalue.substring(0,1);
+              lastName = GZTvalue.substring(1, GZTvalue.length);
+            }else{
+              firstName = GZTvalue.substring(0,2);
+              lastName = GZTvalue.substring(2, GZTvalue.length);
+            }
           }
-          if(GZTvalue && GZTvalue.length >= 1){
-            lastName = GZTvalue.substring(1, GZTvalue.length);
-          }
-
           console.log(GZTvalue + "firstName " + firstName + "lastName " + lastName)
           var firstNameData = {
             "key": "firstName",

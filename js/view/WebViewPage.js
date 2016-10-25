@@ -16,6 +16,7 @@ var SharePage = require('./SharePage')
 var NavBar = require('./NavBar')
 var NetConstants = require('../NetConstants')
 var TalkingdataModule = require('../module/TalkingdataModule')
+var ColorPropType = require('ColorPropType');
 
 var WebViewPage = React.createClass({
 	propTypes: {
@@ -27,8 +28,9 @@ var WebViewPage = React.createClass({
 		shareFunction: React.PropTypes.func,
 		shareTrackingEvent: React.PropTypes.string,
 		shareUrl: React.PropTypes.string,
-		backFunction: React.PropTypes.func, 
+		backFunction: React.PropTypes.func,
 		isShowNav: React.PropTypes.bool,
+		themeColor: ColorPropType,
 	},
 
 	getDefaultProps() {
@@ -155,6 +157,7 @@ var WebViewPage = React.createClass({
 			<NavBar title={this.props.title}
 				showBackButton={true}
 				backButtonOnClick={this.pressBackButton}
+				backgroundColor={this.props.themeColor}
 				imageOnRight={require('../../images/share01.png')}
 				rightImageOnClick={this.pressShareButton}
 				navigator={this.props.navigator}/>
@@ -163,6 +166,7 @@ var WebViewPage = React.createClass({
 			return(
 			<NavBar title={this.props.title}
 				showBackButton={true}
+				backgroundColor={this.props.themeColor}
 				backButtonOnClick={this.pressBackButton}
 				navigator={this.props.navigator}/>
 			);

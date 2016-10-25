@@ -133,7 +133,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 		})
 		return new Promise(resolve=>{
 			if(listRawData[rowID].value && listRawData[rowID].value.length <= 4){
-				listRawData[rowID].error = "请输入4位以上用户名";
+				listRawData[rowID].error = "用户名必须是5到20位字母和数字的组合";
 				this.updateList();
 				this.setState({
 					validateInProgress: false,
@@ -202,12 +202,12 @@ var OAAccountBasicSettingsPage = React.createClass({
 			var hasError = false;
 			if(listRawData[1].value){
 				if(listRawData[1].value.length < 8){
-					listRawData[1].error = "密码必须是8位以上数字字母组合";
+					listRawData[1].error = "密码必须是 8 位或以上字母和数字的组合";
 					hasError = true;
 				}else{
 					var re = /^[0-9a-zA-Z\!\#\*\$\-\/\=\?\@\.\,\:\;]+$/;
 					if(!re.test(listRawData[1].value)){
-						listRawData[1].error = "密码必须是8位以上数字字母组合";
+						listRawData[1].error = "密码必须是 8 位或以上字母和数字的组合";
 						hasError = true;
 					}
 				}
@@ -276,6 +276,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 							autoCorrect={false}
 							secureTextEntry={secureTextEntry}
 							defaultValue={rowData.value}
+							selectionColor="#426bf2"
 							onChangeText={(text)=>this.textInputChange(text, rowID)}
 							onEndEditing={(event)=>this.textInputEndChange(event, rowID)}
 							maxLength={rowData.maxLength}/>

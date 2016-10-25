@@ -9,6 +9,7 @@ import {
 	Text,
 	Dimensions,
 	Alert,
+	InteractionManager,
 } from 'react-native';
 
 var ImagePicker = require('react-native-image-picker');
@@ -150,58 +151,61 @@ var OAIdPhotoPage = React.createClass({
 	},
 
 	gotoNext: function() {
-		if (this.state.idCardFrontData != null && this.state.idCardBackData != null) {
-			this.setState({
-				nextEnabled: false,
-				validateInProgress: true,
-			})
-			var userData = LogicData.getUserData();
-			NetworkModule.fetchTHUrl(
-				NetConstants.CFD_API.ID_CARD_OCR,
-				{
-					method: 'POST',
-					body: JSON.stringify({
-						frontImg: this.state.idCardFrontData,
-						frontImgExt: 'jpg',
-						backImg: this.state.idCardBackData,
-						backImgExt: 'jpg',
-					}),
-					headers: {
-						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-						'Content-Type': 'application/json; charset=utf-8',
+		this.setState({
+			nextEnabled: false,
+			validateInProgress: true,
+			error: null,
+		})
+		InteractionManager.runAfterInteractions(() => {
+			if (this.state.idCardFrontData != null && this.state.idCardBackData != null) {
+				var userData = LogicData.getUserData();
+				NetworkModule.fetchTHUrl(
+					NetConstants.CFD_API.ID_CARD_OCR,
+					{
+						method: 'POST',
+						body: JSON.stringify({
+							frontImg: this.state.idCardFrontData,
+							frontImgExt: 'jpg',
+							backImg: this.state.idCardBackData,
+							backImgExt: 'jpg',
+						}),
+						headers: {
+							'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+							'Content-Type': 'application/json; charset=utf-8',
+						},
+						showLoading: true,
 					},
-					showLoading: true,
-				},
-				(responseJson) => {
-					this.setState({
-						nextEnabled: true,
-						validateInProgress: false,
-					})
-
-					if (responseJson.result == 0) {
-						var dataList = OpenAccountUtils.getAyondoValuesFromGZTValue(responseJson);
-
-						TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP2, TalkingdataModule.LABEL_OPEN_ACCOUNT)
-						OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop, dataList);
-					} else {
+					(responseJson) => {
 						this.setState({
-							error: responseJson.Message
+							nextEnabled: true,
+							validateInProgress: false,
+						})
+
+						if (responseJson.result == 0) {
+							var dataList = OpenAccountUtils.getAyondoValuesFromGZTValue(responseJson);
+
+							TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP2, TalkingdataModule.LABEL_OPEN_ACCOUNT)
+							OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop, dataList);
+						} else {
+							console.log("ocr failed. responseJson: " + JSON.stringify(responseJson))
+							this.setState({
+								error: decodeURIComponent(responseJson.message)
+							});
+						}
+					},
+					(error) => {
+						this.setState({
+							nextEnabled: true,
+							validateInProgress: false,
+							error: error
 						});
 					}
-				},
-				(error) => {
-					this.setState({
-						nextEnabled: true,
-					})
-					this.setState({
-						error: error
-					});
-				}
-			)
-		} else {
-			TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP2, TalkingdataModule.LABEL_OPEN_ACCOUNT)
-			OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
-		}
+				)
+			} else {
+				TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP2, TalkingdataModule.LABEL_OPEN_ACCOUNT)
+				OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
+			}
+		});
 	},
 
 	getData: function(){

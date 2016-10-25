@@ -179,6 +179,7 @@ var OADocumentInfoPage = React.createClass({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			url: rowData.url,
 			title: rowData.key,
+			themeColor: ColorConstants.TITLE_DARK_BLUE,
 		});
 	},
 

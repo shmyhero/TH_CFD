@@ -185,6 +185,7 @@ var OAFinanceInfoPage = React.createClass({
 						editable={false}
 						placeholder={rowData.defaultValue}
 						placeholderTextColor={"#3f6dbd"}
+						selectionColor="#426bf2"
 						value={displayText} />
 					<Image style={{width:17.5, height:13.5}} source={require("../../../images/icon_down_arrow.png")} />
 				</View>

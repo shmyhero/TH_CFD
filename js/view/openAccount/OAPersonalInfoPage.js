@@ -9,7 +9,7 @@ import {
 	Text,
 	TextInput,
 	TouchableOpacity,
-	Image
+	Image,
 } from 'react-native';
 
 import Picker from 'react-native-wheel-picker';
@@ -77,11 +77,13 @@ var OAPersonalInfoPage = React.createClass({
 
 	gotoNext: function() {
 		//TODO: GZT validation.
-		this.setState({
-			validateInProgress: true,
-		})
-		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP3, TalkingdataModule.LABEL_OPEN_ACCOUNT);
-		OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
+		if(this.checkValues()){
+			this.setState({
+				validateInProgress: true,
+			})
+			TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP3, TalkingdataModule.LABEL_OPEN_ACCOUNT);
+			OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
+		}
 	},
 
 	getData: function(){
@@ -103,13 +105,25 @@ var OAPersonalInfoPage = React.createClass({
 		}
 	},
 
+	checkValues: function(){
+		var valid = true;
+		for(var rowID = 0; rowID < listRawData.length; rowID++){
+			if(listRawData[rowID].key === "idCode"){
+				valid = this.checkIDCode(rowID);
+			}
+		}
+		return valid;
+	},
+
 	checkIDCode: function(rowID){
 		if(listRawData[rowID].value.length < 18){
 			listRawData[rowID].error = "请输入" + listRawData[rowID].minLength + "位身份证号";
 			this.updateList();
+			return false;
 		}else{
 			listRawData[rowID].error = null;
 			this.updateList();
+			return true;
 		}
 	},
 
@@ -274,6 +288,8 @@ var OAPersonalInfoPage = React.createClass({
 	          format="YYYY.MM.DD"
 	          confirmBtnText="确定"
 	          cancelBtnText="取消"
+						placeholder="点击选择"
+						placeholderTextColor={"#3f6dbd"}
 	          showIcon={false}
 	          onDateChange={(datetime) => this.onDateTimeSelect(rowID, datetime)}
 						customStyles={datePickerStyle}
@@ -284,22 +300,28 @@ var OAPersonalInfoPage = React.createClass({
 		} else{
 			var numberOfLines = 1;
 			var multiline = false;
-			var style = styles.rowWrapper;
+			var titleStyle = styles.rowWrapper;
+			var inputStyle = styles.valueText;
 			if(rowData.maxLine && rowData.maxLine > 1){
 				multiline = true;
 				numberOfLines = rowData.maxLine;
-				style = styles.multilineRowWrapper;
+				titleStyle = styles.multilineRowWrapper;
+				inputStyle = styles.multilineValueText;
 			}
 			return (
-				<View style={style}>
+				<View style={titleStyle}>
 					<Text style={rowTitleStyle}>{rowData.title}</Text>
-					<TextInput style={styles.valueText}
+					<TextInput style={inputStyle}
 						autoCapitalize="none"
 						autoCorrect={false}
 						defaultValue={rowData.value}
 						multiline={multiline}
 						numberOfLines={numberOfLines}
 						maxLength={rowData.maxLength}
+						selectionColor="#426bf2"
+						onContentSizeChange={(event) => {
+							this.setState({textInputHeight: event.nativeEvent.contentSize.height});
+						}}
 						onChangeText={(text)=>this.textInputChange(text, rowID)}
 						onEndEditing={(event)=>this.textInputEndChange(event, rowID)}
 						/>
@@ -320,28 +342,29 @@ var OAPersonalInfoPage = React.createClass({
 		var pickerModal = null
 		var enabled = true
 		var error = null;
+		console.log("listRawData: " + JSON.stringify(listRawData));
 		for (var i = 0; i < listRawData.length; i++) {
 			if(listRawData[i].error){
 				if(error){
-					error = "您输入的" + listRawData[i].title + "有误，请核对后重试";
+					error = "身份一致性验证失败";
 				}else{
-					error = listRawData[i].error;
+					error = "您输入的" + listRawData[i].title + "有误，请核对后重试";
 				}
+				enabled = false;
 			}
-			if (listRawData[i].type === "choice" && listRawData[i].value === "") {
+			if (listRawData[i].value === "") {
 				enabled = false
-				break
 			}
 			if (listRawData[i].type === "datePeriod") {
 				var date = this.parseStartEndDate(listRawData[i].value);
 				if(date && date.length == 2){
 					if(date[0] == "" || date[1] == ""){
 						enabled = false
-						break
+						//break
 					}
 				}else{
 					enabled = false
-					break
+					//break
 				}
 			}
 		};
@@ -409,19 +432,20 @@ var styles = StyleSheet.create({
 		alignItems: 'center',
 		paddingLeft: 15,
 		paddingRight: 15,
-		paddingBottom: rowPadding,
-		paddingTop: rowPadding,
 		backgroundColor: '#ffffff',
+		paddingTop: rowPadding,
+		paddingBottom: rowPadding,
 	},
 	multilineRowWrapper: {
 		flexDirection: 'row',
-		alignSelf: 'stretch',
-		alignItems: 'center',
+		alignSelf: 'center',
+		//alignItems: 'center',
+		//height: 120,
 		paddingLeft: 15,
 		paddingRight: 15,
-		paddingBottom: rowPadding,
-		paddingTop: rowPadding,
 		backgroundColor: '#ffffff',
+		paddingTop: rowPadding,
+		paddingBottom: rowPadding,
 	},
 	line: {
 		height: 0.5,
@@ -446,8 +470,16 @@ var styles = StyleSheet.create({
 		fontSize: fontSize,
 		color: '#333333',
 		flex: 3,
-		marginTop: -rowPadding,
-		marginBottom: -rowPadding,
+		//marginTop: rowPadding,
+		//marginBottom: rowPadding,
+	},
+	multilineValueText: {
+		fontSize: fontSize,
+		color: '#333333',
+		flex: 3,
+		height: 48,
+		marginTop: -5,
+		alignSelf: "flex-start",
 	},
 	valueContent:{
 		flex: 3,
@@ -493,6 +525,10 @@ var datePickerStyle = StyleSheet.create({
 			alignItems: 'flex-start',
 			justifyContent: 'center',
 		},
+		placeholderText: {
+			fontSize: fontSize,
+			color: "#c4c4c4",
+		},
 });
 
 var datePeriodPickerStyle = StyleSheet.create({
@@ -508,6 +544,10 @@ var datePeriodPickerStyle = StyleSheet.create({
 			borderWidth: 0,
 			alignItems: 'flex-start',
 			justifyContent: 'flex-start',
+		},
+		placeholderText: {
+			fontSize: fontSize,
+			color: "#c4c4c4",
 		},
 });
 

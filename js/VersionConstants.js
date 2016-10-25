@@ -9,7 +9,9 @@ var NetConstants = require('./NetConstants')
 
 export const WEBVIEW_QA_VERSION = '1.4' //Only update this version when QA Page version is updated!
 export const WEBPAGE_VERSION = '1.5'    //Only update this version when Web Page version is updated!
-export const WEBPAGE_FOLDER = 'TH_CFD_WEB' + WEBPAGE_VERSION
+
+//BUG Fix: Some web page in web1.5 cannot be displayed. Use web for now.
+export const WEBPAGE_FOLDER = 'TH_CFD_WEB' //+ WEBPAGE_VERSION
 
 //NEVER CHANGE THE PRODUCT SERVER IN PRODUCT APP!!!
 //DEFAULT settings are product settings.

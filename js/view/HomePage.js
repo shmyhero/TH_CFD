@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import TimerMixin from 'react-timer-mixin';
 import {
 	StyleSheet,
 	View,
@@ -60,6 +61,10 @@ var didFocusSubscription = null
 var lastForceloopTime = 0
 
 var HomePage = React.createClass({
+	mixins: [TimerMixin],
+	navBarPressedCount: 0,
+	developPageTriggerCount: 10,
+
 	getInitialState: function() {
 		return {
 			dataSource: ds.cloneWithRows(PAGES),
@@ -720,21 +725,34 @@ var HomePage = React.createClass({
 		}
 	},
 
-	renderNavBar: function(){
-		if(!VersionConstants.getIsProductApp() || Platform.OS === "ios"){
-			return (
-				<TouchableOpacity onPress={
-						()=>{
-							this.props.navigator.push({
-								name: MainPage.DEVELOP_ROUTE,
-							});
-						}}
-					>
-					<NavBar title="首页"/>
-				</TouchableOpacity>);
+	pressedNavBar: function(){
+		if(this.navBarPressedCount >= this.developPageTriggerCount - 1){
+			this.navBarPressedCount = 0;
+			this.props.navigator.push({
+				name: MainPage.DEVELOP_ROUTE,
+			});
 		}else{
-			return (<NavBar title="首页"/>);
+			this.navBarPressedCount++;
+			var currentCount = this.navBarPressedCount;
+			this.setTimeout(
+				()=>{
+					if(this.navBarPressedCount == currentCount && this.navBarPressedCount < this.developPageTriggerCount - 1){
+						this.navBarPressedCount = 0;
+						console.log("count to 10 failed.")
+					}
+				}, 500
+		 	);
 		}
+	},
+
+	renderNavBar: function(){
+		return (
+			<TouchableOpacity
+				activeOpacity={1}
+				onPress={()=>this.pressedNavBar()}
+				>
+				<NavBar title="首页"/>
+			</TouchableOpacity>);
 	},
 
 	render: function() {

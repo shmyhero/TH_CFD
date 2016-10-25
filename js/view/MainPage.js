@@ -282,7 +282,8 @@ var MainPage = React.createClass({
 										 shareTitle={route.shareTitle}
 										 shareDescription={route.shareDescription}
 										 shareFunction={this._doShare}
-										 shareTrackingEvent={route.shareTrackingEvent}/>
+										 shareTrackingEvent={route.shareTrackingEvent}
+										 themeColor={route.themeColor}/>
 			)
 		} else if (route.name === QA_ROUTE) {
 			hideTabbar();
@@ -374,7 +375,7 @@ var MainPage = React.createClass({
 		}else if (route.name === OPEN_ACCOUNT_ROUTE) {
 			hideTabbar();
 
-			return OpenAccountRoutes.showOARoute(_navigator, route.step, route.onPop, route.data);
+			return OpenAccountRoutes.showOARoute(_navigator, route.step, route.onPop, route.data, route.nextStep);
 		} else if (route.name === LIVE_REGISTER_ROUTE) {
 			// hideTabbar()
 			return (

@@ -54,19 +54,17 @@ export default class DevelopPage extends Component {
           },
         },
         function(responseJson) {
-          StorageModule.setMeData(JSON.stringify(responseJson))
-          LogicData.setMeData(responseJson);
-          this.reloadMeData();
+          
         }.bind(this),
         function(errorMessage) {
-          this.reloadMeDataFromStorage();
+
         }.bind(this),
         function(errorMessage) {
-          this.reloadMeDataFromStorage();
+
         }.bind(this)
       )
     }else{
-      this.reloadMeDataFromStorage();
+
     }
   }
 

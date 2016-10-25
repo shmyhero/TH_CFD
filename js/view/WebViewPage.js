@@ -27,6 +27,8 @@ var WebViewPage = React.createClass({
 		shareFunction: React.PropTypes.func,
 		shareTrackingEvent: React.PropTypes.string,
 		shareUrl: React.PropTypes.string,
+		backFunction: React.PropTypes.func, 
+		isShowNav: React.PropTypes.bool,
 	},
 
 	getDefaultProps() {
@@ -39,6 +41,7 @@ var WebViewPage = React.createClass({
 			shareFunction: ()=>{},
 			shareTrackingEvent: null,
 			shareUrl: null,
+			isShowNav: true,
 		}
 	},
 
@@ -83,6 +86,7 @@ var WebViewPage = React.createClass({
 
 	pressBackButton: function() {
 		this.props.navigator.pop()
+		this.props.backFunction && this.props.backFunction()
 	},
 
 	pressShareButton: function(){
@@ -143,6 +147,9 @@ var WebViewPage = React.createClass({
 	},
 
 	renderNavBar: function() {
+		if(!this.props.isShowNav){
+			return <View></View>
+		}
 		if((this.props.shareID || this.props.shareUrl) && (this.props.shareTitle || this.props.hareDescription)){
 			return(
 			<NavBar title={this.props.title}

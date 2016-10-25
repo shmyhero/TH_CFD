@@ -25,6 +25,7 @@ var NativeSceneModule = require('../module/NativeSceneModule')
 var StorageModule = require('../module/StorageModule')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
+var OpenAccountRoutes = require('./openAccount/OpenAccountRoutes')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
@@ -40,17 +41,30 @@ var listRawData = [{'type':'account','subtype':'accountInfo'},
 {'type':'normal','title':'关于我们', 'image':require('../../images/icon_aboutus.png'), 'subtype':'aboutus'},
 {'type':'normal','title':'设置', 'image':require('../../images/icon_config.png'), 'subtype':'config'},]
 
+
+//0未注册 1已注册 2审核中 3审核失败
+//"liveAccRejReason": "实盘注册申请信息未达到欧盟金融工具市场法规(MiFID)的要求" //审核失败原因
 var accountInfoData = [
-	{type:'开通实盘账户',color:ColorConstants.TITLE_BLUE},
-	{type:'登入实盘账户',color:ColorConstants.TITLE_BLUE},
-	{type:'实盘开户审核中...',color:'#757575'},
-	{type:'继续开户',color:ColorConstants.TITLE_BLUE},
-	{type:'重新开户',color:ColorConstants.TITLE_BLUE}
+	{title:'开通实盘账户',color:ColorConstants.TITLE_BLUE},//0未注册
+	{title:'登入实盘账户',color:ColorConstants.TITLE_BLUE},//1已注册
+	{title:'实盘开户审核中...',color:'#757575'},//2审核中
+	{title:'重新开户',color:ColorConstants.TITLE_BLUE},//3审核失败
+	{title:'继续开户',color:ColorConstants.TITLE_BLUE},//0－未注册情况下 获取本地Step 如2/5
+]
+
+var OpenAccountInfos = [
+	 "",
+	 "设置账户信息(1/5)",
+	 "上传身份证照片(2/5)",
+	 "完善个人信息(3/5)",
+	 "完善财务信息(4/5)",
+	 "提交申请(5/5)",
 ]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var didTabSelectSubscription = null
+var accStatus
 
 var MePage = React.createClass({
 	getInitialState: function() {
@@ -58,6 +72,7 @@ var MePage = React.createClass({
 			loggedIn: false,
 			hasUnreadMessage: false,
 			dataSource: ds.cloneWithRows(listRawData),
+			lastStep:0,
 		};
 	},
 
@@ -133,8 +148,24 @@ var MePage = React.createClass({
 				loggedIn: true,
 			})
 
+			var url = NetConstants.CFD_API.GET_UNREAD_MESSAGE;
+	    if(LogicData.getAccountState()){
+				url = NetConstants.CFD_API.GET_UNREAD_MESSAGE_LIVE
+				console.log('live', url );
+			}
+
+			OpenAccountRoutes.getLatestInputStep()
+			.then(step=>{
+				console.log("getLatestInputStep " + step)
+				this.setState(
+					{
+						lastStep: step,
+					}
+				)
+			});
+
 			NetworkModule.fetchTHUrlWithNoInternetCallback(
-				NetConstants.CFD_API.GET_UNREAD_MESSAGE,
+				url,
 				{
 					method: 'GET',
 					headers: {
@@ -155,6 +186,24 @@ var MePage = React.createClass({
 					console.log(errorMessage)
 				}.bind(this)
 			);
+
+
+
+			NetworkModule.fetchTHUrlWithNoInternetCallback(
+				NetConstants.CFD_API.GET_USER_INFO_API,
+				{
+					method: 'GET',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					},
+				},
+				function(responseJson) {
+					StorageModule.setMeData(JSON.stringify(responseJson))
+					LogicData.setMeData(responseJson);
+				}.bind(this),
+				function(errorMessage) {}.bind(this),
+				function(errorMessage) {}.bind(this)
+			)
 		}
 
 		var datasource = ds.cloneWithRows(listRawData);
@@ -186,20 +235,44 @@ var MePage = React.createClass({
 		});
 	},
 
-	gotoAccountStateExce:function(){
-
-		var userData = LogicData.getUserData()
-		var userId = userData.userId
-		if (userId == undefined) {
-			userId = 0
-		}
-		console.log("gotoAccountStateExce userId = " + userId);
+	gotoOpenLiveAccount:function(){
 		this.props.navigator.push({
-			name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
-			title:'实盘交易',
-			url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state=userId'
-			// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
+			name: MainPage.OPEN_ACCOUNT_ROUTE,
+			step: this.state.lastStep,
+			onPop: this.reloadMeData,
 		});
+	},
+
+	////0未注册 1已注册 2审核中 3审核失败
+	gotoAccountStateExce:function(){
+		if(accStatus == 0){
+			this.gotoOpenLiveAccount();
+		}else if(accStatus == 1){//已注册，去登录
+			var userData = LogicData.getUserData()
+			var userId = userData.userId
+			if (userId == undefined) {
+				userId = 0
+			}
+			console.log("gotoAccountStateExce userId = " + userId);
+			this.props.navigator.push({
+				name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+				title:'实盘交易',
+				url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
+				// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
+			});
+		}else if(accStatus == 2){
+			console.log('审核中...');
+		}else if(accStatus == 3){
+			this.props.navigator.push({
+				name: MainPage.OPEN_ACCOUNT_ROUTE,
+				step: this.state.lastStep,
+				onPop: this.reloadMeData,
+			});
+		}else{
+
+		}
+
+
 
 	},
 
@@ -248,15 +321,16 @@ var MePage = React.createClass({
 			// this.props.navigator.push({
 			// 	name: MainPage.ABOUT_US_ROUTE,
 			// });
-			this.gotoWebviewPage(NetConstants.TRADEHERO_API.WEBVIEW_URL_ABOUT_US, '关于我们');
-			// LogicData.setAccountState(true)
+			var aboutUrl = LogicData.getAccountState()?NetConstants.TRADEHERO_API.WEBVIEW_URL_ABOUT_US_ACTUAL:NetConstants.TRADEHERO_API.WEBVIEW_URL_ABOUT_US
+			this.gotoWebviewPage(aboutUrl, '关于我们');
+			LogicData.setAccountState(true)
+			LogicData.setActualLogin(true)
 		}
 		else if(rowData.subtype === 'config') {
 			this.props.navigator.push({
 				name: MainPage.ME_CONFIG_ROUTE,
 				onPopBack: this.reloadMeData
 			});
-
 		}
 		else if(rowData.subtype === 'feedback') {
 			var meData = LogicData.getMeData();
@@ -264,7 +338,7 @@ var MePage = React.createClass({
 				name: MainPage.FEEDBACK_ROUTE,
 				phone: meData.phone,
 			});
-			// LogicData.setAccountState(false)
+			LogicData.setAccountState(false)
 		}
 		else if(rowData.subtype === 'accountInfo') {
 			this.gotoUserInfoPage()
@@ -329,15 +403,40 @@ var MePage = React.createClass({
 	},
 
 	renderAccountStateView: function(){
-		return(
-			<TouchableOpacity activeOpacity={0.5} onPress={()=>this.gotoAccountStateExce()}>
-				<View style={styles.accoutStateLine}>
-						<View style={styles.accoutStateButton}>
-							<Text style={styles.accountStateInfo}>开通实盘账户</Text>
-					  </View>
-				</View>
-			</TouchableOpacity>
-		)
+		var meData = LogicData.getMeData();
+		console.log('提示：','liveAccStatus = '+meData.liveAccStatus + ', liveAccRejReason = '+ meData.liveAccRejReason)
+	  accStatus = meData.liveAccStatus;
+		//accStatus = 1
+		var strStatus = '';
+		var colorStatus = ColorConstants.TITLE_BLUE
+
+
+
+		if(accStatus!==undefined && accStatus<accountInfoData.length){
+			strStatus = accountInfoData[accStatus].title;
+			colorStatus = accountInfoData[accStatus].color;
+
+			if(accStatus == 0 && this.state.lastStep > 0 ){
+				//未注册 显示最后的Step
+				strStatus = '继续开户:' + OpenAccountInfos[this.state.lastStep]
+			}
+
+			return(
+				<TouchableOpacity activeOpacity={0.5} onPress={()=>this.gotoAccountStateExce()}>
+					<View style={styles.accoutStateLine}>
+							<View style={[styles.accoutStateButton,{backgroundColor:colorStatus}]}>
+								<Text style={styles.accountStateInfo}>{strStatus}</Text>
+						  </View>
+					</View>
+				</TouchableOpacity>
+			)
+		}else{
+			return(
+				<View></View>
+			)
+		}
+
+
 	},
 
 	renderRow: function(rowData, sectionID, rowID) {
@@ -393,7 +492,7 @@ var MePage = React.createClass({
 			}
 		}
 		else if(rowData.type === 'accountState'){
-				if(this.state.loggedIn && LogicData.getAccountState()){
+				if(this.state.loggedIn && (!LogicData.getAccountState())){
 					return this.renderAccountStateView()
 				}else{
 					return (
@@ -403,7 +502,7 @@ var MePage = React.createClass({
 		}
 		else {
 			// separator
-			if(LogicData.getAccountState()){
+			if(!LogicData.getAccountState() && this.state.loggedIn){
 				return (
 					<View></View>
 				)

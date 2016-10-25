@@ -13,9 +13,9 @@
 
 RCT_EXPORT_MODULE();
 
+RCT_EXPORT_VIEW_PROPERTY(chartType, NSString)
 RCT_EXPORT_VIEW_PROPERTY(data, NSString)
 RCT_EXPORT_VIEW_PROPERTY(colorType, NSInteger)
-RCT_EXPORT_VIEW_PROPERTY(chartType, NSString)
 
 - (UIView *)view
 {

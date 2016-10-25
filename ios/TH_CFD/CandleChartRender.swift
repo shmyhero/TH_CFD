@@ -140,6 +140,8 @@ class CandleChartRender: BaseRender {
 			let rect = CGRect(x: verticalLinesX[i]-textWidth/2, y: textY, width: textWidth, height: 10)
 			text.drawInRect(rect, withAttributes: attributes)
 		}
+		
+		super.drawExtraText(context)
 	}
 	
 }

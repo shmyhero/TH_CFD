@@ -362,9 +362,13 @@ var StockOpenPositionPage = React.createClass({
 		if (item === 1) {
 			var stockid = rowData.security.id
 			this.setState({
+				chartType: this.state.chartType,
 				stockDetailInfo: rowData.security
-			})
-			this.loadStockDetailInfo(this.state.chartType,stockid)
+			}, ()=>{
+				this.loadStockDetailInfo(this.state.chartType,stockid)
+			}
+		)
+			
 		}
 		this.doScrollAnimation()
 	},
@@ -460,8 +464,8 @@ var StockOpenPositionPage = React.createClass({
 	pressChartHeaderTab: function(type, rowData) {
 		this.setState({
 			chartType: type
-		})
-		this.loadStockDetailInfo(type,rowData.security.id)
+		}, ()=>this.loadStockDetailInfo(type,rowData.security.id)
+		)
 	},
 
 	currentExtendHeight: function(subItem) {

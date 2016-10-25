@@ -13,6 +13,10 @@ protocol BaseDataProvider : class
 	func margin() -> CGFloat
 	func topMargin() -> CGFloat
 	func bottomMargin() -> CGFloat
+	func maxPrice() -> Double
+	func minPrice() -> Double
+	func maxPercent() -> Double
+	func minPercent() -> Double
 }
 
 class BaseData: NSObject {
@@ -32,6 +36,10 @@ class BaseDataSource: NSObject, BaseDataProvider {
 	let _margin:CGFloat = 15.0
 	let _topMargin:CGFloat = 2.0
 	let _bottomMargin:CGFloat = 15.0
+	
+	var _maxValue:Double = Double.NaN
+	var _minValue:Double = Double.NaN
+	var _preCloseValue:Double? = 0
 	
 	var _chartType:String="today"
 	
@@ -88,5 +96,31 @@ class BaseDataSource: NSObject, BaseDataProvider {
 	
 	func bottomMargin() -> CGFloat {
 		return _bottomMargin
+	}
+	
+	func maxPrice() -> Double {
+		return _maxValue
+	}
+	
+	func minPrice() -> Double {
+		return _minValue
+	}
+	
+	func maxPercent() -> Double {
+		if (_preCloseValue > 0) {
+			return (_maxValue - _preCloseValue!) / _preCloseValue! * 100
+		}
+		else {
+			return Double.NaN
+		}
+	}
+	
+	func minPercent() -> Double {
+		if (_preCloseValue > 0) {
+			return (_minValue - _preCloseValue!) / _preCloseValue! * 100
+		}
+		else {
+			return Double.NaN
+		}
 	}
 }

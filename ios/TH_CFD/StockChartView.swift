@@ -66,7 +66,8 @@ class StockChartView: UIView {
 // MARK: deal with raw data from RN
 	var data:String? { // use for RN manager
 		willSet {
-			if (newValue != nil) {
+			print ("set type data:",self.chartType)
+			if (newValue != nil && self.chartType != "undefined") {
 				if (chartType == "5m" || chartType == "day"){
 					dataSource = CandleChartDataSource.init(json:newValue!, rect: self.bounds)
 				}
@@ -89,7 +90,12 @@ class StockChartView: UIView {
 		}
 	}
 	
-	var chartType:String="today"
+	var chartType:String="undefined" {
+		willSet {
+			print ("set type chart:", newValue)
+			self.setNeedsDisplay()
+		}
+	}
 	
 	override func didMoveToWindow() {
 		if dataSource?._rect == CGRectZero {

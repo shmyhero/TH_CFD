@@ -86,7 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		} else {
             jsCodeLocation = RCTHotUpdate.bundleURL();
 //			jsCodeLocation = NSBundle.mainBundle().URLForResource("main", withExtension: "jsbundle")
-//			jsCodeLocation = NSURL(string: "http://192.168.20.146:8081/index.ios.bundle?platform=ios&dev=true")
+//			jsCodeLocation = NSURL(string: "http://192.168.20.149:8081/index.ios.bundle?platform=ios&dev=true")
 		}
 		
 		let rootView = RCTRootView(bundleURL:jsCodeLocation,moduleName: "TH_CFD",initialProperties:nil,launchOptions:launchOptions)

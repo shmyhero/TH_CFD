@@ -65,6 +65,47 @@ class BaseRender: NSObject {
 	}
 	
 	func drawExtraText(context:CGContext) -> Void {
+		if dataProvider == nil {
+			return
+		}
+		let maxPrice = dataProvider!.maxPrice()
+		let minPrice = dataProvider!.minPrice()
+		if (maxPrice.isNaN || minPrice.isNaN) {
+			return
+		}
+		// draw min/max text
+		let height = _rect.height
+		let width = _rect.width
+		let textWidth:CGFloat = 40.0
+		let textColor = _colorSet.minmaxColor
+		let textFont = UIFont(name: "Helvetica Neue", size: 8)
+		let textStyle = NSMutableParagraphStyle()
+		textStyle.alignment = .Left
+		let attributes: [String:AnyObject] = [
+			NSForegroundColorAttributeName: textColor,
+			NSFontAttributeName: textFont!,
+			NSParagraphStyleAttributeName: textStyle,
+			]
 		
+		var maxText: NSString = "\(maxPrice)"
+		var minText: NSString = "\(minPrice)"
+		var textX = _margin+5
+		let textHeight:CGFloat = 10
+		maxText.drawInRect(CGRect(x: textX, y: _topMargin+5, width: textWidth, height: textHeight), withAttributes: attributes)
+		minText.drawInRect(CGRect(x: textX, y: height-_bottomMargin-textHeight-5, width: textWidth, height: textHeight), withAttributes: attributes)
+		
+		let maxPercent = dataProvider!.maxPercent()
+		let minPercent = dataProvider!.minPercent()
+		if (maxPercent.isNaN || minPercent.isNaN) {
+			return
+		}
+		
+		textStyle.alignment = .Right
+		maxText = NSString(format: "%.2f%%", maxPercent)
+		minText = NSString(format: "%.2f%%", minPercent)
+		textX = width-_margin-5-textWidth
+		
+		maxText.drawInRect(CGRect(x: textX, y: _topMargin+5, width: textWidth, height: textHeight), withAttributes: attributes)
+		minText.drawInRect(CGRect(x: textX, y: height-_bottomMargin-textHeight-5, width: textWidth, height: textHeight), withAttributes: attributes)
 	}
 }

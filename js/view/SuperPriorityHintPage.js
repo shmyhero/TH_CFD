@@ -70,7 +70,7 @@ var SuperPriorityHintPage = React.createClass({
 			},
 		).start();
 
-		this.updateLastShow();
+		// this.updateLastShow();
   },
 
 	updateLastShow: function(){

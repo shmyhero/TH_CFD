@@ -146,6 +146,10 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 			_pointData.append(point)
 		}
 		
+		_maxValue = maxValue
+		_minValue = minValue
+		_preCloseValue = preClose
+		
 		self.calculateVerticalLines()
 	}
 	

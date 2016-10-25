@@ -176,17 +176,6 @@ class LineChartRender: BaseRender {
 		}
 		let timeStart:NSDate = (lineDataProvider!.firstTime())!
 		let timeEnd:NSDate = (lineDataProvider!.lastTime())!
-//		let showPeriod = lineDataProvider!.periodShowTime()
-//		if (showPeriod > 0) {
-//			timeEnd = lineDataProvider!.currentPanEndTime()
-//			let timeGap:NSTimeInterval = timeEnd.timeIntervalSinceDate(timeStart)
-//			if timeGap > showPeriod {
-//				timeStart = NSDate(timeInterval: -showPeriod, sinceDate: timeEnd)
-//			}
-//			else {
-//				timeStart = NSDate(timeInterval: lineDataProvider!.periodPanTime(), sinceDate: timeStart)
-//			}
-//		}
 		
 		let leftText: NSString = dateFormatter.stringFromDate(timeStart)
 		let rightText = dateFormatter.stringFromDate(timeEnd)
@@ -216,5 +205,7 @@ class LineChartRender: BaseRender {
 			text.drawInRect(rect, withAttributes: attributes)
 			lastX = verticalLinesX[i]
 		}
+		
+		super.drawExtraText(context)
 	}
 }

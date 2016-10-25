@@ -17,11 +17,13 @@ class ColorSet: NSObject {
 	
 	var upColor: UIColor = UIColor(hexInt: 0xe34b4f)
 	var downColor: UIColor = UIColor(hexInt: 0x30c296)
+	var minmaxColor: UIColor = UIColor.whiteColor()
 	
 	init(type:Int=0) {
 		_type = type;
 		bgLineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0x497bce)
 		lineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0xbbceed)
+		minmaxColor = type == 1 ? UIColor.whiteColor() : UIColor(hexInt: 0x70a5ff)
 		super.init()
 	}
 }

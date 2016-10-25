@@ -121,14 +121,6 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 			}
 		}
 		
-//		let maxValue = _candleData.reduce(0) { (max, data) -> Double in
-//			(max < data.high) ? data.high : max
-//		}
-//		
-//		let minValue = _candleData.reduce(100000000.0) { (min, data) -> Double in
-//			(min > data.low) ? data.low : min
-//		}
-		
 		//calculate the x point
 		let topBorder:CGFloat = height * 0.12
 		let bottomBorder:CGFloat = height * 0.15
@@ -156,6 +148,10 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		}
 		
 		self.calculateVerticalLines()
+		
+		_maxValue = maxValue
+		_minValue = minValue
+		_preCloseValue = self.stockData?.preClose
 	}
 	
 	func calculateVerticalLines() -> Void {

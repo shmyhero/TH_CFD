@@ -25,6 +25,7 @@ var NativeDataModule = require('../module/NativeDataModule')
 var NavBar = require('./NavBar')
 var TalkingdataModule = require('../module/TalkingdataModule')
 var TongDaoModule = require('../module/TongDaoModule')
+var HeaderLineDialog = require('./HeaderLineDialog')
 
 var {height, width} = Dimensions.get('window');
 var heightRate = height/667.0;
@@ -40,6 +41,7 @@ var imgHeight = imgWidth * 72 /264 ;
 var modelTextW = width/28;
 var signEnable = true;//防止网络不畅多次点击事件发生
 
+var RULE_DIALOG = "ruleDialog";
 var DaySignPage = React.createClass({
 	propTypes: {
     shareFunction: React.PropTypes.func,
@@ -53,10 +55,7 @@ var DaySignPage = React.createClass({
 
 	getInitialState() {
     return {
-      modalAnimated: true,
-      modalVisible: false,
 			modalCoinVisible: false,
-      modalTransparent: true,
 			monthToday: '-',
 			monthDays:31,
 
@@ -328,8 +327,7 @@ var DaySignPage = React.createClass({
 	},
 
 	_clickStratgy:function(){
-		// Alert.alert('签到攻略');
-		this._setModalVisible(true);
+		this.refs[RULE_DIALOG].show();
 	},
 
 	_clickSign:function(){
@@ -425,55 +423,9 @@ var DaySignPage = React.createClass({
 
 	renderModal:function(){
 		return(
-			<Modal
-				transparent={true}
-				visible={this.state.modalVisible}
-				animationType={"slide"}
-				style={{height: height, width: width}}
-				onRequestClose={() => {this._setModalVisible(false)}}
-				>
-				<View style={[styles.modalContainer]}>
-					<View style={[styles.modalInnerContainer]}>
-						<TouchableOpacity onPress={() => this._setModalVisible(false)}>
-							<Image style = {styles.imgSignStratgyClose} source = {require('../../images/sign_stratgy_close.png')} ></Image>
-						</TouchableOpacity>
-
-						<View style = {styles.imgSignTexContainer}>
-							<View style = {styles.lineText}>
-							<View style = {styles.number} >
-								<Text style = {styles.textDayNumber2}>{1}</Text>
-							</View>
-								<Text style={styles.textModal}>签到1天，赠送0.5元交易金；</Text>
-							</View>
-							<View style = {styles.lineText}>
-								<View style = {styles.number} >
-									<Text style = {styles.textDayNumber2}>{2}</Text>
-								</View>
-								<Text style={styles.textModal}>连续签到5天后，第6天起，赠送0.6元交易金；</Text>
-							</View>
-							<View style = {styles.lineText}>
-								<View style = {styles.number} >
-									<Text style = {styles.textDayNumber2}>{3}</Text>
-								</View>
-								<Text style={styles.textModal}>连续签到10天后，第11天起，赠送0.8元交易金；</Text>
-							</View>
-							<View style = {styles.lineText}>
-								<View style = {styles.number} >
-									<Text style = {styles.textDayNumber2}>{4}</Text>
-								</View>
-								<Text style={styles.textModal}>连续签到中断，即恢复到每日赠送0.5元交易金，重新积累连续签到天数</Text>
-							</View>
-      			</View>
-
-						<TouchableOpacity onPress={() => this._setModalVisible(false)}>
-							<Image style = {styles.imgSignStratgyClose2} source = {require('../../images/sign_stratgy_close.png')} ></Image>
-						</TouchableOpacity>
-
-						<Image style = {styles.imgSignStratgy} source = {require('../../images/sign_stratgy.png')} ></Image>
-
-					</View>
-				</View>
-			</Modal>
+			<HeaderLineDialog ref={RULE_DIALOG}
+				headerImage={require('../../images/my_income_strategy.png')}
+				messageLines={this.rules}/>
 		);
 	},
 
@@ -493,11 +445,6 @@ var DaySignPage = React.createClass({
 			</Modal>
 		);
 	},
-
-
-	_setModalVisible(visible) {
-	 this.setState({modalVisible: visible});
- },
 
  _setModalCoinVisible(visible) {
  	 this.setState({modalCoinVisible: visible});

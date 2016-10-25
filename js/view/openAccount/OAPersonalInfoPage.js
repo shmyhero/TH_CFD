@@ -113,12 +113,6 @@ var OAPersonalInfoPage = React.createClass({
 		}
 	},
 
-	updateList: function(){
-		this.setState({
-				dataSource: ds.cloneWithRows(listRawData),
-		});
-	},
-
 	onPressPicker: function(rowData,rowID) {
 		if (-1 !== this.state.selectedPicker) {
 			this.setState({

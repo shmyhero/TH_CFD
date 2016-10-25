@@ -54,7 +54,7 @@ var NavBar = React.createClass({
 			rightImageOnClick: null,
 			backButtonOnClick: null,
 			subTitle: null,
-			backgroundColor: ColorConstants.TITLE_BLUE,
+			backgroundColor: null,
 			rightCustomContent: null,
 			enableRightText: true,
 		}
@@ -99,9 +99,13 @@ var NavBar = React.createClass({
 	},
 
 	render: function() {
+		var backgroundColor = ColorConstants.title_blue();
+		if(this.props.backgroundColor){
+			backgroundColor = this.props.backgroundColor;
+		}
+
 		return (
-			// <View style={[styles.container, {backgroundColor: this.props.backgroundColor}, this.props.barStyle]} >
-			<View style={[styles.container, {backgroundColor: ColorConstants.title_blue()}, this.props.barStyle]} >
+			<View style={[styles.container, {backgroundColor: backgroundColor}, this.props.barStyle]} >
 				<View style={styles.leftContainer}>
 					{this.renderBackButton()}
 					{this.renderLeftText()}

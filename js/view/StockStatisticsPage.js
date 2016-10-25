@@ -44,9 +44,17 @@ var StockStatisticsPage = React.createClass({
 			statisticsBarInfo: [],
 			statisticsSumInfo: [],
 		})
+
 		var userData = LogicData.getUserData()
+
+		var url = NetConstants.CFD_API.GET_USER_STATISTICS_API
+		if(LogicData.getAccountState()){
+			url = NetConstants.CFD_API.GET_USER_STATISTICS_LIVE_API
+			console.log('live', url );
+		}
+
 		NetworkModule.fetchTHUrl(
-			NetConstants.CFD_API.GET_USER_STATISTICS_API,
+			url,
 			{
 				method: 'GET',
 				headers: {
@@ -57,7 +65,11 @@ var StockStatisticsPage = React.createClass({
 				this.playStatisticsAnim(responseJson)
 			},
 			(errorMessage) => {
-				Alert.alert('', errorMessage);
+				if(NetConstants.AUTH_ERROR === errorMessage){
+
+				}else{
+					// Alert.alert('', errorMessage);
+				}
 			}
 		)
 	},
@@ -131,7 +143,7 @@ var StockStatisticsPage = React.createClass({
 		}
 
 		return (
-			<View style={styles.header}>
+			<View style={[styles.header,{backgroundColor:ColorConstants.title_blue()}]}>
 				<View style={styles.empty}/>
 				<Text style={styles.headerText1}>总资产(美元)</Text>
 				<Text style={styles.headerText2}>{total}</Text>
@@ -164,13 +176,13 @@ var StockStatisticsPage = React.createClass({
 				<View style={styles.centerView}>
 					<View style={styles.empty}/>
 					<Text style={styles.centerText1}>近1月收益(美元)</Text>
-					<Text style={styles.centerText2}>{sumPl}</Text>
+					<Text style={[styles.centerText2,{color:LogicData.getAccountState()?'#85b1fb':'#1962dd'}]}>{sumPl}</Text>
 					<View style={styles.empty}/>
 				</View>
 				<View style={styles.centerView}>
 					<View style={styles.empty}/>
 					<Text style={styles.centerText1}>近1月回报率</Text>
-					<Text style={styles.centerText2}>{avgPlRate}%</Text>
+					<Text style={[styles.centerText2,{color:LogicData.getAccountState()?'#85b1fb':'#1962dd'}]}>{avgPlRate}%</Text>
 					<View style={styles.empty}/>
 				</View>
 			</View>

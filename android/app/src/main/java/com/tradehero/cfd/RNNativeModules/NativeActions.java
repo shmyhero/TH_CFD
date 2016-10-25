@@ -13,4 +13,6 @@ public class NativeActions {
 
     //
     public final static String ACTION_SEND_MY_LIST = "myList";
+    public final static String ACTION_LOGIN_SUCCESS = "ayondoLoginSuccess";
+    public final static String ACTION_LOGIN_FAILED = "ayondoLoginError";
 }

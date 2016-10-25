@@ -56,6 +56,8 @@ var bsds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var magicCode = ""
 var NO_MAGIC = false
 var didTabSelectSubscription = null
+var didFocusSubscription = null
+var lastForceloopTime = 0
 
 var HomePage = React.createClass({
 	getInitialState: function() {
@@ -150,8 +152,15 @@ var HomePage = React.createClass({
 	},
 
 	loadHomeData: function() {
+
+		var url = NetConstants.CFD_API.GET_POPULARITY_API
+		if(LogicData.getAccountState()){
+			url = NetConstants.CFD_API.GET_POPULARITY_LIVE_API
+			console.log('live', url );
+		}
+
 		NetworkModule.fetchTHUrl(
-			NetConstants.CFD_API.GET_POPULARITY_API,
+			url,
 			{
 				method: 'GET',
 			},
@@ -187,17 +196,43 @@ var HomePage = React.createClass({
 	},
 
 	componentDidMount: function() {
+		didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
 		didTabSelectSubscription = EventCenter.getEventEmitter().
 			addListener(EventConst.HOME_TAB_RESS_EVENT, this.onTabChanged);
 	},
 
 	componentWillUnmount: function() {
 		didTabSelectSubscription && didTabSelectSubscription.remove();
+		didFocusSubscription && didFocusSubscription.remove();
 	},
 
 	onTabChanged: function(){
 		this.reloadBanner();
 		LogicData.setTabIndex(0);
+		this.forceloopSwipers();
+	},
+
+	onDidFocus: function(event) {
+		//didfocus emit in componentDidMount
+		if (MainPage.HOME_PAGE_ROUTE === event.data.route.name) {
+			this.forceloopSwipers()
+		}
+	},
+
+	forceloopSwipers: function() {
+		if (Platform.OS === 'ios') {
+    		var nowTime = (new Date()).valueOf();
+    		if (nowTime - lastForceloopTime > 1200) {
+    			// console.log("forceloop:"+nowTime)
+				if (this.refs["bannerswiper"] !== undefined) {
+					this.refs["bannerswiper"].forceloop()
+				}
+				if (this.refs["topnewsswiper"] !== undefined) {
+					this.refs["topnewsswiper"].forceloop()
+				}
+				lastForceloopTime = nowTime
+			}
+		}
 	},
 
 	downloadBannerImages: function(images) {
@@ -333,6 +368,7 @@ var HomePage = React.createClass({
 			shareTitle: shareTitle,
 			shareDescription: shareDescription,
 			shareTrackingEvent: sharingTrackingEvent,
+			backFunction: this.forceloopSwipers,
 		});
 	},
 
@@ -398,10 +434,14 @@ var HomePage = React.createClass({
 		// 	this.logoutPress()
 		// }
 		var targetUrl = 'http://cn.tradehero.mobi/TH_CFD_WEB/detail0'+index+'.html'
+		if(LogicData.getAccountState()){
+			targetUrl = 'http://cn.tradehero.mobi/TH_CFD_SP/detail0'+index+'.html'
+		}
 		this.props.navigator.push({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			url: targetUrl,
 			title: '',
+			backFunction: this.forceloopSwipers,
 		});
 	},
 
@@ -418,7 +458,7 @@ var HomePage = React.createClass({
 	gotoStockDetail: function(rowData) {
   		this.props.navigator.push({
 			name: MainPage.STOCK_DETAIL_ROUTE,
-			stockRowData: rowData
+			stockRowData: rowData,
 		});
 	},
 
@@ -446,7 +486,7 @@ var HomePage = React.createClass({
 					</View>
 				</View>
 				<View style={styles.popularityRowCenter}>
-					<Text style={styles.stockName}>{stockName}</Text>
+					<Text style={[styles.stockName,{color:LogicData.getAccountState()?ColorConstants.TITLE_DARK_BLUE:'#1862df'}]}>{stockName}</Text>
 					<Text style={styles.stockCode}>{stockSymbol}</Text>
 					<Text style={styles.stockPeople}>{peopleNum}人参与</Text>
 				</View>
@@ -467,6 +507,7 @@ var HomePage = React.createClass({
 		this.props.navigator.push({
 		 	name: MainPage.STOCK_POPULARITY_ROUTE,
 			data: this.state.rawPopularityInfo,
+			backFunction: this.forceloopSwipers,
 		});
 	},
 
@@ -502,7 +543,7 @@ var HomePage = React.createClass({
 			<TouchableOpacity style={styles.blockContainer} activeOpacity={0.95} onPress={()=>this.magicButtonPress(index)}>
 				<View style={styles.blockContainer}>
 					<View style={styles.blockTextContainer}>
-						<Text style={styles.blockTitleText}>
+						<Text style={[styles.blockTitleText],{color:LogicData.getAccountState()?ColorConstants.TITLE_DARK_BLUE:'#1862df'}}>
 							{head}
 						</Text>
 						<Text style={styles.blockBodyContent}>
@@ -518,15 +559,15 @@ var HomePage = React.createClass({
 		return (
 			<View style={{flex:1}}>
 				<View style={styles.rowContainer}>
-					{this.renderIntroduceView(1, '涨跌双盈','买对趋势就是盈利',require('../../images/updown.png'))}
+					{this.renderIntroduceView(1, '涨跌双盈','买对趋势就是盈利',LogicData.getAccountState()?require('../../images/updown_actual.png'):require('../../images/updown.png'))}
 					<View style={styles.vertLine}/>
-					{this.renderIntroduceView(2, '以小搏大','本金加上杠杆交易',require('../../images/smallbig.png'))}
+					{this.renderIntroduceView(2, '以小搏大','本金加上杠杆交易',LogicData.getAccountState()?require('../../images/small_big_actual.png'):require('../../images/smallbig.png'))}
 				</View>
 				<View style={styles.horiLine}/>
 				<View style={styles.rowContainer}>
-					{this.renderIntroduceView(3, '实时行情','免费实时全球行情',require('../../images/markets.png'))}
+					{this.renderIntroduceView(3, '实时行情','免费实时全球行情',LogicData.getAccountState()?require('../../images/markets_actual.png'):require('../../images/markets.png'))}
 					<View style={styles.vertLine}/>
-					{this.renderIntroduceView(4, '体验简单','极简交易三步骤',require('../../images/advantage.png'))}
+					{this.renderIntroduceView(4, '体验简单','极简交易三步骤',LogicData.getAccountState()?require('../../images/advantage_actual.png'):require('../../images/advantage.png'))}
 				</View>
 			</View>
 		)
@@ -558,7 +599,7 @@ var HomePage = React.createClass({
 		var url = NetConstants.TRADEHERO_API.WEBVIEW_TOP_NEWS_PAGE+news.id
 		return(
 			<TouchableOpacity style={styles.newsContainer} onPress={() => this.tapTopNews(url)}>
-				<View style={styles.bluePoint}/>
+				<View style={[styles.bluePoint,{backgroundColor:ColorConstants.title_blue()}]}/>
 				<Text style={styles.newsText}
 					ellipsizeMode="tail"
 					numberOfLines={1}>
@@ -585,9 +626,10 @@ var HomePage = React.createClass({
 			}
 			return (
 				<View style={[styles.topnewsContainer, {height: rowHeight}]}>
-					<Image style={styles.topnewsImage} source={require('../../images/topnews.png')}/>
+					<Image style={styles.topnewsImage} source={LogicData.getAccountState()?require('../../images/topnews_actual.png'):require('../../images/topnews.png')}/>
 					<View style={styles.topnewsVerticalLine}/>
 					<Swiper
+						ref="topnewsswiper"
 						horizontal={false}
 						height={rowHeight}
 						loop={true}
@@ -601,7 +643,7 @@ var HomePage = React.createClass({
 		} else {
 			return (
 				<View style={[styles.topnewsContainer, {height: rowHeight}]}>
-					<Image style={styles.topnewsImage} source={require('../../images/topnews.png')}/>
+					<Image style={styles.topnewsImage} source={LogicData.getAccountState()?require('../../images/topnews_actual.png'):require('../../images/topnews.png')}/>
 					<View style={styles.topnewsVerticalLine}/>
 				</View>
 			)
@@ -721,6 +763,7 @@ var HomePage = React.createClass({
 				<ScrollView>
 					<View style={{width: width, height: imageHeight}}>
 						<Swiper
+							ref="bannerswiper"
 							height={imageHeight}
 							loop={true}
 							bounces={true}

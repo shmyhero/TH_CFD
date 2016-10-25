@@ -8,9 +8,11 @@
         android:id="@+id/checkbox"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/stock_edit_checkbox"/>
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:button="@null"
+        />
+    <!--style="@style/stock_edit_checkbox"-->
     <LinearLayout
         android:layout_toRightOf="@id/checkbox"
         android:layout_width="wrap_content"
@@ -73,6 +75,7 @@
         android:gravity="center">
 
         <ImageView
+            android:id="@+id/ImgToTop"
             android:background="@drawable/top"
             android:layout_width="22dp"
             android:layout_height="22dp"/>

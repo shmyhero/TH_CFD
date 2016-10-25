@@ -149,7 +149,7 @@ var MeAccountBindingPage = React.createClass({
 						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]} showView={false}>
 							<Text style={styles.title}>{rowData.title}</Text>
 							<View style={styles.extendRight}>
-								<Text style={styles.clickableMessage}>未绑定</Text>
+								<Text style={[styles.clickableMessage,{color:ColorConstants.title_blue()}]}>未绑定</Text>
 							</View>
 							<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
 						</View>
@@ -172,7 +172,7 @@ var MeAccountBindingPage = React.createClass({
 							<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
 								<Text style={styles.title}>{rowData.title}</Text>
 								<View style={styles.extendRight}>
-									<Text style={styles.clickableMessage}>未绑定</Text>
+									<Text style={[styles.clickableMessage,{color:ColorConstants.title_blue()}]}>未绑定</Text>
 								</View>
 								<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
 							</View>

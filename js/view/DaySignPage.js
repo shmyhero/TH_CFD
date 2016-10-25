@@ -465,6 +465,10 @@ var DaySignPage = React.createClass({
 							</View>
       			</View>
 
+						<TouchableOpacity onPress={() => this._setModalVisible(false)}>
+							<Image style = {styles.imgSignStratgyClose2} source = {require('../../images/sign_stratgy_close.png')} ></Image>
+						</TouchableOpacity>
+
 						<Image style = {styles.imgSignStratgy} source = {require('../../images/sign_stratgy.png')} ></Image>
 
 					</View>
@@ -788,8 +792,15 @@ var styles = StyleSheet.create({
 	imgSignStratgyClose:{
 		width:16,
 		height:16,
-		marginLeft:180,
+		marginLeft:9999,
 		marginBottom:32,
+	},
+
+	imgSignStratgyClose2:{
+		width:16,
+		height:16,
+		marginLeft:0,
+		marginTop:16,
 	},
 
 	textModal:{

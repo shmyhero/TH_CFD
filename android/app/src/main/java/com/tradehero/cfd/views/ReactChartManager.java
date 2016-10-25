@@ -1,6 +1,8 @@
 package com.tradehero.cfd.views;
 
 import android.graphics.Color;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -115,6 +117,14 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
             }
         }
     }
+
+    @ReactProp(name = "chartIsActual")
+    public void setChartIsActual(ReactChart chart, boolean chartIsActual){
+        chart.setIsActual(chartIsActual);
+        Log.d("ChartIsActual","chartIsActual = " + chartIsActual);
+    }
+
+
 
     @ReactProp(name = "description")
     public void setDescription(ReactChart chart, String description) {

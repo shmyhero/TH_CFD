@@ -16,6 +16,7 @@ var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants');
 var NetworkModule = require('../module/NetworkModule');
 var TimerMixin = require('react-timer-mixin');
+var LogicData = require('../LogicData');
 
 var {height, width} = Dimensions.get('window')
 var barWidth = Math.round(width/3)-12
@@ -92,7 +93,7 @@ var StockPopularityPage = React.createClass({
 					</View>
 				</View>
 				<View style={styles.popularityRowCenter}>
-					<Text style={styles.stockName}>{stockName}</Text>
+					<Text style={[styles.stockName,{color:LogicData.getAccountState()?ColorConstants.TITLE_DARK_BLUE:'#1862df'}]}>{stockName}</Text>
 					<Text style={styles.stockCode}>{stockSymbol}</Text>
 					<Text style={styles.stockPeople}>{peopleNum}人参与</Text>
 				</View>

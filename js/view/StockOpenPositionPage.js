@@ -21,6 +21,7 @@ import {
 var LayoutAnimation = require('LayoutAnimation')
 
 var LogicData = require('../LogicData')
+var MainPage = require('./MainPage')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
@@ -90,6 +91,10 @@ var StockOpenPositionPage = React.createClass({
 	loadOpenPositionInfo: function() {
 		var userData = LogicData.getUserData()
 		var url = NetConstants.CFD_API.GET_OPEN_POSITION_API
+		if(LogicData.getAccountState()){
+			url = NetConstants.CFD_API.GET_OPEN_POSITION_LIVE_API
+			console.log('live', url );
+		}
 		NetworkModule.fetchTHUrl(
 			url,
 			{
@@ -149,9 +154,37 @@ var StockOpenPositionPage = React.createClass({
 				)
 			},
 			(errorMessage) => {
-				Alert.alert('', errorMessage);
+				// Alert.alert('', errorMessage);
+				if(NetConstants.AUTH_ERROR === errorMessage){
+					if(LogicData.getTabIndex() == 2){
+
+						var length = this.props.navigator.state.routeStack.length;
+						console.log("---> " +this.props.navigator.state.routeStack[length-1].name );
+						if(this.props.navigator.state.routeStack[length-1].name !== 'webviewpage'){
+							//防止多次进入 登录 页面
+							this.gotoAccountStateExce();
+						}
+					}
+				}else{
+					Alert.alert('', errorMessage);
+				}
 			}
 		)
+	},
+
+	gotoAccountStateExce:function(){
+		var userData = LogicData.getUserData()
+		var userId = userData.userId
+		if (userId == undefined) {
+			userId = 0
+		}
+		console.log("gotoAccountStateExce userId = " + userId);
+		this.props.navigator.push({
+			name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			title:'实盘交易',
+			url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
+			// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
+		});
 	},
 
 	loadStockDetailInfo: function(chartType,stockCode) {
@@ -467,6 +500,10 @@ var StockOpenPositionPage = React.createClass({
 	switchConfrim: function(rowData) {
 		var userData = LogicData.getUserData()
 		var url = NetConstants.CFD_API.STOP_PROFIT_LOSS_API
+		if(LogicData.getAccountState()){
+			url = NetConstants.CFD_API.STOP_PROFIT_LOSS_LIVE_API
+			console.log('live', url );
+		}
 
 		var eventParam = {};
 		eventParam[TalkingdataModule.KEY_STOP_PROFIT_SWITCH_ON] = this.state.stopProfitSwitchIsOn;
@@ -483,6 +520,10 @@ var StockOpenPositionPage = React.createClass({
 				return
 			}
 			url = NetConstants.CFD_API.STOP_PROFIT_LOSS_API
+			if(LogicData.getAccountState()){
+				url = NetConstants.CFD_API.STOP_PROFIT_LOSS_LIVE_API
+				console.log('live', url );
+			}
 			var price = this.percentToPriceWithRow(stopLossPercent, rowData, 2)
 			if(!this.state.stopLossSwitchIsOn){
 				stopLossPercent=0
@@ -536,6 +577,10 @@ var StockOpenPositionPage = React.createClass({
 			if (rowData.takeOID === undefined) {
 				if (this.state.stopProfitSwitchIsOn) {
 					url = NetConstants.CFD_API.ADD_REMOVE_STOP_PROFIT_API
+					if(LogicData.getAccountState()){
+						url = NetConstants.CFD_API.ADD_REMOVE_STOP_PROFIT_LIVE_API
+						console.log('live', url );
+					}
 					type = 'POST'
 					body = JSON.stringify({
 							posId: rowData.id,
@@ -560,6 +605,10 @@ var StockOpenPositionPage = React.createClass({
 				}
 				else {
 					url = NetConstants.CFD_API.ADD_REMOVE_STOP_PROFIT_API
+					if(LogicData.getAccountState()){
+						url = NetConstants.CFD_API.ADD_REMOVE_STOP_PROFIT_LIVE_API
+						console.log('live', url );
+					}
 					type = 'DELETE'
 					body = JSON.stringify({
 							posId: rowData.id,
@@ -785,7 +834,7 @@ var StockOpenPositionPage = React.createClass({
 		return (
 			<View style={styles.sliderView}>
 				<Slider
-					minimumTrackTintColor={ColorConstants.TITLE_BLUE}
+					minimumTrackTintColor={ColorConstants.title_blue()}
 					minimumValue={startPercent}
 					value={percent}
 					maximumValue={endPercent}
@@ -885,7 +934,7 @@ var StockOpenPositionPage = React.createClass({
 				        <Switch
 				          onValueChange={(value) => this.onSwitchPressed(type, value)}
 				          value={switchIsOn}
-						  onTintColor={ColorConstants.TITLE_BLUE} />
+						  onTintColor={ColorConstants.title_blue()} />
 			        </View>
 				</View>
 				{ switchIsOn ? this.renderSlider(rowData, type, startPercent, endPercent, percent) : null}
@@ -938,6 +987,7 @@ var StockOpenPositionPage = React.createClass({
 						data={JSON.stringify(this.state.stockDetailInfo)}
 						chartType={this.state.chartType}
 						colorType={1}
+						chartIsActual={LogicData.getAccountState()}
 						descriptionColor={1}>
 						{/* {this.renderStockMaxPriceInfo(maxPrice, maxPercentage, true)}
 						{this.renderStockMaxPriceInfo(minPrice, minPercentage, false)} */}
@@ -961,9 +1011,9 @@ var StockOpenPositionPage = React.createClass({
 					{this.renderStopProfitLoss(rowData, 2)}
 
 					<TouchableHighlight
-						underlayColor={this.state.profitLossUpdated ? '#164593':'#dfdee4'}
-						onPress={() => this.switchConfrim(rowData)} style={[styles.okView, !this.state.profitLossUpdated && styles.okViewDisabled]}>
-						<Text style={[styles.okButton, !this.state.profitLossUpdated && styles.okViewDisabled]}>
+						underlayColor={this.state.profitLossUpdated ? ColorConstants.title_blue():'#dfdee4'}
+						onPress={() => this.switchConfrim(rowData)} style={[styles.okView, !this.state.profitLossUpdated && styles.okViewDisabled,this.state.profitLossUpdated && {backgroundColor:ColorConstants.title_blue()} ]}>
+						<Text style={[styles.okButton, !this.state.profitLossUpdated && styles.okViewDisabled, this.state.profitLossUpdated && {backgroundColor:ColorConstants.title_blue()}]}>
 							{confirmText}
 						</Text>
 					</TouchableHighlight>
@@ -1009,9 +1059,9 @@ var StockOpenPositionPage = React.createClass({
 				: null}
 
 				<TouchableHighlight
-					underlayColor={rowData.security.isOpen ? '#164593' : '#dfdee4'}
-					onPress={() => this.okPress(rowData)} style={[styles.okView, this.state.showExchangeDoubleCheck && styles.okViewDoubleConfirm, !rowData.security.isOpen && styles.okViewDisabled]}>
-					<Text style={[styles.okButton, this.state.showExchangeDoubleCheck && styles.okButtonDoubleConfirm]}>
+					underlayColor={rowData.security.isOpen ? ColorConstants.title_blue() : '#dfdee4'}
+					onPress={() => this.okPress(rowData)} style={[styles.okView, this.state.showExchangeDoubleCheck && styles.okViewDoubleConfirm, !rowData.security.isOpen && styles.okViewDisabled ,rowData.security.isOpen && {backgroundColor:ColorConstants.title_blue()}]}>
+					<Text style={[styles.okButton, this.state.showExchangeDoubleCheck &&  styles.okButtonDoubleConfirm , !this.state.showExchangeDoubleCheck && {backgroundColor:ColorConstants.title_blue()}]}>
 						{buttonText}
 					</Text>
 				</TouchableHighlight>
@@ -1027,11 +1077,11 @@ var StockOpenPositionPage = React.createClass({
 		var lastPrice = this.getLastPrice(rowData)
 
 		var newExtendHeight = this.currentExtendHeight(this.state.selectedSubItem)
-		var stopLossImage = require('../../images/check.png')
+		var stopLossImage = LogicData.getAccountState()?require('../../images/check_actual.png'):require('../../images/check.png')
 		var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) <= MAX_PERCENT
 		var stopProfit = rowData.takePx !== undefined
 		if (stopLoss || stopProfit) {
-			stopLossImage = require('../../images/check2.png')
+			stopLossImage = LogicData.getAccountState()?require('../../images/check2_actual.png'):require('../../images/check2.png')
 		}
 		var currentPriceLabel = rowData.isLong ? '当前买价' : '当前卖价'
 		var openDate = new Date(rowData.createAt)
@@ -1074,17 +1124,27 @@ var StockOpenPositionPage = React.createClass({
 				<View style={styles.extendRowWrapper}>
 					<TouchableOpacity onPress={()=>this.subItemPress(1, rowData)}
 						style={[styles.extendLeft, (this.state.selectedSubItem===1)&&styles.rightTopBorder,
-								(this.state.selectedSubItem===2)&&styles.bottomBorder]}>
+								(this.state.selectedSubItem===2)&&styles.bottomBorder,
+								{borderTopColor:ColorConstants.title_blue()},
+								{borderRightColor:ColorConstants.title_blue()},
+							  {borderBottomColor:ColorConstants.title_blue()}
+
+							]}>
 						<Text style={styles.extendTextTop}>行情</Text>
-						<Image style={styles.extendImageBottom} source={require('../../images/market.png')}/>
+						<Image style={styles.extendImageBottom} source={LogicData.getAccountState()?require('../../images/market_actual.png'):require('../../images/market.png')}/>
 					</TouchableOpacity>
 					<TouchableOpacity onPress={()=>this.subItemPress(2, rowData)}
 						style={[styles.extendMiddle, (this.state.selectedSubItem===1)&&styles.bottomBorder,
-								(this.state.selectedSubItem===2)&&styles.leftTopRightBorder]}>
+								(this.state.selectedSubItem===2)&&styles.leftTopRightBorder,
+								{borderTopColor:ColorConstants.title_blue()},
+								{borderBottomColor:ColorConstants.title_blue()},
+								{borderLeftColor:ColorConstants.title_blue()},
+								{borderRightColor:ColorConstants.title_blue()},
+							]}>
 						<Text style={styles.extendTextTop}>止盈/止损</Text>
 						<Image style={styles.extendImageBottom} source={stopLossImage}/>
 					</TouchableOpacity>
-					<View style={[styles.extendRight, this.state.selectedSubItem!==0 && styles.bottomBorder]}>
+					<View style={[styles.extendRight, this.state.selectedSubItem!==0 && styles.bottomBorder,{borderBottomColor:ColorConstants.title_blue()}]}>
 					</View>
 				</View>
 
@@ -1346,7 +1406,7 @@ var styles = StyleSheet.create({
 		height: 39,
 		backgroundColor: ColorConstants.TITLE_BLUE,
 		paddingVertical: 10,
-    	borderRadius:5,
+    borderRadius:5,
 		marginTop: 15,
 		marginBottom: 15,
 		justifyContent: 'space-around',
@@ -1366,7 +1426,7 @@ var styles = StyleSheet.create({
 		fontSize: 17,
 	},
 	okButtonDoubleConfirm: {
-		color: ColorConstants.TITLE_BLUE,
+		color: '#e60b11',
 	},
 
 	feeText: {

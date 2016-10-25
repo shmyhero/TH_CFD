@@ -8,11 +8,13 @@ import {
 	Image,
 	Dimensions,
 	TouchableHighlight,
+	WebView,
 } from 'react-native';
 
 var {EventCenter, EventConst} = require('../EventCenter')
 
-var LoginPage = require('./LoginPage');
+var LoginPage = require('./LoginPage')
+var WebViewPage = require('./WebViewPage')
 var ScrollTabView = require('./component/ScrollTabView')
 var StockOpenPositionPage = require('./StockOpenPositionPage')
 var StockClosedPositionPage = require('./StockClosedPositionPage')
@@ -89,6 +91,11 @@ var StockExchangePage = React.createClass({
 					currentSelectedTab: 0
 				})
 			}
+
+			// if(!LogicData.getActualLogin()){
+			// 	this.gotoAccountStateExce()
+			// }
+
 		}else{
 			this.setState({
 				loggined: false,
@@ -115,21 +122,52 @@ var StockExchangePage = React.createClass({
 			</View>
 		)
 
-		if (loggined) {
-			return (
-				<View style={{flex: 1}}>
-					<NavBar title="我的交易" showSearchButton={true} navigator={this.props.navigator}/>
-					<ScrollTabView ref={"tabPages"} tabNames={tabNames} viewPages={viewPages} removeClippedSubviews={true}
-						onPageSelected={(index) => this.onPageSelected(index)} />
-				</View>
-			)
+		var userData = LogicData.getUserData()
+		var userId = userData.userId
+		if (userId == undefined) {
+			userId = 0
 		}
-		else {
-			return (
-				<LoginPage navigator={this.props.navigator}
-									onPopToRoute={this.onPageSelected}
-									isTabbarShown={()=> { return true;}}/>
-			)
+
+		if(loggined && LogicData.getAccountState()){//实盘状态
+			if(LogicData.getActualLogin()){
+				return (
+					<View style={{flex: 1}}>
+						<NavBar title="我的交易" showSearchButton={true} navigator={this.props.navigator}/>
+						<ScrollTabView ref={"tabPages"} tabNames={tabNames} viewPages={viewPages} removeClippedSubviews={true}
+							onPageSelected={(index) => this.onPageSelected(index)} />
+					</View>
+				)
+			} else{
+				return (
+					<View style={{flex: 1}}>
+						<NavBar title="我的交易" navigator={this.props.navigator}/>
+						<WebViewPage
+							isShowNav= {false}
+							// url={'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId}
+							// url={'https://www.baidu.com'}
+						  url={'https://www.tradehub.net/live/yuefei-beta/login.html'}
+							// url={'http://cn.tradehero.mobi/TH_CFD_SP/detail01.html'}
+						/>
+					</View>
+				)
+			}
+		}else{//模拟盘状态
+			if (loggined) {
+				return (
+					<View style={{flex: 1}}>
+						<NavBar title="我的交易" showSearchButton={true} navigator={this.props.navigator}/>
+						<ScrollTabView ref={"tabPages"} tabNames={tabNames} viewPages={viewPages} removeClippedSubviews={true}
+							onPageSelected={(index) => this.onPageSelected(index)} />
+					</View>
+				)
+			}
+			else {
+				return (
+					<LoginPage navigator={this.props.navigator}
+										onPopToRoute={this.onPageSelected}
+										isTabbarShown={()=> { return true;}}/>
+				)
+			}
 		}
 	},
 });
@@ -183,7 +221,8 @@ var styles = StyleSheet.create({
 		color: 'white',
 		fontSize: 17,
 		textAlign: 'center',
-	}
+	},
+
 });
 
 

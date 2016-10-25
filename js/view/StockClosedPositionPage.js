@@ -55,6 +55,10 @@ var StockClosedPositionPage = React.createClass({
 	loadClosedPositionInfo: function() {
 		var userData = LogicData.getUserData()
 		var url = NetConstants.CFD_API.GET_CLOSED_POSITION_API
+		if(LogicData.getAccountState()){
+			url = NetConstants.CFD_API.GET_CLOSED_POSITION_LIVE_API
+			console.log('live', url );
+		}
 		NetworkModule.fetchTHUrl(
 			url,
 			{
@@ -70,7 +74,11 @@ var StockClosedPositionPage = React.createClass({
 				})
 			},
 			(errorMessage) => {
-				Alert.alert('', errorMessage);
+				if(NetConstants.AUTH_ERROR === errorMessage){
+
+				}else{
+					// Alert.alert('', errorMessage);
+				}
 			}
 		)
 	},

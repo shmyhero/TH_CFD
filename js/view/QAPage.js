@@ -18,6 +18,7 @@ var ColorConstants = require('../ColorConstants')
 var NavBar = require('../view/NavBar')
 var NetConstants = require('../NetConstants');
 var VersionConstants = require('../VersionConstants')
+var LogicData = require('../LogicData')
 
 // var didTabSelectSubscription = null;
 var {height, width} = Dimensions.get('window')
@@ -29,6 +30,8 @@ var QAPage = React.createClass({
 	getDefaultProps() {
 		var url = NetConstants.TRADEHERO_API.WEBVIEW_QA_PAGE;
 		url = url.replace('<version>', VersionConstants.WEBVIEW_QA_VERSION);
+
+
 
 		return {
 			url: url,
@@ -71,6 +74,10 @@ var QAPage = React.createClass({
 	// 	this.refs[WEBVIEW_REF].reload();
 	// },
 
+	getUrlForQA(){
+		return LogicData.getAccountState()? NetConstants.TRADEHERO_API.WEBVIEW_QA_PAGE_ACTUAL:this.props.url;
+	},
+
 	render: function() {
 		if(this.state.isNetConnected) {
 			return (
@@ -82,7 +89,7 @@ var QAPage = React.createClass({
 					scalesPageToFit={true}
 					automaticallyAdjustContentInsets={true}
 					decelerationRate="normal"
-					source={{uri: this.props.url}}/>
+					source={{uri: this.getUrlForQA()}}/>
 				)
 		}
 		else {
@@ -96,7 +103,11 @@ var QAPage = React.createClass({
 				)
 		}
 	},
+
+
 });
+
+
 
 var styles = StyleSheet.create({
 

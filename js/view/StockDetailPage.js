@@ -448,6 +448,14 @@ var StockDetailPage = React.createClass({
 			);
 	},
 
+	getGradientColor(){
+		if(LogicData.getAccountState()){
+			return [ColorConstants.TITLE_DARK_BLUE,ColorConstants.TITLE_DARK_BLUE]
+		}else{
+			return ['#3475e3','#123b80']
+		}
+	},
+
 	render: function() {
 		// 0.06%, limit to 0.01
 		var leftMoney = this.state.totalMoney - this.state.money
@@ -457,7 +465,7 @@ var StockDetailPage = React.createClass({
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
 				<View style={styles.wrapper}>
-					<LinearGradient colors={['#3475e3', '#123b80']} style={{height: height}}>
+					<LinearGradient colors={this.getGradientColor()} style={{height: height}}>
 
 						{this.renderHeader()}
 
@@ -466,6 +474,7 @@ var StockDetailPage = React.createClass({
 						<View style={{flex: 3.5, marginTop:5,marginLeft:viewMargin,marginRight:viewMargin}}>
 							<LineChart style={styles.lineChart}
 								data={JSON.stringify(this.state.stockInfo)}
+								chartIsActual={LogicData.getAccountState()}
 								chartType={this.state.chartType}>
 							{/* {this.renderStockMaxPriceInfo(this.state.maxPrice, this.state.maxPercentage)}
 							{this.renderStockMinPriceInfo(this.state.minPrice, this.state.minPercentage)} */}
@@ -541,7 +550,7 @@ var StockDetailPage = React.createClass({
 		return (
 			<TouchableOpacity
 					onPress={this.addToMyListClicked}>
-				<View style={styles.addToMyListContainer}>
+				<View style={[styles.addToMyListContainer,{backgroundColor:ColorConstants.title_blue()}]}>
 					<Text style={styles.addToMyListText}>
 						{this.state.isAddedToMyList ? '删除自选':'+自选'}
 					</Text>
@@ -838,6 +847,10 @@ var StockDetailPage = React.createClass({
 
 		var userData = LogicData.getUserData()
 		var url = NetConstants.CFD_API.POST_CREATE_POSITION_API
+		if(LogicData.getAccountState()){
+			url = NetConstants.CFD_API.POST_CREATE_POSITION_LIVE_API
+			console.log('live', url );
+		}
 		this.setState({tradingInProgress: true})
 
 		NetworkModule.fetchTHUrl(
@@ -893,7 +906,7 @@ var StockDetailPage = React.createClass({
 	renderInput: function() {
 		return (
 			<View>
-				<Image style={[styles.inputImage, {marginLeft:50-width,marginTop:10}]} source={require('../../images/key.png')}/>
+				<Image style={[styles.inputImage, {marginLeft:30-width,marginTop:10}]} source={require('../../images/key.png')}/>
 				<TextInput style={[styles.inputText, {marginLeft:40-width, marginTop:-24}]}
 					keyboardType={Platform.OS === 'ios' ? "number-pad" : "numeric"}
 					keyboardAppearance={'dark'}
@@ -973,8 +986,8 @@ var styles = StyleSheet.create({
 		height: 25,
 	},
 	inputImage: {
-		width: 13,
-		height: 11,
+		width: 22,
+		height: 17,
 	},
 	inputText: {
 		width: 30,

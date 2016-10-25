@@ -364,7 +364,7 @@ var StockListPage = React.createClass({
 	renderCountyFlag: function(rowData) {
 		if (rowData.tag !== undefined) {
 			return (
-				<View style={styles.stockCountryFlagContainer}>
+				<View style={[styles.stockCountryFlagContainer,{backgroundColor:LogicData.getAccountState()?'#5483d8':'#00b2fe'}]}>
 					<Text style={styles.stockCountryFlagText}>
 						{rowData.tag}
 					</Text>
@@ -432,7 +432,7 @@ var StockListPage = React.createClass({
 	render: function() {
 		var {height, width} = Dimensions.get('window');
 		var scrollTabHeight = 48
-		
+
 		var viewStyle = Platform.OS === 'android' ?
 			{width: width, height: height
 					- UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER

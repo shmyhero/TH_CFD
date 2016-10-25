@@ -161,7 +161,7 @@ var MePushConfigPage = React.createClass({
 						<Switch
 							onValueChange={(value) => this.onSwitchPressed(value, rowData)}
 							value={switchIsOn}
-							onTintColor={ColorConstants.TITLE_BLUE} />
+							onTintColor={ColorConstants.title_blue()} />
 					</View>
 				</View>
 			);

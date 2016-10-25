@@ -1,8 +1,10 @@
 'use strict'
 
+var LogicData = require('./LogicData')
+
 var colors = {
 	TITLE_BLUE: '#1962dd',
-	TITLE_DARK_BLUE: '#415a86',
+	TITLE_DARK_BLUE: '#425a85',
 	DISABLED_GREY: '#e0e0e0',
 	BACKGROUND_GREY: '#f0f0f0',
 	STOCK_RISE_RED: '#ea5458',
@@ -24,7 +26,12 @@ var colors = {
 		else {
 			return this.STOCK_UNCHANGED_GRAY
 		}
+	},
+
+	title_blue:function(){
+		return LogicData.getAccountState()?'#425a85':'#1962dd'
 	}
+
 }
 
 module.exports = colors;

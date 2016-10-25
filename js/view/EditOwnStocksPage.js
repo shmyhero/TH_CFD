@@ -65,6 +65,7 @@ var EditOwnStocksPage = React.createClass({
 					navigator={this.props.navigator}/>
 				<StockEditFragment style={{flex: 1}}
 					isLogin = {!notLogin}
+					isActual = {LogicData.getAccountState()}
 					onTapEditAlert={this.gotoEditAlertPage}
 					alertData={JSON.stringify(this.state.stockAlertList)}/>
 			</View>

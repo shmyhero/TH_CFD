@@ -45,6 +45,7 @@ export function loadServerSettings(){
 export function getIsProductServer(){
   console.log("getIsProductServer " + isProductServer);
   return isProductServer;
+	// return false;
 }
 
 export function setIsProductServer(value){

@@ -15,7 +15,8 @@ var getui_token = '';
 var pushData;
 var tabIndex = 0;
 var lastSuperPriorityHintDate = '';
-var accountState;//是否是实盘用户登陆状态 false:模拟盘  true:实盘
+var accountState;//是否是实盘用户状态 false:模拟盘  true:实盘 (无论是否是 ayondo 登入成功状态)
+var isActualLogin = false;
 
 var LogicData = {
 
@@ -39,6 +40,14 @@ var LogicData = {
 
 	getAccountState: function(){
 		return accountState == true ? true: false;
+	},
+
+	setActualLogin: function(isLogin){
+		isActualLogin = isLogin
+	},
+
+	getActualLogin: function(){
+		return isActualLogin
 	},
 
 	setMeData: function(data){

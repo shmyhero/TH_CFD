@@ -11,6 +11,8 @@ import com.github.mikephil.charting.charts.LineChart;
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
  */
 public class ReactChart extends CombinedChart {
+    public boolean isAcutal = false;
+
     public ReactChart(Context context) {
         super(context);
     }
@@ -47,4 +49,10 @@ public class ReactChart extends CombinedChart {
 //    public void computeScroll(){
 //        return;
 //    }
+
+
+    public void setIsActual(boolean isActual){
+        this.isAcutal = isActual;
+    }
+
 }

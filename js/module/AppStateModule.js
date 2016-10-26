@@ -1,6 +1,6 @@
 'use strict'
 
-var RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
+var AppState = require('AppState');
 
 export let STATE_ACTIVE = 'active'
 export let STATE_INACTIVE = 'inactive'
@@ -8,7 +8,7 @@ export let STATE_BACKGROUND = 'background'
 
 var appState = STATE_ACTIVE
 var turnToActiveListeners = []
-RCTDeviceEventEmitter.addListener(
+AppState.addListener(
 	'appStateDidChange',
 	(stateData) => {
 		if (appState !== STATE_ACTIVE && stateData.app_state === STATE_ACTIVE) {

@@ -126,8 +126,8 @@ export function showErrorRoute(navigator, onPop, nextRouteData){
     }
     */
     var nextStep = currentStep;
-    if(errorRoutes.length - 1 > errorRouteIndex){
-      nextStep = errorRouteIndex + 1;
+    if(errorRoutes.length - 1 > errorStep){
+      nextStep = errorStep + 1;
     }
     console.log("goToNextRoute OPEN_ACCOUNT_ROUTE: " + errorStep);
     navigator.replace({
@@ -178,11 +178,11 @@ export function getOpenAccountData(){
     for(var i = 0; i < OpenAccountInfos.length; i++){
       if(lastStoredData[i]){
         var dataArray = lastStoredData[i];
-        console.log("dataArray.length " + dataArray.length);
+        //console.log("dataArray.length " + dataArray.length);
         for( var j = 0; j < dataArray.length; j++){
-          console.log("dataArray[j]: j" + j + ", "+ JSON.stringify(dataArray[j]));
+          //console.log("dataArray[j]: j" + j + ", "+ JSON.stringify(dataArray[j]));
           if(dataArray[j] && !dataArray[j].ignoreInRegistery){
-            console.log("getOpenAccountData: " + dataArray[j].key);
+            //console.log("getOpenAccountData: " + dataArray[j].key);
             var key = dataArray[j].key;
             if(key){
               var value = dataArray[j].value;
@@ -209,7 +209,7 @@ export function showError(errorList, navigator, onPop){
           if(pageData[k].key === errorKey){
             pageData[k].error = errorMessage;
             errorRoutes.push(errorPageIndex);
-            console.log("route " + errorPageIndex + " has error: " + errorMessage + ", page:" + JSON.stringify(pageData))
+            console.log("route " + errorPageIndex + " has error: " + errorMessage);//+ ", page:" + JSON.stringify(pageData))
           }
         }
       }

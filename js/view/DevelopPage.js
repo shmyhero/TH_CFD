@@ -16,6 +16,7 @@ var UIConstants = require('../UIConstants');
 var NetConstants = require('../NetConstants');
 var NetworkModule = require('../module/NetworkModule');
 var LogicData = require('../LogicData');
+var ColorConstants = require('../ColorConstants');
 
 export default class DevelopPage extends Component {
 
@@ -54,7 +55,11 @@ export default class DevelopPage extends Component {
           },
         },
         function(responseJson) {
-
+          if(responseJson.success){
+            alert("已删除");
+          }else{
+            alert(JSON.stringify(responseJson))
+          }
         }.bind(this),
         function(errorMessage) {
 
@@ -85,8 +90,8 @@ export default class DevelopPage extends Component {
 						value={this.state.isDevelopServer} />
 				</View>
         <View style={{flexDirection: 'row', padding:15,}}>
-          <TouchableOpacity onPress={()=>this.deleteLiveAcccount()}>
-            <Text style={{fontSize:25}}>
+          <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}} onPress={()=>this.deleteLiveAcccount()}>
+            <Text style={{color:'white', fontSize: 16}}>
               删除实盘账号
             </Text>
           </TouchableOpacity>

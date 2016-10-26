@@ -126,10 +126,15 @@ var OADocumentInfoPage = React.createClass({
 					enabled: true,
 					validateInProgress: false,
 				});
-				var errorList = [];
-				errorList.push({"key": "username", "error": errorMessage});
-				OpenAccountRoutes.showError(errorList, this.props.navigator, this.props.onPop);
-
+				if(errorMessage.includes("服务器繁忙")){
+					this.setState({
+						error: errorMessage
+					});
+				} else {
+					var errorList = [];
+					errorList.push({"key": "username", "error": errorMessage});
+					OpenAccountRoutes.showError(errorList, this.props.navigator, this.props.onPop);
+				}
 			}
 		);
 	},
@@ -138,6 +143,12 @@ var OADocumentInfoPage = React.createClass({
 		var regex1 = /Field '\w+'.+\./g; //1. Find "Filed 'xxx'""
 		var regex2 = /'(.+?)'/g; //2. Find key name.
 		var errorlines = errorMessage.match(regex1);
+		if(errorMessage.includes("服务器繁忙")){
+			this.setState({
+				error: errorMessage
+			})
+			return;
+		}
 		if(errorlines){
 			var errorList = [];
 			for(var i = 0 ; i < errorlines.length; i++){

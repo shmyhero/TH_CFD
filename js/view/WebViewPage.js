@@ -31,6 +31,7 @@ var WebViewPage = React.createClass({
 		backFunction: React.PropTypes.func,
 		isShowNav: React.PropTypes.bool,
 		themeColor: ColorPropType,
+		onNavigationStateChange: React.PropTypes.func,
 	},
 
 	getDefaultProps() {
@@ -121,6 +122,12 @@ var WebViewPage = React.createClass({
 		this.props.shareFunction(data);
 	},
 
+	onNavigationStateChange:function (navState) {
+		if (this.props.onNavigationStateChange) {
+			this.props.onNavigationStateChange(navState)
+		}
+	},
+
 	renderWebView: function(){
 		if(this.state.isNetConnected) {
 
@@ -134,6 +141,7 @@ var WebViewPage = React.createClass({
 					domStorageEnabled={true}
 					scalesPageToFit={true}
 					automaticallyAdjustContentInsets={true}
+					onNavigationStateChange={this.onNavigationStateChange}
 					decelerationRate="normal"
 					source={{uri: this.props.url}}
 				 	/>

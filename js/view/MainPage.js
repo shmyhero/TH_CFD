@@ -268,22 +268,23 @@ var MainPage = React.createClass({
 
 			return (
 				<WebViewPage url={route.url}
-										 showTabbar={showTabbar}
-										 title={route.title} navigator={navigationOperations}
-										 backFunction={()=>{
-										 	if (route.backFunction) {
-										 		this.showTabbar()
-										 		route.backFunction()
-										 	}
-										 }}
-										 showShareButton={route.showShareButton}
-										 shareID={route.shareID}
-										 shareUrl={route.shareUrl}
-										 shareTitle={route.shareTitle}
-										 shareDescription={route.shareDescription}
-										 shareFunction={this._doShare}
-										 shareTrackingEvent={route.shareTrackingEvent}
-										 themeColor={route.themeColor}/>
+					onNavigationStateChange={route.onNavigationStateChange}
+					showTabbar={showTabbar}
+					title={route.title} navigator={navigationOperations}
+					backFunction={()=>{
+						if (route.backFunction) {
+							this.showTabbar()
+							route.backFunction()
+						}
+					}}
+					showShareButton={route.showShareButton}
+					shareID={route.shareID}
+					shareUrl={route.shareUrl}
+					shareTitle={route.shareTitle}
+					shareDescription={route.shareDescription}
+					shareFunction={this._doShare}
+					shareTrackingEvent={route.shareTrackingEvent}
+					themeColor={route.themeColor}/>
 			)
 		} else if (route.name === QA_ROUTE) {
 			hideTabbar();

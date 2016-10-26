@@ -12,6 +12,7 @@ import {
 	ScrollView,
 	Alert,
 } from 'react-native';
+var CookieManager = require('react-native-cookies')
 
 var {EventCenter, EventConst} = require('../EventCenter')
 
@@ -243,6 +244,14 @@ var MePage = React.createClass({
 		});
 	},
 
+	onWebViewNavigationStateChange: function(navState) {
+		// todo
+		console.log("my web view state changed: "+navState.url)
+		CookieManager.get('https://tradehub.net/demo/auth', (err, res) => {
+  			console.log('Got cookies for url: ', res);
+		})
+	},
+
 	////0未注册 1已注册 2审核中 3审核失败
 	gotoAccountStateExce:function(){
 		if(accStatus == 0){
@@ -257,6 +266,7 @@ var MePage = React.createClass({
 			this.props.navigator.push({
 				name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 				title:'实盘交易',
+				onNavigationStateChange: this.onWebViewNavigationStateChange,
 				url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
 				// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
 			  // url:'https://www.tradehub.net/demo/ff-beta/tradehero-login-debug.html',
@@ -273,9 +283,6 @@ var MePage = React.createClass({
 		}else{
 
 		}
-
-
-
 	},
 
 	gotoWebviewPage: function(targetUrl, title) {

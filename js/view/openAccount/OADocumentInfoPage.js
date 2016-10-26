@@ -106,10 +106,8 @@ var OADocumentInfoPage = React.createClass({
 						});
 						if(!responseJson.success){
 							console.log(JSON.stringify(responseJson))
-							alert(JSON.stringify(responseJson))
 							this.parseError(responseJson.message);
 						}else{
-							//alert("success")
 							OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
 						}
 					},

@@ -277,6 +277,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 							secureTextEntry={secureTextEntry}
 							defaultValue={rowData.value}
 							selectionColor="#426bf2"
+							underlineColorAndroid='transparent'
 							onChangeText={(text)=>this.textInputChange(text, rowID)}
 							onEndEditing={(event)=>this.textInputEndChange(event, rowID)}
 							maxLength={rowData.maxLength}/>

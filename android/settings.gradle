@@ -11,6 +11,7 @@ include ':react-native-fs'
 include ':react-native-image-picker'
 include ':react-native-smart-swipe-refresh-layout'
 include ':react-native-picker'
+include ':react-native-cookies'
 
 project(':react-native-wx').projectDir = new File(settingsDir, '../node_modules/react-native-wx/android')
 project(':MPChartLib').projectDir = new File(settingsDir, './MPChartLib')
@@ -22,3 +23,4 @@ project(':react-native-fs').projectDir = new File(settingsDir, '../node_modules/
 project(':react-native-image-picker').projectDir = new File(settingsDir, '../node_modules/react-native-image-picker/android')
 project(':react-native-smart-swipe-refresh-layout').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-smart-pull-to-refresh-listview/android')
 project(':react-native-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-picker/android')
+project(':react-native-cookies').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-cookies/android')

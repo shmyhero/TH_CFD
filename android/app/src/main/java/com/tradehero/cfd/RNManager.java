@@ -15,6 +15,7 @@ import com.tradehero.cfd.talkingdata.TalkingDataPackage;
 import com.tradehero.cfd.tongdao.TongDaoPackage;
 import com.zyu.ReactNativeWheelPickerPackage;
 import com.beefe.picker.PickerViewPackage;
+import com.psykar.cookiemanager.CookieManagerPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +44,8 @@ public class RNManager {
                 new TalkingDataPackage(),
                 new TongDaoPackage(),
                 new RCTSwipeRefreshLayoutPackage(),
-                new PickerViewPackage()
+                new PickerViewPackage(),
+                new CookieManagerPackage()
         );
         return packages;
     }

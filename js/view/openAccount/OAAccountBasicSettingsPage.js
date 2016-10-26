@@ -8,6 +8,7 @@ import {
 	ListView,
 	Text,
 	TextInput,
+	ScrollView,
 } from 'react-native';
 
 var Button = require('../component/Button')
@@ -296,16 +297,29 @@ var OAAccountBasicSettingsPage = React.createClass({
 			)
 	},
 
+	renderListView: function(){
+		var listDataView = listRawData.map((data, i)=>{
+			return(
+				<View key={i}>
+					{this.renderRow(data, 's1', i)}
+					{this.renderSeparator('s1', i, false)}
+				</View>
+			);
+		})
+		return (
+			<View>
+				{listDataView}
+			</View>);
+	},
+
 	render: function() {
 		var nextButtonEnabled = OpenAccountUtils.canGoNext(listRawData);
 
 		return (
 			<View style={styles.wrapper}>
-			    <ListView
-			    	style={styles.list}
-					dataSource={this.state.dataSource}
-					renderRow={this.renderRow}
-					renderSeparator={this.renderSeparator} />
+				<ScrollView style={styles.list}>
+					{this.renderListView()}
+				</ScrollView>
 				<View style={styles.bottomArea}>
 					<Button style={styles.buttonArea}
 						enabled={this.state.enabled && nextButtonEnabled}

@@ -14,8 +14,8 @@ import {
 	TouchableOpacity,
 } from 'react-native';
 
-import Picker from 'react-native-wheel-picker';
-var PickerItem = Picker.Item;
+var TimerMixin = require('react-timer-mixin');
+import Picker from 'react-native-picker';
 
 var Button = require('../component/Button')
 var CheckBoxButton = require('../component/CheckBoxButton')
@@ -91,6 +91,7 @@ var listRawData = [
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var OAFinanceInfoPage = React.createClass({
+	mixins: [TimerMixin],
 	propTypes: {
 		data: React.PropTypes.array,
 		onPop: React.PropTypes.func,
@@ -112,7 +113,6 @@ var OAFinanceInfoPage = React.createClass({
 
 		return {
 			dataSource: dataSource,
-			pickerArray: [],
 			selectedPicker: -1,
 		};
 	},
@@ -126,30 +126,52 @@ var OAFinanceInfoPage = React.createClass({
 		return OpenAccountUtils.getDataFromPageListRawData(listRawData);
 	},
 
-	onPressPicker: function(rowData,rowID) {
-		if (-1 !== this.state.selectedPicker) {
-			this.setState({
-				selectedPicker: -1,
-				pickerArray: [],
-			})
-		}
-		else {
-			this.setState({
-				selectedPicker: rowID,
-				pickerArray: rowData.choices,
-			})
-		}
+	onDismiss: function(){
+		this.hidePicker();
 	},
 
-	onPikcerSelect: function(value) {
-		if (this.state.selectedPicker >= 0) {
-			console.log("onPikcerSelect: " + value);
-			listRawData[this.state.selectedPicker].value = value;
-			this.setState({
-				dataSource: ds.cloneWithRows(listRawData),
-				selectedPicker: -1,
-			})
+	onPressPicker: function(rowData,rowID) {
+		this.setState({
+			selectedPicker: rowID,
+		})
+
+		var selectedText = "";
+		var choices = [];
+		for(var i = 0; i < rowData.choices.length; i++){
+			if(rowData.value === rowData.choices[i].value){
+				selectedText = rowData.displayText;
+			}
+			choices.push(rowData.choices[i].displayText);
 		}
+
+    Picker.init({
+        pickerData: choices,
+        selectedValue: [selectedText],
+				pickerTitleText: "",
+        onPickerConfirm: data => {
+					for(var i = 0; i < rowData.choices.length; i++){
+						if(data[0] === rowData.choices[i].displayText){
+							rowData.value = rowData.choices[i].value;
+						}
+					}
+					this.setState({
+						dataSource: ds.cloneWithRows(listRawData),
+						selectedPicker: -1,
+					})
+        },
+    });
+    Picker.show();
+	},
+
+	hidePicker: function(){
+		Picker.isPickerShow(show => {
+			if(show){
+				Picker.hide();
+				this.setState({
+					selectedPicker: -1,
+				})
+			}
+		});
 	},
 
 	onPressSwitch: function(value, rowID) {
@@ -169,24 +191,31 @@ var OAFinanceInfoPage = React.createClass({
 		if (rowData.type === "choice") {
 
 			var displayText = "";
+			var textColor = '#333333';
 			for(var i = 0; i < rowData.choices.length; i++){
 				if(rowData.value === rowData.choices[i].value){
 					displayText = rowData.choices[i].displayText;
 				}
+			}
+			if(displayText === ""){
+				displayText = rowData.defaultValue;
+				textColor = '#3f6dbd';
 			}
 
 			return (
 				<TouchableOpacity activeOpacity={0.9} onPress={() => this.onPressPicker(rowData, rowID)}>
 				<View style={styles.rowWrapper}>
 					<Text style={styles.rowTitle}>{rowData.title}</Text>
-					<TextInput style={styles.valueText}
-						autoCapitalize="none"
-						autoCorrect={false}
-						editable={false}
-						placeholder={rowData.defaultValue}
-						placeholderTextColor={"#3f6dbd"}
-						selectionColor="#426bf2"
-						value={displayText} />
+					<View style={{flex: 3, flexDirection: 'column', justifyContent: "center"}}>
+						<Text style={[styles.centerText, {color: textColor}]}
+							autoCapitalize="none"
+							autoCorrect={false}
+							editable={false}
+							placeholder={rowData.defaultValue}
+							placeholderTextColor={"#3f6dbd"}>
+							{displayText}
+						</Text>
+					</View>
 					<Image style={{width:17.5, height:13.5}} source={require("../../../images/icon_down_arrow.png")} />
 				</View>
 				</TouchableOpacity>
@@ -248,26 +277,13 @@ var OAFinanceInfoPage = React.createClass({
 			}
 		};
 		if (this.state.selectedPicker>=0) {
-			var rowData = listRawData[this.state.selectedPicker];
-			var pickerValue = listRawData[this.state.selectedPicker].value;
-			//for(var i = 0; i < listRawData[this.state.selectedPicker].length; i++){
-				//if()
-			//}
-			console.log("this.state.selectedPicker: " + this.state.selectedPicker + ", " + pickerValue);
+			pickerModal = (
+				<TouchableOpacity
+				style={{backgroundColor:'transparent', flex:1, position:'absolute', top:0, left:0, right: 0, bottom:0}}
+				onPress={()=>this.hidePicker()}>
 
-			pickerModal = (<View style={styles.pickerContainer}>
-				<Picker ref={"picker"} style={{width: width, height: 150}}
-					itemStyle={{color:"black", fontSize:26}}
-					selectedValue={pickerValue}
-					onValueChange={(value) => this.onPikcerSelect(value)}>
-					{this.state.pickerArray.map((data) => {
-
-							//alert(data.value.toString());
-							return (
-					  <PickerItem label={data.displayText} value={data.value} key={"lever"+data.value.toString()}/>
-					)})}
-				</Picker>
-			</View>)
+				</TouchableOpacity>
+			)
 		}
 		return (
 			<View style={styles.wrapper}>
@@ -340,6 +356,12 @@ var styles = StyleSheet.create({
 		flex: 3,
 		marginTop: -rowPadding,
 		marginBottom: -rowPadding,
+	},
+	centerText: {
+		fontSize: fontSize,
+		color: '#333333',
+		alignItems:'center',
+		justifyContent:'center',
 	},
 	checkboxView: {
 		flexDirection: 'row',

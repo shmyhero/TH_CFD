@@ -34,8 +34,12 @@ var errorRoutes = [];
 
 var lastStoredData = null;
 
-export function backToPreviousRoute(navigator, data, onPop){
+export function backToPreviousRoute(navigator, data, onPop, onPageDismiss){
   console.log("backToPreviousRoute");
+  if(onPageDismiss){
+    onPageDismiss();
+  }
+
   var routes = navigator.getCurrentRoutes();
   var lastRoute = routes[routes.length-1];
   if(lastRoute){
@@ -93,13 +97,12 @@ export function showOARoute(navigator, step, onPop, data, nextStep){
   return (
     <View style={{flex: 1}}>
       <NavBar title={title}
-        titleStyle={{marginLeft:-20, marginRight:-20}}
         showBackButton={showBackButton}
-        leftButtonOnClick={()=>backToPreviousRoute(navigator, page.getData(), onPop)}
+        leftButtonOnClick={()=>backToPreviousRoute(navigator, page.getData(), onPop, page.onDismiss)}
         backButtonOnClick={()=>TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_BACK, TalkingdataModule.LABEL_OPEN_ACCOUNT)}
         backgroundColor={ColorConstants.TITLE_DARK_BLUE}
         textOnRight={showBackButton?'取消':''}
-        rightTextOnClick={()=>cancelOARoute(navigator, page.getData(), onPop)}
+        rightTextOnClick={()=>cancelOARoute(navigator, page.getData(), onPop, page.onDismiss)}
         navigator={navigator}/>
       <Page navigator={navigator}
         ref={(ref) => page = ref}
@@ -109,16 +112,19 @@ export function showOARoute(navigator, step, onPop, data, nextStep){
   )
 }
 
-export function showErrorRoute(errorRouteIndex, navigator, onPop, nextRouteData){
-  var errorStep = errorRoutes[errorRouteIndex];
+export function showErrorRoute(navigator, onPop, nextRouteData){
+  var errorStep = errorRoutes[0];
   console.log("showErrorRoute " + errorStep);
   var routes = navigator.getCurrentRoutes();
   var lastRoute = routes[routes.length-1];
   if(lastRoute){
     var currentStep = lastRoute.step;
+    //We do not need to remove data if there's error occurs.
+    /*
     if(OpenAccountInfos[errorStep].removeStoredData){
       clearAllInputData();
     }
+    */
     var nextStep = currentStep;
     if(errorRoutes.length - 1 > errorRouteIndex){
       nextStep = errorRouteIndex + 1;
@@ -203,9 +209,7 @@ export function showError(errorList, navigator, onPop){
           if(pageData[k].key === errorKey){
             pageData[k].error = errorMessage;
             errorRoutes.push(errorPageIndex);
-            console.log("route: " + errorPageIndex + ", " + JSON.stringify(pageData))
-            //showErrorRoute(errorPageIndex, navigator, onPop, pageData);
-
+            console.log("route " + errorPageIndex + " has error: " + errorMessage + ", page:" + JSON.stringify(pageData))
           }
         }
       }
@@ -213,7 +217,7 @@ export function showError(errorList, navigator, onPop){
   }
 
   if(errorRoutes.length > 0){
-    showErrorRoute(errorRouteIndex, navigator, onPop, pageData);
+    showErrorRoute(navigator, onPop, pageData);
     return true;
   }else{
     return false;
@@ -282,8 +286,12 @@ function storeCurrentInputData(step, data){
   //console.log("storeCurrentInputData lastStoredData: " + JSON.stringify(lastStoredData));
 }
 
-function cancelOARoute(navigator, data, onPop){
+function cancelOARoute(navigator, data, onPop, onPageDismiss){
   console.log("cancelOARoute")
+
+  if(onPageDismiss){
+    onPageDismiss();
+  }
   //Update: Do NOT store data if the next button is not clicked.
   /*var routes = navigator.getCurrentRoutes();
   var lastRoute = routes[routes.length-1];

@@ -52,14 +52,15 @@ export function getIsProductServer(){
 }
 
 export function setIsProductServer(value){
-  if(!isProductApp || Platform.OS === 'ios'){
+	//We do not care about the develop/product app any more.
+  //if(!isProductApp || Platform.OS === 'ios'){
     console.log("setIsProductServer " + value);
     if(isProductServer != value){
       isProductServer = value;
       StorageModule.setIsProductServer(value ? "1" : "0");
       NetConstants.reloadCFDAPI();
     }
-  }
+  //}
 }
 
 //TODO: There will be product and development environment  in later version..

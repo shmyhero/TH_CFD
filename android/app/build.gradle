@@ -171,6 +171,7 @@ android {
 
 dependencies {
     compile project(':react-native-cookies')
+    compile project(':react-native-picker')
     compile 'com.facebook.react:react-native:+'
     compile project(':react-native-image-picker')
     compile project(':react-native-update')

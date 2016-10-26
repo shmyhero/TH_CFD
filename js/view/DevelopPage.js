@@ -35,7 +35,7 @@ export default class DevelopPage extends Component {
     var isProductServer = !isDevelopServer;
     VersionConstants.setIsProductServer(isProductServer);
     this.setState({
-      isDevelopServer: isProductServer,
+      isDevelopServer: isDevelopServer,
       server: NetConstants.getAPIServerIP(),
     })
   }
@@ -54,7 +54,7 @@ export default class DevelopPage extends Component {
           },
         },
         function(responseJson) {
-          
+
         }.bind(this),
         function(errorMessage) {
 

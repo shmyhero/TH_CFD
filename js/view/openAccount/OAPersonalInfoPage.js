@@ -10,10 +10,12 @@ import {
 	TextInput,
 	TouchableOpacity,
 	Image,
+	Platform,
+	ScrollView
 } from 'react-native';
 
-import Picker from 'react-native-wheel-picker';
-var PickerItem = Picker.Item;
+var TimerMixin = require('react-timer-mixin');
+import Picker from 'react-native-picker';
 
 import DatePicker from 'react-native-datepicker'
 
@@ -50,6 +52,9 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 });
 
 
 var OAPersonalInfoPage = React.createClass({
+	mixins: [TimerMixin],
+	pickerDisplayed: false,
+
 	propTypes: {
 		data: React.PropTypes.array,
 		onPop: React.PropTypes.func,
@@ -69,7 +74,6 @@ var OAPersonalInfoPage = React.createClass({
 		return {
 			dataSource: ds.cloneWithRows(listRawData),
 			validateInProgress: false,
-			pickerArray: [],
 			selectedPicker: -1,
 			error: null
 		};
@@ -88,6 +92,10 @@ var OAPersonalInfoPage = React.createClass({
 
 	getData: function(){
 		return OpenAccountUtils.getDataFromPageListRawData(listRawData);
+	},
+
+	onDismiss: function(){
+		this.hidePicker();
 	},
 
 	textInputChange: function(text, rowID) {
@@ -128,34 +136,54 @@ var OAPersonalInfoPage = React.createClass({
 	},
 
 	onPressPicker: function(rowData,rowID) {
-		if (-1 !== this.state.selectedPicker) {
-			this.setState({
-				selectedPicker: -1,
-				pickerArray: [],
-			})
+		this.setState({
+			selectedPicker: rowID,
+		})
+
+		var selectedText = "";
+		var choices = [];
+		for(var i = 0; i < rowData.choices.length; i++){
+			if(rowData.value === rowData.choices[i].value){
+				selectedText = rowData.displayText;
+			}
+			choices.push(rowData.choices[i].displayText);
 		}
-		else {
-			this.setState({
-				selectedPicker: rowID,
-				pickerArray: rowData.choices,
-			})
-		}
+
+    Picker.init({
+        pickerData: choices,
+        selectedValue: [selectedText],
+				pickerTitleText: "",
+				pickerConfirmBtnColor: [25,98,221,1],
+				pickerCancelBtnColor: [25,98,221,1],
+        onPickerConfirm: data => {
+					for(var i = 0; i < rowData.choices.length; i++){
+						if(data[0] === rowData.choices[i].displayText){
+							rowData.value = rowData.choices[i].value;
+						}
+					}
+					this.setState({
+						dataSource: ds.cloneWithRows(listRawData),
+						selectedPicker: -1,
+					})
+        },
+    });
+    Picker.show();
 	},
 
-	onPikcerSelect: function(value) {
-		if (this.state.selectedPicker >= 0) {
-			console.log("onPikcerSelect: " + value);
-			listRawData[this.state.selectedPicker].value = value;
-			this.setState({
-				dataSource: ds.cloneWithRows(listRawData),
-				selectedPicker: -1,
-			})
-		}
+	hidePicker: function(){
+		Picker.isPickerShow(show => {
+			if(show){
+				Picker.hide();
+				this.setState({
+					selectedPicker: -1,
+				})
+			}
+		});
 	},
 
 	onDateTimeSelect: function(rowID, value) {
 		if (rowID>= 0) {
-			console.log("onPikcerSelect: " + value);
+			console.log("onDatePikcerSelect: " + value);
 			listRawData[rowID].value = value;
 
 			this.setState({
@@ -211,7 +239,7 @@ var OAPersonalInfoPage = React.createClass({
 		return (
 			<View style={styles.rowWrapper}>
 				<Text style={styles.rowTitle}>{rowData.title}</Text>
-				<View style={{flex: 3, flexDirection: 'row'}}>
+				<View style={{flex: 3, width: 0, flexDirection: 'row', justifyContent:'center'}}>
 					<DatePicker
 						style={{flex:1, width: 0}}
 						date={dateInfo.startDate}
@@ -225,7 +253,7 @@ var OAPersonalInfoPage = React.createClass({
 						customStyles={datePeriodPickerStyle}
 						placeholder="开始日期"
 					/>
-					<View style={{flex:1, alignItems:'center'}}>
+					<View style={{flex:1, alignItems:'center', alignSelf:'center'}}>
 						<Text>-</Text>
 					</View>
 					<DatePicker
@@ -246,6 +274,7 @@ var OAPersonalInfoPage = React.createClass({
 	},
 
 	renderRow: function(rowData, sectionID, rowID) {
+		console.log(rowID + "+" + JSON.stringify(rowData))
 		var rowTitleStyle = styles.rowTitle;
 		if(rowData.error){
 			rowTitleStyle = styles.errorRowTitle;
@@ -260,18 +289,20 @@ var OAPersonalInfoPage = React.createClass({
 			}
 
 			return (
-				<TouchableOpacity activeOpacity={0.9} onPress={() => this.onPressPicker(rowData, rowID)}>
+				<TouchableOpacity activeOpacity={0.9} style={{backgroundColor: 'yellow'}} onPress={() => this.onPressPicker(rowData, rowID)}>
 					<View style={styles.rowWrapper}>
 						<Text style={rowTitleStyle}>{rowData.title}</Text>
 						<View style={{flex: 3, flexDirection: 'row'}}>
-							<TextInput style={styles.valueText}
-								autoCapitalize="none"
-								autoCorrect={false}
-								editable={false}
-								placeholder={rowData.defaultValue}
-								placeholderTextColor={"#3f6dbd"}
-								value={displayText}
-								maxLength={rowData.maxLength}/>
+							<View style={{flex: 1, flexDirection: 'column', justifyContent: "center"}}>
+								<Text style={styles.centerText}
+									autoCapitalize="none"
+									autoCorrect={false}
+									editable={false}
+									placeholder={rowData.defaultValue}
+									placeholderTextColor={"#3f6dbd"}>
+									{displayText}
+								</Text>
+							</View>
 							<Image style={{width:17.5, height:13.5}} source={require("../../../images/icon_down_arrow.png")} />
 						</View>
 					</View>
@@ -282,7 +313,7 @@ var OAPersonalInfoPage = React.createClass({
 				<View style={styles.rowWrapper}>
 					<Text style={styles.rowTitle}>{rowData.title}</Text>
 					<DatePicker
-	          style={{flex:3, width: 0, padding:0, margin: 0,}}
+	          style={styles.datePicker}
 	          date={rowData.value}
 	          mode="date"
 	          format="YYYY.MM.DD"
@@ -319,9 +350,7 @@ var OAPersonalInfoPage = React.createClass({
 						numberOfLines={numberOfLines}
 						maxLength={rowData.maxLength}
 						selectionColor="#426bf2"
-						onContentSizeChange={(event) => {
-							this.setState({textInputHeight: event.nativeEvent.contentSize.height});
-						}}
+						underlineColorAndroid='transparent'
 						onChangeText={(text)=>this.textInputChange(text, rowID)}
 						onEndEditing={(event)=>this.textInputEndChange(event, rowID)}
 						/>
@@ -369,26 +398,13 @@ var OAPersonalInfoPage = React.createClass({
 			}
 		};
 		if (this.state.selectedPicker>=0) {
-			var rowData = listRawData[this.state.selectedPicker];
-			var pickerValue = listRawData[this.state.selectedPicker].value;
-			//for(var i = 0; i < listRawData[this.state.selectedPicker].length; i++){
-				//if()
-			//}
-			console.log("this.state.selectedPicker: " + this.state.selectedPicker + ", " + pickerValue);
+			pickerModal = (
+				<TouchableOpacity
+				style={{backgroundColor:'transparent', flex:1, position:'absolute', top:0, left:0, right: 0, bottom:0}}
+				onPress={()=>this.hidePicker()}>
 
-			pickerModal = (<View style={styles.pickerContainer}>
-				<Picker ref={"picker"} style={{width: width, height: 150}}
-					itemStyle={{color:"black", fontSize:26}}
-					selectedValue={pickerValue}
-					onValueChange={(value) => this.onPikcerSelect(value)}>
-					{this.state.pickerArray.map((data) => {
-
-							//alert(data.value.toString());
-							return (
-						<PickerItem label={data.displayText} value={data.value} key={"lever"+data.value.toString()}/>
-					)})}
-				</Picker>
-			</View>)
+				</TouchableOpacity>
+			)
 		}
 
 		var nextEnabled = OpenAccountUtils.canGoNext(listRawData);
@@ -396,11 +412,9 @@ var OAPersonalInfoPage = React.createClass({
 		return (
 			<View style={styles.wrapper}>
 				<ErrorBar error={error}/>
-		    <ListView
-		    	style={styles.list}
-					dataSource={this.state.dataSource}
-					renderRow={this.renderRow}
-					renderSeparator={this.renderSeparator} />
+				<ScrollView style={styles.list}>
+					{this.renderListView()}
+				</ScrollView>
 				<View style={styles.bottomArea}>
 					<Button style={styles.buttonArea}
 						enabled={nextEnabled}
@@ -412,6 +426,22 @@ var OAPersonalInfoPage = React.createClass({
 				{pickerModal}
 			</View>
 		);
+	},
+
+	renderListView: function(){
+		var listDataView = listRawData.map((data, i)=>{
+			return(
+				<View key={i}>
+					{this.renderRow(data, 's1', i)}
+					{this.renderSeparator('s1', i, false)}
+				</View>
+			);
+		})
+
+		return (
+			<View>
+				{listDataView}
+			</View>);
 	},
 });
 
@@ -470,15 +500,23 @@ var styles = StyleSheet.create({
 		fontSize: fontSize,
 		color: '#333333',
 		flex: 3,
-		//marginTop: rowPadding,
-		//marginBottom: rowPadding,
+		marginTop: -rowPadding,
+		marginBottom: -rowPadding,
+		alignItems:'center',
+		justifyContent:'center',
+	},
+	centerText: {
+		fontSize: fontSize,
+		color: '#333333',
+		alignItems:'center',
+		justifyContent:'center',
 	},
 	multilineValueText: {
 		fontSize: fontSize,
 		color: '#333333',
 		flex: 3,
-		height: 48,
-		marginTop: -5,
+		height: Platform.OS === "ios" ? 48 : 65,
+		marginTop: Platform.OS === "ios" ? -5 : -10,
 		alignSelf: "flex-start",
 	},
 	valueContent:{
@@ -509,18 +547,24 @@ var styles = StyleSheet.create({
 		textAlign: 'center',
 		color: '#ffffff',
 	},
+	datePicker: {
+		flex:3,
+		width: 0,
+		padding:0,
+		margin: 0
+	}
 });
 
 var datePickerStyle = StyleSheet.create({
 		dateTouchBody:{
-		 	height: 0,
+			height: Platform.OS === 'ios' ? 0: 40,
 		},
 		dateText: {
 			fontSize: fontSize,
 			color: '#333333',
 		},
 		dateInput: {
-			height: 0,//40,
+			height: Platform.OS === 'ios' ? 0: 40,
 			borderWidth: 0,
 			alignItems: 'flex-start',
 			justifyContent: 'center',
@@ -533,17 +577,17 @@ var datePickerStyle = StyleSheet.create({
 
 var datePeriodPickerStyle = StyleSheet.create({
 		dateTouchBody:{
-		 	height: 0,
+		 	height: Platform.OS === 'ios' ? 0: 36,
 		},
 		dateText: {
 			fontSize: fontSize,
 			color: '#333333',
 		},
 		dateInput: {
-			height: 0,//40,
+			height: Platform.OS === 'ios' ? 0: 36,
 			borderWidth: 0,
 			alignItems: 'flex-start',
-			justifyContent: 'flex-start',
+			justifyContent: Platform.OS === 'ios' ? 'flex-start' : 'center',
 		},
 		placeholderText: {
 			fontSize: fontSize,

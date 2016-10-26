@@ -184,6 +184,7 @@ var StockOpenPositionPage = React.createClass({
 			title:'实盘交易',
 			url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
 			// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
+			// url:'http://www.baidu.com',
 		});
 	},
 

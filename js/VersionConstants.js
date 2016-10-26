@@ -12,6 +12,7 @@ export const WEBPAGE_VERSION = '1.5'    //Only update this version when Web Page
 
 //BUG Fix: Some web page in web1.5 cannot be displayed. Use web for now.
 export const WEBPAGE_FOLDER = 'TH_CFD_WEB' //+ WEBPAGE_VERSION
+export const WEBPAGE_FOLDER_ACTUAL = 'TH_CFD_SP'
 
 //NEVER CHANGE THE PRODUCT SERVER IN PRODUCT APP!!!
 //DEFAULT settings are product settings.

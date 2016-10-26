@@ -107,7 +107,9 @@ function getGZTAPI(){
 function getTradeHeroAPI(){
   return {
     WEBVIEW_RECOMMAND_PAGE: TRADEHERO_SERVER_IP + '/TH_CFD_WEB/detailslider.php?id=',
+    WEBVIEW_RECOMMAND_PAGE_ACTUAL: TRADEHERO_SERVER_IP + '/TH_CFD_SP/detailslider.php?id=',
     WEBVIEW_TOP_NEWS_PAGE: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER + '/FocusSlider.php?id=',
+    WEBVIEW_TOP_NEWS_PAGE_ACTUAL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/FocusSlider.php?id=',
     WEBVIEW_QA_PAGE: TRADEHERO_SERVER_IP + '/TH_CFD_WEB/wenda<version>.html',
     WEBVIEW_QA_PAGE_ACTUAL: TRADEHERO_SERVER_IP + '/TH_CFD_SP/wenda.html',
     WEBVIEW_URL_ABOUT_US: TRADEHERO_SERVER_IP + '/TH_CFD_WEB/about.html',

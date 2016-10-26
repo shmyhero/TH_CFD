@@ -602,6 +602,9 @@ var HomePage = React.createClass({
 	renderOneNews: function(news) {
 		var header = news.header
 		var url = NetConstants.TRADEHERO_API.WEBVIEW_TOP_NEWS_PAGE+news.id
+		if(LogicData.getAccountState()){
+			url = NetConstants.TRADEHERO_API.WEBVIEW_TOP_NEWS_PAGE_ACTUAL+news.id
+		}
 		return(
 			<TouchableOpacity style={styles.newsContainer} onPress={() => this.tapTopNews(url)}>
 				<View style={[styles.bluePoint,{backgroundColor:ColorConstants.title_blue()}]}/>

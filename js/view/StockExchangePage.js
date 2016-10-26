@@ -8,6 +8,7 @@ import {
 	Image,
 	Dimensions,
 	TouchableHighlight,
+	TouchableOpacity,
 	WebView,
 } from 'react-native';
 
@@ -52,6 +53,7 @@ var StockExchangePage = React.createClass({
 		if (index == 2) {
 			this.refs['page' + index].playStartAnim()
 		}
+
 		var userData = LogicData.getUserData()
 		var loggined = Object.keys(userData).length !== 0
 		if (loggined && this.refs['page' + index]) {
@@ -103,6 +105,32 @@ var StockExchangePage = React.createClass({
 		}
 	},
 
+	renderLiveLogin:function(){
+		return(
+			<View style={{flex:1,backgroundColor:'white',alignItems:'center'}}>
+   			<NavBar title="我的交易" navigator={this.props.navigator}/>
+				<TouchableOpacity onPress={()=>this.jumpToLogin()}>
+					<Text style={{textAlign:'center',fontSize:20, alignSelf:'center',justifyContent:'center',backgroundColor:'yellow'}}>点击登录实盘账户</Text>
+				</TouchableOpacity>
+			</View>
+		)
+	},
+
+	jumpToLogin:function(){
+		var userData = LogicData.getUserData()
+		var userId = userData.userId
+		if (userId == undefined) {
+			userId = 0
+		}
+		console.log("gotoAccountStateExce userId = " + userId);
+		this.props.navigator.push({
+			name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			title:'实盘交易',
+			url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
+			// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
+		});
+	},
+
 	render: function() {
 		var userData = LogicData.getUserData()
 		var loggined = Object.keys(userData).length !== 0
@@ -138,18 +166,20 @@ var StockExchangePage = React.createClass({
 					</View>
 				)
 			} else{
-				return (
-					<View style={{flex: 1}}>
-						<NavBar title="我的交易" navigator={this.props.navigator}/>
-						<WebViewPage
-							isShowNav= {false}
-							// url={'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId}
-							// url={'https://www.baidu.com'}
-						  url={'https://www.tradehub.net/live/yuefei-beta/login.html'}
-							// url={'http://cn.tradehero.mobi/TH_CFD_SP/detail01.html'}
-						/>
-					</View>
-				)
+				// return (
+				// 	<View style={{flex: 1}}>
+				// 		<NavBar title="我的交易" navigator={this.props.navigator}/>
+				// 		<WebViewPage
+				// 			isShowNav= {false}
+				// 			// url={'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId}
+				// 			// url={'https://www.baidu.com'}
+				// 		  // url={'https://www.tradehub.net/live/yuefei-beta/login.html'}
+				// 			url={'https://www.tradehub.net/demo/ff-beta/tradehero-login-debug.html'}
+				// 			// url={'http://cn.tradehero.mobi/TH_CFD_SP/detail01.html'}
+				// 		/>
+				// 	</View>
+					return(this.renderLiveLogin())
+				// )
 			}
 		}else{//模拟盘状态
 			if (loggined) {

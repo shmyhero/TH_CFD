@@ -259,6 +259,8 @@ var MePage = React.createClass({
 				title:'实盘交易',
 				url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
 				// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
+			  // url:'https://www.tradehub.net/demo/ff-beta/tradehero-login-debug.html',
+
 			});
 		}else if(accStatus == 2){
 			console.log('审核中...');
@@ -406,11 +408,9 @@ var MePage = React.createClass({
 		var meData = LogicData.getMeData();
 		console.log('提示：','liveAccStatus = '+meData.liveAccStatus + ', liveAccRejReason = '+ meData.liveAccRejReason)
 	  accStatus = meData.liveAccStatus;
-		//accStatus = 1
+		accStatus = 1
 		var strStatus = '';
 		var colorStatus = ColorConstants.TITLE_BLUE
-
-
 
 		if(accStatus!==undefined && accStatus<accountInfoData.length){
 			strStatus = accountInfoData[accStatus].title;

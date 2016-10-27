@@ -162,7 +162,8 @@ var StockOpenPositionPage = React.createClass({
 						console.log("---> " +this.props.navigator.state.routeStack[length-1].name );
 						if(this.props.navigator.state.routeStack[length-1].name !== 'webviewpage'){
 							//防止多次进入 登录 页面
-							this.gotoAccountStateExce();
+							// this.gotoAccountStateExce();
+              LogicData.setActualLogin(false)
 						}
 					}
 				}else{
@@ -172,21 +173,22 @@ var StockOpenPositionPage = React.createClass({
 		)
 	},
 
-	gotoAccountStateExce:function(){
-		var userData = LogicData.getUserData()
-		var userId = userData.userId
-		if (userId == undefined) {
-			userId = 0
-		}
-		console.log("gotoAccountStateExce userId = " + userId);
-		this.props.navigator.push({
-			name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
-			title:'实盘交易',
-			url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
-			// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
-			// url:'http://www.baidu.com',
-		});
-	},
+	// gotoAccountStateExce:function(){
+	// 	var userData = LogicData.getUserData()
+	// 	var userId = userData.userId
+	// 	if (userId == undefined) {
+	// 		userId = 0
+	// 	}
+	// 	console.log("gotoAccountStateExce userId = " + userId);
+	// 	this.props.navigator.push({
+	// 		name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+	// 		title:'实盘交易',
+  //     onNavigationStateChange: this.onWebViewNavigationStateChange,
+	// 		url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
+	// 		// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
+	// 		// url:'http://www.baidu.com',
+	// 	});
+	// },
 
 	loadStockDetailInfo: function(chartType,stockCode) {
 		var url = NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_API
@@ -369,7 +371,7 @@ var StockOpenPositionPage = React.createClass({
 				this.loadStockDetailInfo(this.state.chartType,stockid)
 			}
 		)
-			
+
 		}
 		this.doScrollAnimation()
 	},

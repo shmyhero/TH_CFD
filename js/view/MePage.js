@@ -250,6 +250,15 @@ var MePage = React.createClass({
 		CookieManager.get('https://tradehub.net/demo/auth', (err, res) => {
   			console.log('Got cookies for url: ', res);
 		})
+
+		if(navState.url.indexOf('demo/oauth/ok')>0){
+			console.log('success login ok');
+			MainPage.ayondoLoginResult(true)
+		}else if(navState.url.indexOf('demo/oauth/error')>0){
+			console.log('success login error');
+			MainPage.ayondoLoginResult(false)
+		}
+
 	},
 
 	////0未注册 1已注册 2审核中 3审核失败
@@ -270,7 +279,7 @@ var MePage = React.createClass({
 				url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
 				// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
 			  // url:'https://www.tradehub.net/demo/ff-beta/tradehero-login-debug.html',
-
+				// url:'http://cn.tradehero.mobi/TH_CFD_WEB/bangdan1.html',
 			});
 		}else if(accStatus == 2){
 			console.log('审核中...');
@@ -332,8 +341,8 @@ var MePage = React.createClass({
 			// });
 			var aboutUrl = LogicData.getAccountState()?NetConstants.TRADEHERO_API.WEBVIEW_URL_ABOUT_US_ACTUAL:NetConstants.TRADEHERO_API.WEBVIEW_URL_ABOUT_US
 			this.gotoWebviewPage(aboutUrl, '关于我们');
-			LogicData.setAccountState(true)
-			LogicData.setActualLogin(true)
+			// LogicData.setAccountState(true)
+			// LogicData.setActualLogin(true)
 		}
 		else if(rowData.subtype === 'config') {
 			this.props.navigator.push({
@@ -347,7 +356,7 @@ var MePage = React.createClass({
 				name: MainPage.FEEDBACK_ROUTE,
 				phone: meData.phone,
 			});
-			LogicData.setAccountState(false)
+			// LogicData.setAccountState(false)
 		}
 		else if(rowData.subtype === 'accountInfo') {
 			this.gotoUserInfoPage()

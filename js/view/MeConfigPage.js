@@ -151,6 +151,7 @@ var MeConfigPage = React.createClass({
 			this.props.onPopBack();
 		}
 		LogicData.setAccountState(false)
+		MainPage.refreshMainPage()
 	},
 
 	logoutCurrentAccount: function(){

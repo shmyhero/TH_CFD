@@ -14,6 +14,7 @@ import {
 
 var {EventCenter, EventConst} = require('../EventCenter')
 
+var CookieManager = require('react-native-cookies')
 var LoginPage = require('./LoginPage')
 var WebViewPage = require('./WebViewPage')
 var ScrollTabView = require('./component/ScrollTabView')
@@ -126,9 +127,52 @@ var StockExchangePage = React.createClass({
 		this.props.navigator.push({
 			name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			title:'实盘交易',
+			onNavigationStateChange: this.onWebViewNavigationStateChange,
 			url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
 			// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
 		});
+	},
+
+	onWebViewNavigationStateChange: function(navState) {
+		// todo
+		console.log("my web view state changed: "+navState.url)
+		CookieManager.get('https://tradehub.net/demo/auth', (err, res) => {
+  			console.log('Got cookies for url: ', res);
+		})
+
+		if(navState.url.indexOf('demo/oauth/ok')>0){
+			console.log('success login ok');
+			MainPage.ayondoLoginResult(true)
+		}else if(navState.url.indexOf('demo/oauth/error')>0){
+			console.log('success login error');
+			MainPage.ayondoLoginResult(false)
+		}
+
+	},
+
+	onNavigationStateChange:function (navState) {
+		console.log("my web view state changed: "+navState.url)
+		CookieManager.get('https://tradehub.net/demo/auth', (err, res) => {
+  			console.log('Got cookies for url: ', res);
+		})
+
+		if(navState.url.indexOf('demo/oauth/ok')>0){
+			console.log('success login ok');
+			// MainPage.ayondoLoginResult(true)
+			LogicData.setAccountState(true)
+			LogicData.setActualLogin(true)
+			this.setState({
+				loggined:true,
+			})
+		}else if(navState.url.indexOf('demo/oauth/error')>0){
+			console.log('success login error');
+			// MainPage.ayondoLoginResult(false)
+			LogicData.setAccountState(true)
+			LogicData.setActualLogin(false)
+			this.setState({
+				loggined:true,
+			})
+		}
 	},
 
 	render: function() {
@@ -166,20 +210,21 @@ var StockExchangePage = React.createClass({
 					</View>
 				)
 			} else{
-				// return (
-				// 	<View style={{flex: 1}}>
-				// 		<NavBar title="我的交易" navigator={this.props.navigator}/>
-				// 		<WebViewPage
-				// 			isShowNav= {false}
-				// 			// url={'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId}
-				// 			// url={'https://www.baidu.com'}
-				// 		  // url={'https://www.tradehub.net/live/yuefei-beta/login.html'}
-				// 			url={'https://www.tradehub.net/demo/ff-beta/tradehero-login-debug.html'}
-				// 			// url={'http://cn.tradehero.mobi/TH_CFD_SP/detail01.html'}
-				// 		/>
-				// 	</View>
-					return(this.renderLiveLogin())
-				// )
+				return (
+					<View style={{flex: 1}}>
+						<NavBar title="我的交易" navigator={this.props.navigator}/>
+						<WebViewPage
+							isShowNav= {false}
+							onNavigationStateChange={this.onNavigationStateChange}
+							url={'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId}
+							// url={'https://www.baidu.com'}
+						  // url={'https://www.tradehub.net/live/yuefei-beta/login.html'}
+							// url={'https://www.tradehub.net/demo/ff-beta/tradehero-login-debug.html'}
+							// url={'http://cn.tradehero.mobi/TH_CFD_SP/detail01.html'}
+						/>
+					</View>
+					// return(this.renderLiveLogin())
+				)
 			}
 		}else{//模拟盘状态
 			if (loggined) {

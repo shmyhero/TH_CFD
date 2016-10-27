@@ -127,6 +127,8 @@ var hideTabbar
 var showTabbar
 export var hideProgress
 export var showProgress
+export var ayondoLoginResult
+export var refreshMainPage
 
 var recevieDataSubscription = null
 var SHARE_PAGE = 'SharePage'
@@ -160,6 +162,7 @@ var MainPage = React.createClass({
 		if (route.hideProgress !== undefined) {
 			hideProgress = route.hideProgress
 		}
+
 		var showBackButton = true;
 		if (route.hideBackButton) {
 			showBackButton = false;
@@ -325,7 +328,8 @@ var MainPage = React.createClass({
 		} else if (route.name === ME_ROUTE) {
 			showTabbar();
 			return (
-				<MePage navigator={navigationOperations} />
+				<MePage navigator={navigationOperations}
+				/>
 			)
 		} else if(route.name === MY_INCOME_ROUTE) {
 			hideTabbar();
@@ -504,7 +508,15 @@ var MainPage = React.createClass({
 		if(result){
 			LogicData.setAccountState(true)//实盘状态 true
 			LogicData.setActualLogin(true)//实盘登陆状态 true
+			this.refreshMainPage()
 		}
+	},
+
+	refreshMainPage(){
+		// this.setState({
+		//
+		// })
+		console.log('refresh for Tab Icon Color ... ');
 	},
 
 	hideTabbar() {
@@ -549,6 +561,8 @@ var MainPage = React.createClass({
 	},
 
 	componentDidMount: function() {
+		ayondoLoginResult = this.ayondoLoginResult
+		refreshMainPage = this.refreshMainPage
 		this.initTabbarEvent()
 
 		var currentNavigatorIndex = LogicData.getTabIndex();
@@ -780,7 +794,7 @@ var MainPage = React.createClass({
 	    	<View style={styles.container}>
 					{this.renderShareView()}
 		    	<StatusBar barStyle="light-content" backgroundColor='#1962dd'/>
-		      	<Tabbar ref="myTabbar" barColor={'#f7f7f7'} style={{alignItems: 'stretch'}}>
+		      	<Tabbar ref="myTabbar" barColor='#f7f7f7' style={{alignItems: 'stretch'}}>
 			        <Tab name="home">
 			          	<Icon label="首页" type={glypy.Home} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
 			          	<RawContent ref="homeContent">

@@ -88,7 +88,7 @@ var WebViewPage = React.createClass({
 	},
 
 	pressBackButton: function() {
-		this.props.navigator.pop()
+		//this.props.navigator.pop();
 		this.props.backFunction && this.props.backFunction()
 	},
 

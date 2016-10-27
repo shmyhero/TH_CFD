@@ -144,7 +144,7 @@ var OAPersonalInfoPage = React.createClass({
 		var choices = [];
 		for(var i = 0; i < rowData.choices.length; i++){
 			if(rowData.value === rowData.choices[i].value){
-				selectedText = rowData.displayText;
+				selectedText = rowData.choices[i].displayText;
 			}
 			choices.push(rowData.choices[i].displayText);
 		}
@@ -156,9 +156,13 @@ var OAPersonalInfoPage = React.createClass({
 				pickerConfirmBtnColor: [25,98,221,1],
 				pickerCancelBtnColor: [25,98,221,1],
         onPickerConfirm: data => {
-					for(var i = 0; i < rowData.choices.length; i++){
-						if(data[0] === rowData.choices[i].displayText){
-							rowData.value = rowData.choices[i].value;
+					if(data[0] === ""){
+						rowData.value = rowData.choices[0].value;
+					}else{
+						for(var i = 0; i < rowData.choices.length; i++){
+							if(data[0] === rowData.choices[i].displayText){
+								rowData.value = rowData.choices[i].value;
+							}
 						}
 					}
 					this.setState({
@@ -220,7 +224,7 @@ var OAPersonalInfoPage = React.createClass({
 			startDate = dateArray[0];
 			endDate = dateArray[1];
 		}
-
+		console.log("startDate: " + startDate + ", endDate: " + endDate);
 		return {
 			"startDate": startDate,
 			"endDate": endDate,
@@ -233,48 +237,64 @@ var OAPersonalInfoPage = React.createClass({
 		});
 	},
 
+	chooseBirthday: function(){
+		this.refs["birthdayPicker"].onPressDate();
+	},
+
+	chooseStartDatePicker: function(){
+		this.refs['startDatePicker'].onPressDate();
+	},
+
+	chooseEndDatePicker: function(){
+		this.refs['endDatePicker'].onPressDate();
+	},
+
 	renderDatePeriod: function(rowID, rowData){
 		var dateInfo = this.parseStartEndDate(rowData.value);
 
 		return (
-			<View style={styles.rowWrapper}>
-				<Text style={styles.rowTitle}>{rowData.title}</Text>
-				<View style={{flex: 3, width: 0, flexDirection: 'row', justifyContent:'center'}}>
-					<DatePicker
-						style={{flex:1, width: 0}}
-						date={dateInfo.startDate}
-						mode="date"
-						format="YYYY.MM.DD"
-						confirmBtnText="确定"
-						cancelBtnText="取消"
-						showIcon={false}
-						maxDate={dateInfo.endDate}
-						onDateChange={(datetime) => this.onStartDateSelect(rowID, datetime)}
-						customStyles={datePeriodPickerStyle}
-						placeholder="开始日期"
-					/>
-					<View style={{flex:1, alignItems:'center', alignSelf:'center'}}>
+			<View style={[styles.rowWrapper, {paddingTop: 0, paddingBottom: 0,}]}>
+				<Text style={[styles.rowTitle, {paddingTop: rowPadding, paddingBottom: rowPadding,}]}>{rowData.title}</Text>
+				<View style={{flex: 3, flexDirection:'row',}}>
+					<TouchableOpacity style={styles.datePeriodButton} onPress={()=>this.chooseStartDatePicker()}>
+						<DatePicker
+							ref={'startDatePicker'}
+							date={dateInfo.startDate}
+							mode="datetime"
+							format="YYYY.MM.DD"
+							confirmBtnText="确定"
+							cancelBtnText="取消"
+							showIcon={false}
+							maxDate={dateInfo.endDate}
+							onDateChange={(datetime) => this.onStartDateSelect(rowID, datetime)}
+							customStyles={datePeriodPickerStyle}
+							placeholder="开始日期"
+						/>
+					</TouchableOpacity>
+					<View style={{alignItems:'center', alignSelf:'center'}}>
 						<Text>-</Text>
 					</View>
-					<DatePicker
-						style={{flex:1, width: 0}}
-						date={dateInfo.endDate}
-						mode="date"
-						format="YYYY.MM.DD"
-						confirmBtnText="确定"
-						cancelBtnText="取消"
-						showIcon={false}
-						minDate={dateInfo.startDate}
-						onDateChange={(datetime) => this.onEndDateSelect(rowID, datetime)}
-						customStyles={datePeriodPickerStyle}
-						placeholder="结束日期"
-					/>
+					<TouchableOpacity style={styles.datePeriodButton} onPress={()=>this.chooseEndDatePicker()}>
+						<DatePicker
+							ref={'endDatePicker'}
+							date={dateInfo.endDate}
+							mode="date"
+							format="YYYY.MM.DD"
+							confirmBtnText="确定"
+							cancelBtnText="取消"
+							showIcon={false}
+							minDate={dateInfo.startDate}
+							onDateChange={(datetime) => this.onEndDateSelect(rowID, datetime)}
+							customStyles={datePeriodPickerStyle}
+							placeholder="结束日期"
+						/>
+
+					</TouchableOpacity>
 				</View>
 			</View>)
 	},
 
 	renderRow: function(rowData, sectionID, rowID) {
-		console.log(rowID + "+" + JSON.stringify(rowData))
 		var rowTitleStyle = styles.rowTitle;
 		if(rowData.error){
 			rowTitleStyle = styles.errorRowTitle;
@@ -310,22 +330,25 @@ var OAPersonalInfoPage = React.createClass({
 				)
 		} else if(rowData.type === "date"){
 			return (
-				<View style={styles.rowWrapper}>
-					<Text style={styles.rowTitle}>{rowData.title}</Text>
-					<DatePicker
-	          style={styles.datePicker}
-	          date={rowData.value}
-	          mode="date"
-	          format="YYYY.MM.DD"
-	          confirmBtnText="确定"
-	          cancelBtnText="取消"
-						placeholder="点击选择"
-						placeholderTextColor={"#3f6dbd"}
-	          showIcon={false}
-	          onDateChange={(datetime) => this.onDateTimeSelect(rowID, datetime)}
-						customStyles={datePickerStyle}
-	        />
-				</View>);
+				<TouchableOpacity onPress={()=>this.chooseBirthday()}>
+					<View style={styles.rowWrapper}>
+						<Text style={styles.rowTitle}>{rowData.title}</Text>
+						<DatePicker
+							ref={"birthdayPicker"}
+		          style={styles.datePicker}
+		          date={rowData.value}
+		          mode="date"
+		          format="YYYY.MM.DD"
+		          confirmBtnText="确定"
+		          cancelBtnText="取消"
+							placeholder="点击选择"
+							placeholderTextColor={"#3f6dbd"}
+		          showIcon={false}
+		          onDateChange={(datetime) => this.onDateTimeSelect(rowID, datetime)}
+							customStyles={datePickerStyle}
+		        />
+					</View>
+				</TouchableOpacity>);
 		} else if(rowData.type === "datePeriod"){
 			return this.renderDatePeriod(rowID, rowData);
 		} else{
@@ -369,9 +392,10 @@ var OAPersonalInfoPage = React.createClass({
 
 	render: function() {
 		var pickerModal = null
-		var enabled = true
 		var error = null;
-		console.log("listRawData: " + JSON.stringify(listRawData));
+
+		var nextEnabled = OpenAccountUtils.canGoNext(listRawData);
+		//console.log("listRawData: " + JSON.stringify(listRawData));
 		for (var i = 0; i < listRawData.length; i++) {
 			if(listRawData[i].error){
 				if(error){
@@ -379,24 +403,15 @@ var OAPersonalInfoPage = React.createClass({
 				}else{
 					error = "您输入的" + listRawData[i].title + "有误，请核对后重试";
 				}
-				enabled = false;
-			}
-			if (listRawData[i].value === "") {
-				enabled = false
 			}
 			if (listRawData[i].type === "datePeriod") {
 				var date = this.parseStartEndDate(listRawData[i].value);
-				if(date && date.length == 2){
-					if(date[0] == "" || date[1] == ""){
-						enabled = false
-						//break
-					}
-				}else{
-					enabled = false
-					//break
+				if(date.startDate === "" || date.endDate === ""){
+					nextEnabled = false
 				}
 			}
 		};
+
 		if (this.state.selectedPicker>=0) {
 			pickerModal = (
 				<TouchableOpacity
@@ -407,7 +422,6 @@ var OAPersonalInfoPage = React.createClass({
 			)
 		}
 
-		var nextEnabled = OpenAccountUtils.canGoNext(listRawData);
 
 		return (
 			<View style={styles.wrapper}>
@@ -552,7 +566,15 @@ var styles = StyleSheet.create({
 		width: 0,
 		padding:0,
 		margin: 0
-	}
+	},
+	datePeriodButton: {
+		flex:1,
+		paddingTop: rowPadding,
+		paddingBottom: rowPadding,
+		flexDirection: 'row',
+		justifyContent:'center',
+		alignItems: 'center'
+	},
 });
 
 var datePickerStyle = StyleSheet.create({
@@ -586,8 +608,8 @@ var datePeriodPickerStyle = StyleSheet.create({
 		dateInput: {
 			height: Platform.OS === 'ios' ? 0: 36,
 			borderWidth: 0,
-			alignItems: 'flex-start',
-			justifyContent: Platform.OS === 'ios' ? 'flex-start' : 'center',
+			alignItems: 'center',
+			justifyContent: 'center',
 		},
 		placeholderText: {
 			fontSize: fontSize,

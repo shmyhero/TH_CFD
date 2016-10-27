@@ -139,7 +139,7 @@ var OAFinanceInfoPage = React.createClass({
 		var choices = [];
 		for(var i = 0; i < rowData.choices.length; i++){
 			if(rowData.value === rowData.choices[i].value){
-				selectedText = rowData.displayText;
+				selectedText = rowData.choices[i].displayText;
 			}
 			choices.push(rowData.choices[i].displayText);
 		}
@@ -149,9 +149,13 @@ var OAFinanceInfoPage = React.createClass({
         selectedValue: [selectedText],
 				pickerTitleText: "",
         onPickerConfirm: data => {
-					for(var i = 0; i < rowData.choices.length; i++){
-						if(data[0] === rowData.choices[i].displayText){
-							rowData.value = rowData.choices[i].value;
+					if(data[0] === ""){
+						rowData.value = rowData.choices[0].value;
+					}else{
+						for(var i = 0; i < rowData.choices.length; i++){
+							if(data[0] === rowData.choices[i].displayText){
+								rowData.value = rowData.choices[i].value;
+							}
 						}
 					}
 					this.setState({

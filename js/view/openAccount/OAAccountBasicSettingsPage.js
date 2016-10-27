@@ -178,6 +178,9 @@ var OAAccountBasicSettingsPage = React.createClass({
 					console.log("api Error: " + errorMessage);
 					listRawData[rowID].error = errorMessage;
 					this.updateList();
+					this.setState({
+						validateInProgress: false,
+					})
 					if(resolve){
 						resolve();
 					}

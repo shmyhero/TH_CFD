@@ -590,6 +590,19 @@ var HomePage = React.createClass({
 		)
 	},
 
+	tapFirstTopNews: function(firstNews) {
+		var url = NetConstants.TRADEHERO_API.WEBVIEW_TOP_NEWS_PAGE + firstNews.id;
+		if(LogicData.getAccountState()){
+			url = NetConstants.TRADEHERO_API.WEBVIEW_TOP_NEWS_PAGE_ACTUAL+news.id
+		}		
+		this.gotoWebviewPage(url,
+			'每日头条',
+			false,
+			null,
+			null,
+			TalkingdataModule.HEADER_SHARE_EVENT);
+	},
+
 	tapTopNews: function(url) {
 		this.gotoWebviewPage(url,
 			'每日头条',
@@ -620,7 +633,8 @@ var HomePage = React.createClass({
 	renderTopNews: function() {
 		var rowHeight = 60
 		var news = []
-		var len = this.state.topNews.length
+		var len = this.state.topNews.length;
+		var firstNews;
 		if (len > 0) {
 			for (var i=0; i<len; i++) {
 				var news1 = this.state.topNews[i*2%len]
@@ -631,22 +645,26 @@ var HomePage = React.createClass({
 						{this.renderOneNews(news2)}
 					</View>
 				)
+
+				firstNews = this.state.topNews[0];
 			}
 			return (
-				<View style={[styles.topnewsContainer, {height: rowHeight}]}>
-					<Image style={styles.topnewsImage} source={LogicData.getAccountState()?require('../../images/topnews_actual.png'):require('../../images/topnews.png')}/>
-					<View style={styles.topnewsVerticalLine}/>
-					<Swiper
-						ref="topnewsswiper"
-						horizontal={false}
-						height={rowHeight}
-						loop={true}
-						autoplay={true}
-						autoplayTimeout={5}
-						showsPagination={false}>
-						{news}
-					</Swiper>
-				</View>
+				<TouchableOpacity onPress={() => this.tapFirstTopNews(firstNews)}>
+					<View style={[styles.topnewsContainer, {height: rowHeight}]}>
+						<Image style={styles.topnewsImage} source={LogicData.getAccountState()?require('../../images/topnews_actual.png'):require('../../images/topnews.png')}/>
+						<View style={styles.topnewsVerticalLine}/>
+						<Swiper
+							ref="topnewsswiper"
+							horizontal={false}
+							height={rowHeight}
+							loop={true}
+							autoplay={true}
+							autoplayTimeout={5}
+							showsPagination={false}>
+							{news}
+						</Swiper>
+					</View>
+				</TouchableOpacity>
 			)
 		} else {
 			return (

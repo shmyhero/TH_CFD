@@ -1,4 +1,4 @@
-/* @flow */
+'use strict';
 
 import React, { Component } from 'react';
 import {
@@ -70,7 +70,7 @@ var SuperPriorityHintPage = React.createClass({
 			},
 		).start();
 
-		// this.updateLastShow();
+		this.updateLastShow();
   },
 
 	updateLastShow: function(){

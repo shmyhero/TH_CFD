@@ -26,6 +26,7 @@ var NavBar = React.createClass({
 		textOnLeft: React.PropTypes.string,
 		textOnRight: React.PropTypes.string,
 		imageOnRight: React.PropTypes.number,
+		rightImageStyle: React.PropTypes.object,
 		leftTextOnClick: React.PropTypes.func,
 		leftButtonOnClick: React.PropTypes.func,
 		rightTextOnClick: React.PropTypes.func,
@@ -48,6 +49,7 @@ var NavBar = React.createClass({
 			textOnLeft: null,
 			textOnRight: null,
 			imageOnRight: null,
+			rightImageStyle: null,
 			leftTextOnClick: null,
 			leftButtonOnClick: null,
 			rightTextOnClick: null,
@@ -208,13 +210,18 @@ var NavBar = React.createClass({
 
 	renderRightImage: function() {
 		if (this.props.imageOnRight !== null) {
+			var imageStyles = [styles.rightImage];
+			if(this.props.rightImageStyle){
+				imageStyles.push(this.props.rightImageStyle);
+			}
+
 			return (
 				<TouchableHighlight
 					onPress={this.rightImageOnClick}
 					underlayColor={ColorConstants.title_blue()}>
 
 					<Image
-						style={styles.rightImage}
+						style={imageStyles}
 						source={this.props.imageOnRight}/>
 
 				</TouchableHighlight>

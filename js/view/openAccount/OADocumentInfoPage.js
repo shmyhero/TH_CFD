@@ -25,14 +25,15 @@ var ErrorBar = require('./ErrorBar')
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
 var fontSize = Math.round(16*width/375)
-var listRawData = [
-		{"key":"交易条款说明", "url":"http://baidu.com"},
-		{"key":"风险与注意事项告知说明", "url":"http://baidu.com"},
-		{"key":"数据信息共享说明", "url":"http://baidu.com"},
-		{"key":"Ayondo服务协议说明", "url":"http://baidu.com"},
-		{"key":"交易通知说明", "url":"http://baidu.com"}];
 
 var OADocumentInfoPage = React.createClass({
+	listRawData: [
+			{"key":"交易条款说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "1")},
+			{"key":"风险与注意事项告知说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "2")},
+			{"key":"数据信息共享说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "3")},
+			{"key":"Ayondo服务协议说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "4")},
+			{"key":"交易通知说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "5")},],
+
 	propTypes: {
 		data: React.PropTypes.object,
 		onPop: React.PropTypes.func,
@@ -52,7 +53,7 @@ var OADocumentInfoPage = React.createClass({
 	getInitialState: function() {
 		var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		return {
-			dataSource: ds.cloneWithRows(listRawData),
+			dataSource: ds.cloneWithRows(this.listRawData),
 			enabled: true,
 			hasRead: false,
 			validateInProgress: false,
@@ -140,6 +141,12 @@ var OADocumentInfoPage = React.createClass({
 	},
 
 	parseError: function(errorMessage){
+		if(!errorMessage){
+			this.setState({
+				error: "遇到错误，请稍后再试"
+			})
+			return;
+		}
 		var regex1 = /Field '\w+'.+\./g; //1. Find "Filed 'xxx'""
 		var regex2 = /'(.+?)'/g; //2. Find key name.
 		var errorlines = errorMessage.match(regex1);

@@ -254,15 +254,9 @@ var MePage = React.createClass({
 		if(navState.url.indexOf('demo/oauth/ok')>0){
 			console.log('success login ok');
 			MainPage.ayondoLoginResult(true)
-			CookieManager.clearAll((err, res) => {
-				console.log('cookies cleared!');
-			});
 		}else if(navState.url.indexOf('demo/oauth/error')>0){
 			console.log('success login error');
 			MainPage.ayondoLoginResult(false)
-			CookieManager.clearAll((err, res) => {
-				console.log('cookies cleared!');
-			});
 		}
 
 	},

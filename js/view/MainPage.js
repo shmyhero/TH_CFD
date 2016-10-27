@@ -15,6 +15,8 @@ import {
 import Tabbar, { Tab, RawContent, Icon, IconWithBar, glypyMapMaker } from 'react-native-tabbar';
 var {EventCenter, EventConst} = require('../EventCenter')
 
+
+var CookieManager = require('react-native-cookies')
 var ColorConstants = require('../ColorConstants')
 var LoadingIndicator = require('./LoadingIndicator');
 var NavBar = require('./NavBar')
@@ -510,6 +512,11 @@ var MainPage = React.createClass({
 			LogicData.setActualLogin(true)//实盘登陆状态 true
 			this.refreshMainPage()
 		}
+
+		CookieManager.clearAll((err, res) => {
+			console.log('cookies cleared!');
+		});
+
 	},
 
 	refreshMainPage(){

@@ -16,6 +16,7 @@ var MainPage = require('../MainPage')
 var ColorConstants = require('../../ColorConstants')
 var TalkingdataModule = require('../../module/TalkingdataModule')
 var OpenAccountRoutes = require('./OpenAccountRoutes')
+var LogicData = require('../../LogicData')
 
 var {height, width} = Dimensions.get('window')
 var PAGES = [
@@ -26,6 +27,7 @@ var BANNERS = [
 	require('../../../images/live_register_banner01.png'),
 	require('../../../images/live_register_banner02.png'),
 ];
+
 // var ds = new ViewPager.DataSource({
 // 	pageHasChanged: (p1, p2) => p1 !== p2,
 // });
@@ -34,48 +36,32 @@ var imageHeight = 311 / 750 * width
 
 var OAStatusPage = React.createClass({
 
+	propTypes: {
+		onLoginClicked: React.PropTypes.func,
+	},
+
 	getInitialState: function() {
 		return {
-			dataSource: ds.cloneWithPages(PAGES),
+			// dataSource: ds.cloneWithPages(PAGES),
 		};
 	},
 
 	gotoNext: function() {
-		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_START, TalkingdataModule.LABEL_OPEN_ACCOUNT)
-		this.props.navigator.push({
-			name: MainPage.OPEN_ACCOUNT_ROUTE,
-			step: 0,
-		});
+		this.props.onLoginClicked()
 	},
 
 	helpPressed: function() {
 
 	},
 
-	_renderPage: function(
-		data: Object,
-		pageID: number | string,) {
-		return (
-			<Image
-				style={[styles.image, {height: imageHeight, width: width}]}
-				source={BANNERS[pageID % 2]}/>
-		);
-	},
 
 	render: function() {
 		return (
+
 			<View style={styles.wrapper}>
 				<Image
 					style={[styles.backgroundImage, {height: imageHeight, width: width}]}
 					source={BANNERS[0]} >
-					{
-					// <ViewPager
-					// 	style={{backgroundColor:'transparent'}}
-					// 	dataSource={this.state.dataSource}
-					// 	renderPage={this._renderPage}
-					// 	isLoop={false}
-					// 	autoPlay={false}/>
-					}
 				</Image>
 
 				<Image style={styles.image} source={require('../../../images/live_register_sub_banner.png')}/>
@@ -83,22 +69,23 @@ var OAStatusPage = React.createClass({
 				<View style={{flex: 2, marginTop: 70}}>
 					<Text style={styles.text1}>ayondo欢迎您开启财富之旅</Text>
 
-					<Button style={styles.buttonArea}
-						enabled={true}
-						onPress={this.gotoNext}
-						textContainerStyle={styles.buttonView}
-						textStyle={styles.buttonText}
-						text='免费开户' />
+					<View style={{flex:1}}>
+						<Button style={styles.buttonArea}
+							enabled={true}
+							onPress={this.gotoNext}
+							textContainerStyle={styles.buttonView}
+							textStyle={styles.buttonText}
+							text='免费登录' />
+					</View>
+
 
 					<View style={styles.helpContainer}>
 						<View style={styles.helpRowWrapper}>
-							<View style={styles.helpLine}/>
-							<TouchableOpacity style={{padding: 5}} onPress={this.helpPressed}>
+							{/* <TouchableOpacity style={{padding: 5}} onPress={this.helpPressed}> */}
 								<Text style={styles.helpTitle}>
-									 开户交易帮助
+									 服务热线：66058771
 								</Text>
-							</TouchableOpacity>
-							<View style={styles.helpLine}/>
+							{/* </TouchableOpacity> */}
 						</View>
 					</View>
 				</View>
@@ -118,6 +105,7 @@ var styles = StyleSheet.create({
 		textAlign: 'center',
 		paddingTop: 10,
 		marginBottom: 20,
+		color:'#A4A4A4'
 	},
 	image: {
 		alignSelf: 'center',
@@ -125,7 +113,8 @@ var styles = StyleSheet.create({
 		height: 212 / 750 * width,
 	},
 	buttonArea: {
-		flex: 1,
+
+		alignItems:'stretch',
 		marginLeft: 15,
 		marginRight: 15,
 		marginBottom: 16,
@@ -134,7 +123,7 @@ var styles = StyleSheet.create({
 	buttonView: {
 		height: 40,
 		borderRadius: 3,
-		backgroundColor: ColorConstants.TITLE_DARK_BLUE,
+		backgroundColor: '#ee595e',
 		justifyContent: 'center',
 	},
 	buttonText: {
@@ -163,7 +152,7 @@ var styles = StyleSheet.create({
 	helpTitle: {
 		fontSize: 14,
 		textAlign: 'center',
-		color: '#1c5fcf',
+		color: '#2b2b2b',
 	},
 });
 

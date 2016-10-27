@@ -514,7 +514,7 @@ var MainPage = React.createClass({
 
 	refreshMainPage(){
 		// this.setState({
-		//
+		// 	barColor:LogicData.getAccountState()?'#00ff00':'#f7f7f7'
 		// })
 		console.log('refresh for Tab Icon Color ... ');
 	},
@@ -788,15 +788,22 @@ var MainPage = React.createClass({
 		this.showNotification()
 	},
 
-	render: function() {
+	showTabInfo(){
+		if(LogicData.getAccountState()){
+			return (<Icon label="首页" type={glypy.Home} from={'myhero'} onActiveColor={systemBuleActual} onInactiveColor={iconGrey}/>)
+		}else{
+			return (<Icon label="首页" type={glypy.Home} from={'myhero'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>)
+		}
+	},
 
+	render: function() {
 	    return (
 	    	<View style={styles.container}>
 					{this.renderShareView()}
 		    	<StatusBar barStyle="light-content" backgroundColor='#1962dd'/>
 		      	<Tabbar ref="myTabbar" barColor='#f7f7f7' style={{alignItems: 'stretch'}}>
 			        <Tab name="home">
-			          	<Icon label="首页" type={glypy.Home} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
+									<Icon label="首页" type={LogicData.getAccountState()?glypy.Home:glypy.Stat} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
 			          	<RawContent ref="homeContent">
 		            		<Navigator
 								style={styles.container}

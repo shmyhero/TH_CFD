@@ -218,7 +218,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 				//At least 4 chars. Allowed chars: [0-9a-zA-Z\!\#\*\$\-\/\=\?\@\.\,\:\;]
 			}
 			if(listRawData[1].value && listRawData[2].value && listRawData[1].value !== listRawData[2].value){
-				listRawData[2].error = "和登入密码不一致";
+				listRawData[2].error = "两次输入的密码不一致";
 				hasError = true;
 			}
 
@@ -280,6 +280,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 							autoCorrect={false}
 							secureTextEntry={secureTextEntry}
 							defaultValue={rowData.value}
+							placeholder={rowData.hint}
 							selectionColor="#426bf2"
 							underlineColorAndroid='transparent'
 							onChangeText={(text)=>this.textInputChange(text, rowID)}

@@ -33,6 +33,9 @@ var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
 var fontSize = Math.round(16*width/375)
 
+var rowTitleWidth = (width - (2 * rowPadding)) / 4;
+var rowValueWidth = (width - (2 * rowPadding)) / 4 * 3;
+
 const GenderTranslater = [
   {"value":true, "displayText": "男"},
   {"value":false, "displayText": "女"},
@@ -253,29 +256,32 @@ var OAPersonalInfoPage = React.createClass({
 		var dateInfo = this.parseStartEndDate(rowData.value);
 
 		return (
-			<View style={[styles.rowWrapper, {paddingTop: 0, paddingBottom: 0,}]}>
+			<View style={[styles.rowWrapper, {paddingTop: 0, paddingBottom: 0}]}>
 				<Text style={[styles.rowTitle, {paddingTop: rowPadding, paddingBottom: rowPadding,}]}>{rowData.title}</Text>
-				<View style={{flex: 3, flexDirection:'row',}}>
+				<View style={styles.valueContent}>
 					<TouchableOpacity style={styles.datePeriodButton} onPress={()=>this.chooseStartDatePicker()}>
 						<DatePicker
+							style={styles.datePeriodPicker}
 							ref={'startDatePicker'}
 							date={dateInfo.startDate}
-							mode="datetime"
+							mode="date"
 							format="YYYY.MM.DD"
 							confirmBtnText="确定"
 							cancelBtnText="取消"
 							showIcon={false}
-							maxDate={dateInfo.endDate}
+							minDate={dateInfo.startDate?dateInfo.startDate:"1990-01-01"}
+							maxDate={dateInfo.endDate?dateInfo.endDate:"2099-01-01"}
 							onDateChange={(datetime) => this.onStartDateSelect(rowID, datetime)}
 							customStyles={datePeriodPickerStyle}
 							placeholder="开始日期"
 						/>
 					</TouchableOpacity>
-					<View style={{alignItems:'center', alignSelf:'center'}}>
+					<View style={{alignItems:'center', alignSelf:'center', width: 50,}}>
 						<Text>-</Text>
 					</View>
 					<TouchableOpacity style={styles.datePeriodButton} onPress={()=>this.chooseEndDatePicker()}>
 						<DatePicker
+							style={styles.datePeriodPicker}
 							ref={'endDatePicker'}
 							date={dateInfo.endDate}
 							mode="date"
@@ -283,7 +289,8 @@ var OAPersonalInfoPage = React.createClass({
 							confirmBtnText="确定"
 							cancelBtnText="取消"
 							showIcon={false}
-							minDate={dateInfo.startDate}
+							minDate={dateInfo.startDate?dateInfo.startDate:"1990-01-01"}
+							maxDate={dateInfo.endDate?dateInfo.endDate:"2099-01-01"}
 							onDateChange={(datetime) => this.onEndDateSelect(rowID, datetime)}
 							customStyles={datePeriodPickerStyle}
 							placeholder="结束日期"
@@ -312,8 +319,8 @@ var OAPersonalInfoPage = React.createClass({
 				<TouchableOpacity activeOpacity={0.9} style={{backgroundColor: 'yellow'}} onPress={() => this.onPressPicker(rowData, rowID)}>
 					<View style={styles.rowWrapper}>
 						<Text style={rowTitleStyle}>{rowData.title}</Text>
-						<View style={{flex: 3, flexDirection: 'row'}}>
-							<View style={{flex: 1, flexDirection: 'column', justifyContent: "center"}}>
+						<View style={styles.valueContent}>
+							<View style={{flex: 1, flexDirection: 'column', justifyContent: "center", margin: 0,}}>
 								<Text style={styles.centerText}
 									autoCapitalize="none"
 									autoCorrect={false}
@@ -415,9 +422,8 @@ var OAPersonalInfoPage = React.createClass({
 		if (this.state.selectedPicker>=0) {
 			pickerModal = (
 				<TouchableOpacity
-				style={{backgroundColor:'transparent', flex:1, position:'absolute', top:0, left:0, right: 0, bottom:0}}
-				onPress={()=>this.hidePicker()}>
-
+					style={{backgroundColor:'transparent', flex:1, position:'absolute', top:0, left:0, right: 0, bottom:0}}
+					onPress={()=>this.hidePicker()}>
 				</TouchableOpacity>
 			)
 		}
@@ -503,40 +509,47 @@ var styles = StyleSheet.create({
 	rowTitle:{
 		fontSize: fontSize,
 		color: '#333333',
-		flex: 1,
+		width:rowTitleWidth,
 	},
 	errorRowTitle:{
 		fontSize: fontSize,
 		color: 'red',
-		flex: 1,
+		width:rowTitleWidth,
 	},
 	valueText: {
 		fontSize: fontSize,
 		color: '#333333',
-		flex: 3,
+		flex: 1,
 		marginTop: -rowPadding,
 		marginBottom: -rowPadding,
 		alignItems:'center',
 		justifyContent:'center',
+		marginLeft:0,
+		paddingLeft:0
 	},
 	centerText: {
 		fontSize: fontSize,
 		color: '#333333',
 		alignItems:'center',
 		justifyContent:'center',
+		margin: 0,
 	},
 	multilineValueText: {
 		fontSize: fontSize,
 		color: '#333333',
-		flex: 3,
+		flex: 1,
+		alignItems:'center',
+		justifyContent:'center',
+		marginLeft:0,
+		paddingLeft:0,
 		height: Platform.OS === "ios" ? 48 : 65,
 		marginTop: Platform.OS === "ios" ? -5 : -10,
 		alignSelf: "flex-start",
 	},
 	valueContent:{
-		flex: 3,
+		flex: 1,
+		flexDirection: 'row',
 	},
-
 	bottomArea: {
 		height: 72,
 		backgroundColor: 'white',
@@ -562,19 +575,27 @@ var styles = StyleSheet.create({
 		color: '#ffffff',
 	},
 	datePicker: {
-		flex:3,
+		flex:1,
 		width: 0,
 		padding:0,
-		margin: 0
+		margin: 0,
+		marginTop: -rowPadding,
+		marginBottom: -rowPadding,
+		alignItems:'center',
+		justifyContent:'center',
+		marginLeft:0,
+		paddingLeft:0
 	},
 	datePeriodButton: {
-		flex:1,
 		paddingTop: rowPadding,
 		paddingBottom: rowPadding,
 		flexDirection: 'row',
 		justifyContent:'center',
-		alignItems: 'center'
+		alignItems: 'center',
 	},
+	datePeriodPicker:{
+		width: 80,
+	}
 });
 
 var datePickerStyle = StyleSheet.create({
@@ -598,23 +619,25 @@ var datePickerStyle = StyleSheet.create({
 });
 
 var datePeriodPickerStyle = StyleSheet.create({
-		dateTouchBody:{
-		 	height: Platform.OS === 'ios' ? 0: 36,
-		},
-		dateText: {
-			fontSize: fontSize,
-			color: '#333333',
-		},
-		dateInput: {
-			height: Platform.OS === 'ios' ? 0: 36,
-			borderWidth: 0,
-			alignItems: 'center',
-			justifyContent: 'center',
-		},
-		placeholderText: {
-			fontSize: fontSize,
-			color: "#c4c4c4",
-		},
+	dateTouchBody:{
+		height: Platform.OS === 'ios' ? 0: 40,
+	  width: 100,
+	},
+  dateInput: {
+    flex: 1,
+    height: Platform.OS === 'ios' ? 0: 40,
+    borderWidth: 0,
+		alignItems: 'flex-start',
+    justifyContent: 'center'
+  },
+  dateText: {
+		fontSize: fontSize,
+		color: '#333333',
+  },
+	placeholderText: {
+		fontSize: fontSize,
+		color: "#c4c4c4",
+	},
 });
 
 module.exports = OAPersonalInfoPage;

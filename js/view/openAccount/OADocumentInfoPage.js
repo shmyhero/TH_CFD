@@ -24,7 +24,7 @@ var ErrorBar = require('./ErrorBar')
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
-var fontSize = Math.round(16*width/375)
+var fontSize = Math.round(15*width/375)
 
 var OADocumentInfoPage = React.createClass({
 	listRawData: [

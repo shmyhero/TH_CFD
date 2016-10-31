@@ -231,7 +231,7 @@ var OAFinanceInfoPage = React.createClass({
 					<Text style={styles.rowTitle}>{rowData.title}</Text>
 					<Switch
 						onValueChange={(value) => this.onPressSwitch(value, rowID)}
-						style={{height: 16}}
+						style={{height: 22}}
 						value={rowData.value}
 						onTintColor={ColorConstants.TITLE_DARK_BLUE}/>
 				</View>)

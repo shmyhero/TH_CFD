@@ -72,6 +72,12 @@ var MeAccountBindingPage = React.createClass({
 		var meData = LogicData.getMeData();
 		console.log(JSON.stringify(meData))
 
+		if(meData.phone){
+			this.setState({
+				phoneNumber: meData.phone,
+			})
+		}
+		
 		if(meData.weChatOpenId){
 			this.setState({
 				weChatOpenId: meData.weChatOpenId,

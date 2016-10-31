@@ -24,7 +24,7 @@ var NetConstants = require('../../NetConstants')
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
-var fontSize = Math.round(16*width/375)
+var fontSize = Math.round(15*width/375)
 var listRawData = [
 		{"key":"username", "title": "用户名", "value":"", hint: "4位以上登入用户名", "type": "userName", maxLength: 20},
 		{"key":"password", "title":"登入密码", "value":"", hint: "8位以上数字字母组合", "type": "pwd", maxLength: 25},

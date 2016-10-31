@@ -1,6 +1,8 @@
 'use strict'
 
 var StorageModule = require('./module/StorageModule')
+var NativeDataModule = require('./module/NativeDataModule')
+var ColorConstants = require('./ColorConstants')
 
 var userData = {};
 var meData = {};
@@ -33,9 +35,12 @@ var LogicData = {
   },
 
 	setAccountState: function(state){
+		// state = true
 		accountState = state;
 		StorageModule.setAccountState(state)
 		console.log("setAccountState = " + state);
+		NativeDataModule.passRawDataToNative('accountState', state)
+		ColorConstants.setScheme(state ? ColorConstants.COLOR_THEME_LIVE: ColorConstants.COLOR_THEME_SIMULATOR)
 	},
 
 	getAccountState: function(){

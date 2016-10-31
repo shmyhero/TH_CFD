@@ -47,6 +47,9 @@ RCT_EXPORT_MODULE();
 	if([dataName isEqualToString:@"myLogo"]) {
 		[manager loadUserLogo:(NSString *)data];
 	}
+	else if([dataName isEqualToString:@"accountState"])	{
+		[manager setAccountState:data];
+	}
 }
 
 - (void)sendDataToRN:(NSString *)dataName data:(NSString *)jsonData

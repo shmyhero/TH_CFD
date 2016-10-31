@@ -119,7 +119,7 @@ class CandleChartRender: BaseRender {
 			dateFormatter.dateFormat = "HH:mm"
 		}
 		
-		let textColor = UIColor(hexInt: 0x70a5ff)
+		let textColor = _colorSet.dateTextColor
 		let textFont = UIFont(name: "Helvetica Neue", size: 8)
 		let textStyle = NSMutableParagraphStyle()
 		textStyle.alignment = .Center

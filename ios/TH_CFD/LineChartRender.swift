@@ -179,7 +179,7 @@ class LineChartRender: BaseRender {
 		
 		let leftText: NSString = dateFormatter.stringFromDate(timeStart)
 		let rightText = dateFormatter.stringFromDate(timeEnd)
-		let textColor = UIColor(hexInt: 0x70a5ff)
+		let textColor = _colorSet.dateTextColor
 		let textFont = UIFont(name: "Helvetica Neue", size: 8)
 		let textStyle = NSMutableParagraphStyle()
 		textStyle.alignment = .Center

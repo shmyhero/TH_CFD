@@ -170,8 +170,8 @@ var StockSearchPage = React.createClass({
 
 	renderNavBar: function() {
 		return (
-			<View style={styles.navBarContainer} >
-				<View style={styles.navBarInputContainer}>
+			<View style={[styles.navBarContainer,{backgroundColor:ColorConstants.title_blue()}]} >
+				<View style={[styles.navBarInputContainer,{borderColor:LogicData.getAccountState()?'#556f99':'#3877df'},{backgroundColor:ColorConstants.title_blue()}]}>
 					<Image
 						style={styles.searchButton}
 						source={require('../../images/search.png')}/>

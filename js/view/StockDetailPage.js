@@ -567,14 +567,15 @@ var StockDetailPage = React.createClass({
 
 		var upTextColor = 'white'
 		var downTextColor = 'white'
-		if (!upSelected) upTextColor = '#568ff1'
-		if (!downSelected) downTextColor = '#568ff1'
+		if (!upSelected) upTextColor = LogicData.getAccountState()?'#6781ab':'#568ff1'
+		if (!downSelected) downTextColor = LogicData.getAccountState()?'#6781ab':'#568ff1'
 
 		return (
 			<View style={[styles.rowView, {alignItems:'stretch'}]}>
 				<TouchableHighlight
 					underlayColor={upSelected ? '#6da2fc': '#356dce'}
-					onPress={() => this.state.stockInfo.isOpen && this.buyPress()} style={[styles.tradeButtonView,(this.state.flashTimes>0 && this.state.flashTimes%2==0)?styles.flashBorder:null , upSelected&&styles.tradeButtonViewSelected]}>
+					onPress={() => this.state.stockInfo.isOpen && this.buyPress()}
+					style={[styles.tradeButtonView,{backgroundColor:LogicData.getAccountState()?'#476189':'#356dce'},(this.state.flashTimes>0 && this.state.flashTimes%2==0)?styles.flashBorder:null , upSelected&&(LogicData.getAccountState()?styles.tradeButtonViewSelectedLive:styles.tradeButtonViewSelected)]}>
 					<View style={styles.tradeButtonContainer}>
 						<Text style={[styles.tradeButtonText, {color: upTextColor}]}>
 							{this.state.stockPriceAsk}
@@ -585,7 +586,8 @@ var StockDetailPage = React.createClass({
 				</TouchableHighlight>
 				<TouchableHighlight
 					underlayColor={downSelected ? '#6da2fc': '#356dce'}
-					onPress={() => this.state.stockInfo.isOpen && this.sellPress()} style={[styles.tradeButtonView,(this.state.flashTimes>0 && this.state.flashTimes%2==0)?styles.flashBorder:null ,downSelected&&styles.tradeButtonViewSelected]}>
+					onPress={() => this.state.stockInfo.isOpen && this.sellPress()}
+					style={[styles.tradeButtonView,,{backgroundColor:LogicData.getAccountState()?'#476189':'#356dce'},(this.state.flashTimes>0 && this.state.flashTimes%2==0)?styles.flashBorder:null ,downSelected&&(LogicData.getAccountState()?styles.tradeButtonViewSelectedLive:styles.tradeButtonViewSelected)]}>
 					<View style={styles.tradeButtonContainer}>
 						<Text style={[styles.tradeButtonText, {color: downTextColor}]}>
 							{this.state.stockPriceBid}
@@ -765,7 +767,7 @@ var StockDetailPage = React.createClass({
 			<TouchableOpacity
 				activeOpacity={0.85}
 				onPress={() => buttonEnable ? this.okPress():this.okPressInDisable()}
-				style={[styles.okView, !buttonEnable && styles.okViewDisabled, !this.state.stockInfo.isOpen && styles.okViewNotOpened]}>
+				style={[styles.okView, !buttonEnable && (LogicData.getAccountState()?styles.okViewDisabledLive:styles.okViewDisabled), !this.state.stockInfo.isOpen && styles.okViewNotOpened]}>
 				<Text style={[styles.okButton, !buttonEnable && styles.okButtonDisabled, !this.state.stockInfo.isOpen && styles.okButtonNotOpened]}>
 					{this.state.stockInfo.isOpen ? '确认' : '未开市'}
 				</Text>
@@ -956,11 +958,11 @@ var styles = StyleSheet.create({
 	tradeButtonView: {
 		flex: 1,
 		margin: 12,
-    	paddingTop:8,
-    	paddingBottom:9,
-    	borderRadius:5,
-    	borderWidth:1,
-    	borderColor: '#133e86',
+    paddingTop:8,
+  	paddingBottom:9,
+    borderRadius:5,
+  	borderWidth:1,
+		borderColor: '#133e86',
 		backgroundColor: '#356dce',
 		alignItems: 'center',
 		justifyContent: 'space-around',
@@ -980,6 +982,9 @@ var styles = StyleSheet.create({
 	},
 	tradeButtonViewSelected:{
 		backgroundColor: '#6da2fc',
+	},
+	tradeButtonViewSelectedLive:{
+		backgroundColor: '#a1b6d8',
 	},
 	tradeButtonImage: {
 		width: 35,
@@ -1028,6 +1033,9 @@ var styles = StyleSheet.create({
 	},
 	okViewDisabled: {
 		backgroundColor: '#164593'
+	},
+	okViewDisabledLive:{
+		backgroundColor: '#3f577e'
 	},
 	okViewNotOpened: {
 		backgroundColor: '#164593'

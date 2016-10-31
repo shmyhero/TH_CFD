@@ -110,7 +110,7 @@ var StockExchangePage = React.createClass({
 	renderLiveLogin:function(){
 		return(
 			// <View style={{flex:1,backgroundColor:'white',alignItems:'center'}}>
-   	// 		<NavBar title="我的交易" navigator={this.props.navigator}/>
+   	  //   <NavBar title="我的交易" navigator={this.props.navigator}/>
 			// 	<TouchableOpacity onPress={()=>this.jumpToLogin()}>
 			// 		<Text style={{textAlign:'center',fontSize:20, alignSelf:'center',justifyContent:'center',backgroundColor:'yellow'}}>点击登录实盘账户</Text>
 			// 	</TouchableOpacity>
@@ -214,18 +214,20 @@ var StockExchangePage = React.createClass({
 				)
 			} else{
 				// return (
-					// <View style={{flex: 1}}>
-					// 	<NavBar title="我的交易" navigator={this.props.navigator}/>
-					// 	<WebViewPage
-					// 		isShowNav= {false}
-					// 		onNavigationStateChange={this.onNavigationStateChange}
-					// 		url={'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId}
-					// 		// url={'https://www.baidu.com'}
-					// 	  // url={'https://www.tradehub.net/live/yuefei-beta/login.html'}
-					// 		// url={'https://www.tradehub.net/demo/ff-beta/tradehero-login-debug.html'}
-					// 		// url={'http://cn.tradehero.mobi/TH_CFD_SP/detail01.html'}
-					// 	/>
-					// </View>
+				// 	<View style={{flex: 1}}>
+				// 		<NavBar title="我的交易" navigator={this.props.navigator}/>
+				// 		<WebViewPage
+				// 			isShowNav= {false}
+				// 			onNavigationStateChange={this.onNavigationStateChange}
+				// 			url={'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId}
+				// 			// url={'https://www.baidu.com'}
+				// 		  // url={'https://www.tradehub.net/live/yuefei-beta/login.html'}
+				// 			// url={'https://www.tradehub.net/demo/ff-beta/tradehero-login-debug.html'}
+				// 			// url={'http://cn.tradehero.mobi/TH_CFD_SP/detail01.html'}
+				// 			// url={'http://cn.tradehero.mobi/TH_CFD_WEB/FocusSlider1.php'}
+				//
+				// 		/>
+				// 	</View>
 					return(this.renderLiveLogin())
 				// )
 			}

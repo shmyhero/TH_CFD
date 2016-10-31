@@ -73,7 +73,13 @@ export default class DevelopPage extends Component {
     }
   }
 
+  updateColor(liveColor){
+    LogicData.setAccountState(!liveColor)
+    this.forceUpdate()
+  }
+
   render() {
+    var liveColor = LogicData.getAccountState()
     return (
       <View style={styles.container}>
         <View style={{flexDirection: 'column',
@@ -93,6 +99,13 @@ export default class DevelopPage extends Component {
           <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}} onPress={()=>this.deleteLiveAcccount()}>
             <Text style={{color:'white', fontSize: 16}}>
               删除实盘账号
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{flexDirection: 'row', padding:15,}}>
+          <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}} onPress={()=>this.updateColor(liveColor)}>
+            <Text style={{color:'white', fontSize: 16}}>
+              {liveColor?"切换到模拟盘颜色":"切换到实盘颜色"}
             </Text>
           </TouchableOpacity>
         </View>

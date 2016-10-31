@@ -1,5 +1,7 @@
 package com.tradehero.cfd.module;
 
+import android.util.Log;
+
 import com.tradehero.cfd.MainActivity;
 import com.tradehero.cfd.views.ReactStockEditFragmentNative;
 
@@ -10,12 +12,14 @@ import org.json.JSONException;
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
  */
 public class LogicData {
+    private static String isLive = "false";
 
     public static final String MY_LIST = "myList";
     public static final String MY_LOGO = "myLogo";
     public static final String MY_ALERT_LIST = "myAlertList";
     public static final String PLAY_SOUND = "playSound";
     public static final String IS_PRODUCT = "isProduct";
+    public static final String ACCOUNT_STATE = "accountState";
 
     private static LogicData mInstance;
     private JSONArray mMyList;
@@ -31,16 +35,18 @@ public class LogicData {
         return mInstance;
     }
 
+
+
     public void setData(String dataName, String data) {
         if (dataName.equals(MY_LIST)) {
             try {
-                mMyList = new JSONArray(data);
+                mMyList = new JSONArray( data);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }else if(dataName.equals(MY_ALERT_LIST)){
             try {
-                mMyAlertList = new JSONArray(data);
+                mMyAlertList = new JSONArray((String)data);
 //                if(ReactStockEditFragmentNative.instance !=null){
 //                    ReactStockEditFragmentNative.instance.makeDataRefresh();
 //                }
@@ -48,11 +54,14 @@ public class LogicData {
                 e.printStackTrace();
             }
         }else if(dataName.equals(MY_LOGO)){
-            myLogo = data;
+            myLogo =  data;
         }else if(dataName.equals(PLAY_SOUND)){
             playSound(0);
         }else if(dataName.equals(IS_PRODUCT)){
             checkIsProduct();
+        } else if(dataName.equals(ACCOUNT_STATE)){
+            isLive = data;
+            Log.d("" , "isLive = " + isLive);
         }
     }
 
@@ -78,5 +87,9 @@ public class LogicData {
         if(MainActivity.mInstance!=null){
             MainActivity.mInstance.passIsProductServerToRN();
         }
+    }
+
+    public boolean isLive(){
+        return "true".equals(isLive);
     }
 }

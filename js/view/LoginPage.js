@@ -49,18 +49,22 @@ var LoginPage = React.createClass({
 	propTypes: {
 		showCancelButton: React.PropTypes.bool,
 		popToRoute: React.PropTypes.string,
+		nextRoute: React.PropTypes.object,
 		onPopToRoute: React.PropTypes.func,
 		showRegisterSuccessDialog: React.PropTypes.func,
 		isTabbarShown: React.PropTypes.func,
+		isMobileBinding: React.PropTypes.bool,
 	},
 
 	getDefaultProps() {
 		return {
 			showCancelButton: false,
 			popToRoute: null,
+			nextRoute: null,
 			onPopToRoute: ()=>{},
 			showRegisterSuccessDialog: ()=>{},
 			isTabbarShown: ()=>{},
+			isMobileBinding: false,
 		}
 	},
 
@@ -262,6 +266,40 @@ var LoginPage = React.createClass({
 		)
 	},
 
+	bindWithCode: function() {
+		if (!this.state.phoneLoginButtonEnabled) {
+			return
+		}
+		var userData = LogicData.getUserData()
+		this.setState({
+			phoneLoginButtonEnabled: false
+		})
+		NetworkModule.fetchTHUrl(
+			NetConstants.CFD_API.BIND_MOBILE_API,
+			{
+				method: 'POST',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Content-Type': 'application/json; charset=UTF-8'
+				},
+				body: JSON.stringify({
+					phone: this.state.phoneNumber,
+					verifyCode: this.state.validationCode,
+				}),
+				showLoading: true,
+			},
+			(responseJson) => {
+				this.updateMeData();
+			},
+			(errorMessage) => {
+				this.setState({
+					phoneLoginButtonEnabled: true
+				})
+				Alert.alert('提示',errorMessage);
+			}
+		)
+	},
+
 	liveRegisterPressed: function() {
 		this.props.navigator.push({
 			name: MainPage.LIVE_REGISTER_ROUTE,
@@ -284,6 +322,11 @@ var LoginPage = React.createClass({
 			phoneLoginButtonEnabled: true
 		});
 
+		this.updateMeData();
+	},
+
+	updateMeData: function(){
+		var userData = LogicData.getUserData()
 		LocalDataUpdateModule.updateMeData(userData, ()=>{
 			var meData = LogicData.getMeData();
 			if(userData.isNewUser){
@@ -293,11 +336,21 @@ var LoginPage = React.createClass({
 					onPopToRoute: this.props.onPopToRoute,
 				});
 			}else{
-
-				if(this.props.popToRoute != null){
-					var routes = this.props.navigator.getCurrentRoutes();
+				var routes = this.props.navigator.getCurrentRoutes();
+				if(this.props.nextRoute != null){
+					var currentRouteIndex = -1;
+					for (var i=0; i<routes.length; ++i) {
+						if(routes[i].name === MainPage.LOGIN_ROUTE){
+							currentRouteIndex = i;
+						}
+					}
+					if(this.props.onPopToRoute){
+						this.props.onPopToRoute();
+					}
+					this.props.navigator.replaceAtIndex(this.props.nextRoute, currentRouteIndex);
+				}
+				else if(this.props.popToRoute != null){
 					var backRoute = null;
-
 					var currentRouteIndex = -1;
 					for (var i=0; i<routes.length; ++i) {
 						if(routes[i].name === this.props.popToRoute){
@@ -377,7 +430,7 @@ var LoginPage = React.createClass({
 	},
 
 	renderFastLogin: function() {
-		if (this.state.wechatInstalled) {
+		if (this.state.wechatInstalled && !this.props.isMobileBinding) {
 			//console.log("renderFastLogin: " + quickLoginBottomMargin)
 			return (
 				<View style={[styles.fastLoginContainer, {paddingBottom: this.state.quickLoginBottomMargin}]}>
@@ -601,10 +654,10 @@ var LoginPage = React.createClass({
 							</View>
 
 							<View style={[styles.rowWrapper, {marginTop: 20, backgroundColor: 'transparent'}]}>
-								<TouchableOpacity style={styles.loginClickableArea} onPress={this.loginWithCodePressed}>
+								<TouchableOpacity style={styles.loginClickableArea} onPress={this.props.isMobileBinding ? this.bindWithCode : this.loginWithCodePressed}>
 									<View style={styles.loginTextView}>
 										<Text style={styles.loginText}>
-											登录
+											{this.props.isMobileBinding ? "确认" : "登录"}
 										</Text>
 									</View>
 								</TouchableOpacity>
@@ -641,7 +694,7 @@ var LoginPage = React.createClass({
 						{/* {this.renderTab()} */}
 						<View style={styles.tabContainer}>
 							<Text style={{flex: 1, fontSize: 18, textAlign: 'center', color: '#ffffff'}}>
-								我的交易
+								{this.props.isMobileBinding ? "绑定手机号" : "我的交易"}
 							</Text>
 							{this.renderCancelButton()}
 						</View>

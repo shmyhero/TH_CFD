@@ -237,11 +237,24 @@ var MePage = React.createClass({
 	},
 
 	gotoOpenLiveAccount:function(){
-		this.props.navigator.push({
+		var meData = LogicData.getMeData();
+	  console.log("showOARoute medata: " + JSON.stringify(meData));
+
+		var OARoute = {
 			name: MainPage.OPEN_ACCOUNT_ROUTE,
 			step: this.state.lastStep,
 			onPop: this.reloadMeData,
-		});
+		};
+		
+	  if(!meData.phone){
+			this.props.navigator.push({
+				name: MainPage.LOGIN_ROUTE,
+				nextRoute: OARoute,
+				isMobileBinding: true,
+			});
+		}else{
+				this.props.navigator.push(OARoute);
+		}
 	},
 
 	onWebViewNavigationStateChange: function(navState) {
@@ -284,11 +297,7 @@ var MePage = React.createClass({
 		}else if(accStatus == 2){
 			console.log('审核中...');
 		}else if(accStatus == 3){
-			this.props.navigator.push({
-				name: MainPage.OPEN_ACCOUNT_ROUTE,
-				step: this.state.lastStep,
-				onPop: this.reloadMeData,
-			});
+			this.gotoOpenLiveAccount();
 		}else{
 
 		}

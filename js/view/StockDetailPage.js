@@ -432,11 +432,12 @@ var StockDetailPage = React.createClass({
 	},
 
 	renderChartHeader: function() {
+		var tabcolorStyle = {color: ColorConstants.STOCK_TAB_BLUE}
 		var tabs = tabData.map(
 			(data, i) =>
 			<TouchableOpacity style={{width:width/tabData.length}} key={i}
 					onPress={() => this.pressChartHeaderTab(data.type)}>
-				<Text style={this.state.chartType == data.type? styles.chartTitleTextHighlighted : styles.chartTitleText}>
+				<Text style={this.state.chartType == data.type? styles.chartTitleTextHighlighted : [styles.chartTitleText, tabcolorStyle]}>
 					{data.name}
 				</Text>
 			</TouchableOpacity>
@@ -1062,11 +1063,6 @@ var styles = StyleSheet.create({
 		textAlign: 'center',
 		color: '#ffffff',
 	},
-	timeText: {
-		fontSize: 8,
-		textAlign: 'center',
-		color: '#70a5ff',
-	},
 	subTitle: {
 		fontSize: 17,
 		textAlign: 'center',
@@ -1086,18 +1082,6 @@ var styles = StyleSheet.create({
 		textAlign: 'center',
 		color: '#ffffff',
 	},
-	tradeStrengthText: {
-		fontSize: 19,
-		textAlign: 'left',
-		color: '#70a5ff',
-		marginLeft: 10,
-	},
-	tradeStrengthTextSmall: {
-		fontSize: 14,
-		textAlign: 'left',
-		color: '#70a5ff',
-		marginLeft: 1,
-	},
 	tradeStrength: {
 		flexDirection: 'row',
 		height: 2,
@@ -1116,7 +1100,6 @@ var styles = StyleSheet.create({
 		flex: 1,
 		fontSize: 15,
 		textAlign: 'center',
-		color: '#70a5ff'
 	},
 });
 

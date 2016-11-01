@@ -48,7 +48,7 @@ RCT_EXPORT_MODULE();
 		[manager loadUserLogo:(NSString *)data];
 	}
 	else if([dataName isEqualToString:@"accountState"])	{
-		[manager setAccountState:data];
+		[manager setAccountState:[(NSString *)data isEqualToString:@"true"]];
 	}
 }
 

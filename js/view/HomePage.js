@@ -36,8 +36,8 @@ var {EventCenter, EventConst} = require('../EventCenter')
 //Change URL may be wrong.
 var RECOMMAND_URL = NetConstants.TRADEHERO_API.WEBVIEW_RECOMMAND_PAGE
 var PAGES = [
-	{name: 'Page0', url: RECOMMAND_URL + "1"},
-	{name: 'Page1', url: RECOMMAND_URL + "1"},
+	{name: 'Page0', url: RECOMMAND_URL + "1", header:""},
+	{name: 'Page1', url: RECOMMAND_URL + "1", header:""},
 ];
 var BANNERS = [
 	require('../../images/bannar01.png'),

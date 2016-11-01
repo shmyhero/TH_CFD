@@ -17,6 +17,7 @@ var colors = {
 	MORE_ICON: '#9f9f9f',
 	MAIN_CONTENT_BLUE: '#1b65e1',
 	SUB_TITLE_WHITE: '#bbd3ff',
+	STOCK_TAB_BLUE: '#70a5ff',
 
 	stock_color: function(change) {
 		if (change > 0) {
@@ -51,6 +52,7 @@ var colors = {
 			this.MORE_ICON = '#9f9f9f'
 			this.MAIN_CONTENT_BLUE = '#1b65e1'
 			this.SUB_TITLE_WHITE = '#bbd3ff'
+			this.STOCK_TAB_BLUE = '#8fabdb'
 		}
 		else {
 			this.TITLE_BLUE = '#1962dd'
@@ -65,6 +67,7 @@ var colors = {
 			this.MORE_ICON = '#9f9f9f'
 			this.MAIN_CONTENT_BLUE = '#1b65e1'
 			this.SUB_TITLE_WHITE = '#bbd3ff'
+			this.STOCK_TAB_BLUE = '#70a5ff'
 		}
 	},
 }

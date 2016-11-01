@@ -424,7 +424,7 @@ var MePage = React.createClass({
 		var meData = LogicData.getMeData();
 		console.log('提示：','liveAccStatus = '+meData.liveAccStatus + ', liveAccRejReason = '+ meData.liveAccRejReason)
 	  accStatus = meData.liveAccStatus;
-		accStatus = 1
+		// accStatus = 1
 		var strStatus = '';
 		var colorStatus = ColorConstants.TITLE_BLUE
 

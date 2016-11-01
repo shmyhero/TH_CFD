@@ -254,7 +254,7 @@ var OAPersonalInfoPage = React.createClass({
 
 	renderDatePeriod: function(rowID, rowData){
 		var dateInfo = this.parseStartEndDate(rowData.value);
-
+		
 		return (
 			<View style={[styles.rowWrapper, {paddingTop: 0, paddingBottom: 0}]}>
 				<Text style={[styles.rowTitle, {paddingTop: rowPadding, paddingBottom: rowPadding,}]}>{rowData.title}</Text>
@@ -269,8 +269,8 @@ var OAPersonalInfoPage = React.createClass({
 							confirmBtnText="确定"
 							cancelBtnText="取消"
 							showIcon={false}
-							minDate={dateInfo.endDate==""?dateInfo.endDate:"2099-01-01"}
-							maxDate={dateInfo.endDate==""?dateInfo.endDate:"2099-01-01"}
+							minDate={"1990-01-01"}
+							maxDate={dateInfo.endDate!==""?dateInfo.endDate:"2099-01-01"}
 							onDateChange={(datetime) => this.onStartDateSelect(rowID, datetime)}
 							customStyles={datePeriodPickerStyle}
 							placeholder="开始日期"
@@ -290,7 +290,7 @@ var OAPersonalInfoPage = React.createClass({
 							cancelBtnText="取消"
 							showIcon={false}
 							minDate={dateInfo.startDate!==""?dateInfo.startDate:"1990-01-01"}
-							maxDate={dateInfo.endDate!==""?dateInfo.endDate:"2099-01-01"}
+							maxDate={"2099-01-01"}
 							onDateChange={(datetime) => this.onEndDateSelect(rowID, datetime)}
 							customStyles={datePeriodPickerStyle}
 							placeholder="结束日期"

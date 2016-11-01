@@ -75,6 +75,7 @@ export default class DevelopPage extends Component {
 
   updateColor(liveColor){
     LogicData.setAccountState(!liveColor)
+    MainPage.refreshMainPage()
     this.forceUpdate()
   }
 

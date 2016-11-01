@@ -200,7 +200,7 @@ var NavBar = React.createClass({
 			}
 			else {
 				return (
-					<Text style={styles.disabledTextOnRight}>
+					<Text style={[styles.disabledTextOnRight,{color:LogicData.getAccountState()?'#6a9bee':'#3e86ff'}]}>
 						{this.props.textOnRight}
 					</Text>
 					)

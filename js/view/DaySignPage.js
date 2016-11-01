@@ -424,7 +424,7 @@ var DaySignPage = React.createClass({
 	renderModal:function(){
 		return(
 			<HeaderLineDialog ref={RULE_DIALOG}
-				headerImage={require('../../images/my_income_strategy.png')}
+				headerImage={require('../../images/sign_stratgy.png')}
 				messageLines={this.rules}/>
 		);
 	},

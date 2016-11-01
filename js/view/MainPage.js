@@ -12,7 +12,8 @@ import {
 	Platform,
 } from 'react-native';
 
-import Tabbar, { Tab, RawContent, Icon, IconWithBar, glypyMapMaker } from 'react-native-tabbar';
+import Tabbar, { Tab, RawContent,  Icon, IconWithBar, glypyMapMaker } from './component/react-native-tabbar';
+
 var {EventCenter, EventConst} = require('../EventCenter')
 
 
@@ -189,9 +190,11 @@ var MainPage = React.createClass({
 			return (
 				<LoginPage navigator={navigationOperations} showCancelButton={true}
 					popToRoute={route.popToRoute}
+					nextRoute={route.nextRoute}
   				onPopToRoute={route.onPopToRoute}
 					showRegisterSuccessDialog={this.showRegisterSuccessDialog}
-					isTabbarShown={this.getIsTabbarShown}/>
+					isTabbarShown={this.getIsTabbarShown}
+					isMobileBinding={route.isMobileBinding}/>
 			);
 		} else if (route.name === UPDATE_USER_INFO_ROUTE) {
 			return (
@@ -523,6 +526,12 @@ var MainPage = React.createClass({
 		// this.setState({
 		// 	barColor:LogicData.getAccountState()?'#00ff00':'#f7f7f7'
 		// })
+
+		this.refs["homepageBtn"].setActiveColor(LogicData.getAccountState()?systemBuleActual:systemBlue);
+		this.refs["tradeBtn"].setActiveColor(LogicData.getAccountState()?systemBuleActual:systemBlue);
+		this.refs["trendBtn"].setActiveColor(LogicData.getAccountState()?systemBuleActual:systemBlue);
+		this.refs["meBtn"].setActiveColor(LogicData.getAccountState()?systemBuleActual:systemBlue);
+
 		console.log('refresh for Tab Icon Color ... ');
 	},
 
@@ -810,7 +819,11 @@ var MainPage = React.createClass({
 		    	<StatusBar barStyle="light-content" backgroundColor='#1962dd'/>
 		      	<Tabbar ref="myTabbar" barColor='#f7f7f7' style={{alignItems: 'stretch'}}>
 			        <Tab name="home">
-									<Icon label="首页" type={LogicData.getAccountState()?glypy.Home:glypy.Stat} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
+									<Icon ref={"homepageBtn"} label="首页"
+										type={glypy.Home}
+										from={'myhero'}
+										onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue}
+										onInactiveColor={iconGrey}/>
 			          	<RawContent ref="homeContent">
 		            		<Navigator
 								style={styles.container}
@@ -824,7 +837,7 @@ var MainPage = React.createClass({
 			          	</RawContent>
 			        </Tab>
 			        <Tab name="trend">
-			          	<Icon label="行情" type={glypy.Camera} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
+			          	<Icon ref={"trendBtn"} label="行情" type={glypy.Camera} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
 			          	<RawContent style={{width: 100}} ref="stockContent">
 		            		<Navigator
 								style={styles.container}
@@ -834,7 +847,7 @@ var MainPage = React.createClass({
 			          	</RawContent>
 			        </Tab>
 			        <Tab name="trade">
-			          	<Icon label="交易" type={glypy.Stat} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
+			          	<Icon ref={"tradeBtn"} label="交易" type={glypy.Stat} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
 			        	<RawContent ref="exchangeContent">
 			            	<Navigator
 								style={styles.container}
@@ -844,7 +857,7 @@ var MainPage = React.createClass({
 			          	</RawContent>
 			        </Tab>
 			        <Tab name="me">
-			          	<Icon label="我的" type={glypy.Settings} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
+			          	<Icon ref={"meBtn"} label="我的" type={glypy.Settings} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
 			          	<RawContent ref="meContent">
 							<Navigator
 								style={styles.container}

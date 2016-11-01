@@ -1,0 +1,87 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "react-native-tabbar@0.3.6",
+        "scope": null,
+        "escapedName": "react-native-tabbar",
+        "name": "react-native-tabbar",
+        "rawSpec": "0.3.6",
+        "spec": "0.3.6",
+        "type": "version"
+      },
+      "/Users/Rambo/TH_CFD"
+    ]
+  ],
+  "_from": "react-native-tabbar@0.3.6",
+  "_id": "react-native-tabbar@0.3.6",
+  "_inCache": true,
+  "_location": "/react-native-tabbar",
+  "_nodeVersion": "5.9.0",
+  "_npmOperationalInternal": {
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/react-native-tabbar-0.3.6.tgz_1462900576339_0.43194667249917984"
+  },
+  "_npmUser": {
+    "name": "alinz",
+    "email": "a.najafizadeh@gmail.com"
+  },
+  "_npmVersion": "3.7.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "react-native-tabbar@0.3.6",
+    "scope": null,
+    "escapedName": "react-native-tabbar",
+    "name": "react-native-tabbar",
+    "rawSpec": "0.3.6",
+    "spec": "0.3.6",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-native-tabbar/-/react-native-tabbar-0.3.6.tgz",
+  "_shasum": "5a13ebfa2701c9a7fe56ef7930459c8a828cdc07",
+  "_shrinkwrap": null,
+  "_spec": "react-native-tabbar@0.3.6",
+  "_where": "/Users/Rambo/TH_CFD",
+  "author": {
+    "name": "Ali Najafizadeh"
+  },
+  "bugs": {
+    "url": "https://github.com/alinz/react-native-tabbar/issues"
+  },
+  "dependencies": {},
+  "description": "Tab bar with more freedom",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "5a13ebfa2701c9a7fe56ef7930459c8a828cdc07",
+    "tarball": "https://registry.npmjs.org/react-native-tabbar/-/react-native-tabbar-0.3.6.tgz"
+  },
+  "gitHead": "9b15c6fe6d64a261e79afd29a2a3015c23193970",
+  "homepage": "https://github.com/alinz/react-native-tabbar#readme",
+  "keywords": [
+    "react-native",
+    "tabbar"
+  ],
+  "license": "MIT",
+  "main": "libs/index.js",
+  "maintainers": [
+    {
+      "name": "alinz",
+      "email": "a.najafizadeh@gmail.com"
+    }
+  ],
+  "name": "react-native-tabbar",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/alinz/react-native-tabbar.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.3.6"
+}

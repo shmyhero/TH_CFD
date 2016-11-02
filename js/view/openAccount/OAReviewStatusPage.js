@@ -44,11 +44,13 @@ var OAReviewStatusPage = React.createClass({
 				<Text style={styles.text1}>感谢您开设Ayondo账户</Text>
 				<View style={styles.rowWrapper}>
 					<Image style={styles.image} source={require('../../../images/icon_review1.png')}/>
+					<Text style={styles.ellipse}>· · ·</Text>
 					<Image style={styles.image} source={require('../../../images/icon_review2.png')}/>
+					<Text style={styles.ellipse}>· · ·</Text>
 					<Image style={styles.image} source={require('../../../images/icon_review3.png')}/>
 				</View>
 				<View style={styles.rowWrapper}>
-					<Text style={styles.text2}>{"提交申请\n"+startDate.Format('yy/MM/dd')+"\n"+startDate.Format('hh:mm:ss')}</Text>
+					<Text style={styles.text2}>{"提交申请\n"+startDate.Format('yyyy-MM-dd')+"\n"+startDate.Format('hh:mm:ss')}</Text>
 					<Text style={styles.text2}>{"正在审核"}</Text>
 					<Text style={styles.text2}>{"预计审核时间\n3个工作日内"}</Text>
 				</View>
@@ -67,14 +69,14 @@ var OAReviewStatusPage = React.createClass({
 var styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
-   		alignItems: 'stretch',
-    	justifyContent: 'flex-start',
+ 		alignItems: 'stretch',
+  	justifyContent: 'flex-start',
 		backgroundColor: ColorConstants.BACKGROUND_GREY,
 	},
 	rowWrapper: {
 		flexDirection: 'row',
 		backgroundColor: 'white',
-		justifyContent: 'space-around',
+		justifyContent: 'center',
 		paddingBottom: 10,
 	},
 	text1: {
@@ -112,7 +114,7 @@ var styles = StyleSheet.create({
 	buttonView: {
 		height: 40,
 		borderRadius: 3,
-		backgroundColor: '#f36b6f',
+		backgroundColor: ColorConstants.TITLE_DARK_BLUE,
 		justifyContent: 'center',
 	},
 	buttonText: {
@@ -120,6 +122,12 @@ var styles = StyleSheet.create({
 		textAlign: 'center',
 		color: '#ffffff',
 	},
+	ellipse:{
+		fontSize: 50,
+		marginLeft: 20,
+		marginRight: 20,
+		color: ColorConstants.TITLE_DARK_BLUE,
+	}
 });
 
 

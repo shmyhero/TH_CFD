@@ -254,7 +254,7 @@ var OAPersonalInfoPage = React.createClass({
 
 	renderDatePeriod: function(rowID, rowData){
 		var dateInfo = this.parseStartEndDate(rowData.value);
-		
+
 		return (
 			<View style={[styles.rowWrapper, {paddingTop: 0, paddingBottom: 0}]}>
 				<Text style={[styles.rowTitle, {paddingTop: rowPadding, paddingBottom: rowPadding,}]}>{rowData.title}</Text>
@@ -276,7 +276,7 @@ var OAPersonalInfoPage = React.createClass({
 							placeholder="开始日期"
 						/>
 					</TouchableOpacity>
-					<View style={{alignItems:'center', alignSelf:'center', width: 50,}}>
+					<View style={{alignItems:'center', alignSelf:'center', width: 80,}}>
 						<Text>-</Text>
 					</View>
 					<TouchableOpacity style={styles.datePeriodButton} onPress={()=>this.chooseEndDatePicker()}>
@@ -595,7 +595,7 @@ var styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	datePeriodPicker:{
-		width: 80,
+		width: 100,
 	}
 });
 

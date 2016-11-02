@@ -121,7 +121,7 @@ function getTradeHeroAPI(){
     INCOME_URL: TRADEHERO_SERVER_IP + '/TH_CFD_WEB/checkinRule.php',
     MOVIE_WIN_TICKET_URL: TRADEHERO_SERVER_IP + '/CDF_BSY/index.php',
     SHARE_DOWNLOAD_URL: TRADEHERO_SERVER_IP + '/activity/download.php',
-    LIVE_REGISTER_TERMS: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/SignTerms.html?id=<id>',
+    LIVE_REGISTER_TERMS: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/SignTerms<id>.html',
   }
 }
 

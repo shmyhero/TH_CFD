@@ -264,15 +264,23 @@ function loadLastInputData(){
   })
 }
 
-function clearAllInputData(){
+function clearAllInputData(currentIndex){
   console.log("clearAllInputData")
-  for(var i = 0; i < OpenAccountInfos.length; i++){
-    if(OpenAccountInfos[i]){
-
-    }
-    StorageModule.removeOpenAccountData(i);
+  var index = 0;
+  if(currentIndex){
+    index = currentIndex;
   }
-  lastStoredData = null;
+  StorageModule.removeOpenAccountData(index)
+  .then(()=>{
+    index++;
+    if(index < OpenAccountInfos.length){
+      clearAllInputData(index);
+    }else{
+      lastStoredData = null;
+    }
+  },()=>{
+    console.log("removeOpenAccountData " + index + " error")
+  })
 }
 
 function storeCurrentInputData(step, data){

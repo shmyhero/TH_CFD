@@ -136,7 +136,7 @@ var StockTransactionConfirmPage = React.createClass({
 
 
 				<Animated.View style={[styles.contentContainer, {top: this.state.dialogY}]}>
-					<View style={styles.titleContainer}>
+					<View style={[styles.titleContainer,{backgroundColor:ColorConstants.title_blue()}]}>
 						<View style={{flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch'}}>
 							<Text style={styles.titleText}>
 								{this.state.name} - {this.state.isCreate?'开仓':'平仓'}

@@ -1060,15 +1060,14 @@ var StockOpenPositionPage = React.createClass({
 		}
 		return(
 			<View>
-				<View style={styles.darkSeparator} />
-				{showNetIncome ?
-				<Text style={styles.netIncomeText}>净收益:9.26</Text>
-				: null}
+				<View style={styles.darkSeparator}/>
+				{showNetIncome ? <Text style={styles.netIncomeText}>净收益:9.26</Text> : null}
 
 				<TouchableHighlight
 					underlayColor={rowData.security.isOpen ? ColorConstants.title_blue() : '#dfdee4'}
-					onPress={() => this.okPress(rowData)} style={[styles.okView, this.state.showExchangeDoubleCheck && styles.okViewDoubleConfirm, !rowData.security.isOpen && styles.okViewDisabled ,rowData.security.isOpen && {backgroundColor:ColorConstants.title_blue()}]}>
-					<Text style={[styles.okButton, this.state.showExchangeDoubleCheck &&  styles.okButtonDoubleConfirm , !this.state.showExchangeDoubleCheck && {backgroundColor:ColorConstants.title_blue()}]}>
+					onPress={() => this.okPress(rowData)} style={[styles.okView,{backgroundColor:ColorConstants.title_blue()},this.state.showExchangeDoubleCheck && {backgroundColor:'white'}, !rowData.security.isOpen && styles.okViewDisab]}
+					>
+					<Text style={[styles.okButton,this.state.showExchangeDoubleCheck&&{color:ColorConstants.title_blue()}]}>
 						{buttonText}
 					</Text>
 				</TouchableHighlight>
@@ -1424,6 +1423,11 @@ var styles = StyleSheet.create({
     	borderWidth:1,
     	borderColor: ColorConstants.TITLE_BLUE,
 	},
+	okViewDoubleConfirmLive: {
+		backgroundColor: 'transparent',
+    	borderWidth:1,
+    	borderColor: 'white',
+	},
 	okViewDisabled: {
 		backgroundColor: '#dfdee4',
 	},
@@ -1432,7 +1436,11 @@ var styles = StyleSheet.create({
 		textAlign: 'center',
 		fontSize: 17,
 	},
+
 	okButtonDoubleConfirm: {
+		color: ColorConstants.TITLE_BLUE,
+	},
+	okButtonDoubleConfirmLive: {
 		color: '#e60b11',
 	},
 

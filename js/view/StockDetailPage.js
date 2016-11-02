@@ -562,9 +562,9 @@ var StockDetailPage = React.createClass({
 
 	renderTradeButton: function() {
 		var upSelected = this.state.tradeDirection === 1
-		var upImage = upSelected ? require('../../images/click-up.png') : require('../../images/up.png')
+		var upImage = upSelected ? require('../../images/click-up.png') : (LogicData.getAccountState()?require('../../images/up_live.png'):require('../../images/up.png'))
 		var downSelected = this.state.tradeDirection === 2
-		var downImage = downSelected ? require('../../images/click-down.png') : require('../../images/down.png')
+		var downImage = downSelected ? require('../../images/click-down.png') : (LogicData.getAccountState()?require('../../images/down_live.png'):require('../../images/down.png'))
 
 		var upTextColor = 'white'
 		var downTextColor = 'white'

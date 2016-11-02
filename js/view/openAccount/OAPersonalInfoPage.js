@@ -44,8 +44,8 @@ const GenderTranslater = [
 var listRawData = [
 		{"title":"姓", "key": "firstName", "value":"", maxLength: 50,},	//TODO: add ignoreInRegistery when API is avaliable.
 		{"title":"名", "key": "lastName", "value":"", maxLength: 50,},
-		{"title":"性别", "key": "gender", "value":"", "type": "choice", "choices": GenderTranslater},
-		{"title":"出生日期", "key": "birthday", "value":"", "type": "date"},
+		{"title":"性别", "key": "gender", "value":"", defaultValue: "点击选择", "type": "choice", "choices": GenderTranslater},
+		{"title":"出生日期", "key": "birthday", "value":"", defaultValue: "点击选择", "type": "date"},
 		{"title":"民族", "key": "ethnic", "value":"", maxLength: 10,},
 		{"title":"身份证号", "key": "idCode", "value":"", maxLength: 18, minLength: 18},
 		{"title":"证件地址", "key": "addr", "value":"", maxLength:75, maxLine: 2},
@@ -309,10 +309,15 @@ var OAPersonalInfoPage = React.createClass({
 
 		if (rowData.type === "choice") {
 			var displayText = "";
+			var textColor = '#333333';
 			for(var i = 0; i < rowData.choices.length; i++){
-				if(rowData.value == rowData.choices[i].value){
+				if(rowData.value === rowData.choices[i].value){
 					displayText = rowData.choices[i].displayText;
 				}
+			}
+			if(displayText === ""){
+				displayText = rowData.defaultValue;
+				textColor = '#3f6dbd';
 			}
 
 			return (
@@ -321,7 +326,7 @@ var OAPersonalInfoPage = React.createClass({
 						<Text style={rowTitleStyle}>{rowData.title}</Text>
 						<View style={styles.valueContent}>
 							<View style={{flex: 1, flexDirection: 'column', justifyContent: "center", margin: 0,}}>
-								<Text style={styles.centerText}
+								<Text style={[styles.centerText, {color: textColor}]}
 									autoCapitalize="none"
 									autoCorrect={false}
 									editable={false}

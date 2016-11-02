@@ -526,11 +526,12 @@ var MainPage = React.createClass({
 		// this.setState({
 		// 	barColor:LogicData.getAccountState()?'#00ff00':'#f7f7f7'
 		// })
-
-		this.refs["homepageBtn"].setActiveColor(LogicData.getAccountState()?systemBuleActual:systemBlue);
-		this.refs["tradeBtn"].setActiveColor(LogicData.getAccountState()?systemBuleActual:systemBlue);
-		this.refs["trendBtn"].setActiveColor(LogicData.getAccountState()?systemBuleActual:systemBlue);
-		this.refs["meBtn"].setActiveColor(LogicData.getAccountState()?systemBuleActual:systemBlue);
+		//alert("refreshMainPage " + ColorConstants.TITLE_BLUE)
+		
+		this.refs["homepageBtn"].setActiveColor(ColorConstants.TITLE_BLUE);
+		this.refs["tradeBtn"].setActiveColor(ColorConstants.TITLE_BLUE);
+		this.refs["trendBtn"].setActiveColor(ColorConstants.TITLE_BLUE);
+		this.refs["meBtn"].setActiveColor(ColorConstants.TITLE_BLUE);
 
 		console.log('refresh for Tab Icon Color ... ');
 	},

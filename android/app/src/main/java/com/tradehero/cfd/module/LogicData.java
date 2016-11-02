@@ -3,6 +3,7 @@ package com.tradehero.cfd.module;
 import android.util.Log;
 
 import com.tradehero.cfd.MainActivity;
+import com.tradehero.cfd.R;
 import com.tradehero.cfd.views.ReactStockEditFragmentNative;
 
 import org.json.JSONArray;
@@ -59,9 +60,11 @@ public class LogicData {
             playSound(0);
         }else if(dataName.equals(IS_PRODUCT)){
             checkIsProduct();
-        } else if(dataName.equals(ACCOUNT_STATE)){
+        }else if(dataName.equals(ACCOUNT_STATE)){
             isLive = data;
             Log.d("" , "isLive = " + isLive);
+
+            setStatusBarColor();
         }
     }
 
@@ -91,5 +94,15 @@ public class LogicData {
 
     public boolean isLive(){
         return "true".equals(isLive);
+    }
+
+    public void setStatusBarColor(){
+        if(MainActivity.mInstance!=null){
+            if(isLive()){
+                MainActivity.mInstance.setStatusBarColor(R.color.title_blue2);
+            }else{
+                MainActivity.mInstance.setStatusBarColor(R.color.title_blue);
+            }
+        }
     }
 }

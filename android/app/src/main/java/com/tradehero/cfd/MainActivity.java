@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.net.Uri;
@@ -16,6 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -80,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.20.130:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.127:8081").apply();
 
         super.onCreate(null);
 
@@ -412,4 +415,19 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         Log.d("MainActivity", "SrceenW:" + SCREEN_W + " ScreenH:" + SCREEN_H);
 
     }
+
+    public void setStatusBarColor(final int color){
+        final int version = Build.VERSION.SDK_INT;
+        if (version >= 21) {
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Window window = MainActivity.this.getWindow();
+                    int colorInt = getResources().getColor(color, null);
+                    window.setStatusBarColor(colorInt);
+                }
+            });
+        }
+    }
+
 }

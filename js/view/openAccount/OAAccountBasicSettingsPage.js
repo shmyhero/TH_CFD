@@ -26,7 +26,7 @@ var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
 var fontSize = Math.round(15*width/375)
 var listRawData = [
-		{"key":"username", "title": "用户名", "value":"", hint: "4位以上登入用户名", "type": "userName", maxLength: 20},
+		{"key":"username", "title": "用户名", "value":"", hint: "5位以上数字字母组合", "type": "userName", maxLength: 20},
 		{"key":"password", "title":"登入密码", "value":"", hint: "8位以上数字字母组合", "type": "pwd", maxLength: 25},
 		{"key":"passwordOnceMore", "title":"确认密码", "value":"", hint: "确认登入密码", "type": "pwd", ignoreInRegistery: true, maxLength: 25},
 		{"key":"email", "title":"常用邮箱", "value":"", hint: "请输入常用邮箱", "type": "email", maxLength: 60},

@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import Picker from 'react-native-picker';
 var MainPage = require('./MainPage');
 var NetConstants = require('../NetConstants');
 var VersionConstants = require('../VersionConstants');
@@ -23,22 +24,32 @@ export default class DevelopPage extends Component {
   constructor(props) {
 	  super(props);
 
-    var isProductServer = !VersionConstants.getIsProductServer();
     var server = NetConstants.getAPIServerIP();
     this.state = {
-      isDevelopServer: isProductServer,
       server: server,
     }
   }
 
-  onPressSwitch(isDevelopServer){
-    console.log("onPressSwitch: " + isDevelopServer)
-    var isProductServer = !isDevelopServer;
-    VersionConstants.setIsProductServer(isProductServer);
-    this.setState({
-      isDevelopServer: isDevelopServer,
-      server: NetConstants.getAPIServerIP(),
-    })
+  onPressServerPicker(){
+    var selectedText = VersionConstants.getCFDServerType();
+    var choices = [
+      VersionConstants.SERVER_TYPE_PRODUCT,
+      VersionConstants.SERVER_TYPE_STAGE,
+      VersionConstants.SERVER_TYPE_DEVELOP,
+    ];
+    Picker.init({
+        pickerData: choices,
+        selectedValue: [selectedText],
+        pickerTitleText: "",
+        onPickerConfirm: data => {
+          VersionConstants.setCFDServerType(data[0]);
+          this.setState({
+            //isDevelopServer: isDevelopServer,
+            server: NetConstants.getAPIServerIP(),
+          })
+        },
+    });
+    Picker.show();
   }
 
   deleteLiveAcccount(){
@@ -90,11 +101,12 @@ export default class DevelopPage extends Component {
           <Text>{this.state.server}</Text>
         </View>
         <View style={{flexDirection: 'row', padding:15,}}>
-					<Text style={styles.rowTitle}>打开CFD API测试服务器</Text>
-					<Switch
-						onValueChange={(value) => this.onPressSwitch(value)}
-						style={{height: 20}}
-						value={this.state.isDevelopServer} />
+          <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}}
+            onPress={()=>this.onPressServerPicker()}>
+            <Text style={{color:'white', fontSize: 16}}>
+              {"当前服务器：" + VersionConstants.getCFDServerType() + ", 点击切换"}
+            </Text>
+          </TouchableOpacity>
 				</View>
         <View style={{flexDirection: 'row', padding:15,}}>
           <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}} onPress={()=>this.deleteLiveAcccount()}>

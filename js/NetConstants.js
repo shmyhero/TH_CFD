@@ -1,12 +1,16 @@
 'use strict'
 var VersionConstants = require('./VersionConstants');
 
-const STAGING_SERVER_IP = 'http://300f8c59436243fe920fce09eb87d765.chinacloudapp.cn'
-const PRODUCT_SERVER_IP = 'https://api.typhoontechnology.hk'
+const SERVER_MAPPING = {};
+SERVER_MAPPING[VersionConstants.SERVER_TYPE_PRODUCT] = 'https://api.typhoontechnology.hk';
+SERVER_MAPPING[VersionConstants.SERVER_TYPE_STAGE] = 'http://300f8c59436243fe920fce09eb87d765.chinacloudapp.cn';
+SERVER_MAPPING[VersionConstants.SERVER_TYPE_DEVELOP] = 'http://cfd-webapi-dev.chinacloudapp.cn';
+
 const GZT_SERVER_IP = 'http://124.192.161.110:8080'
 const TRADEHERO_SERVER_IP = 'http://cn.tradehero.mobi'
 
-var CFD_API_SERVER = VersionConstants.getIsProductServer() ? PRODUCT_SERVER_IP : STAGING_SERVER_IP;;
+
+var CFD_API_SERVER = SERVER_MAPPING[VersionConstants.getCFDServerType()];
 export function getAPIServerIP(){
   return CFD_API_SERVER;
 }
@@ -24,7 +28,7 @@ export function getUrl(key){
 }
 
 function getCFDAPI(){
-  CFD_API_SERVER = VersionConstants.getIsProductServer() ? PRODUCT_SERVER_IP : STAGING_SERVER_IP;
+  CFD_API_SERVER = SERVER_MAPPING[VersionConstants.getCFDServerType()];
   return {
     GET_OUT_RIGHT_API: CFD_API_SERVER + '/api/security/fx/outright',
     GET_PHONE_CODE_API: CFD_API_SERVER + '/api/sendCode',

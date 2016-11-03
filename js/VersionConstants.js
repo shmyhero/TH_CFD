@@ -16,7 +16,12 @@ export const WEBPAGE_FOLDER_ACTUAL = 'TH_CFD_SP'
 
 //NEVER CHANGE THE PRODUCT SERVER IN PRODUCT APP!!!
 //DEFAULT settings are product settings.
-var isProductServer = true;
+export const SERVER_TYPE_PRODUCT = "product";
+export const SERVER_TYPE_STAGE = "stage";
+export const SERVER_TYPE_DEVELOP = "develop";
+
+var CFDServerType = SERVER_TYPE_PRODUCT;
+
 var isProductApp = true;
 
 export function setIsProductApp(value){
@@ -31,10 +36,10 @@ export function getIsProductApp(){
 export function loadServerSettings(){
 	console.log("loadServerSettings ");
   return new Promise((resolve, reject)=>{
-    StorageModule.loadIsProductServer().then((value) => {
+    StorageModule.loadCFDServerType().then((value) => {
       if (value != null) {
 				console.log("loadIsProductServer result: " + value);
-        isProductServer = value === "1" ? true : false;
+        CFDServerType = value;
         NetConstants.reloadCFDAPI();
         resolve();
       }else{
@@ -45,19 +50,19 @@ export function loadServerSettings(){
   })
 }
 
-export function getIsProductServer(){
-  console.log("getIsProductServer " + isProductServer);
-  return isProductServer;
+export function getCFDServerType(){
+  console.log("getCFDServerType " + CFDServerType);
+  return CFDServerType;
 	// return false;
 }
 
-export function setIsProductServer(value){
+export function setCFDServerType(value){
 	//We do not care about the develop/product app any more.
   //if(!isProductApp || Platform.OS === 'ios'){
-    console.log("setIsProductServer " + value);
-    if(isProductServer != value){
-      isProductServer = value;
-      StorageModule.setIsProductServer(value ? "1" : "0");
+    console.log("setCFDServerType " + value);
+    if(CFDServerType != value){
+      CFDServerType = value;
+      StorageModule.setCFDServerType(value);
       NetConstants.reloadCFDAPI();
     }
   //}

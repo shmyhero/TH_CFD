@@ -228,9 +228,9 @@ var AppNavigator = React.createClass({
 		this.recevieDataSubscription.remove();
 	},
 
-	setIsProduct: function(isProductServer){
-		var value = (isProductServer == "true" ? true : false);
-		console.log("setIsProduct: " + isProductServer);
+	setIsProduct: function(setIsProductApp){
+		var value = (setIsProductApp == "true" ? true : false);
+		console.log("setIsProductApp: " + setIsProductApp);
 		VersionConstants.setIsProductApp(value);
 	},
 

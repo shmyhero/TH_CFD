@@ -195,7 +195,7 @@ var OAFinanceInfoPage = React.createClass({
 		if (rowData.type === "choice") {
 
 			var displayText = "";
-			var textColor = '#333333';
+			var textColor = ColorConstants.INPUT_TEXT_COLOR;
 			for(var i = 0; i < rowData.choices.length; i++){
 				if(rowData.value === rowData.choices[i].value){
 					displayText = rowData.choices[i].displayText;
@@ -351,7 +351,7 @@ var styles = StyleSheet.create({
 	},
 	rowTitle:{
 		fontSize: fontSize,
-		color: '#333333',
+		color: ColorConstants.INPUT_TEXT_COLOR,
 		flex: 1,
 	},
 	valueText: {
@@ -363,7 +363,7 @@ var styles = StyleSheet.create({
 	},
 	centerText: {
 		fontSize: fontSize,
-		color: '#333333',
+		color: ColorConstants.INPUT_TEXT_COLOR,
 		alignItems:'center',
 		justifyContent:'center',
 	},

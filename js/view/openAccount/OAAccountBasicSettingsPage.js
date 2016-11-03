@@ -281,7 +281,8 @@ var OAAccountBasicSettingsPage = React.createClass({
 							secureTextEntry={secureTextEntry}
 							defaultValue={rowData.value}
 							placeholder={rowData.hint}
-							selectionColor="#426bf2"
+							placeholderColor={ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR}
+							selectionColor={ColorConstants.INOUT_TEXT_SELECTION_COLOR}
 							underlineColorAndroid='transparent'
 							onChangeText={(text)=>this.textInputChange(text, rowID)}
 							onEndEditing={(event)=>this.textInputEndChange(event, rowID)}
@@ -369,7 +370,7 @@ var styles = StyleSheet.create({
 	},
 	rowTitle:{
 		fontSize: fontSize,
-		color: '#333333',
+		color: ColorConstants.INPUT_TEXT_COLOR,
 		flex: 1,
 	},
 	errorTitleText:{
@@ -379,7 +380,7 @@ var styles = StyleSheet.create({
 	},
 	valueText: {
 		fontSize: fontSize,
-		color: '#333333',
+		color: ColorConstants.INPUT_TEXT_COLOR,
 		flex: 3,
 		marginTop: -rowPadding,
 		marginBottom: -rowPadding,

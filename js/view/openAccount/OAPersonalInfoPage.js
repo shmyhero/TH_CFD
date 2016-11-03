@@ -42,14 +42,14 @@ const GenderTranslater = [
 ]
 
 var listRawData = [
-		{"title":"姓", "key": "firstName", "value":"", maxLength: 50,},	//TODO: add ignoreInRegistery when API is avaliable.
-		{"title":"名", "key": "lastName", "value":"", maxLength: 50,},
-		{"title":"性别", "key": "gender", "value":"", defaultValue: "点击选择", "type": "choice", "choices": GenderTranslater},
-		{"title":"出生日期", "key": "birthday", "value":"", defaultValue: "点击选择", "type": "date"},
-		{"title":"民族", "key": "ethnic", "value":"", maxLength: 10,},
-		{"title":"身份证号", "key": "idCode", "value":"", maxLength: 18, minLength: 18},
-		{"title":"证件地址", "key": "addr", "value":"", maxLength:75, maxLine: 2},
-		{"title":"签发机关", "key": "issueAuth", "value":""},
+		{"title":"姓", "key": "firstName", "value":"", hint:"请输入姓", maxLength: 50,},	//TODO: add ignoreInRegistery when API is avaliable.
+		{"title":"名", "key": "lastName", "value":"", hint:"请输入名", maxLength: 50,},
+		{"title":"性别", "key": "gender", "value":"", hint: "点击选择", "type": "choice", "choices": GenderTranslater},
+		{"title":"出生日期", "key": "birthday", "value":"", hint: "点击选择", "type": "date"},
+		{"title":"民族", "key": "ethnic", "value":"", hint:"请输入民族", maxLength: 10,},
+		{"title":"身份证号", "key": "idCode", "value":"", hint:"请输入身份证号", maxLength: 18, minLength: 18},
+		{"title":"证件地址", "key": "addr", "value":"", hint:"请输入证件地址", maxLength:75, maxLine: 2},
+		{"title":"签发机关", "key": "issueAuth", hint:"请输入签发机关", "value":""},
 		{"title":"有效期限", "key": "validPeriod", "value":"", "type": "datePeriod"}];
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 });
 
@@ -73,6 +73,7 @@ var OAPersonalInfoPage = React.createClass({
 	getInitialState: function() {
 		if (this.props.data && this.props.data) {
 			OpenAccountUtils.getPageListRawDataFromData(listRawData, this.props.data);
+			console.log("getInitialState: " + JSON.stringify(this.props.data) )
 		}
 		return {
 			dataSource: ds.cloneWithRows(listRawData),
@@ -309,19 +310,19 @@ var OAPersonalInfoPage = React.createClass({
 
 		if (rowData.type === "choice") {
 			var displayText = "";
-			var textColor = '#333333';
+			var textColor = ColorConstants.INPUT_TEXT_COLOR;
 			for(var i = 0; i < rowData.choices.length; i++){
 				if(rowData.value === rowData.choices[i].value){
 					displayText = rowData.choices[i].displayText;
 				}
 			}
 			if(displayText === ""){
-				displayText = rowData.defaultValue;
-				textColor = '#3f6dbd';
+				displayText = rowData.hint;
+				textColor = ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR;
 			}
 
 			return (
-				<TouchableOpacity activeOpacity={0.9} style={{backgroundColor: 'yellow'}} onPress={() => this.onPressPicker(rowData, rowID)}>
+				<TouchableOpacity activeOpacity={0.9} onPress={() => this.onPressPicker(rowData, rowID)}>
 					<View style={styles.rowWrapper}>
 						<Text style={rowTitleStyle}>{rowData.title}</Text>
 						<View style={styles.valueContent}>
@@ -329,9 +330,7 @@ var OAPersonalInfoPage = React.createClass({
 								<Text style={[styles.centerText, {color: textColor}]}
 									autoCapitalize="none"
 									autoCorrect={false}
-									editable={false}
-									placeholder={rowData.defaultValue}
-									placeholderTextColor={"#3f6dbd"}>
+									editable={false}>
 									{displayText}
 								</Text>
 							</View>
@@ -341,6 +340,7 @@ var OAPersonalInfoPage = React.createClass({
 				</TouchableOpacity>
 				)
 		} else if(rowData.type === "date"){
+			console.log(rowData.value)
 			return (
 				<TouchableOpacity onPress={()=>this.chooseBirthday()}>
 					<View style={styles.rowWrapper}>
@@ -354,7 +354,6 @@ var OAPersonalInfoPage = React.createClass({
 		          confirmBtnText="确定"
 		          cancelBtnText="取消"
 							placeholder="点击选择"
-							placeholderTextColor={"#3f6dbd"}
 		          showIcon={false}
 		          onDateChange={(datetime) => this.onDateTimeSelect(rowID, datetime)}
 							customStyles={datePickerStyle}
@@ -381,10 +380,12 @@ var OAPersonalInfoPage = React.createClass({
 						autoCapitalize="none"
 						autoCorrect={false}
 						defaultValue={rowData.value}
+						placeholder={rowData.hint}
+						placeholderTextColor={ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR}
 						multiline={multiline}
 						numberOfLines={numberOfLines}
 						maxLength={rowData.maxLength}
-						selectionColor="#426bf2"
+						selectionColor={ColorConstants.INOUT_TEXT_SELECTION_COLOR}
 						underlineColorAndroid='transparent'
 						onChangeText={(text)=>this.textInputChange(text, rowID)}
 						onEndEditing={(event)=>this.textInputEndChange(event, rowID)}
@@ -513,7 +514,7 @@ var styles = StyleSheet.create({
 	},
 	rowTitle:{
 		fontSize: fontSize,
-		color: '#333333',
+		color: ColorConstants.INPUT_TEXT_COLOR,
 		width:rowTitleWidth,
 	},
 	errorRowTitle:{
@@ -523,7 +524,7 @@ var styles = StyleSheet.create({
 	},
 	valueText: {
 		fontSize: fontSize,
-		color: '#333333',
+		color: ColorConstants.INPUT_TEXT_COLOR,
 		flex: 1,
 		marginTop: -rowPadding,
 		marginBottom: -rowPadding,
@@ -534,14 +535,14 @@ var styles = StyleSheet.create({
 	},
 	centerText: {
 		fontSize: fontSize,
-		color: '#333333',
+		color: ColorConstants.INPUT_TEXT_COLOR,
 		alignItems:'center',
 		justifyContent:'center',
 		margin: 0,
 	},
 	multilineValueText: {
 		fontSize: fontSize,
-		color: '#333333',
+		color: ColorConstants.INPUT_TEXT_COLOR,
 		flex: 1,
 		alignItems:'center',
 		justifyContent:'center',
@@ -610,7 +611,7 @@ var datePickerStyle = StyleSheet.create({
 		},
 		dateText: {
 			fontSize: fontSize,
-			color: '#333333',
+			color: ColorConstants.INPUT_TEXT_COLOR,
 		},
 		dateInput: {
 			height: Platform.OS === 'ios' ? 0: 40,
@@ -620,7 +621,7 @@ var datePickerStyle = StyleSheet.create({
 		},
 		placeholderText: {
 			fontSize: fontSize,
-			color: "#c4c4c4",
+			color: ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR,
 		},
 });
 
@@ -638,11 +639,11 @@ var datePeriodPickerStyle = StyleSheet.create({
   },
   dateText: {
 		fontSize: fontSize,
-		color: '#333333',
+		color: ColorConstants.INPUT_TEXT_COLOR,
   },
 	placeholderText: {
 		fontSize: fontSize,
-		color: "#c4c4c4",
+		color: ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR,
 	},
 });
 

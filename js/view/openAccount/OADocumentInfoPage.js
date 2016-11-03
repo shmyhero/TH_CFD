@@ -283,7 +283,7 @@ var styles = StyleSheet.create({
 	},
 	rowTitle:{
 		fontSize: fontSize,
-		color: '#333333',
+		color: ColorConstants.INPUT_TEXT_COLOR,
 		flex: 1,
 	},
 	image: {

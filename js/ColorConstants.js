@@ -18,6 +18,9 @@ var colors = {
 	MAIN_CONTENT_BLUE: '#1b65e1',
 	SUB_TITLE_WHITE: '#bbd3ff',
 	STOCK_TAB_BLUE: '#70a5ff',
+	INPUT_TEXT_PLACE_HOLDER_COLOR: '#c4c4c4',
+	INPUT_TEXT_COLOR: '#333333',
+	INOUT_TEXT_SELECTION_COLOR: '#426bf2',
 
 	stock_color: function(change) {
 		if (change > 0) {

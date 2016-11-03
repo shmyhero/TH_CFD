@@ -187,9 +187,9 @@ var OAIdPhotoPage = React.createClass({
 							TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP2, TalkingdataModule.LABEL_OPEN_ACCOUNT)
 							OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop, dataList);
 						} else {
-							console.log("ocr failed. responseJson: " + JSON.stringify(responseJson))
+							console.log("ocr failed. error: " + JSON.stringify(decodeURIComponent(responseJson.message)))
 							this.setState({
-								error: decodeURIComponent(responseJson.message)
+								error: "图片识别失败，请重新上传图片"
 							});
 						}
 					},

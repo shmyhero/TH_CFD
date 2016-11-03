@@ -132,17 +132,22 @@ var OAAccountBasicSettingsPage = React.createClass({
 		this.setState({
 			validateInProgress: true,
 		})
+
 		return new Promise(resolve=>{
-			if(listRawData[rowID].value && listRawData[rowID].value.length <= 4){
-				listRawData[rowID].error = "用户名必须是5到20位字母和数字的组合";
-				this.updateList();
-				this.setState({
-					validateInProgress: false,
-				})
-				if(resolve){
-					resolve();
+
+			if(listRawData[rowID].value){
+				var re = /^\w*[a-zA-Z]\w*$/;
+				if(listRawData[rowID].value.length <= 4 || !re.test(listRawData[rowID].value)){
+					listRawData[rowID].error = "用户名必须是5到20位字母和数字的组合";
+					this.updateList();
+					this.setState({
+						validateInProgress: false,
+					})
+					if(resolve){
+						resolve();
+					}
+					return;
 				}
-				return;
 			}
 
 			var url = NetConstants.CFD_API.CHECK_LIVE_USERNAME;

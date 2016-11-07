@@ -36,6 +36,7 @@ var listRawData = [{'type':'account','subtype':'accountInfo'},
 {'type':'Separator', 'height':10},
 {'type':'accountState'},
 {'type':'normal','title':'我的交易金', 'image':require('../../images/icon_income.png'), 'subtype':'income'},
+{'type':'normal','title':'我的卡片', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'mycard'},
 {'type':'normal','title':'帮助中心', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'helpcenter'},
 {'type':'normal','title':'线上咨询', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':'onlinehelp'},
 {'type':'normal','title':'产品反馈', 'image':require('../../images/icon_response.png'), 'subtype':'feedback'},
@@ -245,7 +246,7 @@ var MePage = React.createClass({
 			step: this.state.lastStep,
 			onPop: this.reloadMeData,
 		};
-		
+
 	  if(!meData.phone){
 			this.props.navigator.push({
 				name: MainPage.LOGIN_ROUTE,
@@ -289,7 +290,9 @@ var MePage = React.createClass({
 				name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 				title:'实盘交易',
 				onNavigationStateChange: this.onWebViewNavigationStateChange,
-				url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
+				url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
+				
+				// url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
 				// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
 			  // url:'https://www.tradehub.net/demo/ff-beta/tradehero-login-debug.html',
 				// url:'http://cn.tradehero.mobi/TH_CFD_WEB/bangdan1.html',
@@ -334,6 +337,11 @@ var MePage = React.createClass({
 		if(rowData.subtype === 'income'){
 			this.props.navigator.push({
 				name: MainPage.MY_INCOME_ROUTE,
+			})
+		}
+		else if(rowData.subtype === 'mycard'){
+			this.props.navigator.push({
+				name:MainPage.MY_CARD_ROUTE,
 			})
 		}
 		else if(rowData.subtype === 'helpcenter') {
@@ -433,7 +441,7 @@ var MePage = React.createClass({
 		var meData = LogicData.getMeData();
 		console.log('提示：','liveAccStatus = '+meData.liveAccStatus + ', liveAccRejReason = '+ meData.liveAccRejReason)
 	  accStatus = meData.liveAccStatus;
-		// accStatus = 1
+		accStatus = 1
 		var strStatus = '';
 		var colorStatus = ColorConstants.TITLE_BLUE
 

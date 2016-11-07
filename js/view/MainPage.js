@@ -41,6 +41,7 @@ var AccountInfoPage = require('./AccountInfoPage');
 var AccountNameModifyPage = require('./AccountNameModifyPage');
 var MePage = require('./MePage')
 var MyIncomePage = require('./MyIncomePage')
+var MyCard = require('./MyCard')
 var MeConfigPage = require('./MeConfigPage')
 var ModifyPwdPage = require('./ModifyPwdPage')
 var MePushConfigPage = require('./MePushConfigPage')
@@ -89,6 +90,7 @@ export let STOCK_EXCHANGE_ROUTE = 'stockExchange'
 export let NAVIGATOR_WEBVIEW_ROUTE = 'webviewpage'
 export let QA_ROUTE = 'q&a'
 export let ME_ROUTE = 'me'
+export let MY_CARD_ROUTE = 'myCard'
 export let MY_INCOME_ROUTE = 'myIncome'
 export let ABOUT_US_ROUTE = 'aboutUs'
 export let ACCOUNT_INFO_ROUTE = 'accountInfo'
@@ -341,6 +343,13 @@ var MainPage = React.createClass({
 			return (
 				<MyIncomePage navigator={navigationOperations} />
 			)
+		} else if(route.name === MY_CARD_ROUTE) {
+			hideTabbar();
+			return (
+				<View style={{flex: 1}}>
+				  <MyCard navigator={navigationOperations} />
+			  </View>
+			)
 		} else if(route.name === ME_CONFIG_ROUTE){
 			hideTabbar();
 			return (
@@ -527,7 +536,7 @@ var MainPage = React.createClass({
 		// 	barColor:LogicData.getAccountState()?'#00ff00':'#f7f7f7'
 		// })
 		//alert("refreshMainPage " + ColorConstants.TITLE_BLUE)
-		
+
 		this.refs["homepageBtn"].setActiveColor(ColorConstants.TITLE_BLUE);
 		this.refs["tradeBtn"].setActiveColor(ColorConstants.TITLE_BLUE);
 		this.refs["trendBtn"].setActiveColor(ColorConstants.TITLE_BLUE);

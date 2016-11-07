@@ -30,6 +30,7 @@ var TalkingdataModule = require('../module/TalkingdataModule')
 var TongDaoModule = require('../module/TongDaoModule')
 var DevelopPage = require('./DevelopPage')
 var VersionConstants = require('../VersionConstants')
+var Reward = require('./Reward')
 
 var {EventCenter, EventConst} = require('../EventCenter')
 
@@ -578,6 +579,35 @@ var HomePage = React.createClass({
 		)
 	},
 
+
+	renderCards: function(){
+		var cards = ['0','1','2','3','4','5']
+		var cardItems = cards.map(
+			(card, i) =>
+				<TouchableOpacity onPress={() => this.pressCard(i)} key={i}>
+					<View style={styles.scroolItem}>
+						<Reward  type={1} divideInLine={3} id={card}></Reward>
+					</View>
+				</TouchableOpacity>
+			)
+
+		return(
+			<View>
+				<ScrollView style={styles.scrollViewStyle}
+					horizontal={true}
+					showsHorizontalScrollIndicator={false}>
+				 	{cardItems}
+	   		</ScrollView>
+				<View style={styles.bigSeparator}/>
+			</View>
+		)
+
+	},
+
+	pressCard:function(i){
+		Alert.alert('pressed Card ' + i)
+	},
+
 	renderBannar: function(i) {
 		return(
 			<TouchableOpacity
@@ -594,7 +624,7 @@ var HomePage = React.createClass({
 		var url = NetConstants.TRADEHERO_API.WEBVIEW_TOP_NEWS_PAGE + firstNews.id;
 		if(LogicData.getAccountState()){
 			url = NetConstants.TRADEHERO_API.WEBVIEW_TOP_NEWS_PAGE_ACTUAL+news.id
-		}		
+		}
 		this.gotoWebviewPage(url,
 			'每日头条',
 			false,
@@ -827,7 +857,11 @@ var HomePage = React.createClass({
 					{this.renderPopularityView()}
 					<View style={styles.bigSeparator}/>
 
+
+					{this.renderCards()}
+
 					{this.renderBottomViews()}
+
 				</ScrollView>
 			</View>
 
@@ -1071,7 +1105,18 @@ var styles = StyleSheet.create({
 		position: 'absolute',
 		width:27,
 		height:27
-	}
+	},
+	scrollViewStyle:{
+		height:(width-20)/3 + 68,
+		paddingLeft:5,
+		paddingRight:5,
+	},
+	scroolItem:{
+		width:(width-20)/3,
+		flex:1,
+		marginRight:5,
+		backgroundColor:'white',
+	},
 });
 
 module.exports = HomePage;

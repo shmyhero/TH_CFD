@@ -32,7 +32,7 @@ var TongDaoModule = require('../module/TongDaoModule')
 var NavBar = require('../view/NavBar')
 var InputAccessory = require('./component/InputAccessory')
 var MainPage = require('./MainPage')
-var StockTransactionConfirmPage = require('./StockTransactionConfirmPage')
+var StockTransactionInfoPage = require('./StockTransactionInfoPage')
 var TimerMixin = require('react-timer-mixin');
 
 var {height, width} = Dimensions.get('window');
@@ -502,7 +502,7 @@ var StockDetailPage = React.createClass({
 	    				maxValue={parseFloat(this.state.totalMoney.toFixed(2))}
 	    				rightButtonOnClick={this.clearMoney}/>
 
-	    			<StockTransactionConfirmPage ref='confirmPage'/>
+	    			<StockTransactionInfoPage ref='confirmPage'/>
 				</View>
     		</TouchableWithoutFeedback>
 		)

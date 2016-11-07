@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Switch,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 
 import Picker from 'react-native-picker';
@@ -18,6 +19,7 @@ var NetConstants = require('../NetConstants');
 var NetworkModule = require('../module/NetworkModule');
 var LogicData = require('../LogicData');
 var ColorConstants = require('../ColorConstants');
+var StockTransactionInfoPage = require('./StockTransactionInfoPage');
 
 export default class DevelopPage extends Component {
 
@@ -122,8 +124,61 @@ export default class DevelopPage extends Component {
             </Text>
           </TouchableOpacity>
         </View>
+
+        <View style={{flexDirection: 'row', padding:15,}}>
+          <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}}
+            onPress={()=>this.showPage()}>
+            <Text style={{color:'white', fontSize: 16}}>
+              显示成就卡
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <StockTransactionInfoPage ref='page'/>
       </View>
     );
+  }
+
+  showPage(){
+    var sampleInfo = { id: '140126161654',
+      invest: 99.999997677,
+      isLong: true,
+      leverage: 50,
+      settlePrice: 1289.4,
+      quantity: 0,
+      pl: -1.16,
+      createAt: '2016-11-07T07:09:40.146Z',
+      openPrice: 1289.7,
+      stockName: '黄金',
+      isCreate: false,
+      time: new Date('2016-11-06T23:00:00.521Z'),
+      totalHeight: 503,
+      security:
+       { dcmCount: 1,
+         bid: 1289.4,
+         ask: 1289.9,
+         lastOpen: '2016-11-06T23:00:00.521Z',
+         lastClose: '2016-11-05T04:00:00.26Z',
+         maxLeverage: 50,
+         smd: 0.001,
+         gsmd: 0.006,
+         ccy: 'USD',
+         isPriceDown: false,
+         id: 34821,
+         symbol: 'GOLDS',
+         name: '黄金',
+         preClose: 1303.3,
+         open: 1304.9,
+         last: 1289.7,
+         isOpen: true
+       },
+
+       //Newly added data!
+       achievementID: 2,
+       achievementUrl: "http://i10.72g.com/201503/14277932144495.jpg",
+       achievementThemeColor: '#998822'
+     };
+
+    this.refs['page'].show(sampleInfo, ()=>{}, {showShare: true, /*showLike: true*/});
   }
 }
 

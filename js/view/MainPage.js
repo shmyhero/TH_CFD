@@ -134,6 +134,7 @@ export var hideProgress
 export var showProgress
 export var ayondoLoginResult
 export var refreshMainPage
+export var showSharePage
 
 var recevieDataSubscription = null
 var SHARE_PAGE = 'SharePage'
@@ -589,6 +590,7 @@ var MainPage = React.createClass({
 	componentDidMount: function() {
 		ayondoLoginResult = this.ayondoLoginResult
 		refreshMainPage = this.refreshMainPage
+		showSharePage = this._doShare;
 		this.initTabbarEvent()
 
 		var currentNavigatorIndex = LogicData.getTabIndex();

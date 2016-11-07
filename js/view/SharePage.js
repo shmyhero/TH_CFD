@@ -22,6 +22,8 @@ var SharePage = React.createClass({
   propTypes: {
     title: React.PropTypes.string,
     url: React.PropTypes.string,
+		description: React.PropTypes.string,
+		imgUrl: React.PropTypes.string,
   },
 
   getDefaultProps() {
@@ -85,6 +87,23 @@ var SharePage = React.createClass({
     this.setState({transparent: !this.state.transparent});
   },
 
+	shareToHomePage: function(){
+		//TODO: use real api.
+		//Add this.props.transactionID into circle
+	},
+
+	renderHomePageShare: function(){
+		if(this.data && this.data.transactionID){
+			return (
+				<TouchableOpacity onPress={()=>{this.shareToHomePage("session")}}>
+					<Image style={[styles.icon, {transform: [{rotate: '0deg'}]}]}
+					 source={require('../../images/wechat_session.png')}/>
+					<Text style={styles.shareText}>首页</Text>
+				</TouchableOpacity>
+			)
+		}
+	},
+
   render: function() {
 		//BUGBUG: The status bar cannot be hidden beforn RN 0.27...
 		//So make the animation in our code until we update RN.
@@ -106,6 +125,7 @@ var SharePage = React.createClass({
           <Animated.View style={[styles.shareContainer, {opacity: this.state.fadeAnim}]}>
             <Text style={styles.shareTitleText}>分享到</Text>
             <View style={styles.shareItemContainer}>
+							{this.renderHomePageShare()}
 	            <TouchableOpacity onPress={()=>{this.shareToWeChat("session")}}>
 	              <Image style={[styles.icon, {transform: [{rotate: '0deg'}]}]}
 	               source={require('../../images/wechat_session.png')}/>

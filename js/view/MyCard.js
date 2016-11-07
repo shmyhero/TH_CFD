@@ -61,9 +61,8 @@ export default class MyCard extends Component{
 const styles = StyleSheet.create({
 	scroolItem:{
 		width:(width-20)/2,
-		height:((width-20)/2) + 70,
-		marginRight:5,
-		backgroundColor:'white',
+		height:((width-20)/2) + 80,
+		marginRight:5, 
 		marginBottom:10,
 	},
 

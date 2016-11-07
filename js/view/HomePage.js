@@ -593,6 +593,12 @@ var HomePage = React.createClass({
 
 		return(
 			<View>
+				<View style={[styles.popularityHeaderContainer,{backgroundColor:'white'}]}>
+					<Text style={styles.popularityTitle}>
+						收益分享
+					</Text>
+				</View>
+				<View style={styles.separator}/>
 				<ScrollView style={styles.scrollViewStyle}
 					horizontal={true}
 					showsHorizontalScrollIndicator={false}>
@@ -1107,15 +1113,17 @@ var styles = StyleSheet.create({
 		height:27
 	},
 	scrollViewStyle:{
-		height:(width-20)/3 + 68,
+		height:(width-20)/3 + 100,
 		paddingLeft:5,
 		paddingRight:5,
+		paddingTop:10,
+		paddingBottom:10,
+		backgroundColor:'white'
 	},
 	scroolItem:{
 		width:(width-20)/3,
 		flex:1,
 		marginRight:5,
-		backgroundColor:'white',
 	},
 });
 

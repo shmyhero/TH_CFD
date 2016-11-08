@@ -102,7 +102,8 @@ var StockSearchPage = React.createClass({
 		if (text.length > 0) {
 			console.log('Start search: ' + text)
 			NetworkModule.fetchTHUrl(
-				NetConstants.CFD_API.GET_SEARCH_STOCK_API + '?keyword=' + text,
+				(LogicData.getAccountState()?NetConstants.CFD_API.GET_SEARCH_STOCK_LIVE_API:NetConstants.CFD_API.GET_SEARCH_STOCK_API)
+  			+ '?keyword=' + text,
 				{
 					method: 'GET',
 				},

@@ -178,9 +178,9 @@ var AppNavigator = React.createClass({
 				}
 			})
 			.done()
-
+ 
 		NetworkModule.fetchTHUrl(
-			NetConstants.CFD_API.GET_OUT_RIGHT_API + '?page=1&perPage=99',
+			(LogicData.getAccountState()?NetConstants.CFD_API.GET_OUT_RIGHT_LIVE_API:NetConstants.CFD_API.GET_OUT_RIGHT_API) + '?page=1&perPage=99',
 			{
 				method: 'GET',
 			},

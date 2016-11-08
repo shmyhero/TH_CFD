@@ -265,10 +265,10 @@ var MePage = React.createClass({
   			console.log('Got cookies for url: ', res);
 		})
 
-		if(navState.url.indexOf('demo/oauth/ok')>0){
+		if(navState.url.indexOf('live/oauth/ok')>0){
 			console.log('success login ok');
 			MainPage.ayondoLoginResult(true)
-		}else if(navState.url.indexOf('demo/oauth/error')>0){
+		}else if(navState.url.indexOf('live/oauth/error')>0){
 			console.log('success login error');
 			MainPage.ayondoLoginResult(false)
 		}
@@ -291,7 +291,7 @@ var MePage = React.createClass({
 				title:'实盘交易',
 				onNavigationStateChange: this.onWebViewNavigationStateChange,
 				url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
-				
+
 				// url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
 				// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
 			  // url:'https://www.tradehub.net/demo/ff-beta/tradehero-login-debug.html',

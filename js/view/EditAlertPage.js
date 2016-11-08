@@ -115,6 +115,11 @@ var EditAlertPage = React.createClass({
 
 	loadStockInfo: function() {
 		var url = NetConstants.CFD_API.GET_STOCK_DETAIL_API
+		if(LogicData.getAccountState()){
+		 url = NetConstants.CFD_API.GET_STOCK_DETAIL_LIVE_API
+		 console.log('live', url );
+	  }
+
 		url = url.replace(/<stockCode>/, this.props.stockInfo.id)
 
 		NetworkModule.fetchTHUrl(

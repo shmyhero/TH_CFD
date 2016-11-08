@@ -144,10 +144,10 @@ var StockExchangePage = React.createClass({
   			console.log('Got cookies for url: ', res);
 		})
 
-		if(navState.url.indexOf('demo/oauth/ok')>0){
+		if(navState.url.indexOf('live/oauth/ok')>0){
 			console.log('success login ok');
 			MainPage.ayondoLoginResult(true)
-		}else if(navState.url.indexOf('demo/oauth/error')>0){
+		}else if(navState.url.indexOf('live/oauth/error')>0){
 			console.log('success login error');
 			MainPage.ayondoLoginResult(false)
 		}

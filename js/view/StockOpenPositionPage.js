@@ -192,6 +192,10 @@ var StockOpenPositionPage = React.createClass({
 
 	loadStockDetailInfo: function(chartType,stockCode) {
 		var url = NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_API
+		if(LogicData.getAccountState()){
+		 url = NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_LIVE_API
+		 console.log('live', url );
+	 	}
 		// url = url.replace(/<stockCode>/, stockCode)
 		// url = url.replace(/<chartType>/, this.state.chartType)
 

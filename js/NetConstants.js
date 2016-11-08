@@ -31,6 +31,7 @@ function getCFDAPI(){
   CFD_API_SERVER = SERVER_MAPPING[VersionConstants.getCFDServerType()];
   return {
     GET_OUT_RIGHT_API: CFD_API_SERVER + '/api/security/fx/outright',
+    GET_OUT_RIGHT_LIVE_API: CFD_API_SERVER + '/api/security/live/fx/outright',//LIVE OK
     GET_PHONE_CODE_API: CFD_API_SERVER + '/api/sendCode',
 
     PHONE_NUM_LOGIN_API: CFD_API_SERVER + '/api/user/signupByPhone',
@@ -39,13 +40,20 @@ function getCFDAPI(){
     SET_USER_NICKNAME_API: CFD_API_SERVER + '/api/user/nickname',
     GET_USER_BOOKMARK_LIST_API: CFD_API_SERVER + '/api/security/byIds',
     GET_US_STOCK_TOP_GAIN_API: CFD_API_SERVER + '/api/security/stock/topGainer',
+    GET_US_STOCK_TOP_GAIN_LIVE_API: CFD_API_SERVER + '/api/security/live/stock/topGainer',//LIVE OK
     GET_US_STOCK_TOP_LOSER_API: CFD_API_SERVER + '/api/security/stock/topLoser',
     GET_INDEX_LIST_API: CFD_API_SERVER + '/api/security/index',
+    GET_INDEX_LIST_LIVE_API: CFD_API_SERVER + '/api/security/live/index',//LIVE OK
     GET_FX_LIST_API: CFD_API_SERVER + '/api/security/fx',
+    GET_FX_LIST_LIVE_API: CFD_API_SERVER + '/api/security/live/fx',//LIVE OK
     GET_FUTURE_LIST_API: CFD_API_SERVER + '/api/security/futures',
+    GET_FUTURE_LIST_LIVE_API: CFD_API_SERVER + '/api/security/live/futures',//LIVE OK
     GET_SEARCH_STOCK_API: CFD_API_SERVER + '/api/security/search',
+    GET_SEARCH_STOCK_LIVE_API: CFD_API_SERVER + '/api/security/live/search',//LIVE OK
     GET_STOCK_DETAIL_API: CFD_API_SERVER + '/api/security/<stockCode>',
+    GET_STOCK_DETAIL_LIVE_API: CFD_API_SERVER + '/api/live/security/<stockCode>',//LIVE OK
     GET_STOCK_PRICE_TODAY_API: CFD_API_SERVER + '/api/quote/<stockCode>/tick/<chartType>',
+    GET_STOCK_PRICE_TODAY_LIVE_API: CFD_API_SERVER + '/api/quote/live/<stockCode>/tick/<chartType>',//LIVE OK
     GET_OPEN_POSITION_API: CFD_API_SERVER + '/api/position/open',
     GET_OPEN_POSITION_LIVE_API: CFD_API_SERVER + '/api/position/live/open',//LIVE ok
     GET_CLOSED_POSITION_API: CFD_API_SERVER + '/api/position/closed',

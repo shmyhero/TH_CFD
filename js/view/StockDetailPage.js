@@ -131,6 +131,10 @@ var StockDetailPage = React.createClass({
 
 	loadStockInfo: function() {
 		var url = NetConstants.CFD_API.GET_STOCK_DETAIL_API
+		if(LogicData.getAccountState()){
+		 url = NetConstants.CFD_API.GET_STOCK_DETAIL_LIVE_API
+		 console.log('live', url );
+	 	}
 		url = url.replace(/<stockCode>/, this.props.stockCode)
 
 		NetworkModule.fetchTHUrl(
@@ -204,6 +208,10 @@ var StockDetailPage = React.createClass({
 
 	loadStockPriceToday: function(showLoading, chartType, stockInfo) {
 		var url = NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_API;
+		if(LogicData.getAccountState()){
+		 url = NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_LIVE_API
+		 console.log('live', url );
+	 	}
 
 		if(chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE){
 			url = NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M;

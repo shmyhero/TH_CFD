@@ -234,6 +234,14 @@ export default class MyMessagesPage extends Component {
 		}
 	}
 
+	renderSeparator(sectionID, rowID, adjacentRowHighlighted){
+		return (
+			<View style={styles.line} key={rowID}>
+				<View style={[styles.separator]}/>
+			</View>
+			)
+	}
+
   render() {
     var pullUpDistance = 35;
     var pullUpStayDistance = 50;
@@ -253,6 +261,7 @@ export default class MyMessagesPage extends Component {
 	        dataSource={this.state.dataSource}
 	        pageSize={20}
 	        renderRow={this.renderRow.bind(this)}
+          renderSeparator={this.renderSeparator.bind(this)}
 	        renderHeader={this._renderHeader.bind(this)}
 	        renderFooter={this._renderFooter.bind(this)}
 	        onRefresh={this._onRefresh.bind(this)}
@@ -424,7 +433,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'flex-start',
     paddingLeft: 9,
     paddingRight: 10,
-		paddingTop: 17,
+		paddingTop: 12,
     paddingBottom: 12,
   },
   messageWrapper:{
@@ -438,8 +447,8 @@ const styles = StyleSheet.create({
 		marginTop: 6,
   },
   title: {
-      fontSize: 17,
-      color: '#303030',
+    fontSize: 17,
+    color: '#303030',
   },
   message: {
     fontSize: 14,
@@ -480,7 +489,16 @@ const styles = StyleSheet.create({
 	},
 	refreshItemStyle: {
 		color: '#7a7987',
-	}
+	},
+  line: {
+    height: 0.5,
+    backgroundColor: 'transparent',
+  },
+  separator: {
+    height: 0.5,
+		backgroundColor: '#e2e2e2',
+    marginLeft: 20
+  },
 })
 module.exports = MyMessagesPage
 //export default TimerEnhance(MyMessagesPage)

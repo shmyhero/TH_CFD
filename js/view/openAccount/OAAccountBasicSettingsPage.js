@@ -25,17 +25,20 @@ var NetConstants = require('../../NetConstants')
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
 var fontSize = Math.round(15*width/375)
-var listRawData = [
-		{"key":"username", "title": "用户名", "value":"", hint: "5位以上数字字母组合", "type": "userName", maxLength: 20},
-		{"key":"password", "title":"登入密码", "value":"", hint: "8位以上数字字母组合", "type": "pwd", maxLength: 25},
-		{"key":"passwordOnceMore", "title":"确认密码", "value":"", hint: "确认登入密码", "type": "pwd", ignoreInRegistery: true, maxLength: 25},
-		{"key":"email", "title":"常用邮箱", "value":"", hint: "请输入常用邮箱", "type": "email", maxLength: 60},
-		{"title":"账户信息将自动绑定到盈交易实盘账户", "type": "hint"},
-	];
-var errorRow = [];
-var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 });
+
+var defaultRawData = [
+	{"key":"username", "title": "用户名", "value":"", hint: "5位以上数字字母组合", "type": "userName", maxLength: 20},
+	{"key":"password", "title":"登入密码", "value":"", hint: "8位以上数字字母组合", "type": "pwd", maxLength: 25},
+	{"key":"passwordOnceMore", "title":"确认密码", "value":"", hint: "确认登入密码", "type": "pwd", ignoreInRegistery: true, maxLength: 25},
+	{"key":"email", "title":"常用邮箱", "value":"", hint: "请输入常用邮箱", "type": "email", maxLength: 60},
+	{"title":"账户信息将自动绑定到盈交易实盘账户", "type": "hint"},
+];
 
 var OAAccountBasicSettingsPage = React.createClass({
+	listRawData: [],
+
+	ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 }),
+
 	propTypes: {
 		data: React.PropTypes.array,
 		onPop: React.PropTypes.func,
@@ -49,10 +52,12 @@ var OAAccountBasicSettingsPage = React.createClass({
 	},
 
 	getInitialState: function() {
-		OpenAccountUtils.getPageListRawDataFromData(listRawData, this.props.data);
+		this.listRawData = JSON.parse(JSON.stringify(defaultRawData));
+
+		OpenAccountUtils.getPageListRawDataFromData(this.listRawData, this.props.data);
 
 		return {
-			dataSource: ds.cloneWithRows(listRawData),
+			dataSource: this.ds.cloneWithRows(this.listRawData),
 			hasError: false,
 			enabled: true,
 		};
@@ -68,8 +73,8 @@ var OAAccountBasicSettingsPage = React.createClass({
 			validateInProgress: true,
 		})
 
-		OpenAccountUtils.validateRows(listRawData, this.validateRowValue, ()=>{
-			if(OpenAccountUtils.canGoNext(listRawData)){
+		OpenAccountUtils.validateRows(this.listRawData, this.validateRowValue, ()=>{
+			if(OpenAccountUtils.canGoNext(this.listRawData)){
 				TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP3, TalkingdataModule.LABEL_OPEN_ACCOUNT);
 				OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
 			}else{
@@ -82,25 +87,25 @@ var OAAccountBasicSettingsPage = React.createClass({
 	},
 
 	getData: function(){
-		return OpenAccountUtils.getDataFromPageListRawData(listRawData);
+		return OpenAccountUtils.getDataFromPageListRawData(this.listRawData);
 	},
 
 	updateList: function(){
 		this.setState({
-				dataSource: ds.cloneWithRows(listRawData),
+				dataSource: this.ds.cloneWithRows(this.listRawData),
 		});
 	},
 
 	textInputChange: function(text, rowID) {
-		listRawData[rowID].value = text;
-		listRawData[rowID].checked = false;
-		if(listRawData[rowID].error){
-			listRawData[rowID].error = null;
+		this.listRawData[rowID].value = text;
+		this.listRawData[rowID].checked = false;
+		if(this.listRawData[rowID].error){
+			this.listRawData[rowID].error = null;
 		}
 
-		if(listRawData[rowID].type === "pwd"){
-			listRawData[1].error = null;
-			listRawData[2].error = null;
+		if(this.listRawData[rowID].type === "pwd"){
+			this.listRawData[1].error = null;
+			this.listRawData[2].error = null;
 		}
 
 		this.updateList();
@@ -111,15 +116,15 @@ var OAAccountBasicSettingsPage = React.createClass({
 	},
 
 	validateRowValue: function(rowID){
-		if(listRawData[rowID].value && listRawData[rowID].value.length > 0){
-			listRawData[rowID].checked = true;
-			if(listRawData[rowID].type === "userName"){
+		if(this.listRawData[rowID].value && this.listRawData[rowID].value.length > 0){
+			this.listRawData[rowID].checked = true;
+			if(this.listRawData[rowID].type === "userName"){
 				return this.checkUserName(rowID);
 			}
-			else if(listRawData[rowID].type === "pwd"){
+			else if(this.listRawData[rowID].type === "pwd"){
 				return this.checkPassword(rowID);
 			}
-			else if(listRawData[rowID].type === "email"){
+			else if(this.listRawData[rowID].type === "email"){
 				return this.checkEmail(rowID);
 			}
 			return new Promise(resolve=>{
@@ -135,10 +140,10 @@ var OAAccountBasicSettingsPage = React.createClass({
 
 		return new Promise(resolve=>{
 
-			if(listRawData[rowID].value){
+			if(this.listRawData[rowID].value){
 				var re = /^\w*[a-zA-Z]\w*$/;
-				if(listRawData[rowID].value.length <= 4 || !re.test(listRawData[rowID].value)){
-					listRawData[rowID].error = "用户名必须是5到20位字母和数字的组合";
+				if(this.listRawData[rowID].value.length <= 4 || !re.test(this.listRawData[rowID].value)){
+					this.listRawData[rowID].error = "用户名必须是5到20位字母和数字的组合";
 					this.updateList();
 					this.setState({
 						validateInProgress: false,
@@ -151,7 +156,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 			}
 
 			var url = NetConstants.CFD_API.CHECK_LIVE_USERNAME;
-			url = url.replace('<userName>', listRawData[rowID].value);
+			url = url.replace('<userName>', this.listRawData[rowID].value);
 			var userData = LogicData.getUserData();
 
 			NetworkModule.fetchTHUrlWithNoInternetCallback(
@@ -164,11 +169,11 @@ var OAAccountBasicSettingsPage = React.createClass({
 				},
 				(responseJson) => {
 					if(!responseJson.success){
-						listRawData[rowID].error = responseJson.message;
+						this.listRawData[rowID].error = responseJson.message;
 						this.updateList();
 					}else{
-						if(listRawData[rowID].error){
-							listRawData[rowID].error = null;
+						if(this.listRawData[rowID].error){
+							this.listRawData[rowID].error = null;
 							this.updateList();
 						}
 					}
@@ -181,7 +186,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 				},
 				(errorMessage) => {
 					console.log("api Error: " + errorMessage);
-					listRawData[rowID].error = errorMessage;
+					this.listRawData[rowID].error = errorMessage;
 					this.updateList();
 					this.setState({
 						validateInProgress: false,
@@ -192,7 +197,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 				},
 				(errorMessage) => {
 					console.log("networkError: " + errorMessage);
-					listRawData[rowID].error = errorMessage;
+					this.listRawData[rowID].error = errorMessage;
 					this.updateList();
 					this.setState({
 						validateInProgress: false,
@@ -209,33 +214,33 @@ var OAAccountBasicSettingsPage = React.createClass({
 	checkPassword: function(){
 		return new Promise(resolve=>{
 			var hasError = false;
-			if(listRawData[1].value){
-				if(listRawData[1].value.length < 8){
-					listRawData[1].error = "密码必须是 8 位或以上字母和数字的组合";
+			if(this.listRawData[1].value){
+				if(this.listRawData[1].value.length < 8){
+					this.listRawData[1].error = "密码必须是 8 位或以上字母和数字的组合";
 					hasError = true;
 				}else{
 					var re = /^[0-9a-zA-Z\!\#\*\$\-\/\=\?\@\.\,\:\;]+$/;
-					if(!re.test(listRawData[1].value)){
-						listRawData[1].error = "密码必须是 8 位或以上字母和数字的组合";
+					if(!re.test(this.listRawData[1].value)){
+						this.listRawData[1].error = "密码必须是 8 位或以上字母和数字的组合";
 						hasError = true;
 					}
 				}
 				//At least 4 chars. Allowed chars: [0-9a-zA-Z\!\#\*\$\-\/\=\?\@\.\,\:\;]
 			}
-			if(listRawData[1].value && listRawData[2].value && listRawData[1].value !== listRawData[2].value){
-				listRawData[2].error = "两次输入的密码不一致";
+			if(this.listRawData[1].value && this.listRawData[2].value && this.listRawData[1].value !== this.listRawData[2].value){
+				this.listRawData[2].error = "两次输入的密码不一致";
 				hasError = true;
 			}
 
 			if(!hasError){
-				if(listRawData[2].error){
-					listRawData[2].error = null;
+				if(this.listRawData[2].error){
+					this.listRawData[2].error = null;
 				}
 			}
 
 			this.updateList();
-			listRawData[1].checked = true;
-			listRawData[2].checked = true;
+			this.listRawData[1].checked = true;
+			this.listRawData[2].checked = true;
 			if(resolve){
 				resolve();
 			}
@@ -246,14 +251,14 @@ var OAAccountBasicSettingsPage = React.createClass({
 		return new Promise(resolve=>{
 			//var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 			var re = /^\w+@[0-9a-zA-Z_]+?\.[0-9a-zA-Z]+$/;
-	    if(re.test(listRawData[rowID].value)){
-				if(listRawData[rowID].error){
-					listRawData[rowID].error = null;
+	    if(re.test(this.listRawData[rowID].value)){
+				if(this.listRawData[rowID].error){
+					this.listRawData[rowID].error = null;
 					this.updateList();
 				}
 			}else{
-				if(!listRawData[rowID].error){
-					listRawData[rowID].error = "邮箱格式不正确";
+				if(!this.listRawData[rowID].error){
+					this.listRawData[rowID].error = "邮箱格式不正确";
 					this.updateList();
 				}
 			}
@@ -308,7 +313,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 	},
 
 	renderListView: function(){
-		var listDataView = listRawData.map((data, i)=>{
+		var listDataView = this.listRawData.map((data, i)=>{
 			return(
 				<View key={i}>
 					{this.renderRow(data, 's1', i)}
@@ -323,7 +328,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 	},
 
 	render: function() {
-		var nextButtonEnabled = OpenAccountUtils.canGoNext(listRawData);
+		var nextButtonEnabled = OpenAccountUtils.canGoNext(this.listRawData);
 
 		return (
 			<View style={styles.wrapper}>

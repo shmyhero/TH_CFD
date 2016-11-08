@@ -76,21 +76,23 @@ var expierenceMappings = [
 	{"key": "expShareBond", "displayText": "股票和债券", "value": false},
 ]
 
-var listRawData = [
-		{"key":"annualIncome", "title":"年收入", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":IncomeMapping},
-		{"key":"netWorth", "title":"净资产", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":NetWorthMapping},
-		{"key":"investPct", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":InvestmentPortfolioMapping},
-		{"key":"empStatus", "title":"就业", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":EmploymengStatusMapping},
-		{"key":"investFrq", "title":"投资频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings},
-		{"key":"hasProExp", "title":"你是否有一年以上与金融杠杆交易相关的职业经历", "value":false, "type":"switch"},
-		{"key":"hasAyondoExp", "title":"你是否了解过ayondo的金融产品或使用ayondo模拟账户交易", "value":true, "type":"switch"},
-		{"key":"hasOtherQualif", "title":"你是否有其它相关资质帮助理解ayondo的服务", "value":false, "type":"switch"},
-		{"optionsKey":"tradingExp" ,"title":"你有哪些产品的交易经验", "value":expierenceMappings, "type":"options"},
-		]
-
-var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+var defaultRawData = [
+	{"key":"annualIncome", "title":"年收入", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":IncomeMapping},
+	{"key":"netWorth", "title":"净资产", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":NetWorthMapping},
+	{"key":"investPct", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":InvestmentPortfolioMapping},
+	{"key":"empStatus", "title":"就业", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":EmploymengStatusMapping},
+	{"key":"investFrq", "title":"投资频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings},
+	{"key":"hasProExp", "title":"你是否有一年以上与金融杠杆交易相关的职业经历", "value":false, "type":"switch"},
+	{"key":"hasAyondoExp", "title":"你是否了解过ayondo的金融产品或使用ayondo模拟账户交易", "value":true, "type":"switch"},
+	{"key":"hasOtherQualif", "title":"你是否有其它相关资质帮助理解ayondo的服务", "value":false, "type":"switch"},
+	{"optionsKey":"tradingExp" ,"title":"你有哪些产品的交易经验", "value":expierenceMappings, "type":"options"},
+];
 
 var OAFinanceInfoPage = React.createClass({
+	listRawData: [],
+
+	ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
+
 	mixins: [TimerMixin],
 	propTypes: {
 		data: React.PropTypes.array,
@@ -105,11 +107,12 @@ var OAFinanceInfoPage = React.createClass({
 	},
 
 	getInitialState: function() {
+		this.listRawData = JSON.parse(JSON.stringify(defaultRawData));
 		var dataSource;
 		if (this.props.data && this.props.data) {
-			OpenAccountUtils.getPageListRawDataFromData(listRawData, this.props.data);
+			OpenAccountUtils.getPageListRawDataFromData(this.listRawData, this.props.data);
 		}
-		dataSource = ds.cloneWithRows(listRawData);
+		dataSource = this.ds.cloneWithRows(this.listRawData);
 
 		return {
 			dataSource: dataSource,
@@ -123,7 +126,7 @@ var OAFinanceInfoPage = React.createClass({
 	},
 
 	getData: function(){
-		return OpenAccountUtils.getDataFromPageListRawData(listRawData);
+		return OpenAccountUtils.getDataFromPageListRawData(this.listRawData);
 	},
 
 	onDismiss: function(){
@@ -159,7 +162,7 @@ var OAFinanceInfoPage = React.createClass({
 						}
 					}
 					this.setState({
-						dataSource: ds.cloneWithRows(listRawData),
+						dataSource: this.ds.cloneWithRows(this.listRawData),
 						selectedPicker: -1,
 					})
         },
@@ -180,9 +183,9 @@ var OAFinanceInfoPage = React.createClass({
 
 	onPressSwitch: function(value, rowID) {
 		if(rowID >= 0) {
-			listRawData[rowID].value = value
+			this.listRawData[rowID].value = value
 			this.setState({
-				dataSource: ds.cloneWithRows(listRawData),
+				dataSource: this.ds.cloneWithRows(this.listRawData),
 			})
 		}
 	},
@@ -274,8 +277,8 @@ var OAFinanceInfoPage = React.createClass({
 	render: function() {
 		var pickerModal = null
 		var enabled = true
-		for (var i = 0; i < listRawData.length; i++) {
-			if (listRawData[i].type === "choice" && listRawData[i].value === "") {
+		for (var i = 0; i < this.listRawData.length; i++) {
+			if (this.listRawData[i].type === "choice" && this.listRawData[i].value === "") {
 				enabled = false
 				break
 			}

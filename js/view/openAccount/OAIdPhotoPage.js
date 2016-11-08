@@ -156,6 +156,14 @@ var OAIdPhotoPage = React.createClass({
 			validateInProgress: true,
 			error: null,
 		})
+
+		var responseJson = {
+			"id_code" : '310104198801011234',
+		}
+		var dataList = OpenAccountUtils.getAyondoValuesFromGZTValue(responseJson);
+		OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop, dataList);
+		return;
+
 		InteractionManager.runAfterInteractions(() => {
 			if (this.state.idCardFrontData != null && this.state.idCardBackData != null) {
 				var userData = LogicData.getUserData();

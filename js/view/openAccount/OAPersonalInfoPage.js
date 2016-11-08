@@ -41,7 +41,7 @@ const GenderTranslater = [
   {"value":false, "displayText": "女"},
 ]
 
-var listRawData = [
+var defaultRawData = [
 		{"title":"姓", "key": "firstName", "value":"", hint:"请输入姓", maxLength: 50,},	//TODO: add ignoreInRegistery when API is avaliable.
 		{"title":"名", "key": "lastName", "value":"", hint:"请输入名", maxLength: 50,},
 		{"title":"性别", "key": "gender", "value":"", hint: "点击选择", "type": "choice", "choices": GenderTranslater},
@@ -51,8 +51,6 @@ var listRawData = [
 		{"title":"证件地址", "key": "addr", "value":"", hint:"请输入证件地址", maxLength:75, maxLine: 2},
 		{"title":"签发机关", "key": "issueAuth", hint:"请输入签发机关", "value":""},
 		{"title":"有效期限", "key": "validPeriod", "value":"", "type": "datePeriod"}];
-var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 });
-
 
 var OAPersonalInfoPage = React.createClass({
 	mixins: [TimerMixin],
@@ -63,6 +61,10 @@ var OAPersonalInfoPage = React.createClass({
 		onPop: React.PropTypes.func,
 	},
 
+	listRawData: [],
+
+	ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 }),
+
 	getDefaultProps() {
 		return {
 			data: null,
@@ -71,12 +73,14 @@ var OAPersonalInfoPage = React.createClass({
 	},
 
 	getInitialState: function() {
+		this.listRawData = JSON.parse(JSON.stringify(defaultRawData));
+
 		if (this.props.data && this.props.data) {
-			OpenAccountUtils.getPageListRawDataFromData(listRawData, this.props.data);
+			OpenAccountUtils.getPageListRawDataFromData(this.listRawData, this.props.data);
 			console.log("getInitialState: " + JSON.stringify(this.props.data) )
 		}
 		return {
-			dataSource: ds.cloneWithRows(listRawData),
+			dataSource: this.ds.cloneWithRows(this.listRawData),
 			validateInProgress: false,
 			selectedPicker: -1,
 			error: null
@@ -95,7 +99,7 @@ var OAPersonalInfoPage = React.createClass({
 	},
 
 	getData: function(){
-		return OpenAccountUtils.getDataFromPageListRawData(listRawData);
+		return OpenAccountUtils.getDataFromPageListRawData(this.listRawData);
 	},
 
 	onDismiss: function(){
@@ -103,15 +107,15 @@ var OAPersonalInfoPage = React.createClass({
 	},
 
 	textInputChange: function(text, rowID) {
-		listRawData[rowID].value = text;
-		listRawData[rowID].error = null;
+		this.listRawData[rowID].value = text;
+		this.listRawData[rowID].error = null;
 		this.updateList();
 	},
 
 	textInputEndChange: function(event, rowID){
-		if(listRawData[rowID].value && listRawData[rowID].value.length > 0){
-			listRawData[rowID].checked = true;
-			if(listRawData[rowID].key === "idCode"){
+		if(this.listRawData[rowID].value && this.listRawData[rowID].value.length > 0){
+			this.listRawData[rowID].checked = true;
+			if(this.listRawData[rowID].key === "idCode"){
 				this.checkIDCode(rowID);
 			}
 		}
@@ -119,8 +123,8 @@ var OAPersonalInfoPage = React.createClass({
 
 	checkValues: function(){
 		var valid = true;
-		for(var rowID = 0; rowID < listRawData.length; rowID++){
-			if(listRawData[rowID].key === "idCode"){
+		for(var rowID = 0; rowID < this.listRawData.length; rowID++){
+			if(this.listRawData[rowID].key === "idCode"){
 				valid = this.checkIDCode(rowID);
 			}
 		}
@@ -128,12 +132,12 @@ var OAPersonalInfoPage = React.createClass({
 	},
 
 	checkIDCode: function(rowID){
-		if(listRawData[rowID].value.length < 18){
-			listRawData[rowID].error = "请输入" + listRawData[rowID].minLength + "位身份证号";
+		if(this.listRawData[rowID].value.length < 18){
+			this.listRawData[rowID].error = "请输入" + this.listRawData[rowID].minLength + "位身份证号";
 			this.updateList();
 			return false;
 		}else{
-			listRawData[rowID].error = null;
+			this.listRawData[rowID].error = null;
 			this.updateList();
 			return true;
 		}
@@ -170,7 +174,7 @@ var OAPersonalInfoPage = React.createClass({
 						}
 					}
 					this.setState({
-						dataSource: ds.cloneWithRows(listRawData),
+						dataSource: this.ds.cloneWithRows(this.listRawData),
 						selectedPicker: -1,
 					})
         },
@@ -192,31 +196,25 @@ var OAPersonalInfoPage = React.createClass({
 	onDateTimeSelect: function(rowID, value) {
 		if (rowID>= 0) {
 			console.log("onDatePikcerSelect: " + value);
-			listRawData[rowID].value = value;
+			this.listRawData[rowID].value = value;
 
-			this.setState({
-				dataSource: ds.cloneWithRows(listRawData),
-			})
+			this.updateList();
 		}
 	},
 
 	onStartDateSelect: function(rowID, value) {
 		if (rowID >= 0) {
-			var dateInfo = this.parseStartEndDate(listRawData[rowID].value);
-			listRawData[rowID].value = value + "-" + dateInfo.endDate;
-			this.setState({
-				dataSource: ds.cloneWithRows(listRawData),
-			})
+			var dateInfo = this.parseStartEndDate(this.listRawData[rowID].value);
+			this.listRawData[rowID].value = value + "-" + dateInfo.endDate;
+			this.updateList();
 		}
 	},
 
 	onEndDateSelect: function(rowID, value) {
 		if (rowID >= 0) {
-			var dateInfo = this.parseStartEndDate(listRawData[rowID].value);
-			listRawData[rowID].value = dateInfo.startDate + "-" + value;
-			this.setState({
-				dataSource: ds.cloneWithRows(listRawData),
-			})
+			var dateInfo = this.parseStartEndDate(this.listRawData[rowID].value);
+			this.listRawData[rowID].value = dateInfo.startDate + "-" + value;
+			this.updateList();
 		}
 	},
 
@@ -237,7 +235,7 @@ var OAPersonalInfoPage = React.createClass({
 
 	updateList: function(){
 		this.setState({
-				dataSource: ds.cloneWithRows(listRawData),
+				dataSource: this.ds.cloneWithRows(this.listRawData),
 		});
 	},
 
@@ -407,18 +405,18 @@ var OAPersonalInfoPage = React.createClass({
 		var pickerModal = null
 		var error = null;
 
-		var nextEnabled = OpenAccountUtils.canGoNext(listRawData);
+		var nextEnabled = OpenAccountUtils.canGoNext(this.listRawData);
 		//console.log("listRawData: " + JSON.stringify(listRawData));
-		for (var i = 0; i < listRawData.length; i++) {
-			if(listRawData[i].error){
+		for (var i = 0; i < this.listRawData.length; i++) {
+			if(this.listRawData[i].error){
 				if(error){
 					error = "身份一致性验证失败";
 				}else{
-					error = "您输入的" + listRawData[i].title + "有误，请核对后重试";
+					error = "您输入的" + this.listRawData[i].title + "有误，请核对后重试";
 				}
 			}
-			if (listRawData[i].type === "datePeriod") {
-				var date = this.parseStartEndDate(listRawData[i].value);
+			if (this.listRawData[i].type === "datePeriod") {
+				var date = this.parseStartEndDate(this.listRawData[i].value);
 				if(date.startDate === "" || date.endDate === ""){
 					nextEnabled = false
 				}
@@ -455,7 +453,7 @@ var OAPersonalInfoPage = React.createClass({
 	},
 
 	renderListView: function(){
-		var listDataView = listRawData.map((data, i)=>{
+		var listDataView = this.listRawData.map((data, i)=>{
 			return(
 				<View key={i}>
 					{this.renderRow(data, 's1', i)}

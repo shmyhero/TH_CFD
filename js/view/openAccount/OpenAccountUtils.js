@@ -23,7 +23,6 @@ const GZT_Ayondo_Key_Mappings = [
 	{"GZTKey": "valid_period", "AyondoKey": "validPeriod"},
 ];
 
-
 export function getDataFromPageListRawData(listRawData){
 	  var array = [];
 	  for(var i = 0 ; i < listRawData.length; i++){
@@ -167,6 +166,18 @@ export function getAyondoValuesFromGZTValue(GZTresponse){
           }
           dataList.push(firstNameData);
           dataList.push(lastNameData);
+          break;
+        case "id_code":
+          dataList.push({
+            "key": 'idCode',
+            "value": GZTvalue,
+          });
+          if(GZTvalue && GZTvalue.length == 18){
+            dataList.push({
+              "key": 'birthday',
+              "value": GZTvalue.substring(6, 14)
+            });
+          }
           break;
         default:
           dataList.push(ayondoData);

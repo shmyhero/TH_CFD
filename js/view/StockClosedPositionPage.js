@@ -303,6 +303,15 @@ var StockClosedPositionPage = React.createClass({
 		);
 	},
 
+	renderAchievementIcon: function(rowData){
+		if(rowData.hasAchievement){
+			return(
+				<Image style={styles.achievementIcon}
+					source={require('../../images/achievement_hint.png')}></Image>
+				);
+		}
+	},
+
 	renderRow: function(rowData, sectionID, rowID, highlightRow) {
 		var bgcolor = this.state.selectedRow === rowID ? '#e6e5eb' : 'white'
 		var plPercent = (rowData.closePrice - rowData.openPrice) / rowData.openPrice * rowData.leverage * 100
@@ -331,6 +340,8 @@ var StockClosedPositionPage = React.createClass({
 						<View style={styles.rowRightPart}>
 							{this.renderProfitPercentage(plPercent)}
 						</View>
+
+						{this.renderAchievementIcon(rowData)}
 					</View>
 				</TouchableHighlight>
 
@@ -564,6 +575,14 @@ var styles = StyleSheet.create({
 		fontSize: 14,
 		textAlign: 'center',
 		color:'#576b95',
+	},
+
+	achievementIcon: {
+		position: 'absolute',
+		top: -2,
+		right: 3,
+		height: 17,
+		width: 17,
 	},
 });
 

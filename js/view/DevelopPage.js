@@ -19,7 +19,7 @@ var NetConstants = require('../NetConstants');
 var NetworkModule = require('../module/NetworkModule');
 var LogicData = require('../LogicData');
 var ColorConstants = require('../ColorConstants');
-var StockTransactionInfoPage = require('./StockTransactionInfoPage');
+var StockTransactionInfoModal = require('./StockTransactionInfoModal');
 
 export default class DevelopPage extends Component {
 
@@ -133,52 +133,73 @@ export default class DevelopPage extends Component {
             </Text>
           </TouchableOpacity>
         </View>
-        <StockTransactionInfoPage ref='page'/>
+        <StockTransactionInfoModal ref='page'/>
       </View>
     );
   }
 
   showPage(){
-    var sampleInfo = { id: '140126161654',
+    var sampleInfo = {
       invest: 99.999997677,
       isLong: true,
       leverage: 50,
       settlePrice: 1289.4,
-      quantity: 0,
-      pl: -1.16,
-      createAt: '2016-11-07T07:09:40.146Z',
       openPrice: 1289.7,
-      stockName: '黄金',
-      isCreate: false,
+      pl: -1.16,
+      stockName: '黄金1',
       time: new Date('2016-11-06T23:00:00.521Z'),
-      totalHeight: 503,
-      security:
-       { dcmCount: 1,
-         bid: 1289.4,
-         ask: 1289.9,
-         lastOpen: '2016-11-06T23:00:00.521Z',
-         lastClose: '2016-11-05T04:00:00.26Z',
-         maxLeverage: 50,
-         smd: 0.001,
-         gsmd: 0.006,
-         ccy: 'USD',
-         isPriceDown: false,
-         id: 34821,
-         symbol: 'GOLDS',
-         name: '黄金',
-         preClose: 1303.3,
-         open: 1304.9,
-         last: 1289.7,
-         isOpen: true
-       },
+      security:{
+        ccy: 'USD',
+      },
+      achievementID: 2,
+      achievementUrl: "http://i10.72g.com/201503/14277932144495.jpg",
+      achievementThemeColor: '#d99d51',
+      liked: true,
+      likedPerson: 12,
+    };
 
-       //Newly added data!
-       achievementID: 2,
-       achievementUrl: "http://i10.72g.com/201503/14277932144495.jpg",
-       achievementThemeColor: '#998822'
-     };
+    var sampleInfo1 = {
+      invest: 99.999997677,
+      isLong: true,
+      leverage: 50,
+      settlePrice: 1289.4,
+      openPrice: 1289.7,
+      pl: -1.16,
+      stockName: '黄金1',
+      time: new Date('2016-11-06T23:00:00.521Z'),
+      security:{
+        ccy: 'USD',
+      },
+      achievementID: 2,
+      //achievementUrl: "http://i10.72g.com/201503/14277932144495.jpg",
+      achievementThemeColor: '#d99d51',
+      liked: true,
+      likedPerson: 12,
+    };
+    var sampleInfo2 = {
+      invest: 99.999997677,
+      isLong: true,
+      leverage: 50,
+      settlePrice: 1289.4,
+      openPrice: 1289.7,
+      pl: -1.16,
+      stockName: '黄金2',
+      time: new Date('2016-11-06T23:00:00.521Z'),
+      security:{
+        ccy: 'USD',
+      },
+      achievementID: 2,
+      achievementUrl: "http://i10.72g.com/201503/14277932144495.jpg",
+      achievementThemeColor: 'red',
+      liked: false,
+      likedPerson: 23,
+    };
 
-    this.refs['page'].show(sampleInfo, ()=>{}, {showShare: true, /*showLike: true*/});
+    var array = [sampleInfo1,sampleInfo2,sampleInfo1,sampleInfo2,sampleInfo1,sampleInfo2,sampleInfo1,sampleInfo2,sampleInfo1,sampleInfo2,];
+
+    this.refs['page'].showSwiper(array, 1, ()=>{}, {showShare: true, showLike: true});
+
+    //this.refs['page'].show(sampleInfo, ()=>{}, {/*showShare: true, */showLike: true});
   }
 }
 

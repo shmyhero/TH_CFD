@@ -9,8 +9,8 @@ import {
 	Animated,
 	Dimensions,
 	PanResponder,
-	Modal,
 	TouchableOpacity,
+	Swiper,
 } from 'react-native';
 
 var Touchable = require('Touchable');
@@ -21,73 +21,78 @@ var StockTransactionInfoBar = require('./StockTransactionInfoBar');
 var AchievementCard = require('./AchievementCard');
 var SharePage = require('./SharePage')
 var MainPage = require('./MainPage')
+var NetConstants = require('../NetConstants')
 
 var {height, width} = Dimensions.get('window');
 
 var StockTransactionInfoPage = React.createClass({
 	mixins: [Touchable.Mixin],
 
+	propTypes: {
+		transactionInfo: React.PropTypes.object,
+		pageSettings: React.PropTypes.object,
+		hideFunction: React.PropTypes.func,
+	},
+
+	getDefaultProps() {
+		return {
+			transactionInfo: null,
+			pageSettings: null,
+			hideFunction: ()=>{},
+		}
+	},
+
 	getInitialState: function() {
 		return merge(
 			this.touchableGetInitialState(),
 			{
-				modalVisible: false,
-				totalHeight: height,
 				transactionInfo: null,
 			}
 		);
 	},
 
-	show: function(transactionInfo, callback, pageSettings) {
+	componentWillMount: function(){
 		var state = {
-			modalVisible: true,
-			hideCallback: callback,
 			titleColor: ColorConstants.TITLE_BLUE,
 		};
-		if (transactionInfo !== null) {
-			state.transactionInfo = transactionInfo;
-			state.totalHeight = transactionInfo.totalHeight;
-			state.achievementUrl = transactionInfo.achievementUrl;
-			state.transactionID = transactionInfo.id;
-			if(transactionInfo.achievementThemeColor){
-				state.titleColor = transactionInfo.achievementThemeColor;
+		if (this.props.transactionInfo !== null) {
+			state.transactionInfo = this.props.transactionInfo;
+			state.achievementUrl = this.props.transactionInfo.achievementUrl;
+			state.achievementID = this.props.transactionInfo.achievementID;
+			state.liked = this.props.transactionInfo.liked ? true : false;
+			state.likedPerson = this.props.transactionInfo.likedPerson;
+			if(this.props.transactionInfo.achievementThemeColor){
+				state.titleColor = this.props.transactionInfo.achievementThemeColor;
 			}
 		}
-		if(pageSettings){
-			state.showShare = pageSettings.showShare;
-			state.showLike = pageSettings.showLike;
+		if(this.props.pageSettings){
+			state.showShare = this.props.pageSettings.showShare;
+			state.showLike = this.props.pageSettings.showLike;
 		}
 		this.setState(state);
 	},
 
-	hide: function() {
-		this.setState({
-			modalVisible: false,
-		});
-	},
-
-	touchableHandlePress: function(e: Event) {
-		this.hide()
-		this.state.hideCallback && this.state.hideCallback()
-	},
-
-	_setModalVisible: function(visible) {
-    this.setState({modalVisible: visible});
-  },
-
 	_showSharePanel: function(){
-		this.hide();
+		this.props.hideFunction && this.props.hideFunction();
+
+		var url = NetConstants.TRADEHERO_API.SHARE_ACHIEVEMENT_CARD_URL;
+		url.replace("<id>", this.state.achievementID);
 		MainPage.showSharePage({
-			title: "aaaa",
-      url: "http://baidu.com",
-      description: "cest",
-      imgUrl: "http://baidu.com",
-			transactionID: this.state.transactionID
+			title: "我获得了一张盈交易卡片奖励",
+      description: "盈交易-风靡全球的投资神器登陆亚洲",
+      url: url,
+      imgUrl: NetConstants.TRADEHERO_API.SHARE_LOGO_URL,
+			achievementID: this.state.achievementID
 		});
 	},
 
 	likeTransaction: function(){
-		alert("I like it!")
+		if(!this.state.liked){
+			this.setState({
+				likedPerson: this.state.liked ? this.state.likedPerson - 1 : this.state.likedPerson + 1,
+				liked: !this.state.liked,
+			})
+		}
 	},
 
 	renderAchievementCard: function(){
@@ -103,6 +108,7 @@ var StockTransactionInfoPage = React.createClass({
 			<View style={{flex: 1, flexDirection:'column', alignSelf: 'stretch'}}>
 				{this.renderAchievementCard()}
 				<StockTransactionInfoBar transactionInfo={this.state.transactionInfo} titleColor={this.state.titleColor}
+					hideTopCornerRadius={this.state.achievementUrl != null}
 					style={{backgroundColor: 'yellow',}}/>
 			</View>
 		)
@@ -112,7 +118,7 @@ var StockTransactionInfoPage = React.createClass({
 		if(this.state.showShare){
 			return (
 				<TouchableOpacity style={styles.actionButton} onPress={() => this._showSharePanel()}>
-					<Image style = {styles.imgAction} source = {require('../../images/sign_stratgy_close.png')} ></Image>
+					<Image style = {styles.imgAction} source = {require('../../images/action_share.png')} ></Image>
 				</TouchableOpacity>
 			);
 		}
@@ -120,9 +126,11 @@ var StockTransactionInfoPage = React.createClass({
 
 	renderLike: function(){
 		if(this.state.showLike){
+			var imgSource = this.state.liked ? require('../../images/action_like_liked.png') : require('../../images/action_like.png');
 			return (
 				<TouchableOpacity style={styles.actionButton} onPress={() => this.likeTransaction()}>
-					<Image style = {styles.imgAction} source = {require('../../images/advantage.png')} ></Image>
+					<Image style={styles.imgAction} source={imgSource} ></Image>
+					<Text style={{alignSelf: 'center', color: '#eeeeee', marginTop: 5}}>{this.state.likedPerson}</Text>
 				</TouchableOpacity>
 			);
 		}
@@ -130,27 +138,16 @@ var StockTransactionInfoPage = React.createClass({
 
 	render: function() {
 		return (
-			<View>
-				<Modal
-					transparent={true}
-					visible={this.state.modalVisible}
-					animationType={"slide"}
-					style={{height: height, width: width}}
-					onRequestClose={() => {this._setModalVisible(false)}}>
-					<TouchableOpacity onPress={() => {this._setModalVisible(false)}}>
-						<View style={styles.modalContainer}>
-							<TouchableOpacity activeOpacity={1}>
-							  <View style={[styles.modalInnerContainer, {backgroundColor: 'green'}]}>
-									{this.renderContent()}
-								</View>
-							</TouchableOpacity>
-							<View style={{alignItems: 'center', flexDirection: 'row', justifyContent: 'space-around'}}>
-								{this.renderShare()}
-								{this.renderLike()}
-							</View>
-						</View>
-					</TouchableOpacity>
-				</Modal>
+			<View style={styles.modalContainer}>
+				<TouchableOpacity activeOpacity={1}>
+				  <View style={styles.modalInnerContainer}>
+						{this.renderContent()}
+					</View>
+				</TouchableOpacity>
+				<View style={{alignItems: 'center', flexDirection: 'row', justifyContent: 'space-around'}}>
+					{this.renderShare()}
+					{this.renderLike()}
+				</View>
 			</View>
 		);
 	},
@@ -180,7 +177,7 @@ var styles = StyleSheet.create({
   modalInnerContainer: {
     //borderRadius: 4,
     alignItems: 'stretch',
-    backgroundColor: '#05FFFFFF',
+    //backgroundColor: '#05FFFFFF',
   },
 
   actionButton:{
@@ -188,8 +185,8 @@ var styles = StyleSheet.create({
   },
 
   imgAction:{
-    width:36,
-    height:36,
+    width:61,
+    height:61,
   },
 });
 

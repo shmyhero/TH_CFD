@@ -32,7 +32,8 @@ var listRawData = [
 {'type':'header'},
 {'type':'normal','title':'签到交易金(元)', 'subtype': 'totalDailySign'},
 {'type':'normal','title':'模拟交易金(元)', 'subtype': 'demoTransaction'},
-{'type':'normal','title':'注册交易金(元)', 'subtype': 'demoRegister'}
+{'type':'normal','title':'注册交易金(元)', 'subtype': 'demoRegister'},
+{'type':'normal','title':'卡片交易金(元)', 'subtype': 'achievementCard'}
 ]
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var RULE_DIALOG = "ruleDialog";
@@ -50,6 +51,7 @@ var MyIncomePage = React.createClass({
 			totalDailySign: '--',
 			demoTransaction: '--',
 			demoRegister: '--',
+			achievementCard: '--',
 			dataSource: ds.cloneWithRows(listRawData),
 		};
 	},
@@ -83,6 +85,7 @@ var MyIncomePage = React.createClass({
 						totalDailySign : totalDailySign.toString(),
 						demoTransaction: demoTransaction.toString(),
 						demoRegister: demoRegister.toString(),
+						//achievementCard: achievementCard.toString(),
 						dataSource: ds.cloneWithRows(listRawData),
 	        });
 	      },
@@ -96,6 +99,7 @@ var MyIncomePage = React.createClass({
 				totalDailySign: 0,
 				demoTransaction: 0,
 				demoRegister: 0,
+				achievementCard: 0,
 				dataSource: ds.cloneWithRows(listRawData),
 			})
 		}

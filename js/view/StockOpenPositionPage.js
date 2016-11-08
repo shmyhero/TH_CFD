@@ -29,7 +29,7 @@ var TalkingdataModule = require('../module/TalkingdataModule')
 var TongDaoModule = require('../module/TongDaoModule')
 var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
-var StockTransactionInfoPage = require('./StockTransactionInfoPage')
+var StockTransactionInfoModal = require('./StockTransactionInfoModal')
 var TimerMixin = require('react-timer-mixin');
 var StorageModule = require('../module/StorageModule')
 
@@ -1253,7 +1253,7 @@ var StockOpenPositionPage = React.createClass({
 					renderSeparator={this.renderSeparator}
 					onEndReached={this.onEndReached}/>
 
-					<StockTransactionInfoPage ref='confirmPage'/>
+					<StockTransactionInfoModal ref='confirmPage'/>
 			</View>
 		)
 	},

@@ -23,11 +23,13 @@ export default class StockTransactionInfoBar extends Component {
   static propTypes = {
     transactionInfo: PropTypes.object,
     titleColor: PropTypes.string,
+    hideTopCornerRadius: PropTypes.bool
   }
 
   static defaultProps = {
     transactionInfo: null,
     titleColor: null,
+    hideTopCornerRadius: false,
   }
 
   constructor(props) {
@@ -62,6 +64,10 @@ export default class StockTransactionInfoBar extends Component {
   }
 
   render() {
+    if(this.state.transactionInfo == null){
+      return (<View/>);
+    }
+
     var pl = ''
 		if (!this.state.isCreate) {
 			pl = (this.state.settlePrice - this.state.transactionInfo.openPrice) / this.state.transactionInfo.openPrice * this.state.leverage * 100
@@ -74,9 +80,17 @@ export default class StockTransactionInfoBar extends Component {
     //alert(JSON.stringify(this.state.transactionInfo))
 		var currency = UIConstants.CURRENCY_CODE_LIST[this.state.transactionInfo.security.ccy]
 
+    var extraTitleContainerStyle = {
+      backgroundColor: this.props.titleColor
+    };
+    if(this.props.hideTopCornerRadius){
+      extraTitleContainerStyle.borderTopLeftRadius = 0;
+      extraTitleContainerStyle.borderTopRightRadius = 0;
+    }
+
     return (
       <View style={styles.container}>
-        <View style={[styles.titleContainer, {backgroundColor: this.props.titleColor}]}>
+        <View style={[styles.titleContainer, extraTitleContainerStyle]}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch'}}>
             <Text style={styles.titleText}>
               {this.state.name} - {this.state.isCreate?'开仓':'平仓'}
@@ -130,7 +144,7 @@ export default class StockTransactionInfoBar extends Component {
               {this.state.isCreate? ('最大风险('+currency+')') : '盈亏(美元)'}
             </Text>
             <Text style={[styles.itemValueText, {color: plColor}]}>
-              {this.state.isCreate? this.state.invest.toFixed(2) : this.state.transactionInfo.pl.toFixed(2)}
+              {this.state.isCreate ? this.state.invest.toFixed(2) : this.state.transactionInfo.pl.toFixed(2)}
             </Text>
           </View>
           <View style={{flex: 1, alignItems: 'flex-end', paddingRight: 15}}>
@@ -151,7 +165,7 @@ const styles = StyleSheet.create({
   container: {
     //flex: 1,
     alignSelf: 'stretch',
-    backgroundColor: 'gray',
+    //backgroundColor: 'gray',
   },
 
 	titleContainer: {

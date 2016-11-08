@@ -41,7 +41,7 @@ class BaseDataSource: NSObject, BaseDataProvider {
 	var _minValue:Double = Double.NaN
 	var _preCloseValue:Double? = 0
 	
-	var _chartType:String="today"
+	var _chartType:String="undefined"
 	
 	init(json:String, rect:CGRect) {
 		_jsonString = json

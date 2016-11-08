@@ -92,11 +92,24 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		}
 	}
 	
+	override func setChartType(newValue:String) {
+		if ["day", "5m"].contains(newValue) {
+			super.setChartType(newValue)
+		}
+	}
+	
+	static func isValidData(json:String) -> Bool {
+		return json.containsString("open") && json.containsString("close") && json.containsString("high") && json.containsString("low")
+	}
+	
 	override func isEmpty() -> Bool {
 		return _candleData.isEmpty
 	}
 	
 	override func calculateData() {
+		if _chartType == "undefined" {
+			return
+		}
 		let width = _rect.width
 		let height = _rect.height
 		if (_rect == CGRectZero || _candleData.isEmpty) {

@@ -66,9 +66,14 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 	}
 	
 	override func setChartType(newValue:String) {
-		super.setChartType(newValue)
-
-		drawPreCloseLine = newValue == "today"
+		if ["today", "2h", "week", "month", "10m"].contains(newValue) {
+			super.setChartType(newValue)
+			drawPreCloseLine = newValue == "today"
+		}
+	}
+	
+	static func isValidData(json:String) -> Bool {
+		return json.containsString("p")
 	}
 	
 	override func isEmpty() -> Bool {
@@ -76,6 +81,9 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 	}
 	
 	override func calculateData() {
+		if _chartType == "undefined" {
+			return
+		}
 		let width = _rect.width
 		let height = _rect.height
 		if (_rect == CGRectZero || _lineData.isEmpty) {

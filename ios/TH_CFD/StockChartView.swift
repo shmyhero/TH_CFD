@@ -67,12 +67,16 @@ class StockChartView: UIView {
 	var data:String? { // use for RN manager
 		willSet {
 			print ("set type data:",self.chartType)
-			if (newValue != nil && self.chartType != "undefined") {
-				if (chartType == "5m" || chartType == "day"){
+			if (newValue != nil) {
+//				if (chartType == "5m" || chartType == "day"){
+				if CandleChartDataSource.isValidData(newValue!) {
 					dataSource = CandleChartDataSource.init(json:newValue!, rect: self.bounds)
 				}
-				else {
+				else if LineChartDataSource.isValidData(newValue!) {
 					dataSource = LineChartDataSource.init(json:newValue!, rect: self.bounds)
+				}
+				else {
+					dataSource = BaseDataSource.init(json: newValue!, rect: self.bounds)
 				}
 			}
 			else {
@@ -93,7 +97,7 @@ class StockChartView: UIView {
 	var chartType:String="undefined" {
 		willSet {
 			print ("set type chart:", newValue)
-			self.setNeedsDisplay()
+//			self.setNeedsDisplay()
 		}
 	}
 	

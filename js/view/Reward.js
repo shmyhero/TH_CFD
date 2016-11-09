@@ -76,7 +76,7 @@ export default class Reward extends Component{
     }
   }
 
-  render(){ 
+  render(){
     return(
       <View style = {[styles.container,{borderWidth:this.props.card.isNew?0.5:0}]}>
         <Image

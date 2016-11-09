@@ -145,10 +145,10 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
                             webView.getId(),
                             createWebViewEvent(webView, url)));
 
-            if (url.contains("demo/oauth/ok")) {
+            if (url.contains("live/oauth/ok")) {
                 //ayondo login success
                 NativeDataModule.passDataToRN(reactContext, NativeActions.ACTION_LOGIN_SUCCESS, "success");
-            } else if (url.contains(("demo/oauth/error"))) {
+            } else if (url.contains(("live/oauth/error"))) {
                 //ayondo login failed
                 NativeDataModule.passDataToRN(reactContext, NativeActions.ACTION_LOGIN_FAILED, "error");
             }
@@ -295,8 +295,8 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
             WebView.setWebContentsDebuggingEnabled(true);
         }
 
-
         removeAllCookie(webView);
+
         return webView;
     }
 

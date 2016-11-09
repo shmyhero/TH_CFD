@@ -11,12 +11,14 @@ export default class Reward extends Component{
     divideInLine: PropTypes.number,
     type:PropTypes.number,
     isNew:PropTypes.bool,
+    card:PropTypes.object,
   }
 
   static defaultProps = {
     divideInLine: 3,
     type:1,
     isNew:false,
+    card:undefined,
   }
 
   constructor(props){
@@ -25,6 +27,10 @@ export default class Reward extends Component{
 
   getHeight(){
     return (width/this.props.divideInLine) * 1.13
+  }
+
+  getWidth(){
+    return (width/this.props.divideInLine) - 11
   }
 
   renderBottom(){
@@ -38,7 +44,8 @@ export default class Reward extends Component{
           <View style={styles.lineBottom1}>
             <Image
             style={styles.imgUserHead}
-            source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}></Image>
+            source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}>
+            </Image>
             <Text numberOfLines={1} style = {styles.textName}>
               风飘过
             </Text>
@@ -46,7 +53,8 @@ export default class Reward extends Component{
           <View style={styles.lineBottom2}>
             <Image
             style={styles.imgLove}
-            source={require('../../images/like_small.png') }></Image>
+            source={require('../../images/like_small.png') }>
+            </Image>
             <Text style = {styles.textCounter}>
             46
             </Text>
@@ -61,20 +69,21 @@ export default class Reward extends Component{
           </View>
           <View style={styles.lineView}>
              <Text style={styles.textKind}>
-               美元／欧元
+               {this.props.card.stockName}
              </Text>
           </View>
       </View>);
     }
-
   }
 
-  render(){
+  render(){ 
     return(
-      <View style = {[styles.container,{borderWidth:this.props.isNew?1:0}]}>
+      <View style = {[styles.container,{borderWidth:this.props.card.isNew?0.5:0}]}>
         <Image
-        style={[styles.imgReward,{height:this.getHeight()}]}
-        source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}
+        resizeMode={'stretch'}
+        style={[styles.imgReward,{width:this.getWidth(),height:this.getHeight()}]}
+        // source={require('../../images/card_ag.png')}
+        source={{uri: this.props.card.imgUrlMiddle}}
         >
         </Image>
         {this.renderBottom()}
@@ -97,7 +106,7 @@ const styles = StyleSheet.create({
 
   imgReward:{
     height:120,
-    borderRadius:5,
+    // borderRadius:5,
   },
 
   imgUserHead:{

@@ -8,19 +8,12 @@ var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 var NavBar = require('./NavBar')
 var Reward = require('./Reward')
+var LogicData = require('../LogicData');
+var NetConstants = require('../NetConstants')
+var NetworkModule = require('../module/NetworkModule')
 
-var listRawData = [
-	{id:0},
-	{id:1},
-	{id:2},
-	{id:3},
-	{id:4},
-	{id:5},
-	{id:6},
-	{id:7},
-	{id:8},
-	{id:9}
-	]
+var listRawData = []
+var listResponse = []
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class MyCard extends Component{
@@ -28,20 +21,50 @@ export default class MyCard extends Component{
 	constructor(props){
 		super(props);
 		this.state = {
-			dataSource: ds.cloneWithRows(listRawData),
+			listRawData: ds.cloneWithRows(listRawData),
+			listResponse: undefined,
 		}
 	}
 
 	_renderRow(rowData,sectionID,rowID){
 		return(
-			<TouchableOpacity style={styles.scroolItem} onPress={()=>{this._onPressItem(rowData)}}>
-						<Reward type={2} divideInLine={2} ></Reward>
+			<TouchableOpacity style={styles.scroolItem} onPress={()=>{this._onPressItem(rowID)}}>
+						<Reward card={rowData} type={2} divideInLine={2} ></Reward>
 		  </TouchableOpacity>
 	 	);
 	}
 
-	_onPressItem(rowData){
-		Alert.alert(''+rowData.id);
+	componentDidMount(){
+		this.loadMyCards();
+	}
+
+	_onPressItem(index){
+		//
+		Alert.alert('cardList length = '+this.state.listResponse.length+' selectIndex = '+index);
+	}
+
+	//获取我的卡片列表
+	loadMyCards() {
+		var userData = LogicData.getUserData()
+
+			NetworkModule.fetchTHUrlWithNoInternetCallback(
+				NetConstants.CFD_API.GET_USER_LIVE_CARDS,
+				{
+					method: 'GET',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					},
+				},
+				(responseJson) =>{
+					this.setState({
+						listRawData: ds.cloneWithRows(responseJson.cards),
+						listResponse : responseJson.cards,
+						})
+				},
+				(error) => {
+					Alert.alert(error)
+				}
+			)
 	}
 
 	render(){
@@ -50,7 +73,8 @@ export default class MyCard extends Component{
 				<NavBar title='我的卡片' showBackButton={true} navigator={this.props.navigator}/>
 				<ListView
 					contentContainerStyle={styles.list}
-					dataSource={this.state.dataSource}
+					dataSource={this.state.listRawData}
+					enableEmptySections={true}
 					renderRow={this._renderRow.bind(this)} />
 			</View>
 		);
@@ -62,7 +86,7 @@ const styles = StyleSheet.create({
 	scroolItem:{
 		width:(width-20)/2,
 		height:((width-20)/2) + 80,
-		marginRight:5, 
+		marginRight:5,
 		marginBottom:10,
 	},
 

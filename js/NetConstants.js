@@ -107,6 +107,8 @@ function getCFDAPI(){
     ID_CARD_OCR: CFD_API_SERVER + '/api/user/ocr', //身份证OCR
     USER_ACTUAL_LOGOUT: CFD_API_SERVER + '/api/user/demo/logout',
 
+    GET_USER_LIVE_CARDS:CFD_API_SERVER + '/api/user/live/card',//我的卡片
+
   }
 }
 

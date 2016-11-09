@@ -586,7 +586,7 @@ var HomePage = React.createClass({
 			(card, i) =>
 				<TouchableOpacity onPress={() => this.pressCard(i)} key={i}>
 					<View style={styles.scroolItem}>
-						<Reward  type={1} divideInLine={3} id={card}></Reward>
+						<Reward card={1} type={1} divideInLine={3} id={card}></Reward>
 					</View>
 				</TouchableOpacity>
 			)
@@ -864,7 +864,7 @@ var HomePage = React.createClass({
 					<View style={styles.bigSeparator}/>
 
 
-					{this.renderCards()}
+					{/* {this.renderCards()} */}
 
 					{this.renderBottomViews()}
 

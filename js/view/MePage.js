@@ -474,7 +474,7 @@ var MePage = React.createClass({
 
 	renderRow: function(rowData, sectionID, rowID) {
 		if (rowData.type === 'normal') {
-			if(rowData.subtype === 'config' && !this.state.loggedIn){
+			if((rowData.subtype === 'config'||rowData.subtype === 'mycard') && !this.state.loggedIn){
 				return (
 					<View></View>
 				);

@@ -90,14 +90,15 @@ var SharePage = React.createClass({
 	shareToHomePage: function(){
 		//TODO: use real api.
 		//Add this.props.transactionID into circle
+		this.hide();
 	},
 
 	renderHomePageShare: function(){
-		if(this.data && this.data.transactionID){
+		if(this.data && this.data.cardID){
 			return (
 				<TouchableOpacity onPress={()=>{this.shareToHomePage("session")}}>
 					<Image style={[styles.icon, {transform: [{rotate: '0deg'}]}]}
-					 source={require('../../images/wechat_session.png')}/>
+					 source={require('../../images/share_home.png')}/>
 					<Text style={styles.shareText}>首页</Text>
 				</TouchableOpacity>
 			)

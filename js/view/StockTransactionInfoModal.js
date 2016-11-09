@@ -54,14 +54,14 @@ var StockTransactionInfoModal = React.createClass({
 		this.setState(state);
 	},
 
-	showSwiper: function(transactionInfoList, currentIndex, callback, pageSettings) {
+	showAchievement: function(cardList, currentIndex, callback, pageSettings) {
 		var state = {
 			modalVisible: true,
 			hideCallback: callback,
 		};
-		if(transactionInfoList !== null){
-			state.isArray = true;
-			state.transactionInfoList = transactionInfoList;
+		if(cardList !== null){
+			state.isCardList = true;
+			state.cardList = cardList;
 			state.currentIndex = currentIndex;
 		}
 		if(pageSettings){
@@ -93,14 +93,27 @@ var StockTransactionInfoModal = React.createClass({
 		);
 	},
 
+	renderPageWithCard: function(card, i){
+		if(!i){
+			i = 0;
+		}
+		return (
+			<StockTransactionInfoPage card={card}
+				pageSettings={this.state.pageSettings}
+				showReward={false}
+				key={i}
+				hideFunction={()=>this.hide()}/>
+		);
+	},
+
 	renderContent: function(){
-		if(this.state.isArray){
+		if(this.state.isCardList){
 			var activeDot = <View/>;
 			var dot = <View/>;
 			var slides = [];
-			for(var i = 0 ; i < this.state.transactionInfoList.length; i ++){
+			for(var i = 0 ; i < this.state.cardList.length; i ++){
 				slides.push(
-					this.renderPage(this.state.transactionInfoList[i], i)
+					this.renderPageWithCard(this.state.cardList[i], i)
 				);
 			}
 			return (

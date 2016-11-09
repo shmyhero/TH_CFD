@@ -24,21 +24,26 @@ var MainPage = require('./MainPage')
 var NetConstants = require('../NetConstants')
 
 var {height, width} = Dimensions.get('window');
+var actionButtonSize = 61;
 
 var StockTransactionInfoPage = React.createClass({
 	mixins: [Touchable.Mixin],
 
 	propTypes: {
 		transactionInfo: React.PropTypes.object,
+		card: React.PropTypes.object,
 		pageSettings: React.PropTypes.object,
 		hideFunction: React.PropTypes.func,
+		showReward: React.PropTypes.bool,
 	},
 
 	getDefaultProps() {
 		return {
 			transactionInfo: null,
-			pageSettings: null,
+			card: null,
+			pageSettings: {showShare: true},
 			hideFunction: ()=>{},
+			showReward: true,
 		}
 	},
 
@@ -52,19 +57,24 @@ var StockTransactionInfoPage = React.createClass({
 	},
 
 	componentWillMount: function(){
-		var state = {
-			titleColor: ColorConstants.TITLE_BLUE,
-		};
+		var state = {};
+		if(this.props.card !== null){
+			state.card = this.props.card;
+			state.liked = this.props.card.liked ? true : false;
+			state.likes = this.props.card.likes;
+		}
 		if (this.props.transactionInfo !== null) {
 			state.transactionInfo = this.props.transactionInfo;
-			state.achievementUrl = this.props.transactionInfo.achievementUrl;
-			state.achievementID = this.props.transactionInfo.achievementID;
-			state.liked = this.props.transactionInfo.liked ? true : false;
-			state.likedPerson = this.props.transactionInfo.likedPerson;
-			if(this.props.transactionInfo.achievementThemeColor){
-				state.titleColor = this.props.transactionInfo.achievementThemeColor;
+			if(this.props.transactionInfo.card !== null){
+				state.card = this.props.transactionInfo.card;
+				if(this.props.transactionInfo.card){
+					state.liked = this.props.transactionInfo.card.liked ? true : false;
+					state.likes = this.props.transactionInfo.card.likes;
+				}
 			}
 		}
+
+		state.showShare = true;	//Default is show Share.
 		if(this.props.pageSettings){
 			state.showShare = this.props.pageSettings.showShare;
 			state.showLike = this.props.pageSettings.showLike;
@@ -73,49 +83,57 @@ var StockTransactionInfoPage = React.createClass({
 	},
 
 	_showSharePanel: function(){
-		this.props.hideFunction && this.props.hideFunction();
-
+		this.props.hideFunction && this.props.hideFunction();	
 		var url = NetConstants.TRADEHERO_API.SHARE_ACHIEVEMENT_CARD_URL;
-		url.replace("<id>", this.state.achievementID);
+		url.replace("<id>", this.state.card.cardId);
 		MainPage.showSharePage({
 			title: "我获得了一张盈交易卡片奖励",
       description: "盈交易-风靡全球的投资神器登陆亚洲",
       url: url,
       imgUrl: NetConstants.TRADEHERO_API.SHARE_LOGO_URL,
-			achievementID: this.state.achievementID
+			cardID: this.state.card.cardId,
 		});
 	},
 
 	likeTransaction: function(){
 		if(!this.state.liked){
 			this.setState({
-				likedPerson: this.state.liked ? this.state.likedPerson - 1 : this.state.likedPerson + 1,
+				likes: this.state.liked ? this.state.likes - 1 : this.state.likes + 1,
 				liked: !this.state.liked,
 			})
 		}
 	},
 
 	renderAchievementCard: function(){
-		if(this.state.achievementUrl){
+		if(this.state.card){
 			return (
-				<AchievementCard cardUrl={this.state.achievementUrl}/>
+				<AchievementCard card={this.state.card} showReward={this.props.showReward}/>
 			)
 		}
 	},
 
 	renderContent: function(){
-		return (
-			<View style={{flex: 1, flexDirection:'column', alignSelf: 'stretch'}}>
-				{this.renderAchievementCard()}
-				<StockTransactionInfoBar transactionInfo={this.state.transactionInfo} titleColor={this.state.titleColor}
-					hideTopCornerRadius={this.state.achievementUrl != null}
-					style={{backgroundColor: 'yellow',}}/>
-			</View>
-		)
+		if(this.state.card){
+			return (
+				<View style={{flex: 1, flexDirection:'column', alignSelf: 'stretch'}}>
+					{this.renderAchievementCard()}
+					<StockTransactionInfoBar card={this.state.card} transactionInfo={this.state.transactionInfo}
+						hideTopCornerRadius={this.state.card !== undefined && this.state.card !== null}/>
+				</View>
+			);
+		}else{
+			return (
+				<View style={{flex: 1, flexDirection:'column', alignSelf: 'stretch'}}>
+					{this.renderAchievementCard()}
+					<StockTransactionInfoBar transactionInfo={this.state.transactionInfo}
+						hideTopCornerRadius={this.state.card !== undefined && this.state.card !== null}/>
+				</View>
+			);
+		}
 	},
 
 	renderShare: function(){
-		if(this.state.showShare){
+		if(this.state.card && this.state.showShare){
 			return (
 				<TouchableOpacity style={styles.actionButton} onPress={() => this._showSharePanel()}>
 					<Image style = {styles.imgAction} source = {require('../../images/action_share.png')} ></Image>
@@ -125,12 +143,12 @@ var StockTransactionInfoPage = React.createClass({
 	},
 
 	renderLike: function(){
-		if(this.state.showLike){
+		if(this.state.card  && this.state.showLike){
 			var imgSource = this.state.liked ? require('../../images/action_like_liked.png') : require('../../images/action_like.png');
 			return (
-				<TouchableOpacity style={styles.actionButton} onPress={() => this.likeTransaction()}>
+				<TouchableOpacity style={[styles.actionButton, {flexDirection: 'row'}]} onPress={() => this.likeTransaction()}>
 					<Image style={styles.imgAction} source={imgSource} ></Image>
-					<Text style={{alignSelf: 'center', color: '#eeeeee', marginTop: 5}}>{this.state.likedPerson}</Text>
+					<Text style={{alignSelf: 'center', color: '#eeeeee', marginLeft: 5}}>{this.state.likes}</Text>
 				</TouchableOpacity>
 			);
 		}
@@ -181,12 +199,16 @@ var styles = StyleSheet.create({
   },
 
   actionButton:{
-    marginTop:28,
+    marginTop: (height
+			- UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
+			- UIConstants.ANDROID_SOFT_MENU_HEIGHT
+			- actionButtonSize - 150 - ((width - 20) / 690 * 644))/3,
+		flexDirection: 'row',
   },
 
   imgAction:{
-    width:61,
-    height:61,
+    width:actionButtonSize,
+    height:actionButtonSize,
   },
 });
 

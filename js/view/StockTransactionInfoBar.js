@@ -22,13 +22,13 @@ var itemValueFontSize = Math.round(14*width/375)
 export default class StockTransactionInfoBar extends Component {
   static propTypes = {
     transactionInfo: PropTypes.object,
-    titleColor: PropTypes.string,
+    card: PropTypes.object,
     hideTopCornerRadius: PropTypes.bool
   }
 
   static defaultProps = {
     transactionInfo: null,
-    titleColor: null,
+    card: null,
     hideTopCornerRadius: false,
   }
 
@@ -36,19 +36,39 @@ export default class StockTransactionInfoBar extends Component {
 	  super(props);
 
     var transactionInfo = this.props.transactionInfo;
-    if(transactionInfo !== null){
+    var cardInfo = this.props.card;
+    if(cardInfo){
+      console.log("cardInfo: " + JSON.stringify(cardInfo))
+      this.state = {
+        name: cardInfo.stockName,
+        isCreate: false,
+        isLong: cardInfo.isLong,
+        invest: cardInfo.invest,
+        leverage: cardInfo.leverage,
+        openPrice: cardInfo.tradePrice,
+        settlePrice: cardInfo.settlePrice,
+        time: new Date(cardInfo.tradeTime),
+        titleColor: cardInfo.themeColor,
+        ccy: cardInfo.ccy,
+        pl: cardInfo.pl ? cardInfo.pl : transactionInfo.pl,
+        plRate: cardInfo.plRate,
+      }
+    }else if(transactionInfo){
+      console.log("transactionInfo: " + JSON.stringify(transactionInfo))
       this.state = {
         name: transactionInfo.stockName,
         isCreate: transactionInfo.isCreate,
         isLong: transactionInfo.isLong,
         invest: transactionInfo.invest,
         leverage: transactionInfo.leverage,
+        openPrice: transactionInfo.openPrice,
         settlePrice: transactionInfo.settlePrice,
         time: transactionInfo.time,
-        transactionInfo: transactionInfo,
+        titleColor: ColorConstants.TITLE_BLUE,
+        ccy: transactionInfo.security ? transactionInfo.security.ccy : "USD",
+        pl: transactionInfo.pl,
+        plRate: '',
       };
-
-
     }else{
       this.state = {
         name: 'ABC',
@@ -56,32 +76,33 @@ export default class StockTransactionInfoBar extends Component {
         isLong: true,
         invest: 0,
         leverage: 0,
+        openPrice: 0,
         settlePrice: 0,
         time: new Date(),
-        transactionInfo: null,
+        titleColor: ColorConstants.TITLE_BLUE,
+        ccy: 'USD',
+        pl: 0,
+        plRate: 0,
       }
     }
   }
 
   render() {
-    if(this.state.transactionInfo == null){
-      return (<View/>);
-    }
-
-    var pl = ''
-		if (!this.state.isCreate) {
-			pl = (this.state.settlePrice - this.state.transactionInfo.openPrice) / this.state.transactionInfo.openPrice * this.state.leverage * 100
-			pl *= (this.state.isLong ? 1 : -1)
+    var plRate = this.state.plRate
+		if ((plRate === '' || plRate === undefined) && !this.state.isCreate) {
+      //console.log("this.state.settlePrice: " + this.state.settlePrice + ", this.state.openPrice: " + this.state.openPrice + ", this.state.leverage: " + this.state.leverage)
+			plRate = (this.state.settlePrice - this.state.openPrice) / this.state.openPrice * this.state.leverage * 100
+			plRate *= (this.state.isLong ? 1 : -1)
 		}
 
 		var plColor = 'black'
 		if (!this.state.isCreate)
-			plColor = pl > 0 ? ColorConstants.STOCK_RISE_RED : (pl < 0 ? ColorConstants.STOCK_DOWN_GREEN : 'black')
+			plColor = plRate > 0 ? ColorConstants.STOCK_RISE_RED : (plRate < 0 ? ColorConstants.STOCK_DOWN_GREEN : 'black')
     //alert(JSON.stringify(this.state.transactionInfo))
-		var currency = UIConstants.CURRENCY_CODE_LIST[this.state.transactionInfo.security.ccy]
+		var currency = UIConstants.CURRENCY_CODE_LIST[this.state.ccy]
 
     var extraTitleContainerStyle = {
-      backgroundColor: this.props.titleColor
+      backgroundColor: this.state.titleColor
     };
     if(this.props.hideTopCornerRadius){
       extraTitleContainerStyle.borderTopLeftRadius = 0;
@@ -99,7 +120,7 @@ export default class StockTransactionInfoBar extends Component {
             {this.state.isCreate ?
               null :
               <Text style={[styles.titleText, {marginRight: 15}]}>
-                {(pl).toFixed(2)} %
+                {(plRate).toFixed(2)} %
               </Text>
             }
 
@@ -144,7 +165,7 @@ export default class StockTransactionInfoBar extends Component {
               {this.state.isCreate? ('最大风险('+currency+')') : '盈亏(美元)'}
             </Text>
             <Text style={[styles.itemValueText, {color: plColor}]}>
-              {this.state.isCreate ? this.state.invest.toFixed(2) : this.state.transactionInfo.pl.toFixed(2)}
+              {this.state.isCreate ? this.state.invest.toFixed(2) : this.state.pl.toFixed(2)}
             </Text>
           </View>
           <View style={{flex: 1, alignItems: 'flex-end', paddingRight: 15}}>

@@ -20,6 +20,7 @@ var NetworkModule = require('../module/NetworkModule');
 var LogicData = require('../LogicData');
 var ColorConstants = require('../ColorConstants');
 var StockTransactionInfoModal = require('./StockTransactionInfoModal');
+var StockTransactionInfoBar = require('./StockTransactionInfoBar')
 
 export default class DevelopPage extends Component {
 
@@ -139,67 +140,79 @@ export default class DevelopPage extends Component {
   }
 
   showPage(){
-    var sampleInfo = {
-      invest: 99.999997677,
-      isLong: true,
-      leverage: 50,
-      settlePrice: 1289.4,
-      openPrice: 1289.7,
-      pl: -1.16,
-      stockName: '黄金1',
-      time: new Date('2016-11-06T23:00:00.521Z'),
-      security:{
+    var card1 = {
+        cardId: 1,
+        invest: 100,
+        isLong: true,
+        leverage: 50,
+        tradePrice: 1284.8,
+        settlePrice: 1302.8,
+        imgUrlBig: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/brozne_1_1_big.png',
+        imgUrlMiddle: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/brozne_1_1_middle.png',
+        imgUrlSmall: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/brozne_1_1_small.png',
+        reward: 1,
+        tradeTime: '2016-11-08T08:00:16.223',
         ccy: 'USD',
-      },
-      achievementID: 2,
-      achievementUrl: "http://i10.72g.com/201503/14277932144495.jpg",
-      achievementThemeColor: '#d99d51',
-      liked: true,
-      likedPerson: 12,
+        stockName: '黄金',
+        themeColor: '#ee9922',
+        pl:100,
+        plRate:50,
+        likes: 39,
+    };
+    var card2 = {
+        cardId: 2,
+        invest: 100,
+        isLong: true,
+        leverage: 50,
+        tradePrice: 1284.8,
+        settlePrice: 1302.8,
+        imgUrlBig: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/brozne_1_1_big.png',
+        imgUrlMiddle: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/brozne_1_1_middle.png',
+        imgUrlSmall: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/brozne_1_1_small.png',
+        reward: 3,
+        tradeTime: '2016-11-08T08:00:16.223',
+        ccy: 'USD',
+        stockName: '白银',
+        themeColor: 'red',
+        pl:-100,
+        plRate:-50,
+        likes: 11,
     };
 
-    var sampleInfo1 = {
-      invest: 99.999997677,
+    var array = [card1,card2,card1,card2,card1,card2,card1,card2,card1,card2,card1,card2,];
+
+    var info = { id: '140134428162',
+      invest: 0,
       isLong: true,
-      leverage: 50,
-      settlePrice: 1289.4,
-      openPrice: 1289.7,
-      pl: -1.16,
-      stockName: '黄金1',
-      time: new Date('2016-11-06T23:00:00.521Z'),
-      security:{
-        ccy: 'USD',
-      },
-      achievementID: 2,
-      //achievementUrl: "http://i10.72g.com/201503/14277932144495.jpg",
-      achievementThemeColor: '#d99d51',
-      liked: true,
-      likedPerson: 12,
-    };
-    var sampleInfo2 = {
-      invest: 99.999997677,
-      isLong: true,
-      leverage: 50,
-      settlePrice: 1289.4,
-      openPrice: 1289.7,
-      pl: -1.16,
-      stockName: '黄金2',
-      time: new Date('2016-11-06T23:00:00.521Z'),
-      security:{
-        ccy: 'USD',
-      },
-      achievementID: 2,
-      achievementUrl: "http://i10.72g.com/201503/14277932144495.jpg",
-      achievementThemeColor: 'red',
-      liked: false,
-      likedPerson: 23,
-    };
+      leverage: 1,
+      openPrice: 1284.6,
+      settlePrice: 1308.6,
+      quantity: 0,
+      pl: 37.36,
+      createAt: '2016-11-09T08:02:37.975Z',
+      time: new Date('2016-11-08T07:58:29.67'),
+      card:
+       { cardId: 1,
+         invest: 2000,
+         isLong: true,
+         leverage: 1,
+         tradePrice: 1284.6,
+         settlePrice: 1308.6,
+         imgUrlBig: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/brozne_1_1_big.png',
+         imgUrlMiddle: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/brozne_1_1_middle.png',
+         imgUrlSmall: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/brozne_1_1_small.png',
+         reward: 1,
+         tradeTime: '2016-11-08T07:58:29.67',
+         ccy: 'USD',
+         stockName: '黄金',
+         themeColor: '#ee9922',
+         likes: 22,
+      }
+    }
 
-    var array = [sampleInfo1,sampleInfo2,sampleInfo1,sampleInfo2,sampleInfo1,sampleInfo2,sampleInfo1,sampleInfo2,sampleInfo1,sampleInfo2,];
-
-    this.refs['page'].showSwiper(array, 1, ()=>{}, {showShare: true, showLike: true});
-
-    //this.refs['page'].show(sampleInfo, ()=>{}, {/*showShare: true, */showLike: true});
+    //this.refs['page'].showAchievement(array, 1, ()=>{}, {showShare: true});
+    //{/*showShare: true, */showLike: true}
+    this.refs['page'].show(info, ()=>{}, {/*showShare: true, */showLike: true});
   }
 }
 

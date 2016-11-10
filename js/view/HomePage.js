@@ -496,6 +496,18 @@ var HomePage = React.createClass({
 		});
 	},
 
+	gotoStockDetalWithID: function(card){
+			var stockRowData = {
+				name: card.stockName,
+				id: parseInt(card.stockID),
+			}
+
+			this.props.navigator.push({
+			name: MainPage.STOCK_DETAIL_ROUTE,
+			stockRowData: stockRowData,
+		});
+	},
+
 	renderPopularityRow: function(rowData, sectionID, rowID, highlightRow) {
 		var percent = 0
 		var stockName = ""
@@ -638,7 +650,18 @@ var HomePage = React.createClass({
 	},
 
 	pressCard:function(index){
-		Alert.alert('cardList length = '+this.state.rawCardsInfo.length+' selectIndex = '+index);
+
+		if(this.state.rawCardsInfo[index].likes == undefined){
+				//special Card like gold and ag
+			// Alert.alert('go to ' + this.state.rawCardsInfo[index].stockName);
+			this.gotoStockDetalWithID(this.state.rawCardsInfo[index])
+		}else{
+			var listData = this.state.rawCardsInfo.filter(function(card){
+				return card.likes !== undefined;
+			})
+			Alert.alert('cardList length = '+listData.length+' selectIndex = '+index);
+		}
+
 	},
 
 	renderBannar: function(i) {

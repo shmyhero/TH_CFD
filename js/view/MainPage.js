@@ -793,7 +793,6 @@ var MainPage = React.createClass({
 			  stockRowData: stockRowData,
 				});
 		 }
-
 	},
 
 	showNotification: function() {

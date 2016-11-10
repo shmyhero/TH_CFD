@@ -5,6 +5,9 @@ var ColorConstants = require('../ColorConstants')
 
 var {height, width} = Dimensions.get('window');
 
+const CARD_SPECIAL_GOLD = 1;
+const CARD_SPECIAL_AG = 2;
+var isSpecialCard = false;
 
 export default class Reward extends Component{
 
@@ -34,12 +37,46 @@ export default class Reward extends Component{
     return (width/this.props.divideInLine) - 11
   }
 
+  renderBottomForSpecial(){
+    if(isSpecialCard){
+      return(
+        <View style={styles.specialContainer}>
+          <Text>
+            {this.props.card.last.toFixed(2)}
+          </Text>
+        </View>
+      );
+    }else{
+      return(<View style={styles.lineUser}>
+        <View style={styles.lineBottom1}>
+          <Image
+          style={styles.imgUserHead}
+          source={{uri:this.props.card.profileUrl}}>
+          </Image>
+          <Text numberOfLines={1} style = {styles.textName}>
+            {this.props.card.userName}
+          </Text>
+        </View>
+        <View style={styles.lineBottom2}>
+          <Image
+          style={styles.imgLove}
+          source={require('../../images/like_small.png') }>
+          </Image>
+          <Text style = {styles.textCounter}>
+          {this.props.card.likes}
+          </Text>
+         </View>
+       </View>);
+    }
+  }
+
   renderBottom(){
-    percentChange = this.props.card.plRate;
+
+    var percentChange = isSpecialCard?this.props.card.rate:this.props.card.plRate;
+
     percentChange = percentChange.toFixed(2)
     var color = ColorConstants.stock_color(percentChange)
     var startMark = percentChange > 0 ? "+" : null
-
 
     if(this.props.type === 1){//显示在首页的
       return(
@@ -49,27 +86,7 @@ export default class Reward extends Component{
             {startMark} {percentChange} %
           </Text>
         </View>
-        <View style={styles.lineUser}>
-          <View style={styles.lineBottom1}>
-            <Image
-            style={styles.imgUserHead}
-            // source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}>
-            source={{uri:this.props.card.imgUrlSmall}}>
-            </Image>
-            <Text numberOfLines={1} style = {styles.textName}>
-              {this.props.card.userName}
-            </Text>
-          </View>
-          <View style={styles.lineBottom2}>
-            <Image
-            style={styles.imgLove}
-            source={require('../../images/like_small.png') }>
-            </Image>
-            <Text style = {styles.textCounter}>
-            {this.props.card.likes}
-            </Text>
-          </View>
-        </View>
+        {this.renderBottomForSpecial()}
       </View>);
     }else if(this.props.type === 2){//显示在我的卡片
 
@@ -90,13 +107,26 @@ export default class Reward extends Component{
   }
 
   render(){
+    isSpecialCard = this.props.card.likes==undefined?true:false;//没有likes则是特殊，金或银 行情卡
+    var indexSpecial = 0;//
+    var specialPic = undefined;
+    if(isSpecialCard){
+      if(this.props.card.stockName==='黄金'){
+        indexSpecial = CARD_SPECIAL_GOLD;
+        specialPic = require('../../images/card_gold.png')
+      }else if(this.props.card.stockName === '白银'){
+        indexSpecial = CARD_SPECIAL_AG;
+        specialPic = require('../../images/card_ag.png')
+      }
+    }
+
     return(
       <View style = {[styles.container,{borderWidth:this.props.card.isNew?0.5:0}]}>
         <Image
         resizeMode={'stretch'}
         style={[styles.imgReward,{width:this.getWidth(),height:this.getHeight()}]}
         // source={require('../../images/card_ag.png')}
-        source={{uri: this.props.card.imgUrlMiddle}}
+        source={isSpecialCard?specialPic:{uri: this.props.card.imgUrlMiddle}}
         >
         </Image>
         {this.renderBottom()}
@@ -199,7 +229,13 @@ const styles = StyleSheet.create({
   textKind:{
     color:'#cccccc',
     marginTop:-2,
-  }
+  },
+
+  specialContainer:{
+    alignItems:'center',
+    justifyContent:'center'
+  },
+
 });
 
 

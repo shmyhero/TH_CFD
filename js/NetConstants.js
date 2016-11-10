@@ -107,11 +107,12 @@ function getCFDAPI(){
     ID_CARD_OCR: CFD_API_SERVER + '/api/user/ocr', //身份证OCR
     USER_ACTUAL_LOGOUT: CFD_API_SERVER + '/api/user/demo/logout',
 
-    GET_USER_LIVE_CARDS:CFD_API_SERVER + '/api/user/live/card',//我的卡片
-    GET_HOME_CARDS:CFD_API_SERVER + '/api/cards',//首页卡片
+    GET_USER_LIVE_CARDS:CFD_API_SERVER + '/api/card/my',//我的卡片
+    GET_HOME_CARDS:CFD_API_SERVER + '/api/card/top',//首页卡片
     SET_CARD_READ: CFD_API_SERVER + '/api/live/card/<id>',
     SET_CARD_LIKED: CFD_API_SERVER + '/api/live/card/like/<id>',
     SHARE_CARD_TO_HOME: CFD_API_SERVER + '/api/live/card/share/<id>',
+
   }
 }
 

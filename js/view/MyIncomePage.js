@@ -33,7 +33,7 @@ var listRawData = [
 {'type':'normal','title':'签到交易金(元)', 'subtype': 'totalDailySign'},
 {'type':'normal','title':'模拟交易金(元)', 'subtype': 'demoTransaction'},
 {'type':'normal','title':'注册交易金(元)', 'subtype': 'demoRegister'},
-{'type':'normal','title':'卡片交易金(元)', 'subtype': 'achievementCard'}
+{'type':'normal','title':'卡片交易金(元)', 'subtype': 'totalCard'}
 ]
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var RULE_DIALOG = "ruleDialog";
@@ -49,9 +49,9 @@ var MyIncomePage = React.createClass({
 		return {
 			totalIncome: '--',
 			totalDailySign: '--',
+			totalCard: '--',
 			demoTransaction: '--',
 			demoRegister: '--',
-			achievementCard: '--',
 			dataSource: ds.cloneWithRows(listRawData),
 		};
 	},
@@ -74,18 +74,20 @@ var MyIncomePage = React.createClass({
 
 					var totalDailySign = responseJson.totalDailySign;
 					var demoTransaction = responseJson.totalDemoTransaction;
-					var demoRegister = responseJson.demoRegister;
+					var demoRegister = responseJson.demoRegister
+					var totalCard = responseJson.totalCard ? responseJson.totalCard : 0;
 					var totalIncome = totalDailySign + demoTransaction + demoRegister;
 					console.log("totalIncome: " + totalIncome.toString())
 					console.log("totalDailySign: " + totalDailySign.toString())
 					console.log("demoTransaction: " + demoTransaction.toString())
 					console.log("demoRegister: " + demoRegister.toString())
+					console.log("totalCard: " + totalCard.toString())
 	        this.setState({
 	          totalIncome: totalIncome.toString(),
 						totalDailySign : totalDailySign.toString(),
+						totalCard: totalCard.toString(),
 						demoTransaction: demoTransaction.toString(),
 						demoRegister: demoRegister.toString(),
-						//achievementCard: achievementCard.toString(),
 						dataSource: ds.cloneWithRows(listRawData),
 	        });
 	      },
@@ -99,7 +101,7 @@ var MyIncomePage = React.createClass({
 				totalDailySign: 0,
 				demoTransaction: 0,
 				demoRegister: 0,
-				achievementCard: 0,
+				totalCard: 0,
 				dataSource: ds.cloneWithRows(listRawData),
 			})
 		}
@@ -145,6 +147,9 @@ var MyIncomePage = React.createClass({
 			}
 			if(rowData.subtype == 'demoRegister'){
 				value = this.state.demoRegister;
+			}
+			if(rowData.subtype == 'totalCard'){
+				value = this.state.totalCard;
 			}
 
 			return(

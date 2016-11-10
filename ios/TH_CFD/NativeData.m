@@ -36,6 +36,10 @@ RCT_EXPORT_MODULE();
 	else if([dataName isEqualToString:@"playSound"]) {
 		[[SoundManager sharedInstance] playSound:jsonData];
 	}
+    else if([dataName isEqualToString:@"toast"]){
+        //    [[SoundManager sharedInstance] playSound:jsonData];
+        [SwiftNotice showToastNotice:jsonData];
+    }
 }
 
 - (void)receiveRawDataFromRN:(NSString *)dataName data:(id)data

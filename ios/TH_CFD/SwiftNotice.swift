@@ -6,14 +6,15 @@
 //  Copyright © 2016年 Facebook. All rights reserved.
 //
 
-enum NoticeType{
-	case success
-	case error
-	case info
-}
 
 class SwiftNotice: NSObject {
-	
+    enum NoticeType{
+        case success
+        case error
+        case info
+        case message
+    }
+    
 	static var windows = Array<UIWindow!>()
 	static let rv = UIApplication.sharedApplication().keyWindow?.subviews.first as UIView!
 	static var timer: dispatch_source_t!
@@ -23,7 +24,11 @@ class SwiftNotice: NSObject {
 			return [0, 0, 180, 270, 90][UIApplication.sharedApplication().statusBarOrientation.hashValue] as Double
 		}
 	}
-	
+	   
+    static func showToastNotice(text: String) {
+        showNoticeWithText(.message, text: text, autoClear: true, autoClearTime: 1)
+    }
+    
 	static func showNoticeWithText(type: NoticeType,text: String, autoClear: Bool, autoClearTime: Int) {
 		let frame = CGRectMake(0, 0, 105, 105)
 		let window = UIWindow()
@@ -40,10 +45,15 @@ class SwiftNotice: NSObject {
 			image = UIImage.init(named: "Cross")!
 		case .info:
 			image = UIImage.init(named: "Info")!
+        default:
+            break
 		}
-		let checkmarkView = UIImageView(image: image)
-		checkmarkView.frame = CGRectMake(30, 15, 46, 46)
-		mainView.addSubview(checkmarkView)
+        
+        if(type != .message){
+            let checkmarkView = UIImageView(image: image)
+            checkmarkView.frame = CGRectMake(30, 15, 46, 46)
+            mainView.addSubview(checkmarkView)
+        }
 		
 		let label = UILabel(frame: CGRectMake(0, 70, 105, 20))
 		label.font = UIFont.systemFontOfSize(17)

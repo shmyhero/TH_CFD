@@ -212,7 +212,7 @@ export default class DevelopPage extends Component {
 
     //this.refs['page'].showAchievement(array, 1, ()=>{}, {showShare: true});
     //{/*showShare: true, */showLike: true}
-    this.refs['page'].show(info, ()=>{}, {/*showShare: true, */showLike: true});
+    this.refs['page'].show(info, ()=>{}, {showShare: true});
   }
 }
 

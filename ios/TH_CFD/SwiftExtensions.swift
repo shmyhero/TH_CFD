@@ -25,9 +25,8 @@ extension UIColor {
 // MARK: UIViewController
 extension UIViewController {
 	func noticeSuccess(text: String, autoClear: Bool = true, autoClearTime: Int = 1) {
-		SwiftNotice.showNoticeWithText(NoticeType.success, text: text, autoClear: autoClear, autoClearTime: autoClearTime)
+		SwiftNotice.showNoticeWithText(SwiftNotice.NoticeType.success, text: text, autoClear: autoClear, autoClearTime: autoClearTime)
 	}
-
 }
 
 // MARK: String

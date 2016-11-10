@@ -31,6 +31,7 @@ var TongDaoModule = require('../module/TongDaoModule')
 var DevelopPage = require('./DevelopPage')
 var VersionConstants = require('../VersionConstants')
 var Reward = require('./Reward')
+var StockTransactionInfoModal = require('./StockTransactionInfoModal')
 
 var {EventCenter, EventConst} = require('../EventCenter')
 
@@ -644,13 +645,13 @@ var HomePage = React.createClass({
 				 	{cardItems}
 	   		</ScrollView>
 				<View style={styles.bigSeparator}/>
+				<StockTransactionInfoModal ref='stockTransactionInfoModal' navigator={this.state.navigator}/>
 			</View>
 		)
 
 	},
 
 	pressCard:function(index){
-
 		if(this.state.rawCardsInfo[index].likes == undefined){
 				//special Card like gold and ag
 			// Alert.alert('go to ' + this.state.rawCardsInfo[index].stockName);
@@ -659,9 +660,12 @@ var HomePage = React.createClass({
 			var listData = this.state.rawCardsInfo.filter(function(card){
 				return card.likes !== undefined;
 			})
-			Alert.alert('cardList length = '+listData.length+' selectIndex = '+index);
-		}
+			//Alert.alert('cardList length = '+listData.length+' selectIndex = '+index);
+			this.refs['stockTransactionInfoModal'].showAchievement(listData, index, ()=>{}, {showLike: true,})
+			//showAchievement: function(cardList, currentIndex, callback, pageSettings) {
+			//Alert.alert('cardList length = '+this.state.rawCardsInfo.length+' selectIndex = '+index);
 
+		}
 	},
 
 	renderBannar: function(i) {

@@ -53,7 +53,7 @@ RCT_EXPORT_MODULE();
 			[[UINavigationBar appearance] setTranslucent:NO];
 		});
 		
-	}
+    }
 }
 
 #pragma mark RCT_EXPORT

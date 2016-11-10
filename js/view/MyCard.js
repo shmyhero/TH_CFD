@@ -77,6 +77,7 @@ export default class MyCard extends Component{
 					contentContainerStyle={styles.list}
 					dataSource={this.state.listRawData}
 					enableEmptySections={true}
+					removeClippedSubviews={false}
 					renderRow={this._renderRow.bind(this)} />
         <StockTransactionInfoModal ref='stockTransactionInfoModal'/>
 			</View>

@@ -108,6 +108,7 @@ function getCFDAPI(){
     USER_ACTUAL_LOGOUT: CFD_API_SERVER + '/api/user/demo/logout',
 
     GET_USER_LIVE_CARDS:CFD_API_SERVER + '/api/user/live/card',//我的卡片
+    GET_HOME_CARDS:CFD_API_SERVER + '/api/cards',//首页卡片
 
   }
 }

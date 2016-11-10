@@ -1,6 +1,7 @@
 import React,{Component,PropTypes} from 'react'
 import {StyleSheet,Text,View,Image,Dimensions,} from 'react-native'
 
+var ColorConstants = require('../ColorConstants')
 
 var {height, width} = Dimensions.get('window');
 
@@ -34,20 +35,29 @@ export default class Reward extends Component{
   }
 
   renderBottom(){
+    percentChange = this.props.card.plRate;
+    percentChange = percentChange.toFixed(2)
+    var color = ColorConstants.stock_color(percentChange)
+    var startMark = percentChange > 0 ? "+" : null
+
+
     if(this.props.type === 1){//显示在首页的
       return(
         <View style={styles.bottom}>
         <View style={styles.lineScore}>
-          <Text style = {styles.textScore}>+88.2%</Text>
+          <Text style = {[styles.textScore,{color:color}]}>
+            {startMark} {percentChange} %
+          </Text>
         </View>
         <View style={styles.lineUser}>
           <View style={styles.lineBottom1}>
             <Image
             style={styles.imgUserHead}
-            source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}>
+            // source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}>
+            source={{uri:this.props.card.imgUrlSmall}}>
             </Image>
             <Text numberOfLines={1} style = {styles.textName}>
-              风飘过
+              {this.props.card.userName}
             </Text>
           </View>
           <View style={styles.lineBottom2}>
@@ -56,16 +66,19 @@ export default class Reward extends Component{
             source={require('../../images/like_small.png') }>
             </Image>
             <Text style = {styles.textCounter}>
-            46
+            {this.props.card.likes}
             </Text>
           </View>
         </View>
       </View>);
     }else if(this.props.type === 2){//显示在我的卡片
+
       return(
         <View style={styles.bottom}>
           <View style={styles.lineScore}>
-            <Text style = {styles.textScore}>+88.2%</Text>
+            <Text style = {[styles.textScore,{color:color}]}>
+              {startMark} {percentChange} %
+            </Text>
           </View>
           <View style={styles.lineView}>
              <Text style={styles.textKind}>

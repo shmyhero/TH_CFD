@@ -71,6 +71,7 @@ var HomePage = React.createClass({
 			dataSource: ds.cloneWithRows(PAGES),
 			rawPopularityInfo: [],
 			popularityInfo: bsds.cloneWithRows([]),
+			rawCardsInfo: [],
 			topNews: [],
 			attendedMovieEvent: false,
 			winMovieTicket: false,
@@ -155,7 +156,34 @@ var HomePage = React.createClass({
 			);
 		}
 		this.loadHomeData();
+		this.loadCards();
 	},
+
+	loadCards: function() {
+
+		var url = NetConstants.CFD_API.GET_HOME_CARDS;
+		var userData = LogicData.getUserData()
+
+		NetworkModule.fetchTHUrl(
+			url,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+			},
+			(responseJson) => {
+				this.setState({
+					rawCardsInfo: responseJson,
+				})
+			},
+			(errorMessage) => {
+				Alert.alert('', errorMessage);
+			}
+		);
+
+	},
+
 
 	loadHomeData: function() {
 
@@ -581,12 +609,11 @@ var HomePage = React.createClass({
 
 
 	renderCards: function(){
-		var cards = ['0','1','2','3','4','5']
-		var cardItems = cards.map(
+		var cardItems = this.state.rawCardsInfo.map(
 			(card, i) =>
 				<TouchableOpacity onPress={() => this.pressCard(i)} key={i}>
 					<View style={styles.scroolItem}>
-						<Reward card={1} type={1} divideInLine={3} id={card}></Reward>
+						<Reward card={card} type={1} divideInLine={3} id={card}></Reward>
 					</View>
 				</TouchableOpacity>
 			)
@@ -610,8 +637,8 @@ var HomePage = React.createClass({
 
 	},
 
-	pressCard:function(i){
-		Alert.alert('pressed Card ' + i)
+	pressCard:function(index){
+		Alert.alert('cardList length = '+this.state.rawCardsInfo.length+' selectIndex = '+index);
 	},
 
 	renderBannar: function(i) {
@@ -864,7 +891,7 @@ var HomePage = React.createClass({
 					<View style={styles.bigSeparator}/>
 
 
-					{/* {this.renderCards()} */}
+					{this.renderCards()}
 
 					{this.renderBottomViews()}
 

@@ -101,13 +101,11 @@ var StockTransactionInfoPage = React.createClass({
 		if(!this.state.liked){
 			var userData = LogicData.getUserData();
 			var login = Object.keys(userData).length !== 0
-			Alert.alert("请先登录");
 			if(!login){
-
+				Alert.alert("请先登录");
 			}else{
 				var url = NetConstants.CFD_API.SET_CARD_LIKED;
 				url = url.replace("<id>", this.state.card.cardId);
-
 				NetworkModule.fetchTHUrl(
 					url,
 					{

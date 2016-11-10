@@ -109,9 +109,9 @@ function getCFDAPI(){
 
     GET_USER_LIVE_CARDS:CFD_API_SERVER + '/api/card/my',//我的卡片
     GET_HOME_CARDS:CFD_API_SERVER + '/api/card/top',//首页卡片
-    SET_CARD_READ: CFD_API_SERVER + '/api/live/card/<id>',
-    SET_CARD_LIKED: CFD_API_SERVER + '/api/live/card/like/<id>',
-    SHARE_CARD_TO_HOME: CFD_API_SERVER + '/api/live/card/share/<id>',
+    SET_CARD_READ: CFD_API_SERVER + '/api/card/<id>',
+    SET_CARD_LIKED: CFD_API_SERVER + '/api/card/like/<id>',
+    SHARE_CARD_TO_HOME: CFD_API_SERVER + '/api/card/share/<id>',
 
   }
 }

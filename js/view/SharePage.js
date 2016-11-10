@@ -19,7 +19,8 @@ var NetworkModule = require('../module/NetworkModule');
 var NetConstants = require('../NetConstants');
 var LogicData = require('../LogicData');
 
-import Toast from 'react-native-root-toast';
+var Toast = require('./component/toast/Toast');
+//import Toast from 'react-native-root-toast';
 
 var {height, width} = Dimensions.get('window')
 var SHARE_CONTAINER_HEIGHT = 150;
@@ -126,7 +127,7 @@ var SharePage = React.createClass({
 	},
 
 	renderHomePageShare: function(){
-		if(this.data && this.data.card){
+		if(this.data && this.data.card && ! this.data.card.isShared){
 			return (
 				<TouchableOpacity onPress={()=>{this.shareToHomePage(this.data.card)}}>
 					<Image style={[styles.icon, {transform: [{rotate: '0deg'}]}]}

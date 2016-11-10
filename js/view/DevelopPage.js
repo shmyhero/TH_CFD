@@ -192,7 +192,7 @@ export default class DevelopPage extends Component {
       createAt: '2016-11-09T08:02:37.975Z',
       time: new Date('2016-11-08T07:58:29.67'),
       card:
-       { cardId: 1,
+       { cardId: 11,
          invest: 2000,
          isLong: true,
          leverage: 1,

@@ -199,17 +199,6 @@ var styles = StyleSheet.create({
 		backgroundColor: 'transparent',
 	},
 
-	modalContainer:{
-		flex: 1,
-		justifyContent: 'center',
-		backgroundColor:'rgba(0, 0, 0, 0.5)',
-		paddingLeft: 10,
-		paddingRight: 10,
-		height: height,
-		width: width,
-		// paddingBottom:height/2,
-	},
-
   modalInnerContainer: {
     //borderRadius: 4,
     alignItems: 'stretch',
@@ -231,7 +220,6 @@ var styles = StyleSheet.create({
 		backgroundColor:'rgba(0, 0, 0, 0.5)',
 		height: height,
 		width: width,
-		// paddingBottom:height/2,
 	},
 });
 

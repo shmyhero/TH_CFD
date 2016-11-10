@@ -110,11 +110,13 @@ var SharePage = React.createClass({
 					},
 				},
 				(responseJson) => {
-					card.isShared = true;
-					Toast.show("分享成功", {
-						duration: 500,
-					})
-					this.hide();
+					if(responseJson.success){
+						card.isShared = true;
+						Toast.show("分享成功", {
+							duration: 500,
+						})
+						this.hide();
+					}
 				},
 				(errorMessage) => {
 					console.log(errorMessage)

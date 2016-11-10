@@ -665,7 +665,9 @@ var HomePage = React.createClass({
 				return card.likes !== undefined;
 			})
 			//Alert.alert('cardList length = '+listData.length+' selectIndex = '+index);
-			this.refs['stockTransactionInfoModal'].showAchievement(listData, index, ()=>{}, {showLike: true,})
+			this.refs['stockTransactionInfoModal'].showAchievement(listData, index, ()=>{
+				this.loadCards();
+			}, {showLike: true,})
 			//showAchievement: function(cardList, currentIndex, callback, pageSettings) {
 			//Alert.alert('cardList length = '+this.state.rawCardsInfo.length+' selectIndex = '+index);
 

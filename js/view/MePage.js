@@ -27,6 +27,7 @@ var StorageModule = require('../module/StorageModule')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var OpenAccountRoutes = require('./openAccount/OpenAccountRoutes')
+var UIConstants = require('../UIConstants')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
@@ -606,6 +607,7 @@ var MePage = React.createClass({
 				<ScrollView>
 					{this.renderListView()}
 				</ScrollView>
+				<View style={{width:width,height:UIConstants.TAB_BAR_HEIGHT}}></View>
 			</View>
 		);
 	},

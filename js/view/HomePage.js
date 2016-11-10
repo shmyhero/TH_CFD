@@ -622,7 +622,8 @@ var HomePage = React.createClass({
 
 
 	renderCards: function(){
-		var cardItems = this.state.rawCardsInfo.map(
+
+			var cardItems = this.state.rawCardsInfo.map(
 			(card, i) =>
 				<TouchableOpacity onPress={() => this.pressCard(i)} key={i}>
 					<View style={styles.scroolItem}>
@@ -631,24 +632,27 @@ var HomePage = React.createClass({
 				</TouchableOpacity>
 			)
 
-		return(
-			<View>
-				<View style={[styles.popularityHeaderContainer,{backgroundColor:'white'}]}>
-					<Text style={styles.popularityTitle}>
-						收益分享
-					</Text>
-				</View>
-				<View style={styles.separator}/>
-				<ScrollView style={styles.scrollViewStyle}
-					horizontal={true}
-					showsHorizontalScrollIndicator={false}>
-				 	{cardItems}
-	   		</ScrollView>
-				<View style={styles.bigSeparator}/>
-				<StockTransactionInfoModal ref='stockTransactionInfoModal' navigator={this.state.navigator}/>
-			</View>
-		)
-
+			if(cardItems!==undefined && cardItems.length > 0){
+				return(
+					<View>
+						<View style={[styles.popularityHeaderContainer,{backgroundColor:'white'}]}>
+							<Text style={styles.popularityTitle}>
+								收益分享
+							</Text>
+						</View>
+						<View style={styles.separator}/>
+						<ScrollView style={styles.scrollViewStyle}
+							horizontal={true}
+							showsHorizontalScrollIndicator={false}>
+						 	{cardItems}
+			   		</ScrollView>
+						<View style={styles.bigSeparator}/>
+						<StockTransactionInfoModal ref='stockTransactionInfoModal' navigator={this.state.navigator}/>
+					</View>
+				)
+			}else{
+				return (<View></View>)
+			}
 	},
 
 	pressCard:function(index){

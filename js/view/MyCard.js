@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
 		marginTop:5,
 		marginRight:5,
 		flexDirection:'row',
-		justifyContent: 'space-around',
+		justifyContent: 'flex-start',
 		flexWrap:'wrap',
 	},
 });

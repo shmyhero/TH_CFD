@@ -18,26 +18,36 @@ var imageHeight = imageWidth / 690 * 644;
 
 export default class AchievementCard extends Component {
   static propTypes = {
-    id: PropTypes.number,
-    cardUrl: PropTypes.string,
-    reward: PropTypes.number,
+    showReward: PropTypes.bool,
+    card: PropTypes.object,
+    //reward: PropTypes.number,
   }
 
   static defaultProps = {
-    //cardImage: require('../../images/live_register_banner02.png'),
-    id: 0,
-    reward: 0,
-    //cardImage: require('../../images/Guide-page05.png'),
-    cardUrl: 'http://i10.72g.com/201503/14277923092830.jpg',
-    cardImage: require('../../images/test_achievement.png'),
+    showReward: true,
+    cardInfo: null,
   }
 
   renderReward(){
-    if(this.props.reward){
-      var rewardImagePath = '../../images/achievement_income_' + this.props.reward + '.png';
+    if(this.props.showReward && this.props.card.reward){
+      var rewardImage ;
+      switch(this.props.card.reward){
+        case 1:
+        rewardImage = require('../../images/achievement_income_1.png');
+        break;
+        case 2:
+        rewardImage = require('../../images/achievement_income_2.png');
+        break;
+        case 3:
+        rewardImage = require('../../images/achievement_income_3.png');
+        break;
+      }
+
       return(
-        <Image style={styles.rewardImage}
-          source={require(rewardImagePath)}></Image>
+        <View style={styles.rewardBar}>
+          <Image style={styles.rewardImage}
+            source={rewardImage}></Image>
+        </View>
      )
    }else{
      return null;
@@ -45,28 +55,25 @@ export default class AchievementCard extends Component {
   }
 
   render() {
-    var source = null;
-    if(this.props.cardImage){
-      source = this.props.cardImage;
-    }else{
-      source = {uri: this.props.cardUrl}
-    }
+    if(this.props.card){
+      var source = null;
+      source = {uri: this.props.card.imgUrlBig}
 
-    return (
-      <View style={styles.container}>
-        <Image style={styles.cardImage} source={source}>
-        </Image>
-        <View style={{position: 'absolute', bottom: 20, left:0, right: 0, alignItems:'center',}}>
+      return (
+        <View style={styles.container}>
+          <Image style={styles.cardImage} source={source}>
+          </Image>
           {this.renderReward()}
-         </View>
-      </View>
-    );
+        </View>
+      );
+    }else{
+      return (<View/>)
+    }
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'yellow',
     flexDirection: 'row',
     alignItems: 'stretch',
   },
@@ -81,7 +88,15 @@ const styles = StyleSheet.create({
   rewardImage: {
     height: 23,
     width: 163
-  }
+  },
+
+  rewardBar: {
+    position: 'absolute',
+    bottom: 20,
+    left:0,
+    right: 0,
+    alignItems:'center',
+  },
 });
 
 module.exports = AchievementCard;

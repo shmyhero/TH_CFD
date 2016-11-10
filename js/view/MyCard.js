@@ -11,6 +11,7 @@ var Reward = require('./Reward')
 var LogicData = require('../LogicData');
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
+var StockTransactionInfoModal = require('./StockTransactionInfoModal')
 
 var listRawData = []
 var listResponse = []
@@ -39,8 +40,7 @@ export default class MyCard extends Component{
 	}
 
 	_onPressItem(index){
-		//
-		Alert.alert('cardList length = '+this.state.listResponse.length+' selectIndex = '+index);
+		this.refs['stockTransactionInfoModal'].showAchievement(this.state.listResponse, parseInt(index));
 	}
 
 	//获取我的卡片列表
@@ -76,6 +76,7 @@ export default class MyCard extends Component{
 					dataSource={this.state.listRawData}
 					enableEmptySections={true}
 					renderRow={this._renderRow.bind(this)} />
+        <StockTransactionInfoModal ref='stockTransactionInfoModal'/>
 			</View>
 		);
 	}

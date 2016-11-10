@@ -87,11 +87,11 @@ var StockTransactionInfoPage = React.createClass({
 	_showSharePanel: function(){
 		this.props.hideFunction && this.props.hideFunction();
 		var url = NetConstants.TRADEHERO_API.SHARE_ACHIEVEMENT_CARD_URL;
-		url.replace("<id>", this.state.card.cardId);
+		url = url.replace("<id>", this.state.card.cardId);
 		MainPage.showSharePage({
 			title: "我获得了一张盈交易卡片奖励",
       description: "盈交易-风靡全球的投资神器登陆亚洲",
-      url: url,
+      webpageUrl: url,
       imgUrl: NetConstants.TRADEHERO_API.SHARE_LOGO_URL,
 			card: this.state.card,
 		});

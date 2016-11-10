@@ -13,7 +13,6 @@ import {
 	TouchableOpacity,
 } from 'react-native';
 
-
 var Swiper = require('react-native-swiper')
 var Touchable = require('Touchable');
 var merge = require('merge');
@@ -23,7 +22,8 @@ var StockTransactionInfoBar = require('./StockTransactionInfoBar');
 var AchievementCard = require('./AchievementCard');
 var SharePage = require('./SharePage')
 var MainPage = require('./MainPage')
-var StockTransactionInfoPage = require('./StockTransactionInfoPage')
+var StockTransactionInfoPage = require('./StockTransactionInfoPage');
+var NetworkModule = require('../module/NetworkModule');
 
 var {height, width} = Dimensions.get('window');
 
@@ -63,6 +63,10 @@ var StockTransactionInfoModal = React.createClass({
 			state.isCardList = true;
 			state.cardList = cardList;
 			state.currentIndex = currentIndex;
+
+			if(cardList && cardList.length > currentIndex){
+				this.setPageViewed(cardList[currentIndex]);
+			}
 		}
 		if(pageSettings){
 			state.pageSettings = pageSettings;
@@ -80,6 +84,33 @@ var StockTransactionInfoModal = React.createClass({
 	_setModalVisible: function(visible) {
     this.setState({modalVisible: visible});
   },
+
+	setPageViewed: function(cardInfo){
+		if(cardInfo.isNew){
+			var url = NetConstants.CFD_API.SET_CARD_READ;
+			url = url.replace("<id>", cardInfo.cardId);
+			NetworkModule.fetchTHUrl(
+				url,
+				{
+					method: 'GET',
+				},
+				(responseJson) => {
+					cardInfo.isNew = false;
+				},
+				(errorMessage) => {
+					console.log(errorMessage)
+				}
+			)
+		}
+	},
+
+	onSwipeTouchEnd: function() {
+		var index = this.refs["swiper"].state.index;
+		console.log(index);
+		if(this.state.cardList && this.state.cardList[index]){
+			this.setPageViewed(this.state.cardList[index]);
+		}
+	},
 
 	renderPage: function(transactionInfo, i){
 		if(!i){
@@ -118,15 +149,18 @@ var StockTransactionInfoModal = React.createClass({
 			}
 			return (
 				<Swiper
+					ref={"swiper"}
 					loop={false}
 					bounces={false}
 					autoplay={false}
 					paginationStyle={{
 						bottom: null, top: 12, left: null, right: 10,
 					}}
+					loadMinimal={true}
 					index={this.state.currentIndex}
 					activeDot={activeDot}
-					dot={dot}>
+					dot={dot}
+					onMomentumScrollEnd={(a,b,c)=>this.onSwipeTouchEnd()}>
 					{slides}
 				</Swiper>
 			);
@@ -145,7 +179,9 @@ var StockTransactionInfoModal = React.createClass({
 					style={{height: height, width: width}}
 					onRequestClose={() => {this._setModalVisible(false)}}>
 						<TouchableOpacity activeOpacity={1} onPress={()=>this.hide()}>
-							{this.renderContent()}
+							<View style={styles.modalContainer}>
+								{this.renderContent()}
+							</View>
 						</TouchableOpacity>
 				</Modal>
 			</View>
@@ -188,6 +224,15 @@ var styles = StyleSheet.create({
     width:61,
     height:61,
   },
+
+	modalContainer:{
+		flex: 1,
+		justifyContent: 'center',
+		backgroundColor:'rgba(0, 0, 0, 0.5)',
+		height: height,
+		width: width,
+		// paddingBottom:height/2,
+	},
 });
 
 

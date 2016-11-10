@@ -40,7 +40,9 @@ export default class MyCard extends Component{
 	}
 
 	_onPressItem(index){
-		this.refs['stockTransactionInfoModal'].showAchievement(this.state.listResponse, parseInt(index));
+		this.refs['stockTransactionInfoModal'].showAchievement(this.state.listResponse, parseInt(index), ()=>{
+			//alert("我回来了！");
+		});
 	}
 
 	//获取我的卡片列表

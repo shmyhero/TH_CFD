@@ -10,7 +10,7 @@ import {
 	Dimensions,
 	PanResponder,
 	TouchableOpacity,
-	Swiper,
+	Alert,
 } from 'react-native';
 
 var Touchable = require('Touchable');
@@ -21,7 +21,9 @@ var StockTransactionInfoBar = require('./StockTransactionInfoBar');
 var AchievementCard = require('./AchievementCard');
 var SharePage = require('./SharePage')
 var MainPage = require('./MainPage')
-var NetConstants = require('../NetConstants')
+var NetConstants = require('../NetConstants');
+var LogicData = require('../LogicData');
+var NetworkModule = require('../module/NetworkModule');
 
 var {height, width} = Dimensions.get('window');
 var actionButtonSize = 61;
@@ -83,7 +85,7 @@ var StockTransactionInfoPage = React.createClass({
 	},
 
 	_showSharePanel: function(){
-		this.props.hideFunction && this.props.hideFunction();	
+		this.props.hideFunction && this.props.hideFunction();
 		var url = NetConstants.TRADEHERO_API.SHARE_ACHIEVEMENT_CARD_URL;
 		url.replace("<id>", this.state.card.cardId);
 		MainPage.showSharePage({
@@ -91,16 +93,43 @@ var StockTransactionInfoPage = React.createClass({
       description: "盈交易-风靡全球的投资神器登陆亚洲",
       url: url,
       imgUrl: NetConstants.TRADEHERO_API.SHARE_LOGO_URL,
-			cardID: this.state.card.cardId,
+			card: this.state.card,
 		});
 	},
 
 	likeTransaction: function(){
 		if(!this.state.liked){
-			this.setState({
-				likes: this.state.liked ? this.state.likes - 1 : this.state.likes + 1,
-				liked: !this.state.liked,
-			})
+			var userData = LogicData.getUserData();
+			var login = Object.keys(userData).length !== 0
+			Alert.alert("请先登录");
+			if(!login){
+
+			}else{
+				var url = NetConstants.CFD_API.SET_CARD_LIKED;
+				url = url.replace("<id>", this.state.card.cardId);
+
+				NetworkModule.fetchTHUrl(
+					url,
+					{
+						method: 'GET',
+						headers: {
+							'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+							'Content-Type': 'application/json; charset=UTF-8',
+						},
+					},
+					(responseJson) => {
+						if(responseJson.success){
+							this.setState({
+								likes: this.state.liked ? this.state.likes - 1 : this.state.likes + 1,
+								liked: !this.state.liked,
+							})
+						}
+					},
+					(errorMessage) => {
+						console.log(errorMessage)
+					}
+				)
+			}
 		}
 	},
 
@@ -156,7 +185,7 @@ var StockTransactionInfoPage = React.createClass({
 
 	render: function() {
 		return (
-			<View style={styles.modalContainer}>
+			<View style={styles.container}>
 				<TouchableOpacity activeOpacity={1}>
 				  <View style={styles.modalInnerContainer}>
 						{this.renderContent()}
@@ -173,22 +202,17 @@ var StockTransactionInfoPage = React.createClass({
 
 var styles = StyleSheet.create({
 	container: {
-		position: 'absolute',
+		/*position: 'absolute',
 		left: 0,
 		right: 0,
 		top: 0,
 		bottom: 0,
 		backgroundColor: 'transparent',
-	},
-
-	modalContainer:{
+		*/
 		flex: 1,
 		justifyContent: 'center',
-		backgroundColor:'rgba(0, 0, 0, 0.5)',
-		paddingLeft: 10,
-		paddingRight: 10,
-		height: height,
-		width: width,
+		marginLeft: 10,
+		marginRight: 10,
 		// paddingBottom:height/2,
 	},
 

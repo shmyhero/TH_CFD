@@ -20,7 +20,6 @@ export default class AchievementCard extends Component {
   static propTypes = {
     showReward: PropTypes.bool,
     card: PropTypes.object,
-    //reward: PropTypes.number,
   }
 
   static defaultProps = {

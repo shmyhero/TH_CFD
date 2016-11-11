@@ -111,7 +111,7 @@ var SharePage = React.createClass({
 				},
 				(responseJson) => {
 					if(responseJson.success){
-						card.isShared = true;
+						card.shared = true;
 						Toast.show("分享成功", {
 							duration: 500,
 						})
@@ -129,7 +129,7 @@ var SharePage = React.createClass({
 	},
 
 	renderHomePageShare: function(){
-		if(this.data && this.data.card && ! this.data.card.isShared){
+		if(this.data && this.data.card && ! this.data.card.shared){
 			return (
 				<TouchableOpacity onPress={()=>{this.shareToHomePage(this.data.card)}}>
 					<Image style={[styles.icon, {transform: [{rotate: '0deg'}]}]}

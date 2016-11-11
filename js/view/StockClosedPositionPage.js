@@ -304,7 +304,7 @@ var StockClosedPositionPage = React.createClass({
 	},
 
 	renderAchievementIcon: function(rowData){
-		if(rowData.hasAchievement){
+		if(rowData.hasCard){
 			return(
 				<Image style={styles.achievementIcon}
 					source={require('../../images/achievement_hint.png')}></Image>

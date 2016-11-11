@@ -68,6 +68,7 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var didTabSelectSubscription = null
 var accStatus
+var LIST_SCROLL_VIEW = "listScrollView"
 
 var MePage = React.createClass({
 	getInitialState: function() {
@@ -136,6 +137,10 @@ var MePage = React.createClass({
 
 	reloadMeData: function(){
 		//Check if the user has logged in and the config row need to be shown.
+		if(this.refs[LIST_SCROLL_VIEW]){
+			this.refs[LIST_SCROLL_VIEW].scrollTo({y:0});
+		}
+
 		var userData = LogicData.getUserData();
 		var meData = LogicData.getMeData()
 		var notLogin = Object.keys(meData).length === 0
@@ -604,7 +609,7 @@ var MePage = React.createClass({
 		return (
 			<View style={styles.wrapper}>
 				{this.renderNavBar()}
-				<ScrollView>
+				<ScrollView ref={LIST_SCROLL_VIEW}>
 					{this.renderListView()}
 				</ScrollView>
 				<View style={{width:width,height:UIConstants.TAB_BAR_HEIGHT}}></View>
@@ -728,6 +733,7 @@ var styles = StyleSheet.create({
 		backgroundColor:ColorConstants.TITLE_BLUE,
 		justifyContent: 'center',
 		alignItems:'center',
+		borderRadius: 4,
 	},
 
 	accountStateInfo:{

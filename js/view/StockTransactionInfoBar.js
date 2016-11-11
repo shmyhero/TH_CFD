@@ -19,6 +19,9 @@ var {height, width} = Dimensions.get('window');
 var itemTitleFontSize = Math.round(16*width/375)
 var itemValueFontSize = Math.round(14*width/375)
 
+var TITLE_HEIGHT = 40;
+var ROW_HEIGHT = 60;
+
 export default class StockTransactionInfoBar extends Component {
   static propTypes = {
     transactionInfo: PropTypes.object,
@@ -194,11 +197,13 @@ const styles = StyleSheet.create({
 		borderTopRightRadius: 3,
 		backgroundColor: ColorConstants.TITLE_BLUE,
 		alignItems: 'flex-start',
+    height: TITLE_HEIGHT,
 	},
 
 	centerContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
+    height: ROW_HEIGHT,
 		backgroundColor: '#f5f5f5',
 	},
 
@@ -207,6 +212,7 @@ const styles = StyleSheet.create({
 		borderBottomRightRadius: 3,
 		flexDirection: 'row',
 		alignItems: 'center',
+    height: ROW_HEIGHT,
 		backgroundColor: '#f5f5f5',
 	},
 

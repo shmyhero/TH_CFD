@@ -26,6 +26,7 @@ class SwiftNotice: NSObject {
 	}
 	   
     static func showToastNotice(text: String) {
+		print ("show toast notice:%s", text)
         showNoticeWithText(.message, text: text, autoClear: true, autoClearTime: 1)
     }
     
@@ -54,8 +55,8 @@ class SwiftNotice: NSObject {
             checkmarkView.frame = CGRectMake(30, 15, 46, 46)
             mainView.addSubview(checkmarkView)
         }
-		
-		let label = UILabel(frame: CGRectMake(0, 70, 105, 20))
+		let labelY:CGFloat = type == .message ? 42 : 70
+		let label = UILabel(frame: CGRectMake(0, labelY, 105, 20))
 		label.font = UIFont.systemFontOfSize(17)
 		label.textColor = UIColor(hexInt: 0x4883e7)
 		label.text = text
@@ -89,11 +90,13 @@ class SwiftNotice: NSObject {
 	}
 	
 	static func hideNotice(sender: AnyObject) {
+		print ("hide notice:start")
 		if let window = sender as? UIWindow {
 			if let index = windows.indexOf({ (item) -> Bool in
 				return item == window
 			}) {
 				windows.removeAtIndex(index)
+				print ("hide notice:success")
 			}
 		}
 	}

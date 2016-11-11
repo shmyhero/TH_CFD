@@ -37,8 +37,10 @@ RCT_EXPORT_MODULE();
 		[[SoundManager sharedInstance] playSound:jsonData];
 	}
     else if([dataName isEqualToString:@"toast"]){
-        //    [[SoundManager sharedInstance] playSound:jsonData];
-        [SwiftNotice showToastNotice:jsonData];
+		dispatch_queue_t queue = dispatch_get_main_queue();
+		dispatch_async(queue, ^{
+			[SwiftNotice showToastNotice:jsonData];
+		});
     }
 }
 

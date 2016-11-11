@@ -98,7 +98,7 @@ var ScrollTabView = React.createClass({
 		)
 
 		return (
-			<ScrollView horizontal={true} style={[styles.tabs , {backgroundColor:ColorConstants.title_blue()}]}>
+			<ScrollView horizontal={true} style={styles.tabs}>
 				{tabs}
 			</ScrollView>
 		);

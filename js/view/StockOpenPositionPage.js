@@ -1496,13 +1496,11 @@ var styles = StyleSheet.create({
 	},
 
 	chartTitleTextHighlighted: {
-		flex: 1,
 		fontSize: 15,
 		textAlign: 'center',
 		color: '#70a5ff',
 	},
 	chartTitleText: {
-		flex: 1,
 		fontSize: 15,
 		textAlign: 'center',
 		color: '#7d7d7d'

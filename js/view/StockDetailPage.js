@@ -451,7 +451,7 @@ var StockDetailPage = React.createClass({
 			</TouchableOpacity>
 		)
 		return(
-			<ScrollView horizontal={true} style={{flex: 0,marginTop: 6}}>
+			<ScrollView horizontal={true} style={{flex: 0, marginTop: 6}}>
 				{tabs}
 			</ScrollView>
 			);
@@ -966,11 +966,10 @@ var styles = StyleSheet.create({
 	},
 	tradeButtonView: {
 		flex: 1,
-		margin: 12,
-    paddingTop:8,
-  	paddingBottom:9,
-    borderRadius:5,
-  	borderWidth:1,
+		marginLeft: 12,
+		marginRight: 12,
+		borderRadius:5,
+		borderWidth:1,
 		borderColor: '#133e86',
 		backgroundColor: '#356dce',
 		alignItems: 'center',
@@ -998,6 +997,8 @@ var styles = StyleSheet.create({
 	tradeButtonImage: {
 		width: 35,
 		height: 25,
+		marginTop: 5,
+		marginBottom: 5,
 	},
 	inputImage: {
 		width: 22,
@@ -1099,13 +1100,11 @@ var styles = StyleSheet.create({
 		marginBottom: 5,
 	},
 	chartTitleTextHighlighted: {
-		flex: 1,
 		fontSize: 15,
 		textAlign: 'center',
 		color: '#ffffff'
 	},
 	chartTitleText: {
-		flex: 1,
 		fontSize: 15,
 		textAlign: 'center',
 	},

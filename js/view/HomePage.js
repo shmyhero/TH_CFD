@@ -982,6 +982,7 @@ var styles = StyleSheet.create({
 	blockBodyContent: {
 		color: '#525252',
 		fontSize: 11,
+		marginTop: 5,
 	},
 	backgroundImage: {
 		flex: 1,

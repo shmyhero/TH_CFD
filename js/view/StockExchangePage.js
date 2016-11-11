@@ -204,6 +204,9 @@ var StockExchangePage = React.createClass({
 			userId = 0
 		}
 
+
+		console.log('loggined = '+loggined + ' accState = ' + LogicData.getAccountState());
+
 		if(loggined && LogicData.getAccountState()){//实盘状态
 			if(LogicData.getActualLogin()){
 				return (

@@ -1,7 +1,7 @@
 'use strict';
 
 import React,{Component} from 'react'
-import {StyleSheet,Text,View,Dimensions,ListView,Alert,TouchableOpacity} from 'react-native'
+import {StyleSheet,Text,Image,View,Dimensions,ListView,Alert,TouchableOpacity} from 'react-native'
 
 
 var {height, width} = Dimensions.get('window')
@@ -12,6 +12,7 @@ var LogicData = require('../LogicData');
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var StockTransactionInfoModal = require('./StockTransactionInfoModal')
+var UIConstants = require('../UIConstants')
 
 var listRawData = []
 var listResponse = []
@@ -24,6 +25,7 @@ export default class MyCard extends Component{
 		this.state = {
 			listRawData: ds.cloneWithRows(listRawData),
 			listResponse: undefined,
+			noMessage: false,
 		}
 	}
 
@@ -58,9 +60,11 @@ export default class MyCard extends Component{
 					},
 				},
 				(responseJson) =>{
+					var noMessage = responseJson.cards.length == 0;
 					this.setState({
-						listRawData: ds.cloneWithRows(responseJson.cards),
+					  listRawData: ds.cloneWithRows(responseJson.cards),
 						listResponse : responseJson.cards,
+						noMessage: noMessage,
 						})
 				},
 				(error) => {
@@ -69,10 +73,21 @@ export default class MyCard extends Component{
 			)
 	}
 
+	renderEmptyView(){
+		if(this.state.noMessage){
+			return (
+				<View style={styles.emptyContent}>
+						<Text style={styles.emptyText}>暂无卡片</Text>
+				</View>
+			);
+		}
+	}
+
 	render(){
 		return(
 			<View style={{flex:1}}>
 				<NavBar title='我的卡片' showBackButton={true} navigator={this.props.navigator}/>
+				{this.renderEmptyView()}
 				<ListView
 					contentContainerStyle={styles.list}
 					dataSource={this.state.listRawData}
@@ -102,6 +117,18 @@ const styles = StyleSheet.create({
 		justifyContent: 'flex-start',
 		flexWrap:'wrap',
 	},
+
+	emptyContent: {
+		height:height-UIConstants.HEADER_HEIGHT,
+    alignItems:'center',
+    justifyContent: 'center'
+  },
+  emptyText: {
+    marginTop: 14,
+    color: '#afafaf'
+  },
+
+
 });
 
 

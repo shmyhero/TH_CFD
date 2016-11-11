@@ -175,7 +175,7 @@ export function getAyondoValuesFromGZTValue(GZTresponse){
           if(GZTvalue && GZTvalue.length == 18){
             dataList.push({
               "key": 'birthday',
-              "value": GZTvalue.substring(6, 14)
+              "value": GZTvalue.substring(6, 10) + "." + GZTvalue.substring(10, 12) + "." + GZTvalue.substring(12, 14)
             });
           }
           break;

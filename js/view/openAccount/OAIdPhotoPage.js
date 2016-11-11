@@ -231,15 +231,11 @@ var OAIdPhotoPage = React.createClass({
 			<View style={styles.wrapper}>
 				<ErrorBar error={this.state.error}/>
 				<View style={{height: 15}} />
-				<TouchableOpacity onPress={() => this.pressAddImage(ID_CARD_FRONT)}>
-					<View style={styles.imageArea}>
-						<Image style={styles.addImage} source={this.state.idCardFront}/>
-					</View>
+				<TouchableOpacity style={styles.imageArea} onPress={() => this.pressAddImage(ID_CARD_FRONT)}>
+					<Image style={styles.addImage} source={this.state.idCardFront}/>
 				</TouchableOpacity>
-				<TouchableOpacity onPress={() => this.pressAddImage(ID_CARD_BACK)}>
-					<View style={styles.imageArea}>
-						<Image style={styles.addImage} source={this.state.idCardBack}/>
-					</View>
+				<TouchableOpacity style={styles.imageArea} onPress={() => this.pressAddImage(ID_CARD_BACK)}>
+					<Image style={styles.addImage} source={this.state.idCardBack}/>
 				</TouchableOpacity>
 				<View style={styles.reminderArea}>
 					<Text style={styles.reminderText}>

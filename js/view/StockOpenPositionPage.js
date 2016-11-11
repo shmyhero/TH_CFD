@@ -1049,8 +1049,8 @@ var StockOpenPositionPage = React.createClass({
 				if (rowData.fxData && rowData.fxData.ask) {
 					profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxData)
 				}
-				else if(rowData.fxoutright && rowData.fxoutright.ask){
-					profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxoutright)
+				else if(rowData.fxOutright && rowData.fxOutright.ask){
+					profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxOutright)
 				} else {
 					//Error below! Use the upl will make the percentage and price not synchronized...
 					profitAmount = rowData.upl
@@ -1177,8 +1177,8 @@ var StockOpenPositionPage = React.createClass({
 			if (rowData.security.ccy != UIConstants.USD_CURRENCY) {
 				if (rowData.fxData && rowData.fxData.ask) {
 					profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxData)
-				}	else if(rowData.fxoutright && rowData.fxoutright.ask){
-					profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxoutright)
+				}	else if(rowData.fxOutright && rowData.fxOutright.ask){
+					profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxOutright)
 				} else {
 					profitAmount = rowData.upl
 				}

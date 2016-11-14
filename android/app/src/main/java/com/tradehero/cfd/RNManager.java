@@ -3,7 +3,7 @@ package com.tradehero.cfd;
 import android.app.Application;
 
 import com.BV.LinearGradient.LinearGradientPackage;
-import com.facebook.react.LifecycleState;
+import com.facebook.react.common.LifecycleState;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;

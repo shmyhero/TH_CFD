@@ -338,7 +338,6 @@ var OAPersonalInfoPage = React.createClass({
 				</TouchableOpacity>
 				)
 		} else if(rowData.type === "date"){
-			console.log(rowData.value)
 			return (
 				<TouchableOpacity onPress={()=>this.chooseBirthday()}>
 					<View style={styles.rowWrapper}>
@@ -612,7 +611,7 @@ var datePickerStyle = StyleSheet.create({
 			color: ColorConstants.INPUT_TEXT_COLOR,
 		},
 		dateInput: {
-			height: Platform.OS === 'ios' ? 0: 40,
+			height: Platform.OS === 'ios' ? 20: 40,
 			borderWidth: 0,
 			alignItems: 'flex-start',
 			justifyContent: 'center',
@@ -620,6 +619,7 @@ var datePickerStyle = StyleSheet.create({
 		placeholderText: {
 			fontSize: fontSize,
 			color: ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR,
+			height: 20,
 		},
 });
 
@@ -630,18 +630,20 @@ var datePeriodPickerStyle = StyleSheet.create({
 	},
   dateInput: {
     flex: 1,
-    height: Platform.OS === 'ios' ? 0: 40,
+    height: Platform.OS === 'ios' ? 20: 40,
     borderWidth: 0,
 		alignItems: 'flex-start',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   dateText: {
 		fontSize: fontSize,
 		color: ColorConstants.INPUT_TEXT_COLOR,
+		height: 20,
   },
 	placeholderText: {
 		fontSize: fontSize,
 		color: ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR,
+		height: 20,
 	},
 });
 

@@ -142,7 +142,7 @@ var StockTransactionInfoPage = React.createClass({
 	renderContent: function(){
 		if(this.state.card){
 			return (
-				<View style={{flex: 1, flexDirection:'column', alignSelf: 'stretch'}}>
+				<View style={{/*flex: 1,*/ flexDirection:'column', alignSelf: 'stretch'}}>
 					{this.renderAchievementCard()}
 					<StockTransactionInfoBar card={this.state.card} transactionInfo={this.state.transactionInfo}
 						hideTopCornerRadius={this.state.card !== undefined && this.state.card !== null}/>
@@ -150,7 +150,7 @@ var StockTransactionInfoPage = React.createClass({
 			);
 		}else{
 			return (
-				<View style={{flex: 1, flexDirection:'column', alignSelf: 'stretch'}}>
+				<View style={{/*flex: 1,*/ flexDirection:'column', alignSelf: 'stretch'}}>
 					{this.renderAchievementCard()}
 					<StockTransactionInfoBar transactionInfo={this.state.transactionInfo}
 						hideTopCornerRadius={this.state.card !== undefined && this.state.card !== null}/>
@@ -189,7 +189,7 @@ var StockTransactionInfoPage = React.createClass({
 						{this.renderContent()}
 					</View>
 				</TouchableOpacity>
-				<View style={{alignItems: 'center', flexDirection: 'row', justifyContent: 'space-around'}}>
+				<View style={{alignItems: 'center', flexDirection: 'row', justifyContent: 'space-around',}}>
 					{this.renderShare()}
 					{this.renderLike()}
 				</View>
@@ -207,10 +207,11 @@ var styles = StyleSheet.create({
 		bottom: 0,
 		backgroundColor: 'transparent',
 		*/
-		flex: 1,
+		//flex: 1,
 		justifyContent: 'center',
 		marginLeft: 10,
 		marginRight: 10,
+		alignSelf: 'center',
 		// paddingBottom:height/2,
 	},
 
@@ -224,7 +225,7 @@ var styles = StyleSheet.create({
     marginTop: (height
 			- UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
 			- UIConstants.ANDROID_SOFT_MENU_HEIGHT
-			- actionButtonSize - 150 - ((width - 20) / 690 * 644))/3,
+			- actionButtonSize - 160 - ((width - 20) / 690 * 644))/3,
 		flexDirection: 'row',
   },
 

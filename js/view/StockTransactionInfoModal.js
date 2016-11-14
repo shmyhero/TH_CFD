@@ -133,18 +133,30 @@ var StockTransactionInfoModal = React.createClass({
 				pageSettings={this.state.pageSettings}
 				showReward={false}
 				key={i}
-				hideFunction={()=>this.hide()}/>
+				hideFunction={()=>this.hide()}
+				style={{
+					flex: 1,
+					justifyContent: 'center',
+					marginLeft: 10,
+					marginRight: 10,
+					//alignSelf: 'center',
+					backgroundColor: 'purple',
+					alignSelf: 'flex-end',
+				}}/>
 		);
 	},
 
 	renderContent: function(){
+		//return (<View style={{backgroundColor:'red', height: 100, width: 100}}/>);
 		if(this.state.isCardList){
 			var activeDot = <View/>;
 			var dot = <View/>;
 			var slides = [];
 			for(var i = 0 ; i < this.state.cardList.length; i ++){
 				slides.push(
-					this.renderPageWithCard(this.state.cardList[i], i)
+					<View style={{flex: 1, flexDirection: 'row'}}>
+						{this.renderPageWithCard(this.state.cardList[i], i)}
+					</View>
 				);
 			}
 			return (
@@ -160,7 +172,8 @@ var StockTransactionInfoModal = React.createClass({
 					index={this.state.currentIndex}
 					activeDot={activeDot}
 					dot={dot}
-					onMomentumScrollEnd={(a,b,c)=>this.onSwipeTouchEnd()}>
+					onMomentumScrollEnd={(a,b,c)=>this.onSwipeTouchEnd()}
+					>
 					{slides}
 				</Swiper>
 			);
@@ -218,6 +231,7 @@ var styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		backgroundColor:'rgba(0, 0, 0, 0.5)',
+		alignItems: 'center',
 		height: height,
 		width: width,
 	},

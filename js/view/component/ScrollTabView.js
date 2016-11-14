@@ -171,7 +171,7 @@ var styles = StyleSheet.create({
 	},
 
 	tabs: {
-		flex: 0,
+		//flex: 0,
 		alignSelf: 'stretch',
 		backgroundColor: ColorConstants.TITLE_BLUE,
 	},

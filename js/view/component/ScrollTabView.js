@@ -85,7 +85,8 @@ var ScrollTabView = React.createClass({
 			(tabName, i) =>
 			<TouchableHighlight style={[styles.tabItemContainer,
 				{width: width / this.props.tabNames.length,
-					 paddingBottom: 10}
+				 paddingBottom: 10,
+}
 			]} key={i}
 					underlayColor={ColorConstants.title_blue()}
 					onPress={() => this.tabClicked(i)}>
@@ -98,9 +99,11 @@ var ScrollTabView = React.createClass({
 		)
 
 		return (
-			<ScrollView horizontal={true} style={styles.tabs}>
-				{tabs}
-			</ScrollView>
+			<View>
+				<ScrollView horizontal={true} style={styles.tabs}>
+					{tabs}
+				</ScrollView>
+			</View>
 		);
 	},
 
@@ -171,7 +174,7 @@ var styles = StyleSheet.create({
 	},
 
 	tabs: {
-		//flex: 0,
+		flex: 0,
 		alignSelf: 'stretch',
 		backgroundColor: ColorConstants.TITLE_BLUE,
 	},

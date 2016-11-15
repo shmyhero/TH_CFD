@@ -16,6 +16,7 @@ var LAST_SUPER_PRIORITY_HINT_DATE = '@TH_CFD:lastSuperPriorityDateData'
 var ACCOUNT_STATE = '@TH_CFD:accountState'
 var CFD_SERVER_TYPE = '@TH_CFD:CFDServerType'
 var OPEN_ACCOUNT_DATA = '@TH_CFD:openAccountDataStep<step>'
+var OPEN_ACCOUNT_LAST_STEP = '@TH_CFD:lastOpenAccountStep'
 
 export async function loadUserData() {
 	try {
@@ -248,6 +249,33 @@ export async function removeOpenAccountData(step) {
 	try {
     var key = OPEN_ACCOUNT_DATA.replace("<step>", step);
 		await AsyncStorage.removeItem(key);
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+//Only use this if you want the user to move into a route with is before the last
+//data he has entered.
+export async function setLastOpenAccountRoute(step){
+  try {
+  	await AsyncStorage.setItem(OPEN_ACCOUNT_LAST_STEP, step)
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function loadLastOpenAccountRoute(){
+  try {
+    var value = await AsyncStorage.getItem(OPEN_ACCOUNT_LAST_STEP);
+    return value;
+  } catch (error) {
+    console.log('AsyncStorage error: ' + error.message);
+  }
+}
+
+export async function removeLastOpenAccountRoute() {
+	try {
+		await AsyncStorage.removeItem(OPEN_ACCOUNT_LAST_STEP);
 	} catch (error) {
 		console.log('AsyncStorage error: ' + error.message);
 	}

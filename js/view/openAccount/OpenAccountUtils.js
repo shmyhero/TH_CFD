@@ -148,14 +148,14 @@ export function getAyondoValuesFromGZTValue(GZTresponse){
           console.log("realname: " + GZTvalue);
           if(GZTvalue && GZTvalue.length >= 1){
             if(GZTvalue.length <= 3){
-              firstName = GZTvalue.substring(0,1);
-              lastName = GZTvalue.substring(1, GZTvalue.length);
+              lastName = GZTvalue.substring(0,1);
+              firstName = GZTvalue.substring(1, GZTvalue.length);
             }else{
-              firstName = GZTvalue.substring(0,2);
-              lastName = GZTvalue.substring(2, GZTvalue.length);
+              lastName = GZTvalue.substring(0,2);
+              firstName = GZTvalue.substring(2, GZTvalue.length);
             }
           }
-          console.log(GZTvalue + "firstName " + firstName + "lastName " + lastName)
+          console.log(GZTvalue + "firstName " + firstName + "lastName " + lastName);
           var firstNameData = {
             "key": "firstName",
             "value": firstName,
@@ -168,14 +168,21 @@ export function getAyondoValuesFromGZTValue(GZTresponse){
           dataList.push(lastNameData);
           break;
         case "id_code":
+          if(GZTvalue.length > 18){
+            GZTvalue = GZTvalue.substring(0,18);
+          }
+
           dataList.push({
             "key": 'idCode',
             "value": GZTvalue,
           });
-          if(GZTvalue && GZTvalue.length == 18){
+
+          if(GZTvalue && GZTvalue.length >= 18){
+            var value = GZTvalue.substring(6, 10) + "." + GZTvalue.substring(10, 12) + "." + GZTvalue.substring(12, 14);
+            console.log("value:" + value);
             dataList.push({
               "key": 'birthday',
-              "value": GZTvalue.substring(6, 10) + "." + GZTvalue.substring(10, 12) + "." + GZTvalue.substring(12, 14)
+              "value": value
             });
           }
           break;

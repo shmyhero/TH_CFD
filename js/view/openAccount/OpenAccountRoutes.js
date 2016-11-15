@@ -33,6 +33,19 @@ var OpenAccountInfos = [
 var errorRoutes = [];
 
 var lastStoredData = null;
+var lastInputIndex = null;
+
+export function setCurrentRouteStateAsLatest(navigator, data){
+  var routes = navigator.getCurrentRoutes();
+  var lastRoute = routes[routes.length-1];
+  if(lastRoute){
+    var currentStep = lastRoute.step;
+    storeCurrentInputData(currentStep, data);
+    StorageModule.setLastOpenAccountRoute(currentStep.toString());
+  	console.log("storeCurrentInputData: " + currentStep.toString());
+    lastInputIndex = currentStep;
+  }
+}
 
 export function backToPreviousRoute(navigator, data, onPop, onPageDismiss){
   console.log("backToPreviousRoute");
@@ -57,6 +70,7 @@ export function backToPreviousRoute(navigator, data, onPop, onPageDismiss){
         name: MainPage.OPEN_ACCOUNT_ROUTE,
         step: nextStep,
         onPop: onPop,
+        isBack: true,
       })
     }else{
       popToLastPage(navigator, onPop);
@@ -69,19 +83,34 @@ export function getLatestInputStep(){
   return new Promise(resolve=>{
     loadLastInputData()
     .then(()=>{
-      if(lastStoredData == null){
-        resolve(0);
-      }
-      for(var i = 0; i < OpenAccountInfos.length; i++){
-        if(!lastStoredData[i]){
-          if(i > 0){
-            resolve(i-1);
-          }else{
-            resolve(i);
-          }
+      StorageModule.loadLastOpenAccountRoute()
+        .then((lastIndex)=>{
+        if(lastStoredData == null){
+          resolve(0);
           return;
         }
-      }
+
+        console.log("lastIndex: " + lastIndex);
+        if(lastIndex !== undefined && lastIndex !== null){
+          lastInputIndex = parseInt(lastIndex);
+          resolve(lastInputIndex);
+
+
+          console.log("lastInputIndex: " + lastInputIndex);
+          return;
+        }
+
+        for(var i = 0; i < OpenAccountInfos.length; i++){
+          if(!lastStoredData[i]){
+            if(i > 0){
+              resolve(i-1);
+            }else{
+              resolve(i);
+            }
+            return;
+          }
+        }
+      });
     })
   });
 }
@@ -107,7 +136,8 @@ export function showOARoute(navigator, step, onPop, data, nextStep){
       <Page navigator={navigator}
         ref={(ref) => page = ref}
         data={data}
-        onPop={onPop}/>
+        onPop={onPop}
+        />
     </View>
   )
 }
@@ -137,6 +167,7 @@ export function showErrorRoute(navigator, onPop, nextRouteData){
       data: nextRouteData,
       backToPage: currentStep,
       nextStep: nextStep,
+      isError: true,
     });
   }
 }
@@ -148,6 +179,11 @@ export function goToNextRoute(navigator, data, onPop, nextRouteData){
     var currentStep = lastRoute.step;
 
     storeCurrentInputData(currentStep, data);
+
+    if(lastInputIndex !== null){
+      StorageModule.removeLastOpenAccountRoute();
+      lastInputIndex = null;
+    }
 
     var nextStep = currentStep + 1;
     if(lastRoute.nextStep){
@@ -167,6 +203,7 @@ export function goToNextRoute(navigator, data, onPop, nextRouteData){
         step: nextStep,
         onPop: onPop,
         data: nextRouteData,
+        isNext: true,
       });
     }
   }
@@ -277,6 +314,10 @@ function clearAllInputData(currentIndex){
       clearAllInputData(index);
     }else{
       lastStoredData = null;
+      if(lastInputIndex !== null){
+        StorageModule.removeLastOpenAccountRoute();
+        lastInputIndex = null;
+      }
     }
   },()=>{
     console.log("removeOpenAccountData " + index + " error")

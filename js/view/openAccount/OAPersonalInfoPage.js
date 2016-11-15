@@ -28,6 +28,9 @@ var TalkingdataModule = require('../../module/TalkingdataModule')
 var OpenAccountRoutes = require('./OpenAccountRoutes')
 var OpenAccountUtils = require('./OpenAccountUtils')
 var ErrorBar = require('./ErrorBar')
+var NetworkModule = require('../../module/NetworkModule');
+var NetConstants = require('../../NetConstants');
+var LogicData = require('../../LogicData');
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
@@ -42,15 +45,17 @@ const GenderTranslater = [
 ]
 
 var defaultRawData = [
-		{"title":"姓", "key": "firstName", "value":"", hint:"请输入姓", maxLength: 50,},	//TODO: add ignoreInRegistery when API is avaliable.
-		{"title":"名", "key": "lastName", "value":"", hint:"请输入名", maxLength: 50,},
+		{"title":"姓", "key": "lastName", "value":"", hint:"请输入姓", maxLength: 50, "ignoreInRegistery": true},	//TODO: add ignoreInRegistery when API is avaliable.
+		{"title":"名", "key": "firstName", "value":"", hint:"请输入名", maxLength: 50, "ignoreInRegistery": true},
 		{"title":"性别", "key": "gender", "value":"", hint: "点击选择", "type": "choice", "choices": GenderTranslater},
 		{"title":"出生日期", "key": "birthday", "value":"", hint: "点击选择", "type": "date"},
 		{"title":"民族", "key": "ethnic", "value":"", hint:"请输入民族", maxLength: 10,},
-		{"title":"身份证号", "key": "idCode", "value":"", hint:"请输入身份证号", maxLength: 18, minLength: 18},
+		{"title":"身份证号", "key": "idCode", "value":"", hint:"请输入身份证号", maxLength: 18, minLength: 18, "ignoreInRegistery": true},
 		{"title":"证件地址", "key": "addr", "value":"", hint:"请输入证件地址", maxLength:75, maxLine: 2},
 		{"title":"签发机关", "key": "issueAuth", hint:"请输入签发机关", "value":""},
 		{"title":"有效期限", "key": "validPeriod", "value":"", "type": "datePeriod"}];
+
+const DEFAULT_ERROR = "身份一致性验证失败";
 
 var OAPersonalInfoPage = React.createClass({
 	mixins: [TimerMixin],
@@ -77,7 +82,16 @@ var OAPersonalInfoPage = React.createClass({
 
 		if (this.props.data && this.props.data) {
 			OpenAccountUtils.getPageListRawDataFromData(this.listRawData, this.props.data);
-			console.log("getInitialState: " + JSON.stringify(this.props.data) )
+
+			var routes = this.props.navigator.getCurrentRoutes();
+			var lastRoute = routes[routes.length-1];
+			if(lastRoute){
+				console.log("lastRoute: " + JSON.stringify(lastRoute));
+				if(lastRoute.isNext){
+					console.log("getInitialState!");
+					OpenAccountRoutes.setCurrentRouteStateAsLatest(this.props.navigator, this.listRawData);
+				}
+			}
 		}
 		return {
 			dataSource: this.ds.cloneWithRows(this.listRawData),
@@ -88,13 +102,60 @@ var OAPersonalInfoPage = React.createClass({
 	},
 
 	gotoNext: function() {
-		//TODO: GZT validation.
+		//GZT validation.
 		if(this.checkValues()){
 			this.setState({
 				validateInProgress: true,
+				error: null,
 			})
-			TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP3, TalkingdataModule.LABEL_OPEN_ACCOUNT);
-			OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
+
+			var verifyBody = {};
+			for(var i = 0; i< this.listRawData.length; i++){
+				if(this.listRawData[i].ignoreInRegistery){
+					var key = this.listRawData[i].key
+					if(this.listRawData[i].key == "idCode"){
+						key = "userId";
+					}
+					verifyBody[key] = this.listRawData[i].value;
+				}
+			}
+
+			var userData = LogicData.getUserData()
+		 	var notLogin = Object.keys(userData).length === 0
+			NetworkModule.fetchTHUrl(
+				NetConstants.CFD_API.ID_CHECK,
+				{
+					method: 'POST',
+					body: JSON.stringify(verifyBody),
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						'Content-Type': 'application/json; charset=utf-8',
+					},
+					showLoading: true,
+				},
+				(responseJson) => {
+					if(responseJson.result == 0){
+						TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP3, TalkingdataModule.LABEL_OPEN_ACCOUNT);
+						OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
+					}else{
+						if(responseJson.message){
+							var errorMessage = decodeURIComponent(responseJson.message);
+							console.log("ID validation failed. Error: " + errorMessage);
+						}
+						this.setState({
+							error: decodeURIComponent(DEFAULT_ERROR),
+							validateInProgress: false,
+						})
+					}
+				},
+				(error) => {
+					this.setState({
+						error: DEFAULT_ERROR,
+						validateInProgress: false,
+					})
+				}
+			);
+
 		}
 	},
 
@@ -109,6 +170,9 @@ var OAPersonalInfoPage = React.createClass({
 	textInputChange: function(text, rowID) {
 		this.listRawData[rowID].value = text;
 		this.listRawData[rowID].error = null;
+		this.setState({
+			error: null,
+		})
 		this.updateList();
 	},
 
@@ -338,6 +402,7 @@ var OAPersonalInfoPage = React.createClass({
 				</TouchableOpacity>
 				)
 		} else if(rowData.type === "date"){
+			console.log("birthday: " + rowData.value)
 			return (
 				<TouchableOpacity onPress={()=>this.chooseBirthday()}>
 					<View style={styles.rowWrapper}>
@@ -402,14 +467,14 @@ var OAPersonalInfoPage = React.createClass({
 
 	render: function() {
 		var pickerModal = null
-		var error = null;
+		var error = this.state.error;
 
 		var nextEnabled = OpenAccountUtils.canGoNext(this.listRawData);
 		//console.log("listRawData: " + JSON.stringify(listRawData));
 		for (var i = 0; i < this.listRawData.length; i++) {
 			if(this.listRawData[i].error){
 				if(error){
-					error = "身份一致性验证失败";
+					error = DEFAULT_ERROR;
 				}else{
 					error = "您输入的" + this.listRawData[i].title + "有误，请核对后重试";
 				}
@@ -421,6 +486,10 @@ var OAPersonalInfoPage = React.createClass({
 				}
 			}
 		};
+
+		if(error){
+			nextEnabled = false;
+		}
 
 		if (this.state.selectedPicker>=0) {
 			pickerModal = (
@@ -440,7 +509,7 @@ var OAPersonalInfoPage = React.createClass({
 				</ScrollView>
 				<View style={styles.bottomArea}>
 					<Button style={styles.buttonArea}
-						enabled={nextEnabled}
+						enabled={this.state.validateInProgress ? false : nextEnabled}
 						onPress={this.gotoNext}
 						textContainerStyle={styles.buttonView}
 						textStyle={styles.buttonText}

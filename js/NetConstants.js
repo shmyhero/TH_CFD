@@ -105,6 +105,7 @@ function getCFDAPI(){
     REGISTER_LIVE_ACCOUNT: CFD_API_SERVER + '/api/user/live/signup', //实盘注册
     DETELE_LIVE_ACCOUNT: CFD_API_SERVER + '/api/user/live/delete', //删除实盘账号绑定（测试用！)
     ID_CARD_OCR: CFD_API_SERVER + '/api/user/ocr', //身份证OCR
+    ID_CHECK: CFD_API_SERVER + '/api/user/faceCheck', //验证身份证正确性
     USER_ACTUAL_LOGOUT: CFD_API_SERVER + '/api/user/demo/logout',
 
     GET_USER_LIVE_CARDS:CFD_API_SERVER + '/api/card/my',//我的卡片

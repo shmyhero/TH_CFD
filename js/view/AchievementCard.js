@@ -78,7 +78,10 @@ const styles = StyleSheet.create({
   },
 
   cardImage:{
-    //position: 'absolute',
+    padding: 0,
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
+    borderWidth: 0,
     width: imageWidth,
     height: imageHeight,
     resizeMode: "stretch",

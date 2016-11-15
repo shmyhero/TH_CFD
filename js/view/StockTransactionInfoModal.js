@@ -154,7 +154,7 @@ var StockTransactionInfoModal = React.createClass({
 			var slides = [];
 			for(var i = 0 ; i < this.state.cardList.length; i ++){
 				slides.push(
-					<View style={{flex: 1, flexDirection: 'row'}}>
+					<View style={{flex: 1, flexDirection: 'row'}} key={i}>
 						{this.renderPageWithCard(this.state.cardList[i], i)}
 					</View>
 				);

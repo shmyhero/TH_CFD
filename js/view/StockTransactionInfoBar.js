@@ -189,12 +189,14 @@ const styles = StyleSheet.create({
   container: {
     //flex: 1,
     alignSelf: 'stretch',
+    width: width - 20,
     //backgroundColor: 'gray',
   },
 
 	titleContainer: {
-		borderTopLeftRadius: 3,
-		borderTopRightRadius: 3,
+		borderTopLeftRadius: 4,
+		borderTopRightRadius: 4,
+    borderWidth:0,
 		backgroundColor: ColorConstants.TITLE_BLUE,
 		alignItems: 'flex-start',
     height: TITLE_HEIGHT,
@@ -208,8 +210,8 @@ const styles = StyleSheet.create({
 	},
 
 	bottomContainer: {
-		borderBottomLeftRadius: 3,
-		borderBottomRightRadius: 3,
+		borderBottomLeftRadius: 4,
+		borderBottomRightRadius: 4,
 		flexDirection: 'row',
 		alignItems: 'center',
     height: ROW_HEIGHT,

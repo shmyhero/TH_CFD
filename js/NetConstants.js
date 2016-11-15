@@ -51,7 +51,7 @@ function getCFDAPI(){
     GET_SEARCH_STOCK_API: CFD_API_SERVER + '/api/security/search',
     GET_SEARCH_STOCK_LIVE_API: CFD_API_SERVER + '/api/security/live/search',//LIVE OK
     GET_STOCK_DETAIL_API: CFD_API_SERVER + '/api/security/<stockCode>',
-    GET_STOCK_DETAIL_LIVE_API: CFD_API_SERVER + '/api/live/security/<stockCode>',//LIVE OK
+    GET_STOCK_DETAIL_LIVE_API: CFD_API_SERVER + '/api/security/live/<stockCode>',//LIVE OK
     GET_STOCK_PRICE_TODAY_API: CFD_API_SERVER + '/api/quote/<stockCode>/tick/<chartType>',
     GET_STOCK_PRICE_TODAY_LIVE_API: CFD_API_SERVER + '/api/quote/live/<stockCode>/tick/<chartType>',//LIVE OK
     GET_OPEN_POSITION_API: CFD_API_SERVER + '/api/position/open',
@@ -81,7 +81,9 @@ function getCFDAPI(){
     BIND_WECHAT_API: CFD_API_SERVER + '/api/user/bindwechat?openid=<wechatOpenId>',
     UPDATE_HEAD_PHOTO: CFD_API_SERVER + '/api/user/photo',
     GET_ALL_STOCK_ALERT: CFD_API_SERVER + '/api/user/stockAlert/all',
+    GET_ALL_STOCK_ALERT_LIVE: CFD_API_SERVER + '/api/user/live/stockAlert/all',//LIVE
     UPDATE_STOCK_ALERT: CFD_API_SERVER + '/api/user/stockAlert',
+    UPDATE_STOCK_ALERT_LIVE: CFD_API_SERVER + '/api/user/live/stockAlert',//LIVE
     POST_PUSH_TOKEN: CFD_API_SERVER + '/api/user/pushtoken',
     POST_PUSH_TOKEN_AUTH: CFD_API_SERVER + '/api/user/pushtokenauth',
     GET_STOCK_KLINE_FIVE_M: CFD_API_SERVER + '/api/quote/<securityId>/kline/5m',

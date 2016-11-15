@@ -3,6 +3,7 @@
 var StorageModule = require('./module/StorageModule')
 var NativeDataModule = require('./module/NativeDataModule')
 var ColorConstants = require('./ColorConstants')
+var {EventCenter, EventConst} = require('./EventCenter')
 
 var userData = {};
 var meData = {};
@@ -36,11 +37,17 @@ var LogicData = {
 
 	setAccountState: function(state){
 		// state = true
+
+		if(accountState!==state){
+			EventCenter.emitAccountStateChangeEvent;
+		}
+
 		accountState = state;
 		StorageModule.setAccountState(state)
 		console.log("setAccountState = " + state);
 		NativeDataModule.passRawDataToNative('accountState', ''+state)
 		ColorConstants.setScheme(state ? ColorConstants.COLOR_THEME_LIVE: ColorConstants.COLOR_THEME_SIMULATOR)
+
 	},
 
 	getAccountState: function(){

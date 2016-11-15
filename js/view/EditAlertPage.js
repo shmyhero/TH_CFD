@@ -371,8 +371,13 @@ var EditAlertPage = React.createClass({
     	"LowEnabled": lowEnabled
 		}
 
+		var url = NetConstants.CFD_API.UPDATE_STOCK_ALERT;
+		if(LogicData.getAccountState()){
+			url = NetConstants.CFD_API.UPDATE_STOCK_ALERT_LIVE;
+		}
+
 		NetworkModule.fetchTHUrl(
-			NetConstants.CFD_API.UPDATE_STOCK_ALERT,
+			url,
 			{
 				method: 'PUT',
 				headers: {

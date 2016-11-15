@@ -32,7 +32,14 @@ var StockStatisticsPage = React.createClass({
 			maxBarSize: 1,
 			barAnimPlayed: false,
 			balanceData: balanceData,
+			isClear: false,
 		}
+	},
+
+	clearViews:function(){
+		this.setState({
+			isClear:true
+		})
 	},
 
 	tabPressed: function(index) {
@@ -43,6 +50,7 @@ var StockStatisticsPage = React.createClass({
 		this.setState({
 			statisticsBarInfo: [],
 			statisticsSumInfo: [],
+			isClear:false,
 		})
 
 		var userData = LogicData.getUserData()
@@ -244,16 +252,19 @@ var StockStatisticsPage = React.createClass({
 		}
 	},
 
+	renderOrClear:function(){
+		if(this.state.isClear){
+			return(<View style={{flex:10000}}></View>)
+		}
+	},
+
 	render: function() {
 		return (
 			<View style={[styles.wrapper, {width:width}]}>
-
+				{this.renderOrClear()}
 				{this.renderHeader()}
-
 				{this.renderBody()}
-
 				{this.renderChart()}
-
 			</View>
 		);
 	},

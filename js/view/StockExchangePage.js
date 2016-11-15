@@ -29,6 +29,7 @@ var OAStatusPage= require('./openAccount/OAStatusPage')
 
 var tabNames = ['持仓', '平仓', '统计']
 var didTabSelectSubscription = null
+var didAccountChangeSubscription = null
 
 var StockExchangePage = React.createClass({
 
@@ -40,12 +41,19 @@ var StockExchangePage = React.createClass({
 	},
 
 	componentDidMount: function() {
-		didTabSelectSubscription = EventCenter.getEventEmitter().
-			addListener(EventConst.EXCHANGE_TAB_PRESS_EVENT, this.onTabChanged);
+		didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.EXCHANGE_TAB_PRESS_EVENT, this.onTabChanged);
+		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, this.clearViews);
 	},
 
 	componentWillUnmount: function() {
 		didTabSelectSubscription && didTabSelectSubscription.remove();
+		didAccountChangeSubscription && didAccountChangeSubscription.remove();
+	},
+
+	clearViews:function(){
+			this.refs['page2'].clearViews()
+			this.refs['page1'].clearViews()
+			this.refs['page0'].clearViews()
 	},
 
 	onPageSelected: function(index: number) {
@@ -64,7 +72,7 @@ var StockExchangePage = React.createClass({
 	},
 
 	onTabChanged: function(){
-				LogicData.setTabIndex(2);
+	  LogicData.setTabIndex(2);
 		var userData = LogicData.getUserData()
 		var loggined = Object.keys(userData).length !== 0
 
@@ -115,8 +123,11 @@ var StockExchangePage = React.createClass({
 			// 		<Text style={{textAlign:'center',fontSize:20, alignSelf:'center',justifyContent:'center',backgroundColor:'yellow'}}>点击登录实盘账户</Text>
 			// 	</TouchableOpacity>
 			// </View>
+			<View>
+				<NavBar title="我的交易" navigator={this.props.navigator}/>
+				<OAStatusPage onLoginClicked={this.jumpToLogin}/>
+			</View>
 
-			<OAStatusPage onLoginClicked={this.jumpToLogin}/>
 		)
 	},
 

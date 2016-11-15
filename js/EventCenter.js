@@ -10,6 +10,7 @@ const EventConst = {
 	STOCK_TAB_PRESS_EVENT : 'stockTabEvent',
 	EXCHANGE_TAB_PRESS_EVENT : 'exchangeTabEvent',
 	ME_TAB_PRESS_EVENT : 'meTabEvent',
+	ACCOUNT_STATE_CHANGE : 'account_state_change',
 }
 
 var EventCenter = {
@@ -33,6 +34,10 @@ var EventCenter = {
 
 	emitMeTabPressEvent: function(){
 		eventEmitter.emit(EventConst.ME_TAB_PRESS_EVENT)
+	},
+
+	emitAccountStateChangeEvent: function(){
+		eventEmitter.emit(EventConst.ACCOUNT_STATE_CHANGE)
 	},
 }
 

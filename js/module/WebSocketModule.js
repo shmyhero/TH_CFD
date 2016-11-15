@@ -110,7 +110,8 @@ export function registerInterestedStocks(stockList) {
 	if (webSocketConnection.state == 1 && stockPriceWebSocketProxy !== null && stockList !== null && stockList.length > 0) {
 		console.log('Send stockList to websocket server: ' + stockList)
 		previousInterestedStocks = stockList
-	    var messagePromise = stockPriceWebSocketProxy.invoke('S', stockList);
+		var invokeS = LogicData.getAccountState()?'SL':'S';
+	  var messagePromise = stockPriceWebSocketProxy.invoke(invokeS, stockList);
 
 	    messagePromise
 	    	.done(() => {

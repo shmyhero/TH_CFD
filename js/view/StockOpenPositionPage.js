@@ -73,6 +73,7 @@ var StockOpenPositionPage = React.createClass({
 			stopLossSwitchIsOn: false,
 			profitLossUpdated: false,
 			profitLossConfirmed: false,
+			isClear:false,
 		};
 	},
 
@@ -86,6 +87,12 @@ var StockOpenPositionPage = React.createClass({
 
 	tabPressed: function() {
 		this.loadOpenPositionInfo()
+	},
+
+	clearViews:function(){
+		this.setState({
+			isClear:true
+		})
 	},
 
 	loadOpenPositionInfo: function() {
@@ -104,6 +111,10 @@ var StockOpenPositionPage = React.createClass({
 				},
 			},
 			(responseJson) => {
+				this.setState({
+					isClear:false,
+				})
+				
 				var interestedStockIds = []
 				for (var i = 0; i < responseJson.length; i++) {
 					var currencySymbol = responseJson[i].security.ccy
@@ -127,6 +138,7 @@ var StockOpenPositionPage = React.createClass({
 						stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
 						selectedRow: -1,
 						selectedSubItem: 0,
+
 					})
 				}
 				else {
@@ -1069,7 +1081,7 @@ var StockOpenPositionPage = React.createClass({
 
 				<TouchableHighlight
 					underlayColor={rowData.security.isOpen ? ColorConstants.title_blue() : '#dfdee4'}
-					onPress={() => this.okPress(rowData)} style={[styles.okView,{backgroundColor:ColorConstants.title_blue()},this.state.showExchangeDoubleCheck && {backgroundColor:'white'}, !rowData.security.isOpen && styles.okViewDisab]}
+					onPress={() => this.okPress(rowData)} style={[styles.okView,{backgroundColor:ColorConstants.title_blue()},this.state.showExchangeDoubleCheck && {backgroundColor:'white',borderWidth:1,borderColor:ColorConstants.title_blue()}, !rowData.security.isOpen && styles.okViewDisab]}
 					>
 					<Text style={[styles.okButton,this.state.showExchangeDoubleCheck&&{color:ColorConstants.title_blue()}]}>
 						{buttonText}
@@ -1230,6 +1242,12 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
+	renderOrClear:function(){
+		if(this.state.isClear){
+			return(<View style={{height:10000}}></View>)
+		}
+	},
+
 	render: function() {
 		var viewStyle = Platform.OS === 'android' ?
 			{width: width, height: height
@@ -1240,6 +1258,7 @@ var StockOpenPositionPage = React.createClass({
 			{width: width, flex: 1}
 		return (
 			<View style={viewStyle}>
+				{this.renderOrClear()}
 				{this.renderHeaderBar()}
 				{this.renderLoadingText()}
 				<ListView

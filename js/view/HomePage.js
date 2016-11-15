@@ -559,30 +559,36 @@ var HomePage = React.createClass({
 	},
 
 	renderPopularityView: function() {
-		return (
-		<View style={{height:239, backgroundColor:'white'}}>
-			<View style={styles.popularityHeaderContainer}>
-				<Text style={styles.popularityTitle}>
-					多空博弈
-				</Text>
-				<TouchableOpacity onPress={this.showPopularityDetail}>
-					<Text style={styles.more}>
-						更多 >
+		if(this.state.rawPopularityInfo.length < 3){
+			return(
+				<View></View>
+			)
+		}else{
+			return (
+			<View style={{height:239, backgroundColor:'white'}}>
+				<View style={styles.popularityHeaderContainer}>
+					<Text style={styles.popularityTitle}>
+						多空博弈
 					</Text>
-				</TouchableOpacity>
+					<TouchableOpacity onPress={this.showPopularityDetail}>
+						<Text style={styles.more}>
+							更多 >
+						</Text>
+					</TouchableOpacity>
+				</View>
+				<View style={styles.separator}/>
+				<ListView
+					style={styles.popularitylist}
+					ref="popularitylist"
+					initialListSize={3}
+					scrollEnabled={false}
+					dataSource={this.state.popularityInfo}
+					enableEmptySections={true}
+					renderRow={this.renderPopularityRow}
+					renderSeparator={this.renderSeparator}/>
 			</View>
-			<View style={styles.separator}/>
-			<ListView
-				style={styles.popularitylist}
-				ref="popularitylist"
-				initialListSize={3}
-				scrollEnabled={false}
-				dataSource={this.state.popularityInfo}
-				enableEmptySections={true}
-				renderRow={this.renderPopularityRow}
-				renderSeparator={this.renderSeparator}/>
-		</View>
-		)
+			)
+		}
 	},
 
 	renderIntroduceView: function(index, head, body, image) {

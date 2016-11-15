@@ -37,6 +37,7 @@ var StockClosedPositionPage = React.createClass({
 			stockInfoRowData: [],
 			stockInfo: ds.cloneWithRows([]),
 			selectedRow: -1,
+			isClear:false,
 		};
 	},
 
@@ -49,6 +50,12 @@ var StockClosedPositionPage = React.createClass({
 
 		WebSocketModule.registerCallbacks(
 			() => {
+		})
+	},
+
+	clearViews:function(){
+		this.setState({
+			isClear:true
 		})
 	},
 
@@ -71,6 +78,7 @@ var StockClosedPositionPage = React.createClass({
 				this.setState({
 					stockInfoRowData: responseJson,
 					stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
+					isClear:false,
 				})
 			},
 			(errorMessage) => {
@@ -376,6 +384,12 @@ var StockClosedPositionPage = React.createClass({
 			);
 	},
 
+	renderOrClear:function(){
+		if(this.state.isClear){
+			return(<View style={{height:10000}}></View>)
+		}
+	},
+
 	render: function() {
 		var viewStyle = Platform.OS === 'android' ?
 		{width: width, height: height
@@ -386,6 +400,7 @@ var StockClosedPositionPage = React.createClass({
 			{width: width, flex: 1}
 		return (
 			<View style={viewStyle}>
+				{this.renderOrClear()}
 				{this.renderHeaderBar()}
 				{this.renderLoadingText()}
 				<ListView

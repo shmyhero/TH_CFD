@@ -42,6 +42,7 @@ var MAX_ValidationCodeCountdown = 60
 
 const TAB_LIVE = 1
 const TAB_SIMULATOR = 2
+var last_pressed_login = new Date().getTime();
 
 var LoginPage = React.createClass({
 	mixins: [TimerMixin],
@@ -176,8 +177,27 @@ var LoginPage = React.createClass({
 		)
 	},
 
+	getCurrentTime:function(){
+		return new Date().getTime();
+	},
+
+	isBlockedButton:function(){
+		if(this.getCurrentTime() - last_pressed_login  > 2000){
+			last_pressed_login = this.getCurrentTime();
+			console.log('isBolcked = false');
+			return false;
+		}else{
+			console.log('isBolcked = true');
+			return true;
+		}
+	},
+
 	wechatLogin: function() {
 		var wechatUserData = LogicData.getWechatUserData()
+
+		if(this.isBlockedButton()){
+			return
+		}
 
 		NetworkModule.fetchTHUrl(
 			NetConstants.CFD_API.WECHAT_LOGIN_API,
@@ -204,6 +224,11 @@ var LoginPage = React.createClass({
 	},
 
 	loginWithPasswordPressed: function() {
+		if(this.isBlockedButton()){
+			return
+		}
+
+
 		this.setState({
 			phoneLoginButtonEnabled: false
 		})
@@ -234,6 +259,11 @@ var LoginPage = React.createClass({
 	},
 
 	loginWithCodePressed: function() {
+		if(this.isBlockedButton()){
+			return
+		}
+
+
 		if (!this.state.phoneLoginButtonEnabled) {
 			return
 		}

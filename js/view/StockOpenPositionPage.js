@@ -857,6 +857,7 @@ var StockOpenPositionPage = React.createClass({
 		return (
 			<View style={styles.sliderView}>
 				<Slider
+					style={styles.slider}
 					minimumTrackTintColor={ColorConstants.title_blue()}
 					minimumValue={startPercent}
 					value={percent}
@@ -1534,6 +1535,10 @@ var styles = StyleSheet.create({
 	sliderView: {
 		paddingLeft: 15,
 		paddingRight: 15,
+	},
+	slider: {
+		marginLeft: Platform.OS === 'ios' ? 15 : 0,
+		marginRight: Platform.OS === 'ios' ? 15 : 0,
 	},
 	sliderLeftText: {
 		fontSize: 12,

@@ -138,7 +138,7 @@ var MePage = React.createClass({
 	reloadMeData: function(){
 		//Check if the user has logged in and the config row need to be shown.
 		if(this.refs[LIST_SCROLL_VIEW]){
-			this.refs[LIST_SCROLL_VIEW].scrollTo({y:0});
+			this.refs[LIST_SCROLL_VIEW].scrollTo({x:0, y:0, animated:false});
 		}
 
 		var userData = LogicData.getUserData();

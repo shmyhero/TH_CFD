@@ -35,12 +35,16 @@ var LogicData = {
     userData = {}
   },
 
-	setAccountState: function(state){
+	setAccountState: function(state, isStartUp){
 		// state = true
 		if(accountState!==state){
 			accountState = state;
-			//StorageModule.removeOwnStocksData();
-			//this.removeOwnStocksData();
+
+			if(!isStartUp){
+				StorageModule.removeOwnStocksData();
+				this.removeOwnStocksData();
+			}
+
 			StorageModule.setAccountState(state)
 			console.log("setAccountState = " + state);
 			NativeDataModule.passRawDataToNative('accountState', ''+state)

@@ -31,27 +31,27 @@ var fontSize = Math.round(16*width/375)
 var fontSize2 = Math.round(15*width/375)
 
 var IncomeMapping = [
-	{"value": 0, "displayText": "15万以下"},
-	{"value": 15, "displayText": "15-40万"},
-	{"value": 40, "displayText": "40-70万"},
-	{"value": 70, "displayText": "70-100万"},
-	{"value": 100, "displayText": "100万以上"},
+	{"value": 0, "displayText": "12万以下（人民币）"},
+	{"value": 15, "displayText": "12-33万（人民币）"},
+	{"value": 40, "displayText": "33-58万（人民币）"},
+	{"value": 70, "displayText": "58-83万（人民币）"},
+	{"value": 100, "displayText": "83万以上（人民币）"},
 ];
 
 var NetWorthMapping = [
-	{"value": 0, "displayText": "15万以下"},
-	{"value": 15, "displayText": "15-40万"},
-	{"value": 40, "displayText": "40-70万"},
-	{"value": 70, "displayText": "70-100万"},
-	{"value": 100, "displayText": "100万-500万"},
-	{"value": 101, "displayText": "500万以上"},
+	{"value": 0, "displayText": "12万以下（人民币）"},
+	{"value": 15, "displayText": "12-33万（人民币）"},
+	{"value": 40, "displayText": "33-58万（人民币）"},
+	{"value": 70, "displayText": "33-58万（人民币）"},
+	{"value": 100, "displayText": "83-413万以上（人民币）"},
+	{"value": 101, "displayText": "413万以上（人民币）"},
 ]
 
 var InvestmentPortfolioMapping = [
-	{"value": 0, "displayText": "占净资产25%"},
-	{"value": 25, "displayText": "占净资产50%"},
-	{"value": 50, "displayText": "占净资产75%"},
-	{"value": 75, "displayText": "占净资产100%"},
+	{"value": 0, "displayText": "占净资产0-25%"},
+	{"value": 25, "displayText": "占净资产25-50%"},
+	{"value": 50, "displayText": "占净资产50-75%"},
+	{"value": 75, "displayText": "占净资产75-100%"},
 ]
 
 var EmploymengStatusMapping = [

@@ -176,7 +176,7 @@ var StockListPage = React.createClass({
 				};
 				var url = (LogicData.getAccountState() ? this.props.activeDataURL : this.props.dataURL) + param;
 				NetworkModule.fetchTHUrl(
-					this.props.dataURL + param,
+					url,
 					{
 						method: 'GET',
 					},

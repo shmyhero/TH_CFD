@@ -111,7 +111,7 @@ var ModifyPwdPage = React.createClass({
 						</TextInput>
 
 						<TouchableOpacity onPress={this.getValidationCodePressed}>
-							<View style = {[styles.validationCodeView,{backgroundColor:this.state.getValidationCodeButtonEnabled?ColorConstants.TITLE_BLUE:'grey'}]}>
+							<View style = {[styles.validationCodeView,{backgroundColor:this.state.getValidationCodeButtonEnabled?ColorConstants.TITLE_BLUE:'#e0e0e0'}]}>
 								<Text style={styles.textValidCode}>{getCode}</Text>
 							</View>
 						</TouchableOpacity>
@@ -131,7 +131,7 @@ var ModifyPwdPage = React.createClass({
 					</View>
 
 					<TouchableOpacity onPress={this.getCompletePressed}>
-					<View style = {[styles.complete,{backgroundColor:getCompleteEnable?ColorConstants.TITLE_BLUE:'grey'}]}>
+					<View style = {[styles.complete,{backgroundColor:getCompleteEnable?ColorConstants.TITLE_BLUE:'#e0e0e0'}]}>
 						<Text style = {styles.textComplete}>完成</Text>
 					</View>
 					</TouchableOpacity>
@@ -265,6 +265,9 @@ var styles = StyleSheet.create({
 		marginRight:10,
 		alignItems:'center',
 		flexDirection:'row',
+		borderRadius:4,
+		borderColor:'#e0e0e0',
+		borderWidth:1,
 	},
 
 	keyValueLine:{
@@ -276,6 +279,9 @@ var styles = StyleSheet.create({
 		marginRight:10,
 		alignItems:'center',
 		flexDirection:'row',
+		borderRadius:4,
+		borderColor:'#e0e0e0',
+		borderWidth:1,
 	},
 
 	keyValueLineCode:{
@@ -286,6 +292,7 @@ var styles = StyleSheet.create({
 		marginRight:10,
 		alignItems:'center',
 		flexDirection:'row',
+
 	},
 
 	textKey:{
@@ -309,6 +316,9 @@ var styles = StyleSheet.create({
 		flex:1,
 		paddingLeft:5,
 		backgroundColor:'white',
+		borderRadius:4,
+		borderColor:'#e0e0e0',
+		borderWidth:1,
 	},
 
 	validationCodeView:{
@@ -318,6 +328,9 @@ var styles = StyleSheet.create({
 		marginLeft:5,
 		justifyContent:'center',
 		alignItems:'center',
+		borderRadius:4,
+		borderColor:'#e0e0e0',
+		borderWidth:1,
 	},
 
 	textValidCode:{
@@ -334,6 +347,9 @@ var styles = StyleSheet.create({
 		marginRight:10,
 		justifyContent:'center',
 		alignItems:'center',
+		borderRadius:4,
+		borderColor:'#e0e0e0',
+		borderWidth:1,
 	},
 
 	textComplete:{

@@ -230,7 +230,7 @@ var styles = StyleSheet.create({
 	modalContainer:{
 		flex: 1,
 		justifyContent: 'center',
-		backgroundColor:'rgba(0, 0, 0, 0.5)',
+		backgroundColor:'rgba(0, 0, 0, 0.7)',
 		alignItems: 'center',
 		height: height,
 		width: width,

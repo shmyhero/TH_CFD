@@ -35,7 +35,7 @@ var urlKeys = [
 	'GET_FUTURE_LIST_API',
 ]
 var urlKeysLive = [
-	'GET_USER_BOOKMARK_LIST_API',
+	'GET_USER_BOOKMARK_LIST_LIVE_API',
 	'GET_US_STOCK_TOP_GAIN_LIVE_API',
 	'GET_INDEX_LIST_LIVE_API',
 	'GET_FX_LIST_LIVE_API',
@@ -136,7 +136,9 @@ var StockListViewPager = React.createClass({
 		var viewPages = tabNames.map(
 			(tabName, i) =>
 			<View style={styles.slide} key={i}>
-				<StockListPage dataURL={NetConstants.getUrl(LogicData.getAccountState()?urlKeysLive[i]:urlKeys[i])} ref={'page' + i} showHeaderBar={i==1} isOwnStockPage={i==0} navigator={this.props.navigator}/>
+				<StockListPage dataURL={NetConstants.getUrl(urlKeys[i])}
+											 activeDataURL={NetConstants.getUrl(urlKeysLive[i])}
+											 ref={'page' + i} showHeaderBar={i==1} isOwnStockPage={i==0} navigator={this.props.navigator}/>
 			</View>
 		)
 		return (

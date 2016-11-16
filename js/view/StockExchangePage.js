@@ -42,7 +42,7 @@ var StockExchangePage = React.createClass({
 
 	componentDidMount: function() {
 		didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.EXCHANGE_TAB_PRESS_EVENT, this.onTabChanged);
-		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, this.clearViews);
+		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>this.clearViews());
 	},
 
 	componentWillUnmount: function() {
@@ -51,9 +51,9 @@ var StockExchangePage = React.createClass({
 	},
 
 	clearViews:function(){
-			this.refs['page2'].clearViews()
-			this.refs['page1'].clearViews()
-			this.refs['page0'].clearViews()
+		if(this.refs['page2'])this.refs['page2'].clearViews();
+		if(this.refs['page1'])this.refs['page1'].clearViews();
+		if(this.refs['page0'])this.refs['page0'].clearViews();
 	},
 
 	onPageSelected: function(index: number) {

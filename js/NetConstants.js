@@ -39,6 +39,7 @@ function getCFDAPI(){
     GET_USER_INFO_API: CFD_API_SERVER + '/api/user/me',
     SET_USER_NICKNAME_API: CFD_API_SERVER + '/api/user/nickname',
     GET_USER_BOOKMARK_LIST_API: CFD_API_SERVER + '/api/security/byIds',
+    GET_USER_BOOKMARK_LIST_LIVE_API: CFD_API_SERVER + '/api/security/live/byIds', //LIVE OK
     GET_US_STOCK_TOP_GAIN_API: CFD_API_SERVER + '/api/security/stock/topGainer',
     GET_US_STOCK_TOP_GAIN_LIVE_API: CFD_API_SERVER + '/api/security/live/stock/topGainer',//LIVE OK
     GET_US_STOCK_TOP_LOSER_API: CFD_API_SERVER + '/api/security/stock/topLoser',
@@ -60,6 +61,7 @@ function getCFDAPI(){
     GET_CLOSED_POSITION_LIVE_API: CFD_API_SERVER + '/api/position/live/closed',//LIVE ok
     GET_HOMEPAGE_BANNER_API: CFD_API_SERVER + '/api/banner2',
     OWN_STOCK_LIST_API: CFD_API_SERVER + '/api/security/bookmark',
+    OWN_STOCK_LIST_LIVE_API: CFD_API_SERVER + '/api/security/live/bookmark',//LIVE ok
     POST_CREATE_POSITION_API: CFD_API_SERVER + '/api/position',
     POST_CREATE_POSITION_LIVE_API: CFD_API_SERVER + '/api/position/live',//LIVE ok
     POST_DELETE_POSITION_API: CFD_API_SERVER + '/api/position/net',
@@ -115,7 +117,6 @@ function getCFDAPI(){
     SET_CARD_READ: CFD_API_SERVER + '/api/card/<id>',
     SET_CARD_LIKED: CFD_API_SERVER + '/api/card/like/<id>',
     SHARE_CARD_TO_HOME: CFD_API_SERVER + '/api/card/share/<id>',
-
   }
 }
 

@@ -89,7 +89,7 @@ var MePushConfigPage = React.createClass({
 					},
 				},
 				function(responseJson) {
-					var autoCloseAlert = responseJson.autoCloseAlert
+					var autoCloseAlert = LogicData.getAccountState() ? responseJson.autoCloseAlert_Live : responseJson.autoCloseAlert;
 					this.setState({
 						autoCloseAlertIsOn: autoCloseAlert,
 						dataSource: ds.cloneWithRows(listRawData),
@@ -107,7 +107,7 @@ var MePushConfigPage = React.createClass({
 		var notLogin = Object.keys(userData).length === 0
 		if (notLogin) {
 		}else{
-			var url = NetConstants.CFD_API.AUTO_CLOSE_ALERT_API
+			var url = LogicData.getAccountState() ? NetConstants.CFD_API.AUTO_CLOSE_ALERT_LIVE_API : NetConstants.CFD_API.AUTO_CLOSE_ALERT_API
 			url = url.replace(/<setting>/, value)
 
 			NetworkModule.fetchTHUrl(

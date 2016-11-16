@@ -79,6 +79,7 @@ function getCFDAPI(){
     GET_TOP_NEWS_TOP10_API: CFD_API_SERVER + '/api/headline/top10',
     FEEDBACK_API: CFD_API_SERVER + '/api/feedback_pic',
     AUTO_CLOSE_ALERT_API: CFD_API_SERVER + '/api/user/alert/<setting>',
+    AUTO_CLOSE_ALERT_LIVE_API: CFD_API_SERVER + '/api/user/live/alert/<setting>',
     BIND_MOBILE_API: CFD_API_SERVER + '/api/user/bindphone',
     BIND_WECHAT_API: CFD_API_SERVER + '/api/user/bindwechat?openid=<wechatOpenId>',
     UPDATE_HEAD_PHOTO: CFD_API_SERVER + '/api/user/photo',

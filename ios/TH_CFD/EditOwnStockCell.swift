@@ -57,6 +57,7 @@ class EditOwnStockCell: UITableViewCell {
 			reminderOnImageName = "Reminder01Live"
 			reminderOffImageName = "ReminderLive"
 			topImageName = "TopLive"
+			self.tagLabel.backgroundColor = UIColor(hexInt: 0x5483d8)
 		}
 		else {
 			selectImageName = "Select"
@@ -64,6 +65,7 @@ class EditOwnStockCell: UITableViewCell {
 			reminderOnImageName = "Reminder01"
 			reminderOffImageName = "Reminder"
 			topImageName = "Top"
+			self.tagLabel.backgroundColor = UIColor(hexInt: 0x00B2FE)
 		}
 	}
 	

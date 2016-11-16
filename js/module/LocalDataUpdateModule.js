@@ -10,7 +10,8 @@ var StorageModule = require('../module/StorageModule')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
-var TongDaoModule = require('../module/TongDaoModule')
+var TongDaoModule = require('../module/TongDaoModule');
+var OpenAccountRoutes = require('../view/openAccount/OpenAccountRoutes');
 
 export function updateMeData(userData, onSuccess){
 	NetworkModule.fetchTHUrl(
@@ -44,6 +45,8 @@ export function removeUserData(){
   StorageModule.removeOwnStocksData();
   LogicData.removeOwnStocksData();
 
+  OpenAccountRoutes.clearAllInputData();
+
   var date = new Date().getDateString();
   var data = {
     "lastDate": date,
@@ -56,4 +59,5 @@ export function removeUserData(){
   //Restart the web socket.
   //WebSocketModule.stop();
   WebSocketModule.start();
+
 }

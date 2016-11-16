@@ -301,7 +301,7 @@ function loadLastInputData(){
   })
 }
 
-function clearAllInputData(currentIndex){
+export function clearAllInputData(currentIndex){
   console.log("clearAllInputData")
   var index = 0;
   if(currentIndex){

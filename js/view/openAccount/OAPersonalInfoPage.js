@@ -141,6 +141,15 @@ var OAPersonalInfoPage = React.createClass({
 						if(responseJson.message){
 							var errorMessage = decodeURIComponent(responseJson.message);
 							console.log("ID validation failed. Error: " + errorMessage);
+							var idData = null;
+							for(var i = 0; i< this.listRawData.length; i++){
+								if(this.listRawData[i].key == "idCode"){
+									idData = this.listRawData[i];
+								}
+							}
+							if(errorMessage.inculdes("库中无此号")){
+								idData.error = "身份证号码不存在";
+							}
 						}
 						this.setState({
 							error: decodeURIComponent(DEFAULT_ERROR),
@@ -476,7 +485,11 @@ var OAPersonalInfoPage = React.createClass({
 				if(error){
 					error = DEFAULT_ERROR;
 				}else{
-					error = "您输入的" + this.listRawData[i].title + "有误，请核对后重试";
+					if(this.listRawData[i].error){
+						error = this.listRawData[i].error;
+					}else{
+						error = "您输入的" + this.listRawData[i].title + "有误，请核对后重试";
+					}
 				}
 			}
 			if (this.listRawData[i].type === "datePeriod") {

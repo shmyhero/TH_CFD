@@ -451,9 +451,11 @@ var StockDetailPage = React.createClass({
 			</TouchableOpacity>
 		)
 		return(
-			<ScrollView horizontal={true} style={{flex: 0, marginTop: 6}}>
-				{tabs}
-			</ScrollView>
+			<View>
+				<ScrollView horizontal={true} style={{flex: 0, marginTop: 6}}>
+					{tabs}
+				</ScrollView>
+			</View>
 			);
 	},
 
@@ -920,6 +922,7 @@ var StockDetailPage = React.createClass({
 				<Image style={[styles.inputImage, {marginLeft:30-width,marginTop:10}]} source={require('../../images/key.png')}/>
 				<TextInput style={[styles.inputText, {marginLeft:40-width, marginTop:-24}]}
 					keyboardType={Platform.OS === 'ios' ? "number-pad" : "numeric"}
+					underlineColorAndroid="transparent"
 					keyboardAppearance={'dark'}
 					selectionColor={'transparent'}
 					value={this.state.inputText}

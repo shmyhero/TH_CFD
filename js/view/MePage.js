@@ -295,6 +295,7 @@ var MePage = React.createClass({
 			this.props.navigator.push({
 				name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 				title:'实盘交易',
+				themeColor: "#3f5781",//ColorConstants.TITLE_DARK_BLUE,
 				onNavigationStateChange: this.onWebViewNavigationStateChange,
 				url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
 

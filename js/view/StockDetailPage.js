@@ -209,15 +209,24 @@ var StockDetailPage = React.createClass({
 	loadStockPriceToday: function(showLoading, chartType, stockInfo) {
 		var url = NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_API;
 		if(LogicData.getAccountState()){
-		 url = NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_LIVE_API
-		 console.log('live', url );
+			url = NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_LIVE_API
+			console.log('live', url );
 	 	}
 
 		if(chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE){
 			url = NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M;
+			if(LogicData.getAccountState()){
+				url = NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M_LIVE;
+				console.log('live', url );
+			}
+
 			url = url.replace(/<securityId>/, this.props.stockCode);
 		}else if(chartType == NetConstants.PARAMETER_CHARTTYPE_DAY){
 			url = NetConstants.CFD_API.GET_STOCK_KLINE_DAY;
+			if(LogicData.getAccountState()){
+				url = NetConstants.CFD_API.GET_STOCK_KLINE_DAY_LIVE;
+				console.log('live', url );
+			}
 			url = url.replace(/<securityId>/, this.props.stockCode);
 		}else {
 			 url = url.replace(/<stockCode>/, this.props.stockCode)
@@ -661,7 +670,7 @@ var StockDetailPage = React.createClass({
 
 	renderScroll: function() {
 		var pickerWidth = width/2-60
-		var pickerHeight = Platform.OS === 'ios' ? 216 : 100;	
+		var pickerHeight = Platform.OS === 'ios' ? 216 : 100;
 		// money list: 100,500,1000,3000,5000,7000,10000,20000,max
 		var rawList=[100, 500, 1000, 2000, 3000, 5000, 7000, 10000, 20000]
 		var moneyCount = 0

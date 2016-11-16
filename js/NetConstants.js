@@ -89,7 +89,9 @@ function getCFDAPI(){
     POST_PUSH_TOKEN: CFD_API_SERVER + '/api/user/pushtoken',
     POST_PUSH_TOKEN_AUTH: CFD_API_SERVER + '/api/user/pushtokenauth',
     GET_STOCK_KLINE_FIVE_M: CFD_API_SERVER + '/api/quote/<securityId>/kline/5m',
+    GET_STOCK_KLINE_FIVE_M_LIVE: CFD_API_SERVER + '/api/quote/live/<securityId>/kline/5m',
     GET_STOCK_KLINE_DAY: CFD_API_SERVER + '/api/quote/<securityId>/kline/day',
+    GET_STOCK_KLINE_DAY_LIVE: CFD_API_SERVER + '/api/quote/live/<securityId>/kline/day',
     GET_MY_MESSAGES: CFD_API_SERVER + '/api/user/message?pageNum=<pageNum>&pageSize=<pageSize>',
     GET_MY_MESSAGES_LIVE: CFD_API_SERVER + '/api/user/live/message?pageNum=<pageNum>&pageSize=<pageSize>',//LIVE ok
     SET_MESSAGE_READ: CFD_API_SERVER + '/api/user/message/<id>',
@@ -110,7 +112,7 @@ function getCFDAPI(){
     DETELE_LIVE_ACCOUNT: CFD_API_SERVER + '/api/user/live/delete', //删除实盘账号绑定（测试用！)
     ID_CARD_OCR: CFD_API_SERVER + '/api/user/ocr', //身份证OCR
     ID_CHECK: CFD_API_SERVER + '/api/user/faceCheck', //验证身份证正确性
-    USER_ACTUAL_LOGOUT: CFD_API_SERVER + '/api/user/demo/logout',
+    USER_ACTUAL_LOGOUT: CFD_API_SERVER + '/api/user/live/logout',
 
     GET_USER_LIVE_CARDS:CFD_API_SERVER + '/api/card/my',//我的卡片
     GET_HOME_CARDS:CFD_API_SERVER + '/api/card/top',//首页卡片

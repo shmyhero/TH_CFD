@@ -100,7 +100,7 @@ var ScrollTabView = React.createClass({
 
 		return (
 			<View>
-				<ScrollView horizontal={true} style={styles.tabs}>
+				<ScrollView horizontal={true} style={[styles.tabs, {backgroundColor:ColorConstants.title_blue()}]}>
 					{tabs}
 				</ScrollView>
 			</View>
@@ -176,7 +176,6 @@ var styles = StyleSheet.create({
 	tabs: {
 		flex: 0,
 		alignSelf: 'stretch',
-		backgroundColor: ColorConstants.TITLE_BLUE,
 	},
 
 	tabItemTextSelected: {
@@ -188,7 +187,7 @@ var styles = StyleSheet.create({
 
 	tabItemTextUnSelected: {
 		textAlign: 'center',
-		color: '#abcaff',
+		color: ColorConstants.TAB_UNSELECT_TEXT_COLOR,
 		fontSize: 14,
 	},
 

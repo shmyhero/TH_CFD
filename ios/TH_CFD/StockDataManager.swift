@@ -87,7 +87,7 @@ class StockDataManager: NSObject {
 	var stockDataArray = [StockData]()
 	var alertDataArray = [AlertData]()
 	var logoImage: UIImage? = UIImage.init(named: "Head_portrait")
-	var accountState: Bool = false
+	var isLive: Bool = false
 	
 	class func sharedInstance() ->StockDataManager {
 		return StockDataManager.singleton

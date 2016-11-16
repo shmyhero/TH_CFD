@@ -24,11 +24,15 @@ class ColorSet: NSObject {
 	var upColor: UIColor = UIColor(hexInt: 0xe34b4f)
 	var downColor: UIColor = UIColor(hexInt: 0x30c296)
 	
+	// edit own stock color
+	var bgColor: UIColor = UIColor(hexInt: 0x1962dd)
+	var headLabelColor: UIColor = UIColor(hexInt: 0xabcaff)
+	
 	init(type:Int=0) {
 		_type = type;
 		// type 0 is detail view.
 		// type 1 is open position view
-		if StockDataManager.sharedInstance().accountState {
+		if StockDataManager.sharedInstance().isLive {
 			startColor = UIColor(hexInt: 0x6683b3)
 			endColor = UIColor(hexInt: 0x374d74)
 			middleLineColor = UIColor(hexInt: 0x657798)
@@ -49,5 +53,16 @@ class ColorSet: NSObject {
 			minmaxColor = type == 1 ? UIColor.whiteColor() : UIColor(hexInt: 0x70a5ff)
 		}
 		super.init()
+	}
+	
+	func update() {
+		if StockDataManager.sharedInstance().isLive {
+			bgColor = UIColor(hexInt: 0x425a85)
+			headLabelColor = UIColor(hexInt: 0xa0bdf1)
+		}
+		else {
+			bgColor = UIColor(hexInt: 0x1962dd)
+			headLabelColor = UIColor(hexInt: 0xabcaff)
+		}
 	}
 }

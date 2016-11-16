@@ -19,8 +19,14 @@ class EditOwnStockCell: UITableViewCell {
 	@IBOutlet weak var topButtonTrailConstraint: NSLayoutConstraint!
 	
 	var stockData: StockData?
+	var selectImageName = "Select"
+	var unselectImageName = "Unselect"
+	var reminderOffImageName = "Reminder"
+	var reminderOnImageName = "Reminder01"
+	var topImageName = "Top"
 	
 	func setData(data:StockData) {
+		self.setupColor()
 		self.stockData = data
 		self.nameLabel.text = data.name
 		self.codeLabel.text = data.symbol
@@ -34,13 +40,31 @@ class EditOwnStockCell: UITableViewCell {
 			self.codeLabelLeftConstraint.constant = 0
 			self.tagLabel.hidden = true
 		}
-		let name:String = data.choose ?"Select":"Unselect"
+		let name:String = data.choose ? selectImageName : unselectImageName
 		self.selectButton.setImage(UIImage.init(named: name), forState: .Normal)
+		self.topButton.setImage(UIImage.init(named: topImageName), forState: .Normal)
 	}
 	
 	func setAlert(hasAlert: Bool) {
-		let name:String = hasAlert ? "Reminder01":"Reminder"
+		let name:String = hasAlert ? reminderOffImageName : reminderOnImageName
 		self.alertButton.setImage(UIImage.init(named: name), forState: .Normal)
+	}
+	
+	func setupColor() {
+		if (StockDataManager.sharedInstance().isLive) {
+			selectImageName = "SelectLive"
+			unselectImageName = "UnselectLive"
+			reminderOnImageName = "Reminder01Live"
+			reminderOffImageName = "ReminderLive"
+			topImageName = "TopLive"
+		}
+		else {
+			selectImageName = "Select"
+			unselectImageName = "Unselect"
+			reminderOnImageName = "Reminder01"
+			reminderOffImageName = "Reminder"
+			topImageName = "Top"
+		}
 	}
 	
 	typealias callbackfunc=(selectStock:StockData)->Void
@@ -67,7 +91,7 @@ class EditOwnStockCell: UITableViewCell {
 	
 	@IBAction func tapSelectButton(sender: AnyObject) {
 		self.stockData!.choose = !self.stockData!.choose
-		let name:String = self.stockData!.choose ?"Select":"Unselect"
+		let name:String = self.stockData!.choose ? selectImageName : unselectImageName
 		self.selectButton.setImage(UIImage.init(named: name), forState: .Normal)
 		
 		tapSelect!(selectStock: stockData!)

@@ -21,6 +21,7 @@ var colors = {
 	INPUT_TEXT_PLACE_HOLDER_COLOR: '#c4c4c4',
 	INPUT_TEXT_COLOR: '#333333',
 	INOUT_TEXT_SELECTION_COLOR: '#426bf2',
+	TAB_UNSELECT_TEXT_COLOR: '#abcaff',
 
 	stock_color: function(change) {
 		if (change > 0) {
@@ -56,6 +57,7 @@ var colors = {
 			this.MAIN_CONTENT_BLUE = '#1b65e1'
 			this.SUB_TITLE_WHITE = '#bbd3ff'
 			this.STOCK_TAB_BLUE = '#8fabdb'
+			this.TAB_UNSELECT_TEXT_COLOR = '#a0bdf1'
 		}
 		else {
 			this.TITLE_BLUE = '#1962dd'
@@ -71,6 +73,7 @@ var colors = {
 			this.MAIN_CONTENT_BLUE = '#1b65e1'
 			this.SUB_TITLE_WHITE = '#bbd3ff'
 			this.STOCK_TAB_BLUE = '#70a5ff'
+			this.TAB_UNSELECT_TEXT_COLOR = '#abcaff'
 		}
 	},
 }

@@ -91,7 +91,7 @@ var ScrollTabView = React.createClass({
 					underlayColor={ColorConstants.title_blue()}
 					onPress={() => this.tabClicked(i)}>
 
-				<Text style={this.state.currentSelectedTab == i ? styles.tabItemTextSelected : styles.tabItemTextUnSelected}>
+				<Text style={this.state.currentSelectedTab == i ? styles.tabItemTextSelected : [styles.tabItemTextUnSelected, {color: ColorConstants.TAB_UNSELECT_TEXT_COLOR}]}>
 					{tabName}
 				</Text>
 
@@ -100,7 +100,7 @@ var ScrollTabView = React.createClass({
 
 		return (
 			<View>
-				<ScrollView horizontal={true} style={[styles.tabs, {backgroundColor:ColorConstants.title_blue()}]}>
+				<ScrollView horizontal={true} style={[styles.tabs, {backgroundColor: ColorConstants.TITLE_BLUE}]}>
 					{tabs}
 				</ScrollView>
 			</View>
@@ -187,7 +187,6 @@ var styles = StyleSheet.create({
 
 	tabItemTextUnSelected: {
 		textAlign: 'center',
-		color: ColorConstants.TAB_UNSELECT_TEXT_COLOR,
 		fontSize: 14,
 	},
 

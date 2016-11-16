@@ -75,59 +75,75 @@ export function fetchTHUrlWithNoInternetCallback(url, params, successCallback, e
 }
 
 export function syncOwnStocks(userData) {
-	var stockData = LogicData.getOwnStocksData()
-	fetchTHUrl(
-		NetConstants.CFD_API.OWN_STOCK_LIST_API,
-		{
-			method: 'GET',
-			headers: {
-				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+  return new Promise((resolve, reject)=>{
+		var stockData = LogicData.getOwnStocksData()
+		var isLive = LogicData.getAccountState();
+		console.log("syncOwnStocks, isLive: " + isLive);
+		var url = isLive ? NetConstants.CFD_API.OWN_STOCK_LIST_LIVE_API : NetConstants.CFD_API.OWN_STOCK_LIST_API;
+		fetchTHUrl(
+			url,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				}
+			},
+			(responseJson) => {
+				if (responseJson.length===0 && !isLive) {
+					console.log('no own stocks online')
+					if (stockData.length > 0) {
+						addToOwnStocks(stockData)
+						.then((res)=>resolve(res))
+						.catch((error)=>reject(error));
+					};
+				}
+				else {
+					//If live, the user must be logined. So just sync the response to local data.
+					console.log('get own stocks')
+					LogicData.setOwnStocksData(responseJson)
+				}
+				console.log(responseJson)
+				resolve();
+			},
+			(errorMessage) => {
+				Alert.alert('获取股票列表失败', errorMessage);
+				reject(errorMessage);
 			}
-		},
-		(responseJson) => {
-			if (responseJson.length===0) {
-				console.log('no own stocks online')
-				if (stockData.length > 0) {
-					addToOwnStocks(stockData)
-				};
-			}
-			else {
-				console.log('get own stocks')
-				LogicData.setOwnStocksData(responseJson)
-			}
-			console.log(responseJson)
-		},
-		(errorMessage) => {
-			Alert.alert('获取股票列表失败', errorMessage);
-		}
-	)
+		)
+	});
 }
 
 export function addToOwnStocks(stockData) {
-	var userData = LogicData.getUserData()
-	if (Object.keys(userData).length === 0) {
-		return
-	}
-
-	var idList = stockData.map((stock, index, list)=>{
-		return stock.id
-	})
-
-	fetchTHUrl(
-		NetConstants.CFD_API.OWN_STOCK_LIST_API+'?'+NetConstants.PARAMETER_STOCKIDS+'='+idList,
-		{
-			method: 'POST',
-			headers: {
-				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-			}
-		},
-		(responseJson) => {
-			console.log('add to own stocks success')
-		},
-		(errorMessage) => {
-			Alert.alert('添加股票失败', errorMessage);
+	return new Promise((resolve, reject)=>{
+		var userData = LogicData.getUserData()
+		if (Object.keys(userData).length === 0) {
+			resolve();
 		}
-	)
+
+		var idList = stockData.map((stock, index, list)=>{
+			return stock.id
+		})
+
+		var isLive = LogicData.getAccountState();
+		var url = (isLive ? NetConstants.CFD_API.OWN_STOCK_LIST_LIVE_API : NetConstants.CFD_API.OWN_STOCK_LIST_API)+'?'+NetConstants.PARAMETER_STOCKIDS+'='+idList;
+		fetchTHUrl(
+			url,
+			{
+				method: 'POST',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				}
+			},
+			(responseJson) => {
+				console.log('add to own stocks success')
+				resolve();
+			},
+			(errorMessage) => {
+				Alert.alert('添加股票失败', errorMessage);
+				reject(errorMessage);
+			}
+		)
+	});
 }
 
 export function removeFromOwnStocks(stockData) {

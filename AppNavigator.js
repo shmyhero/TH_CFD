@@ -167,7 +167,7 @@ var AppNavigator = React.createClass({
 
 		StorageModule.loadAccountState().then((value) => {
 				if (value !== null) {
-					LogicData.setAccountState(JSON.parse(value))
+					LogicData.setAccountState(JSON.parse(value), true)
 				}
 			})
 			.done()
@@ -178,7 +178,7 @@ var AppNavigator = React.createClass({
 				}
 			})
 			.done()
- 
+
 		NetworkModule.fetchTHUrl(
 			(LogicData.getAccountState()?NetConstants.CFD_API.GET_OUT_RIGHT_LIVE_API:NetConstants.CFD_API.GET_OUT_RIGHT_API) + '?page=1&perPage=99',
 			{

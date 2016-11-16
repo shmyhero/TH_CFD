@@ -34,7 +34,9 @@ export default class Reward extends Component{
   }
 
   getWidth(){
-    return (width/this.props.divideInLine) - 11
+    var magic = 8;
+    if(this.props.divideInLine == 2) magic = 11
+    return (width/this.props.divideInLine) - magic
   }
 
   renderBottomForSpecial(){

@@ -64,12 +64,12 @@ export function trackOpenPositionEvent(data, money) {
 	trackEvent(TD_OPEN_POSITION, values)
 }
 
-export function trackClosePositionEvent(data, money) {
+export function trackClosePositionEvent(data) {
 	var values = {}
 	console.log("tongdao:", data)
 	values["zhang/die"] = data.isLong ? "zhang":"die"
 	values["tou zi pin zhong"] = data.security.name
-	values["zi jin"] = ""+money
+	values["zi jin"] = ""+data.invest
 	values["gang gan"] = ""+data.leverage
 	trackEvent(TD_CLOSE_POSITION, values)
 }
@@ -94,4 +94,4 @@ export function trackDaySignEvent(signed) {
 
 export function trackTopBannerEvent() {
 	trackEvent(TD_TOP_BANNER, null)
-} 
+}

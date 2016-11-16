@@ -212,6 +212,7 @@ var styles = StyleSheet.create({
 		marginLeft: 10,
 		marginRight: 10,
 		alignSelf: 'center',
+		//backgroundColor: "red",
 		// paddingBottom:height/2,
 	},
 
@@ -225,7 +226,7 @@ var styles = StyleSheet.create({
     marginTop: (height
 			- UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
 			- UIConstants.ANDROID_SOFT_MENU_HEIGHT
-			- actionButtonSize - 160 - ((width - 20) / 690 * 644))/3,
+			- actionButtonSize - 160 - ((width - 20) / 690 * 644))/3 + 8,
 		flexDirection: 'row',
   },
 

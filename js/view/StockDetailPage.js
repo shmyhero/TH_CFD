@@ -451,9 +451,11 @@ var StockDetailPage = React.createClass({
 			</TouchableOpacity>
 		)
 		return(
-			<ScrollView horizontal={true} style={{flex: 0, marginTop: 6}}>
-				{tabs}
-			</ScrollView>
+			<View>
+				<ScrollView horizontal={true} style={{flex: 0, marginTop: 6}}>
+					{tabs}
+				</ScrollView>
+			</View>
 			);
 	},
 
@@ -659,7 +661,7 @@ var StockDetailPage = React.createClass({
 
 	renderScroll: function() {
 		var pickerWidth = width/2-60
-		var pickerHeight = 216
+		var pickerHeight = Platform.OS === 'ios' ? 216 : 100;	
 		// money list: 100,500,1000,3000,5000,7000,10000,20000,max
 		var rawList=[100, 500, 1000, 2000, 3000, 5000, 7000, 10000, 20000]
 		var moneyCount = 0
@@ -920,6 +922,7 @@ var StockDetailPage = React.createClass({
 				<Image style={[styles.inputImage, {marginLeft:30-width,marginTop:10}]} source={require('../../images/key.png')}/>
 				<TextInput style={[styles.inputText, {marginLeft:40-width, marginTop:-24}]}
 					keyboardType={Platform.OS === 'ios' ? "number-pad" : "numeric"}
+					underlineColorAndroid="transparent"
 					keyboardAppearance={'dark'}
 					selectionColor={'transparent'}
 					value={this.state.inputText}

@@ -14,7 +14,7 @@ import {
 	TouchableOpacity,
 } from 'react-native';
 
-
+var {EventCenter, EventConst} = require('../EventCenter')
 var LogicData = require('../LogicData')
 var ColorConstants = require('../ColorConstants')
 var NetConstants = require('../NetConstants')
@@ -28,13 +28,18 @@ var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var didFocusSubscription = null;
 var recevieDataSubscription = null;
+var didAccountChangeSubscription = null;
 
 var stockNameFontSize = 18;
+
+var ACTIVE_CONTRY_COLOR = '#5483d8';
+var SIMULATE_CONTRY_COLOR = '#00b2fe';
 
 var StockListPage = React.createClass({
 
 	propTypes: {
 		dataURL: React.PropTypes.string,
+		activeDataURL: React.PropTypes.string,
 		showHeaderBar: React.PropTypes.bool,
 		isOwnStockPage: React.PropTypes.bool,
 	},
@@ -42,6 +47,7 @@ var StockListPage = React.createClass({
 	getDefaultProps() {
 		return {
 			dataURL: NetConstants.CFD_API.GET_USER_BOOKMARK_LIST_API,
+			activeDataURL: NetConstants.CFD_API.GET_ACTIVE_USER_BOOKMARK_LIST_API,
 			showHeaderBar: false,
 			isOwnStockPage: false,
 		}
@@ -92,17 +98,18 @@ var StockListPage = React.createClass({
 		}
 	},
 
-	refreshData: function() {
+	refreshData: function(forceRefetch) {
 		if (this.props.isOwnStockPage) {
 			this.refreshOwnData()
 		}
 		else {
-			this.reFetchStockData()
+			this.reFetchStockData(forceRefetch)
 		}
 	},
 
-	reFetchStockData: function() {
-		if (this.state.rowStockInfoData.length === 0) {
+	reFetchStockData: function(forceRefetch) {
+		if (this.state.rowStockInfoData.length === 0 || forceRefetch) {
+			console.log("reFetchStockData")
 			this.fetchStockData()
 		}
 	},
@@ -117,8 +124,14 @@ var StockListPage = React.createClass({
 			.then(() => {
 				if (!this.props.isOwnStockPage) {
 					var userData = LogicData.getUserData()
+
+					var url = (LogicData.getAccountState() ? this.props.activeDataURL : this.props.dataURL) + '?page=1&perPage=99';
+
+					console.log("LogicData.getAccountState(): " + LogicData.getAccountState());
+					console.log("url: " + url);
+
 					NetworkModule.fetchTHUrl(
-						this.props.dataURL + '?page=1&perPage=99',
+						url,
 						{
 							method: 'GET',
 							headers: {
@@ -161,8 +174,9 @@ var StockListPage = React.createClass({
 				for (var i = 1; i < ownData.length; i++) {
 					param += ","+ownData[i].id
 				};
+				var url = (LogicData.getAccountState() ? this.props.activeDataURL : this.props.dataURL) + param;
 				NetworkModule.fetchTHUrl(
-					this.props.dataURL + param,
+					url,
 					{
 						method: 'GET',
 					},
@@ -190,19 +204,33 @@ var StockListPage = React.createClass({
 		if (this.props.isOwnStockPage) {
 			this.fetchOwnData()
 
-		    this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
-		    this.recevieDataSubscription = RCTNativeAppEventEmitter.addListener(
-				'nativeSendDataToRN',
-				(args) => {
-					if (args[0] == 'myList') {
-						var stockData = JSON.parse(args[1])
-						LogicData.setOwnStocksData(stockData)
-						NetworkModule.updateOwnStocks(stockData)
-						this.refreshOwnData()
-					}
-					console.log('Get data from Native ' + args[0] + ' : ' + args[1])
+	    this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
+	    this.recevieDataSubscription = RCTNativeAppEventEmitter.addListener(
+			'nativeSendDataToRN',
+			(args) => {
+				if (args[0] == 'myList') {
+					var stockData = JSON.parse(args[1])
+					LogicData.setOwnStocksData(stockData)
+					NetworkModule.updateOwnStocks(stockData)
+					this.refreshOwnData()
 				}
-			)
+				console.log('Get data from Native ' + args[0] + ' : ' + args[1])
+			})
+		}
+		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>{
+			console.log("ACCOUNT_STATE_CHANGE");
+			this.accountStateChange()});
+	},
+
+	accountStateChange: function(){
+		if(this.props.isOwnStockPage){
+			var userData = LogicData.getUserData()
+			if(Object.keys(userData).length !== 0){
+				NetworkModule.syncOwnStocks(userData)
+				.then(()=>this.refreshData(true));
+			}
+		} else{
+			this.refreshData(true);
 		}
 	},
 
@@ -210,6 +238,8 @@ var StockListPage = React.createClass({
 		if (this.props.isOwnStockPage) {
 			this.didFocusSubscription.remove();
 			this.recevieDataSubscription.remove();
+		}else{
+			didAccountChangeSubscription && didAccountChangeSubscription.remove();
 		}
 	},
 
@@ -364,7 +394,7 @@ var StockListPage = React.createClass({
 	renderCountyFlag: function(rowData) {
 		if (rowData.tag !== undefined) {
 			return (
-				<View style={[styles.stockCountryFlagContainer,{backgroundColor:LogicData.getAccountState()?'#5483d8':'#00b2fe'}]}>
+				<View style={[styles.stockCountryFlagContainer,{backgroundColor:LogicData.getAccountState()?ACTIVE_CONTRY_COLOR:SIMULATE_CONTRY_COLOR}]}>
 					<Text style={styles.stockCountryFlagText}>
 						{rowData.tag}
 					</Text>

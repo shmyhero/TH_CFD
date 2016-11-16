@@ -17,6 +17,7 @@ var ColorConstants = require('../../ColorConstants')
 var TalkingdataModule = require('../../module/TalkingdataModule')
 var OpenAccountRoutes = require('./OpenAccountRoutes')
 var LogicData = require('../../LogicData')
+var UIConstants = require('../../UIConstants')
 
 var {height, width} = Dimensions.get('window')
 var PAGES = [
@@ -78,7 +79,6 @@ var OAStatusPage = React.createClass({
 							text='免费登录' />
 					</View>
 
-
 					<View style={styles.helpContainer}>
 						<View style={styles.helpRowWrapper}>
 							{/* <TouchableOpacity style={{padding: 5}} onPress={this.helpPressed}> */}
@@ -97,15 +97,22 @@ var OAStatusPage = React.createClass({
 var styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
-   		alignItems: 'stretch',
-		backgroundColor: ColorConstants.BACKGROUND_GREY,
+		flexDirection: 'column',
+   	alignItems: 'stretch',
+		//backgroundColor: ColorConstants.BACKGROUND_GREY,
+		height: height
+				- UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
+				- UIConstants.HEADER_HEIGHT
+				- UIConstants.TAB_BAR_HEIGHT,
+		//backgroundColor: 'pink',
 	},
 	text1: {
 		fontSize: 17,
 		textAlign: 'center',
 		paddingTop: 10,
 		marginBottom: 20,
-		color:'#A4A4A4'
+		color:'#A4A4A4',
+		backgroundColor: 'transparent',
 	},
 	image: {
 		alignSelf: 'center',
@@ -132,8 +139,9 @@ var styles = StyleSheet.create({
 		color: '#ffffff',
 	},
 	helpContainer: {
-		paddingBottom: 70,
+		paddingBottom: 30,
 		alignItems: 'stretch',
+		//height: 30,
 	},
 	helpRowWrapper: {
 		flexDirection: 'row',

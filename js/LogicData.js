@@ -35,23 +35,27 @@ var LogicData = {
     userData = {}
   },
 
-	setAccountState: function(state){
+	setAccountState: function(state, isStartUp){
 		// state = true
-
 		if(accountState!==state){
-			EventCenter.emitAccountStateChangeEvent;
+			accountState = state;
+
+			if(!isStartUp){
+				StorageModule.removeOwnStocksData();
+				this.removeOwnStocksData();
+			}
+
+			StorageModule.setAccountState(state)
+			console.log("setAccountState = " + state);
+			NativeDataModule.passRawDataToNative('accountState', ''+state)
+			ColorConstants.setScheme(state ? ColorConstants.COLOR_THEME_LIVE: ColorConstants.COLOR_THEME_SIMULATOR);
+
+			EventCenter.emitAccountStateChangeEvent();
 		}
-
-		accountState = state;
-		StorageModule.setAccountState(state)
-		console.log("setAccountState = " + state);
-		NativeDataModule.passRawDataToNative('accountState', ''+state)
-		ColorConstants.setScheme(state ? ColorConstants.COLOR_THEME_LIVE: ColorConstants.COLOR_THEME_SIMULATOR)
-
 	},
 
 	getAccountState: function(){
-		return accountState ;
+		return accountState;
 		// return true;
 	},
 
@@ -97,7 +101,7 @@ var LogicData = {
   },
 
   getOwnStocksData: function() {
-      return ownStocksData
+    return ownStocksData
   },
 
 	removeOwnStocksData: function(){

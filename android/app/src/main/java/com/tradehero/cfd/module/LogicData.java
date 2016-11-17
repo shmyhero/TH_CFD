@@ -22,17 +22,20 @@ public class LogicData {
     public static final String IS_PRODUCT = "isProduct";
     public static final String ACCOUNT_STATE = "accountState";
 
+    public static final String LIVE_NAME = "userName";
+    public static final String LIVE_EMAIL = "userEmail";
+
     private static LogicData mInstance;
     private JSONArray mMyList;
     private JSONArray mMyAlertList;
     private String myLogo;
-
+    private String mLiveName;
+    private String mLiveEmail;
 
     public static LogicData getInstance() {
         if (mInstance == null) {
             mInstance = new LogicData();
         }
-
         return mInstance;
     }
 
@@ -63,9 +66,20 @@ public class LogicData {
         }else if(dataName.equals(ACCOUNT_STATE)){
             isLive = data;
             Log.d("" , "isLive = " + isLive);
-
             setStatusBarColor();
+        }else if(dataName.equals(LIVE_NAME)){
+            mLiveName = data;
+        }else if(dataName.equals(LIVE_EMAIL)){
+            mLiveEmail = data;
         }
+    }
+
+    public String getLiveName(){
+        return mLiveName;
+    }
+
+    public String getLiveEmail(){
+        return mLiveEmail;
     }
 
     public JSONArray getMyList() {

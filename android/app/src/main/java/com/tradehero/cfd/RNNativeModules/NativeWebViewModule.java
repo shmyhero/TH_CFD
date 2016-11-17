@@ -42,6 +42,7 @@ import com.facebook.react.views.webview.WebViewConfig;
 import com.facebook.react.views.webview.events.TopLoadingErrorEvent;
 import com.facebook.react.views.webview.events.TopLoadingFinishEvent;
 import com.facebook.react.views.webview.events.TopLoadingStartEvent;
+import com.tradehero.cfd.module.LogicData;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -116,6 +117,18 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
                 NativeDataModule.passDataToRN(reactContext, NativeActions.ACTION_OPEN_URL, url);
 
                 return true;
+            }
+
+            CookieSyncManager.createInstance(reactContext);
+            CookieManager cookieManager = CookieManager.getInstance();
+            cookieManager.setAcceptCookie(true);
+            String url2 = "cn.tradehero.mobi";
+            cookieManager.setCookie(url2, "username="+ LogicData.getInstance().getLiveName());
+            cookieManager.setCookie(url2, "email="+LogicData.getInstance().getLiveEmail());
+            if (Build.VERSION.SDK_INT < 21) {
+                CookieSyncManager.getInstance().sync();
+            } else {
+                CookieManager.getInstance().flush();
             }
 
             view.loadUrl(url);
@@ -291,7 +304,7 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
         reactContext.addLifecycleEventListener(webView);
         mWebViewConfig.configWebView(webView);
 
-        if (ReactBuildConfig.DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (/*ReactBuildConfig.DEBUG && */Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             WebView.setWebContentsDebuggingEnabled(true);
         }
 

@@ -11,6 +11,7 @@ import {
 	TouchableOpacity,
 	ScrollView,
 	Alert,
+	Platform,
 } from 'react-native';
 var CookieManager = require('react-native-cookies')
 
@@ -208,6 +209,12 @@ var MePage = React.createClass({
 				function(responseJson) {
 					StorageModule.setMeData(JSON.stringify(responseJson))
 					LogicData.setMeData(responseJson);
+					NativeDataModule.passRawDataToNative('userName', responseJson.liveUsername)
+					NativeDataModule.passRawDataToNative('userEmail', responseJson.liveEmail)
+					if (Platform.OS === 'ios') {
+						this.setCookie();
+					}
+					console.log("about cookie " + "userName = " + responseJson.liveUsername + " && userEmail = " + responseJson.liveEmail);
 				}.bind(this),
 				function(errorMessage) {}.bind(this),
 				function(errorMessage) {}.bind(this)
@@ -264,12 +271,48 @@ var MePage = React.createClass({
 		}
 	},
 
+	setCookie:function(){
+
+		var userData = LogicData.getUserData()
+
+			CookieManager.set({
+			  name: 'username',
+			  value: userData.liveUsername,
+			  domain: 'cn.tradehero.mobi',
+			  origin: 'cn.tradehero.mobi',
+			  path: '/',
+			  version: '1',
+			  expiration: '2029-05-30T12:30:00.00-05:00'
+			}, (err, res) => {
+			  console.log('cookie set username!');
+			  console.log(err);
+			  console.log(res);
+			});
+
+			CookieManager.set({
+				  name: 'email',
+				  value: userData.liveEmail,
+				  domain: 'cn.tradehero.mobi',
+				  origin: 'cn.tradehero.mobi',
+				  path: '/',
+				  version: '1',
+				  expiration: '2029-05-30T12:30:00.00-05:00'
+				}, (err, res) => {
+				  console.log('cookie set email!');
+				  console.log(err);
+				  console.log(res);
+				});
+	},
+
 	onWebViewNavigationStateChange: function(navState) {
 		// todo
 		console.log("my web view state changed: "+navState.url)
-		CookieManager.get('https://tradehub.net/demo/auth', (err, res) => {
-  			console.log('Got cookies for url: ', res);
+
+		CookieManager.get('http://cn.tradehero.mobi', (err, res) => {
+  			console.log('about cookie 2', res);
 		})
+
+		// console.log('about cookie 3',navState.url)
 
 		if(navState.url.indexOf('live/oauth/ok')>0){
 			console.log('success login ok');
@@ -298,7 +341,8 @@ var MePage = React.createClass({
 				themeColor: "#3f5781",//ColorConstants.TITLE_DARK_BLUE,
 				onNavigationStateChange: this.onWebViewNavigationStateChange,
 				url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
-
+				// url:'http://cn.tradehero.mobi/tradehub/login.html'
+				// url:'http://www.baidu.com'
 				// url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
 				// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
 			  // url:'https://www.tradehub.net/demo/ff-beta/tradehero-login-debug.html',

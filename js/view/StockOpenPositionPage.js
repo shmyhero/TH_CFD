@@ -212,10 +212,10 @@ var StockOpenPositionPage = React.createClass({
 		// url = url.replace(/<chartType>/, this.state.chartType)
 
 		if(chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE){
-			url = NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M;
+			url = LogicData.getAccountState() ? NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M_LIVE : NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M;
 			url = url.replace(/<securityId>/, stockCode);
 		}else if(chartType == NetConstants.PARAMETER_CHARTTYPE_DAY){
-			url = NetConstants.CFD_API.GET_STOCK_KLINE_DAY;
+			url = LogicData.getAccountState() ? NetConstants.CFD_API.GET_STOCK_KLINE_DAY_LIVE : NetConstants.CFD_API.GET_STOCK_KLINE_DAY;			
 			url = url.replace(/<securityId>/, stockCode);
 		}else {
 			 url = url.replace(/<stockCode>/, stockCode)

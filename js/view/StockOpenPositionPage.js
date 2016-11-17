@@ -750,9 +750,11 @@ var StockOpenPositionPage = React.createClass({
 			</TouchableOpacity>
 		)
 		return(
-			<ScrollView horizontal={true} style={{flex: 0, paddingBottom: 5, marginTop: 6}}>
-				{tabs}
-			</ScrollView>
+			<View>
+				<ScrollView horizontal={true} style={{flex: 0, paddingBottom: 5, marginTop: 6}}>
+					{tabs}
+				</ScrollView>
+			</View>
 			);
 	},
 

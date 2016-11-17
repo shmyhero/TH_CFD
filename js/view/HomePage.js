@@ -61,6 +61,7 @@ var NO_MAGIC = false
 var didTabSelectSubscription = null
 var didFocusSubscription = null
 var lastForceloopTime = 0
+const CARDS_LIST = "cardList"
 
 var HomePage = React.createClass({
 	mixins: [TimerMixin],
@@ -108,6 +109,7 @@ var HomePage = React.createClass({
 	reloadBanner: function() {
 		var userData = LogicData.getUserData();
 
+		this.refs[CARDS_LIST] && this.refs[CARDS_LIST].scrollTo({x:0})
 		NetworkModule.fetchTHUrl(
 			NetConstants.CFD_API.GET_HOMEPAGE_BANNER_API,
 			{
@@ -647,7 +649,7 @@ var HomePage = React.createClass({
 							</Text>
 						</View>
 						<View style={styles.separator}/>
-						<ScrollView style={styles.scrollViewStyle}
+						<ScrollView ref={CARDS_LIST} style={styles.scrollViewStyle}
 							horizontal={true}
 							showsHorizontalScrollIndicator={false}>
 						 	{cardItems}

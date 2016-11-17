@@ -76,7 +76,7 @@ var OAStatusPage = React.createClass({
 							onPress={this.gotoNext}
 							textContainerStyle={styles.buttonView}
 							textStyle={styles.buttonText}
-							text='免费登录' />
+							text='实盘登录' />
 					</View>
 
 					<View style={styles.helpContainer}>

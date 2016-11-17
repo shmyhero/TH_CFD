@@ -156,8 +156,9 @@ export function removeFromOwnStocks(stockData) {
 		return stock.id
 	})
 
+	var urlPrefix = LogicData.getAccountState() ? NetConstants.CFD_API.OWN_STOCK_LIST_LIVE_API : NetConstants.CFD_API.OWN_STOCK_LIST_API;
 	fetchTHUrl(
-		NetConstants.CFD_API.OWN_STOCK_LIST_API+'?'+NetConstants.PARAMETER_STOCKIDS+'='+idList,
+		urlPrefix + '?'+NetConstants.PARAMETER_STOCKIDS+'='+idList,
 		{
 			method: 'DELETE',
 			headers: {
@@ -183,8 +184,10 @@ export function updateOwnStocks(stockData) {
 		return stock.id
 	})
 
+	var urlPrefix = isLive ? NetConstants.CFD_API.OWN_STOCK_LIST_LIVE_API : NetConstants.CFD_API.OWN_STOCK_LIST_API;
+
 	fetchTHUrl(
-		NetConstants.CFD_API.OWN_STOCK_LIST_API+'?'+NetConstants.PARAMETER_STOCKIDS+'='+idList,
+		urlPrefix + '?'+NetConstants.PARAMETER_STOCKIDS+'='+idList,
 		{
 			method: 'PUT',
 			headers: {

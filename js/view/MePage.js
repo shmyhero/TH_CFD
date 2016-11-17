@@ -273,15 +273,17 @@ var MePage = React.createClass({
 
 	setCookie:function(){
 
-		if(userData ==undefined || userData.liveUsername==undefined || userData.liveEmail==undefined){
+		var meData = LogicData.getMeData();
+
+		if(meData ==undefined || meData.liveUsername==undefined || meData.liveEmail==undefined){
 			return;
 		}
 
-		var userData = LogicData.getUserData()
+
 
 			CookieManager.set({
 			  name: 'username',
-			  value: userData.liveUsername,
+			  value: meData.liveUsername,
 			  domain: 'cn.tradehero.mobi',
 			  origin: 'cn.tradehero.mobi',
 			  path: '/',
@@ -295,7 +297,7 @@ var MePage = React.createClass({
 
 			CookieManager.set({
 				  name: 'email',
-				  value: userData.liveEmail,
+				  value: meData.liveEmail,
 				  domain: 'cn.tradehero.mobi',
 				  origin: 'cn.tradehero.mobi',
 				  path: '/',

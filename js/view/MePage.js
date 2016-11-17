@@ -273,6 +273,10 @@ var MePage = React.createClass({
 
 	setCookie:function(){
 
+		if(userData ==undefined || userData.liveUsername==undefined || userData.liveEmail==undefined){
+			return;
+		}
+
 		var userData = LogicData.getUserData()
 
 			CookieManager.set({

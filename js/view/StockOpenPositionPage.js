@@ -114,7 +114,7 @@ var StockOpenPositionPage = React.createClass({
 				this.setState({
 					isClear:false,
 				})
-				
+
 				var interestedStockIds = []
 				for (var i = 0; i < responseJson.length; i++) {
 					var currencySymbol = responseJson[i].security.ccy
@@ -410,7 +410,7 @@ var StockOpenPositionPage = React.createClass({
 		isWaiting = true
 
 		var userData = LogicData.getUserData()
-		var url = NetConstants.CFD_API.POST_DELETE_POSITION_API
+		var url = LogicData.getAccountState() ? NetConstants.CFD_API.POST_DELETE_POSITION_LIVE_API : NetConstants.CFD_API.POST_DELETE_POSITION_API;
 		NetworkModule.fetchTHUrl(
 			url,
 			{

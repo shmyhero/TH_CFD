@@ -42,7 +42,7 @@ var NetWorthMapping = [
 	{"value": 0, "displayText": "12万以下（人民币）"},
 	{"value": 15, "displayText": "12-33万（人民币）"},
 	{"value": 40, "displayText": "33-58万（人民币）"},
-	{"value": 70, "displayText": "33-58万（人民币）"},
+	{"value": 70, "displayText": "58-83万（人民币）"},
 	{"value": 100, "displayText": "83-413万以上（人民币）"},
 	{"value": 101, "displayText": "413万以上（人民币）"},
 ]

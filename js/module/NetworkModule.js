@@ -184,6 +184,7 @@ export function updateOwnStocks(stockData) {
 		return stock.id
 	})
 
+	var isLive = LogicData.getAccountState();
 	var urlPrefix = isLive ? NetConstants.CFD_API.OWN_STOCK_LIST_LIVE_API : NetConstants.CFD_API.OWN_STOCK_LIST_API;
 
 	fetchTHUrl(

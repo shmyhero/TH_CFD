@@ -21,6 +21,7 @@ var UIConstants = require('../UIConstants')
 var LogicData = require('../LogicData')
 var NetworkModule = require('../module/NetworkModule')
 var NetConstants = require('../NetConstants')
+var Toast = require('./component/toast/Toast');
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
@@ -30,7 +31,7 @@ var listRawData = [
 {'type':'normal','title':'切换到模拟账号', 'subtype': 'change2Simulator'},
 {'type':'normal','title':'退出盈交易', 'subtype': 'logout'},
 {'type':'normal','title':'登出实盘账号', 'subtype': 'logoutAccountActual'},
-{'type':'normal','title':'修改登入密码', 'subtype': 'modifyLoginActualPwd'},
+{'type':'normal','title':'修改登录密码', 'subtype': 'modifyLoginActualPwd'},
 ]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -70,10 +71,49 @@ var MeConfigPage = React.createClass({
 		}else if(rowData.subtype === 'logoutAccountActual'){
 			this.logoutAccountActualAlert();
 		}else if(rowData.subtype === 'modifyLoginActualPwd'){
-			this.props.navigator.push({
-				name: MainPage.ME_CONFIG_MODIFY_PWD_ROUTE,
-			});
+			// this.props.navigator.push({
+			// 	name: MainPage.ME_CONFIG_MODIFY_PWD_ROUTE,
+			// });
+			this.askForSendEmailToModifyPwd();
 		}
+	},
+
+	askForSendEmailToModifyPwd:function(){
+
+		var meData = LogicData.getMeData();
+
+		Alert.alert(
+			"提示",
+			"是否需要发送修改密码邮件到您的邮箱"+meData.liveEmail+"?",
+				[
+					{text: '取消'},
+					{text: '发送', onPress: () => this.sendEmailForModifyPwd()},
+				]
+			)
+	},
+
+	sendEmailForModifyPwd:function(){
+		var userData = LogicData.getUserData()
+
+		NetworkModule.fetchTHUrlWithNoInternetCallback(
+			NetConstants.CFD_API.RESET_PASSWORD,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+			},
+			function(responseJson) {
+			 console.log('忘记密码。。。邮件发送成功');
+			 Toast.show("邮件发送成功");
+			}.bind(this),
+			function(errorMessage) {
+				console.log('登出失败 1');
+			}.bind(this),
+			function(errorMessage) {
+				console.log('登出失败 2');
+			}.bind(this)
+		)
 	},
 
 

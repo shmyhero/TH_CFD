@@ -776,6 +776,7 @@ var HomePage = React.createClass({
 					<Image style={styles.topnewsImage} source={LogicData.getAccountState()?require('../../images/topnews_actual.png'):require('../../images/topnews.png')}/>
 					<View style={styles.topnewsVerticalLine}/>
 				</View>
+				// <View></View>
 			)
 		}
 	},
@@ -811,8 +812,8 @@ var HomePage = React.createClass({
 					<Image
 						style={[styles.eventsIcon]}
 						source={image}/>
-					<Image style={[styles.eventsHotIcon]}
-						source={hot_image}/>
+					{/* <Image style={[styles.eventsHotIcon]}
+						source={hot_image}/> */}
 				</View>
 			</TouchableOpacity>
 		)
@@ -980,7 +981,7 @@ var styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		backgroundColor: 'white',
-		marginLeft: 12,
+		marginLeft: 15,
 	},
 	blockTitleText: {
 		color: '#1862df',
@@ -1008,13 +1009,13 @@ var styles = StyleSheet.create({
 	popularityTitle: {
 		flex: 1,
 		fontSize: 17,
-		marginLeft: 12,
+		marginLeft: 15,
 		color: "#3f3f3f",
 	},
 	more: {
 		fontSize: 14,
 		color: ColorConstants.MORE_ICON,
-		marginRight: 12,
+		marginRight: 15,
 	},
 	popularitylist: {
 		height:200,
@@ -1026,7 +1027,7 @@ var styles = StyleSheet.create({
 	popularityRowLeft: {
 		flex: 1,
 		alignItems: 'flex-start',
-		marginLeft: 12,
+		marginLeft: 15,
 	},
 	popularityRowCenter: {
 		flex: 1,
@@ -1035,7 +1036,7 @@ var styles = StyleSheet.create({
 	popularityRowRight: {
 		flex: 1,
 		alignItems: 'flex-end',
-		marginRight: 12,
+		marginRight: 15,
 	},
 	buyTitle: {
 		color: ColorConstants.STOCK_RISE_RED,
@@ -1154,7 +1155,7 @@ var styles = StyleSheet.create({
 	eventsTextContainer: {
 		paddingTop: 10,
 		paddingBottom: 10,
-		paddingLeft:12,
+		paddingLeft:15,
 		flexDirection: 'column',
 		flex:1,
 		alignSelf:'center',

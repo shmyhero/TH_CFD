@@ -120,6 +120,8 @@ function getCFDAPI(){
     SET_CARD_READ: CFD_API_SERVER + '/api/card/<id>',
     SET_CARD_LIKED: CFD_API_SERVER + '/api/card/like/<id>',
     SHARE_CARD_TO_HOME: CFD_API_SERVER + '/api/card/share/<id>',
+
+    RESET_PASSWORD:CFD_API_SERVER + '/api/user/live/resetPwd',//忘记密码/重置密码
   }
 }
 

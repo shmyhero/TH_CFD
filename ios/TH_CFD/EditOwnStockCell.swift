@@ -46,7 +46,7 @@ class EditOwnStockCell: UITableViewCell {
 	}
 	
 	func setAlert(hasAlert: Bool) {
-		let name:String = hasAlert ? reminderOffImageName : reminderOnImageName
+		let name:String = hasAlert ? reminderOnImageName : reminderOffImageName
 		self.alertButton.setImage(UIImage.init(named: name), forState: .Normal)
 	}
 	

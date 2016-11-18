@@ -986,6 +986,7 @@ var styles = StyleSheet.create({
 		backgroundColor: '#356dce',
 		alignItems: 'center',
 		justifyContent: 'space-around',
+		height: 43,
 	},
 	flashBorder: {
 	  borderColor: '#bfd4f7',

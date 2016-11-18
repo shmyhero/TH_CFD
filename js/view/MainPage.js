@@ -858,7 +858,7 @@ var MainPage = React.createClass({
 			          	</RawContent>
 			        </Tab>
 			        <Tab name="trade">
-			          	<Icon ref={"tradeBtn"} label="交易" type={glypy.Stat} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
+			          	<Icon ref={"tradeBtn"} label="仓位" type={glypy.Stat} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
 			        	<RawContent ref="exchangeContent">
 			            	<Navigator
 								style={styles.container}

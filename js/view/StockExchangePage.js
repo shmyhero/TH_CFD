@@ -51,9 +51,9 @@ var StockExchangePage = React.createClass({
 	},
 
 	clearViews:function(){
-		if(this.refs['page2'])this.refs['page2'].clearViews();
-		if(this.refs['page1'])this.refs['page1'].clearViews();
-		if(this.refs['page0'])this.refs['page0'].clearViews();
+		// if(this.refs['page2'])this.refs['page2'].clearViews();
+		// if(this.refs['page1'])this.refs['page1'].clearViews();
+		// if(this.refs['page0'])this.refs['page0'].clearViews();
 	},
 
 	onPageSelected: function(index: number) {

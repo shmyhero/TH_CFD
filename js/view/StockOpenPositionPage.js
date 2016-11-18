@@ -215,7 +215,7 @@ var StockOpenPositionPage = React.createClass({
 			url = LogicData.getAccountState() ? NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M_LIVE : NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M;
 			url = url.replace(/<securityId>/, stockCode);
 		}else if(chartType == NetConstants.PARAMETER_CHARTTYPE_DAY){
-			url = LogicData.getAccountState() ? NetConstants.CFD_API.GET_STOCK_KLINE_DAY_LIVE : NetConstants.CFD_API.GET_STOCK_KLINE_DAY;			
+			url = LogicData.getAccountState() ? NetConstants.CFD_API.GET_STOCK_KLINE_DAY_LIVE : NetConstants.CFD_API.GET_STOCK_KLINE_DAY;
 			url = url.replace(/<securityId>/, stockCode);
 		}else {
 			 url = url.replace(/<stockCode>/, stockCode)
@@ -385,9 +385,7 @@ var StockOpenPositionPage = React.createClass({
 				stockDetailInfo: rowData.security
 			}, ()=>{
 				this.loadStockDetailInfo(this.state.chartType,stockid)
-			}
-		)
-
+			})
 		}
 		this.doScrollAnimation()
 	},
@@ -1022,13 +1020,9 @@ var StockOpenPositionPage = React.createClass({
 			);
 		}
 		else {
-			var thisPartHeight = 170
+			var thisPartHeight = 100 //170
 			thisPartHeight += this.state.stopLossSwitchIsOn ? 55 : 0
 			thisPartHeight += this.state.stopProfitSwitchIsOn ? 55 : 0
-			var confirmText = '确认'
-			if (!this.state.profitLossUpdated && this.state.profitLossConfirmed) {
-				confirmText = '已设置'
-			}
 
 			return (
 				<View style={{height:thisPartHeight}}>
@@ -1036,16 +1030,26 @@ var StockOpenPositionPage = React.createClass({
 
 					{this.renderStopProfitLoss(rowData, 2)}
 
-					<TouchableHighlight
-						underlayColor={this.state.profitLossUpdated ? ColorConstants.title_blue():'#dfdee4'}
-						onPress={() => this.switchConfrim(rowData)} style={[styles.okView, !this.state.profitLossUpdated && styles.okViewDisabled,this.state.profitLossUpdated && {backgroundColor:ColorConstants.title_blue()} ]}>
-						<Text style={[styles.okButton, !this.state.profitLossUpdated && styles.okViewDisabled, this.state.profitLossUpdated && {backgroundColor:ColorConstants.title_blue()}]}>
-							{confirmText}
-						</Text>
-					</TouchableHighlight>
 				</View>
 				);
 		}
+	},
+
+	renderProfitOKViw: function(rowData){
+		var confirmText = '确认'
+		if (!this.state.profitLossUpdated && this.state.profitLossConfirmed) {
+			confirmText = '已设置'
+		}
+
+		return (
+			<TouchableHighlight
+				underlayColor={this.state.profitLossUpdated ? ColorConstants.title_blue():'#dfdee4'}
+				onPress={() => this.switchConfrim(rowData)} style={[styles.okView, !this.state.profitLossUpdated && styles.okViewDisabled,this.state.profitLossUpdated && {backgroundColor:ColorConstants.title_blue()} ]}>
+				<Text style={[styles.okButton, !this.state.profitLossUpdated && styles.okViewDisabled, this.state.profitLossUpdated && {backgroundColor:ColorConstants.title_blue()}]}>
+					{confirmText}
+				</Text>
+			</TouchableHighlight>
+		)
 	},
 
 	renderOKView: function(rowData) {
@@ -1077,16 +1081,32 @@ var StockOpenPositionPage = React.createClass({
 		if (this.state.showExchangeDoubleCheck) {
 			buttonText = '确认:$' + profitAmount.toFixed(2)
 		}
+
+		var underlayColor = rowData.security.isOpen ? ColorConstants.title_blue() : '#dfdee4';
+		var separatorStyle = styles.darkSeparator;
+		var buttonStyle = [styles.okView,{backgroundColor:ColorConstants.title_blue()},this.state.showExchangeDoubleCheck && {backgroundColor:'white',borderWidth:1,borderColor:ColorConstants.title_blue()}, !rowData.security.isOpen && styles.okViewDisabled];
+		var buttonTextStyle = [styles.okButton,this.state.showExchangeDoubleCheck&&{color:ColorConstants.title_blue()}];
+		if(this.state.selectedSubItem === 2){
+			var buttonText = '确认'
+			if (!this.state.profitLossUpdated && this.state.profitLossConfirmed) {
+				buttonText = '已设置'
+			}
+			separatorStyle = {};
+			underlayColor = this.state.profitLossUpdated ? ColorConstants.title_blue():'#dfdee4';
+			buttonStyle = [styles.okView, !this.state.profitLossUpdated && styles.okViewDisabled,this.state.profitLossUpdated && {backgroundColor:ColorConstants.title_blue()} ]
+			buttonTextStyle = [styles.okButton, !this.state.profitLossUpdated && styles.okViewDisabled, this.state.profitLossUpdated && {backgroundColor:ColorConstants.title_blue()}];
+		}
 		return(
 			<View>
-				<View style={styles.darkSeparator}/>
+				<View style={separatorStyle}/>
 				{showNetIncome ? <Text style={styles.netIncomeText}>净收益:9.26</Text> : null}
 
 				<TouchableHighlight
-					underlayColor={rowData.security.isOpen ? ColorConstants.title_blue() : '#dfdee4'}
-					onPress={() => this.okPress(rowData)} style={[styles.okView,{backgroundColor:ColorConstants.title_blue()},this.state.showExchangeDoubleCheck && {backgroundColor:'white',borderWidth:1,borderColor:ColorConstants.title_blue()}, !rowData.security.isOpen && styles.okViewDisabled]}
+					underlayColor={underlayColor}
+					onPress={()=>this.state.selectedSubItem === 2 ? this.switchConfrim(rowData) : this.okPress(rowData)}
+					style={buttonStyle}
 					>
-					<Text style={[styles.okButton,this.state.showExchangeDoubleCheck&&{color:ColorConstants.title_blue()}]}>
+					<Text style={buttonTextStyle}>
 						{buttonText}
 					</Text>
 				</TouchableHighlight>
@@ -1175,7 +1195,7 @@ var StockOpenPositionPage = React.createClass({
 
 				{this.state.selectedSubItem !== 0 ? this.renderSubDetail(rowData): null}
 
-				{this.state.selectedSubItem !== 2 ? this.renderOKView(rowData) : null}
+				{this.renderOKView(rowData)}
 			</View>
 		);
 	},

@@ -76,7 +76,7 @@ var MyIncomePage = React.createClass({
 					var demoTransaction = responseJson.totalDemoTransaction;
 					var demoRegister = responseJson.demoRegister
 					var totalCard = responseJson.totalCard ? responseJson.totalCard : 0;
-					var totalIncome = totalDailySign + demoTransaction + demoRegister;
+					var totalIncome = totalDailySign + demoTransaction + demoRegister + totalCard;
 					console.log("totalIncome: " + totalIncome.toString())
 					console.log("totalDailySign: " + totalDailySign.toString())
 					console.log("demoTransaction: " + demoTransaction.toString())

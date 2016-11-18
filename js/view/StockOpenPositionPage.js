@@ -114,7 +114,7 @@ var StockOpenPositionPage = React.createClass({
 				this.setState({
 					isClear:false,
 				})
-				
+
 				var interestedStockIds = []
 				for (var i = 0; i < responseJson.length; i++) {
 					var currencySymbol = responseJson[i].security.ccy
@@ -1082,7 +1082,7 @@ var StockOpenPositionPage = React.createClass({
 
 				<TouchableHighlight
 					underlayColor={rowData.security.isOpen ? ColorConstants.title_blue() : '#dfdee4'}
-					onPress={() => this.okPress(rowData)} style={[styles.okView,{backgroundColor:ColorConstants.title_blue()},this.state.showExchangeDoubleCheck && {backgroundColor:'white',borderWidth:1,borderColor:ColorConstants.title_blue()}, !rowData.security.isOpen && styles.okViewDisab]}
+					onPress={() => this.okPress(rowData)} style={[styles.okView,{backgroundColor:ColorConstants.title_blue()},this.state.showExchangeDoubleCheck && {backgroundColor:'white',borderWidth:1,borderColor:ColorConstants.title_blue()}, !rowData.security.isOpen && styles.okViewDisabled]}
 					>
 					<Text style={[styles.okButton,this.state.showExchangeDoubleCheck&&{color:ColorConstants.title_blue()}]}>
 						{buttonText}

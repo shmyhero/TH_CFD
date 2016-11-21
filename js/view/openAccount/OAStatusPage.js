@@ -90,7 +90,7 @@ var OAStatusPage = React.createClass({
 							<TouchableOpacity style={{flexDirection:'row',alignItems:'center'}} onPress={this.helpPressed}>
 
 								<Image style = {styles.lineLeftRight} source = {require('../../../images/line_left2.png')} ></Image>
-								<Text style={styles.helpTitle}>服务热线：{CALL_NUMBER}}</Text>
+								<Text style={styles.helpTitle}>服务热线：{CALL_NUMBER}</Text>
 								<Image style = {styles.lineLeftRight} source = {require('../../../images/line_right2.png')} ></Image>
 
 							</TouchableOpacity>

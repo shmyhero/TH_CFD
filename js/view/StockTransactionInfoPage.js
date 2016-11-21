@@ -92,7 +92,7 @@ var StockTransactionInfoPage = React.createClass({
 			title: "我获得了一张盈交易卡片奖励",
       description: "盈交易-风靡全球的投资神器登陆亚洲",
       webpageUrl: url,
-      imgUrl: NetConstants.TRADEHERO_API.SHARE_LOGO_URL,
+      imageUrl: NetConstants.TRADEHERO_API.SHARE_LOGO_URL,
 			card: this.state.card,
 		});
 	},

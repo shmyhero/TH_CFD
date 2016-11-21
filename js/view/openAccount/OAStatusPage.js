@@ -8,6 +8,7 @@ import {
 	Image,
 	Dimensions,
 	TouchableOpacity,
+	Alert,
 } from 'react-native';
 
 // var ViewPager = require('react-native-viewpager-es6');
@@ -18,8 +19,13 @@ var TalkingdataModule = require('../../module/TalkingdataModule')
 var OpenAccountRoutes = require('./OpenAccountRoutes')
 var LogicData = require('../../LogicData')
 var UIConstants = require('../../UIConstants')
+var SentIntent = require('../component/nativeIntent/SendIntent')
 
 var {height, width} = Dimensions.get('window')
+
+
+var CALL_NUMBER = '66058771'
+
 var PAGES = [
 	{name: 'Page0'},
 	{name: 'Page1'},
@@ -52,7 +58,7 @@ var OAStatusPage = React.createClass({
 	},
 
 	helpPressed: function() {
-
+		SentIntent.sendPhoneDial(CALL_NUMBER)
 	},
 
 
@@ -81,11 +87,13 @@ var OAStatusPage = React.createClass({
 
 					<View style={styles.helpContainer}>
 						<View style={styles.helpRowWrapper}>
-							{/* <TouchableOpacity style={{padding: 5}} onPress={this.helpPressed}> */}
-								<Text style={styles.helpTitle}>
-									 服务热线：66058771
-								</Text>
-							{/* </TouchableOpacity> */}
+							<TouchableOpacity style={{flexDirection:'row',alignItems:'center'}} onPress={this.helpPressed}>
+
+								<Image style = {styles.lineLeftRight} source = {require('../../../images/line_left2.png')} ></Image>
+								<Text style={styles.helpTitle}>服务热线：{CALL_NUMBER}}</Text>
+								<Image style = {styles.lineLeftRight} source = {require('../../../images/line_right2.png')} ></Image>
+
+							</TouchableOpacity>
 						</View>
 					</View>
 				</View>
@@ -148,7 +156,7 @@ var styles = StyleSheet.create({
 		alignItems: 'center',
 		paddingLeft: 10,
 		paddingRight: 10,
-		justifyContent: 'space-around',
+		justifyContent: 'center',
 	},
 	helpLine: {
 		flex: 1,
@@ -160,7 +168,12 @@ var styles = StyleSheet.create({
 	helpTitle: {
 		fontSize: 14,
 		textAlign: 'center',
-		color: '#2b2b2b',
+		color: '#415a87',
+	},
+	lineLeftRight:{
+			 	width:100,
+				height:1,
+				margin:5,
 	},
 });
 

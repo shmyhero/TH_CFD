@@ -377,8 +377,8 @@ var StockListPage = React.createClass({
 					<View style={{flex:10, alignItems:'center', justifyContent: 'space-around'}}>
 						<TouchableOpacity onPress={this.handleAddStock}>
 							<View>
-								<Image style={styles.addImage} source={require('../../images/add.png')}/>
-								<Text style={styles.addText}>暂无产品 点击添加</Text>
+								<Image style={styles.addImage} source={LogicData.getAccountState()?require('../../images/add_live.png'):require('../../images/add.png')}/>
+								<Text style={[styles.addText,{color:ColorConstants.TITLE_BLUE}]}>暂无产品 点击添加</Text>
 							</View>
 						</TouchableOpacity>
 					</View>

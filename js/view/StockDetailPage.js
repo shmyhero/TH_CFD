@@ -595,7 +595,7 @@ var StockDetailPage = React.createClass({
 				<TouchableHighlight
 					underlayColor={upSelected ? '#6da2fc': '#356dce'}
 					onPress={() => this.state.stockInfo.isOpen && this.buyPress()}
-					style={[styles.tradeButtonView,{backgroundColor:LogicData.getAccountState()?'#476189':'#356dce'},(this.state.flashTimes>0 && this.state.flashTimes%2==0)?styles.flashBorder:null , upSelected&&(LogicData.getAccountState()?styles.tradeButtonViewSelectedLive:styles.tradeButtonViewSelected)]}>
+					style={[styles.tradeButtonView,{borderColor:ColorConstants.COLOR_BORDER},{backgroundColor:LogicData.getAccountState()?'#476189':'#356dce'},(this.state.flashTimes>0 && this.state.flashTimes%2==0)?styles.flashBorder:null , upSelected&&(LogicData.getAccountState()?styles.tradeButtonViewSelectedLive:styles.tradeButtonViewSelected)]}>
 					<View style={styles.tradeButtonContainer}>
 						<Text style={[styles.tradeButtonText, {color: upTextColor}]}>
 							{this.state.stockPriceAsk}
@@ -607,7 +607,7 @@ var StockDetailPage = React.createClass({
 				<TouchableHighlight
 					underlayColor={downSelected ? '#6da2fc': '#356dce'}
 					onPress={() => this.state.stockInfo.isOpen && this.sellPress()}
-					style={[styles.tradeButtonView,,{backgroundColor:LogicData.getAccountState()?'#476189':'#356dce'},(this.state.flashTimes>0 && this.state.flashTimes%2==0)?styles.flashBorder:null ,downSelected&&(LogicData.getAccountState()?styles.tradeButtonViewSelectedLive:styles.tradeButtonViewSelected)]}>
+					style={[styles.tradeButtonView,{borderColor:ColorConstants.COLOR_BORDER},{backgroundColor:LogicData.getAccountState()?'#476189':'#356dce'},(this.state.flashTimes>0 && this.state.flashTimes%2==0)?styles.flashBorder:null ,downSelected&&(LogicData.getAccountState()?styles.tradeButtonViewSelectedLive:styles.tradeButtonViewSelected)]}>
 					<View style={styles.tradeButtonContainer}>
 						<Text style={[styles.tradeButtonText, {color: downTextColor}]}>
 							{this.state.stockPriceBid}
@@ -982,7 +982,7 @@ var styles = StyleSheet.create({
 		marginRight: 12,
 		borderRadius:5,
 		borderWidth:1,
-		borderColor: '#133e86',
+		borderColor: ColorConstants.COLOR_BORDER,
 		backgroundColor: '#356dce',
 		alignItems: 'center',
 		justifyContent: 'space-around',

@@ -9,6 +9,7 @@ var USER_DATA_STORAGE_KEY = '@TH_CFD:userData';
 var ME_DATA_STORAGE_KEY = '@TH_CFD:meData';
 var OWN_STOCKS_DATA_STORAGE_KEY = '@TH_CFD:ownStocksData';
 var SEARCH_HISTORY_KEY = '@TH_CFD:searchHistory';
+var LIVE_SEARCH_HISTORY_KEY = '@TH_CFD:searchHistoryLive';
 var BANNER_STORAGE_KEY = '@TH_CFD:bannerData';
 var GUIDE_STORAGE_KEY = '@TH_CFD:guideData';
 var TUTORIAL_KEY = '@TH_CFD:tutorialData';
@@ -134,6 +135,34 @@ export async function setSearchHistory(history) {
 export async function removeSearchHistory() {
 	try {
 		await AsyncStorage.removeItem(SEARCH_HISTORY_KEY);
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+
+export async function loadLiveSearchHistory() {
+	try {
+		var value = await AsyncStorage.getItem(LIVE_SEARCH_HISTORY_KEY);
+		console.log('search history:'+value)
+		return value;
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function setLiveSearchHistory(history) {
+	try {
+		await AsyncStorage.setItem(LIVE_SEARCH_HISTORY_KEY, history);
+		console.log('save search history:'+history)
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function removeLiveSearchHistory() {
+	try {
+		await AsyncStorage.removeItem(LIVE_SEARCH_HISTORY_KEY);
 	} catch (error) {
 		console.log('AsyncStorage error: ' + error.message);
 	}

@@ -10,7 +10,7 @@ var meData = {};
 var wechatAuthData = {};
 var wechatUserData = {};
 var ownStocksData = [];
-var searchStockHistory = [];
+var searchStockHistory = null;
 var balanceData = null;
 var fxData = [];
 var certificateIdCardInfo = null;
@@ -44,6 +44,7 @@ var LogicData = {
 				StorageModule.removeOwnStocksData();
 				this.removeOwnStocksData();
 			}
+			searchStockHistory = null;
 
 			StorageModule.setAccountState(state)
 			console.log("setAccountState = " + state);
@@ -137,22 +138,60 @@ var LogicData = {
 	},
 
   setSearchStockHistory: function(stocksData){
-      searchStockHistory = stocksData
-      StorageModule.setSearchHistory(JSON.stringify(stocksData))
+    searchStockHistory = stocksData
+		if(accountState){
+    	StorageModule.setLiveSearchHistory(JSON.stringify(stocksData))
+		}else{
+    	StorageModule.setSearchHistory(JSON.stringify(stocksData))
+		}
   },
 
   getSearchStockHistory: function() {
-      return searchStockHistory
+		return new Promise(resolve=>{
+			if(searchStockHistory == null){
+				if(accountState){
+					StorageModule.loadLiveSearchHistory()
+					.then((value) => {
+						if (value !== null) {
+							searchStockHistory = JSON.parse(value);
+							resolve(searchStockHistory);
+						}else{
+							searchStockHistory = [];
+						}
+					})
+				}else{
+					StorageModule.loadSearchHistory()
+					.then((value) => {
+						if (value !== null) {
+							searchStockHistory = JSON.parse(value);
+							resolve(searchStockHistory);
+						}else{
+							searchStockHistory = [];
+						}
+					})
+				}
+			}else{
+				resolve(searchStockHistory);
+			}
+		});
   },
 
   addStockToSearchHistory: function(stockData) {
+		if(searchStockHistory){
       var findResult = searchStockHistory.find((stock)=>{return stock.id === stockData.id})
       if (findResult === undefined) {
           searchStockHistory.unshift(stockData)
-          StorageModule.setSearchHistory(JSON.stringify(searchStockHistory))
+					if(accountState){
+	          StorageModule.setLiveSearchHistory(JSON.stringify(searchStockHistory))
+					}else{
+						StorageModule.setSearchHistory(JSON.stringify(searchStockHistory))
+					}
       }
       // if exist, not update.
       return searchStockHistory
+		}else{
+			return [];
+		}
   },
 
 	setBalanceData: function(data) {

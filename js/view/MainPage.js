@@ -122,7 +122,7 @@ const glypy = glypyMapMaker({
 });
 
 const systemBlue = '#1a61dd'
-const iconGrey = '#888f9c'
+const iconGrey = '#adb1b7'
 const systemBuleActual = '#425a85'
 
 export var initExchangeTab = 0
@@ -137,6 +137,7 @@ export var refreshMainPage
 export var showSharePage
 
 var recevieDataSubscription = null
+var didAccountChangeSubscription = null;
 var SHARE_PAGE = 'SharePage'
 var REGISTER_SUCCESS_DIALOG = 'RegisterSuccessDialog'
 var SUPER_PRIORITY_HINT = 'SuperPriorityHint'
@@ -523,7 +524,6 @@ var MainPage = React.createClass({
 		if(result){
 			LogicData.setAccountState(true)//实盘状态 true
 			LogicData.setActualLogin(true)//实盘登陆状态 true
-			this.refreshMainPage()
 		}
 
 		CookieManager.clearAll((err, res) => {
@@ -592,6 +592,7 @@ var MainPage = React.createClass({
 		refreshMainPage = this.refreshMainPage
 		showSharePage = this._doShare;
 		this.initTabbarEvent()
+		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>this.refreshMainPage());
 
 		var currentNavigatorIndex = LogicData.getTabIndex();
 		if(_navigators && _navigators.length > currentNavigatorIndex){
@@ -617,6 +618,7 @@ var MainPage = React.createClass({
 				}
 			)
 		}
+
 		this.showNotification()
 
 		/*
@@ -678,6 +680,9 @@ var MainPage = React.createClass({
 		} else {
 			this.recevieDataSubscription.remove();
 		}
+
+		didAccountChangeSubscription && didAccountChangeSubscription.remove();
+
 		BackAndroid.removeEventListener('hardwareBackPress', this.backAndroidHandler);
 	},
 

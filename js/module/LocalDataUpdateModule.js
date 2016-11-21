@@ -45,6 +45,8 @@ export function removeUserData(){
   StorageModule.removeOwnStocksData();
   LogicData.removeOwnStocksData();
 
+  LogicData.setAccountState(false);
+
   OpenAccountRoutes.clearAllInputData();
 
   var date = new Date().getDateString();

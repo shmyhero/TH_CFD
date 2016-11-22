@@ -63,7 +63,7 @@ var lastForceloopTime = 0
 var HomePage = React.createClass({
 	mixins: [TimerMixin],
 	navBarPressedCount: 0,
-	developPageTriggerCount: 10,
+	developPageTriggerCount: 100,
 
 	getInitialState: function() {
 		return {

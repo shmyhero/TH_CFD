@@ -34,7 +34,7 @@ var heightRate = height/667.0
 var listRawData = [{'type':'account','subtype':'accountInfo'},
 // {'type':'button','title':'开设实盘账户'},
 {'type':'Separator', 'height':10},
-{'type':'accountState'},
+// {'type':'accountState'},
 {'type':'normal','title':'我的交易金', 'image':require('../../images/icon_income.png'), 'subtype':'income'},
 {'type':'normal','title':'帮助中心', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'helpcenter'},
 {'type':'normal','title':'线上咨询', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':'onlinehelp'},

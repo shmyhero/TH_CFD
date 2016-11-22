@@ -519,7 +519,9 @@ var MainPage = React.createClass({
 	},
 
 	ayondoLoginResult(result){
-		this.backAndShowTabbar()
+		console.log('login:ayondoLoginResult'+result);
+	  this.backAndShowTabbar()
+
 		console.log('ayondo login result :' + result);
 		if(result){
 			LogicData.setAccountState(true)//实盘状态 true

@@ -28,10 +28,10 @@ var heightRate = height/667.0
 var listRawData = [
 {'type':'normal','title':'推送设置', 'subtype': 'pushconfig'},
 {'type':'normal','title':'账号绑定', 'subtype': 'accountbinding'},
-{'type':'normal','title':'切换到模拟账号', 'subtype': 'change2Simulator'},
-{'type':'normal','title':'退出盈交易', 'subtype': 'logout'},
+{'type':'normal','title':'切换到模拟交易', 'subtype': 'change2Simulator'},
 {'type':'normal','title':'登出实盘账号', 'subtype': 'logoutAccountActual'},
-{'type':'normal','title':'修改登录密码', 'subtype': 'modifyLoginActualPwd'},
+{'type':'normal','title':'修改实盘登录密码', 'subtype': 'modifyLoginActualPwd'},
+{'type':'normal','title':'退出盈交易账号', 'subtype': 'logout'},
 ]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});

@@ -46,6 +46,7 @@ var tabData = [
 var didFocusSubscription = null;
 var updateStockInfoTimer = null;
 var flashButtonTimer = null;
+var wattingLogin = false;
 
 var StockDetailPage = React.createClass({
 	mixins: [TimerMixin],
@@ -476,12 +477,35 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
+	renderLeftMoney:function(){
+			var leftMoney = this.state.totalMoney;// - this.state.money
+
+			var userData = LogicData.getUserData()
+			var loggined = Object.keys(userData).length !== 0
+			if(loggined){
+				if(!LogicData.getAccountState()||(LogicData.getAccountState() && LogicData.getActualLogin())){
+					return (
+						<Text style={styles.leftMoneyLabel}> 账户剩余资金：{leftMoney.toFixed(2)}</Text>
+					);
+				}else{
+					return (
+						<View></View>
+					);
+				}
+			}else{
+				return (
+					<View></View>
+				);
+			}
+	},
+
 	render: function() {
 		// 0.06%, limit to 0.01
 		var leftMoney = this.state.totalMoney - this.state.money
 		var charge = 0
 		var viewMargin = Platform.OS === 'ios' ? 0:15
 		// console.log("render: " + JSON.stringify(this.state.stockInfo))
+
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
 				<View style={styles.wrapper}>
@@ -510,7 +534,7 @@ var StockDetailPage = React.createClass({
 							{this.renderScroll()}
 						</View>
 						<View style={{flex: 2, alignItems: 'center', justifyContent: 'space-around', paddingTop: 30, paddingBottom:Platform.OS === 'ios'?10:48}}>
-							<Text style={styles.leftMoneyLabel}> 账户剩余资金：{leftMoney.toFixed(2)}</Text>
+							{this.renderLeftMoney()}
 							<Text style={styles.smallLabel}> 手续费为{charge}美元</Text>
 							{this.renderOKButton()}
 							{this.renderStockCurrencyWarning()}
@@ -619,6 +643,46 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
+	live_login:function(){
+		var userData = LogicData.getUserData()
+		var userId = userData.userId
+		if (userId == undefined) {
+			userId = 0
+		}
+		wattingLogin = true;
+		console.log("RAMBO wattingLogin = true ")
+		this.props.navigator.push({
+			name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			title:'实盘交易',
+			themeColor: "#3f5781",//ColorConstants.TITLE_DARK_BLUE,
+			onNavigationStateChange: this.onWebViewNavigationStateChange,
+			url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
+			// url:'http://cn.tradehero.mobi/tradehub/login.html'
+			// url:'http://www.baidu.com'
+			// url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
+			// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
+			// url:'https://www.tradehub.net/demo/ff-beta/tradehero-login-debug.html',
+			// url:'http://cn.tradehero.mobi/TH_CFD_WEB/bangdan1.html',
+		});
+
+	},
+
+	onWebViewNavigationStateChange: function(navState) {
+		// todo
+		console.log("RAMBO my web view state changed: "+navState.url)
+
+		if(navState.url.indexOf('live/oauth/ok')>0 && wattingLogin){
+			console.log('RAMBO success login ok');
+			MainPage.ayondoLoginResult(true)
+			wattingLogin = false;
+		}else if(navState.url.indexOf('live/oauth/error')>0 && wattingLogin){
+			console.log('success login error');
+			MainPage.ayondoLoginResult(false)
+			wattingLogin = false;
+		}
+
+	},
+
 	buyPress: function() {
 		if(!this.state.stockInfo.isOpen) {
 			Alert.alert(this.state.stockInfo.name,'已停牌/休市,暂时不能进行交易')
@@ -627,6 +691,12 @@ var StockDetailPage = React.createClass({
 		var userData = LogicData.getUserData()
 		var loggined = Object.keys(userData).length !== 0
 		if (loggined) {
+
+			if(LogicData.getAccountState()&&!LogicData.getActualLogin()){
+				this.live_login();
+				return;
+			}
+
 			if (this.state.tradeDirection === 1)
 				this.setState({tradeDirection:0})
 			else
@@ -647,6 +717,11 @@ var StockDetailPage = React.createClass({
 		var userData = LogicData.getUserData()
 		var loggined = Object.keys(userData).length !== 0
 		if (loggined) {
+			if(LogicData.getAccountState()&&!LogicData.getActualLogin()){
+				this.live_login();
+				return;
+			}
+
 			if (this.state.tradeDirection === 2)
 				this.setState({tradeDirection:0})
 			else

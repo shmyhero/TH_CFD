@@ -197,11 +197,12 @@ var AppNavigator = React.createClass({
 						this.actionForPush(JSON.parse(args[1]));
 					}else if (args[0] == 'isProductServer') {
 						this.setIsProduct(args[1]);
-					}else if (args[0] == 'ayondoLoginSuccess'){
-						this.ayondoLoginResule(true)
-					}else if( args[0] == 'ayondoLoginError'){
-						this.ayondoLoginResule(false)
 					}
+					// else if (args[0] == 'ayondoLoginSuccess'){
+					// 	this.ayondoLoginResule(true)
+					// }else if( args[0] == 'ayondoLoginError'){
+					// 	this.ayondoLoginResule(false)
+					// }
 				}
 				catch (e) {
 					console.log(e)
@@ -227,9 +228,9 @@ var AppNavigator = React.createClass({
 		VersionConstants.setIsProductApp(value);
 	},
 
-	ayondoLoginResule:function(result){
-		this.refs['mainPage'].ayondoLoginResult(result)
-	},
+	// ayondoLoginResule:function(result){
+	// 	this.refs['mainPage'].ayondoLoginResult(result)
+	// },
 
 	_handleDeviceToken: function(event) {
 		console.log("deviceToken from native:", event);

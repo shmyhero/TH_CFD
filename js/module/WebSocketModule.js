@@ -40,7 +40,9 @@ var wsErrorCallback = (errorMessage) =>
 	if (AppStateModule.getAppState() === AppStateModule.STATE_ACTIVE && webSocketConnection && webSocketConnection.state == 4) {
 		if(networkAvailable){
 			setTimeout(()=>{
-				start();
+				if (webSocketConnection && webSocketConnection.state == 4){
+					start();
+				}
 			}, 5000);
 		}else{
 			//Do nothing until the device is online.
@@ -79,7 +81,7 @@ export function start() {
 	});*/
 
 	webSocketConnection.disconnected(function() {
-		//wsErrorCallback('网络已断开。')
+		wsErrorCallback('网络已断开。')
 	});
 
 	webSocketConnection.logging = false;
@@ -125,11 +127,13 @@ export function start() {
 function handleConnectivityChange(reach){
 	var origionNetworkAvailable = networkAvailable;
   console.log('Connectivity Change: ' + reach);
+	console.log('Platform.OS ' + Platform.OS + ", " + (Platform.OS === 'ios'))
   if(Platform.OS === 'ios'){
     switch(reach){
       case 'none':
       case 'unknown':
         networkAvailable = DISCONNECTED;
+				break;
       case 'wifi':
       case 'cell':
         networkAvailable = CONNECTED;
@@ -141,6 +145,7 @@ function handleConnectivityChange(reach){
       case 'DUMMY':
       case 'UNKNOWN':
         networkAvailable = DISCONNECTED;
+				break;
       case 'MOBILE':
       case 'WIFI':
         networkAvailable = CONNECTED;
@@ -148,8 +153,17 @@ function handleConnectivityChange(reach){
     }
   }
 
+	console.log("origionNetworkAvailable " + origionNetworkAvailable + ", networkAvailable " + networkAvailable)
 	if(origionNetworkAvailable !== networkAvailable){
-		start();
+
+		if (networkAvailable === CONNECTED && webSocketConnection && webSocketConnection.state == 4){
+			start();
+		}else if(networkAvailable === DISCONNECTED){
+			if(webSocketConnection){
+				webSocketConnection.stop();
+			}
+			wsErrorCallback('网络已断开。');
+		}
 	}
 }
 

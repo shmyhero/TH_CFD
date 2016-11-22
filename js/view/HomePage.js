@@ -60,6 +60,7 @@ var magicCode = ""
 var NO_MAGIC = false
 var didTabSelectSubscription = null
 var didFocusSubscription = null
+var networkConnectionChangedSubscription = null
 var lastForceloopTime = 0
 const CARDS_LIST = "cardList"
 
@@ -77,6 +78,7 @@ var HomePage = React.createClass({
 			topNews: [],
 			attendedMovieEvent: false,
 			winMovieTicket: false,
+			isConnected: false,
 		};
 	},
 
@@ -103,7 +105,16 @@ var HomePage = React.createClass({
 					this.reloadBanner();
 				}
 			})
-			.done()
+			.done();
+
+		this.loadHomeData();
+		this.loadCards();
+	},
+
+	reloadPage: function(){
+		this.reloadBanner();
+		this.loadHomeData();
+		this.loadCards();
 	},
 
 	reloadBanner: function() {
@@ -114,6 +125,7 @@ var HomePage = React.createClass({
 			NetConstants.CFD_API.GET_HOMEPAGE_BANNER_API,
 			{
 				method: 'GET',
+				cache: 'offline',
 			},
 			(responseJson) => {
 				console.log(JSON.stringify(responseJson))
@@ -158,14 +170,14 @@ var HomePage = React.createClass({
 				}
 			);
 		}
-		this.loadHomeData();
-		this.loadCards();
 	},
 
 	loadCards: function() {
 
 		var url = NetConstants.CFD_API.GET_HOME_CARDS;
 		var userData = LogicData.getUserData()
+
+		var requestSuccess = true;
 
 		NetworkModule.fetchTHUrl(
 			url,
@@ -174,6 +186,7 @@ var HomePage = React.createClass({
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 				},
+				cache: 'none',
 			},
 			(responseJson) => {
 				this.setState({
@@ -200,6 +213,7 @@ var HomePage = React.createClass({
 			url,
 			{
 				method: 'GET',
+				cache: 'offline',
 			},
 			(responseJson) => {
 				var listdata = responseJson
@@ -220,6 +234,7 @@ var HomePage = React.createClass({
 			NetConstants.CFD_API.GET_TOP_NEWS_TOP10_API,
 			{
 				method: 'GET',
+				cache: 'offline',
 			},
 			(responseJson) => {
 				this.setState({
@@ -235,16 +250,33 @@ var HomePage = React.createClass({
 	componentDidMount: function() {
 		didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
 		didTabSelectSubscription = EventCenter.getEventEmitter().
-			addListener(EventConst.HOME_TAB_RESS_EVENT, this.onTabChanged);
+		addListener(EventConst.HOME_TAB_RESS_EVENT, this.onTabChanged);
+		networkConnectionChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.NETWORK_CONNECTION_CHANGED, () => {
+
+					console.log("onConnectionStateChanged listener")
+			this.onConnectionStateChanged();
+		});
+
+		console.log("onConnectionStateChanged")
+		this.onConnectionStateChanged();
+	},
+
+	onConnectionStateChanged: function(){
+		var isConnected = WebSocketModule.isConnected();
+			console.log("onConnectionStateChanged " + isConnected)
+		this.setState({
+			connected: isConnected
+		})
 	},
 
 	componentWillUnmount: function() {
 		didTabSelectSubscription && didTabSelectSubscription.remove();
 		didFocusSubscription && didFocusSubscription.remove();
+		networkConnectionChangedSubscription && networkConnectionChangedSubscription.remove();
 	},
 
 	onTabChanged: function(){
-		this.reloadBanner();
+		this.reloadPage();
 		LogicData.setTabIndex(0);
 		this.forceloopSwipers();
 	},
@@ -877,7 +909,7 @@ var HomePage = React.createClass({
 				activeOpacity={1}
 				onPress={()=>this.pressedNavBar()}
 				>
-				<NavBar title="首页"/>
+				<NavBar title={this.state.connected ? "首页" : "首页（未连接）"}/>
 			</TouchableOpacity>);
 	},
 

@@ -3,6 +3,7 @@
 var LogicData = require('../LogicData')
 var NetConstants = require('../NetConstants')
 var MainPage = require('../view/MainPage')
+var CacheModule = require('./CacheModule')
 import React from 'react';
 import {
 	Alert
@@ -22,6 +23,17 @@ export function fetchTHUrlWithNoInternetCallback(url, params, successCallback, e
 
 	if (params.showLoading === true) {
 		MainPage.showProgress && MainPage.showProgress()
+	}
+
+	if(params.cache === "offline"){
+		CacheModule.loadCacheForUrl(url)
+		.then((value)=>{
+			if(value){
+				console.log("read offline cache: " + value)
+				var respJson = JSON.parse(value);
+				successCallback(respJson);
+			}
+		});
 	}
 
 	fetch(url, params)
@@ -48,7 +60,20 @@ export function fetchTHUrlWithNoInternetCallback(url, params, successCallback, e
 				} else {
 					console.log('fetchTHUrl success with response: ')
 					console.log(responseJson)
-					successCallback(responseJson);
+
+					if(params.cache === "offline"){
+						var userRelated = false;
+						if(params.Authorization){
+							userRelated = true;
+						}
+						CacheModule.storeCacheForUrl(url, JSON.stringify(responseJson), userRelated)
+						.then(()=>{
+							console.log('stored offline cache ')
+							successCallback(responseJson);
+						})
+					}else{
+						successCallback(responseJson);
+					}
 				}
 			} else {
 				console.log('fetchTHUrl unhandled error with message: ' + JSON.stringify(responseJson))
@@ -56,18 +81,42 @@ export function fetchTHUrlWithNoInternetCallback(url, params, successCallback, e
 			}
 		})
 		.catch((e) => {
-			console.log('fetchTHUrl catches: ' + e);
+			console.log('fetchTHUrl catches: ' + e + ", " + url);
 			var message = e.message
+
+			if(params.cache === "offline"){
+				CacheModule.loadCacheForUrl(url)
+				.then((value)=>{
+					if(value){
+						var respJson = JSON.parse(value);
+						successCallback(respJson);
+					}else{
+						if(message.toLowerCase() === "network request failed"){
+							message = "网络连接已断开，请检查设置"
+						}
+						if(internetErrorCallback){
+							internetErrorCallback(message);
+						}
+						else if (!alertShow) {
+							alertShow = true
+							Alert.alert('', message, [{text: 'OK', onPress: () => alertShow=false}])
+						};
+					}
+				});
+			}
+
 			if(message.toLowerCase() === "network request failed"){
 				message = "网络连接已断开，请检查设置"
 			}
+			console.log(message);
 			if(internetErrorCallback){
 				internetErrorCallback(message);
 			}
-			if (!alertShow) {
-				alertShow = true
-				Alert.alert('', message, [{text: 'OK', onPress: () => alertShow=false}])
-			};
+			//else if (!alertShow) {
+				//alertShow = true
+
+				//Alert.alert('', message, [{text: 'OK', onPress: () => alertShow=false}])
+			//};
 		})
 		.done(() => {
 			MainPage.hideProgress && MainPage.hideProgress()
@@ -223,6 +272,7 @@ export function loadUserBalance(force, successCallback) {
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 				},
+				cache: 'offline',
 			},
 			(responseJson) => {
 				LogicData.setBalanceData(responseJson)

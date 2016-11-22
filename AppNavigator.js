@@ -34,10 +34,11 @@ var buildStyleInterpolator = require('buildStyleInterpolator');
 var UIManager = require('UIManager');
 
 var recevieDataSubscription = null
+var didAccountChangeSubscription = null;
 var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
+var {EventCenter, EventConst} = require('./js/EventCenter');
 
 require('./js/utils/dateUtils')
-
 
 var SCREEN_WIDTH = Dimensions.get('window').width;
 var ToTheLeft = {
@@ -212,6 +213,10 @@ var AppNavigator = React.createClass({
 
 		NativeDataModule.passDataToNative('isProduct', "");
 
+		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>{
+			console.log("ACCOUNT_STATE_CHANGE");
+			NetworkModule.loadUserBalance(true);
+		});
 		// var alertData = {'title':'盈交易','msg':'打开苹果股票详情','type':'1','stockName':'英国100', 'stockId':34854};
 		// this.alertForPush(alertData);
 

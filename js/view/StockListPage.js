@@ -137,6 +137,7 @@ var StockListPage = React.createClass({
 							headers: {
 								'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 							},
+							cache: 'offline',
 						},
 						(responseJson) => {
 							this.setState({
@@ -179,6 +180,7 @@ var StockListPage = React.createClass({
 					url,
 					{
 						method: 'GET',
+						cache: 'offline',
 					},
 					(responseJson) => {
 						LogicData.setOwnStocksData(responseJson)

@@ -51,6 +51,7 @@ var StockListViewPager = React.createClass({
 	getInitialState: function() {
 		return {
 			currentSelectedTab : 0,
+			connected : false,
 		}
 	},
 
@@ -61,8 +62,21 @@ var StockListViewPager = React.createClass({
 		this.didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.STOCK_TAB_PRESS_EVENT, () => {
   		this.onTabChanged()
 		});
+
+		this.networkConnectionChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.NETWORK_CONNECTION_CHANGED, () => {
+			this.onConnectionStateChanged();
+		});
+
+		this.onConnectionStateChanged();
 	},
 
+	onConnectionStateChanged: function(){
+		var isConnected = WebSocketModule.isConnected();
+		this.setState({
+			connected: isConnected
+		})
+	},
+	
 	componentDidMount: function() {
 		NetInfo.isConnected.addEventListener(
 			'change',
@@ -77,6 +91,7 @@ var StockListViewPager = React.createClass({
 			'change',
 			this._handleConnectivityChange
 		);
+		this.networkConnectionChangedSubscription && this.networkConnectionChangedSubscription.remove();
 	},
 
 	onTabChanged: function() {
@@ -123,7 +138,7 @@ var StockListViewPager = React.createClass({
 	renderNavBar: function() {
 		var hasOwnStocks = LogicData.getOwnStocksData().length !== 0
 		return (
-			<NavBar title="行情"
+			<NavBar title={this.state.connected ? "行情" : "行情（未连接）"}
 				textOnLeft={(_currentSelectedTab==0 && hasOwnStocks) ? '编辑' : null}
 				leftTextOnClick={this.editButtonClicked}
 				showSearchButton={true}

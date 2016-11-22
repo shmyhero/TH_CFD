@@ -6,12 +6,13 @@ import {
 } from 'react-native';
 
 var LogicData = require('../LogicData')
-var StorageModule = require('../module/StorageModule')
+var StorageModule = require('./StorageModule')
 var NetConstants = require('../NetConstants')
-var NetworkModule = require('../module/NetworkModule')
-var WebSocketModule = require('../module/WebSocketModule')
-var TongDaoModule = require('../module/TongDaoModule');
+var NetworkModule = require('./NetworkModule')
+var WebSocketModule = require('./WebSocketModule')
+var TongDaoModule = require('./TongDaoModule');
 var OpenAccountRoutes = require('../view/openAccount/OpenAccountRoutes');
+var CacheModule = require('./CacheModule');
 
 export function updateMeData(userData, onSuccess){
 	NetworkModule.fetchTHUrl(
@@ -48,6 +49,7 @@ export function removeUserData(){
   LogicData.setAccountState(false);
 
   OpenAccountRoutes.clearAllInputData();
+  CacheModule.clearUserRelatedCache();
 
   var date = new Date().getDateString();
   var data = {

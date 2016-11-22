@@ -158,6 +158,7 @@ var DaySignPage = React.createClass({
 					headers: {
 						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 					},
+					cache: 'offline',
 				},
 				(responseJson) =>{
 
@@ -171,7 +172,7 @@ var DaySignPage = React.createClass({
 					)
 				},
 				(error) => {
-					Alert.alert(error)
+					//Alert.alert(error)
 				}
 			)
 		}
@@ -190,6 +191,7 @@ var DaySignPage = React.createClass({
 					headers: {
 						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 					},
+					cache: 'offline',
 				},
 				(responseJson) =>{
 
@@ -356,7 +358,7 @@ var DaySignPage = React.createClass({
 					},
 					(error) => {
 						signEnable = true
-						Alert.alert(error)
+						//Alert.alert(error)
 						// this._actionAni()
 					}
 				)

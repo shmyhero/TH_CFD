@@ -68,6 +68,7 @@ var StockStatisticsPage = React.createClass({
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 				},
+				cache: 'offline',
 			},
 			(responseJson) => {
 				this.playStatisticsAnim(responseJson)

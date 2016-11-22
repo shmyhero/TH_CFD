@@ -6,11 +6,14 @@ require('../utils/jquery.signalR-2.2.0')
 import React from 'react';
 import {
 	Alert,
+	NetInfo,
+	Platform,
 } from 'react-native';
 
 var AppStateModule = require('./AppStateModule');
 var LogicData = require('../LogicData')
 var StorageModule = require('./StorageModule')
+var {EventCenter, EventConst} = require('../EventCenter');
 
 var serverURL = 'http://cfd-webapi.chinacloudapp.cn'
 var stockPriceServerName = 'Q'
@@ -23,12 +26,28 @@ var alertWebSocketProxy = null
 var wsStockInfoCallback = null
 var wsAlertCallback = null
 
+var socketConnected = false;
+var networkAvailable = false;
+
+const CONNECTED = "connected";
+const DISCONNECTED = "disconnected";
+
 var wsErrorCallback = (errorMessage) =>
 {
+	console.log('wsErrorCallback ' + errorMessage)
+	socketConnected = false;
+	EventCenter.emitNetworkConnectionChangedEvent();
 	if (AppStateModule.getAppState() === AppStateModule.STATE_ACTIVE && webSocketConnection && webSocketConnection.state == 4) {
-		start()
+		if(networkAvailable){
+			setTimeout(()=>{
+				start();
+			}, 5000);
+		}else{
+			//Do nothing until the device is online.
+		}
 	}
 }
+
 AppStateModule.registerTurnToActiveListener(() => {
 	console.log('Check Web sockets connection.')
 	if (webSocketConnection && webSocketConnection.state == 4) { // disconnected state
@@ -36,10 +55,33 @@ AppStateModule.registerTurnToActiveListener(() => {
 	}
 })
 
+export function isConnected(){
+	return socketConnected;
+}
+
 export function start() {
 	stop();
 
+	NetInfo.addEventListener(
+	  'change',
+	  handleConnectivityChange
+	);
+
 	webSocketConnection = $.hubConnection(serverURL);
+	/*webSocketConnection.reconnecting(function() {
+    //tryingToReconnect = true;
+		//alert("tryingToReconnect")
+	});
+
+	webSocketConnection.reconnected(function() {
+    //tryingToReconnect = false;
+		//alert("reconnected")
+	});*/
+
+	webSocketConnection.disconnected(function() {
+		//wsErrorCallback('网络已断开。')
+	});
+
 	webSocketConnection.logging = false;
 
 	stockPriceWebSocketProxy = webSocketConnection.createHubProxy(stockPriceServerName);
@@ -66,20 +108,8 @@ export function start() {
 		}
 	});
 
-		// atempt connection, and handle errors
-	webSocketConnection.start()
-		.done(() => {
-			console.log('Now connected, connection ID=' + webSocketConnection.id);
-			registerInterestedStocks(previousInterestedStocks)
-
-			var userData = LogicData.getUserData()
-			if (userData != null) {
-				alertServiceLogin(userData.userId + '_' + userData.token)
-			}
-		})
-		.fail((error) => {
-			wsErrorCallback(error.message)
-	});
+	// atempt connection, and handle errors
+	startWebSocket(webSocketConnection);
 
 	//connection-handling
 	webSocketConnection.connectionSlow(function () {
@@ -92,11 +122,66 @@ export function start() {
 
 }
 
+function handleConnectivityChange(reach){
+	var origionNetworkAvailable = networkAvailable;
+  console.log('Connectivity Change: ' + reach);
+  if(Platform.OS === 'ios'){
+    switch(reach){
+      case 'none':
+      case 'unknown':
+        networkAvailable = DISCONNECTED;
+      case 'wifi':
+      case 'cell':
+        networkAvailable = CONNECTED;
+        break;
+    }
+  }else{
+    switch(reach){
+      case 'NONE':
+      case 'DUMMY':
+      case 'UNKNOWN':
+        networkAvailable = DISCONNECTED;
+      case 'MOBILE':
+      case 'WIFI':
+        networkAvailable = CONNECTED;
+        break;
+    }
+  }
+
+	if(origionNetworkAvailable !== networkAvailable){
+		start();
+	}
+}
+
+function startWebSocket(webSocketConnection){
+	webSocketConnection.start()
+		.done(() => {
+			socketConnected = true;
+			EventCenter.emitNetworkConnectionChangedEvent();
+
+			console.log('Now connected, connection ID=' + webSocketConnection.id);
+			registerInterestedStocks(previousInterestedStocks)
+
+			var userData = LogicData.getUserData()
+			if (userData != null) {
+				alertServiceLogin(userData.userId + '_' + userData.token)
+			}
+		})
+		.fail((error) => {
+			wsErrorCallback(error.message)
+	});
+}
+
 export function stop() {
 	if (webSocketConnection !== null) {
 		webSocketConnection.stop()
 		webSocketConnection = null
 	}
+
+	NetInfo.removeEventListener(
+		'change',
+		handleConnectivityChange
+	);
 }
 
 export function registerCallbacks(stockInfoCallback, alertCallback) {

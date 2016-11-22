@@ -105,6 +105,7 @@ export default class MyMessagesPage extends Component {
         headers: {
           'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
         },
+				cache: 'offline',
       },
       (responseJson) => {
         if(this._pullToRefreshListView){

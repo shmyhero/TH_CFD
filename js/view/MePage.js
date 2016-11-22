@@ -93,6 +93,7 @@ var MePage = React.createClass({
 					headers: {
 						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 					},
+					cache: 'offline',
 				},
 				function(responseJson) {
 					StorageModule.setMeData(JSON.stringify(responseJson))
@@ -180,6 +181,7 @@ var MePage = React.createClass({
 					headers: {
 						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 					},
+					cache: 'offline',
 				},
 				function(response) {
 					this.setState(
@@ -205,6 +207,7 @@ var MePage = React.createClass({
 					headers: {
 						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 					},
+					cache: 'offline',
 				},
 				function(responseJson) {
 					StorageModule.setMeData(JSON.stringify(responseJson))

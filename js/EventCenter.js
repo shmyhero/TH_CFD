@@ -11,6 +11,7 @@ const EventConst = {
 	EXCHANGE_TAB_PRESS_EVENT : 'exchangeTabEvent',
 	ME_TAB_PRESS_EVENT : 'meTabEvent',
 	ACCOUNT_STATE_CHANGE : 'account_state_change',
+	NETWORK_CONNECTION_CHANGED: 'network_connection_changed',
 }
 
 var EventCenter = {
@@ -38,6 +39,10 @@ var EventCenter = {
 
 	emitAccountStateChangeEvent: function(){
 		eventEmitter.emit(EventConst.ACCOUNT_STATE_CHANGE)
+	},
+
+	emitNetworkConnectionChangedEvent: function(){
+		eventEmitter.emit(EventConst.NETWORK_CONNECTION_CHANGED)
 	},
 }
 

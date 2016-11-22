@@ -19,8 +19,10 @@ var {EventCenter, EventConst} = require('../EventCenter')
 
 var CookieManager = require('react-native-cookies')
 var ColorConstants = require('../ColorConstants')
-var LoadingIndicator = require('./LoadingIndicator');
+var LoadingIndicator = require('./LoadingIndicator')
 var NavBar = require('./NavBar')
+var NetConstants = require('../NetConstants')
+var NetworkModule = require('../module/NetworkModule')
 var HomePage = require('./HomePage')
 var LandingPage = require('./LandingPage')
 var LoginPage = require('./LoginPage')
@@ -546,7 +548,34 @@ var MainPage = React.createClass({
 		this.refs["meBtn"].setActiveColor(ColorConstants.TITLE_BLUE);
 
 		console.log('refresh for Tab Icon Color ... ');
+
+
+		//监听到模拟或实盘状态切换的时候，调用相应API，SwitchTo/Live or SwitchTo/demo
+		console.log('refreshMainPage ' + LogicData.getAccountState());
+		this.sendToSwitchAccountStatus()
 	},
+
+	sendToSwitchAccountStatus:function(){
+		var userData = LogicData.getUserData()
+	  var urlToSend = LogicData.getAccountState()?NetConstants.CFD_API.SWITCH_TO_LIVE:NetConstants.CFD_API.SWITCH_TO_DEMO;
+		console.log('sendToSwitchAccountStatus url = ' + urlToSend);
+		NetworkModule.fetchTHUrlWithNoInternetCallback(
+			urlToSend,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+			},
+			(responseJson) =>{
+				 console.log(responseJson)
+			},
+			(error) => {
+				console.log(error)
+			}
+		)
+	},
+
 
 	hideTabbar() {
 		if(this.refs['myTabbar']){

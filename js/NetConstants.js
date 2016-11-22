@@ -122,6 +122,10 @@ function getCFDAPI(){
     SHARE_CARD_TO_HOME: CFD_API_SERVER + '/api/card/share/<id>',
 
     RESET_PASSWORD:CFD_API_SERVER + '/api/user/live/resetPwd',//忘记密码/重置密码
+
+    SWITCH_TO_LIVE:CFD_API_SERVER + '/api/user/switchTo/Live',//切换到实盘
+    SWITCH_TO_DEMO:CFD_API_SERVER + '/api/user/switchTo/Demo',//切换到模拟盘
+    
   }
 }
 

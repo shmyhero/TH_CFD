@@ -413,13 +413,10 @@ var MePage = React.createClass({
 			NativeSceneModule.launchNativeScene('MeiQia')
 		}
 		else if(rowData.subtype === 'aboutus') {
-			// this.props.navigator.push({
-			// 	name: MainPage.ABOUT_US_ROUTE,
-			// });
+		 
 			var aboutUrl = LogicData.getAccountState()?NetConstants.TRADEHERO_API.WEBVIEW_URL_ABOUT_US_ACTUAL:NetConstants.TRADEHERO_API.WEBVIEW_URL_ABOUT_US
 			this.gotoWebviewPage(aboutUrl, '关于我们');
-			// LogicData.setAccountState(true)
-			// LogicData.setActualLogin(true)
+
 		}
 		else if(rowData.subtype === 'config') {
 			this.props.navigator.push({

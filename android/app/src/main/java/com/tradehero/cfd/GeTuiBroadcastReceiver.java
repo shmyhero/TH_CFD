@@ -10,15 +10,18 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.util.Base64;
 import android.util.Log;
 
 import com.facebook.react.bridge.ReactContext;
 import com.igexin.sdk.PushConsts;
+import com.tongdao.sdk.ui.TongDaoUiCore;
 import com.tradehero.cfd.RNNativeModules.NativeActions;
 import com.tradehero.cfd.RNNativeModules.NativeDataModule;
 
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 
 /**
@@ -41,7 +44,7 @@ public class GeTuiBroadcastReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        CFDApplication application = (CFDApplication) context.getApplicationContext();
+        MainApplication application = (MainApplication) context.getApplicationContext();
 
         Bundle bundle = intent.getExtras();
         Log.i(TAG, "onReceive() action=" + bundle.getInt("action"));
@@ -53,6 +56,17 @@ public class GeTuiBroadcastReceiver extends BroadcastReceiver{
                 if (payload != null) {
                     String data = new String(payload);
                     Log.i(TAG, "receive push data: " + data);
+
+                    try {
+                        byte[] base64Payload = Base64.decode(payload, Base64.DEFAULT);
+                        data = new String(base64Payload, "UTF-8");
+
+                        TongDaoUiCore.trackOpenPushMessage(data);
+                        TongDaoUiCore.openPage(context, data);
+
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
 
                     // Check if it is TongDao's push data. If it is, the Tongdao sdk will show the
                     // notification. But the deep link has some issue wo we need to handle it in
@@ -133,7 +147,7 @@ public class GeTuiBroadcastReceiver extends BroadcastReceiver{
         }
         */
 
-        ReactContext rnContext = ((CFDApplication) application).getReactNativeHost().getReactInstanceManager().getCurrentReactContext();
+        ReactContext rnContext = ((MainApplication) application).getReactNativeHost().getReactInstanceManager().getCurrentReactContext();
         NativeDataModule.passDataToRN(rnContext, NativeActions.ACTION_PUSH_DIALOG, data);
     }
 

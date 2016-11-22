@@ -16,6 +16,7 @@ import com.tradehero.cfd.tongdao.TongDaoPackage;
 import com.zyu.ReactNativeWheelPickerPackage;
 import com.beefe.picker.PickerViewPackage;
 import com.psykar.cookiemanager.CookieManagerPackage;
+import io.realm.react.RealmReactPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,7 +46,8 @@ public class RNManager {
                 new TongDaoPackage(),
                 new RCTSwipeRefreshLayoutPackage(),
                 new PickerViewPackage(),
-                new CookieManagerPackage()
+                new CookieManagerPackage(),
+                new RealmReactPackage()
         );
         return packages;
     }

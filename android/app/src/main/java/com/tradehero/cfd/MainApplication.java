@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 /**
  * Created by Neko on 16/9/5.
  */
-public class CFDApplication extends Application implements Application.ActivityLifecycleCallbacks, ReactApplication {
+public class MainApplication extends Application implements Application.ActivityLifecycleCallbacks, ReactApplication {
 
     private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
         @Override

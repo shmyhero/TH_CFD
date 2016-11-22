@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.20.119:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.129:8081").apply();
 
         super.onCreate(null);
 
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         initGeTui();
         initSound();
 
-        mReactInstanceManager = ((CFDApplication)getApplication()).getReactNativeHost().getReactInstanceManager();
+        mReactInstanceManager = ((MainApplication)getApplication()).getReactNativeHost().getReactInstanceManager();
         setContentView(R.layout.react_activity_container);
         ButterKnife.bind(this);
 

@@ -63,11 +63,13 @@ var StockSearchPage = React.createClass({
 
 	updateSearchHistory: function() {
 		// load history
-		var history = LogicData.getSearchStockHistory()
-		this.setState({
-			historyRawInfo: history,
-			historyInfo: ds.cloneWithRows(history),
-		})
+		LogicData.getSearchStockHistory()
+		.then((history)=>{			
+			this.setState({
+				historyRawInfo: history,
+				historyInfo: ds.cloneWithRows(history),
+			})
+		});
 	},
 
 	cleanSearchHistory: function() {
@@ -198,9 +200,9 @@ var StockSearchPage = React.createClass({
 		);
 	},
 
-  	stockPressed: function(rowData) {
-  		LogicData.addStockToSearchHistory(rowData)
-  		this.props.navigator.push({
+	stockPressed: function(rowData) {
+		LogicData.addStockToSearchHistory(rowData)
+		this.props.navigator.push({
 			name: MainPage.STOCK_DETAIL_ROUTE,
 			stockRowData: rowData
 		});
@@ -208,7 +210,7 @@ var StockSearchPage = React.createClass({
 		var eventParam = {};
 		eventParam[TalkingdataModule.KEY_STOCK_ID] = rowData.id,
 		TalkingdataModule.trackEvent(TalkingdataModule.SEARCH_AND_LOOK_EVENT, '', eventParam)
-  	},
+	},
 
 	renderRowHistory: function(rowData, sectionID, rowID, highlightRow) {
 		return this.renderRow(rowData, sectionID, rowID, highlightRow, this.addToMyListPressedFromHistory)
@@ -273,7 +275,7 @@ var StockSearchPage = React.createClass({
 			<View style={styles.historyFooterView}>
 				<TouchableOpacity style={styles.cleanHistoryButton} onPress={() => this.cleanSearchHistory()}>
 					<Image style={styles.cleanHistoryImage} source={require('../../images/delete.png')}/>
-					<Text style={styles.cleanHistoryText}>清除历史纪录</Text>
+					<Text style={styles.cleanHistoryText}>清除历史记录</Text>
 				</TouchableOpacity>
 			</View>
 		)

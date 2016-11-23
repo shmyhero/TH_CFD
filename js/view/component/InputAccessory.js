@@ -164,7 +164,7 @@ var InputAccessory = React.createClass({
 					{this.props.textValue}
 					</Text>
 					{warningText}
-					<TouchableOpacity onPress = {() => this.dismissKeyboardHandler()} >
+					<TouchableOpacity onPress = {() => this.dismissKeyboardHandler()} style = {s.ButtonArea}>
 						<Text style = {[s.InputAccessoryButtonText]} >完成 </Text>
 					</TouchableOpacity>
 				</View>)
@@ -192,11 +192,13 @@ var s = StyleSheet.create({
 		fontSize: 17,
 		color: '#f23719',
 	},
-	InputAccessoryButtonText: {
+	ButtonArea: {
 		flex: 1,
+	},
+	InputAccessoryButtonText: {
 		fontSize: 21,
 		color: '#1b5ecd',
-		paddingHorizontal: 9,
+		// paddingHorizontal: 9,
 		textAlign: 'center',
 	},
 });

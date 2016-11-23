@@ -269,6 +269,7 @@ var styles = StyleSheet.create({
 	backButton: {
 		width: 20,
 		height: 14,
+		margin: 10,
 		marginLeft: 10,
 		resizeMode: Image.resizeMode.contain,
 	},
@@ -292,6 +293,7 @@ var styles = StyleSheet.create({
 		fontSize: 15,
 		textAlign: 'center',
 		color: '#ffffff',
+		margin: 10,
 		marginLeft: 20,
 	},
 	textOnRight: {

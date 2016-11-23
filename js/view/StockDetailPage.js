@@ -907,7 +907,7 @@ var StockDetailPage = React.createClass({
 		return (
 			<View>
 				<Image style={[styles.inputImage, {marginLeft:30-width,marginTop:10}]} source={require('../../images/key.png')}/>
-				<TextInput style={[styles.inputText, {marginLeft:25-width, marginTop:-24, borderWidth: 1}]}
+				<TextInput style={[styles.inputText, {marginLeft:25-width, marginTop:-24}]}
 					keyboardType={Platform.OS === 'ios' ? "number-pad" : "numeric"}
 					keyboardAppearance={'dark'}
 					selectionColor={'transparent'}

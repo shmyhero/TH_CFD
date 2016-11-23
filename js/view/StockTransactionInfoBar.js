@@ -115,17 +115,16 @@ export default class StockTransactionInfoBar extends Component {
     return (
       <View style={styles.container}>
         <View style={[styles.titleContainer, extraTitleContainerStyle]}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch'}}>
-            <Text style={styles.titleText}>
-              {this.state.name} - {this.state.isCreate?'开仓':'平仓'}
+        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch'}}>
+          <Text style={[styles.titleText, {flex:1}]} numberOfLines={1} ellipsizeMode={'head'}>
+            {this.state.name} - {this.state.isCreate?'开仓':'平仓'}
+          </Text>
+          {this.state.isCreate ?
+            null :
+            <Text style={[styles.titleText, {marginRight: 15, marginLeft: 15}]}>
+              {(plRate).toFixed(2)} %
             </Text>
-
-            {this.state.isCreate ?
-              null :
-              <Text style={[styles.titleText, {marginRight: 15}]}>
-                {(plRate).toFixed(2)} %
-              </Text>
-            }
+          }
 
           </View>
         </View>
@@ -218,12 +217,16 @@ const styles = StyleSheet.create({
 		backgroundColor: '#f5f5f5',
 	},
 
-	titleText: {
+  titleText: {
 		fontSize: 20,
 		textAlign: 'center',
 		color: '#ffffff',
-		marginLeft: 15,
 		marginVertical: 8,
+    textAlign: 'left',
+  	marginLeft: 15,
+	},
+
+	stockNameText: {
 	},
 
 	itemTitleText: {

@@ -23,6 +23,8 @@ var colors = {
 	INOUT_TEXT_SELECTION_COLOR: '#426bf2',
 	TAB_UNSELECT_TEXT_COLOR: '#abcaff',
 	COLOR_BORDER:'#356dce',
+	COLOR_STATIC_TEXT1:'#85b1fb',
+	COLOR_CUSTOM_BLUE:'#629af3',
 
 	stock_color: function(change) {
 		if (change > 0) {
@@ -60,6 +62,8 @@ var colors = {
 			this.STOCK_TAB_BLUE = '#8fabdb'
 			this.TAB_UNSELECT_TEXT_COLOR = '#a0bdf1'
 			this.COLOR_BORDER = '#2f446a'
+			this.COLOR_STATIC_TEXT1 = '#698dcd'
+			this.COLOR_CUSTOM_BLUE = '#455e8b'
 		}
 		else {
 			this.TITLE_BLUE = '#1962dd'
@@ -77,6 +81,8 @@ var colors = {
 			this.STOCK_TAB_BLUE = '#70a5ff'
 			this.TAB_UNSELECT_TEXT_COLOR = '#abcaff'
 			this.COLOR_BORDER = '#356dce'
+			this.COLOR_STATIC_TEXT1 = '#85b1fb'
+			this.COLOR_CUSTOM_BLUE = '#629af3'
 		}
 	},
 }

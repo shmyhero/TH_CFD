@@ -302,7 +302,7 @@ var styles = StyleSheet.create({
 	},
 	headerText3: {
 		fontSize: 17,
-		color: '#85b1fb',
+		color: ColorConstants.COLOR_STATIC_TEXT1,
 	},
 	headerText4: {
 		fontSize: 19,
@@ -366,7 +366,7 @@ var styles = StyleSheet.create({
 	blueSquare: {
 		width: 10,
 		height: 6,
-		backgroundColor: '#629af3',
+		backgroundColor: ColorConstants.COLOR_CUSTOM_BLUE,
 	},
 
 	separator: {
@@ -401,7 +401,7 @@ var styles = StyleSheet.create({
 	},
 
 	investBar: {
-		backgroundColor: '#629af3',
+		backgroundColor: ColorConstants.COLOR_CUSTOM_BLUE,
 		width: 20,
 	},
 

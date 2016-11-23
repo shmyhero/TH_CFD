@@ -90,7 +90,7 @@ export function fetchTHUrlWithNoInternetCallback(url, params, successCallback, e
 				console.log('多点登录 = ' + e);
 				if (!alertShow) {
 					alertShow = true
- 					Alert.alert('风险提示！', '盈交易账号已登录其他设备', [{text: '确定', onPress: () => {
+ 					Alert.alert('风险提示！', '盈交易账号已登录其他设备', [{text: '我知道了', onPress: () => {
 						alertShow=false
  						EventCenter.emitAccountLoginOutSideEvent();
 					}}])

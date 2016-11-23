@@ -114,12 +114,20 @@ var AppNavigator = React.createClass({
 
 		//Load the server setting should always be the first step.
 		console.log("loadServerSettings");
-		VersionConstants.loadServerSettings()
-		.then(()=>{
-			this.initializeApp();
-		},()=>{
-			this.initializeApp();
-		});
+
+		StorageModule.loadAccountState().then((value) => {
+			if (value !== null) {
+				LogicData.setAccountState(JSON.parse(value), true)
+			}
+		})
+		.done(()=>{
+			VersionConstants.loadServerSettings()
+			.then(()=>{
+				this.initializeApp();
+			},()=>{
+				this.initializeApp();
+			});
+		})		
 	},
 
 	initializeApp: function(){
@@ -162,13 +170,6 @@ var AppNavigator = React.createClass({
 		StorageModule.loadOwnStocksData().then((value) => {
 				if (value !== null) {
 					LogicData.setOwnStocksData(JSON.parse(value))
-				}
-			})
-			.done()
-
-		StorageModule.loadAccountState().then((value) => {
-				if (value !== null) {
-					LogicData.setAccountState(JSON.parse(value), true)
 				}
 			})
 			.done()

@@ -34,7 +34,7 @@ const DISCONNECTED = "disconnected";
 
 var wsErrorCallback = (errorMessage) =>
 {
-	console.log('wsErrorCallback ' + errorMessage)
+	console.log('web socket error: ' + errorMessage)
 	socketConnected = false;
 	EventCenter.emitNetworkConnectionChangedEvent();
 	if (AppStateModule.getAppState() === AppStateModule.STATE_ACTIVE && webSocketConnection && webSocketConnection.state == 4) {
@@ -126,8 +126,6 @@ export function start() {
 
 function handleConnectivityChange(reach){
 	var origionNetworkAvailable = networkAvailable;
-  console.log('Connectivity Change: ' + reach);
-	console.log('Platform.OS ' + Platform.OS + ", " + (Platform.OS === 'ios'))
   if(Platform.OS === 'ios'){
     switch(reach){
       case 'none':

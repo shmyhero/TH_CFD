@@ -68,6 +68,7 @@ var OpenAccountInfos = [
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var didTabSelectSubscription = null
+var didAccountStateChangeSubscription = null
 var accStatus
 var LIST_SCROLL_VIEW = "listScrollView"
 
@@ -116,6 +117,8 @@ var MePage = React.createClass({
 	componentDidMount: function(){
 		didTabSelectSubscription = EventCenter.getEventEmitter().
 			addListener(EventConst.ME_TAB_PRESS_EVENT, this.onTabChanged);
+		didAccountStateChangeSubscription = EventCenter.getEventEmitter().
+			addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>this.reloadMeData());
 	},
 
 	componentWillUnmount: function() {
@@ -144,7 +147,7 @@ var MePage = React.createClass({
 		}
 
 		var userData = LogicData.getUserData();
-		var meData = LogicData.getMeData()
+		var meData = LogicData.getMeData();
 		var notLogin = Object.keys(meData).length === 0
 		if (notLogin) {
 			this.setState({
@@ -158,21 +161,23 @@ var MePage = React.createClass({
 				loggedIn: true,
 			})
 
+			if(meData.liveAccStatus == 0 || meData.liveAccStatus == 3){
+				OpenAccountRoutes.getLatestInputStep()
+				.then(step=>{
+					console.log("getLatestInputStep " + step)
+					this.setState(
+						{
+							lastStep: step,
+						}
+					)
+				});
+			}
+
 			var url = NetConstants.CFD_API.GET_UNREAD_MESSAGE;
 	    if(LogicData.getAccountState()){
 				url = NetConstants.CFD_API.GET_UNREAD_MESSAGE_LIVE
 				console.log('live', url );
 			}
-
-			OpenAccountRoutes.getLatestInputStep()
-			.then(step=>{
-				console.log("getLatestInputStep " + step)
-				this.setState(
-					{
-						lastStep: step,
-					}
-				)
-			});
 
 			NetworkModule.fetchTHUrlWithNoInternetCallback(
 				url,
@@ -413,7 +418,7 @@ var MePage = React.createClass({
 			NativeSceneModule.launchNativeScene('MeiQia')
 		}
 		else if(rowData.subtype === 'aboutus') {
-		 
+
 			var aboutUrl = LogicData.getAccountState()?NetConstants.TRADEHERO_API.WEBVIEW_URL_ABOUT_US_ACTUAL:NetConstants.TRADEHERO_API.WEBVIEW_URL_ABOUT_US
 			this.gotoWebviewPage(aboutUrl, '关于我们');
 
@@ -647,7 +652,7 @@ var MePage = React.createClass({
 	},
 
 	render: function() {
-		//Do not use List view with image inside under RN 3.3
+		//Do not use List view with image inside under RN 0.33
 		//since there's a serious bug that the portrait won't update if user changes.
 		/*
 		<ListView

@@ -72,6 +72,8 @@ var OpenAccountRoutes = require('./openAccount/OpenAccountRoutes');
 
 var TutorialPage = require('./TutorialPage');
 
+var LocalDataUpdateModule = require('../module/LocalDataUpdateModule')
+
 var _navigator;
 var _navigators = [];
 
@@ -137,9 +139,11 @@ export var showProgress
 export var ayondoLoginResult
 export var refreshMainPage
 export var showSharePage
+export var gotoLoginPage
 
 var recevieDataSubscription = null
 var didAccountChangeSubscription = null;
+var didAccountLoginOutSideSubscription = null;
 var SHARE_PAGE = 'SharePage'
 var REGISTER_SUCCESS_DIALOG = 'RegisterSuccessDialog'
 var SUPER_PRIORITY_HINT = 'SuperPriorityHint'
@@ -621,10 +625,11 @@ var MainPage = React.createClass({
 	componentDidMount: function() {
 		ayondoLoginResult = this.ayondoLoginResult
 		refreshMainPage = this.refreshMainPage
-		showSharePage = this._doShare;
+		showSharePage = this._doShare
+		gotoLoginPage = this.gotoLoginPage
 		this.initTabbarEvent()
 		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>this.refreshMainPage());
-
+		didAccountLoginOutSideSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGIN_OUT_SIDE, ()=>this.gotoLoginPage());
 		var currentNavigatorIndex = LogicData.getTabIndex();
 		if(_navigators && _navigators.length > currentNavigatorIndex){
 			_navigator = _navigators[currentNavigatorIndex];
@@ -829,6 +834,21 @@ var MainPage = React.createClass({
 			  stockRowData: stockRowData,
 				});
 		 }
+	},
+
+	gotoLoginPage: function(){
+		LocalDataUpdateModule.removeUserData();
+		LogicData.setAccountState(false)
+		LogicData.setActualLogin(false)
+
+		var currentNavigatorIndex = LogicData.getTabIndex();
+
+		if(_navigators[currentNavigatorIndex]){
+			_navigators[currentNavigatorIndex].push({
+			 name: LOGIN_ROUTE,
+			 });
+		}
+
 	},
 
 	showNotification: function() {

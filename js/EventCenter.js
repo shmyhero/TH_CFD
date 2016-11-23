@@ -12,6 +12,7 @@ const EventConst = {
 	ME_TAB_PRESS_EVENT : 'meTabEvent',
 	ACCOUNT_STATE_CHANGE : 'account_state_change',
 	NETWORK_CONNECTION_CHANGED: 'network_connection_changed',
+	ACCOUNT_LOGIN_OUT_SIDE: 'account_login_out_side',
 }
 
 var EventCenter = {
@@ -43,6 +44,10 @@ var EventCenter = {
 
 	emitNetworkConnectionChangedEvent: function(){
 		eventEmitter.emit(EventConst.NETWORK_CONNECTION_CHANGED)
+	},
+
+	emitAccountLoginOutSideEvent: function(){
+		eventEmitter.emit(EventConst.ACCOUNT_LOGIN_OUT_SIDE)
 	},
 }
 

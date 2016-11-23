@@ -4,6 +4,8 @@ var LogicData = require('../LogicData')
 var NetConstants = require('../NetConstants')
 var MainPage = require('../view/MainPage')
 var CacheModule = require('./CacheModule')
+var {EventCenter, EventConst} = require('../EventCenter')
+
 import React from 'react';
 import {
 	Alert
@@ -82,28 +84,41 @@ export function fetchTHUrlWithNoInternetCallback(url, params, successCallback, e
 		})
 		.catch((e) => {
 			console.log('fetchTHUrl catches: ' + e + ", " + url);
+
+
+			if(e.message=='身份验证失败'){
+				console.log('多点登录 = ' + e);
+				if (!alertShow) {
+					alertShow = true
+ 					Alert.alert('风险提示！', '盈交易账号已登录其他设备', [{text: '确定', onPress: () => {
+						alertShow=false
+ 						EventCenter.emitAccountLoginOutSideEvent();
+					}}])
+				};
+			}
+
 			var message = e.message
 
-			if(params.cache === "offline"){
-				CacheModule.loadCacheForUrl(url)
-				.then((value)=>{
-					if(value){
-						var respJson = JSON.parse(value);
-						successCallback(respJson);
-					}else{
-						if(message.toLowerCase() === "network request failed"){
-							message = "网络连接已断开，请检查设置"
-						}
-						if(internetErrorCallback){
-							internetErrorCallback(message);
-						}
-						else if (!alertShow) {
-							alertShow = true
-							Alert.alert('', message, [{text: 'OK', onPress: () => alertShow=false}])
-						};
-					}
-				});
-			}
+			// if(params.cache === "offline"){
+			// 	CacheModule.loadCacheForUrl(url)
+			// 	.then((value)=>{
+			// 		if(value){
+			// 			var respJson = JSON.parse(value);
+			// 			successCallback(respJson);
+			// 		}else{
+			// 			if(message.toLowerCase() === "network request failed"){
+			// 				message = "网络连接已断开，请检查设置"
+			// 			}
+			// 			if(internetErrorCallback){
+			// 				internetErrorCallback(message);
+			// 			}
+			// 			else if (!alertShow) {
+			// 				alertShow = true
+			// 				Alert.alert('', message, [{text: 'OK', onPress: () => alertShow=false}])
+			// 			};
+			// 		}
+			// 	});
+			// }
 
 			if(message.toLowerCase() === "network request failed"){
 				message = "网络连接已断开，请检查设置"
@@ -111,17 +126,18 @@ export function fetchTHUrlWithNoInternetCallback(url, params, successCallback, e
 			console.log(message);
 			if(internetErrorCallback){
 				internetErrorCallback(message);
-			}
-			//else if (!alertShow) {
-				//alertShow = true
+			} else if (!alertShow) {
+				alertShow = true
 
-				//Alert.alert('', message, [{text: 'OK', onPress: () => alertShow=false}])
-			//};
+				// Alert.alert('', message, [{text: 'OK', onPress: () => alertShow=false}])
+			};
 		})
 		.done(() => {
 			MainPage.hideProgress && MainPage.hideProgress()
 		});
 }
+
+
 
 export function syncOwnStocks(userData) {
   return new Promise((resolve, reject)=>{

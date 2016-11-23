@@ -48,6 +48,7 @@ var BANNERS = [
 const check_in_image = require("../../images/check_in.png")
 const movie_image = require("../../images/movie.png")
 const hot_image = require("../../images/hot.png")
+const bg_hint_image = require("../../images/icon_bg_hint.png")
 
 var {height, width} = Dimensions.get('window');
 var barWidth = Math.round(width/3)-12
@@ -913,6 +914,15 @@ var HomePage = React.createClass({
 			</TouchableOpacity>);
 	},
 
+	renderBgHint:function(){
+		return(
+			<View style={styles.bgHint}>
+				<Image style = {{width:20,height:20}} source={bg_hint_image}></Image>
+				<Text style={{marginTop:5,fontSize:12,color:'#c4c4c4'}}>具有全套FCA牌照，受FCA授权与监管</Text>
+			</View>
+	 	)
+	},
+
 	render: function() {
 		var activeDot = <View style={styles.guideActiveDot} />
 		var dot = <View style={styles.guideDot} />
@@ -936,40 +946,44 @@ var HomePage = React.createClass({
 		return (
 			<View style={{width: width, height: height - UIConstants.TAB_BAR_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER}}>
 				{this.renderNavBar()}
-				<ScrollView>
-					<View style={{width: width, height: imageHeight}}>
-						<Swiper
-							ref="bannerswiper"
-							height={imageHeight}
-							loop={true}
-							bounces={true}
-							autoplay={true}
-							autoplayTimeout={3}
-							paginationStyle={{
-								bottom: null, top: 12, left: null, right: 10,
-							}}
-							activeDot={activeDot}
-							dot={dot}>
-							{slides}
-						</Swiper>
-					</View>
 
-					{this.renderTopNews()}
-					<View style={styles.bigSeparator}/>
+				<View style={{width:width,height:height}}>
+					{this.renderBgHint()}
+					<ScrollView>
+						<View style={{width: width, height: imageHeight}}>
+							<Swiper
+								ref="bannerswiper"
+								height={imageHeight}
+								loop={true}
+								bounces={true}
+								autoplay={true}
+								autoplayTimeout={3}
+								paginationStyle={{
+									bottom: null, top: 12, left: null, right: 10,
+								}}
+								activeDot={activeDot}
+								dot={dot}>
+								{slides}
+							</Swiper>
+						</View>
 
-					{this.renderEventsRow()}
-					{this.renderEventSeparator2()}
+						{this.renderTopNews()}
+						<View style={styles.bigSeparator}/>
+
+						{this.renderEventsRow()}
+						{this.renderEventSeparator2()}
 
 
-					{this.renderPopularityView()}
-					<View style={styles.bigSeparator}/>
+						{this.renderPopularityView()}
+						<View style={styles.bigSeparator}/>
 
 
-					{this.renderCards()}
+						{this.renderCards()}
 
-					{this.renderBottomViews()}
+						{this.renderBottomViews()}
 
-				</ScrollView>
+					</ScrollView>
+				</View>
 			</View>
 
 		);
@@ -1226,6 +1240,14 @@ var styles = StyleSheet.create({
 		width:(width-20)/3,
 		flex:1,
 		marginRight:5,
+	},
+	bgHint:{
+		width:width,
+		height:80,
+		position:'absolute',
+		alignItems:'center',
+		justifyContent:'center',
+
 	},
 });
 

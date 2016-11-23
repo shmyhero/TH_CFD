@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
 
   titleText: {
 		fontSize: 20,
-		textAlign: 'center',
+		// textAlign: 'center',
 		color: '#ffffff',
 		marginVertical: 8,
     textAlign: 'left',

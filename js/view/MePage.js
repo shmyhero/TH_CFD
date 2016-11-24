@@ -332,8 +332,8 @@ var MePage = React.createClass({
 			// });
 			var aboutUrl = LogicData.getAccountState()?NetConstants.TRADEHERO_API.WEBVIEW_URL_ABOUT_US_ACTUAL:NetConstants.TRADEHERO_API.WEBVIEW_URL_ABOUT_US
 			this.gotoWebviewPage(aboutUrl, '关于我们');
-			LogicData.setAccountState(true)
-			LogicData.setActualLogin(true)
+			// LogicData.setAccountState(true)
+			// LogicData.setActualLogin(true)
 		}
 		else if(rowData.subtype === 'config') {
 			this.props.navigator.push({
@@ -347,7 +347,7 @@ var MePage = React.createClass({
 				name: MainPage.FEEDBACK_ROUTE,
 				phone: meData.phone,
 			});
-			LogicData.setAccountState(false)
+			// LogicData.setAccountState(false)
 		}
 		else if(rowData.subtype === 'accountInfo') {
 			this.gotoUserInfoPage()

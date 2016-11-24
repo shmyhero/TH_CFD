@@ -184,8 +184,8 @@ var StockDetailPage = React.createClass({
 				);
 				this.props.showTutorial('trade')
 			},
-			(errorMessage) => {
-				Alert.alert('', errorMessage);
+			(result) => {
+				Alert.alert('', result.errorMessage);
 			}
 		)
 
@@ -304,8 +304,8 @@ var StockDetailPage = React.createClass({
 				}
 				this.connectWebSocket();
 			},
-			(errorMessage) => {
-				Alert.alert('', errorMessage);
+			(result) => {
+				Alert.alert('', result.errorMessage);
 			}
 		)
 	},
@@ -990,8 +990,8 @@ var StockDetailPage = React.createClass({
 				TalkingdataModule.trackEvent(TalkingdataModule.TRADE_EVENT, '', eventParam)
 				TongDaoModule.trackOpenPositionEvent(responseJson, this.state.money)
 			},
-			(errorMessage) => {
-				Alert.alert('', errorMessage,
+			(result) => {
+				Alert.alert('', result.errorMessage,
 					[
 						{text: 'OK', onPress: () => this.setState({tradingInProgress: false})}
 					]

@@ -23,7 +23,7 @@ var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
 var MainPage = require('./MainPage')
 var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
-
+var NetworkErrorIndicator = require('./NetworkErrorIndicator')
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var didFocusSubscription = null;
@@ -34,6 +34,7 @@ var stockNameFontSize = 18;
 
 var ACTIVE_CONTRY_COLOR = '#5483d8';
 var SIMULATE_CONTRY_COLOR = '#00b2fe';
+const NETWORK_ERROR_INDICATOR = "networkErrorIndicator";
 
 var StockListPage = React.createClass({
 
@@ -142,11 +143,18 @@ var StockListPage = React.createClass({
 						(responseJson) => {
 							this.setState({
 								rowStockInfoData: responseJson,
-								stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, responseJson))
+								stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, responseJson)),
+								contentLoadingFailed: false,
 							})
 						},
-						(errorMessage) => {
-							Alert.alert('', errorMessage);
+						(result) => {
+							if(!result.loadedOfflineCache){
+								this.setState({
+									contentLoadingFailed: true
+								})
+								this.refs[NETWORK_ERROR_INDICATOR] && this.refs[NETWORK_ERROR_INDICATOR].stopRefresh();
+							}
+							//Alert.alert('', result.errorMessage);
 						}
 					)
 				}
@@ -189,8 +197,14 @@ var StockListPage = React.createClass({
 							stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, responseJson))
 						})
 					},
-					(errorMessage) => {
-						Alert.alert('', errorMessage);
+					(result) => {
+						if(!result.loadedOfflineCache){
+							this.setState({
+								contentLoadingFailed: true
+							})
+							this.refs[NETWORK_ERROR_INDICATOR] && this.refs[NETWORK_ERROR_INDICATOR].stopRefresh();
+						}
+						//Alert.alert('', result.errorMessage);
 					}
 				)
 			}
@@ -267,6 +281,7 @@ var StockListPage = React.createClass({
 			stockInfo: ds.cloneWithRows([]),
 			sortType: this.props.showHeaderBar ? 0: -1,
 			rowStockInfoData: [],
+			contentLoadingFailed: false,
 		};
 	},
 
@@ -461,6 +476,27 @@ var StockListPage = React.createClass({
 
 	},
 
+	renderContent: function(){
+		if(this.state.contentLoadingFailed){
+			return (
+				<NetworkErrorIndicator onRefresh={()=>this.refreshData(true)} ref={NETWORK_ERROR_INDICATOR}/>
+			)
+		}else{
+			return(
+				<ListView
+					style={styles.list}
+					ref="listview"
+					initialListSize={11}
+					dataSource={this.state.stockInfo}
+					enableEmptySections={true}
+					renderFooter={this.renderFooter}
+					renderRow={this.renderRow}
+					renderSeparator={this.renderSeparator}
+					onEndReached={this.onEndReached}/>
+			);
+		}
+	},
+
 	render: function() {
 		var {height, width} = Dimensions.get('window');
 		var scrollTabHeight = 48
@@ -476,16 +512,7 @@ var StockListPage = React.createClass({
 			<View style={viewStyle}>
 				{this.renderHeaderBar()}
 				{this.renderAddStockView()}
-				<ListView
-					style={styles.list}
-					ref="listview"
-					initialListSize={11}
-					dataSource={this.state.stockInfo}
-					enableEmptySections={true}
-					renderFooter={this.renderFooter}
-					renderRow={this.renderRow}
-					renderSeparator={this.renderSeparator}
-					onEndReached={this.onEndReached}/>
+				{this.renderContent()}
 			</View>
 		)
 	},

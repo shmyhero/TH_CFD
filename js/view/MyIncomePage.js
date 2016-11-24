@@ -91,8 +91,8 @@ var MyIncomePage = React.createClass({
 						dataSource: ds.cloneWithRows(listRawData),
 	        });
 	      },
-	      (errorMessage) => {
-	        console.log(errorMessage)
+	      (result) => {
+	        console.log(result.errorMessage)
 	      }
 	    )
 		}else{

@@ -151,7 +151,7 @@ var DaySignPage = React.createClass({
 		var userData = LogicData.getUserData()
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
-			NetworkModule.fetchTHUrlWithNoInternetCallback(
+			NetworkModule.fetchTHUrl(
 				NetConstants.CFD_API.GET_USER_DAILY_SIGN_INFO,
 				{
 					method: 'GET',
@@ -170,9 +170,6 @@ var DaySignPage = React.createClass({
 				  		amountToday: responseJson.AmountToday //今天的签到奖励金额
 						}
 					)
-				},
-				(error) => {
-					//Alert.alert(error)
 				}
 			)
 		}
@@ -184,7 +181,7 @@ var DaySignPage = React.createClass({
 		var userData = LogicData.getUserData()
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
-			NetworkModule.fetchTHUrlWithNoInternetCallback(
+			NetworkModule.fetchTHUrl(
 				NetConstants.CFD_API.GET_USER_DAILY_SIGN_MONTH,
 				{
 					method: 'GET',
@@ -210,8 +207,8 @@ var DaySignPage = React.createClass({
 						)
 					}
 				},
-				(error) => {
-					Alert.alert(error)
+				(result) => {
+					Alert.alert(result.errorMessage)
 				}
 			)
 		}
@@ -234,9 +231,6 @@ var DaySignPage = React.createClass({
 						description: responseJson.text,
 					}
 					this.props.shareFunction(data);
-				},
-				(errorMessage) => {
-					// Ignore it.
 				}
 			);
     }
@@ -340,7 +334,7 @@ var DaySignPage = React.createClass({
 				TalkingdataModule.trackEvent(TalkingdataModule.CHECK_IN_BUTTON_EVENT);
 				signEnable = false
 				TongDaoModule.trackDaySignEvent(this.state.totalSignDays>0)
-				NetworkModule.fetchTHUrlWithNoInternetCallback(
+				NetworkModule.fetchTHUrl(
 					NetConstants.CFD_API.USER_DAILY_SIGN,
 					{
 						method: 'GET',
@@ -356,7 +350,7 @@ var DaySignPage = React.createClass({
 						this._refresh()
 						this._actionAni()
 					},
-					(error) => {
+					(result) => {
 						signEnable = true
 						//Alert.alert(error)
 						// this._actionAni()

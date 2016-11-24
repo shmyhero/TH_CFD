@@ -77,7 +77,7 @@ var MeAccountBindingPage = React.createClass({
 				phoneNumber: meData.phone,
 			})
 		}
-		
+
 		if(meData.weChatOpenId){
 			this.setState({
 				weChatOpenId: meData.weChatOpenId,
@@ -122,8 +122,8 @@ var MeAccountBindingPage = React.createClass({
 					this.loadAccountBindingInfo(responseJson)
 				})
 			},
-			(errorMessage) => {
-				Alert.alert('提示',errorMessage);
+			(result) => {
+				Alert.alert('提示', result.errorMessage);
 			}
 		)
 	},

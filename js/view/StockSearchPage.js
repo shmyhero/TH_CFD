@@ -64,7 +64,7 @@ var StockSearchPage = React.createClass({
 	updateSearchHistory: function() {
 		// load history
 		LogicData.getSearchStockHistory()
-		.then((history)=>{			
+		.then((history)=>{
 			this.setState({
 				historyRawInfo: history,
 				historyInfo: ds.cloneWithRows(history),
@@ -129,9 +129,9 @@ var StockSearchPage = React.createClass({
 						TongDaoModule.trackSearchStockEvent(text, true)
 					}
 				},
-				(errorMessage) => {
+				(result) => {
 					this.setState({
-						searchFailedText: errorMessage,
+						searchFailedText: result.errorMessage,
 					})
 				}
 			)

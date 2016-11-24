@@ -158,8 +158,8 @@ var EditAlertPage = React.createClass({
 				this.validatePrice(1, this.state.HighPrice)
 				this.validatePrice(2, this.state.LowPrice)
 			},
-			(errorMessage) => {
-				Alert.alert('', errorMessage);
+			(result) => {
+				Alert.alert('', result.errorMessage);
 			}
 		)
 	},
@@ -393,8 +393,8 @@ var EditAlertPage = React.createClass({
 				this.props.onAlertSetComplete()
 				this.props.navigator.pop()
 			},
-			(errorMessage) => {
-				Alert.alert('提醒设置', errorMessage);
+			(result) => {
+				Alert.alert('提醒设置', result.errorMessage);
 			}
 		)
 	},

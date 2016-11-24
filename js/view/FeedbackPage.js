@@ -106,8 +106,8 @@ var FeedbackPage = React.createClass({
 				Alert.alert('提交成功', '感谢你的反馈',
 					[{text:'确定', onPress: ()=>this.pressBackButton()}]);
 			},
-			(errorMessage) => {
-				Alert.alert('', errorMessage);
+			(result) => {
+				Alert.alert('', result.errorMessage);
 			}
 		)
 	},

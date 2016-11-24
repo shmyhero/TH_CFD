@@ -132,9 +132,6 @@ var HomePage = React.createClass({
 				console.log(JSON.stringify(responseJson))
 				this.downloadBannerImages(responseJson)
 				StorageModule.setBanners(JSON.stringify(responseJson))
-			},
-			(errorMessage) => {
-				// Ignore it.
 			}
 		);
 
@@ -165,9 +162,6 @@ var HomePage = React.createClass({
 							winMovieTicket: false,
 						})
 					}
-				},
-				(errorMessage) => {
-					// Ignore it.
 				}
 			);
 		}
@@ -193,9 +187,6 @@ var HomePage = React.createClass({
 				this.setState({
 					rawCardsInfo: responseJson,
 				})
-			},
-			(errorMessage) => {
-				Alert.alert('', errorMessage);
 			}
 		);
 
@@ -225,9 +216,6 @@ var HomePage = React.createClass({
 					rawPopularityInfo: responseJson,
 					popularityInfo: bsds.cloneWithRows(listdata)
 				})
-			},
-			(errorMessage) => {
-				Alert.alert('', errorMessage);
 			}
 		);
 
@@ -241,9 +229,6 @@ var HomePage = React.createClass({
 				this.setState({
 					topNews: responseJson,
 				})
-			},
-			(errorMessage) => {
-				Alert.alert('', errorMessage);
 			}
 		);
 	},

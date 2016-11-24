@@ -97,8 +97,8 @@ var OALiveRegisterPage = React.createClass({
 			function(responseJson) {
 				// Nothing to do.
 			}.bind(this),
-			function(errorMessage) {
-				Alert.alert('提示',errorMessage);
+			function(result) {
+				Alert.alert('提示', result.errorMessage);
 			}
 		)
 
@@ -159,8 +159,8 @@ var OALiveRegisterPage = React.createClass({
 			function(responseJson) {
 				this.loginSuccess(responseJson);
 			}.bind(this),
-			function(errorMessage) {
-				Alert.alert('提示',errorMessage);
+			function(result) {
+				Alert.alert('提示',result.errorMessage);
 			}
 		)
 	},

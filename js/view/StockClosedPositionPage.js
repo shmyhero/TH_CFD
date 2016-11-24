@@ -82,8 +82,8 @@ var StockClosedPositionPage = React.createClass({
 					isClear:false,
 				})
 			},
-			(errorMessage) => {
-				if(NetConstants.AUTH_ERROR === errorMessage){
+			(result) => {
+				if(NetConstants.AUTH_ERROR === result.errorMessage){
 
 				}else{
 					// Alert.alert('', errorMessage);

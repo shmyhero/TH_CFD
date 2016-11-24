@@ -563,7 +563,7 @@ var MainPage = React.createClass({
 		var userData = LogicData.getUserData()
 	  var urlToSend = LogicData.getAccountState()?NetConstants.CFD_API.SWITCH_TO_LIVE:NetConstants.CFD_API.SWITCH_TO_DEMO;
 		console.log('sendToSwitchAccountStatus url = ' + urlToSend);
-		NetworkModule.fetchTHUrlWithNoInternetCallback(
+		NetworkModule.fetchTHUrl(
 			urlToSend,
 			{
 				method: 'GET',
@@ -574,8 +574,8 @@ var MainPage = React.createClass({
 			(responseJson) =>{
 				 console.log(responseJson)
 			},
-			(error) => {
-				console.log(error)
+			(result) => {
+				console.log(result.errorMessage)
 			}
 		)
 	},

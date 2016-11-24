@@ -127,7 +127,7 @@ var AppNavigator = React.createClass({
 			},()=>{
 				this.initializeApp();
 			});
-		})		
+		})
 	},
 
 	initializeApp: function(){
@@ -143,7 +143,7 @@ var AppNavigator = React.createClass({
 					console.log("tong dao", userData)
 					TongDaoModule.setUserId(userData.userId)
 				}
-				this.checkUpdate()
+				this.checkUpdate();
 
 				StorageModule.loadGuide()
 				.then((value) => {
@@ -182,8 +182,8 @@ var AppNavigator = React.createClass({
 			(responseJson) => {
 				LogicData.setFxData(responseJson)
 			},
-			(errorMessage) => {
-				console.log(errorMessage)
+			(result) => {
+				console.log(result.errorMessage)
 			}
 		)
 

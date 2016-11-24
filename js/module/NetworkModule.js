@@ -13,15 +13,20 @@ import {
 
 var alertShow = false
 
-export function fetchTHUrl(url, params, successCallback, errorCallback) {
-	fetchTHUrlWithNoInternetCallback(url, params, successCallback, errorCallback, null)
-}
+export const API_ERROR = 'apiError';
+export const NETWORK_CONNECTION_ERROR = 'networkConnectionError';
 
-export function fetchTHUrlWithNoInternetCallback(url, params, successCallback, errorCallback, internetErrorCallback) {
+export function fetchTHUrl(url, params, successCallback, errorCallback) {
 	var requestSuccess = true;
 
 	console.log('fetching: ' + url + ' with params: ')
 	console.log(params)
+
+	var result = {
+		error: null,
+		errorMessage: null,
+		loadedOfflineCache: false,
+	}
 
 	if (params.showLoading === true) {
 		MainPage.showProgress && MainPage.showProgress()
@@ -33,6 +38,7 @@ export function fetchTHUrlWithNoInternetCallback(url, params, successCallback, e
 			if(value){
 				console.log("read offline cache: " + value)
 				var respJson = JSON.parse(value);
+				result.loadedOfflineCache = true;
 				successCallback(respJson);
 			}
 		});
@@ -58,7 +64,9 @@ export function fetchTHUrlWithNoInternetCallback(url, params, successCallback, e
 			if (requestSuccess) {
 				if (responseJson.success === false) {
 					console.log('fetchTHUrl handled error with message: ' + JSON.stringify(responseJson))
-					errorCallback(responseJson.ExceptionMessage || responseJson.Message || responseJson.message);
+					result.error = API_ERROR;
+					result.errorMessage = responseJson.ExceptionMessage || responseJson.Message || responseJson.message;
+					errorCallback && errorCallback(result);
 				} else {
 					console.log('fetchTHUrl success with response: ')
 					console.log(responseJson)
@@ -71,15 +79,17 @@ export function fetchTHUrlWithNoInternetCallback(url, params, successCallback, e
 						CacheModule.storeCacheForUrl(url, JSON.stringify(responseJson), userRelated)
 						.then(()=>{
 							console.log('stored offline cache ')
-							successCallback(responseJson);
+							successCallback && successCallback(responseJson);
 						})
 					}else{
-						successCallback(responseJson);
+						successCallback && successCallback(responseJson);
 					}
 				}
 			} else {
 				console.log('fetchTHUrl unhandled error with message: ' + JSON.stringify(responseJson))
-				errorCallback(responseJson.ExceptionMessage || responseJson.Message|| responseJson.message);
+				result.error = NETWORK_CONNECTION_ERROR;
+				result.errorMessage = responseJson.ExceptionMessage || responseJson.Message || responseJson.message;
+				errorCallback && errorCallback(result);
 			}
 		})
 		.catch((e) => {
@@ -96,7 +106,6 @@ export function fetchTHUrlWithNoInternetCallback(url, params, successCallback, e
 					}}])
 				};
 			}
-
 			var message = e.message
 
 			// if(params.cache === "offline"){
@@ -124,12 +133,12 @@ export function fetchTHUrlWithNoInternetCallback(url, params, successCallback, e
 				message = "网络连接已断开，请检查设置"
 			}
 			console.log(message);
-			if(internetErrorCallback){
-				internetErrorCallback(message);
+			if(errorCallback){
+				result.error = API_ERROR;
+				result.errorMessage = message;
+				errorCallback && errorCallback(result);
 			} else if (!alertShow) {
 				alertShow = true
-
-				// Alert.alert('', message, [{text: 'OK', onPress: () => alertShow=false}])
 			};
 		})
 		.done(() => {
@@ -170,9 +179,9 @@ export function syncOwnStocks(userData) {
 				console.log(responseJson)
 				resolve();
 			},
-			(errorMessage) => {
-				Alert.alert('获取股票列表失败', errorMessage);
-				reject(errorMessage);
+			(result) => {
+				Alert.alert('获取股票列表失败', result.errorMessage);
+				reject(result.errorMessage);
 			}
 		)
 	});
@@ -203,9 +212,9 @@ export function addToOwnStocks(stockData) {
 				console.log('add to own stocks success')
 				resolve();
 			},
-			(errorMessage) => {
-				Alert.alert('添加股票失败', errorMessage);
-				reject(errorMessage);
+			(result) => {
+				Alert.alert('添加股票失败', result.errorMessage);
+				reject(result.errorMessage);
 			}
 		)
 	});
@@ -233,8 +242,8 @@ export function removeFromOwnStocks(stockData) {
 		(responseJson) => {
 			console.log('delete from own stocks success')
 		},
-		(errorMessage) => {
-			Alert.alert('删除股票失败', errorMessage);
+		(result) => {
+			Alert.alert('删除股票失败', result.errorMessage);
 		}
 	)
 }
@@ -263,8 +272,8 @@ export function updateOwnStocks(stockData) {
 		(responseJson) => {
 			console.log('update own stocks success')
 		},
-		(errorMessage) => {
-			Alert.alert('更新股票失败', errorMessage);
+		(result) => {
+			Alert.alert('更新股票失败', result.errorMessage);
 		}
 	)
 }
@@ -294,7 +303,7 @@ export function loadUserBalance(force, successCallback) {
 				LogicData.setBalanceData(responseJson)
 				successCallback && successCallback(responseJson)
 			},
-			(errorMessage) => {
+			(result) => {
 				// Alert.alert('', errorMessage);
 			}
 		)

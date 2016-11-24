@@ -123,8 +123,8 @@ var StockTransactionInfoPage = React.createClass({
 							})
 						}
 					},
-					(errorMessage) => {
-						console.log(errorMessage)
+					(result) => {
+						console.log(result.errorMessage)
 					}
 				)
 			}

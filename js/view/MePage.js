@@ -87,7 +87,7 @@ var MePage = React.createClass({
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
 			//If previously logged in, fetch me data from server.
-			NetworkModule.fetchTHUrlWithNoInternetCallback(
+			NetworkModule.fetchTHUrl(
 				NetConstants.CFD_API.GET_USER_INFO_API,
 				{
 					method: 'GET',
@@ -102,12 +102,9 @@ var MePage = React.createClass({
 
 					this.reloadMeData();
 				}.bind(this),
-				function(errorMessage) {
+				(result) => {
 					this.reloadMeDataFromStorage();
-				}.bind(this),
-				function(errorMessage) {
-					this.reloadMeDataFromStorage();
-				}.bind(this)
+				}
 			)
 		}else{
 			this.reloadMeDataFromStorage();
@@ -179,7 +176,7 @@ var MePage = React.createClass({
 				console.log('live', url );
 			}
 
-			NetworkModule.fetchTHUrlWithNoInternetCallback(
+			NetworkModule.fetchTHUrl(
 				url,
 				{
 					method: 'GET',
@@ -195,17 +192,12 @@ var MePage = React.createClass({
 						}
 					)
 				}.bind(this),
-				function(errorMessage) {
-					console.log(errorMessage)
-				}.bind(this),
-				function(errorMessage) {
-					console.log(errorMessage)
-				}.bind(this)
+				(result) => {
+					console.log(result.errorMessage)
+				}
 			);
 
-
-
-			NetworkModule.fetchTHUrlWithNoInternetCallback(
+			NetworkModule.fetchTHUrl(
 				NetConstants.CFD_API.GET_USER_INFO_API,
 				{
 					method: 'GET',
@@ -223,9 +215,7 @@ var MePage = React.createClass({
 						this.setCookie();
 					}
 					console.log("about cookie " + "userName = " + responseJson.liveUsername + " && userEmail = " + responseJson.liveEmail);
-				}.bind(this),
-				function(errorMessage) {}.bind(this),
-				function(errorMessage) {}.bind(this)
+				}.bind(this)
 			)
 		}
 

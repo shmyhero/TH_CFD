@@ -135,8 +135,8 @@ var LoginPage = React.createClass({
 			(responseJson) => {
 				// Nothing to do.
 			},
-			(errorMessage) => {
-				Alert.alert('提示',errorMessage);
+			(result) => {
+				Alert.alert('提示', result.errorMessage);
 			}
 		)
 
@@ -217,8 +217,8 @@ var LoginPage = React.createClass({
 			(responseJson) => {
 				this.loginSuccess(responseJson);
 			},
-			(errorMessage) => {
-				Alert.alert('提示',errorMessage);
+			(result) => {
+				Alert.alert('提示', result.errorMessage);
 			}
 		)
 	},
@@ -249,11 +249,11 @@ var LoginPage = React.createClass({
 			(responseJson) => {
 				this.loginSuccess(responseJson);
 			},
-			(errorMessage) => {
+			(result) => {
 				this.setState({
 					phoneLoginButtonEnabled: true
 				})
-				Alert.alert('提示',errorMessage);
+				Alert.alert('提示', result.errorMessage);
 			}
 		)
 	},
@@ -287,11 +287,11 @@ var LoginPage = React.createClass({
 			(responseJson) => {
 				this.loginSuccess(responseJson);
 			},
-			(errorMessage) => {
+			(result) => {
 				this.setState({
 					phoneLoginButtonEnabled: true
 				})
-				Alert.alert('提示',errorMessage);
+				Alert.alert('提示', result.errorMessage);
 			}
 		)
 	},
@@ -321,11 +321,11 @@ var LoginPage = React.createClass({
 			(responseJson) => {
 				this.updateMeData();
 			},
-			(errorMessage) => {
+			(result) => {
 				this.setState({
 					phoneLoginButtonEnabled: true
 				})
-				Alert.alert('提示',errorMessage);
+				Alert.alert('提示', result.errorMessage);
 			}
 		)
 	},
@@ -443,8 +443,8 @@ var LoginPage = React.createClass({
 				//  Alert.alert('set deviceToken success auth： ' + alertData.deviceToken +" * " +alertData.deviceType);
 				 console.log('set deviceToken success auth： ' + alertData.deviceToken +" * " +alertData.deviceType);
 			 },
-			 (errorMessage) => {
-				 console.log('errorMessage');
+			 (result) => {
+				 console.log('errorMessage ' + result.errorMessage);
 			 }
 		 )
 	},

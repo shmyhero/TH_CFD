@@ -67,8 +67,8 @@ var OALiveUpdateUserInfoPage = React.createClass({
 					saveButtonEnabled: false,
 				});
 			}.bind(this),
-			function(errorMessage) {
-				Alert.alert('提示',errorMessage);
+			function(result) {
+				Alert.alert('提示',result.errorMessage);
 			}
 		)
 	},
@@ -152,8 +152,8 @@ var OALiveUpdateUserInfoPage = React.createClass({
 					name: MainPage.LIVE_REGISTER_STATUS_ROUTE,
 				});
 			}.bind(this),
-			function(errorMessage) {
-				Alert.alert('提示',errorMessage);
+			function(result) {
+				Alert.alert('提示',result.errorMessage);
 			}
 		)
 	},

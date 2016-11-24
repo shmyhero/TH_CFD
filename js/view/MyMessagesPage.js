@@ -98,7 +98,7 @@ export default class MyMessagesPage extends Component {
 
     url = url.replace("<pageNum>", this.currentIndex);
     url = url.replace("<pageSize>", 20);
-    NetworkModule.fetchTHUrlWithNoInternetCallback(
+    NetworkModule.fetchTHUrl(
       url,
       {
         method: 'GET',
@@ -158,8 +158,8 @@ export default class MyMessagesPage extends Component {
       (responseJson) =>{
         //Ignore the result!
       },
-      (error) => {
-        Alert.alert(error)
+      (result) => {
+        Alert.alert(result.errorMessage)
       }
     )
   }
@@ -195,14 +195,32 @@ export default class MyMessagesPage extends Component {
     }
   }
 
+  renderDateTime(rowData){
+    var datetime = rowData.createdAt;
+    if(datetime){
+      var dt = new Date(datetime);
+      var month = dt.getMonth()+1;
+      var dateString = dateFormat(dt, "yyyy.mm.dd");
+      var timeString = dateFormat(dt, "HH:MM")
+      return (
+        <View style={styles.datetime}>
+          <Text style={styles.date}>
+            {dateString}
+            <Text> </Text>
+            <Text style={styles.time}>{timeString}</Text>
+          </Text>
+        </View>
+      );
+    }else{
+      return (
+        <View/>
+      );
+    }
+
+  }
+
 	renderRow(rowData, sectionID, rowID) {
     var title;
-
-    var datetime = rowData.createdAt;
-    var dt = new Date(datetime);
-    var month = dt.getMonth()+1;
-    var dateString = dateFormat(dt, "yyyy.mm.dd");
-    var timeString = dateFormat(dt, "HH:MM")
 
     return(
       <TouchableOpacity activeOpacity={0.5} onPress={()=>this._onSelectNormalRow(rowData)}>
@@ -211,13 +229,7 @@ export default class MyMessagesPage extends Component {
 	      	<View style={styles.messageWrapper}>
 	          <Text style={styles.title}>{rowData.title}</Text>
 		        <Text style={styles.message}>{rowData.body}</Text>
-		        <View style={styles.datetime}>
-		          <Text style={styles.date}>
-		            {dateString}
-		            <Text> </Text>
-		            <Text style={styles.time}>{timeString}</Text>
-		          </Text>
-		        </View>
+            {this.renderDateTime(rowData)}
 		      </View>
 		    </View>
 	    </TouchableOpacity>

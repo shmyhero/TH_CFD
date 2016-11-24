@@ -161,12 +161,12 @@ var AccountNameModifyPage = React.createClass({
 					this.props.navigator.pop();
 				}.bind(this))
 			}.bind(this),
-			function(errorMessage) {
+			(result) => {
 				this.setState({
 					isShowError:true,
-					errorText:errorMessage,
+					errorText:result.errorMessage,
 				});
-			}.bind(this)
+			}
 		)
 	},
 

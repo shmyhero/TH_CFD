@@ -159,7 +159,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 			url = url.replace('<userName>', this.listRawData[rowID].value);
 			var userData = LogicData.getUserData();
 
-			NetworkModule.fetchTHUrlWithNoInternetCallback(
+			NetworkModule.fetchTHUrl(
 				url,
 				{
 					method: 'GET',
@@ -184,20 +184,9 @@ var OAAccountBasicSettingsPage = React.createClass({
 						resolve();
 					}
 				},
-				(errorMessage) => {
-					console.log("api Error: " + errorMessage);
-					this.listRawData[rowID].error = errorMessage;
-					this.updateList();
-					this.setState({
-						validateInProgress: false,
-					})
-					if(resolve){
-						resolve();
-					}
-				},
-				(errorMessage) => {
-					console.log("networkError: " + errorMessage);
-					this.listRawData[rowID].error = errorMessage;
+				(result) => {
+					console.log("api Error: " + result.errorMessage);
+					this.listRawData[rowID].error = result.errorMessage;
 					this.updateList();
 					this.setState({
 						validateInProgress: false,

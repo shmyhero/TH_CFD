@@ -163,8 +163,8 @@ var AccountInfoPage = React.createClass({
 						[{text:'确定', onPress: ()=>this.confirmOfSuccess()}]);
 				}.bind(this));
 			},
-			(errorMessage) => {
-				Alert.alert('设置头像', errorMessage);
+			(result) => {
+				Alert.alert('设置头像', result.errorMessage);
 			}
 		)
 	},

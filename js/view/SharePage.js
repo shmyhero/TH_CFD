@@ -118,8 +118,8 @@ var SharePage = React.createClass({
 						this.hide();
 					}
 				},
-				(errorMessage) => {
-					console.log(errorMessage)
+				(result) => {
+					console.log(result.errorMessage)
 				}
 			)
 

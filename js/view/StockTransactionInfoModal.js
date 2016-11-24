@@ -97,8 +97,8 @@ var StockTransactionInfoModal = React.createClass({
 				(responseJson) => {
 					cardInfo.isNew = false;
 				},
-				(errorMessage) => {
-					console.log(errorMessage)
+				(result) => {
+					console.log(result.errorMessage)
 				}
 			)
 		}

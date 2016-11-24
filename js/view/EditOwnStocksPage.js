@@ -100,8 +100,8 @@ var EditOwnStocksPage = React.createClass({
 						stockAlertList : responseJson,
 					});
 			 },
-			 (errorMessage) => {
-				 Alert.alert('', errorMessage);
+			 (result) => {
+				 Alert.alert('', result.errorMessage);
 			 }
 		 )
 		}

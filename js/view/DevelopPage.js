@@ -8,6 +8,7 @@ import {
   Switch,
   TouchableOpacity,
   Dimensions,
+  ScrollView,
 } from 'react-native';
 
 import Picker from 'react-native-picker';
@@ -21,6 +22,7 @@ var LogicData = require('../LogicData');
 var ColorConstants = require('../ColorConstants');
 var StockTransactionInfoModal = require('./StockTransactionInfoModal');
 var StockTransactionInfoBar = require('./StockTransactionInfoBar')
+var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 
 export default class DevelopPage extends Component {
 
@@ -60,7 +62,7 @@ export default class DevelopPage extends Component {
     var notLogin = Object.keys(userData).length === 0
     if(!notLogin){
       //If previously logged in, fetch me data from server.
-      NetworkModule.fetchTHUrlWithNoInternetCallback(
+      NetworkModule.fetchTHUrl(
         NetConstants.CFD_API.DETELE_LIVE_ACCOUNT,
         {
           method: 'GET',
@@ -74,12 +76,6 @@ export default class DevelopPage extends Component {
           }else{
             alert(JSON.stringify(responseJson))
           }
-        }.bind(this),
-        function(errorMessage) {
-
-        }.bind(this),
-        function(errorMessage) {
-
         }.bind(this)
       )
     }else{
@@ -93,48 +89,60 @@ export default class DevelopPage extends Component {
     this.forceUpdate()
   }
 
+  refresh(){
+    var server = NetConstants.getAPIServerIP();
+    this.state = {
+      server: server,
+    }
+  }
+
   render() {
     var liveColor = LogicData.getAccountState()
     return (
       <View style={styles.container}>
-        <View style={{flexDirection: 'column',
-          padding:15,
-          }}>
-          <Text>当前服务器：</Text>
-          <Text>{this.state.server}</Text>
-        </View>
-        <View style={{flexDirection: 'row', padding:15,}}>
-          <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}}
-            onPress={()=>this.onPressServerPicker()}>
-            <Text style={{color:'white', fontSize: 16}}>
-              {"当前服务器：" + VersionConstants.getCFDServerType() + ", 点击切换"}
-            </Text>
-          </TouchableOpacity>
-				</View>
-        <View style={{flexDirection: 'row', padding:15,}}>
-          <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}} onPress={()=>this.deleteLiveAcccount()}>
-            <Text style={{color:'white', fontSize: 16}}>
-              删除实盘账号
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{flexDirection: 'row', padding:15,}}>
-          <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}} onPress={()=>this.updateColor(liveColor)}>
-            <Text style={{color:'white', fontSize: 16}}>
-              {liveColor?"切换到模拟盘颜色":"切换到实盘颜色"}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <ScrollView style={{flex: 1}}>
 
-        <View style={{flexDirection: 'row', padding:15,}}>
-          <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}}
-            onPress={()=>this.showPage()}>
-            <Text style={{color:'white', fontSize: 16}}>
-              显示成就卡
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <StockTransactionInfoModal ref='page'/>
+          <NetworkErrorIndicator onRefresh={()=>this.refresh()}/>
+
+          <View style={{flexDirection: 'column',
+            padding:15,
+            }}>
+            <Text>当前服务器：</Text>
+            <Text>{this.state.server}</Text>
+          </View>
+          <View style={{flexDirection: 'row', padding:15,}}>
+            <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}}
+              onPress={()=>this.onPressServerPicker()}>
+              <Text style={{color:'white', fontSize: 16}}>
+                {"当前服务器：" + VersionConstants.getCFDServerType() + ", 点击切换"}
+              </Text>
+            </TouchableOpacity>
+  				</View>
+          <View style={{flexDirection: 'row', padding:15,}}>
+            <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}} onPress={()=>this.deleteLiveAcccount()}>
+              <Text style={{color:'white', fontSize: 16}}>
+                删除实盘账号
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{flexDirection: 'row', padding:15,}}>
+            <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}} onPress={()=>this.updateColor(liveColor)}>
+              <Text style={{color:'white', fontSize: 16}}>
+                {liveColor?"切换到模拟盘颜色":"切换到实盘颜色"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={{flexDirection: 'row', padding:15,}}>
+            <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}}
+              onPress={()=>this.showPage()}>
+              <Text style={{color:'white', fontSize: 16}}>
+                显示成就卡
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <StockTransactionInfoModal ref='page'/>
+        </ScrollView>
       </View>
     );
   }
@@ -153,7 +161,7 @@ export default class DevelopPage extends Component {
         reward: 1,
         tradeTime: '2016-11-08T08:00:16.223',
         ccy: 'USD',
-        stockName: '黄金',
+        stockName: '美国科技股1000000',
         themeColor: '#ee9922',
         pl:100,
         plRate:50,
@@ -204,7 +212,7 @@ export default class DevelopPage extends Component {
          reward: 1,
          tradeTime: '2016-11-08T07:58:29.67',
          ccy: 'USD',
-         stockName: '黄金',
+         stockName: '美国100',
          themeColor: '#ee9922',
          likes: 22,
       }

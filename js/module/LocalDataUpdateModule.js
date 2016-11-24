@@ -32,8 +32,8 @@ export function updateMeData(userData, onSuccess){
 				onSuccess()
 			}
 		}.bind(this),
-		function(errorMessage) {
-			Alert.alert('提示',errorMessage);
+		function(result) {
+			Alert.alert('提示', result.errorMessage);
 		}
 	)
 }

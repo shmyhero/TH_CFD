@@ -17,7 +17,9 @@ var NavBar = require('./NavBar')
 var NetConstants = require('../NetConstants')
 var TalkingdataModule = require('../module/TalkingdataModule')
 var ColorPropType = require('ColorPropType');
+var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 
+const NETWORK_ERROR_INDICATOR = "networkErrorIndicator";
 var WebViewPage = React.createClass({
 	propTypes: {
 		url: React.PropTypes.string,
@@ -128,6 +130,22 @@ var WebViewPage = React.createClass({
 		}
 	},
 
+	onRefresh: function(){
+		this.setState({
+			isNetConnected: true,
+		}, ()=>{
+			this.refs[WEBVIEW_REF] && this.refs[WEBVIEW_REF].reload();
+		});
+	},
+
+	renderLoading: function(){
+		return (
+			<View style={styles.containerView}>
+				<NetworkErrorIndicator onRefresh={()=>this.onRefresh()} refreshing={true}/>
+			</View>
+		)
+	},
+
 	renderWebView: function(){
 		if(this.state.isNetConnected) {
 
@@ -142,15 +160,22 @@ var WebViewPage = React.createClass({
 					scalesPageToFit={true}
 					automaticallyAdjustContentInsets={true}
 					onNavigationStateChange={this.onNavigationStateChange}
+					onLoadEnd={(content)=>console.log("onLoadEnd " +content)}
+					onMessage={(message)=>console.log("onMessage " +message)}
+					onError={()=>this._handleConnectivityChange(false)}
 					decelerationRate="normal"
 					source={{uri: this.props.url}}
+					renderLoading={()=>this.renderLoading()}
 				 	/>
 			)
 		}
 		else {
+
+			//	<Image style={styles.image} source={require('../../images/no_network.png')}/>
+			//
 			return (
 					<View style={styles.containerView}>
-						<Image style={styles.image} source={require('../../images/no_network.png')}/>
+						<NetworkErrorIndicator onRefresh={()=>this.onRefresh()} ref={NETWORK_ERROR_INDICATOR}/>
 					</View>
 				)
 		}
@@ -195,6 +220,7 @@ var styles = StyleSheet.create({
 	webView: {
 		backgroundColor: 'white',
 	},
+
 	containerView: {
 		flex: 1,
 		alignItems: 'center',
@@ -202,9 +228,17 @@ var styles = StyleSheet.create({
 		justifyContent: 'space-around',
 		backgroundColor: 'white',
 	},
+
 	image: {
 		width: 170,
 		height: 180,
+	},
+
+	loadingImage:{
+		height: 191,
+		width: 200,
+		alignSelf: 'center',
+		resizeMode: "stretch",
 	},
 });
 

@@ -13,10 +13,13 @@ var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var StockTransactionInfoModal = require('./StockTransactionInfoModal')
 var UIConstants = require('../UIConstants')
+var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 
 var listRawData = []
 var listResponse = []
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
+const NETWORK_ERROR_INDICATOR = "networkErrorIndicator";
 
 export default class MyCard extends Component{
 
@@ -26,6 +29,7 @@ export default class MyCard extends Component{
 			listRawData: ds.cloneWithRows(listRawData),
 			listResponse: undefined,
 			noMessage: false,
+			contentLoadingFailed: false,
 		}
 	}
 
@@ -66,10 +70,16 @@ export default class MyCard extends Component{
 					  listRawData: ds.cloneWithRows(responseJson.cards),
 						listResponse : responseJson.cards,
 						noMessage: noMessage,
+						contentLoadingFailed: false,
 						})
 				},
 				(result) => {
-					Alert.alert(result.errorMessage)
+					if(!result.loadedOfflineCache){
+						this.setState({
+							contentLoadingFailed: true,
+						})
+						this.refs[NETWORK_ERROR_INDICATOR] && this.refs[NETWORK_ERROR_INDICATOR].stopRefresh();
+					}
 				}
 			)
 	}
@@ -84,18 +94,32 @@ export default class MyCard extends Component{
 		}
 	}
 
+	renderContent(){
+		if(this.state.contentLoadingFailed){
+			return (
+				<NetworkErrorIndicator onRefresh={()=>this.loadMyCards()} ref={NETWORK_ERROR_INDICATOR}/>
+			)
+		}else{
+			return(
+				<View>
+					{this.renderEmptyView()}
+					<ListView
+						contentContainerStyle={styles.list}
+						dataSource={this.state.listRawData}
+						enableEmptySections={true}
+						removeClippedSubviews={false}
+						renderRow={this._renderRow.bind(this)} />
+					<StockTransactionInfoModal ref='stockTransactionInfoModal'/>
+				</View>
+			)
+		}
+	}
+
 	render(){
 		return(
 			<View style={{flex:1}}>
 				<NavBar title='我的卡片' showBackButton={true} navigator={this.props.navigator}/>
-				{this.renderEmptyView()}
-				<ListView
-					contentContainerStyle={styles.list}
-					dataSource={this.state.listRawData}
-					enableEmptySections={true}
-					removeClippedSubviews={false}
-					renderRow={this._renderRow.bind(this)} />
-        <StockTransactionInfoModal ref='stockTransactionInfoModal'/>
+				{this.renderContent()}
 			</View>
 		);
 	}

@@ -15,17 +15,19 @@ export default class NetworkErrorIndicator extends Component {
 
   static propTypes = {
     onRefresh: PropTypes.func,
+    refreshing: PropTypes.bool,
   }
 
   static defaultProps = {
     onRefresh: null,
+    refreshing: false,
   }
 
   constructor(props) {
     super(props);
 
     this.state = {
-      isLoading: false,
+      isLoading: this.props.refreshing ? true : false,
     }
   }
 

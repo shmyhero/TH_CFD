@@ -31,11 +31,13 @@ var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var dateFormat = require('dateformat');
 var LogicData = require('../LogicData')
+var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 var emptyImageHintTop = height / 2 - 40;
 
+const NETWORK_ERROR_INDICATOR = "networkErrorIndicator";
 export default class MyMessagesPage extends Component {
 
 	currentPage = 0;
@@ -61,6 +63,7 @@ export default class MyMessagesPage extends Component {
 			noMessage: false,
       dataList: dataList,
       dataSource: this._dataSource.cloneWithRows(dataList),
+      contentLoadingFailed: false,
     }
   }
 
@@ -108,6 +111,9 @@ export default class MyMessagesPage extends Component {
 				cache: 'offline',
       },
       (responseJson) => {
+        this.setState({
+          contentLoadingFailed: false,
+        })
         if(this._pullToRefreshListView){
           let refreshedDataList = isRefresh ? [] : this.state.dataList;
           refreshedDataList = refreshedDataList.concat(responseJson);
@@ -133,8 +139,16 @@ export default class MyMessagesPage extends Component {
         }
       },
       (result) => {
-        this._pullToRefreshListView.endRefresh();
-        Alert.alert(result.errorMessage)
+        console.log("read message failed");
+        this._pullToRefreshListView && this._pullToRefreshListView.endRefresh();
+        if(!result.loadedOfflineCache){
+          console.log("not loadedOfflineCache");
+          this.setState({
+            contentLoadingFailed: true,
+          })
+          this.refs[NETWORK_ERROR_INDICATOR] && this.refs[NETWORK_ERROR_INDICATOR].stopRefresh();
+          console.log("NETWORK_ERROR_INDICATOR");
+        }
       }
     );
     this.currentIndex++;
@@ -256,35 +270,49 @@ export default class MyMessagesPage extends Component {
 			)
 	}
 
-  render() {
-    var pullUpDistance = 35;
-    var pullUpStayDistance = 50;
-    var pullDownDistance = 35;
-    var pullDownStayDistance = 50;
+  renderContent(){
+    console.log("renderContent: this.state.contentLoadingFailed: " + this.state.contentLoadingFailed)
+    if(this.state.contentLoadingFailed){
+      return (
+				<NetworkErrorIndicator onRefresh={()=>this.fetchMessages(true)} ref={NETWORK_ERROR_INDICATOR}/>
+      );
+    }else{
+      var pullUpDistance = 35;
+      var pullUpStayDistance = 50;
+      var pullDownDistance = 35;
+      var pullDownStayDistance = 50;
 
-    //{this._renderStartUpActivityIndicator()}
+      return(
+        <View style={{flex:1}}>
+          {this.renderEmptyView()}
+          <PullToRefreshListView
+            ref={ (component) => this._pullToRefreshListView = component }
+            viewType={PullToRefreshListView.constants.viewType.listView}
+            style={[styles.list,]}
+            initialListSize={20}
+            enableEmptySections={true}
+            dataSource={this.state.dataSource}
+            pageSize={20}
+            renderRow={this.renderRow.bind(this)}
+            renderSeparator={this.renderSeparator.bind(this)}
+            renderHeader={this._renderHeader.bind(this)}
+            renderFooter={this._renderFooter.bind(this)}
+            onRefresh={this._onRefresh.bind(this)}
+            onLoadMore={this._onLoadMore.bind(this)}
+            pullUpDistance={pullUpDistance}
+            pullUpStayDistance={pullUpStayDistance}
+            pullDownDistance={pullDownDistance}
+            pullDownStayDistance={pullDownStayDistance}
+          />
+        </View>
+      )
+    }
+  }
+
+  render() {
     return (
 			<View style={{flex: 1,}}>
-				{this.renderEmptyView()}
-	      <PullToRefreshListView
-	        ref={ (component) => this._pullToRefreshListView = component }
-	        viewType={PullToRefreshListView.constants.viewType.listView}
-	        style={[styles.list,]}
-	        initialListSize={20}
-	        enableEmptySections={true}
-	        dataSource={this.state.dataSource}
-	        pageSize={20}
-	        renderRow={this.renderRow.bind(this)}
-          renderSeparator={this.renderSeparator.bind(this)}
-	        renderHeader={this._renderHeader.bind(this)}
-	        renderFooter={this._renderFooter.bind(this)}
-	        onRefresh={this._onRefresh.bind(this)}
-	        onLoadMore={this._onLoadMore.bind(this)}
-	        pullUpDistance={pullUpDistance}
-	        pullUpStayDistance={pullUpStayDistance}
-	        pullDownDistance={pullDownDistance}
-	        pullDownStayDistance={pullDownStayDistance}
-	      />
+				{this.renderContent()}
 			</View>
 		)
   }

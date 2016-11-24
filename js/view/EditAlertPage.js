@@ -10,6 +10,7 @@ import {
 	Switch,
 	UIManager,
 	Image,
+	Alert,
 } from 'react-native';
 
 var MainPage = require('./MainPage')

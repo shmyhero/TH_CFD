@@ -918,12 +918,13 @@ var HomePage = React.createClass({
 					this.renderBannar(i)
 				);
 			} else {
+				var index = i;
 				slides.push (
 					<TouchableOpacity
-						onPress={() => this.goToBannerPage(i)} key={i}>
+						onPress={() => this.goToBannerPage(index)} key={index}>
 						<Image
 							style={[styles.image, {height: imageHeight, width: width}]}
-							source={BANNERS[i % 2]}/>
+							source={BANNERS[index % 2]}/>
 					</TouchableOpacity>
 				);
 			}

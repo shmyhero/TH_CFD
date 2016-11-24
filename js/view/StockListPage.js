@@ -101,7 +101,11 @@ var StockListPage = React.createClass({
 
 	refreshData: function(forceRefetch) {
 		if (this.props.isOwnStockPage) {
-			this.refreshOwnData()
+			if(forceRefetch){
+				this.fetchOwnData();
+			}else{
+				this.refreshOwnData();
+			}
 		}
 		else {
 			this.reFetchStockData(forceRefetch)

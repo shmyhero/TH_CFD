@@ -132,8 +132,9 @@ export default class MyMessagesPage extends Component {
           }
         }
       },
-      (error) => {
-        Alert.alert(error)
+      (result) => {
+        this._pullToRefreshListView.endRefresh();
+        Alert.alert(result.errorMessage)
       }
     );
     this.currentIndex++;

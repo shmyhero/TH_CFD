@@ -307,7 +307,7 @@ var MainPage = React.createClass({
 		} else if (route.name === QA_ROUTE) {
 			hideTabbar();
 			return (
-				<QAPage />
+				<QAPage navigator={navigationOperations}/>
 			)
 		} else if (route.name === ABOUT_US_ROUTE) {
 			hideTabbar();

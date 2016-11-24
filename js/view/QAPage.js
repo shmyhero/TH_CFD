@@ -94,7 +94,8 @@ var QAPage = React.createClass({
 		}
 		else {
 			return (<View style={{flex:1, backgroundColor: 'white'}}>
-						<NavBar title="问答" navigator={this.props.navigator}/>
+						<NavBar title="问答" navigator={this.props.navigator}
+										showBackButton={true}/>
 						<View style={styles.containerView}>
 							<Image style={styles.image} source={require('../../images/no_network.png')}/>
 						</View>

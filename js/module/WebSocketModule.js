@@ -204,7 +204,7 @@ export function registerCallbacks(stockInfoCallback, alertCallback) {
 
 export function registerInterestedStocks(stockList) {
 	// console.log("register interested backs")
-	if (webSocketConnection.state == 1 && stockPriceWebSocketProxy !== null && stockList !== null && stockList.length > 0) {
+	if (webSocketConnection && webSocketConnection.state == 1 && stockPriceWebSocketProxy !== null && stockList !== null && stockList.length > 0) {
 		console.log('Send stockList to websocket server: ' + stockList)
 		previousInterestedStocks = stockList
 		var invokeS = LogicData.getAccountState()?'SL':'S';

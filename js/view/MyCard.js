@@ -51,7 +51,7 @@ export default class MyCard extends Component{
 	loadMyCards() {
 		var userData = LogicData.getUserData()
 
-			NetworkModule.fetchTHUrlWithNoInternetCallback(
+			NetworkModule.fetchTHUrl(
 				NetConstants.CFD_API.GET_USER_LIVE_CARDS,
 				{
 					method: 'GET',
@@ -68,8 +68,8 @@ export default class MyCard extends Component{
 						noMessage: noMessage,
 						})
 				},
-				(error) => {
-					Alert.alert(error)
+				(result) => {
+					Alert.alert(result.errorMessage)
 				}
 			)
 	}

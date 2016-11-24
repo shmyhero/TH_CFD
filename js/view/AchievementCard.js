@@ -57,10 +57,13 @@ export default class AchievementCard extends Component {
     if(this.props.card){
       var source = null;
       source = {uri: this.props.card.imgUrlBig}
-
+      var imgStyle = [styles.cardImage];
+      if(this.props.card.themeColor){
+        imgStyle.push({backgroundColor: this.props.card.themeColor});
+      }
       return (
         <View style={styles.container}>
-          <Image style={styles.cardImage} source={source}>
+          <Image style={imgStyle} source={source}>
           </Image>
           {this.renderReward()}
         </View>

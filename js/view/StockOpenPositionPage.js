@@ -166,9 +166,9 @@ var StockOpenPositionPage = React.createClass({
 					}
 				)
 			},
-			(errorMessage) => {
+			(result) => {
 				// Alert.alert('', errorMessage);
-				if(NetConstants.AUTH_ERROR === errorMessage){
+				if(NetConstants.AUTH_ERROR === result.errorMessage){
 					if(LogicData.getTabIndex() == 2){
 
 						var length = this.props.navigator.state.routeStack.length;
@@ -180,7 +180,7 @@ var StockOpenPositionPage = React.createClass({
 						}
 					}
 				}else{
-					Alert.alert('', errorMessage);
+					//Alert.alert('', result.errorMessage);
 				}
 			}
 		)
@@ -235,8 +235,8 @@ var StockOpenPositionPage = React.createClass({
 					stockDetailInfo: tempStockInfo,
 				})
 			},
-			(errorMessage) => {
-				Alert.alert('', errorMessage);
+			(result) => {
+				Alert.alert('', result.errorMessage);
 			}
 		)
 	},
@@ -472,8 +472,8 @@ var StockOpenPositionPage = React.createClass({
 				TalkingdataModule.trackEvent(TalkingdataModule.SOLD_EVENT, '', eventParam)
 				TongDaoModule.trackClosePositionEvent(responseJson)
 			},
-			(errorMessage) => {
-				Alert.alert('', errorMessage);
+			(result) => {
+				Alert.alert('', result.errorMessage);
 				isWaiting = false
 			}
 		)
@@ -587,8 +587,8 @@ var StockOpenPositionPage = React.createClass({
 						stockInfo: ds.cloneWithRows(tempStockInfo),
 					})
 				},
-				(errorMessage) => {
-					Alert.alert('', errorMessage);
+				(result) => {
+					Alert.alert('', result.errorMessage);
 				}
 			)
 		}
@@ -670,8 +670,8 @@ var StockOpenPositionPage = React.createClass({
 						stockInfo: ds.cloneWithRows(tempStockInfo),
 					})
 				},
-				(errorMessage) => {
-					Alert.alert('', errorMessage);
+				(result) => {
+					Alert.alert('', result.errorMessage);
 				}
 			)
 		}

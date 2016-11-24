@@ -73,8 +73,8 @@ var StockStatisticsPage = React.createClass({
 			(responseJson) => {
 				this.playStatisticsAnim(responseJson)
 			},
-			(errorMessage) => {
-				if(NetConstants.AUTH_ERROR === errorMessage){
+			(result) => {
+				if(NetConstants.AUTH_ERROR === result.errorMessage){
 
 				}else{
 					// Alert.alert('', errorMessage);

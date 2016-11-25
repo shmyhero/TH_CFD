@@ -30,6 +30,7 @@ var dateFormat = require('dateformat');
 var LogicData = require('../LogicData')
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 var WaitingRing = require('./component/WaitingRing')
+var CacheModule = require('../module/CacheModule');
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
@@ -71,7 +72,6 @@ export default class MyMessagesPage extends Component {
     }else{
       this.fetchMessages(true);
     }
-    //this.fetchMessages(false);
   }
 
   componentWillUnmount (){
@@ -101,6 +101,8 @@ export default class MyMessagesPage extends Component {
     }
   }
 
+
+
   fetchAllMessages = (isRefresh) => {
     var userData = LogicData.getUserData();
     var url = NetConstants.CFD_API.GET_MY_MESSAGES;
@@ -109,6 +111,8 @@ export default class MyMessagesPage extends Component {
 			console.log('live', url );
 		}
 
+    var isStartUp = this.state.isStartUp;
+    let refreshedDataList = isRefresh ? [] : this.state.dataList;
     url = url.replace("<pageNum>", this.currentIndex);
     url = url.replace("<pageSize>", 20);
     NetworkModule.fetchTHUrl(
@@ -118,48 +122,50 @@ export default class MyMessagesPage extends Component {
         headers: {
           'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
         },
-				cache: this.state.isStartUp ? 'offline' : 'none',
+        cache: (this.state.isStartUp ? 'offline': 'none'),
       },
       (responseJson) => {
-        this.setState({
-          contentLoaded: true,
-          isRefreshing: false,
-        })
-        if(this._pullToRefreshListView){
-          let refreshedDataList = isRefresh ? [] : this.state.dataList;
-          refreshedDataList = refreshedDataList.concat(responseJson);
+          var updatedDataList = refreshedDataList.concat(responseJson);
 
-          var noMessage = refreshedDataList.length == 0;
+          var noMessage = updatedDataList.length == 0;
           this.setState({
-            dataList: refreshedDataList,
-            dataSource: this._dataSource.cloneWithRows(refreshedDataList),
+            dataList: updatedDataList,
+            dataSource: this._dataSource.cloneWithRows(updatedDataList),
             noMessage: noMessage,
             isStartUp: false,
+            contentLoaded: true,
+            isRefreshing: false,
           });
 
-          if(isRefresh){
-            this._pullToRefreshListView.endRefresh();
-          }else{
-    	      if(responseJson.length < 20) {
-    	          this._pullToRefreshListView.endLoadMore(true)
-    	      }
-    	      else {
-    	          this._pullToRefreshListView.endLoadMore(false)
-    	      }
+          if(!isStartUp && this._pullToRefreshListView){
+            if(isRefresh){
+              this._pullToRefreshListView.endRefresh();
+            }else{
+      	      if(responseJson.length < 20) {
+      	          this._pullToRefreshListView.endLoadMore(true)
+      	      }
+      	      else {
+      	          this._pullToRefreshListView.endLoadMore(false)
+      	      }
+            }
           }
-        }
       },
       (result) => {
         console.log("read message failed");
-        this._pullToRefreshListView && this._pullToRefreshListView.endRefresh();
-        if(!result.loadedOfflineCache){
+        if(this.state.isStartUp && !result.loadedOfflineCache){
           console.log("not loadedOfflineCache");
           this.setState({
             contentLoaded: false,
             isRefreshing: false,
           })
-          this.refs[NETWORK_ERROR_INDICATOR] && this.refs[NETWORK_ERROR_INDICATOR].stopRefresh();
-          console.log("NETWORK_ERROR_INDICATOR");
+        }else{
+          if(!isStartUp && this._pullToRefreshListView){
+            if(isRefresh){
+              this._pullToRefreshListView.endRefresh();
+            }else{
+      	      this._pullToRefreshListView.endLoadMore(false);
+            }
+          }
         }
       }
     );
@@ -284,6 +290,7 @@ export default class MyMessagesPage extends Component {
 
   renderContent(){
     if(!this.state.contentLoaded){
+      console.log("renderContent this.state.isRefreshing " + this.state.isRefreshing)
       return (
 				<NetworkErrorIndicator onRefresh={()=>this.fetchMessages(true)} refreshing={this.state.isRefreshing}/>
       );
@@ -391,18 +398,6 @@ export default class MyMessagesPage extends Component {
     }
   }
 
-  _renderStartUpActivityIndicator(){
-    if(this.state.isStartUp){
-      return (
-        <View style={{marginTop: 10}}>
-          {this._renderActivityIndicator()}
-        </View>
-    );
-    }
-    return (
-      <View/>
-    )
-  }
 
   _renderActivityIndicator() {
 		var color = "#7a7987";

@@ -33,7 +33,7 @@ export default class NetworkErrorIndicator extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    if(nextProps && nextProps.refreshing){
+    if(nextProps){
       this.setState({
         isLoading: nextProps.refreshing,
       })

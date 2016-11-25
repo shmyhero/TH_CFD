@@ -183,7 +183,7 @@ var MePage = React.createClass({
 					headers: {
 						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 					},
-					cache: 'offline',
+					//cache: 'offline',
 				},
 				function(response) {
 					this.setState(

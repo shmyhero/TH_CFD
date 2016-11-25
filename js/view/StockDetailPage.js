@@ -14,11 +14,14 @@ import {
 	TextInput,
 	Platform,
 	ScrollView,
+	ProgressBarAndroid,
+	ActivityIndicatorIOS,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Picker from 'react-native-wheel-picker';
 var PickerItem = Picker.Item;
 
+var ActivityIndicator = require('ActivityIndicator');
 var LineChart = require('./component/lineChart/LineChart');
 var dismissKeyboard = require('dismissKeyboard');
 var LogicData = require('../LogicData')
@@ -72,6 +75,7 @@ var StockDetailPage = React.createClass({
 			stockPriceAsk: '--',
 			stockPriceBid: '--',
 			lastClosePrice: 9,
+
 		}
 	},
 
@@ -98,11 +102,14 @@ var StockDetailPage = React.createClass({
 			maxPrice: 0,
 			maxPercentage: 0,
 			minPercentage: 0,
+			dataStatus:0,//0正常 1等待刷新 2加载中
 		};
 	},
 
 	componentDidMount: function() {
 		this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
+
+		// this.pressChartHeaderTab(NetConstants.PARAMETER_CHARTTYPE_TODAY)
 	},
 
 	componentWillUnmount: function() {
@@ -185,7 +192,10 @@ var StockDetailPage = React.createClass({
 				this.props.showTutorial('trade')
 			},
 			(result) => {
-				Alert.alert('', result.errorMessage);
+				// Alert.alert('', result.errorMessage);
+				this.setState({
+					dataStatus :1,
+				})
 			}
 		)
 
@@ -234,6 +244,10 @@ var StockDetailPage = React.createClass({
 			 url = url.replace(/<chartType>/, chartType)
 		}
 
+		this.setState({
+			dataStatus : 2
+		})
+
 		NetworkModule.fetchTHUrl(
 			url,
 			{
@@ -279,12 +293,14 @@ var StockDetailPage = React.createClass({
 						minPercentage = minPercentage.toFixed(2)
 					}
 				}
+
 				this.setState({
 					stockInfo: tempStockInfo,
 					maxPrice: maxPrice,
 					minPrice: minPrice,
 					maxPercentage: maxPercentage,
 					minPercentage: minPercentage,
+					dataStatus :0,
 				})
 
 				var previousInterestedStocks = WebSocketModule.getPreviousInterestedStocks()
@@ -305,7 +321,11 @@ var StockDetailPage = React.createClass({
 				this.connectWebSocket();
 			},
 			(result) => {
-				Alert.alert('', result.errorMessage);
+				// Alert.alert('', result.errorMessage);
+
+				this.setState({
+					dataStatus :1,
+				})
 			}
 		)
 	},
@@ -499,6 +519,81 @@ var StockDetailPage = React.createClass({
 			}
 	},
 
+	renderDataStatus:function(){
+		//status 0:正常 1：暂时无法获取数据 2:加载中
+		var status = this.state.dataStatus;
+		// if(WebSocketModule.isConnected()){status=0}
+
+		var imageError = LogicData.getAccountState()?require('../../images/icon_network_connection_error_live.png'):require('../../images/icon_network_connection_error.png')
+		if(status === 1){
+			return (
+				<View style={styles.dataStatus}>
+					<View style={styles.dataStatus2}>
+					<Image style={{width:24,height:24,marginBottom:5}} source={imageError}></Image>
+					<Text style={styles.textDataStatus}>暂时无法获取数据</Text>
+					<TouchableOpacity onPress={()=> this.dataRefreshClicked()}>
+						<View>
+							<Text style={styles.textDataStatusRefresh}>刷新</Text>
+						</View>
+					</TouchableOpacity>
+					</View>
+				</View>
+			)
+		}else if(status === 2){
+			return (
+				<View style={styles.dataStatus}>
+					<View style={styles.dataStatus2}>
+					{this._renderActivityIndicator()}
+					<Text style={styles.textDataStatus}>加载中...</Text>
+					</View>
+				</View>
+			)
+		}
+	},
+
+	dataRefreshClicked:function(){
+		this.pressChartHeaderTab(this.state.chartType)
+	},
+
+	_renderActivityIndicator() {
+			return ActivityIndicator ? (
+					<ActivityIndicator
+							style={{marginRight: 10,}}
+							animating={true}
+							color={'white'}
+							size={'small'}/>
+			) : Platform.OS == 'android' ?
+					(
+							<ProgressBarAndroid
+									style={{marginRight: 10,}}
+									color={'#ff0000'}
+									styleAttr={'Small'}/>
+
+					) :  (
+					<ActivityIndicatorIOS
+							style={{marginRight: 10,}}
+							animating={true}
+							color={'#ff0000'}
+							size={'small'}/>
+			)
+	},
+
+	renderChart:function(){
+		var state = this.state.dataStatus;
+		console.log("RAMBO: chartType = " + this.state.chartType)
+		var opacity = state == 0? 1.0 : 0.3;
+	  // if(state == 0){
+			return(
+				<LineChart style={[styles.lineChart,{opacity:opacity}]}
+					data={JSON.stringify(this.state.stockInfo)}
+					chartType={this.state.chartType}
+					chartIsActual={LogicData.getAccountState()}
+					>
+				</LineChart>
+			)
+		// }
+	},
+
 	render: function() {
 		// 0.06%, limit to 0.01
 		var leftMoney = this.state.totalMoney - this.state.money
@@ -515,15 +610,9 @@ var StockDetailPage = React.createClass({
 
 						{this.renderChartHeader()}
 
-						<View style={{flex: 3.5, marginTop:5,marginLeft:viewMargin,marginRight:viewMargin}}>
-							<LineChart style={styles.lineChart}
-								data={JSON.stringify(this.state.stockInfo)}
-								chartIsActual={LogicData.getAccountState()}
-								chartType={this.state.chartType}>
-							{/* {this.renderStockMaxPriceInfo(this.state.maxPrice, this.state.maxPercentage)}
-							{this.renderStockMinPriceInfo(this.state.minPrice, this.state.minPercentage)} */}
-							</LineChart>
-
+						<View style={{flex: 3.5,marginTop:5,marginLeft:viewMargin,marginRight:viewMargin}}>
+							{this.renderChart()}
+						  {this.renderDataStatus()}
 						</View>
 
 						<View style={{flex: 1.2, justifyContent: 'space-around'}}>
@@ -1050,6 +1139,7 @@ var styles = StyleSheet.create({
 		justifyContent:'space-between',
 		paddingTop: 6,
 		paddingBottom: 16,
+
 	},
 	tradeButtonView: {
 		flex: 1,
@@ -1196,6 +1286,40 @@ var styles = StyleSheet.create({
 		fontSize: 15,
 		textAlign: 'center',
 	},
+	dataStatus:{
+		position:'absolute',
+		top:0,
+		left:0,
+		right:0,
+		bottom:0,
+		width:width,
+		alignItems:'center',
+		justifyContent:'center',
+		backgroundColor:'transparent',
+
+	},
+	dataStatus2:{
+		alignItems:'center',
+		justifyContent:'center',
+		width:width - 48,
+		height:120,
+	},
+	textDataStatus:{
+		color:'white',
+		marginTop:5,
+	},
+	textDataStatusRefresh:{
+		color:'white',
+		paddingLeft:15,
+		paddingRight:15,
+		marginTop:10,
+		paddingTop:5,
+		paddingBottom:5,
+		borderColor:'white',
+		borderRadius:4,
+		borderWidth:1,
+	},
+
 });
 
 module.exports = StockDetailPage;

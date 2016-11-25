@@ -930,14 +930,15 @@ var HomePage = React.createClass({
 			}
 		}
 		return (
-			<View style={{width: width, height: height - UIConstants.TAB_BAR_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER}}>
+			<View style={{width: width, height: height - UIConstants.TAB_BAR_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER }}>
 				{this.renderNavBar()}
 
-				<View style={{width:width,height:height}}>
+				<View style={{width:width,height:height - UIConstants.TAB_BAR_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER - UIConstants.HEADER_HEIGHT}}>
 					{this.renderBgHint()}
-					<ScrollView>
+					<ScrollView >
 						<View style={{width: width, height: imageHeight}}>
 							<Swiper
+							  style={{backgroundColor:'#eaeaea'}}
 								ref="bannerswiper"
 								height={imageHeight}
 								loop={true}

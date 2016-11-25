@@ -7,6 +7,7 @@ import {
 	WebView,
 	NetInfo,
 	Image,
+	Platform
 } from 'react-native';
 
 var WEBVIEW_REF = 'webview';
@@ -18,6 +19,8 @@ var NetConstants = require('../NetConstants')
 var TalkingdataModule = require('../module/TalkingdataModule')
 var ColorPropType = require('ColorPropType');
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
+var NativeDataModule = require('../module/NativeDataModule');
+var ColorConstants = require('../ColorConstants');
 
 const NETWORK_ERROR_INDICATOR = "networkErrorIndicator";
 var WebViewPage = React.createClass({
@@ -69,6 +72,10 @@ var WebViewPage = React.createClass({
 		NetInfo.isConnected.fetch().done(
 			(isConnected) => { this.setState({isNetConnected: isConnected}); }
 		);
+
+		if(this.props.themeColor && Platform.OS == 'android'){
+			NativeDataModule.passRawDataToNative('statusBarColor', ''+this.props.themeColor)
+		}
 	},
 
 	componentWillUnmount: function() {
@@ -80,6 +87,10 @@ var WebViewPage = React.createClass({
 			'change',
 			this._handleConnectivityChange
 		);
+
+		if(this.props.themeColor && Platform.OS == 'android'){
+			NativeDataModule.passRawDataToNative('statusBarColor', ''+ColorConstants.TITLE_BLUE);
+		}
   },
 
 	_handleConnectivityChange: function(isConnected) {

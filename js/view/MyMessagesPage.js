@@ -12,9 +12,6 @@ import {
   ScrollView,
   ListView,
   Image,
-  ActivityIndicator,
-  ProgressBarAndroid,
-  ActivityIndicatorIOS,
   Platform,
 	Dimensions,
 	TouchableOpacity,
@@ -32,12 +29,12 @@ var NetworkModule = require('../module/NetworkModule')
 var dateFormat = require('dateformat');
 var LogicData = require('../LogicData')
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
+var WaitingRing = require('./component/WaitingRing')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 var emptyImageHintTop = height / 2 - 40;
 
-const NETWORK_ERROR_INDICATOR = "networkErrorIndicator";
 export default class MyMessagesPage extends Component {
 
 	currentPage = 0;
@@ -63,12 +60,17 @@ export default class MyMessagesPage extends Component {
 			noMessage: false,
       dataList: dataList,
       dataSource: this._dataSource.cloneWithRows(dataList),
-      contentLoadingFailed: false,
+      contentLoaded: false,
+      isRefreshing: false,
     }
   }
 
   componentDidMount () {
-    this._pullToRefreshListView.beginRefresh();
+    if(this._pullToRefreshListView){
+      this._pullToRefreshListView.beginRefresh();
+    }else{
+      this.fetchMessages(true);
+    }
     //this.fetchMessages(false);
   }
 
@@ -81,6 +83,14 @@ export default class MyMessagesPage extends Component {
   currentIndex = 1;
 
   fetchMessages = (isRefresh) => {
+    console.log("fetchMessages")
+    if(!this.state.contentLoaded){
+			console.log("loadMyCards content not Loaded")
+			this.setState({
+				isRefreshing: true,
+			})
+		}
+
     if(this.state.isStartUp){
       //The quick loading will cause a display bug on the listview.
       setTimeout(()=>{
@@ -108,11 +118,12 @@ export default class MyMessagesPage extends Component {
         headers: {
           'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
         },
-				cache: 'offline',
+				cache: this.state.isStartUp ? 'offline' : 'none',
       },
       (responseJson) => {
         this.setState({
-          contentLoadingFailed: false,
+          contentLoaded: true,
+          isRefreshing: false,
         })
         if(this._pullToRefreshListView){
           let refreshedDataList = isRefresh ? [] : this.state.dataList;
@@ -144,7 +155,8 @@ export default class MyMessagesPage extends Component {
         if(!result.loadedOfflineCache){
           console.log("not loadedOfflineCache");
           this.setState({
-            contentLoadingFailed: true,
+            contentLoaded: false,
+            isRefreshing: false,
           })
           this.refs[NETWORK_ERROR_INDICATOR] && this.refs[NETWORK_ERROR_INDICATOR].stopRefresh();
           console.log("NETWORK_ERROR_INDICATOR");
@@ -271,10 +283,9 @@ export default class MyMessagesPage extends Component {
 	}
 
   renderContent(){
-    console.log("renderContent: this.state.contentLoadingFailed: " + this.state.contentLoadingFailed)
-    if(this.state.contentLoadingFailed){
+    if(!this.state.contentLoaded){
       return (
-				<NetworkErrorIndicator onRefresh={()=>this.fetchMessages(true)} ref={NETWORK_ERROR_INDICATOR}/>
+				<NetworkErrorIndicator onRefresh={()=>this.fetchMessages(true)} refreshing={this.state.isRefreshing}/>
       );
     }else{
       var pullUpDistance = 35;
@@ -396,26 +407,9 @@ export default class MyMessagesPage extends Component {
   _renderActivityIndicator() {
 		var color = "#7a7987";
 		var styleAttr = 'small' //or "large"
-    return ActivityIndicator ? (
-		<ActivityIndicator
-            style={{marginRight: 10,}}
-            animating={true}
-            color={color}
-            size={styleAttr}/>
-    ) : Platform.OS == 'android' ?
-        (
-      <ProgressBarAndroid
-          style={{marginRight: 10,}}
-          color={color}
-          styleAttr={styleAttr}/>
-
-        ) : (
-        <ActivityIndicatorIOS
-            style={{marginRight: 10,}}
-            animating={true}
-            color={color}
-            size={styleAttr}/>
-    )
+    return (
+      <WaitingRing color={color} styleAttr={styleAttr}/>
+    );
   }
 }
 

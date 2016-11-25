@@ -31,7 +31,8 @@ var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
 var StockTransactionInfoModal = require('./StockTransactionInfoModal')
 var TimerMixin = require('react-timer-mixin');
-var StorageModule = require('../module/StorageModule')
+var StorageModule = require('../module/StorageModule');
+var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 
 var {height, width} = Dimensions.get('window');
 var tabData = [
@@ -74,6 +75,8 @@ var StockOpenPositionPage = React.createClass({
 			profitLossUpdated: false,
 			profitLossConfirmed: false,
 			isClear:false,
+			contentLoaded: false,
+			isRefreshing: false,
 		};
 	},
 
@@ -96,6 +99,11 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	loadOpenPositionInfo: function() {
+		if(!this.state.contentLoaded){
+			this.setState({
+				isRefreshing: true,
+			})
+		}
 		var userData = LogicData.getUserData()
 		var url = NetConstants.CFD_API.GET_OPEN_POSITION_API
 		if(LogicData.getAccountState()){
@@ -109,10 +117,13 @@ var StockOpenPositionPage = React.createClass({
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 				},
-				cache: 'offline',
+				cache: 'offline',				
+				timeout: 1000,
 			},
 			(responseJson) => {
 				this.setState({
+					contentLoaded: true,
+					isRefreshing: false,
 					isClear:false,
 				})
 
@@ -139,7 +150,6 @@ var StockOpenPositionPage = React.createClass({
 						stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
 						selectedRow: -1,
 						selectedSubItem: 0,
-
 					})
 				}
 				else {
@@ -167,6 +177,12 @@ var StockOpenPositionPage = React.createClass({
 				)
 			},
 			(result) => {
+				if(!result.loadedOfflineCache){
+					this.setState({
+						contentLoaded: false,
+						isRefreshing: false,
+					})
+				}
 				// Alert.alert('', errorMessage);
 				if(NetConstants.AUTH_ERROR === result.errorMessage){
 					if(LogicData.getTabIndex() == 2){
@@ -1272,6 +1288,34 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
+	renderContent: function(){
+		if(!this.state.contentLoaded){
+			return (
+				<NetworkErrorIndicator onRefresh={()=>this.loadOpenPositionInfo()} refreshing={this.state.isRefreshing}/>
+			)
+		}else{
+			return(
+				<View style={{flex:1}}>
+					{this.renderOrClear()}
+					{this.renderHeaderBar()}
+					{this.renderLoadingText()}
+					<ListView
+						style={styles.list}
+						ref="listview"
+						initialListSize={11}
+						dataSource={this.state.stockInfo}
+						enableEmptySections={true}
+						renderFooter={this.renderFooter}
+						renderRow={this.renderRow}
+						renderSeparator={this.renderSeparator}
+						onEndReached={this.onEndReached}/>
+
+					<StockTransactionInfoModal ref='confirmPage'/>
+				</View>
+			)
+		}
+	},
+
 	render: function() {
 		var viewStyle = Platform.OS === 'android' ?
 			{width: width, height: height
@@ -1282,21 +1326,7 @@ var StockOpenPositionPage = React.createClass({
 			{width: width, flex: 1}
 		return (
 			<View style={viewStyle}>
-				{this.renderOrClear()}
-				{this.renderHeaderBar()}
-				{this.renderLoadingText()}
-				<ListView
-					style={styles.list}
-					ref="listview"
-					initialListSize={11}
-					dataSource={this.state.stockInfo}
-					enableEmptySections={true}
-					renderFooter={this.renderFooter}
-					renderRow={this.renderRow}
-					renderSeparator={this.renderSeparator}
-					onEndReached={this.onEndReached}/>
-
-					<StockTransactionInfoModal ref='confirmPage'/>
+				{this.renderContent()}
 			</View>
 		)
 	},

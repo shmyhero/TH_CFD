@@ -21,6 +21,7 @@ var WebSocketModule = require('../module/WebSocketModule')
 var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
 var TimerMixin = require('react-timer-mixin');
+var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 
 var {height, width} = Dimensions.get('window');
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -38,6 +39,8 @@ var StockClosedPositionPage = React.createClass({
 			stockInfo: ds.cloneWithRows([]),
 			selectedRow: -1,
 			isClear:false,
+			contentLoaded: false,
+			isRefreshing: false,
 		};
 	},
 
@@ -60,6 +63,12 @@ var StockClosedPositionPage = React.createClass({
 	},
 
 	loadClosedPositionInfo: function() {
+		if(!this.state.contentLoaded){
+			this.setState({
+				isRefreshing: true,
+			});
+		}
+
 		var userData = LogicData.getUserData()
 		var url = NetConstants.CFD_API.GET_CLOSED_POSITION_API
 		if(LogicData.getAccountState()){
@@ -74,20 +83,30 @@ var StockClosedPositionPage = React.createClass({
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 				},
 				cache: 'offline',
+				timeout: 1000,
 			},
 			(responseJson) => {
 				this.setState({
 					stockInfoRowData: responseJson,
 					stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
 					isClear:false,
+					contentLoaded: true,
+					isRefreshing: false,
 				})
 			},
 			(result) => {
-				if(NetConstants.AUTH_ERROR === result.errorMessage){
-
-				}else{
-					// Alert.alert('', errorMessage);
+				if(!result.loadedOfflineCache){
+					this.setState({
+						contentLoaded: false,
+						isRefreshing: false,
+					})
 				}
+
+				// if(NetConstants.AUTH_ERROR === result.errorMessage){
+				//
+				// }else{
+				// 	// Alert.alert('', errorMessage);
+				// }
 			}
 		)
 	},
@@ -391,16 +410,13 @@ var StockClosedPositionPage = React.createClass({
 		}
 	},
 
-	render: function() {
-		var viewStyle = Platform.OS === 'android' ?
-		{width: width, height: height
-			- UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
-			- UIConstants.HEADER_HEIGHT
-			- UIConstants.SCROLL_TAB_HEIGHT
-			- UIConstants.TAB_BAR_HEIGHT} :
-			{width: width, flex: 1}
-		return (
-			<View style={viewStyle}>
+	renderContent: function(){
+		if(!this.state.contentLoaded){
+			return (
+				<NetworkErrorIndicator onRefresh={()=>this.loadOpenPositionInfo()} refreshing={this.state.isRefreshing}/>
+			)
+		}else{
+			return (<View style={{flex:1}}>
 				{this.renderOrClear()}
 				{this.renderHeaderBar()}
 				{this.renderLoadingText()}
@@ -414,6 +430,21 @@ var StockClosedPositionPage = React.createClass({
 					renderRow={this.renderRow}
 					renderSeparator={this.renderSeparator}
 					onEndReached={this.onEndReached}/>
+			</View>)
+		}
+	},
+
+	render: function() {
+		var viewStyle = Platform.OS === 'android' ?
+		{width: width, height: height
+			- UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
+			- UIConstants.HEADER_HEIGHT
+			- UIConstants.SCROLL_TAB_HEIGHT
+			- UIConstants.TAB_BAR_HEIGHT} :
+			{width: width, flex: 1}
+		return (
+			<View style={viewStyle}>
+				{this.renderContent()}
 			</View>
 		)
 	},

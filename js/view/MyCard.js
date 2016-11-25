@@ -19,8 +19,6 @@ var listRawData = []
 var listResponse = []
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-const NETWORK_ERROR_INDICATOR = "networkErrorIndicator";
-
 export default class MyCard extends Component{
 
 	constructor(props){
@@ -29,7 +27,8 @@ export default class MyCard extends Component{
 			listRawData: ds.cloneWithRows(listRawData),
 			listResponse: undefined,
 			noMessage: false,
-			contentLoadingFailed: false,
+			contentLoaded: false,
+			isRefreshing: false,
 		}
 	}
 
@@ -53,6 +52,12 @@ export default class MyCard extends Component{
 
 	//获取我的卡片列表
 	loadMyCards() {
+		if(!this.state.contentLoaded){
+			console.log("loadMyCards content not Loaded")
+			this.setState({
+				isRefreshing: true,
+			})
+		}
 		var userData = LogicData.getUserData()
 
 			NetworkModule.fetchTHUrl(
@@ -63,6 +68,7 @@ export default class MyCard extends Component{
 						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 					},
 					cache: "offline",
+					timeout: 1000,
 				},
 				(responseJson) =>{
 					var noMessage = responseJson.cards.length == 0;
@@ -70,15 +76,17 @@ export default class MyCard extends Component{
 					  listRawData: ds.cloneWithRows(responseJson.cards),
 						listResponse : responseJson.cards,
 						noMessage: noMessage,
-						contentLoadingFailed: false,
+						contentLoaded: true,
+						isRefreshing: false,
 						})
 				},
 				(result) => {
+					console.log("fetch url error: " + JSON.stringify(result))
 					if(!result.loadedOfflineCache){
 						this.setState({
-							contentLoadingFailed: true,
+							contentLoaded: false,
+							isRefreshing: false,
 						})
-						this.refs[NETWORK_ERROR_INDICATOR] && this.refs[NETWORK_ERROR_INDICATOR].stopRefresh();
 					}
 				}
 			)
@@ -95,9 +103,9 @@ export default class MyCard extends Component{
 	}
 
 	renderContent(){
-		if(this.state.contentLoadingFailed){
+		if(!this.state.contentLoaded){
 			return (
-				<NetworkErrorIndicator onRefresh={()=>this.loadMyCards()} ref={NETWORK_ERROR_INDICATOR}/>
+				<NetworkErrorIndicator onRefresh={()=>this.loadMyCards()} refreshing={this.state.isRefreshing}/>
 			)
 		}else{
 			return(

@@ -36,8 +36,8 @@ var wsErrorCallback = (errorMessage) =>
 {
 	console.log('web socket error: ' + errorMessage)
 	socketConnected = false;
-	EventCenter.emitNetworkConnectionChangedEvent();
 	if (AppStateModule.getAppState() === AppStateModule.STATE_ACTIVE && webSocketConnection && webSocketConnection.state == 4) {
+		EventCenter.emitNetworkConnectionChangedEvent();
 		if(networkAvailable){
 			setTimeout(()=>{
 				if (webSocketConnection && webSocketConnection.state == 4){
@@ -115,7 +115,7 @@ export function start() {
 
 	//connection-handling
 	webSocketConnection.connectionSlow(function () {
-		wsErrorCallback('网络不稳定。')
+		wsErrorCallback('网络不稳定。webSocketConnection.state: ' + webSocketConnection.state)
 	});
 
 	webSocketConnection.error(function (error) {

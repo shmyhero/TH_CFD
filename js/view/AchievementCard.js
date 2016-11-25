@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 
 var {height, width} = Dimensions.get('window');
+var WaitingRing = require('./component/WaitingRing');
 var imageWidth = width - 20;
 var imageHeight = imageWidth / 690 * 644;
 
@@ -25,6 +26,20 @@ export default class AchievementCard extends Component {
   static defaultProps = {
     showReward: true,
     cardInfo: null,
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: true,
+    }
+  }
+
+  onLoad(){
+    this.setState({
+      loading: false,
+    })
   }
 
   renderReward(){
@@ -53,6 +68,20 @@ export default class AchievementCard extends Component {
    }
   }
 
+  renderWaitingRing(){
+    if(this.state.loading){
+      return(
+        <View style={{position:'absolute', top:0, bottom:0, left:0, right: 0, alignItems: 'center', justifyContent:'center'}}>
+          <WaitingRing color="white"/>
+        </View>
+      )
+    }else{
+      return(
+        <View></View>
+      )
+    }
+  }
+
   render() {
     if(this.props.card){
       var source = null;
@@ -63,9 +92,10 @@ export default class AchievementCard extends Component {
       }
       return (
         <View style={styles.container}>
-          <Image style={imgStyle} source={source}>
+          <Image style={imgStyle} source={source} onLoad={()=>this.onLoad()}>
           </Image>
           {this.renderReward()}
+          {this.renderWaitingRing()}
         </View>
       );
     }else{

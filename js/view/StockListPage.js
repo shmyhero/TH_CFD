@@ -23,7 +23,7 @@ var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
 var MainPage = require('./MainPage')
 var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
-var NetworkErrorIndicator = require('./NetworkErrorIndicator')
+var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var didFocusSubscription = null;
@@ -52,6 +52,16 @@ var StockListPage = React.createClass({
 			showHeaderBar: false,
 			isOwnStockPage: false,
 		}
+	},
+
+	getInitialState: function() {
+		return {
+			stockInfo: ds.cloneWithRows([]),
+			sortType: this.props.showHeaderBar ? 0: -1,
+			rowStockInfoData: [],
+			contentLoaded: false,
+			isRefreshing: true,
+		};
 	},
 
 	getShownStocks: function() {
@@ -120,6 +130,11 @@ var StockListPage = React.createClass({
 	},
 
 	fetchStockData: function() {
+		if(!this.state.contentLoaded){
+			this.setState({
+				isRefreshing: true,
+			});
+		}
 		StorageModule.loadUserData()
 			.then((value) => {
 				if (value !== null) {
@@ -143,18 +158,21 @@ var StockListPage = React.createClass({
 								'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 							},
 							cache: 'offline',
+							timeout: 1000,
 						},
 						(responseJson) => {
 							this.setState({
 								rowStockInfoData: responseJson,
 								stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, responseJson)),
-								contentLoadingFailed: false,
+								contentLoaded: true,
+								isRefreshing: false,
 							})
 						},
 						(result) => {
 							if(!result.loadedOfflineCache){
 								this.setState({
-									contentLoadingFailed: true
+									contentLoaded: false,
+									isRefreshing: false,
 								})
 								this.refs[NETWORK_ERROR_INDICATOR] && this.refs[NETWORK_ERROR_INDICATOR].stopRefresh();
 							}
@@ -193,24 +211,30 @@ var StockListPage = React.createClass({
 					{
 						method: 'GET',
 						cache: 'offline',
+						timeout: 1000,
 					},
 					(responseJson) => {
 						LogicData.setOwnStocksData(responseJson)
 						this.setState({
 							rowStockInfoData: responseJson,
-							stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, responseJson))
+							stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, responseJson)),
+							contentLoaded: true,
 						})
 					},
 					(result) => {
 						if(!result.loadedOfflineCache){
 							this.setState({
-								contentLoadingFailed: true
+								contentLoaded: false
 							})
 							this.refs[NETWORK_ERROR_INDICATOR] && this.refs[NETWORK_ERROR_INDICATOR].stopRefresh();
 						}
 						//Alert.alert('', result.errorMessage);
 					}
 				)
+			}else{
+				this.setState({
+					contentLoaded: true,
+				})
 			}
 		})
 	},
@@ -277,16 +301,6 @@ var StockListPage = React.createClass({
 
 	tabPressed: function() {
 		this.refreshData()
-	},
-
-
-	getInitialState: function() {
-		return {
-			stockInfo: ds.cloneWithRows([]),
-			sortType: this.props.showHeaderBar ? 0: -1,
-			rowStockInfoData: [],
-			contentLoadingFailed: false,
-		};
 	},
 
 	onEndReached: function() {
@@ -481,22 +495,26 @@ var StockListPage = React.createClass({
 	},
 
 	renderContent: function(){
-		if(this.state.contentLoadingFailed){
+		if(!this.state.contentLoaded){
 			return (
-				<NetworkErrorIndicator onRefresh={()=>this.refreshData(true)} ref={NETWORK_ERROR_INDICATOR}/>
+				<NetworkErrorIndicator onRefresh={()=>this.refreshData(true)} ref={NETWORK_ERROR_INDICATOR} refreshing={this.state.isRefreshing}/>
 			)
 		}else{
 			return(
-				<ListView
-					style={styles.list}
-					ref="listview"
-					initialListSize={11}
-					dataSource={this.state.stockInfo}
-					enableEmptySections={true}
-					renderFooter={this.renderFooter}
-					renderRow={this.renderRow}
-					renderSeparator={this.renderSeparator}
-					onEndReached={this.onEndReached}/>
+				<View style={{flex:1}}>
+					{this.renderHeaderBar()}
+					{this.renderAddStockView()}
+					<ListView
+						style={styles.list}
+						ref="listview"
+						initialListSize={11}
+						dataSource={this.state.stockInfo}
+						enableEmptySections={true}
+						renderFooter={this.renderFooter}
+						renderRow={this.renderRow}
+						renderSeparator={this.renderSeparator}
+						onEndReached={this.onEndReached}/>
+				</View>
 			);
 		}
 	},
@@ -514,8 +532,6 @@ var StockListPage = React.createClass({
 			{width: width, flex: 1}
 		return (
 			<View style={viewStyle}>
-				{this.renderHeaderBar()}
-				{this.renderAddStockView()}
 				{this.renderContent()}
 			</View>
 		)

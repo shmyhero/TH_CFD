@@ -160,7 +160,8 @@ export function syncOwnStocks(userData) {
 				method: 'GET',
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-				}
+				},
+				cache: 'offline',
 			},
 			(responseJson) => {
 				if (responseJson.length===0 && !isLive) {
@@ -267,7 +268,7 @@ export function updateOwnStocks(stockData) {
 			method: 'PUT',
 			headers: {
 				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-			}
+			},
 		},
 		(responseJson) => {
 			console.log('update own stocks success')

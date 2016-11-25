@@ -68,6 +68,7 @@ var MyIncomePage = React.createClass({
 	          'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 						'Content-Type': 'application/json; charset=UTF-8',
 	        },
+					cache: 'offline'
 	      },
 	      (responseJson) => {
 					console.log("my unpaid income: " + JSON.stringify(responseJson));

@@ -26,8 +26,17 @@ export default class NetworkErrorIndicator extends Component {
   constructor(props) {
     super(props);
 
+    console.log("NetworkErrorIndicator this.props.refreshing " + this.props.refreshing)
     this.state = {
       isLoading: this.props.refreshing ? true : false,
+    }
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps && nextProps.refreshing){
+      this.setState({
+        isLoading: nextProps.refreshing,
+      })
     }
   }
 

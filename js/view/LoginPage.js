@@ -96,6 +96,7 @@ var LoginPage = React.createClass({
 			phoneLoginButtonEnabled: false,
 			liveLoginRememberUserName: true,
 			quickLoginBottomMargin: 70,
+			isWorking: false,
 		};
 	},
 
@@ -228,7 +229,6 @@ var LoginPage = React.createClass({
 			return
 		}
 
-
 		this.setState({
 			phoneLoginButtonEnabled: false
 		})
@@ -263,13 +263,12 @@ var LoginPage = React.createClass({
 			return
 		}
 
-
-		if (!this.state.phoneLoginButtonEnabled) {
+		if (!this.state.phoneLoginButtonEnabled || this.state.isWorking) {
 			return
 		}
 		TalkingdataModule.trackEvent(TalkingdataModule.SIMULATOR_LOGIN_EVENT)
 		this.setState({
-			phoneLoginButtonEnabled: false
+			isWorking: true,
 		})
 		NetworkModule.fetchTHUrl(
 			NetConstants.CFD_API.PHONE_NUM_LOGIN_API,
@@ -289,7 +288,7 @@ var LoginPage = React.createClass({
 			},
 			(result) => {
 				this.setState({
-					phoneLoginButtonEnabled: true
+					isWorking: false
 				})
 				Alert.alert('提示', result.errorMessage);
 			}
@@ -610,8 +609,8 @@ var LoginPage = React.createClass({
 
 							<View style={[styles.liveRowWrapper, {marginTop: 0, backgroundColor: 'transparent'}]}>
 								<TouchableOpacity style={styles.loginClickableArea} onPress={this.loginWithPasswordPressed}>
-									<View style={styles.loginTextView}>
-										<Text style={styles.loginText}>
+									<View style={[styles.loginTextView, styles.enabledLoginTextView]}>
+										<Text style={[styles.loginText, styles.enabledLoginText]}>
 											登录
 										</Text>
 									</View>
@@ -644,6 +643,34 @@ var LoginPage = React.createClass({
 				</View>
 			</TouchableWithoutFeedback>
 		)
+	},
+
+	renderLoginButton: function(){
+		var style = [styles.loginTextView];
+		var textStyle = [styles.loginText];
+		var activeOpacity = 0.2;
+
+		if(!this.state.phoneLoginButtonEnabled || this.state.isWorking){
+			style.push(styles.disabledLoginTextView);
+			textStyle.push(styles.disabledLoginText);
+			activeOpacity = 1;
+		}else{
+			style.push(styles.enabledLoginTextView);
+			textStyle.push(styles.enabledLoginText);
+			activeOpacity = 0.2;
+		}
+		return (
+				<View style={[styles.rowWrapper, {marginTop: 20, backgroundColor: 'transparent', alignSelf: 'stretch'}]}>
+					<TouchableOpacity style={style} onPress={this.props.isMobileBinding ? this.bindWithCode : this.loginWithCodePressed}
+														activeOpacity={activeOpacity}>
+						<View style={styles.loginTextView}>
+							<Text style={textStyle}>
+								{this.props.isMobileBinding ? "确认" : "登录"}
+							</Text>
+						</View>
+					</TouchableOpacity>
+				</View>
+		);
 	},
 
 	renderSimulatorLoginContent: function() {
@@ -683,15 +710,7 @@ var LoginPage = React.createClass({
 								</View>
 							</View>
 
-							<View style={[styles.rowWrapper, {marginTop: 20, backgroundColor: 'transparent'}]}>
-								<TouchableOpacity style={styles.loginClickableArea} onPress={this.props.isMobileBinding ? this.bindWithCode : this.loginWithCodePressed}>
-									<View style={styles.loginTextView}>
-										<Text style={styles.loginText}>
-											{this.props.isMobileBinding ? "确认" : "登录"}
-										</Text>
-									</View>
-								</TouchableOpacity>
-							</View>
+							{this.renderLoginButton()}
 						</View>
 					</View>
 
@@ -873,13 +892,24 @@ var styles = StyleSheet.create({
 		padding: 5,
 		height: rowHeight,
 		borderRadius: 3,
-		backgroundColor: '#b8c7db',
 		justifyContent: 'center',
+		flex: 1,
+	},
+	enabledLoginTextView: {
+		backgroundColor: '#b8c7db',
+	},
+	disabledLoginTextView: {
+		backgroundColor: 'rgba(184,199,219, 0.2)', //#b8c7db
 	},
 	loginText: {
 		fontSize: fontSize,
 		textAlign: 'center',
+	},
+	enabledLoginText: {
 		color: '#2e2e2e',
+	},
+	disabledLoginText: {
+		color: 'rgba(46,46,46,0.5)', //#b8c7db
 	},
 	registerTextView: {
 		padding: 5,

@@ -20,6 +20,7 @@ var tabIndex = 0;
 var lastSuperPriorityHintDate = '';
 var accountState = false;//是否是实盘用户状态 false:模拟盘  true:实盘 (无论是否是 ayondo 登入成功状态)
 var isActualLogin = false;
+var upgradeUrl = null;
 
 var LogicData = {
 
@@ -269,7 +270,15 @@ var LogicData = {
 
 	getLastSuperPriorityHintData: function(){
 		return lastSuperPriorityHintDate;
-	}
+	},
+
+	setUpgradeUrl(url){
+		upgradeUrl = url;
+	},
+
+	getUpgradeUrl(){
+		return upgradeUrl;
+	},
 };
 
 module.exports = LogicData;

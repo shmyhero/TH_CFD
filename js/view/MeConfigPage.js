@@ -11,7 +11,12 @@ import {
 	TouchableOpacity,
 	Alert,
 	ScrollView,
+	Linking,
 } from 'react-native';
+
+import {
+	packageVersion,
+} from 'react-native-update';
 
 var ColorConstants = require('../ColorConstants')
 var NavBar = require('./NavBar')
@@ -34,6 +39,7 @@ var listRawData = [
 {'type':'normal','title':'登出实盘账号', 'subtype': 'logoutAccountActual'},
 {'type':'normal','title':'修改实盘登录密码', 'subtype': 'modifyLoginActualPwd'},
 {'type':'normal','title':'退出盈交易账号', 'subtype': 'logout'},
+{'type':'normal','title':'版本号', 'subtype': 'version'},
 ]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -79,6 +85,8 @@ var MeConfigPage = React.createClass({
 			// 	name: MainPage.ME_CONFIG_MODIFY_PWD_ROUTE,
 			// });
 			this.askForSendEmailToModifyPwd();
+		}else if(rowData.subtype === 'version'){
+			this.upgradeAppVersion();
 		}
 	},
 
@@ -129,6 +137,13 @@ var MeConfigPage = React.createClass({
       webpageUrl: url,
       imageUrl: NetConstants.TRADEHERO_API.SHARE_LOGO_URL,
 		});
+	},
+
+	upgradeAppVersion: function(){
+		var url = LogicData.getUpgradeUrl();
+		if(url){
+			Linking.openURL(url)
+		}
 	},
 
 	logoutAccountActualAlert:function(){
@@ -229,6 +244,18 @@ var MeConfigPage = React.createClass({
 			)
 	},
 
+	renderVersion: function(){
+		if(LogicData.getUpgradeUrl()){
+			return (
+				 <Text style={[styles.contentValue, {color:ColorConstants.title_blue()}]}>更新新版本</Text>
+			)
+		}else{
+			return (
+				 <Text style={styles.contentValue}>{packageVersion}</Text>
+			)
+		}
+	},
+
 	renderRow: function(rowData, sectionID, rowID) {
 		if(!LogicData.getAccountState() &&
 		(rowData.subtype === 'change2Simulator' ||
@@ -240,6 +267,15 @@ var MeConfigPage = React.createClass({
 		 } else if(LogicData.getAccountState() && (!LogicData.getActualLogin()) && rowData.subtype === 'logoutAccountActual'){
 			 	//实盘状态 实盘未登录 不显示 ‘登出实盘账号’
 				return(null)
+		 } else if(rowData.subtype === 'version'){
+			 return(
+			  <TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
+			 	 <View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
+			 		 <Text style={styles.title}>{rowData.title}</Text>
+					 {this.renderVersion()}
+			 	 </View>
+			  </TouchableOpacity>
+			 )
 		 } else{
 			 return(
 	 			<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
@@ -338,7 +374,11 @@ var styles = StyleSheet.create({
 		textAlign: 'center',
 		color: '#ffffff',
 	},
-
+	contentValue: {
+		fontSize: 17,
+		marginRight: 5,
+		color: '#757575',
+	},
 	defaultText: {
 		flex: 1,
 		fontSize: 17,

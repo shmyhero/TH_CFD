@@ -312,6 +312,8 @@ var AppNavigator = React.createClass({
 				// Alert.alert('提示', '您的应用版本已更新,请前往应用商店下载新的版本', [
 				// 	{text: '确定', onPress: ()=>{info.downloadUrl && Linking.openURL(info.downloadUrl)}},
 				// ]);
+
+				LogicData.setUpgradeUrl(info.downloadUrl);
 			} else if (info.upToDate) {
 				// Do nothing as the version is up-to-date.
 			} else {

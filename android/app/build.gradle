@@ -180,6 +180,10 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'asia.ivity.android:drag-sort-listview:1.0'
 
+    // -------------------- GIF Support ----------------------------
+    compile 'com.facebook.fresco:animated-gif:0.12.0'
+
+
     compile project(':realm')
     compile project(':react-native-wx')
     compile project(':MPChartLib')
@@ -202,7 +206,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.getui:sdk:2.9.0.0'
     compile 'com.android.support:support-v4:+'
-
     // -------------------- 同道依赖 ------------
     compile project(':sdk-ui')
 }

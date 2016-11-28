@@ -83,7 +83,7 @@ var StockClosedPositionPage = React.createClass({
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 				},
 				cache: 'offline',
-				timeout: 1000,
+				//timeout: 1000,
 			},
 			(responseJson) => {
 				this.setState({
@@ -413,7 +413,7 @@ var StockClosedPositionPage = React.createClass({
 	renderContent: function(){
 		if(!this.state.contentLoaded){
 			return (
-				<NetworkErrorIndicator onRefresh={()=>this.loadOpenPositionInfo()} refreshing={this.state.isRefreshing}/>
+				<NetworkErrorIndicator onRefresh={()=>this.loadClosedPositionInfo()} refreshing={this.state.isRefreshing}/>
 			)
 		}else{
 			return (<View style={{flex:1}}>

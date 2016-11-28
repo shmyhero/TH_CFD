@@ -71,3 +71,6 @@
 
 #Bugly
 -keep public class com.tencent.bugly.**{*;}
+
+# Fresco Gif support
+-keep class com.facebook.imagepipeline.animated.factory.AnimatedFactoryImpl { public AnimatedFactoryImpl(com.facebook.imagepipeline.bitmaps.PlatformBitmapFactory, com.facebook.imagepipeline.core.ExecutorSupplier); }

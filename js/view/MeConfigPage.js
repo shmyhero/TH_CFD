@@ -10,6 +10,7 @@ import {
 	Image,
 	TouchableOpacity,
 	Alert,
+	ScrollView,
 } from 'react-native';
 
 var ColorConstants = require('../ColorConstants')
@@ -234,11 +235,11 @@ var MeConfigPage = React.createClass({
 		 rowData.subtype === 'logoutAccountActual' ||
 		 rowData.subtype === 'modifyLoginActualPwd' )){
 			 return(
-				 <View></View>
+				 null
 			 )
 		 } else if(LogicData.getAccountState() && (!LogicData.getActualLogin()) && rowData.subtype === 'logoutAccountActual'){
 			 	//实盘状态 实盘未登录 不显示 ‘登出实盘账号’
-				return(<View></View>)
+				return(null)
 		 } else{
 			 return(
 	 			<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
@@ -251,14 +252,30 @@ var MeConfigPage = React.createClass({
 		 }
 	},
 
+	renderListView: function(){
+		var listDataView = listRawData.map((data, i)=>{
+			var row = this.renderRow(data, 's1', i)
+			return(
+				<View key={i}>
+					{row}
+					{row != null ? this.renderSeparator('s1', i, false) : null}
+				</View>
+			);
+		})
+
+		return (
+			<View>
+				{listDataView}
+			</View>);
+	},
 
 	render: function() {
 		return (
-	    <ListView
-	    	style={styles.list}
-				dataSource={this.state.dataSource}
-				renderRow={this.renderRow}
-				renderSeparator={this.renderSeparator} />
+			<View style={styles.wrapper}>
+				<ScrollView>
+					{this.renderListView()}
+				</ScrollView>
+			</View>
 		);
 	},
 });

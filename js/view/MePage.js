@@ -519,7 +519,7 @@ var MePage = React.createClass({
 			)
 		}else{
 			return(
-				<View></View>
+				null
 			)
 		}
 
@@ -530,12 +530,12 @@ var MePage = React.createClass({
 		if (rowData.type === 'normal') {
 			if((rowData.subtype === 'config'||rowData.subtype === 'mycard') && !this.state.loggedIn){
 				return (
-					<View></View>
+					null
 				);
 			}
 			else if(rowData.subtype == 'income' && LogicData.getAccountState()){
 				 return(
-					 <View></View>
+					 null
 				 );
 			}
 			else{
@@ -583,7 +583,7 @@ var MePage = React.createClass({
 					return this.renderAccountStateView()
 				}else{
 					return (
-						<View></View>
+						null
 					)
 				}
 		}
@@ -591,7 +591,7 @@ var MePage = React.createClass({
 			// separator
 			if(!LogicData.getAccountState() && this.state.loggedIn){
 				return (
-					<View></View>
+					null
 				)
 			}else{
 				return (
@@ -629,10 +629,11 @@ var MePage = React.createClass({
 
 	renderListView: function(){
 		var listDataView = listRawData.map((data, i)=>{
+			var row = this.renderRow(data, 's1', i)
 			return(
 				<View key={i}>
-					{this.renderRow(data, 's1', i)}
-					{this.renderSeparator('s1', i, false)}
+					{row}
+					{row != null ? this.renderSeparator('s1', i, false) : null}
 				</View>
 			);
 		})

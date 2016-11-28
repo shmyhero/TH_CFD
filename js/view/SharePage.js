@@ -189,7 +189,8 @@ var SharePage = React.createClass({
 	        ()=>{ },
 	        ()=>{ })
 	    }else{
-	      WechatModule.wechatShare(this.data.title,
+				var title = this.data.circleTitle ? this.data.circleTitle : this.data.title;
+	      WechatModule.wechatShare(title,
 							this.data.description,
 							this.data.webpageUrl,
 							this.data.imageUrl,

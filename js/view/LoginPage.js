@@ -743,7 +743,7 @@ var LoginPage = React.createClass({
 						{/* {this.renderTab()} */}
 						<View style={styles.tabContainer}>
 							<Text style={{flex: 1, fontSize: 18, textAlign: 'center', color: '#ffffff'}}>
-								{this.props.isMobileBinding ? "绑定手机号" : "我的交易"}
+								{this.props.isMobileBinding ? "绑定手机号" : "盈交易"}
 							</Text>
 							{this.renderCancelButton()}
 						</View>

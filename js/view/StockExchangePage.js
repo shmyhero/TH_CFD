@@ -118,13 +118,13 @@ var StockExchangePage = React.createClass({
 	renderLiveLogin:function(){
 		return(
 			// <View style={{flex:1,backgroundColor:'white',alignItems:'center'}}>
-   	  //   <NavBar title="我的交易" navigator={this.props.navigator}/>
+   	  //   <NavBar title="我的仓位" navigator={this.props.navigator}/>
 			// 	<TouchableOpacity onPress={()=>this.jumpToLogin()}>
 			// 		<Text style={{textAlign:'center',fontSize:20, alignSelf:'center',justifyContent:'center',backgroundColor:'yellow'}}>点击登录实盘账户</Text>
 			// 	</TouchableOpacity>
 			// </View>
 			<View>
-				<NavBar title="我的交易" navigator={this.props.navigator}/>
+				<NavBar title="我的仓位" navigator={this.props.navigator}/>
 				<OAStatusPage onLoginClicked={this.jumpToLogin}/>
 			</View>
 
@@ -222,7 +222,7 @@ var StockExchangePage = React.createClass({
 			if(LogicData.getActualLogin()){
 				return (
 					<View style={{flex: 1}}>
-						<NavBar title="我的交易" showSearchButton={true} navigator={this.props.navigator}/>
+						<NavBar title="我的仓位" showSearchButton={true} navigator={this.props.navigator}/>
 						<ScrollTabView ref={"tabPages"} tabNames={tabNames} viewPages={viewPages} removeClippedSubviews={true}
 							onPageSelected={(index) => this.onPageSelected(index)} />
 					</View>
@@ -230,7 +230,7 @@ var StockExchangePage = React.createClass({
 			} else{
 				// return (
 				// 	<View style={{flex: 1}}>
-				// 		<NavBar title="我的交易" navigator={this.props.navigator}/>
+				// 		<NavBar title="我的仓位" navigator={this.props.navigator}/>
 				// 		<WebViewPage
 				// 			isShowNav= {false}
 				// 			onNavigationStateChange={this.onNavigationStateChange}
@@ -250,7 +250,7 @@ var StockExchangePage = React.createClass({
 			if (loggined) {
 				return (
 					<View style={{flex: 1}}>
-						<NavBar title="我的交易" showSearchButton={true} navigator={this.props.navigator}/>
+						<NavBar title="我的仓位" showSearchButton={true} navigator={this.props.navigator}/>
 						<ScrollTabView ref={"tabPages"} tabNames={tabNames} viewPages={viewPages} removeClippedSubviews={true}
 							onPageSelected={(index) => this.onPageSelected(index)} />
 					</View>
@@ -270,7 +270,7 @@ var StockExchangePage = React.createClass({
 		// // 	if(LogicData.getActualLogin()){
 		// // 		return (
 		// // 			<View style={{flex: 1}}>
-		// // 				<NavBar title="我的交易" showSearchButton={true} navigator={this.props.navigator}/>
+		// // 				<NavBar title="我的仓位" showSearchButton={true} navigator={this.props.navigator}/>
 		// // 				<ScrollTabView ref={"tabPages"} tabNames={tabNames} viewPages={viewPages} removeClippedSubviews={true}
 		// // 					onPageSelected={(index) => this.onPageSelected(index)} />
 		// // 			</View>
@@ -278,7 +278,7 @@ var StockExchangePage = React.createClass({
 		// // 	} else{
 		// 		return (
 		// 			<View style={{flex: 1}}>
-		// 				<NavBar title="我的交易" navigator={this.props.navigator}/>
+		// 				<NavBar title="我的仓位" navigator={this.props.navigator}/>
 		// 				<WebViewPage
 		// 					isShowNav= {false}
 		// 					onNavigationStateChange={this.onNavigationStateChange}
@@ -298,7 +298,7 @@ var StockExchangePage = React.createClass({
 		// // 	if (loggined) {
 		// // 		return (
 		// // 			<View style={{flex: 1}}>
-		// // 				<NavBar title="我的交易" showSearchButton={true} navigator={this.props.navigator}/>
+		// // 				<NavBar title="我的仓位" showSearchButton={true} navigator={this.props.navigator}/>
 		// // 				<ScrollTabView ref={"tabPages"} tabNames={tabNames} viewPages={viewPages} removeClippedSubviews={true}
 		// // 					onPageSelected={(index) => this.onPageSelected(index)} />
 		// // 			</View>

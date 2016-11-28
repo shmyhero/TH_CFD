@@ -28,6 +28,7 @@ var heightRate = height/667.0
 var listRawData = [
 {'type':'normal','title':'推送设置', 'subtype': 'pushconfig'},
 {'type':'normal','title':'账号绑定', 'subtype': 'accountbinding'},
+{'type':'normal','title':'推荐给好友', 'subtype': 'share'},
 {'type':'normal','title':'切换到模拟交易', 'subtype': 'change2Simulator'},
 {'type':'normal','title':'登出实盘账号', 'subtype': 'logoutAccountActual'},
 {'type':'normal','title':'修改实盘登录密码', 'subtype': 'modifyLoginActualPwd'},
@@ -64,6 +65,8 @@ var MeConfigPage = React.createClass({
 			this.props.navigator.push({
 				name: MainPage.ME_ACCOUNT_BINDING_ROUTE,
 			});
+		}else if(rowData.subtype === 'share'){
+			this.shareApp();
 		}else if(rowData.subtype === 'logout'){
 			this.logout();
 		}else if(rowData.subtype === 'change2Simulator'){
@@ -116,6 +119,16 @@ var MeConfigPage = React.createClass({
 		)
 	},
 
+	shareApp:function(){
+		var url = NetConstants.TRADEHERO_API.SHARE_DOWNLOAD_URL;
+		MainPage.showSharePage({
+			title: "盈交易-ayondo亚洲中文交易平台",
+			circleTitle: "盈交易-ayondo亚洲中文交易平台，提供实时免费的全球行情系统",
+      description: "提供实时免费的全球行情系统，您可做多做空全球的美股、指数、外汇、商品等。",
+      webpageUrl: url,
+      imageUrl: NetConstants.TRADEHERO_API.SHARE_LOGO_URL,
+		});
+	},
 
 	logoutAccountActualAlert:function(){
 		Alert.alert(

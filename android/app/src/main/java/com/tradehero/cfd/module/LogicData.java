@@ -117,9 +117,11 @@ public class LogicData {
         if(MainActivity.mInstance!=null){
             int colorInt;
             if(isLive()){
-                colorInt = MainActivity.mInstance.getResources().getColor(R.color.title_blue2, null);
+                colorInt = MainActivity.mInstance.getResources().getColor(R.color.title_blue2);
+//                colorInt = MainActivity.mInstance.getResources().getColor(R.color.title_blue2, null);
             }else{
-                colorInt = MainActivity.mInstance.getResources().getColor(R.color.title_blue, null);
+                colorInt = MainActivity.mInstance.getResources().getColor(R.color.title_blue);
+//                colorInt = MainActivity.mInstance.getResources().getColor(R.color.title_blue, null);
             }
             MainActivity.mInstance.setStatusBarColor(colorInt);
         }

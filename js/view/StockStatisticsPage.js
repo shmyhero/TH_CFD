@@ -276,10 +276,10 @@ var styles = StyleSheet.create({
 		height: height
 				- UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
 				- UIConstants.HEADER_HEIGHT
-				- UIConstants.SCROLL_TAB_HEIGHT
-				- UIConstants.LIST_HEADER_BAR_HEIGHT,
+				//- UIConstants.SCROLL_TAB_HEIGHT
+				- UIConstants.LIST_HEADER_BAR_HEIGHT
+				- UIConstants.TAB_BAR_HEIGHT,
 		alignItems: 'stretch',
-		paddingBottom: Platform.OS === 'android' ? 40 : 0,
 	},
 	empty: {
 		paddingBottom: 0,

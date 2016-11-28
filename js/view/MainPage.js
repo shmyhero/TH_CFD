@@ -302,12 +302,13 @@ var MainPage = React.createClass({
 					shareDescription={route.shareDescription}
 					shareFunction={this._doShare}
 					shareTrackingEvent={route.shareTrackingEvent}
-					themeColor={route.themeColor}/>
+					themeColor={route.themeColor}
+					isShowNav={route.isShowNav}/>
 			)
 		} else if (route.name === QA_ROUTE) {
 			hideTabbar();
 			return (
-				<QAPage navigator={navigationOperations}/>
+				<QAPage />
 			)
 		} else if (route.name === ABOUT_US_ROUTE) {
 			hideTabbar();

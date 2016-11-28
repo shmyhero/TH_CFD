@@ -206,9 +206,6 @@ var DaySignPage = React.createClass({
 							}
 						)
 					}
-				},
-				(result) => {
-					Alert.alert(result.errorMessage)
 				}
 			)
 		}

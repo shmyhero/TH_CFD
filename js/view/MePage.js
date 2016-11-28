@@ -28,7 +28,8 @@ var StorageModule = require('../module/StorageModule')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var OpenAccountRoutes = require('./openAccount/OpenAccountRoutes')
-var UIConstants = require('../UIConstants')
+var UIConstants = require('../UIConstants');
+var VersionConstants = require('../VersionConstants');
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
@@ -361,7 +362,7 @@ var MePage = React.createClass({
 		}
 	},
 
-	gotoWebviewPage: function(targetUrl, title) {
+	gotoWebviewPage: function(targetUrl, title, hideNavBar) {
 		var userData = LogicData.getUserData()
 		var userId = userData.userId
 		if (userId == undefined) {
@@ -378,6 +379,7 @@ var MePage = React.createClass({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			url: targetUrl,
 			title: title,
+			isShowNav: hideNavBar ? false : true,
 		});
 	},
 
@@ -400,9 +402,9 @@ var MePage = React.createClass({
 			})
 		}
 		else if(rowData.subtype === 'helpcenter') {
-			this.props.navigator.push({
-				name: MainPage.QA_ROUTE,
-			});
+			var qaUrl = LogicData.getAccountState()? NetConstants.TRADEHERO_API.WEBVIEW_QA_PAGE_ACTUAL:NetConstants.TRADEHERO_API.WEBVIEW_QA_PAGE;
+			qaUrl = qaUrl.replace('<version>', VersionConstants.WEBVIEW_QA_VERSION);
+			this.gotoWebviewPage(qaUrl, '帮助中心', true);
 		}
 		else if(rowData.subtype === 'onlinehelp') {
 			NativeSceneModule.launchNativeScene('MeiQia')

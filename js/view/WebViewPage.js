@@ -50,6 +50,7 @@ var WebViewPage = React.createClass({
 			shareTrackingEvent: null,
 			shareUrl: null,
 			isShowNav: true,
+			hideNavBar: false,
 		}
 	},
 
@@ -70,7 +71,12 @@ var WebViewPage = React.createClass({
 		);
 		//检测网络是否连接
 		NetInfo.isConnected.fetch().done(
-			(isConnected) => { this.setState({isNetConnected: isConnected}); }
+			(isConnected) => {
+				//Do not change the connected status to not-connected.
+				if(!this.state.isNetConnected){
+					this.setState({isNetConnected: isConnected});
+				}
+			}
 		);
 
 		if(this.props.themeColor && Platform.OS == 'android'){
@@ -157,6 +163,11 @@ var WebViewPage = React.createClass({
 		)
 	},
 
+	webViewLoaded: function(content){
+		console.log("onLoadEnd " +content);
+		this.setState({isLoaded:true});
+	},
+
 	renderWebView: function(){
 		if(this.state.isNetConnected) {
 
@@ -171,7 +182,7 @@ var WebViewPage = React.createClass({
 					scalesPageToFit={true}
 					automaticallyAdjustContentInsets={true}
 					onNavigationStateChange={this.onNavigationStateChange}
-					onLoadEnd={(content)=>console.log("onLoadEnd " +content)}
+					onLoadEnd={(content)=>this.webViewLoaded(content)}
 					onMessage={(message)=>console.log("onMessage " +message)}
 					onError={()=>this._handleConnectivityChange(false)}
 					decelerationRate="normal"
@@ -193,7 +204,8 @@ var WebViewPage = React.createClass({
 	},
 
 	renderNavBar: function() {
-		if(!this.props.isShowNav){
+		console.log("this.props.isShowNav" + this.props.isShowNav)
+		if(!this.props.isShowNav && this.state.isLoaded){
 			return <View></View>
 		}
 		if((this.props.shareID || this.props.shareUrl) && (this.props.shareTitle || this.props.hareDescription)){

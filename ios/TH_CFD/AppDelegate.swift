@@ -68,17 +68,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 			}
 		})
 		
-		// tongdao
-//		if let userId = NSUserDefaults.standardUserDefaults().valueForKey("TDUser") as? String {
-//			TongDaoUiCore.sharedManager().initTDSdkWithTDAppKey("126b767625e6d0df67333fb01749143f", andUserId: userId)
-//		}
-//		else {
-//			NSUserDefaults.standardUserDefaults().setValue("0", forKey: "TDUser")
-//			TongDaoUiCore.sharedManager().initTDSdkWithTDAppKey("126b767625e6d0df67333fb01749143f", andUserId: "0")
-//			TongDao.setUserId(nil)
-//		}
-		TongDaoUiCore.sharedManager().initTDSdkWithTDAppKey("126b767625e6d0df67333fb01749143f", andUserId: nil)
-		
 		// initialize the rootView to fetch JS from the dev server
 		let jsCodeLocation:NSURL?
 		if Platform.isSimulator {
@@ -190,7 +179,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		if (self.nativeData != nil) {
 			self.nativeData!.sendDataToRN("deviceToken", data: clientId)
 		}
-		TongDaoUiCore.sharedManager().identifyPushToken(getuiID)
 	}
 	
 	/** SDK遇到错误回调 */

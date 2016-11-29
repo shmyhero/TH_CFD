@@ -130,7 +130,7 @@ class NotificationManager: NSObject {
 		}
 		else {
 			if data.payload != nil {
-				can = data.payload!.containsString("title") && data.payload!.containsString("message") && data.payload!.containsString("tongrd_")
+				can = data.payload!.containsString("title") && data.payload!.containsString("message")
 			}
 		}
 		return can

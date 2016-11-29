@@ -27,7 +27,6 @@ var LogicData = require('../LogicData');
 var WebSocketModule = require('../module/WebSocketModule');
 var NavBar = require('./NavBar')
 var TalkingdataModule = require('../module/TalkingdataModule')
-var TongDaoModule = require('../module/TongDaoModule')
 var DevelopPage = require('./DevelopPage')
 var VersionConstants = require('../VersionConstants')
 
@@ -309,7 +308,6 @@ var HomePage = React.createClass({
 			PAGES[i].digest,
 			TalkingdataModule.BANNER_SHARE_EVENT)
 
-		TongDaoModule.trackTopBannerEvent()
 	},
 
 	getShareMovieEventInfo: function(){

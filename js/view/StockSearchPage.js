@@ -24,7 +24,6 @@ var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
 var TalkingdataModule = require('../module/TalkingdataModule')
 var TimerMixin = require('react-timer-mixin');
-var TongDaoModule = require('../module/TongDaoModule')
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var searchText = ""
@@ -116,14 +115,12 @@ var StockSearchPage = React.createClass({
 						eventParam[TalkingdataModule.KEY_SEARCH_TEXT] = text;
 						TalkingdataModule.trackEvent(TalkingdataModule.SEARCH_WITH_NO_RESULT_EVENT, '', eventParam)
 
-						TongDaoModule.trackSearchStockEvent(text, false)
 					} else {
 						this.setState({
 							searchStockRawInfo: responseJson,
 							searchStockInfo: ds.cloneWithRows(responseJson),
 							searchFailedText: null,
 						})
-						TongDaoModule.trackSearchStockEvent(text, true)
 					}
 				},
 				(errorMessage) => {
@@ -151,7 +148,6 @@ var StockSearchPage = React.createClass({
 		eventParam[TalkingdataModule.KEY_STOCK_ID] = stockData.id,
 		TalkingdataModule.trackEvent(TalkingdataModule.SEARCH_AND_ADD_TO_MY_LIST_EVENT, '', eventParam)
 
-		TongDaoModule.trackAddRemoveOwnStockEvent(stockData.id.toString(), true)
 	},
 
 	addToMyListPressedFromHistory: function(rowID) {

@@ -28,7 +28,6 @@ var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
 var TalkingdataModule = require('../module/TalkingdataModule')
-var TongDaoModule = require('../module/TongDaoModule')
 var NavBar = require('../view/NavBar')
 var InputAccessory = require('./component/InputAccessory')
 var MainPage = require('./MainPage')
@@ -344,7 +343,6 @@ var StockDetailPage = React.createClass({
     		parameters[TalkingdataModule.KEY_STOCK_ID] = this.props.stockCode.toString();
 			TalkingdataModule.trackEvent(TalkingdataModule.REMOVE_FROM_MY_LIST_EVENT, '', parameters)
 
-			TongDaoModule.trackAddRemoveOwnStockEvent(this.props.stockCode.toString(), false)
 		} else {
 			LogicData.addStockToOwn(stock)
 			NetworkModule.addToOwnStocks([stock])
@@ -356,7 +354,6 @@ var StockDetailPage = React.createClass({
 			parameters[TalkingdataModule.KEY_STOCK_ID] = this.props.stockCode.toString();
 			TalkingdataModule.trackEvent(TalkingdataModule.ADD_TO_MY_LIST_EVENT, '', parameters)
 
-			TongDaoModule.trackAddRemoveOwnStockEvent(this.props.stockCode.toString(), true)
 		}
 	},
 
@@ -891,7 +888,6 @@ var StockDetailPage = React.createClass({
 				eventParam[TalkingdataModule.KEY_TIME] = responseJson.createAt;
 
 				TalkingdataModule.trackEvent(TalkingdataModule.TRADE_EVENT, '', eventParam)
-				TongDaoModule.trackOpenPositionEvent(responseJson, this.state.money)
 			},
 			(errorMessage) => {
 				Alert.alert('', errorMessage,

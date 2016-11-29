@@ -26,7 +26,6 @@ var NetworkModule = require('../module/NetworkModule')
 var NativeDataModule = require('../module/NativeDataModule')
 var NavBar = require('./NavBar')
 var TalkingdataModule = require('../module/TalkingdataModule')
-var TongDaoModule = require('../module/TongDaoModule')
 var WebViewPage = require('./WebViewPage');
 var {height, width} = Dimensions.get('window');
 var heightRate = height/667.0;

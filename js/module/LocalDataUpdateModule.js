@@ -10,7 +10,6 @@ var StorageModule = require('../module/StorageModule')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
-var TongDaoModule = require('../module/TongDaoModule')
 
 export function updateMeData(userData, onSuccess){
 	NetworkModule.fetchTHUrl(
@@ -24,7 +23,6 @@ export function updateMeData(userData, onSuccess){
 		function(responseJson) {
 			StorageModule.setMeData(JSON.stringify(responseJson))
 			LogicData.setMeData(responseJson);
-			TongDaoModule.updateUserData(responseJson)
 
 			if(onSuccess){
 				onSuccess()
@@ -50,8 +48,6 @@ export function removeUserData(){
     "isCheckInDialogShown": false
   };
   StorageModule.setLastSuperPriorityHintData(JSON.stringify(data));
-
-  TongDaoModule.setUserId("");
 
   //Restart the web socket.
   //WebSocketModule.stop();

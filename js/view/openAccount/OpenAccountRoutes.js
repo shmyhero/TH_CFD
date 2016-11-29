@@ -11,7 +11,6 @@ var LogicData = require('../../LogicData')
 var StorageModule = require('../../module/StorageModule')
 var NetworkModule = require('../../module/NetworkModule')
 var WebSocketModule = require('../../module/WebSocketModule')
-var TongDaoModule = require('../../module/TongDaoModule')
 */
 var TalkingdataModule = require('../../module/TalkingdataModule')
 var StorageModule = require('../../module/StorageModule')

@@ -31,7 +31,6 @@ var WebSocketModule = require('../module/WebSocketModule')
 var MainPage = require('./MainPage')
 var dismissKeyboard = require('dismissKeyboard');
 var TalkingdataModule = require('../module/TalkingdataModule')
-var TongDaoModule = require('../module/TongDaoModule')
 var LocalDataUpdateModule = require('../module/LocalDataUpdateModule')
 var AppNavigator = require('../../AppNavigator')
 
@@ -275,7 +274,6 @@ var LoginPage = React.createClass({
 		console.log(LogicData.getUserData());
 
 		this.initTokenForGeTui();
-		this.trackTongDao(userData)
 
 		NetworkModule.syncOwnStocks(userData)
 		WebSocketModule.alertServiceLogin(userData.userId + '_' + userData.token)
@@ -364,12 +362,6 @@ var LoginPage = React.createClass({
 				 console.log('errorMessage');
 			 }
 		 )
-	},
-
-	trackTongDao: function(userData) {
-		console.log("tong dao register:", userData)
-		TongDaoModule.setUserId(userData.userId)
-		TongDaoModule.trackRegistration()
 	},
 
 	forgetPassword: function() {

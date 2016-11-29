@@ -22,7 +22,6 @@ public class LogicData {
     public static final String IS_PRODUCT = "isProduct";
     public static final String ACCOUNT_STATE = "accountState";
     public static final String STATUS_BAR_COLOR = "statusBarColor";
-    public static final String UPGRADE_APP = "upgradeApp";
 
     public static final String LIVE_NAME = "userName";
     public static final String LIVE_EMAIL = "userEmail";
@@ -75,8 +74,6 @@ public class LogicData {
             mLiveName = data;
         }else if(dataName.equals(LIVE_EMAIL)){
             mLiveEmail = data;
-        }else if(dataName.equals(UPGRADE_APP)){
-            upgradeApp();
         }
     }
 
@@ -144,12 +141,6 @@ public class LogicData {
             }else{
                 setStatusBarColor();
             }
-        }
-    }
-
-    public void upgradeApp(){
-        if(MainActivity.mInstance!=null){
-            MainActivity.mInstance.upgradeApp();
         }
     }
 }

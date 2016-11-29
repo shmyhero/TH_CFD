@@ -861,9 +861,9 @@ var MainPage = React.createClass({
 				if(pushData.deepLink){
 					this._handleDeepLink(pushData.deepLink);
 				}
-				else if(pushData.tongrd_type === "deeplink") {
-					this._handleDeepLink(pushData.tongrd_value)
-				}
+				// else if(pushData.tongrd_type === "deeplink") {
+				// 	this._handleDeepLink(pushData.tongrd_value)
+				// }
 			}
 		}
 	},

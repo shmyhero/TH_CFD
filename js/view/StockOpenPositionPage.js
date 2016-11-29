@@ -26,7 +26,7 @@ var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
 var TalkingdataModule = require('../module/TalkingdataModule')
-var TongDaoModule = require('../module/TongDaoModule')
+//var TongDaoModule = require('../module/TongDaoModule')
 var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
 var StockTransactionInfoModal = require('./StockTransactionInfoModal')
@@ -117,8 +117,8 @@ var StockOpenPositionPage = React.createClass({
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 				},
-				cache: 'offline',				
-				timeout: 1000,
+				cache: 'offline',
+				//timeout: 1000,
 			},
 			(responseJson) => {
 				this.setState({
@@ -486,7 +486,7 @@ var StockOpenPositionPage = React.createClass({
 				eventParam[TalkingdataModule.KEY_PROFIT]= responseJson.pl.toString();
 
 				TalkingdataModule.trackEvent(TalkingdataModule.SOLD_EVENT, '', eventParam)
-				TongDaoModule.trackClosePositionEvent(responseJson)
+				//TongDaoModule.trackClosePositionEvent(responseJson)
 			},
 			(result) => {
 				Alert.alert('', result.errorMessage);

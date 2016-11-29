@@ -73,7 +73,7 @@ var MainPage = require('./js/view/MainPage')
 var AskForRestartPage = require('./js/view/AskForRestartPage')
 var NativeDataModule = require('./js/module/NativeDataModule')
 var VersionConstants = require('./js/VersionConstants')
-var TongDaoModule = require('./js/module/TongDaoModule')
+//var TongDaoModule = require('./js/module/TongDaoModule')
 
 var GUIDE_SLIDES = [
 	require('./images/Guide-page01.png'),
@@ -141,7 +141,7 @@ var AppNavigator = React.createClass({
 
 					var userData = LogicData.getUserData()
 					console.log("tong dao", userData)
-					TongDaoModule.setUserId(userData.userId)
+					//TongDaoModule.setUserId(userData.userId)
 				}
 				this.checkUpdate();
 
@@ -382,12 +382,12 @@ var AppNavigator = React.createClass({
 			//type: 1: 平仓, 2: 股价提醒, 3: deeplink
 			console.log('actionForPush '+ data.title);
 
-			if(data.tongrd_type == 'deeplink' && data.type === '3'){
-				//TongDao data. We need to format it with our rules.
-				if(!data.deepLink){
-					data.deepLink = data.tongrd_value;
-				}
-			}
+			// if(data.tongrd_type == 'deeplink' && data.type === '3'){
+			// 	//TongDao data. We need to format it with our rules.
+			// 	if(!data.deepLink){
+			// 		data.deepLink = data.tongrd_value;
+			// 	}
+			// }	
 
 			LogicData.setPushData(data);
 

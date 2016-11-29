@@ -158,7 +158,7 @@ var StockListPage = React.createClass({
 								'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 							},
 							cache: 'offline',
-							timeout: 1000,
+							//timeout: 1000,
 						},
 						(responseJson) => {
 							this.setState({
@@ -211,7 +211,7 @@ var StockListPage = React.createClass({
 					{
 						method: 'GET',
 						cache: 'offline',
-						timeout: 1000,
+						//timeout: 1000,
 					},
 					(responseJson) => {
 						LogicData.setOwnStocksData(responseJson)
@@ -219,12 +219,14 @@ var StockListPage = React.createClass({
 							rowStockInfoData: responseJson,
 							stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, responseJson)),
 							contentLoaded: true,
+							isRefreshing: false,
 						})
 					},
 					(result) => {
 						if(!result.loadedOfflineCache){
 							this.setState({
-								contentLoaded: false
+								contentLoaded: false,
+								isRefreshing: false,
 							})
 							this.refs[NETWORK_ERROR_INDICATOR] && this.refs[NETWORK_ERROR_INDICATOR].stopRefresh();
 						}
@@ -234,6 +236,7 @@ var StockListPage = React.createClass({
 			}else{
 				this.setState({
 					contentLoaded: true,
+					isRefreshing: false,
 				})
 			}
 		})

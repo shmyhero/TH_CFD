@@ -10,7 +10,7 @@ var StorageModule = require('./StorageModule')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('./NetworkModule')
 var WebSocketModule = require('./WebSocketModule')
-var TongDaoModule = require('./TongDaoModule');
+//var TongDaoModule = require('./TongDaoModule');
 var OpenAccountRoutes = require('../view/openAccount/OpenAccountRoutes');
 var CacheModule = require('./CacheModule');
 
@@ -26,7 +26,7 @@ export function updateMeData(userData, onSuccess){
 		function(responseJson) {
 			StorageModule.setMeData(JSON.stringify(responseJson))
 			LogicData.setMeData(responseJson);
-			TongDaoModule.updateUserData(responseJson)
+			//TongDaoModule.updateUserData(responseJson)
 
 			if(onSuccess){
 				onSuccess()
@@ -58,7 +58,7 @@ export function removeUserData(){
   };
   StorageModule.setLastSuperPriorityHintData(JSON.stringify(data));
 
-  TongDaoModule.setUserId("");
+  //TongDaoModule.setUserId("");
 
   //Restart the web socket.
   //WebSocketModule.stop();

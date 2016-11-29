@@ -1,6 +1,6 @@
 rootProject.name = 'TH_CFD'
 
-include ':app', ':sdk-ui'
+include ':app'
 include ':react-native-wx'
 include ':MPChartLib'
 include ':react-native-linear-gradient'

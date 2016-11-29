@@ -31,7 +31,7 @@ var WebSocketModule = require('../module/WebSocketModule')
 var MainPage = require('./MainPage')
 var dismissKeyboard = require('dismissKeyboard');
 var TalkingdataModule = require('../module/TalkingdataModule')
-var TongDaoModule = require('../module/TongDaoModule')
+//var TongDaoModule = require('../module/TongDaoModule')
 var LocalDataUpdateModule = require('../module/LocalDataUpdateModule')
 var AppNavigator = require('../../AppNavigator')
 
@@ -450,8 +450,8 @@ var LoginPage = React.createClass({
 
 	trackTongDao: function(userData) {
 		console.log("tong dao register:", userData)
-		TongDaoModule.setUserId(userData.userId)
-		TongDaoModule.trackRegistration()
+		//TongDaoModule.setUserId(userData.userId)
+		//TongDaoModule.trackRegistration()
 	},
 
 	forgetPassword: function() {

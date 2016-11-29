@@ -68,7 +68,7 @@ export default class MyCard extends Component{
 						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 					},
 					cache: "offline",
-					timeout: 1000,
+					//timeout: 1000,
 				},
 				(responseJson) =>{
 					var noMessage = responseJson.cards.length == 0;

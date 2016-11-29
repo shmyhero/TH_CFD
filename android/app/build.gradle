@@ -99,8 +99,8 @@ android {
         applicationId "com.tradehero.cfd"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 14
-        versionName "1.1.0"
+        versionCode 15
+        versionName "1.1.1"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -113,7 +113,7 @@ android {
             GETUI_APP_ID : "v28qIAj6TO6ykm4QYEQFU",
             GETUI_APP_KEY : "wY0MaVLXBjAneFnLwmBUDA",
             GETUI_APP_SECRET : "UPfURaOnLI6K0vP6PC0ie5",
-            TONGDAO_APP_KEY : "126b767625e6d0df67333fb01749143f",
+            //TONGDAO_APP_KEY : "126b767625e6d0df67333fb01749143f",
             PACKAGE_NAME : "com.tradehero.cfd"
         ]
     }
@@ -207,7 +207,7 @@ dependencies {
     compile 'com.getui:sdk:2.9.0.0'
     compile 'com.android.support:support-v4:+'
     // -------------------- 同道依赖 ------------
-    compile project(':sdk-ui')
+    //compile project(':sdk-ui')
 }
 
 // Run this once to be able to run the application with BUCK

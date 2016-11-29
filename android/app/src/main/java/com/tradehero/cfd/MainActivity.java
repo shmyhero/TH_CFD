@@ -40,8 +40,8 @@ import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import com.tongdao.sdk.ui.TongDaoUiCore;
-import com.tradehero.cfd.tongdao.TongDaoModule;
+//import com.tongdao.sdk.ui.TongDaoUiCore;
+//import com.tradehero.cfd.tongdao.TongDaoModule;
 
 import static android.content.pm.PackageManager.GET_META_DATA;
 
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.20.131:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.115:8081").apply();
 
         super.onCreate(null);
 
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         TalkingDataAppCpa.init(this.getApplicationContext(), "d505985d4e8e494fbd59aab89d4b8b96", null);
 
         initMeiQia();
-        initTongDao();
+        //initTongDao();
         initGeTui();
         initSound();
 
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     @Override
     protected void onPause() {
         super.onPause();
-        TongDaoUiCore.onSessionEnd(this);
+        //TongDaoUiCore.onSessionEnd(this);
         if (mReactInstanceManager != null) {
             mReactInstanceManager.onHostPause();
         }
@@ -204,8 +204,8 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     @Override
     protected void onResume() {
         super.onResume();
-        TongDaoUiCore.onSessionStart(this);
-        TongDaoUiCore.displayInAppMessage(this);
+        //TongDaoUiCore.onSessionStart(this);
+        //TongDaoUiCore.displayInAppMessage(this);
         if (mReactInstanceManager != null) {
             mReactInstanceManager.onHostResume(this, this);
 
@@ -324,7 +324,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         if (mClientIDTeTui != null) {
             Log.d("GeTui", "" + mClientIDTeTui);
 
-            TongDaoModule.setPushToken(mClientIDTeTui);
+            //TongDaoModule.setPushToken(mClientIDTeTui);
         }
     }
 
@@ -342,7 +342,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
             Log.e("Initialize TongDao|", err.toString());
         }
 
-        TongDaoUiCore.init(this, appKey);
+        //TongDaoUiCore.init(this, appKey);
     }
 
     private void requestPermission() {

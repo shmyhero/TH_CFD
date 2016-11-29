@@ -15,7 +15,7 @@ import android.util.Log;
 
 import com.facebook.react.bridge.ReactContext;
 import com.igexin.sdk.PushConsts;
-import com.tongdao.sdk.ui.TongDaoUiCore;
+//import com.tongdao.sdk.ui.TongDaoUiCore;
 import com.tradehero.cfd.RNNativeModules.NativeActions;
 import com.tradehero.cfd.RNNativeModules.NativeDataModule;
 
@@ -38,8 +38,8 @@ public class GeTuiBroadcastReceiver extends BroadcastReceiver{
 
     public final static String DEEP_LINK_KEY = "deepLink";
 
-    public final static String TONGDAO_TYPE_KEY = "tongrd_type";
-    public final static String TONGDAO_VALUE_KEY = "tongrd_value";
+    //public final static String TONGDAO_TYPE_KEY = "tongrd_type";
+    //public final static String TONGDAO_VALUE_KEY = "tongrd_value";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -57,23 +57,12 @@ public class GeTuiBroadcastReceiver extends BroadcastReceiver{
                     String data = new String(payload);
                     Log.i(TAG, "receive push data: " + data);
 
-                    try {
-                        byte[] base64Payload = Base64.decode(payload, Base64.DEFAULT);
-                        data = new String(base64Payload, "UTF-8");
-
-                        TongDaoUiCore.trackOpenPushMessage(data);
-                        TongDaoUiCore.openPage(context, data);
-
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-
                     // Check if it is TongDao's push data. If it is, the Tongdao sdk will show the
                     // notification. But the deep link has some issue wo we need to handle it in
                     // our app.
-                    if(parseTongDaoData(context, data)){
-                        break;
-                    }
+//                    if(parseTongDaoData(context, data)){
+//                        break;
+//                    }
 
                     //So it is a Getui push.
                     if(application.IsAppFront()){
@@ -88,25 +77,17 @@ public class GeTuiBroadcastReceiver extends BroadcastReceiver{
         }
     }
 
+    /*
     private boolean parseTongDaoData(Context context, String data){
         try{
+            byte[] base64Payload = Base64.decode(data, Base64.DEFAULT);
+            data = new String(base64Payload, "UTF-8");
+
+
+
             JSONObject jsonObject = new JSONObject(data);
 
             if(jsonObject.has(TONGDAO_TYPE_KEY) && jsonObject.has(TONGDAO_VALUE_KEY)){
-                //Do not handle deep link natively. Send all data to RN and leave all jobs done there.
-                /*
-                if(jsonObject.getString(TONGDAO_TYPE_KEY).equalsIgnoreCase("deeplink")){
-                    String url = jsonObject.getString(TONGDAO_VALUE_KEY);
-                    Uri uri = Uri.parse(url);
-                    Intent resultIntent = new Intent(Intent.ACTION_VIEW);
-                    resultIntent.addCategory(Intent.CATEGORY_BROWSABLE);
-                    resultIntent.setData(uri);
-                    resultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(resultIntent);
-                    return true;
-                }
-                */
-
                 Intent resultIntent = new Intent(context, MainActivity.class);
 
                 Bundle pushDataBundle = new Bundle();
@@ -124,6 +105,7 @@ public class GeTuiBroadcastReceiver extends BroadcastReceiver{
 
         return false;
     }
+    */
 
     private void showPushDialog(Application application, String pushJsonString){
         int type = PUSH_TYPE_DIALOG;

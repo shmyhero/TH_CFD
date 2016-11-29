@@ -103,7 +103,7 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
  					Alert.alert('风险提示！', '盈交易账号已登录其他设备', [{text: '我知道了', onPress: () => {
 						alertShow=false
  						EventCenter.emitAccountLoginOutSideEvent();
-					}}])
+					}}],{cancelable:false})
 				};
 			}
 			var message = e.message

@@ -143,4 +143,10 @@ public class LogicData {
             }
         }
     }
+
+//    public void upgradeApp(){
+//        if(MainActivity.mInstance!=null){
+////            MainActivity.mInstance.upgradeApp();
+//        }
+//    }
 }

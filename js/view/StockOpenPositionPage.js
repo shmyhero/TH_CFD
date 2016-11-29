@@ -1063,8 +1063,8 @@ var StockOpenPositionPage = React.createClass({
 
 				<TouchableHighlight
 					underlayColor={rowData.security.isOpen ? ColorConstants.title_blue() : '#dfdee4'}
-					onPress={() => this.okPress(rowData)} style={[styles.okView, this.state.showExchangeDoubleCheck && styles.okViewDoubleConfirm, !rowData.security.isOpen && styles.okViewDisabled ,rowData.security.isOpen && {backgroundColor:ColorConstants.title_blue()}]}>
-					<Text style={[styles.okButton, this.state.showExchangeDoubleCheck &&  styles.okButtonDoubleConfirm , !this.state.showExchangeDoubleCheck && {backgroundColor:ColorConstants.title_blue()}, !rowData.security.isOpen && styles.okViewDisabled]}>
+					onPress={() => this.okPress(rowData)} style={[styles.okView, this.state.showExchangeDoubleCheck && styles.okViewDoubleConfirm, !rowData.security.isOpen && styles.okViewDisabled]}>
+					<Text style={[styles.okButton, this.state.showExchangeDoubleCheck &&  styles.okButtonDoubleConfirm, !rowData.security.isOpen && styles.okViewDisabled]}>
 						{buttonText}
 					</Text>
 				</TouchableHighlight>
@@ -1429,7 +1429,7 @@ var styles = StyleSheet.create({
 		fontSize: 17,
 	},
 	okButtonDoubleConfirm: {
-		color: '#e60b11',
+		color: ColorConstants.TITLE_BLUE,
 	},
 
 	feeText: {

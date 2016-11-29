@@ -247,7 +247,7 @@ var MeConfigPage = React.createClass({
 	renderVersion: function(){
 		if(LogicData.getUpgradeUrl()){
 			return (
-				 <Text style={[styles.contentValue, {color:ColorConstants.title_blue()}]}>更新新版本</Text>
+				 <Text style={[styles.contentValue, {color:ColorConstants.title_blue()}]}>版本更新</Text>
 			)
 		}else{
 			return (

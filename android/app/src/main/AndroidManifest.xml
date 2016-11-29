@@ -84,7 +84,6 @@
             <intent-filter>
                 <!-- APPID需要替换为相应的个推应用ID -->
                 <action android:name="com.igexin.sdk.action.${GETUI_APP_ID}" />
-                <action android:name="com.igexin.sdk.action.${TD_APP_ID}" />
             </intent-filter>
         </receiver>
 
@@ -133,9 +132,6 @@
         <meta-data
             android:name="TD_CHANNEL_ID"
             android:value="${TD_CHANNEL_ID}" />
-        <meta-data
-            android:name="TONGDAO_APP_KEY"
-            android:value="${TONGDAO_APP_KEY}" />
     </application>
 
 </manifest>

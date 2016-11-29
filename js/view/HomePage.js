@@ -366,7 +366,7 @@ var HomePage = React.createClass({
 		var info = {};
 		if(!this.state.attendedMovieEvent){
 			info.shareUrl = NetConstants.TRADEHERO_API.SHARE_MOVIE_WIN_TICKET_URL;
-			info.message = "朕的投资收益率排名前3，快快赞我！";
+			info.message = "模拟投资比收益，排名前三，每天都送电影票！";
 		}else{
 			if(this.state.winMovieTicket){
 				info.shareUrl = NetConstants.TRADEHERO_API.SHARE_MOVIE_WIN_TICKET_URL;

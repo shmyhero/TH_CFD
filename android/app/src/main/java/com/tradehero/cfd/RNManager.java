@@ -12,7 +12,6 @@ import com.imagepicker.ImagePickerPackage;
 import com.rnfs.RNFSPackage;
 import com.tradehero.cfd.RNNativeModules.RNNativePackage;
 import com.tradehero.cfd.talkingdata.TalkingDataPackage;
-import com.tradehero.cfd.tongdao.TongDaoPackage;
 import com.zyu.ReactNativeWheelPickerPackage;
 import com.beefe.picker.PickerViewPackage;
 import com.psykar.cookiemanager.CookieManagerPackage;
@@ -43,7 +42,6 @@ public class RNManager {
                 new RNFSPackage(),
                 new ImagePickerPackage(),
                 new TalkingDataPackage(),
-                new TongDaoPackage(),
                 new RCTSwipeRefreshLayoutPackage(),
                 new PickerViewPackage(),
                 new CookieManagerPackage(),

@@ -365,7 +365,7 @@ var HomePage = React.createClass({
 	getShareMovieEventInfo: function(){
 		var info = {};
 		if(!this.state.attendedMovieEvent){
-			info.shareUrl = NetConstants.TRADEHERO_API.SHARE_MOVIE_WIN_TICKET_URL;
+			info.shareUrl = NetConstants.TRADEHERO_API.SHARE_MOVIE_NOT_ATTENDED_TICKET_URL;
 			info.message = "模拟投资比收益，排名前三，每天都送电影票！";
 		}else{
 			if(this.state.winMovieTicket){

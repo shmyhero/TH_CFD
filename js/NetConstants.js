@@ -148,6 +148,7 @@ function getTradeHeroAPI(){
     SHARE_URL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER + '/detailShare.php?id=<id>',
     SHARE_MOVIE_WIN_TICKET_URL: TRADEHERO_SERVER_IP + '/CDF_BSY/sucess.php?hjcode=0',
     SHARE_MOVIE_NOT_WIN_TICKET_URL: TRADEHERO_SERVER_IP + '/CDF_BSY/sucess.php?hjcode=1',
+    SHARE_MOVIE_NOT_ATTENDED_TICKET_URL: TRADEHERO_SERVER_IP + '/CDF_BSY/indexShare.php',
     SHARE_LOGO_URL: TRADEHERO_SERVER_IP + '/TH_CFD_WEB/images/ShareLogo.png',
     INCOME_URL: TRADEHERO_SERVER_IP + '/TH_CFD_WEB/checkinRule.php',
     MOVIE_WIN_TICKET_URL: TRADEHERO_SERVER_IP + '/CDF_BSY/index.php',

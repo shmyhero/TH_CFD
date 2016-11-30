@@ -532,12 +532,7 @@ var MePage = React.createClass({
 				return (
 					null
 				);
-			}
-			else if(rowData.subtype == 'income' && LogicData.getAccountState()){
-				 return(
-					 null
-				 );
-			}
+			}			
 			else{
 				return(
 					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>

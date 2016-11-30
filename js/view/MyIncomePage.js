@@ -133,7 +133,7 @@ var MyIncomePage = React.createClass({
 	renderRow: function(rowData, sectionID, rowID) {
 		if(rowData.type == 'header'){
 			return (
-					<View style={styles.headerWrapper}>
+					<View style={[styles.headerWrapper, {backgroundColor: ColorConstants.TITLE_BLUE}]}>
 						{this.renderTotalIncome()}
 					</View>
 			);

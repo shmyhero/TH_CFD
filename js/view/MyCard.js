@@ -109,7 +109,7 @@ export default class MyCard extends Component{
 			)
 		}else{
 			return(
-				<View>
+				<View style={{flex:1}}>
 					{this.renderEmptyView()}
 					<ListView
 						contentContainerStyle={styles.list}

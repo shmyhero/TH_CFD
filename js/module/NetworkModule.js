@@ -181,7 +181,7 @@ export function syncOwnStocks(userData) {
 				resolve();
 			},
 			(result) => {
-				Alert.alert('获取股票列表失败', result.errorMessage);
+				//Alert.alert('获取股票列表失败', result.errorMessage);
 				reject(result.errorMessage);
 			}
 		)
@@ -193,6 +193,7 @@ export function addToOwnStocks(stockData) {
 		var userData = LogicData.getUserData()
 		if (Object.keys(userData).length === 0) {
 			resolve();
+			return;
 		}
 
 		var idList = stockData.map((stock, index, list)=>{
@@ -222,31 +223,36 @@ export function addToOwnStocks(stockData) {
 }
 
 export function removeFromOwnStocks(stockData) {
-	var userData = LogicData.getUserData()
-	if (Object.keys(userData).length === 0) {
-		return
-	}
-
-	var idList = stockData.map((stock, index, list)=>{
-		return stock.id
-	})
-
-	var urlPrefix = LogicData.getAccountState() ? NetConstants.CFD_API.OWN_STOCK_LIST_LIVE_API : NetConstants.CFD_API.OWN_STOCK_LIST_API;
-	fetchTHUrl(
-		urlPrefix + '?'+NetConstants.PARAMETER_STOCKIDS+'='+idList,
-		{
-			method: 'DELETE',
-			headers: {
-				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-			}
-		},
-		(responseJson) => {
-			console.log('delete from own stocks success')
-		},
-		(result) => {
-			Alert.alert('删除股票失败', result.errorMessage);
+	return new Promise((resolve, reject)=>{
+		var userData = LogicData.getUserData()
+		if (Object.keys(userData).length === 0) {
+			resolve();
+			return;
 		}
-	)
+
+		var idList = stockData.map((stock, index, list)=>{
+			return stock.id
+		})
+
+		var urlPrefix = LogicData.getAccountState() ? NetConstants.CFD_API.OWN_STOCK_LIST_LIVE_API : NetConstants.CFD_API.OWN_STOCK_LIST_API;
+		fetchTHUrl(
+			urlPrefix + '?'+NetConstants.PARAMETER_STOCKIDS+'='+idList,
+			{
+				method: 'DELETE',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				}
+			},
+			(responseJson) => {
+				console.log('delete from own stocks success')
+				resolve();
+			},
+			(result) => {
+				Alert.alert('删除股票失败', result.errorMessage);
+				reject(result.errorMessage);
+			}
+		)
+	});
 }
 
 export function updateOwnStocks(stockData) {

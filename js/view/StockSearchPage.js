@@ -143,8 +143,10 @@ var StockSearchPage = React.createClass({
 
 	addToMyListPressedFromSearchResult: function(rowID) {
 		var stockData = this.state.searchStockRawInfo[rowID]
-		LogicData.addStockToOwn(stockData)
 		NetworkModule.addToOwnStocks([stockData])
+		.then(()=>{
+			LogicData.addStockToOwn(stockData)
+		})
 		// force re-render list
 		this.setState({
 			searchStockInfo: ds.cloneWithRows(this.state.searchStockRawInfo)
@@ -159,8 +161,10 @@ var StockSearchPage = React.createClass({
 
 	addToMyListPressedFromHistory: function(rowID) {
 		var stockData = this.state.historyRawInfo[rowID]
-		LogicData.addStockToOwn(stockData)
 		NetworkModule.addToOwnStocks([stockData])
+		.then(()=>{
+			LogicData.addStockToOwn(stockData)
+		})
 		// force re-render list
 		this.setState({
 			historyInfo: ds.cloneWithRows(this.state.historyRawInfo)

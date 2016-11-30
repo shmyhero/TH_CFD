@@ -110,7 +110,7 @@ var MeConfigPage = React.createClass({
 	sendEmailForModifyPwd:function(){
 		var userData = LogicData.getUserData()
 
-		NetworkModule.fetchTHUrlWithNoInternetCallback(
+		NetworkModule.fetchTHUrl(
 			NetConstants.CFD_API.RESET_PASSWORD,
 			{
 				method: 'GET',
@@ -195,7 +195,7 @@ var MeConfigPage = React.createClass({
 	logoutAccountActual:function(){
 		var userData = LogicData.getUserData()
 
-		NetworkModule.fetchTHUrlWithNoInternetCallback(
+		NetworkModule.fetchTHUrl(
 			NetConstants.CFD_API.USER_ACTUAL_LOGOUT,
 			{
 				method: 'GET',

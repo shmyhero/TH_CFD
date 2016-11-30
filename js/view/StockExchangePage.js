@@ -158,12 +158,13 @@ var StockExchangePage = React.createClass({
 		if(navState.url.indexOf('live/oauth/ok')>0){
 			console.log('success login ok');
 			MainPage.ayondoLoginResult(true)
+			this.setState({
+				loggined:true,
+			});
 		}else if(navState.url.indexOf('live/oauth/error')>0){
 			console.log('success login error');
 			MainPage.ayondoLoginResult(false)
 		}
-
-		this.forceUpdate();
 	},
 
 	onNavigationStateChange:function (navState) {

@@ -319,7 +319,7 @@ var MePage = React.createClass({
 
 		// console.log('about cookie 3',navState.url)
 
-		if(navState.url.indexOf('live/oauth/ok')>0){
+		if(navState.url.indexOf('live/loginload')>0){
 			console.log('success login ok');
 			MainPage.ayondoLoginResult(true)
 		}else if(navState.url.indexOf('live/oauth/error')>0){

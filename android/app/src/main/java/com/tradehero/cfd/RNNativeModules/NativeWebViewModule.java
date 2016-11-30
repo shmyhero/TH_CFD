@@ -158,7 +158,7 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
                             webView.getId(),
                             createWebViewEvent(webView, url)));
 
-            if (url.contains("live/oauth/ok")) {
+            if (url.contains("live/loginload")) {
                 //ayondo login success
                 NativeDataModule.passDataToRN(reactContext, NativeActions.ACTION_LOGIN_SUCCESS, "success");
             } else if (url.contains(("live/oauth/error"))) {

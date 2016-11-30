@@ -588,7 +588,7 @@ var StockDetailPage = React.createClass({
 	renderChart:function(){
 		var state = this.state.dataStatus;
 		console.log("RAMBO: chartType = " + this.state.chartType)
-		var opacity = state == 0? 1.0 : 0.3;
+		var opacity = state == 0? 1.0 : 0.0;
 	  // if(state == 0){
 			return(
 				<LineChart style={[styles.lineChart,{opacity:opacity}]}
@@ -767,7 +767,7 @@ var StockDetailPage = React.createClass({
 		// todo
 		console.log("RAMBO my web view state changed: "+navState.url)
 
-		if(navState.url.indexOf('live/oauth/ok')>0 && wattingLogin){
+		if(navState.url.indexOf('live/loginload')>0 && wattingLogin){
 			console.log('RAMBO success login ok');
 			MainPage.ayondoLoginResult(true)
 			wattingLogin = false;

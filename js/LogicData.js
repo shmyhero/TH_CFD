@@ -20,7 +20,9 @@ var tabIndex = 0;
 var lastSuperPriorityHintDate = '';
 var accountState = false;//是否是实盘用户状态 false:模拟盘  true:实盘 (无论是否是 ayondo 登入成功状态)
 var isActualLogin = false;
-var upgradeUrl = null;
+var onlineVersionCode = 0;
+var currentVersionCode = 0;
+var onlineVersionName = null;
 
 var LogicData = {
 
@@ -272,12 +274,28 @@ var LogicData = {
 		return lastSuperPriorityHintDate;
 	},
 
-	setUpgradeUrl(url){
-		upgradeUrl = url;
+	setCurrentVersionCode: function(value){
+		currentVersionCode = value;
 	},
 
-	getUpgradeUrl(){
-		return upgradeUrl;
+	getCurrentVersionCode: function(){
+		return currentVersionCode;
+	},
+
+	setOnlineVersionCode: function(value){
+		onlineVersionCode = value;
+	},
+
+	getOnlineVersionCode: function(){
+		return onlineVersionCode;
+	},
+
+	setOnlineVersionName: function(value){
+		onlineVersionName = value;
+	},
+
+	getOnlineVersionName: function(){
+		return onlineVersionName;
 	},
 };
 

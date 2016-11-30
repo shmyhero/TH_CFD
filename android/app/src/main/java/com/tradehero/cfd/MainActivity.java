@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.20.115:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.125:8081").apply();
 
         super.onCreate(null);
 
@@ -426,6 +426,17 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
                     window.setStatusBarColor(color);
                 }
             });
+        }
+    }
+
+    public void getVersionCode() {
+        try {
+            String pkName = MainActivity.mInstance.getPackageName();
+            Integer versionCode = MainActivity.mInstance.getPackageManager().getPackageInfo(
+                    pkName, 0).versionCode;
+            NativeDataModule.passDataToRN(mReactInstanceManager.getCurrentReactContext(), NativeActions.ACTION_VERSION_CODE, versionCode.toString());
+        }catch (Exception e){
+
         }
     }
 

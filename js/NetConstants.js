@@ -1,4 +1,7 @@
 'use strict'
+import {
+  Platform
+} from 'react-native'
 var VersionConstants = require('./VersionConstants');
 
 const SERVER_MAPPING = {};
@@ -125,7 +128,8 @@ function getCFDAPI(){
 
     SWITCH_TO_LIVE:CFD_API_SERVER + '/api/user/switchTo/Live',//切换到实盘
     SWITCH_TO_DEMO:CFD_API_SERVER + '/api/user/switchTo/Demo',//切换到模拟盘
-    
+
+    LATEST_APP_VERSION: CFD_API_SERVER + '/api/version',
   }
 }
 
@@ -172,3 +176,5 @@ export let PARAMETER_CHARTTYPE_DAY = 'day'
 export let PARAMETER_CHARTTYPE_5_MINUTE = '5m'
 
 export let AUTH_ERROR = '需要OAuth授权'
+
+export let MARKET_URL = Platform.OS === 'android' ? 'market://details?id=com.tradehero.cfd' : '';

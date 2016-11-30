@@ -12,8 +12,8 @@ import {
 	Alert,
 	ScrollView,
 	Linking,
-} from 'react-native';
-
+	Platform,
+} from 'react-native'
 import {
 	packageVersion,
 } from 'react-native-update';
@@ -59,6 +59,9 @@ var MeConfigPage = React.createClass({
 	getInitialState: function() {
 		return {
 			dataSource: ds.cloneWithRows(listRawData),
+			currentVersionCode: LogicData.getCurrentVersionCode(),
+			onlineVersionCode: LogicData.getOnlineVersionCode(),
+			onlineVersionName: LogicData.getOnlineVersionName(),
 		};
 	},
 
@@ -140,10 +143,19 @@ var MeConfigPage = React.createClass({
 	},
 
 	upgradeAppVersion: function(){
-		var url = LogicData.getUpgradeUrl();
-		if(url){
-			Linking.openURL(url)
+		if(this.state.onlineVersionCode > this.state.currentVersionCode){
+			var url = null;
+			if(Platform.OS === 'android'){
+				url = 'market://details?id=com.tradehero.cfd';
+			}
+			else if(Platform.OS === 'ios'){
+				//TODO: add iOS download page here.
+			}
+			if(url){
+				Linking.openURL(url)
+			}
 		}
+
 	},
 
 	logoutAccountActualAlert:function(){
@@ -245,9 +257,9 @@ var MeConfigPage = React.createClass({
 	},
 
 	renderVersion: function(){
-		if(LogicData.getUpgradeUrl()){
+		if(this.state.onlineVersionCode > this.state.currentVersionCode){
 			return (
-				 <Text style={[styles.contentValue, {color:ColorConstants.title_blue()}]}>版本更新</Text>
+				 <Text style={[styles.contentValue, {color:ColorConstants.title_blue()}]}>更新到{this.state.onlineVersionName}版本</Text>
 			)
 		}else{
 			return (

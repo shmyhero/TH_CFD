@@ -199,6 +199,8 @@ var AppNavigator = React.createClass({
 						this.actionForPush(JSON.parse(args[1]));
 					}else if (args[0] == 'isProductServer') {
 						this.setIsProduct(args[1]);
+					}else if (args[0] == 'versionCode'){
+						this.setCurrentVersionCode(args[1]);
 					}
 					// else if (args[0] == 'ayondoLoginSuccess'){
 					// 	this.ayondoLoginResule(true)
@@ -213,6 +215,7 @@ var AppNavigator = React.createClass({
 		);
 
 		NativeDataModule.passDataToNative('isProduct', "");
+		NativeDataModule.passDataToNative('getVersionCode', "");
 
 		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>{
 			console.log("ACCOUNT_STATE_CHANGE");
@@ -221,8 +224,31 @@ var AppNavigator = React.createClass({
 		// var alertData = {'title':'盈交易','msg':'打开苹果股票详情','type':'1','stockName':'英国100', 'stockId':34854};
 		// this.alertForPush(alertData);
 
+		NetworkModule.fetchTHUrl(
+			NetConstants.CFD_API.LATEST_APP_VERSION,
+			{
+				method: 'GET',
+			},
+			(responseJson) => {
+				if(responseJson){
+					if(Platform.OS === 'ios'){
+						LogicData.setOnlineVersionCode(responseJson.iOSLatestInt);
+						LogicData.setOnlineVersionName(responseJson.iOSLatestStr);
+					}else{
+						LogicData.setOnlineVersionCode(responseJson.androidLatestInt);
+						LogicData.setOnlineVersionName(responseJson.androidLatestStr);
+					}
+				}
+			},
+			(result) => {
+				console.log(result.errorMessage)
+			}
+		);
 	},
 
+	setCurrentVersionCode: function(value){
+		LogicData.setCurrentVersionCode(value);
+	},
 
 	componentWillUnmount: function() {
 		this.recevieDataSubscription.remove();
@@ -312,8 +338,6 @@ var AppNavigator = React.createClass({
 				// Alert.alert('提示', '您的应用版本已更新,请前往应用商店下载新的版本', [
 				// 	{text: '确定', onPress: ()=>{info.downloadUrl && Linking.openURL(info.downloadUrl)}},
 				// ]);
-
-				LogicData.setUpgradeUrl(info.downloadUrl);
 			} else if (info.upToDate) {
 				// Do nothing as the version is up-to-date.
 			} else {
@@ -387,7 +411,7 @@ var AppNavigator = React.createClass({
 			// 	if(!data.deepLink){
 			// 		data.deepLink = data.tongrd_value;
 			// 	}
-			// }	
+			// }
 
 			LogicData.setPushData(data);
 

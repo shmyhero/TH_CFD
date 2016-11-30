@@ -326,7 +326,8 @@ var MePage = React.createClass({
 			console.log('success login error');
 			MainPage.ayondoLoginResult(false)
 		}
-
+		
+		this.forceUpdate();
 	},
 
 	////0未注册 1已注册 2审核中 3审核失败
@@ -532,7 +533,7 @@ var MePage = React.createClass({
 				return (
 					null
 				);
-			}			
+			}
 			else{
 				return(
 					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>

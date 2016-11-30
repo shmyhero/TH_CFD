@@ -163,6 +163,7 @@ var StockExchangePage = React.createClass({
 			MainPage.ayondoLoginResult(false)
 		}
 
+		this.forceUpdate();
 	},
 
 	onNavigationStateChange:function (navState) {

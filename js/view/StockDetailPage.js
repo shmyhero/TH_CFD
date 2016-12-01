@@ -50,6 +50,7 @@ var didFocusSubscription = null;
 var updateStockInfoTimer = null;
 var flashButtonTimer = null;
 var wattingLogin = false;
+var loadStockInfoSuccess = false;
 
 var StockDetailPage = React.createClass({
 	mixins: [TimerMixin],
@@ -119,7 +120,7 @@ var StockDetailPage = React.createClass({
 	onDidFocus: function(event) {
         if (MainPage.STOCK_DETAIL_ROUTE === event.data.route.name) {
             this.loadStockInfo()
-			NetworkModule.loadUserBalance(false, this.updateUserBalance)
+						NetworkModule.loadUserBalance(false, this.updateUserBalance)
         }
 	},
 
@@ -138,13 +139,17 @@ var StockDetailPage = React.createClass({
 	},
 
 	loadStockInfo: function() {
+	  console.log('StockDetailPage loadStockInfo');
+		loadStockInfoSuccess = false
 		var url = NetConstants.CFD_API.GET_STOCK_DETAIL_API
 		if(LogicData.getAccountState()){
 		 url = NetConstants.CFD_API.GET_STOCK_DETAIL_LIVE_API
 		 console.log('live', url );
 	 	}
 		url = url.replace(/<stockCode>/, this.props.stockCode)
-
+		this.setState({
+			dataStatus :2,
+		})
 		NetworkModule.fetchTHUrl(
 			url,
 			{
@@ -171,6 +176,7 @@ var StockDetailPage = React.createClass({
 						WebSocketModule.registerInterestedStocks(previousInterestedStocks)
 					}
 				}
+				loadStockInfoSuccess = true
 				console.log("loadStockInfo: " + JSON.stringify(responseJson))
 				this.setState({
 					stockInfo: responseJson,
@@ -406,6 +412,7 @@ var StockDetailPage = React.createClass({
 	},
 
 	pressChartHeaderTab: function(type) {
+		console.log('StockDetailPage: pressChartHeaderTab ' + type);
 		switch(type){
 			case NetConstants.PARAMETER_CHARTTYPE_TODAY:
 				TalkingdataModule.trackEvent(TalkingdataModule.STOCK_DETAIL_TAB_TODAY);
@@ -426,8 +433,8 @@ var StockDetailPage = React.createClass({
 
 		this.setState({
 			chartType: type
-		})
-		this.loadStockPriceToday(true, type, this.state.stockInfo)
+		},loadStockInfoSuccess?this.loadStockPriceToday(true, type, this.state.stockInfo):this.loadStockInfo())
+		// this.loadStockPriceToday(true, type, this.state.stockInfo)
 	},
 
 	renderStockMaxPriceInfo: function(maxPrice, maxPercentage) {
@@ -559,7 +566,13 @@ var StockDetailPage = React.createClass({
 	},
 
 	dataRefreshClicked:function(){
-		this.pressChartHeaderTab(this.state.chartType)
+
+		if(!loadStockInfoSuccess){
+			this.loadStockInfo();
+		}else{
+			this.loadStockPriceToday(false, this.state.chartType, this.state.stockInfo)
+		}
+
 	},
 
 	_renderActivityIndicator() {
@@ -588,7 +601,7 @@ var StockDetailPage = React.createClass({
 	renderChart:function(){
 		var state = this.state.dataStatus;
 		console.log("RAMBO: chartType = " + this.state.chartType)
-		var opacity = state == 0? 1.0 : 0.0;
+		var opacity = state == 0? 1.0 : 0.01;
 	  // if(state == 0){
 			return(
 				<LineChart style={[styles.lineChart,{opacity:opacity}]}

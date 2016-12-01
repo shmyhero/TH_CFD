@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.20.125:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.123:8081").apply();
 
         super.onCreate(null);
 

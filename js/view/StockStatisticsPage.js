@@ -24,6 +24,8 @@ var {height, width} = Dimensions.get('window');
 var StockStatisticsPage = React.createClass({
 	mixins: [TimerMixin],
 
+	lastStatisticsInfo: null,
+
 	getInitialState: function() {
 		var balanceData = LogicData.getBalanceData()
 		return {
@@ -53,6 +55,8 @@ var StockStatisticsPage = React.createClass({
 			isClear:false,
 		})
 
+		this.lastStatisticsInfo = null;
+
 		var userData = LogicData.getUserData()
 
 		var url = NetConstants.CFD_API.GET_USER_STATISTICS_API
@@ -71,7 +75,7 @@ var StockStatisticsPage = React.createClass({
 				cache: 'offline',
 			},
 			(responseJson) => {
-				this.playStatisticsAnim(responseJson)
+				this.playStatisticsAnim(responseJson);
 			},
 			(result) => {
 				if(NetConstants.AUTH_ERROR === result.errorMessage){
@@ -84,34 +88,82 @@ var StockStatisticsPage = React.createClass({
 	},
 
 	playStatisticsAnim: function(statisticsInfo) {
-		var originalStatisticsInfo = []
-		$.extend(true, originalStatisticsInfo, statisticsInfo)	// deep copy
-		this.setState({
-			statisticsBarInfo: statisticsInfo,
-			statisticsSumInfo: originalStatisticsInfo,
-			barAnimPlayed: true,
-		})
-		var maxBarSize = 1
-		for (var i = 0; i < statisticsInfo.length; i++) {
-			var barContent = statisticsInfo[i]
-			if (maxBarSize < barContent.invest + barContent.pl) {
-				maxBarSize = barContent.invest + barContent.pl
+		console.log("statisticsInfo " + JSON.stringify(statisticsInfo));
+		var hasDifference = false;
+		if(this.lastStatisticsInfo != null){
+			for(var i = 0; i < statisticsInfo.length; i++){
+				if(this.lastStatisticsInfo[i].pl != statisticsInfo[i].pl){
+
+					console.log("lastStatisticsInfo[i]" + JSON.stringify(this.lastStatisticsInfo[i]))
+					console.log("statisticsInfo[i]" + JSON.stringify(statisticsInfo[i]))
+					hasDifference = true;
+					break;
+				}
 			}
-			barContent.pl = 0
+		}else{
+			console.log("lastStatisticsInfo is null")
+			hasDifference = true;
 		}
-		this.setState({
-			maxBarSize: maxBarSize,
-		})
-		this.setTimeout(
-			() => {
-				LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-				this.setState({
-					statisticsBarInfo: originalStatisticsInfo,
-					barAnimPlayed: true,
-				})
-			 },
-			1000
-		);
+
+		if(hasDifference){
+
+			var originalStatisticsInfo = []
+			$.extend(true, originalStatisticsInfo, statisticsInfo)	// deep copy
+
+			this.lastStatisticsInfo = originalStatisticsInfo;
+
+			var maxBarSize = 1
+			for (var i = 0; i < statisticsInfo.length; i++) {
+				var barContent = statisticsInfo[i]
+				if (maxBarSize < barContent.invest + barContent.pl) {
+					maxBarSize = barContent.invest + barContent.pl
+				}
+				barContent.pl = 0
+			}
+
+			this.setState({
+				maxBarSize: maxBarSize,
+				statisticsBarInfo: statisticsInfo,
+				statisticsSumInfo: originalStatisticsInfo,
+				barAnimPlayed: true,
+			}, ()=>{
+				this.setTimeout(
+					() => {
+						if(LogicData.getTabIndex() == 2){
+							console.log("LogicData.getTabIndex(): " + LogicData.getTabIndex());
+							//Make sure user still stays in current tab.
+
+							//BUGFIX:
+							//There's a bug that if user switches tab during the animation period, the whole screen will
+							//be refreshed with this animation which seems wierld.
+							//The workaround is to use a shorter duration so user is hard to
+							//click other buttons when animation is running. It doesn't really
+							//fix the bug, but makes it harder to be reproduced.							
+							var CustomLayoutAnimation = {
+						    duration: 100,
+						    update: {
+						      type: LayoutAnimation.Types.easeInEaseOut,
+						    },
+						  };
+
+							console.log("anim started");
+							LayoutAnimation.configureNext(CustomLayoutAnimation, ()=>{
+								console.log("anim ended");
+							}, ()=>{
+								console.log("anim error");
+							});
+							this.setState({
+								statisticsBarInfo: originalStatisticsInfo,
+								barAnimPlayed: true,
+							})
+						}
+					},
+					1000
+				);
+			});
+		}
+
+
 	},
 
 	renderBars: function() {

@@ -144,20 +144,24 @@ var StockOpenPositionPage = React.createClass({
 					}
 				}
 
-				if (this.state.selectedRow >= responseJson.length) {
-					this.setState ({
-						stockInfoRowData: responseJson,
-						stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
-						selectedRow: -1,
-						selectedSubItem: 0,
-					})
-				}
-				else {
-					this.setState({
-						stockInfoRowData: responseJson,
-						stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
-					})
-				}
+				//Fix the issue that the listview content may not be shown when the data
+				//is refreshed too quickily by set a very short timeout.
+				setTimeout(()=>{
+					if (this.state.selectedRow >= responseJson.length) {
+						this.setState ({
+							stockInfoRowData: responseJson,
+							stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
+							selectedRow: -1,
+							selectedSubItem: 0,
+						});
+					}
+					else {
+						this.setState({
+							stockInfoRowData: responseJson,
+							stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
+						});
+					}
+				}, 1);
 
 				for (var i = 0; i < responseJson.length; i++) {
 					var stockId = responseJson[i].security.id

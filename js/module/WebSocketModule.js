@@ -34,17 +34,19 @@ const DISCONNECTED = "disconnected";
 
 var wsErrorCallback = (errorMessage) =>
 {
-	console.log('web socket error: ' + errorMessage)
-	socketConnected = false;
+	console.log('web socket error: ' + errorMessage);
 	if (AppStateModule.getAppState() === AppStateModule.STATE_ACTIVE && webSocketConnection && webSocketConnection.state == 4) {
+		socketConnected = false;
 		EventCenter.emitNetworkConnectionChangedEvent();
 		if(networkAvailable){
+			console.log('web socket ready to restart');
 			setTimeout(()=>{
 				if (webSocketConnection && webSocketConnection.state == 4){
 					start();
 				}
 			}, 5000);
 		}else{
+			console.log('web socket no network connection.');
 			//Do nothing until the device is online.
 		}
 	}
@@ -63,6 +65,8 @@ export function isConnected(){
 
 export function start() {
 	stop();
+
+	console.log('start web socket');
 
 	NetInfo.addEventListener(
 	  'change',
@@ -119,7 +123,7 @@ export function start() {
 	});
 
 	webSocketConnection.error(function (error) {
-		wsErrorCallback('网络已断开。')
+		wsErrorCallback('网络错误。' + error)
 	});
 
 }
@@ -151,7 +155,6 @@ function handleConnectivityChange(reach){
     }
   }
 
-	console.log("origionNetworkAvailable " + origionNetworkAvailable + ", networkAvailable " + networkAvailable)
 	if(origionNetworkAvailable !== networkAvailable){
 
 		if (networkAvailable === CONNECTED && webSocketConnection && webSocketConnection.state == 4){
@@ -169,9 +172,11 @@ function startWebSocket(webSocketConnection){
 	webSocketConnection.start()
 		.done(() => {
 			socketConnected = true;
+			networkAvailable = true;
+
 			EventCenter.emitNetworkConnectionChangedEvent();
 
-			console.log('Now connected, connection ID=' + webSocketConnection.id);
+			console.log('WebSocket now connected, connection ID=' + webSocketConnection.id);
 			registerInterestedStocks(previousInterestedStocks)
 
 			var userData = LogicData.getUserData()
@@ -185,6 +190,7 @@ function startWebSocket(webSocketConnection){
 }
 
 export function stop() {
+	console.log("stop websocket")
 	if (webSocketConnection !== null) {
 		webSocketConnection.stop()
 		webSocketConnection = null

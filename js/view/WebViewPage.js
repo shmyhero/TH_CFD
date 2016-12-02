@@ -24,6 +24,8 @@ var ColorConstants = require('../ColorConstants');
 
 const NETWORK_ERROR_INDICATOR = "networkErrorIndicator";
 var WebViewPage = React.createClass({
+	isPageLoaded: false,
+
 	propTypes: {
 		url: React.PropTypes.string,
 		shareID: React.PropTypes.number,
@@ -56,7 +58,7 @@ var WebViewPage = React.createClass({
 
 	getInitialState: function() {
 		return {
-			isNetConnected: true,
+			isNetConnected: false,
 		};
 	},
 
@@ -100,9 +102,12 @@ var WebViewPage = React.createClass({
   },
 
 	_handleConnectivityChange: function(isConnected) {
-		this.setState({isNetConnected: isConnected})
-		if (isConnected) {
-			this.refs[WEBVIEW_REF].reload();
+		console.log("isConnected? " + isConnected);
+		if (!this.state.isLoaded) {
+			this.setState({isNetConnected: isConnected});
+			if(isConnected){
+				this.refs[WEBVIEW_REF].reload();
+			}
 		}
 	},
 
@@ -184,7 +189,10 @@ var WebViewPage = React.createClass({
 					onNavigationStateChange={this.onNavigationStateChange}
 					onLoadEnd={(content)=>this.webViewLoaded(content)}
 					onMessage={(message)=>console.log("onMessage " +message)}
-					onError={()=>this._handleConnectivityChange(false)}
+					onError={(error)=>{
+						console.log("webview error" + error);
+						this._handleConnectivityChange(false)
+					}}
 					decelerationRate="normal"
 					source={{uri: this.props.url}}
 					renderLoading={()=>this.renderLoading()}

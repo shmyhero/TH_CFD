@@ -73,7 +73,7 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 
 					if(params.cache === "offline"){
 						var userRelated = false;
-						if(params.Authorization){
+						if(params.headers && params.headers.Authorization){
 							userRelated = true;
 						}
 						CacheModule.storeCacheForUrl(url, JSON.stringify(responseJson), userRelated)

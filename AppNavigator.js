@@ -35,6 +35,7 @@ var UIManager = require('UIManager');
 
 var recevieDataSubscription = null
 var didAccountChangeSubscription = null;
+var networkConnectionChangedSubscription = null;
 var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 var {EventCenter, EventConst} = require('./js/EventCenter');
 
@@ -219,6 +220,11 @@ var AppNavigator = React.createClass({
 
 		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>{
 			console.log("ACCOUNT_STATE_CHANGE");
+			NetworkModule.loadUserBalance(true);
+		});
+
+		networkConnectionChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.NETWORK_CONNECTION_CHANGED, () => {
+			console.log("NETWORK_STATE_CHANGE");
 			NetworkModule.loadUserBalance(true);
 		});
 		// var alertData = {'title':'盈交易','msg':'打开苹果股票详情','type':'1','stockName':'英国100', 'stockId':34854};

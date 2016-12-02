@@ -238,21 +238,20 @@ var HomePage = React.createClass({
 		didTabSelectSubscription = EventCenter.getEventEmitter().
 		addListener(EventConst.HOME_TAB_RESS_EVENT, this.onTabChanged);
 		networkConnectionChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.NETWORK_CONNECTION_CHANGED, () => {
-
-					console.log("onConnectionStateChanged listener")
 			this.onConnectionStateChanged();
 		});
 
-		console.log("onConnectionStateChanged")
 		this.onConnectionStateChanged();
 	},
 
 	onConnectionStateChanged: function(){
 		var isConnected = WebSocketModule.isConnected();
-			console.log("onConnectionStateChanged " + isConnected)
 		this.setState({
 			connected: isConnected
 		})
+		if(LogicData.getTabIndex() == 0){
+			this.reloadPage();
+		}
 	},
 
 	componentWillUnmount: function() {

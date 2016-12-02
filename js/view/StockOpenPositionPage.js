@@ -33,6 +33,7 @@ var StockTransactionInfoModal = require('./StockTransactionInfoModal')
 var TimerMixin = require('react-timer-mixin');
 var StorageModule = require('../module/StorageModule');
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
+var {EventCenter, EventConst} = require('../EventCenter');
 
 var {height, width} = Dimensions.get('window');
 var tabData = [
@@ -56,6 +57,9 @@ var stopProfitUpdated = false
 var stopLossUpdated = false
 var MAX_PERCENT = 90
 var isWaiting = false
+
+var networkConnectionChangedSubscription = null;
+var accountLogoutEventSubscription = null;
 
 var StockOpenPositionPage = React.createClass({
 
@@ -81,7 +85,31 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	componentDidMount: function() {
-		this.loadOpenPositionInfo()
+		this.loadOpenPositionInfo();
+
+		networkConnectionChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.NETWORK_CONNECTION_CHANGED, () => {
+			this.onConnectionStateChanged();
+		});
+
+		accountLogoutEventSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGOUT, () => {
+			this.clearViews();
+		});
+	},
+
+	onConnectionStateChanged: function(){
+		if(LogicData.getTabIndex() == 2 && WebSocketModule.isConnected()){
+			//Refresh current page data.
+			var userData = LogicData.getUserData();
+			var notLogin = Object.keys(userData).length === 0;
+			if(!notLogin){
+				this.loadOpenPositionInfo();
+			}
+		}
+	},
+
+	componentWillUnmount: function(){
+		networkConnectionChangedSubscription && networkConnectionChangedSubscription.remove();
+		accountLogoutEventSubscription && accountLogoutEventSubscription.remove();
 	},
 
 	onEndReached: function() {
@@ -94,7 +122,9 @@ var StockOpenPositionPage = React.createClass({
 
 	clearViews:function(){
 		this.setState({
-			isClear:true
+			isClear:true,
+			contentLoaded: false,
+			isRefreshing: false,
 		})
 	},
 

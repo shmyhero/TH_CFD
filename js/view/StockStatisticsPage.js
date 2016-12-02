@@ -17,9 +17,14 @@ var LogicData = require('../LogicData')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var ColorConstants = require('../ColorConstants')
-var UIConstants = require('../UIConstants')
+var UIConstants = require('../UIConstants');
+var WebSocketModule = require('../module/WebSocketModule');
+var {EventCenter, EventConst} = require('../EventCenter');
 
 var {height, width} = Dimensions.get('window');
+
+var networkConnectionChangedSubscription = null;
+var accountLogoutEventSubscription = null;
 
 var StockStatisticsPage = React.createClass({
 	mixins: [TimerMixin],
@@ -40,12 +45,46 @@ var StockStatisticsPage = React.createClass({
 
 	clearViews:function(){
 		this.setState({
-			isClear:true
+			statisticsBarInfo: [],
+			statisticsSumInfo: [],
+			maxBarSize: 1,
+			barAnimPlayed: false,
+			balanceData: null,
+			isClear:true,
 		})
 	},
 
 	tabPressed: function(index) {
 		NetworkModule.loadUserBalance(true, (responseJson)=>{this.setState({balanceData: responseJson,})})
+	},
+
+	componentDidMount: function(){
+		networkConnectionChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.NETWORK_CONNECTION_CHANGED, () => {
+			this.onConnectionStateChanged();
+		});
+
+		accountLogoutEventSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGOUT, () => {
+			this.clearViews();
+		});
+	},
+
+	componentWillUnmount: function(){
+		networkConnectionChangedSubscription && networkConnectionChangedSubscription.remove();
+		accountLogoutEventSubscription && accountLogoutEventSubscription.remove();
+	},
+
+	onConnectionStateChanged: function(){
+		if(LogicData.getTabIndex() == 2 && WebSocketModule.isConnected()){
+			var userData = LogicData.getUserData();
+			var notLogin = Object.keys(userData).length === 0;
+			if(!notLogin){
+
+				NetworkModule.loadUserBalance(true, (responseJson)=>{
+					this.setState({balanceData: responseJson,});
+					this.playStartAnim();
+				})
+			}
+		}
 	},
 
 	playStartAnim: function() {
@@ -138,7 +177,7 @@ var StockStatisticsPage = React.createClass({
 							//be refreshed with this animation which seems wierld.
 							//The workaround is to use a shorter duration so user is hard to
 							//click other buttons when animation is running. It doesn't really
-							//fix the bug, but makes it harder to be reproduced.							
+							//fix the bug, but makes it harder to be reproduced.
 							var CustomLayoutAnimation = {
 						    duration: 100,
 						    update: {

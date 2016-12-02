@@ -24,11 +24,13 @@ var NetworkModule = require('../module/NetworkModule')
 var MainPage = require('./MainPage')
 var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
+var WebSocketModule = require('../module/WebSocketModule');
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var didFocusSubscription = null;
 var recevieDataSubscription = null;
 var didAccountChangeSubscription = null;
+var networkConnectionChangedSubscription = null;
 
 var stockNameFontSize = 18;
 
@@ -267,6 +269,10 @@ var StockListPage = React.createClass({
 		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>{
 			console.log("ACCOUNT_STATE_CHANGE");
 			this.accountStateChange()});
+
+		networkConnectionChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.NETWORK_CONNECTION_CHANGED, () => {
+			this.onConnectionStateChanged();
+		});
 	},
 
 	accountStateChange: function(){
@@ -281,6 +287,12 @@ var StockListPage = React.createClass({
 		}
 	},
 
+	onConnectionStateChanged: function(){
+		if(LogicData.getTabIndex() == 1 && WebSocketModule.isConnected()){
+			this.refreshData(true);
+		}
+	},
+
 	componentWillUnmount: function() {
 		if (this.props.isOwnStockPage) {
 			this.didFocusSubscription.remove();
@@ -288,6 +300,7 @@ var StockListPage = React.createClass({
 		}else{
 			didAccountChangeSubscription && didAccountChangeSubscription.remove();
 		}
+		networkConnectionChangedSubscription && networkConnectionChangedSubscription.remove();
 	},
 
 	onDidFocus: function(event) {

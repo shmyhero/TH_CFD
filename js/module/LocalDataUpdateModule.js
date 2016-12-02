@@ -13,6 +13,7 @@ var WebSocketModule = require('./WebSocketModule')
 //var TongDaoModule = require('./TongDaoModule');
 var OpenAccountRoutes = require('../view/openAccount/OpenAccountRoutes');
 var CacheModule = require('./CacheModule');
+var {EventCenter, EventConst} = require('../EventCenter');
 
 export function updateMeData(userData, onSuccess){
 	NetworkModule.fetchTHUrl(
@@ -58,6 +59,7 @@ export function removeUserData(){
   };
   StorageModule.setLastSuperPriorityHintData(JSON.stringify(data));
 
+  EventCenter.emitAccountLogoutEvent();
   //TongDaoModule.setUserId("");
 
   //Restart the web socket.

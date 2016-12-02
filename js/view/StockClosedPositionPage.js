@@ -22,6 +22,7 @@ var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
 var TimerMixin = require('react-timer-mixin');
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
+var {EventCenter, EventConst} = require('../EventCenter');
 
 var {height, width} = Dimensions.get('window');
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -29,6 +30,9 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var extendHeight = 204
 var rowHeight = 0
 var stockNameFontSize = Math.round(17*width/375.0)
+
+var networkConnectionChangedSubscription = null;
+var accountLogoutEventSubscription = null;
 
 var StockClosedPositionPage = React.createClass({
 	mixins: [TimerMixin],
@@ -45,8 +49,32 @@ var StockClosedPositionPage = React.createClass({
 	},
 
 	componentDidMount: function() {
-		this.loadClosedPositionInfo()
+		this.loadClosedPositionInfo();
+
+		networkConnectionChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.NETWORK_CONNECTION_CHANGED, () => {
+			this.onConnectionStateChanged();
+		});
+
+		accountLogoutEventSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGOUT, () => {
+			this.clearViews();
+		});
 	},
+
+	onConnectionStateChanged: function(){
+		if(LogicData.getTabIndex() == 2 && !this.state.contentLoaded && !this.state.isRefreshing && WebSocketModule.isConnected()){
+			var userData = LogicData.getUserData();
+			var notLogin = Object.keys(userData).length === 0;
+			if(!notLogin){
+				this.loadClosedPositionInfo();
+			}
+		}
+	},
+
+	componentWillUnmount: function(){
+		networkConnectionChangedSubscription && networkConnectionChangedSubscription.remove();
+		accountLogoutEventSubscription && accountLogoutEventSubscription.remove();
+	},
+
 
 	tabPressed: function(index) {
 		this.loadClosedPositionInfo()
@@ -58,7 +86,9 @@ var StockClosedPositionPage = React.createClass({
 
 	clearViews:function(){
 		this.setState({
-			isClear:true
+			isClear:true,			
+			contentLoaded: false,
+			isRefreshing: false,
 		})
 	},
 

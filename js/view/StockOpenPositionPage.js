@@ -60,6 +60,7 @@ var isWaiting = false
 
 var networkConnectionChangedSubscription = null;
 var accountLogoutEventSubscription = null;
+var accountStateChangedSubscription = null;
 
 var StockOpenPositionPage = React.createClass({
 
@@ -91,6 +92,10 @@ var StockOpenPositionPage = React.createClass({
 			this.onConnectionStateChanged();
 		});
 
+		accountStateChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, () => {
+			this.clearViews();
+		});
+
 		accountLogoutEventSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGOUT, () => {
 			this.clearViews();
 		});
@@ -109,6 +114,7 @@ var StockOpenPositionPage = React.createClass({
 
 	componentWillUnmount: function(){
 		networkConnectionChangedSubscription && networkConnectionChangedSubscription.remove();
+		accountStateChangedSubscription && accountStateChangedSubscription.remove();
 		accountLogoutEventSubscription && accountLogoutEventSubscription.remove();
 	},
 
@@ -123,6 +129,18 @@ var StockOpenPositionPage = React.createClass({
 	clearViews:function(){
 		this.setState({
 			isClear:true,
+
+			stockInfo: ds.cloneWithRows([]),
+			stockInfoRowData: [],
+			selectedRow: -1,
+			selectedSubItem: 0,
+			stockDetailInfo: [],
+			showExchangeDoubleCheck: false,
+			chartType: NetConstants.PARAMETER_CHARTTYPE_TODAY,
+			stopProfitSwitchIsOn: false,
+			stopLossSwitchIsOn: false,
+			profitLossUpdated: false,
+			profitLossConfirmed: false,
 			contentLoaded: false,
 			isRefreshing: false,
 		})

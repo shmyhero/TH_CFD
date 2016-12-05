@@ -157,7 +157,7 @@ var OAPersonalInfoPage = React.createClass({
 						})
 					}
 				},
-				(error) => {
+				(result) => {
 					this.setState({
 						error: DEFAULT_ERROR,
 						validateInProgress: false,

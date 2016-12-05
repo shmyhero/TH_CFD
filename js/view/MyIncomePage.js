@@ -31,7 +31,7 @@ var DOWN_INPUT_REF = "downInput"
 var listRawData = [
 {'type':'header'},
 {'type':'normal','title':'签到交易金(元)', 'subtype': 'totalDailySign'},
-{'type':'normal','title':'模拟交易金(元)', 'subtype': 'demoTransaction'},
+{'type':'normal','title':'模拟下单交易金(元)', 'subtype': 'demoTransaction'},
 {'type':'normal','title':'注册交易金(元)', 'subtype': 'demoRegister'},
 {'type':'normal','title':'卡片交易金(元)', 'subtype': 'totalCard'}
 ]
@@ -42,7 +42,8 @@ var MyIncomePage = React.createClass({
     "盈交易平台交易金等同于现金，用户获取的交易金，开通实盘账户后，会转入现金账户；",
     "利用交易金获取的投资收益直接归用户所有；",
     "用户累计交易金额达到5000元后，赠送的交易金本金即可提现；",
-    "盈交易交易金可以通过签到、模拟交易、实盘交易等多种方式获取。",
+    "盈交易交易金可以通过签到、模拟下单、实盘交易等多种方式获取；",
+    "用户进行模拟下单交易每日可获得0.5元交易金。",
   ],
 
 	getInitialState: function() {

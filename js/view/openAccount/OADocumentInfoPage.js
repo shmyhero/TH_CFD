@@ -112,28 +112,28 @@ var OADocumentInfoPage = React.createClass({
 							OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
 						}
 					},
-					(errorMessage) => {
-						console.log("api Error: " + errorMessage);
+					(errorResult) => {
+						console.log("api Error: " + errorResult.errorMessage);
 						this.setState({
 							enabled: true,
 							validateInProgress: false,
 						});
-						this.parseError(errorMessage);
+						this.parseError(errorResult.errorMessage);
 					});
 			},
-			(errorMessage) => {
-				console.log("api Error: " + errorMessage);
+			(errorResult) => {
+				console.log("api Error: " + errorResult.errorMessage);
 				this.setState({
 					enabled: true,
 					validateInProgress: false,
 				});
-				if(errorMessage.includes("服务器繁忙")){
+				if(errorResult.errorMessage.includes("服务器繁忙")){
 					this.setState({
-						error: errorMessage
+						error: errorResult.errorMessage
 					});
 				} else {
 					var errorList = [];
-					errorList.push({"key": "username", "error": errorMessage});
+					errorList.push({"key": "username", "error": errorResult.errorMessage});
 					OpenAccountRoutes.showError(errorList, this.props.navigator, this.props.onPop);
 				}
 			}

@@ -24,6 +24,7 @@ var {EventCenter, EventConst} = require('../EventCenter');
 var {height, width} = Dimensions.get('window');
 
 var networkConnectionChangedSubscription = null;
+var accountStateChangedSubscription = null;
 var accountLogoutEventSubscription = null;
 
 var StockStatisticsPage = React.createClass({
@@ -63,6 +64,10 @@ var StockStatisticsPage = React.createClass({
 			this.onConnectionStateChanged();
 		});
 
+		accountStateChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, () => {
+			this.clearViews();
+		});
+
 		accountLogoutEventSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGOUT, () => {
 			this.clearViews();
 		});
@@ -70,6 +75,7 @@ var StockStatisticsPage = React.createClass({
 
 	componentWillUnmount: function(){
 		networkConnectionChangedSubscription && networkConnectionChangedSubscription.remove();
+		accountStateChangedSubscription && accountStateChangedSubscription.remove();
 		accountLogoutEventSubscription && accountLogoutEventSubscription.remove();
 	},
 

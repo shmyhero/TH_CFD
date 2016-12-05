@@ -33,6 +33,7 @@ var stockNameFontSize = Math.round(17*width/375.0)
 
 var networkConnectionChangedSubscription = null;
 var accountLogoutEventSubscription = null;
+var accountStateChangedSubscription = null;
 
 var StockClosedPositionPage = React.createClass({
 	mixins: [TimerMixin],
@@ -55,6 +56,10 @@ var StockClosedPositionPage = React.createClass({
 			this.onConnectionStateChanged();
 		});
 
+		accountStateChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, () => {
+			this.clearViews();
+		});
+
 		accountLogoutEventSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGOUT, () => {
 			this.clearViews();
 		});
@@ -72,6 +77,7 @@ var StockClosedPositionPage = React.createClass({
 
 	componentWillUnmount: function(){
 		networkConnectionChangedSubscription && networkConnectionChangedSubscription.remove();
+		accountStateChangedSubscription && accountStateChangedSubscription.remove();
 		accountLogoutEventSubscription && accountLogoutEventSubscription.remove();
 	},
 
@@ -86,9 +92,12 @@ var StockClosedPositionPage = React.createClass({
 
 	clearViews:function(){
 		this.setState({
-			isClear:true,			
+			isClear:true,
 			contentLoaded: false,
 			isRefreshing: false,
+			stockInfoRowData: [],
+			stockInfo: ds.cloneWithRows([]),
+			selectedRow: -1,
 		})
 	},
 

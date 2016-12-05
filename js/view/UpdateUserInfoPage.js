@@ -106,8 +106,8 @@ var UpdateUserInfoPage = React.createClass({
 				this.verifyNickName(originalName)
 
 			}.bind(this),
-			function(errorMessage) {
-				Alert.alert('提示',errorMessage);
+			function(result) {
+				Alert.alert('提示',result.errorMessage);
 			}
 		)
 	},
@@ -154,8 +154,8 @@ var UpdateUserInfoPage = React.createClass({
 					this.backButtonPressed();
 				}.bind(this));
 			}.bind(this),
-			function(errorMessage) {
-				Alert.alert('提示',errorMessage);
+			function(result) {
+				Alert.alert('提示',result.errorMessage);
 			}
 		)
 	},

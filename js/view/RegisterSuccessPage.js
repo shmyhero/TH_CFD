@@ -101,9 +101,6 @@ var RegisterSuccessPage = React.createClass({
 		  			description: responseJson.text,
 		  		}
 		      this.props.shareFunction(data);
-				},
-				(errorMessage) => {
-					// Ignore it.
 				}
 			);
     }

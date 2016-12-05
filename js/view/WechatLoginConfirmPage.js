@@ -22,7 +22,7 @@ var WechatLoginConfirmPage = React.createClass({
 		var userData = LogicData.getUserData()
 
 		NetworkModule.fetchTHUrl(
-			NetConstants.CFD_API.GET_USER_INFO_API, 
+			NetConstants.CFD_API.GET_USER_INFO_API,
 			{
 				method: 'GET',
 				headers: {
@@ -34,8 +34,8 @@ var WechatLoginConfirmPage = React.createClass({
 					nickName: responseJson.nickname
 				});
 			}.bind(this),
-			function(errorMessage) {
-				Alert.alert('提示',errorMessage);
+			function(result) {
+				Alert.alert('提示', result.errorMessage);
 			}
 		)
 	},

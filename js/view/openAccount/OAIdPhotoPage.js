@@ -194,11 +194,11 @@ var OAIdPhotoPage = React.createClass({
 							});
 						}
 					},
-					(error) => {
+					(result) => {
 						this.setState({
 							nextEnabled: true,
 							validateInProgress: false,
-							error: error
+							error: result.errorMessage
 						});
 					}
 				)

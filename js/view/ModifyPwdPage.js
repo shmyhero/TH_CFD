@@ -220,8 +220,8 @@ var ModifyPwdPage = React.createClass({
 			(responseJson) => {
 				// Nothing to do.
 			},
-			(errorMessage) => {
-				Alert.alert('提示',errorMessage);
+			(result) => {
+				Alert.alert('提示', result.errorMessage);
 			}
 		)
 

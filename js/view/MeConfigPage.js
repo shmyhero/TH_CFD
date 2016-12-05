@@ -122,10 +122,10 @@ var MeConfigPage = React.createClass({
 			 console.log('忘记密码。。。邮件发送成功');
 			 Toast.show("邮件发送成功");
 			}.bind(this),
-			function(errorMessage) {
+			function(result) {
 				console.log('登出失败 1');
 			}.bind(this),
-			function(errorMessage) {
+			function(result) {
 				console.log('登出失败 2');
 			}.bind(this)
 		)
@@ -207,11 +207,11 @@ var MeConfigPage = React.createClass({
 			 this.logoutAccountActualNative()
 			 console.log('登出成功。。。');
 			}.bind(this),
-			function(errorMessage) {
+			function(result) {
 				this.logoutAccountActualNative()
 				console.log('登出失败 1');
 			}.bind(this),
-			function(errorMessage) {
+			function(result) {
 			  this.logoutAccountActualNative()
 				console.log('登出失败 2');
 			}.bind(this)

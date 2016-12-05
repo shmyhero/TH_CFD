@@ -177,6 +177,8 @@ var StockListPage = React.createClass({
 									isRefreshing: false,
 								})
 								this.refs[NETWORK_ERROR_INDICATOR] && this.refs[NETWORK_ERROR_INDICATOR].stopRefresh();
+							}else{
+								console.log("Stock list is using old cached data.");
 							}
 							//Alert.alert('', result.errorMessage);
 						}

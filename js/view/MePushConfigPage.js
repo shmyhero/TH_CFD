@@ -95,8 +95,8 @@ var MePushConfigPage = React.createClass({
 						dataSource: ds.cloneWithRows(listRawData),
 					});
 				}.bind(this),
-				function(errorMessage) {
-					Alert.alert('提示',errorMessage);
+				function(result) {
+					Alert.alert('提示', result.errorMessage);
 				}
 			)
 		}
@@ -121,8 +121,8 @@ var MePushConfigPage = React.createClass({
 				function(responseJson) {
 					//Do nothing?
 				}.bind(this),
-				function(errorMessage) {
-					Alert.alert('提示',errorMessage);
+				function(result) {
+					Alert.alert('提示', result.errorMessage);
 				}
 			)
 		}

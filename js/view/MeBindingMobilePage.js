@@ -112,8 +112,8 @@ var MeBindingMobilePage = React.createClass({
 			function(responseJson) {
 				// Nothing to do.
 			}.bind(this),
-			function(errorMessage) {
-				Alert.alert('提示',errorMessage);
+			function(result) {
+				Alert.alert('提示', result.errorMessage);
 			}
 		)
 
@@ -178,11 +178,11 @@ var MeBindingMobilePage = React.createClass({
 					this.props.navigator.pop();
 				});
 			},
-			(errorMessage) => {
+			(result) => {
 				this.setState({
 					phoneLoginButtonEnabled: true
 				})
-				Alert.alert('提示',errorMessage);
+				Alert.alert('提示', result.errorMessage);
 			}
 		)
 	},

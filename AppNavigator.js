@@ -302,7 +302,7 @@ var AppNavigator = React.createClass({
 				//  Alert.alert('set deviceToken success auth： ' + alertData.deviceToken +" * " +alertData.deviceType);
 				 console.log('set deviceToken success auth： ' + alertData.deviceToken +" * " +alertData.deviceType);
 			 },
-			 (errorMessage) => {
+			 (result) => {
 				 console.log('errorMessage');
 			 }
 		 )
@@ -321,7 +321,7 @@ var AppNavigator = React.createClass({
 				// Alert.alert('set deviceToken success ： ' + alertData.deviceToken +" * " +alertData.deviceType);
 				console.log('set deviceToken success ： ' + alertData.deviceToken +" * " +alertData.deviceType);
 			 },
-			 (errorMessage) => {
+			 (result) => {
 				console.log('errorMessage');
 			 }
 		 )
@@ -439,7 +439,7 @@ var AppNavigator = React.createClass({
 		}
 	},
 
-	setMessageRead : function(id) {
+	setMessageRead: function(id) {
 		var userData = LogicData.getUserData();
 		var url = NetConstants.CFD_API.SET_MESSAGE_READ;
 		if(LogicData.getAccountState()){
@@ -454,12 +454,6 @@ var AppNavigator = React.createClass({
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 				},
-			},
-			(responseJson) =>{
-				//Ignore the result!
-			},
-			(error) => {
-				Alert.alert(error)
 			}
 		)
 	},

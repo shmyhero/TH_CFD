@@ -76,7 +76,7 @@ var StockListViewPager = React.createClass({
 			connected: isConnected
 		})
 	},
-	
+
 	componentDidMount: function() {
 		NetInfo.isConnected.addEventListener(
 			'change',
@@ -101,6 +101,9 @@ var StockListViewPager = React.createClass({
 		WebSocketModule.registerCallbacks((stockInfo) => {
 			this.refs['page' + _currentSelectedTab] && this.refs['page' + _currentSelectedTab].handleStockInfo(stockInfo)
 		})
+
+		this.refs['page' + _currentSelectedTab].onPageSelected();
+		WebSocketModule.registerInterestedStocks(this.refs['page' + _currentSelectedTab].getShownStocks())
 	},
 
 	_handleConnectivityChange: function(isConnected) {

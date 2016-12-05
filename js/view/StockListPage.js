@@ -25,6 +25,7 @@ var MainPage = require('./MainPage')
 var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 var WebSocketModule = require('../module/WebSocketModule');
+var CacheModule = require('../module/CacheModule');
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var didFocusSubscription = null;
@@ -105,6 +106,10 @@ var StockListPage = React.createClass({
 					LogicData.setOwnStocksData(ownData)
 				}
 			}
+
+			var url = LogicData.getAccountState() ? this.props.activeDataURL : this.props.dataURL;
+			CacheModule.storeCacheForUrl(url, JSON.stringify(this.state.rowStockInfoData), this.state.isOwnStockPage ? true : false);
+
 			this.setState({
 				stockInfo: ds.cloneWithRows(this.state.rowStockInfoData)
 			})
@@ -156,9 +161,9 @@ var StockListPage = React.createClass({
 						url,
 						{
 							method: 'GET',
-							headers: {
-								'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-							},
+							// headers: {
+							// 	'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+							// },
 							cache: 'offline',
 							//timeout: 1000,
 						},

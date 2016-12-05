@@ -33,6 +33,7 @@ var StockTransactionInfoModal = require('./StockTransactionInfoModal')
 var TimerMixin = require('react-timer-mixin');
 var StorageModule = require('../module/StorageModule');
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
+var CacheModule = require('../module/CacheModule');
 var {EventCenter, EventConst} = require('../EventCenter');
 
 var {height, width} = Dimensions.get('window');
@@ -63,6 +64,7 @@ var accountLogoutEventSubscription = null;
 var accountStateChangedSubscription = null;
 
 var StockOpenPositionPage = React.createClass({
+	dataToStore: [],
 
 	mixins: [TimerMixin],
 
@@ -146,18 +148,23 @@ var StockOpenPositionPage = React.createClass({
 		})
 	},
 
+	getDataUrl: function(){
+		var url = NetConstants.CFD_API.GET_OPEN_POSITION_API
+		if(LogicData.getAccountState()){
+			url = NetConstants.CFD_API.GET_OPEN_POSITION_LIVE_API
+			console.log('live', url );
+		}
+		return url;
+	},
+
 	loadOpenPositionInfo: function() {
 		if(!this.state.contentLoaded){
 			this.setState({
 				isRefreshing: true,
 			})
 		}
-		var userData = LogicData.getUserData()
-		var url = NetConstants.CFD_API.GET_OPEN_POSITION_API
-		if(LogicData.getAccountState()){
-			url = NetConstants.CFD_API.GET_OPEN_POSITION_LIVE_API
-			console.log('live', url );
-		}
+		var userData = LogicData.getUserData();
+		var url = this.getDataUrl();
 		NetworkModule.fetchTHUrl(
 			url,
 			{
@@ -345,6 +352,28 @@ var StockOpenPositionPage = React.createClass({
 				// }
 			};
 		};
+
+		if(this.dataToStore){
+			var needToUpdateCache = false;
+			for (var i = 0; i < this.dataToStore.length; i++) {
+				for (var j = 0; j < realtimeStockInfo.length; j++) {
+					if (this.dataToStore[i].security.id == realtimeStockInfo[j].id &&
+								this.dataToStore[i].security.last !== realtimeStockInfo[j].last) {
+
+						this.dataToStore[i].security.ask = realtimeStockInfo[j].ask
+						this.dataToStore[i].security.bid = realtimeStockInfo[j].bid
+						this.dataToStore[i].security.last = (realtimeStockInfo[j].ask + realtimeStockInfo[j].bid) / 2;
+						needToUpdateCache = true;
+					}
+				}
+			}
+			if(needToUpdateCache){
+				var url = this.getDataUrl();
+				var data = JSON.stringify(this.dataToStore);
+				console.log("store cache open position: " + data)
+				CacheModule.storeCacheForUrl(url, data, true);
+			}
+		}
 
 		if (hasUpdate) {
 			this.setState({

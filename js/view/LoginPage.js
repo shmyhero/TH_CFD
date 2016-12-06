@@ -128,6 +128,10 @@ var LoginPage = React.createClass({
 			return
 		}
 
+		this.setState({
+			getValidationCodeButtonEnabled: false,
+		});
+
 		NetworkModule.fetchTHUrl(
 			NetConstants.CFD_API.GET_PHONE_CODE_API + '?' + NetConstants.PARAMETER_PHONE + "=" + this.state.phoneNumber,
 			{
@@ -135,37 +139,41 @@ var LoginPage = React.createClass({
 			},
 			(responseJson) => {
 				// Nothing to do.
+				this.setState({
+					validationCodeCountdown: MAX_ValidationCodeCountdown,
+					getValidationCodeButtonEnabled: false
+				})
+
+				var timer = this.setInterval(
+					() => {
+						var currentCountDown = this.state.validationCodeCountdown
+
+						if (currentCountDown > 0) {
+							this.setState({
+								validationCodeCountdown: this.state.validationCodeCountdown - 1
+							})
+						} else {
+
+							if (this.state.phoneNumber.length == 11) {
+								this.setState({
+									getValidationCodeButtonEnabled: true,
+									validationCodeCountdown: -1
+								})
+							}
+							this.clearInterval(timer)
+						}
+					},
+					1000
+				);
 			},
 			(result) => {
+				this.setState({
+					getValidationCodeButtonEnabled: true,
+				});
+
 				Alert.alert('提示', result.errorMessage);
 			}
 		)
-
-		this.setState({
-			validationCodeCountdown: MAX_ValidationCodeCountdown,
-			getValidationCodeButtonEnabled: false
-		})
-		var timer = this.setInterval(
-			() => {
-				var currentCountDown = this.state.validationCodeCountdown
-
-				if (currentCountDown > 0) {
-					this.setState({
-						validationCodeCountdown: this.state.validationCodeCountdown - 1
-					})
-				} else {
-
-					if (this.state.phoneNumber.length == 11) {
-						this.setState({
-							getValidationCodeButtonEnabled: true,
-							validationCodeCountdown: -1
-						})
-					}
-					this.clearInterval(timer)
-				}
-			},
-			1000
-		);
 	},
 
 	wechatPressed: function() {

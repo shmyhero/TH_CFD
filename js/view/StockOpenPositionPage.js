@@ -17,9 +17,11 @@ import {
   	Slider,
   	TextInput,
   	ScrollView,
+		ActivityIndicatorIOS,
 } from 'react-native';
 var LayoutAnimation = require('LayoutAnimation')
 
+var ActivityIndicator = require('ActivityIndicator');
 var LogicData = require('../LogicData')
 var MainPage = require('./MainPage')
 var NetConstants = require('../NetConstants')
@@ -61,7 +63,11 @@ var isWaiting = false
 
 var networkConnectionChangedSubscription = null;
 var accountLogoutEventSubscription = null;
+<<<<<<< Updated upstream
 var accountStateChangedSubscription = null;
+=======
+var _currentRowData = null;
+>>>>>>> Stashed changes
 
 var StockOpenPositionPage = React.createClass({
 	dataToStore: [],
@@ -84,6 +90,7 @@ var StockOpenPositionPage = React.createClass({
 			isClear:false,
 			contentLoaded: false,
 			isRefreshing: false,
+			dataStatus:0,//0正常 1等待刷新 2加载中
 		};
 	},
 
@@ -297,7 +304,9 @@ var StockOpenPositionPage = React.createClass({
 			 url = url.replace(/<stockCode>/, stockCode)
 			 url = url.replace(/<chartType>/, chartType)
 		}
-
+		this.setState({
+			dataStatus : 2
+		})
 		NetworkModule.fetchTHUrl(
 			url,
 			{
@@ -308,10 +317,14 @@ var StockOpenPositionPage = React.createClass({
 				tempStockInfo.priceData = responseJson
 				this.setState({
 					stockDetailInfo: tempStockInfo,
+					dataStatus :0,
 				})
 			},
 			(result) => {
-				Alert.alert('', result.errorMessage);
+				// Alert.alert('', result.errorMessage);
+				this.setState({
+					dataStatus :1,
+				})
 			}
 		)
 	},
@@ -1064,6 +1077,88 @@ var StockOpenPositionPage = React.createClass({
 			</View>)
 	},
 
+	renderChart:function(){
+		var state = this.state.dataStatus;
+		console.log("RAMBO: chartType = " + this.state.chartType)
+		var opacity = state == 0? 1.0 : 0.01;
+			return(
+				<LineChart style={[styles.lineChart,{opacity:opacity}]}
+					data={JSON.stringify(this.state.stockDetailInfo)}
+					chartType={this.state.chartType}
+					colorType={1}
+					chartIsActual={LogicData.getAccountState()}
+					descriptionColor={1}>
+				</LineChart>
+			)
+	},
+
+	renderDataStatus:function(){
+		//status 0:正常 1：暂时无法获取数据 2:加载中
+		var status = this.state.dataStatus;
+		// if(WebSocketModule.isConnected()){status=0}
+
+		var imageError = LogicData.getAccountState()?require('../../images/icon_network_connection_error_live.png'):require('../../images/icon_network_connection_error.png')
+		if(status === 1){
+			return (
+				<View style={styles.dataStatus}>
+					<View style={styles.dataStatus2}>
+					<Image style={{width:24,height:24,marginBottom:5}} source={imageError}></Image>
+					<Text style={styles.textDataStatus}>暂时无法获取数据</Text>
+					<TouchableOpacity onPress={()=> this.dataRefreshClicked()}>
+						<View>
+							<Text style={styles.textDataStatusRefresh}>刷新</Text>
+						</View>
+					</TouchableOpacity>
+					</View>
+				</View>
+			)
+		}else if(status === 2){
+			return (
+				<View style={styles.dataStatus}>
+					<View style={styles.dataStatus2}>
+					{this._renderActivityIndicator()}
+					<Text style={styles.textDataStatus}>加载中...</Text>
+					</View>
+				</View>
+			)
+		}
+	},
+
+	dataRefreshClicked:function(){
+
+		// if(!loadStockInfoSuccess){
+		// 	this.loadStockInfo();
+		// }else{
+	  // this.loadStockPriceToday(false, this.state.chartType, this.state.stockInfo)
+		// }
+		console.log('Rambo stockId is '+_currentRowData.security.id);
+		this.loadStockDetailInfo(this.state.chartType,_currentRowData.security.id)
+
+	},
+
+	_renderActivityIndicator() {
+			return ActivityIndicator ? (
+					<ActivityIndicator
+							style={{marginRight: 10,}}
+							animating={true}
+							color={'black'}
+							size={'small'}/>
+			) : Platform.OS == 'android' ?
+					(
+							<ProgressBarAndroid
+									style={{marginRight: 10,}}
+									color={'black'}
+									styleAttr={'Small'}/>
+
+					) :  (
+					<ActivityIndicatorIOS
+							style={{marginRight: 10,}}
+							animating={true}
+							color={'black'}
+							size={'small'}/>
+			)
+	},
+
 	renderSubDetail: function(rowData) {
 		if (this.state.selectedSubItem === 1) {
 			// market view
@@ -1105,15 +1200,8 @@ var StockOpenPositionPage = React.createClass({
 			return (
 				<View style={{height: 170}}>
 					{this.renderChartHeader(rowData)}
-					<LineChart style={styles.lineChart}
-						data={JSON.stringify(this.state.stockDetailInfo)}
-						chartType={this.state.chartType}
-						colorType={1}
-						chartIsActual={LogicData.getAccountState()}
-						descriptionColor={1}>
-						{/* {this.renderStockMaxPriceInfo(maxPrice, maxPercentage, true)}
-						{this.renderStockMaxPriceInfo(minPrice, minPercentage, false)} */}
-					</LineChart>
+					{this.renderChart()}
+					{this.renderDataStatus()}
 				</View>
 			);
 		}
@@ -1218,7 +1306,9 @@ var StockOpenPositionPage = React.createClass({
 	renderDetailInfo: function(rowData) {
 		var tradeImage = rowData.isLong ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
 		var lastPrice = this.getLastPrice(rowData)
-
+		console.log('RAMBO rowData.id = ' + rowData.security.id)
+		_currentRowData = rowData
+	  console.log('RAMBO _currentRowData.id = ' + _currentRowData.security.id)
 		var newExtendHeight = this.currentExtendHeight(this.state.selectedSubItem)
 		var stopLossImage = LogicData.getAccountState()?require('../../images/check_actual.png'):require('../../images/check.png')
 		var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) <= MAX_PERCENT
@@ -1726,6 +1816,40 @@ var styles = StyleSheet.create({
 		fontSize: 14,
 		textAlign: 'left',
 		color:'#576b95',
+	},
+
+	dataStatus:{
+		position:'absolute',
+		top:0,
+		left:0,
+		right:0,
+		bottom:0,
+		width:width,
+		alignItems:'center',
+		justifyContent:'center',
+		backgroundColor:'transparent',
+
+	},
+	dataStatus2:{
+		alignItems:'center',
+		justifyContent:'center',
+		width:width - 48,
+		height:120,
+	},
+	textDataStatus:{
+		color:'black',
+		marginTop:5,
+	},
+	textDataStatusRefresh:{
+		color:'black',
+		paddingLeft:15,
+		paddingRight:15,
+		marginTop:10,
+		paddingTop:5,
+		paddingBottom:5,
+		borderColor:'black',
+		borderRadius:4,
+		borderWidth:1,
 	},
 });
 

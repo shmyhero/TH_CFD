@@ -73,7 +73,7 @@ var OAStatusPage = React.createClass({
 
 				<Image style={styles.image} source={require('../../../images/live_register_sub_banner.png')}/>
 
-				<View style={{flex: 2, marginTop: 70}}>
+				<View style={{flex: 2, marginTop: 50}}>
 					<Text style={styles.text1}>ayondo欢迎您开启财富之旅</Text>
 
 					<View style={{flex:1}}>

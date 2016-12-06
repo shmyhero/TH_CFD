@@ -104,7 +104,10 @@ var WebViewPage = React.createClass({
 	_handleConnectivityChange: function(isConnected) {
 		console.log("isConnected? " + isConnected);
 		if (!this.state.isLoaded) {
-			this.setState({isNetConnected: isConnected});
+			this.setState({
+				isNetConnected: isConnected,
+				isrefresh: false
+			});
 			if(isConnected){
 				this.refs[WEBVIEW_REF].reload();
 			}
@@ -153,11 +156,22 @@ var WebViewPage = React.createClass({
 	},
 
 	onRefresh: function(){
-		this.setState({
-			isNetConnected: true,
-		}, ()=>{
-			this.refs[WEBVIEW_REF] && this.refs[WEBVIEW_REF].reload();
-		});
+		NetInfo.isConnected.fetch().done(
+			(isConnected) => {
+				//Do not change the connected status to not-connected.
+				this.setState(
+					{
+						isNetConnected: isConnected,
+						refreshing: false,
+					}, ()=>{
+						if(isConnected){
+							this.refs[WEBVIEW_REF] && this.refs[WEBVIEW_REF].reload();
+						}
+					}
+				);
+			}
+		);
+
 	},
 
 	renderLoading: function(){
@@ -187,7 +201,7 @@ var WebViewPage = React.createClass({
 					scalesPageToFit={true}
 					automaticallyAdjustContentInsets={true}
 					onNavigationStateChange={this.onNavigationStateChange}
-					onLoadEnd={(content)=>this.webViewLoaded(content)}
+					onLoad ={(content)=>this.webViewLoaded(content)}
 					onMessage={(message)=>console.log("onMessage " +message)}
 					onError={(error)=>{
 						console.log("webview error" + error);

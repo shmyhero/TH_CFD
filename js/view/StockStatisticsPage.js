@@ -133,20 +133,18 @@ var StockStatisticsPage = React.createClass({
 	},
 
 	playStatisticsAnim: function(statisticsInfo) {
-		console.log("statisticsInfo " + JSON.stringify(statisticsInfo));
 		var hasDifference = false;
+		var initializeAnimation = false;
 		if(this.lastStatisticsInfo != null){
 			for(var i = 0; i < statisticsInfo.length; i++){
 				if(this.lastStatisticsInfo[i].pl != statisticsInfo[i].pl){
-
-					console.log("lastStatisticsInfo[i]" + JSON.stringify(this.lastStatisticsInfo[i]))
-					console.log("statisticsInfo[i]" + JSON.stringify(statisticsInfo[i]))
 					hasDifference = true;
 					break;
 				}
 			}
 		}else{
-			console.log("lastStatisticsInfo is null")
+			//Start the anim from 0.
+			initializeAnimation = true;
 			hasDifference = true;
 		}
 
@@ -166,49 +164,64 @@ var StockStatisticsPage = React.createClass({
 				barContent.pl = 0
 			}
 
-			this.setState({
-				maxBarSize: maxBarSize,
-				statisticsBarInfo: statisticsInfo,
-				statisticsSumInfo: originalStatisticsInfo,
-				barAnimPlayed: true,
-			}, ()=>{
-				this.setTimeout(
-					() => {
-						if(LogicData.getTabIndex() == 2){
-							console.log("LogicData.getTabIndex(): " + LogicData.getTabIndex());
-							//Make sure user still stays in current tab.
+			if(initializeAnimation){
+				this.setState({
+					maxBarSize: maxBarSize,
+					statisticsBarInfo: statisticsInfo,
+					statisticsSumInfo: originalStatisticsInfo,
+					barAnimPlayed: true,
+				}, ()=>{
+						this.runAnimationIfNecessary(originalStatisticsInfo);
+					});
+				}else{
+					this.runAnimationIfNecessary(originalStatisticsInfo);
+				}
+			}
+	},
 
-							//BUGFIX:
-							//There's a bug that if user switches tab during the animation period, the whole screen will
-							//be refreshed with this animation which seems wierld.
-							//The workaround is to use a shorter duration so user is hard to
-							//click other buttons when animation is running. It doesn't really
-							//fix the bug, but makes it harder to be reproduced.
-							var CustomLayoutAnimation = {
-						    duration: 100,
-						    update: {
-						      type: LayoutAnimation.Types.easeInEaseOut,
-						    },
-						  };
+	runAnimationIfNecessary: function(originalStatisticsInfo){
+		this.setTimeout(() => {
+				//We need to check if the layout will be changed.
+				//If the profit bar won't change, we will not apply the LayoutAnimation.configureNext,
+				//because it will affect the tab switch and display a wrong animation.
+				if(LogicData.getTabIndex() == 2){
+					var hasData = this.state.balanceData!==null;
 
-							console.log("anim started");
-							LayoutAnimation.configureNext(CustomLayoutAnimation, ()=>{
-								console.log("anim ended");
-							}, ()=>{
-								console.log("anim error");
-							});
-							this.setState({
-								statisticsBarInfo: originalStatisticsInfo,
-								barAnimPlayed: true,
-							})
+					var sumInvest = 0
+					for (var i = 0; i < this.state.statisticsSumInfo.length; i++) {
+						var barContent = this.state.statisticsSumInfo[i]
+						sumInvest += barContent.invest
+					}
+					if (hasData && sumInvest > 0) {
+						var needAnimation = false;
+						for(var i = 0; i < this.state.statisticsBarInfo.length; i++) {
+							if(originalStatisticsInfo[i]
+								&& this.state.statisticsBarInfo[i].pl !== originalStatisticsInfo[i].pl){
+									var oldInvestBarFlex = Math.floor(this.state.statisticsBarInfo[i].invest / this.state.maxBarSize * 100)
+									var oldProfitBarFlex = Math.floor(this.state.statisticsBarInfo[i].pl / this.state.maxBarSize * 100)
+									var newInvestBarFlex = Math.floor(originalStatisticsInfo[i].invest / this.state.maxBarSize * 100)
+									var newProfitBarFlex = Math.floor(originalStatisticsInfo[i].pl / this.state.maxBarSize * 100)
+
+									if(oldInvestBarFlex != newInvestBarFlex || oldProfitBarFlex != newProfitBarFlex){
+										needAnimation = true;
+										break;
+									}
+							}
 						}
-					},
-					1000
-				);
-			});
-		}
 
-
+						if(needAnimation){
+							console.log("anim started");
+							LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+						}
+					}
+					this.setState({
+						statisticsBarInfo: originalStatisticsInfo,
+						barAnimPlayed: true,
+					});
+				}
+			},
+			1000
+		);
 	},
 
 	renderBars: function() {

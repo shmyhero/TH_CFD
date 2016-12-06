@@ -63,11 +63,10 @@ var isWaiting = false
 
 var networkConnectionChangedSubscription = null;
 var accountLogoutEventSubscription = null;
-<<<<<<< Updated upstream
 var accountStateChangedSubscription = null;
-=======
+
 var _currentRowData = null;
->>>>>>> Stashed changes
+
 
 var StockOpenPositionPage = React.createClass({
 	dataToStore: [],

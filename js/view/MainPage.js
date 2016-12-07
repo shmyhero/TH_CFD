@@ -562,6 +562,7 @@ var MainPage = React.createClass({
 
 	sendToSwitchAccountStatus:function(){
 		var userData = LogicData.getUserData()
+		if(userData.token == undefined){return}
 	  var urlToSend = LogicData.getAccountState()?NetConstants.CFD_API.SWITCH_TO_LIVE:NetConstants.CFD_API.SWITCH_TO_DEMO;
 		console.log('sendToSwitchAccountStatus url = ' + urlToSend);
 		NetworkModule.fetchTHUrl(

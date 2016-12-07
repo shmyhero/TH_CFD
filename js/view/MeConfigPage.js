@@ -181,7 +181,7 @@ var MeConfigPage = React.createClass({
 			"是否确认退出？",
 				[
 					{text: '取消'},
-					{text: '确定', onPress: () => this.logoutCurrentAccount()},
+					{text: '确定', onPress: () => this.sendToSwitchAccountDemo()},
 				]
 			)
 	},
@@ -231,11 +231,34 @@ var MeConfigPage = React.createClass({
 
 	logoutCurrentAccount: function(){
 		LocalDataUpdateModule.removeUserData();
+
 		this.props.navigator.pop();
 		if(this.props.onPopBack){
 			this.props.onPopBack();
 		}
 		LogicData.setAccountState(false)
+	},
+
+	sendToSwitchAccountDemo:function(){
+		var userData = LogicData.getUserData()
+		var urlToSend = NetConstants.CFD_API.SWITCH_TO_DEMO;
+		console.log('sendToSwitchAccountStatus url = ' + urlToSend);
+		NetworkModule.fetchTHUrl(
+			urlToSend,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+			},
+			(responseJson) =>{
+				 console.log(responseJson)
+				 this.logoutCurrentAccount();
+			},
+			(result) => {
+				console.log(result.errorMessage)
+			}
+		)
 	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){

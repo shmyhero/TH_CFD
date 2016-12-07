@@ -42,31 +42,31 @@ export default class AchievementCard extends Component {
     })
   }
 
-  renderReward(){
-    if(this.props.showReward && this.props.card.reward){
-      var rewardImage ;
-      switch(this.props.card.reward){
-        case 1:
-        rewardImage = require('../../images/achievement_income_1.png');
-        break;
-        case 2:
-        rewardImage = require('../../images/achievement_income_2.png');
-        break;
-        case 3:
-        rewardImage = require('../../images/achievement_income_3.png');
-        break;
-      }
-
-      return(
-        <View style={styles.rewardBar}>
-          <Image style={styles.rewardImage}
-            source={rewardImage}></Image>
-        </View>
-     )
-   }else{
-     return null;
-   }
-  }
+  // renderReward(){
+  //   if(this.props.showReward && this.props.card.reward){
+  //     var rewardImage ;
+  //     switch(this.props.card.reward){
+  //       case 1:
+  //       rewardImage = require('../../images/achievement_income_1.png');
+  //       break;
+  //       case 2:
+  //       rewardImage = require('../../images/achievement_income_2.png');
+  //       break;
+  //       case 3:
+  //       rewardImage = require('../../images/achievement_income_3.png');
+  //       break;
+  //     }
+  //
+  //     return(
+  //       <View style={styles.rewardBar}>
+  //         <Image style={styles.rewardImage}
+  //           source={rewardImage}></Image>
+  //       </View>
+  //    )
+  //  }else{
+  //    return null;
+  //  }
+  // }
 
   renderWaitingRing(){
     if(this.state.loading){
@@ -83,6 +83,7 @@ export default class AchievementCard extends Component {
   }
 
   render() {
+    /* {this.renderReward()} */
     if(this.props.card){
       var source = null;
       source = {uri: this.props.card.imgUrlBig}
@@ -94,7 +95,6 @@ export default class AchievementCard extends Component {
         <View style={styles.container}>
           <Image style={imgStyle} source={source} onLoad={()=>this.onLoad()}>
           </Image>
-          {this.renderReward()}
           {this.renderWaitingRing()}
         </View>
       );

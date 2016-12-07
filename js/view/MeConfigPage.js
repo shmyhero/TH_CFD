@@ -144,13 +144,7 @@ var MeConfigPage = React.createClass({
 
 	upgradeAppVersion: function(){
 		if(this.state.onlineVersionCode > this.state.currentVersionCode){
-			var url = null;
-			if(Platform.OS === 'android'){
-				url = 'market://details?id=com.tradehero.cfd';
-			}
-			else if(Platform.OS === 'ios'){
-				//TODO: add iOS download page here.
-			}
+			var url = NetConstants.MARKET_URL;
 			if(url){
 				Linking.openURL(url)
 			}

@@ -22,7 +22,7 @@ var colors = {
 	INPUT_TEXT_COLOR: '#333333',
 	INOUT_TEXT_SELECTION_COLOR: '#426bf2',
 	TAB_UNSELECT_TEXT_COLOR: '#abcaff',
-	COLOR_BORDER:'#356dce',
+	COLOR_BORDER:'#184692',
 	COLOR_STATIC_TEXT1:'#85b1fb',
 	COLOR_CUSTOM_BLUE:'#629af3',
 
@@ -61,7 +61,7 @@ var colors = {
 			this.SUB_TITLE_WHITE = '#bbd3ff'
 			this.STOCK_TAB_BLUE = '#8fabdb'
 			this.TAB_UNSELECT_TEXT_COLOR = '#a0bdf1'
-			this.COLOR_BORDER = '#2f446a'
+			this.COLOR_BORDER = '#253b60'
 			this.COLOR_STATIC_TEXT1 = '#698dcd'
 			this.COLOR_CUSTOM_BLUE = '#455e8b'
 		}
@@ -80,7 +80,7 @@ var colors = {
 			this.SUB_TITLE_WHITE = '#bbd3ff'
 			this.STOCK_TAB_BLUE = '#70a5ff'
 			this.TAB_UNSELECT_TEXT_COLOR = '#abcaff'
-			this.COLOR_BORDER = '#356dce'
+			this.COLOR_BORDER = '#184692'
 			this.COLOR_STATIC_TEXT1 = '#85b1fb'
 			this.COLOR_CUSTOM_BLUE = '#629af3'
 		}

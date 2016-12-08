@@ -81,14 +81,16 @@ var StockStatisticsPage = React.createClass({
 
 	onConnectionStateChanged: function(){
 		if(LogicData.getTabIndex() == 2 && WebSocketModule.isConnected()){
-			var userData = LogicData.getUserData();
-			var notLogin = Object.keys(userData).length === 0;
-			if(!notLogin){
-
-				NetworkModule.loadUserBalance(true, (responseJson)=>{
-					this.setState({balanceData: responseJson,});
-					this.playStartAnim();
-				})
+			var routes = this.props.navigator.getCurrentRoutes();
+			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE){
+				var userData = LogicData.getUserData();
+				var notLogin = Object.keys(userData).length === 0;
+				if(!notLogin){
+					NetworkModule.loadUserBalance(true, (responseJson)=>{
+						this.setState({balanceData: responseJson,});
+						this.playStartAnim();
+					})
+				}
 			}
 		}
 	},

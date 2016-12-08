@@ -27,7 +27,7 @@ var wsStockInfoCallback = null
 var wsAlertCallback = null
 
 var socketConnected = false;
-var networkAvailable = false;
+var networkConnectionStatus = DISCONNECTED;
 
 const CONNECTED = "connected";
 const DISCONNECTED = "disconnected";
@@ -38,7 +38,7 @@ var wsErrorCallback = (errorMessage) =>
 	if (AppStateModule.getAppState() === AppStateModule.STATE_ACTIVE && webSocketConnection && webSocketConnection.state == 4) {
 		socketConnected = false;
 		EventCenter.emitNetworkConnectionChangedEvent();
-		if(networkAvailable){
+		if(networkConnectionStatus === CONNECTED){
 			console.log('web socket ready to restart');
 			setTimeout(()=>{
 				if (webSocketConnection && webSocketConnection.state == 4){
@@ -129,16 +129,16 @@ export function start() {
 }
 
 function handleConnectivityChange(reach){
-	var origionNetworkAvailable = networkAvailable;
+	var origionNetworkConnectionStatus = networkConnectionStatus;
   if(Platform.OS === 'ios'){
     switch(reach){
       case 'none':
       case 'unknown':
-        networkAvailable = DISCONNECTED;
+        networkConnectionStatus = DISCONNECTED;
 				break;
       case 'wifi':
       case 'cell':
-        networkAvailable = CONNECTED;
+        networkConnectionStatus = CONNECTED;
         break;
     }
   }else{
@@ -146,20 +146,20 @@ function handleConnectivityChange(reach){
       case 'NONE':
       case 'DUMMY':
       case 'UNKNOWN':
-        networkAvailable = DISCONNECTED;
+        networkConnectionStatus = DISCONNECTED;
 				break;
       case 'MOBILE':
       case 'WIFI':
-        networkAvailable = CONNECTED;
+        networkConnectionStatus = CONNECTED;
         break;
     }
   }
 
-	if(origionNetworkAvailable !== networkAvailable){
+	if(origionNetworkConnectionStatus !== networkConnectionStatus){
 
-		if (networkAvailable === CONNECTED && webSocketConnection && webSocketConnection.state == 4){
+		if (networkConnectionStatus === CONNECTED && webSocketConnection && webSocketConnection.state == 4){
 			start();
-		}else if(networkAvailable === DISCONNECTED){
+		}else if(networkConnectionStatus === DISCONNECTED){
 			if(webSocketConnection){
 				webSocketConnection.stop();
 			}
@@ -172,7 +172,7 @@ function startWebSocket(webSocketConnection){
 	webSocketConnection.start()
 		.done(() => {
 			socketConnected = true;
-			networkAvailable = true;
+			networkConnectionStatus = CONNECTED;
 
 			EventCenter.emitNetworkConnectionChangedEvent();
 

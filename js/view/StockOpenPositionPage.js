@@ -111,11 +111,14 @@ var StockOpenPositionPage = React.createClass({
 
 	onConnectionStateChanged: function(){
 		if(LogicData.getTabIndex() == 2 && WebSocketModule.isConnected()){
-			//Refresh current page data.
-			var userData = LogicData.getUserData();
-			var notLogin = Object.keys(userData).length === 0;
-			if(!notLogin){
-				this.loadOpenPositionInfo();
+			var routes = this.props.navigator.getCurrentRoutes();
+			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE){
+				//Refresh current page data.
+				var userData = LogicData.getUserData();
+				var notLogin = Object.keys(userData).length === 0;
+				if(!notLogin){
+					this.loadOpenPositionInfo();
+				}
 			}
 		}
 	},

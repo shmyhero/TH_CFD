@@ -249,8 +249,11 @@ var HomePage = React.createClass({
 		this.setState({
 			connected: isConnected
 		})
-		if(LogicData.getTabIndex() == 0){
-			this.reloadPage();
+		if(isConnected && LogicData.getTabIndex() == 0){
+			var routes = this.props.navigator.getCurrentRoutes();
+			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.HOME_PAGE_ROUTE){
+				this.reloadPage();
+			}
 		}
 	},
 

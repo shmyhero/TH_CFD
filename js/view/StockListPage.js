@@ -117,19 +117,21 @@ var StockListPage = React.createClass({
 	},
 
 	refreshData: function(forceRefetch) {
+		//If the last shown list is read from cache, we also need to refresh the data by refetching the api
 		if (this.props.isOwnStockPage) {
-			if(forceRefetch){
+			if(forceRefetch || this.isDisplayingCache){
 				this.fetchOwnData();
 			}else{
 				this.refreshOwnData();
 			}
 		}
 		else {
-			this.reFetchStockData(forceRefetch)
+			this.reFetchStockData(forceRefetch || this.isDisplayingCache)
 		}
 	},
 
 	reFetchStockData: function(forceRefetch) {
+		//If the last shown list is read from cache, we need to refetch the data.
 		if (this.state.rowStockInfoData.length === 0 || forceRefetch) {
 			console.log("reFetchStockData")
 			this.fetchStockData()
@@ -167,7 +169,9 @@ var StockListPage = React.createClass({
 							cache: 'offline',
 							//timeout: 1000,
 						},
-						(responseJson) => {
+						(responseJson, isCache) => {
+							this.isDisplayingCache = isCache;
+
 							this.setState({
 								rowStockInfoData: responseJson,
 								stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, responseJson)),
@@ -184,6 +188,7 @@ var StockListPage = React.createClass({
 								this.refs[NETWORK_ERROR_INDICATOR] && this.refs[NETWORK_ERROR_INDICATOR].stopRefresh();
 							}else{
 								console.log("Stock list is using old cached data.");
+								this.isDisplayingCache = true;
 							}
 							//Alert.alert('', result.errorMessage);
 						}
@@ -192,6 +197,8 @@ var StockListPage = React.createClass({
 			})
 			.done()
 	},
+
+	isDisplayingCache: false,
 
 	refreshOwnData: function() {
 		var ownData = LogicData.getOwnStocksData()
@@ -222,7 +229,8 @@ var StockListPage = React.createClass({
 						cache: 'offline',
 						//timeout: 1000,
 					},
-					(responseJson) => {
+					(responseJson, isCache) => {
+						this.isDisplayingCache = isCache;
 						LogicData.setOwnStocksData(responseJson)
 						this.setState({
 							rowStockInfoData: responseJson,
@@ -238,6 +246,8 @@ var StockListPage = React.createClass({
 								isRefreshing: false,
 							})
 							this.refs[NETWORK_ERROR_INDICATOR] && this.refs[NETWORK_ERROR_INDICATOR].stopRefresh();
+						}else{
+							this.isDisplayingCache = true;
 						}
 						//Alert.alert('', result.errorMessage);
 					}
@@ -296,7 +306,10 @@ var StockListPage = React.createClass({
 
 	onConnectionStateChanged: function(){
 		if(LogicData.getTabIndex() == 1 && WebSocketModule.isConnected()){
-			this.refreshData(true);
+			var routes = this.props.navigator.getCurrentRoutes();
+			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE){
+				this.refreshData(true);
+			}
 		}
 	},
 

@@ -39,7 +39,7 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 				console.log("read offline cache: " + value)
 				var respJson = JSON.parse(value);
 				result.loadedOfflineCache = true;
-				successCallback(respJson);
+				successCallback(respJson, true);
 			}
 		});
 	}
@@ -79,10 +79,10 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 						CacheModule.storeCacheForUrl(url, JSON.stringify(responseJson), userRelated)
 						.then(()=>{
 							console.log('stored offline cache ')
-							successCallback && successCallback(responseJson);
+							successCallback && successCallback(responseJson, false);
 						})
 					}else{
-						successCallback && successCallback(responseJson);
+						successCallback && successCallback(responseJson, false);
 					}
 				}
 			} else {

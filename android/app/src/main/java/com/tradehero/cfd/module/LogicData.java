@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.tradehero.cfd.MainActivity;
 import com.tradehero.cfd.R;
-import com.tradehero.cfd.views.ReactStockEditFragmentNative;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +22,7 @@ public class LogicData {
     public static final String ACCOUNT_STATE = "accountState";
     public static final String STATUS_BAR_COLOR = "statusBarColor";
     public static final String GET_VERSION_CODE = "getVersionCode";
+    public final static String GET_DEVICE_TOKEN = "getui";
 
     public static final String LIVE_NAME = "userName";
     public static final String LIVE_EMAIL = "userEmail";
@@ -77,6 +77,8 @@ public class LogicData {
             mLiveEmail = data;
         }else if(dataName.equals(GET_VERSION_CODE)){
             getVersionCode();
+        }else if(dataName.equals(GET_DEVICE_TOKEN)){
+            sendDeviceTokenToRN();
         }
     }
 
@@ -150,6 +152,12 @@ public class LogicData {
     public void getVersionCode(){
         if(MainActivity.mInstance != null) {
             MainActivity.mInstance.getVersionCode();
+        }
+    }
+
+    private void sendDeviceTokenToRN(){
+        if(MainActivity.mInstance != null) {
+            MainActivity.mInstance.sendDeviceTokenToRN();
         }
     }
 }

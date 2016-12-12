@@ -105,8 +105,6 @@ var AppNavigator = React.createClass({
 	},
 
 	componentDidMount: function() {
-		NativeDataModule.passDataToNative('getui', "");
-
 		if (isFirstTime) {
 			markSuccess()
 		}
@@ -198,11 +196,12 @@ var AppNavigator = React.createClass({
 						this.alertForPush(JSON.parse(args[1]));
 					}else if (args[0] == 'PushShowDetail') {
 						this.actionForPush(JSON.parse(args[1]));
-					}else if (args[0] == 'isProductServer') {
-						this.setIsProduct(args[1]);
 					}else if (args[0] == 'versionCode'){
 						this.setCurrentVersionCode(args[1]);
 					}
+					// else if (args[0] == 'isProductServer') {
+					// 	this.setIsProduct(args[1]);
+					// }
 					// else if (args[0] == 'ayondoLoginSuccess'){
 					// 	this.ayondoLoginResule(true)
 					// }else if( args[0] == 'ayondoLoginError'){
@@ -215,8 +214,9 @@ var AppNavigator = React.createClass({
 			}
 		);
 
-		NativeDataModule.passDataToNative('isProduct', "");
+		//NativeDataModule.passDataToNative('isProduct', "");
 		NativeDataModule.passDataToNative('getVersionCode', "");
+		NativeDataModule.passDataToNative('getui', "");
 
 		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>{
 			console.log("ACCOUNT_STATE_CHANGE");
@@ -260,11 +260,11 @@ var AppNavigator = React.createClass({
 		this.recevieDataSubscription.remove();
 	},
 
-	setIsProduct: function(setIsProductApp){
-		var value = (setIsProductApp == "true" ? true : false);
-		console.log("setIsProductApp: " + setIsProductApp);
-		VersionConstants.setIsProductApp(value);
-	},
+	// setIsProduct: function(setIsProductApp){
+	// 	var value = (setIsProductApp == "true" ? true : false);
+	// 	console.log("setIsProductApp: " + setIsProductApp);
+	// 	VersionConstants.setIsProductApp(value);
+	// },
 
 	// ayondoLoginResule:function(result){
 	// 	this.refs['mainPage'].ayondoLoginResult(result)
@@ -279,6 +279,10 @@ var AppNavigator = React.createClass({
 
 
 	sendDeviceTokenToServer: function(event){
+		if(!event || event === ""){
+			console.log("devicetoken not set in RN " + event)
+			return;
+		}
 		LogicData.setGeTuiToken(event);
 		var userData = LogicData.getUserData()
 		var notLogin = Object.keys(userData).length === 0
@@ -303,7 +307,7 @@ var AppNavigator = React.createClass({
 				 console.log('set deviceToken success auth： ' + alertData.deviceToken +" * " +alertData.deviceType);
 			 },
 			 (result) => {
-				 console.log('errorMessage');
+				 console.log('errorMessage' + result.errorMessage);
 			 }
 		 )
 	 }else{//if not login

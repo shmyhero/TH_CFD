@@ -22,16 +22,17 @@ export const SERVER_TYPE_DEVELOP = "develop";
 
 var CFDServerType = SERVER_TYPE_PRODUCT;
 
-var isProductApp = true;
-
-export function setIsProductApp(value){
-  console.log("setIsProductApp " + value);
-  isProductApp = value
-}
-
-export function getIsProductApp(){
-  return isProductApp;
-}
+// //Not used any more
+// var isProductApp = true;
+//
+// export function setIsProductApp(value){
+//   console.log("setIsProductApp " + value);
+//   isProductApp = value
+// }
+//
+// export function getIsProductApp(){
+//   return isProductApp;
+// }
 
 export function loadServerSettings(){
 	console.log("loadServerSettings ");

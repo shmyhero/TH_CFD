@@ -230,7 +230,7 @@ var WebViewPage = React.createClass({
 		if(!this.props.isShowNav && this.state.isLoaded){
 			return <View></View>
 		}
-		if((this.props.shareID || this.props.shareUrl) && (this.props.shareTitle || this.props.hareDescription)){
+		if((this.props.shareID || this.props.shareUrl) && (this.props.shareTitle || this.props.shareDescription)){
 			return(
 			<NavBar title={this.props.title}
 				showBackButton={true}

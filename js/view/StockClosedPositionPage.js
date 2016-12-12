@@ -22,6 +22,7 @@ var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
 var TimerMixin = require('react-timer-mixin');
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
+var MainPage = require('./MainPage')
 var {EventCenter, EventConst} = require('../EventCenter');
 
 var {height, width} = Dimensions.get('window');

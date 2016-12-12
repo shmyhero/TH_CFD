@@ -19,6 +19,7 @@ var NetworkModule = require('../module/NetworkModule')
 var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
 var WebSocketModule = require('../module/WebSocketModule');
+var MainPage = require('./MainPage')
 var {EventCenter, EventConst} = require('../EventCenter');
 
 var {height, width} = Dimensions.get('window');

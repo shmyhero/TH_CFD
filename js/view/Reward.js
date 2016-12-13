@@ -34,8 +34,8 @@ export default class Reward extends Component{
   }
 
   getWidth(){
-    var magic = 8;
-    if(this.props.divideInLine == 2) magic = 11
+    var magic = 7.5;
+    if(this.props.divideInLine == 2) magic = 10;
     return (width/this.props.divideInLine) - magic
   }
 
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     height:24,
     borderRadius:12,
     marginLeft:5,
-    borderWidth:1.5,
+    borderWidth:0,
     borderColor:'#f3e3d3',
   },
 

@@ -129,7 +129,9 @@ function getCFDAPI(){
     SWITCH_TO_LIVE:CFD_API_SERVER + '/api/user/switchTo/Live',//切换到实盘
     SWITCH_TO_DEMO:CFD_API_SERVER + '/api/user/switchTo/Demo',//切换到模拟盘
 
-    LATEST_APP_VERSION: CFD_API_SERVER + '/api/version',
+    LATEST_APP_VERSION:CFD_API_SERVER + '/api/version',
+
+    GET_PAY_DEMO_TEST_ID:CFD_API_SERVER + '/api/user/live/deposit/id?amount=10',
   }
 }
 

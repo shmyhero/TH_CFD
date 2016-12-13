@@ -474,7 +474,59 @@ var HomePage = React.createClass({
 	    return str.indexOf(suffix, str.length - suffix.length) !== -1;
 	},
 
+	payDemoTest:function(index){
+		var userData = LogicData.getUserData()
+		NetworkModule.fetchTHUrl(
+				NetConstants.CFD_API.GET_PAY_DEMO_TEST_ID,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Content-Type': 'application/json; charset=UTF-8',
+				},
+			},
+			(responseJson) => {
+				 console.log('responseJson = ' + responseJson + 'index = ' + index);
+
+				 if (Platform.OS === 'ios') {
+					 var url =            'http://cn.tradehero.mobi/test_form/test_form_Ayondo-wechat.html';
+					 if(index == 1){url = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-alipay.html';}
+					 if(index == 2){url = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-quick.html';}
+					 if(index == 3){url = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-wechat.html';}
+					 this.props.navigator.push({
+			 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			 			url: url,
+			 			title: responseJson,
+			 			backFunction: this.forceloopSwipers,
+			 		});
+				 }else{
+					 var payMethod;
+					 if(index == 1){payMethod = 'alipay'}
+					 if(index == 2){payMethod = 'quick'}
+					 if(index == 3){payMethod = 'wechat'}
+					 this.props.navigator.push({
+			 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			 			url: 'http://www.test.paytest/'+payMethod,
+			 			title: responseJson,
+			 			backFunction: this.forceloopSwipers,
+			 		});
+				 }
+
+
+
+
+
+			}
+		);
+	},
+
 	magicButtonPress: function(index) {
+
+		//Pay Demo Test
+
+		this.payDemoTest(index);
+		return;
+
 		if (NO_MAGIC) {
 			return
 		}

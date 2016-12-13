@@ -131,7 +131,10 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
                 CookieManager.getInstance().flush();
             }
 
+
             view.loadUrl(url);
+
+
             return true;
         }
 
@@ -144,6 +147,8 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
                 reactWebView.callInjectedJavaScript();
                 emitFinishEvent(webView, url);
             }
+
+
         }
 
         @Override
@@ -151,6 +156,16 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
             super.onPageStarted(webView, url, favicon);
             mLastLoadFailed = false;
             Log.d("WebView:", " URL = " + url);
+
+            if(url.contains("paytest")){
+                if(url.endsWith("alipay")){
+                    webView.loadUrl("file:///android_asset/test_form_Ayondo-alipay.html ");
+                }else if(url.endsWith("quick")){
+                    webView.loadUrl("file:///android_asset/test_form_Ayondo-quick.html ");
+                }else if(url.endsWith("wechat")){
+                    webView.loadUrl("file:///android_asset/test_form_Ayondo-wechat.html ");
+                }
+            }
 
             dispatchEvent(
                     webView,

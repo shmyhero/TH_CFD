@@ -1,0 +1,74 @@
+    <html>
+    	<head>
+    		<title>Web Shop</title>
+    		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    	</head>
+		<style>
+body {font-family: Arial, Sans-Serif;}		
+
+input[type="text"] {
+  padding: 5px;
+  border: solid 1px #dcdcdc;
+  transition: box-shadow 0.3s, border 0.3s;
+  width:260px;
+  margin-bottom: 2px; 
+  }
+input[type="text"]:focus,
+input[type="text"].focus {
+  border: solid 1px #707070;
+  box-shadow: 0 0 5px 1px #969696;
+}	
+label{
+    display:inline-block;
+    width:150px;
+}
+.styled-button {
+	background:#555555;
+	padding:5px 4px;
+	color:#fff;
+	font-size:12px;
+	border-radius:2px;
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	border:1px solid #000000
+}
+
+
+		</style>
+    	<body>
+		Ayondo Markets Limited #2 (WeChat Pay)<br><br>
+    		<form action="https://sales.wecollect.com/hosted/index/" method="post">
+    			<label>Merchant</label><input type="text" name="Merchant" value="79c0a634-bacf-11e6-a3f5-0211eb00a4cc"><br>
+				<label>Site</label><input type="text" name="Site" value="aa7eaa4c-bace-11e6-a849-0211eb00a4cc"><br>
+    			<label>Schedule</label><input type="text" name="Schedule" value=""><br>
+    			<label>Amount</label><input type="text" name="Amount" value="1.00"><br>
+    			<label>Currency</label><input type="text" name="Currency" value="CNY"><br>
+    			<label>TransRef</label><input type="text" name="TransRef" value="TestTxn"><br>
+    			<label>Product</label><input type="text" name="Product" value="lots of stuff"><br>
+    			<label>PaymentType</label><input type="text" name="PaymentType" value="cup"><br>
+    			<label>AttemptMode</label><input type="text" name="AttemptMode" value="1"><br>
+    			<label>TestTrans</label>
+				<!-- <input type="text" name="TestTrans" value="1"><br> -->
+				<select name="TestTrans">
+					<option value="0">No</option>
+				</select><br/>
+    			<label>customer[email]</label><input type="text" name="customer[email]" value="joe@wecollect.com"><br>
+    			<label>customer[first_name]</label><input type="text" name="customer[first_name]" value="Joe"><br>
+    			<label>customer[last_name]</label><input type="text" name="customer[last_name]" value="Smith"><br>
+    			<label>customer[dob]</label><input type="text" name="customer[dob]" value=""><br>
+    			<label>customer[address1]</label><input type="text" name="customer[address1]" value="mmmmm"><br>
+    			<label>customer[address2]</label><input type="text" name="customer[address2]" value=""><br>
+    			<label>customer[city]</label><input type="text" name="customer[city]" value="mmmmm"><br>
+    			<label>customer[postcode]</label><input type="text" name="customer[postcode]" value="mmmmm"><br>
+    			<label>customer[country]</label><input type="text" name="customer[country]" value="CN"><br>
+    			<label>customer[phone]</label><input type="text" name="customer[phone]" value=""><br>
+    			<label>customer[fax]</label><input type="text" name="customer[fax]" value=""><br>
+    			<label>customer[mobile]</label><input type="text" name="customer[mobile]" value=""><br>
+				<input type="hidden" name="ReturnUrlSuccess" value="http://localhost/wecollect/callback.html?1" >
+				<input type="hidden" name="ReturnUrlFailure" value="http://localhost/wecollect/callback.html?2" >
+				<input type="hidden" name="lang1" value="en">
+				<input type="hidden" name="DirectTransfer" value="1">
+				<button class="styled-button" type="submit">Submit</button><br>
+    		 </form>
+       </body>
+    </html>

@@ -42,6 +42,18 @@ RCT_EXPORT_MODULE();
 			[SwiftNotice showToastNotice:jsonData];
 		});
     }
+    else if([dataName isEqualToString:@"getVersionCode"]) {
+        // should send version code to RN.
+        // like android, we need to convert the 1.2.3(4) to 1000000+20000+300+4
+        NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+        NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+        NSArray *vers = [ver componentsSeparatedByString:@"."];
+        int versionCode = build.intValue;
+        for(int i=0; i<vers.count; i++) {
+            versionCode += pow(10, 2*(vers.count - i)) * [vers[i] intValue];
+        }
+        [self sendDataToRN:@"versionCode" data: [NSString stringWithFormat:@"%d", versionCode]];
+    }
 }
 
 - (void)receiveRawDataFromRN:(NSString *)dataName data:(id)data

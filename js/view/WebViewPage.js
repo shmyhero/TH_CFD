@@ -7,7 +7,8 @@ import {
 	WebView,
 	NetInfo,
 	Image,
-	Platform
+	Platform,
+	StatusBar,
 } from 'react-native';
 
 var WEBVIEW_REF = 'webview';
@@ -80,10 +81,6 @@ var WebViewPage = React.createClass({
 				}
 			}
 		);
-
-		if(this.props.themeColor && Platform.OS == 'android'){
-			NativeDataModule.passRawDataToNative('statusBarColor', ''+this.props.themeColor)
-		}
 	},
 
 	componentWillUnmount: function() {
@@ -95,10 +92,6 @@ var WebViewPage = React.createClass({
 			'change',
 			this._handleConnectivityChange
 		);
-
-		if(this.props.themeColor && Platform.OS == 'android'){
-			NativeDataModule.passRawDataToNative('statusBarColor', ''+ColorConstants.TITLE_BLUE);
-		}
   },
 
 	_handleConnectivityChange: function(isConnected) {
@@ -252,8 +245,12 @@ var WebViewPage = React.createClass({
 	},
 
 	render: function() {
+		var statusBarColor = this.props.themeColor ? this.props.themeColor : ColorConstants.TITLE_BLUE;
+		var statusBar = <StatusBar barStyle="light-content" backgroundColor={statusBarColor}/>;
+
 		return(
 			<View style={{flex: 1}}>
+				{statusBar}
 				{this.renderNavBar()}
 				{this.renderWebView()}
 			</View>

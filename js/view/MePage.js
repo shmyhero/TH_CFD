@@ -12,6 +12,7 @@ import {
 	ScrollView,
 	Alert,
 	Platform,
+	StatusBar,
 } from 'react-native';
 var CookieManager = require('react-native-cookies')
 
@@ -344,7 +345,7 @@ var MePage = React.createClass({
 			this.props.navigator.push({
 				name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 				title:'实盘交易',
-				themeColor: "#3f5781",//ColorConstants.TITLE_DARK_BLUE,
+				themeColor: ColorConstants.TITLE_BLUE_LIVE,
 				onNavigationStateChange: this.onWebViewNavigationStateChange,
 				url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
 				// url:'http://cn.tradehero.mobi/tradehub/login.html'
@@ -653,6 +654,7 @@ var MePage = React.createClass({
 		*/
 		return (
 			<View style={styles.wrapper}>
+				<StatusBar barStyle="light-content" backgroundColor={ColorConstants.TITLE_BLUE}/>
 				{this.renderNavBar()}
 				<ScrollView ref={LIST_SCROLL_VIEW}>
 					{this.renderListView()}

@@ -885,7 +885,7 @@ var MainPage = React.createClass({
 	    return (
 	    	<View style={styles.container}>
 					{this.renderShareView()}
-		    	<StatusBar barStyle="light-content" backgroundColor='#1962dd'/>
+		    	<StatusBar barStyle="light-content" backgroundColor={ColorConstants.TITLE_BLUE}/>
 		      	<Tabbar ref="myTabbar" barColor='#f7f7f7' style={{alignItems: 'stretch'}}>
 			        <Tab name="home">
 									<Icon ref={"homepageBtn"} label="首页"

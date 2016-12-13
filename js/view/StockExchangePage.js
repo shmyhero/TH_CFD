@@ -10,6 +10,7 @@ import {
 	TouchableHighlight,
 	TouchableOpacity,
 	WebView,
+	StatusBar
 } from 'react-native';
 
 var {EventCenter, EventConst} = require('../EventCenter')
@@ -192,7 +193,7 @@ var StockExchangePage = React.createClass({
 		}
 	},
 
-	render: function() {
+	renderContent: function(){
 		var userData = LogicData.getUserData()
 		var loggined = Object.keys(userData).length !== 0
 
@@ -314,9 +315,15 @@ var StockExchangePage = React.createClass({
 		// // 		)
 		// // 	}
 		// // }
+	},
 
-
-
+	render: function() {
+		return (
+			<View style={{flex: 1}}>
+				<StatusBar barStyle="light-content" backgroundColor={ColorConstants.TITLE_BLUE}/>
+				{this.renderContent()}
+			</View>
+		);
 	},
 });
 

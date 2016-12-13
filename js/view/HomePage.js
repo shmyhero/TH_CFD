@@ -13,6 +13,7 @@ import {
 	ListView,
 	Alert,
 	ScrollView,
+	StatusBar,
 } from 'react-native';
 
 var Swiper = require('react-native-swiper')
@@ -933,6 +934,7 @@ var HomePage = React.createClass({
 		}
 		return (
 			<View style={{width: width, height: height - UIConstants.TAB_BAR_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER }}>
+				<StatusBar barStyle="light-content" backgroundColor={ColorConstants.TITLE_BLUE}/>
 				{this.renderNavBar()}
 
 				<View style={{width:width,height:height - UIConstants.TAB_BAR_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER - UIConstants.HEADER_HEIGHT}}>

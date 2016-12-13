@@ -1,5 +1,6 @@
 package com.tradehero.cfd;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -49,8 +50,7 @@ import static android.content.pm.PackageManager.GET_META_DATA;
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
  */
 //BUGBUG: how to use the 0.33 way ReactActivity with a splash screen?
-public class MainActivity extends AppCompatActivity implements DefaultHardwareBackBtnHandler,
-        ReactInstanceManager.ReactInstanceEventListener {
+public class MainActivity extends AppCompatActivity implements DefaultHardwareBackBtnHandler {
 
     @Bind(R.id.react_root_view)
     ReactRootView reactRootView;
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.20.123:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.116:8081").apply();
 
         super.onCreate(null);
 
@@ -102,8 +102,6 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
         reactRootView.startReactApplication(mReactInstanceManager, "TH_CFD", null);
 
-        mReactInstanceManager.addReactInstanceEventListener(this);
-
         try {
             String pkName = this.getPackageName();
             String versionName = this.getPackageManager().getPackageInfo(
@@ -113,23 +111,6 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         }
 
         getScreenWH();
-    }
-
-    @Override
-    public void onReactContextInitialized(ReactContext context) {
-        //Send GeTui Client ID to RN
-        initDeviceToken();
-
-        if(getIntent() != null){
-            if (getIntent().getExtras() != null) {
-                final String data = getIntent().getExtras().getString(GeTuiBroadcastReceiver.KEY_PUSH_DATA);
-                if (data != null) {
-                    sendPushDetailMessageWhenAvailable(data);
-                    mReactInstanceManager.removeReactInstanceEventListener(this);
-                }
-            }
-            handlePossilbeDeepLink(getIntent());
-        }
     }
 
     String pushData = null;
@@ -291,18 +272,18 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
             ReactContext context = mReactInstanceManager.getCurrentReactContext();
             if (mClientIDTeTui != null) {
                 NativeDataModule.passDataToRN(context, NativeActions.ACTION_DEVICE_TOKEN, mClientIDTeTui);
-                Log.d("GeTui", "NativeDataModule deviceToken : " + mClientIDTeTui);
+                Log.i("GeTui", "NativeDataModule deviceToken : " + mClientIDTeTui);
             }
 
 
         } catch (Exception e) {
-            Log.d("", "initDeviceToken : error");
+            Log.i("", "initDeviceToken : error");
         }
     }
 
     public void initGeTui() {
         // SDK初始化，第三方程序启动时，都要进行SDK初始化工作
-        Log.d("GetuiSdk", "initializing sdk...");
+        Log.i("GetuiSdk", "initializing sdk...");
         PackageManager pkgManager = getPackageManager();
         // 读写 sd card 权限非常重要, android6.0默认禁止的, 建议初始化之前就弹窗让用户赋予该权限
         boolean sdCardWritePermission =
@@ -322,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
         mClientIDTeTui = PushManager.getInstance().getClientid(this);
         if (mClientIDTeTui != null) {
-            Log.d("GeTui", "" + mClientIDTeTui);
+            Log.i("GeTui", "" + mClientIDTeTui);
 
             //TongDaoModule.setPushToken(mClientIDTeTui);
         }
@@ -440,4 +421,17 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         }
     }
 
+    public void sendDeviceTokenToRN(){
+        initDeviceToken();
+
+        if(getIntent() != null){
+            if (getIntent().getExtras() != null) {
+                final String data = getIntent().getExtras().getString(GeTuiBroadcastReceiver.KEY_PUSH_DATA);
+                if (data != null) {
+                    sendPushDetailMessageWhenAvailable(data);
+                }
+            }
+            handlePossilbeDeepLink(getIntent());
+        }
+    }
 }

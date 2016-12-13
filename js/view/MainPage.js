@@ -272,7 +272,8 @@ var MainPage = React.createClass({
 					stockPriceBid={route.stockRowData.lastBid}
 					stockTag={route.stockRowData.tag}
 					lastClosePrice={route.stockRowData.preClose}
-					openPrice={route.stockRowData.open}/>
+					openPrice={route.stockRowData.open}
+					onPopUp={route.onPopUp}/>
 			);
 		} else if (route.name === STOCK_EXCHANGE_ROUTE) {
 			showTabbar()
@@ -882,6 +883,7 @@ var MainPage = React.createClass({
 	},
 
 	render: function() {
+		console.log("LogicData.getAccountState: " + LogicData.getAccountState() + ", ColorConstants.TITLE_BLUE: " + ColorConstants.TITLE_BLUE);
 	    return (
 	    	<View style={styles.container}>
 					{this.renderShareView()}

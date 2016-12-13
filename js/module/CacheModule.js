@@ -25,7 +25,7 @@ RequestCache.schema = {
 const realm = new Realm({schema: [RequestCache]});
 
 export async function storeCacheForUrl(url, responseString, isUserRelated){
-  console.log("storeCacheForUrl: " + url + " with resp: " + responseString + ", isUserRelated: " + isUserRelated);
+  //console.log("storeCacheForUrl: " + url + " with resp: " + responseString + ", isUserRelated: " + isUserRelated);
 
   // Write
   realm.write(() => {

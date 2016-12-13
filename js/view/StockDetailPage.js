@@ -66,6 +66,7 @@ var StockDetailPage = React.createClass({
 		lastClosePrice: React.PropTypes.number,
 		openPrice: React.PropTypes.number,
 		showTabbar: React.PropTypes.func,
+		onPopUp: React.PropTypes.func,
 	},
 
 	getDefaultProps() {
@@ -76,7 +77,7 @@ var StockDetailPage = React.createClass({
 			stockPriceAsk: '--',
 			stockPriceBid: '--',
 			lastClosePrice: 9,
-
+			onPopUp: ()=>{},
 		}
 	},
 
@@ -690,7 +691,18 @@ var StockDetailPage = React.createClass({
 		}
 		return (
 			<NavBar showBackButton={true} navigator={this.props.navigator}
-				backButtonOnClick={this.props.showTabbar}
+				backButtonOnClick={()=>{
+					console.log("backButtonOnClick")
+					if(this.props.onPopUp){
+
+							console.log("backButtonOnClick on popup is not null")
+						this.props.onPopUp();
+					}else{
+
+							console.log("backButtonOnClick on popup is null")
+					}
+					this.props.showTabbar();
+				}}
 				barStyle={{height: barHeight}}	titleStyle={{fontSize:18}}
 				title={this.props.stockName}
 				backgroundColor='transparent'

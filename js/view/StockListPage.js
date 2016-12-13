@@ -134,8 +134,8 @@ var StockListPage = React.createClass({
 	reFetchStockData: function(forceRefetch) {
 		//If the last shown list is read from cache, we need to refetch the data.
 		if (this.state.rowStockInfoData.length === 0 || forceRefetch) {
-			console.log("reFetchStockData")
-			this.fetchStockData()
+			console.log("reFetchStockData");
+			this.fetchStockData();
 		}
 	},
 
@@ -333,11 +333,11 @@ var StockListPage = React.createClass({
 	},
 
 	onPageSelected: function() {
-		this.refreshData()
+		this.refreshData(true);
 	},
 
 	tabPressed: function() {
-		this.refreshData()
+		this.refreshData(true);
 	},
 
 	onEndReached: function() {
@@ -397,7 +397,8 @@ var StockListPage = React.createClass({
   	stockPressed: function(rowData) {
   		this.props.navigator.push({
 			name: MainPage.STOCK_DETAIL_ROUTE,
-			stockRowData: rowData
+			stockRowData: rowData,
+			onPopUp: ()=>{this.refreshData(true);},
 		});
   	},
 

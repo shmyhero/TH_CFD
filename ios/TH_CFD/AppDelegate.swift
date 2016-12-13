@@ -8,10 +8,10 @@
 
 import UIKit
 
-let kGtAppId:String = "v28qIAj6TO6ykm4QYEQFU"
-let kGtAppKey:String = "wY0MaVLXBjAneFnLwmBUDA"
-let kGtAppSecret:String = "UPfURaOnLI6K0vP6PC0ie5"
-
+let kGtAppId:String = "yug3IJK3kh8SKs7FQaSdI3"
+let kGtAppKey:String = "2ZIYLZjWQy8i4l7jcmdyB3"
+let kGtAppSecret:String = "BbmXDciUnM61tN5wkyNn57"
+    
 struct Platform {
 	static let isSimulator: Bool = {
 		var isSim = false

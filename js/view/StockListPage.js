@@ -97,7 +97,8 @@ var StockListPage = React.createClass({
 	},
 
 	handleStockInfo: function(realtimeStockInfo) {
-		var hasUpdate = this.updateListDataWithLastInfo(this.state.rowStockInfoData, realtimeStockInfo)
+		var listRowData = JSON.parse(JSON.stringify(this.state.rowStockInfoData));
+		var hasUpdate = this.updateListDataWithLastInfo(listRowData, realtimeStockInfo)
 
 		if (hasUpdate) {
 			if(!this.state.isOwnStockPage) {
@@ -108,16 +109,14 @@ var StockListPage = React.createClass({
 				}
 			}
 
-			var url = LogicData.getAccountState() ? this.props.activeDataURL : this.props.dataURL;
-			CacheModule.storeCacheForUrl(url, JSON.stringify(this.state.rowStockInfoData), this.state.isOwnStockPage ? true : false);
-
 			this.setState({
-				stockInfo: ds.cloneWithRows(this.state.rowStockInfoData)
+				stockInfo: ds.cloneWithRows(listRowData)
 			})
 		}
 	},
 
 	refreshData: function(forceRefetch) {
+		console.log("stocklistpage refreshData force" + forceRefetch)
 		//If the last shown list is read from cache, we also need to refresh the data by refetching the api
 		if (this.props.isOwnStockPage) {
 			if(forceRefetch || this.isDisplayingCache){
@@ -160,6 +159,17 @@ var StockListPage = React.createClass({
 					console.log("LogicData.getAccountState(): " + LogicData.getAccountState());
 					console.log("url: " + url);
 
+					CacheModule.loadStockDataForUrl(url)
+						.then((responseJson)=>{
+							this.isDisplayingCache = true;
+							this.setState({
+								rowStockInfoData: responseJson,
+								stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, responseJson)),
+								contentLoaded: true,
+								isRefreshing: false,
+							})
+						});
+
 					NetworkModule.fetchTHUrl(
 						url,
 						{
@@ -167,12 +177,12 @@ var StockListPage = React.createClass({
 							// headers: {
 							// 	'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 							// },
-							cache: 'offline',
+							//cache: 'offline',
 							//timeout: 1000,
 						},
-						(responseJson, isCache) => {
-							this.isDisplayingCache = isCache;
-
+						(responseJson) => {
+							this.isDisplayingCache = false;
+							CacheModule.storeStockDataForUrl(url, responseJson);
 							this.setState({
 								rowStockInfoData: responseJson,
 								stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, responseJson)),
@@ -181,15 +191,13 @@ var StockListPage = React.createClass({
 							})
 						},
 						(result) => {
-							if(!result.loadedOfflineCache){
+							if(!this.isDisplayingCache){
+								//Cache not loaded.
 								this.setState({
 									contentLoaded: false,
 									isRefreshing: false,
 								})
 								this.refs[NETWORK_ERROR_INDICATOR] && this.refs[NETWORK_ERROR_INDICATOR].stopRefresh();
-							}else{
-								console.log("Stock list is using old cached data.");
-								this.isDisplayingCache = true;
 							}
 							//Alert.alert('', result.errorMessage);
 						}
@@ -398,7 +406,10 @@ var StockListPage = React.createClass({
   		this.props.navigator.push({
 			name: MainPage.STOCK_DETAIL_ROUTE,
 			stockRowData: rowData,
-			onPopUp: ()=>{this.refreshData(true);},
+			onPopUp: ()=>{
+				console.log("STOCK_DETAIL_ROUTE onPopUp")
+				this.refreshData(true);
+			},
 		});
   	},
 
@@ -465,7 +476,7 @@ var StockListPage = React.createClass({
 	},
 
 	renderCountyFlag: function(rowData) {
-		if (rowData.tag !== undefined) {
+		if (rowData.tag && rowData.tag !== "") {
 			return (
 				<View style={[styles.stockCountryFlagContainer,{backgroundColor:LogicData.getAccountState()?ACTIVE_CONTRY_COLOR:SIMULATE_CONTRY_COLOR}]}>
 					<Text style={styles.stockCountryFlagText}>

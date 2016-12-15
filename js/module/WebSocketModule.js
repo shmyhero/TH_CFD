@@ -13,6 +13,7 @@ import {
 var AppStateModule = require('./AppStateModule');
 var LogicData = require('../LogicData')
 var StorageModule = require('./StorageModule')
+var CacheModule = require('./CacheModule')
 var {EventCenter, EventConst} = require('../EventCenter');
 
 var serverURL = 'http://cfd-webapi.chinacloudapp.cn'
@@ -95,7 +96,19 @@ export function start() {
 	//receives broadcast messages from a hub function, called "broadcastMessage"
 	// StockInfo data structure: {"Symbol":"MSFT","Price":31.97,"DayOpen":30.31,"Change":1.66,"PercentChange":0.0519}
 	stockPriceWebSocketProxy.on(serverListenerName, (stockInfo) => {
-		// console.log("socketUpdate! " + JSON.stringify(stockInfo))
+		 console.log("socketUpdate! " + JSON.stringify(stockInfo))
+
+		//Stock Price is changed.
+		stockInfo.forEach((data)=>{
+			var updateData = {
+				"id":data.id,
+				"last": data.last,
+				"lastBid": data.bid,
+				"lastAsk": data.ask,
+			}
+			CacheModule.updateStockData(updateData);
+		});
+
 		if (wsStockInfoCallback !== null) {
 			// console.log("socketUpdate! wsStockInfoCallback != null")
 			wsStockInfoCallback(stockInfo)

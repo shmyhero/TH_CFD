@@ -770,7 +770,7 @@ var HomePage = React.createClass({
 	tapFirstTopNews: function(firstNews) {
 		var url = NetConstants.TRADEHERO_API.WEBVIEW_TOP_NEWS_PAGE + firstNews.id;
 		if(LogicData.getAccountState()){
-			url = NetConstants.TRADEHERO_API.WEBVIEW_TOP_NEWS_PAGE_ACTUAL+news.id
+			url = NetConstants.TRADEHERO_API.WEBVIEW_TOP_NEWS_PAGE_ACTUAL+firstNews.id
 		}
 		this.gotoWebviewPage(url,
 			'每日头条',
@@ -828,8 +828,6 @@ var HomePage = React.createClass({
 			return (
 				<TouchableOpacity onPress={() => this.tapFirstTopNews(firstNews)}>
 					<View style={[styles.topnewsContainer, {height: rowHeight}]}>
-						<Image style={styles.topnewsImage} source={LogicData.getAccountState()?require('../../images/topnews_actual.png'):require('../../images/topnews.png')}/>
-						<View style={styles.topnewsVerticalLine}/>
 						<Swiper
 							ref="topnewsswiper"
 							horizontal={false}
@@ -846,8 +844,6 @@ var HomePage = React.createClass({
 		} else {
 			return (
 				<View style={[styles.topnewsContainer, {height: rowHeight}]}>
-					<Image style={styles.topnewsImage} source={LogicData.getAccountState()?require('../../images/topnews_actual.png'):require('../../images/topnews.png')}/>
-					<View style={styles.topnewsVerticalLine}/>
 				</View>
 				// <View></View>
 			)
@@ -1217,12 +1213,12 @@ var styles = StyleSheet.create({
 		width: 4,
 		height: 4,
 		backgroundColor: '#1962dd',
-		marginLeft: 10,
+		marginLeft: 15,
 		marginRight: 5,
 		borderRadius: 2,
 	},
 	newsText: {
-		width: width-100,
+		width: width-30,
 		fontSize: 14,
 		color: '#333333',
 		marginRight: 10,

@@ -471,7 +471,8 @@ var AppNavigator = React.createClass({
 		var {height, width} = Dimensions.get('window')
 		var statusBar = <StatusBar barStyle="light-content"/>
 
-		if (this.state.startUpPhase == MAIN_PAGE_PHASE) {
+		if (this.state.startUpPhase == MAIN_PAGE_PHASE) {			
+			StatusBar.setBackgroundColor(ColorConstants.TITLE_BLUE);
 			return (
 				<View style={styles.container}>
 					{statusBar}

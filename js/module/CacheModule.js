@@ -130,7 +130,7 @@ export async function loadStockDataForUrl(url){
     })
     return resultArray;
   }else{
-    return null;
+    return [];
   }
 }
 
@@ -157,7 +157,6 @@ export async function updateStockData(stockData){
           }
         });
       });
-      return;
     }
   }
   //If the stock data doesn't exist in data base, it should be a fx data instead of a stock.
@@ -175,6 +174,21 @@ export async function loadStockData(stockID){
   }else{
     return null;
   }
+}
+
+export async function loadStockDataList(stockIDList){
+  // Query
+  var stockIDArray = stockIDList.split(",");
+  var result = [];
+  for(var i = 0; i < stockIDArray.length; i++){
+    var queryString = 'id == "' + stockIDArray[i] + '"';
+    var results = realm.objects(STOCK_DATA_KEY).filtered(queryString);
+    if(results.length > 0){
+      result.push(JSON.parse(JSON.stringify(results[0])));
+    }
+  }
+
+  return result;
 }
 
 export async function clearStockData(){

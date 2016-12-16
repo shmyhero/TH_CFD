@@ -161,14 +161,16 @@ export function syncOwnStocks(userData) {
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 				},
-				cache: 'offline',
 			},
 			(responseJson) => {
 				if (responseJson.length===0 && !isLive) {
 					console.log('no own stocks online')
 					if (stockData.length > 0) {
 						addToOwnStocks(stockData)
-						.then((res)=>resolve(res))
+						.then((res)=>{
+							//LogicData.setOwnStocksData(res);
+							resolve(res);
+						})
 						.catch((error)=>reject(error));
 					};
 				}

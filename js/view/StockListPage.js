@@ -218,28 +218,47 @@ var StockListPage = React.createClass({
 	},
 
 	fetchOwnData: function() {
-
+		console.log("stocklistpage fetchOwnData")
 		StorageModule.loadOwnStocksData().then((value) => {
+			console.log("stocklistpage StorageModule.loadOwnStocksData " + JSON.stringify(value));
 			if (value !== null) {
 				LogicData.setOwnStocksData(JSON.parse(value))
+			}else{
+				LogicData.setOwnStocksData([]);
 			}
 		}).then(() => {
+
 			var ownData = LogicData.getOwnStocksData()
+			console.log("stocklistpage LogicData.getOwnStocksData() " + JSON.stringify(ownData));
 			if (ownData.length > 0) {
-				var param = "/"+ownData[0].id
+				var param = "" + ownData[0].id
 				for (var i = 1; i < ownData.length; i++) {
 					param += ","+ownData[i].id
 				};
-				var url = (LogicData.getAccountState() ? this.props.activeDataURL : this.props.dataURL) + param;
+				console.log("stocklistpage param " + param);
+				CacheModule.loadStockDataList(param)
+				.then((stockDataList)=>{
+					console.log("cached stockDataList "+ JSON.stringify(stockDataList))
+					this.isDisplayingCache = true;
+					this.setState({
+						rowStockInfoData: stockDataList,
+						stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, stockDataList)),
+						contentLoaded: true,
+						isRefreshing: false,
+					})
+				});
+
+				var url = (LogicData.getAccountState() ? this.props.activeDataURL : this.props.dataURL) + "/"+ param;
 				NetworkModule.fetchTHUrl(
 					url,
 					{
 						method: 'GET',
-						cache: 'offline',
+						//cache: 'offline',
 						//timeout: 1000,
 					},
 					(responseJson, isCache) => {
-						this.isDisplayingCache = isCache;
+						console.log("api responseJson "+ JSON.stringify(responseJson))
+						this.isDisplayingCache = false;
 						LogicData.setOwnStocksData(responseJson)
 						this.setState({
 							rowStockInfoData: responseJson,
@@ -249,20 +268,20 @@ var StockListPage = React.createClass({
 						})
 					},
 					(result) => {
-						if(!result.loadedOfflineCache){
+						if(!this.isDisplayingCache){
 							this.setState({
 								contentLoaded: false,
 								isRefreshing: false,
 							})
 							this.refs[NETWORK_ERROR_INDICATOR] && this.refs[NETWORK_ERROR_INDICATOR].stopRefresh();
-						}else{
-							this.isDisplayingCache = true;
 						}
 						//Alert.alert('', result.errorMessage);
 					}
 				)
 			}else{
 				this.setState({
+					rowStockInfoData: ownData,
+					stockInfo: ds.cloneWithRows(ownData),
 					contentLoaded: true,
 					isRefreshing: false,
 				})

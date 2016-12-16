@@ -51,6 +51,7 @@ var LogicData = {
 
 			StorageModule.setAccountState(state)
 			console.log("setAccountState = " + state);
+			NativeDataModule.passRawDataToNative('accountState', ''+state)
 			ColorConstants.setScheme(state ? ColorConstants.COLOR_THEME_LIVE: ColorConstants.COLOR_THEME_SIMULATOR);
 
 			EventCenter.emitAccountStateChangeEvent();

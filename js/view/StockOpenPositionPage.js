@@ -968,7 +968,7 @@ var StockOpenPositionPage = React.createClass({
 			}
 		}
 		return (
-			<View style={styles.sliderView}>
+			<View style={[styles.sliderView]}>
 				<Slider
 					style={styles.slider}
 					minimumTrackTintColor={ColorConstants.title_blue()}
@@ -1056,7 +1056,7 @@ var StockOpenPositionPage = React.createClass({
 					<Text style={styles.extendLeft}>{titleText}</Text>
 					{
 						switchIsOn ?
-						<View style={[styles.extendMiddle, {flexDirection: 'row', flex:3,paddingTop:0}]}>
+						<View style={[styles.extendMiddle, {flexDirection: 'row', flex:3, paddingTop:0, paddingBottom:0}]}>
 							<TextInput editable={false} ref={component => this.bindRef(type, component, 1)} defaultValue={percent.toFixed(1)+'%'}
 								style={{flex:3, textAlign:'right', fontSize:17, color: color}}
 								underlineColorAndroid='transparent'/>
@@ -1068,9 +1068,9 @@ var StockOpenPositionPage = React.createClass({
 						: null
 					}
 					<View style={styles.extendRight}>
-				        <Switch
-				          onValueChange={(value) => this.onSwitchPressed(type, value)}
-				          value={switchIsOn}
+		        <Switch
+		          onValueChange={(value) => this.onSwitchPressed(type, value)}
+		          value={switchIsOn}
 						  onTintColor={ColorConstants.title_blue()} />
 			        </View>
 				</View>
@@ -1215,9 +1215,7 @@ var StockOpenPositionPage = React.createClass({
 			return (
 				<View style={{height:thisPartHeight}}>
 					{this.renderStopProfitLoss(rowData, 1)}
-
 					{this.renderStopProfitLoss(rowData, 2)}
-
 				</View>
 				);
 		}
@@ -1279,7 +1277,7 @@ var StockOpenPositionPage = React.createClass({
 			if (!this.state.profitLossUpdated && this.state.profitLossConfirmed) {
 				buttonText = '已设置'
 			}
-			separatorStyle = {};
+			separatorStyle = {backgroundColor: 'pink'};
 			underlayColor = this.state.profitLossUpdated ? ColorConstants.title_blue():'#dfdee4';
 			buttonStyle = [styles.okView, !this.state.profitLossUpdated && styles.okViewDisabled,this.state.profitLossUpdated && {backgroundColor:ColorConstants.title_blue()} ]
 			buttonTextStyle = [styles.okButton, !this.state.profitLossUpdated && styles.okViewDisabled, this.state.profitLossUpdated && {backgroundColor:ColorConstants.title_blue()}];
@@ -1765,6 +1763,8 @@ var styles = StyleSheet.create({
 	slider: {
 		marginLeft: Platform.OS === 'ios' ? 15 : 0,
 		marginRight: Platform.OS === 'ios' ? 15 : 0,
+		height: 40,
+		//flex: 1,
 	},
 	sliderLeftText: {
 		fontSize: 12,

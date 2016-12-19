@@ -46,6 +46,7 @@ export function removeUserData(){
   LogicData.removeMeData();
   StorageModule.removeOwnStocksData();
   LogicData.removeOwnStocksData();
+  LogicData.removeBalance();
 
   LogicData.setAccountState(false);
 

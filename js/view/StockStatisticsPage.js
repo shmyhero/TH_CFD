@@ -57,7 +57,12 @@ var StockStatisticsPage = React.createClass({
 	},
 
 	tabPressed: function(index) {
-		NetworkModule.loadUserBalance(true, (responseJson)=>{this.setState({balanceData: responseJson,})})
+		var balanceData = LogicData.getBalanceData()
+		this.setState({balanceData: balanceData,},
+			()=>{
+				NetworkModule.loadUserBalance(true, (responseJson)=>{this.setState({balanceData: responseJson,})});
+			}
+		);
 	},
 
 	componentDidMount: function(){

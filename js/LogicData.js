@@ -15,6 +15,7 @@ var wechatUserData = {};
 var ownStocksData = [];
 var searchStockHistory = null;
 var balanceData = null;
+var balanceDataLive = null;
 var fxData = [];
 var certificateIdCardInfo = null;
 var getui_token = '';
@@ -204,11 +205,30 @@ var LogicData = {
   },
 
 	setBalanceData: function(data) {
-		balanceData = data
+		if(accountState){
+			balanceDataLive = data;
+		}else{
+			balanceData = data;
+		}
+
+		console.log("balanceData " + balanceData)
+		console.log("balanceDataLive " + balanceDataLive)
 	},
 
 	getBalanceData: function() {
-		return balanceData
+		console.log("balanceData " + balanceData)
+		console.log("balanceDataLive " + balanceDataLive)
+		
+		if(accountState){
+			return balanceDataLive;
+		}else{
+			return balanceData;
+		}
+	},
+
+	removeBalanceData: function(){
+		balanceDataLive = null;
+		balanceData = null;
 	},
 
 	setFxData: function(data) {

@@ -12,14 +12,19 @@ package com.tradehero.cfd.RNNativeModules;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Picture;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.SslErrorHandler;
+import android.webkit.GeolocationPermissions;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -36,6 +41,7 @@ import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.UIManagerModule;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.uimanager.events.ContentSizeChangeEvent;
 import com.facebook.react.uimanager.events.Event;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.react.views.webview.WebViewConfig;
@@ -83,12 +89,15 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
     public static final int COMMAND_GO_BACK = 1;
     public static final int COMMAND_GO_FORWARD = 2;
     public static final int COMMAND_RELOAD = 3;
+    public static final int COMMAND_STOP_LOADING = 4;
 
     // Use `webView.loadUrl("about:blank")` to reliably reset the view
     // state and release page resources (including any running JavaScript).
     private static final String BLANK_URL = "about:blank";
 
     private WebViewConfig mWebViewConfig;
+    private @Nullable
+    WebView.PictureListener mPictureListener;
 
     private static class ReactWebViewClient extends WebViewClient {
 
@@ -223,13 +232,6 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
                             createWebViewEvent(webView, url)));
         }
 
-        private static void dispatchEvent(WebView webView, Event event) {
-            ReactContext reactContext = (ReactContext) webView.getContext();
-            EventDispatcher eventDispatcher =
-                    reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
-            eventDispatcher.dispatchEvent(event);
-        }
-
         private WritableMap createWebViewEvent(WebView webView, String url) {
             WritableMap event = Arguments.createMap();
             event.putDouble("target", webView.getId());
@@ -249,9 +251,7 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
      * to call {@link WebView#destroy} on activty destroy event and also to clear the client
      */
     private static class ReactWebView extends WebView implements LifecycleEventListener {
-        private
-        @Nullable
-        String injectedJS;
+        private @Nullable String injectedJS;
 
         /**
          * WebView must be created with an context of the current activity
@@ -316,8 +316,21 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
     @Override
     protected WebView createViewInstance(ThemedReactContext reactContext) {
         ReactWebView webView = new ReactWebView(reactContext);
+        webView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+                callback.invoke(origin, true, false);
+            }
+        });
         reactContext.addLifecycleEventListener(webView);
         mWebViewConfig.configWebView(webView);
+        webView.getSettings().setBuiltInZoomControls(true);
+        webView.getSettings().setDisplayZoomControls(false);
+
+        // Fixes broken full-screen modals/galleries due to body height being 0.
+        webView.setLayoutParams(
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
 
         if (/*ReactBuildConfig.DEBUG && */Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             WebView.setWebContentsDebuggingEnabled(true);
@@ -377,6 +390,10 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
             }
             if (source.hasKey("uri")) {
                 String url = source.getString("uri");
+                String previousUrl = view.getUrl();
+                if (previousUrl != null && previousUrl.equals(url)) {
+                    return;
+                }
                 if (source.hasKey("method")) {
                     String method = source.getString("method");
                     if (method.equals(HTTP_METHOD_POST)) {
@@ -414,6 +431,15 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
         view.loadUrl(BLANK_URL);
     }
 
+    @ReactProp(name = "onContentSizeChange")
+    public void setOnContentSizeChange(WebView view, boolean sendContentSizeChangeEvents) {
+        if (sendContentSizeChangeEvents) {
+            view.setPictureListener(getPictureListener());
+        } else {
+            view.setPictureListener(null);
+        }
+    }
+
     @Override
     protected void addEventEmitters(ThemedReactContext reactContext, WebView view) {
         // Do not register default touch emitter and let WebView implementation handle touches
@@ -433,13 +459,13 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
     }
 
     @Override
-    public
-    @Nullable
+    public @Nullable
     Map<String, Integer> getCommandsMap() {
         return MapBuilder.of(
                 "goBack", COMMAND_GO_BACK,
                 "goForward", COMMAND_GO_FORWARD,
-                "reload", COMMAND_RELOAD);
+                "reload", COMMAND_RELOAD,
+                "stopLoading", COMMAND_STOP_LOADING);
     }
 
     @Override
@@ -454,6 +480,9 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
             case COMMAND_RELOAD:
                 root.reload();
                 break;
+            case COMMAND_STOP_LOADING:
+                root.stopLoading();
+                break;
         }
     }
 
@@ -462,6 +491,30 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
         super.onDropViewInstance(webView);
         ((ThemedReactContext) webView.getContext()).removeLifecycleEventListener((ReactWebView) webView);
         ((ReactWebView) webView).cleanupCallbacksAndDestroy();
+    }
+
+    private WebView.PictureListener getPictureListener() {
+        if (mPictureListener == null) {
+            mPictureListener = new WebView.PictureListener() {
+                @Override
+                public void onNewPicture(WebView webView, Picture picture) {
+                    dispatchEvent(
+                            webView,
+                            new ContentSizeChangeEvent(
+                                    webView.getId(),
+                                    webView.getWidth(),
+                                    webView.getContentHeight()));
+                }
+            };
+        }
+        return mPictureListener;
+    }
+
+    private static void dispatchEvent(WebView webView, Event event) {
+        ReactContext reactContext = (ReactContext) webView.getContext();
+        EventDispatcher eventDispatcher =
+                reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
+        eventDispatcher.dispatchEvent(event);
     }
 
     private void removeAllCookie(WebView wb) {

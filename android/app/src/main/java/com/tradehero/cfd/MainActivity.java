@@ -82,10 +82,9 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     protected void onCreate(Bundle savedInstanceState) {
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        
+
         preferences.edit().putString("debug_http_host", "192.168.20.126:8081").apply();
-
-
+        
         super.onCreate(null);
 
         CrashReport.initCrashReport(getApplicationContext());

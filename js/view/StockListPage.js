@@ -161,13 +161,15 @@ var StockListPage = React.createClass({
 
 					CacheModule.loadStockDataForUrl(url)
 						.then((responseJson)=>{
-							this.isDisplayingCache = true;
-							this.setState({
-								rowStockInfoData: responseJson,
-								stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, responseJson)),
-								contentLoaded: true,
-								isRefreshing: false,
-							})
+							if(responseJson){
+								this.isDisplayingCache = true;
+								this.setState({
+									rowStockInfoData: responseJson,
+									stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, responseJson)),
+									contentLoaded: true,
+									isRefreshing: false,
+								})
+							}
 						});
 
 					NetworkModule.fetchTHUrl(
@@ -191,6 +193,7 @@ var StockListPage = React.createClass({
 							})
 						},
 						(result) => {
+							console.log("get stock data error " + JSON.stringify(result))
 							if(!this.isDisplayingCache){
 								//Cache not loaded.
 								this.setState({
@@ -238,14 +241,15 @@ var StockListPage = React.createClass({
 				console.log("stocklistpage param " + param);
 				CacheModule.loadStockDataList(param)
 				.then((stockDataList)=>{
-					console.log("cached stockDataList "+ JSON.stringify(stockDataList))
-					this.isDisplayingCache = true;
-					this.setState({
-						rowStockInfoData: stockDataList,
-						stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, stockDataList)),
-						contentLoaded: true,
-						isRefreshing: false,
-					})
+					if(stockDataList){
+						this.isDisplayingCache = true;
+						this.setState({
+							rowStockInfoData: stockDataList,
+							stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, stockDataList)),
+							contentLoaded: true,
+							isRefreshing: false,
+						})
+					}
 				});
 
 				var url = (LogicData.getAccountState() ? this.props.activeDataURL : this.props.dataURL) + "/"+ param;

@@ -130,7 +130,7 @@ export async function loadStockDataForUrl(url){
     })
     return resultArray;
   }else{
-    return [];
+    return null;
   }
 }
 

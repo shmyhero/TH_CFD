@@ -208,6 +208,11 @@ dependencies {
     compile 'com.android.support:support-v4:+'
     // -------------------- 同道依赖 ------------
     //compile project(':sdk-ui')
+
+
+    // -------------------- 截屏 + QR码识别 ------------
+    compile project(':react-native-view-shot')
+    compile project(':react-native-qrcode-local-image')
 }
 
 // Run this once to be able to run the application with BUCK

@@ -494,7 +494,7 @@ var HomePage = React.createClass({
 					 if(index == 2){url = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-quick.html';}
 					 if(index == 3){url = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-wechat.html';}
 					 this.props.navigator.push({
-			 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			 			name: MainPage.PAYMENT_PAGE,
 			 			url: url,
 			 			title: responseJson,
 			 			backFunction: this.forceloopSwipers,
@@ -505,7 +505,7 @@ var HomePage = React.createClass({
 					 if(index == 2){payMethod = 'quick'}
 					 if(index == 3){payMethod = 'wechat'}
 					 this.props.navigator.push({
-			 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			 			name: MainPage.PAYMENT_PAGE,
 			 			url: 'http://www.test.paytest/'+payMethod,
 			 			title: responseJson,
 			 			backFunction: this.forceloopSwipers,
@@ -640,7 +640,7 @@ var HomePage = React.createClass({
 			)
 		}else{
 			return (
-			<View style={{height:239, backgroundColor:'white'}}>
+			<View style={{height:249, backgroundColor:'white'}}>
 				<View style={styles.popularityHeaderContainer}>
 					<Text style={styles.popularityTitle}>
 						多空博弈
@@ -661,6 +661,8 @@ var HomePage = React.createClass({
 					enableEmptySections={true}
 					renderRow={this.renderPopularityRow}
 					renderSeparator={this.renderSeparator}/>
+
+				<View style={styles.bigSeparator}/>
 			</View>
 			)
 		}
@@ -843,8 +845,9 @@ var HomePage = React.createClass({
 			)
 		} else {
 			return (
-				<View style={[styles.topnewsContainer, {height: rowHeight}]}>
-				</View>
+				null
+				//<View style={[styles.topnewsContainer, {height: rowHeight}]}>
+				//</View>
 				// <View></View>
 			)
 		}
@@ -1014,7 +1017,6 @@ var HomePage = React.createClass({
 
 
 						{this.renderPopularityView()}
-						<View style={styles.bigSeparator}/>
 
 
 						{this.renderCards()}

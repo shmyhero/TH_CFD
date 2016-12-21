@@ -40,6 +40,7 @@ var WebViewPage = React.createClass({
 		isShowNav: React.PropTypes.bool,
 		themeColor: ColorPropType,
 		onNavigationStateChange: React.PropTypes.func,
+		onWebPageLoaded: React.PropTypes.func,
 	},
 
 	getDefaultProps() {
@@ -105,6 +106,10 @@ var WebViewPage = React.createClass({
 				this.refs[WEBVIEW_REF].reload();
 			}
 		}
+	},
+
+	getWebViewRef: function(){
+		return this.refs[WEBVIEW_REF];
 	},
 
 	pressBackButton: function() {
@@ -178,6 +183,9 @@ var WebViewPage = React.createClass({
 	webViewLoaded: function(content){
 		console.log("onLoadEnd " +content);
 		this.setState({isLoaded:true});
+		if(this.props.onWebPageLoaded){
+			this.props.onWebPageLoaded(content.nativeEvent);
+		}
 	},
 
 	renderWebView: function(){

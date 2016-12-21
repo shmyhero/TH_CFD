@@ -21,6 +21,8 @@
     "react-native-wheel-picker": "1.1.0",
     "react-native-wx": "^2.0.1",
     "react-timer-mixin": "0.13.3",
+    "@remobile/react-native-qrcode-local-image": "1.0.1",
+    "react-native-view-shot": "1.5.1",
     "realm": "^0.14.3"
   }
 }

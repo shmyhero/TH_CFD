@@ -39,6 +39,7 @@ var listRawData = [{'type':'account','subtype':'accountInfo'},
 // {'type':'button','title':'开设实盘账户'},
 {'type':'Separator', 'height':10},
 {'type':'accountState'},
+{'type':'normal','title':'存取资金', 'image':require('../../images/icon_income.png'), 'subtype':'depositWithdraw'},
 {'type':'normal','title':'我的交易金', 'image':require('../../images/icon_income.png'), 'subtype':'income'},
 {'type':'normal','title':'我的卡片', 'image':require('../../images/icon_mycard.png'), 'subtype':'mycard'},
 {'type':'normal','title':'帮助中心', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'helpcenter'},
@@ -393,7 +394,11 @@ var MePage = React.createClass({
 	},
 
 	onSelectNormalRow: function(rowData) {
-		if(rowData.subtype === 'income'){
+		if(rowData.subtype === 'depositWithdraw'){
+			this.props.navigator.push({
+				name: MainPage.DEPOSIT_WITHDRAW_ROUTE,
+			})
+		}else if(rowData.subtype === 'income'){
 			this.props.navigator.push({
 				name: MainPage.MY_INCOME_ROUTE,
 			})

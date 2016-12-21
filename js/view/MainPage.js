@@ -63,6 +63,9 @@ var RegisterSuccessPage = require('./RegisterSuccessPage')
 var SuperPriorityHintPage = require('./SuperPriorityHintPage')
 var MyMessagesPage = require('./MyMessagesPage')
 var DevelopPage = require('./DevelopPage')
+var PaymentPage = require('./PaymentPage')
+var DepositWithdrawPage = require('./DepositWithdrawPage')
+var NativeDataModule = require('../module/NativeDataModule')
 
 var TalkingdataModule = require('../module/TalkingdataModule')
 var WebSocketModule = require('../module/WebSocketModule');
@@ -116,6 +119,8 @@ export let SHARE_ROUTE = 'share'
 export let DAY_SIGN_ROUTE = 'daySign'
 export let MY_MESSAGES_ROUTE = 'myMessages'
 export let DEVELOP_ROUTE = 'develop'
+export let PAYMENT_PAGE = 'payment'
+export let DEPOSIT_WITHDRAW_ROUTE = 'depositWithdrawRoute'
 
 const glypy = glypyMapMaker({
   Home: 'f04f',
@@ -288,6 +293,7 @@ var MainPage = React.createClass({
 			return (
 				<WebViewPage url={route.url}
 					onNavigationStateChange={route.onNavigationStateChange}
+					onWebPageLoaded={route.onWebPageLoaded}
 					showTabbar={showTabbar}
 					title={route.title} navigator={navigationOperations}
 					backFunction={()=>{
@@ -501,6 +507,29 @@ var MainPage = React.createClass({
 					<DevelopPage navigator={navigationOperations} routeMapper={this.RouteMapper}
   					onPopToRoute={route.onPopToRoute}/>
 				</View>
+			);
+		}else if (route.name === PAYMENT_PAGE){
+			hideTabbar();
+			return (
+				<View style={{flex: 1}}>
+					<PaymentPage navigator={navigationOperations} routeMapper={this.RouteMapper}
+						onPopToRoute={route.onPopToRoute}
+						url={route.url}
+						onNavigationStateChange={route.onNavigationStateChange}
+						showTabbar={showTabbar}
+						title={route.title}
+						backFunction={()=>{
+							this.showTabbar()
+							if (route.backFunction) {
+								route.backFunction()
+							}
+						}}/>
+				</View>
+			);
+		}else if (route.name === DEPOSIT_WITHDRAW_ROUTE){
+			hideTabbar();
+			return (
+				<DepositWithdrawPage navigator={navigationOperations} routeMapper={this.RouteMapper}/>
 			);
 		}
 	},
@@ -883,7 +912,6 @@ var MainPage = React.createClass({
 	},
 
 	render: function() {
-		console.log("LogicData.getAccountState: " + LogicData.getAccountState() + ", ColorConstants.TITLE_BLUE: " + ColorConstants.TITLE_BLUE);
 	    return (
 	    	<View style={styles.container}>
 					{this.renderShareView()}

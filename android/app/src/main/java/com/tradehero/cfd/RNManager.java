@@ -16,6 +16,8 @@ import com.zyu.ReactNativeWheelPickerPackage;
 import com.beefe.picker.PickerViewPackage;
 import com.psykar.cookiemanager.CookieManagerPackage;
 import io.realm.react.RealmReactPackage;
+import fr.greweb.reactnativeviewshot.RNViewShotPackage;
+import com.remobile.qrcodeLocalImage.RCTQRCodeLocalImagePackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,7 +47,9 @@ public class RNManager {
                 new RCTSwipeRefreshLayoutPackage(),
                 new PickerViewPackage(),
                 new CookieManagerPackage(),
-                new RealmReactPackage()
+                new RealmReactPackage(),
+                new RNViewShotPackage(),
+                new RCTQRCodeLocalImagePackage()
         );
         return packages;
     }

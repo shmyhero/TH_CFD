@@ -328,7 +328,7 @@ var MePage = React.createClass({
 			console.log('success login error');
 			MainPage.ayondoLoginResult(false)
 		}
-		
+
 		this.forceUpdate();
 	},
 
@@ -417,10 +417,8 @@ var MePage = React.createClass({
 			NativeSceneModule.launchNativeScene('MeiQia')
 		}
 		else if(rowData.subtype === 'aboutus') {
-
 			var aboutUrl = LogicData.getAccountState()?NetConstants.TRADEHERO_API.WEBVIEW_URL_ABOUT_US_ACTUAL:NetConstants.TRADEHERO_API.WEBVIEW_URL_ABOUT_US
 			this.gotoWebviewPage(aboutUrl, '关于我们');
-
 		}
 		else if(rowData.subtype === 'config') {
 			this.props.navigator.push({

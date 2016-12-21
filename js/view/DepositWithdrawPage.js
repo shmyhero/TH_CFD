@@ -53,7 +53,9 @@ export default class DepositWithdrawPage extends Component {
         alert("出金")
         return;
       case 'details':
-        alert("明细")
+				this.props.navigator.push({
+					name: MainPage.DEPOSIT_WITHDRAW_FLOW,
+				});
         return;
     }
   }

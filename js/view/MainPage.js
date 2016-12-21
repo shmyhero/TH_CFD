@@ -72,6 +72,7 @@ var WebSocketModule = require('../module/WebSocketModule');
 var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 var StorageModule = require('../module/StorageModule');
 var OpenAccountRoutes = require('./openAccount/OpenAccountRoutes');
+var DepositWithdrawFlow = require('./DepositWithdrawFlow');
 
 var TutorialPage = require('./TutorialPage');
 
@@ -113,6 +114,7 @@ export let LIVE_UPDATE_USER_INFO_ROUTE = 'liveUpdateUserInfo'
 export let LIVE_REGISTER_STATUS_ROUTE = 'liveRegisterStatus'
 export let STOCK_POPULARITY_ROUTE = 'stockPopularity'
 export let FEEDBACK_ROUTE = 'feedback'
+export let DEPOSIT_WITHDRAW_FLOW = 'deposit_withdraw_flow'
 export let EDIT_OWN_STOCKS_ROUTE = 'editownstocks'
 export let EDIT_ALERT_ROUTE = 'editalert'
 export let SHARE_ROUTE = 'share'
@@ -462,6 +464,12 @@ var MainPage = React.createClass({
 			return (
 				<FeedbackPage navigator={navigationOperations}
 					showTabbar={showTabbar} phone={route.phone}/>
+			)
+		}
+		else if (route.name === DEPOSIT_WITHDRAW_FLOW) {
+			hideTabbar()
+			return (
+				<DepositWithdrawFlow navigator={navigationOperations} showTabbar={showTabbar}/>
 			)
 		}
 		else if (route.name === EDIT_OWN_STOCKS_ROUTE) {

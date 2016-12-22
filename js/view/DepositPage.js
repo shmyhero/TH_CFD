@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
 
 	protocalRight:{
 		fontSize:12,
-		color:'#d71a18'
+		color:'#ff6666'
 	},
 
 });

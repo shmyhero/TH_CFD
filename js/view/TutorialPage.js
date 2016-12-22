@@ -19,9 +19,17 @@ var pages = {
 	'position': [require('../../images/tutorial04.png')],
 }
 
+var TimerMixin = require('react-timer-mixin');
+var toturial = require('../../images/tutorial.gif');
+var gifIamgeTimer = null;
+
 var savedData = null
 
+
 var TutorialPage = React.createClass({
+
+	mixins: [TimerMixin],
+
 	getInitialState: function() {
 		return {
 			tutorialType: 'trade',
@@ -32,6 +40,13 @@ var TutorialPage = React.createClass({
 
 	componentWillMount: function() {
 		// this.show()
+	},
+
+	componentWillUnmount() {
+      //Unregister handleActions from dispatcher
+			if(gifIamgeTimer !== null) {
+				this.clearInterval(gifIamgeTimer)
+			}
 	},
 
 	checkShow: function() {
@@ -46,11 +61,13 @@ var TutorialPage = React.createClass({
 				else {
 					//异步
 					if (!this.state.visible) {
-						this.setState({
-							tutorialType: type,
-							visible: true,
-							page: 0,
-						});
+						if (this.isMounted()) {
+							this.setState({
+								tutorialType: type,
+								visible: true,
+								page: 0,
+							});
+						}
 					}
 				}
 			})
@@ -58,24 +75,26 @@ var TutorialPage = React.createClass({
 	},
 
 	gotoNextPage: function() {
-		var totalPage = pages[this.state.tutorialType].length;
-		if (this.state.page+1 >= totalPage) {
+		// var totalPage = pages[this.state.tutorialType].length;
+		// if (this.state.page+1 >= totalPage) {
 			if(savedData === null) {
 				savedData = {}
 			}
 			savedData[this.state.tutorialType] = true
 			StorageModule.setTutorial(JSON.stringify(savedData))
 			// the call sequence is useful here, first set visible false, then call super's hideTutorial
-			this.setState({
-				visible: false,
-			})
-			this.props.hideTutorial()
-		}
-		else {
-			this.setState({
-				page: this.state.page+1,
-			});
-		}
+			if (this.isMounted()) {
+				this.setState({
+					visible: false,
+				})
+				this.props.hideTutorial()
+			}
+		// }
+		// else {
+		// 	this.setState({
+		// 		page: this.state.page+1,
+		// 	});
+		// }
 	},
 
 	render: function() {
@@ -83,11 +102,22 @@ var TutorialPage = React.createClass({
 			this.checkShow()
 			return null
 		}
-		var imageSource = pages[this.state.tutorialType][this.state.page]
+		// var imageSource = pages[this.state.tutorialType][this.state.page]
+		var imageSource = toturial;
+		if(gifIamgeTimer !== null) {
+			this.clearInterval(gifIamgeTimer)
+		}
+		gifIamgeTimer = this.setInterval(
+			() => {
+				this.gotoNextPage()
+			},
+			8000
+		);
+
 		return (
-			<TouchableOpacity style={styles.container} onPress={this.gotoNextPage}>
+			// <TouchableOpacity style={styles.container} onPress={this.gotoNextPage}>
 				<Image source={imageSource} style={{width:width, height:height, resizeMode:'stretch'}}/>
-			</TouchableOpacity>
+			// </TouchableOpacity>
 		)
 	},
 });

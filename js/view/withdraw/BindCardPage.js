@@ -14,7 +14,6 @@ import {
 	ScrollView,
 } from 'react-native';
 
-var TimerMixin = require('react-timer-mixin');
 import Picker from 'react-native-picker';
 
 var Button = require('../component/Button')
@@ -59,7 +58,6 @@ var defaultRawData = [
 
 export default class BindCardPage extends Component {
 
-	//mixins: [TimerMixin],
 	pickerDisplayed = false;
   listRawData = [];
   ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 });

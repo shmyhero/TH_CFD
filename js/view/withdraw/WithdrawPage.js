@@ -173,15 +173,7 @@ export default class WithdrawPage extends Component {
  					<Text style={{fontSize: 15, color: '#5a5a5a', marginTop: 18}}>出金金额</Text>
           <View style={{flexDirection: 'row', marginTop:10, alignItems:"center"}}>
    					<Text style={{fontSize: 17, fontWeight: 'bold'}}>美元</Text>
-            <TextInput style={[{ fontSize: 50,
-          		color: '#000000',
-          		flex: 1,
-          		alignItems:'center',
-          		justifyContent:'center',
-          		marginLeft:0,
-          		paddingLeft:0,
-              height: 80
-            },inputStyle]}
+            <TextInput style={[styles.inputText, inputStyle]}
    						autoCapitalize="none"
    						autoCorrect={false}
    						defaultValue={rowData.value}
@@ -415,6 +407,16 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 14,
     color: '#415a87',
+  },
+  inputText:{
+    fontSize: 50,
+    color: '#000000',
+    flex: 1,
+    alignItems:'center',
+    justifyContent:'center',
+    marginLeft:10,
+    paddingLeft:0,
+    height: 80
   },
   normalInputText: {
     color: '#000000',

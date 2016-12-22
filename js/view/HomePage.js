@@ -703,7 +703,26 @@ var HomePage = React.createClass({
 		)
 	},
 
+	newUserGuide:function(){
+		Alert.alert('newUserGuide');
+	},
 
+	renderNewUser:function(){
+		return(
+			<TouchableOpacity style = {styles.newUser} activeOpacity={0.5} onPress={()=>this.newUserGuide()}>
+				<View style={{padding:20}}>
+					<View style={{flexDirection:'row'}}>
+						<Text style={{fontSize:19,color:'#4b4b4b'}}>新手学堂</Text>
+						<Text style={{fontSize:19,color:'#ff7500',marginLeft:5}}>场景教学</Text>
+     			</View>
+					<Text style={{marginTop:12,fontSize:13,color:'#6a6a6a'}}>一站式尽览盈交易赚钱秘诀</Text>
+	   		</View>
+				<View style={styles.imageContainer}>
+					<Image style = {styles.newUserImage} source={require('../../images/user_guide.png')}></Image>
+				</View>
+   		</TouchableOpacity>
+		)
+	},
 	renderCards: function(){
 
 			var cardItems = this.state.rawCardsInfo.map(
@@ -1021,7 +1040,9 @@ var HomePage = React.createClass({
 
 						{this.renderCards()}
 
-						{this.renderBottomViews()}
+						{/* {this.renderBottomViews()} */}
+
+						{this.renderNewUser()}
 
 					</ScrollView>
 				</View>
@@ -1290,6 +1311,27 @@ var styles = StyleSheet.create({
 		justifyContent:'center',
 
 	},
+	newUser:{
+		width:width,
+		flexDirection:'row',
+		backgroundColor:'white',
+		marginBottom:10,
+		height:90,
+
+	},
+
+	imageContainer:{
+		flex:1,
+		justifyContent:'center',
+		alignItems:'flex-end',
+	},
+
+	newUserImage:{
+		height:62,
+		width:100,
+		marginRight:20,
+	},
+
 });
 
 module.exports = HomePage;

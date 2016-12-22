@@ -73,6 +73,7 @@ var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 var StorageModule = require('../module/StorageModule');
 var OpenAccountRoutes = require('./openAccount/OpenAccountRoutes');
 var DepositWithdrawFlow = require('./DepositWithdrawFlow');
+var DepositPage = require('./DepositPage');
 
 var TutorialPage = require('./TutorialPage');
 
@@ -115,6 +116,7 @@ export let LIVE_REGISTER_STATUS_ROUTE = 'liveRegisterStatus'
 export let STOCK_POPULARITY_ROUTE = 'stockPopularity'
 export let FEEDBACK_ROUTE = 'feedback'
 export let DEPOSIT_WITHDRAW_FLOW = 'deposit_withdraw_flow'
+export let DEPOSIT_PAGE = 'deposit_page'
 export let EDIT_OWN_STOCKS_ROUTE = 'editownstocks'
 export let EDIT_ALERT_ROUTE = 'editalert'
 export let SHARE_ROUTE = 'share'
@@ -123,6 +125,7 @@ export let MY_MESSAGES_ROUTE = 'myMessages'
 export let DEVELOP_ROUTE = 'develop'
 export let PAYMENT_PAGE = 'payment'
 export let DEPOSIT_WITHDRAW_ROUTE = 'depositWithdrawRoute'
+
 
 const glypy = glypyMapMaker({
   Home: 'f04f',
@@ -470,6 +473,12 @@ var MainPage = React.createClass({
 			hideTabbar()
 			return (
 				<DepositWithdrawFlow navigator={navigationOperations} showTabbar={showTabbar}/>
+			)
+		}
+		else if (route.name === DEPOSIT_PAGE) {
+			hideTabbar()
+			return (
+				<DepositPage navigator={navigationOperations} showTabbar={showTabbar}/>
 			)
 		}
 		else if (route.name === EDIT_OWN_STOCKS_ROUTE) {

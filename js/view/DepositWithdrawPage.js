@@ -47,7 +47,9 @@ export default class DepositWithdrawPage extends Component {
   onSelectNormalRow(rowData){
     switch(rowData.subtype){
       case 'deposit':
-        alert("入金")
+				this.props.navigator.push({
+					name: MainPage.DEPOSIT_PAGE,
+				});
         return;
       case 'withdraw':
         alert("出金")

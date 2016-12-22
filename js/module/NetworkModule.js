@@ -16,7 +16,7 @@ var alertShow = false
 export const API_ERROR = 'apiError';
 export const NETWORK_CONNECTION_ERROR = 'networkConnectionError';
 
-export function fetchTHUrl(url, params, successCallback, errorCallback) {
+export function fetchTHUrl(url, params, successCallback, errorCallback, notShowResponseLog) {
 	var requestSuccess = true;
 
 	console.log('fetching: ' + url + ' with params: ')
@@ -46,7 +46,6 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 
 	fetch(url, params)
 		.then((response) => {
-			console.log(response)
 			if (response.status === 200) {
 				requestSuccess = true;
 			} else if (response.status === 401){
@@ -68,8 +67,10 @@ export function fetchTHUrl(url, params, successCallback, errorCallback) {
 					result.errorMessage = responseJson.ExceptionMessage || responseJson.Message || responseJson.message;
 					errorCallback && errorCallback(result);
 				} else {
-					console.log('fetchTHUrl success with response: ')
-					console.log(responseJson)
+					if(!notShowResponseLog){
+						console.log('fetchTHUrl success with response: ')
+						console.log(responseJson)
+					}
 
 					if(params.cache === "offline"){
 						var userRelated = false;

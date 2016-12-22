@@ -132,6 +132,15 @@ function getCFDAPI(){
     LATEST_APP_VERSION:CFD_API_SERVER + '/api/version',
 
     GET_PAY_DEMO_TEST_ID:CFD_API_SERVER + '/api/user/live/deposit/id?amount=10',
+
+    GET_SUPPORT_WITHDRAW_BANKS: CFD_API_SERVER + "/api/banks",
+    GET_ALL_PROVINCES_AND_CITIES: CFD_API_SERVER + "/api/area/?id=-1",
+    GET_PROVINCES: CFD_API_SERVER + "/api/area/?id=0",
+    GET_CITY: CFD_API_SERVER + "/api/area/?id=<id>",
+
+    BIND_BANK_ACCOUNT: CFD_API_SERVER + "/api/user/live/refaccount",
+    GET_USER_INFO: CFD_API_SERVER + "/api/user/live/info",
+    REFUNDABLE_BALANCE: CFD_API_SERVER + "/api/user/live/balance/refundable",
   }
 }
 

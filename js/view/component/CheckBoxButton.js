@@ -26,6 +26,12 @@ var CheckBoxButton = React.createClass({
 		defaultSelected: React.PropTypes.bool,
 
 		onPress: React.PropTypes.func,
+
+		content: React.PropTypes.element,
+
+		selectedIcon: React.PropTypes.number,
+
+		unSelectedIcon: React.PropTypes.number,
 	},
 
 	getInitialState: function() {
@@ -33,7 +39,7 @@ var CheckBoxButton = React.createClass({
 			selected: this.props.defaultSelected,
 		};
 	},
-	
+
 	getDefaultProps(): Object {
 		return {
 			containerStyle: {flex: 1,flexDirection: 'row', alignItems:'center'},
@@ -53,12 +59,15 @@ var CheckBoxButton = React.createClass({
 	},
 
 	render: function() {
-		var icon = this.state.selected ? require('../../../images/checkbox1.png') : require('../../../images/checkbox2.png')
+		var icon = this.state.selected ?
+			(this.props.selectedIcon ? this.props.selectedIcon : require('../../../images/checkbox1.png'))
+		 : (this.props.unSelectedIcon ? this.props.unSelectedIcon : require('../../../images/checkbox2.png'))
 		return (
 			<TouchableOpacity style={styles.wrapper} onPress={this.props.enabled ? this.onPressed : null} >
 				<View style={this.props.containerStyle}>
 					<Image style={styles.image} source={icon} />
 					<Text style = {this.props.textStyle}>{this.props.text} </Text>
+					{this.props.children}
 				</View>
 			</TouchableOpacity>
 		)

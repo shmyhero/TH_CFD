@@ -31,6 +31,7 @@ var NetworkModule = require('../module/NetworkModule')
 var OpenAccountRoutes = require('./openAccount/OpenAccountRoutes')
 var UIConstants = require('../UIConstants');
 var VersionConstants = require('../VersionConstants');
+var WebSocketModule = require('../module/WebSocketModule')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
@@ -39,7 +40,7 @@ var listRawData = [{'type':'account','subtype':'accountInfo'},
 // {'type':'button','title':'开设实盘账户'},
 {'type':'Separator', 'height':10},
 {'type':'accountState'},
-{'type':'normal','title':'存取资金', 'image':require('../../images/icon_income.png'), 'subtype':'depositWithdraw'},
+{'type':'normal','title':'存取资金', 'image':require('../../images/icon_depositwithdraw.png'), 'subtype':'depositWithdraw'},
 {'type':'normal','title':'我的交易金', 'image':require('../../images/icon_income.png'), 'subtype':'income'},
 {'type':'normal','title':'我的卡片', 'image':require('../../images/icon_mycard.png'), 'subtype':'mycard'},
 {'type':'normal','title':'帮助中心', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'helpcenter'},
@@ -137,7 +138,8 @@ var MePage = React.createClass({
 
 	onTabChanged: function(){
 		LogicData.setTabIndex(3);
-		this.reloadMeData()
+		WebSocketModule.registerInterestedStocks(null);
+		this.reloadMeData();
 	},
 
 	reloadMeData: function(){

@@ -67,6 +67,9 @@ var PaymentPage = require('./PaymentPage')
 var DepositWithdrawPage = require('./DepositWithdrawPage')
 var NativeDataModule = require('../module/NativeDataModule')
 
+var BindCardPage = require('./withdraw/BindCardPage')
+var WithdrawPage = require('./withdraw/WithdrawPage')
+
 var TalkingdataModule = require('../module/TalkingdataModule')
 var WebSocketModule = require('../module/WebSocketModule');
 var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
@@ -125,6 +128,8 @@ export let MY_MESSAGES_ROUTE = 'myMessages'
 export let DEVELOP_ROUTE = 'develop'
 export let PAYMENT_PAGE = 'payment'
 export let DEPOSIT_WITHDRAW_ROUTE = 'depositWithdrawRoute'
+export let WITHDRAW_BIND_CARD_ROUTE = 'withdrawBindCardRoute'
+export let WITHDRAW_ROUTE = 'withdrawRoute'
 
 
 const glypy = glypyMapMaker({
@@ -548,6 +553,18 @@ var MainPage = React.createClass({
 			return (
 				<DepositWithdrawPage navigator={navigationOperations} routeMapper={this.RouteMapper}/>
 			);
+		}else if (route.name === WITHDRAW_BIND_CARD_ROUTE){
+			hideTabbar();
+			return (
+				<BindCardPage navigator={navigationOperations}
+					routeMapper={this.RouteMapper}
+					isReadOnlyMode={route.isReadOnlyMode}/>
+			)
+		}else if (route.name === WITHDRAW_ROUTE){
+			hideTabbar();
+			return (
+				<WithdrawPage navigator={navigationOperations} routeMapper={this.RouteMapper}/>
+			)
 		}
 	},
 

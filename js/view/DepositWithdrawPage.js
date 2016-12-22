@@ -31,9 +31,9 @@ var heightRate = height/667.0
 
 var listRawData = [
 {'type':'header'},
-{'type':'depositwithdraw','title':'入金', 'image':require('../../images/icon_income.png'), 'subtype': 'deposit'},
-{'type':'depositwithdraw','title':'出金', 'image':require('../../images/icon_income.png'), 'subtype': 'withdraw'},
-{'type':'detail','title':'明细', 'image':require('../../images/icon_income.png'), 'subtype': 'details'},
+{'type':'depositwithdraw','title':'入金', 'image':require('../../images/deposit.png'), 'subtype': 'deposit'},
+{'type':'depositwithdraw','title':'出金', 'image':require('../../images/withdraw.png'), 'subtype': 'withdraw'},
+{'type':'detail','title':'明细', 'image':require('../../images/detail.png'), 'subtype': 'details'},
 ]
 
 var CALL_NUMBER = '66058771'
@@ -52,7 +52,10 @@ export default class DepositWithdrawPage extends Component {
 				});
         return;
       case 'withdraw':
-        alert("出金")
+				this.props.navigator.push({
+					//name:MainPage.WITHDRAW_BIND_CARD_ROUTE,
+					name: MainPage.WITHDRAW_ROUTE,
+				});
         return;
       case 'details':
 				this.props.navigator.push({
@@ -150,165 +153,6 @@ export default class DepositWithdrawPage extends Component {
 		);
 	}
 }
-//
-// var UP_INPUT_REF = "upInput"
-// var DOWN_INPUT_REF = "downInput"
-//
-// var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-// var RULE_DIALOG = "ruleDialog";
-// var MyIncomePage = React.createClass({
-//
-// 	getInitialState: function() {
-// 		return {
-// 			totalIncome: '--',
-// 			totalDailySign: '--',
-// 			totalCard: '--',
-// 			demoTransaction: '--',
-// 			demoRegister: '--',
-// 			dataSource: ds.cloneWithRows(listRawData),
-// 		};
-// 	},
-//
-// 	componentDidMount: function(){
-//     var userData = LogicData.getUserData();
-// 		var notLogin = Object.keys(userData).length === 0
-// 		if(!notLogin){
-// 	    NetworkModule.fetchTHUrl(
-// 	      NetConstants.CFD_API.GET_TOTAL_UNPAID,
-// 	      {
-// 	        method: 'GET',
-// 	        headers: {
-// 	          'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-// 						'Content-Type': 'application/json; charset=UTF-8',
-// 	        },
-// 					cache: 'offline'
-// 	      },
-// 	      (responseJson) => {
-// 					console.log("my unpaid income: " + JSON.stringify(responseJson));
-//
-// 					var totalDailySign = responseJson.totalDailySign;
-// 					var demoTransaction = responseJson.totalDemoTransaction;
-// 					var demoRegister = responseJson.demoRegister
-// 					var totalCard = responseJson.totalCard ? responseJson.totalCard : 0;
-// 					var totalIncome = totalDailySign + demoTransaction + demoRegister + totalCard;
-// 					console.log("totalIncome: " + totalIncome.toString())
-// 					console.log("totalDailySign: " + totalDailySign.toString())
-// 					console.log("demoTransaction: " + demoTransaction.toString())
-// 					console.log("demoRegister: " + demoRegister.toString())
-// 					console.log("totalCard: " + totalCard.toString())
-// 	        this.setState({
-// 	          totalIncome: totalIncome.toString(),
-// 						totalDailySign : totalDailySign.toString(),
-// 						totalCard: totalCard.toString(),
-// 						demoTransaction: demoTransaction.toString(),
-// 						demoRegister: demoRegister.toString(),
-// 						dataSource: ds.cloneWithRows(listRawData),
-// 	        });
-// 	      },
-// 	      (result) => {
-// 	        console.log(result.errorMessage)
-// 	      }
-// 	    )
-// 		}else{
-// 			this.setState({
-// 				totalIncome: 0,
-// 				totalDailySign: 0,
-// 				demoTransaction: 0,
-// 				demoRegister: 0,
-// 				totalCard: 0,
-// 				dataSource: ds.cloneWithRows(listRawData),
-// 			})
-// 		}
-// 	},
-//
-// 	pressBackButton: function() {
-// 		this.props.showTabbar()
-// 		this.props.navigator.pop()
-// 	},
-//
-// 	showDialog: function(){
-// 		this.refs[RULE_DIALOG].show();
-// 	},
-//
-//   renderHeader: function(){
-//     return(
-// 			<View style={styles.totalTextContainer}>
-//         <Text style={styles.totalIncomeTitleText}>
-//           总计交易金(元)
-//         </Text>
-//         <Text style={styles.totalIncomeText}>
-//           {this.state.totalIncome}
-//         </Text>
-//       </View>
-//     );
-//   },
-//
-// 	renderRow: function(rowData, sectionID, rowID) {
-// 		if(rowData.type == 'header'){
-// 			return (
-// 					<View style={[styles.headerWrapper, {backgroundColor: ColorConstants.TITLE_BLUE}]}>
-// 						{this.renderHeader()}
-// 					</View>
-// 			);
-// 		}
-// 		else if(rowData.type == 'normal'){
-// 			var value;
-// 			if(rowData.subtype == 'totalDailySign'){
-// 				value = this.state.totalDailySign;
-// 			}
-// 			if(rowData.subtype == 'demoTransaction'){
-// 				value = this.state.demoTransaction;
-// 			}
-// 			if(rowData.subtype == 'demoRegister'){
-// 				value = this.state.demoRegister;
-// 			}
-// 			if(rowData.subtype == 'totalCard'){
-// 				value = this.state.totalCard;
-// 			}
-//
-// 			return(
-// 				<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-// 					<Text style={styles.title}>{rowData.title}</Text>
-// 					<Text style={styles.contentValue}>{value}</Text>
-// 				</View>
-// 			);
-// 		}
-// 	},
-//
-// 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
-// 		if(rowID == 0){
-// 			return (
-// 				<View style={[styles.line, {height: 10}]} key={rowID}>
-// 					<View style={[styles.separator]}/>
-// 				</View>
-// 				)
-// 		}else{
-// 			return (
-// 				<View style={styles.line} key={rowID}>
-// 					<View style={[styles.separator]}/>
-// 				</View>
-// 				)
-// 		}
-// 	},
-//
-// 	render: function() {
-// 		return (
-// 			<View style={{flex: 1}}>
-// 				<NavBar title='我的交易金' showBackButton={true} navigator={this.props.navigator}
-// 					textOnRight='规则'
-// 					rightTextOnClick={()=>this.showDialog()}/>
-// 				<ListView
-// 					style={styles.list}
-// 					dataSource={this.state.dataSource}
-// 					renderRow={this.renderRow}
-// 					renderSeparator={this.renderSeparator} />
-// 				<HeaderLineDialog ref={RULE_DIALOG}
-// 				headerImage={require('../../images/my_income_strategy.png')}
-// 				messageLines={this.rules}/>
-// 			</View>
-// 		);
-// 	},
-// });
 
 var styles = StyleSheet.create({
   wrapper:{
@@ -363,7 +207,7 @@ var styles = StyleSheet.create({
 	title: {
 		flex: 1,
 		fontSize: 17,
-		color: '#303030',
+		color: '#000000',
 	},
 	extendRight: {
 		flex: 1,
@@ -373,9 +217,10 @@ var styles = StyleSheet.create({
 		paddingBottom: 8,
 	},
 	image: {
-		marginLeft: -10,
-		width: 40,
-		height: 40,
+		marginLeft: 0,
+		marginRight: 11,
+		width: 23,
+		height: 23,
 	},
 
 	contentValue: {
@@ -400,6 +245,11 @@ var styles = StyleSheet.create({
 			 	width:100,
 				height:1,
 				margin:5,
+	},
+	moreImage: {
+		alignSelf: 'center',
+		width: 7.5,
+		height: 12.5,
 	},
 });
 

@@ -139,7 +139,7 @@ export default class DepositPage extends Component{
 
 	renderDetail(){
 
-		var textColor = inputError?'red':'black';
+		var textColor = inputError?'#d71a18':'black';
 		console.log("textColor = " + textColor);
 
 		return(
@@ -205,10 +205,18 @@ export default class DepositPage extends Component{
 				)
 	}
 
+	go2Question(){
+		Alert.alert('go2Question');
+	}
+
 	render(){
+
 		return(
 			<View style={{flex:1,backgroundColor:ColorConstants.SEPARATOR_GRAY}}>
-				<NavBar title='入金' showBackButton={true} navigator={this.props.navigator}/>
+				<NavBar title='入金' showBackButton={true}
+					imageOnRight={require('../../images/icon_question.png')}
+					rightImageOnClick={this.go2Question}
+					navigator={this.props.navigator}/>
 				<View style = {styles.listViewContainer}>
 					<ListView
 						style={styles.list}
@@ -313,11 +321,6 @@ const styles = StyleSheet.create({
 		margin:15,
 	},
 
-	moneyInput:{
-		fontSize:32,
-		marginLeft:10,
-	},
-
 	cellWrapper: {
 		height: Math.round(height/10),
 		backgroundColor: 'white',
@@ -327,7 +330,7 @@ const styles = StyleSheet.create({
 	},
 
 	cellInput: {
-		fontSize: 36,
+		fontSize: 50,
 		padding: 0,
 		width: Math.round(width/3),
 		alignSelf: 'center',
@@ -357,7 +360,7 @@ const styles = StyleSheet.create({
 
 	protocalRight:{
 		fontSize:12,
-		color:'#ef7374'
+		color:'#d71a18'
 	},
 
 });

@@ -175,12 +175,12 @@ const styles = StyleSheet.create({
 		padding:10,
 	},
 	itemTitle:{
-		fontSize:16,
+		fontSize:17,
 	},
 	itemTime:{
 		marginTop:6,
-		fontSize:12,
-		color:'#2e2e2e'
+		fontSize:13,
+		color:'#858585'
 	},
 	rightView:{
 		flex:1,
@@ -189,8 +189,8 @@ const styles = StyleSheet.create({
 		justifyContent:'center',
 	},
 	itemMoney:{
-		fontSize:18,
-		color:'green',
+		fontSize:21,
+		color:'#1c8d13',
 	},
 	separator: {
 		height: 0.5,

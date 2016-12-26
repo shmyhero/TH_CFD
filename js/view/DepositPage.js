@@ -37,9 +37,9 @@ export default class DepositPage extends Component{
 		super(props);
 		this.state = {
 			noLessMoney:100,
+			fxRate:0.144,
 			payStateTip:'最低入金额度：100美元',
 			payStateTip2:'对应人民币：0.00元',
-			exchangeRate:6.9,
 			payMethodSelected:0,
 			dataSource:ds.cloneWithRows(listRawData),
 			protocolSeleceted:true,
@@ -48,7 +48,27 @@ export default class DepositPage extends Component{
 	}
 
 	componentDidMount(){
+		this.loadDepositSetting()
+	}
 
+	loadDepositSetting(){
+
+		NetworkModule.fetchTHUrl(
+			NetConstants.CFD_API.GET_DEPOSIT_SETTING,
+			{
+				method: 'GET',
+				cache: 'offline',
+			},
+			(responseJson) =>{
+				console.log('minimun = ' + responseJson.minimum +' fxRate = ' + responseJson.fxRate);
+				this.setState({
+					noLessMoney: responseJson.minimum,
+					fxRate : responseJson.fxRate,
+				},()=>this.validatePrice(''))
+			},
+			(result) => {
+			}
+		)
 	}
 
 	onSelectNormalRow(rowData){
@@ -110,7 +130,7 @@ export default class DepositPage extends Component{
 		var text_ = text
 		var value = parseFloat(text_);
 		var error = null
-		var rmbValue = this.state.exchangeRate * value;
+		var rmbValue = value / this.state.fxRate;
 		rmbValue = (text.length>0 ? rmbValue.toFixed(2):0.00.toFixed(2))
 
 		if(text_ && value < this.state.noLessMoney){
@@ -118,7 +138,6 @@ export default class DepositPage extends Component{
 
 			console.log("Text1 = " + text_);
 			this.setState({
-
 				payStateTip: error,
 			  payStateTip2:'对应人民币：'+rmbValue+'元',
 			})
@@ -126,7 +145,6 @@ export default class DepositPage extends Component{
 		}else{
 			console.log("Text2 = " + text_);
 			this.setState({
-
 				payStateTip: '最低入金额度：'+this.state.noLessMoney+'美元',
 				payStateTip2:'对应人民币：'+rmbValue+'元',
 			})
@@ -144,7 +162,7 @@ export default class DepositPage extends Component{
 
 		return(
 			<View style = {styles.payDetail}>
-				<Text style = {styles.payStateTip}>{this.state.payStateTip}</Text>
+				<Text style = {[styles.payStateTip,{color:textColor}]}>{this.state.payStateTip}</Text>
 					<View style = {styles.cellWrapper}>
 						<Text style = {styles.moneyUSD}>美元</Text>
 						<TextInput style={[styles.cellInput, {color: textColor}]}

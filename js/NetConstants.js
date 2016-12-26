@@ -144,6 +144,7 @@ function getCFDAPI(){
     REFUNDABLE_BALANCE: CFD_API_SERVER + "/api/user/live/balance/refundable",
 
     GET_TRANSFERS_LIST: CFD_API_SERVER + "/api/user/live/transfers",
+    GET_DEPOSIT_SETTING: CFD_API_SERVER + "/api/deposit/setting",
   }
 }
 

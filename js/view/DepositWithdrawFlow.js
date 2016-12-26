@@ -36,27 +36,32 @@ export default class DepositWithdrawFlow extends Component{
 	}
 
 	_renderRow(rowData,sectionID,rowID){
+
+		var title = rowData.transferType;
+		var date = rowData.date;
+		var amount = rowData.amount;
+
 		return(
 			<TouchableOpacity style={styles.scroolItem}>
 					 <View style = {styles.leftView}>
-						 <Text style = {styles.itemTitle}>入金</Text>
-						 <Text style = {styles.itemTime}>2016-12-05 12:21:33</Text>
+						 <Text style = {styles.itemTitle}>{title}</Text>
+						 <Text style = {styles.itemTime}>{date}</Text>
 					 </View>
 					 <View style = {styles.rightView}	>
-					 	<Text style = {styles.itemMoney}>350.12</Text>
+					 	<Text style = {styles.itemMoney}>{amount}</Text>
 					 </View>
 		  </TouchableOpacity>
 	 	);
 	}
 
 	componentDidMount(){
-		this.loadMyCards();
+		this.loadTransferList();
 	}
 
-	//获取我的卡片列表
-	loadMyCards() {
+	//获取出入金明细流水
+	loadTransferList() {
 		if(!this.state.contentLoaded){
-			console.log("loadMyCards content not Loaded")
+			console.log("loadTransferList content not Loaded")
 			this.setState({
 				isRefreshing: true,
 			})
@@ -64,7 +69,7 @@ export default class DepositWithdrawFlow extends Component{
 		var userData = LogicData.getUserData()
 
 			NetworkModule.fetchTHUrl(
-				NetConstants.CFD_API.GET_USER_LIVE_CARDS,
+				NetConstants.CFD_API.GET_TRANSFERS_LIST,
 				{
 					method: 'GET',
 					headers: {
@@ -74,10 +79,10 @@ export default class DepositWithdrawFlow extends Component{
 					//timeout: 1000,
 				},
 				(responseJson) =>{
-					var noMessage = responseJson.cards.length == 0;
+					var noMessage = responseJson.length == 0;
 					this.setState({
-					  listRawData: ds.cloneWithRows(responseJson.cards),
-						listResponse : responseJson.cards,
+					  listRawData: ds.cloneWithRows(responseJson),
+						listResponse : responseJson,
 						noMessage: noMessage,
 						contentLoaded: true,
 						isRefreshing: false,
@@ -108,7 +113,7 @@ export default class DepositWithdrawFlow extends Component{
 	renderContent(){
 		if(!this.state.contentLoaded){
 			return (
-				<NetworkErrorIndicator onRefresh={()=>this.loadMyCards()} refreshing={this.state.isRefreshing}/>
+				<NetworkErrorIndicator onRefresh={()=>this.loadTransferList()} refreshing={this.state.isRefreshing}/>
 			)
 		}else{
 			return(

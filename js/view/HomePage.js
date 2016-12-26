@@ -555,6 +555,18 @@ var HomePage = React.createClass({
 		});
 	},
 
+	gotoNewUserGuide:function(){
+		var targetUrl = LogicData.getAccountState()?NetConstants.TRADEHERO_API.WEBVIEW_URL_SCHOOL_ACTUAL:NetConstants.TRADEHERO_API.WEBVIEW_URL_SCHOOL;
+		console.log('targetUrl : ' + targetUrl);
+		this.props.navigator.push({
+			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			url: targetUrl,
+			title: '新手学堂',
+			isShowNav: false ,
+		});
+
+	},
+
 	logoutPress: function() {
 		StorageModule.removeUserData()
 		.then(() => {
@@ -703,13 +715,10 @@ var HomePage = React.createClass({
 		)
 	},
 
-	newUserGuide:function(){
-		Alert.alert('newUserGuide');
-	},
 
 	renderNewUser:function(){
 		return(
-			<TouchableOpacity style = {styles.newUser} activeOpacity={0.5} onPress={()=>this.newUserGuide()}>
+			<TouchableOpacity style = {styles.newUser} activeOpacity={0.5} onPress={()=>this.gotoNewUserGuide()}>
 				<View style={{padding:20}}>
 					<View style={{flexDirection:'row'}}>
 						<Text style={{fontSize:19,color:'#4b4b4b'}}>新手学堂</Text>

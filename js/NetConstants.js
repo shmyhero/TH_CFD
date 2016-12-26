@@ -104,6 +104,7 @@ function getCFDAPI(){
     GET_UNREAD_MESSAGE_LIVE: CFD_API_SERVER + '/api/user/live/message/unread',//LIVE ok
     GET_MOVIE_RANK: CFD_API_SERVER + '/api/competition/1/user/<userId>/rank',
 
+
     GET_USER_DAILY_SIGN_INFO: CFD_API_SERVER + '/api/reward/summary',//获取每日签到页面所需信息（需身份验证）
     GET_USER_DAILY_SIGN_MONTH: CFD_API_SERVER + '/api/reward/checkIn/month',//获取当前月份的签到情况(需要身份验证)
     USER_DAILY_SIGN: CFD_API_SERVER + '/api/reward/checkIn',//每日签到 (需要身份验证)
@@ -141,6 +142,8 @@ function getCFDAPI(){
     BIND_BANK_ACCOUNT: CFD_API_SERVER + "/api/user/live/refaccount",
     GET_USER_INFO: CFD_API_SERVER + "/api/user/live/info",
     REFUNDABLE_BALANCE: CFD_API_SERVER + "/api/user/live/balance/refundable",
+
+    GET_TRANSFERS_LIST: CFD_API_SERVER + "/api/user/live/transfers",
   }
 }
 
@@ -160,6 +163,8 @@ function getTradeHeroAPI(){
     WEBVIEW_QA_PAGE_ACTUAL: TRADEHERO_SERVER_IP + '/TH_CFD_SP/wenda.html',
     WEBVIEW_URL_ABOUT_US: TRADEHERO_SERVER_IP + '/TH_CFD_WEB/about.html',
     WEBVIEW_URL_ABOUT_US_ACTUAL: TRADEHERO_SERVER_IP + '/TH_CFD_SP/about.html',
+    WEBVIEW_URL_SCHOOL:TRADEHERO_SERVER_IP + '/TH_CFD_WEB/school.html',
+    WEBVIEW_URL_SCHOOL_ACTUAL:TRADEHERO_SERVER_IP + '/TH_CFD_SP/about.html',
     SHARE_URL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER + '/detailShare.php?id=<id>',
     SHARE_MOVIE_WIN_TICKET_URL: TRADEHERO_SERVER_IP + '/CDF_BSY/sucess.php?hjcode=0',
     SHARE_MOVIE_NOT_WIN_TICKET_URL: TRADEHERO_SERVER_IP + '/CDF_BSY/sucess.php?hjcode=1',

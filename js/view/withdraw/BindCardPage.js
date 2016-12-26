@@ -12,6 +12,7 @@ import {
 	Image,
 	Platform,
 	ScrollView,
+	Modal,
 } from 'react-native';
 
 import Picker from 'react-native-picker';
@@ -64,11 +65,11 @@ export default class BindCardPage extends Component {
   provinceAndCities = [];
 
   static propTypes = {
-    isReadOnlyMode: PropTypes.bool,
+    isUnbindMode: PropTypes.bool,
   }
 
   static defaultProps = {
-    isReadOnlyMode: false,
+    isUnbindMode: false,
   }
 
   constructor(props) {
@@ -80,29 +81,32 @@ export default class BindCardPage extends Component {
       dataSource: this.ds.cloneWithRows(this.listRawData),
 			validateInProgress: false,
 			selectedPicker: -1,
+			modalVisible: false,
     }
   }
 
   componentWillMount(){
-    if(this.props.isReadOnlyMode){
-      //Get the users card information.
+		var liveUserInfo = LogicData.getLiveUserInfo();
+		this.listRawData[0].value = liveUserInfo.lastName + liveUserInfo.firstName;
 
-      for(var i = 0; i < this.listRawData.length; i++){
+    if(this.props.isUnbindMode){
+      //Get the users card information.
+			for(var i = 0; i < this.listRawData.length; i++){
         switch(this.listRawData[i].key){
           case "ProvinceAndCity":
-            this.listRawData[i].value = {Province:{"displayText":"北京"}, City: {"displayText":"北京市"}};
+            this.listRawData[i].value = {Province:{"displayText":liveUserInfo.province}, City: {"displayText":liveUserInfo.city}};
             break;
           case "AccountHolder":
-            this.listRawData[i].value = "你的名字呢";
+            this.listRawData[i].value = liveUserInfo.lastName + liveUserInfo.firstName;
             break;
           case "NameOfBank":
-            this.listRawData[i].value = "中国银行";
+            this.listRawData[i].value = liveUserInfo.bankName;
             break;
           case "Branch":
-            this.listRawData[i].value = "一个测试分行";
+            this.listRawData[i].value = liveUserInfo.branch;
             break;
           case "AccountNumber":
-            var cardNumber = "1234 5678 9012 3456 789";
+            var cardNumber = liveUserInfo.bankCardNumber;
 
 						//Star the card number!
             var realNumberString = cardNumber.split(" ").join('');
@@ -120,7 +124,7 @@ export default class BindCardPage extends Component {
               finalText += staredCardNumber.slice(j, j+4);
             }
             this.listRawData[i].value = finalText;
-
+						console.log("bankCardNumber " + liveUserInfo.bankCardNumber + " finalText " + finalText)
             break;
           default:
             break;
@@ -129,26 +133,23 @@ export default class BindCardPage extends Component {
 
     }
 
-    var userData = LogicData.getUserData()
-  	if(userData.token == undefined){return}
-
     //Get userinfo
-    NetworkModule.fetchTHUrl(NetConstants.CFD_API.GET_USER_INFO,
-      {
-        method: 'GET',
-        headers: {
-          'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-        },
-      },
-      (responseJson)=>{
-        this.listRawData[0].value = responseJson.lastName + responseJson.firstName;
-        this.updateList();
-      },
-      (result)=>{
+    // NetworkModule.fetchTHUrl(NetConstants.CFD_API.GET_USER_INFO,
+    //   {
+    //     method: 'GET',
+    //     headers: {
+    //       'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+    //     },
+    //   },
+    //   (responseJson)=>{
+    //     this.listRawData[0].value = responseJson.lastName + responseJson.firstName;
+    //     this.updateList();
+    //   },
+    //   (result)=>{
+		//
+    //   });
 
-      });
-
-	  if(!this.props.isReadOnlyMode){
+	  if(!this.props.isUnbindMode){
 	    //Get banks
 	    NetworkModule.fetchTHUrl(NetConstants.CFD_API.GET_SUPPORT_WITHDRAW_BANKS,
 	      {
@@ -246,7 +247,8 @@ export default class BindCardPage extends Component {
         }
 			}
 		}
-    //Get userinfo
+
+    //Bind bank account
     NetworkModule.fetchTHUrl(NetConstants.CFD_API.BIND_BANK_ACCOUNT,
       {
         method: 'POST',
@@ -277,13 +279,55 @@ export default class BindCardPage extends Component {
       });
 	}
 
-  unbindCard(){
-    var userData = LogicData.getUserData()
-    if(userData.token == undefined){return}
+	readyToUnbindCard(){
+		this.setState({
+			modalVisible: true,
+		});
+	}
 
-    //alert("解除绑定！")
-    this.props.navigator.pop();
+  unbindCard(){
+		this.setState({
+			modalVisible: false,
+		});
+
+		var userData = LogicData.getUserData()
+		if(userData.token == undefined){return}
+
+		//Get userinfo
+		NetworkModule.fetchTHUrl(NetConstants.CFD_API.REQUEST_UNBIND_CARD,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+			},
+			(responseJson)=>{
+				var routes = this.props.navigator.getCurrentRoutes();
+				var popToRoute = null;
+				for(var i = routes.length - 2; i >= 0 ;i --){
+					if(routes[i].name === MainPage.DEPOSIT_WITHDRAW_ROUTE){
+						popToRoute = routes[i];
+						break;
+					}
+				}
+
+				if(popToRoute){
+					this.props.navigator.popToRoute(popToRoute);
+				}else{
+					this.props.navigator.pop();
+				}
+			},
+			(result)=>{
+				alert(result.errorMessage);
+			});
+
   }
+
+	_setModalVisible(value){
+		this.setState({
+			modalVisible: value
+		})
+	}
 
 	textInputChange(text, rowID) {
 		this.listRawData[rowID].value = text;
@@ -527,7 +571,7 @@ export default class BindCardPage extends Component {
   }
 
   renderChoiceSelectionIcon(){
-    if(!this.props.isReadOnlyMode){
+    if(!this.props.isUnbindMode){
       return (<Image style={{width:17.5, height:13.5}} source={require("../../../images/icon_down_arrow.png")} />);
     }else{
       return null;
@@ -565,7 +609,7 @@ export default class BindCardPage extends Component {
     }
 
     return (
-      <TouchableOpacity activeOpacity={0.9} onPress={onPress} disabled={this.props.isReadOnlyMode}>
+      <TouchableOpacity activeOpacity={0.9} onPress={onPress} disabled={this.props.isUnbindMode}>
         <View style={styles.rowWrapper}>
           <Text style={styles.rowTitle}>{rowData.title}</Text>
           <View style={styles.valueContent}>
@@ -585,7 +629,7 @@ export default class BindCardPage extends Component {
   }
 
   renderNameHint(){
-    if(!this.props.isReadOnlyMode){
+    if(!this.props.isUnbindMode){
       return(
         <Text style={[{color: ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR, fontSize: 12}]}>
           与身份证一致，不可更改
@@ -613,10 +657,6 @@ export default class BindCardPage extends Component {
       var onChangeText;
       var cardNumber = rowData.value;
       if(rowData.type === "cardNumber"){
-        var starSize = cardNumber.length - 10;
-        var stars = Array(starSize).join("*")
-        var cardNumber = cardNumber.substr(0, 6) + stars + cardNumber.substr(cardNumber.length - 4);
-        console.log("render cardnumber " + rowData.value)
         onChangeText = (text)=>this.cardNumberInputChange(text, rowID)
       }else{
         onChangeText = (text)=>this.textInputChange(text, rowID)
@@ -626,7 +666,7 @@ export default class BindCardPage extends Component {
 				<View style={styles.rowWrapper}>
 					<Text style={styles.rowTitle}>{rowData.title}</Text>
 					<TextInput style={styles.valueText}
-            editable={!this.props.isReadOnlyMode}
+            editable={!this.props.isUnbindMode}
 						autoCapitalize="none"
 						autoCorrect={false}
 						defaultValue={cardNumber}
@@ -654,9 +694,9 @@ export default class BindCardPage extends Component {
     var nextEnabled = true;
     var buttonText = "";
     var buttonAction;
-    if(this.props.isReadOnlyMode){
+    if(this.props.isUnbindMode){
       buttonText = "解除绑定";
-      buttonAction = ()=>this.unbindCard();
+      buttonAction = ()=>this.readyToUnbindCard();
     }else{
       buttonText = "下一步";
       buttonAction = ()=>this.bindCard();
@@ -703,7 +743,7 @@ export default class BindCardPage extends Component {
 
 		return (
 			<View style={styles.wrapper}>
-        <NavBar title="添加银行卡"
+        <NavBar title={this.props.isUnbindMode ? "我的银行卡" : "添加银行卡"}
           showBackButton={true}
           navigator={this.props.navigator}
           imageOnRight={require('../../../images/icon_question.png')}
@@ -714,6 +754,7 @@ export default class BindCardPage extends Component {
 				</ScrollView>
         {this.renderActionButton()}
 				{pickerModal}
+				{this.renderUnbindCardDialog()}
 			</View>
 		);
 	}
@@ -732,6 +773,54 @@ export default class BindCardPage extends Component {
 			<View>
 				{listDataView}
 			</View>);
+	}
+
+	renderUnbindCardDialog(){
+		var liveUserInfo = LogicData.getLiveUserInfo();
+		var cardNumber = liveUserInfo.bankCardNumber;
+		var realNumberString = cardNumber.split(" ").join('');
+		var lastNumber = realNumberString.slice(realNumberString.length - 4);
+
+		if(this.props.isUnbindMode){
+			return(
+				<Modal
+	        transparent={true}
+	        visible={this.state.modalVisible}
+	        animationType={"slide"}
+	        style={{height: height, width: width}}
+	        onRequestClose={() => {this._setModalVisible(false)}}
+	        >
+					<View style={styles.modalContainer}>
+
+						<TouchableOpacity style={{flex: 1}} onPress={() => this._setModalVisible(false)}>
+						</TouchableOpacity>
+
+						<View style={{height:200, width: width, backgroundColor: "#f8f8f8"}}>
+							<Text style={{alignSelf: 'center',
+								fontSize: 18,
+								marginTop: 30}}>
+								{"确定删除尾号为" + lastNumber + "的银行卡？"}
+							</Text>
+							<TouchableOpacity style={{alignItems:'center'}} onPress={()=>this.unbindCard()}>
+								<View style={{borderRadius:5, backgroundColor: ColorConstants.TITLE_BLUE, height: 48, width: 105,
+									alignItems:'center', justifyContent:'center',
+									marginTop: 30}}>
+									<Text style={{
+										color: '#ffffff',
+										textAlign: 'center',
+										alignItems:'center',}}>
+										确认
+									</Text>
+								</View>
+							</TouchableOpacity>
+						</View>
+					</View>
+	      </Modal>
+			);
+		}
+		else{
+			return null;
+		}
 	}
 };
 
@@ -851,6 +940,13 @@ var styles = StyleSheet.create({
 		justifyContent:'center',
 		marginLeft:0,
 		paddingLeft:0
+	},
+	modalContainer:{
+		flex: 1,
+		flexDirection: 'column',
+		justifyContent: 'flex-end',
+		backgroundColor:'rgba(0, 0, 0, 0.5)',
+		// paddingBottom:height/2,
 	},
 });
 

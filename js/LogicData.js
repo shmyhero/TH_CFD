@@ -27,6 +27,7 @@ var isActualLogin = false;
 var onlineVersionCode = 0;
 var currentVersionCode = 0;
 var onlineVersionName = null;
+var liveUserInfo = null;
 
 var LogicData = {
 
@@ -218,7 +219,7 @@ var LogicData = {
 	getBalanceData: function() {
 		console.log("balanceData " + balanceData)
 		console.log("balanceDataLive " + balanceDataLive)
-		
+
 		if(accountState){
 			return balanceDataLive;
 		}else{
@@ -322,6 +323,18 @@ var LogicData = {
 
 	getOnlineVersionName: function(){
 		return onlineVersionName;
+	},
+
+	setLiveUserInfo: function(value){
+		liveUserInfo = value;
+	},
+
+	getLiveUserInfo: function(){
+		return liveUserInfo;
+	},
+
+	removeLiveUserInfo: function(){
+		liveUserInfo = null;
 	},
 };
 

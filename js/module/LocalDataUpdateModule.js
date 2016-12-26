@@ -49,6 +49,7 @@ export function removeUserData(){
   LogicData.removeBalanceData();
 
   LogicData.setAccountState(false);
+  LogicData.removeLiveUserInfo();
 
   OpenAccountRoutes.clearAllInputData();
   CacheModule.clearUserRelatedCache();

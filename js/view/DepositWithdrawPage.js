@@ -42,7 +42,43 @@ var dataSource = ds.cloneWithRows(listRawData);
 export default class DepositWithdrawPage extends Component {
   constructor(props) {
 	  super(props);
+
+		this.state = {
+			balance: LogicData.getBalanceData().available,
+		};
   }
+
+	componentDidMount(){
+		NetworkModule.loadUserBalance(true, (response)=>{
+			this.setState({
+				balance: response.available,
+			})
+		});
+
+		this.loadLiveUserInfo();
+	}
+
+	loadLiveUserInfo(onSuccess){
+		var userData = LogicData.getUserData()
+  	if(userData.token == undefined){return}	//This must not be true!!!
+
+		NetworkModule.fetchTHUrl(NetConstants.CFD_API.GET_USER_INFO,{
+			method: 'GET',
+			headers: {
+				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+			},
+		},
+		(response)=>{
+			LogicData.setLiveUserInfo(response);
+
+			if(onSuccess){
+				onSuccess();
+			}
+			//{"lastName":"张","firstName":"三","identityID":"310104000000000000","bankCardNumber":"1234567890","bankName":"光大银行","branch":"光大银行上海分行","province":"上海","city":"上海"}
+		}, (error)=>{
+
+		});
+	}
 
   onSelectNormalRow(rowData){
     switch(rowData.subtype){
@@ -52,10 +88,15 @@ export default class DepositWithdrawPage extends Component {
 				});
         return;
       case 'withdraw':
-				this.props.navigator.push({
-					//name:MainPage.WITHDRAW_BIND_CARD_ROUTE,
-					name: MainPage.WITHDRAW_ROUTE,
-				});
+				var liveUserInfo = LogicData.getLiveUserInfo();
+				if(liveUserInfo == null){
+					this.loadLiveUserInfo((userInfo)=>{
+						this.goToWithdrawPage(userInfo);
+					});
+				}else{
+					this.goToWithdrawPage(liveUserInfo);
+				}
+
         return;
       case 'details':
 				this.props.navigator.push({
@@ -65,9 +106,24 @@ export default class DepositWithdrawPage extends Component {
     }
   }
 
+	goToWithdrawPage(liveUserInfo){
+		if(liveUserInfo == null){
+			alert("网络错误，请重试！");	//What should happen if there's no internet connection?
+		}
+		else if(liveUserInfo.bankCardNumber && liveUserInfo.bankCardNumber !== ""){
+			this.props.navigator.push({
+				name: MainPage.WITHDRAW_ROUTE,
+			});
+		}else{
+			this.props.navigator.push({
+				name: MainPage.WITHDRAW_BIND_CARD_ROUTE,
+			});
+		}
+	}
+
 	pressBackButton() {
-		this.props.showTabbar()
-		this.props.navigator.pop()
+		MainPage.showTabbar();
+		this.props.navigator.popToTop();
 	}
 
   helpPressed() {
@@ -75,13 +131,20 @@ export default class DepositWithdrawPage extends Component {
   }
 
   renderHeader(){
+		var balance = ""
+		if(this.state.balance){
+			balance += this.state.balance.toFixed(2);
+		}else{
+			balance = "--";
+		}
+
     return(
 			<View style={styles.totalTextContainer}>
         <Text style={styles.totalIncomeTitleText}>
           剩余资金(美元)
         </Text>
         <Text style={styles.totalIncomeText}>
-          {12345.13}
+          {balance}
         </Text>
       </View>
     );
@@ -141,7 +204,7 @@ export default class DepositWithdrawPage extends Component {
 	render() {
 		return (
 			<View style={{flex: 1}}>
-				<NavBar title='存取资金' showBackButton={true} navigator={this.props.navigator}/>
+				<NavBar title='存取资金' showBackButton={true} leftButtonOnClick={()=>this.pressBackButton()} navigator={this.props.navigator}/>
 				<ListView
 					style={styles.list}
 					dataSource={dataSource}

@@ -69,6 +69,7 @@ var NativeDataModule = require('../module/NativeDataModule')
 
 var BindCardPage = require('./withdraw/BindCardPage')
 var WithdrawPage = require('./withdraw/WithdrawPage')
+var WithdrawSubmittedPage = require('./withdraw/WithdrawSubmittedPage')
 
 var TalkingdataModule = require('../module/TalkingdataModule')
 var WebSocketModule = require('../module/WebSocketModule');
@@ -130,6 +131,7 @@ export let PAYMENT_PAGE = 'payment'
 export let DEPOSIT_WITHDRAW_ROUTE = 'depositWithdrawRoute'
 export let WITHDRAW_BIND_CARD_ROUTE = 'withdrawBindCardRoute'
 export let WITHDRAW_ROUTE = 'withdrawRoute'
+export let WITHDRAW_SUBMITTED_ROUTE = 'withdrawSubmittedRoute'
 
 
 const glypy = glypyMapMaker({
@@ -147,8 +149,8 @@ const systemBuleActual = '#425a85'
 export var initExchangeTab = 0
 export var initStockListTab = 1
 
-var hideTabbar
-var showTabbar
+export var hideTabbar
+export var showTabbar
 export var hideProgress
 export var showProgress
 export var ayondoLoginResult
@@ -558,14 +560,20 @@ var MainPage = React.createClass({
 			return (
 				<BindCardPage navigator={navigationOperations}
 					routeMapper={this.RouteMapper}
-					isReadOnlyMode={route.isReadOnlyMode}/>
+					isUnbindMode={route.isUnbindMode}/>
 			)
 		}else if (route.name === WITHDRAW_ROUTE){
 			hideTabbar();
 			return (
 				<WithdrawPage navigator={navigationOperations} routeMapper={this.RouteMapper}/>
 			)
+		}else if (route.name === WITHDRAW_SUBMITTED_ROUTE){
+			hideTabbar();
+			return (
+				<WithdrawSubmittedPage navigator={navigationOperations} routeMapper={this.RouteMapper}/>
+			)
 		}
+
 	},
 
 	showTutorial: function(type){
@@ -589,9 +597,11 @@ var MainPage = React.createClass({
 	 	}
 	},
 
-	ayondoLoginResult(result){
+	ayondoLoginResult(result, stayInCurrentRoute){
 		console.log('login:ayondoLoginResult'+result);
-	  this.backAndShowTabbar()
+		if(!stayInCurrentRoute){
+	  	this.backAndShowTabbar();
+		}
 
 		console.log('ayondo login result :' + result);
 		if(result){

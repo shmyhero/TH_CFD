@@ -61,7 +61,7 @@ export function fetchTHUrl(url, params, successCallback, errorCallback, notShowR
 		})
 		.then((responseJson) => {
 			if (requestSuccess) {
-				if (responseJson.success === false) {
+				if (responseJson != null && responseJson.success === false) {
 					console.log('fetchTHUrl handled error with message: ' + JSON.stringify(responseJson))
 					result.error = API_ERROR;
 					result.errorMessage = responseJson.ExceptionMessage || responseJson.Message || responseJson.message;

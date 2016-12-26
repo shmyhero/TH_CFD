@@ -50,17 +50,28 @@ export default class WithdrawPage extends Component {
 
     this.listRawData = JSON.parse(JSON.stringify(defaultRawData));
 
-    this.state={
-      dataSource: this.ds.cloneWithRows(this.listRawData),
-      cardImageUrl: 'https://cfdstorage.blob.core.chinacloudapi.cn/bank/bankofchina.jpg',
-			cardBank: "中国银行",
-			lastCardNumber: "1234",
-      withdrawHint: "每笔出金固定费用: 15美元",
-      refundableBanalce: 0,
-      withdrawValueText: "",
-      withdrawValue: 0,
-      hasRead: true,
-      withdrawChargeHint: "每笔出金费用15美元"
+    var liveUserInfo = LogicData.getLiveUserInfo();
+    var balanceData = LogicData.getBalanceData();
+    if(liveUserInfo){
+      var cardNumber = liveUserInfo.bankCardNumber.split(" ").join('');
+      var lastCardNumber = cardNumber.slice(cardNumber.length-4);
+
+      var cardBank = liveUserInfo.bankName;
+      var bankIcon = liveUserInfo.bankIcon;
+      var withdrawChargeHint = balanceData.comment;
+
+      this.state={
+        dataSource: this.ds.cloneWithRows(this.listRawData),
+        cardImageUrl: bankIcon,
+  			cardBank: cardBank,
+  			lastCardNumber: lastCardNumber,
+        refundableBanalce: LogicData.getBalanceData().refundable,
+        withdrawValueText: "",
+        withdrawValue: 0,
+        hasRead: true,
+        withdrawChargeHint: withdrawChargeHint,
+        refundETA: 3,
+      }
     }
   }
 
@@ -68,20 +79,20 @@ export default class WithdrawPage extends Component {
     var userData = LogicData.getUserData()
     if(userData.token == undefined){return}
 
-    NetworkModule.fetchTHUrl(NetConstants.CFD_API.REFUNDABLE_BALANCE,
-      {
-				method: 'GET',
-        headers: {
-          'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-        },
-			},
-      (response)=>{
-        this.setState({
-          refundableBanalce: response
-        })
-      },
-      (result)=>{
+    NetworkModule.loadUserBalance(true, (response)=>{
+      this.setState({
+        refundableBanalce: response.refundable,
+      })
+    })
 
+    NetworkModule.fetchTHUrl(NetConstants.CFD_API.REFUND_ESTIMATED_DAYS,
+      {
+        method: 'GET',
+      },
+      (days)=>{
+        this.setState({
+          refundETA: days,
+        })
       });
   }
 
@@ -139,7 +150,7 @@ export default class WithdrawPage extends Component {
   gotoCardInfoPage(){
     this.props.navigator.push({
       'name': MainPage.WITHDRAW_BIND_CARD_ROUTE,
-      isReadOnlyMode: true,
+      isUnbindMode: true,
     })
   }
 
@@ -187,7 +198,7 @@ export default class WithdrawPage extends Component {
               //  onChange={(text)=>this.ontextInputChange(text, rowID)}
    						/>
           </View>
-          <View style={styles.line} key={rowID}>
+          <View style={[styles.line, {alignSelf: 'stretch'}]} key={rowID}>
             <View style={styles.separator}/>
           </View>
           <View style={{height:38, flexDirection: 'row', marginTop: 13,}}>
@@ -239,7 +250,42 @@ export default class WithdrawPage extends Component {
 	}
 
   gotoNext(){
+    //TEST ONLY!!!!
 
+    this.props.navigator.push({
+      name: MainPage.WITHDRAW_SUBMITTED_ROUTE,
+    });
+    return;
+
+    var body = {
+      Amount: this.state.withdrawValue,
+    }
+
+    var userData = LogicData.getUserData()
+    if(userData.token == undefined){return}
+
+    NetworkModule.fetchTHUrl(NetConstants.CFD_API.REQUEST_WITHDRAW,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        body: JSON.stringify(body),
+      },
+      (transferID)=>{
+        console.log("Request withdraw success. TransferID: " + transferID);
+        this.props.navigator.push({
+          name: MainPage.WITHDRAW_SUBMITTED_ROUTE,
+        });
+      },
+      (result)=>{
+        alert(result.errorMessage);
+      });
+  }
+
+  showWithdrawDocument(){
+    alert("出金协议！")
   }
 
   render() {
@@ -269,17 +315,19 @@ export default class WithdrawPage extends Component {
             onPress={(value)=>{this.onClickCheckbox(value)}}
             selectedIcon={require('../../../images/check_selected.png')}
             unSelectedIcon={require('../../../images/check_unselected.png')}>
-            <View style={{flexDirection: 'row'}}>
-              <Text style={styles.readMeText}>
-                我已阅读并同意
-                <Text style={{color: 'transparent',}}>0</Text>
-              </Text>
-              <TouchableOpacity onPress={()=>this.showWithdrawDocument()}>
-                <Text style={styles.documentText}>
-                出金协议内容
-                <Text style={{color: 'transparent',}}>0</Text>
+            <View style={{flexDirection:'column'}}>
+              <View style={{flexDirection: 'row'}}>
+                <Text style={styles.readMeText}>
+                  我已阅读并同意
+                  <Text style={{color: 'transparent',}}>0</Text>
                 </Text>
-              </TouchableOpacity>
+                <TouchableOpacity onPress={()=>this.showWithdrawDocument()}>
+                  <Text style={styles.documentText}>
+                  出金协议内容，
+                  <Text style={{color: 'transparent',}}>0</Text>
+                  </Text>
+                </TouchableOpacity>
+              </View>
               <Text style={styles.readMeText}>{this.state.withdrawChargeHint}</Text>
             </View>
           </CheckBoxButton>
@@ -291,7 +339,7 @@ export default class WithdrawPage extends Component {
 						onPress={()=>this.gotoNext()}
 						textContainerStyle={styles.buttonView}
 						textStyle={styles.buttonText}
-						text={this.state.validateInProgress? "信息正在检查中...": '3天内到账，确认出金'} />
+						text={this.state.validateInProgress? "信息正在检查中...": this.state.refundETA + '天内到账，确认出金'} />
 				</View>
 			</View>
 		);
@@ -301,8 +349,8 @@ export default class WithdrawPage extends Component {
 const styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
-   		alignItems: 'stretch',
-    	justifyContent: 'space-around',
+ 		alignItems: 'stretch',
+  	justifyContent: 'space-around',
 		backgroundColor: ColorConstants.BACKGROUND_GREY,
 	},
 
@@ -433,7 +481,7 @@ const styles = StyleSheet.create({
 		paddingTop: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 18,//12,
 	},
   checkbox: {
     width: 20,

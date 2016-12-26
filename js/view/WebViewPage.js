@@ -26,6 +26,7 @@ var ColorConstants = require('../ColorConstants');
 const NETWORK_ERROR_INDICATOR = "networkErrorIndicator";
 var WebViewPage = React.createClass({
 	isPageLoaded: false,
+	lastUrl: "",
 
 	propTypes: {
 		url: React.PropTypes.string,
@@ -148,6 +149,10 @@ var WebViewPage = React.createClass({
 	},
 
 	onNavigationStateChange:function (navState) {
+		if(navState && this.lastUrl === navState.url){
+			return;
+		}
+		this.lastUrl = navState.url;
 		if (this.props.onNavigationStateChange) {
 			this.props.onNavigationStateChange(navState)
 		}

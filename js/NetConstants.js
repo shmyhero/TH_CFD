@@ -138,10 +138,12 @@ function getCFDAPI(){
     GET_ALL_PROVINCES_AND_CITIES: CFD_API_SERVER + "/api/area/?id=-1",
     GET_PROVINCES: CFD_API_SERVER + "/api/area/?id=0",
     GET_CITY: CFD_API_SERVER + "/api/area/?id=<id>",
-
     BIND_BANK_ACCOUNT: CFD_API_SERVER + "/api/user/live/refaccount",
+    REQUEST_UNBIND_CARD: CFD_API_SERVER + "/api/user/live/unbind",
     GET_USER_INFO: CFD_API_SERVER + "/api/user/live/info",
     REFUNDABLE_BALANCE: CFD_API_SERVER + "/api/user/live/balance/refundable",
+    REFUND_ESTIMATED_DAYS: CFD_API_SERVER + "/api/refundETA",
+    REQUEST_WITHDRAW: CFD_API_SERVER + "/api/user/live/withdraw",
 
     GET_TRANSFERS_LIST: CFD_API_SERVER + "/api/user/live/transfers",
     GET_DEPOSIT_SETTING: CFD_API_SERVER + "/api/deposit/setting",

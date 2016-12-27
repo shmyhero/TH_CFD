@@ -13,6 +13,8 @@ import {
 	Platform,
 	ScrollView,
 	Modal,
+	Alert,
+	BackAndroid,
 } from 'react-native';
 
 import Picker from 'react-native-picker';
@@ -24,6 +26,8 @@ var LogicData = require('../../LogicData')
 var ColorConstants = require('../../ColorConstants')
 var TalkingdataModule = require('../../module/TalkingdataModule')
 var NavBar = require('../NavBar')
+var AreaProvider = require('./AreaProvider')
+
 // var OpenAccountRoutes = require('./OpenAccountRoutes')
 // var OpenAccountUtils = require('./OpenAccountUtils')
 var NetworkModule = require('../../module/NetworkModule');
@@ -54,11 +58,11 @@ var defaultRawData = [
 		{"title":"开户城市", "key": "ProvinceAndCity", "value":{"Province": null, "City": null}, hint: "点击选择", "type": "cascadeChoice", "choicesKey": "Provices"},
 		{"title":"开户银行", "key": "NameOfBank", "value":"", hint: "点击选择", "type": "choice", "choicesKey": "SupportedBanks"},
 		{"title":"支行名称", "key": "Branch", "value":"", hint:"请输入支行名称", maxLength: 18, minLength: 18,},
-		{"title":"银行卡号", "key": "AccountNumber", "value":"", hint:"请输入支行名称", maxLength:75, "type": "cardNumber",},
+		{"title":"银行卡号", "key": "AccountNumber", "value":"", hint:"请输入银行卡号", maxLength:75, "type": "cardNumber",},
 ];
 
 export default class BindCardPage extends Component {
-
+	hardwareBackPress = ()=>{this.backButtonPressed();};
 	pickerDisplayed = false;
   listRawData = [];
   ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 });
@@ -85,7 +89,13 @@ export default class BindCardPage extends Component {
     }
   }
 
+	componentWillUnmount(){
+		BackAndroid.removeEventListener('hardwareBackPress', this.hardwareBackPress);
+	}
+
   componentWillMount(){
+		BackAndroid.addEventListener('hardwareBackPress', this.hardwareBackPress);
+
 		var liveUserInfo = LogicData.getLiveUserInfo();
 		this.listRawData[0].value = liveUserInfo.lastName + liveUserInfo.firstName;
 
@@ -110,10 +120,11 @@ export default class BindCardPage extends Component {
 
 						//Star the card number!
             var realNumberString = cardNumber.split(" ").join('');
-            var startIndex = 6;
-            var endIndex = 4;
+            var startIndex = realNumberString.length > 10 ? 6 : ((realNumberString.length / 2).toFixed(0) - 1);
+            var endIndex = realNumberString.length > 10 ? 4 : ((realNumberString.length / 2).toFixed(0) - 2);
             var starSize = realNumberString.length - startIndex - endIndex;
-            var stars = Array(starSize).join("*")
+						console.log("startIndex " + startIndex + " endIndex " + endIndex + " starSize " + starSize)
+            var stars = Array(starSize+1).join("*")
             var staredCardNumber = realNumberString.substr(0, startIndex) + stars + realNumberString.substr(realNumberString.length - endIndex);
 
             var finalText = "";
@@ -169,35 +180,56 @@ export default class BindCardPage extends Component {
 
 	      });
 
+			console.log("get all areas");
+			var responseJson = AreaProvider.getAllAreas();
+			console.log("get all areas responseJson " + JSON.stringify(responseJson));
+
+			this.provinceAndCities = [];
+			for(var i = 0; i < responseJson.length; i++){
+				//{"value":110000,"displayText":"北京","ShortName":"北京"},
+				if(responseJson[i].ParentId){
+					//City
+					for(var j = 0; j < this.provinceAndCities.length; j++){
+						if(responseJson[i].ParentId == this.provinceAndCities[j].value){
+							this.provinceAndCities[j].children.push({"value": responseJson[i].Id, "displayText": responseJson[i].Name})
+							break;
+						}
+					}
+				}else{
+					//Province
+					this.provinceAndCities.push({"value": responseJson[i].Id, "displayText": responseJson[i].Name, children: []});
+				}
+			}
+			console.log("get all areas this.provinceAndCities " + JSON.stringify(this.provinceAndCities));
+
 	    //Get Provices
 	    //Provices and cities won't updated, so write it down locally.
-
-	    NetworkModule.fetchTHUrl(NetConstants.CFD_API.GET_ALL_PROVINCES_AND_CITIES,
-	      {
-	  			method: 'GET',
-	  		},
-	      (responseJson)=>{
-	        this.provinceAndCities = [];
-	        for(var i = 0; i < responseJson.length; i++){
-	          //{"value":110000,"displayText":"北京","ShortName":"北京"},
-	          if(responseJson[i].ParentId){
-	            //City
-	            for(var j = 0; j < this.provinceAndCities.length; j++){
-	              if(responseJson[i].ParentId == this.provinceAndCities[j].value){
-	                this.provinceAndCities[j].children.push({"value": responseJson[i].Id, "displayText": responseJson[i].Name})
-	                break;
-	              }
-	            }
-	          }else{
-	            //Province
-	            this.provinceAndCities.push({"value": responseJson[i].Id, "displayText": responseJson[i].Name, children: []});
-	          }
-
-	        }
-	      },
-	      (result)=>{
-
-	      });
+	    // NetworkModule.fetchTHUrl(NetConstants.CFD_API.GET_ALL_PROVINCES_AND_CITIES,
+	    //   {
+	  	// 		method: 'GET',
+	  	// 	},
+	    //   (responseJson)=>{
+	    //     this.provinceAndCities = [];
+	    //     for(var i = 0; i < responseJson.length; i++){
+	    //       //{"value":110000,"displayText":"北京","ShortName":"北京"},
+	    //       if(responseJson[i].ParentId){
+	    //         //City
+	    //         for(var j = 0; j < this.provinceAndCities.length; j++){
+	    //           if(responseJson[i].ParentId == this.provinceAndCities[j].value){
+	    //             this.provinceAndCities[j].children.push({"value": responseJson[i].Id, "displayText": responseJson[i].Name})
+	    //             break;
+	    //           }
+	    //         }
+	    //       }else{
+	    //         //Province
+	    //         this.provinceAndCities.push({"value": responseJson[i].Id, "displayText": responseJson[i].Name, children: []});
+	    //       }
+			//
+	    //     }
+	    //   },
+	    //   (result)=>{
+			//
+	    //   });
 		}
   }
 
@@ -263,13 +295,30 @@ export default class BindCardPage extends Component {
         this.setState({
           validateInProgress: false,
         });
-        if(responseJson.success){
-          this.props.navigator.push({
-            'name': MainPage.WITHDRAW_ROUTE,
-          });
-        }else{
-          //Do something???
-        }
+				if(responseJson.success){
+					//Refresh userinfo
+			    NetworkModule.fetchTHUrl(NetConstants.CFD_API.GET_USER_INFO,
+		      {
+		        method: 'GET',
+		        headers: {
+		          'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+		        },
+		      },
+		      (responseJson)=>{
+		        LogicData.setLiveUserInfo(responseJson);
+	          this.props.navigator.push({
+	            'name': MainPage.WITHDRAW_ROUTE,
+	          });
+		      },
+		      (result)=>{
+						this.setState({
+		          validateInProgress: false,
+		        });
+		        alert("error! " + result.errorMessage);
+		      });
+				}else{
+					//Do something???
+				}
       },
       (result)=>{
         this.setState({
@@ -280,15 +329,28 @@ export default class BindCardPage extends Component {
 	}
 
 	readyToUnbindCard(){
-		this.setState({
-			modalVisible: true,
-		});
+		// this.setState({
+		// 	modalVisible: true,
+		// });
+		var liveUserInfo = LogicData.getLiveUserInfo();
+		var cardNumber = liveUserInfo.bankCardNumber;
+		var realNumberString = cardNumber.split(" ").join('');
+		var lastNumber = realNumberString.slice(realNumberString.length - 4);
+
+		Alert.alert(
+		  '确认删除',
+		  '尾号为' + lastNumber + "的银行卡",
+		  [
+		    {text: '取消', onPress: () => console.log('cancel unbind  d'), style: 'cancel'},
+			  {text: '确认', onPress: () => this.unbindCard()},
+		  ]
+		)
 	}
 
   unbindCard(){
-		this.setState({
-			modalVisible: false,
-		});
+		// this.setState({
+		// 	modalVisible: false,
+		// });
 
 		var userData = LogicData.getUserData()
 		if(userData.token == undefined){return}
@@ -302,26 +364,37 @@ export default class BindCardPage extends Component {
 				},
 			},
 			(responseJson)=>{
-				var routes = this.props.navigator.getCurrentRoutes();
-				var popToRoute = null;
-				for(var i = routes.length - 2; i >= 0 ;i --){
-					if(routes[i].name === MainPage.DEPOSIT_WITHDRAW_ROUTE){
-						popToRoute = routes[i];
-						break;
-					}
-				}
 
-				if(popToRoute){
-					this.props.navigator.popToRoute(popToRoute);
-				}else{
-					this.props.navigator.pop();
-				}
+				var liveUserInfo = LogicData.getLiveUserInfo();
+				var clearedInfo = {};
+				clearedInfo.firstName = liveUserInfo.firstName;
+				clearedInfo.lastName = liveUserInfo.lastName;
+				LogicData.setLiveUserInfo(clearedInfo);
+
+				this.backButtonPressed();
 			},
 			(result)=>{
 				alert(result.errorMessage);
 			});
 
   }
+
+	backButtonPressed(){
+		var routes = this.props.navigator.getCurrentRoutes();
+		var popToRoute = null;
+		for(var i = routes.length - 2; i >= 0 ;i --){
+			if(routes[i].name === MainPage.DEPOSIT_WITHDRAW_ROUTE){
+				popToRoute = routes[i];
+				break;
+			}
+		}
+
+		if(popToRoute){
+			this.props.navigator.popToRoute(popToRoute);
+		}else{
+			this.props.navigator.pop();
+		}
+	}
 
 	_setModalVisible(value){
 		this.setState({
@@ -585,12 +658,17 @@ export default class BindCardPage extends Component {
 
     var onPress;
     if(type === "choice"){
+
       onPress = () => this.onGenericPickerPressed(rowData, rowID);
-      for(var i = 0; i < choices.length; i++){
-        if(rowData.value === choices[i].value){
-          displayText = choices[i].displayText;
-        }
-      }
+			if(rowData.value){
+				displayText = rowData.value;
+			}else{
+	      for(var i = 0; i < choices.length; i++){
+	        if(rowData.value === choices[i].value){
+	          displayText = choices[i].displayText;
+	        }
+	      }
+			}
     }else if(type === "cascadeChoice"){
       onPress = () => this.onProvincePickerPressed(rowData, rowID);
       Object.keys(rowData.value).forEach((key)=>{
@@ -656,7 +734,9 @@ export default class BindCardPage extends Component {
     }else{
       var onChangeText;
       var cardNumber = rowData.value;
+			var keyboardType = "default"
       if(rowData.type === "cardNumber"){
+				keyboardType = 'numeric';
         onChangeText = (text)=>this.cardNumberInputChange(text, rowID)
       }else{
         onChangeText = (text)=>this.textInputChange(text, rowID)
@@ -676,6 +756,7 @@ export default class BindCardPage extends Component {
 						underlineColorAndroid='transparent'
 						onChangeText={(text)=>onChangeText(text, rowID)}
             onChange={(text)=>this.ontextInputChange(text, rowID)}
+            keyboardType={keyboardType}
 						/>
 				</View>
 				)
@@ -754,7 +835,7 @@ export default class BindCardPage extends Component {
 				</ScrollView>
         {this.renderActionButton()}
 				{pickerModal}
-				{this.renderUnbindCardDialog()}
+				{/* {this.renderUnbindCardDialog()} */}
 			</View>
 		);
 	}

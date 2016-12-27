@@ -12,6 +12,7 @@ import {
 	Image,
 	Platform,
 	ScrollView,
+  BackAndroid,
 } from 'react-native';
 
 var NavBar = require('../NavBar');
@@ -22,7 +23,7 @@ var MainPage = require('../MainPage')
 var LogicData = require('../../LogicData')
 var ColorConstants = require('../../ColorConstants')
 var TalkingdataModule = require('../../module/TalkingdataModule')
-var NavBar = require('../NavBar')
+
 // var OpenAccountRoutes = require('./OpenAccountRoutes')
 // var OpenAccountUtils = require('./OpenAccountUtils')
 var NetworkModule = require('../../module/NetworkModule');
@@ -43,6 +44,7 @@ var defaultRawData = [
 ];
 
 export default class WithdrawPage extends Component {
+  hardwareBackPress = ()=>{this.onBackButtonPressed()}
   listRawData = [];
   ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 });
   constructor(props) {
@@ -75,7 +77,13 @@ export default class WithdrawPage extends Component {
     }
   }
 
+  componentWillUnmount(){
+		BackAndroid.removeEventListener('hardwareBackPress', this.hardwareBackPress);
+	}
+
   componentDidMount(){
+    BackAndroid.addEventListener('hardwareBackPress', this.hardwareBackPress);
+
     var userData = LogicData.getUserData()
     if(userData.token == undefined){return}
 
@@ -158,8 +166,8 @@ export default class WithdrawPage extends Component {
     if(rowData.type === 'cardEntry'){
       return (
         <TouchableOpacity style={[styles.rowWrapper, styles.cardRowWrapper]} onPress={()=>this.gotoCardInfoPage()}>
-          <Image source={{uri: this.state.cardImageUrl}} style={{height: 55, width: 55, resizeMode: 'contain', marginRight: 15}} />
-          <View style={{flexDirection: 'column', flex: 1}}>
+          <Image source={{uri: this.state.cardImageUrl}} style={{height: 40, width: 40, resizeMode: 'contain', margin: 15, marginLeft: 0,}} />
+          <View style={{flexDirection: 'column', flex: 1,}}>
    					<Text style={styles.bankTitle}>{this.state.cardBank}</Text>
   	        <Text style={styles.cardNumberText}>{"尾号"+this.state.lastCardNumber}</Text>
           </View>
@@ -183,7 +191,7 @@ export default class WithdrawPage extends Component {
         <View style={[styles.rowWrapper, styles.depositRowWrapper]}>
  					<Text style={{fontSize: 15, color: '#5a5a5a', marginTop: 18}}>出金金额</Text>
           <View style={{flexDirection: 'row', marginTop:10, alignItems:"center"}}>
-   					<Text style={{fontSize: 17, fontWeight: 'bold'}}>美元</Text>
+   					<Text style={{fontSize: 17, fontWeight: 'bold', color: '#333333'}}>美元</Text>
             <TextInput style={[styles.inputText, inputStyle]}
    						autoCapitalize="none"
    						autoCorrect={false}
@@ -288,6 +296,23 @@ export default class WithdrawPage extends Component {
     alert("出金协议！")
   }
 
+  onBackButtonPressed(){
+		var routes = this.props.navigator.getCurrentRoutes();
+		var popToRoute = null;
+		for(var i = routes.length - 2; i >= 0 ;i --){
+			if(routes[i].name === MainPage.DEPOSIT_WITHDRAW_ROUTE){
+				popToRoute = routes[i];
+				break;
+			}
+		}
+
+		if(popToRoute){
+			this.props.navigator.popToRoute(popToRoute);
+		}else{
+			this.props.navigator.pop();
+		}
+  }
+
   render() {
 		var nextEnabled = true;//OpenAccountUtils.canGoNext(this.listRawData);
 		//console.log("listRawData: " + JSON.stringify(listRawData));
@@ -301,6 +326,7 @@ export default class WithdrawPage extends Component {
 			<View style={styles.wrapper}>
         <NavBar title="出金"
           showBackButton={true}
+          leftButtonOnClick={()=>this.onBackButtonPressed()}
           navigator={this.props.navigator}
           imageOnRight={require('../../../images/icon_question.png')}
           rightImageOnClick={()=>this.pressHelpButton()}
@@ -443,7 +469,8 @@ const styles = StyleSheet.create({
 	},
   bankTitle: {
     fontSize: 17,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: '#000000',
   },
   cardNumberText: {
     fontSize: 17,
@@ -476,12 +503,12 @@ const styles = StyleSheet.create({
     color: '#d71a18',
   },
 	checkboxView: {
-		height: 30,
+		height: 50,
 		paddingLeft: 15,
 		paddingTop: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 18,//12,
+    marginBottom: 12,//12,
 	},
   checkbox: {
     width: 20,

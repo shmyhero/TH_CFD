@@ -211,15 +211,9 @@ var LogicData = {
 		}else{
 			balanceData = data;
 		}
-
-		console.log("balanceData " + balanceData)
-		console.log("balanceDataLive " + balanceDataLive)
 	},
 
 	getBalanceData: function() {
-		console.log("balanceData " + balanceData)
-		console.log("balanceDataLive " + balanceDataLive)
-
 		if(accountState){
 			return balanceDataLive;
 		}else{

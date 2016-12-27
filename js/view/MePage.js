@@ -559,7 +559,9 @@ var MePage = React.createClass({
 				);
 			}
 			else if((rowData.subtype === 'depositWithdraw') && !LogicData.getAccountState()){
-
+				return (
+					null
+				);
 			}
 			else{
 				return(

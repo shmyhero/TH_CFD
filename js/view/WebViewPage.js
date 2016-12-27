@@ -110,7 +110,7 @@ var WebViewPage = React.createClass({
 	},
 
 	getWebViewRef: function(){
-		return this.refs[WEBVIEW_REF];
+		return this.refs[WEBVIEW_REF].getWebViewHandle();
 	},
 
 	pressBackButton: function() {

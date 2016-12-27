@@ -43,11 +43,11 @@ var rowValueWidth = (width - (2 * rowPadding)) / 4 * 3;
 
 var viewsChoices = {};
 
-viewsChoices.Provices = [
-  {"value":110000,"displayText":"北京","ShortName":"北京", "children":[{"value":110100,"displayText":"北京市","ShortName":"北京"}]},
-  {"value":310000,"displayText":"上海","ShortName":"上海", "children":[{"value":310100,"displayText":"上海市","ShortName":"上海"}]},
-  {"value":320000,"displayText":"江苏省","ShortName":"江苏", "children":[{"value":320400,"displayText":"常州市","ShortName":"常州"},{"Id":320800,"Name":"淮安市","ShortName":"淮安"},{"Id":320700,"Name":"连云港市","ShortName":"连云港"},{"Id":320100,"Name":"南京市","ShortName":"南京"},{"Id":320600,"Name":"南通市","ShortName":"南通"},{"Id":321300,"Name":"宿迁市","ShortName":"宿迁"},{"Id":320500,"Name":"苏州市","ShortName":"苏州"},{"Id":321200,"Name":"泰州市","ShortName":"泰州"},{"Id":320200,"Name":"无锡市","ShortName":"无锡"},{"Id":320300,"Name":"徐州市","ShortName":"徐州"},{"Id":320900,"Name":"盐城市","ShortName":"盐城"},{"Id":321000,"Name":"扬州市","ShortName":"扬州"},{"Id":321100,"Name":"镇江市","ShortName":"镇江"}]},
-]
+// viewsChoices.Provices = [
+//   {"value":110000,"displayText":"北京","ShortName":"北京", "children":[{"value":110100,"displayText":"北京市","ShortName":"北京"}]},
+//   {"value":310000,"displayText":"上海","ShortName":"上海", "children":[{"value":310100,"displayText":"上海市","ShortName":"上海"}]},
+//   {"value":320000,"displayText":"江苏省","ShortName":"江苏", "children":[{"value":320400,"displayText":"常州市","ShortName":"常州"},{"Id":320800,"Name":"淮安市","ShortName":"淮安"},{"Id":320700,"Name":"连云港市","ShortName":"连云港"},{"Id":320100,"Name":"南京市","ShortName":"南京"},{"Id":320600,"Name":"南通市","ShortName":"南通"},{"Id":321300,"Name":"宿迁市","ShortName":"宿迁"},{"Id":320500,"Name":"苏州市","ShortName":"苏州"},{"Id":321200,"Name":"泰州市","ShortName":"泰州"},{"Id":320200,"Name":"无锡市","ShortName":"无锡"},{"Id":320300,"Name":"徐州市","ShortName":"徐州"},{"Id":320900,"Name":"盐城市","ShortName":"盐城"},{"Id":321000,"Name":"扬州市","ShortName":"扬州"},{"Id":321100,"Name":"镇江市","ShortName":"镇江"}]},
+// ]
 
 viewsChoices.SupportedBanks = [
   {"displayText":"中国银行","value":"中国银行","logo":"https://cfdstorage.blob.core.chinacloudapi.cn/bank/bankofchina.jpg"},
@@ -62,7 +62,7 @@ var defaultRawData = [
 ];
 
 export default class BindCardPage extends Component {
-	hardwareBackPress = ()=>{this.backButtonPressed();};
+	hardwareBackPress = ()=>{return this.backButtonPressed();};
 	pickerDisplayed = false;
   listRawData = [];
   ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 });
@@ -123,7 +123,7 @@ export default class BindCardPage extends Component {
             var startIndex = realNumberString.length > 10 ? 6 : ((realNumberString.length / 2).toFixed(0) - 1);
             var endIndex = realNumberString.length > 10 ? 4 : ((realNumberString.length / 2).toFixed(0) - 2);
             var starSize = realNumberString.length - startIndex - endIndex;
-						console.log("startIndex " + startIndex + " endIndex " + endIndex + " starSize " + starSize)
+
             var stars = Array(starSize+1).join("*")
             var staredCardNumber = realNumberString.substr(0, startIndex) + stars + realNumberString.substr(realNumberString.length - endIndex);
 
@@ -135,7 +135,7 @@ export default class BindCardPage extends Component {
               finalText += staredCardNumber.slice(j, j+4);
             }
             this.listRawData[i].value = finalText;
-						console.log("bankCardNumber " + liveUserInfo.bankCardNumber + " finalText " + finalText)
+
             break;
           default:
             break;
@@ -364,14 +364,29 @@ export default class BindCardPage extends Component {
 				},
 			},
 			(responseJson)=>{
-
+				console.log("aaaa");
 				var liveUserInfo = LogicData.getLiveUserInfo();
 				var clearedInfo = {};
 				clearedInfo.firstName = liveUserInfo.firstName;
 				clearedInfo.lastName = liveUserInfo.lastName;
 				LogicData.setLiveUserInfo(clearedInfo);
 
-				this.backButtonPressed();
+				console.log("bbbb");
+
+				var routes = this.props.navigator.getCurrentRoutes();
+				var popToRoute = null;
+				for(var i = routes.length - 2; i >= 0 ;i --){
+					if(routes[i].name === MainPage.DEPOSIT_WITHDRAW_ROUTE){
+						popToRoute = routes[i];
+						break;
+					}
+				}
+
+				if(popToRoute){
+					this.props.navigator.popToRoute(popToRoute);
+				}else{
+					this.props.navigator.pop();
+				}
 			},
 			(result)=>{
 				alert(result.errorMessage);
@@ -380,20 +395,17 @@ export default class BindCardPage extends Component {
   }
 
 	backButtonPressed(){
-		var routes = this.props.navigator.getCurrentRoutes();
-		var popToRoute = null;
-		for(var i = routes.length - 2; i >= 0 ;i --){
-			if(routes[i].name === MainPage.DEPOSIT_WITHDRAW_ROUTE){
-				popToRoute = routes[i];
-				break;
+		Picker.isPickerShow(show => {
+			if(show){
+				Picker.hide();
+				this.setState({
+					selectedPicker: -1,
+				})
+			}else{
+				this.props.navigator.pop();
 			}
-		}
-
-		if(popToRoute){
-			this.props.navigator.popToRoute(popToRoute);
-		}else{
-			this.props.navigator.pop();
-		}
+		});
+		return true;
 	}
 
 	_setModalVisible(value){
@@ -403,76 +415,30 @@ export default class BindCardPage extends Component {
 	}
 
 	textInputChange(text, rowID) {
-		this.listRawData[rowID].value = text;
-		this.updateList();
-	}
-
-  ontextInputChange(text, rowID) {
-    console.log("ontextInputChange " + console.log(Object.keys(text)));
+		if(this.listRawData[rowID].value !== text){
+			this.listRawData[rowID].value = text;
+			this.updateList();
+		}
 	}
 
   cardNumberInputChange(text, rowID){
-    console.log("cardNumberInputChange " + text);
     var placeholder = text.split(" ").join('');
     var finalText = ""
-    console.log("cardNumberInputChange 1 text: " + text + ", placeholder: " + placeholder + ", finalText: " + finalText);
     for(var i = 0; i < placeholder.length; i +=4){
       if(i!=0){
         finalText+=" ";
       }
       finalText += placeholder.slice(i, i+4);
-      console.log("finalText: " + finalText + ", i: " + i);
     }
     console.log("finalText: " + finalText + ", finally!");
-    if(text !== finalText){
-
+    console.log("this.listRawData[rowID].value: " + this.listRawData[rowID].value);
+    console.log("text: " + text);
+    if(text !== finalText || this.listRawData[rowID].value !== finalText){
       this.listRawData[rowID].value = finalText;
       console.log("updateList");
   		this.updateList();
     }
   }
-
-	// onPressPicker(rowData, rowID) {
-	// 	this.setState({
-	// 		selectedPicker: rowID,
-	// 	})
-  //
-	// 	var selectedText = "";
-	// 	var choices = [];
-  //   var choiceDataArray = viewsChoices[rowData.choicesKey];
-  //   //var choices = viewsChoices[rowData.choicesKey];
-	// 	for(var i = 0; i < choiceDataArray.length; i++){
-  //     console.log(""+JSON.stringify(choiceDataArray[i]))
-	// 		if(rowData.value === choiceDataArray[i].value){
-	// 			selectedText = choiceDataArray[i].displayText;
-	// 		}
-	// 		choices.push(choiceDataArray[i].displayText);
-	// 	}
-  //
-  //   Picker.init({
-  //       pickerData: choices,
-  //       selectedValue: [selectedText],
-	// 			pickerTitleText: "",
-	// 			pickerConfirmBtnColor: [25,98,221,1],
-	// 			pickerCancelBtnColor: [25,98,221,1],
-  //       onPickerConfirm: data => {
-	// 				if(data[0] === ""){
-	// 					rowData.value = choiceDataArray[0].value;
-	// 				}else{
-	// 					for(var i = 0; i < choiceDataArray.length; i++){
-	// 						if(data[0] === choiceDataArray[i].displayText){
-	// 							rowData.value = choiceDataArray[i].value;
-	// 						}
-	// 					}
-	// 				}
-	// 				this.setState({
-	// 					dataSource: this.ds.cloneWithRows(this.listRawData),
-	// 					selectedPicker: -1,
-	// 				})
-  //       },
-  //   });
-  //   Picker.show();
-	// }
 
   onProvincePickerPressed(rowData, rowID){
     this.showCascadePicker(this.provinceAndCities, [rowData.value.Province, rowData.value.City], rowID, (province, city)=>{
@@ -480,26 +446,6 @@ export default class BindCardPage extends Component {
       this.listRawData[rowID].value.City = city;
       this.updateList();
     });
-    // this.onPressPicker(viewsChoices[rowData.choicesKey],
-    //   rowData.value,
-    //   (selectedValue)=>{
-    //     this.getCity(selectedValue,
-    //       (cities)=>{
-    //         this.onPressPicker(viewsChoices.Cities, viewsChoices.Cities[0].value,
-    //           ()=>{
-    //
-    //           }, rowID);
-    //       },
-    //       (error)=>{
-    //         alert("getcity error " + error);
-    //       });
-    //
-    //     // rowData.value = selectedValue;
-    //     // this.setState({
-    //     //   dataSource: this.ds.cloneWithRows(this.listRawData),
-    //     // });
-    //   },
-    //   rowID);
   }
 
   onGenericPickerPressed(rowData, rowID){
@@ -755,7 +701,7 @@ export default class BindCardPage extends Component {
 						selectionColor={ColorConstants.INOUT_TEXT_SELECTION_COLOR}
 						underlineColorAndroid='transparent'
 						onChangeText={(text)=>onChangeText(text, rowID)}
-            onChange={(text)=>this.ontextInputChange(text, rowID)}
+						onEndEditing={(event)=>{onChangeText(event.nativeEvent.text, rowID)}}
             keyboardType={keyboardType}
 						/>
 				</View>

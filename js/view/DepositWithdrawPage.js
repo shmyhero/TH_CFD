@@ -12,6 +12,7 @@ import {
 	Image,
 	ListView,
   TouchableOpacity,
+	BackAndroid,
 } from 'react-native';
 
 
@@ -40,6 +41,7 @@ var CALL_NUMBER = '66058771'
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var dataSource = ds.cloneWithRows(listRawData);
 export default class DepositWithdrawPage extends Component {
+	hardwareBackPress = ()=>{return this.pressBackButton();};
   constructor(props) {
 	  super(props);
 
@@ -48,7 +50,12 @@ export default class DepositWithdrawPage extends Component {
 		};
   }
 
+	componentWillUnmount(){
+		BackAndroid.removeEventListener('hardwareBackPress', this.hardwareBackPress);
+	}
+
 	componentDidMount(){
+		BackAndroid.addEventListener('hardwareBackPress', this.hardwareBackPress);
 		NetworkModule.loadUserBalance(true, (response)=>{
 			this.setState({
 				balance: response.available,
@@ -122,8 +129,12 @@ export default class DepositWithdrawPage extends Component {
 	}
 
 	pressBackButton() {
-		MainPage.showTabbar();
-		this.props.navigator.popToTop();
+		var routes = this.props.navigator.getCurrentRoutes();
+		if(routes[routes.length - 1].name === MainPage.DEPOSIT_WITHDRAW_ROUTE){
+			MainPage.showTabbar();
+			this.props.navigator.popToTop();
+			return true;
+		}
 	}
 
   helpPressed() {

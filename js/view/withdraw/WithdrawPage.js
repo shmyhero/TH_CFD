@@ -13,6 +13,7 @@ import {
 	Platform,
 	ScrollView,
   BackAndroid,
+  Keyboard,
 } from 'react-native';
 
 var NavBar = require('../NavBar');
@@ -44,7 +45,7 @@ var defaultRawData = [
 ];
 
 export default class WithdrawPage extends Component {
-  hardwareBackPress = ()=>{this.onBackButtonPressed()}
+  hardwareBackPress = ()=>{return this.onBackButtonPressed();}
   listRawData = [];
   ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 });
   constructor(props) {
@@ -124,6 +125,15 @@ export default class WithdrawPage extends Component {
   }
 
   onChangeWithdrawValue(text){
+    //Only show 2 digits after dot.
+    var re = /\d+.\d{0,2}/;
+    var found = text.match(re);
+    // console.log("onChangeWithdrawValue " + text);
+    // console.log(found);
+    if(found){
+      text = found[0];
+    }
+
     var newState = {
       withdrawValueText: this.state.withdrawValueText,
     };//{withdrawValueText: text,}
@@ -259,11 +269,13 @@ export default class WithdrawPage extends Component {
 
   gotoNext(){
     //TEST ONLY!!!!
+    //
+    // this.props.navigator.push({
+    //   name: MainPage.WITHDRAW_SUBMITTED_ROUTE,
+    // });
+    // return;
 
-    this.props.navigator.push({
-      name: MainPage.WITHDRAW_SUBMITTED_ROUTE,
-    });
-    return;
+    Keyboard.dismiss();
 
     var body = {
       Amount: this.state.withdrawValue,
@@ -283,8 +295,11 @@ export default class WithdrawPage extends Component {
       },
       (transferID)=>{
         console.log("Request withdraw success. TransferID: " + transferID);
-        this.props.navigator.push({
-          name: MainPage.WITHDRAW_SUBMITTED_ROUTE,
+
+        NetworkModule.loadUserBalance(true,()=>{
+          this.props.navigator.push({
+            name: MainPage.WITHDRAW_SUBMITTED_ROUTE,
+          });
         });
       },
       (result)=>{
@@ -298,19 +313,23 @@ export default class WithdrawPage extends Component {
 
   onBackButtonPressed(){
 		var routes = this.props.navigator.getCurrentRoutes();
-		var popToRoute = null;
-		for(var i = routes.length - 2; i >= 0 ;i --){
-			if(routes[i].name === MainPage.DEPOSIT_WITHDRAW_ROUTE){
-				popToRoute = routes[i];
-				break;
-			}
-		}
+    if(routes[routes.length - 1].name === MainPage.WITHDRAW_ROUTE){
+  		var popToRoute = null;
+  		for(var i = routes.length - 2; i >= 0 ;i --){
+  			if(routes[i].name === MainPage.DEPOSIT_WITHDRAW_ROUTE){
+  				popToRoute = routes[i];
+  				break;
+  			}
+  		}
 
-		if(popToRoute){
-			this.props.navigator.popToRoute(popToRoute);
-		}else{
-			this.props.navigator.pop();
-		}
+  		if(popToRoute){
+  			this.props.navigator.popToRoute(popToRoute);
+  		}else{
+  			this.props.navigator.pop();
+  		}
+      return true;
+    }
+    return false;
   }
 
   render() {

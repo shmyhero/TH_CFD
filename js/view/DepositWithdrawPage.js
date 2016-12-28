@@ -13,6 +13,7 @@ import {
 	ListView,
   TouchableOpacity,
 	BackAndroid,
+	ScrollView,
 } from 'react-native';
 
 
@@ -45,7 +46,7 @@ export default class DepositWithdrawPage extends Component {
 	  super(props);
 
 		this.state = {
-			balance: LogicData.getBalanceData().available,
+			balance: '--',
 			dataSource: ds.cloneWithRows(listRawData)
 		};
   }
@@ -60,11 +61,12 @@ export default class DepositWithdrawPage extends Component {
 	}
 
 	refreshData(){
-		NetworkModule.loadUserBalance(true, (response)=>{
-			this.setState({
-				balance: response.available,
-				dataSource: ds.cloneWithRows(listRawData),
-			})
+		NetworkModule.loadUserBalance(true, (response, isCache)=>{
+			if(!isCache){
+				this.setState({
+					balance: response.available,
+				});
+			}
 		});
 
 		this.loadLiveUserInfo();
@@ -150,7 +152,7 @@ export default class DepositWithdrawPage extends Component {
 
   renderHeader(){
 		var balance = ""
-		if(this.state.balance){
+		if(this.state.balance !== '--'){
 			balance += this.state.balance.toFixed(2);
 		}else{
 			balance = "--";
@@ -170,7 +172,7 @@ export default class DepositWithdrawPage extends Component {
 
 	renderRow(rowData, sectionID, rowID) {
     if(rowData){
-  		if(rowData.type == 'header'){
+			if(rowData.type == 'header'){
   			return (
   					<View style={[styles.headerWrapper, {backgroundColor: ColorConstants.TITLE_BLUE}]}>
   						{this.renderHeader()}
@@ -219,16 +221,30 @@ export default class DepositWithdrawPage extends Component {
     );
   }
 
+	renderListView(){
+		var listDataView = listRawData.map((data, i)=>{
+			var row = this.renderRow(data, 's1', i)
+			return(
+				<View key={i}>
+					{row}
+					{row != null ? this.renderSeparator('s1', i, false) : null}
+				</View>
+			);
+		})
+
+		return (
+			<View>
+				{listDataView}
+			</View>);
+	}
+
 	render() {
 		return (
 			<View style={{flex: 1}}>
 				<NavBar title='存取资金' showBackButton={true} leftButtonOnClick={()=>this.pressBackButton()} navigator={this.props.navigator}/>
-				<ListView
-					style={styles.list}
-					dataSource={this.state.dataSource}
-					renderRow={(rowData, sectionID, rowID)=>this.renderRow(rowData, sectionID, rowID)}
-					renderSeparator={(sectionID, rowID, adjacentRowHighlighted)=>this.renderSeparator(sectionID, rowID, adjacentRowHighlighted)} />
-
+				<ScrollView >
+					{this.renderListView()}
+				</ScrollView>
         {this.renderHelp()}
 			</View>
 		);

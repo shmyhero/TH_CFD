@@ -15,6 +15,7 @@ import {
 	Modal,
 	Alert,
 	BackAndroid,
+	Keyboard,
 } from 'react-native';
 
 import Picker from 'react-native-picker';
@@ -251,6 +252,8 @@ export default class BindCardPage extends Component {
   }
 
 	bindCard() {
+		Keyboard.dismiss();
+
     //{"AccountHolder":"张三","AccountNumber":"1217 0000 0000 0000 000","Branch":"建设银行上海分行","City":"上海","NameOfBank":"建设银行","Province":"上海"}
     var userData = LogicData.getUserData()
     if(userData.token == undefined){return}

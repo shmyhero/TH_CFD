@@ -178,6 +178,9 @@ function getTradeHeroAPI(){
     SHARE_DOWNLOAD_URL: TRADEHERO_SERVER_IP + '/activity/download.php',
     LIVE_REGISTER_TERMS: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/SignTerms<id>.html',
     SHARE_ACHIEVEMENT_CARD_URL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER + '/CardShare.php?id=<id>',
+
+    DEPOSIT_HELP_URL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/Help_rujin.html',
+    WITHDRAW_HELP_URL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/Help_chujin.html',
   }
 }
 

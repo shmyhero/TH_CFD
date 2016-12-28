@@ -39,7 +39,6 @@ var listRawData = [
 
 var CALL_NUMBER = '66058771'
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-var dataSource = ds.cloneWithRows(listRawData);
 export default class DepositWithdrawPage extends Component {
 	hardwareBackPress = ()=>{return this.pressBackButton();};
   constructor(props) {
@@ -47,6 +46,7 @@ export default class DepositWithdrawPage extends Component {
 
 		this.state = {
 			balance: LogicData.getBalanceData().available,
+			dataSource: ds.cloneWithRows(listRawData)
 		};
   }
 
@@ -56,9 +56,14 @@ export default class DepositWithdrawPage extends Component {
 
 	componentDidMount(){
 		BackAndroid.addEventListener('hardwareBackPress', this.hardwareBackPress);
+		this.refreshData();
+	}
+
+	refreshData(){
 		NetworkModule.loadUserBalance(true, (response)=>{
 			this.setState({
 				balance: response.available,
+				dataSource: ds.cloneWithRows(listRawData),
 			})
 		});
 
@@ -120,10 +125,12 @@ export default class DepositWithdrawPage extends Component {
 		else if(liveUserInfo.bankCardNumber && liveUserInfo.bankCardNumber !== ""){
 			this.props.navigator.push({
 				name: MainPage.WITHDRAW_ROUTE,
+				popToOutsidePage: ()=>{this.refreshData();}
 			});
 		}else{
 			this.props.navigator.push({
 				name: MainPage.WITHDRAW_BIND_CARD_ROUTE,
+				popToOutsidePage: ()=>{this.refreshData();}
 			});
 		}
 	}
@@ -218,7 +225,7 @@ export default class DepositWithdrawPage extends Component {
 				<NavBar title='存取资金' showBackButton={true} leftButtonOnClick={()=>this.pressBackButton()} navigator={this.props.navigator}/>
 				<ListView
 					style={styles.list}
-					dataSource={dataSource}
+					dataSource={this.state.dataSource}
 					renderRow={(rowData, sectionID, rowID)=>this.renderRow(rowData, sectionID, rowID)}
 					renderSeparator={(sectionID, rowID, adjacentRowHighlighted)=>this.renderSeparator(sectionID, rowID, adjacentRowHighlighted)} />
 

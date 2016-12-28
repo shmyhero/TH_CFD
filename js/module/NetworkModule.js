@@ -309,9 +309,9 @@ export function loadUserBalance(force, successCallback) {
 				},
 				cache: 'offline',
 			},
-			(responseJson) => {
+			(responseJson, isCache) => {
 				LogicData.setBalanceData(responseJson)
-				successCallback && successCallback(responseJson)
+				successCallback && successCallback(responseJson, isCache)
 			},
 			(result) => {
 				// Alert.alert('', errorMessage);

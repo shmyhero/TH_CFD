@@ -16,6 +16,7 @@ var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var UIConstants = require('../UIConstants')
 var ColorConstants = require('../ColorConstants')
+var MainPage = require('./MainPage')
 
 var listRawData = [
 {'type':'paytype','title':'支付宝钱包', 'image':require('../../images/icon_alipay.png'), 'subtype': 'alipay', },
@@ -224,7 +225,11 @@ export default class DepositPage extends Component{
 	}
 
 	go2Question(){
-		Alert.alert('go2Question');
+		this.props.navigator.push({
+			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			url: NetConstants.TRADEHERO_API.DEPOSIT_HELP_URL,
+			title: "出金帮助",
+		});
 	}
 
 	render(){
@@ -233,7 +238,7 @@ export default class DepositPage extends Component{
 			<View style={{flex:1,backgroundColor:ColorConstants.SEPARATOR_GRAY}}>
 				<NavBar title='入金' showBackButton={true}
 					imageOnRight={require('../../images/icon_question.png')}
-					rightImageOnClick={this.go2Question}
+					rightImageOnClick={()=>this.go2Question()}
 					navigator={this.props.navigator}/>
 				<View style = {styles.listViewContainer}>
 					<ListView

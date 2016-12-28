@@ -65,6 +65,7 @@ var MyMessagesPage = require('./MyMessagesPage')
 var DevelopPage = require('./DevelopPage')
 var PaymentPage = require('./PaymentPage')
 var DepositWithdrawPage = require('./DepositWithdrawPage')
+var DepositWithdrawHelpPage = require('./DepositWithdrawHelpPage')
 var NativeDataModule = require('../module/NativeDataModule')
 
 var BindCardPage = require('./withdraw/BindCardPage')
@@ -129,6 +130,7 @@ export let MY_MESSAGES_ROUTE = 'myMessages'
 export let DEVELOP_ROUTE = 'develop'
 export let PAYMENT_PAGE = 'payment'
 export let DEPOSIT_WITHDRAW_ROUTE = 'depositWithdrawRoute'
+export let DEPOSIT_WITHDRAW_HELP_ROUTE = 'depositWithdrawHelpRoute'
 export let WITHDRAW_BIND_CARD_ROUTE = 'withdrawBindCardRoute'
 export let WITHDRAW_ROUTE = 'withdrawRoute'
 export let WITHDRAW_SUBMITTED_ROUTE = 'withdrawSubmittedRoute'
@@ -473,7 +475,8 @@ var MainPage = React.createClass({
 			hideTabbar()
 			return (
 				<FeedbackPage navigator={navigationOperations}
-					showTabbar={showTabbar} phone={route.phone}/>
+					showTabbar={showTabbar} phone={route.phone}
+					backToTop={route.backToTop}/>
 			)
 		}
 		else if (route.name === DEPOSIT_WITHDRAW_FLOW) {
@@ -555,6 +558,13 @@ var MainPage = React.createClass({
 			return (
 				<DepositWithdrawPage navigator={navigationOperations} routeMapper={this.RouteMapper}/>
 			);
+		}else if(route.name === DEPOSIT_WITHDRAW_HELP_ROUTE){
+			hideTabbar();
+			return (
+				<DepositWithdrawHelpPage navigator={navigationOperations} routeMapper={this.RouteMapper}
+					url={route.url}
+					title={route.title}/>
+			);
 		}else if (route.name === WITHDRAW_BIND_CARD_ROUTE){
 			hideTabbar();
 			return (
@@ -565,12 +575,14 @@ var MainPage = React.createClass({
 		}else if (route.name === WITHDRAW_ROUTE){
 			hideTabbar();
 			return (
-				<WithdrawPage navigator={navigationOperations} routeMapper={this.RouteMapper}/>
+				<WithdrawPage navigator={navigationOperations} routeMapper={this.RouteMapper}
+					popToOutsidePage={route.popToOutsidePage}/>
 			)
 		}else if (route.name === WITHDRAW_SUBMITTED_ROUTE){
 			hideTabbar();
 			return (
-				<WithdrawSubmittedPage navigator={navigationOperations} routeMapper={this.RouteMapper}/>
+				<WithdrawSubmittedPage navigator={navigationOperations} routeMapper={this.RouteMapper}
+					popToOutsidePage={route.popToOutsidePage}/>
 			)
 		}
 
@@ -819,6 +831,18 @@ var MainPage = React.createClass({
 		else if(url.startsWith('wx')){
 			// callback from wx
 			// do nothing.
+		}
+		else if(url==='cfd://page/feedback'){
+			var meData = LogicData.getMeData();
+			var currentNavigatorIndex = LogicData.getTabIndex();
+			console.log("currentNavigatorIndex ")
+			if(_navigators[currentNavigatorIndex]){
+				_navigators[currentNavigatorIndex].push({
+					name: FEEDBACK_ROUTE,
+					phone: meData.phone,
+					backToTop: false,
+				});
+			}
 		}
 		else{
 			_navigator.popToTop()

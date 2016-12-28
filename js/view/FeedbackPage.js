@@ -55,6 +55,18 @@ const Options = {
 var imageNumber = 0
 
 var FeedbackPage = React.createClass({
+	propTypes: {
+		showTabbar: React.PropTypes.func,
+		backToTop: React.PropTypes.bool,
+	},
+
+	getDefaultProps() {
+		return {
+			showTabbar: ()=>{},
+			backToTop: true,
+		}
+	},
+
 	getInitialState: function() {
 		return {
 			commitButtonEnabled: true,
@@ -75,8 +87,10 @@ var FeedbackPage = React.createClass({
 	},
 
 	pressBackButton: function() {
-		this.props.showTabbar()
-		this.props.navigator.pop()
+		if(this.props.backToTop){
+			this.props.showTabbar();
+		}
+		this.props.navigator.pop();
 	},
 
 	pressCommitButton: function() {
@@ -199,7 +213,7 @@ var FeedbackPage = React.createClass({
 			<View style={styles.wrapper}>
 				<NavBar title='产品反馈'
 					showBackButton={true}
-					backButtonOnClick={this.pressBackButton}
+					leftButtonOnClick={()=>this.pressBackButton()}
 					textOnRight='提交'
 					rightTextOnClick={this.pressCommitButton}
 					enableRightText={this.state.text.length>0}

@@ -1,6 +1,6 @@
 'use strict'
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes} from 'react';
 import {
   View,
   Text,
@@ -45,6 +45,14 @@ var defaultRawData = [
 ];
 
 export default class WithdrawPage extends Component {
+  static propTypes = {
+		popToOutsidePage: PropTypes.func,
+  }
+
+  static defaultProps = {
+		popToOutsidePage: ()=>{},
+  }
+
   hardwareBackPress = ()=>{return this.onBackButtonPressed();}
   listRawData = [];
   ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 });
@@ -57,7 +65,7 @@ export default class WithdrawPage extends Component {
     var balanceData = LogicData.getBalanceData();
     if(liveUserInfo){
       var cardNumber = liveUserInfo.bankCardNumber.split(" ").join('');
-      var lastCardNumber = cardNumber.slice(cardNumber.length-4);
+      var lastCardNumber = cardNumber.length>4 ? cardNumber.slice(cardNumber.length-4) : cardNumber;
 
       var cardBank = liveUserInfo.bankName;
       var bankIcon = liveUserInfo.bankIcon;
@@ -106,7 +114,11 @@ export default class WithdrawPage extends Component {
   }
 
   pressHelpButton(){
-    alert("help!!!")
+    this.props.navigator.push({
+      name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+      url: NetConstants.TRADEHERO_API.WITHDRAW_HELP_URL,
+      title: "出金帮助",
+    });
   }
 
   withdrawAll(){
@@ -168,6 +180,7 @@ export default class WithdrawPage extends Component {
   gotoCardInfoPage(){
     this.props.navigator.push({
       'name': MainPage.WITHDRAW_BIND_CARD_ROUTE,
+      'popToOutsidePage': this.props.popToOutsidePage,
       isUnbindMode: true,
     })
   }
@@ -268,13 +281,6 @@ export default class WithdrawPage extends Component {
 	}
 
   gotoNext(){
-    //TEST ONLY!!!!
-    //
-    // this.props.navigator.push({
-    //   name: MainPage.WITHDRAW_SUBMITTED_ROUTE,
-    // });
-    // return;
-
     Keyboard.dismiss();
 
     var body = {
@@ -296,10 +302,9 @@ export default class WithdrawPage extends Component {
       (transferID)=>{
         console.log("Request withdraw success. TransferID: " + transferID);
 
-        NetworkModule.loadUserBalance(true,()=>{
-          this.props.navigator.push({
-            name: MainPage.WITHDRAW_SUBMITTED_ROUTE,
-          });
+        this.props.popToOutsidePage && this.props.popToOutsidePage();
+        this.props.navigator.push({
+          name: MainPage.WITHDRAW_SUBMITTED_ROUTE,
         });
       },
       (result)=>{

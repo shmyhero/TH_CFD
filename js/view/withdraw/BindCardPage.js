@@ -26,7 +26,7 @@ var LogicData = require('../../LogicData')
 var ColorConstants = require('../../ColorConstants')
 var TalkingdataModule = require('../../module/TalkingdataModule')
 var NavBar = require('../NavBar')
-var AreaProvider = require('./AreaProvider')
+var UserInfoSelectorProvider = require('./UserInfoSelectorProvider')
 
 // var OpenAccountRoutes = require('./OpenAccountRoutes')
 // var OpenAccountUtils = require('./OpenAccountUtils')
@@ -40,18 +40,6 @@ var fontSize = Math.round(16*width/375)
 
 var rowTitleWidth = (width - (2 * rowPadding)) / 4;
 var rowValueWidth = (width - (2 * rowPadding)) / 4 * 3;
-
-var viewsChoices = {};
-
-// viewsChoices.Provices = [
-//   {"value":110000,"displayText":"北京","ShortName":"北京", "children":[{"value":110100,"displayText":"北京市","ShortName":"北京"}]},
-//   {"value":310000,"displayText":"上海","ShortName":"上海", "children":[{"value":310100,"displayText":"上海市","ShortName":"上海"}]},
-//   {"value":320000,"displayText":"江苏省","ShortName":"江苏", "children":[{"value":320400,"displayText":"常州市","ShortName":"常州"},{"Id":320800,"Name":"淮安市","ShortName":"淮安"},{"Id":320700,"Name":"连云港市","ShortName":"连云港"},{"Id":320100,"Name":"南京市","ShortName":"南京"},{"Id":320600,"Name":"南通市","ShortName":"南通"},{"Id":321300,"Name":"宿迁市","ShortName":"宿迁"},{"Id":320500,"Name":"苏州市","ShortName":"苏州"},{"Id":321200,"Name":"泰州市","ShortName":"泰州"},{"Id":320200,"Name":"无锡市","ShortName":"无锡"},{"Id":320300,"Name":"徐州市","ShortName":"徐州"},{"Id":320900,"Name":"盐城市","ShortName":"盐城"},{"Id":321000,"Name":"扬州市","ShortName":"扬州"},{"Id":321100,"Name":"镇江市","ShortName":"镇江"}]},
-// ]
-
-viewsChoices.SupportedBanks = [
-  {"displayText":"中国银行","value":"中国银行","logo":"https://cfdstorage.blob.core.chinacloudapi.cn/bank/bankofchina.jpg"},
-];
 
 var defaultRawData = [
 		{"title":"姓名", "key": "AccountHolder", "value":"", hint:"请输入姓名", "type": "realname",},
@@ -67,13 +55,16 @@ export default class BindCardPage extends Component {
   listRawData = [];
   ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 });
   provinceAndCities = [];
+	SupportedBanks = UserInfoSelectorProvider.getSupportedBanks();
 
   static propTypes = {
     isUnbindMode: PropTypes.bool,
+		popToOutsidePage: PropTypes.func,
   }
 
   static defaultProps = {
     isUnbindMode: false,
+		popToOutsidePage: ()=>{},
   }
 
   constructor(props) {
@@ -120,8 +111,8 @@ export default class BindCardPage extends Component {
 
 						//Star the card number!
             var realNumberString = cardNumber.split(" ").join('');
-            var startIndex = realNumberString.length > 10 ? 6 : ((realNumberString.length / 2).toFixed(0) - 1);
-            var endIndex = realNumberString.length > 10 ? 4 : ((realNumberString.length / 2).toFixed(0) - 2);
+            var startIndex = Math.max(0, (realNumberString.length > 10 ? 6 : ((realNumberString.length / 2).toFixed(0) - 1)));
+            var endIndex = Math.max(0, realNumberString.length > 10 ? 4 : ((realNumberString.length / 2).toFixed(0) - 2));
             var starSize = realNumberString.length - startIndex - endIndex;
 
             var stars = Array(starSize+1).join("*")
@@ -168,9 +159,9 @@ export default class BindCardPage extends Component {
 				},
 	      (responseJson)=>{
 	        try{
-	          viewsChoices.SupportedBanks = [];
+	          this.SupportedBanks = [];
 	          for(var i = 0; i < responseJson.length; i++){
-	            viewsChoices.SupportedBanks.push({"value": responseJson[i].cname, "displayText": responseJson[i].cname, "logo": responseJson[i].logo});
+	            this.SupportedBanks.push({"value": responseJson[i].cname, "displayText": responseJson[i].cname, "logo": responseJson[i].logo});
 	          }
 	        }catch(err){
 	          console.log("error " + err)
@@ -181,7 +172,7 @@ export default class BindCardPage extends Component {
 	      });
 
 			console.log("get all areas");
-			var responseJson = AreaProvider.getAllAreas();
+			var responseJson = UserInfoSelectorProvider.getAllAreas();
 			console.log("get all areas responseJson " + JSON.stringify(responseJson));
 
 			this.provinceAndCities = [];
@@ -234,7 +225,7 @@ export default class BindCardPage extends Component {
   }
 
   getCity(provinceId, onGetCitiesFinished, onGetCitiesFailed){
-    viewsChoices.Cities = [];
+    this.Cities = [];
         //GET_CITY: CFD_API_SERVER + "/api/area/?id=<id>",
         //		url = url.replace(/<stockCode>/, this.props.stockInfo.id)
     var url = NetConstants.CFD_API.GET_CITY.replace(/<id>/, provinceId);
@@ -245,10 +236,10 @@ export default class BindCardPage extends Component {
       (responseJson)=>{
         for(var i = 0; i < responseJson.length; i++){
           //{"value":110000,"displayText":"北京","ShortName":"北京"},
-          viewsChoices.Cities.push({"value": responseJson[i].Id, "displayText": responseJson[i].Name});
+          this.Cities.push({"value": responseJson[i].Id, "displayText": responseJson[i].Name});
         }
         if(onGetCitiesFinished){
-          onGetCitiesFinished(viewsChoices.Cities);
+          onGetCitiesFinished(this.Cities);
         }
       },
       (result)=>{
@@ -308,13 +299,14 @@ export default class BindCardPage extends Component {
 		        LogicData.setLiveUserInfo(responseJson);
 	          this.props.navigator.push({
 	            'name': MainPage.WITHDRAW_ROUTE,
+							'popToOutsidePage': this.props.popToOutsidePage,
 	          });
 		      },
 		      (result)=>{
 						this.setState({
 		          validateInProgress: false,
 		        });
-		        alert("error! " + result.errorMessage);
+						Alert.alert('', result.errorMessage, [{text: '确认',}]);
 		      });
 				}else{
 					//Do something???
@@ -324,7 +316,7 @@ export default class BindCardPage extends Component {
         this.setState({
           validateInProgress: false,
         });
-        alert("error! " + result.errorMessage);
+				Alert.alert('', result.errorMessage, [{text: '确认',}]);
       });
 	}
 
@@ -402,9 +394,11 @@ export default class BindCardPage extends Component {
 					selectedPicker: -1,
 				})
 			}else{
+				this.props.popToOutsidePage && this.props.popToOutsidePage();
 				this.props.navigator.pop();
 			}
 		});
+
 		return true;
 	}
 
@@ -449,7 +443,7 @@ export default class BindCardPage extends Component {
   }
 
   onGenericPickerPressed(rowData, rowID){
-    this.onPressPicker(viewsChoices[rowData.choicesKey],
+    this.onPressPicker(this[rowData.choicesKey],
       rowData.value,
       (selectedValue)=>{
         rowData.value = selectedValue;
@@ -479,7 +473,6 @@ export default class BindCardPage extends Component {
     }
     var choices = [];
 
-    //var choices = viewsChoices[rowData.choicesKey];
     for(var i = 0; i < choiceDataArray.length; i++){
       var choice = {};
       choice[choiceDataArray[i].displayText] = [];
@@ -531,7 +524,7 @@ export default class BindCardPage extends Component {
 
 		var selectedText = "";
 		var choices = [];
-    //var choices = viewsChoices[rowData.choicesKey];
+
 		for(var i = 0; i < choiceDataArray.length; i++){
       console.log(""+JSON.stringify(choiceDataArray[i]))
 			if(currentSelectedValue === choiceDataArray[i].value){
@@ -600,7 +593,7 @@ export default class BindCardPage extends Component {
   renderChoice(rowData, rowID, type){
     var displayText = "";
     var textColor = ColorConstants.INPUT_TEXT_COLOR;
-    var choices = viewsChoices[rowData.choicesKey];
+    var choices = this[rowData.choicesKey];
 
     var onPress;
     if(type === "choice"){

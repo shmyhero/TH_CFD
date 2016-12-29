@@ -315,40 +315,24 @@ var HomePage = React.createClass({
 		var header = images[index].header
 		var digest = images[index].digest
 		var id = images[index].id
-		FSModule.getBannerImageLocalPath(imagePath)
-			.then(filePath => {
-				if (filePath !== null) {
-					while(PAGES.length <= index) {
-						PAGES.push({name: 'PAGE' + PAGES.length})
-					}
-					PAGES[index].id = id
-					PAGES[index].imgUrl = filePath
-					PAGES[index].url = targetUrl
-					PAGES[index].header = header
-					PAGES[index].digest = digest
-					this.setState({
-						dataSource: ds.cloneWithRows(PAGES)
-					})
-					this.downloadOneBannerImage(images, index + 1, resolve)
-				} else {
-					FSModule.downloadBannerImage(imagePath, (filePath) => {
-						if (filePath !== null) {
-							while(PAGES.length <= index) {
-								PAGES.push({name: 'PAGE' + PAGES.length})
-							}
-							PAGES[index].id = id
-							PAGES[index].imgUrl = filePath
-							PAGES[index].url = targetUrl
-							PAGES[index].header = header
-							PAGES[index].digest = digest
-							this.setState({
-								dataSource: ds.cloneWithRows(PAGES)
-							})
-						}
-						this.downloadOneBannerImage(images, index + 1, resolve)
-					})
-				}
+		var filePath = images[index].imgUrl;
+		// RN will cache the image.
+		// FSModule.getBannerImageLocalPath(imagePath)
+		// 	.then(filePath => {
+		if (filePath !== null) {
+			while(PAGES.length <= index) {
+				PAGES.push({name: 'PAGE' + PAGES.length})
+			}
+			PAGES[index].id = id
+			PAGES[index].imgUrl = filePath
+			PAGES[index].url = targetUrl
+			PAGES[index].header = header
+			PAGES[index].digest = digest
+			this.setState({
+				dataSource: ds.cloneWithRows(PAGES)
 			})
+			this.downloadOneBannerImage(images, index + 1, resolve)
+		}
 	},
 
 	goToBannerPage: function(i) {
@@ -585,12 +569,12 @@ var HomePage = React.createClass({
 	},
 
 	gotoStockDetalWithID: function(card){
-			var stockRowData = {
-				name: card.stockName,
-				id: parseInt(card.stockID),
-			}
+		var stockRowData = {
+			name: card.stockName,
+			id: parseInt(card.stockID),
+		}
 
-			this.props.navigator.push({
+		this.props.navigator.push({
 			name: MainPage.STOCK_DETAIL_ROUTE,
 			stockRowData: stockRowData,
 		});
@@ -792,7 +776,7 @@ var HomePage = React.createClass({
 				onPress={() => this.goToBannerPage(i)} key={i}>
 				<Image
 					style={[styles.image, {height: imageHeight, width: width}]}
-					source={{uri: 'file://' + PAGES[i].imgUrl}}/>
+					source={{uri: PAGES[i].imgUrl}}/>
 			</TouchableOpacity>
 		)
 	},

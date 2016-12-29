@@ -178,6 +178,7 @@ export default class DepositPage extends Component{
 												//  value={value}
 											 defaultValue={inputValue}
 											 maxLength={8}
+											 autoFocus={true}
 											 underlineColorAndroid='transparent'
 											 keyboardType='numeric'>
 						</TextInput>
@@ -262,7 +263,7 @@ export default class DepositPage extends Component{
 		});
 	}
 
-	pressBlank(){ 
+	pressBlank(){
 		Keyboard.dismiss();
 	}
 

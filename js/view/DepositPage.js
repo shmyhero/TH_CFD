@@ -263,8 +263,9 @@ export default class DepositPage extends Component{
 	go2Question(){
 		this.props.navigator.push({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
-			url: NetConstants.TRADEHERO_API.DEPOSIT_HELP_URL,
-			title: "出金帮助",
+			url: NetConstants.TRADEHERO_API.HELP_CENTER_URL_ACTUAL,
+			isShowNav: false,
+			title: "入金帮助",
 		});
 	}
 

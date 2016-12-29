@@ -116,8 +116,9 @@ export default class WithdrawPage extends Component {
   pressHelpButton(){
     this.props.navigator.push({
       name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
-      url: NetConstants.TRADEHERO_API.WITHDRAW_HELP_URL,
-      title: "出金帮助",
+      url: NetConstants.TRADEHERO_API.HELP_CENTER_URL_ACTUAL,
+      isShowNav: false,
+      title: "帮助中心",
     });
   }
 
@@ -314,7 +315,11 @@ export default class WithdrawPage extends Component {
   }
 
   showWithdrawDocument(){
-    alert("出金协议！")
+    this.props.navigator.push({
+      name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+      url: NetConstants.TRADEHERO_API.WITHDRAW_AGREEMENT_URL,
+      title: "出金协议",
+    });
   }
 
   onBackButtonPressed(){

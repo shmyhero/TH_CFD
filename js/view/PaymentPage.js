@@ -74,6 +74,9 @@ export default class PaymentPage extends Component {
                 //Alipay scheme.
 								try{
                   Linking.openURL("alipayqr://platformapi/startapp?saId=10000007&qrcode=" + encodedValue/*+"%3Dweb-other"*/)
+                  .then(()=>{
+                    console.log('openURL success')
+                  })
                   .catch(err => {
                     //User may not install alipay. So just open the url inside the qrcode.
                     console.log('An error occurred' + err + ", result + " + result)

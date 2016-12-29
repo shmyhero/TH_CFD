@@ -429,7 +429,7 @@ var MePage = React.createClass({
 			})
 		}
 		else if(rowData.subtype === 'helpcenter') {
-			var qaUrl = LogicData.getAccountState()? NetConstants.TRADEHERO_API.WEBVIEW_QA_PAGE_ACTUAL:NetConstants.TRADEHERO_API.WEBVIEW_QA_PAGE;
+			var qaUrl = LogicData.getAccountState()? NetConstants.TRADEHERO_API.HELP_CENTER_URL_ACTUAL:NetConstants.TRADEHERO_API.HELP_CENTER_URL;
 			qaUrl = qaUrl.replace('<version>', VersionConstants.WEBVIEW_QA_VERSION);
 			this.gotoWebviewPage(qaUrl, '帮助中心', true);
 		}

@@ -217,6 +217,7 @@ export default class WithdrawPage extends Component {
    					<Text style={{fontSize: 17, fontWeight: 'bold', color: '#333333'}}>美元</Text>
             <TextInput style={[styles.inputText, inputStyle]}
    						autoCapitalize="none"
+              autoFocus={true}
    						autoCorrect={false}
    						defaultValue={rowData.value}
    						placeholder={rowData.hint}
@@ -355,42 +356,41 @@ export default class WithdrawPage extends Component {
           imageOnRight={require('../../../images/icon_question.png')}
           rightImageOnClick={()=>this.pressHelpButton()}
           />
-				<ScrollView style={styles.list}>
+        <View style={{flex:1}}>
 					{this.renderListView()}
-				</ScrollView>
-
-        <View style={styles.checkboxView}>
-          <CheckBoxButton
-            defaultSelected={this.state.hasRead}
-            onPress={(value)=>{this.onClickCheckbox(value)}}
-            selectedIcon={require('../../../images/check_selected.png')}
-            unSelectedIcon={require('../../../images/check_unselected.png')}>
-            <View style={{flexDirection:'column'}}>
-              <View style={{flexDirection: 'row'}}>
-                <Text style={styles.readMeText}>
-                  我已阅读并同意
-                  <Text style={{color: 'transparent',}}>0</Text>
-                </Text>
-                <TouchableOpacity onPress={()=>this.showWithdrawDocument()}>
-                  <Text style={styles.documentText}>
-                  出金协议内容，
-                  <Text style={{color: 'transparent',}}>0</Text>
+          <View style={{flex:1}}></View>
+          <View style={styles.checkboxView}>
+            <CheckBoxButton
+              defaultSelected={this.state.hasRead}
+              onPress={(value)=>{this.onClickCheckbox(value)}}
+              selectedIcon={require('../../../images/check_selected.png')}
+              unSelectedIcon={require('../../../images/check_unselected.png')}>
+              <View style={{flexDirection:'column'}}>
+                <View style={{flexDirection: 'row'}}>
+                  <Text style={styles.readMeText}>
+                    我已阅读并同意
+                    <Text style={{color: 'transparent',}}>0</Text>
                   </Text>
-                </TouchableOpacity>
+                  <TouchableOpacity onPress={()=>this.showWithdrawDocument()}>
+                    <Text style={styles.documentText}>
+                    出金协议内容，
+                    <Text style={{color: 'transparent',}}>0</Text>
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <Text style={styles.readMeText}>{this.state.withdrawChargeHint}</Text>
               </View>
-              <Text style={styles.readMeText}>{this.state.withdrawChargeHint}</Text>
-            </View>
-          </CheckBoxButton>
+            </CheckBoxButton>
+          </View>
+  				<View style={styles.bottomArea}>
+  					<Button style={styles.buttonArea}
+  						enabled={this.state.validateInProgress ? false : nextEnabled}
+  						onPress={()=>this.gotoNext()}
+  						textContainerStyle={styles.buttonView}
+  						textStyle={styles.buttonText}
+  						text={this.state.validateInProgress? "信息正在检查中...": this.state.refundETA + '天内到账，确认出金'} />
+  				</View>
         </View>
-
-				<View style={styles.bottomArea}>
-					<Button style={styles.buttonArea}
-						enabled={this.state.validateInProgress ? false : nextEnabled}
-						onPress={()=>this.gotoNext()}
-						textContainerStyle={styles.buttonView}
-						textStyle={styles.buttonText}
-						text={this.state.validateInProgress? "信息正在检查中...": this.state.refundETA + '天内到账，确认出金'} />
-				</View>
 			</View>
 		);
   }
@@ -407,6 +407,7 @@ const styles = StyleSheet.create({
 	list: {
 		flex: 1,
 	},
+
 	rowWrapper: {
 		flexDirection: 'row',
 		alignSelf: 'stretch',

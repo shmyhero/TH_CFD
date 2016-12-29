@@ -5,7 +5,7 @@
 */
 
 import React,{Component} from 'react'
-import {StyleSheet,Text,TextInput,Image,View,Dimensions,ListView,Alert,TouchableOpacity} from 'react-native'
+import {StyleSheet,Text,TextInput,Keyboard,Image,View,Dimensions,ListView,Alert,TouchableOpacity} from 'react-native'
 
 
 var {height, width} = Dimensions.get('window')
@@ -262,6 +262,10 @@ export default class DepositPage extends Component{
 		});
 	}
 
+	pressBlank(){ 
+		Keyboard.dismiss();
+	}
+
 	render(){
 
 		return(
@@ -279,6 +283,9 @@ export default class DepositPage extends Component{
 				</View>
 				<View style = {{flex:1}}>
 					{this.renderDetail()}
+					<TouchableOpacity style={styles.blank} onPress={()=>this.pressBlank()}>
+						<View></View>
+					</TouchableOpacity>
 					<View style = {{flex:1,justifyContent:'flex-end'}}>
 					{this.renderProtocol()}
 					{this.renderConfirm()}
@@ -415,6 +422,10 @@ const styles = StyleSheet.create({
 	protocalRight:{
 		fontSize:12,
 		color:'#ff6666'
+	},
+
+	blank:{
+		flex:1,
 	},
 
 });

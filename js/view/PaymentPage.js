@@ -25,7 +25,7 @@ export default class PaymentPage extends Component {
   static defaultProps = {
     url: "www.baidu.com",
     title: "支付",
-    paymentDestination: "支付宝",
+    paymentDestination: "alipay", //unionpay, wechat,
     onPopToRoute: ()=>{}
   }
 
@@ -114,12 +114,25 @@ export default class PaymentPage extends Component {
     }
   }
 
+  getDestinationName(){
+    switch (this.props.paymentDestination) {
+      case "alipay":
+        return "支付宝";
+      case "wechat":
+        return "微信";
+      case "unionpay":
+        return "银联支付";
+      default:
+        return "";
+    }
+  }
+
   renderPayButton(){
     if(this.state.showPaymentButton){
       return (
         <TouchableOpacity style={styles.paymentButton} onPress={()=>this.pressPayButton()}>
           <Text style={styles.paymentText}>
-            前往{this.props.paymentDestination}
+            前往{this.getDestinationName()}
           </Text>
         </TouchableOpacity>
       );

@@ -65,7 +65,6 @@ var MyMessagesPage = require('./MyMessagesPage')
 var DevelopPage = require('./DevelopPage')
 var PaymentPage = require('./PaymentPage')
 var DepositWithdrawPage = require('./DepositWithdrawPage')
-var DepositWithdrawHelpPage = require('./DepositWithdrawHelpPage')
 var NativeDataModule = require('../module/NativeDataModule')
 
 var BindCardPage = require('./withdraw/BindCardPage')
@@ -130,7 +129,6 @@ export let MY_MESSAGES_ROUTE = 'myMessages'
 export let DEVELOP_ROUTE = 'develop'
 export let PAYMENT_PAGE = 'payment'
 export let DEPOSIT_WITHDRAW_ROUTE = 'depositWithdrawRoute'
-export let DEPOSIT_WITHDRAW_HELP_ROUTE = 'depositWithdrawHelpRoute'
 export let WITHDRAW_BIND_CARD_ROUTE = 'withdrawBindCardRoute'
 export let WITHDRAW_ROUTE = 'withdrawRoute'
 export let WITHDRAW_SUBMITTED_ROUTE = 'withdrawSubmittedRoute'
@@ -557,13 +555,6 @@ var MainPage = React.createClass({
 			hideTabbar();
 			return (
 				<DepositWithdrawPage navigator={navigationOperations} routeMapper={this.RouteMapper}/>
-			);
-		}else if(route.name === DEPOSIT_WITHDRAW_HELP_ROUTE){
-			hideTabbar();
-			return (
-				<DepositWithdrawHelpPage navigator={navigationOperations} routeMapper={this.RouteMapper}
-					url={route.url}
-					title={route.title}/>
 			);
 		}else if (route.name === WITHDRAW_BIND_CARD_ROUTE){
 			hideTabbar();

@@ -181,6 +181,7 @@ function getTradeHeroAPI(){
 
     DEPOSIT_HELP_URL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/Help_rujin.html',
     WITHDRAW_HELP_URL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/Help_chujin.html',
+    DEPOSIT_AGREEMENT: TRADEHERO_SERVER_IP + '/TH_CFD_SP/Agreementchujin.html',
   }
 }
 

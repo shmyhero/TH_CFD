@@ -29,6 +29,7 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 //0: alipay 1:unionpay
 var inputError = false;
 var inputValue = '';
+var rmbValue = 0;
 var _protocolSelected = true;
 
 
@@ -91,7 +92,7 @@ export default class DepositPage extends Component{
 
 	pressConfirmButton(){
 		if(this.state.confirmButtonEnable){
-			Alert.alert('确定');
+			this.requestPayConfirm();
 		}
 	}
 
@@ -131,7 +132,7 @@ export default class DepositPage extends Component{
 		var text_ = text
 		var value = parseFloat(text_);
 		var error = null
-		var rmbValue = value / this.state.fxRate;
+		rmbValue = value / this.state.fxRate;
 		rmbValue = (text.length>0 ? rmbValue.toFixed(2):0.00.toFixed(2))
 
 		if(text_ && value < this.state.noLessMoney){
@@ -223,6 +224,31 @@ export default class DepositPage extends Component{
 				</View>
 				)
 	}
+
+	requestPayConfirm(){
+		var userData = LogicData.getUserData()
+		NetworkModule.fetchTHUrl(
+				NetConstants.CFD_API.GET_PAY_DEMO_TEST_ID,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Content-Type': 'application/json; charset=UTF-8',
+				},
+			},
+			(responseJson) => {
+				 console.log('responseJson = ' + responseJson + 'payMethodSelected = ' + this.state.payMethodSelected);//rmbValue
+ 			 		 var alipayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-alipay.html'+'?Amount='+1.00+'&TransRef='+responseJson
+					 var unionpayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-quick.html'+'?Amount='+1.00+'&TransRef='+responseJson
+					 var url = this.state.payMethodSelected == 0? alipayUrl:unionpayUrl;
+						//  if(index == 3){url = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-wechat.html';}
+					 this.props.navigator.push({
+			 			name: MainPage.PAYMENT_PAGE,
+			 			url: url,
+			 			title: responseJson,
+			 		});
+				})
+			}
 
 	go2Question(){
 		this.props.navigator.push({

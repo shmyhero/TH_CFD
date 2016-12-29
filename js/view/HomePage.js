@@ -511,11 +511,6 @@ var HomePage = React.createClass({
 			 			backFunction: this.forceloopSwipers,
 			 		});
 				 }
-
-
-
-
-
 			}
 		);
 	},

@@ -588,8 +588,13 @@ var MainPage = React.createClass({
 	},
 
 	backAndShowTabbar: function() {
-		this.showTabbar()
-		_navigator.pop();
+		if(_navigator){
+			var routes = _navigator.getCurrentRoutes();
+			if(routes && routes.length == 2 ){
+				this.showTabbar();
+			}
+			_navigator.pop();
+		}
 	},
 
 	showTabbar() {

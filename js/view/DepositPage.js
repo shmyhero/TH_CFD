@@ -128,7 +128,12 @@ export default class DepositPage extends Component{
 	}
 
 	go2Protocol(){
-		Alert.alert('入金协议内容');
+		// Alert.alert('入金协议内容');
+		this.props.navigator.push({
+			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			url: NetConstants.TRADEHERO_API.DEPOSIT_AGREEMENT,
+			title: "入金协议",
+		});
 	}
 
 	validatePrice (text){

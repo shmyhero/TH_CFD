@@ -11,13 +11,14 @@ import com.reactnativecomponent.swiperefreshlayout.RCTSwipeRefreshLayoutPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.rnfs.RNFSPackage;
 import com.tradehero.cfd.RNNativeModules.RNNativePackage;
+import com.tradehero.cfd.qrcodeReader.RCTQRCodeLocalImagePackage;
 import com.tradehero.cfd.talkingdata.TalkingDataPackage;
 import com.zyu.ReactNativeWheelPickerPackage;
 import com.beefe.picker.PickerViewPackage;
 import com.psykar.cookiemanager.CookieManagerPackage;
 import io.realm.react.RealmReactPackage;
 import fr.greweb.reactnativeviewshot.RNViewShotPackage;
-import com.remobile.qrcodeLocalImage.RCTQRCodeLocalImagePackage;
+//import com.remobile.qrcodeLocalImage.RCTQRCodeLocalImagePackage;
 
 import java.util.Arrays;
 import java.util.List;

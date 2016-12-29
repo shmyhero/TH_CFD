@@ -73,7 +73,12 @@ export default class PaymentPage extends Component {
 							if(result.includes("qr.alipay.com")){
                 //Alipay scheme.
 								try{
-                  Linking.openURL("alipayqr://platformapi/startapp?saId=10000007&qrcode=" + encodedValue/*+"%3Dweb-other"*/);
+                  Linking.openURL("alipayqr://platformapi/startapp?saId=10000007&qrcode=" + encodedValue/*+"%3Dweb-other"*/)
+                  .catch(err => {
+                    //User may not install alipay. So just open the url inside the qrcode.
+                    console.log('An error occurred' + err + ", result + " + result)
+                    Linking.openURL(uri)
+                  });
                 }catch(error){
                   alert(error)
                 }
@@ -83,7 +88,8 @@ export default class PaymentPage extends Component {
 						}
 	        });
 				}catch(error){
-					console.login("QRCode error: " + error);
+					console.log("QRCode error: " + error);
+          alert("扫码失败，请截屏后打开支付宝，选择扫一扫付款。")
 				}
 			},
 		  error => console.error("Oops, snapshot failed", error)

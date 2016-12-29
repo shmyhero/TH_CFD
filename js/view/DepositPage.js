@@ -53,6 +53,10 @@ export default class DepositPage extends Component{
 		this.loadDepositSetting()
 	}
 
+	componentWillUnmount(){
+		inputValue = '';
+	}
+
 	loadDepositSetting(){
 
 		NetworkModule.fetchTHUrl(
@@ -385,7 +389,8 @@ const styles = StyleSheet.create({
 		alignSelf: 'center',
 		textAlignVertical:'center',
 		flex:width,
-		height:48,
+		height:100,
+		alignItems:'center',
 	},
 
 	comfirmButton: {

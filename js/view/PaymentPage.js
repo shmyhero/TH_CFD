@@ -38,14 +38,12 @@ export default class PaymentPage extends Component {
   }
 
   pressPayButton(){
-		//Have some issue on Android...
-		//this.refs[WEBVIEW_REF].sendToBridge("get-share-info");
+    //Take snapshot of the webview.
 		RNViewShot.takeSnapshot(this.refs["webView"].getWebViewRef(), {
 		  format: "jpeg",
 		  quality: 1
 		})
-		.then(
-		  uri => {
+		.then( uri => {
 				var origionUri = uri;
 				console.log("Image saved to", uri);
         //The lib doesn't accept file:/// prefix. Remove it before using.
@@ -56,11 +54,8 @@ export default class PaymentPage extends Component {
 				try{
 					QRCode.decode(uri, (error, result)=>{
 						if(error){
-							/*alert("qr scanner error: " + error);
-							this.setState({
-								imageSource: {uri: origionUri}}
-							);*/
               console.log("qr scanner error: " + error);
+              alert("扫码失败，请截屏后打开" + this.getDestinationName() + "，选择扫一扫付款。")
               // Wechat test...
 							// Linking.openURL("weixin://wxpay/bizpayurl?pr=xtZdnua");
 							// Linking.openURL("weixin://scanqrcode?pr=xtZdnua")
@@ -99,20 +94,10 @@ export default class PaymentPage extends Component {
 		);
   }
 
-  // text = "";
-  //
-  // setText(text){
-  //   this.text = text;
-  // }
-  //
-  // pressDeepLink(){
-  //   Linking.openURL(this.text);
-  // }
-
   webPageLoaded(content){
     // todo
     console.log("webPageLoaded: "+ content.url);
-    if(content.url && content.url.includes("payForward.do;")){
+    if(content.url && content.url.includes("payForward.do")){
       this.setState({
         showPaymentButton: true,
       })

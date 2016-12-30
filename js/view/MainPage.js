@@ -544,7 +544,6 @@ var MainPage = React.createClass({
 						showTabbar={showTabbar}
 						title={route.title}
 						backFunction={()=>{
-							this.showTabbar()
 							if (route.backFunction) {
 								route.backFunction()
 							}

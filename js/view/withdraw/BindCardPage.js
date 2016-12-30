@@ -136,22 +136,6 @@ export default class BindCardPage extends Component {
 
     }
 
-    //Get userinfo
-    // NetworkModule.fetchTHUrl(NetConstants.CFD_API.GET_USER_INFO,
-    //   {
-    //     method: 'GET',
-    //     headers: {
-    //       'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-    //     },
-    //   },
-    //   (responseJson)=>{
-    //     this.listRawData[0].value = responseJson.lastName + responseJson.firstName;
-    //     this.updateList();
-    //   },
-    //   (result)=>{
-		//
-    //   });
-
 	  if(!this.props.isUnbindMode){
 	    //Get banks
 	    NetworkModule.fetchTHUrl(NetConstants.CFD_API.GET_SUPPORT_WITHDRAW_BANKS,
@@ -162,7 +146,7 @@ export default class BindCardPage extends Component {
 	        try{
 	          this.SupportedBanks = [];
 	          for(var i = 0; i < responseJson.length; i++){
-	            this.SupportedBanks.push({"value": responseJson[i].cname, "displayText": responseJson[i].cname, "logo": responseJson[i].logo});
+	            this.SupportedBanks.push({"value": responseJson[i].cname, "logo": responseJson[i].logo});
 	          }
 	        }catch(err){
 	          console.log("error " + err)
@@ -178,7 +162,6 @@ export default class BindCardPage extends Component {
 
 			this.provinceAndCities = [];
 			for(var i = 0; i < responseJson.length; i++){
-				//{"value":110000,"displayText":"北京","ShortName":"北京"},
 				if(responseJson[i].ParentId){
 					//City
 					for(var j = 0; j < this.provinceAndCities.length; j++){
@@ -193,62 +176,7 @@ export default class BindCardPage extends Component {
 				}
 			}
 			console.log("get all areas this.provinceAndCities " + JSON.stringify(this.provinceAndCities));
-
-	    //Get Provices
-	    //Provices and cities won't updated, so write it down locally.
-	    // NetworkModule.fetchTHUrl(NetConstants.CFD_API.GET_ALL_PROVINCES_AND_CITIES,
-	    //   {
-	  	// 		method: 'GET',
-	  	// 	},
-	    //   (responseJson)=>{
-	    //     this.provinceAndCities = [];
-	    //     for(var i = 0; i < responseJson.length; i++){
-	    //       //{"value":110000,"displayText":"北京","ShortName":"北京"},
-	    //       if(responseJson[i].ParentId){
-	    //         //City
-	    //         for(var j = 0; j < this.provinceAndCities.length; j++){
-	    //           if(responseJson[i].ParentId == this.provinceAndCities[j].value){
-	    //             this.provinceAndCities[j].children.push({"value": responseJson[i].Id, "displayText": responseJson[i].Name})
-	    //             break;
-	    //           }
-	    //         }
-	    //       }else{
-	    //         //Province
-	    //         this.provinceAndCities.push({"value": responseJson[i].Id, "displayText": responseJson[i].Name, children: []});
-	    //       }
-			//
-	    //     }
-	    //   },
-	    //   (result)=>{
-			//
-	    //   });
 		}
-  }
-
-  getCity(provinceId, onGetCitiesFinished, onGetCitiesFailed){
-    this.Cities = [];
-        //GET_CITY: CFD_API_SERVER + "/api/area/?id=<id>",
-        //		url = url.replace(/<stockCode>/, this.props.stockInfo.id)
-    var url = NetConstants.CFD_API.GET_CITY.replace(/<id>/, provinceId);
-    NetworkModule.fetchTHUrl(url,
-      {
-				method: 'GET',
-			},
-      (responseJson)=>{
-        for(var i = 0; i < responseJson.length; i++){
-          //{"value":110000,"displayText":"北京","ShortName":"北京"},
-          this.Cities.push({"value": responseJson[i].Id, "displayText": responseJson[i].Name});
-        }
-        if(onGetCitiesFinished){
-          onGetCitiesFinished(this.Cities);
-        }
-      },
-      (result)=>{
-        if(onGetCitiesFailed){
-          onGetCitiesFailed(result);
-        }
-      },
-      true);
   }
 
 	bindCard() {
@@ -273,6 +201,14 @@ export default class BindCardPage extends Component {
         }
 			}
 		}
+		//
+		// console.log("this.listRawData " + JSON.stringify(this.listRawData))
+		console.log("body " + JSON.stringify(body))
+		//
+		// this.setState({
+		// 	validateInProgress: false,
+		// });
+		// return
 
     //Bind bank account
     NetworkModule.fetchTHUrl(NetConstants.CFD_API.BIND_BANK_ACCOUNT,
@@ -487,6 +423,8 @@ export default class BindCardPage extends Component {
 
       choices.push(choice);
     }
+		console.log(JSON.stringify(choiceDataArray));
+		console.log(JSON.stringify(choices));
 
     Picker.init({
         pickerData: choices,
@@ -531,9 +469,9 @@ export default class BindCardPage extends Component {
 		for(var i = 0; i < choiceDataArray.length; i++){
       console.log(""+JSON.stringify(choiceDataArray[i]))
 			if(currentSelectedValue === choiceDataArray[i].value){
-				selectedText = choiceDataArray[i].displayText;
+				selectedText = choiceDataArray[i].value;
 			}
-			choices.push(choiceDataArray[i].displayText);
+			choices.push(choiceDataArray[i].value);
 		}
 
     Picker.init({
@@ -549,7 +487,7 @@ export default class BindCardPage extends Component {
             }
 					}else{
 						for(var i = 0; i < choiceDataArray.length; i++){
-							if(data[0] === choiceDataArray[i].displayText){
+							if(data[0] === choiceDataArray[i].value){
 								if(onValueSelected){
                   onValueSelected(choiceDataArray[i].value);
                 }
@@ -612,7 +550,7 @@ export default class BindCardPage extends Component {
 			}else{
 	      for(var i = 0; i < choices.length; i++){
 	        if(rowData.value === choices[i].value){
-	          displayText = choices[i].displayText;
+	          displayText = choices[i].value;
 	        }
 	      }
 			}

@@ -946,6 +946,8 @@ var MainPage = React.createClass({
 					popToStackTop: true,
 				});
 			}
+		}else{
+			_navigators[currentNavigatorIndex].popToTop();
 		}
 
 	},

@@ -24,9 +24,28 @@ var listRawData = [
 // {'type':'paydetail','title':'支付详情', 'image':null, 'subtype': 'paydetail'},
 ]
 
+var bankListData = [
+	{'bankID':'00','logo':require('../../images/icon_bank0.png')},
+	{'bankID':'01','logo':require('../../images/icon_bank1.png')},
+	{'bankID':'02','logo':require('../../images/icon_bank2.png')},
+	{'bankID':'03','logo':require('../../images/icon_bank3.png')},
+	{'bankID':'04','logo':require('../../images/icon_bank4.png')},
+	{'bankID':'05','logo':require('../../images/icon_bank5.png')},
+	{'bankID':'06','logo':require('../../images/icon_bank6.png')},
+	{'bankID':'07','logo':require('../../images/icon_bank7.png')},
+	{'bankID':'08','logo':require('../../images/icon_bank8.png')},
+	{'bankID':'09','logo':require('../../images/icon_bank9.png')},
+	{'bankID':'10','logo':require('../../images/icon_bank10.png')},
+	{'bankID':'11','logo':require('../../images/icon_bank11.png')},
+	{'bankID':'12','logo':require('../../images/icon_bank12.png')},
+	{'bankID':'13','logo':require('../../images/icon_bank13.png')},
+	{'bankID':'14','logo':require('../../images/icon_bank14.png')},
+	{'bankID':'15','logo':require('../../images/icon_bank15.png')},
+]
+
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-// var dataSource = ds.cloneWithRows(listRawData);
-//0: alipay 1:unionpay
+var dsBank = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
 var inputError = false;
 var inputValue = '';
 var rmbValue = 0;
@@ -44,8 +63,10 @@ export default class DepositPage extends Component{
 			payStateTip2:'对应人民币：0.00元',
 			payMethodSelected:0,
 			dataSource:ds.cloneWithRows(listRawData),
+			dataSourceBank:dsBank.cloneWithRows(bankListData),
 			protocolSeleceted:true,
 			confirmButtonEnable:false,
+			showBankList:false,
 		}
 	}
 
@@ -70,6 +91,7 @@ export default class DepositPage extends Component{
 				this.setState({
 					noLessMoney: responseJson.minimum,
 					fxRate : responseJson.fxRate,
+					dataSourceBank:dsBank.cloneWithRows(responseJson.banks),
 				},()=>this.validatePrice(''))
 			},
 			(result) => {
@@ -78,6 +100,7 @@ export default class DepositPage extends Component{
 	}
 
 	onSelectNormalRow(rowData){
+		this.dismissKB()
 		switch(rowData.subtype){
 			case 'alipay':
 				this.setState({
@@ -150,14 +173,14 @@ export default class DepositPage extends Component{
 			console.log("Text1 = " + text_);
 			this.setState({
 				payStateTip: error,
-			  payStateTip2:'对应人民币：'+rmbValue+'元',
+			  payStateTip2:/*'当前汇率：'+(1/this.state.fxRate).toFixed(2)+*/'对应人民币：'+rmbValue+'元',
 			})
 				inputError = true
 		}else{
 			console.log("Text2 = " + text_);
 			this.setState({
 				payStateTip: '最低入金额度：'+this.state.noLessMoney+'美元',
-				payStateTip2:'对应人民币：'+rmbValue+'元',
+				payStateTip2:/*'当前汇率：'+(1/this.state.fxRate).toFixed(2)+*/'对应人民币：'+rmbValue+'元',
 			})
 
 				inputError = false
@@ -201,35 +224,120 @@ export default class DepositPage extends Component{
 				<Image source={checkBox} style={[styles.checkbox,{marginLeft:15,marginRight:10}]} />
 				<Text style={styles.protocalLeft}>我已阅读并同意</Text>
 				<TouchableOpacity activeOpacity={0.5} onPress={()=>this.go2Protocol()}>
-					<Text style={styles.protocalRight}>入金协议内容</Text>
+					<Text style={styles.protocalRight}>入金协议内容，</Text>
 				</TouchableOpacity>
+				<Text style={styles.protocalLeft}>入金手续费1%</Text>
 		 </TouchableOpacity>
 		)
 	}
 
-	renderRow(rowData, sectionID, rowID) {
-		if(rowData){
-			if(rowData.type == 'paytype'){
-				console.log('this.state.payMethodSelected = ' + this.state.payMethodSelected +'rowID = '+rowID);
-				var checkBox = this.state.payMethodSelected == rowID ? require('../../images/check_selected.png'):require('../../images/check_unselected.png')
-				return(
-					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
-						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-							<Image source={checkBox} style={styles.checkbox} />
-							<Image source={rowData.image} style={styles.image} />
-							<Text style={styles.title}>{rowData.title}</Text>
-						</View>
-					</TouchableOpacity>
-				);
-			}
+	renderBankList(){
+		if(this.state.showBankList){
+			return(
+				<View style = {styles.banklist}>
+					 <View style = {[styles.line,{backgroundColor:ColorConstants.SEPARATOR_GRAY,height:0.5}]}></View>
+	 					<ListView
+							contentContainerStyle={styles.listBank}
+							dataSource={this.state.dataSourceBank}
+							enableEmptySections={true}
+							removeClippedSubviews={false}
+							initialListSize={16}
+	 						renderRow={(rowData, sectionID, rowID)=>this.renderRowBank(rowData, sectionID, rowID)} />
+	   		</View>
+			)
+		}else{
+			return(
+				<View></View>
+			)
 		}
-		return (<View></View>)
 	}
 
-	renderSeparator(sectionID, rowID, adjacentRowHighlighted){
-		var nextID = parseInt(rowID) + 1;
+	renderAliPay(){
+		var checkBox = this.state.payMethodSelected == 0 ? require('../../images/check_selected.png'):require('../../images/check_unselected.png')
+		var rowData = listRawData[0]
+		return(
+			<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
+
+				<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
+					<Image source={checkBox} style={styles.checkbox} />
+					<Image source={rowData.image} style={styles.image} />
+					<Text style={styles.title}>支付宝钱包</Text>
+				</View>
+			</TouchableOpacity>
+		);
+	}
+
+	renderUnionPay(){
+		var checkBox = this.state.payMethodSelected == 1 ? require('../../images/check_selected.png'):require('../../images/check_unselected.png')
+		var rowData = listRawData[1]
+		return(
+			<View>
+				<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
+					<View style={[styles.rowWrapper2, {height:Math.round(64*heightRate)}]}>
+						<Image source={checkBox} style={styles.checkbox} />
+						<Image source={rowData.image} style={styles.image} />
+						<Text style={styles.title}>银联卡</Text>
+						<TouchableOpacity activeOpacity={0.5} onPress={()=>this.blankSupport()}>
+							<Text style = {styles.blankSupport}>支持的银行</Text>
+						</TouchableOpacity>
+					</View>
+				</TouchableOpacity>
+				{this.renderBankList()}
+			</View>
+		)
+	}
+
+	blankSupport(){
+		this.setState({
+			showBankList:!this.state.showBankList,
+		})
+	}
+
+	renderRowBank(rowData, sectionID, rowID) {
+		if(rowData){
+				 	return(
+					 <Image source={{uri:rowData.logo}} style={styles.imageBank}></Image>
+				);
+			}
+	}
+
+	// renderRow(rowData, sectionID, rowID) {
+	// 	if(rowData){
+	// 		if(rowData.subtype == 'alipay'){
+	// 			console.log('this.state.payMethodSelected = ' + this.state.payMethodSelected +'rowID = '+rowID);
+	// 			var checkBox = this.state.payMethodSelected == rowID ? require('../../images/check_selected.png'):require('../../images/check_unselected.png')
+	// 			return(
+	// 				<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
+	// 					<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
+	// 						<Image source={checkBox} style={styles.checkbox} />
+	// 						<Image source={rowData.image} style={styles.image} />
+	// 						<Text style={styles.title}>{rowData.title}</Text>
+	// 					</View>
+	// 				</TouchableOpacity>
+	// 			);
+	// 		}else if(rowData.subtype == 'unionpay'){
+	// 			console.log('this.state.payMethodSelected = ' + this.state.payMethodSelected +'rowID = '+rowID);
+	// 			var checkBox = this.state.payMethodSelected == rowID ? require('../../images/check_selected.png'):require('../../images/check_unselected.png')
+	// 			return(
+	// 				<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
+	// 					<View style={[styles.rowWrapper2, {height:Math.round(64*heightRate)}]}>
+	// 						<Image source={checkBox} style={styles.checkbox} />
+	// 						<Image source={rowData.image} style={styles.image} />
+	// 						<Text style={styles.title}>{rowData.title}</Text>
+	// 						<Text>支持的银行</Text>
+	// 					</View>
+	// 					{this.renderBankList()}
+	// 				</TouchableOpacity>
+	//
+	// 			);
+	// 		}
+	// 	}
+	// 	return (<View></View>)
+	// }
+
+	renderSeparator(){
 		 	return (
-				<View style={[styles.line, {height: 10}]} key={rowID}>
+				<View style={[styles.line, {height: 10}]}>
 					<View style={[styles.separator]}/>
 				</View>
 				)
@@ -270,6 +378,10 @@ export default class DepositPage extends Component{
 	}
 
 	pressBlank(){
+		this.dismissKB();
+	}
+
+	dismissKB(){
 		Keyboard.dismiss();
 	}
 
@@ -281,13 +393,20 @@ export default class DepositPage extends Component{
 					imageOnRight={require('../../images/icon_question.png')}
 					rightImageOnClick={()=>this.go2Question()}
 					navigator={this.props.navigator}/>
-				<View style = {styles.listViewContainer}>
+
+				{/* <View style = {styles.listViewContainer}>
 					<ListView
 						style={styles.list}
 						dataSource={this.state.dataSource}
 						renderRow={(rowData, sectionID, rowID)=>this.renderRow(rowData, sectionID, rowID)}
 						renderSeparator={(sectionID, rowID, adjacentRowHighlighted)=>this.renderSeparator(sectionID, rowID, adjacentRowHighlighted)} />
-				</View>
+				</View> */}
+				{this.renderSeparator()}
+				{this.renderAliPay()}
+				{this.renderSeparator()}
+				{this.renderUnionPay()}
+				{this.renderSeparator()}
+
 				<View style = {{flex:1}}>
 					{this.renderDetail()}
 					<TouchableOpacity style={styles.blank} onPress={()=>this.pressBlank()}>
@@ -319,6 +438,12 @@ const styles = StyleSheet.create({
 		width:width,
 	},
 
+	banklist:{
+		width:width,
+		height:84,
+		backgroundColor:'white',
+	},
+
 	title:{
 		flex:1,
 		fontSize:17,
@@ -326,6 +451,17 @@ const styles = StyleSheet.create({
 	},
 
 	rowWrapper: {
+		width:width,
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingLeft: UIConstants.LIST_ITEM_LEFT_MARGIN,
+		paddingRight: 15,
+		paddingBottom: 5,
+		paddingTop: 5,
+		backgroundColor: 'white',
+	},
+
+	rowWrapper2: {
 		width:width,
 		flexDirection: 'row',
 		alignItems: 'center',
@@ -434,6 +570,28 @@ const styles = StyleSheet.create({
 	blank:{
 		flex:1,
 	},
+
+	blankSupport:{
+		backgroundColor:'white',
+		fontSize:12,
+		padding:15,
+		color:'#b4b4b4'
+	},
+
+	listBank:{
+			marginLeft:15,
+			marginTop:5,
+			marginRight:15,
+			flexDirection:'row',
+			justifyContent: 'space-between',
+			flexWrap:'wrap',
+	},
+
+	imageBank:{
+		width:74.7,
+		height:29.7,
+		marginBottom:5,
+	}
 
 });
 

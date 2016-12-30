@@ -839,6 +839,9 @@ var MainPage = React.createClass({
 				});
 			}
 		}
+		else if(url==='cfd://page/back') {
+			this.backAndShowTabbar()
+		}
 		else{
 			_navigator.popToTop()
 			if(url==='cfd://page/1') {//首页
@@ -867,9 +870,6 @@ var MainPage = React.createClass({
 			}
 			else if(url==='cfd://page/me') {
 				this.refs['myTabbar'].gotoTab("me")
-			}
-			else if(url==='cfd://page/back') {
-				this.backAndShowTabbar()
 			}
 			initExchangeTab = 0
 			initStockListTab = 1

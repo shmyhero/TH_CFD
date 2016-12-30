@@ -57,18 +57,6 @@ const Options = {
 
 var AccountInfoPage = React.createClass({
 
-	propTypes: {
-		backButtonOnClick: React.PropTypes.func,
-	},
-
-	getDefaultProps() {
-		return {
-			backButtonOnClick: function() {
-
-			},
-		}
-	},
-
 	getInitialState: function() {
 		var meData = LogicData.getMeData()
 		return {
@@ -232,8 +220,7 @@ var AccountInfoPage = React.createClass({
 	render: function() {
 		return (
 			<View style={styles.wrapper}>
-				<NavBar title='帐号信息' showBackButton={true} navigator={this.props.navigator}
-					backButtonOnClick={this.props.backButtonOnClick}/>
+				<NavBar title='帐号信息' showBackButton={true} navigator={this.props.navigator}/>
 				<ListView
 					style={styles.list}
 					dataSource={this.state.dataSource}

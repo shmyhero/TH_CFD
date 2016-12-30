@@ -73,6 +73,8 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var didTabSelectSubscription = null
 var didAccountStateChangeSubscription = null
+var didLoginSubscription = null;
+var didLogoutSubscription = null;
 var accStatus
 var LIST_SCROLL_VIEW = "listScrollView"
 
@@ -120,10 +122,17 @@ var MePage = React.createClass({
 			addListener(EventConst.ME_TAB_PRESS_EVENT, this.onTabChanged);
 		didAccountStateChangeSubscription = EventCenter.getEventEmitter().
 			addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>this.reloadMeData());
+		didLoginSubscription = EventCenter.getEventEmitter().
+			addListener(EventConst.ACCOUNT_LOGIN, ()=>this.reloadMeData());
+		didLogoutSubscription = EventCenter.getEventEmitter().
+			addListener(EventConst.ACCOUNT_LOGOUT, ()=>this.reloadMeData());
 	},
 
 	componentWillUnmount: function() {
 		didTabSelectSubscription && didTabSelectSubscription.remove();
+		didAccountStateChangeSubscription && didAccountStateChangeSubscription.remove();
+		didLoginSubscription && didLoginSubscription.remove();
+		didLogoutSubscription && didLogoutSubscription.remove();
 	},
 
 	reloadMeDataFromStorage: function(){
@@ -240,7 +249,7 @@ var MePage = React.createClass({
 		this.props.navigator.push({
 			name: MainPage.LOGIN_ROUTE,
 			popToRoute: MainPage.ME_ROUTE,	//Set to destination page
-			onPopToRoute: this.reloadMeData,
+			//onPopToRoute: this.reloadMeData,
 		});
 	},
 
@@ -248,7 +257,7 @@ var MePage = React.createClass({
 		//TODO: Use real page.
 		this.props.navigator.push({
 			name: MainPage.ACCOUNT_INFO_ROUTE,
-			backButtonOnClick: this.reloadMeData,
+			//backButtonOnClick: this.reloadMeData,
 			//popToRoute: MainPage.ME_PUSH_CONFIG_ROUTE,	//Set to destination page
 		});
 	},

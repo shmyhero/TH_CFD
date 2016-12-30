@@ -218,18 +218,18 @@ var MainPage = React.createClass({
 				<LoginPage navigator={navigationOperations} showCancelButton={true}
 					popToRoute={route.popToRoute}
 					nextRoute={route.nextRoute}
-  				onPopToRoute={route.onPopToRoute}
 					showRegisterSuccessDialog={this.showRegisterSuccessDialog}
 					isTabbarShown={this.getIsTabbarShown}
-					isMobileBinding={route.isMobileBinding}/>
+					isMobileBinding={route.isMobileBinding}
+					popToStackTop={route.popToStackTop}/>
 			);
 		} else if (route.name === UPDATE_USER_INFO_ROUTE) {
 			return (
 				<View style={{flex: 1}}>
 					<UpdateUserInfoPage navigator={navigationOperations}
 					popToRoute={route.popToRoute}
-  				onPopToRoute={route.onPopToRoute}
-					showRegisterSuccessDialog={this.showRegisterSuccessDialog}/>
+					showRegisterSuccessDialog={this.showRegisterSuccessDialog}
+					popToStackTop={route.popToStackTop}/>
 				</View>
 			);
 		} else if (route.name === MY_HOME_ROUTE) {
@@ -348,7 +348,7 @@ var MainPage = React.createClass({
 			hideTabbar();
 			return (
 				<View style={{flex: 1}}>
-					<AccountInfoPage navigator={navigationOperations} backButtonOnClick={route.backButtonOnClick}/>
+					<AccountInfoPage navigator={navigationOperations}/>
 				</View>
 			)
 		} else if (route.name === ACCOUNT_NAME_MODIFY_ROUTE) {
@@ -589,7 +589,7 @@ var MainPage = React.createClass({
 	backAndShowTabbar: function() {
 		if(_navigator){
 			var routes = _navigator.getCurrentRoutes();
-			if(routes && routes.length == 2 ){
+			if(routes && routes.length == 2){
 				this.showTabbar();
 			}
 			_navigator.pop();
@@ -932,16 +932,20 @@ var MainPage = React.createClass({
 	},
 
 	gotoLoginPage: function(){
+		console.log("gotoLoginPage");
 		LocalDataUpdateModule.removeUserData();
 		LogicData.setAccountState(false)
 		LogicData.setActualLogin(false)
 
 		var currentNavigatorIndex = LogicData.getTabIndex();
-
-		if(_navigators[currentNavigatorIndex]){
-			_navigators[currentNavigatorIndex].push({
-			 name: LOGIN_ROUTE,
-			 });
+		console.log("gotoLoginPage " + currentNavigatorIndex);
+		if(currentNavigatorIndex != 2){
+			if(_navigators[currentNavigatorIndex]){
+				_navigators[currentNavigatorIndex].push({
+					name: LOGIN_ROUTE,
+					popToStackTop: true,
+				});
+			}
 		}
 
 	},

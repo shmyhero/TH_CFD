@@ -31,6 +31,9 @@ var OAStatusPage= require('./openAccount/OAStatusPage')
 var tabNames = ['持仓', '平仓', '统计']
 var didTabSelectSubscription = null
 var didAccountChangeSubscription = null
+//var didAccountLoginOutSideSubscription = null
+var didLoginSubscription = null;
+var didLogoutSubscription = null;
 
 var StockExchangePage = React.createClass({
 
@@ -44,14 +47,21 @@ var StockExchangePage = React.createClass({
 	componentDidMount: function() {
 		didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.EXCHANGE_TAB_PRESS_EVENT, this.onTabChanged);
 		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>this.clearViews());
+		//didAccountLoginOutSideSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGIN_OUT_SIDE, ()=>this.clearViews());
+		didLoginSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGIN, ()=>this.clearViews());
+		didLogoutSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGOUT, ()=>this.clearViews());
 	},
 
 	componentWillUnmount: function() {
 		didTabSelectSubscription && didTabSelectSubscription.remove();
 		didAccountChangeSubscription && didAccountChangeSubscription.remove();
+		//didAccountLoginOutSideSubscription && didAccountLoginOutSideSubscription.remove();
+		didLoginSubscription && didLoginSubscription.remove();
+		didLogoutSubscription && didLogoutSubscription.remove();
 	},
 
 	clearViews:function(){
+		this.reloadTabData();
 		// if(this.refs['page2'])this.refs['page2'].clearViews();
 		// if(this.refs['page1'])this.refs['page1'].clearViews();
 		// if(this.refs['page0'])this.refs['page0'].clearViews();
@@ -74,6 +84,10 @@ var StockExchangePage = React.createClass({
 
 	onTabChanged: function(){
 	  LogicData.setTabIndex(2);
+		this.reloadTabData();
+	},
+
+	reloadTabData: function(){
 		var userData = LogicData.getUserData()
 		var loggined = Object.keys(userData).length !== 0
 
@@ -194,8 +208,8 @@ var StockExchangePage = React.createClass({
 	},
 
 	renderContent: function(){
-		var userData = LogicData.getUserData()
-		var loggined = Object.keys(userData).length !== 0
+		//var userData = LogicData.getUserData()
+		var loggined = this.state.loggined;//Object.keys(userData).length !== 0
 
 		var {height, width} = Dimensions.get('window');
 		var tabPages = [
@@ -262,7 +276,6 @@ var StockExchangePage = React.createClass({
 			else {
 				return (
 					<LoginPage navigator={this.props.navigator}
-										onPopToRoute={this.onPageSelected}
 										isTabbarShown={()=> { return true;}}/>
 				)
 			}

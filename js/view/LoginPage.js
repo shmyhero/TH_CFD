@@ -51,10 +51,10 @@ var LoginPage = React.createClass({
 		showCancelButton: React.PropTypes.bool,
 		popToRoute: React.PropTypes.string,
 		nextRoute: React.PropTypes.object,
-		onPopToRoute: React.PropTypes.func,
 		showRegisterSuccessDialog: React.PropTypes.func,
 		isTabbarShown: React.PropTypes.func,
 		isMobileBinding: React.PropTypes.bool,
+		popToStackTop: React.PropTypes.bool,
 	},
 
 	getDefaultProps() {
@@ -62,10 +62,10 @@ var LoginPage = React.createClass({
 			showCancelButton: false,
 			popToRoute: null,
 			nextRoute: null,
-			onPopToRoute: ()=>{},
 			showRegisterSuccessDialog: ()=>{},
 			isTabbarShown: ()=>{},
 			isMobileBinding: false,
+			popToStackTop: false,
 		}
 	},
 
@@ -363,26 +363,25 @@ var LoginPage = React.createClass({
 	},
 
 	updateMeData: function(){
-		var userData = LogicData.getUserData()
+		var userData = LogicData.getUserData();
 		LocalDataUpdateModule.updateMeData(userData, ()=>{
 			var meData = LogicData.getMeData();
 			if(userData.isNewUser){
 				this.props.navigator.push({
 					name: MainPage.UPDATE_USER_INFO_ROUTE,
 					popToRoute: this.props.popToRoute,
-					onPopToRoute: this.props.onPopToRoute,
+					popToStackTop: this.props.popToStackTop,
 				});
 			}else{
 				var routes = this.props.navigator.getCurrentRoutes();
-				if(this.props.nextRoute != null){
+				if(this.props.popToStackTop){
+					this.props.navigator.popToTop();
+				}else if(this.props.nextRoute != null){
 					var currentRouteIndex = -1;
 					for (var i=0; i<routes.length; ++i) {
 						if(routes[i].name === MainPage.LOGIN_ROUTE){
 							currentRouteIndex = i;
 						}
-					}
-					if(this.props.onPopToRoute){
-						this.props.onPopToRoute();
 					}
 					this.props.navigator.replaceAtIndex(this.props.nextRoute, currentRouteIndex);
 				}
@@ -400,23 +399,13 @@ var LoginPage = React.createClass({
 					}
 
 					if(backRoute!=null){
-						if(this.props.onPopToRoute){
-							this.props.onPopToRoute();
-						}
 						this.props.navigator.popToRoute(backRoute);
 					}else if(currentRouteIndex >= 0 ){
-						if(this.props.onPopToRoute){
-							this.props.onPopToRoute();
-						}
 						this.props.navigator.replaceAtIndex({name: this.props.popToRoute}, currentRouteIndex);
 					}else{
 						this.props.navigator.pop();
 					}
 				}else{
-					if(this.props.onPopToRoute){
-						this.props.onPopToRoute();
-					}
-
 					this.props.navigator.pop();
 				}
 
@@ -425,6 +414,14 @@ var LoginPage = React.createClass({
 				}
 			}
 		})
+	},
+
+	onBackPressed: function(){
+		if(this.props.popToStackTop){
+			this.props.navigator.popToTop();
+		}else{
+			this.props.navigator.pop()
+		}
 	},
 
 	initTokenForGeTui:function(){
@@ -766,7 +763,7 @@ var LoginPage = React.createClass({
 		if (this.props.showCancelButton) {
 			return (
 				<TouchableOpacity style={styles.cancelContainer}
-					onPress={()=>this.props.navigator.pop()}>
+					onPress={()=>this.onBackPressed()}>
 						<Text style={styles.cancel}>
 							取消
 						</Text>

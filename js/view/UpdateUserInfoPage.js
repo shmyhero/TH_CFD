@@ -55,15 +55,15 @@ class ErrorMsg extends Component{
 var UpdateUserInfoPage = React.createClass({
 	propTypes: {
 		popToRoute: React.PropTypes.string,
-		onPopToRoute: React.PropTypes.func,
 		showRegisterSuccessDialog: React.PropTypes.func,
+		popToStackTop: React.PropTypes.bool,
 	},
 
 	getDefaultProps() {
 		return {
 			popToRoute: null,
-			onPopToRoute: null,
 			showRegisterSuccessDialog: ()=>{},
+			popToStackTop: false,
 		}
 	},
 
@@ -191,7 +191,9 @@ var UpdateUserInfoPage = React.createClass({
 	},
 
 	backButtonPressed: function(){
-		if(this.props.popToRoute != null){
+		if(this.props.popToStackTop){
+			this.props.navigator.popToTop();
+		}else	if(this.props.popToRoute != null){
 			var routes = this.props.navigator.getCurrentRoutes();
 			var backRoute = null;
 
@@ -207,14 +209,8 @@ var UpdateUserInfoPage = React.createClass({
 			}
 
 			if(backRoute!=null){
-				if(this.props.onPopToRoute){
-					this.props.onPopToRoute();
-				}
 				this.props.navigator.popToRoute(backRoute);
 			}else if(currentRouteIndex >= 0 ){
-				if(this.props.onPopToRoute){
-					this.props.onPopToRoute();
-				}
 				var route = {name: this.props.popToRoute};
 				this.props.navigator.replaceAtIndex(route, currentRouteIndex, ()=>{
 					this.props.navigator.popToRoute(route);
@@ -224,9 +220,6 @@ var UpdateUserInfoPage = React.createClass({
 			}
 		}else{
 			this.props.navigator.pop();
-			if(this.props.onPopToRoute){
-				this.props.onPopToRoute();
-			}
 		}
 
 		if(this.props.showRegisterSuccessDialog){

@@ -13,6 +13,7 @@ const EventConst = {
 	ACCOUNT_STATE_CHANGE : 'account_state_change',
 	NETWORK_CONNECTION_CHANGED: 'network_connection_changed',
 	ACCOUNT_LOGIN_OUT_SIDE: 'account_login_out_side',
+	ACCOUNT_LOGIN: 'account_login',
 	ACCOUNT_LOGOUT: 'account_logout',
 }
 
@@ -45,6 +46,10 @@ var EventCenter = {
 
 	emitNetworkConnectionChangedEvent: function(){
 		eventEmitter.emit(EventConst.NETWORK_CONNECTION_CHANGED)
+	},
+
+	emitAccountLoginEvent: function(){
+		eventEmitter.emit(EventConst.ACCOUNT_LOGIN)
 	},
 
 	emitAccountLoginOutSideEvent: function(){

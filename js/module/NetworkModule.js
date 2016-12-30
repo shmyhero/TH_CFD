@@ -11,10 +11,14 @@ import {
 	Alert
 } from 'react-native';
 
-var alertShow = false
+var loginOutsideAlertShown = false
 
 export const API_ERROR = 'apiError';
 export const NETWORK_CONNECTION_ERROR = 'networkConnectionError';
+
+export function resetLoginOutsideAlert(){
+	loginOutsideAlertShown = false;
+}
 
 export function fetchTHUrl(url, params, successCallback, errorCallback, notShowResponseLog) {
 	var requestSuccess = true;
@@ -96,13 +100,11 @@ export function fetchTHUrl(url, params, successCallback, errorCallback, notShowR
 		.catch((e) => {
 			console.log('fetchTHUrl catches: ' + e + ", " + url);
 
-
 			if(e.message=='身份验证失败'){
 				console.log('多点登录 = ' + e);
-				if (!alertShow) {
-					alertShow = true
+				if (!loginOutsideAlertShown) {
+					loginOutsideAlertShown = true
  					Alert.alert('风险提示！', '盈交易账号已登录其他设备', [{text: '我知道了', onPress: () => {
-						alertShow=false
  						EventCenter.emitAccountLoginOutSideEvent();
 					}}],{cancelable:false})
 				};
@@ -138,9 +140,7 @@ export function fetchTHUrl(url, params, successCallback, errorCallback, notShowR
 				result.error = API_ERROR;
 				result.errorMessage = message;
 				errorCallback && errorCallback(result);
-			} else if (!alertShow) {
-				alertShow = true
-			};
+			}
 		})
 		.done(() => {
 			MainPage.hideProgress && MainPage.hideProgress()

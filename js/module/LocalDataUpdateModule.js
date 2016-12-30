@@ -25,9 +25,11 @@ export function updateMeData(userData, onSuccess){
 			},
 		},
 		function(responseJson) {
+      NetworkModule.resetLoginOutsideAlert();
 			StorageModule.setMeData(JSON.stringify(responseJson))
 			LogicData.setMeData(responseJson);
-			//TongDaoModule.updateUserData(responseJson)
+
+      EventCenter.emitAccountLoginEvent();
 
 			if(onSuccess){
 				onSuccess()

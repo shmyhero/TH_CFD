@@ -16,7 +16,7 @@ import Tabbar, { Tab, RawContent,  Icon, IconWithBar, glypyMapMaker } from './co
 
 var {EventCenter, EventConst} = require('../EventCenter')
 
-
+var NativeSceneModule = require('../module/NativeSceneModule')
 var CookieManager = require('react-native-cookies')
 var ColorConstants = require('../ColorConstants')
 var LoadingIndicator = require('./LoadingIndicator')
@@ -828,16 +828,7 @@ var MainPage = React.createClass({
 			// do nothing.
 		}
 		else if(url==='cfd://page/feedback'){
-			var meData = LogicData.getMeData();
-			var currentNavigatorIndex = LogicData.getTabIndex();
-			console.log("currentNavigatorIndex ")
-			if(_navigators[currentNavigatorIndex]){
-				_navigators[currentNavigatorIndex].push({
-					name: FEEDBACK_ROUTE,
-					phone: meData.phone,
-					backToTop: false,
-				});
-			}
+			NativeSceneModule.launchNativeScene('MeiQia');
 		}
 		else if(url==='cfd://page/back') {
 			this.backAndShowTabbar()

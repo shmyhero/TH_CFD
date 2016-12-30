@@ -138,23 +138,18 @@ export default class WithdrawPage extends Component {
   }
 
   onChangeWithdrawValue(text){
-    //Only show 2 digits after dot.
-    var re = /\d+.\d{0,2}/;
-    var found = text.match(re);
-    // console.log("onChangeWithdrawValue " + text);
-    // console.log(found);
-    if(found){
-      text = found[0];
-    }
-
     var newState = {
       withdrawValueText: this.state.withdrawValueText,
     };//{withdrawValueText: text,}
     if(text !== ""){
-      var value = parseFloat(text);
-      if(!isNaN(value)){
-        newState.withdrawValueText = text;
-        newState.withdrawValue = value;
+      var re = /^\d+\.?\d{0,2}$/;
+      var found = text.match(re);
+      if(found){
+        var value = parseFloat(text);
+        if(!isNaN(value)){
+          newState.withdrawValueText = text;
+          newState.withdrawValue = value;
+        }
       }
     }else{
       newState.withdrawValueText = "";

@@ -175,9 +175,9 @@ export default class WithdrawPage extends Component {
 
   gotoCardInfoPage(){
     this.props.navigator.push({
-      'name': MainPage.WITHDRAW_BIND_CARD_ROUTE,
-      'popToOutsidePage': this.props.popToOutsidePage,
-      isUnbindMode: true,
+      name: MainPage.WITHDRAW_BIND_CARD_ROUTE,
+      popToOutsidePage: this.props.popToOutsidePage,
+      bankCardStatus: "Approved",
     })
   }
 

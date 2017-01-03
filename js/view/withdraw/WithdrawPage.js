@@ -287,6 +287,10 @@ export default class WithdrawPage extends Component {
     var userData = LogicData.getUserData()
     if(userData.token == undefined){return}
 
+    this.setState({
+      validateInProgress: true,
+    })
+
     NetworkModule.fetchTHUrl(NetConstants.CFD_API.REQUEST_WITHDRAW,
       {
         method: 'POST',
@@ -298,7 +302,9 @@ export default class WithdrawPage extends Component {
       },
       (transferID)=>{
         console.log("Request withdraw success. TransferID: " + transferID);
-
+        this.setState({
+          validateInProgress: false,
+        })
         this.props.popToOutsidePage && this.props.popToOutsidePage();
         this.props.navigator.push({
           name: MainPage.WITHDRAW_SUBMITTED_ROUTE,

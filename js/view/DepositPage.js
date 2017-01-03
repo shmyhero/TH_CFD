@@ -50,7 +50,7 @@ var inputError = false;
 var inputValue = '';
 var rmbValue = 0;
 var _protocolSelected = true;
-
+var last_pressed_confirm = new Date().getTime();
 
 export default class DepositPage extends Component{
 
@@ -117,9 +117,14 @@ export default class DepositPage extends Component{
 		}
 	}
 
+	getCurrentTime(){
+		return new Date().getTime();
+	}
+
 	pressConfirmButton(){
-		if(this.state.confirmButtonEnable){
+		if(this.state.confirmButtonEnable && (this.getCurrentTime() - last_pressed_confirm  > 3000)){
 			this.requestPayConfirm();
+			last_pressed_confirm = this.getCurrentTime();
 		}
 	}
 

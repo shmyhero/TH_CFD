@@ -13,6 +13,7 @@ import {
 import RNViewShot from "react-native-view-shot";
 var QRCode = require('@remobile/react-native-qrcode-local-image');
 var WebViewPage = require('./WebViewPage');
+var ColorConstants = require('../ColorConstants')
 
 export default class PaymentPage extends Component {
   static propTypes = {
@@ -74,8 +75,15 @@ export default class PaymentPage extends Component {
                   })
                   .catch(err => {
                     //User may not install alipay. So just open the url inside the qrcode.
-                    console.log('An error occurred' + err + ", result + " + result)
-                    Linking.openURL(uri)
+                    console.log('An error occurred: ' + err + " when open " + this.getDestinationName() + ", try to open " + result + " instead")
+                    Linking.openURL(result)
+                    .then(()=>{
+
+                    })
+                    .catch(error =>{
+                      console.log('An error occurred' + error + ", result + " + error)
+                      alert("支付宝未安装")
+                    })
                   });
                 }catch(error){
                   alert(error)
@@ -163,7 +171,7 @@ const styles = StyleSheet.create({
   paymentButton: {
     height: 60,
     justifyContent: 'center',
-    backgroundColor: '#ff6666',
+    backgroundColor: ColorConstants.TITLE_DARK_BLUE,
   },
 
   paymentText: {

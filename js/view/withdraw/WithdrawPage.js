@@ -113,6 +113,13 @@ export default class WithdrawPage extends Component {
       });
   }
 
+  hideKeyboard(){
+    Keyboard.dismiss();
+    this.setState({
+      keyboardHiderShown: false,
+    })
+  }
+
   pressHelpButton(){
     this.props.navigator.push({
       name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
@@ -364,7 +371,7 @@ export default class WithdrawPage extends Component {
           />
         <View style={{flex:1}}>
 					{this.renderListView()}
-          <View style={{flex:1}}></View>
+          <TouchableOpacity style={{flex:1}} onPress={()=>this.hideKeyboard()}></TouchableOpacity>
           <View style={styles.checkboxView}>
             <CheckBoxButton
               defaultSelected={this.state.hasRead}

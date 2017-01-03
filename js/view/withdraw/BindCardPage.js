@@ -46,8 +46,8 @@ var defaultRawData = [
 		{"title":"姓名", "key": "AccountHolder", "value":"", hint:"请输入姓名", "type": "realname",},
 		{"title":"开户城市", "key": "ProvinceAndCity", "value":{"Province": null, "City": null}, hint: "点击选择", "type": "cascadeChoice", "choicesKey": "Provices"},
 		{"title":"开户银行", "key": "NameOfBank", "value":"", hint: "点击选择", "type": "choice", "choicesKey": "SupportedBanks"},
-		{"title":"支行名称", "key": "Branch", "value":"", hint:"请输入支行名称", maxLength: 18, minLength: 18,},
-		{"title":"银行卡号", "key": "AccountNumber", "value":"", hint:"请输入银行卡号", maxLength:75, "type": "cardNumber",},
+		{"title":"支行名称", "key": "Branch", "value":"", hint:"请输入支行名称", maxLength: 50,},
+		{"title":"银行卡号", "key": "AccountNumber", "value":"", hint:"请输入银行卡号", maxLength:50, "type": "cardNumber",},
 ];
 
 export default class BindCardPage extends Component {
@@ -366,11 +366,19 @@ export default class BindCardPage extends Component {
     console.log("finalText: " + finalText + ", finally!");
     console.log("this.listRawData[rowID].value: " + this.listRawData[rowID].value);
     console.log("text: " + text);
-    if(text !== finalText || this.listRawData[rowID].value !== finalText){
-      this.listRawData[rowID].value = finalText;
-      console.log("updateList");
-  		this.updateList();
-    }
+
+		console.log("finalText.length " + finalText.length + " this.listRawData[rowID].maxLength " + this.listRawData[rowID].maxLength);
+		console.log("finalText.length < this.listRawData[rowID].maxLength " + finalText.length < this.listRawData[rowID].maxLength)
+		if(finalText.length < this.listRawData[rowID].maxLength){
+	    if(text !== finalText || this.listRawData[rowID].value !== finalText){
+	      this.listRawData[rowID].value = finalText;
+	      console.log("updateList");
+	  		this.updateList();
+	    }
+		}else{
+			this.listRawData[rowID].value = this.listRawData[rowID].value;
+			this.updateList();
+		}
   }
 
   onProvincePickerPressed(rowData, rowID){
@@ -603,6 +611,47 @@ export default class BindCardPage extends Component {
     }
   }
 
+	renderRowValue(rowData, rowID){
+		var onChangeText;
+		var displayText = rowData.value;
+		var keyboardType = "default"
+		if(rowData.type === "cardNumber"){
+			keyboardType = 'numeric';
+			onChangeText = (text)=>this.cardNumberInputChange(text, rowID)
+		}else{
+			onChangeText = (text)=>this.textInputChange(text, rowID)
+		}
+
+		if(this.props.bankCardStatus === "None"){
+			return (<TextInput style={styles.valueText}
+					editable={true}
+					autoCapitalize="none"
+					autoCorrect={false}
+					defaultValue={displayText}
+					placeholder={rowData.hint}
+					placeholderTextColor={ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR}
+					selectionColor={ColorConstants.INOUT_TEXT_SELECTION_COLOR}
+					underlineColorAndroid='transparent'
+					onChangeText={(text)=>onChangeText(text, rowID)}
+					onEndEditing={(event)=>{onChangeText(event.nativeEvent.text, rowID)}}
+					keyboardType={keyboardType}
+					ellipsizeMode={''}
+					maxLength={rowData.maxLength-1}
+					/>);
+		}else{
+			return (<Text style={styles.valueText}
+					ellipsizeMode="middle"
+					autoCorrect={false}
+					value={displayText}
+					selectionColor={ColorConstants.INOUT_TEXT_SELECTION_COLOR}
+					underlineColorAndroid='transparent'
+					numberOfLines={1}
+					>
+					{displayText}
+				</Text>);
+		}
+	}
+
 	renderRow(rowData, sectionID, rowID) {
 		if (rowData.type === "choice" || rowData.type === "cascadeChoice") {
 			return this.renderChoice(rowData, rowID, rowData.type);
@@ -617,32 +666,10 @@ export default class BindCardPage extends Component {
 				</View>
       );
     }else{
-      var onChangeText;
-      var cardNumber = rowData.value;
-			var keyboardType = "default"
-      if(rowData.type === "cardNumber"){
-				keyboardType = 'numeric';
-        onChangeText = (text)=>this.cardNumberInputChange(text, rowID)
-      }else{
-        onChangeText = (text)=>this.textInputChange(text, rowID)
-      }
-
 			return (
 				<View style={styles.rowWrapper}>
 					<Text style={styles.rowTitle}>{rowData.title}</Text>
-					<TextInput style={styles.valueText}
-            editable={this.props.bankCardStatus === "None"}
-						autoCapitalize="none"
-						autoCorrect={false}
-						defaultValue={cardNumber}
-						placeholder={rowData.hint}
-						placeholderTextColor={ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR}
-						selectionColor={ColorConstants.INOUT_TEXT_SELECTION_COLOR}
-						underlineColorAndroid='transparent'
-						onChangeText={(text)=>onChangeText(text, rowID)}
-						onEndEditing={(event)=>{onChangeText(event.nativeEvent.text, rowID)}}
-            keyboardType={keyboardType}
-						/>
+					{this.renderRowValue(rowData, rowID)}
 				</View>
 				)
 		}
@@ -856,19 +883,6 @@ var styles = StyleSheet.create({
 		alignItems:'center',
 		justifyContent:'center',
 		margin: 0,
-	},
-	multilineValueText: {
-		fontSize: fontSize,
-		color: ColorConstants.INPUT_TEXT_COLOR,
-		flex: 1,
-		alignItems:'center',
-		justifyContent:'center',
-		padding:0,
-		margin: 0,
-		textAlignVertical: 'top',
-		height: Platform.OS === "ios" ? 48 : 65,
-		marginTop: Platform.OS === "ios" ? -5 : 0,
-		alignSelf: "flex-start",
 	},
 	valueContent:{
 		flex: 1,

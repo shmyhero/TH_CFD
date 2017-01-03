@@ -560,7 +560,8 @@ var MainPage = React.createClass({
 			return (
 				<BindCardPage navigator={navigationOperations}
 					routeMapper={this.RouteMapper}
-					isUnbindMode={route.isUnbindMode}/>
+					isUnbindMode={route.isUnbindMode}
+					bankCardStatus={route.bankCardStatus}/>
 			)
 		}else if (route.name === WITHDRAW_ROUTE){
 			hideTabbar();

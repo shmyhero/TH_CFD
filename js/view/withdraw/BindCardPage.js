@@ -59,12 +59,12 @@ export default class BindCardPage extends Component {
 	SupportedBanks = UserInfoSelectorProvider.getSupportedBanks();
 
   static propTypes = {
-    isUnbindMode: PropTypes.bool,
+		bankCardStatus: PropTypes.string, //None, PendingReview, Approved, Rejected
 		popToOutsidePage: PropTypes.func,
   }
 
   static defaultProps = {
-    isUnbindMode: false,
+		bankCardStatus: "None", //
 		popToOutsidePage: ()=>{},
   }
 
@@ -91,7 +91,9 @@ export default class BindCardPage extends Component {
 		var liveUserInfo = LogicData.getLiveUserInfo();
 		this.listRawData[0].value = liveUserInfo.lastName + liveUserInfo.firstName;
 
-    if(this.props.isUnbindMode){
+    if(this.props.bankCardStatus === "PendingReview"
+		|| this.props.bankCardStatus === "Approved"
+		|| this.props.bankCardStatus === "Rejected" ){
       //Get the users card information.
 			for(var i = 0; i < this.listRawData.length; i++){
         switch(this.listRawData[i].key){
@@ -134,9 +136,7 @@ export default class BindCardPage extends Component {
         }
       }
 
-    }
-
-	  if(!this.props.isUnbindMode){
+    }	else if(this.props.bankCardStatus === "None"){
 	    //Get banks
 	    NetworkModule.fetchTHUrl(NetConstants.CFD_API.GET_SUPPORT_WITHDRAW_BANKS,
 	      {
@@ -165,7 +165,7 @@ export default class BindCardPage extends Component {
 				if(responseJson[i].ParentId){
 					//City
 					for(var j = 0; j < this.provinceAndCities.length; j++){
-						if(responseJson[i].ParentId == this.provinceAndCities[j].value){
+						if(responseJson[i].ParentId === this.provinceAndCities[j].value){
 							this.provinceAndCities[j].children.push({"value": responseJson[i].Id, "displayText": responseJson[i].Name})
 							break;
 						}
@@ -193,7 +193,7 @@ export default class BindCardPage extends Component {
     var body = {};
     for(var i = 0; i< this.listRawData.length; i++){
 			if(this.listRawData[i]){
-				if(this.listRawData[i].key == "ProvinceAndCity"){
+				if(this.listRawData[i].key === "ProvinceAndCity"){
 					body.City = this.listRawData[i].value.City.displayText;
           body.Province = this.listRawData[i].value.Province.displayText;
 				}else{
@@ -398,7 +398,7 @@ export default class BindCardPage extends Component {
       selectedPicker: rowID,
     })
 
-    if(!choiceDataArray || choiceDataArray.length == 0){
+    if(!choiceDataArray || choiceDataArray.length === 0){
       console.log("choiceDataArray is empty")
       return;
     }
@@ -529,7 +529,7 @@ export default class BindCardPage extends Component {
   }
 
   renderChoiceSelectionIcon(){
-    if(!this.props.isUnbindMode){
+    if(this.props.bankCardStatus === "None"){
       return (<Image style={{width:17.5, height:13.5}} source={require("../../../images/icon_down_arrow.png")} />);
     }else{
       return null;
@@ -572,7 +572,7 @@ export default class BindCardPage extends Component {
     }
 
     return (
-      <TouchableOpacity activeOpacity={0.9} onPress={onPress} disabled={this.props.isUnbindMode}>
+      <TouchableOpacity activeOpacity={0.9} onPress={onPress} disabled={this.props.bankCardStatus !== "None"}>
         <View style={styles.rowWrapper}>
           <Text style={styles.rowTitle}>{rowData.title}</Text>
           <View style={styles.valueContent}>
@@ -592,7 +592,7 @@ export default class BindCardPage extends Component {
   }
 
   renderNameHint(){
-    if(!this.props.isUnbindMode){
+    if(!this.props.bankCardStatus === "None"){
       return(
         <Text style={[{color: ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR, fontSize: 12}]}>
           与身份证一致，不可更改
@@ -631,7 +631,7 @@ export default class BindCardPage extends Component {
 				<View style={styles.rowWrapper}>
 					<Text style={styles.rowTitle}>{rowData.title}</Text>
 					<TextInput style={styles.valueText}
-            editable={!this.props.isUnbindMode}
+            editable={this.props.bankCardStatus === "None"}
 						autoCapitalize="none"
 						autoCorrect={false}
 						defaultValue={cardNumber}
@@ -660,10 +660,13 @@ export default class BindCardPage extends Component {
     var nextEnabled = true;
     var buttonText = "";
     var buttonAction;
-    if(this.props.isUnbindMode){
+		if(this.props.bankCardStatus === "PendingReview"){
+			buttonText = 	"银行卡信息审核中";
+			nextEnabled = false;
+		} else if(this.props.bankCardStatus === "Approved"){
       buttonText = "解除绑定";
       buttonAction = ()=>this.readyToUnbindCard();
-    }else{
+    }	else{
       buttonText = "下一步";
       buttonAction = ()=>this.bindCard();
       //OpenAccountUtils.canGoNext(this.listRawData);
@@ -709,7 +712,7 @@ export default class BindCardPage extends Component {
 
 		return (
 			<View style={styles.wrapper}>
-        <NavBar title={this.props.isUnbindMode ? "我的银行卡" : "添加银行卡"}
+        <NavBar title={(this.props.bankCardStatus === "None") ? "添加银行卡": "我的银行卡"}
           showBackButton={true}
           navigator={this.props.navigator}
           imageOnRight={require('../../../images/icon_question.png')}
@@ -747,7 +750,7 @@ export default class BindCardPage extends Component {
 		var realNumberString = cardNumber.split(" ").join('');
 		var lastNumber = realNumberString.slice(realNumberString.length - 4);
 
-		if(this.props.isUnbindMode){
+		if(this.props.bankCardStatus === "Approved"){
 			return(
 				<Modal
 	        transparent={true}

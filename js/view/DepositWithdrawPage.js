@@ -123,15 +123,29 @@ export default class DepositWithdrawPage extends Component {
 	goToWithdrawPage(liveUserInfo){
 		if(liveUserInfo == null){
 			alert("网络错误，请重试！");	//What should happen if there's no internet connection?
-		}
-		else if(liveUserInfo.bankCardNumber && liveUserInfo.bankCardNumber !== ""){
+		} else if(liveUserInfo.bankCardStatus == "PendingReview"){
+			this.props.navigator.push({
+				name: MainPage.WITHDRAW_BIND_CARD_ROUTE,
+				bankCardStatus: liveUserInfo.bankCardStatus,
+				popToOutsidePage: ()=>{this.refreshData();}
+			});
+		} else if(liveUserInfo.bankCardStatus == "Rejected"){
+			alert("出金请求被拒绝！")
+			// this.props.navigator.push({
+			// 	name: MainPage.WITHDRAW_BIND_CARD_ROUTE,
+			// 	bankcardStatus: liveUserInfo.bankcardStatus,
+			// 	popToOutsidePage: ()=>{this.refreshData();}
+			// });
+		} else if(liveUserInfo.bankCardNumber && liveUserInfo.bankCardNumber !== ""){
 			this.props.navigator.push({
 				name: MainPage.WITHDRAW_ROUTE,
+				bankCardStatus: liveUserInfo.bankCardStatus,
 				popToOutsidePage: ()=>{this.refreshData();}
 			});
 		}else{
 			this.props.navigator.push({
 				name: MainPage.WITHDRAW_BIND_CARD_ROUTE,
+				bankCardStatus: "None",
 				popToOutsidePage: ()=>{this.refreshData();}
 			});
 		}

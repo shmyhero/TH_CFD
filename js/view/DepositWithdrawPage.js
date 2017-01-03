@@ -227,7 +227,7 @@ export default class DepositWithdrawPage extends Component {
 
   renderHelp() {
     return(
-      <TouchableOpacity style={{flexDirection:'row', alignItems:'center', marginBottom: 20}} onPress={this.helpPressed}>
+      <TouchableOpacity style={{flexDirection:'row', alignItems:'center', justifyContent:'center', marginBottom: 20}} onPress={this.helpPressed}>
         <Image style = {styles.lineLeftRight} source = {require('../../images/line_left2.png')} ></Image>
         <Text style={styles.helpTitle}>服务热线：{CALL_NUMBER}</Text>
         <Image style = {styles.lineLeftRight} source = {require('../../images/line_right2.png')} ></Image>
@@ -353,9 +353,9 @@ var styles = StyleSheet.create({
 		color: '#415a87',
 	},
 	lineLeftRight:{
-			 	width:100,
-				height:1,
-				margin:5,
+	 	width:100,
+		height:1,
+		margin:5,
 	},
 	moreImage: {
 		alignSelf: 'center',

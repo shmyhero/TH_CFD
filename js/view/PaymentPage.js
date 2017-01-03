@@ -101,6 +101,8 @@ export default class PaymentPage extends Component {
       this.setState({
         showPaymentButton: true,
       })
+    }else if(content.url && content.url.includes("test_form/finish")){
+      this.props.navigator.popToTop();
     }else{
       this.setState({
         showPaymentButton: false,

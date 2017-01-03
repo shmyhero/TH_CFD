@@ -92,7 +92,7 @@ export default class DepositPage extends Component{
 					noLessMoney: responseJson.minimum,
 					fxRate : responseJson.fxRate,
 					dataSourceBank:dsBank.cloneWithRows(responseJson.banks),
-				},()=>this.validatePrice(''))
+				},()=>this.onChangeWithdrawValue(''))
 			},
 			(result) => {
 			}
@@ -159,7 +159,28 @@ export default class DepositPage extends Component{
 		});
 	}
 
-	validatePrice (text){
+	// var newState = {
+	// 	withdrawValueText: this.state.withdrawValueText,
+	// };//{withdrawValueText: text,}
+	// if(text !== ""){
+	// 	var re = /^\d+\.?\d{0,2}$/;
+	// 	var found = text.match(re);
+	// 	if(found){
+	// 		var value = parseFloat(text);
+	// 		if(!isNaN(value)){
+	// 			newState.withdrawValueText = text;
+	// 			newState.withdrawValue = value;
+	// 		}
+	// 	}
+	// }else{
+	// 	newState.withdrawValueText = "";
+	// 	newState.withdrawValue = 0;
+	// }
+	//
+	// console.log("newState " + JSON.stringify(newState));
+	// this.setState(newState);
+
+	onChangeWithdrawValue (text){
 		inputValue = text
 		var text_ = text
 		var value = parseFloat(text_);
@@ -183,7 +204,20 @@ export default class DepositPage extends Component{
 				payStateTip2:/*'当前汇率：'+(1/this.state.fxRate).toFixed(2)+*/'对应人民币：'+rmbValue+'元',
 			})
 
-				inputError = false
+		  inputError = false
+		}
+
+		if(text !== ""){
+			var re = /^\d+\.?\d{0,2}$/;
+			var found = text.match(re);
+			if(found){
+				var value = parseFloat(text);
+				if(!isNaN(value)){
+				}
+			}else{
+					console.log('数据错误,重置输入框')
+					this.onChangeWithdrawValue('')
+			}
 		}
 
 		this.checkConfirmEnable();
@@ -200,10 +234,10 @@ export default class DepositPage extends Component{
 					<View style = {styles.cellWrapper}>
 						<Text style = {styles.moneyUSD}>美元</Text>
 						<TextInput style={[styles.cellInput, {color: textColor}]}
-											 onChangeText={(text) => this.validatePrice(text)}
+											 onChangeText={(text) => this.onChangeWithdrawValue(text)}
 												//  onFocus={() => this.onTextFocus(type)}
 												//  onBlur={() => this.onTextBlur(type)}
-												//  value={value}
+											 value={inputValue}
 											 defaultValue={inputValue}
 											 maxLength={8}
 											 autoFocus={true}
@@ -294,11 +328,16 @@ export default class DepositPage extends Component{
 	}
 
 	renderRowBank(rowData, sectionID, rowID) {
-		if(rowData){
+		console.log('Image rowData = ' + rowData.logo)
+		if(rowData && (typeof rowData.logo == 'string')){
 				 	return(
 					 <Image source={{uri:rowData.logo}} style={styles.imageBank}></Image>
 				);
-			}
+		}else{
+			return (
+				<Image source={rowData.logo} style={styles.imageBank}></Image>
+			)
+		}
 	}
 
 	// renderRow(rowData, sectionID, rowID) {
@@ -356,8 +395,8 @@ export default class DepositPage extends Component{
 			},
 			(responseJson) => {
 				 console.log('responseJson = ' + responseJson + 'payMethodSelected = ' + this.state.payMethodSelected);//rmbValue
- 			 		 var alipayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-alipay.html'+'?Amount='+1.00+'&TransRef='+responseJson
-					 var unionpayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-quick.html'+'?Amount='+1.00+'&TransRef='+responseJson
+ 			 		 var alipayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-alipay.html'+'?Amount='+rmbValue+'&TransRef='+responseJson
+					 var unionpayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-quick.html'+'?Amount='+rmbValue+'&TransRef='+responseJson
 					 var url = this.state.payMethodSelected == 0? alipayUrl:unionpayUrl;
 						//  if(index == 3){url = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-wechat.html';}
 					 this.props.navigator.push({

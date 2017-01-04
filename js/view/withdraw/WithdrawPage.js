@@ -182,7 +182,7 @@ export default class WithdrawPage extends Component {
 
   gotoCardInfoPage(){
     this.props.navigator.push({
-      name: MainPage.WITHDRAW_BIND_CARD_ROUTE,
+      name: MainPage.WITHDRAW_RESULT_ROUTE,
       popToOutsidePage: this.props.popToOutsidePage,
       bankCardStatus: "Approved",
     })
@@ -401,7 +401,7 @@ export default class WithdrawPage extends Component {
   						onPress={()=>this.gotoNext()}
   						textContainerStyle={styles.buttonView}
   						textStyle={styles.buttonText}
-  						text={this.state.validateInProgress? "信息正在检查中...": this.state.refundETA + '天内到账，确认出金'} />
+  						text={this.state.validateInProgress? "信息正在检查中...": this.state.refundETA + '个工作日内到账，确认出金'} />
   				</View>
         </View>
 			</View>

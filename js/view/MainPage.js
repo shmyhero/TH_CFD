@@ -68,6 +68,7 @@ var DepositWithdrawPage = require('./DepositWithdrawPage')
 var NativeDataModule = require('../module/NativeDataModule')
 
 var BindCardPage = require('./withdraw/BindCardPage')
+var BindCardResultPage = require('./withdraw/BindCardResultPage')
 var WithdrawPage = require('./withdraw/WithdrawPage')
 var WithdrawSubmittedPage = require('./withdraw/WithdrawSubmittedPage')
 
@@ -132,6 +133,7 @@ export let DEPOSIT_WITHDRAW_ROUTE = 'depositWithdrawRoute'
 export let WITHDRAW_BIND_CARD_ROUTE = 'withdrawBindCardRoute'
 export let WITHDRAW_ROUTE = 'withdrawRoute'
 export let WITHDRAW_SUBMITTED_ROUTE = 'withdrawSubmittedRoute'
+export let WITHDRAW_RESULT_ROUTE = 'withdrawFailedRoute'
 
 
 const glypy = glypyMapMaker({
@@ -560,7 +562,13 @@ var MainPage = React.createClass({
 			return (
 				<BindCardPage navigator={navigationOperations}
 					routeMapper={this.RouteMapper}
-					isUnbindMode={route.isUnbindMode}
+					bankCardStatus={route.bankCardStatus}/>
+			)
+		}else if (route.name === WITHDRAW_RESULT_ROUTE){
+			hideTabbar();
+			return (
+				<BindCardResultPage navigator={navigationOperations}
+					routeMapper={this.RouteMapper}
 					bankCardStatus={route.bankCardStatus}/>
 			)
 		}else if (route.name === WITHDRAW_ROUTE){

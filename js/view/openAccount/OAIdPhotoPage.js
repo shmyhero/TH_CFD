@@ -22,7 +22,7 @@ var NetConstants = require('../../NetConstants');
 var NetworkModule = require('../../module/NetworkModule')
 var TalkingdataModule = require('../../module/TalkingdataModule')
 var OpenAccountRoutes = require('./OpenAccountRoutes')
-var ErrorBar = require('./ErrorBar')
+var ErrorBar = require('../component/ErrorBar')
 var OpenAccountUtils = require('./OpenAccountUtils')
 var {height, width} = Dimensions.get('window')
 

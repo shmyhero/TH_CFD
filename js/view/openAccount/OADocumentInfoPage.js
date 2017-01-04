@@ -20,7 +20,7 @@ var OpenAccountRoutes = require('./OpenAccountRoutes')
 var LogicData = require('../../LogicData')
 var NetworkModule = require('../../module/NetworkModule')
 var NetConstants = require('../../NetConstants')
-var ErrorBar = require('./ErrorBar')
+var ErrorBar = require('../component/ErrorBar')
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)

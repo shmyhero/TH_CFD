@@ -259,72 +259,6 @@ export default class BindCardPage extends Component {
       });
 	}
 
-	readyToUnbindCard(){
-		// this.setState({
-		// 	modalVisible: true,
-		// });
-		var liveUserInfo = LogicData.getLiveUserInfo();
-		var cardNumber = liveUserInfo.bankCardNumber;
-		var realNumberString = cardNumber.split(" ").join('');
-		var lastNumber = realNumberString.slice(realNumberString.length - 4);
-
-		Alert.alert(
-		  '确认删除',
-		  '尾号为' + lastNumber + "的银行卡",
-		  [
-		    {text: '取消', onPress: () => console.log('cancel unbind  d'), style: 'cancel'},
-			  {text: '确认', onPress: () => this.unbindCard()},
-		  ]
-		)
-	}
-
-  unbindCard(){
-		// this.setState({
-		// 	modalVisible: false,
-		// });
-
-		var userData = LogicData.getUserData()
-		if(userData.token == undefined){return}
-
-		//Get userinfo
-		NetworkModule.fetchTHUrl(NetConstants.CFD_API.REQUEST_UNBIND_CARD,
-			{
-				method: 'GET',
-				headers: {
-					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-				},
-			},
-			(responseJson)=>{
-				console.log("aaaa");
-				var liveUserInfo = LogicData.getLiveUserInfo();
-				var clearedInfo = {};
-				clearedInfo.firstName = liveUserInfo.firstName;
-				clearedInfo.lastName = liveUserInfo.lastName;
-				LogicData.setLiveUserInfo(clearedInfo);
-
-				console.log("bbbb");
-
-				var routes = this.props.navigator.getCurrentRoutes();
-				var popToRoute = null;
-				for(var i = routes.length - 2; i >= 0 ;i --){
-					if(routes[i].name === MainPage.DEPOSIT_WITHDRAW_ROUTE){
-						popToRoute = routes[i];
-						break;
-					}
-				}
-
-				if(popToRoute){
-					this.props.navigator.popToRoute(popToRoute);
-				}else{
-					this.props.navigator.pop();
-				}
-			},
-			(result)=>{
-				alert(result.errorMessage);
-			});
-
-  }
-
 	backButtonPressed(){
 		Picker.isPickerShow(show => {
 			if(show){
@@ -737,9 +671,23 @@ export default class BindCardPage extends Component {
 			)
 		}
 
+		var navbarTitle = ""
+		switch (this.props.bankCardStatus) {
+			case "None":
+				navbarTitle = "添加银行卡";
+				break;
+			case "accecpted":
+				navbarTitle = "我的银行卡";
+				break;
+			case "PendingReview":
+				navbarTitle = "出金";
+			default:
+
+		}
+
 		return (
 			<View style={styles.wrapper}>
-        <NavBar title={(this.props.bankCardStatus === "None") ? "添加银行卡": "我的银行卡"}
+        <NavBar title={navbarTitle}
           showBackButton={true}
           navigator={this.props.navigator}
           imageOnRight={require('../../../images/icon_question.png')}

@@ -97,7 +97,7 @@ export default class WithdrawSubmittedPage extends Component {
           navigator={this.props.navigator}
           />
         <Image source={require('../../../images/withdraw_submitted.png')} style={styles.checkImage}/>
-        <Text style={styles.hintText}>{"预计资金到账时间为" + this.state.refundETA + "天，具体以银行同知为准！"}</Text>
+        <Text style={styles.hintText}>{"预计资金到账时间为" + this.state.refundETA + "个工作日，具体以银行通知为准！"}</Text>
 
         <View style={{flex:1}}/>
 

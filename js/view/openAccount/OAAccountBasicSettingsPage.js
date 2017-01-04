@@ -18,7 +18,7 @@ var ColorConstants = require('../../ColorConstants')
 var TalkingdataModule = require('../../module/TalkingdataModule')
 var OpenAccountRoutes = require('./OpenAccountRoutes')
 var OpenAccountUtils = require('./OpenAccountUtils')
-var ErrorBar = require('./ErrorBar')
+var ErrorBar = require('../component/ErrorBar')
 var NetworkModule = require('../../module/NetworkModule')
 var NetConstants = require('../../NetConstants')
 

@@ -123,6 +123,7 @@ export default class DepositWithdrawPage extends Component {
 	goToWithdrawPage(liveUserInfo){
 		//liveUserInfo.bankCardStatus = "PendingReview";
 		liveUserInfo.bankCardStatus="Approved";
+
 		if(liveUserInfo == null){
 			alert("网络错误，请重试！");	//What should happen if there's no internet connection?
 		} else if(liveUserInfo.bankCardStatus == "PendingReview"

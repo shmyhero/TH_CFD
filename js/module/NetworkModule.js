@@ -4,6 +4,7 @@ var LogicData = require('../LogicData')
 var NetConstants = require('../NetConstants')
 var MainPage = require('../view/MainPage')
 var CacheModule = require('./CacheModule')
+var Encryptor = require('./Encryptor')
 var {EventCenter, EventConst} = require('../EventCenter')
 
 import React from 'react';
@@ -147,7 +148,41 @@ export function fetchTHUrl(url, params, successCallback, errorCallback, notShowR
 		});
 }
 
+export function fetchEncryptedUrl(url, params, successCallback, errorCallback, notShowResponseLog){
+	console.log("fetchEncryptedUrl")
+	var userData = LogicData.getUserData();
+	if (Object.keys(userData).length === 0) {
+		var result = {
+			error: API_ERROR,
+			errorMessage: "尚未登录",
+		};
+		errorCallback(result);
+		return;
+	}
 
+	fetchTHUrl(NetConstants.CFD_API.TIMESTAMP,
+		{
+			method: 'GET',
+			headers: {
+				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+			},
+		},
+		(response)=>{
+			//console.log("TIMESTAMP " + JSON.stringify(response));
+			var data = "" +response.timeStamp + response.nonce;
+			var encryptedData = Encryptor.DESEncrypt(data);
+			//console.log("encryptedData " + encryptedData)
+			if(!params.headers){
+				params.headers = {}
+			}
+			params.headers.signature = encryptedData;
+
+			fetchTHUrl(url, params, successCallback, errorCallback, true);
+
+		}, (result)=>{
+			errorCallback(result)
+		}, true);
+}
 
 export function syncOwnStocks(userData) {
   return new Promise((resolve, reject)=>{

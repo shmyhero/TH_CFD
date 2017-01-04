@@ -147,6 +147,7 @@ function getCFDAPI(){
 
     GET_TRANSFERS_LIST: CFD_API_SERVER + "/api/user/live/transfers",
     GET_DEPOSIT_SETTING: CFD_API_SERVER + "/api/deposit/setting",
+    TIMESTAMP: CFD_API_SERVER + '/api/user/live/timestamp',//LIVE ok
   }
 }
 

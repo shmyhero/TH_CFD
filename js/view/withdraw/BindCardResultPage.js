@@ -18,8 +18,6 @@ import {
 	Keyboard,
 } from 'react-native';
 
-import Picker from 'react-native-picker';
-
 var Button = require('../component/Button')
 var CheckBoxButton = require('../component/CheckBoxButton')
 var MainPage = require('../MainPage')
@@ -48,15 +46,14 @@ var defaultRawData = [
 		{"title":"开户银行", "key": "NameOfBank", "value":"",},
 		{"title":"支行名称", "key": "Branch", "value":"",},
 		{"title":"银行卡号", "key": "AccountNumber", "value":"",},
-		{"title":"出金金额", "key": "WithdrawAmount", "value":""},
-		{"title":"出金时间", "key": "WithdrawTime", "value":"",},
+		{"title":"出金金额", "key": "lastWithdraw", "value":""},
+		{"title":"出金时间", "key": "lastWithdrawAt", "value":"",},
 ];
 
 var CALL_NUMBER = '66058771';
 
 export default class BindCardResultPage extends Component {
 	hardwareBackPress = ()=>{return this.backButtonPressed();};
-	pickerDisplayed = false;
   listRawData = [];
   ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 });
   provinceAndCities = [];
@@ -79,7 +76,6 @@ export default class BindCardResultPage extends Component {
     this.state={
       dataSource: this.ds.cloneWithRows(this.listRawData),
 			validateInProgress: false,
-			selectedPicker: -1,
 			bankCardRejectReason: "",
     }
   }
@@ -138,14 +134,14 @@ export default class BindCardResultPage extends Component {
           this.listRawData[i].value = finalText;
 
           break;
-				case "WithdrawAmount":
+				case "lastWithdraw":
 					if(this.props.bankCardStatus !== "Approved"){
-						this.listRawData[i].value = liveUserInfo.WithdrawAmount;
+						this.listRawData[i].value = liveUserInfo.lastWithdraw;
 					}
 					break;
-				case "WithdrawTime":
+				case "lastWithdrawAt":
 					if(this.props.bankCardStatus !== "Approved"){
-						this.listRawData[i].value = liveUserInfo.WithdrawTime;
+						this.listRawData[i].value = liveUserInfo.lastWithdrawAt;
 					}
 					break;
         default:
@@ -157,17 +153,8 @@ export default class BindCardResultPage extends Component {
 	}
 
 	backButtonPressed(){
-		Picker.isPickerShow(show => {
-			if(show){
-				Picker.hide();
-				this.setState({
-					selectedPicker: -1,
-				})
-			}else{
-				this.props.popToOutsidePage && this.props.popToOutsidePage();
-				this.props.navigator.pop();
-			}
-		});
+		this.props.popToOutsidePage && this.props.popToOutsidePage();
+		this.props.navigator.pop();
 
 		return true;
 	}
@@ -403,6 +390,7 @@ export default class BindCardResultPage extends Component {
 			<View style={styles.wrapper}>
         <NavBar title={title}
           showBackButton={true}
+					leftButtonOnClick={()=>this.backButtonPressed()}
           navigator={this.props.navigator}
           imageOnRight={require('../../../images/icon_question.png')}
           rightImageOnClick={()=>this.pressHelpButton()}
@@ -450,17 +438,6 @@ var styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignSelf: 'stretch',
 		alignItems: 'center',
-		paddingLeft: 15,
-		paddingRight: 15,
-		backgroundColor: '#ffffff',
-		paddingTop: rowPadding,
-		paddingBottom: rowPadding,
-	},
-	multilineRowWrapper: {
-		flexDirection: 'row',
-		alignSelf: 'center',
-		//alignItems: 'center',
-		//height: 120,
 		paddingLeft: 15,
 		paddingRight: 15,
 		backgroundColor: '#ffffff',
@@ -526,25 +503,6 @@ var styles = StyleSheet.create({
 		fontSize: 17,
 		textAlign: 'center',
 		color: '#ffffff',
-	},
-	datePicker: {
-		flex:1,
-		width: 0,
-		padding:0,
-		margin: 0,
-		marginTop: -rowPadding,
-		marginBottom: -rowPadding,
-		alignItems:'center',
-		justifyContent:'center',
-		marginLeft:0,
-		paddingLeft:0
-	},
-	modalContainer:{
-		flex: 1,
-		flexDirection: 'column',
-		justifyContent: 'flex-end',
-		backgroundColor:'rgba(0, 0, 0, 0.5)',
-		// paddingBottom:height/2,
 	},
 	helpTitle: {
 		fontSize: 14,

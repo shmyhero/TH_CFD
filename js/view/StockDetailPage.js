@@ -1074,8 +1074,9 @@ var StockDetailPage = React.createClass({
 			console.log('live', url );
 		}
 		this.setState({tradingInProgress: true})
+		var fetchFunction = LogicData.getAccountState() ? NetworkModule.fetchEncryptedUrl : NetworkModule.fetchTHUrl;
 
-		NetworkModule.fetchTHUrl(
+		fetchFunction(
 			url,
 			{
 				method: 'POST',

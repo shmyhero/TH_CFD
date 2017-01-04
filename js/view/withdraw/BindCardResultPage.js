@@ -52,6 +52,8 @@ var defaultRawData = [
 		{"title":"出金时间", "key": "WithdrawTime", "value":"",},
 ];
 
+var CALL_NUMBER = '66058771';
+
 export default class BindCardResultPage extends Component {
 	hardwareBackPress = ()=>{return this.backButtonPressed();};
 	pickerDisplayed = false;
@@ -90,13 +92,14 @@ export default class BindCardResultPage extends Component {
 		BackAndroid.addEventListener('hardwareBackPress', this.hardwareBackPress);
 
 		var liveUserInfo = LogicData.getLiveUserInfo();
-		liveUserInfo.bankCardRejectReason = "测试一下"
-		liveUserInfo.WithdrawAmount = "100";
-		liveUserInfo.WithdrawTime = "2017.1.1 19:23:12";
 		this.setState({
 			bankCardRejectReason: liveUserInfo.bankCardRejectReason,
 		})
 		this.listRawData[0].value = liveUserInfo.lastName + liveUserInfo.firstName;
+
+		if(this.props.bankCardStatus === "Rejected"){
+			this.unbindCard();
+		}
 
     //Get the users card information.
 		for(var i = 0; i < this.listRawData.length; i++){
@@ -139,6 +142,7 @@ export default class BindCardResultPage extends Component {
 					if(this.props.bankCardStatus !== "Approved"){
 						this.listRawData[i].value = liveUserInfo.WithdrawAmount;
 					}
+					break;
 				case "WithdrawTime":
 					if(this.props.bankCardStatus !== "Approved"){
 						this.listRawData[i].value = liveUserInfo.WithdrawTime;
@@ -148,6 +152,8 @@ export default class BindCardResultPage extends Component {
           break;
     	}
 		}
+
+		console.log("this.listRawData" + JSON.stringify(this.listRawData));
 	}
 
 	backButtonPressed(){
@@ -184,11 +190,16 @@ export default class BindCardResultPage extends Component {
 			validateInProgress: true,
 		})
 
-		this.props.navigator.push({
+		//this.props.navigator.push();
+
+		this.props.navigator.replace({
 			name: MainPage.WITHDRAW_BIND_CARD_ROUTE,
-			bankCardStatus: "None",
 			popToOutsidePage: ()=>{this.refreshData();}
-		});
+		})
+
+		//this.props.navigator.immediatelyResetRouteStack(routes);
+
+
 	}
 
 	readyToUnbindCard(){
@@ -234,21 +245,23 @@ export default class BindCardResultPage extends Component {
 				clearedInfo.lastName = liveUserInfo.lastName;
 				LogicData.setLiveUserInfo(clearedInfo);
 
-				console.log("bbbb");
+				if(this.props.bankCardStatus === "Approved"){
+					console.log("bbbb");
 
-				var routes = this.props.navigator.getCurrentRoutes();
-				var popToRoute = null;
-				for(var i = routes.length - 2; i >= 0 ;i --){
-					if(routes[i].name === MainPage.DEPOSIT_WITHDRAW_ROUTE){
-						popToRoute = routes[i];
-						break;
+					var routes = this.props.navigator.getCurrentRoutes();
+					var popToRoute = null;
+					for(var i = routes.length - 2; i >= 0 ;i --){
+						if(routes[i].name === MainPage.DEPOSIT_WITHDRAW_ROUTE){
+							popToRoute = routes[i];
+							break;
+						}
 					}
-				}
 
-				if(popToRoute){
-					this.props.navigator.popToRoute(popToRoute);
-				}else{
-					this.props.navigator.pop();
+					if(popToRoute){
+						this.props.navigator.popToRoute(popToRoute);
+					}else{
+						this.props.navigator.pop();
+					}
 				}
 			},
 			(result)=>{
@@ -258,13 +271,15 @@ export default class BindCardResultPage extends Component {
   }
 
 	renderHelp() {
-    return(
-      <TouchableOpacity style={{flexDirection:'row', alignItems:'center', justifyContent:'center', marginBottom: 20}} onPress={this.helpPressed}>
-        <Image style = {styles.lineLeftRight} source = {require('../../../images/line_left2.png')} ></Image>
-        <Text style={styles.helpTitle}>服务热线：{CALL_NUMBER}</Text>
-        <Image style = {styles.lineLeftRight} source = {require('../../../images/line_right2.png')} ></Image>
-      </TouchableOpacity>
-    );
+		if(this.props.bankCardStatus === "Rejected"){
+	    return(
+	      <TouchableOpacity style={{flexDirection:'row', alignItems:'center', justifyContent:'center', marginBottom: 20}} onPress={this.helpPressed}>
+	        <Image style = {styles.lineLeftRight} source = {require('../../../images/line_left2.png')} ></Image>
+	        <Text style={styles.helpTitle}>服务热线：{CALL_NUMBER}</Text>
+	        <Image style = {styles.lineLeftRight} source = {require('../../../images/line_right2.png')} ></Image>
+	      </TouchableOpacity>
+	    );
+		}
   }
 
 	renderRowValue(rowData, rowID){
@@ -272,12 +287,9 @@ export default class BindCardResultPage extends Component {
 
 		return (<Text style={styles.valueText}
 				ellipsizeMode="middle"
-				autoCorrect={false}
 				value={displayText}
-				selectionColor={ColorConstants.INOUT_TEXT_SELECTION_COLOR}
 				underlineColorAndroid='transparent'
-				numberOfLines={1}
-				>
+				numberOfLines={1}>
 				{displayText}
 			</Text>);
 	}
@@ -399,6 +411,7 @@ export default class BindCardResultPage extends Component {
 				<ScrollView style={styles.list}>
 					{this.renderListView()}
 				</ScrollView>
+				{this.renderHelp()}
         {this.renderActionButton()}
 			</View>
 		);
@@ -532,6 +545,16 @@ var styles = StyleSheet.create({
 		justifyContent: 'flex-end',
 		backgroundColor:'rgba(0, 0, 0, 0.5)',
 		// paddingBottom:height/2,
+	},
+	helpTitle: {
+		fontSize: 14,
+		textAlign: 'center',
+		color: '#415a87',
+	},
+	lineLeftRight:{
+		width:100,
+		height:1,
+		margin:5,
 	},
 });
 

@@ -422,7 +422,7 @@ var MePage = React.createClass({
 			}else{
 				this.gotoLiveLogin(true,
 					()=>{
-					this.props.navigator.push({
+					this.props.navigator.replace({
 						name: MainPage.DEPOSIT_WITHDRAW_ROUTE,
 					});
 				});
@@ -560,6 +560,23 @@ var MePage = React.createClass({
 
 	},
 
+	renderRowRight: function(rowData){
+		if(rowData.subtype === "depositWithdraw"){
+			var hasError = LogicData.getMeData().bankCardStatus === "Rejected";
+			if(hasError){
+				return (
+					<View style={{flexDirection: 'row', alignItems:'center', justifyContent:'center'}}>
+						<Image source={require('../../images/icon_new.png')} style={styles.newEventImage}/>
+						<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
+					</View>
+				);
+			}
+		}
+		return (
+			<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
+		);
+	},
+
 	renderRow: function(rowData, sectionID, rowID) {
 		if (rowData.type === 'normal') {
 			if((rowData.subtype === 'config' || rowData.subtype === 'mycard') && !this.state.loggedIn){
@@ -578,7 +595,7 @@ var MePage = React.createClass({
 						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
 							<Image source={rowData.image} style={styles.image} />
 							<Text style={styles.title}>{rowData.title}</Text>
-							<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
+							{this.renderRowRight(rowData)}
 						</View>
 					</TouchableOpacity>
 				)
@@ -824,6 +841,12 @@ var styles = StyleSheet.create({
 		fontSize:16,
 		color:'white',
 	},
+
+	newEventImage:{
+    width: 6,
+    height: 6,
+		marginRight: 8,
+  },
 });
 
 

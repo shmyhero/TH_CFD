@@ -59,12 +59,10 @@ export default class BindCardPage extends Component {
 	SupportedBanks = UserInfoSelectorProvider.getSupportedBanks();
 
   static propTypes = {
-		bankCardStatus: PropTypes.string, //None, PendingReview, Approved, Rejected
 		popToOutsidePage: PropTypes.func,
   }
 
   static defaultProps = {
-		bankCardStatus: "None", //
 		popToOutsidePage: ()=>{},
   }
 
@@ -91,93 +89,65 @@ export default class BindCardPage extends Component {
 		var liveUserInfo = LogicData.getLiveUserInfo();
 		this.listRawData[0].value = liveUserInfo.lastName + liveUserInfo.firstName;
 
-    if(this.props.bankCardStatus === "PendingReview"
-		|| this.props.bankCardStatus === "Approved"
-		|| this.props.bankCardStatus === "Rejected" ){
-      //Get the users card information.
-			for(var i = 0; i < this.listRawData.length; i++){
-        switch(this.listRawData[i].key){
-          case "ProvinceAndCity":
-            this.listRawData[i].value = {Province:{"displayText":liveUserInfo.province}, City: {"displayText":liveUserInfo.city}};
-            break;
-          case "AccountHolder":
-            this.listRawData[i].value = liveUserInfo.lastName + liveUserInfo.firstName;
-            break;
-          case "NameOfBank":
-            this.listRawData[i].value = liveUserInfo.bankName;
-            break;
-          case "Branch":
-            this.listRawData[i].value = liveUserInfo.branch;
-            break;
-          case "AccountNumber":
-            var cardNumber = liveUserInfo.bankCardNumber;
-
-						//Star the card number!
-            var realNumberString = cardNumber.split(" ").join('');
-            var startIndex = Math.max(0, (realNumberString.length > 10 ? 6 : ((realNumberString.length / 2).toFixed(0) - 1)));
-            var endIndex = Math.max(0, realNumberString.length > 10 ? 4 : ((realNumberString.length / 2).toFixed(0) - 2));
-            var starSize = realNumberString.length - startIndex - endIndex;
-
-            var stars = Array(starSize+1).join("*")
-            var staredCardNumber = realNumberString.substr(0, startIndex) + stars + realNumberString.substr(realNumberString.length - endIndex);
-
-            var finalText = "";
-            for(var j = 0; j < staredCardNumber.length; j +=4){
-              if(j!=0){
-                finalText+=" ";
-              }
-              finalText += staredCardNumber.slice(j, j+4);
-            }
-            this.listRawData[i].value = finalText;
-
-            break;
-          default:
-            break;
+    //Get banks
+    NetworkModule.fetchTHUrl(NetConstants.CFD_API.GET_SUPPORT_WITHDRAW_BANKS,
+      {
+				method: 'GET',
+			},
+      (responseJson)=>{
+        try{
+          this.SupportedBanks = [];
+          for(var i = 0; i < responseJson.length; i++){
+            this.SupportedBanks.push({"value": responseJson[i].cname, "logo": responseJson[i].logo});
+          }
+        }catch(err){
+          console.log("error " + err)
         }
-      }
+      },
+      (result)=>{
 
-    }	else if(this.props.bankCardStatus === "None"){
-	    //Get banks
-	    NetworkModule.fetchTHUrl(NetConstants.CFD_API.GET_SUPPORT_WITHDRAW_BANKS,
-	      {
-					method: 'GET',
-				},
-	      (responseJson)=>{
-	        try{
-	          this.SupportedBanks = [];
-	          for(var i = 0; i < responseJson.length; i++){
-	            this.SupportedBanks.push({"value": responseJson[i].cname, "logo": responseJson[i].logo});
-	          }
-	        }catch(err){
-	          console.log("error " + err)
-	        }
-	      },
-	      (result)=>{
+      });
 
-	      });
+		console.log("get all areas");
+		var responseJson = UserInfoSelectorProvider.getAllAreas();
+		console.log("get all areas responseJson " + JSON.stringify(responseJson));
 
-			console.log("get all areas");
-			var responseJson = UserInfoSelectorProvider.getAllAreas();
-			console.log("get all areas responseJson " + JSON.stringify(responseJson));
-
-			this.provinceAndCities = [];
-			for(var i = 0; i < responseJson.length; i++){
-				if(responseJson[i].ParentId){
-					//City
-					for(var j = 0; j < this.provinceAndCities.length; j++){
-						if(responseJson[i].ParentId === this.provinceAndCities[j].value){
-							this.provinceAndCities[j].children.push({"value": responseJson[i].Id, "displayText": responseJson[i].Name})
-							break;
-						}
+		this.provinceAndCities = [];
+		for(var i = 0; i < responseJson.length; i++){
+			if(responseJson[i].ParentId){
+				//City
+				for(var j = 0; j < this.provinceAndCities.length; j++){
+					if(responseJson[i].ParentId === this.provinceAndCities[j].value){
+						this.provinceAndCities[j].children.push({"value": responseJson[i].Id, "displayText": responseJson[i].Name})
+						break;
 					}
-				}else{
-					//Province
-					this.provinceAndCities.push({"value": responseJson[i].Id, "displayText": responseJson[i].Name, children: []});
 				}
+			}else{
+				//Province
+				this.provinceAndCities.push({"value": responseJson[i].Id, "displayText": responseJson[i].Name, children: []});
 			}
-			console.log("get all areas this.provinceAndCities " + JSON.stringify(this.provinceAndCities));
 		}
+		console.log("get all areas this.provinceAndCities " + JSON.stringify(this.provinceAndCities));
   }
+	//
+	// componentDidMount(){
+	// 	var routes = this.props.navigator.getCurrentRoutes();
+	// 	console.log("componentDidMount routes: " + JSON.stringify(routes))
+	// 	var withdrawParentRouteIndex = routes.length - 2
+	// 	for(; withdrawParentRouteIndex > 0 ; withdrawParentRouteIndex-- ){
+	// 		if(routes[withdrawParentRouteIndex].name == MainPage.DEPOSIT_WITHDRAW_ROUTE){
+	// 			console.log("found " + withdrawParentRouteIndex);
+	// 			break;
+	// 		}else{
+	// 			console.log("not right! " + withdrawParentRouteIndex);
+	// 		}
+	// 	}
+	// 	if(withdrawParentRouteIndex != routes.length - 2){
+	// 		routes.splice(withdrawParentRouteIndex, 1);
+	// 		console.log("new componentDidMount routes: " + JSON.stringify(routes))
+	// 		this.props.navigator.immediatelyResetRouteStack(routes);
+	// 	}
+	// }
 
 	bindCard() {
 		Keyboard.dismiss();
@@ -236,11 +206,11 @@ export default class BindCardPage extends Component {
 		      },
 		      (responseJson)=>{
 		        LogicData.setLiveUserInfo(responseJson);
-	          this.props.navigator.push({
-	            'name': MainPage.WITHDRAW_ROUTE,
+						this.props.navigator.replace({
+							'name': MainPage.WITHDRAW_ROUTE,
 							'popToOutsidePage': this.props.popToOutsidePage,
-	          });
-		      },
+						});
+					},
 		      (result)=>{
 						this.setState({
 		          validateInProgress: false,
@@ -471,11 +441,7 @@ export default class BindCardPage extends Component {
   }
 
   renderChoiceSelectionIcon(){
-    if(this.props.bankCardStatus === "None"){
-      return (<Image style={{width:17.5, height:13.5}} source={require("../../../images/icon_down_arrow.png")} />);
-    }else{
-      return null;
-    }
+    return (<Image style={{width:17.5, height:13.5}} source={require("../../../images/icon_down_arrow.png")} />);
   }
 
   renderChoice(rowData, rowID, type){
@@ -514,7 +480,7 @@ export default class BindCardPage extends Component {
     }
 
     return (
-      <TouchableOpacity activeOpacity={0.9} onPress={onPress} disabled={this.props.bankCardStatus !== "None"}>
+      <TouchableOpacity activeOpacity={0.9} onPress={onPress}>
         <View style={styles.rowWrapper}>
           <Text style={styles.rowTitle}>{rowData.title}</Text>
           <View style={styles.valueContent}>
@@ -534,15 +500,11 @@ export default class BindCardPage extends Component {
   }
 
   renderNameHint(){
-    if(!this.props.bankCardStatus === "None"){
-      return(
-        <Text style={[{color: ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR, fontSize: 12}]}>
-          与身份证一致，不可更改
-        </Text>
-      )
-    }else{
-      return null;
-    }
+    return(
+      <Text style={[{color: ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR, fontSize: 12}]}>
+        与身份证一致，不可更改
+      </Text>
+    )
   }
 
 	renderRowValue(rowData, rowID){
@@ -556,34 +518,21 @@ export default class BindCardPage extends Component {
 			onChangeText = (text)=>this.textInputChange(text, rowID)
 		}
 
-		if(this.props.bankCardStatus === "None"){
-			return (<TextInput style={styles.valueText}
-					editable={true}
-					autoCapitalize="none"
-					autoCorrect={false}
-					defaultValue={displayText}
-					placeholder={rowData.hint}
-					placeholderTextColor={ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR}
-					selectionColor={ColorConstants.INOUT_TEXT_SELECTION_COLOR}
-					underlineColorAndroid='transparent'
-					onChangeText={(text)=>onChangeText(text, rowID)}
-					onEndEditing={(event)=>{onChangeText(event.nativeEvent.text, rowID)}}
-					keyboardType={keyboardType}
-					ellipsizeMode={''}
-					maxLength={rowData.maxLength-1}
-					/>);
-		}else{
-			return (<Text style={styles.valueText}
-					ellipsizeMode="middle"
-					autoCorrect={false}
-					value={displayText}
-					selectionColor={ColorConstants.INOUT_TEXT_SELECTION_COLOR}
-					underlineColorAndroid='transparent'
-					numberOfLines={1}
-					>
-					{displayText}
-				</Text>);
-		}
+		return (<TextInput style={styles.valueText}
+				editable={true}
+				autoCapitalize="none"
+				autoCorrect={false}
+				defaultValue={displayText}
+				placeholder={rowData.hint}
+				placeholderTextColor={ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR}
+				selectionColor={ColorConstants.INOUT_TEXT_SELECTION_COLOR}
+				underlineColorAndroid='transparent'
+				onChangeText={(text)=>onChangeText(text, rowID)}
+				onEndEditing={(event)=>{onChangeText(event.nativeEvent.text, rowID)}}
+				keyboardType={keyboardType}
+				ellipsizeMode={''}
+				maxLength={rowData.maxLength-1}
+				/>);
 	}
 
 	renderRow(rowData, sectionID, rowID) {
@@ -621,30 +570,23 @@ export default class BindCardPage extends Component {
     var nextEnabled = true;
     var buttonText = "";
     var buttonAction;
-		if(this.props.bankCardStatus === "PendingReview"){
-			buttonText = 	"银行卡信息审核中";
-			nextEnabled = false;
-		} else if(this.props.bankCardStatus === "Approved"){
-      buttonText = "解除绑定";
-      buttonAction = ()=>this.readyToUnbindCard();
-    }	else{
-      buttonText = "下一步";
-      buttonAction = ()=>this.bindCard();
-      //OpenAccountUtils.canGoNext(this.listRawData);
-      //console.log("listRawData: " + JSON.stringify(listRawData));
-      for (var i = 0; i < this.listRawData.length; i++) {
-        if (this.listRawData[i].type === "cascadeChoice") {
-          if(this.listRawData[i].Province === null || this.listRawData[i].City === null){
-            nextEnabled = false;
-            break;
-          }
-        }else{
-          if(this.listRawData[i].value === "" || this.listRawData[i].value === null) {
-            nextEnabled = false;
-            break;
-          }
+
+    buttonText = "下一步";
+    buttonAction = ()=>this.bindCard();
+    //OpenAccountUtils.canGoNext(this.listRawData);
+    //console.log("listRawData: " + JSON.stringify(listRawData));
+    for (var i = 0; i < this.listRawData.length; i++) {
+      if (this.listRawData[i].type === "cascadeChoice") {
+        if(this.listRawData[i].Province === null || this.listRawData[i].City === null){
+          nextEnabled = false;
+          break;
         }
-      };
+      }else{
+        if(this.listRawData[i].value === "" || this.listRawData[i].value === null) {
+          nextEnabled = false;
+          break;
+        }
+      }
     }
 
     return (
@@ -671,19 +613,7 @@ export default class BindCardPage extends Component {
 			)
 		}
 
-		var navbarTitle = ""
-		switch (this.props.bankCardStatus) {
-			case "None":
-				navbarTitle = "添加银行卡";
-				break;
-			case "accecpted":
-				navbarTitle = "我的银行卡";
-				break;
-			case "PendingReview":
-				navbarTitle = "出金";
-			default:
-
-		}
+		var navbarTitle = "添加银行卡";
 
 		return (
 			<View style={styles.wrapper}>
@@ -698,7 +628,6 @@ export default class BindCardPage extends Component {
 				</ScrollView>
         {this.renderActionButton()}
 				{pickerModal}
-				{/* {this.renderUnbindCardDialog()} */}
 			</View>
 		);
 	}
@@ -717,54 +646,6 @@ export default class BindCardPage extends Component {
 			<View>
 				{listDataView}
 			</View>);
-	}
-
-	renderUnbindCardDialog(){
-		var liveUserInfo = LogicData.getLiveUserInfo();
-		var cardNumber = liveUserInfo.bankCardNumber;
-		var realNumberString = cardNumber.split(" ").join('');
-		var lastNumber = realNumberString.slice(realNumberString.length - 4);
-
-		if(this.props.bankCardStatus === "Approved"){
-			return(
-				<Modal
-	        transparent={true}
-	        visible={this.state.modalVisible}
-	        animationType={"slide"}
-	        style={{height: height, width: width}}
-	        onRequestClose={() => {this._setModalVisible(false)}}
-	        >
-					<View style={styles.modalContainer}>
-
-						<TouchableOpacity style={{flex: 1}} onPress={() => this._setModalVisible(false)}>
-						</TouchableOpacity>
-
-						<View style={{height:200, width: width, backgroundColor: "#f8f8f8"}}>
-							<Text style={{alignSelf: 'center',
-								fontSize: 18,
-								marginTop: 30}}>
-								{"确定删除尾号为" + lastNumber + "的银行卡？"}
-							</Text>
-							<TouchableOpacity style={{alignItems:'center'}} onPress={()=>this.unbindCard()}>
-								<View style={{borderRadius:5, backgroundColor: ColorConstants.TITLE_BLUE, height: 48, width: 105,
-									alignItems:'center', justifyContent:'center',
-									marginTop: 30}}>
-									<Text style={{
-										color: '#ffffff',
-										textAlign: 'center',
-										alignItems:'center',}}>
-										确认
-									</Text>
-								</View>
-							</TouchableOpacity>
-						</View>
-					</View>
-	      </Modal>
-			);
-		}
-		else{
-			return null;
-		}
 	}
 };
 

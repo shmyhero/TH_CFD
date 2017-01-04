@@ -47,7 +47,8 @@ export default class DepositWithdrawPage extends Component {
 
 		this.state = {
 			balance: '--',
-			dataSource: ds.cloneWithRows(listRawData)
+			dataSource: ds.cloneWithRows(listRawData),
+			hasWithdrawError: false
 		};
   }
 
@@ -83,7 +84,16 @@ export default class DepositWithdrawPage extends Component {
 			},
 		},
 		(response)=>{
+			// response.bankCardStatus="Rejected";
+			// 	response.bankCardRejectReason = "测试一下"
+			// 	response.WithdrawAmount = "100";
+			// 	response.WithdrawTime = "2017.1.1 19:23:12";
+
 			LogicData.setLiveUserInfo(response);
+
+			this.setState({
+				hasWithdrawError: response.bankCardStatus === "Rejected",
+			});
 
 			if(onSuccess){
 				onSuccess();
@@ -122,7 +132,6 @@ export default class DepositWithdrawPage extends Component {
 
 	goToWithdrawPage(liveUserInfo){
 		//liveUserInfo.bankCardStatus = "PendingReview";
-		liveUserInfo.bankCardStatus="Approved";
 
 		if(liveUserInfo == null){
 			alert("网络错误，请重试！");	//What should happen if there's no internet connection?
@@ -142,7 +151,6 @@ export default class DepositWithdrawPage extends Component {
 		}else{
 			this.props.navigator.push({
 				name: MainPage.WITHDRAW_BIND_CARD_ROUTE,
-				bankCardStatus: "None",
 				popToOutsidePage: ()=>{this.refreshData();}
 			});
 		}
@@ -181,6 +189,19 @@ export default class DepositWithdrawPage extends Component {
     );
   }
 
+	renderRowRightPart(rowData){
+		if(rowData.subtype === "withdraw" && this.state.hasWithdrawError){
+			return (
+				<View style={{flexDirection: 'row', alignItems:'center', justifyContent:'center'}}>
+					<Image source={require('../../images/icon_new.png')} style={styles.newEventImage}/>
+					<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
+				</View>
+			)
+		}
+		return (
+		<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />);
+	}
+
 	renderRow(rowData, sectionID, rowID) {
     if(rowData){
 			if(rowData.type == 'header'){
@@ -196,7 +217,7 @@ export default class DepositWithdrawPage extends Component {
             <View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
               <Image source={rowData.image} style={styles.image} />
               <Text style={styles.title}>{rowData.title}</Text>
-              <Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
+							{this.renderRowRightPart(rowData)}
             </View>
           </TouchableOpacity>
   			);
@@ -358,6 +379,11 @@ var styles = StyleSheet.create({
 		alignSelf: 'center',
 		width: 7.5,
 		height: 12.5,
+	},
+	newEventImage:{
+		width: 6,
+		height: 6,
+		marginRight: 8,
 	},
 });
 

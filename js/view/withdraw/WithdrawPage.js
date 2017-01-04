@@ -53,7 +53,7 @@ export default class WithdrawPage extends Component {
 		popToOutsidePage: ()=>{},
   }
 
-  hardwareBackPress = ()=>{return this.onBackButtonPressed();}
+  // hardwareBackPress = ()=>{return this.onBackButtonPressed();}
   listRawData = [];
   ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 });
   constructor(props) {
@@ -364,7 +364,7 @@ export default class WithdrawPage extends Component {
 			<View style={styles.wrapper}>
         <NavBar title="出金"
           showBackButton={true}
-          leftButtonOnClick={()=>this.onBackButtonPressed()}
+          // leftButtonOnClick={()=>this.onBackButtonPressed()}
           navigator={this.props.navigator}
           imageOnRight={require('../../../images/icon_question.png')}
           rightImageOnClick={()=>this.pressHelpButton()}

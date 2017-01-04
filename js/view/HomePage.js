@@ -722,7 +722,7 @@ var HomePage = React.createClass({
 				</TouchableOpacity>
 			)
 
-			if(cardItems!==undefined && cardItems.length > 0){
+			if(cardItems!==undefined && cardItems.length > 0 && LogicData.getAccountState()){
 				return(
 					<View>
 						<View style={[styles.popularityHeaderContainer,{backgroundColor:'white'}]}>

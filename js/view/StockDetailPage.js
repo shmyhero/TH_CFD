@@ -735,10 +735,13 @@ var StockDetailPage = React.createClass({
 		if (!upSelected) upTextColor = LogicData.getAccountState()?'#6781ab':'#568ff1'
 		if (!downSelected) downTextColor = LogicData.getAccountState()?'#6781ab':'#568ff1'
 
+		var isLive = LogicData.getAccountState();
+
 		return (
 			<View style={[styles.rowView, {alignItems:'stretch'}]}>
+
 				<TouchableHighlight
-					underlayColor={upSelected ? '#6da2fc': '#356dce'}
+					underlayColor={upSelected ? (isLive?'#99acce':'#6da2fc'): (isLive?'#415980':'#356dce')}
 					onPress={() => this.state.stockInfo.isOpen && this.buyPress()}
 					style={[styles.tradeButtonView,{borderColor:ColorConstants.COLOR_BORDER},{backgroundColor:LogicData.getAccountState()?'#476189':'#356dce'},(this.state.flashTimes>0 && this.state.flashTimes%2==0)?styles.flashBorder:null , upSelected&&(LogicData.getAccountState()?styles.tradeButtonViewSelectedLive:styles.tradeButtonViewSelected)]}>
 					<View style={styles.tradeButtonContainer}>
@@ -747,10 +750,10 @@ var StockDetailPage = React.createClass({
 						</Text>
 						<Image style={styles.tradeButtonImage} source={upImage}/>
 					</View>
-
 				</TouchableHighlight>
+
 				<TouchableHighlight
-					underlayColor={downSelected ? '#6da2fc': '#356dce'}
+					underlayColor={downSelected ? (isLive?'#99acce':'#6da2fc'): (isLive?'#415980':'#356dce')}
 					onPress={() => this.state.stockInfo.isOpen && this.sellPress()}
 					style={[styles.tradeButtonView,{borderColor:ColorConstants.COLOR_BORDER},{backgroundColor:LogicData.getAccountState()?'#476189':'#356dce'},(this.state.flashTimes>0 && this.state.flashTimes%2==0)?styles.flashBorder:null ,downSelected&&(LogicData.getAccountState()?styles.tradeButtonViewSelectedLive:styles.tradeButtonViewSelected)]}>
 					<View style={styles.tradeButtonContainer}>
@@ -760,6 +763,7 @@ var StockDetailPage = React.createClass({
 						<Image style={styles.tradeButtonImage} source={downImage}/>
 					</View>
 				</TouchableHighlight>
+
 			</View>
 		)
 	},

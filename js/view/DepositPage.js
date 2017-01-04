@@ -308,6 +308,7 @@ export default class DepositPage extends Component{
 
 	renderUnionPay(){
 		var checkBox = this.state.payMethodSelected == 1 ? require('../../images/check_selected.png'):require('../../images/check_unselected.png')
+		var imageArrow = this.state.showBankList ? require('../../images/arrow_up.png'):require('../../images/arrow_down.png')
 		var rowData = listRawData[1]
 		return(
 			<View>
@@ -317,7 +318,10 @@ export default class DepositPage extends Component{
 						<Image source={rowData.image} style={styles.image} />
 						<Text style={styles.title}>银联卡</Text>
 						<TouchableOpacity activeOpacity={0.5} onPress={()=>this.blankSupport()}>
-							<Text style = {styles.blankSupport}>支持的银行</Text>
+							<View style = {{flexDirection:'row',alignItems:'center'}}>
+								<Text style = {styles.blankSupport}>支持的银行</Text>
+								<Image style = {styles.arrow} source={imageArrow}></Image>
+							</View>
 						</TouchableOpacity>
 					</View>
 				</TouchableOpacity>
@@ -344,40 +348,6 @@ export default class DepositPage extends Component{
 			)
 		}
 	}
-
-	// renderRow(rowData, sectionID, rowID) {
-	// 	if(rowData){
-	// 		if(rowData.subtype == 'alipay'){
-	// 			console.log('this.state.payMethodSelected = ' + this.state.payMethodSelected +'rowID = '+rowID);
-	// 			var checkBox = this.state.payMethodSelected == rowID ? require('../../images/check_selected.png'):require('../../images/check_unselected.png')
-	// 			return(
-	// 				<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
-	// 					<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-	// 						<Image source={checkBox} style={styles.checkbox} />
-	// 						<Image source={rowData.image} style={styles.image} />
-	// 						<Text style={styles.title}>{rowData.title}</Text>
-	// 					</View>
-	// 				</TouchableOpacity>
-	// 			);
-	// 		}else if(rowData.subtype == 'unionpay'){
-	// 			console.log('this.state.payMethodSelected = ' + this.state.payMethodSelected +'rowID = '+rowID);
-	// 			var checkBox = this.state.payMethodSelected == rowID ? require('../../images/check_selected.png'):require('../../images/check_unselected.png')
-	// 			return(
-	// 				<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
-	// 					<View style={[styles.rowWrapper2, {height:Math.round(64*heightRate)}]}>
-	// 						<Image source={checkBox} style={styles.checkbox} />
-	// 						<Image source={rowData.image} style={styles.image} />
-	// 						<Text style={styles.title}>{rowData.title}</Text>
-	// 						<Text>支持的银行</Text>
-	// 					</View>
-	// 					{this.renderBankList()}
-	// 				</TouchableOpacity>
-	//
-	// 			);
-	// 		}
-	// 	}
-	// 	return (<View></View>)
-	// }
 
 	renderSeparator(){
 		 	return (
@@ -618,7 +588,10 @@ const styles = StyleSheet.create({
 	blankSupport:{
 		backgroundColor:'white',
 		fontSize:12,
-		padding:15,
+		paddingTop:15,
+		paddingBottom:15,
+		paddingLeft:15,
+		paddingRight:5,
 		color:'#b4b4b4'
 	},
 
@@ -635,6 +608,11 @@ const styles = StyleSheet.create({
 		width:74.7,
 		height:29.7,
 		marginBottom:5,
+	},
+
+	arrow:{
+		width:12,
+		height:12,
 	}
 
 });

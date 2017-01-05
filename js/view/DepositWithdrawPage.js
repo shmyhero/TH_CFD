@@ -172,7 +172,12 @@ export default class DepositWithdrawPage extends Component {
   renderHeader(){
 		var balance = ""
 		if(this.state.balance !== '--'){
-			balance += this.state.balance.toFixed(2);
+			var balanceValue = this.state.balance.toFixed(2);
+			if(balanceValue > 0){
+				balance += balanceValue;
+			}else{
+				balance = "0";
+			}
 		}else{
 			balance = "--";
 		}

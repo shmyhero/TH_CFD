@@ -12,7 +12,6 @@ import {
 	Image,
 	Platform,
 	ScrollView,
-  BackAndroid,
   Keyboard,
 } from 'react-native';
 
@@ -86,13 +85,7 @@ export default class WithdrawPage extends Component {
     }
   }
 
-  componentWillUnmount(){
-		BackAndroid.removeEventListener('hardwareBackPress', this.hardwareBackPress);
-	}
-
   componentDidMount(){
-    BackAndroid.addEventListener('hardwareBackPress', this.hardwareBackPress);
-
     var userData = LogicData.getUserData()
     if(userData.token == undefined){return}
 

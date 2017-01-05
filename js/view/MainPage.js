@@ -757,31 +757,39 @@ var MainPage = React.createClass({
 		};
 		*/
 
+		//Only show the super priority dialog when user isn't under live state.
 
-		StorageModule.loadLastSuperPriorityHintData()
-		.then((lastDateInfo) => {
-			var needShowDialog = false;
-			if(lastDateInfo){
-				//lastDateInfo = `{"lastDate":"09/19/2016","isCheckInDialogShown":false}`
-				var data = JSON.parse(lastDateInfo);
-				var lastDate = data["lastDate"];
-				var userData = LogicData.getUserData();
-	      var isLogin = Object.keys(userData).length != 0;
-				var today = new Date().getDateString();
+			StorageModule.loadLastSuperPriorityHintData()
+			.then((lastDateInfo) => {
+				var needShowDialog = false;
+				if(lastDateInfo){
+					//lastDateInfo = `{"lastDate":"09/19/2016","isCheckInDialogShown":false}`
+					var data = JSON.parse(lastDateInfo);
+					var lastDate = data["lastDate"];
+					var userData = LogicData.getUserData();
+		      var isLogin = Object.keys(userData).length != 0;
+					var today = new Date().getDateString();
 
-				//Dialog will only show up once a day.
-				//If user login today, the dialog won't show until the next day.
-				if(today != lastDate && ((!isLogin) || (isLogin && !data["isCheckInDialogShown"]))){
+					//Dialog will only show up once a day.
+					//If user login today, the dialog won't show until the next day.
+					if(today != lastDate && ((!isLogin) || (isLogin && !data["isCheckInDialogShown"]))){
+						needShowDialog = true;
+
+						if(!data["isCheckInDialogShown"] && LogicData.getAccountState()){
+							//Time for showing super priority dialog but we don't want it to be shown in live mode.
+							needShowDialog = false;
+							this.refs[SUPER_PRIORITY_HINT].updateLastShow();
+						}
+					}
+
+				}else{
 					needShowDialog = true;
 				}
-			}else{
-				needShowDialog = true;
-			}
 
-			if(needShowDialog){
-				this.refs[SUPER_PRIORITY_HINT].show();
-			}
-		})
+				if(needShowDialog){
+					this.refs[SUPER_PRIORITY_HINT].show();
+				}
+			});
 	},
 
 	backAndroidHandler: function(){

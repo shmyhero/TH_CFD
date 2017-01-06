@@ -489,6 +489,7 @@ var StockOpenPositionPage = React.createClass({
 
 		this.setState({
 			selectedSubItem: this.state.selectedSubItem === item ? 0 : item,
+			stockInfo: ds.cloneWithRows(this.state.stockInfoRowData)
 		})
 
 		if (item === 1) {

@@ -418,12 +418,14 @@ var MePage = React.createClass({
 			if(LogicData.getActualLogin()){
 				this.props.navigator.push({
 					name: MainPage.DEPOSIT_WITHDRAW_ROUTE,
+					onPopToOutsidePage: this.reloadMeData,
 				});
 			}else{
 				this.gotoLiveLogin(true,
 					()=>{
 					this.props.navigator.replace({
 						name: MainPage.DEPOSIT_WITHDRAW_ROUTE,
+						onPopToOutsidePage: this.reloadMeData,
 					});
 				});
 			}

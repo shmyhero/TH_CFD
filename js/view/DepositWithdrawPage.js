@@ -1,6 +1,6 @@
 'use strict';
 
-import React, {Component,} from 'react';
+import React, {Component,PropTypes} from 'react';
 import {
 	StyleSheet,
 	View,
@@ -41,6 +41,14 @@ var listRawData = [
 var CALL_NUMBER = '66058771'
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 export default class DepositWithdrawPage extends Component {
+	static propTypes = {
+		onPopToOutsidePage: PropTypes.func,
+  }
+
+  static defaultProps = {
+		onPopToOutsidePage: ()=>{},
+  }
+
 	hardwareBackPress = ()=>{return this.pressBackButton();};
   constructor(props) {
 	  super(props);
@@ -62,6 +70,13 @@ export default class DepositWithdrawPage extends Component {
 	}
 
 	refreshData(){
+		var liveUserInfo = LogicData.getLiveUserInfo();
+		if(liveUserInfo){
+			this.setState({
+				hasWithdrawError: liveUserInfo.bankCardStatus === "Rejected",
+			});
+		}
+
 		NetworkModule.loadUserBalance(true, (response, isCache)=>{
 			if(!isCache){
 				this.setState({
@@ -84,11 +99,12 @@ export default class DepositWithdrawPage extends Component {
 			},
 		},
 		(response)=>{
-			// response.bankCardStatus="Rejected";
-			// 	response.bankCardRejectReason = "测试一下"
-			// 	response.WithdrawAmount = "100";
-			// 	response.WithdrawTime = "2017.1.1 19:23:12";
-
+			if(response.bankCardNumber && response.bankCardNumber != ""){
+				response.bankCardRejectReason = "这是一个错误 "
+				response.bankCardStatus = "Rejected";
+				response.WithdrawAmount = "100";
+				response.WithdrawTime = "2017.1.1 19:23:12";
+			}
 			LogicData.setLiveUserInfo(response);
 
 			this.setState({
@@ -131,17 +147,26 @@ export default class DepositWithdrawPage extends Component {
   }
 
 	goToWithdrawPage(liveUserInfo){
-		//liveUserInfo.bankCardStatus = "PendingReview";
-
 		if(liveUserInfo == null){
 			alert("网络错误，请重试！");	//What should happen if there's no internet connection?
 		} else if(liveUserInfo.bankCardStatus == "PendingReview"
 						||liveUserInfo.bankCardStatus == "Rejected"){
-			this.props.navigator.push({
-				name: MainPage.WITHDRAW_RESULT_ROUTE,
-				bankCardStatus: liveUserInfo.bankCardStatus,
-				popToOutsidePage: ()=>{this.refreshData();}
-			});
+			if(liveUserInfo.bankCardStatus == "PendingReview"
+			&& liveUserInfo.lastWithdrawAt == "" && !liveUserInfo.lastWithdraw){
+				//User's first withdraw request should not be stucked if user's bank card isn't rejected.
+				//If there's no lastWithdrawAt and lastWithdraw, we treat it as the first withdraw request.
+				this.props.navigator.push({
+					name: MainPage.WITHDRAW_ROUTE,
+					bankCardStatus: liveUserInfo.bankCardStatus,
+					popToOutsidePage: ()=>{this.refreshData();}
+				});
+			}else{
+				this.props.navigator.push({
+					name: MainPage.WITHDRAW_RESULT_ROUTE,
+					bankCardStatus: liveUserInfo.bankCardStatus,
+					popToOutsidePage: ()=>{this.refreshData();}
+				});
+			}
 		} else if(liveUserInfo.bankCardNumber && liveUserInfo.bankCardNumber !== ""){
 			this.props.navigator.push({
 				name: MainPage.WITHDRAW_ROUTE,
@@ -157,12 +182,11 @@ export default class DepositWithdrawPage extends Component {
 	}
 
 	pressBackButton() {
-		var routes = this.props.navigator.getCurrentRoutes();
-		if(routes[routes.length - 1].name === MainPage.DEPOSIT_WITHDRAW_ROUTE){
-			MainPage.showTabbar();
-			this.props.navigator.popToTop();
-			return true;
-		}
+		console.log("pressBackButton")
+		console.log("this.props.onPopToOutsidePage " + this.props.onPopToOutsidePage)
+		this.props.onPopToOutsidePage && this.props.onPopToOutsidePage();
+		this.props.navigator.pop();
+		return true;
 	}
 
   helpPressed() {

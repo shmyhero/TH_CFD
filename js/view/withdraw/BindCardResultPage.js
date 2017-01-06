@@ -28,6 +28,7 @@ var NavBar = require('../NavBar')
 var UserInfoSelectorProvider = require('./UserInfoSelectorProvider')
 var ErrorBar = require('../component/ErrorBar')
 var SentIntent = require('../component/nativeIntent/SendIntent')
+var dateFormat = require('dateformat');
 
 var NetworkModule = require('../../module/NetworkModule');
 var NetConstants = require('../../NetConstants');
@@ -141,7 +142,10 @@ export default class BindCardResultPage extends Component {
 					break;
 				case "lastWithdrawAt":
 					if(this.props.bankCardStatus !== "Approved"){
-						this.listRawData[i].value = liveUserInfo.lastWithdrawAt;
+						var dt = new Date(liveUserInfo.lastWithdrawAt);
+			      var month = dt.getMonth()+1;
+			      var timeString = dateFormat(dt, "yyyy.mm.dd HH:MM:ss");
+						this.listRawData[i].value = timeString;
 					}
 					break;
         default:
@@ -177,16 +181,10 @@ export default class BindCardResultPage extends Component {
 			validateInProgress: true,
 		})
 
-		//this.props.navigator.push();
-
 		this.props.navigator.replace({
 			name: MainPage.WITHDRAW_BIND_CARD_ROUTE,
-			popToOutsidePage: ()=>{this.refreshData();}
-		})
-
-		//this.props.navigator.immediatelyResetRouteStack(routes);
-
-
+			popToOutsidePage: this.props.popToOutsidePage,
+		});
 	}
 
 	readyToUnbindCard(){

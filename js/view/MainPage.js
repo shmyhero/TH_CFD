@@ -555,21 +555,24 @@ var MainPage = React.createClass({
 		}else if (route.name === DEPOSIT_WITHDRAW_ROUTE){
 			hideTabbar();
 			return (
-				<DepositWithdrawPage navigator={navigationOperations} routeMapper={this.RouteMapper}/>
+				<DepositWithdrawPage navigator={navigationOperations} routeMapper={this.RouteMapper}
+					onPopToOutsidePage={route.onPopToOutsidePage}/>
 			);
 		}else if (route.name === WITHDRAW_BIND_CARD_ROUTE){
 			hideTabbar();
 			return (
 				<BindCardPage navigator={navigationOperations}
 					routeMapper={this.RouteMapper}
-					bankCardStatus={route.bankCardStatus}/>
+					bankCardStatus={route.bankCardStatus}
+					popToOutsidePage={route.popToOutsidePage}/>
 			)
 		}else if (route.name === WITHDRAW_RESULT_ROUTE){
 			hideTabbar();
 			return (
 				<BindCardResultPage navigator={navigationOperations}
 					routeMapper={this.RouteMapper}
-					bankCardStatus={route.bankCardStatus}/>
+					bankCardStatus={route.bankCardStatus}
+					popToOutsidePage={route.popToOutsidePage}/>
 			)
 		}else if (route.name === WITHDRAW_ROUTE){
 			hideTabbar();

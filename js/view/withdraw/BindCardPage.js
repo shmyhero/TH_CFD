@@ -267,13 +267,7 @@ export default class BindCardPage extends Component {
       }
       finalText += placeholder.slice(i, i+4);
     }
-    console.log("finalText: " + finalText + ", finally!");
-    console.log("this.listRawData[rowID].value: " + this.listRawData[rowID].value);
-    console.log("text: " + text);
-
-		console.log("finalText.length " + finalText.length + " this.listRawData[rowID].maxLength " + this.listRawData[rowID].maxLength);
-		console.log("finalText.length < this.listRawData[rowID].maxLength " + finalText.length < this.listRawData[rowID].maxLength)
-		if(finalText.length < this.listRawData[rowID].maxLength){
+    if(finalText.length < this.listRawData[rowID].maxLength){
 	    if(text !== finalText || this.listRawData[rowID].value !== finalText){
 	      this.listRawData[rowID].value = finalText;
 	      console.log("updateList");

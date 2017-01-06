@@ -99,12 +99,12 @@ export default class DepositWithdrawPage extends Component {
 			},
 		},
 		(response)=>{
-			if(response.bankCardNumber && response.bankCardNumber != ""){
-				response.bankCardRejectReason = "这是一个错误 "
-				response.bankCardStatus = "Rejected";
-				response.WithdrawAmount = "100";
-				response.WithdrawTime = "2017.1.1 19:23:12";
-			}
+			// if(response.bankCardNumber && response.bankCardNumber != ""){
+			// 	response.bankCardRejectReason = "这是一个错误 "
+			// 	response.bankCardStatus = "Rejected";
+			// 	response.WithdrawAmount = "100";
+			// 	response.WithdrawTime = "2017.1.1 19:23:12";
+			// }
 			LogicData.setLiveUserInfo(response);
 
 			this.setState({

@@ -14,6 +14,7 @@ import RNViewShot from "react-native-view-shot";
 var QRCode = require('@remobile/react-native-qrcode-local-image');
 var WebViewPage = require('./WebViewPage');
 var ColorConstants = require('../ColorConstants')
+var MainPage = require('./MainPage')
 
 export default class PaymentPage extends Component {
   static propTypes = {
@@ -110,7 +111,20 @@ export default class PaymentPage extends Component {
         showPaymentButton: true,
       })
     }else if(content.url && content.url.includes("test_form/finish")){
-      this.props.navigator.popToTop();
+      var routes = this.props.navigator.getCurrentRoutes();
+			var popToRoute = null;
+			for(var i = routes.length - 2; i >= 0 ;i --){
+				if(routes[i].name === MainPage.DEPOSIT_WITHDRAW_ROUTE){
+					popToRoute = routes[i];
+					break;
+				}
+			}
+
+			if(popToRoute){
+				this.props.navigator.popToRoute(popToRoute);
+			}else{
+				this.props.navigator.pop();
+			}
     }else{
       this.setState({
         showPaymentButton: false,

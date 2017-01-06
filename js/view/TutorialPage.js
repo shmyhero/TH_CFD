@@ -33,7 +33,7 @@ var TutorialPage = React.createClass({
 	getInitialState: function() {
 		return {
 			tutorialType: 'trade',
-			visible: false,
+			visible: true,
 			page: 0,
 		}
 	},
@@ -98,10 +98,10 @@ var TutorialPage = React.createClass({
 	},
 
 	render: function() {
-		if (!this.state.visible) {
-			this.checkShow()
-			return null
-		}
+		// if (!this.state.visible) {
+		// 	this.checkShow()
+		// 	return null
+		// }
 		// var imageSource = pages[this.state.tutorialType][this.state.page]
 		var imageSource = toturial;
 		if(gifIamgeTimer !== null) {
@@ -115,9 +115,9 @@ var TutorialPage = React.createClass({
 		);
 
 		return (
-			// <TouchableOpacity style={styles.container} onPress={this.gotoNextPage}>
+			<View style={styles.container}>
 				<Image source={imageSource} style={{width:width, height:height, resizeMode:'stretch'}}/>
-			// </TouchableOpacity>
+			</View>
 		)
 	},
 });

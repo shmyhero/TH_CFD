@@ -70,6 +70,7 @@ export default class DepositWithdrawPage extends Component {
 	}
 
 	refreshData(){
+		console.log("refreshData!!!");
 		var liveUserInfo = LogicData.getLiveUserInfo();
 		if(liveUserInfo){
 			this.setState({
@@ -125,6 +126,7 @@ export default class DepositWithdrawPage extends Component {
       case 'deposit':
 				this.props.navigator.push({
 					name: MainPage.DEPOSIT_PAGE,
+					popToOutsidePage: ()=>{this.refreshData();}
 				});
         return;
       case 'withdraw':

@@ -22,13 +22,15 @@ export default class PaymentPage extends Component {
     title: PropTypes.string,
     paymentDestination: PropTypes.string,
     onPopToRoute: PropTypes.func,
+    popToOutsidePage: PropTypes.func,
   }
 
   static defaultProps = {
     url: "www.baidu.com",
     title: "支付",
     paymentDestination: "alipay", //unionpay, wechat,
-    onPopToRoute: ()=>{}
+    onPopToRoute: ()=>{},
+    popToOutsidePage: ()=>{},
   }
 
   constructor(props) {
@@ -121,11 +123,13 @@ export default class PaymentPage extends Component {
 			}
 
 			if(popToRoute){
+        this.props.popToOutsidePage();
 				this.props.navigator.popToRoute(popToRoute);
 			}else{
 				this.props.navigator.pop();
 			}
-    }else{
+    }else{ 
+
       this.setState({
         showPaymentButton: false,
       })

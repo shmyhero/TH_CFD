@@ -493,7 +493,7 @@ var MainPage = React.createClass({
 		else if (route.name === DEPOSIT_PAGE) {
 			hideTabbar()
 			return (
-				<DepositPage navigator={navigationOperations} showTabbar={showTabbar}/>
+				<DepositPage navigator={navigationOperations} popToOutsidePage={route.popToOutsidePage} showTabbar={showTabbar}/>
 			)
 		}
 		else if (route.name === EDIT_OWN_STOCKS_ROUTE) {
@@ -547,6 +547,7 @@ var MainPage = React.createClass({
 					<PaymentPage navigator={navigationOperations} routeMapper={this.RouteMapper}
 						onPopToRoute={route.onPopToRoute}
 						url={route.url}
+						popToOutsidePage={route.popToOutsidePage}
 						onNavigationStateChange={route.onNavigationStateChange}
 						showTabbar={showTabbar}
 						title={route.title}

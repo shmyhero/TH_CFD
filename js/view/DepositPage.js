@@ -4,7 +4,7 @@
 存取资金->入金
 */
 
-import React,{Component} from 'react'
+import React,{Component,PropTypes} from 'react'
 import {StyleSheet,Text,TextInput,Keyboard,Image,View,Dimensions,ListView,Alert,TouchableOpacity} from 'react-native'
 
 
@@ -53,6 +53,14 @@ var _protocolSelected = true;
 var last_pressed_confirm = new Date().getTime();
 
 export default class DepositPage extends Component{
+
+	static propTypes = {
+		popToOutsidePage: PropTypes.func,
+	}
+
+	static defaultProps = {
+		popToOutsidePage: ()=>{},
+	}
 
 	constructor(props){
 		super(props);
@@ -377,6 +385,7 @@ export default class DepositPage extends Component{
 					 this.props.navigator.push({
 			 			name: MainPage.PAYMENT_PAGE,
 			 			url: url,
+						popToOutsidePage: this.props.popToOutsidePage,
 			 			title: responseJson,
 			 		});
 				})

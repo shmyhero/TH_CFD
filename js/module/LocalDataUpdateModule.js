@@ -46,11 +46,14 @@ export function removeUserData(){
   LogicData.removeUserData();
   StorageModule.removeMeData();
   LogicData.removeMeData();
-  StorageModule.removeOwnStocksData();
-  LogicData.removeOwnStocksData();
+
+  StorageModule.removeOwnStocksData().then(()=>{
+    LogicData.removeOwnStocksData();
+    LogicData.setAccountState(false);
+  });
+
   LogicData.removeBalanceData();
 
-  LogicData.setAccountState(false);
   LogicData.removeLiveUserInfo();
 
   OpenAccountRoutes.clearAllInputData();

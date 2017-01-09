@@ -213,19 +213,19 @@ var MeConfigPage = React.createClass({
 	},
 
 	logoutAccountActualNative(){
-		this.props.navigator.pop();
-		if(this.props.onPopBack){
-		 this.props.onPopBack();
-		}
 		LogicData.setActualLogin(false);
+		// if(this.props.onPopBack){
+		//  this.props.onPopBack();
+		// }
+		this.props.navigator.pop();
 	},
 
 	logout2Simulator: function(){
-		this.props.navigator.pop();
-		if(this.props.onPopBack){
-			this.props.onPopBack();
-		}
 		LogicData.setAccountState(false)
+		this.props.navigator.pop();
+		// if(this.props.onPopBack){
+		// 	this.props.onPopBack();
+		// }
 		MainPage.refreshMainPage()
 	},
 
@@ -233,10 +233,9 @@ var MeConfigPage = React.createClass({
 		LocalDataUpdateModule.removeUserData();
 
 		this.props.navigator.pop();
-		if(this.props.onPopBack){
-			this.props.onPopBack();
-		}
-		LogicData.setAccountState(false)
+		// if(this.props.onPopBack){
+		// 	this.props.onPopBack();
+		// }
 	},
 
 	sendToSwitchAccountDemo:function(){

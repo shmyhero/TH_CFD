@@ -45,7 +45,6 @@ var urlKeysLive = [
 var didFocusSubscription = null;
 var didTabSelectSubscription = null;
 var _currentSelectedTab = 0;
-
 var StockListViewPager = React.createClass({
 
 	getInitialState: function() {
@@ -95,9 +94,9 @@ var StockListViewPager = React.createClass({
 	},
 
 	onTabChanged: function() {
+		LogicData.setTabIndex(MainPage.STOCK_LIST_PAGE_TAB_INDEX);
 		this.setState({currentSelectedTab: _currentSelectedTab});
 		this.refs['page' + _currentSelectedTab].tabPressed()
-		LogicData.setTabIndex(1);
 		WebSocketModule.registerCallbacks((stockInfo) => {
 			this.refs['page' + _currentSelectedTab] && this.refs['page' + _currentSelectedTab].handleStockInfo(stockInfo)
 		})

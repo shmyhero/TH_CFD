@@ -167,6 +167,11 @@ var SHARE_PAGE = 'SharePage'
 var REGISTER_SUCCESS_DIALOG = 'RegisterSuccessDialog'
 var SUPER_PRIORITY_HINT = 'SuperPriorityHint'
 var isTabbarShown = true
+
+export var HOME_PAGE_TAB_INDEX = 0;
+export var STOCK_LIST_PAGE_TAB_INDEX = 1;
+export var STOCK_EXCHANGE_TAB_INDEX = 2;
+export var ME_PAGE_TAB_INDEX = 3;
 var MainPage = React.createClass({
 	getInitialState: function() {
 		return {

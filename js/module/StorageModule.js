@@ -8,6 +8,7 @@ import {
 var USER_DATA_STORAGE_KEY = '@TH_CFD:userData';
 var ME_DATA_STORAGE_KEY = '@TH_CFD:meData';
 var OWN_STOCKS_DATA_STORAGE_KEY = '@TH_CFD:ownStocksData';
+var OWN_STOCKS_DATA_STORAGE_LIVE_KEY = '@TH_CFD:ownStocksDataLive';
 var SEARCH_HISTORY_KEY = '@TH_CFD:searchHistory';
 var LIVE_SEARCH_HISTORY_KEY = '@TH_CFD:searchHistoryLive';
 var BANNER_STORAGE_KEY = '@TH_CFD:bannerData';
@@ -86,9 +87,9 @@ export async function removeMeData() {
 	}
 }
 
-export async function loadOwnStocksData() {
+export async function loadOwnStocksData(isLive) {
 	try {
-		var value = await AsyncStorage.getItem(OWN_STOCKS_DATA_STORAGE_KEY);
+		var value = await AsyncStorage.getItem(isLive ? OWN_STOCKS_DATA_STORAGE_LIVE_KEY : OWN_STOCKS_DATA_STORAGE_KEY);
 		console.log('load stocks:'+value)
 		return value;
 	} catch (error) {
@@ -96,17 +97,19 @@ export async function loadOwnStocksData() {
 	}
 }
 
-export async function setOwnStocksData(selectedValue) {
+export async function setOwnStocksData(selectedValue, isLive) {
 	try {
-		await AsyncStorage.setItem(OWN_STOCKS_DATA_STORAGE_KEY, selectedValue);
+		await AsyncStorage.setItem(isLive ? OWN_STOCKS_DATA_STORAGE_LIVE_KEY : OWN_STOCKS_DATA_STORAGE_KEY, selectedValue);
 		console.log('save stocks:'+selectedValue)
 	} catch (error) {
 		console.log('AsyncStorage error: ' + error.message);
 	}
 }
 
+//Remove all stocks data
 export async function removeOwnStocksData() {
 	try {
+    await AsyncStorage.removeItem(OWN_STOCKS_DATA_STORAGE_LIVE_KEY);
 		await AsyncStorage.removeItem(OWN_STOCKS_DATA_STORAGE_KEY);
 	} catch (error) {
 		console.log('AsyncStorage error: ' + error.message);

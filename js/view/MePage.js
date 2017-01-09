@@ -146,97 +146,99 @@ var MePage = React.createClass({
 	},
 
 	onTabChanged: function(){
-		LogicData.setTabIndex(3);
+		LogicData.setTabIndex(MainPage.ME_PAGE_TAB_INDEX);
 		WebSocketModule.registerInterestedStocks(null);
 		this.reloadMeData();
 	},
 
 	reloadMeData: function(){
-		//Check if the user has logged in and the config row need to be shown.
-		if(this.refs[LIST_SCROLL_VIEW]){
-			this.refs[LIST_SCROLL_VIEW].scrollTo({x:0, y:0, animated:false});
-		}
-
-		var userData = LogicData.getUserData();
-		var meData = LogicData.getMeData();
-		var notLogin = Object.keys(meData).length === 0
-		if (notLogin) {
-			this.setState({
-				loggedIn: false,
-			})
-		}else{
-			if(meData.picUrl !== undefined){
-				NativeDataModule.passRawDataToNative('myLogo', meData.picUrl)
-			}
-			this.setState({
-				loggedIn: true,
-			})
-
-			if(meData.liveAccStatus == 0 || meData.liveAccStatus == 3){
-				OpenAccountRoutes.getLatestInputStep()
-				.then(step=>{
-					console.log("getLatestInputStep " + step)
-					this.setState(
-						{
-							lastStep: step,
-						}
-					)
-				});
+		if(LogicData.getTabIndex() == MainPage.ME_PAGE_TAB_INDEX){
+			//Check if the user has logged in and the config row need to be shown.
+			if(this.refs[LIST_SCROLL_VIEW]){
+				this.refs[LIST_SCROLL_VIEW].scrollTo({x:0, y:0, animated:false});
 			}
 
-			var url = NetConstants.CFD_API.GET_UNREAD_MESSAGE;
-	    if(LogicData.getAccountState()){
-				url = NetConstants.CFD_API.GET_UNREAD_MESSAGE_LIVE
-				console.log('live', url );
-			}
-
-			NetworkModule.fetchTHUrl(
-				url,
-				{
-					method: 'GET',
-					headers: {
-						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-					},
-					//cache: 'offline',
-				},
-				function(response) {
-					this.setState(
-						{
-							hasUnreadMessage: response > 0,
-						}
-					)
-				}.bind(this),
-				(result) => {
-					console.log(result.errorMessage)
+			var userData = LogicData.getUserData();
+			var meData = LogicData.getMeData();
+			var notLogin = Object.keys(meData).length === 0
+			if (notLogin) {
+				this.setState({
+					loggedIn: false,
+				})
+			}else{
+				if(meData.picUrl !== undefined){
+					NativeDataModule.passRawDataToNative('myLogo', meData.picUrl)
 				}
-			);
+				this.setState({
+					loggedIn: true,
+				})
 
-			NetworkModule.fetchTHUrl(
-				NetConstants.CFD_API.GET_USER_INFO_API,
-				{
-					method: 'GET',
-					headers: {
-						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				if(meData.liveAccStatus == 0 || meData.liveAccStatus == 3){
+					OpenAccountRoutes.getLatestInputStep()
+					.then(step=>{
+						console.log("getLatestInputStep " + step)
+						this.setState(
+							{
+								lastStep: step,
+							}
+						)
+					});
+				}
+
+				var url = NetConstants.CFD_API.GET_UNREAD_MESSAGE;
+		    if(LogicData.getAccountState()){
+					url = NetConstants.CFD_API.GET_UNREAD_MESSAGE_LIVE
+					console.log('live', url );
+				}
+
+				NetworkModule.fetchTHUrl(
+					url,
+					{
+						method: 'GET',
+						headers: {
+							'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						},
+						//cache: 'offline',
 					},
-					cache: 'offline',
-				},
-				function(responseJson) {
-					StorageModule.setMeData(JSON.stringify(responseJson))
-					LogicData.setMeData(responseJson);
-					NativeDataModule.passRawDataToNative('userName', responseJson.liveUsername)
-					NativeDataModule.passRawDataToNative('userEmail', responseJson.liveEmail)
-					if (Platform.OS === 'ios') {
-						this.setCookie();
+					function(response) {
+						this.setState(
+							{
+								hasUnreadMessage: response > 0,
+							}
+						)
+					}.bind(this),
+					(result) => {
+						console.log(result.errorMessage)
 					}
-					console.log("about cookie " + "userName = " + responseJson.liveUsername + " && userEmail = " + responseJson.liveEmail);
-				}.bind(this)
-			)
-		}
+				);
 
-		var datasource = ds.cloneWithRows(listRawData);
-		this.setState({
-			dataSource: datasource,
-		})
+				NetworkModule.fetchTHUrl(
+					NetConstants.CFD_API.GET_USER_INFO_API,
+					{
+						method: 'GET',
+						headers: {
+							'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						},
+						cache: 'offline',
+					},
+					function(responseJson) {
+						StorageModule.setMeData(JSON.stringify(responseJson))
+						LogicData.setMeData(responseJson);
+						NativeDataModule.passRawDataToNative('userName', responseJson.liveUsername)
+						NativeDataModule.passRawDataToNative('userEmail', responseJson.liveEmail)
+						if (Platform.OS === 'ios') {
+							this.setCookie();
+						}
+						console.log("about cookie " + "userName = " + responseJson.liveUsername + " && userEmail = " + responseJson.liveEmail);
+					}.bind(this)
+				)
+			}
+
+			var datasource = ds.cloneWithRows(listRawData);
+			this.setState({
+				dataSource: datasource,
+			})
+		}
 	},
 
 	gotoOpenAccount: function() {

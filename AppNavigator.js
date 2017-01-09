@@ -113,8 +113,6 @@ var AppNavigator = React.createClass({
 		UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 
 		//Load the server setting should always be the first step.
-		console.log("loadServerSettings");
-
 		StorageModule.loadAccountState().then((value) => {
 			if (value !== null) {
 				LogicData.setAccountState(JSON.parse(value), true)
@@ -167,7 +165,7 @@ var AppNavigator = React.createClass({
 			})
 			.done()
 
-		StorageModule.loadOwnStocksData().then((value) => {
+		StorageModule.loadOwnStocksData(LogicData.getAccountState()).then((value) => {
 				if (value !== null) {
 					LogicData.setOwnStocksData(JSON.parse(value))
 				}

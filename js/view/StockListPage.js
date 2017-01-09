@@ -68,6 +68,10 @@ var StockListPage = React.createClass({
 		};
 	},
 
+	resetContent: function(){
+		this.setState(this.getInitialState());
+	},
+
 	getShownStocks: function() {
 		var result = ''
 		for (var i = 0; i < this.state.rowStockInfoData.length; i++) {
@@ -116,17 +120,22 @@ var StockListPage = React.createClass({
 	},
 
 	refreshData: function(forceRefetch) {
-		console.log("stocklistpage refreshData force" + forceRefetch)
-		//If the last shown list is read from cache, we also need to refresh the data by refetching the api
-		if (this.props.isOwnStockPage) {
-			if(forceRefetch || this.isDisplayingCache){
-				this.fetchOwnData();
-			}else{
-				this.refreshOwnData();
+		if(LogicData.getTabIndex() == MainPage.STOCK_LIST_PAGE_TAB_INDEX){
+			var routes = this.props.navigator.getCurrentRoutes();
+			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_LIST_VIEW_PAGER_ROUTE){
+				//If the last shown list is read from cache, we also need to refresh the data by refetching the api
+				if (this.props.isOwnStockPage) {
+					if(forceRefetch || this.isDisplayingCache){
+						//Always read server data.
+						this.fetchOwnData();
+					}else{
+						this.refreshOwnData();
+					}
+				}
+				else {
+					this.reFetchStockData(forceRefetch || this.isDisplayingCache)
+				}
 			}
-		}
-		else {
-			this.reFetchStockData(forceRefetch || this.isDisplayingCache)
 		}
 	},
 
@@ -222,7 +231,7 @@ var StockListPage = React.createClass({
 
 	fetchOwnData: function() {
 		console.log("stocklistpage fetchOwnData")
-		StorageModule.loadOwnStocksData().then((value) => {
+		StorageModule.loadOwnStocksData(LogicData.getAccountState()).then((value) => {
 			console.log("stocklistpage StorageModule.loadOwnStocksData " + JSON.stringify(value));
 			if (value !== null) {
 				LogicData.setOwnStocksData(JSON.parse(value))
@@ -258,7 +267,6 @@ var StockListPage = React.createClass({
 					{
 						method: 'GET',
 						//cache: 'offline',
-						//timeout: 1000,
 					},
 					(responseJson, isCache) => {
 						console.log("api responseJson "+ JSON.stringify(responseJson))
@@ -329,11 +337,11 @@ var StockListPage = React.createClass({
 			var userData = LogicData.getUserData()
 			if(Object.keys(userData).length !== 0){
 				NetworkModule.syncOwnStocks(userData)
-				.then(()=>this.refreshData(true));
+					.then(()=>this.refreshData(true));
 			}
-		} else{
-			this.refreshData(true);
 		}
+
+		this.resetContent();
 	},
 
 	onConnectionStateChanged: function(){

@@ -13,6 +13,7 @@ var meData = {};
 var wechatAuthData = {};
 var wechatUserData = {};
 var ownStocksData = [];
+var ownStocksDataLive = [];
 var searchStockHistory = null;
 var balanceData = null;
 var balanceDataLive = null;
@@ -49,8 +50,12 @@ var LogicData = {
 			accountState = state;
 
 			if(!isStartUp){
-				StorageModule.removeOwnStocksData();
-				this.removeOwnStocksData();
+				StorageModule.loadOwnStocksData(accountState).then((value) => {
+					if (value !== null) {
+						this.setOwnStocksData(JSON.parse(value))
+					}
+				})
+				.done()
 			}
 			searchStockHistory = null;
 
@@ -108,41 +113,51 @@ var LogicData = {
   },
 
   setOwnStocksData: function(stocksData) {
-    ownStocksData = stocksData
-		StorageModule.setOwnStocksData(JSON.stringify(stocksData))
+		if(accountState){
+	    ownStocksDataLive = stocksData
+		}else{
+			ownStocksData = stocksData
+		}
+		StorageModule.setOwnStocksData(JSON.stringify(stocksData), accountState)
   },
 
   getOwnStocksData: function() {
-    return ownStocksData
+    return accountState ? ownStocksDataLive : ownStocksData;
   },
 
 	removeOwnStocksData: function(){
+		ownStocksDataLive = [];
 		ownStocksData = [];
 	},
 
   addStockToOwn: function(stockData) {
-  	var findResult = ownStocksData.find((stock)=>{return stock.id === stockData.id})
+		var stockDataList = accountState ? ownStocksDataLive : ownStocksData;
+  	var findResult = stockDataList.find((stock)=>{return stock.id === stockData.id})
   	if (findResult === undefined) {
-  		ownStocksData.unshift(stockData)
-			StorageModule.setOwnStocksData(JSON.stringify(ownStocksData))
+	  	stockDataList.unshift(stockData)
+			StorageModule.setOwnStocksData(JSON.stringify(stockDataList), accountState)
   	}
   	// if exist, not update.
-  	return ownStocksData
+  	return stockDataList
   },
 
   removeStockFromOwn: function(stockData) {
-  	var index = ownStocksData.findIndex((stock)=>{return stock.id === stockData.id})
+		var stockDataList = accountState ? ownStocksDataLive : ownStocksData;
+		console.log("removeStockFromOwn" + JSON.stringify(stockDataList))
+  	var index = stockDataList.findIndex((stock)=>{return stock.id === stockData.id})
   	if (index != -1) {
-  		ownStocksData.splice(index, 1)
-			StorageModule.setOwnStocksData(JSON.stringify(ownStocksData))
+			stockDataList.splice(index, 1);
+			StorageModule.setOwnStocksData(JSON.stringify(stockDataList), accountState)
   	}
-  	return ownStocksData
+		console.log("removeStockFromOwn" + JSON.stringify(stockDataList))
+  	return stockDataList;
   },
 
 	getStockFromOwnStockData: function(stockId){
-		var index = ownStocksData.findIndex((stock)=>{return stock.id === stockId})
+		var stockDataList = accountState ? ownStocksDataLive : ownStocksData;
+		var index = stockDataList.findIndex((stock)=>{return stock.id === stockId})
   	if (index != -1) {
-  		 return ownStocksData[index]
+  		 return stockDataList[index]
   	}else{
 			 return undefined
 		}

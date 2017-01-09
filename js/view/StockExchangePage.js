@@ -34,7 +34,6 @@ var didAccountChangeSubscription = null
 //var didAccountLoginOutSideSubscription = null
 var didLoginSubscription = null;
 var didLogoutSubscription = null;
-
 var StockExchangePage = React.createClass({
 
 	getInitialState: function() {
@@ -61,10 +60,15 @@ var StockExchangePage = React.createClass({
 	},
 
 	clearViews:function(){
-		this.reloadTabData();
-		// if(this.refs['page2'])this.refs['page2'].clearViews();
-		// if(this.refs['page1'])this.refs['page1'].clearViews();
-		// if(this.refs['page0'])this.refs['page0'].clearViews();
+		if(LogicData.getTabIndex() == MainPage.STOCK_EXCHANGE_TAB_INDEX){
+			var routes = this.props.navigator.getCurrentRoutes();
+			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE){
+				this.reloadTabData();
+				// if(this.refs['page2'])this.refs['page2'].clearViews();
+				// if(this.refs['page1'])this.refs['page1'].clearViews();
+				// if(this.refs['page0'])this.refs['page0'].clearViews();
+			}
+		}
 	},
 
 	onPageSelected: function(index: number) {
@@ -83,7 +87,7 @@ var StockExchangePage = React.createClass({
 	},
 
 	onTabChanged: function(){
-	  LogicData.setTabIndex(2);
+	  LogicData.setTabIndex(MainPage.STOCK_EXCHANGE_TAB_INDEX);
 		this.reloadTabData();
 	},
 

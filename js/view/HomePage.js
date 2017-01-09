@@ -63,6 +63,7 @@ var NO_MAGIC = false
 var didTabSelectSubscription = null
 var didFocusSubscription = null
 var networkConnectionChangedSubscription = null
+var accountStateChangedSubscription = null
 var lastForceloopTime = 0
 const CARDS_LIST = "cardList"
 
@@ -95,28 +96,39 @@ var HomePage = React.createClass({
 	},
 
 	componentWillMount: function() {
-		StorageModule.loadBanners()
-			.then((value) => {
-				if (value !== null) {
-					this.downloadBannerImages(JSON.parse(value))
-					.then(()=>{
-						//Make sure the downloading synchronized.
-						this.reloadBanner();
-					})
-				}else{
-					this.reloadBanner();
-				}
-			})
-			.done();
-
+		// StorageModule.loadBanners()
+		// 	.then((value) => {
+		// 		if (value !== null) {
+		// 			this.downloadBannerImages(JSON.parse(value))
+		// 			.then(()=>{
+		// 				//Make sure the downloading synchronized.
+		// 				this.reloadBanner();
+		// 			})
+		// 		}else{
+		// 			this.reloadBanner();
+		// 		}
+		// 	})
+		// 	.done();
+		this.reloadBanner();
 		this.loadHomeData();
 		this.loadCards();
 	},
 
+	resetPage: function(){
+		this.setState(this.getInitialState());
+	},
+
 	reloadPage: function(){
-		this.reloadBanner();
-		this.loadHomeData();
-		this.loadCards();
+		console.log("reloadPage " + LogicData.getTabIndex());
+		console.log("MainPage.HOME_PAGE_TAB_INDEX" +  MainPage.HOME_PAGE_TAB_INDEX)
+		if(LogicData.getTabIndex() == MainPage.HOME_PAGE_TAB_INDEX){
+			var routes = this.props.navigator.getCurrentRoutes();
+			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.HOME_PAGE_ROUTE){
+				this.reloadBanner();
+				this.loadHomeData();
+				this.loadCards();
+			}
+		}
 	},
 
 	reloadBanner: function() {
@@ -132,7 +144,7 @@ var HomePage = React.createClass({
 			(responseJson) => {
 				console.log(JSON.stringify(responseJson))
 				this.downloadBannerImages(responseJson)
-				StorageModule.setBanners(JSON.stringify(responseJson))
+				//StorageModule.setBanners(JSON.stringify(responseJson))
 			}
 		);
 
@@ -241,6 +253,7 @@ var HomePage = React.createClass({
 		networkConnectionChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.NETWORK_CONNECTION_CHANGED, () => {
 			this.onConnectionStateChanged();
 		});
+		accountStateChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, this.resetPage);
 
 		this.onConnectionStateChanged();
 	},
@@ -250,7 +263,7 @@ var HomePage = React.createClass({
 		this.setState({
 			connected: isConnected
 		})
-		if(isConnected && LogicData.getTabIndex() == 0){
+		if(isConnected && LogicData.getTabIndex() == MainPage.HOME_PAGE_TAB_INDEX){
 			var routes = this.props.navigator.getCurrentRoutes();
 			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.HOME_PAGE_ROUTE){
 				this.reloadPage();
@@ -262,11 +275,12 @@ var HomePage = React.createClass({
 		didTabSelectSubscription && didTabSelectSubscription.remove();
 		didFocusSubscription && didFocusSubscription.remove();
 		networkConnectionChangedSubscription && networkConnectionChangedSubscription.remove();
+		accountStateChangedSubscription && accountStateChangedSubscription.remove();
 	},
 
 	onTabChanged: function(){
+		LogicData.setTabIndex(MainPage.HOME_PAGE_TAB_INDEX);
 		this.reloadPage();
-		LogicData.setTabIndex(0);
 		this.forceloopSwipers();
 	},
 

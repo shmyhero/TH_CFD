@@ -432,9 +432,20 @@ var MePage = React.createClass({
 				});
 			}
 		}else if(rowData.subtype === 'income'){
-			this.props.navigator.push({
-				name: MainPage.MY_INCOME_ROUTE,
-			})
+			var userData = LogicData.getUserData()
+			var notLogin = Object.keys(userData).length === 0
+			if(!notLogin){
+				this.props.navigator.push({
+					name: MainPage.MY_INCOME_ROUTE,
+				})
+			}else{
+				this.props.navigator.push({
+					name: MainPage.LOGIN_ROUTE,
+					nextRoute: {
+						name: MainPage.MY_INCOME_ROUTE,
+					},
+				});
+			}
 		}
 		else if(rowData.subtype === 'mycard'){
 			this.props.navigator.push({

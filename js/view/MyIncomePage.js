@@ -11,6 +11,7 @@ import {
 	UIManager,
 	Image,
 	ListView,
+	TouchableOpacity,
 } from 'react-native';
 
 var MainPage = require('./MainPage')
@@ -23,6 +24,8 @@ var WebSocketModule = require('../module/WebSocketModule')
 var UIConstants = require('../UIConstants');
 var HeaderLineDialog = require('./HeaderLineDialog');
 var {height, width} = Dimensions.get('window')
+var Button = require('./component/Button');
+var OpenAccountRoutes = require('./openAccount/OpenAccountRoutes');
 var heightRate = height/667.0
 
 var UP_INPUT_REF = "upInput"
@@ -57,20 +60,24 @@ var MyIncomePage = React.createClass({
 	},
 
 	componentDidMount: function(){
-    var userData = LogicData.getUserData();
+  	this.refreshData();
+	},
+
+	refreshData: function(){
+		var userData = LogicData.getUserData();
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
-	    NetworkModule.fetchTHUrl(
-	      NetConstants.CFD_API.GET_TOTAL_UNPAID,
-	      {
-	        method: 'GET',
-	        headers: {
-	          'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+			NetworkModule.fetchTHUrl(
+				NetConstants.CFD_API.GET_TOTAL_UNPAID,
+				{
+					method: 'GET',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 						'Content-Type': 'application/json; charset=UTF-8',
-	        },
+					},
 					cache: 'offline'
-	      },
-	      (responseJson) => {
+				},
+				(responseJson) => {
 					console.log("my unpaid income: " + JSON.stringify(responseJson));
 
 					var totalDailySign = responseJson.totalDailySign;
@@ -78,25 +85,28 @@ var MyIncomePage = React.createClass({
 					var demoRegister = responseJson.demoRegister
 					var totalCard = responseJson.totalCard ? responseJson.totalCard : 0;
 					var totalIncome = totalDailySign + demoTransaction + demoRegister + totalCard;
+					LogicData.setTotalUnpaidIncome(totalIncome);
 					console.log("totalIncome: " + totalIncome.toString())
 					console.log("totalDailySign: " + totalDailySign.toString())
 					console.log("demoTransaction: " + demoTransaction.toString())
 					console.log("demoRegister: " + demoRegister.toString())
 					console.log("totalCard: " + totalCard.toString())
-	        this.setState({
-	          totalIncome: totalIncome.toString(),
+					this.setState({
+						totalIncome: totalIncome.toString(),
 						totalDailySign : totalDailySign.toString(),
 						totalCard: totalCard.toString(),
 						demoTransaction: demoTransaction.toString(),
 						demoRegister: demoRegister.toString(),
 						dataSource: ds.cloneWithRows(listRawData),
-	        });
-	      },
-	      (result) => {
-	        console.log(result.errorMessage)
-	      }
-	    )
+					});
+				},
+				(result) => {
+					LogicData.setTotalUnpaidIncome(0);
+					console.log(result.errorMessage)
+				}
+			)
 		}else{
+			LogicData.setTotalUnpaidIncome(0);
 			this.setState({
 				totalIncome: 0,
 				totalDailySign: 0,
@@ -117,16 +127,45 @@ var MyIncomePage = React.createClass({
 		this.refs[RULE_DIALOG].show();
 	},
 
+	gotoNext: function(){
+		this.props.navigator.push({
+			name: MainPage.WITHDRAW_INCOME_ROUTE,
+			popToOutsidePage: ()=>{this.refreshData();}
+		});
+	},
+
+	gotoOpenAccount: function(){
+		OpenAccountRoutes.getLatestInputStep()
+		.then(step=>{
+			console.log("getLatestInputStep " + step)
+			this.props.navigator.push({
+				name: MainPage.OPEN_ACCOUNT_ROUTE,
+				step: step,
+				onPop: ()=>{this.refreshData()},
+			})
+		});
+	},
+
   renderTotalIncome: function(){
     return(
-			<View style={styles.totalTextContainer}>
-        <Text style={styles.totalIncomeTitleText}>
-          总计交易金(元)
-        </Text>
-        <Text style={styles.totalIncomeText}>
-          {this.state.totalIncome}
-        </Text>
-      </View>
+			<View style={{flex:1, flexDirection: 'row', justifyContent: 'space-around'}}>
+				<View style={styles.totalTextContainer}>
+	        <Text style={styles.totalIncomeTitleText}>
+	          累计获得交易金(元)
+	        </Text>
+	        <Text style={styles.totalIncomeText}>
+	          {this.state.totalIncome}
+	        </Text>
+	      </View>
+				<View style={styles.totalTextContainer}>
+					<Text style={styles.totalIncomeTitleText}>
+						剩余交易金(元)
+					</Text>
+					<Text style={styles.totalIncomeText}>
+						{this.state.totalIncome}
+					</Text>
+				</View>
+			</View>
     );
   },
 
@@ -178,7 +217,50 @@ var MyIncomePage = React.createClass({
 		}
 	},
 
+	renderOpenAccountButton: function(liveAccStatus){
+		if(liveAccStatus == 0 || liveAccStatus == 3){
+			return (
+				<TouchableOpacity onPress={()=>this.gotoOpenAccount()}>
+					<Text style={[styles.openaccountText, {color: ColorConstants.TITLE_BLUE,}]}>
+						开通实盘账户
+					</Text>
+				</TouchableOpacity>
+			)
+		}else if(liveAccStatus == 2){
+			return(
+				<Text style={styles.noticeText}>
+					开通实盘账户
+				</Text>
+			);
+		}
+	},
+
+	renderNoticeView: function(){
+		var meData = LogicData.getMeData();
+		var notLogin = Object.keys(meData).length === 0
+		if(!notLogin){
+			//meData.liveAccStatus = 0; //TEST 
+			if(meData.liveAccStatus != 1){
+				return (
+					<View style={styles.checkboxView}>
+						<View style={{flexDirection:'column'}}>
+							<View style={{flexDirection: 'row'}}>
+								<Text style={styles.noticeText}>
+									注意：交易金转入实盘账户前，必须
+								</Text>
+								{this.renderOpenAccountButton(meData.liveAccStatus)}
+							</View>
+						</View>
+					</View>
+				);
+			}
+		}
+		return null;
+	},
+
 	render: function() {
+		var nextEnabled = true;
+
 		return (
 			<View style={{flex: 1}}>
 				<NavBar title='我的交易金' showBackButton={true} navigator={this.props.navigator}
@@ -189,6 +271,15 @@ var MyIncomePage = React.createClass({
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
 					renderSeparator={this.renderSeparator} />
+				{this.renderNoticeView()}
+				<View style={styles.bottomArea}>
+					<Button style={styles.buttonArea}
+						enabled={this.state.validateInProgress ? false : nextEnabled}
+						onPress={()=>this.gotoNext()}
+						textContainerStyle={[styles.buttonView, {backgroundColor: ColorConstants.TITLE_BLUE,}]}
+						textStyle={styles.buttonText}
+						text={'转入实盘账户'} />
+				</View>
 				<HeaderLineDialog ref={RULE_DIALOG}
 				headerImage={require('../../images/my_income_strategy.png')}
 				messageLines={this.rules}/>
@@ -210,15 +301,16 @@ var styles = StyleSheet.create({
   totalTextContainer:{
     flexDirection: 'column',
     alignItems:'center',
-		flex:1,
+		marginLeft:32,
+		marginRight:32,
   },
   totalIncomeTitleText:{
     fontSize: 14,
 		marginTop: 41,
-    color: ColorConstants.SUB_TITLE_WHITE,
+    color: 'white',
   },
   totalIncomeText:{
-    fontSize: 46,
+    fontSize: 36,
 		marginTop: 23,
     color: 'white',
   },
@@ -249,8 +341,8 @@ var styles = StyleSheet.create({
 	},
 	title: {
 		flex: 1,
-		fontSize: 17,
-		color: '#303030',
+		fontSize: 15,
+		color: '#4c5f70',
 	},
 	extendRight: {
 		flex: 1,
@@ -261,9 +353,9 @@ var styles = StyleSheet.create({
 	},
 
 	contentValue: {
-		fontSize: 17,
+		fontSize: 15,
 		marginRight: 5,
-		color: '#757575',
+		color: '#4c5f70',
 	},
 	line: {
 		height: 0.5,
@@ -273,7 +365,45 @@ var styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: ColorConstants.SEPARATOR_GRAY,
 	},
-
+	bottomArea: {
+		height: 72,
+		backgroundColor: 'white',
+		alignItems: 'flex-end',
+		flexDirection:'row'
+	},
+	buttonArea: {
+		flex: 1,
+		marginLeft: 15,
+		marginRight: 15,
+		marginBottom: 16,
+		borderRadius: 3,
+	},
+	buttonView: {
+		height: 40,
+		borderRadius: 3,
+		backgroundColor: ColorConstants.TITLE_BLUE,
+		justifyContent: 'center',
+	},
+	buttonText: {
+		fontSize: 17,
+		textAlign: 'center',
+		color: '#ffffff',
+	},
+	checkboxView: {
+		paddingLeft: 15,
+		paddingTop: 10,
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginBottom: 10,//12,
+	},
+	noticeText:{
+		fontSize: 12,
+		color: '#858585',
+	},
+	openaccountText:{
+		fontSize: 12,
+		color: ColorConstants.TITLE_BLUE,
+	}
 });
 
 

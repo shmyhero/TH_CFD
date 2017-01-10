@@ -29,6 +29,7 @@ var onlineVersionCode = 0;
 var currentVersionCode = 0;
 var onlineVersionName = null;
 var liveUserInfo = null;
+var totalUnpaidIncome = 0;
 
 var LogicData = {
 
@@ -113,12 +114,21 @@ var LogicData = {
   },
 
   setOwnStocksData: function(stocksData) {
-		if(accountState){
-	    ownStocksDataLive = stocksData
-		}else{
-			ownStocksData = stocksData
-		}
-		StorageModule.setOwnStocksData(JSON.stringify(stocksData), accountState)
+		return new Promise(resolve=>{
+			if(accountState){
+				// console.log("setOwnStocksData ownStocksDataLive " + JSON.stringify(stocksData))
+		    ownStocksDataLive = stocksData
+			}else{
+				// console.log("setOwnStocksData ownStocksData " + JSON.stringify(stocksData))
+				ownStocksData = stocksData
+			}
+			StorageModule.setOwnStocksData(JSON.stringify(stocksData), accountState)
+			.then(()=>{
+				if(resolve){
+					resolve();
+				}
+			})
+		});
   },
 
   getOwnStocksData: function() {
@@ -344,6 +354,14 @@ var LogicData = {
 
 	removeLiveUserInfo: function(){
 		liveUserInfo = null;
+	},
+
+	getTotalUnpaidIncome: function(){
+		return totalUnpaidIncome;
+	},
+
+	setTotalUnpaidIncome: function(value){
+		totalUnpaidIncome = value;
 	},
 };
 

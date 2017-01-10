@@ -37,8 +37,10 @@ var wsErrorCallback = (errorMessage) =>
 {
 	console.log('web socket error: ' + errorMessage);
 	if (AppStateModule.getAppState() === AppStateModule.STATE_ACTIVE && webSocketConnection && webSocketConnection.state == 4) {
+		if(socketConnected){
+			EventCenter.emitNetworkConnectionChangedEvent();
+		}
 		socketConnected = false;
-		EventCenter.emitNetworkConnectionChangedEvent();
 		if(networkConnectionStatus === CONNECTED){
 			console.log('web socket ready to restart');
 			setTimeout(()=>{

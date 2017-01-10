@@ -62,7 +62,9 @@ var StockExchangePage = React.createClass({
 	clearViews:function(){
 		if(LogicData.getTabIndex() == MainPage.STOCK_EXCHANGE_TAB_INDEX){
 			var routes = this.props.navigator.getCurrentRoutes();
-			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE){
+			if(routes && routes[routes.length-1] &&
+				(routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE
+			|| routes[routes.length-1].name == MainPage.LOGIN_ROUTE)){
 				this.reloadTabData();
 				// if(this.refs['page2'])this.refs['page2'].clearViews();
 				// if(this.refs['page1'])this.refs['page1'].clearViews();

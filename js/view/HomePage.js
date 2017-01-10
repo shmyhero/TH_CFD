@@ -123,7 +123,9 @@ var HomePage = React.createClass({
 		console.log("MainPage.HOME_PAGE_TAB_INDEX" +  MainPage.HOME_PAGE_TAB_INDEX)
 		if(LogicData.getTabIndex() == MainPage.HOME_PAGE_TAB_INDEX){
 			var routes = this.props.navigator.getCurrentRoutes();
-			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.HOME_PAGE_ROUTE){
+			if(routes && routes[routes.length-1] &&
+					(routes[routes.length-1].name == MainPage.HOME_PAGE_ROUTE
+				|| routes[routes.length-1].name == MainPage.LOGIN_ROUTE)){
 				this.reloadBanner();
 				this.loadHomeData();
 				this.loadCards();
@@ -247,6 +249,11 @@ var HomePage = React.createClass({
 	},
 
 	componentDidMount: function() {
+		var isConnected = WebSocketModule.isConnected();
+		this.setState({
+			connected: isConnected
+		})
+
 		didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
 		didTabSelectSubscription = EventCenter.getEventEmitter().
 		addListener(EventConst.HOME_TAB_RESS_EVENT, this.onTabChanged);
@@ -254,8 +261,8 @@ var HomePage = React.createClass({
 			this.onConnectionStateChanged();
 		});
 		accountStateChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, this.resetPage);
-
-		this.onConnectionStateChanged();
+		//
+		// this.onConnectionStateChanged();
 	},
 
 	onConnectionStateChanged: function(){
@@ -263,12 +270,8 @@ var HomePage = React.createClass({
 		this.setState({
 			connected: isConnected
 		})
-		if(isConnected && LogicData.getTabIndex() == MainPage.HOME_PAGE_TAB_INDEX){
-			var routes = this.props.navigator.getCurrentRoutes();
-			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.HOME_PAGE_ROUTE){
-				this.reloadPage();
-			}
-		}
+		console.log("onConnectionStateChanged reloadPage" + isConnected);
+		this.reloadPage();
 	},
 
 	componentWillUnmount: function() {
@@ -280,6 +283,8 @@ var HomePage = React.createClass({
 
 	onTabChanged: function(){
 		LogicData.setTabIndex(MainPage.HOME_PAGE_TAB_INDEX);
+
+		console.log("onTabChanged reloadPage");
 		this.reloadPage();
 		this.forceloopSwipers();
 	},

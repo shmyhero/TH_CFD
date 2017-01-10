@@ -184,7 +184,7 @@ export function fetchEncryptedUrl(url, params, successCallback, errorCallback, n
 		}, true);
 }
 
-export function syncOwnStocks(userData) {
+export function syncOwnStocks(userData, readCache) {
   return new Promise((resolve, reject)=>{
 		var stockData = LogicData.getOwnStocksData()
 		var isLive = LogicData.getAccountState();
@@ -197,6 +197,7 @@ export function syncOwnStocks(userData) {
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 				},
+				cache: readCache ? 'offline' : 'none',
 			},
 			(responseJson) => {
 				if (responseJson.length===0 && !isLive) {
@@ -214,13 +215,19 @@ export function syncOwnStocks(userData) {
 					//If live, the user must be logined. So just sync the response to local data.
 					console.log('get own stocks')
 					LogicData.setOwnStocksData(responseJson)
+					.then((responseJson)=>{
+						console.log('set own stocks')
+						resolve(responseJson);
+					})
 				}
 				console.log(responseJson)
-				resolve();
 			},
 			(result) => {
 				//Alert.alert('获取股票列表失败', result.errorMessage);
-				reject(result.errorMessage);
+				if(!result.loadedOfflineCache){
+					console.log("syncOwnStocks error " + result)
+					reject(result);
+				}
 			}
 		)
 	});

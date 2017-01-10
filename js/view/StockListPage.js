@@ -122,12 +122,14 @@ var StockListPage = React.createClass({
 	refreshData: function(forceRefetch) {
 		if(LogicData.getTabIndex() == MainPage.STOCK_LIST_PAGE_TAB_INDEX){
 			var routes = this.props.navigator.getCurrentRoutes();
-			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_LIST_VIEW_PAGER_ROUTE){
+			if(routes && routes[routes.length-1] &&
+				(routes[routes.length-1].name == MainPage.STOCK_LIST_VIEW_PAGER_ROUTE
+			|| routes[routes.length-1].name == MainPage.LOGIN_ROUTE)){
 				//If the last shown list is read from cache, we also need to refresh the data by refetching the api
 				if (this.props.isOwnStockPage) {
 					if(forceRefetch || this.isDisplayingCache){
 						//Always read server data.
-						this.fetchOwnData();
+						this.syncOwnData();
 					}else{
 						this.refreshOwnData();
 					}
@@ -229,8 +231,28 @@ var StockListPage = React.createClass({
 		})
 	},
 
+	syncOwnData: function(){
+		var userData = LogicData.getUserData()
+		if(Object.keys(userData).length !== 0){
+			NetworkModule.syncOwnStocks(userData, true)
+				.then(()=>{
+					console.log("syncOwnStocks success")
+					this.fetchOwnStockData();})
+				.catch((result)=>{
+					console.log("syncOwnStocks result " + JSON.stringify(result))
+					if(!result.loadedOfflineCache){
+						this.setState({
+							contentLoaded: false,
+							isRefreshing: false,
+						});
+					}
+				})
+		}else{
+			this.fetchOwnData();
+		}
+	},
+
 	fetchOwnData: function() {
-		console.log("stocklistpage fetchOwnData")
 		StorageModule.loadOwnStocksData(LogicData.getAccountState()).then((value) => {
 			console.log("stocklistpage StorageModule.loadOwnStocksData " + JSON.stringify(value));
 			if (value !== null) {
@@ -239,66 +261,69 @@ var StockListPage = React.createClass({
 				LogicData.setOwnStocksData([]);
 			}
 		}).then(() => {
-
-			var ownData = LogicData.getOwnStocksData()
-			console.log("stocklistpage LogicData.getOwnStocksData() " + JSON.stringify(ownData));
-			if (ownData.length > 0) {
-				var param = "" + ownData[0].id
-				for (var i = 1; i < ownData.length; i++) {
-					param += ","+ownData[i].id
-				};
-				console.log("stocklistpage param " + param);
-				CacheModule.loadStockDataList(param)
-				.then((stockDataList)=>{
-					if(stockDataList){
-						this.isDisplayingCache = true;
-						this.setState({
-							rowStockInfoData: stockDataList,
-							stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, stockDataList)),
-							contentLoaded: true,
-							isRefreshing: false,
-						})
-					}
-				});
-
-				var url = (LogicData.getAccountState() ? this.props.activeDataURL : this.props.dataURL) + "/"+ param;
-				NetworkModule.fetchTHUrl(
-					url,
-					{
-						method: 'GET',
-						//cache: 'offline',
-					},
-					(responseJson, isCache) => {
-						console.log("api responseJson "+ JSON.stringify(responseJson))
-						this.isDisplayingCache = false;
-						LogicData.setOwnStocksData(responseJson)
-						this.setState({
-							rowStockInfoData: responseJson,
-							stockInfo: ds.cloneWithRows(this.sortRawData(this.state.sortType, responseJson)),
-							contentLoaded: true,
-							isRefreshing: false,
-						})
-					},
-					(result) => {
-						if(!this.isDisplayingCache){
-							this.setState({
-								contentLoaded: false,
-								isRefreshing: false,
-							})
-							this.refs[NETWORK_ERROR_INDICATOR] && this.refs[NETWORK_ERROR_INDICATOR].stopRefresh();
-						}
-						//Alert.alert('', result.errorMessage);
-					}
-				)
-			}else{
-				this.setState({
-					rowStockInfoData: ownData,
-					stockInfo: ds.cloneWithRows(ownData),
-					contentLoaded: true,
-					isRefreshing: false,
-				})
-			}
+			this.fetchOwnStockData();
 		})
+	},
+
+	fetchOwnStockData: function(){
+		var ownData = LogicData.getOwnStocksData()
+		console.log("stocklistpage LogicData.getOwnStocksData() " + JSON.stringify(ownData));
+		if (ownData.length > 0) {
+			var param = "" + ownData[0].id
+			for (var i = 1; i < ownData.length; i++) {
+				param += ","+ownData[i].id
+			};
+			console.log("stocklistpage param " + param);
+			CacheModule.loadStockDataList(param)
+			.then((stockDataList)=>{
+				if(stockDataList){
+					this.isDisplayingCache = true;
+					this.setState({
+						rowStockInfoData: stockDataList,
+						stockInfo: ds.cloneWithRows(stockDataList),
+						contentLoaded: true,
+						isRefreshing: false,
+					})
+				}
+			});
+
+			var url = (LogicData.getAccountState() ? this.props.activeDataURL : this.props.dataURL) + "/"+ param;
+			NetworkModule.fetchTHUrl(
+				url,
+				{
+					method: 'GET',
+					//cache: 'offline',
+				},
+				(responseJson, isCache) => {
+					console.log("api responseJson "+ JSON.stringify(responseJson))
+					this.isDisplayingCache = false;
+					LogicData.setOwnStocksData(responseJson)
+					this.setState({
+						rowStockInfoData: responseJson,
+						stockInfo: ds.cloneWithRows(responseJson),
+						contentLoaded: true,
+						isRefreshing: false,
+					})
+				},
+				(result) => {
+					if(!this.isDisplayingCache){
+						this.setState({
+							contentLoaded: false,
+							isRefreshing: false,
+						})
+						this.refs[NETWORK_ERROR_INDICATOR] && this.refs[NETWORK_ERROR_INDICATOR].stopRefresh();
+					}
+					//Alert.alert('', result.errorMessage);
+				}
+			)
+		}else{
+			this.setState({
+				rowStockInfoData: ownData,
+				stockInfo: ds.cloneWithRows(ownData),
+				contentLoaded: true,
+				isRefreshing: false,
+			})
+		}
 	},
 
 	componentDidMount: function() {
@@ -308,7 +333,7 @@ var StockListPage = React.createClass({
 		this.fetchStockData()
 
 		if (this.props.isOwnStockPage) {
-			this.fetchOwnData()
+			this.syncOwnData()
 
 	    this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
 	    this.recevieDataSubscription = RCTNativeAppEventEmitter.addListener(
@@ -345,12 +370,13 @@ var StockListPage = React.createClass({
 	},
 
 	onConnectionStateChanged: function(){
-		if(LogicData.getTabIndex() == 1 && WebSocketModule.isConnected()){
-			var routes = this.props.navigator.getCurrentRoutes();
-			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE){
-				this.refreshData(true);
-			}
+		if(WebSocketModule.isConnected()){
+			this.refreshData(true);
 		}
+	},
+
+	onDidFocus: function(event) {
+		console.log("onDidFocus")
 	},
 
 	componentWillUnmount: function() {
@@ -372,10 +398,12 @@ var StockListPage = React.createClass({
 	},
 
 	onPageSelected: function() {
+		console.log("onPageSelected")
 		this.refreshData(true);
 	},
 
 	tabPressed: function() {
+		console.log("tabPressed")
 		this.refreshData(true);
 	},
 

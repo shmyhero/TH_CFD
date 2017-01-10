@@ -102,7 +102,7 @@ export default class DevelopPage extends Component {
       <View style={styles.container}>
         <ScrollView style={{flex: 1}}>
 
-          <NetworkErrorIndicator onRefresh={()=>this.refresh()}/>
+          {/* <NetworkErrorIndicator onRefresh={()=>this.refresh()}/> */}
 
           <View style={{flexDirection: 'column',
             padding:15,
@@ -133,7 +133,7 @@ export default class DevelopPage extends Component {
             </TouchableOpacity>
           </View>
 
-          <View style={{flexDirection: 'row', padding:15,}}>
+          {/* <View style={{flexDirection: 'row', padding:15,}}>
             <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}}
               onPress={()=>this.showPage()}>
               <Text style={{color:'white', fontSize: 16}}>
@@ -141,7 +141,7 @@ export default class DevelopPage extends Component {
               </Text>
             </TouchableOpacity>
           </View>
-          <StockTransactionInfoModal ref='page'/>
+          <StockTransactionInfoModal ref='page'/> */}
         </ScrollView>
       </View>
     );

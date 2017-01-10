@@ -67,9 +67,9 @@ var StockClosedPositionPage = React.createClass({
 	},
 
 	onConnectionStateChanged: function(){
-		if(LogicData.getTabIndex() == 2 && !this.state.contentLoaded && !this.state.isRefreshing && WebSocketModule.isConnected()){
+		if(LogicData.getTabIndex() == MainPage.STOCK_EXCHANGE_TAB_INDEX && !this.state.contentLoaded && !this.state.isRefreshing && WebSocketModule.isConnected()){
 			var routes = this.props.navigator.getCurrentRoutes();
-			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.HOME_PAGE_ROUTE){
+			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE){
 				var userData = LogicData.getUserData();
 				var notLogin = Object.keys(userData).length === 0;
 				if(!notLogin){

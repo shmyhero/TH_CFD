@@ -324,7 +324,7 @@ export default class DepositPage extends Component{
 					<View style={[styles.rowWrapper2, {height:Math.round(64*heightRate)}]}>
 						<Image source={checkBox} style={styles.checkbox} />
 						<Image source={rowData.image} style={styles.image} />
-						<Text style={styles.title}>银联卡</Text>
+						<Text style={styles.title}>银联借记卡</Text>
 						<TouchableOpacity activeOpacity={0.5} onPress={()=>this.blankSupport()}>
 							<View style = {{flexDirection:'row',alignItems:'center'}}>
 								<Text style = {styles.blankSupport}>支持的银行</Text>

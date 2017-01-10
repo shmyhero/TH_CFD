@@ -146,11 +146,13 @@ var StockSearchPage = React.createClass({
 		NetworkModule.addToOwnStocks([stockData])
 		.then(()=>{
 			LogicData.addStockToOwn(stockData)
-		})
-		// force re-render list
-		this.setState({
-			searchStockInfo: ds.cloneWithRows(this.state.searchStockRawInfo)
-		})
+		}).then(
+			()=>
+			// force re-render list
+			this.setState({
+				searchStockInfo: ds.cloneWithRows(this.state.searchStockRawInfo)
+			})
+		)
 
 		var eventParam = {};
 		eventParam[TalkingdataModule.KEY_STOCK_ID] = stockData.id,

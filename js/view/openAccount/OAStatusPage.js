@@ -66,12 +66,14 @@ var OAStatusPage = React.createClass({
 		return (
 
 			<View style={styles.wrapper}>
-				<Image
+				{/* <Image
 					style={[styles.backgroundImage, {height: imageHeight, width: width}]}
 					source={BANNERS[0]} >
-				</Image>
+				</Image> */}
 
-				<Image style={styles.image} source={require('../../../images/live_register_sub_banner.png')}/>
+				{/* <Image style={styles.image} source={require('../../../images/live_register_sub_banner.png')}/> */}
+
+				<Image style={styles.image} source={require('../../../images/live_register_banner.png')}/>
 
 				<View style={{flex: 2, marginTop: 50}}>
 					<Text style={styles.text1}>ayondo欢迎您开启财富之旅</Text>
@@ -125,7 +127,7 @@ var styles = StyleSheet.create({
 	image: {
 		alignSelf: 'center',
 		width: width,
-		height: 212 / 750 * width,
+		height: 523 / 750 * width,
 	},
 	buttonArea: {
 

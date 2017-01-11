@@ -91,12 +91,12 @@ export default class WithdrawIncomeSubmittedPage extends Component {
 
     return (
 			<View style={styles.wrapper}>
-        <NavBar title="交易金转入提交成功"
+        <NavBar title="转入提交成功"
           showBackButton={false}
           navigator={this.props.navigator}
           />
         <Image source={require('../../../images/withdraw_submitted.png')} style={styles.checkImage}/>
-        <Text style={styles.hintText}>{"转入申请已提交，到账时间以短信通知为准！"}</Text>
+        <Text style={styles.hintText}>{"申请已提交，到账时间以短信通知为准！"}</Text>
 
         <View style={{flex:1}}/>
 

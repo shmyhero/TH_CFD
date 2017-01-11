@@ -23,12 +23,9 @@ var LogicData = require('../../LogicData')
 var ColorConstants = require('../../ColorConstants')
 var TalkingdataModule = require('../../module/TalkingdataModule')
 
-// var OpenAccountRoutes = require('./OpenAccountRoutes')
-// var OpenAccountUtils = require('./OpenAccountUtils')
 var NetworkModule = require('../../module/NetworkModule');
 var NetConstants = require('../../NetConstants');
-var LogicData = require('../../LogicData');
-
+var StorageModule = require('../../module/StorageModule');
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
@@ -57,35 +54,9 @@ export default class WithdrawIncomePage extends Component {
   constructor(props) {
 	  super(props);
 
-    // this.listRawData = JSON.parse(JSON.stringify(defaultRawData));
-    //
-    // var liveUserInfo = LogicData.getLiveUserInfo();
-    // var balanceData = LogicData.getBalanceData();
-    // if(liveUserInfo){
-    //   var cardNumber = liveUserInfo.bankCardNumber.split(" ").join('');
-    //   var lastCardNumber = cardNumber.length>4 ? cardNumber.slice(cardNumber.length-4) : cardNumber;
-    //
-    //   var cardBank = liveUserInfo.bankName;
-    //   var bankIcon = liveUserInfo.bankIcon;
-    //   var withdrawChargeHint = balanceData.comment;
-    //
-    //   this.state={
-    //     dataSource: this.ds.cloneWithRows(this.listRawData),
-    //     cardImageUrl: bankIcon,
-  	// 		cardBank: cardBank,
-  	// 		lastCardNumber: lastCardNumber,
-    //     refundableBanalce: LogicData.getBalanceData().refundable,
-    //     withdrawValueText: "",
-    //     withdrawValue: 0,
-    //     hasRead: true,
-    //     withdrawChargeHint: withdrawChargeHint,
-    //     refundETA: 3,
-    //   }
-    // }
-
     this.state={
       dataSource: this.ds.cloneWithRows(this.listRawData),
-      refundableBanalce: LogicData.getTotalUnpaidIncome(), //TODO: use real data.
+      refundableBanalce: LogicData.getUnpaidReward(), //TODO: use real data.
       withdrawValueText: "",
       withdrawValue: 0,
       hasRead: true,
@@ -265,44 +236,45 @@ export default class WithdrawIncomePage extends Component {
 
   gotoNext(){
     Keyboard.dismiss();
-    this.props.navigator.replace({
-      name: MainPage.WITHDRAW_INCOME_SUBMITTED_ROUTE,
-      popToOutsidePage: this.props.popToOutsidePage,
 
-    });
-    // var body = {
-    //   Amount: this.state.withdrawValue,
-    // }
-    //
-    // var userData = LogicData.getUserData()
-    // if(userData.token == undefined){return}
-    //
-    // this.setState({
-    //   validateInProgress: true,
-    // })
-    //
-    // NetworkModule.fetchTHUrl(NetConstants.CFD_API.REQUEST_WITHDRAW,
-    //   {
-    //     method: 'POST',
-    //     headers: {
-    //       'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-    //       'Content-Type': 'application/json; charset=utf-8',
-    //     },
-    //     body: JSON.stringify(body),
-    //   },
-    //   (transferID)=>{
-    //     console.log("Request withdraw success. TransferID: " + transferID);
-    //     this.setState({
-    //       validateInProgress: false,
-    //     })
-    //     this.props.popToOutsidePage && this.props.popToOutsidePage();
-    //     this.props.navigator.push({
-    //       name: MainPage.WITHDRAW_SUBMITTED_ROUTE,
-    //     });
-    //   },
-    //   (result)=>{
-    //     alert(result.errorMessage);
-    //   });
+    var userData = LogicData.getUserData()
+    if(userData.token == undefined){return}
+
+    this.setState({
+      validateInProgress: true,
+    })
+
+    var url = NetConstants.CFD_API.TRANSFER_REWARD;
+    url = url.replace("<amount>", this.state.withdrawValue)
+    NetworkModule.fetchTHUrl(url,
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+      },
+      (responseJson)=>{
+        var unpaid = LogicData.getUnpaidReward() - this.state.withdrawValue;
+        LogicData.setUnpaidReward(unpaid);
+        StorageModule.setUnpaidReward(""+unpaid)
+        .then(()=>{
+          console.log("Request withdraw reward success. ");
+          this.setState({
+            validateInProgress: false,
+          })
+          this.props.popToOutsidePage && this.props.popToOutsidePage();
+          this.props.navigator.replace({
+            name: MainPage.WITHDRAW_INCOME_SUBMITTED_ROUTE,
+          });
+        });
+      },
+      (result)=>{
+        alert(result.errorMessage);
+        this.setState({
+          validateInProgress: false,
+        })
+      });
   }
 
   showWithdrawDocument(){

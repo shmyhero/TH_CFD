@@ -29,7 +29,7 @@ var onlineVersionCode = 0;
 var currentVersionCode = 0;
 var onlineVersionName = null;
 var liveUserInfo = null;
-var totalUnpaidIncome = 0;
+var unpaidIncome = null;
 
 var LogicData = {
 
@@ -356,12 +356,12 @@ var LogicData = {
 		liveUserInfo = null;
 	},
 
-	getTotalUnpaidIncome: function(){
-		return totalUnpaidIncome;
+	getUnpaidReward: function(){
+		return unpaidIncome;
 	},
 
-	setTotalUnpaidIncome: function(value){
-		totalUnpaidIncome = value;
+	setUnpaidReward: function(value){
+		unpaidIncome = value;
 	},
 };
 

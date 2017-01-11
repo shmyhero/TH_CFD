@@ -26,6 +26,7 @@ var HeaderLineDialog = require('./HeaderLineDialog');
 var {height, width} = Dimensions.get('window')
 var Button = require('./component/Button');
 var OpenAccountRoutes = require('./openAccount/OpenAccountRoutes');
+var StorageModule = require('../module/StorageModule');
 var heightRate = height/667.0
 
 var UP_INPUT_REF = "upInput"
@@ -42,7 +43,7 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var RULE_DIALOG = "ruleDialog";
 var MyIncomePage = React.createClass({
 	rules: [
-		"盈交易交易金等同于现金，用户获取的交易金，开通实盘账户后，会转入现金账户；",
+		"盈交易平台交易金等同于现金，开通实盘账户后，可以手动申请转到实盘账户，转入成功后以短信告知；",
     "用户累计交易金额达到5000元后，赠送的交易金即可提现；",
     "交易金可以通过签到、模拟交易、实盘交易等方式获取；",
     "模拟交易金：用户通过模拟下单交易，每日可以获得0.5元交易金。",
@@ -50,7 +51,8 @@ var MyIncomePage = React.createClass({
 
 	getInitialState: function() {
 		return {
-			totalIncome: '--',
+			totalReward: '--',
+			unpaidReward: '--',
 			totalDailySign: '--',
 			totalCard: '--',
 			demoTransaction: '--',
@@ -60,13 +62,57 @@ var MyIncomePage = React.createClass({
 	},
 
 	componentDidMount: function(){
-  	this.refreshData();
+		var unpaidReward = LogicData.getUnpaidReward();
+		if(unpaidReward == null){
+			StorageModule.loadUnpaidReward()
+			.then((value)=>{
+				console.log("loadUnpaidReward " + value)
+				if(value != null){
+					var unpaid = parseInt(value)
+					LogicData.setUnpaidReward(unpaid);
+				}
+				this.refreshData();
+			});
+		}else{
+  		this.refreshData();
+		}
 	},
 
 	refreshData: function(){
 		var userData = LogicData.getUserData();
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
+			NetworkModule.fetchTHUrl(
+				NetConstants.CFD_API.GET_TOTAL_REWARD,
+				{
+					method: 'GET',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						'Content-Type': 'application/json; charset=UTF-8',
+					},
+					cache: 'offline'
+				},
+				(responseJson, isCache) => {
+					console.log("my total income: " + JSON.stringify(responseJson));
+
+					var unpaid = responseJson.total - responseJson.paid;
+
+					if(!isCache){
+						LogicData.setUnpaidReward(unpaid);
+						StorageModule.setUnpaidReward(""+unpaid);
+					}else{
+						unpaid = LogicData.getUnpaidReward()
+					}
+					this.setState({
+						unpaidReward: unpaid,
+						totalReward: responseJson.total,
+					});
+				},
+				(result) => {
+					console.log(result.errorMessage)
+				}
+			);
+
 			NetworkModule.fetchTHUrl(
 				NetConstants.CFD_API.GET_TOTAL_UNPAID,
 				{
@@ -78,21 +124,17 @@ var MyIncomePage = React.createClass({
 					cache: 'offline'
 				},
 				(responseJson) => {
-					console.log("my unpaid income: " + JSON.stringify(responseJson));
+					console.log("my detail rewards: " + JSON.stringify(responseJson));
 
 					var totalDailySign = responseJson.totalDailySign;
 					var demoTransaction = responseJson.totalDemoTransaction;
 					var demoRegister = responseJson.demoRegister
 					var totalCard = responseJson.totalCard ? responseJson.totalCard : 0;
-					var totalIncome = totalDailySign + demoTransaction + demoRegister + totalCard;
-					LogicData.setTotalUnpaidIncome(totalIncome);
-					console.log("totalIncome: " + totalIncome.toString())
 					console.log("totalDailySign: " + totalDailySign.toString())
 					console.log("demoTransaction: " + demoTransaction.toString())
 					console.log("demoRegister: " + demoRegister.toString())
 					console.log("totalCard: " + totalCard.toString())
 					this.setState({
-						totalIncome: totalIncome.toString(),
 						totalDailySign : totalDailySign.toString(),
 						totalCard: totalCard.toString(),
 						demoTransaction: demoTransaction.toString(),
@@ -101,14 +143,13 @@ var MyIncomePage = React.createClass({
 					});
 				},
 				(result) => {
-					LogicData.setTotalUnpaidIncome(0);
 					console.log(result.errorMessage)
 				}
 			)
 		}else{
-			LogicData.setTotalUnpaidIncome(0);
 			this.setState({
-				totalIncome: 0,
+				totalReward: 0,
+				unpaidReward: 0,
 				totalDailySign: 0,
 				demoTransaction: 0,
 				demoRegister: 0,
@@ -150,19 +191,19 @@ var MyIncomePage = React.createClass({
     return(
 			<View style={{flex:1, flexDirection: 'row', justifyContent: 'space-around'}}>
 				<View style={styles.totalTextContainer}>
-	        <Text style={styles.totalIncomeTitleText}>
+	        <Text style={styles.totalRewardTitleText}>
 	          累计获得交易金(元)
 	        </Text>
-	        <Text style={styles.totalIncomeText}>
-	          {this.state.totalIncome}
+	        <Text style={styles.totalRewardText}>
+	          {this.state.totalReward}
 	        </Text>
 	      </View>
 				<View style={styles.totalTextContainer}>
-					<Text style={styles.totalIncomeTitleText}>
+					<Text style={styles.totalRewardTitleText}>
 						剩余交易金(元)
 					</Text>
-					<Text style={styles.totalIncomeText}>
-						{this.state.totalIncome}
+					<Text style={styles.totalRewardText}>
+						{this.state.unpaidReward}
 					</Text>
 				</View>
 			</View>
@@ -239,7 +280,7 @@ var MyIncomePage = React.createClass({
 		var meData = LogicData.getMeData();
 		var notLogin = Object.keys(meData).length === 0
 		if(!notLogin){
-			//meData.liveAccStatus = 0; //TEST 
+			//meData.liveAccStatus = 0; //TEST
 			if(meData.liveAccStatus != 1){
 				return (
 					<View style={styles.checkboxView}>
@@ -304,12 +345,12 @@ var styles = StyleSheet.create({
 		marginLeft:32,
 		marginRight:32,
   },
-  totalIncomeTitleText:{
+  totalRewardTitleText:{
     fontSize: 14,
 		marginTop: 41,
     color: 'white',
   },
-  totalIncomeText:{
+  totalRewardText:{
     fontSize: 36,
 		marginTop: 23,
     color: 'white',

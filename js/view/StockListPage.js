@@ -172,7 +172,7 @@ var StockListPage = React.createClass({
 
 					CacheModule.loadStockDataForUrl(url)
 						.then((responseJson)=>{
-							if(responseJson){
+							if(responseJson && responseJson.length > 0){
 								this.isDisplayingCache = true;
 								this.setState({
 									rowStockInfoData: responseJson,
@@ -276,7 +276,7 @@ var StockListPage = React.createClass({
 			console.log("stocklistpage param " + param);
 			CacheModule.loadStockDataList(param)
 			.then((stockDataList)=>{
-				if(stockDataList){
+				if(stockDataList && stockDataList.length > 0){
 					this.isDisplayingCache = true;
 					this.setState({
 						rowStockInfoData: stockDataList,
@@ -373,10 +373,6 @@ var StockListPage = React.createClass({
 		if(WebSocketModule.isConnected()){
 			this.refreshData(true);
 		}
-	},
-
-	onDidFocus: function(event) {
-		console.log("onDidFocus")
 	},
 
 	componentWillUnmount: function() {

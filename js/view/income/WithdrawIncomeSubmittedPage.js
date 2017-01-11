@@ -22,7 +22,6 @@ var MainPage = require('../MainPage')
 var LogicData = require('../../LogicData')
 var ColorConstants = require('../../ColorConstants')
 var TalkingdataModule = require('../../module/TalkingdataModule')
-var NavBar = require('../NavBar')
 // var OpenAccountRoutes = require('./OpenAccountRoutes')
 // var OpenAccountUtils = require('./OpenAccountUtils')
 var NetworkModule = require('../../module/NetworkModule');

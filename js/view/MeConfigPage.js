@@ -28,6 +28,7 @@ var LogicData = require('../LogicData')
 var NetworkModule = require('../module/NetworkModule')
 var NetConstants = require('../NetConstants')
 var Toast = require('./component/toast/Toast');
+var VersionControlModule = require('../module/VersionControlModule')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
@@ -144,10 +145,7 @@ var MeConfigPage = React.createClass({
 
 	upgradeAppVersion: function(){
 		if(this.state.onlineVersionCode > this.state.currentVersionCode){
-			var url = NetConstants.MARKET_URL;
-			if(url){
-				Linking.openURL(url)
-			}
+			VersionControlModule.gotoDownloadPage();
 		}
 
 	},

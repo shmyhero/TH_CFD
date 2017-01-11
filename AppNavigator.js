@@ -75,6 +75,7 @@ var MainPage = require('./js/view/MainPage')
 var AskForRestartPage = require('./js/view/AskForRestartPage')
 var NativeDataModule = require('./js/module/NativeDataModule')
 var VersionConstants = require('./js/VersionConstants')
+var VersionControlModule = require('./js/module/VersionControlModule')
 //var TongDaoModule = require('./js/module/TongDaoModule')
 
 var GUIDE_SLIDES = [
@@ -228,31 +229,11 @@ var AppNavigator = React.createClass({
 		});
 		// var alertData = {'title':'盈交易','msg':'打开苹果股票详情','type':'1','stockName':'英国100', 'stockId':34854};
 		// this.alertForPush(alertData);
-
-		NetworkModule.fetchTHUrl(
-			NetConstants.CFD_API.LATEST_APP_VERSION,
-			{
-				method: 'GET',
-			},
-			(responseJson) => {
-				if(responseJson){
-					if(Platform.OS === 'ios'){
-						LogicData.setOnlineVersionCode(responseJson.iOSLatestInt);
-						LogicData.setOnlineVersionName(responseJson.iOSLatestStr);
-					}else{
-						LogicData.setOnlineVersionCode(responseJson.androidLatestInt);
-						LogicData.setOnlineVersionName(responseJson.androidLatestStr);
-					}
-				}
-			},
-			(result) => {
-				console.log(result.errorMessage)
-			}
-		);
 	},
 
 	setCurrentVersionCode: function(value){
-		LogicData.setCurrentVersionCode(value);
+		LogicData.setCurrentVersionCode(value);		
+		VersionControlModule.start();
 	},
 
 	componentWillUnmount: function() {

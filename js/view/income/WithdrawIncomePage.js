@@ -334,7 +334,6 @@ export default class WithdrawIncomePage extends Component {
           showBackButton={true}
           leftButtonOnClick={()=>this.onBackButtonPressed()}
           navigator={this.props.navigator}
-          imageOnRight={require('../../../images/icon_question.png')}
           />
         <View style={{flex:1}}>
 					{this.renderWithdraw()}
@@ -489,7 +488,7 @@ const styles = StyleSheet.create({
     color: '#d71a18',
   },
   readMeText:{
-    fontSize: 12,
+    fontSize: 14,
     color: '#858585',
   },
   documentText:{

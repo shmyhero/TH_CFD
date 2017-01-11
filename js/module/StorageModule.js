@@ -19,6 +19,7 @@ var ACCOUNT_STATE = '@TH_CFD:accountState'
 var CFD_SERVER_TYPE = '@TH_CFD:CFDServerType'
 var OPEN_ACCOUNT_DATA = '@TH_CFD:openAccountDataStep<step>'
 var OPEN_ACCOUNT_LAST_STEP = '@TH_CFD:lastOpenAccountStep'
+var LAST_ONLINE_VERSION_INFO = '@TH_CFD:lastOnlineVersionInfo'
 
 export async function loadUserData() {
 	try {
@@ -308,6 +309,23 @@ export async function loadLastOpenAccountRoute(){
 export async function removeLastOpenAccountRoute() {
 	try {
 		await AsyncStorage.removeItem(OPEN_ACCOUNT_LAST_STEP);
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function setLastOnlineVerionInfo(info){
+  try {
+		await AsyncStorage.setItem(LAST_ONLINE_VERSION_INFO, info);
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function loadLastOnlineVerionInfo(){
+  try {
+		  var value = await AsyncStorage.getItem(LAST_ONLINE_VERSION_INFO);
+      return value;
 	} catch (error) {
 		console.log('AsyncStorage error: ' + error.message);
 	}

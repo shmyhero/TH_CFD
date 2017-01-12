@@ -9,7 +9,7 @@ var colors = {
 	TITLE_BLUE_SIMULATE: '#1962dd',
 	TITLE_BLUE: '#1962dd',
 	TITLE_DARK_BLUE: '#425a85',
-	DISABLED_GREY: '#e0e0e0',
+	DISABLED_GREY: '#dcdcdc',
 	BACKGROUND_GREY: '#f0f0f0',
 	STOCK_RISE_RED: '#bc4105',
 	STOCK_DOWN_GREEN: '#428e1b',
@@ -51,7 +51,7 @@ var colors = {
 		if(scheme === this.COLOR_THEME_LIVE) {
 			this.TITLE_BLUE = '#425a85'
 			this.TITLE_DARK_BLUE = '#425a85'
-			this.DISABLED_GREY = '#e0e0e0'
+			this.DISABLED_GREY = '#dcdcdc'
 			this.BACKGROUND_GREY = '#f0f0f0'
 			this.STOCK_RISE_RED = '#bc4105'
 			this.STOCK_DOWN_GREEN = '#428e1b'
@@ -70,7 +70,7 @@ var colors = {
 		else {
 			this.TITLE_BLUE = '#1962dd'
 			this.TITLE_DARK_BLUE = '#425a85'
-			this.DISABLED_GREY = '#e0e0e0'
+			this.DISABLED_GREY = '#dcdcdc'
 			this.BACKGROUND_GREY = '#f0f0f0'
 			this.STOCK_RISE_RED = '#bc4105'
 			this.STOCK_DOWN_GREEN = '#428e1b'

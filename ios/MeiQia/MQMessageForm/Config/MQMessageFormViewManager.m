@@ -128,11 +128,6 @@
     }
     
     //导航栏左键
-    UIBarButtonItem *customizedBackItem = nil;
-    if ([MQChatViewConfig sharedConfig].chatViewStyle.navBackButtonImage) {
-        customizedBackItem = [[UIBarButtonItem alloc]initWithImage:[MQChatViewConfig sharedConfig].chatViewStyle.navBackButtonImage style:(UIBarButtonItemStylePlain) target:viewController action:@selector(dismissMessageFormViewController)];
-    }
-    
     MQTransiteAnimationType animation = [MQChatViewConfig sharedConfig].presentingAnimation;
     if (animation == MQTransiteAnimationTypeDefault) {
         animation = messageFormConfig.presentingAnimation;
@@ -140,7 +135,7 @@
     if (animation== MQTransiteAnimationTypeDefault) {
         viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:viewController action:@selector(dismissMessageFormViewController)];
     } else {
-        viewController.navigationItem.leftBarButtonItem = customizedBackItem?: [[UIBarButtonItem alloc] initWithImage:[MQAssetUtil backArrow] style:UIBarButtonItemStylePlain target:viewController action:@selector(dismissMessageFormViewController)];
+        viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[MQAssetUtil backArrow] style:UIBarButtonItemStylePlain target:viewController action:@selector(dismissMessageFormViewController)];
     }
 }
 

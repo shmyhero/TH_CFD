@@ -17,7 +17,7 @@ static const NSInteger kMQTextCellSelectedUrlActionSheetTag = 2000;
 static const NSInteger kMQTextCellSelectedNumberActionSheetTag = 2001;
 static const NSInteger kMQTextCellSelectedEmailActionSheetTag = 2002;
 
-@interface MQTextMessageCell() <MEIQIA_TTTAttributedLabelDelegate, UIActionSheetDelegate, UIAlertViewDelegate>
+@interface MQTextMessageCell() <TTTAttributedLabelDelegate, UIActionSheetDelegate, UIAlertViewDelegate>
 
 @end
 

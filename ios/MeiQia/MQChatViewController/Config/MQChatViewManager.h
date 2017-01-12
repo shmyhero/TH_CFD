@@ -63,11 +63,6 @@
 - (MQChatViewController *)presentMQChatViewControllerInViewController:(UIViewController *)viewController;
 
 /**
- 创建一个美洽聊天界面的 viewControler
- */
-- (MQChatViewController *)createMQChatViewController;
-
-/**
  * 将客服聊天界面移除
  */
 - (void)disappearMQChatViewController;
@@ -115,7 +110,7 @@
 
 /**
  * 增加消息中可选中的链接的正则表达式，用于匹配消息，满足条件段落可以被用户点击。
- * @param linkRegex 链接的正则表达式
+ * @param numberRegex 链接的正则表达式
  */
 - (void)setMessageLinkRegex:(NSString *)linkRegex;
 
@@ -127,7 +122,7 @@
 
 /**
  * 设置顾客第一次进入界面显示的欢迎文字；
- * @param welcomText 提示文字
+ * @param tipText 提示文字
  */
 - (void)setChatWelcomeText:(NSString *)welcomText;
 
@@ -168,7 +163,7 @@
 
 /**
  * 是否支持表情键盘
- * @param enable 是否支持表情键盘
+ * @param
  */
 - (void)enableSendEmoji:(BOOL)enable;
 
@@ -296,7 +291,7 @@
 /**
  *  设置导航栏右键的图片
  *
- *  @param rightButton 右键图片
+ *  @param rightButtonImage 右键图片
  */
 - (void)setNavRightButton:(UIButton *)rightButton style_deprecated;
 

@@ -52,13 +52,3 @@
 @property (nonatomic, strong) NSDate *updateAt;
 
 @end
-
-@interface MQTicketCategory : MQModel
-
-@property (nonatomic, strong) NSNumber *id;
-@property (nonatomic, strong) NSNumber *enterpriseId;
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, strong) NSDate *createAt;
-@property (nonatomic, strong) NSDate *updateAt;
-
-@end

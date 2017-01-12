@@ -14,6 +14,4 @@
 
 - (NSArray *)map:(id(^)(id element))action;
 
-- (id)reduce:(id)initial step:(id(^)(id current, id element))action;
-
 @end

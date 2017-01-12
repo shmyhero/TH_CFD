@@ -11,9 +11,12 @@ import {
 	Linking,
 	Platform,
   NetInfo,
+	BackAndroid,
 } from 'react-native';
 
 var isAlertShown = false;
+var localVersionDataFetched = false;
+var lastOnlineVerionInfo = null;
 export function getLatestVersion(){
   console.log("getLatestVersion")
 	return new Promise((resolve, reject)=>{
@@ -24,20 +27,15 @@ export function getLatestVersion(){
 				},
 				(responseJson) => {
 					if(responseJson){
+						//responseJson.androidMinInt = 17;
+						lastOnlineVerionInfo = responseJson;
+						localVersionDataFetched = true;
             StorageModule.setLastOnlineVerionInfo(JSON.stringify(responseJson))
             .then(()=>{
-  						var currentVersionCode = LogicData.getCurrentVersionCode();
+							isCurrentVersionMinimum();
 
   						var onlineVersionCode = Platform.OS === 'ios' ? responseJson.iOSLatestInt : responseJson.androidLatestInt;
   						var onlineVersionName = Platform.OS === 'ios' ? responseJson.iOSLatestStr : responseJson.androidLatestStr;
-  						var onlineMinimumVersionCode = Platform.OS === 'ios' ? responseJson.iOSMinInt : responseJson.androidMinInt;
-  						var onlinePkgSize = Platform.OS === 'ios' ? responseJson.iOSPkgSize : responseJson.androidPkgSize;
-
-  						var pkgSize = (onlinePkgSize / 1024 / 1024).toFixed(2) + "MB"
-  						console.log("onlineMinimumVersionCode " + onlineMinimumVersionCode)
-  						if(onlineMinimumVersionCode > currentVersionCode && !isAlertShown){
-                showForceAlertDialog(onlineVersionName, pkgSize)
-  						}
 
   						LogicData.setOnlineVersionCode(onlineVersionCode);
   						LogicData.setOnlineVersionName(onlineVersionName);
@@ -46,9 +44,40 @@ export function getLatestVersion(){
 				},
 				(result) => {
 					console.log(result.errorMessage)
+
+					if(!localVersionDataFetched){
+						StorageModule.loadLastOnlineVerionInfo()
+					  .then((value)=>{
+					    if(value){
+								localVersionDataFetched = true;
+					      lastOnlineVerionInfo = JSON.parse(value);
+					    	isCurrentVersionMinimum();
+					    }
+						});
+					}
 				}
 			);
 	});
+}
+
+function isCurrentVersionMinimum(){
+	var currentVersionCode = LogicData.getCurrentVersionCode();
+
+	var onlineMinimumVersionCode = Platform.OS === 'ios' ? lastOnlineVerionInfo.iOSMinInt : lastOnlineVerionInfo.androidMinInt;
+
+	console.log("currentVersionCode " + currentVersionCode)
+	console.log("onlineMinimumVersionCode " + onlineMinimumVersionCode)
+	if(onlineMinimumVersionCode > currentVersionCode){
+		var onlineVersionName = Platform.OS === 'ios' ? lastOnlineVerionInfo.iOSLatestStr : lastOnlineVerionInfo.androidLatestStr;
+		var onlinePkgSize = Platform.OS === 'ios' ? lastOnlineVerionInfo.iOSPkgSize : lastOnlineVerionInfo.androidPkgSize;
+		console.log("onlineMinimumVersionCode " + onlineMinimumVersionCode + " versionInfo.androidPkgSize" + lastOnlineVerionInfo.androidPkgSize)
+		var pkgSize = (onlinePkgSize / 1024 / 1024).toFixed(2) + "MB";
+		if(onlineMinimumVersionCode > currentVersionCode && !isAlertShown){
+			showForceAlertDialog(onlineVersionName, pkgSize);
+			return false;
+		}
+	}
+	return true;
 }
 
 export function showForceAlertDialog(onlineVersionName, pkgSize){
@@ -66,58 +95,57 @@ export function showForceAlertDialog(onlineVersionName, pkgSize){
 
 export function gotoDownloadPage(){
   return new Promise((resolve)=>{
-    var url = NetConstants.MARKET_URL;
-    Linking.openURL(url)
-    .done(()=>{
-      if(resolve){
-        resolve();
-      }
-    })
+		if(lastOnlineVerionInfo || Platform.OS !== 'ios'){
+			var url = Platform.OS === 'ios' ? lastOnlineVerionInfo.iOSAppUrl : NetConstants.ANDROID_MARKET_URL;
+	    Linking.openURL(url)
+	    .done(()=>{
+	      if(resolve){
+	        resolve();
+	      }
+	    })
+		}else{
+			StorageModule.loadLastOnlineVerionInfo()
+			.then((value)=>{
+				if(value){
+					lastOnlineVerionInfo = JSON.stringify(value);
+					var url = Platform.OS === 'ios' ? lastOnlineVerionInfo.iOSAppUrl : NetConstants.ANDROID_MARKET_URL;
+					Linking.openURL(url)
+					.done(()=>{
+						if(resolve){
+							resolve();
+						}
+					})
+				}
+			})
+		}
+
   })
 }
 
 export function start(){
-  StorageModule.loadLastOnlineVerionInfo()
-  .then((value)=>{
-    if(value){
-      var versionInfo = JSON.parse(value);
-      var currentVersionCode = LogicData.getCurrentVersionCode();
-
-      var onlineMinimumVersionCode = Platform.OS === 'ios' ? versionInfo.iOSMinInt : versionInfo.androidMinInt;
-
-      console.log("currentVersionCode " + currentVersionCode)
-      console.log("onlineMinimumVersionCode " + onlineMinimumVersionCode)
-      if(onlineMinimumVersionCode > currentVersionCode){
-        var onlineVersionName = Platform.OS === 'ios' ? versionInfo.iOSLatestStr : versionInfo.androidLatestStr;
-        var onlinePkgSize = Platform.OS === 'ios' ? versionInfo.iOSPkgSize : versionInfo.androidPkgSize;
-        var pkgSize = (onlinePkgSize / 1024 / 1024).toFixed(2) + "MB";
-        if(onlineMinimumVersionCode > currentVersionCode && !isAlertShown){
-          showForceAlertDialog(onlineVersionName, pkgSize);
-          return;
-        }
-      }
-    }
-    getLatestVersion();
-    NetInfo.addEventListener(
-      'change',
-      handleConnectivityChange
-    );
-  })
-
+  getLatestVersion();
+  NetInfo.addEventListener(
+    'change',
+    handleConnectivityChange
+  );
 }
 
 function handleConnectivityChange(reach){
   if(Platform.OS === 'ios'){
     switch(reach){
-      case 'wifi':
-      case 'cell':
+      case 'none':
+				break;
+			default:
         getLatestVersion();
         break;
     }
   }else{
     switch(reach){
-      case 'MOBILE':
-      case 'WIFI':
+      case 'NONE':
+			case 'BLUETOOTH':
+				break;
+			default:
+				//
         getLatestVersion();
         break;
     }

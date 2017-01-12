@@ -132,7 +132,7 @@ function getCFDAPI(){
     SWITCH_TO_LIVE:CFD_API_SERVER + '/api/user/switchTo/Live',//切换到实盘
     SWITCH_TO_DEMO:CFD_API_SERVER + '/api/user/switchTo/Demo',//切换到模拟盘
 
-    LATEST_APP_VERSION:CFD_API_SERVER + '/api/version',
+    LATEST_APP_VERSION:CFD_API_SERVER + '/api/version/' + (Platform.OS === "ios" ? "ios" : "android"),
 
     GET_PAY_DEMO_TEST_ID:CFD_API_SERVER + '/api/user/live/deposit/id?amount=10',
 
@@ -144,7 +144,7 @@ function getCFDAPI(){
     REQUEST_UNBIND_CARD: CFD_API_SERVER + "/api/user/live/unbind",
     GET_USER_INFO: CFD_API_SERVER + "/api/user/live/info",
     REFUNDABLE_BALANCE: CFD_API_SERVER + "/api/user/live/balance/refundable",
-    REFUND_ESTIMATED_DAYS: CFD_API_SERVER + "/api/refundETA",
+    REFUND_SETTINGS: CFD_API_SERVER + "/api/refundSetting",
     REQUEST_WITHDRAW: CFD_API_SERVER + "/api/user/live/withdraw",
 
     GET_TRANSFERS_LIST: CFD_API_SERVER + "/api/user/live/transfers",
@@ -205,4 +205,4 @@ export let PARAMETER_CHARTTYPE_5_MINUTE = '5m'
 
 export let AUTH_ERROR = '需要OAuth授权'
 
-export let MARKET_URL = Platform.OS === 'android' ? 'market://details?id=com.tradehero.cfd' : '';
+export let ANDROID_MARKET_URL = 'market://details?id=com.tradehero.cfd';

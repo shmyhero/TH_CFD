@@ -81,6 +81,9 @@ export default class WithdrawPage extends Component {
         hasRead: true,
         withdrawChargeHint: withdrawChargeHint,
         refundETA: 3,
+        feeRate: 0.01,
+        minFee: 5,
+        fee: 0,
       }
     }
   }
@@ -95,13 +98,16 @@ export default class WithdrawPage extends Component {
       })
     })
 
-    NetworkModule.fetchTHUrl(NetConstants.CFD_API.REFUND_ESTIMATED_DAYS,
+    NetworkModule.fetchTHUrl(NetConstants.CFD_API.REFUND_SETTINGS,
       {
         method: 'GET',
       },
-      (days)=>{
+      (responseJson)=>{
+        //{"charge":{"minimum":0.0,"rate":0.0},"eta":3}
         this.setState({
-          refundETA: days,
+          refundETA: responseJson.eta,
+          minFee: responseJson.minimum,
+          feeRate: responseJson.rate
         })
       });
   }
@@ -123,12 +129,6 @@ export default class WithdrawPage extends Component {
   }
 
   withdrawAll(){
-    var newState = {
-      withdrawValueText: "" + this.state.refundableBanalce,
-      withdrawValue: this.state.refundableBanalce,
-    }
-    console.log("withdrawAll " + JSON.stringify(newState))
-    console.log("this.state.withdrawValue1" + this.state.withdrawValue);
     this.setState({
       withdrawValueText: "" + this.state.refundableBanalce,
       withdrawValue: this.state.refundableBanalce,
@@ -150,12 +150,13 @@ export default class WithdrawPage extends Component {
           newState.withdrawValueText = text;
           newState.withdrawValue = value;
         }
+        newState.fee = this.generateFee(newState.withdrawValue);
       }
     }else{
       newState.withdrawValueText = "";
       newState.withdrawValue = 0;
+      newState.fee = 0
     }
-
     console.log("newState " + JSON.stringify(newState));
     this.setState(newState);
   }
@@ -164,6 +165,14 @@ export default class WithdrawPage extends Component {
     this.setState({
       hasRead: value
     })
+  }
+
+  generateFee(withdrawValue){
+    var fee = (withdrawValue * this.state.feeRate).toFixed(2);
+    if(fee < this.state.minFee){
+      fee = this.state.minFee;
+    }
+    return fee;
   }
 
   isWithdrawValueAvailable(){
@@ -208,7 +217,10 @@ export default class WithdrawPage extends Component {
 
       return (
         <View style={[styles.rowWrapper, styles.depositRowWrapper]}>
- 					<Text style={{fontSize: 15, color: '#5a5a5a', marginTop: 18}}>出金金额</Text>
+          <View style={{flexDirection: 'row', alignSelf:'stretch', justifyContent:'space-between'}}>
+ 					    <Text style={styles.midiumText}>出金金额</Text>
+              <Text style={[styles.midiumText, {alignSelf: 'flex-end'}]}>{"对应手续费:" + this.state.fee + "美元"}</Text>
+          </View>
           <View style={{flexDirection: 'row', marginTop:10, alignItems:"center"}}>
    					<Text style={{fontSize: 17, fontWeight: 'bold', color: '#333333'}}>美元</Text>
             <TextInput style={[styles.inputText, inputStyle]}
@@ -537,6 +549,11 @@ const styles = StyleSheet.create({
   documentText:{
     fontSize: 12,
     color: '#ff6666',
+  },
+  midiumText:{
+    fontSize: 15,
+    color: '#5a5a5a',
+    marginTop: 18,
   }
 });
 

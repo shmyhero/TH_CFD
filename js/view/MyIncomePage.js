@@ -178,13 +178,27 @@ var MyIncomePage = React.createClass({
 	gotoOpenAccount: function(){
 		OpenAccountRoutes.getLatestInputStep()
 		.then(step=>{
-			console.log("getLatestInputStep " + step)
-			this.props.navigator.push({
+			var meData = LogicData.getMeData();
+			console.log("showOARoute medata: " + JSON.stringify(meData));
+
+			var OARoute = {
 				name: MainPage.OPEN_ACCOUNT_ROUTE,
 				step: step,
-				onPop: ()=>{this.refreshData()},
-			})
+				onPop: this.reloadMeData,
+			};
+
+			if(!meData.phone){
+				this.props.navigator.push({
+					name: MainPage.LOGIN_ROUTE,
+					nextRoute: OARoute,
+					isMobileBinding: true,
+				});
+			}else{
+				this.props.navigator.push(OARoute);
+			}
 		});
+
+
 	},
 
   renderTotalIncome: function(){
@@ -300,7 +314,12 @@ var MyIncomePage = React.createClass({
 	},
 
 	render: function() {
-		var nextEnabled = true;
+		var nextEnabled = false;
+		var meData = LogicData.getMeData();
+		var notLogin = Object.keys(meData).length === 0
+		if(!notLogin && meData.liveAccStatus === 1){
+			nextEnabled = true;
+		}
 
 		return (
 			<View style={{flex: 1}}>

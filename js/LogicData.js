@@ -1,7 +1,6 @@
 'use strict'
 import {
 	Platform,
-	StatusBar
 } from 'react-native';
 var StorageModule = require('./module/StorageModule')
 var NativeDataModule = require('./module/NativeDataModule')
@@ -64,9 +63,6 @@ var LogicData = {
 			console.log("setAccountState = " + state);
 			NativeDataModule.passRawDataToNative('accountState', ''+state)
 			ColorConstants.setScheme(state ? ColorConstants.COLOR_THEME_LIVE: ColorConstants.COLOR_THEME_SIMULATOR);
-			if(Platform.OS === 'android'){
-				StatusBar.setBackgroundColor(ColorConstants.TITLE_BLUE);
-			}
 
 			EventCenter.emitAccountStateChangeEvent();
 		}

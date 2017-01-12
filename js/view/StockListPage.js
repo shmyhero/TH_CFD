@@ -12,7 +12,6 @@ import {
 	Alert,
 	Platform,
 	TouchableOpacity,
-	StatusBar,
 } from 'react-native';
 
 var {EventCenter, EventConst} = require('../EventCenter')
@@ -636,7 +635,6 @@ var StockListPage = React.createClass({
 			{width: width, flex: 1}
 		return (
 			<View style={viewStyle}>
-				<StatusBar barStyle="light-content" backgroundColor={ColorConstants.TITLE_BLUE}/>
 				{this.renderContent()}
 			</View>
 		)

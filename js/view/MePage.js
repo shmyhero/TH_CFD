@@ -12,7 +12,6 @@ import {
 	ScrollView,
 	Alert,
 	Platform,
-	StatusBar,
 } from 'react-native';
 var CookieManager = require('react-native-cookies')
 
@@ -723,7 +722,6 @@ var MePage = React.createClass({
 		*/
 		return (
 			<View style={styles.wrapper}>
-				<StatusBar barStyle="light-content" backgroundColor={ColorConstants.TITLE_BLUE}/>
 				{this.renderNavBar()}
 				<ScrollView ref={LIST_SCROLL_VIEW}>
 					{this.renderListView()}

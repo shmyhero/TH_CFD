@@ -10,6 +10,7 @@ import {
 	Text,
 	Image,
 	TouchableHighlight,
+	StatusBar,
 } from 'react-native';
 
 var ColorPropType = require('ColorPropType');
@@ -100,6 +101,14 @@ var NavBar = React.createClass({
 		});
 	},
 
+	renderStatusBar: function(backgroundColor){
+		if(Platform.OS === "android"){
+			<StatusBar barStyle="light-content" backgroundColor={backgroundColor}/>
+		}else{
+			return null;
+		}
+	},
+
 	render: function() {
 		var backgroundColor = ColorConstants.title_blue();
 		if(this.props.backgroundColor){
@@ -108,6 +117,7 @@ var NavBar = React.createClass({
 
 		return (
 			<View style={[styles.container, {backgroundColor: backgroundColor}, this.props.barStyle]} >
+	    	{this.renderStatusBar(backgroundColor)}
 				<View style={styles.leftContainer}>
 					{this.renderBackButton()}
 					{this.renderLeftText()}

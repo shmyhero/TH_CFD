@@ -8,7 +8,6 @@ import {
 	NetInfo,
 	Image,
 	Platform,
-	StatusBar,
 } from 'react-native';
 
 var WEBVIEW_REF = 'webview';
@@ -258,12 +257,8 @@ var WebViewPage = React.createClass({
 	},
 
 	render: function() {
-		var statusBarColor = this.props.themeColor ? this.props.themeColor : ColorConstants.TITLE_BLUE;
-		var statusBar = <StatusBar barStyle="light-content" backgroundColor={statusBarColor}/>;
-
 		return(
 			<View style={{flex: 1}}>
-				{statusBar}
 				{this.renderNavBar()}
 				{this.renderWebView()}
 			</View>

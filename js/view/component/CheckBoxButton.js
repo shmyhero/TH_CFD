@@ -82,7 +82,7 @@ var styles = StyleSheet.create({
 
 	image: {
 		width: 20.5,
-		height: 19.5,
+		height: 20,
 	},
 });
 

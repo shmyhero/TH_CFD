@@ -168,6 +168,9 @@ export default class WithdrawPage extends Component {
   }
 
   generateFee(withdrawValue){
+    if(withdrawValue == 0){
+      return 0;
+    }
     var fee = (withdrawValue * this.state.feeRate).toFixed(2);
     if(fee < this.state.minFee){
       fee = this.state.minFee;

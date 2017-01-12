@@ -1321,6 +1321,14 @@ var StockOpenPositionPage = React.createClass({
 		var openDate = new Date(rowData.createAt)
 		var currency = UIConstants.CURRENCY_CODE_LIST[rowData.security.ccy]
 
+		var financing_dividend_sum = 0;
+		if(rowData.financingSum){
+			financing_dividend_sum += rowData.financingSum;
+		}
+		if(rowData.dividendSum){
+			financing_dividend_sum += rowData.dividendSum;
+		}
+
 		return (
 			<View style={[{height: newExtendHeight}, styles.extendWrapper]} >
 				<View style={[styles.darkSeparator, {marginLeft: 0}]} />
@@ -1378,8 +1386,18 @@ var StockOpenPositionPage = React.createClass({
 						<Text style={styles.extendTextTop}>止盈/止损</Text>
 						<Image style={styles.extendImageBottom} source={stopLossImage}/>
 					</TouchableOpacity>
-					<View style={[styles.extendRight, this.state.selectedSubItem!==0 && styles.bottomBorder,{borderBottomColor:ColorConstants.title_blue()}]}>
+
+					<View style={[styles.extendRight,this.state.selectedSubItem!==0 && styles.bottomBorder,{borderBottomColor:ColorConstants.title_blue()},{justifyContent:'flex-start',paddingBottom:0,marginLeft:1}]}>
+						<View>
+      				<Text style={styles.extendTextTop}>隔夜费</Text>
+      			</View>
+						<View>
+      				<Text style={styles.extendTextBottom}>{financing_dividend_sum}</Text>
+      			</View>
 					</View>
+
+
+
 				</View>
 
 				{this.state.selectedSubItem !== 0 ? this.renderSubDetail(rowData): null}

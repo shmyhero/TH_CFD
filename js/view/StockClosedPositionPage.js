@@ -309,6 +309,13 @@ var StockClosedPositionPage = React.createClass({
 		var openDate = new Date(rowData.openAt)
 		var closeDate = new Date(rowData.closeAt)
 		var currency = UIConstants.CURRENCY_CODE_LIST[rowData.security.ccy]
+		var financing_dividend_sum = 0;
+		if(rowData.financingSum){
+			financing_dividend_sum += rowData.financingSum;
+		}
+		if(rowData.dividendSum){
+			financing_dividend_sum += rowData.dividendSum;
+		}
 		return (
 			<View style={[{height: extendHeight}, styles.extendWrapper]} >
 				<View style={[styles.darkSeparator, {marginLeft: 0}]} />
@@ -359,8 +366,8 @@ var StockClosedPositionPage = React.createClass({
 				<View style={styles.darkSeparator} />
 				<View style={styles.extendRowWrapper}>
 					<View style={styles.extendLeft}>
-						<Text style={styles.extendTextTop}>留仓费</Text>
-						<Text style={styles.extendTextBottom}>0</Text>
+						<Text style={styles.extendTextTop}>隔夜费</Text>
+						<Text style={styles.extendTextBottom}>{financing_dividend_sum}</Text>
 					</View>
 					<View style={styles.extendMiddle}>
 						<Text style={styles.extendTextTop}>净收益(美元)</Text>

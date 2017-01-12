@@ -69,12 +69,16 @@ export default class DepositPage extends Component{
 			fxRate:0.144,
 			payStateTip:'最低入金额度：100美元',
 			payStateTip2:'对应人民币：0.00元',
+			payStateTip3:'对应手续费：0美元',
+			payStateTip4:'注意：入金手续费为入金金额的1%(最低5美元)',
 			payMethodSelected:0,
 			dataSource:ds.cloneWithRows(listRawData),
 			dataSourceBank:dsBank.cloneWithRows(bankListData),
 			protocolSeleceted:true,
 			confirmButtonEnable:false,
 			showBankList:false,
+			chargeRate:0.01,
+			chargeMin:5,
 		}
 	}
 
@@ -100,6 +104,8 @@ export default class DepositPage extends Component{
 					noLessMoney: responseJson.minimum,
 					fxRate : responseJson.fxRate,
 					dataSourceBank:dsBank.cloneWithRows(responseJson.banks),
+					chargeRate:responseJson.charge.rate,
+					chargeMin:responseJson.charge.minimum,
 				},()=>this.onChangeWithdrawValue(''))
 			},
 			(result) => {
@@ -156,7 +162,7 @@ export default class DepositPage extends Component{
 			<View style = {{backgroundColor:'white'}}>
 				<TouchableOpacity style={[styles.comfirmButton,{backgroundColor:color}]} onPress={()=>this.pressConfirmButton()}>
 					<Text style={styles.comfirmText}>
-						确定
+						实时到账，确认入金
 					</Text>
 				</TouchableOpacity>
 			</View>
@@ -200,6 +206,7 @@ export default class DepositPage extends Component{
 		var error = null
 		rmbValue = value / this.state.fxRate;
 		rmbValue = (text.length>0 ? rmbValue.toFixed(2):0.00.toFixed(2))
+		var charge = (text.length>0 ? Math.max(value*this.state.chargeRate,this.state.chargeMin).toFixed(2):0.00.toFixed(2))
 
 		if(text_ && value < this.state.noLessMoney){
 			error = "入金金额不低于"+this.state.noLessMoney+'美元！';
@@ -208,6 +215,7 @@ export default class DepositPage extends Component{
 			this.setState({
 				payStateTip: error,
 			  payStateTip2:/*'当前汇率：'+(1/this.state.fxRate).toFixed(2)+*/'对应人民币：'+rmbValue+'元',
+				payStateTip3:'对应手续费'+charge+'美元',
 			})
 				inputError = true
 		}else{
@@ -215,6 +223,7 @@ export default class DepositPage extends Component{
 			this.setState({
 				payStateTip: '最低入金额度：'+this.state.noLessMoney+'美元',
 				payStateTip2:/*'当前汇率：'+(1/this.state.fxRate).toFixed(2)+*/'对应人民币：'+rmbValue+'元',
+				payStateTip3:'对应手续费'+charge+'美元',
 			})
 
 		  inputError = false
@@ -259,7 +268,12 @@ export default class DepositPage extends Component{
 						</TextInput>
 					</View>
 				<View style = {styles.lineSep}></View>
-				<Text style = {styles.payStateTip2}>{this.state.payStateTip2}</Text>
+				<View style = {styles.tipsLine}>
+					<Text style = {styles.payStateTip2}>{this.state.payStateTip2}</Text>
+					<Text style = {styles.payStateTip3}>{this.state.payStateTip3}</Text>
+				</View>
+
+
 			</View>
 		)
 	}
@@ -271,9 +285,8 @@ export default class DepositPage extends Component{
 				<Image source={checkBox} style={[styles.checkbox,{marginLeft:15,marginRight:10}]} />
 				<Text style={styles.protocalLeft}>我已阅读并同意</Text>
 				<TouchableOpacity activeOpacity={0.5} onPress={()=>this.go2Protocol()}>
-					<Text style={styles.protocalRight}>入金协议内容，</Text>
+					<Text style={styles.protocalRight}>入金协议内容</Text>
 				</TouchableOpacity>
-				<Text style={styles.protocalLeft}>入金手续费1%</Text>
 		 </TouchableOpacity>
 		)
 	}
@@ -408,6 +421,7 @@ export default class DepositPage extends Component{
 		Keyboard.dismiss();
 	}
 
+
 	render(){
 
 		return(
@@ -432,9 +446,11 @@ export default class DepositPage extends Component{
 
 				<View style = {{flex:1}}>
 					{this.renderDetail()}
+					<Text style={styles.psLine}>注意：入金手续费为入金金额的{this.state.chargeRate*100}%(最低{this.state.chargeMin}美元)</Text>
 					<TouchableOpacity style={styles.blank} onPress={()=>this.pressBlank()}>
 						<View></View>
 					</TouchableOpacity>
+
 					<View style = {{flex:1,justifyContent:'flex-end'}}>
 					{this.renderProtocol()}
 					{this.renderConfirm()}
@@ -529,9 +545,22 @@ const styles = StyleSheet.create({
 	},
 
 	payStateTip2:{
-		fontSize:14,
+		fontSize:13,
+		color:'#5a5a5a',
+		paddingLeft:15,
+		paddingTop:15,
+		paddingBottom:15,
+	},
+
+	payStateTip3:{
+		fontSize:13,
 		color:'#5a5a5a',
 		padding:15,
+	},
+
+	tipsLine:{
+		flexDirection:'row',
+		justifyContent:'space-between',
 	},
 
 	lineSep:{
@@ -583,6 +612,12 @@ const styles = StyleSheet.create({
 	protocalLeft:{
 		fontSize:12,
 		color:'#858585'
+	},
+
+	psLine:{
+		fontSize:12,
+		color:'#858585',
+		margin:15,
 	},
 
 	protocalRight:{

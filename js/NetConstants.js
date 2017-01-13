@@ -144,7 +144,7 @@ function getCFDAPI(){
     REQUEST_UNBIND_CARD: CFD_API_SERVER + "/api/user/live/unbind",
     GET_USER_INFO: CFD_API_SERVER + "/api/user/live/info",
     REFUNDABLE_BALANCE: CFD_API_SERVER + "/api/user/live/balance/refundable",
-    REFUND_SETTINGS: CFD_API_SERVER + "/api/refundSetting",
+    REFUND_SETTINGS: CFD_API_SERVER + "/api/refund/setting",
     REQUEST_WITHDRAW: CFD_API_SERVER + "/api/user/live/withdraw",
 
     GET_TRANSFERS_LIST: CFD_API_SERVER + "/api/user/live/transfers",

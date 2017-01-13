@@ -82,8 +82,8 @@ export default class WithdrawPage extends Component {
         withdrawChargeHint: withdrawChargeHint,
         refundETA: 3,
         feeRate: 0.01,
-        minFee: 5,
-        fee: 0,
+        minFee: 5.00,
+        fee: (0.00).toFixed(2),
       }
     }
   }
@@ -155,7 +155,7 @@ export default class WithdrawPage extends Component {
     }else{
       newState.withdrawValueText = "";
       newState.withdrawValue = 0;
-      newState.fee = 0
+      newState.fee = (0.00).toFixed(2)
     }
     console.log("newState " + JSON.stringify(newState));
     this.setState(newState);
@@ -169,11 +169,11 @@ export default class WithdrawPage extends Component {
 
   generateFee(withdrawValue){
     if(withdrawValue == 0){
-      return 0;
+      return 0.00.toFixed(2);
     }
     var fee = (withdrawValue * this.state.feeRate).toFixed(2);
     if(fee < this.state.minFee){
-      fee = this.state.minFee;
+      fee = (this.state.minFee).toFixed(2);
     }
     return fee;
   }

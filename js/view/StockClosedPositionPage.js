@@ -11,8 +11,8 @@ import {
 	Image,
 	Platform,
 	Alert,
+	LayoutAnimation,
 } from 'react-native';
-var LayoutAnimation = require('LayoutAnimation')
 
 var LogicData = require('../LogicData')
 var NetConstants = require('../NetConstants')
@@ -173,19 +173,20 @@ var StockClosedPositionPage = React.createClass({
 				stockInfo: this.state.stockInfo.cloneWithRows(newData),
 				stockInfoRowData: newData,
 				selectedRow: -1,
-			})
-			if (Platform.OS === 'android') {
-				var listHeight = this.refs['listview'].getMetrics().contentLength
-				var currentY = listHeight/newData.length*(parseInt(rowID)) + UIConstants.LIST_HEADER_BAR_HEIGHT
-				this.setTimeout(
-					() => {
-						if (currentY > 300 && currentY + 3 * rowHeight > this.refs['listview'].getMetrics().contentLength) {
-							this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY), animated:true})
-						}
-					 },
-					500
-				);
-			}
+			},()=>{
+				if (Platform.OS === 'android') {
+					var listHeight = this.refs['listview'].getMetrics().contentLength
+					var currentY = listHeight/newData.length*(parseInt(rowID)) + UIConstants.LIST_HEADER_BAR_HEIGHT
+					this.setTimeout(
+						() => {
+							if (currentY > 300 && currentY + 3 * rowHeight > this.refs['listview'].getMetrics().contentLength) {
+								this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY), animated:true})
+							}
+						 },
+						500
+					);
+				}
+			});
 		} else {
 			var maxY = Platform.OS === 'android' ?
 			(height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER - UIConstants.HEADER_HEIGHT
@@ -209,8 +210,22 @@ var StockClosedPositionPage = React.createClass({
 			);
 
 			//RN 3.3 Android list view has a bug when the spring animation shows up... Disable it for now
+
 			if(Platform.OS === 'ios'){
-				LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+				//Do not set delete animation, or the some row will be removed if clicked quickly.
+				var animation = {
+					duration: 700,
+					create: {
+						type: 'linear',
+						property: 'opacity',
+					},
+					update: {
+						type: 'spring',
+						springDamping: 0.4,
+						property: 'scaleXY',
+					},
+				}
+				LayoutAnimation.configureNext(animation);//LayoutAnimation.Presets.spring);
 			}
 			newData[rowID].hasSelected = true
 			this.setState({
@@ -391,6 +406,7 @@ var StockClosedPositionPage = React.createClass({
 	},
 
 	renderRow: function(rowData, sectionID, rowID, highlightRow) {
+		console.log("BUG FIX - renderRow rowID " + rowID + ", rowData " + JSON.stringify(rowData))
 		var bgcolor = this.state.selectedRow === rowID ? '#e6e5eb' : 'white'
 		var plPercent = (rowData.closePrice - rowData.openPrice) / rowData.openPrice * rowData.leverage * 100
 		plPercent = plPercent * (rowData.isLong ? 1 : -1)
@@ -491,7 +507,7 @@ var StockClosedPositionPage = React.createClass({
 			- UIConstants.HEADER_HEIGHT
 			- UIConstants.SCROLL_TAB_HEIGHT
 			- UIConstants.TAB_BAR_HEIGHT} :
-			{width: width, flex: 1}
+			{width: width, flex: 1,}
 		return (
 			<View style={viewStyle}>
 				{this.renderContent()}

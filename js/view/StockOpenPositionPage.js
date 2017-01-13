@@ -13,13 +13,13 @@ import {
 	Platform,
 	Image,
 	Alert,
-  	Switch,
-  	Slider,
-  	TextInput,
-  	ScrollView,
-		ActivityIndicatorIOS,
+	Switch,
+	Slider,
+	TextInput,
+	ScrollView,
+	ActivityIndicatorIOS,
+	LayoutAnimation,
 } from 'react-native';
-var LayoutAnimation = require('LayoutAnimation')
 
 var ActivityIndicator = require('ActivityIndicator');
 var LogicData = require('../LogicData')
@@ -416,7 +416,21 @@ var StockOpenPositionPage = React.createClass({
 
 			//Disable the spring animation on Android for now since the RN 3.3 list view has a bug.
 			if(Platform.OS === 'ios'){
-				LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+				//Do not set delete animation, or the some row will be removed if clicked quickly.
+				var animation = {
+					duration: 700,
+					create: {
+						type: 'linear',
+						property: 'opacity',
+					},
+					update: {
+						type: 'spring',
+						springDamping: 0.4,
+						property: 'scaleXY',
+					},
+				}
+				LayoutAnimation.configureNext(animation);//LayoutAnimation.Presets.spring);
+				//LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
 			}
 			extendHeight = newExtendHeight
 		}

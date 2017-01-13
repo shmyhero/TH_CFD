@@ -106,8 +106,8 @@ export default class WithdrawPage extends Component {
         //{"charge":{"minimum":0.0,"rate":0.0},"eta":3}
         this.setState({
           refundETA: responseJson.eta,
-          minFee: responseJson.minimum,
-          feeRate: responseJson.rate
+          minFee: responseJson.charge.minimum,
+          feeRate: responseJson.charge.rate
         })
       });
   }

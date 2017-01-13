@@ -238,14 +238,10 @@ var StockListPage = React.createClass({
 					console.log("syncOwnStocks success")
 					this.fetchOwnStockData();})
 				.catch((result)=>{
+					//Sync failed. But we still can use old own stocks data.
 					console.log("syncOwnStocks result " + JSON.stringify(result))
-					if(!result.loadedOfflineCache){
-						this.setState({
-							contentLoaded: false,
-							isRefreshing: false,
-						});
-					}
-				})
+					this.fetchOwnStockData();
+				});
 		}else{
 			this.fetchOwnData();
 		}
@@ -332,6 +328,7 @@ var StockListPage = React.createClass({
 		this.fetchStockData()
 
 		if (this.props.isOwnStockPage) {
+			this.fetchOwnStockData();		//Read last cache.
 			this.syncOwnData()
 
 	    this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);

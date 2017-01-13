@@ -197,7 +197,7 @@ export function syncOwnStocks(userData, readCache) {
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 				},
-				cache: readCache ? 'offline' : 'none',
+				//cache: readCache ? 'offline' : 'none',
 			},
 			(responseJson) => {
 				if (responseJson.length===0 && !isLive) {

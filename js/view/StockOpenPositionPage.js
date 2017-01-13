@@ -1392,7 +1392,7 @@ var StockOpenPositionPage = React.createClass({
       				<Text style={styles.extendTextTop}>隔夜费</Text>
       			</View>
 						<View>
-      				<Text style={styles.extendTextBottom}>{financing_dividend_sum}</Text>
+      				<Text style={styles.extendTextBottom}>{financing_dividend_sum.toFixed(2)}</Text>
       			</View>
 					</View>
 

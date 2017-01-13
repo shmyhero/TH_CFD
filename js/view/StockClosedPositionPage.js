@@ -367,7 +367,7 @@ var StockClosedPositionPage = React.createClass({
 				<View style={styles.extendRowWrapper}>
 					<View style={styles.extendLeft}>
 						<Text style={styles.extendTextTop}>隔夜费</Text>
-						<Text style={styles.extendTextBottom}>{financing_dividend_sum}</Text>
+						<Text style={styles.extendTextBottom}>{financing_dividend_sum.toFixed(2)}</Text>
 					</View>
 					<View style={styles.extendMiddle}>
 						<Text style={styles.extendTextTop}>净收益(美元)</Text>

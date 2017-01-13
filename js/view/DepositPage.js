@@ -68,8 +68,8 @@ export default class DepositPage extends Component{
 			noLessMoney:100,
 			fxRate:0.144,
 			payStateTip:'最低入金额度：100美元',
-			payStateTip2:'对应人民币：0.00元',
-			payStateTip3:'对应手续费：0美元',
+			payStateTip2:'等额人民币：0.00元',
+			payStateTip3:'手续费：0美元',
 			payStateTip4:'注意：入金手续费为入金金额的1%(最低5美元)',
 			payMethodSelected:0,
 			dataSource:ds.cloneWithRows(listRawData),
@@ -214,16 +214,16 @@ export default class DepositPage extends Component{
 			console.log("Text1 = " + text_);
 			this.setState({
 				payStateTip: error,
-			  payStateTip2:/*'当前汇率：'+(1/this.state.fxRate).toFixed(2)+*/'对应人民币：'+rmbValue+'元',
-				payStateTip3:'对应手续费'+charge+'美元',
+			  payStateTip2:/*'当前汇率：'+(1/this.state.fxRate).toFixed(2)+*/'等额人民币：'+rmbValue+'元',
+				payStateTip3:'手续费'+charge+'美元',
 			})
 				inputError = true
 		}else{
 			console.log("Text2 = " + text_);
 			this.setState({
 				payStateTip: '最低入金额度：'+this.state.noLessMoney+'美元',
-				payStateTip2:/*'当前汇率：'+(1/this.state.fxRate).toFixed(2)+*/'对应人民币：'+rmbValue+'元',
-				payStateTip3:'对应手续费'+charge+'美元',
+				payStateTip2:/*'当前汇率：'+(1/this.state.fxRate).toFixed(2)+*/'等额人民币：'+rmbValue+'元',
+				payStateTip3:'手续费'+charge+'美元',
 			})
 
 		  inputError = false

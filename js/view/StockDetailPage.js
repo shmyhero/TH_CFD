@@ -987,7 +987,7 @@ var StockDetailPage = React.createClass({
 			<TouchableOpacity
 				activeOpacity={0.85}
 				onPress={() => buttonEnable ? this.okPress():this.okPressInDisable()}
-				style={[styles.okView, !buttonEnable && (LogicData.getAccountState()?styles.okViewDisabledLive:styles.okViewDisabled), !this.state.stockInfo.isOpen && styles.okViewNotOpened]}>
+				style={[styles.okView, !buttonEnable && (LogicData.getAccountState()?styles.okViewDisabledLive:styles.okViewDisabled), !this.state.stockInfo.isOpen && (LogicData.getAccountState()?styles.okViewNotOpenedLive:styles.okViewNotOpened)]}>
 				<Text style={[styles.okButton, !buttonEnable && styles.okButtonDisabled, !this.state.stockInfo.isOpen && styles.okButtonNotOpened]}>
 					{this.state.stockInfo.isOpen ? '确认' : '未开市'}
 				</Text>
@@ -1265,6 +1265,9 @@ var styles = StyleSheet.create({
 	okViewNotOpened: {
 		backgroundColor: '#164593'
 	},
+	okViewNotOpenedLive: {
+		backgroundColor: '#486288'
+	},
 	okButton: {
 		color: '#ffffff',
 		textAlign: 'center',
@@ -1273,9 +1276,15 @@ var styles = StyleSheet.create({
 	okButtonDisabled: {
 		color: '#5771a8'
 	},
+
 	okButtonNotOpened: {
-		color: '#f1585c'
+		color: '#f1585c',
 	},
+
+	okButtonNotOpenedLive: {
+		color: '#486288'
+	},
+
 	stockCurrencyWarningText: {
 		margin: 5,
 		fontSize: 10,

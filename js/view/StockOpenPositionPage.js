@@ -1357,8 +1357,8 @@ var StockOpenPositionPage = React.createClass({
 						<Text style={styles.extendTextBottom}>{lastPrice}</Text>
 					</View>
 					<View style={styles.extendRight}>
-						<Text style={styles.extendTextTop}>开仓时间</Text>
-						<Text style={styles.extendTextBottom}>{openDate.Format('yy/MM/dd')}</Text>
+						<Text style={styles.extendTextTop}>{openDate.Format('yy/MM/dd')}</Text>
+						<Text style={styles.extendTextBottom}>{openDate.Format('hh:mm')}</Text>
 					</View>
 				</View>
 				<View style={styles.darkSeparator} />

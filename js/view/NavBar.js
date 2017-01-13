@@ -10,6 +10,7 @@ import {
 	Text,
 	Image,
 	TouchableHighlight,
+	TouchableOpacity,
 	StatusBar,
 } from 'react-native';
 
@@ -145,15 +146,16 @@ var NavBar = React.createClass({
 			}
 
 			return (
-				<TouchableHighlight
+				<TouchableOpacity
 					onPress={this.backOnClick}
-					underlayColor={ColorConstants.title_blue()}>
+					// underlayColor={ColorConstants.title_blue()}
+					>
 					<View style={{padding: 5}}>
 						<Image
 							style={styles.backButton}
 							source={imageOnLeft}/>
 					</View>
-				</TouchableHighlight>
+				</TouchableOpacity>
 			);
 		}
 	},
@@ -161,15 +163,16 @@ var NavBar = React.createClass({
 	renderLeftText: function() {
 		if (this.props.textOnLeft !== null) {
 			return (
-				<TouchableHighlight
+				<TouchableOpacity
 					onPress={this.leftTextOnClick}
-					underlayColor={ColorConstants.title_blue()}>
+					// underlayColor={ColorConstants.title_blue()}
+					>
 
 					<Text style={styles.textOnLeft}>
 						{this.props.textOnLeft}
 					</Text>
 
-				</TouchableHighlight>
+				</TouchableOpacity>
 			);
 		}
 	},
@@ -177,15 +180,16 @@ var NavBar = React.createClass({
 	renderSearchButton: function() {
 		if (this.props.showSearchButton) {
 			return (
-				<TouchableHighlight
+				<TouchableOpacity
 					onPress={this.searchButtonClicked}
-					underlayColor={ColorConstants.title_blue()}>
+					// underlayColor={ColorConstants.title_blue()}
+					>
 
 					<Image
 						style={styles.rightImage}
 						source={require('../../images/search.png')}/>
 
-				</TouchableHighlight>
+				</TouchableOpacity>
 			);
 		}
 	},
@@ -194,15 +198,16 @@ var NavBar = React.createClass({
 		if (this.props.textOnRight !== null) {
 			if(this.props.enableRightText) {
 				return (
-					<TouchableHighlight
+					<TouchableOpacity
 						onPress={this.rightTextOnClick}
-						underlayColor={ColorConstants.title_blue()}>
+						// underlayColor={ColorConstants.title_blue()}
+						>
 
 						<Text style={styles.textOnRight}>
 							{this.props.textOnRight}
 						</Text>
 
-					</TouchableHighlight>
+					</TouchableOpacity>
 				);
 			}
 			else {
@@ -223,15 +228,16 @@ var NavBar = React.createClass({
 			}
 
 			return (
-				<TouchableHighlight
+				<TouchableOpacity
 					onPress={this.rightImageOnClick}
-					underlayColor={ColorConstants.title_blue()}>
+					// underlayColor={ColorConstants.title_blue()}
+					>
 
 					<Image
 						style={imageStyles}
 						source={this.props.imageOnRight}/>
 
-				</TouchableHighlight>
+				</TouchableOpacity>
 			);
 		}
 	},

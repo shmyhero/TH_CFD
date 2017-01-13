@@ -963,6 +963,38 @@ var MainPage = React.createClass({
 		 }
 	},
 
+	gotoWithdrawResultPage: function(pushData){
+		var currentNavigatorIndex = LogicData.getTabIndex();
+	  console.log("push gotoStockDetail");
+		console.log("push " + currentNavigatorIndex);
+
+		var stockRowData = {
+			name: pushData.CName,
+			id: parseInt(pushData.StockID),
+		}
+
+		var liveUserInfo = {}
+		liveUserInfo.province = pushData.province;
+		liveUserInfo.city = pushData.city;
+		liveUserInfo.lastName = pushData.lastName;
+		liveUserInfo.firstName = pushData.firstName;
+		liveUserInfo.bankName = pushData.bankName;
+		liveUserInfo.branch = pushData.branch;
+		liveUserInfo.bankCardNumber = pushData.bankCardNumber;
+		liveUserInfo.lastWithdraw = pushData.lastWithdraw;
+		liveUserInfo.lastWithdrawAt = pushData.lastWithdrawAt;
+		liveUserInfo.bankCardStatus = "Rejected";
+		liveUserInfo.bankCardRejectReason = pushData.bankCardRejectReason;
+		LogicData.setLiveUserInfo(liveUserInfo);
+
+		if(_navigators[currentNavigatorIndex]){
+			_navigators[currentNavigatorIndex].push({
+				name: WITHDRAW_RESULT_ROUTE,
+				bankCardStatus: "Rejected",
+			});
+		}
+	},
+
 	gotoLoginPage: function(){
 		console.log("gotoLoginPage");
 		LocalDataUpdateModule.removeUserData();
@@ -996,6 +1028,8 @@ var MainPage = React.createClass({
 				// else if(pushData.tongrd_type === "deeplink") {
 				// 	this._handleDeepLink(pushData.tongrd_value)
 				// }
+			}else if(pushData.type == "4"){
+				this.gotoWithdrawResultPage(pushData);
 			}
 		}
 	},

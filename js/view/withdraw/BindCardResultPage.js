@@ -62,11 +62,13 @@ export default class BindCardResultPage extends Component {
   static propTypes = {
 		bankCardStatus: PropTypes.string, //None, PendingReview, Approved, Rejected
 		popToOutsidePage: PropTypes.func,
+		withdrawData: PropTypes.object,
   }
 
   static defaultProps = {
 		bankCardStatus: "None", //
 		popToOutsidePage: ()=>{},
+		withdrawData: null,
   }
 
   constructor(props) {

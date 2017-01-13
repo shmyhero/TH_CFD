@@ -151,7 +151,7 @@ var MePage = React.createClass({
 	},
 
 	reloadMeData: function(){
-		if(LogicData.getTabIndex() == MainPage.ME_PAGE_TAB_INDEX){
+		// if(LogicData.getTabIndex() == MainPage.ME_PAGE_TAB_INDEX){
 			//Check if the user has logged in and the config row need to be shown.
 			if(this.refs[LIST_SCROLL_VIEW]){
 				this.refs[LIST_SCROLL_VIEW].scrollTo({x:0, y:0, animated:false});
@@ -237,7 +237,7 @@ var MePage = React.createClass({
 			this.setState({
 				dataSource: datasource,
 			})
-		}
+		// }
 	},
 
 	gotoOpenAccount: function() {
@@ -291,8 +291,6 @@ var MePage = React.createClass({
 		if(meData ==undefined || meData.liveUsername==undefined || meData.liveEmail==undefined){
 			return;
 		}
-
-
 
 			CookieManager.set({
 			  name: 'username',

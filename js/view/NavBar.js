@@ -107,9 +107,14 @@ var NavBar = React.createClass({
 			backgroundColor = this.props.backgroundColor;
 		}
 
+		var navBarColor = ColorConstants.title_blue();
+		if(this.props.backgroundColor !== "transparent"){
+			navBarColor = this.props.backgroundColor;
+		}
+
 		return (
 			<View style={[styles.container, {backgroundColor: backgroundColor}, this.props.barStyle]} >
-	    	<StatusBar barStyle="light-content" backgroundColor={backgroundColor}/>
+	    	<StatusBar barStyle="light-content" backgroundColor={navBarColor}/>
 				<View style={styles.leftContainer}>
 					{this.renderBackButton()}
 					{this.renderLeftText()}

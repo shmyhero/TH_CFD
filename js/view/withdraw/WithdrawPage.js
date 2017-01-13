@@ -222,7 +222,7 @@ export default class WithdrawPage extends Component {
         <View style={[styles.rowWrapper, styles.depositRowWrapper]}>
           <View style={{flexDirection: 'row', alignSelf:'stretch', justifyContent:'space-between'}}>
  					    <Text style={styles.midiumText}>出金金额</Text>
-              <Text style={[styles.midiumText, {alignSelf: 'flex-end'}]}>{"对应手续费:" + this.state.fee + "美元"}</Text>
+              <Text style={[styles.midiumText, {alignSelf: 'flex-end'}]}>{"手续费:" + this.state.fee + "美元"}</Text>
           </View>
           <View style={{flexDirection: 'row', marginTop:10, alignItems:"center"}}>
    					<Text style={{fontSize: 17, fontWeight: 'bold', color: '#333333'}}>美元</Text>

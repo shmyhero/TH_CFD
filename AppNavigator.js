@@ -232,7 +232,7 @@ var AppNavigator = React.createClass({
 	},
 
 	setCurrentVersionCode: function(value){
-		LogicData.setCurrentVersionCode(value);		
+		LogicData.setCurrentVersionCode(value);
 		VersionControlModule.start();
 	},
 
@@ -493,7 +493,7 @@ var AppNavigator = React.createClass({
 			}
 			return (
 				<View style={{width: width, height: height, backgroundColor: '#0079ff'}}>
-					{statusBar}
+					<StatusBar barStyle="light-content" backgroundColor={ColorConstants.TITLE_BLUE_SIMULATE}/>
 					<Swiper loop={false} bounces={true} activeDot={activeDot} dot={dot}>
 						{slides}
 					</Swiper>

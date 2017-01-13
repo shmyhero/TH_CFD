@@ -499,8 +499,8 @@ var MePage = React.createClass({
 		if(meData.phone){
 			return (
 				<View style={[styles.userInfoWrapper]}>
-					<Text style={styles.userNameText}>{meData.nickname}</Text>
-					<Text style={styles.phoneText}>{"账号: " + meData.phone}</Text>
+					<Text style={styles.userNameText}>{meData.nickname ? meData.nickname : "--"}</Text>
+					<Text style={styles.phoneText}>{meData.phone ? ("账号: " + meData.phone) : "--"}</Text>
 				</View>
 			);
 		}

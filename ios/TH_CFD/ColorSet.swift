@@ -7,7 +7,7 @@
 //
 
 class ColorSet: NSObject {
-	var _type:Int = 0
+	var _type:Int = 0   // 0 is stock detail view, 1 is open position view.
 	
 	// base chart
 	var bgLineColor: UIColor
@@ -35,7 +35,7 @@ class ColorSet: NSObject {
 		if StockDataManager.sharedInstance().isLive {
 			startColor = UIColor(hexInt: 0x6683b3)
 			endColor = UIColor(hexInt: 0x374d74)
-			middleLineColor = UIColor(hexInt: 0x657798)
+			middleLineColor = type == 1 ? UIColor(hexInt:0x1d4fa2) : UIColor(hexInt: 0x657798)
 			dateTextColor = UIColor(hexInt: 0x657798)
 				
 			bgLineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0x657798)
@@ -45,7 +45,7 @@ class ColorSet: NSObject {
 		else {
 			startColor = UIColor(hexInt: 0x7daeff)
 			endColor = UIColor(hexInt: 0x1954b9)
-			middleLineColor = UIColor(hexInt: 0xf8f8f8)
+            middleLineColor = type == 1 ? UIColor(hexInt:0x1d4fa2) : UIColor(hexInt: 0xf8f8f8)
 			dateTextColor = UIColor(hexInt: 0x70a5ff)
 			
 			bgLineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0x497bce)

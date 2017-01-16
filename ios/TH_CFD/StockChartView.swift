@@ -90,7 +90,7 @@ class StockChartView: UIView {
 	
 	var colorType:Int=0 {
 		willSet {
-			colorSet = ColorSet.init(type: colorType)
+			colorSet = ColorSet.init(type: newValue)
 		}
 	}
 	

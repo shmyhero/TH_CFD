@@ -95,7 +95,7 @@ var MyIncomePage = React.createClass({
 				(responseJson, isCache) => {
 					console.log("my total income: " + JSON.stringify(responseJson));
 
-					var unpaid = responseJson.total - responseJson.paid;
+					var unpaid = (responseJson.total - responseJson.paid).toFixed(2);
 
 					if(!isCache){
 						LogicData.setUnpaidReward(unpaid);

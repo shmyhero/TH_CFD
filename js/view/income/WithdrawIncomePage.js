@@ -255,7 +255,7 @@ export default class WithdrawIncomePage extends Component {
         },
       },
       (responseJson)=>{
-        var unpaid = LogicData.getUnpaidReward() - this.state.withdrawValue;
+        var unpaid = (LogicData.getUnpaidReward() - this.state.withdrawValue).toFixed(2);
         LogicData.setUnpaidReward(unpaid);
         StorageModule.setUnpaidReward(""+unpaid)
         .then(()=>{

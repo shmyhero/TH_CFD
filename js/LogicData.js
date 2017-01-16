@@ -65,7 +65,9 @@ var LogicData = {
 			NativeDataModule.passRawDataToNative('accountState', ''+state)
 			ColorConstants.setScheme(state ? ColorConstants.COLOR_THEME_LIVE: ColorConstants.COLOR_THEME_SIMULATOR);
 
-			StatusBar.setBackgroundColor(ColorConstants.TITLE_BLUE)
+			if(Platform.OS === "android"){
+				StatusBar.setBackgroundColor(ColorConstants.TITLE_BLUE);
+			}
 			EventCenter.emitAccountStateChangeEvent();
 		}
 	},

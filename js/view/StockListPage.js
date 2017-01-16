@@ -124,6 +124,7 @@ var StockListPage = React.createClass({
 			if(routes && routes[routes.length-1] &&
 				(routes[routes.length-1].name == MainPage.STOCK_LIST_VIEW_PAGER_ROUTE
 			|| routes[routes.length-1].name == MainPage.LOGIN_ROUTE)){
+				this.isDisplayingCache = false;
 				//If the last shown list is read from cache, we also need to refresh the data by refetching the api
 				if (this.props.isOwnStockPage) {
 					if(forceRefetch || this.isDisplayingCache){
@@ -231,20 +232,33 @@ var StockListPage = React.createClass({
 	},
 
 	syncOwnData: function(){
-		var userData = LogicData.getUserData()
-		if(Object.keys(userData).length !== 0){
-			NetworkModule.syncOwnStocks(userData, true)
-				.then(()=>{
-					console.log("syncOwnStocks success")
-					this.fetchOwnStockData();})
-				.catch((result)=>{
-					//Sync failed. But we still can use old own stocks data.
-					console.log("syncOwnStocks result " + JSON.stringify(result))
-					this.fetchOwnStockData();
-				});
-		}else{
-			this.fetchOwnData();
-		}
+		this.getOwnStocksDataCache()		//Read last cache.
+		.then(()=>{
+			var userData = LogicData.getUserData()
+			if(Object.keys(userData).length !== 0){
+				NetworkModule.syncOwnStocks(userData, true)
+					.then(()=>{
+						console.log("syncOwnStocks success")
+						var ownStocksData = LogicData.getOwnStocksData();
+						this.isDisplayingCache = false;
+						this.setState({
+							rowStockInfoData: ownStocksData,
+							stockInfo: ds.cloneWithRows(ownStocksData),
+							contentLoaded: true,
+							isRefreshing: false,
+						},()=>{
+							WebSocketModule.registerInterestedStocks(this.getShownStocks())
+						});
+					})
+					.catch((result)=>{
+						//Sync failed. But we still can use old own stocks data and fetch latest stock info.
+						console.log("syncOwnStocks result " + JSON.stringify(result))
+						this.fetchOwnStockData();
+					});
+			}else{
+				this.fetchOwnData();
+			}
+		});
 	},
 
 	fetchOwnData: function() {
@@ -260,6 +274,37 @@ var StockListPage = React.createClass({
 		})
 	},
 
+	getOwnStocksDataCache: function(){
+		return new Promise((resolve)=>{
+			var ownData = LogicData.getOwnStocksData()
+			if (ownData.length > 0) {
+				var param = "" + ownData[0].id
+				for (var i = 1; i < ownData.length; i++) {
+					param += ","+ownData[i].id
+				};
+				console.log("read cache for stocklistpage param " + param);
+				CacheModule.loadStockDataList(param)
+				.then((stockDataList)=>{
+					if(stockDataList && stockDataList.length > 0){
+						this.isDisplayingCache = true;
+						this.setState({
+							rowStockInfoData: stockDataList,
+							stockInfo: ds.cloneWithRows(stockDataList),
+							contentLoaded: true,
+							isRefreshing: false,
+						},()=>{
+							resolve();
+						})
+					}else{
+						resolve();
+					}
+				});
+			}else{
+				resolve();
+			}
+		});
+	},
+
 	fetchOwnStockData: function(){
 		var ownData = LogicData.getOwnStocksData()
 		console.log("stocklistpage LogicData.getOwnStocksData() " + JSON.stringify(ownData));
@@ -268,20 +313,8 @@ var StockListPage = React.createClass({
 			for (var i = 1; i < ownData.length; i++) {
 				param += ","+ownData[i].id
 			};
-			console.log("stocklistpage param " + param);
-			CacheModule.loadStockDataList(param)
-			.then((stockDataList)=>{
-				if(stockDataList && stockDataList.length > 0){
-					this.isDisplayingCache = true;
-					this.setState({
-						rowStockInfoData: stockDataList,
-						stockInfo: ds.cloneWithRows(stockDataList),
-						contentLoaded: true,
-						isRefreshing: false,
-					})
-				}
-			});
 
+			console.log("stocklistpage param " + param);
 			var url = (LogicData.getAccountState() ? this.props.activeDataURL : this.props.dataURL) + "/"+ param;
 			NetworkModule.fetchTHUrl(
 				url,
@@ -301,6 +334,7 @@ var StockListPage = React.createClass({
 					})
 				},
 				(result) => {
+					console.log("get stock data failed. " + this.isDisplayingCache)
 					if(!this.isDisplayingCache){
 						this.setState({
 							contentLoaded: false,
@@ -328,7 +362,6 @@ var StockListPage = React.createClass({
 		this.fetchStockData()
 
 		if (this.props.isOwnStockPage) {
-			this.fetchOwnStockData();		//Read last cache.
 			this.syncOwnData()
 
 	    this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
@@ -337,9 +370,17 @@ var StockListPage = React.createClass({
 			(args) => {
 				if (args[0] == 'myList') {
 					var stockData = JSON.parse(args[1])
-					LogicData.setOwnStocksData(stockData)
-					NetworkModule.updateOwnStocks(stockData)
+					var oldData = LogicData.getOwnStocksData();
+					LogicData.setOwnStocksData(stockData);
 					this.refreshOwnData()
+					NetworkModule.updateOwnStocks(stockData)
+					.then(()=>{
+						//Do nothing?
+					})
+					.catch(()=>{
+						LogicData.setOwnStocksData(oldData);
+						this.refreshOwnData()
+					});
 				}
 				console.log('Get data from Native ' + args[0] + ' : ' + args[1])
 			})
@@ -396,7 +437,9 @@ var StockListPage = React.createClass({
 
 	tabPressed: function() {
 		console.log("tabPressed")
-		this.refreshData(true);
+		//onPageSelected will be triggered when tabPressed is triggered, we don't want
+		//the refresh function called twice...
+		//this.refreshData(true);
 	},
 
 	onEndReached: function() {

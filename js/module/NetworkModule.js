@@ -67,13 +67,13 @@ export function fetchTHUrl(url, params, successCallback, errorCallback, notShowR
 		.then((responseJson) => {
 			if (requestSuccess) {
 				if (responseJson != null && responseJson.success === false) {
-					console.log('fetchTHUrl handled error with message: ' + JSON.stringify(responseJson))
+					console.log('fetchTHUrl ' + url + ' handled error with message: ' + JSON.stringify(responseJson))
 					result.error = API_ERROR;
 					result.errorMessage = responseJson.ExceptionMessage || responseJson.Message || responseJson.message;
 					errorCallback && errorCallback(result);
 				} else {
 					if(!notShowResponseLog){
-						console.log('fetchTHUrl success with response: ')
+						console.log('fetchTHUrl ' + url + ' success with response: ')
 						console.log(responseJson)
 					}
 
@@ -184,7 +184,7 @@ export function fetchEncryptedUrl(url, params, successCallback, errorCallback, n
 		}, true);
 }
 
-export function syncOwnStocks(userData, readCache) {
+export function syncOwnStocks(userData) {
   return new Promise((resolve, reject)=>{
 		var stockData = LogicData.getOwnStocksData()
 		var isLive = LogicData.getAccountState();
@@ -197,9 +197,18 @@ export function syncOwnStocks(userData, readCache) {
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 				},
-				//cache: readCache ? 'offline' : 'none',
 			},
 			(responseJson) => {
+				if(responseJson){
+					responseJson.forEach((data)=>{
+						var updateData = {
+							"id":data.id,
+							"last": data.last,
+						}
+						CacheModule.updateStockData(updateData);
+					});
+				}
+
 				if (responseJson.length===0 && !isLive) {
 					console.log('no own stocks online')
 					if (stockData.length > 0) {
@@ -209,7 +218,9 @@ export function syncOwnStocks(userData, readCache) {
 							resolve(res);
 						})
 						.catch((error)=>reject(error));
-					};
+					}else{
+						resolve(responseJson);
+					}
 				}
 				else {
 					//If live, the user must be logined. So just sync the response to local data.
@@ -224,10 +235,8 @@ export function syncOwnStocks(userData, readCache) {
 			},
 			(result) => {
 				//Alert.alert('获取股票列表失败', result.errorMessage);
-				if(!result.loadedOfflineCache){
-					console.log("syncOwnStocks error " + result)
-					reject(result);
-				}
+				console.log("syncOwnStocks error " + result)
+				reject(result);
 			}
 		)
 	});
@@ -301,33 +310,38 @@ export function removeFromOwnStocks(stockData) {
 }
 
 export function updateOwnStocks(stockData) {
-	var userData = LogicData.getUserData()
-	if (Object.keys(userData).length === 0) {
-		return
-	}
-
-	var idList = stockData.map((stock, index, list)=>{
-		return stock.id
-	})
-
-	var isLive = LogicData.getAccountState();
-	var urlPrefix = isLive ? NetConstants.CFD_API.OWN_STOCK_LIST_LIVE_API : NetConstants.CFD_API.OWN_STOCK_LIST_API;
-
-	fetchTHUrl(
-		urlPrefix + '?'+NetConstants.PARAMETER_STOCKIDS+'='+idList,
-		{
-			method: 'PUT',
-			headers: {
-				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-			},
-		},
-		(responseJson) => {
-			console.log('update own stocks success')
-		},
-		(result) => {
-			Alert.alert('更新股票失败', result.errorMessage);
+	return new Promise((resolve, reject)=>{
+		var userData = LogicData.getUserData()
+		if (Object.keys(userData).length === 0) {
+			resolve();
+			return
 		}
-	)
+
+		var idList = stockData.map((stock, index, list)=>{
+			return stock.id;
+		})
+
+		var isLive = LogicData.getAccountState();
+		var urlPrefix = isLive ? NetConstants.CFD_API.OWN_STOCK_LIST_LIVE_API : NetConstants.CFD_API.OWN_STOCK_LIST_API;
+
+		fetchTHUrl(
+			urlPrefix + '?'+NetConstants.PARAMETER_STOCKIDS+'='+idList,
+			{
+				method: 'PUT',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+			},
+			(responseJson) => {
+				console.log('update own stocks success')
+				resolve();
+			},
+			(result) => {
+				Alert.alert('更新股票失败', result.errorMessage);
+				reject(result);
+			}
+		)
+	});
 }
 
 export function loadUserBalance(force, successCallback) {

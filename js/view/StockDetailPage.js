@@ -387,6 +387,9 @@ var StockDetailPage = React.createClass({
 				this.setState({
 					isAddedToMyList: false,
 				})
+			})
+			.catch(()=>{
+				//Do nothing?
 			});
 
 			var parameters = {};
@@ -401,7 +404,9 @@ var StockDetailPage = React.createClass({
 							this.setState({
 								isAddedToMyList: true,
 							})
-
+			})
+			.catch(()=>{
+				//Do nothing?
 			});
 
 			var parameters = {};

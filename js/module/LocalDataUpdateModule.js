@@ -55,6 +55,7 @@ export function removeUserData(){
   LogicData.removeBalanceData();
 
   LogicData.removeLiveUserInfo();
+  LogicData.removeUnpaidReward()
 
   OpenAccountRoutes.clearAllInputData();
   CacheModule.clearUserRelatedCache();

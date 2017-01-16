@@ -11,6 +11,7 @@ import {
 	Alert,
 } from 'react-native';
 
+var NativeSceneModule = require('../../module/NativeSceneModule')
 // var ViewPager = require('react-native-viewpager-es6');
 var Button = require('../component/Button')
 var MainPage = require('../MainPage')
@@ -58,7 +59,8 @@ var OAStatusPage = React.createClass({
 	},
 
 	helpPressed: function() {
-		SentIntent.sendPhoneDial(CALL_NUMBER)
+		NativeSceneModule.launchNativeScene('MeiQia')
+		// SentIntent.sendPhoneDial(CALL_NUMBER)
 	},
 
 
@@ -89,10 +91,11 @@ var OAStatusPage = React.createClass({
 
 					<View style={styles.helpContainer}>
 						<View style={styles.helpRowWrapper}>
-							<TouchableOpacity style={{flexDirection:'row',alignItems:'center'}} onPress={this.helpPressed}>
+							<TouchableOpacity style={{flexDirection:'row',alignItems:'center'}} onPress={()=>this.helpPressed()}>
 
 								<Image style = {styles.lineLeftRight} source = {require('../../../images/line_left2.png')} ></Image>
-								<Text style={styles.helpTitle}>服务热线：{CALL_NUMBER}</Text>
+								<Text style={styles.helpTitle}>{"盈盈在线24小时服务"}</Text>
+								{/* <Text style={styles.helpTitle}>服务热线：{CALL_NUMBER}</Text> */}
 								<Image style = {styles.lineLeftRight} source = {require('../../../images/line_right2.png')} ></Image>
 
 							</TouchableOpacity>

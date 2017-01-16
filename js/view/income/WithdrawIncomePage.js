@@ -15,6 +15,7 @@ import {
   Keyboard,
 } from 'react-native';
 
+var NativeSceneModule = require('../../module/NativeSceneModule')
 var NavBar = require('../NavBar');
 var Button = require('../component/Button');
 
@@ -54,9 +55,14 @@ export default class WithdrawIncomePage extends Component {
   constructor(props) {
 	  super(props);
 
+    var unpaid = LogicData.getUnpaidReward();
+    if(!unpaid){
+      unpaid = 0;
+    }
+
     this.state={
       dataSource: this.ds.cloneWithRows(this.listRawData),
-      refundableBanalce: LogicData.getUnpaidReward(), //TODO: use real data.
+      refundableBanalce: unpaid,
       withdrawValueText: "",
       withdrawValue: 0,
       hasRead: true,

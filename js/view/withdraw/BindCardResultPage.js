@@ -18,6 +18,7 @@ import {
 	Keyboard,
 } from 'react-native';
 
+var NativeSceneModule = require('../../module/NativeSceneModule')
 var Button = require('../component/Button')
 var CheckBoxButton = require('../component/CheckBoxButton')
 var MainPage = require('../MainPage')
@@ -175,7 +176,8 @@ export default class BindCardResultPage extends Component {
   }
 
 	helpPressed() {
-		SentIntent.sendPhoneDial(CALL_NUMBER)
+		NativeSceneModule.launchNativeScene('MeiQia')
+		// SentIntent.sendPhoneDial(CALL_NUMBER)
 	}
 
 	goToBindCardPage(){
@@ -260,9 +262,10 @@ export default class BindCardResultPage extends Component {
 	renderHelp() {
 		if(this.props.bankCardStatus === "Rejected"){
 	    return(
-	      <TouchableOpacity style={{flexDirection:'row', alignItems:'center', justifyContent:'center', marginBottom: 20}} onPress={this.helpPressed}>
+	      <TouchableOpacity style={{flexDirection:'row', alignItems:'center', justifyContent:'center', marginBottom: 20}} onPress={()=>this.helpPressed()}>
 	        <Image style = {styles.lineLeftRight} source = {require('../../../images/line_left2.png')} ></Image>
-	        <Text style={styles.helpTitle}>服务热线：{CALL_NUMBER}</Text>
+					<Text style={styles.helpTitle}>{"盈盈在线24小时服务"}</Text>
+	        {/* <Text style={styles.helpTitle}>服务热线：{CALL_NUMBER}</Text> */}
 	        <Image style = {styles.lineLeftRight} source = {require('../../../images/line_right2.png')} ></Image>
 	      </TouchableOpacity>
 	    );

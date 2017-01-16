@@ -222,8 +222,10 @@ public abstract class BaseChartDrawer implements IChartDrawer {
      */
     private void drawPreCloseLine(CombinedChart chart, JSONObject stockInfoObject) throws JSONException {
         LimitLine line = new LimitLine((float) stockInfoObject.getDouble("preClose"));
-        line.setLineColor(ChartDrawerConstants.CHART_LINE_COLOR);
-        line.setLineWidth(ChartDrawerConstants.LINE_WIDTH);
+//      line.setLineColor(ChartDrawerConstants.CHART_LINE_COLOR);
+        line.setLineColor(chart.mDesColorType==0?ChartDrawerConstants.CHART_LINE_COLOR:ChartDrawerConstants.CHART_LINE_COLOR2);
+
+        line.setLineWidth(ChartDrawerConstants.LINE_WIDTH * 2);
         line.enableDashedLine(10f, 10f, 0f);
         line.setTextSize(0f);
 

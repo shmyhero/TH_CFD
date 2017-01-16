@@ -12,6 +12,7 @@ import java.util.GregorianCalendar;
 public class ChartDrawerConstants {
     public static int CHART_BORDER_COLOR = 0xff497bce;
     public static int CHART_LINE_COLOR = 0Xff759de2;
+    public static int CHART_LINE_COLOR2 = 0Xff1d4fa2;
     public static int CHART_TEXT_COLOR = 0Xff70a5ff;
 
     public static int FIVE_MINUTE_POINT_NUMBER = 300;//30s*10

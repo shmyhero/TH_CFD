@@ -5,7 +5,7 @@
 */
 
 import React,{Component,PropTypes} from 'react'
-import {StyleSheet,Text,TextInput,Keyboard,Image,View,Dimensions,ListView,Alert,TouchableOpacity} from 'react-native'
+import {StyleSheet,Text,TextInput,TouchableWithoutFeedback,Keyboard,Image,View,Dimensions,ListView,Alert,TouchableOpacity} from 'react-native'
 
 
 var {height, width} = Dimensions.get('window')
@@ -338,7 +338,7 @@ export default class DepositPage extends Component{
 						<Image source={checkBox} style={styles.checkbox} />
 						<Image source={rowData.image} style={styles.image} />
 						<Text style={styles.title}>银联借记卡</Text>
-						<TouchableOpacity activeOpacity={0.5} onPress={()=>this.blankSupport()}>
+						<TouchableOpacity activeOpacity={0.5} onPress={()=>this.bankSupport()}>
 							<View style = {{flexDirection:'row',alignItems:'center'}}>
 								<Text style = {styles.blankSupport}>支持的银行</Text>
 								<Image style = {styles.arrow} source={imageArrow}></Image>
@@ -351,7 +351,7 @@ export default class DepositPage extends Component{
 		)
 	}
 
-	blankSupport(){
+	bankSupport(){
 		this.setState({
 			showBankList:!this.state.showBankList,
 		})
@@ -446,7 +446,11 @@ export default class DepositPage extends Component{
 
 				<View style = {{flex:1}}>
 					{this.renderDetail()}
-					<Text style={styles.psLine}>注意：入金手续费为入金金额的{this.state.chargeRate*100}%(最低{this.state.chargeMin}美元)</Text>
+					<TouchableWithoutFeedback style={styles.blank} onPress={()=>this.pressBlank()}>
+						<View>
+						<Text style={styles.psLine}>注意：入金手续费为入金金额的{this.state.chargeRate*100}%(最低{this.state.chargeMin}美元)</Text>
+						</View>
+				  </TouchableWithoutFeedback>
 					<TouchableOpacity style={styles.blank} onPress={()=>this.pressBlank()}>
 						<View></View>
 					</TouchableOpacity>

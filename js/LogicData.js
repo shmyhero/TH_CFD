@@ -363,6 +363,10 @@ var LogicData = {
 	setUnpaidReward: function(value){
 		unpaidIncome = value;
 	},
+
+	removeUnpaidReward: function(){
+		unpaidIncome = null;
+	}
 };
 
 module.exports = LogicData;

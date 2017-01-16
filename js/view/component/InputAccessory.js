@@ -198,6 +198,7 @@ var s = StyleSheet.create({
 		color: '#1b5ecd',
 		paddingHorizontal: 9,
 		textAlign: 'center',
+		marginTop: 6,
 	},
 });
 

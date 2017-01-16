@@ -57,7 +57,7 @@ export default class WithdrawIncomePage extends Component {
 
     var unpaid = LogicData.getUnpaidReward();
     if(!unpaid){
-      unpaid = 0;
+      unpaid = (0.00).toFixed(2);
     }
 
     this.state={
@@ -65,7 +65,6 @@ export default class WithdrawIncomePage extends Component {
       refundableBanalce: unpaid,
       withdrawValueText: "",
       withdrawValue: 0,
-      hasRead: true,
       //withdrawChargeHint: withdrawChargeHint,
     }
   }
@@ -99,17 +98,11 @@ export default class WithdrawIncomePage extends Component {
   }
 
   withdrawAll(){
-    var newState = {
-      withdrawValueText: "" + this.state.refundableBanalce,
-      withdrawValue: this.state.refundableBanalce,
-    }
-    console.log("withdrawAll " + JSON.stringify(newState))
-    console.log("this.state.withdrawValue1" + this.state.withdrawValue);
     this.setState({
       withdrawValueText: "" + this.state.refundableBanalce,
       withdrawValue: this.state.refundableBanalce,
     }, ()=>{
-      console.log("this.state.withdrawValue2" + this.state.withdrawValue);
+      console.log("this.state.withdrawValue " + this.state.withdrawValue);
     })
   }
 
@@ -298,12 +291,9 @@ export default class WithdrawIncomePage extends Component {
   }
 
   render() {
-		var nextEnabled = true;//OpenAccountUtils.canGoNext(this.listRawData);
-		//console.log("listRawData: " + JSON.stringify(listRawData));
-		if(!this.state.withdrawValue || !this.isWithdrawValueAvailable()){
-      nextEnabled = false;
-    }else if(!this.state.hasRead){
-      nextEnabled = false;
+		var nextEnabled = false;
+    if(this.state.withdrawValue > 0 && this.isWithdrawValueAvailable()){
+      nextEnabled = true;
     }
 
     return (

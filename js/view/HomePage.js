@@ -669,7 +669,8 @@ var HomePage = React.createClass({
 					dataSource={this.state.popularityInfo}
 					enableEmptySections={true}
 					renderRow={this.renderPopularityRow}
-					renderSeparator={this.renderSeparator}/>
+					renderSeparator={this.renderSeparator}
+					removeClippedSubviews={false}/>
 
 				<View style={styles.bigSeparator}/>
 			</View>

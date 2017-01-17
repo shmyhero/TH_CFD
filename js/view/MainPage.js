@@ -997,23 +997,21 @@ var MainPage = React.createClass({
 
 	gotoLoginPage: function(){
 		console.log("gotoLoginPage");
-		LocalDataUpdateModule.removeUserData();
-		LogicData.setAccountState(false)
-		LogicData.setActualLogin(false)
-
-		var currentNavigatorIndex = LogicData.getTabIndex();
-		console.log("gotoLoginPage " + currentNavigatorIndex);
-		if(currentNavigatorIndex != 2){
-			if(_navigators[currentNavigatorIndex]){
-				_navigators[currentNavigatorIndex].push({
-					name: LOGIN_ROUTE,
-					popToStackTop: true,
-				});
+		LocalDataUpdateModule.removeUserData()
+		.then(()=>{
+			var currentNavigatorIndex = LogicData.getTabIndex();
+			console.log("gotoLoginPage " + currentNavigatorIndex);
+			if(currentNavigatorIndex != 2){
+				if(_navigators[currentNavigatorIndex]){
+					_navigators[currentNavigatorIndex].push({
+						name: LOGIN_ROUTE,
+						popToStackTop: true,
+					});
+				}
+			}else{
+				_navigators[currentNavigatorIndex].popToTop();
 			}
-		}else{
-			_navigators[currentNavigatorIndex].popToTop();
-		}
-
+		});
 	},
 
 	showNotification: function() {

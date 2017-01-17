@@ -42,36 +42,45 @@ export function updateMeData(userData, onSuccess){
 }
 
 export function removeUserData(){
-  StorageModule.removeUserData();
-  LogicData.removeUserData();
-  StorageModule.removeMeData();
-  LogicData.removeMeData();
+  return new Promise((resolve)=>{
+    StorageModule.removeUserData()
+    .then(()=>{
+      LogicData.removeUserData();
+      StorageModule.removeMeData();
+      LogicData.removeMeData();
 
-  StorageModule.removeOwnStocksData().then(()=>{
-    LogicData.removeOwnStocksData();
-    LogicData.setAccountState(false);
+      LogicData.removeOwnStocksData();
+      return StorageModule.removeOwnStocksData();
+    })
+    .then(()=>{
+      LogicData.setAccountState(false);
+      LogicData.setActualLogin(false);
+
+      LogicData.removeBalanceData();
+
+      LogicData.removeLiveUserInfo();
+      LogicData.removeUnpaidReward()
+
+      OpenAccountRoutes.clearAllInputData();
+      return CacheModule.clearUserRelatedCache();
+    })
+    .then(()=>{
+      var date = new Date().getDateString();
+      var data = {
+        "lastDate": date,
+        "isCheckInDialogShown": false
+      };
+      return StorageModule.setLastSuperPriorityHintData(JSON.stringify(data));
+    })
+    .then(()=>{
+      EventCenter.emitAccountLogoutEvent();
+      //TongDaoModule.setUserId("");
+
+      //Restart the web socket.
+      //WebSocketModule.stop();
+      WebSocketModule.start();
+
+      resolve();
+    });
   });
-
-  LogicData.removeBalanceData();
-
-  LogicData.removeLiveUserInfo();
-  LogicData.removeUnpaidReward()
-
-  OpenAccountRoutes.clearAllInputData();
-  CacheModule.clearUserRelatedCache();
-
-  var date = new Date().getDateString();
-  var data = {
-    "lastDate": date,
-    "isCheckInDialogShown": false
-  };
-  StorageModule.setLastSuperPriorityHintData(JSON.stringify(data));
-
-  EventCenter.emitAccountLogoutEvent();
-  //TongDaoModule.setUserId("");
-
-  //Restart the web socket.
-  //WebSocketModule.stop();
-  WebSocketModule.start();
-
 }

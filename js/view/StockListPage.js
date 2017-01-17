@@ -656,7 +656,8 @@ var StockListPage = React.createClass({
 						renderFooter={this.renderFooter}
 						renderRow={this.renderRow}
 						renderSeparator={this.renderSeparator}
-						onEndReached={this.onEndReached}/>
+						onEndReached={this.onEndReached}
+						removeClippedSubviews={false}/>
 				</View>
 			);
 		}

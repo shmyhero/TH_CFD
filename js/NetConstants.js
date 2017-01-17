@@ -9,7 +9,8 @@ SERVER_MAPPING[VersionConstants.SERVER_TYPE_PRODUCT] = 'https://api.typhoontechn
 SERVER_MAPPING[VersionConstants.SERVER_TYPE_STAGE] = 'http://300f8c59436243fe920fce09eb87d765.chinacloudapp.cn';
 SERVER_MAPPING[VersionConstants.SERVER_TYPE_DEVELOP] = 'http://cfd-webapi-dev.chinacloudapp.cn';
 
-const GZT_SERVER_IP = 'http://124.192.161.110:8080'
+//const GZT_SERVER_IP = 'http://124.192.161.110:8080'
+const GZT_SERVER_IP_LIVE = 'http://219.143.253.206:2025'
 const TRADEHERO_SERVER_IP = 'http://cn.tradehero.mobi'
 
 
@@ -155,7 +156,7 @@ function getCFDAPI(){
 
 function getGZTAPI(){
   return {
-    GZT_OCR_CHECK_API: GZT_SERVER_IP + '/ocrCheck',
+    GZT_OCR_CHECK_API: GZT_SERVER_IP_LIVE + '/ocrCheck',
   }
 }
 

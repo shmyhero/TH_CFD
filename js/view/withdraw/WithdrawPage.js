@@ -63,7 +63,7 @@ export default class WithdrawPage extends Component {
     var liveUserInfo = LogicData.getLiveUserInfo();
     var balanceData = LogicData.getBalanceData();
     if(liveUserInfo){
-      var cardNumber = liveUserInfo.bankCardNumber.split(" ").join('');
+      var cardNumber = liveUserInfo.bankCardNumber ? liveUserInfo.bankCardNumber.split(" ").join('') : "";
       var lastCardNumber = cardNumber.length>4 ? cardNumber.slice(cardNumber.length-4) : cardNumber;
 
       var cardBank = liveUserInfo.bankName;
@@ -210,7 +210,12 @@ export default class WithdrawPage extends Component {
       var withdrawValueError = false;
       var inputStyle = styles.normalInputText;
       var fundableValueStyle = styles.fundableValueText;
-      var fundableValueText = "可出资金: " + this.state.refundableBanalce + "美元， ";
+      var refundableBalance = this.state.refundableBanalce;
+      if(!refundableBalance){
+        refundableBalance = (0.00).toFixed(2)
+      }
+
+      var fundableValueText = "可出资金: " + refundableBalance + "美元， ";
       if(!this.isWithdrawValueAvailable()){
         inputStyle = styles.errorInputText;
         fundableValueStyle = styles.errorInputText;

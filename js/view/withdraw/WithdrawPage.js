@@ -364,6 +364,7 @@ export default class WithdrawPage extends Component {
           />
         <View style={{flex:1}}>
 					{this.renderListView()}
+          <Text style={styles.bottomHintText}>{this.state.withdrawChargeHint}</Text>
           <TouchableOpacity style={{flex:1}} onPress={()=>this.hideKeyboard()}></TouchableOpacity>
           <View style={styles.checkboxView}>
             <CheckBoxButton
@@ -384,7 +385,6 @@ export default class WithdrawPage extends Component {
                     </Text>
                   </TouchableOpacity>
                 </View>
-                <Text style={styles.readMeText}>{this.state.withdrawChargeHint}</Text>
               </View>
             </CheckBoxButton>
           </View>
@@ -509,10 +509,9 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   bottomHintText: {
-    textAlign: 'center',
-    marginBottom: 20,
-    fontSize: 14,
-    color: '#415a87',
+    fontSize: 12,
+    color: '#858585',
+    margin: 15,
   },
   inputText:{
     fontSize: 50,
@@ -534,12 +533,12 @@ const styles = StyleSheet.create({
     color: '#d71a18',
   },
 	checkboxView: {
-		height: 50,
+		height: 30,
 		paddingLeft: 15,
 		paddingTop: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,//12,
+    marginBottom: 10,//12,
 	},
   checkbox: {
     width: 20,

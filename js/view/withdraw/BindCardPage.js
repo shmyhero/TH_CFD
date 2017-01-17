@@ -108,9 +108,9 @@ export default class BindCardPage extends Component {
 
       });
 
-		console.log("get all areas");
+		//console.log("get all areas");
 		var responseJson = UserInfoSelectorProvider.getAllAreas();
-		console.log("get all areas responseJson " + JSON.stringify(responseJson));
+		//console.log("get all areas responseJson " + JSON.stringify(responseJson));
 
 		this.provinceAndCities = [];
 		for(var i = 0; i < responseJson.length; i++){
@@ -127,7 +127,7 @@ export default class BindCardPage extends Component {
 				this.provinceAndCities.push({"value": responseJson[i].Id, "displayText": responseJson[i].Name, children: []});
 			}
 		}
-		console.log("get all areas this.provinceAndCities " + JSON.stringify(this.provinceAndCities));
+		//console.log("get all areas this.provinceAndCities " + JSON.stringify(this.provinceAndCities));
   }
 	//
 	// componentDidMount(){

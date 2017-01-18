@@ -329,8 +329,8 @@ export default class BindCardPage extends Component {
 
       choices.push(choice);
     }
-		console.log(JSON.stringify(choiceDataArray));
-		console.log(JSON.stringify(choices));
+		//console.log(JSON.stringify(choiceDataArray));
+		//console.log(JSON.stringify(choices));
 
     Picker.init({
         pickerData: choices,
@@ -360,6 +360,11 @@ export default class BindCardPage extends Component {
             selectedPicker: -1,
           })
         },
+				onPickerCancel: ()=>{
+					this.setState({
+						selectedPicker: -1,
+					})
+				}
     });
     Picker.show();
   }

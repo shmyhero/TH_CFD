@@ -166,6 +166,11 @@ var OAFinanceInfoPage = React.createClass({
 						selectedPicker: -1,
 					})
         },
+				onPickerCancel: ()=>{
+					this.setState({
+						selectedPicker: -1,
+					})
+				}
     });
     Picker.show();
 	},

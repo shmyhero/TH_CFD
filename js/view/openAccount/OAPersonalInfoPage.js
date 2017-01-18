@@ -11,7 +11,7 @@ import {
 	TouchableOpacity,
 	Image,
 	Platform,
-	ScrollView
+	ScrollView,
 } from 'react-native';
 
 var TimerMixin = require('react-timer-mixin');
@@ -251,6 +251,11 @@ var OAPersonalInfoPage = React.createClass({
 						selectedPicker: -1,
 					})
         },
+				onPickerCancel: ()=>{
+					this.setState({
+						selectedPicker: -1,
+					})
+				}
     });
     Picker.show();
 	},

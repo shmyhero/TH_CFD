@@ -662,6 +662,7 @@ var StockOpenPositionPage = React.createClass({
 
 		TalkingdataModule.trackEvent(TalkingdataModule.SET_STOP_PROFIT_LOSS_EVENT, '', eventParam)
 
+		var lastSelectedRow = this.state.selectedRow;
 		// STOP LOSS
 		if (stopLossUpdated) {
 			if (this.state.stopLossSwitchIsOn && stopLossPercent > MAX_PERCENT) {
@@ -708,7 +709,7 @@ var StockOpenPositionPage = React.createClass({
 						profitLossConfirmed: true})
 
 					var tempStockInfo = this.state.stockInfoRowData
-					tempStockInfo[this.state.selectedRow].stopPx = responseJson.stopPx
+					tempStockInfo[lastSelectedRow].stopPx = responseJson.stopPx
 					this.setState({
 						stockInfoRowData: tempStockInfo,
 						stockInfo: ds.cloneWithRows(tempStockInfo),
@@ -785,12 +786,12 @@ var StockOpenPositionPage = React.createClass({
 
 					var tempStockInfo = this.state.stockInfoRowData
 					if (responseJson.takePx === undefined) {
-						tempStockInfo[this.state.selectedRow].takeOID = undefined
-						tempStockInfo[this.state.selectedRow].takePx = undefined
+						tempStockInfo[lastSelectedRow].takeOID = undefined
+						tempStockInfo[lastSelectedRow].takePx = undefined
 					}
 					else {
-						tempStockInfo[this.state.selectedRow].takeOID = responseJson.takeOID
-						tempStockInfo[this.state.selectedRow].takePx = responseJson.takePx
+						tempStockInfo[lastSelectedRow].takeOID = responseJson.takeOID
+						tempStockInfo[lastSelectedRow].takePx = responseJson.takePx
 					}
 					this.setState({
 						stockInfoRowData: tempStockInfo,

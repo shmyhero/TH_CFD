@@ -12,6 +12,7 @@ import {
 	Image,
 	Platform,
 	ScrollView,
+	Keyboard,
 } from 'react-native';
 
 var TimerMixin = require('react-timer-mixin');
@@ -56,6 +57,7 @@ var defaultRawData = [
 		{"title":"有效期限", "key": "validPeriod", "value":"", "type": "datePeriod"}];
 
 const DEFAULT_ERROR = "身份一致性验证失败";
+const SCROLL_VIEW = "scrollView"
 
 var OAPersonalInfoPage = React.createClass({
 	mixins: [TimerMixin],
@@ -75,6 +77,18 @@ var OAPersonalInfoPage = React.createClass({
 			data: null,
 			onPop: ()=>{},
 		}
+	},
+
+	componentWillMount: function(){
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+	},
+
+	componentWillUnmount: function(){
+		this.keyboardDidHideListener.remove();
+	},
+
+	_keyboardDidHide: function(){
+		this.refs[SCROLL_VIEW] && this.refs[SCROLL_VIEW].scrollTo({y:0})
 	},
 
 	getInitialState: function() {
@@ -522,7 +536,7 @@ var OAPersonalInfoPage = React.createClass({
 		return (
 			<View style={styles.wrapper}>
 				<ErrorBar error={error}/>
-				<ScrollView style={styles.list}>
+				<ScrollView style={styles.list} ref={SCROLL_VIEW}>
 					{this.renderListView()}
 				</ScrollView>
 				<View style={styles.bottomArea}>
@@ -547,9 +561,8 @@ var OAPersonalInfoPage = React.createClass({
 				</View>
 			);
 		})
-
 		return (
-			<View>
+			<View style={{height:height}}>
 				{listDataView}
 			</View>);
 	},

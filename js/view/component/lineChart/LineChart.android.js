@@ -86,15 +86,15 @@ var LineChart = React.createClass({
 			chartIsActual: false,
 			descriptionColor: 0,
 			noDataText: '',
-			padding: 2,
+			padding: 2 - 2,
 			xAxisPosition: LineChartXAxisPosition.BOTTOM,
 			xAxisDrawLabel: true,
 			leftAxisEnabled: true,
 			leftAxisDrawLabel: false,
-			leftAxisLabelCount: 2,
+			leftAxisLabelCount: 2 - 2,
 			rightAxisEnabled: true,
 			rightAxisDrawLabel: false,
-			rightAxisLabelCount: 2,
+			rightAxisLabelCount: 2 - 2,
 		};
 	},
 

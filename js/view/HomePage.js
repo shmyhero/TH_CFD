@@ -46,7 +46,8 @@ var BANNERS = [
 	require('../../images/bannar02.png'),
 ];
 const check_in_image = require("../../images/check_in.png")
-const movie_image = require("../../images/movie.png")
+//const movie_image = require("../../images/movie.png")
+const competition_image = require("../../images/mobile_reward.png");
 const hot_image = require("../../images/hot.png")
 const bg_hint_image = require("../../images/icon_bg_hint.png")
 
@@ -78,8 +79,8 @@ var HomePage = React.createClass({
 			popularityInfo: bsds.cloneWithRows([]),
 			rawCardsInfo: [],
 			topNews: [],
-			attendedMovieEvent: false,
-			winMovieTicket: false,
+			//attendedMovieEvent: false,
+			//winMovieTicket: false,
 			isConnected: false,
 		};
 	},
@@ -150,35 +151,35 @@ var HomePage = React.createClass({
 		);
 
 		var userId = userData.userId
-		var login = Object.keys(userData).length !== 0
-		if(login){
-			var url = NetConstants.CFD_API.GET_MOVIE_RANK;
-			url = url.replace("<userId>", userId);
-
-			NetworkModule.fetchTHUrl(
-				url,
-				{
-					method: 'GET',
-					headers: {
-						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-						'Content-Type': 'application/json; charset=UTF-8',
-					},
-				},
-				(responseJson) => {
-					if(responseJson.rank){
-						this.setState({
-							attendedMovieEvent: true,
-							winMovieTicket: responseJson.rank <= 3,
-						})
-					}else{
-						this.setState({
-							attendedMovieEvent: false,
-							winMovieTicket: false,
-						})
-					}
-				}
-			);
-		}
+		// var login = Object.keys(userData).length !== 0
+		// if(login){
+		// 	var url = NetConstants.CFD_API.GET_MOVIE_RANK;
+		// 	url = url.replace("<userId>", userId);
+		//
+		// 	NetworkModule.fetchTHUrl(
+		// 		url,
+		// 		{
+		// 			method: 'GET',
+		// 			headers: {
+		// 				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+		// 				'Content-Type': 'application/json; charset=UTF-8',
+		// 			},
+		// 		},
+		// 		(responseJson) => {
+		// 			if(responseJson.rank){
+		// 				this.setState({
+		// 					attendedMovieEvent: true,
+		// 					winMovieTicket: responseJson.rank <= 3,
+		// 				})
+		// 			}else{
+		// 				this.setState({
+		// 					attendedMovieEvent: false,
+		// 					winMovieTicket: false,
+		// 				})
+		// 			}
+		// 		}
+		// 	);
+		// }
 	},
 
 	loadCards: function() {
@@ -367,23 +368,23 @@ var HomePage = React.createClass({
 		//TongDaoModule.trackTopBannerEvent()
 	},
 
-	getShareMovieEventInfo: function(){
-		var info = {};
-		if(!this.state.attendedMovieEvent){
-			info.shareUrl = NetConstants.TRADEHERO_API.SHARE_MOVIE_NOT_ATTENDED_TICKET_URL;
-			info.message = "模拟投资比收益，排名前三，每天都送电影票！";
-		}else{
-			if(this.state.winMovieTicket){
-				info.shareUrl = NetConstants.TRADEHERO_API.SHARE_MOVIE_WIN_TICKET_URL;
-				info.message = "朕的投资收益率排名前3，快快赞我！";
-			}else{
-				info.shareUrl = NetConstants.TRADEHERO_API.SHARE_MOVIE_NOT_WIN_TICKET_URL;
-				info.message = "俺的模拟投资战绩不佳，求大侠支招，助我拿到电影票！";
-			}
-		}
-		info.title = "一大波影券来啦";
-		return info;
-	},
+	// getShareMovieEventInfo: function(){
+	// 	var info = {};
+	// 	if(!this.state.attendedMovieEvent){
+	// 		info.shareUrl = NetConstants.TRADEHERO_API.SHARE_MOVIE_NOT_ATTENDED_TICKET_URL;
+	// 		info.message = "模拟投资比收益，排名前三，每天都送电影票！";
+	// 	}else{
+	// 		if(this.state.winMovieTicket){
+	// 			info.shareUrl = NetConstants.TRADEHERO_API.SHARE_MOVIE_WIN_TICKET_URL;
+	// 			info.message = "朕的投资收益率排名前3，快快赞我！";
+	// 		}else{
+	// 			info.shareUrl = NetConstants.TRADEHERO_API.SHARE_MOVIE_NOT_WIN_TICKET_URL;
+	// 			info.message = "俺的模拟投资战绩不佳，求大侠支招，助我拿到电影票！";
+	// 		}
+	// 	}
+	// 	info.title = "一大波影券来啦";
+	// 	return info;
+	// },
 
 	gotoWebviewPage: function(targetUrl, title, shareID, shareTitle, shareDescription, sharingTrackingEvent, shareUrl) {
 		var userData = LogicData.getUserData()
@@ -400,12 +401,12 @@ var HomePage = React.createClass({
 			}
 		}
 
-		if(!shareUrl && targetUrl.startsWith(NetConstants.TRADEHERO_API.MOVIE_WIN_TICKET_URL)){
-			var shareInfo = this.getShareMovieEventInfo();
-			shareUrl = shareInfo.shareUrl;
-			shareDescription = shareInfo.message;
-			shareTitle = shareInfo.title;
-		}
+		// if(!shareUrl && targetUrl.startsWith(NetConstants.TRADEHERO_API.MOVIE_WIN_TICKET_URL)){
+		// 	var shareInfo = this.getShareMovieEventInfo();
+		// 	shareUrl = shareInfo.shareUrl;
+		// 	shareDescription = shareInfo.message;
+		// 	shareTitle = shareInfo.title;
+		// }
 
 		if(!shareID){
 			shareID = null
@@ -432,10 +433,10 @@ var HomePage = React.createClass({
 		});
 	},
 
-	gotoMoviePage: function(){
+	gotoCompetitionPage: function(){
 		TalkingdataModule.trackEvent(TalkingdataModule.MOVIE_ACTIVITY_EVENT);
 
-		var url = NetConstants.TRADEHERO_API.MOVIE_WIN_TICKET_URL;
+		var url = NetConstants.TRADEHERO_API.COMPETITION_PAGE_URL;
 		var userData = LogicData.getUserData();
 		var userId = userData.userId;
 		if(userId == undefined){
@@ -443,14 +444,34 @@ var HomePage = React.createClass({
 		}
 		url = url + '?userId=' + userId;
 
-		var info = this.getShareMovieEventInfo();
-		this.gotoWebviewPage(url, '推荐',
-			null,
-			info.title,
-			info.message,
-			TalkingdataModule.MOVIE_SHARE_EVENT,
-			info.shareUrl);
+		this.props.navigator.push({
+			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			url: url,
+			title: "比收益",
+			isShowNav: false,
+			backFunction: this.forceloopSwipers,
+		});
 	},
+
+	// gotoMoviePage: function(){
+	// 	TalkingdataModule.trackEvent(TalkingdataModule.MOVIE_ACTIVITY_EVENT);
+	//
+	// 	var url = NetConstants.TRADEHERO_API.MOVIE_WIN_TICKET_URL;
+	// 	var userData = LogicData.getUserData();
+	// 	var userId = userData.userId;
+	// 	if(userId == undefined){
+	// 		userId = 0;
+	// 	}
+	// 	url = url + '?userId=' + userId;
+	//
+	// 	var info = this.getShareMovieEventInfo();
+	// 	this.gotoWebviewPage(url, '推荐',
+	// 		null,
+	// 		info.title,
+	// 		info.message,
+	// 		TalkingdataModule.MOVIE_SHARE_EVENT,
+	// 		info.shareUrl);
+	// },
 
 	gotoCheckinPage: function(){
 		TalkingdataModule.trackEvent(TalkingdataModule.CHECK_IN_ACTIVITY_EVENT);
@@ -885,10 +906,10 @@ var HomePage = React.createClass({
 		var onPress;
 		var image;
 		if(i == 1){
-			title = "影票来袭";
+			title = "话费来袭";
 			description = "每日模拟交易前三名";
-			image = movie_image;
-			onPress = () => this.gotoMoviePage();
+			image = competition_image;
+			onPress = () => this.gotoCompetitionPage();
 		}else{
 			title = "每日签到";
 			description = "签到可赚取实盘资金";

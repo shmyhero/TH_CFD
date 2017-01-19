@@ -475,8 +475,9 @@ var StockOpenPositionPage = React.createClass({
 			}
 			newData[rowID].hasSelected = true
 
-			var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) <= MAX_PERCENT
 			var stopProfit = rowData.takePx !== undefined
+			var stopLoss = rowData.stopPx !== undefined
+			// var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) <= MAX_PERCENT
 
 			stopProfitPercent = 0
 			stopLossPercent = 0
@@ -1045,6 +1046,7 @@ var StockOpenPositionPage = React.createClass({
 		startPercent = this.priceToPercentWithRow(rowData.security.last, rowData, type)
 		// use gsmd to make sure this order is guaranteed.
 		startPercent += rowData.security.gsmd*100*rowData.leverage
+
 		if (startPercent < 0)
 			startPercent = 0
 
@@ -1064,6 +1066,14 @@ var StockOpenPositionPage = React.createClass({
 				stopLossPercent = percent
 			}
 		};
+
+		var disabled = false
+		if (type === 2) {
+			if (startPercent > MAX_PERCENT) {
+				disabled = true
+			}
+		}
+
 		price = this.percentToPriceWithRow(percent, rowData, type)
 
 		return (
@@ -1087,6 +1097,7 @@ var StockOpenPositionPage = React.createClass({
 		        <Switch
 		          onValueChange={(value) => this.onSwitchPressed(type, value)}
 		          value={switchIsOn}
+							disabled={disabled}
 						  onTintColor={ColorConstants.title_blue()} />
 			        </View>
 				</View>

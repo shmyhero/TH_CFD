@@ -54,8 +54,9 @@ var extendHeight = 222
 var rowHeight = 0
 var stockNameFontSize = Math.round(17*width/375.0)
 
-var stopProfitPercent = 0
-var stopLossPercent = 0
+var DEFAULT_PERCENT = -1
+var stopProfitPercent = DEFAULT_PERCENT
+var stopLossPercent = DEFAULT_PERCENT
 var stopProfitUpdated = false
 var stopLossUpdated = false
 var MAX_PERCENT = 90
@@ -479,8 +480,8 @@ var StockOpenPositionPage = React.createClass({
 			// var stopLoss = rowData.stopPx !== undefined
 			var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) <= MAX_PERCENT
 
-			stopProfitPercent = 0
-			stopLossPercent = 0
+			stopProfitPercent = DEFAULT_PERCENT
+			stopLossPercent = DEFAULT_PERCENT
 			stopProfitUpdated = false
 			stopLossUpdated = false
 
@@ -682,7 +683,7 @@ var StockOpenPositionPage = React.createClass({
 			console.log('Rambo: stopLossPercent = ' + stopLossPercent)
 			console.log('Rambo: price = ' + price)
 			if(!this.state.stopLossSwitchIsOn){
-				stopLossPercent=0
+				stopLossPercent=DEFAULT_PERCENT
 				price = this.percentToPriceWithRow(100, rowData, 2)
 				var dcm = Math.pow(10, rowData.security.dcmCount)
 				if (rowData.isLong){
@@ -1058,13 +1059,13 @@ var StockOpenPositionPage = React.createClass({
 
 		if (type === 1) {
 			endPercent = startPercent + 100
-			if (percent === 0) {
+			if (percent === DEFAULT_PERCENT) {
 				percent = rowData.takePx === undefined ? startPercent
 					: this.priceToPercentWithRow(rowData.takePx, rowData, type)
 				stopProfitPercent = percent
 			}
 		} else{
-			if (percent=== 0) {
+			if (percent=== DEFAULT_PERCENT) {
 				percent = this.priceToPercentWithRow(rowData.stopPx, rowData, type)
 				if (percent > endPercent) {
 					percent = startPercent

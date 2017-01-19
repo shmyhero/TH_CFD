@@ -103,7 +103,7 @@ function getCFDAPI(){
     SET_MESSAGE_READ_LIVE: CFD_API_SERVER + '/api/user/live/message/<id>',//LIVE ok
     GET_UNREAD_MESSAGE: CFD_API_SERVER + '/api/user/message/unread',
     GET_UNREAD_MESSAGE_LIVE: CFD_API_SERVER + '/api/user/live/message/unread',//LIVE ok
-    GET_MOVIE_RANK: CFD_API_SERVER + '/api/competition/1/user/<userId>/rank',
+    //GET_MOVIE_RANK: CFD_API_SERVER + '/api/competition/1/user/<userId>/rank',
 
 
     GET_USER_DAILY_SIGN_INFO: CFD_API_SERVER + '/api/reward/summary',//获取每日签到页面所需信息（需身份验证）
@@ -178,7 +178,8 @@ function getTradeHeroAPI(){
     SHARE_MOVIE_NOT_ATTENDED_TICKET_URL: TRADEHERO_SERVER_IP + '/CDF_BSY/indexShare.php',
     SHARE_LOGO_URL: TRADEHERO_SERVER_IP + '/TH_CFD_WEB/images/ShareLogo.png',
     INCOME_URL: TRADEHERO_SERVER_IP + '/TH_CFD_WEB/checkinRule.php',
-    MOVIE_WIN_TICKET_URL: TRADEHERO_SERVER_IP + '/CDF_BSY/index.php',
+    //MOVIE_WIN_TICKET_URL: TRADEHERO_SERVER_IP + '/CDF_BSY/index.php',
+    COMPETITION_PAGE_URL: TRADEHERO_SERVER_IP + '/CDF_BSY_HF/index.php',
     SHARE_DOWNLOAD_URL: TRADEHERO_SERVER_IP + '/activity/download.php',
     LIVE_REGISTER_TERMS: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/SignTerms<id>.html',
     SHARE_ACHIEVEMENT_CARD_URL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER + '/CardShare.php?id=<id>',

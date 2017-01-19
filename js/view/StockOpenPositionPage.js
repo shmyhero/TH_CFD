@@ -476,8 +476,8 @@ var StockOpenPositionPage = React.createClass({
 			newData[rowID].hasSelected = true
 
 			var stopProfit = rowData.takePx !== undefined
-			var stopLoss = rowData.stopPx !== undefined
-			// var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) <= MAX_PERCENT
+			// var stopLoss = rowData.stopPx !== undefined
+			var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) <= MAX_PERCENT
 
 			stopProfitPercent = 0
 			stopLossPercent = 0
@@ -648,6 +648,8 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	switchConfrim: function(rowData) {
+		console.log('Rambo: stopLossPercent switchConfrim = ' + stopLossPercent)
+
 		var userData = LogicData.getUserData()
 		var url = NetConstants.CFD_API.STOP_PROFIT_LOSS_API
 		if(LogicData.getAccountState()){
@@ -666,6 +668,7 @@ var StockOpenPositionPage = React.createClass({
 		var lastSelectedRow = this.state.selectedRow;
 		// STOP LOSS
 		if (stopLossUpdated) {
+
 			if (this.state.stopLossSwitchIsOn && stopLossPercent > MAX_PERCENT) {
 				Alert.alert('', '止损超过'+MAX_PERCENT+'%，无法设置');
 				return
@@ -676,6 +679,8 @@ var StockOpenPositionPage = React.createClass({
 				console.log('live', url );
 			}
 			var price = this.percentToPriceWithRow(stopLossPercent, rowData, 2)
+			console.log('Rambo: stopLossPercent = ' + stopLossPercent)
+			console.log('Rambo: price = ' + price)
 			if(!this.state.stopLossSwitchIsOn){
 				stopLossPercent=0
 				price = this.percentToPriceWithRow(100, rowData, 2)
@@ -912,6 +917,7 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	setSliderValue: function(type, value, rowData) {
+		// console.log('Rambo:stopLossPercent' + value)
 		if (type === 1) {
 			stopProfitPercent = value
 			stopProfitUpdated = true

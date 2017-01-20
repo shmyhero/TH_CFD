@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
     private ReactInstanceManager mReactInstanceManager;
     private boolean mDoRefresh = false;
-    public static String mClientIDTeTui = "";
+    public static String mClientIDTeTui = null;
     final static String TAG = "MainActivity";
 
     private static final int REQUEST_PERMISSION = 0;
@@ -83,8 +83,8 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.20.126:8081").apply();
-        
+        preferences.edit().putString("debug_http_host", "192.168.20.137:8081").apply();
+
         super.onCreate(null);
 
         CrashReport.initCrashReport(getApplicationContext());
@@ -159,6 +159,11 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         } catch (Exception e) {
             Log.e(TAG, "passDataToRN : error", e);
         }
+    }
+
+    public void setGetuiClientID(String clientID){
+        mClientIDTeTui = clientID;
+        initDeviceToken();
     }
 
     @Override
@@ -270,14 +275,19 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 //                    Log.d("","initDeviceToken : " + ANDOIRD_ID);
 
             ReactContext context = mReactInstanceManager.getCurrentReactContext();
-            if (mClientIDTeTui != null) {
-                NativeDataModule.passDataToRN(context, NativeActions.ACTION_DEVICE_TOKEN, mClientIDTeTui);
-                Log.i("GeTui", "NativeDataModule deviceToken : " + mClientIDTeTui);
+            if(context != null) {
+                if (mClientIDTeTui != null) {
+                    NativeDataModule.passDataToRN(context, NativeActions.ACTION_DEVICE_TOKEN, mClientIDTeTui);
+                    Log.i("GeTui", "NativeDataModule deviceToken : " + mClientIDTeTui);
+                } else {
+                    Log.i("GeTui", "We didn't get mClientIDTeTui, wait for device token...");
+                }
+            }else{
+                Log.i("GeTui", "React Native environment isn't ready...");
             }
 
-
         } catch (Exception e) {
-            Log.i("", "initDeviceToken : error");
+            Log.e("", "initDeviceToken : error", e);
         }
     }
 
@@ -301,11 +311,11 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
             PushManager.getInstance().initialize(this.getApplicationContext());
         }
 
-        mClientIDTeTui = PushManager.getInstance().getClientid(this);
-        if (mClientIDTeTui != null) {
-            Log.i("GeTui", "" + mClientIDTeTui);
-
-            //TongDaoModule.setPushToken(mClientIDTeTui);
+        String clientID = PushManager.getInstance().getClientid(this);
+        Log.i("GeTui", "try devicetoken" + clientID);
+        if(clientID!=null) {
+            mClientIDTeTui = clientID;
+            Log.i("GeTui", "initGeTui devicetoken " + mClientIDTeTui);
         }
     }
 

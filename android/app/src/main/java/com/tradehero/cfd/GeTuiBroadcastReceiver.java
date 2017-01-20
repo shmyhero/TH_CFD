@@ -50,6 +50,15 @@ public class GeTuiBroadcastReceiver extends BroadcastReceiver{
         Log.i(TAG, "onReceive() action=" + bundle.getInt("action"));
 
         switch (bundle.getInt(PushConsts.CMD_ACTION)) {
+            case PushConsts.GET_CLIENTID:
+                String cid = bundle.getString("clientid");
+                if (cid != null) {
+                    Log.i(TAG, "receive client id: " + cid);
+                    if(MainActivity.mInstance != null) {
+                        MainActivity.mInstance.setGetuiClientID(cid);
+                    }
+                }
+                break;
             case PushConsts.GET_MSG_DATA:
                 byte[] payload = bundle.getByteArray("payload");
 

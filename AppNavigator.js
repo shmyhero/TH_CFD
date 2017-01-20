@@ -250,10 +250,14 @@ var AppNavigator = React.createClass({
 	// 	this.refs['mainPage'].ayondoLoginResult(result)
 	// },
 
-	_handleDeviceToken: function(event) {
-		console.log("deviceToken from native:", event);
+	_lastDeviceToken: "",
 
-		this.sendDeviceTokenToServer(event);
+	_handleDeviceToken: function(event) {
+		if(this._lastDeviceToken != event){
+			console.log("deviceToken from native:", event);
+			this._lastDeviceToken = event;
+			this.sendDeviceTokenToServer(event);
+		}
 	},
 
 

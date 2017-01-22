@@ -650,166 +650,283 @@ var StockOpenPositionPage = React.createClass({
 
 	switchConfrim: function(rowData) {
 		console.log('Rambo: stopLossPercent switchConfrim = ' + stopLossPercent)
-
-		var userData = LogicData.getUserData()
-		var url = NetConstants.CFD_API.STOP_PROFIT_LOSS_API
-		if(LogicData.getAccountState()){
-			url = NetConstants.CFD_API.STOP_PROFIT_LOSS_LIVE_API
-			console.log('live', url );
-		}
-
-		var eventParam = {};
-		eventParam[TalkingdataModule.KEY_STOP_PROFIT_SWITCH_ON] = this.state.stopProfitSwitchIsOn;
-		eventParam[TalkingdataModule.KEY_STOP_LOSS_SWITCH_OFF] = this.state.stopLossSwitchIsOn;
-		eventParam[TalkingdataModule.KEY_STOP_PROFIT] = stopProfitUpdated && this.state.stopProfitSwitchIsOn ? stopProfitPercent : '-';
-		eventParam[TalkingdataModule.KEY_STOP_LOSS] = stopLossUpdated && this.state.stopLossSwitchIsOn ? stopLossPercent : '-';
-
-		TalkingdataModule.trackEvent(TalkingdataModule.SET_STOP_PROFIT_LOSS_EVENT, '', eventParam)
+		var currentStopProfitUpdated = stopProfitUpdated;
+		var currentStopLossUpdated = stopLossUpdated;
+		var currentStopLossPercent = stopLossPercent;
+		var currentStopProfitPercent = stopProfitPercent;
+		var currentStopProfitSwitchIsOn = this.state.stopProfitSwitchIsOn;
+		var currentStopLossSwitchIsOn = this.state.stopLossSwitchIsOn;
 
 		var lastSelectedRow = this.state.selectedRow;
-		// STOP LOSS
-		if (stopLossUpdated) {
-
-			if (this.state.stopLossSwitchIsOn && stopLossPercent > MAX_PERCENT) {
-				Alert.alert('', '止损超过'+MAX_PERCENT+'%，无法设置');
-				return
-			}
-			url = NetConstants.CFD_API.STOP_PROFIT_LOSS_API
+		// var tempStockInfo = this.state.stockInfoRowData;
+		// tempStockInfo[lastSelectedRow].isSettingProfitLoss = true;
+		//
+		// this.setState({
+		// 	stockInfoRowData: tempStockInfo,
+		// 	stockInfo: ds.cloneWithRows(tempStockInfo),
+		// }, ()=>{
+			var userData = LogicData.getUserData()
+			var url = NetConstants.CFD_API.STOP_PROFIT_LOSS_API
 			if(LogicData.getAccountState()){
 				url = NetConstants.CFD_API.STOP_PROFIT_LOSS_LIVE_API
 				console.log('live', url );
 			}
-			var price = this.percentToPriceWithRow(stopLossPercent, rowData, 2)
-			console.log('Rambo: stopLossPercent = ' + stopLossPercent)
-			console.log('Rambo: price = ' + price)
-			if(!this.state.stopLossSwitchIsOn){
-				stopLossPercent=DEFAULT_PERCENT
-				price = this.percentToPriceWithRow(100, rowData, 2)
-				var dcm = Math.pow(10, rowData.security.dcmCount)
-				if (rowData.isLong){
-					price = Math.ceil(price * dcm)/dcm
-				}
-				else {
-					price = Math.floor(price * dcm)/dcm
-				}
-			}
-			NetworkModule.fetchTHUrl(
-				url,
-				{
-					method: 'PUT',
-					headers: {
-						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-						'Content-Type': 'application/json; charset=utf-8',
-					},
-					body: JSON.stringify({
-						posId: rowData.id,
-						securityId: rowData.security.id,
-						orderId: rowData.stopOID,
-						price: price
-					}),
-					showLoading: true,
-				},
-				(responseJson) => {
-					stopLossUpdated = false
-					this.setState({
-						profitLossUpdated: false,
-						profitLossConfirmed: true})
 
-					var tempStockInfo = this.state.stockInfoRowData
-					tempStockInfo[lastSelectedRow].stopPx = responseJson.stopPx
-					this.setState({
-						stockInfoRowData: tempStockInfo,
-						stockInfo: ds.cloneWithRows(tempStockInfo),
-					})
-				},
-				(result) => {
-					Alert.alert('', result.errorMessage);
+			var eventParam = {};
+			eventParam[TalkingdataModule.KEY_STOP_PROFIT_SWITCH_ON] = currentStopProfitSwitchIsOn;
+			eventParam[TalkingdataModule.KEY_STOP_LOSS_SWITCH_OFF] = currentStopLossSwitchIsOn;
+			eventParam[TalkingdataModule.KEY_STOP_PROFIT] = currentStopProfitUpdated && currentStopProfitSwitchIsOn ? currentStopProfitPercent : '-';
+			eventParam[TalkingdataModule.KEY_STOP_LOSS] = currentStopLossUpdated && currentStopLossSwitchIsOn ? currentStopLossPercent : '-';
+
+			TalkingdataModule.trackEvent(TalkingdataModule.SET_STOP_PROFIT_LOSS_EVENT, '', eventParam)
+
+			// STOP LOSS
+
+			this.sendStopLossRequest(rowData,
+				lastSelectedRow,
+				currentStopLossSwitchIsOn,
+				currentStopLossPercent,
+				currentStopLossUpdated)
+			.then((info)=>{
+				return this.sendStopProfitRequest(rowData,
+					lastSelectedRow,
+					info,
+					currentStopProfitSwitchIsOn,
+					currentStopProfitPercent,
+					currentStopProfitUpdated);
+			}).then((result)=>{
+				var newState = {
+					profitLossUpdated: false,
+					profitLossConfirmed: true,
+				};
+
+				if(result){
+					var tempStockInfo = this.state.stockInfoRowData;
+					if ('stopPx' in result){
+						tempStockInfo[lastSelectedRow].stopPx = result.stopPx;
+						console.log("update stopPx: " + result.stopPx)
+					}
+					if ('takeOID' in result){
+						tempStockInfo[lastSelectedRow].takeOID = result.takeOID;
+						console.log("update takeOID: " + result.takeOID)
+					}
+					if ('takePx' in result){
+						tempStockInfo[lastSelectedRow].takePx = result.takePx;
+						console.log("update takePx: " + result.takePx)
+					}
+					//tempStockInfo[lastSelectedRow].isSettingProfitLoss = false;
+					newState.stockInfoRowData = tempStockInfo;
+					newState.stockInfo = ds.cloneWithRows(tempStockInfo);
 				}
-			)
-		}
-		// STOP PROFIT
-		var type = 'PUT'
-		var body = JSON.stringify({})
-		if (stopProfitUpdated) {
-			if (rowData.takeOID === undefined) {
-				if (this.state.stopProfitSwitchIsOn) {
-					url = NetConstants.CFD_API.ADD_REMOVE_STOP_PROFIT_API
+				console.log("stop profit/loss finsished. Update state")
+				this.setState(newState);
+			})
+			.catch((error)=>{
+				console.log("Met error! " + error);
+				//var tempStockInfo = this.state.stockInfoRowData;
+				var newState = {
+					profitLossUpdated: false,
+					profitLossConfirmed: true,
+					//stockInfoRowData: tempStockInfo,
+					//stockInfo: ds.cloneWithRows(tempStockInfo),
+				};
+				this.setState(newState);
+			});
+		//});
+	},
+
+	sendStopLossRequest: function(rowData, lastSelectedRow, stopLossSwitchIsOn, stopLossPercent, stopLossUpdated){
+		return new Promise((resolve, reject)=>{
+			try{
+				console.log("stopLossUpdated " + stopLossUpdated)
+				if (stopLossUpdated) {
+					var userData = LogicData.getUserData()
+					if (stopLossSwitchIsOn && stopLossPercent > MAX_PERCENT) {
+						Alert.alert('', '止损超过'+MAX_PERCENT+'%，无法设置');
+						reject();
+						return
+					}
+					var url = NetConstants.CFD_API.STOP_PROFIT_LOSS_API
 					if(LogicData.getAccountState()){
-						url = NetConstants.CFD_API.ADD_REMOVE_STOP_PROFIT_LIVE_API
+						url = NetConstants.CFD_API.STOP_PROFIT_LOSS_LIVE_API
 						console.log('live', url );
 					}
-					type = 'POST'
-					body = JSON.stringify({
-							posId: rowData.id,
-							securityId: rowData.security.id,
-							price: this.percentToPriceWithRow(stopProfitPercent, rowData, 1),
-						})
+					var price = this.percentToPriceWithRow(stopLossPercent, rowData, 2)
+					console.log("sendStopLoss rowData " + JSON.stringify(rowData));
+					console.log('Rambo: stopLossPercent = ' + stopLossPercent)
+					console.log('Rambo: price = ' + price)
+					if(!stopLossSwitchIsOn){
+						stopLossPercent=DEFAULT_PERCENT
+						price = this.percentToPriceWithRow(100, rowData, 2)
+						var dcm = Math.pow(10, rowData.security.dcmCount)
+						if (rowData.isLong){
+							price = Math.ceil(price * dcm)/dcm
+						}
+						else {
+							price = Math.floor(price * dcm)/dcm
+						}
+					}
+					console.log('Rambo: final price = ' + price)
+					NetworkModule.fetchTHUrl(
+						url,
+						{
+							method: 'PUT',
+							headers: {
+								'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+								'Content-Type': 'application/json; charset=utf-8',
+							},
+							body: JSON.stringify({
+								posId: rowData.id,
+								securityId: rowData.security.id,
+								orderId: rowData.stopOID,
+								price: price
+							}),
+							showLoading: true,
+						},
+						(responseJson) => {
+							console.log("set stop loss returned");
+							stopLossUpdated = false
+							// this.setState({
+							// 	profitLossUpdated: false,
+							// 	profitLossConfirmed: true})
+
+							var stockInfo = {};
+							stockInfo.stopPx = responseJson.stopPx;
+							//var tempStockInfo = this.state.stockInfoRowData
+							//tempStockInfo[lastSelectedRow].stopPx = responseJson.stopPx
+							// this.setState({
+							// 	stockInfoRowData: tempStockInfo,
+							// 	stockInfo: ds.cloneWithRows(tempStockInfo),
+							// });
+
+							resolve(stockInfo);
+						},
+						(result) => {
+							Alert.alert('', result.errorMessage);
+							resolve(null);
+						}
+					);
+
+					console.log("send request");
+				}else{
+					resolve(null);
 				}
-				else {
-					stopProfitUpdated = false
-					this.setState({profitLossUpdated: false})
-					return
-				}
+			}catch(error){
+				console.log("stop loss has ERROR:" + error);
 			}
-			else {
-				if(this.state.stopProfitSwitchIsOn) {
-					body = JSON.stringify({
-						posId: rowData.id,
-						securityId: rowData.security.id,
-						orderId: rowData.takeOID,
-						price: this.percentToPriceWithRow(stopProfitPercent, rowData, 1),
-					})
-				}
-				else {
-					url = NetConstants.CFD_API.ADD_REMOVE_STOP_PROFIT_API
+		});
+	},
+
+	sendStopProfitRequest: function(rowData, lastSelectedRow, resolveData, stopProfitSwitchIsOn, stopProfitPercent, stopProfitUpdated){
+		return new Promise(resolve=>{
+			try{
+				var type = 'PUT'
+				var body = JSON.stringify({})
+				if (stopProfitUpdated) {
+					var url = NetConstants.CFD_API.STOP_PROFIT_LOSS_API
 					if(LogicData.getAccountState()){
-						url = NetConstants.CFD_API.ADD_REMOVE_STOP_PROFIT_LIVE_API
+						url = NetConstants.CFD_API.STOP_PROFIT_LOSS_LIVE_API
 						console.log('live', url );
 					}
-					type = 'DELETE'
-					body = JSON.stringify({
-							posId: rowData.id,
-							securityId: rowData.security.id,
-							orderId: rowData.takeOID,
-						})
-				}
-			}
-			NetworkModule.fetchTHUrl(
-				url,
-				{
-					method: type,
-					headers: {
-						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-						'Content-Type': 'application/json; charset=utf-8',
-					},
-					body: body,
-					showLoading: true,
-				},
-				(responseJson) => {
-					stopProfitUpdated = false
-					this.setState({
-						profitLossUpdated: false,
-						profitLossConfirmed: true})
 
-					var tempStockInfo = this.state.stockInfoRowData
-					if (responseJson.takePx === undefined) {
-						tempStockInfo[lastSelectedRow].takeOID = undefined
-						tempStockInfo[lastSelectedRow].takePx = undefined
+					var userData = LogicData.getUserData()
+					var price = this.percentToPriceWithRow(stopProfitPercent, rowData, 1);
+					console.log("StopProfitPrice rowData " + JSON.stringify(rowData));
+					console.log("StopProfitPrice " + price);
+					if (rowData.takeOID === undefined) {
+
+						console.log('Rambo: final price = ' + price)
+						if (stopProfitSwitchIsOn) {
+							url = NetConstants.CFD_API.ADD_REMOVE_STOP_PROFIT_API
+							if(LogicData.getAccountState()){
+								url = NetConstants.CFD_API.ADD_REMOVE_STOP_PROFIT_LIVE_API
+								console.log('live', url );
+							}
+							type = 'POST'
+							body = JSON.stringify({
+									posId: rowData.id,
+									securityId: rowData.security.id,
+									price: price,
+								})
+						}
+						else {
+							stopProfitUpdated = false
+							//this.setState({profitLossUpdated: false})
+							resolve(resolveData);
+							return
+						}
 					}
 					else {
-						tempStockInfo[lastSelectedRow].takeOID = responseJson.takeOID
-						tempStockInfo[lastSelectedRow].takePx = responseJson.takePx
+						if(stopProfitSwitchIsOn) {
+							body = JSON.stringify({
+								posId: rowData.id,
+								securityId: rowData.security.id,
+								orderId: rowData.takeOID,
+								price: price,
+							})
+						}
+						else {
+							url = NetConstants.CFD_API.ADD_REMOVE_STOP_PROFIT_API
+							if(LogicData.getAccountState()){
+								url = NetConstants.CFD_API.ADD_REMOVE_STOP_PROFIT_LIVE_API
+								console.log('live', url );
+							}
+							type = 'DELETE'
+							body = JSON.stringify({
+									posId: rowData.id,
+									securityId: rowData.security.id,
+									orderId: rowData.takeOID,
+								})
+						}
 					}
-					this.setState({
-						stockInfoRowData: tempStockInfo,
-						stockInfo: ds.cloneWithRows(tempStockInfo),
-					})
-				},
-				(result) => {
-					Alert.alert('', result.errorMessage);
+					NetworkModule.fetchTHUrl(
+						url,
+						{
+							method: type,
+							headers: {
+								'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+								'Content-Type': 'application/json; charset=utf-8',
+							},
+							body: body,
+							showLoading: true,
+						},
+						(responseJson) => {
+							stopProfitUpdated = false
+							// this.setState({
+							// 	profitLossUpdated: false,
+							// 	profitLossConfirmed: true})
+
+							var tempStockInfo = this.state.stockInfoRowData
+							if(!resolveData){
+								resolveData = {}
+							}
+							if (responseJson.takePx === undefined) {
+								resolveData.takeOID = undefined
+								resolveData.takePx = undefined
+								// tempStockInfo[lastSelectedRow].takeOID = undefined
+								// tempStockInfo[lastSelectedRow].takePx = undefined
+							}
+							else {
+								resolveData.takeOID = responseJson.takeOID
+								resolveData.takePx = responseJson.takePx
+								// tempStockInfo[lastSelectedRow].takeOID = responseJson.takeOID
+								// tempStockInfo[lastSelectedRow].takePx = responseJson.takePx
+							}
+							resolve(resolveData);
+						},
+						(result) => {
+							Alert.alert('', result.errorMessage);
+							resolve(resolveData);
+						}
+					)
 				}
-			)
-		}
+				else{
+					resolve(resolveData);
+				}
+			}catch(error){
+				console.log("set stop profit error: " + error);
+			}
+		});
 	},
 
 	getLastPrice: function(rowData) {
@@ -1311,10 +1428,15 @@ var StockOpenPositionPage = React.createClass({
 			if (!this.state.profitLossUpdated && this.state.profitLossConfirmed) {
 				buttonText = '已设置'
 			}
-			separatorStyle = {backgroundColor: 'pink'};
+			//separatorStyle = {backgroundColor: 'pink'};
 			underlayColor = this.state.profitLossUpdated ? ColorConstants.title_blue():'#dfdee4';
 			buttonStyle = [styles.okView, !this.state.profitLossUpdated && styles.okViewDisabled,this.state.profitLossUpdated && {backgroundColor:ColorConstants.title_blue()} ]
 			buttonTextStyle = [styles.okButton, !this.state.profitLossUpdated && styles.okViewDisabled, this.state.profitLossUpdated && {backgroundColor:ColorConstants.title_blue()}];
+			// if(rowData.isSettingProfitLoss){
+			// 	buttonText = "请稍后"
+			// 	buttonStyle = [styles.okView, styles.okViewDisabled];
+			// 	buttonTextStyle = [styles.okButton, styles.okViewDisabled];
+			// }
 		}
 		return(
 			<View>

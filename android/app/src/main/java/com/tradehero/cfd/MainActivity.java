@@ -1,11 +1,10 @@
 package com.tradehero.cfd;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
+import android.content.res.Resources;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.net.Uri;
@@ -18,8 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -83,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.20.137:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.120:8081").apply();
 
         super.onCreate(null);
 
@@ -101,6 +100,29 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         ButterKnife.bind(this);
 
         reactRootView.startReactApplication(mReactInstanceManager, "TH_CFD", null);
+
+        // Fix the UI issue caused by the hidden navigation bar on some devices
+        // by passing the React view height to RN every time the view size is changed.
+        reactRootView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                Integer height = bottom - top;
+                Integer oldHeight = oldBottom - oldTop;
+
+                if(oldHeight != height){
+                    Log.i(TAG, "onLayoutChange top " + top + ", bottom " + bottom + ", oldTop " + oldTop + ", oldBottom " + oldBottom );
+                    Resources resources = MainActivity.this.getResources();
+                    DisplayMetrics metrics = resources.getDisplayMetrics();
+                    Integer dp = (int)(height / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+                    ReactContext context = mReactInstanceManager.getCurrentReactContext();
+                    if (context != null) {
+                        NativeDataModule.passDataToRN(mReactInstanceManager.getCurrentReactContext(),
+                                NativeActions.ACTION_GET_ANDROID_VISIBLE_HEIGHT, dp.toString());
+                    }
+
+                }
+            }
+        });
 
         try {
             String pkName = this.getPackageName();
@@ -175,6 +197,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(null);
         ButterKnife.unbind(this);
     }
 

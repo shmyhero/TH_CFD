@@ -35,6 +35,7 @@ var stockNameFontSize = Math.round(17*width/375.0)
 var networkConnectionChangedSubscription = null;
 var accountLogoutEventSubscription = null;
 var accountStateChangedSubscription = null;
+var layoutSizeChangedSubscription = null
 
 var StockClosedPositionPage = React.createClass({
 	mixins: [TimerMixin],
@@ -47,6 +48,7 @@ var StockClosedPositionPage = React.createClass({
 			isClear:false,
 			contentLoaded: false,
 			isRefreshing: false,
+			height: UIConstants.getVisibleHeight(),
 		};
 	},
 
@@ -63,6 +65,10 @@ var StockClosedPositionPage = React.createClass({
 
 		accountLogoutEventSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGOUT, () => {
 			this.clearViews();
+		});
+
+		layoutSizeChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.LAYOUT_SIZE_CHANGED, () => {
+			this.onLayoutSizeChanged();
 		});
 	},
 
@@ -83,8 +89,15 @@ var StockClosedPositionPage = React.createClass({
 		networkConnectionChangedSubscription && networkConnectionChangedSubscription.remove();
 		accountStateChangedSubscription && accountStateChangedSubscription.remove();
 		accountLogoutEventSubscription && accountLogoutEventSubscription.remove();
+		layoutSizeChangedSubscription && layoutSizeChangedSubscription.remove();
 	},
 
+	onLayoutSizeChanged: function(){
+		console.log("onLayoutSizeChanged StockClosedPositionPage");
+		this.setState({
+			height: UIConstants.getVisibleHeight(),
+		})
+	},
 
 	tabPressed: function(index) {
 		this.loadClosedPositionInfo()
@@ -502,8 +515,7 @@ var StockClosedPositionPage = React.createClass({
 
 	render: function() {
 		var viewStyle = Platform.OS === 'android' ?
-		{width: width, height: height
-			- UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
+		{width: width, height: this.state.height
 			- UIConstants.HEADER_HEIGHT
 			- UIConstants.SCROLL_TAB_HEIGHT
 			- UIConstants.TAB_BAR_HEIGHT} :

@@ -32,6 +32,7 @@ var didFocusSubscription = null;
 var recevieDataSubscription = null;
 var didAccountChangeSubscription = null;
 var networkConnectionChangedSubscription = null;
+var layoutSizeChangedSubscription = null
 
 var stockNameFontSize = 18;
 
@@ -64,6 +65,7 @@ var StockListPage = React.createClass({
 			rowStockInfoData: [],
 			contentLoaded: false,
 			isRefreshing: true,
+			height: UIConstants.getVisibleHeight(),
 		};
 	},
 
@@ -147,6 +149,13 @@ var StockListPage = React.createClass({
 			console.log("reFetchStockData");
 			this.fetchStockData();
 		}
+	},
+
+	onLayoutSizeChanged: function(){
+		console.log("onLayoutSizeChanged");
+		this.setState({
+			height: UIConstants.getVisibleHeight(),
+		})
 	},
 
 	fetchStockData: function() {
@@ -392,6 +401,10 @@ var StockListPage = React.createClass({
 		networkConnectionChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.NETWORK_CONNECTION_CHANGED, () => {
 			this.onConnectionStateChanged();
 		});
+
+		layoutSizeChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.LAYOUT_SIZE_CHANGED, () => {
+			this.onLayoutSizeChanged();
+		});
 	},
 
 	accountStateChange: function(){
@@ -420,6 +433,7 @@ var StockListPage = React.createClass({
 			didAccountChangeSubscription && didAccountChangeSubscription.remove();
 		}
 		networkConnectionChangedSubscription && networkConnectionChangedSubscription.remove();
+		layoutSizeChangedSubscription && layoutSizeChangedSubscription.remove();
 	},
 
 	onDidFocus: function(event) {
@@ -668,8 +682,7 @@ var StockListPage = React.createClass({
 		var scrollTabHeight = 48
 
 		var viewStyle = Platform.OS === 'android' ?
-			{width: width, height: height
-					- UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
+			{width: width, height: this.state.height
 					- UIConstants.HEADER_HEIGHT
 					- UIConstants.SCROLL_TAB_HEIGHT
 					- UIConstants.TAB_BAR_HEIGHT} :

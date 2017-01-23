@@ -15,6 +15,7 @@ const EventConst = {
 	ACCOUNT_LOGIN_OUT_SIDE: 'account_login_out_side',
 	ACCOUNT_LOGIN: 'account_login',
 	ACCOUNT_LOGOUT: 'account_logout',
+	LAYOUT_SIZE_CHANGED: 'layout_size_changed',
 }
 
 var EventCenter = {
@@ -58,6 +59,10 @@ var EventCenter = {
 
 	emitAccountLogoutEvent: function(){
 		eventEmitter.emit(EventConst.ACCOUNT_LOGOUT);
+	},
+
+	emitLayoutSizeChangedEvent: function(){
+		eventEmitter.emit(EventConst.LAYOUT_SIZE_CHANGED);
 	},
 }
 

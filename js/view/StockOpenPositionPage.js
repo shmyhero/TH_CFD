@@ -65,6 +65,7 @@ var isWaiting = false
 var networkConnectionChangedSubscription = null;
 var accountLogoutEventSubscription = null;
 var accountStateChangedSubscription = null;
+var layoutSizeChangedSubscription = null
 
 var _currentRowData = null;
 
@@ -91,6 +92,7 @@ var StockOpenPositionPage = React.createClass({
 			contentLoaded: false,
 			isRefreshing: false,
 			dataStatus:0,//0正常 1等待刷新 2加载中
+			height: UIConstants.getVisibleHeight(),
 		};
 	},
 
@@ -108,6 +110,17 @@ var StockOpenPositionPage = React.createClass({
 		accountLogoutEventSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGOUT, () => {
 			this.clearViews();
 		});
+
+		layoutSizeChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.LAYOUT_SIZE_CHANGED, () => {
+			this.onLayoutSizeChanged();
+		});
+	},
+
+	onLayoutSizeChanged: function(){
+		console.log("onLayoutSizeChanged StockOpenPositionPage");
+		this.setState({
+			height: UIConstants.getVisibleHeight(),
+		})
 	},
 
 	onConnectionStateChanged: function(){
@@ -128,6 +141,7 @@ var StockOpenPositionPage = React.createClass({
 		networkConnectionChangedSubscription && networkConnectionChangedSubscription.remove();
 		accountStateChangedSubscription && accountStateChangedSubscription.remove();
 		accountLogoutEventSubscription && accountLogoutEventSubscription.remove();
+		layoutSizeChangedSubscription && layoutSizeChangedSubscription.remove();
 	},
 
 	onEndReached: function() {
@@ -1663,11 +1677,12 @@ var StockOpenPositionPage = React.createClass({
 
 	render: function() {
 		var viewStyle = Platform.OS === 'android' ?
-			{width: width, height: height
-				- UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
+			{	width: width,
+				height: this.state.height
 				- UIConstants.HEADER_HEIGHT
 				- UIConstants.SCROLL_TAB_HEIGHT
-				- UIConstants.TAB_BAR_HEIGHT} :
+				- UIConstants.TAB_BAR_HEIGHT,
+			}:
 			{width: width, flex: 1}
 		return (
 			<View style={viewStyle}>

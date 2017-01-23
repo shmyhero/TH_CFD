@@ -33,7 +33,7 @@ const {appKey} = _updateConfig[Platform.OS];
 var buildStyleInterpolator = require('buildStyleInterpolator');
 var UIManager = require('UIManager');
 var ColorConstants = require('./js/ColorConstants')
-
+var UIConstants = require('./js/UIConstants')
 var recevieDataSubscription = null
 var didAccountChangeSubscription = null;
 var networkConnectionChangedSubscription = null;
@@ -198,6 +198,8 @@ var AppNavigator = React.createClass({
 						this.actionForPush(JSON.parse(args[1]));
 					}else if (args[0] == 'versionCode'){
 						this.setCurrentVersionCode(args[1]);
+					}else if (args[0] == 'getAndroidVisibleHeight'){
+						UIConstants.setVisibleHeight(args[1])
 					}
 					// else if (args[0] == 'isProductServer') {
 					// 	this.setIsProduct(args[1]);
@@ -250,17 +252,16 @@ var AppNavigator = React.createClass({
 	// 	this.refs['mainPage'].ayondoLoginResult(result)
 	// },
 
-	_lastDeviceToken: "",
 
+	lastDeviceToken: "",
 	_handleDeviceToken: function(event) {
-		if(this._lastDeviceToken != event){
-			console.log("deviceToken from native:", event);
-			this._lastDeviceToken = event;
+		console.log("deviceToken from native:", event);
+
+		if(this.lastDeviceToken != event){
+			this.lastDeviceToken = event;
 			this.sendDeviceTokenToServer(event);
 		}
 	},
-
-
 
 	sendDeviceTokenToServer: function(event){
 		if(!event || event === ""){

@@ -15,6 +15,7 @@ import {
 	TouchableWithoutFeedback,
 } from 'react-native';
 
+var {EventCenter, EventConst} = require('../EventCenter')
 import LinearGradient from 'react-native-linear-gradient';
 var TimerMixin = require('react-timer-mixin');
 
@@ -43,6 +44,7 @@ var MAX_ValidationCodeCountdown = 60
 const TAB_LIVE = 1
 const TAB_SIMULATOR = 2
 var last_pressed_login = new Date().getTime();
+var layoutSizeChangedSubscription = null
 
 var LoginPage = React.createClass({
 	mixins: [TimerMixin],
@@ -82,6 +84,21 @@ var LoginPage = React.createClass({
 				wechatInstalled: installed,
 			})
 		})
+
+		layoutSizeChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.LAYOUT_SIZE_CHANGED, () => {
+			this.onLayoutSizeChanged();
+		});
+	},
+
+	componentWillUnmount: function(){
+		layoutSizeChangedSubscription && layoutSizeChangedSubscription.remove();
+	},
+
+	onLayoutSizeChanged: function(){
+		console.log("onLayoutSizeChanged");
+		this.setState({
+			height: UIConstants.getVisibleHeight(),
+		})
 	},
 
 	getInitialState: function() {
@@ -97,6 +114,7 @@ var LoginPage = React.createClass({
 			liveLoginRememberUserName: true,
 			quickLoginBottomMargin: 70,
 			isWorking: false,
+			height: UIConstants.getVisibleHeight(),
 		};
 	},
 
@@ -744,7 +762,7 @@ var LoginPage = React.createClass({
 		return (
 			<View style={{flex:1}}>
 				<ScrollView style={{flex:1}}>
-					<LinearGradient colors={gradientColors} style={[styles.wrapper, {height: height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER}]}>
+					<LinearGradient colors={gradientColors} style={[styles.wrapper, {height: this.state.height}]}>
 						{/* {this.renderTab()} */}
 						<View style={styles.tabContainer}>
 							<Text style={{flex: 1, fontSize: 18, textAlign: 'center', color: '#ffffff'}}>

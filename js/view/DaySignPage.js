@@ -29,7 +29,7 @@ var HeaderLineDialog = require('./HeaderLineDialog')
 
 var {height, width} = Dimensions.get('window');
 var heightRate = height/667.0;
-var heightShow = height - UIConstants.HEADER_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
+//var heightShow = height - UIConstants.HEADER_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
 var roundR = (width-10)/2
 var roundDayMargin = 5
 var roundDayLength = 11
@@ -234,8 +234,10 @@ var DaySignPage = React.createClass({
 	},
 
 	renderTop: function(){
+		var heightShow = this.state.height - UIConstants.HEADER_HEIGHT;
+
 			return(
-				<View style = {styles.topLayout}>
+				<View style = {[styles.topLayout, {height: heightShow*(1*0.33),}]}>
 
 						<View style = {styles.bottomSepContainer}>
 							<View style = {styles.topSep}>
@@ -286,8 +288,9 @@ var DaySignPage = React.createClass({
 	},
 
 	renderMiddle: function(){
+		var heightShow = this.state.height - UIConstants.HEADER_HEIGHT;
 		return(
-			<View style = {styles.middleLayout}>
+			<View style = {[styles.middleLayout, {height: heightShow*(1*0.57) + (roundR/2),}]}>
 					<View style = {styles.signLayout}>
 						<View style = {styles.roundButtonBoard}>
 						<TouchableOpacity onPress={() => this._clickSign()}>
@@ -392,8 +395,10 @@ var DaySignPage = React.createClass({
 	},
 
 	renderBottom: function(){
+		var heightShow = this.state.height - UIConstants.HEADER_HEIGHT;
+
 		return(
-			<View style = {styles.bottomLayout}>
+			<View style = {[styles.bottomLayout, {height:heightShow*(1*0.12),}]}>
 					<View style = {styles.lineLeftRightTextContainer}>
 						<Image style = {styles.lineLeftRight} source = {require('../../images/line_left.png')} ></Image>
      			 	<Text style = {[styles.textBottom]}>更多交易金获取方式</Text>
@@ -446,7 +451,7 @@ var DaySignPage = React.createClass({
 
 	render: function() {
 		return (
-			<View>
+			<View style={{flex: 1}}>
 				<NavBar title='每日签到' showBackButton={true} navigator={this.props.navigator}
 							imageOnRight={require('../../images/share01.png')}
 							rightImageOnClick={this._share}/>
@@ -469,16 +474,16 @@ var styles = StyleSheet.create({
 	scrollView: {
 		flex:1,
 		backgroundColor: '#FFFFFF',
-	  height:height - UIConstants.HEADER_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER ,
+	  //height:height - UIConstants.HEADER_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER ,
 	},
 
 	topLayout:{
-		height:heightShow*(1*0.33),
+		//height:heightShow*(1*0.33),
 		backgroundColor: ColorConstants.TITLE_BLUE,
 	},
 
 	middleLayout:{
-		height:heightShow*(1*0.57) + (roundR/2),
+		//height:heightShow*(1*0.57) + (roundR/2),
 		marginTop:-roundR/2,
 		// marginLeft:(width-roundR)/2,
 		backgroundColor: '#00000000',
@@ -490,7 +495,7 @@ var styles = StyleSheet.create({
 
 	bottomLayout:{
 		flex:1,
-		height:heightShow*(1*0.12),
+		//height:heightShow*(1*0.12),
 		backgroundColor: '#F6F6F6',
 	  alignItems:'center',
 		justifyContent:'center',

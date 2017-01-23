@@ -27,6 +27,7 @@ var {height, width} = Dimensions.get('window');
 var networkConnectionChangedSubscription = null;
 var accountStateChangedSubscription = null;
 var accountLogoutEventSubscription = null;
+var layoutSizeChangedSubscription = null
 
 var StockStatisticsPage = React.createClass({
 	mixins: [TimerMixin],
@@ -42,6 +43,7 @@ var StockStatisticsPage = React.createClass({
 			barAnimPlayed: false,
 			balanceData: balanceData,
 			isClear: false,
+			height: UIConstants.getVisibleHeight(),
 		}
 	},
 
@@ -77,12 +79,24 @@ var StockStatisticsPage = React.createClass({
 		accountLogoutEventSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGOUT, () => {
 			this.clearViews();
 		});
+
+		layoutSizeChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.LAYOUT_SIZE_CHANGED, () => {
+			this.onLayoutSizeChanged();
+		});
 	},
 
 	componentWillUnmount: function(){
 		networkConnectionChangedSubscription && networkConnectionChangedSubscription.remove();
 		accountStateChangedSubscription && accountStateChangedSubscription.remove();
 		accountLogoutEventSubscription && accountLogoutEventSubscription.remove();
+		layoutSizeChangedSubscription && layoutSizeChangedSubscription.remove();
+	},
+
+	onLayoutSizeChanged: function(){
+		console.log("onLayoutSizeChanged StockStatisticsPage");
+		this.setState({
+			height: UIConstants.getVisibleHeight(),
+		})
 	},
 
 	onConnectionStateChanged: function(){
@@ -379,7 +393,12 @@ var StockStatisticsPage = React.createClass({
 
 	render: function() {
 		return (
-			<View style={[styles.wrapper, {width:width}]}>
+			<View style={[styles.wrapper, {width:width,
+				height: this.state.height
+						- UIConstants.HEADER_HEIGHT
+						//- UIConstants.SCROLL_TAB_HEIGHT
+						- UIConstants.LIST_HEADER_BAR_HEIGHT
+						- UIConstants.TAB_BAR_HEIGHT,}]}>
 				{this.renderOrClear()}
 				{this.renderHeader()}
 				{this.renderBody()}
@@ -391,12 +410,6 @@ var StockStatisticsPage = React.createClass({
 
 var styles = StyleSheet.create({
 	wrapper: {
-		height: height
-				- UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
-				- UIConstants.HEADER_HEIGHT
-				//- UIConstants.SCROLL_TAB_HEIGHT
-				- UIConstants.LIST_HEADER_BAR_HEIGHT
-				- UIConstants.TAB_BAR_HEIGHT,
 		alignItems: 'stretch',
 	},
 	empty: {

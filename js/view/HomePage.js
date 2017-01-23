@@ -265,6 +265,13 @@ var HomePage = React.createClass({
 		// this.onConnectionStateChanged();
 	},
 
+	componentWillUnmount: function() {
+		didTabSelectSubscription && didTabSelectSubscription.remove();
+		didFocusSubscription && didFocusSubscription.remove();
+		networkConnectionChangedSubscription && networkConnectionChangedSubscription.remove();
+		accountStateChangedSubscription && accountStateChangedSubscription.remove();
+	},
+
 	onConnectionStateChanged: function(){
 		var isConnected = WebSocketModule.isConnected();
 		this.setState({
@@ -272,13 +279,6 @@ var HomePage = React.createClass({
 		})
 		console.log("onConnectionStateChanged reloadPage" + isConnected);
 		this.reloadPage();
-	},
-
-	componentWillUnmount: function() {
-		didTabSelectSubscription && didTabSelectSubscription.remove();
-		didFocusSubscription && didFocusSubscription.remove();
-		networkConnectionChangedSubscription && networkConnectionChangedSubscription.remove();
-		accountStateChangedSubscription && accountStateChangedSubscription.remove();
 	},
 
 	onTabChanged: function(){
@@ -1031,10 +1031,10 @@ var HomePage = React.createClass({
 			}
 		}
 		return (
-			<View style={{width: width, height: height - UIConstants.TAB_BAR_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER }}>
+			<View style={{width: width, flex: 1, paddingBottom: UIConstants.TAB_BAR_HEIGHT}}>
 				{this.renderNavBar()}
 
-				<View style={{width:width,height:height - UIConstants.TAB_BAR_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER - UIConstants.HEADER_HEIGHT}}>
+				<View style={{width:width, flex: 1}}>
 					{this.renderBgHint()}
 					<ScrollView >
 						<View style={{width: width, height: imageHeight}}>

@@ -36,6 +36,7 @@ var NavBar = require('../view/NavBar')
 var InputAccessory = require('./component/InputAccessory')
 var MainPage = require('./MainPage')
 var StockTransactionInfoModal = require('./StockTransactionInfoModal')
+var {EventCenter, EventConst} = require('../EventCenter')
 var TimerMixin = require('react-timer-mixin');
 
 var {height, width} = Dimensions.get('window');
@@ -48,6 +49,7 @@ var tabData = [
 			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'5分钟'},]
 var didFocusSubscription = null;
 var updateStockInfoTimer = null;
+var layoutSizeChangedSubscription = null
 var flashButtonTimer = null;
 var wattingLogin = false;
 var loadStockInfoSuccess = false;
@@ -105,17 +107,38 @@ var StockDetailPage = React.createClass({
 			maxPercentage: 0,
 			minPercentage: 0,
 			dataStatus:0,//0正常 1等待刷新 2加载中
+			height: UIConstants.getVisibleHeight(),
 		};
 	},
 
 	componentDidMount: function() {
 		this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
 
+		layoutSizeChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.LAYOUT_SIZE_CHANGED, () => {
+			this.onLayoutSizeChanged();
+		});
+
 		// this.pressChartHeaderTab(NetConstants.PARAMETER_CHARTTYPE_TODAY)
 	},
 
 	componentWillUnmount: function() {
 		this.didFocusSubscription.remove();
+		layoutSizeChangedSubscription && layoutSizeChangedSubscription.remove();
+	},
+
+	onLayoutSizeChanged: function(){
+
+		var routes = this.props.navigator.getCurrentRoutes();
+		if(routes && routes[routes.length-1]
+			&& routes[routes.length-1].name == MainPage.STOCK_DETAIL_ROUTE){
+			console.log("onLayoutSizeChanged stock detail page");
+			this.setState({
+				height: UIConstants.getVisibleHeight(),
+			})
+			return;
+		}
+
+		this.state.height = UIConstants.getVisibleHeight();
 	},
 
 	onDidFocus: function(event) {
@@ -630,7 +653,7 @@ var StockDetailPage = React.createClass({
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
 				<View style={styles.wrapper}>
-					<LinearGradient colors={this.getGradientColor()} style={{height: height}}>
+					<LinearGradient colors={this.getGradientColor()} style={{flex: 1, /*height: this.state.height*/}}>
 
 						{this.renderHeader()}
 

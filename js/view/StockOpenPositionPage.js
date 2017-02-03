@@ -149,6 +149,15 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	tabPressed: function() {
+
+		this.setState({
+			selectedRow: -1,
+			selectedSubItem: 0,
+			stopProfitSwitchIsOn: false,
+			stopLossSwitchIsOn: false,
+			profitLossUpdated: false,
+			profitLossConfirmed: false,
+		});
 		this.loadOpenPositionInfo()
 	},
 

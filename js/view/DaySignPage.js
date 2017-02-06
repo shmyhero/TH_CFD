@@ -82,6 +82,21 @@ var DaySignPage = React.createClass({
 	componentDidMount:function(){
 		this._refresh()
 	  signEnable = true
+
+		layoutSizeChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.LAYOUT_SIZE_CHANGED, () => {
+			this.onLayoutSizeChanged();
+		});
+	},
+
+	componentWillUnmount: function() {
+		layoutSizeChangedSubscription && layoutSizeChangedSubscription.remove();
+	},
+
+	onLayoutSizeChanged: function(){
+		console.log("onLayoutSizeChanged");
+		this.setState({
+			height: UIConstants.getVisibleHeight(),
+		})
 	},
 
 	_refresh:function() {

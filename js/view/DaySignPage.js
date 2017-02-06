@@ -26,6 +26,7 @@ var NavBar = require('./NavBar')
 var TalkingdataModule = require('../module/TalkingdataModule')
 //var TongDaoModule = require('../module/TongDaoModule')
 var HeaderLineDialog = require('./HeaderLineDialog')
+var {EventCenter, EventConst} = require('../EventCenter')
 
 var {height, width} = Dimensions.get('window');
 var heightRate = height/667.0;
@@ -42,6 +43,8 @@ var modelTextW = width/28;
 var signEnable = true;//防止网络不畅多次点击事件发生
 
 var RULE_DIALOG = "ruleDialog";
+var layoutSizeChangedSubscription = null
+
 var DaySignPage = React.createClass({
 	propTypes: {
     shareFunction: React.PropTypes.func,
@@ -72,7 +75,7 @@ var DaySignPage = React.createClass({
 			bounceValue: new Animated.Value(0),
       rotateValue: new Animated.Value(0),
 			fadeInValue: new Animated.Value(0),
-
+			height: UIConstants.getVisibleHeight(),
     };
   },
 

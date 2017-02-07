@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.20.120:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.101:8081").apply();
 
         super.onCreate(null);
 
@@ -430,18 +430,18 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
     }
 
-    public void setStatusBarColor(final int color){
-        final int version = Build.VERSION.SDK_INT;
-        if (version >= 21) {
-            this.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Window window = MainActivity.this.getWindow();
-                    window.setStatusBarColor(color);
-                }
-            });
-        }
-    }
+//    public void setStatusBarColor(final int color){
+//        final int version = Build.VERSION.SDK_INT;
+//        if (version >= 21) {
+//            this.runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Window window = MainActivity.this.getWindow();
+//                    window.setStatusBarColor(color);
+//                }
+//            });
+//        }
+//    }
 
     public void getVersionCode() {
         try {

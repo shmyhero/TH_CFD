@@ -1498,7 +1498,7 @@ var StockOpenPositionPage = React.createClass({
 		if (stopLoss || stopProfit) {
 			stopLossImage = LogicData.getAccountState()?require('../../images/check2_actual.png'):require('../../images/check2.png')
 		}
-		var currentPriceLabel = rowData.isLong ? '当前买价' : '当前卖价'
+		var currentPriceLabel = rowData.isLong ?   '当前卖价':'当前买价'
 		var openDate = new Date(rowData.createAt)
 		var currency = UIConstants.CURRENCY_CODE_LIST[rowData.security.ccy]
 

@@ -46,8 +46,9 @@ var listRawData = [{'type':'account','subtype':'accountInfo'},
 {'type':'normal','title':'线上咨询', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':'onlinehelp'},
 {'type':'normal','title':'产品反馈', 'image':require('../../images/icon_response.png'), 'subtype':'feedback'},
 // {'type':'normal','title':'关于我们', 'image':require('../../images/icon_aboutus.png'), 'subtype':'aboutus'},
+{'type':'normal','title':'用户协议', 'image':require('../../images/icon_protocol.png'), 'subtype':'protocol'},
 {'type':'normal','title':'设置', 'image':require('../../images/icon_config.png'), 'subtype':'config'},
-{'type':'normal','title':'用户协议', 'image':require('../../images/icon_protocol.png'), 'subtype':'protocol'},]
+]
 
 
 //0未注册 1已注册 2审核中 3审核失败

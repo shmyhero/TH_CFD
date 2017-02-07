@@ -593,7 +593,7 @@ var LoginPage = React.createClass({
 				<View style={{flex: 1, justifyContent: 'space-between'}}>
 					<View>
 						<Image style={styles.ayondoLogoImage} source={require('../../images/ayondo_logo.png')}/>
-						<Text style={{alignSelf: 'center', fontSize: 11, color: '#2a3f43', marginTop: 30}}>您正在登录券商ayondo</Text>
+						<Text style={{alignSelf: 'center', fontSize: 11, color: '#2a3f43', marginTop: 30}}>您正在登录盈交易</Text>
 
 						<View style={styles.phoneLoginContainer}>
 							<View style={styles.liveRowWrapper}>
@@ -702,8 +702,8 @@ var LoginPage = React.createClass({
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
 				<View style={{flex: 1, justifyContent: 'space-between'}}>
 					<View>
-						<Image style={styles.ayondoLogoImage} source={require('../../images/ayondo_logo.png')}/>
-						<Text style={{alignSelf: 'center', fontSize: 11, color: '#2a3f43', marginTop: 30}}>您正在登录券商ayondo</Text>
+						<Image style={styles.ayondoLogoImage} source={require('../../images/yingjiaoyi-logo.png')}/>
+						<Text style={{alignSelf: 'center', fontSize: 11, color: '#2a3f43', marginTop: 30}}>您正在登录盈交易</Text>
 
 						<View style={styles.phoneLoginContainer}>
 							<View style={styles.rowWrapper}>
@@ -848,7 +848,7 @@ var styles = StyleSheet.create({
 	ayondoLogoImage: {
 		marginTop: 20,
 		alignSelf: 'center',
-		width: 245,
+		width: 106,
 		height: 106,
 	},
 	wrapper: {

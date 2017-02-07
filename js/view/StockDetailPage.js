@@ -663,7 +663,9 @@ var StockDetailPage = React.createClass({
 							{this.renderChart()}
 						  {this.renderDataStatus()}
 						</View>
-
+						<View>
+							<Text style={styles.tipsLine}>以上行情仅供参考</Text>
+						</View>
 						<View style={{flex: 1.2, justifyContent: 'space-around'}}>
 							{this.renderTradeButton()}
 						</View>
@@ -1392,6 +1394,12 @@ var styles = StyleSheet.create({
 		borderColor:'white',
 		borderRadius:4,
 		borderWidth:1,
+	},
+	tipsLine:{
+		fontSize:9,
+		color:'#adc7f4',
+		marginRight:10,
+		alignSelf:'flex-end',
 	},
 
 });

@@ -1378,6 +1378,9 @@ var StockOpenPositionPage = React.createClass({
 					{this.renderChartHeader(rowData)}
 					{this.renderChart()}
 					{this.renderDataStatus()}
+					<View style={{marginBottom:5}}>
+						<Text style={styles.tipsLine}>以上行情仅供参考</Text>
+					</View>
 				</View>
 			);
 		}
@@ -2050,6 +2053,12 @@ var styles = StyleSheet.create({
 		borderColor:'black',
 		borderRadius:4,
 		borderWidth:1,
+	},
+	tipsLine:{
+		fontSize:9,
+		color:'#5b7eb9',
+		marginRight:10,
+		alignSelf:'flex-end',
 	},
 });
 

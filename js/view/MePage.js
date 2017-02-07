@@ -46,7 +46,8 @@ var listRawData = [{'type':'account','subtype':'accountInfo'},
 {'type':'normal','title':'线上咨询', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':'onlinehelp'},
 {'type':'normal','title':'产品反馈', 'image':require('../../images/icon_response.png'), 'subtype':'feedback'},
 // {'type':'normal','title':'关于我们', 'image':require('../../images/icon_aboutus.png'), 'subtype':'aboutus'},
-{'type':'normal','title':'设置', 'image':require('../../images/icon_config.png'), 'subtype':'config'},]
+{'type':'normal','title':'设置', 'image':require('../../images/icon_config.png'), 'subtype':'config'},
+{'type':'normal','title':'用户协议', 'image':require('../../images/icon_protocol.png'), 'subtype':'protocol'},]
 
 
 //0未注册 1已注册 2审核中 3审核失败
@@ -461,6 +462,10 @@ var MePage = React.createClass({
 			var aboutUrl = LogicData.getAccountState()?NetConstants.TRADEHERO_API.WEBVIEW_URL_ABOUT_US_ACTUAL:NetConstants.TRADEHERO_API.WEBVIEW_URL_ABOUT_US
 			this.gotoWebviewPage(aboutUrl, '关于我们');
 		}
+		else if(rowData.subtype === 'protocol') {
+			var protocolUrl = LogicData.getAccountState()?NetConstants.TRADEHERO_API.WEBVIEW_SIGNTERMS_PAGE_ACTUAL:NetConstants.TRADEHERO_API.WEBVIEW_SIGNTERMS_PAGE
+			this.gotoWebviewPage(protocolUrl, '用户协议',true);
+		}
 		else if(rowData.subtype === 'config') {
 			this.props.navigator.push({
 				name: MainPage.ME_CONFIG_ROUTE,
@@ -596,7 +601,7 @@ var MePage = React.createClass({
 					null
 				);
 			}
-			else if((rowData.subtype === 'depositWithdraw') && !LogicData.getAccountState()){
+			else if((rowData.subtype === 'depositWithdraw' || rowData.subtype === 'mycard') && !LogicData.getAccountState()){
 				return (
 					null
 				);

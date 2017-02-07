@@ -188,7 +188,9 @@ function getTradeHeroAPI(){
     HELP_CENTER_URL_ACTUAL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/HelpCenter.html',
     WITHDRAW_AGREEMENT_URL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/Agreementchujin.html',
     DEPOSIT_AGREEMENT: TRADEHERO_SERVER_IP + '/TH_CFD_SP/Agreementrujin.html',
-
+    //用户协议
+    WEBVIEW_SIGNTERMS_PAGE: TRADEHERO_SERVER_IP + '/TH_CFD_WEB/SignTerms.html',
+    WEBVIEW_SIGNTERMS_PAGE_ACTUAL: TRADEHERO_SERVER_IP + '/TH_CFD_SP/SignTerms.html',
   }
 }
 

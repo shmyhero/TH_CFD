@@ -32,7 +32,10 @@ var OADocumentInfoPage = React.createClass({
 			{"key":"风险与注意事项告知说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "2")},
 			{"key":"数据信息共享说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "3")},
 			{"key":"Ayondo服务协议说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "4")},
-			{"key":"交易通知说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "5")},],
+			{"key":"交易通知说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "5")},
+			{"key":"用户头像使用说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "6")},
+			{"key":"关于保证金交易", },
+		],
 
 	propTypes: {
 		data: React.PropTypes.object,
@@ -199,15 +202,47 @@ var OADocumentInfoPage = React.createClass({
 		});
 	},
 
-	renderRow: function(rowData, sectionID, rowID) {
-		return (
-			<TouchableHighlight onPress={() => this.documentPressed(rowData)}>
-				<View style={styles.rowWrapper}>
-					<Text style={styles.rowTitle}>{rowData.key}</Text>
-					<Image style={styles.image} source={require("../../../images/icon_arrow_right.png")} />
+	renderAboutCashDeposit:function(){
+		return(
+			<View style={styles.aboutCash}>
+	  		<Text style = {[styles.textTitle,{marginTop:0}]}>关于保证金交易:</Text>
+				<View style = {styles.textLine}>
+					<Text style = {styles.textRound}>●</Text>
+					<Text style = {styles.textValue}>保证金交易是对价格的变动进行投注或交易，您的盈亏取决于以保证金建仓的金融标的市场波动以及我们进而提供的买卖报价。</Text>
 				</View>
-			</TouchableHighlight>
-			)
+
+				<View style = {styles.textLine}>
+					<Text style = {styles.textRound}>●</Text>
+					<Text style = {styles.textValue}>保证金交易只能以现金交割，且具有法律强制效力。</Text>
+				</View>
+
+				<View style = {styles.textLine}>
+					<Text style = {styles.textRound}>●</Text>
+					<Text style = {styles.textValue}>您必须确保明白保证金交易的任何潜在结果，并对其风险程度具有心理准备，保证金交易并不在普通或特指的交易所执行，如果您在我们这里开仓交易，也必须在这里平仓。</Text>
+				</View>
+
+				<View style = {styles.textLine}>
+					<Text style = {styles.textRound}>●</Text>
+					<Text style = {styles.textValue}>您不会持有实际标的的资产或者相关权利，也不必承担标的实际交割义务。</Text>
+				</View>
+				<Text style = {styles.textTitle}>我确认我不是美国公民且或永久居民（为纳税目的）</Text>
+	  	</View>
+		)
+	},
+
+	renderRow: function(rowData, sectionID, rowID) {
+		if(rowID == 6){//关于保证金交易
+			return this.renderAboutCashDeposit()
+		}else{
+			return (
+				<TouchableHighlight onPress={() => this.documentPressed(rowData)}>
+					<View style={styles.rowWrapper}>
+						<Text style={styles.rowTitle}>{rowData.key}</Text>
+						<Image style={styles.image} source={require("../../../images/icon_arrow_right.png")} />
+					</View>
+				</TouchableHighlight>
+				)
+		}
 	},
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
 		return (
@@ -228,7 +263,7 @@ var OADocumentInfoPage = React.createClass({
 			<View style={styles.wrapper}>
 				<ErrorBar error={this.state.error}/>
 				<ListView
-			    	style={styles.list}
+			    style={styles.list}
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}
 					renderSeparator={this.renderSeparator} />
@@ -262,6 +297,35 @@ var styles = StyleSheet.create({
 	list: {
 		flex: 1,
 	},
+
+	aboutCash:{
+		padding:15,
+	},
+
+	textRound:{
+		fontSize:12,
+		color:'#b8ceeb'
+	},
+
+	textTitle:{
+		fontSize:14,
+		color:'black',
+		marginTop:15,
+		marginBottom:5,
+	},
+
+	textValue:{
+		fontSize:13,
+		color:'#515356',
+		marginLeft:5,
+		marginRight:10,
+	},
+
+	textLine:{
+		flexDirection:'row',
+		marginTop:10,
+	},
+
 	rowWrapper: {
 		flexDirection: 'row',
 		alignSelf: 'stretch',

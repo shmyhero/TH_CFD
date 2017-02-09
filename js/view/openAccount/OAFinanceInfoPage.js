@@ -31,11 +31,11 @@ var fontSize = Math.round(16*width/375)
 var fontSize2 = Math.round(15*width/375)
 
 var IncomeMapping = [
-	{"value": 0, "displayText": "12万以下（人民币）"},
-	{"value": 15, "displayText": "12-33万（人民币）"},
-	{"value": 40, "displayText": "33-58万（人民币）"},
-	{"value": 70, "displayText": "58-83万（人民币）"},
-	{"value": 100, "displayText": "83万以上（人民币）"},
+	{"value": 0, "displayText": "低于 1000 元"},
+	{"value": 15, "displayText": "1001-2500 元"},
+	{"value": 40, "displayText": "2501-4000 元"},
+	{"value": 70, "displayText": "4001-6000 元"},
+	{"value": 100, "displayText": "高于 6000 元"},
 ];
 
 var NetWorthMapping = [
@@ -63,11 +63,62 @@ var EmploymengStatusMapping = [
 	{"value": "Other", "displayText": "其他"},
 ]
 
+var EmploymengTypeMapping = [
+	{"value": "type0", "displayText": "汽车和零部件"},
+	{"value": "type1", "displayText": "资本产品"},
+	{"value": "type2", "displayText": "商业及专业服务"},
+	{"value": "type3", "displayText": "消费产品及服务"},
+	{"value": "type4", "displayText": "银行与金融服务"},
+	{"value": "type5", "displayText": "能源"},
+	{"value": "type6", "displayText": "食品，饮料和烟草"},
+	{"value": "type7", "displayText": "医疗保健设备和服务"},
+	{"value": "type8", "displayText": "家用和个人产品"},
+	{"value": "type9", "displayText": "保险"},
+	{"value": "type10", "displayText": "传媒"},
+	{"value": "type11", "displayText": "医疗"},
+	{"value": "type12", "displayText": "生物技术与生命科学"},
+	{"value": "type13", "displayText": "房地产"},
+	{"value": "type14", "displayText": "零售"},
+	{"value": "type15", "displayText": "软件与服务"},
+	{"value": "type16", "displayText": "科技"},
+	{"value": "type17", "displayText": "电信"},
+	{"value": "type18", "displayText": "运输"},
+	{"value": "type19", "displayText": "公共事业"},
+	{"value": "type20", "displayText": "其他"},
+]
+
+var PositionMapping = [
+	{"value": "type0", "displayText": "副经理"},
+	{"value": "type1", "displayText": "主管"},
+	{"value": "type2", "displayText": "经理"},
+	{"value": "type3", "displayText": "创始人"},
+	{"value": "type4", "displayText": "合伙人"},
+	{"value": "type5", "displayText": "职员"},
+	{"value": "type6", "displayText": "其他"},
+] 
+
 var investFrqMappings = [
-	{"value": 0, "displayText": "基本没有"},
-	{"value": 1, "displayText": "每季度1-5次"},
-	{"value": 2, "displayText": "每季度6-10次"},
-	{"value": 3, "displayText": "每季度超过10次"},
+	{"value": 0, "displayText": "完全没有"},
+	{"value": 1, "displayText": "1-5次"},
+	{"value": 2, "displayText": "6-10次"},
+	{"value": 3, "displayText": "超过10次"},
+]
+
+var amontOfMondyMappings = [
+	{"value": 0, "displayText": "低于 1000 元"},
+	{"value": 1, "displayText": "1001 - 5000 元"},
+	{"value": 2, "displayText": "5001 - 25000 元"},
+	{"value": 3, "displayText": "25001- 50000 元"},
+	{"value": 4, "displayText": "50001- 100000 元"},
+	{"value": 5, "displayText": "高于 100000 元"},
+]
+
+var investProportionMapping = [
+	{"value": 0, "displayText": "低于 10%"},
+	{"value": 1, "displayText": "10% - 25%"},
+	{"value": 2, "displayText": "25% - 50%"},
+	{"value": 3, "displayText": "50% - 75%"},
+	{"value": 4, "displayText": "75% - 100%"},
 ]
 
 var expierenceMappings = [
@@ -76,16 +127,48 @@ var expierenceMappings = [
 	{"key": "expShareBond", "displayText": "股票和债券", "value": false},
 ]
 
+var InComeSourceMappings = [
+	{"key":"incomeSource0" , "displayText":"存款与投资",value:false},
+	{"key":"incomeSource1" , "displayText":"工作收入",value:false},
+	{"key":"incomeSource2" , "displayText":"赠予",value:false},
+	{"key":"incomeSource3" , "displayText":"遗产",value:false},
+	{"key":"incomeSource4" , "displayText":"养老金",value:false},
+	{"key":"incomeSource5" , "displayText":"其他",value:false},
+]
+
+var qualificationsMappings = [
+	{"key":"qualifications0" , "displayText":"专业资格", value:false},
+	{"key":"qualifications1" , "displayText":"大学学位", value:false},
+	{"key":"qualifications2" , "displayText":"职业资格", value:false},
+	{"key":"qualifications3" , "displayText":"其他资历", value:false},
+]
+
 var defaultRawData = [
-	{"key":"annualIncome", "title":"年收入", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":IncomeMapping},
+	{"key":"annualIncome", "title":"月净收入", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":IncomeMapping},
 	{"key":"netWorth", "title":"净资产", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":NetWorthMapping},
-	{"key":"investPct", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":InvestmentPortfolioMapping},
-	{"key":"empStatus", "title":"就业", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":EmploymengStatusMapping},
-	{"key":"investFrq", "title":"投资频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings},
-	{"key":"hasProExp", "title":"你是否有一年以上与金融杠杆交易相关的职业经历", "value":false, "type":"switch"},
-	{"key":"hasAyondoExp", "title":"你是否了解过ayondo的金融产品或使用ayondo模拟账户交易", "value":true, "type":"switch"},
-	{"key":"hasOtherQualif", "title":"你是否有其它相关资质帮助理解ayondo的服务", "value":false, "type":"switch"},
-	{"optionsKey":"tradingExp" ,"title":"你有哪些产品的交易经验", "value":expierenceMappings, "type":"options"},
+	{"optionsKey":"incomeSource" ,"title":"交易资金主要来源", "value":InComeSourceMappings, "type":"options"},
+	// {"key":"investPct", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":InvestmentPortfolioMapping},
+	{"key":"empStatus", "title":"职业信息", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":EmploymengStatusMapping},
+	// {"key":"investFrq", "title":"投资频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings},
+	{"key":"hasProExp", "title":"您是否曾经在金融领域担任专业杠杆交易相关职位至少一年？", "value":false, "type":"switch"},
+	{"key":"hasAyondoExp", "title":"您以前参加过培训研讨会或通过其他教育形式了解过我们的产品吗？", "value":true, "type":"switch"},
+	{"key":"hasOtherQualif", "title":"您是否用过点差交易或差价合约(CFD)的模拟账户？", "value":false, "type":"switch"},
+	{"key":"hasOther2", "title":"您是否有其他相关的资历证书，让您可以更好理解我们的金融服务？", "value":false, "type":"switch"},
+	{"optionsKey":"qualificationsKey" ,"title":"", "value":qualificationsMappings, "type":"options"},
+	// {"optionsKey":"tradingExp" ,"title":"您有以下哪种产品的实盘交易经验？", "value":expierenceMappings, "type":"options"},
+	{"title":"您有以下哪种产品的实盘交易经验？"},
+	{"key":"hasExpChannel0", "title":"差价合约、点差交易或外汇", "value":false, "type":"switch"},
+		{"key":"investFrq0", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings},
+		{"key":"amontOfMondy0", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMondyMappings},
+		{"key":"investProportion0", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping},
+	{"key":"hasExpChannel1", "title":"股票或债券", "value":false, "type":"switch"},
+		{"key":"investFrq1", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings},
+		{"key":"amontOfMondy1", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMondyMappings},
+		{"key":"investProportion1", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping},
+	{"key":"hasExpChannel2", "title":"期权，期货或认购权证", "value":false, "type":"switch"},
+		{"key":"investFrq2", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings},
+		{"key":"amontOfMondy2", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMondyMappings},
+		{"key":"investProportion2", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping},
 ];
 
 var OAFinanceInfoPage = React.createClass({
@@ -218,7 +301,7 @@ var OAFinanceInfoPage = React.createClass({
 				<TouchableOpacity activeOpacity={0.9} onPress={() => this.onPressPicker(rowData, rowID)}>
 				<View style={styles.rowWrapper}>
 					<Text style={styles.rowTitle}>{rowData.title}</Text>
-					<View style={{flex: 3, flexDirection: 'column', justifyContent: "center"}}>
+					<View style={{flex: 2, flexDirection: 'column', justifyContent: "center"}}>
 						<Text style={[styles.centerText, {color: textColor}]}
 							autoCapitalize="none"
 							autoCorrect={false}
@@ -257,7 +340,7 @@ var OAFinanceInfoPage = React.createClass({
 			)
 			return(
 				<View style={styles.rowWrapperOption}>
-					<Text style={styles.rowTitle}>{rowData.title}</Text>
+				  <Text style={[styles.rowTitle,rowData.title ? null : {height:0}]}>{rowData.title}</Text>
 					<View style={styles.checkboxView}>
 						{boxes}
 					</View>
@@ -270,6 +353,7 @@ var OAFinanceInfoPage = React.createClass({
 				</View>)
 		}
 	},
+
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
 		return (

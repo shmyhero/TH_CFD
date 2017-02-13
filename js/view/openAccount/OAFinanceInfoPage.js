@@ -391,13 +391,49 @@ var OAFinanceInfoPage = React.createClass({
 				</View>)
 		}
 		else if(rowData.type === 'options'){
-			var boxes = rowData.value.map(
-				(title, i) =>{
+			var valuesCount = rowData.value.length;
+			var rowCount = Math.ceil(valuesCount / 3);
+			var array = [];
+			for(var i = 0; i < rowCount; i++){
+				var data;
+				if(rowData.value.length >= i* + 2){
+					data = rowData.value.slice(i*3, i*3 + 3);
+				}else{
+					data = rowData.value.slice(i*3);
+				}
+				if(data){
+					while(data.length < 3)
+					{
+						data.push(null);
+					}
+
+					array.push(data);
+				}
+			}
+
+			var rows = array.map(
+				(boxRowData, i) =>{
+					console.log("i: " + i + " array[i]: " + JSON.stringify(array[i]));
+					var boxes = array[i].map(
+						(data, j) =>{
+							if(data){
+								return (<CheckBoxButton key={i*3+j} text={data.displayText}
+									defaultSelected={data.value}
+									onPress={(selected)=>this.onCheckBoxPressed(data, selected)}>
+									</CheckBoxButton>
+								);
+							}else{
+								return(
+									<View key={i*3+j} style={{flex:1}}/>
+								);
+							}
+						}
+					)
 					var data = rowData.value[i];
-					return (<CheckBoxButton key={i} text={data.displayText}
-						defaultSelected={data.value}
-						onPress={(selected)=>this.onCheckBoxPressed(data, selected)}>
-						</CheckBoxButton>
+					return (
+						<View style={[styles.checkboxView]}>
+							{boxes}
+						</View>
 					);
 				}
 			)
@@ -405,8 +441,8 @@ var OAFinanceInfoPage = React.createClass({
 			return(rowData.hide?null:
 				<View style={[styles.rowWrapperOption]}>
 				  <Text style={[styles.rowTitle,rowData.title ? null : {height:0}]}>{rowData.title}</Text>
-					<View style={[styles.checkboxView]}>
-						{boxes}
+					<View style={{flexDirection: 'column'}}>
+						{rows}
 					</View>
 				</View>)
 

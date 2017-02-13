@@ -1379,7 +1379,7 @@ var StockOpenPositionPage = React.createClass({
 					{this.renderChart()}
 					{this.renderDataStatus()}
 					<View style={{marginBottom:5}}>
-						<Text style={styles.tipsLine}>以上行情仅供参考</Text>
+						<Text style={styles.tipsLine}>行情可能存在细微偏差</Text>
 					</View>
 				</View>
 			);

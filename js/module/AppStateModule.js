@@ -28,3 +28,10 @@ export function getAppState() {
 export function registerTurnToActiveListener(listener) {
 	turnToActiveListeners.push(listener)
 }
+
+export function unregisterTurnToActiveListener(listener) {
+	var index = turnToActiveListeners.indexOf(listener);
+	if(index!== -1) {
+			 turnToActiveListeners.splice(index, 1);
+	 }
+}

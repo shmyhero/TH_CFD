@@ -76,6 +76,7 @@ var StockExchangePage = React.createClass({
 		this.setState({
 			currentSelectedTab: index,
 		})
+		LogicData.setCurrentPageTag(index);
 		if (index == 2) {
 			this.refs['page' + index].playStartAnim()
 		}
@@ -89,6 +90,7 @@ var StockExchangePage = React.createClass({
 
 	onTabChanged: function(){
 	  LogicData.setTabIndex(MainPage.STOCK_EXCHANGE_TAB_INDEX);
+		LogicData.setCurrentPageTag(this.state.currentSelectedTab);
 		this.reloadTabData();
 	},
 

@@ -664,7 +664,7 @@ var StockDetailPage = React.createClass({
 						  {this.renderDataStatus()}
 						</View>
 						<View>
-							<Text style={styles.tipsLine}>以上行情仅供参考</Text>
+							<Text style={styles.tipsLine}>行情可能存在细微偏差</Text>
 						</View>
 						<View style={{flex: 1.2, justifyContent: 'space-around'}}>
 							{this.renderTradeButton()}

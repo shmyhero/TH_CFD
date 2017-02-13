@@ -272,7 +272,7 @@ var MainPage = React.createClass({
 			);
 		} else if (route.name === STOCK_LIST_ROUTE) {
 			return (
-				<StockListPage navigator={navigationOperations} style={{flex: 1}}/>
+				<StockListPage navigator={navigationOperations} style={{flex: 1}} pageKey={route.pageKey}/>
 			);
 		} else if (route.name === STOCK_LIST_VIEW_PAGER_ROUTE) {
 			showTabbar()

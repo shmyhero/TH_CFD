@@ -36,6 +36,7 @@ var TimerMixin = require('react-timer-mixin');
 var StorageModule = require('../module/StorageModule');
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 var CacheModule = require('../module/CacheModule');
+var AppStateModule = require('../module/AppStateModule');
 var {EventCenter, EventConst} = require('../EventCenter');
 
 var {height, width} = Dimensions.get('window');
@@ -114,6 +115,8 @@ var StockOpenPositionPage = React.createClass({
 		layoutSizeChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.LAYOUT_SIZE_CHANGED, () => {
 			this.onLayoutSizeChanged();
 		});
+
+		AppStateModule.registerTurnToActiveListener(this.refreshData);
 	},
 
 	onLayoutSizeChanged: function(){
@@ -124,14 +127,23 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	onConnectionStateChanged: function(){
-		if(LogicData.getTabIndex() == 2 && WebSocketModule.isConnected()){
-			var routes = this.props.navigator.getCurrentRoutes();
-			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE){
-				//Refresh current page data.
-				var userData = LogicData.getUserData();
-				var notLogin = Object.keys(userData).length === 0;
-				if(!notLogin){
-					this.loadOpenPositionInfo();
+		if(WebSocketModule.isConnected()){
+			this.refreshData();
+		}
+	},
+
+	refreshData: function(){
+		if(LogicData.getTabIndex() == 2){
+			var currentPageTag = LogicData.getCurrentPageTag();
+			if(currentPageTag == 0){
+				var routes = this.props.navigator.getCurrentRoutes();
+				if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE){
+					//Refresh current page data.
+					var userData = LogicData.getUserData();
+					var notLogin = Object.keys(userData).length === 0;
+					if(!notLogin){
+						this.loadOpenPositionInfo();
+					}
 				}
 			}
 		}
@@ -142,6 +154,7 @@ var StockOpenPositionPage = React.createClass({
 		accountStateChangedSubscription && accountStateChangedSubscription.remove();
 		accountLogoutEventSubscription && accountLogoutEventSubscription.remove();
 		layoutSizeChangedSubscription && layoutSizeChangedSubscription.remove();
+		AppStateModule.unregisterTurnToActiveListener(this.refreshData);
 	},
 
 	onEndReached: function() {
@@ -1258,7 +1271,7 @@ var StockOpenPositionPage = React.createClass({
 		console.log("RAMBO: chartType = " + this.state.chartType)
 		var opacity = state == 0? 1.0 : 0.01;
 			return(
-				<LineChart style={[styles.lineChart,{opacity:opacity}]}
+				<LineChart style={[styles.lineChart,{opacity:opacity},]}
 					data={JSON.stringify(this.state.stockDetailInfo)}
 					chartType={this.state.chartType}
 					colorType={1}
@@ -1379,7 +1392,7 @@ var StockOpenPositionPage = React.createClass({
 					{this.renderChart()}
 					{this.renderDataStatus()}
 					<View style={{marginBottom:5}}>
-						<Text style={styles.tipsLine}>以上行情仅供参考</Text>
+						<Text style={styles.tipsLine}>行情可能存在细微偏差</Text>
 					</View>
 				</View>
 			);
@@ -1854,6 +1867,8 @@ var styles = StyleSheet.create({
 		justifyContent:'space-between',
 		paddingTop: 1,
 		paddingBottom: 11,
+		marginLeft: Platform.OS === 'ios' ? 0:10,
+		marginRight: Platform.OS === 'ios' ? 0:10,
 	},
 
 	okView: {

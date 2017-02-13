@@ -56,7 +56,7 @@ var InvestmentPortfolioMapping = [
 
 var EmploymengStatusMapping = [
 	{"value": "Employed", "displayText": "就业"},
-	{"value": "Self-Employed", "displayText": "自由职业"},
+	{"value": "Self-Employed", "displayText": "自雇"},
 	{"value": "UnEmployed", "displayText": "失业"},
 	{"value": "Retired", "displayText": "退休"},
 	{"value": "Student", "displayText": "学生"},
@@ -95,7 +95,7 @@ var PositionMapping = [
 	{"value": "type4", "displayText": "合伙人"},
 	{"value": "type5", "displayText": "职员"},
 	{"value": "type6", "displayText": "其他"},
-] 
+]
 
 var investFrqMappings = [
 	{"value": 0, "displayText": "完全没有"},
@@ -143,32 +143,55 @@ var qualificationsMappings = [
 	{"key":"qualifications3" , "displayText":"其他资历", value:false},
 ]
 
+//hard code for control hide line
+var EMPSWITCH = 3
+var EMPSWITCH_0 = 4
+var EMPSWITCH_1 = 5
+var EMPSWITCH_2 = 6
+var QUALIFICATION = 10
+var QUALIFICATION_V = 11
+var EXPCHANNEL0 = 13
+var EXPCHANNEL0_0 = 14
+var EXPCHANNEL0_1 = 15
+var EXPCHANNEL0_2 = 16
+var EXPCHANNEL1 = 17
+var EXPCHANNEL1_0 = 18
+var EXPCHANNEL1_1 = 19
+var EXPCHANNEL1_2 = 20
+var EXPCHANNEL2 = 21
+var EXPCHANNEL2_0 = 22
+var EXPCHANNEL2_1 = 23
+var EXPCHANNEL2_2 = 24
+
 var defaultRawData = [
 	{"key":"annualIncome", "title":"月净收入", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":IncomeMapping},
 	{"key":"netWorth", "title":"净资产", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":NetWorthMapping},
 	{"optionsKey":"incomeSource" ,"title":"交易资金主要来源", "value":InComeSourceMappings, "type":"options"},
 	// {"key":"investPct", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":InvestmentPortfolioMapping},
 	{"key":"empStatus", "title":"职业信息", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":EmploymengStatusMapping},
+	{"key":"empBossName", "title": "雇主名称", "value":"", hint: "请输入雇主名称", "type": "userName", maxLength: 20,"hide":true},
+	{"key":"empType", "title":"业务类型", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":EmploymengTypeMapping,"hide":true},
+	{"key":"empPosition", "title":"担任职位", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":PositionMapping,"hide":true},
 	// {"key":"investFrq", "title":"投资频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings},
 	{"key":"hasProExp", "title":"您是否曾经在金融领域担任专业杠杆交易相关职位至少一年？", "value":false, "type":"switch"},
-	{"key":"hasAyondoExp", "title":"您以前参加过培训研讨会或通过其他教育形式了解过我们的产品吗？", "value":true, "type":"switch"},
+	{"key":"hasAyondoExp", "title":"您以前参加过培训研讨会或通过其他教育形式了解过我们的产品吗？", "value":false, "type":"switch"},
 	{"key":"hasOtherQualif", "title":"您是否用过点差交易或差价合约(CFD)的模拟账户？", "value":false, "type":"switch"},
 	{"key":"hasOther2", "title":"您是否有其他相关的资历证书，让您可以更好理解我们的金融服务？", "value":false, "type":"switch"},
-	{"optionsKey":"qualificationsKey" ,"title":"", "value":qualificationsMappings, "type":"options"},
+	{"optionsKey":"qualificationsKey" ,"title":"", "value":qualificationsMappings, "type":"options","hide":true},
 	// {"optionsKey":"tradingExp" ,"title":"您有以下哪种产品的实盘交易经验？", "value":expierenceMappings, "type":"options"},
 	{"title":"您有以下哪种产品的实盘交易经验？"},
 	{"key":"hasExpChannel0", "title":"差价合约、点差交易或外汇", "value":false, "type":"switch"},
-		{"key":"investFrq0", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings},
-		{"key":"amontOfMondy0", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMondyMappings},
-		{"key":"investProportion0", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping},
+		{"key":"investFrq0", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true},
+		{"key":"amontOfMondy0", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMondyMappings,"hide":true},
+		{"key":"investProportion0", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true},
 	{"key":"hasExpChannel1", "title":"股票或债券", "value":false, "type":"switch"},
-		{"key":"investFrq1", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings},
-		{"key":"amontOfMondy1", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMondyMappings},
-		{"key":"investProportion1", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping},
+		{"key":"investFrq1", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true},
+		{"key":"amontOfMondy1", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMondyMappings,"hide":true},
+		{"key":"investProportion1", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true},
 	{"key":"hasExpChannel2", "title":"期权，期货或认购权证", "value":false, "type":"switch"},
-		{"key":"investFrq2", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings},
-		{"key":"amontOfMondy2", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMondyMappings},
-		{"key":"investProportion2", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping},
+		{"key":"investFrq2", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true},
+		{"key":"amontOfMondy2", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMondyMappings,"hide":true},
+		{"key":"investProportion2", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true},
 ];
 
 var OAFinanceInfoPage = React.createClass({
@@ -230,6 +253,10 @@ var OAFinanceInfoPage = React.createClass({
 			choices.push(rowData.choices[i].displayText);
 		}
 
+		if(selectedText == "" && rowData.choices.length > 0){
+			selectedText = rowData.choices[0].displayText;
+		}
+
     Picker.init({
         pickerData: choices,
         selectedValue: [selectedText],
@@ -242,6 +269,13 @@ var OAFinanceInfoPage = React.createClass({
 							if(data[0] === rowData.choices[i].displayText){
 								rowData.value = rowData.choices[i].value;
 							}
+						}
+
+						if(rowID == EMPSWITCH){
+							var showEMPSwitches = (data[0] == "就业" || data[0] == "自雇")
+							this.listRawData[EMPSWITCH_0].hide = !showEMPSwitches
+							this.listRawData[EMPSWITCH_1].hide = !showEMPSwitches
+							this.listRawData[EMPSWITCH_2].hide = !showEMPSwitches
 						}
 					}
 					this.setState({
@@ -269,9 +303,40 @@ var OAFinanceInfoPage = React.createClass({
 		});
 	},
 
+	setForHideValues(value,rowID){
+		if(rowID == EMPSWITCH){
+			this.listRawData[EMPSWITCH_0].hide = !value
+			this.listRawData[EMPSWITCH_1].hide = !value
+			this.listRawData[EMPSWITCH_2].hide = !value
+		}
+
+		if(rowID == QUALIFICATION){
+			this.listRawData[QUALIFICATION_V].hide = !value
+		}
+
+		if(rowID == EXPCHANNEL0){
+			this.listRawData[EXPCHANNEL0_0].hide = !value
+			this.listRawData[EXPCHANNEL0_1].hide = !value
+			this.listRawData[EXPCHANNEL0_2].hide = !value
+		}
+		if(rowID == EXPCHANNEL1){
+			this.listRawData[EXPCHANNEL1_0].hide = !value
+			this.listRawData[EXPCHANNEL1_1].hide = !value
+			this.listRawData[EXPCHANNEL1_2].hide = !value
+		}
+		if(rowID == EXPCHANNEL2){
+			this.listRawData[EXPCHANNEL2_0].hide = !value
+			this.listRawData[EXPCHANNEL2_1].hide = !value
+			this.listRawData[EXPCHANNEL2_2].hide = !value
+		}
+	},
+
 	onPressSwitch: function(value, rowID) {
 		if(rowID >= 0) {
 			this.listRawData[rowID].value = value
+
+			this.setForHideValues(value, rowID)
+
 			this.setState({
 				dataSource: this.ds.cloneWithRows(this.listRawData),
 			})
@@ -283,6 +348,8 @@ var OAFinanceInfoPage = React.createClass({
 	},
 
 	renderRow: function(rowData, sectionID, rowID) {
+
+
 		if (rowData.type === "choice") {
 
 			var displayText = "";
@@ -298,7 +365,7 @@ var OAFinanceInfoPage = React.createClass({
 			}
 
 			return (
-				<TouchableOpacity activeOpacity={0.9} onPress={() => this.onPressPicker(rowData, rowID)}>
+				<TouchableOpacity style = {rowData.hide?{height:0}:null} activeOpacity={0.9} onPress={() => this.onPressPicker(rowData, rowID)}>
 				<View style={styles.rowWrapper}>
 					<Text style={styles.rowTitle}>{rowData.title}</Text>
 					<View style={{flex: 2, flexDirection: 'column', justifyContent: "center"}}>
@@ -328,23 +395,82 @@ var OAFinanceInfoPage = React.createClass({
 				</View>)
 		}
 		else if(rowData.type === 'options'){
-			var boxes = rowData.value.map(
-				(title, i) =>{
+			var valuesCount = rowData.value.length;
+			var rowCount = Math.ceil(valuesCount / 3);
+			var array = [];
+			for(var i = 0; i < rowCount; i++){
+				var data;
+				if(rowData.value.length >= i* + 2){
+					data = rowData.value.slice(i*3, i*3 + 3);
+				}else{
+					data = rowData.value.slice(i*3);
+				}
+				if(data){
+					while(data.length < 3)
+					{
+						data.push(null);
+					}
+
+					array.push(data);
+				}
+			}
+
+			var rows = array.map(
+				(boxRowData, i) =>{
+
+					var boxes = array[i].map(
+						(data, j) =>{
+							if(data){
+								return (<CheckBoxButton key={i*3+j} text={data.displayText}
+									defaultSelected={data.value}
+									onPress={(selected)=>this.onCheckBoxPressed(data, selected)}>
+									</CheckBoxButton>
+								);
+							}else{
+								return(
+									<View key={i*3+j} style={{flex:1}}/>
+								);
+							}
+						}
+					)
 					var data = rowData.value[i];
-					return (<CheckBoxButton key={i} text={data.displayText}
-						defaultSelected={data.value}
-						onPress={(selected)=>this.onCheckBoxPressed(data, selected)}>
-						</CheckBoxButton>
+					return (
+						<View style={[styles.checkboxView]} key={i}>
+							{boxes}
+						</View>
 					);
 				}
 			)
-			return(
-				<View style={styles.rowWrapperOption}>
+
+			return(rowData.hide?null:
+				<View style={[styles.rowWrapperOption]}>
 				  <Text style={[styles.rowTitle,rowData.title ? null : {height:0}]}>{rowData.title}</Text>
-					<View style={styles.checkboxView}>
-						{boxes}
+					<View style={{flexDirection: 'column'}}>
+						{rows}
 					</View>
 				</View>)
+
+		}
+		else if(rowData.type === 'userName'){
+			return (
+				<View  style={rowData.hide?{height:0}:null}>
+					<View style={styles.rowWrapper}>
+						<Text style={styles.rowTitle}>{rowData.title}</Text>
+						<TextInput style={styles.valueText}
+							autoCapitalize="none"
+							autoCorrect={false}
+							// secureTextEntry={secureTextEntry}
+							defaultValue={rowData.value}
+							placeholder={rowData.hint}
+							placeholderColor={ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR}
+							selectionColor={ColorConstants.INOUT_TEXT_SELECTION_COLOR}
+							underlineColorAndroid='transparent'
+							// onChangeText={(text)=>this.textInputChange(text, rowID)}
+							// onEndEditing={(event)=>this.textInputEndChange(event, rowID)}
+							maxLength={rowData.maxLength}/>
+					</View>
+				</View>
+			)
 		}
 		else {
 			return(
@@ -447,9 +573,9 @@ var styles = StyleSheet.create({
 		flex: 1,
 	},
 	valueText: {
-		fontSize: fontSize2,
+		fontSize: fontSize,
 		color: 'black',
-		flex: 3,
+		flex: 2,
 		marginTop: -rowPadding,
 		marginBottom: -rowPadding,
 	},

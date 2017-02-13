@@ -413,7 +413,7 @@ var OAFinanceInfoPage = React.createClass({
 
 			var rows = array.map(
 				(boxRowData, i) =>{
-					console.log("i: " + i + " array[i]: " + JSON.stringify(array[i]));
+
 					var boxes = array[i].map(
 						(data, j) =>{
 							if(data){
@@ -431,7 +431,7 @@ var OAFinanceInfoPage = React.createClass({
 					)
 					var data = rowData.value[i];
 					return (
-						<View style={[styles.checkboxView]}>
+						<View style={[styles.checkboxView]} key={i}>
 							{boxes}
 						</View>
 					);

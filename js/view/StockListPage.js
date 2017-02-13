@@ -26,6 +26,7 @@ var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 var WebSocketModule = require('../module/WebSocketModule');
 var CacheModule = require('../module/CacheModule');
+var AppStateModule = require('../module/AppStateModule');
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var didFocusSubscription = null;
@@ -47,6 +48,7 @@ var StockListPage = React.createClass({
 		activeDataURL: React.PropTypes.string,
 		showHeaderBar: React.PropTypes.bool,
 		isOwnStockPage: React.PropTypes.bool,
+		pageKey: React.PropTypes.number,
 	},
 
 	getDefaultProps() {
@@ -55,6 +57,7 @@ var StockListPage = React.createClass({
 			activeDataURL: NetConstants.CFD_API.GET_ACTIVE_USER_BOOKMARK_LIST_API,
 			showHeaderBar: false,
 			isOwnStockPage: false,
+			pageKey: -1,
 		}
 	},
 
@@ -126,18 +129,21 @@ var StockListPage = React.createClass({
 			if(routes && routes[routes.length-1] &&
 				(routes[routes.length-1].name == MainPage.STOCK_LIST_VIEW_PAGER_ROUTE
 			|| routes[routes.length-1].name == MainPage.LOGIN_ROUTE)){
-				this.isDisplayingCache = false;
-				//If the last shown list is read from cache, we also need to refresh the data by refetching the api
-				if (this.props.isOwnStockPage) {
-					if(forceRefetch || this.isDisplayingCache){
-						//Always read server data.
-						this.syncOwnData();
-					}else{
-						this.refreshOwnData();
+				var currentIndex = LogicData.getCurrentPageTag();				
+				if(this.props.pageKey == currentIndex){
+					this.isDisplayingCache = false;
+					//If the last shown list is read from cache, we also need to refresh the data by refetching the api
+					if (this.props.isOwnStockPage) {
+						if(forceRefetch || this.isDisplayingCache){
+							//Always read server data.
+							this.syncOwnData();
+						}else{
+							this.refreshOwnData();
+						}
 					}
-				}
-				else {
-					this.reFetchStockData(forceRefetch || this.isDisplayingCache)
+					else {
+						this.reFetchStockData(forceRefetch || this.isDisplayingCache)
+					}
 				}
 			}
 		}
@@ -392,7 +398,7 @@ var StockListPage = React.createClass({
 					});
 				}
 				console.log('Get data from Native ' + args[0] + ' : ' + args[1])
-			})
+			});
 		}
 		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>{
 			console.log("ACCOUNT_STATE_CHANGE");
@@ -405,6 +411,8 @@ var StockListPage = React.createClass({
 		layoutSizeChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.LAYOUT_SIZE_CHANGED, () => {
 			this.onLayoutSizeChanged();
 		});
+
+		AppStateModule.registerTurnToActiveListener(()=>this.refreshData(true));
 	},
 
 	accountStateChange: function(){
@@ -434,14 +442,16 @@ var StockListPage = React.createClass({
 		}
 		networkConnectionChangedSubscription && networkConnectionChangedSubscription.remove();
 		layoutSizeChangedSubscription && layoutSizeChangedSubscription.remove();
+
+		AppStateModule.unregisterTurnToActiveListener(()=>this.refreshData(true));
 	},
 
 	onDidFocus: function(event) {
 		var currentRoute = this.props.navigator.navigationContext.currentRoute;
 		//didfocus emit in componentDidMount
-        if (currentRoute === event.data.route) {
-            this.refreshOwnData()
-        }
+      if (currentRoute === event.data.route) {
+          this.refreshOwnData()
+      }
 	},
 
 	onPageSelected: function() {

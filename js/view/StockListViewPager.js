@@ -95,6 +95,7 @@ var StockListViewPager = React.createClass({
 
 	onTabChanged: function() {
 		LogicData.setTabIndex(MainPage.STOCK_LIST_PAGE_TAB_INDEX);
+		LogicData.setCurrentPageTag(_currentSelectedTab);
 		this.setState({currentSelectedTab: _currentSelectedTab});
 		this.refs['page' + _currentSelectedTab].tabPressed()
 		WebSocketModule.registerCallbacks((stockInfo) => {
@@ -131,7 +132,8 @@ var StockListViewPager = React.createClass({
 		this.setState({
 			currentSelectedTab: index,
 		})
-		_currentSelectedTab = index,
+		_currentSelectedTab = index;		
+		LogicData.setCurrentPageTag(_currentSelectedTab);
 		this.refs['page' + _currentSelectedTab].onPageSelected()
 
 		WebSocketModule.registerInterestedStocks(this.refs['page' + _currentSelectedTab].getShownStocks())
@@ -155,7 +157,8 @@ var StockListViewPager = React.createClass({
 			<View style={styles.slide} key={i}>
 				<StockListPage dataURL={NetConstants.getUrl(urlKeys[i])}
 											 activeDataURL={NetConstants.getUrl(urlKeysLive[i])}
-											 ref={'page' + i} showHeaderBar={i==1} isOwnStockPage={i==0} navigator={this.props.navigator}/>
+											 ref={'page' + i} showHeaderBar={i==1} isOwnStockPage={i==0} navigator={this.props.navigator}
+											 pageKey={i}/>
 			</View>
 		)
 		return (

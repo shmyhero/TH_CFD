@@ -30,6 +30,7 @@ var currentVersionCode = 0;
 var onlineVersionName = null;
 var liveUserInfo = null;
 var unpaidIncome = null;
+var currentPageTag = null;
 
 var LogicData = {
 
@@ -366,7 +367,15 @@ var LogicData = {
 
 	removeUnpaidReward: function(){
 		unpaidIncome = null;
-	}
+	},
+
+	setCurrentPageTag: function(tag){
+		currentPageTag = tag;
+	},
+
+	getCurrentPageTag: function(){
+		return currentPageTag;
+	},
 };
 
 module.exports = LogicData;

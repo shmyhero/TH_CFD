@@ -19,7 +19,8 @@ var NetworkModule = require('../module/NetworkModule')
 var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
 var WebSocketModule = require('../module/WebSocketModule');
-var MainPage = require('./MainPage')
+var MainPage = require('./MainPage');
+var AppStateModule = require('../module/AppStateModule');
 var {EventCenter, EventConst} = require('../EventCenter');
 
 var {height, width} = Dimensions.get('window');
@@ -83,6 +84,8 @@ var StockStatisticsPage = React.createClass({
 		layoutSizeChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.LAYOUT_SIZE_CHANGED, () => {
 			this.onLayoutSizeChanged();
 		});
+
+		AppStateModule.registerTurnToActiveListener(this.refreshData);
 	},
 
 	componentWillUnmount: function(){
@@ -90,6 +93,7 @@ var StockStatisticsPage = React.createClass({
 		accountStateChangedSubscription && accountStateChangedSubscription.remove();
 		accountLogoutEventSubscription && accountLogoutEventSubscription.remove();
 		layoutSizeChangedSubscription && layoutSizeChangedSubscription.remove();
+		AppStateModule.unregisterTurnToActiveListener(this.refreshData);
 	},
 
 	onLayoutSizeChanged: function(){
@@ -100,16 +104,25 @@ var StockStatisticsPage = React.createClass({
 	},
 
 	onConnectionStateChanged: function(){
-		if(LogicData.getTabIndex() == 2 && WebSocketModule.isConnected()){
+		if(WebSocketModule.isConnected()){
+			this.refreshData();
+		}
+	},
+
+	refreshData: function(){
+		if(LogicData.getTabIndex() == 2){
 			var routes = this.props.navigator.getCurrentRoutes();
 			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE){
-				var userData = LogicData.getUserData();
-				var notLogin = Object.keys(userData).length === 0;
-				if(!notLogin){
-					NetworkModule.loadUserBalance(true, (responseJson)=>{
-						this.setState({balanceData: responseJson,});
-						this.playStartAnim();
-					})
+				var currentPageTag = LogicData.getCurrentPageTag();
+				if(currentPageTag == 2){
+					var userData = LogicData.getUserData();
+					var notLogin = Object.keys(userData).length === 0;
+					if(!notLogin){
+						NetworkModule.loadUserBalance(true, (responseJson)=>{
+							this.setState({balanceData: responseJson,});
+							this.playStartAnim();
+						})
+					}
 				}
 			}
 		}

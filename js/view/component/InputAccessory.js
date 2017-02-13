@@ -24,9 +24,19 @@ var InputAccessory = React.createClass({
 	},
 
 	propTypes: {
+		enableNumberText: React.PropTypes.bool,
 		textValue: React.PropTypes.string,
 		maxValue: React.PropTypes.number,
 		rightButtonOnClick: React.PropTypes.func,	// use to clear text when error occured.
+	},
+
+	getDefaultProps(): Object {
+		return {
+			enableNumberText: true,
+			textValue: '',
+			maxValue: 0,
+			rightButtonOnClick: null,
+		};
 	},
 
 	//For some reason, this gives warnings?
@@ -108,7 +118,7 @@ var InputAccessory = React.createClass({
 			this.setState({
 				validValue: 2
 			})
-			this.props.rightButtonOnClick()
+			this.props.rightButtonOnClick && this.props.rightButtonOnClick()
 			return
 		}
 
@@ -161,7 +171,7 @@ var InputAccessory = React.createClass({
 		return ( <View style = {[s.InputAccessory, {opacity: this.state.opacity}, styleOfPosition]}
 					onLayout = {(e) => this.rotateDevice(e)} >
 					<Text numberOfLines={1} style = {[s.InputAccessoryLabelText]} >
-					{this.props.textValue}
+					{this.props.enableNumberText ? this.props.textValue : ''}
 					</Text>
 					{warningText}
 					<TouchableOpacity onPress = {() => this.dismissKeyboardHandler()} >

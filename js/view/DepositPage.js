@@ -5,7 +5,7 @@
 */
 
 import React,{Component,PropTypes} from 'react'
-import {StyleSheet,Text,TextInput,TouchableWithoutFeedback,Keyboard,Image,View,Dimensions,ListView,Alert,TouchableOpacity} from 'react-native'
+import {StyleSheet,Text,TextInput,TouchableWithoutFeedback,Keyboard,Image,View,Dimensions,ListView,Alert,TouchableOpacity,Platform} from 'react-native'
 
 
 var {height, width} = Dimensions.get('window')
@@ -17,6 +17,7 @@ var NetworkModule = require('../module/NetworkModule')
 var UIConstants = require('../UIConstants')
 var ColorConstants = require('../ColorConstants')
 var MainPage = require('./MainPage')
+var InputAccessory = require('./component/InputAccessory')
 
 var listRawData = [
 {'type':'paytype','title':'支付宝钱包', 'image':require('../../images/icon_alipay.png'), 'subtype': 'alipay', },
@@ -421,7 +422,6 @@ export default class DepositPage extends Component{
 		Keyboard.dismiss();
 	}
 
-
 	render(){
 
 		return(
@@ -460,10 +460,25 @@ export default class DepositPage extends Component{
 					{this.renderConfirm()}
 					</View>
 				</View>
+				{this.renderAccessoryBar()}
 
 			</View>
 		);
 	}
+
+	renderAccessoryBar(){
+		if(Platform.OS === 'ios'){
+			return(
+				<InputAccessory ref='InputAccessory'
+					enableNumberText={false}/>
+			)
+		}else{
+			return(
+				<View></View>
+			)
+		}
+	}
+
 }
 
 

@@ -20,6 +20,7 @@ import {
 
 import Picker from 'react-native-picker';
 
+var InputAccessory = require('../component/InputAccessory')
 var Button = require('../component/Button')
 var CheckBoxButton = require('../component/CheckBoxButton')
 var MainPage = require('../MainPage')
@@ -409,6 +410,11 @@ export default class BindCardPage extends Component {
 						selectedPicker: -1,
 					})
         },
+				onPickerCancel: ()=>{
+					this.setState({
+						selectedPicker: -1,
+					})
+				},
     });
     Picker.show();
 	}
@@ -627,8 +633,22 @@ export default class BindCardPage extends Component {
 				</ScrollView>
         {this.renderActionButton()}
 				{pickerModal}
+				{this.renderAccessoryBar()}
 			</View>
 		);
+	}
+
+	renderAccessoryBar(){
+		if(Platform.OS === 'ios'){
+			return(
+				<InputAccessory ref='InputAccessory'
+					enableNumberText={false}/>
+			)
+		}else{
+			return(
+				<View></View>
+			)
+		}
 	}
 
 	renderListView(){

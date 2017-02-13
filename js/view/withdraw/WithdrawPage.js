@@ -402,9 +402,23 @@ export default class WithdrawPage extends Component {
   						text={this.state.validateInProgress? "信息正在检查中...": this.state.refundETA + '个工作日内到账，确认出金'} />
   				</View>
         </View>
+        {this.renderAccessoryBar()}
 			</View>
 		);
   }
+
+  renderAccessoryBar(){
+		if(Platform.OS === 'ios'){
+			return(
+				<InputAccessory ref='InputAccessory'
+					enableNumberText={false}/>
+			)
+		}else{
+			return(
+				<View></View>
+			)
+		}
+	}
 }
 
 const styles = StyleSheet.create({

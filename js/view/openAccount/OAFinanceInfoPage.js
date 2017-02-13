@@ -253,6 +253,10 @@ var OAFinanceInfoPage = React.createClass({
 			choices.push(rowData.choices[i].displayText);
 		}
 
+		if(selectedText == "" && rowData.choices.length > 0){
+			selectedText = rowData.choices[0].displayText;
+		}
+
     Picker.init({
         pickerData: choices,
         selectedValue: [selectedText],

@@ -653,7 +653,7 @@ var StockDetailPage = React.createClass({
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
 				<View style={styles.wrapper}>
-					<LinearGradient colors={this.getGradientColor()} style={{flex: 1, /*height: this.state.height*/}}>
+					<LinearGradient colors={this.getGradientColor()} style={{height: Math.max(height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER, this.state.height)}}>
 
 						{this.renderHeader()}
 
@@ -1190,6 +1190,7 @@ var styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'stretch',
 		width:width,
+		backgroundColor: '#123b80',
 	},
 	rowView: {
 		flexDirection: 'row',

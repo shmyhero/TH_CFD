@@ -1271,7 +1271,7 @@ var StockOpenPositionPage = React.createClass({
 		console.log("RAMBO: chartType = " + this.state.chartType)
 		var opacity = state == 0? 1.0 : 0.01;
 			return(
-				<LineChart style={[styles.lineChart,{opacity:opacity},]}
+				<LineChart style={[styles.lineChart,{opacity:opacity}]}
 					data={JSON.stringify(this.state.stockDetailInfo)}
 					chartType={this.state.chartType}
 					colorType={1}

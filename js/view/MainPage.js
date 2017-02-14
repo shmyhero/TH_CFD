@@ -162,6 +162,7 @@ export var ayondoLoginResult
 export var refreshMainPage
 export var showSharePage
 export var gotoLoginPage
+export var gotoTrade
 
 var recevieDataSubscription = null
 var didAccountChangeSubscription = null;
@@ -743,6 +744,7 @@ var MainPage = React.createClass({
 		refreshMainPage = this.refreshMainPage
 		showSharePage = this._doShare
 		gotoLoginPage = this.gotoLoginPage
+		gotoTrade = this.gotoTrade
 		this.initTabbarEvent()
 		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>this.refreshMainPage());
 		didAccountLoginOutSideSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGIN_OUT_SIDE, ()=>this.gotoLoginPage());
@@ -961,6 +963,11 @@ var MainPage = React.createClass({
 			  stockRowData: stockRowData,
 				});
 		 }
+	},
+
+	gotoTrade:function(){
+		_navigator.popToTop()
+		this.refs['myTabbar'].gotoTab("trade")
 	},
 
 	gotoWithdrawResultPage: function(pushData){

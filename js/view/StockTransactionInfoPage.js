@@ -139,6 +139,11 @@ var StockTransactionInfoPage = React.createClass({
 		}
 	},
 
+	gotoTrade:function(){
+		console.log("gotoTrade");
+		MainPage.gotoTrade()
+	},
+
 	renderContent: function(){
 		if(this.state.card){
 			return (
@@ -152,8 +157,11 @@ var StockTransactionInfoPage = React.createClass({
 			return (
 				<View style={{/*flex: 1,*/ flexDirection:'column', alignSelf: 'stretch'}}>
 					{this.renderAchievementCard()}
-					<StockTransactionInfoBar transactionInfo={this.state.transactionInfo}
-						hideTopCornerRadius={this.state.card !== undefined && this.state.card !== null}/>
+					<TouchableOpacity activeOpacity={1.0} onPress={()=>this.gotoTrade()}>
+						<StockTransactionInfoBar transactionInfo={this.state.transactionInfo}
+							hideTopCornerRadius={this.state.card !== undefined && this.state.card !== null}
+							/>
+				 </TouchableOpacity>
 				</View>
 			);
 		}

@@ -18,6 +18,7 @@ import {
 var NavBar = require('../NavBar');
 var Button = require('../component/Button');
 
+var InputAccessory = require('../component/InputAccessory')
 var CheckBoxButton = require('../component/CheckBoxButton')
 var MainPage = require('../MainPage')
 var LogicData = require('../../LogicData')

@@ -1190,7 +1190,7 @@ var styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'stretch',
 		width:width,
-		backgroundColor: '#123b80',
+		backgroundColor: Platform.OS === 'andriod' ? '#123b80' : 'transparent',
 	},
 	rowView: {
 		flexDirection: 'row',

@@ -130,10 +130,8 @@ var NavBar = React.createClass({
 					{this.renderSubTitle()}
 				</View>
 
-				<View style={styles.rightContainer}>
-					{this.renderSearchButton()}
-					{this.renderRightPart()}
-				</View>
+				{this.renderRightPart()}
+
 			</View>
 		);
 	},
@@ -143,11 +141,13 @@ var NavBar = React.createClass({
 		if(this.props.viewOnRight){
 			return this.props.viewOnRight;
 		}else{
-			return (<View>
-				{this.renderRightText()}
-				{this.renderRightImage()}
-				{this.renderRightCustomContent()}
-			</View>)
+			return (
+				<View style={styles.rightContainer}>
+					{this.renderSearchButton()}
+					{this.renderRightText()}
+					{this.renderRightImage()}
+					{this.renderRightCustomContent()}
+				</View>);
 		}
 	},
 

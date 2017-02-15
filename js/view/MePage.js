@@ -689,7 +689,8 @@ var MePage = React.createClass({
 
 	renderMessageIcon: function(){
 		return (
-			<TouchableOpacity onPress={()=>this.goToMailPage()}>
+			<TouchableOpacity onPress={()=>this.goToMailPage()}
+				style={styles.navBarRightView}>
 				<Image
 						style={styles.navBarRightImage}
 						source={require('../../images/icon_my_message.png')}/>
@@ -891,21 +892,28 @@ var styles = StyleSheet.create({
 		resizeMode: Image.resizeMode.contain,
 	},
 
+	navBarRightView:{
+		flex:1,
+		height: 30,
+		alignItems:"flex-end",
+		justifyContent:"center",
+	},
+
 	unreadMessageView:{
-		backgroundColor:'red',
+		backgroundColor:'#ff3333',
 		position:'absolute',
 		top:0,
-		right:15,
-		width:16,
-		height:10,
+		right:13,
+		width:20,
+		height:14,
 		alignItems:'center',
 		justifyContent:'center',
-		borderRadius: 5,
+		borderRadius: 6,
 	},
 
 	unreadMessageText:{
 		color:'white',
-		fontSize:7,
+		fontSize:10,
 	},
 });
 

@@ -29,6 +29,7 @@ var NavBar = React.createClass({
 		textOnRight: React.PropTypes.string,
 		imageOnRight: React.PropTypes.number,
 		rightImageStyle: React.PropTypes.object,
+		viewOnRight: React.PropTypes.element,
 		leftTextOnClick: React.PropTypes.func,
 		leftButtonOnClick: React.PropTypes.func,
 		rightTextOnClick: React.PropTypes.func,
@@ -52,6 +53,7 @@ var NavBar = React.createClass({
 			textOnRight: null,
 			imageOnRight: null,
 			rightImageStyle: null,
+			viewOnRight: null,
 			leftTextOnClick: null,
 			leftButtonOnClick: null,
 			rightTextOnClick: null,
@@ -130,12 +132,23 @@ var NavBar = React.createClass({
 
 				<View style={styles.rightContainer}>
 					{this.renderSearchButton()}
-					{this.renderRightText()}
-					{this.renderRightImage()}
-					{this.renderRightCustomContent()}
+					{this.renderRightPart()}
 				</View>
 			</View>
 		);
+	},
+
+	renderRightPart: function(){
+		//viewOnRight
+		if(this.props.viewOnRight){
+			return this.props.viewOnRight;
+		}else{
+			return (<View>
+				{this.renderRightText()}
+				{this.renderRightImage()}
+				{this.renderRightCustomContent()}
+			</View>)
+		}
 	},
 
 	renderBackButton: function() {

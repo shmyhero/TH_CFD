@@ -83,7 +83,7 @@ var MePage = React.createClass({
 	getInitialState: function() {
 		return {
 			loggedIn: false,
-			hasUnreadMessage: false,
+			unreadMessageCount: 0,
 			dataSource: ds.cloneWithRows(listRawData),
 			lastStep:0,
 		};
@@ -204,7 +204,7 @@ var MePage = React.createClass({
 					function(response) {
 						this.setState(
 							{
-								hasUnreadMessage: response > 0,
+								unreadMessageCount: response,
 							}
 						)
 					}.bind(this),
@@ -672,20 +672,39 @@ var MePage = React.createClass({
 		}
 	},
 
+	renderUnreadCount: function(){
+		if(this.state.unreadMessageCount > 0){
+			var text = this.state.unreadMessageCount > 9 ? "9+" : "" + this.state.unreadMessageCount;
+			return (
+				<View style={styles.unreadMessageView}>
+					<Text style={styles.unreadMessageText}>
+						{text}
+					</Text>
+				</View>
+			)
+		}else{
+			return null;
+		}
+	},
+
+	renderMessageIcon: function(){
+		return (
+			<TouchableOpacity onPress={()=>this.goToMailPage()}>
+				<Image
+						style={styles.navBarRightImage}
+						source={require('../../images/icon_my_message.png')}/>
+				{this.renderUnreadCount()}
+			</TouchableOpacity>
+		);
+	},
+
 	renderNavBar: function(){
 		var userData = LogicData.getUserData()
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
-			var image;
-			console.log("this.state.hasUnreadMessage: " + this.state.hasUnreadMessage)
-			if(this.state.hasUnreadMessage){
-				image = require('../../images/icon_my_messages_new.png');
-			}else{
-				image = require('../../images/icon_my_message.png');
-			}
+
 			return(
-				<NavBar title="我的" imageOnRight={image}
-					rightImageOnClick={this.goToMailPage}
+				<NavBar title="我的" viewOnRight={this.renderMessageIcon()}
 					navigator={this.props.navigator}/>
 			)
 		}else{
@@ -864,6 +883,30 @@ var styles = StyleSheet.create({
     height: 6,
 		marginRight: 8,
   },
+
+	navBarRightImage: {
+		width: 21,
+		height: 21,
+		marginRight: 20,
+		resizeMode: Image.resizeMode.contain,
+	},
+
+	unreadMessageView:{
+		backgroundColor:'red',
+		position:'absolute',
+		top:0,
+		right:15,
+		width:16,
+		height:10,
+		alignItems:'center',
+		justifyContent:'center',
+		borderRadius: 5,
+	},
+
+	unreadMessageText:{
+		color:'white',
+		fontSize:7,
+	},
 });
 
 

@@ -255,7 +255,7 @@ var DaySignPage = React.createClass({
 		var heightShow = this.state.height - UIConstants.HEADER_HEIGHT;
 
 			return(
-				<View style = {[styles.topLayout, {height: heightShow*(1*0.33),}]}>
+				<View style = {[styles.topLayout, {height: heightShow*(1*0.33),backgroundColor:ColorConstants.title_blue()}]}>
 
 						<View style = {styles.bottomSepContainer}>
 							<View style = {styles.topSep}>
@@ -321,7 +321,7 @@ var DaySignPage = React.createClass({
 						<View style={{flex:1,justifyContent:'flex-end',flexDirection:'row'}}>
 
 									<TouchableOpacity onPress={() => this._clickStratgy()}>
-										<View style = {styles.signStrategy}>
+										<View style = {[styles.signStrategy,LogicData.getAccountState()?{backgroundColor:'#5b75a4'}:null]}>
 											<Text style={styles.textSignStrategy}>签到攻略</Text>
 											<View style={styles.textSignDot}></View>
 										</View>
@@ -390,9 +390,10 @@ var DaySignPage = React.createClass({
 
 	renderCalendar: function(){
 		// var days = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
+		var colorSign = LogicData.getAccountState()?'#7294d0':'#4c88f1';
 		var daysView = this.state.days.map(
 			(day, i) =>
-					<View style = {[styles.day ,  {backgroundColor:this._isSignedDay(i)?'#4c88f1':'transparent'}  ]} key={i}>
+					<View style = {[styles.day ,  {backgroundColor:this._isSignedDay(i)?colorSign:'transparent'}  ]} key={i}>
 						<Text style = {[styles.textDayNumber,{color:this._isSignedDay(i)?'#FFFFFF':'#B6B6B6'}]}>{i+1}</Text>
 					</View>
 			)

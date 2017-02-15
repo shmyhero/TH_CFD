@@ -991,12 +991,16 @@ var HomePage = React.createClass({
 	},
 
 	renderNavBar: function(){
+		var image = require('../../images/icon_day_sign_live.png');
+
 		return (
 			<TouchableOpacity
 				activeOpacity={1}
 				onPress={()=>this.pressedNavBar()}
 				>
-				<NavBar title={this.state.connected ? "首页" : "首页（未连接）"}/>
+				<NavBar title={this.state.connected ? "首页" : "首页（未连接）"}
+					imageOnRight={LogicData.getAccountState()?image:null}
+					rightImageOnClick={this.gotoCheckinPage}/>
 			</TouchableOpacity>);
 	},
 

@@ -42,12 +42,12 @@ var InputAccessory = React.createClass({
 	//For some reason, this gives warnings?
 	componentWillMount() {
 		if (Platform.OS === 'ios') {
-			Keyboard.addListener('keyboardWillShow', this.keyboardDidShow)
-			Keyboard.addListener('keyboardWillHide', this.keyboardDidHide)
+			this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', this.keyboardDidShow)
+			this.keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', this.keyboardDidHide)
 		}
 		else {
-			Keyboard.addListener('keyboardDidShow', this.keyboardDidShow)
-			Keyboard.addListener('keyboardDidHide', this.keyboardDidHide)
+			this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow)
+			this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide)
 		}
 	},
 
@@ -60,12 +60,12 @@ var InputAccessory = React.createClass({
 			})
 		// dismissKeyboardHandler();
 		if (Platform.OS === 'ios') {
-			Keyboard.removeAllListeners('keyboardWillShow');
-			Keyboard.removeAllListeners('keyboardWillHide');
+			this.keyboardWillShowListener.remove();
+			this.keyboardWillHideListener.remove();
 		}
 		else {
-			Keyboard.removeAllListeners('keyboardDidShow');
-			Keyboard.removeAllListeners('keyboardDidHide');
+			this.keyboardDidShowListener.remove();
+			this.keyboardDidHideListener.remove();
 		}
 	},
 

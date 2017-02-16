@@ -14,18 +14,18 @@ import {
 
 var {height, width} = Dimensions.get('window');
 var WaitingRing = require('./component/WaitingRing');
-var imageWidth = width - 20;
-var imageHeight = imageWidth / 690 * 644;
 
 export default class AchievementCard extends Component {
   static propTypes = {
     showReward: PropTypes.bool,
     card: PropTypes.object,
+    width: PropTypes.number,
   }
 
   static defaultProps = {
     showReward: true,
     cardInfo: null,
+    width: width - 20
   }
 
   constructor(props) {
@@ -87,7 +87,8 @@ export default class AchievementCard extends Component {
     if(this.props.card){
       var source = null;
       source = {uri: this.props.card.imgUrlBig}
-      var imgStyle = [styles.cardImage];
+      //source = require('../../images/blue_big.jpg');
+      var imgStyle = [styles.cardImage, {width: this.props.width, height: this.props.width / 690 * 644}];
       if(this.props.card.themeColor){
         imgStyle.push({backgroundColor: this.props.card.themeColor});
       }
@@ -115,8 +116,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 4,
     borderTopRightRadius: 4,
     borderWidth: 0,
-    width: imageWidth,
-    height: imageHeight,
     resizeMode: "stretch",
   },
 

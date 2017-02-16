@@ -20,19 +20,25 @@ var itemTitleFontSize = Math.round(16*width/375)
 var itemValueFontSize = Math.round(14*width/375)
 
 var TITLE_HEIGHT = 40;
-var ROW_HEIGHT = 60;
+var ROW_HEIGHT = 61;
+var HORIZONTAL_BIG_MARGIN = 28;
+var HORIZONTAL_SMALL_MARGIN = 15;
 
 export default class StockTransactionInfoBar extends Component {
   static propTypes = {
     transactionInfo: PropTypes.object,
     card: PropTypes.object,
-    hideTopCornerRadius: PropTypes.bool
+    hideTopCornerRadius: PropTypes.bool,
+    width: PropTypes.number,
+    bigMargin: PropTypes.bool,
   }
 
   static defaultProps = {
     transactionInfo: null,
     card: null,
     hideTopCornerRadius: false,
+    width: width-30,
+    bigMargin: false,
   }
 
   constructor(props) {
@@ -112,24 +118,26 @@ export default class StockTransactionInfoBar extends Component {
       extraTitleContainerStyle.borderTopRightRadius = 0;
     }
 
+    console.log("this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN " + this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN)
+
     return (
-      <View style={styles.container}>
-        <View style={[styles.titleContainer, extraTitleContainerStyle]}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch'}}>
-          <Text style={[styles.titleText, {flex:1}]} numberOfLines={1} ellipsizeMode={'head'}>
-            {this.state.name} - {this.state.isCreate?'开仓':'平仓'}
-          </Text>
-          {this.state.isCreate ?
-            null :
-            <Text style={[styles.titleText, {marginRight: 15, marginLeft: 15}]}>
-              {(plRate).toFixed(2)} %
+      <View style={[styles.container, {width: this.props.width}]}>
+        <View style={[styles.titleContainer, extraTitleContainerStyle, {height: this.props.width / 690 * 82, justifyContent:'center'}]}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch'}}>
+            <Text style={[styles.titleText, {flex:1, marginLeft: this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN}]} numberOfLines={1} ellipsizeMode={'head'}>
+              {this.state.name} - {this.state.isCreate?'开仓':'平仓'}
             </Text>
-          }
+            {this.state.isCreate ?
+              null :
+              <Text style={[styles.titleText, {marginRight: this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN, marginLeft: this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN}]}>
+                {(plRate).toFixed(2)} %
+              </Text>
+            }
 
           </View>
         </View>
-        <View style={styles.centerContainer}>
-          <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 15, paddingVertical: 8}}>
+        <View style={[styles.centerContainer, {height: this.props.width / 690 * 122}]}>
+          <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN, paddingVertical: 8}}>
             <Text style={styles.itemTitleText}>
               类型
             </Text>
@@ -143,7 +151,7 @@ export default class StockTransactionInfoBar extends Component {
               {this.state.invest.toFixed(2)}
             </Text>
           </View>
-          <View style={{flex: 1, alignItems: 'flex-end', paddingRight: 15}}>
+          <View style={{flex: 1, alignItems: 'flex-end', paddingRight: this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN}}>
             <Text style={styles.itemTitleText}>
               杠杆
             </Text>
@@ -153,8 +161,8 @@ export default class StockTransactionInfoBar extends Component {
           </View>
         </View>
         <View style={styles.line}/>
-        <View style={styles.bottomContainer}>
-          <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: 15, paddingVertical: 8}}>
+        <View style={[styles.bottomContainer, {height: this.props.width / 690 * 122}]}>
+          <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN, paddingVertical: 8}}>
             <Text style={styles.itemTitleText}>
               交易价格
             </Text>
@@ -170,7 +178,7 @@ export default class StockTransactionInfoBar extends Component {
               {this.state.isCreate ? this.state.invest.toFixed(2) : this.state.pl.toFixed(2)}
             </Text>
           </View>
-          <View style={{flex: 1, alignItems: 'flex-end', paddingRight: 15}}>
+          <View style={{flex: 1, alignItems: 'flex-end', paddingRight: this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN}}>
             <Text style={styles.itemTitleText}>
               {this.state.time.Format('yy/MM/dd')}
             </Text>
@@ -223,7 +231,6 @@ const styles = StyleSheet.create({
 		color: '#ffffff',
 		marginVertical: 8,
     textAlign: 'left',
-  	marginLeft: 15,
 	},
 
 	stockNameText: {

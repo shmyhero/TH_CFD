@@ -11,6 +11,7 @@ import {
 	PanResponder,
 	TouchableOpacity,
 	Alert,
+	Platform,
 } from 'react-native';
 
 var Touchable = require('Touchable');
@@ -27,6 +28,19 @@ var NetworkModule = require('../module/NetworkModule');
 
 var {height, width} = Dimensions.get('window');
 var actionButtonSize = 61;
+
+const BODY_HORIZON_MARGIN = Platform.OS === 'ios' ? 15 : 20;
+const BODY_TOP_MARGIN = 0;
+const BODY_BOTTOM_MARGIN = Platform.OS === 'ios' ? 0 : 30;
+const CONTENT_WIDTH = width - BODY_HORIZON_MARGIN * 2;
+const CARD_BORDER_WIDTH = CONTENT_WIDTH * 0.02;
+const BOTTOM_CARD_BORDER_WIDTH = CARD_BORDER_WIDTH*3;
+const BORDER_WIDTH = (width - BODY_HORIZON_MARGIN * 2 + CARD_BORDER_WIDTH * 2);
+const BORDER_HEIGHT = (BORDER_WIDTH/ 720 * 1090);
+const CARD_BORDER_HEADER_HEIGHT = BORDER_HEIGHT * 0.063;
+const CARD_TITLE_POSITION = BORDER_HEIGHT * 0.026;
+const CARD_TITLE_HEIGHT = BORDER_HEIGHT * 0.04;
+const TITLE_FONT_SIZE = 20 / 375 * width;
 
 var StockTransactionInfoPage = React.createClass({
 	mixins: [Touchable.Mixin],
@@ -134,7 +148,9 @@ var StockTransactionInfoPage = React.createClass({
 	renderAchievementCard: function(){
 		if(this.state.card){
 			return (
-				<AchievementCard card={this.state.card} showReward={this.props.showReward}/>
+				<AchievementCard card={this.state.card} showReward={this.props.showReward}
+					width={CONTENT_WIDTH}
+				/>
 			)
 		}
 	},
@@ -144,24 +160,58 @@ var StockTransactionInfoPage = React.createClass({
 		MainPage.gotoTrade()
 	},
 
+	renderCardBorder: function(){
+		if(this.state.card){
+
+			return (
+				<View style={{
+					position:'absolute',
+					top: 0, bottom:0,
+					left:BODY_HORIZON_MARGIN-CARD_BORDER_WIDTH,
+					right: BODY_HORIZON_MARGIN-CARD_BORDER_WIDTH,
+				}}>
+					<Image source={require('../../images/card_border_bronze.png')}
+						style={{width: BORDER_WIDTH, height: BORDER_HEIGHT,
+						resizeMode: "contain"}}>
+					</Image>
+					<View style={{position:'absolute', top: CARD_TITLE_POSITION, left:0, right:0, justifyContent:'center', alignItems:'center', height:CARD_TITLE_HEIGHT,}}>
+						<Text style={{textAlign: 'center', color:'white', fontSize: TITLE_FONT_SIZE, width:120,} }>
+							财富起航
+						</Text>
+					</View>
+				</View>
+			)
+		}
+	},
+
 	renderContent: function(){
 		if(this.state.card){
 			return (
-				<View style={{/*flex: 1,*/ flexDirection:'column', alignSelf: 'stretch'}}>
-					{this.renderAchievementCard()}
-					<StockTransactionInfoBar card={this.state.card} transactionInfo={this.state.transactionInfo}
-						hideTopCornerRadius={this.state.card !== undefined && this.state.card !== null}/>
+				<View style={{/*flex: 1,*/ flexDirection:'column', alignSelf: 'stretch',
+					paddingTop:CARD_BORDER_HEADER_HEIGHT,
+					paddingBottom: BOTTOM_CARD_BORDER_WIDTH}}>
+					<View style={styles.realContent}>
+						<View style={{/*flex: 1,*/ flexDirection:'column', alignSelf: 'stretch'}}>
+							{this.renderAchievementCard()}
+							<StockTransactionInfoBar card={this.state.card} transactionInfo={this.state.transactionInfo}
+								hideTopCornerRadius={this.state.card !== undefined && this.state.card !== null}
+								width={CONTENT_WIDTH} bigMargin={true}/>
+						</View>
+					</View>
+					{this.renderCardBorder()}
 				</View>
 			);
 		}else{
 			return (
-				<View style={{/*flex: 1,*/ flexDirection:'column', alignSelf: 'stretch'}}>
-					{this.renderAchievementCard()}
-					<TouchableOpacity activeOpacity={1.0} onPress={()=>this.gotoTrade()}>
-						<StockTransactionInfoBar transactionInfo={this.state.transactionInfo}
-							hideTopCornerRadius={this.state.card !== undefined && this.state.card !== null}
-							/>
-				 </TouchableOpacity>
+				<View style={styles.realContent}>
+					<View style={{/*flex: 1,*/ flexDirection:'column', alignSelf: 'stretch'}}>
+						{this.renderAchievementCard()}
+						<TouchableOpacity activeOpacity={1.0} onPress={()=>this.gotoTrade()}>
+							<StockTransactionInfoBar transactionInfo={this.state.transactionInfo}
+								hideTopCornerRadius={this.state.card !== undefined && this.state.card !== null}
+								/>
+					 </TouchableOpacity>
+					</View>
 				</View>
 			);
 		}
@@ -216,12 +266,16 @@ var styles = StyleSheet.create({
 		backgroundColor: 'transparent',
 		*/
 		//flex: 1,
+		marginTop: BODY_TOP_MARGIN,
 		justifyContent: 'center',
-		marginLeft: 10,
-		marginRight: 10,
 		alignSelf: 'center',
 		//backgroundColor: "red",
 		// paddingBottom:height/2,
+	},
+
+	realContent: {
+		marginLeft: BODY_HORIZON_MARGIN,
+		marginRight: BODY_HORIZON_MARGIN,
 	},
 
   modalInnerContainer: {
@@ -231,10 +285,9 @@ var styles = StyleSheet.create({
   },
 
   actionButton:{
-    marginTop: (height
-			- UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
-			- actionButtonSize - 160 - ((width - 20) / 690 * 644))/3 + 8,
+    marginTop: (height - actionButtonSize - BORDER_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER)/3,
 		flexDirection: 'row',
+		marginBottom:BODY_BOTTOM_MARGIN,
   },
 
   imgAction:{

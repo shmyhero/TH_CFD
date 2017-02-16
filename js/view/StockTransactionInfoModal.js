@@ -11,6 +11,7 @@ import {
 	PanResponder,
 	Modal,
 	TouchableOpacity,
+	Platform,
 } from 'react-native';
 
 var Swiper = require('react-native-swiper')
@@ -209,30 +210,14 @@ var styles = StyleSheet.create({
 		right: 0,
 		top: 0,
 		bottom: 0,
-		backgroundColor: 'transparent',
 	},
-
-  modalInnerContainer: {
-    //borderRadius: 4,
-    alignItems: 'stretch',
-    backgroundColor: '#05FFFFFF',
-  },
-
-  actionButton:{
-    marginTop:28,
-  },
-
-  imgAction:{
-    width:61,
-    height:61,
-  },
 
 	modalContainer:{
 		flex: 1,
 		justifyContent: 'center',
 		backgroundColor:'rgba(0, 0, 0, 0.7)',
 		alignItems: 'center',
-		height: height,
+		height: height + (Platform.OS === 'android' ? 20 : 0),
 		width: width,
 	},
 });

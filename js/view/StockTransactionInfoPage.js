@@ -233,7 +233,6 @@ var styles = StyleSheet.create({
   actionButton:{
     marginTop: (height
 			- UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
-			- UIConstants.ANDROID_SOFT_MENU_HEIGHT
 			- actionButtonSize - 160 - ((width - 20) / 690 * 644))/3 + 8,
 		flexDirection: 'row',
   },

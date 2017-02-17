@@ -203,7 +203,7 @@ var StockTransactionInfoPage = React.createClass({
 			);
 		}else{
 			return (
-				<View style={styles.realContent}>
+				<View style={{marginLeft: 10, marginRight: 10,}}>
 					<View style={{/*flex: 1,*/ flexDirection:'column', alignSelf: 'stretch'}}>
 						{this.renderAchievementCard()}
 						<TouchableOpacity activeOpacity={1.0} onPress={()=>this.gotoTrade()}>

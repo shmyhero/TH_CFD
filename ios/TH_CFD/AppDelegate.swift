@@ -98,6 +98,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 
 		return true
 	}
+    
+    func application(application: UIApplication, supportedInterfaceOrientationsForWindow window: UIWindow?) -> UIInterfaceOrientationMask {
+        return Orientation.getOrientation()
+    }
 	
 	/** 注册用户通知(推送) */
 	func registerUserNotification(application: UIApplication) {

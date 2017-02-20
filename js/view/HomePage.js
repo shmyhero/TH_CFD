@@ -68,6 +68,7 @@ var accountStateChangedSubscription = null
 var lastForceloopTime = 0
 var firstLoad = false
 const CARDS_LIST = "cardList"
+const SCROLL_VIEW = "scrollView"
 
 var HomePage = React.createClass({
 	mixins: [TimerMixin],
@@ -118,6 +119,7 @@ var HomePage = React.createClass({
 
 	resetPage: function(){
 		this.setState(this.getInitialState());
+		this.refs[SCROLL_VIEW] && this.refs[SCROLL_VIEW].scrollTo({x:0, y:0})
 	},
 
 	reloadPage: function(){
@@ -1060,7 +1062,7 @@ var HomePage = React.createClass({
 
 				<View style={{width:width, flex: 1}}>
 					{this.renderBgHint()}
-					<ScrollView >
+					<ScrollView ref={SCROLL_VIEW} >
 						<View style={{width: width, height: imageHeight}}>
 							<Swiper
 							  style={{backgroundColor:'#eaeaea'}}

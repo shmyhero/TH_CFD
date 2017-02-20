@@ -106,6 +106,13 @@ var WebViewPage = React.createClass({
 				this.refs[WEBVIEW_REF].reload();
 			}
 		}
+		else {
+			// todo, failed when load success, but webview jump to an error host.
+			this.setState({
+				isNetConnected: isConnected,
+				isrefresh: false
+			});
+		}
 	},
 
 	getWebViewRef: function(){

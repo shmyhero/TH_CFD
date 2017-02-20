@@ -62,6 +62,10 @@ AppStateModule.registerTurnToActiveListener(() => {
 		start()
 	}
 })
+AppStateModule.registerTurnToInactiveListener(() => {
+	console.log('Stop Web sockets.')
+	stop();
+})
 
 export function isConnected(){
 	return socketConnected;
@@ -258,7 +262,7 @@ export function cleanRegisteredCallbacks() {
 }
 
 export function alertServiceLogin(token) {
-	if (webSocketConnection.state == 1 && alertWebSocketProxy !== null && token !== null) {
+	if (webSocketConnection && webSocketConnection.state == 1 && alertWebSocketProxy !== null && token !== null) {
 		var messagePromise = alertWebSocketProxy.invoke('L', token);
 
 	    messagePromise

@@ -8,13 +8,22 @@ export let STATE_BACKGROUND = 'background'
 
 var appState = STATE_ACTIVE
 var turnToActiveListeners = []
+var turnToInactiveListeners = []
 AppState.addListener(
 	'appStateDidChange',
 	(stateData) => {
+		console.log("stateData.app_state: " + stateData.app_state)
 		if (appState !== STATE_ACTIVE && stateData.app_state === STATE_ACTIVE) {
 			for (var i = 0; i < turnToActiveListeners.length; i++) {
 				turnToActiveListeners[i]()
 			}
+		}
+		else if(appState !== STATE_INACTIVE && stateData.app_state === STATE_INACTIVE) {
+			for (var i = 0; i < turnToInactiveListeners.length; i++) {
+				turnToInactiveListeners[i]()
+			}
+		}
+		else if(appState !== STATE_BACKGROUND && stateData.app_state === STATE_BACKGROUND) {
 		}
 
 		appState = stateData.app_state
@@ -33,5 +42,16 @@ export function unregisterTurnToActiveListener(listener) {
 	var index = turnToActiveListeners.indexOf(listener);
 	if(index!== -1) {
 			 turnToActiveListeners.splice(index, 1);
+	 }
+}
+
+export function registerTurnToInactiveListener(listener) {
+	turnToInactiveListeners.push(listener)
+}
+
+export function unregisterTurnToInactiveListener(listener) {
+	var index = turnToInactiveListeners.indexOf(listener);
+	if(index!== -1) {
+			 turnToInactiveListeners.splice(index, 1);
 	 }
 }

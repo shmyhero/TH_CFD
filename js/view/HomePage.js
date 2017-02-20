@@ -13,6 +13,7 @@ import {
 	ListView,
 	Alert,
 	ScrollView,
+	WebView,
 } from 'react-native';
 
 var Swiper = require('react-native-swiper')
@@ -65,6 +66,7 @@ var didFocusSubscription = null
 var networkConnectionChangedSubscription = null
 var accountStateChangedSubscription = null
 var lastForceloopTime = 0
+var firstLoad = false
 const CARDS_LIST = "cardList"
 
 var HomePage = React.createClass({
@@ -253,7 +255,7 @@ var HomePage = React.createClass({
 		this.setState({
 			connected: isConnected
 		})
-
+		firstLoad = true;
 		didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
 		didTabSelectSubscription = EventCenter.getEventEmitter().
 		addListener(EventConst.HOME_TAB_RESS_EVENT, this.onTabChanged);
@@ -1013,6 +1015,24 @@ var HomePage = React.createClass({
 	 	)
 	},
 
+	renderLoginWebView:function(){
+		if(firstLoad){
+			console.log("firstLoad true renderLoginWebView");
+			firstLoad = false
+			var url = 'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='
+			return(
+				<WebView
+					style = {{height:0}}
+					source={{uri: url}}
+				/>
+			)
+		}else{
+			console.log("firstLoad false not renderLoginWebView");
+			return null;
+		}
+
+	},
+
 	render: function() {
 		var activeDot = <View style={styles.guideActiveDot} />
 		var dot = <View style={styles.guideDot} />
@@ -1074,6 +1094,8 @@ var HomePage = React.createClass({
 						{/* {this.renderBottomViews()} */}
 
 						{this.renderNewUser()}
+
+						{this.renderLoginWebView()}
 
 					</ScrollView>
 				</View>

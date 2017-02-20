@@ -48,6 +48,11 @@ var tabData = [
 			{"type":NetConstants.PARAMETER_CHARTTYPE_DAY, "name":'日K'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'5分钟'},]
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {
+		if(r1.security && r2.security){
+			if(r1.security.last !== r2.security.last || r1.security.bid !== r2.security.bid || r1.security.ask !== r2.security.ask){
+				return true;
+			}
+		}
 		return r1.id !== r2.id || r1.profitPercentage!==r2.profitPercentage || r1.hasSelected!==r2.hasSelected
 	}});
 

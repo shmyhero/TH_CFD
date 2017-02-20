@@ -45,6 +45,9 @@ import butterknife.ButterKnife;
 
 import static android.content.pm.PackageManager.GET_META_DATA;
 
+import android.content.Intent; // <--- import
+import android.content.res.Configuration; // <--- import
+
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
  */
@@ -82,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.20.101:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.116:8081").apply();
 
         super.onCreate(null);
 
@@ -466,5 +469,13 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
             }
             handlePossilbeDeepLink(getIntent());
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Intent intent = new Intent("onConfigurationChanged");
+        intent.putExtra("newConfig", newConfig);
+        this.sendBroadcast(intent);
     }
 }

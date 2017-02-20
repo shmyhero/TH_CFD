@@ -21,6 +21,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Picker from 'react-native-wheel-picker';
 var PickerItem = Picker.Item;
 
+var Orientation = require('react-native-orientation');
 var ActivityIndicator = require('ActivityIndicator');
 var LineChart = require('./component/lineChart/LineChart');
 var dismissKeyboard = require('dismissKeyboard');
@@ -40,6 +41,8 @@ var {EventCenter, EventConst} = require('../EventCenter')
 var TimerMixin = require('react-timer-mixin');
 
 var {height, width} = Dimensions.get('window');
+var commonUtil = require('../utils/commonUtil');
+
 var tabData = [
 			{"type":NetConstants.PARAMETER_CHARTTYPE_TODAY, "name":'分时'},
 			// {"type":NetConstants.PARAMETER_CHARTTYPE_TEN_MINUTE, "name":'10分钟'},
@@ -108,6 +111,7 @@ var StockDetailPage = React.createClass({
 			minPercentage: 0,
 			dataStatus:0,//0正常 1等待刷新 2加载中
 			height: UIConstants.getVisibleHeight(),
+			widht: width
 		};
 	},
 
@@ -119,11 +123,25 @@ var StockDetailPage = React.createClass({
 		});
 
 		// this.pressChartHeaderTab(NetConstants.PARAMETER_CHARTTYPE_TODAY)
+
+	  Orientation.unlockAllOrientations(); //this will unlock the view to all Orientations
+		Orientation.lockToPortrait(); //this will lock the view to Portrait
+    // Orientation.lockToLandscape(); //this will lock the view to Landscape
+    //Orientation.unlockAllOrientations(); //this will unlock the view to all Orientations
+    Orientation.addOrientationListener(this._orientationDidChange);
+
 	},
 
 	componentWillUnmount: function() {
 		this.didFocusSubscription.remove();
 		layoutSizeChangedSubscription && layoutSizeChangedSubscription.remove();
+
+		Orientation.getOrientation((err,orientation)=> {
+		 console.log("Current Device Orientation: ", orientation);
+	 });
+
+	 Orientation.lockToPortrait();
+	 Orientation.removeOrientationListener(this._orientationDidChange);
 	},
 
 	onLayoutSizeChanged: function(){
@@ -722,6 +740,7 @@ var StockDetailPage = React.createClass({
 		return (
 			<NavBar showBackButton={true} navigator={this.props.navigator}
 				backButtonOnClick={()=>{
+
 					console.log("backButtonOnClick")
 					if(this.props.onPopUp){
 
@@ -806,6 +825,7 @@ var StockDetailPage = React.createClass({
 		}
 		wattingLogin = true;
 		console.log("RAMBO wattingLogin = true ")
+		this.resetToLandscape()
 		this.props.navigator.push({
 			name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			title:'实盘交易',
@@ -857,6 +877,7 @@ var StockDetailPage = React.createClass({
 			else
 				this.setState({tradeDirection:1})
 		} else {
+			this.resetToLandscape()
 			this.props.navigator.push({
 				name: MainPage.LOGIN_ROUTE,
 				popToRoute: MainPage.STOCK_DETAIL_ROUTE,
@@ -882,6 +903,7 @@ var StockDetailPage = React.createClass({
 			else
 				this.setState({tradeDirection:2})
 		} else {
+			this.resetToLandscape()
 			this.props.navigator.push({
 				name: MainPage.LOGIN_ROUTE,
 				popToRoute: MainPage.STOCK_DETAIL_ROUTE,
@@ -889,16 +911,44 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
+	changeOrientatioin:function(){
+		console.log("changeOrientatioin");
+		Orientation.getOrientation((err,orientation)=> {
+
+			if(orientation === 'PORTRAIT'){
+				height = Dimensions.get('window').width
+				width = Dimensions.get('window').height
+ 				Orientation.lockToLandscape()
+
+			}else{
+				height = Dimensions.get('window').width
+				width = Dimensions.get('window').height
+				Orientation.lockToPortrait()
+
+			}
+
+			console.log("Current Device Orientation: ", orientation);
+    });
+
+	},
+
+	resetToLandscape:function(){
+		Orientation.lockToPortrait();
+	},
+
 	renderScrollHeader: function() {
 		return (
+			<TouchableWithoutFeedback onPress={()=> this.changeOrientatioin()}>
 			<View style={[styles.rowView, {height:20}]}>
 				<Text style={styles.smallLabel}>本金（美元）</Text>
 				<Text style={styles.smallLabel}>杠杆（倍）</Text>
 			</View>
+			</TouchableWithoutFeedback>
 		)
 	},
 
 	renderScroll: function() {
+		console.log("Orientation width = " + width)
 		var pickerWidth = width/2-60
 		var pickerHeight = Platform.OS === 'ios' ? 216 : 100;
 		// money list: 100,500,1000,3000,5000,7000,10000,20000,max
@@ -928,6 +978,9 @@ var StockDetailPage = React.createClass({
 			};
 			moneyArray.push(""+ Math.floor(this.state.totalMoney))
 		}
+
+
+
 		// insert the user input value
 		var exist = false
 		var input = parseInt(this.state.inputText)
@@ -954,6 +1007,8 @@ var StockDetailPage = React.createClass({
 				}
 			}
 		}
+
+		moneyArray = commonUtil.removeRepeat1(moneyArray)
 
 		// leverage list: 无，2,3,...,20
 		var maxLeverage = 20
@@ -994,6 +1049,7 @@ var StockDetailPage = React.createClass({
 			</View>
 		)
 	},
+
 
 	parseLeverage: function(value) {
 		if (value === 1)
@@ -1182,14 +1238,25 @@ var StockDetailPage = React.createClass({
 		this.setState({inputText:""+value,
 			money: value,
 			})
-	}
+	},
+
+	_orientationDidChange: function(orientation) {
+	 if (orientation == 'LANDSCAPE') {
+		 //do something with landscape layout
+		 console.log("_orientationDidChange : " + orientation);
+	 } else {
+		 //do something with portrait layout
+		 console.log("_orientationDidChange : " + orientation);
+	 }
+ },
+
 });
 
 var styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
 		alignItems: 'stretch',
-		width:width,
+		// width:width,
 		backgroundColor: Platform.OS === 'andriod' ? '#123b80' : 'transparent',
 	},
 	rowView: {

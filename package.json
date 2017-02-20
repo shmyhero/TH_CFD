@@ -6,7 +6,9 @@
     "start": "react-native start"
   },
   "dependencies": {
+    "@remobile/react-native-qrcode-local-image": "1.0.1",
     "babylon": "6.8.4",
+    "crypto-js": "3.1.9-1",
     "react": "15.3.1",
     "react-native": "^0.36.1",
     "react-native-cookies": "^2.0.0",
@@ -14,16 +16,15 @@
     "react-native-fs": "1.5.0",
     "react-native-image-picker": "0.22.7",
     "react-native-linear-gradient": "1.5.12",
+    "react-native-orientation": "yamill/react-native-orientation",
     "react-native-picker": "4.0.8",
     "react-native-smart-pull-to-refresh-listview": "^1.0.17",
     "react-native-swiper": "1.5.2",
     "react-native-update": "^4.0.0",
+    "react-native-view-shot": "1.5.1",
     "react-native-wheel-picker": "1.1.0",
     "react-native-wx": "^2.0.1",
     "react-timer-mixin": "0.13.3",
-    "@remobile/react-native-qrcode-local-image": "1.0.1",
-    "react-native-view-shot": "1.5.1",
-    "crypto-js": "3.1.9-1",
     "realm": "^0.14.3"
   }
 }

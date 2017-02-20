@@ -206,6 +206,7 @@
 		CBDAB12CB32E43B38DF342E5 /* libRCTWeChat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 283667F11BD6472A9A1A8BAE /* libRCTWeChat.a */; };
 		D5C95DE6EB174E6896A7067C /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D8780BF57DD4DB28D4B30A9 /* libRNImagePicker.a */; };
 		E30C3760AD2343E4BF815D6D /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8E9B8FF0CA943FB9D049E93 /* libBVLinearGradient.a */; };
+		F6CD2005BFCB4171B6F9ECB0 /* libRCTOrientation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 305943FAFB2240B4A9F9CA20 /* libRCTOrientation.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -264,6 +265,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 83CBBA2E1A601D0E00E9B192;
 			remoteInfo = React;
+		};
+		234BD2EB1E555B49002C5860 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D9009717F0B9442A9A9C3188 /* RCTOrientation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RCTOrientation;
 		};
 		3D5BED5A1DEEAE42006CC10F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -415,6 +423,7 @@
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		22F5EC88B9014CDA85FEBFBA /* RCTHotUpdate.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTHotUpdate.xcodeproj; path = "../node_modules/react-native-update/ios/RCTHotUpdate.xcodeproj"; sourceTree = "<group>"; };
 		283667F11BD6472A9A1A8BAE /* libRCTWeChat.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTWeChat.a; sourceTree = "<group>"; };
+		305943FAFB2240B4A9F9CA20 /* libRCTOrientation.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTOrientation.a; sourceTree = "<group>"; };
 		364F0D55964C421580FB2DE1 /* libRNCookieManagerIOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNCookieManagerIOS.a; sourceTree = "<group>"; };
 		3D02CECE1D922B3100BA9160 /* BaseDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseDataSource.swift; path = TH_CFD/BaseDataSource.swift; sourceTree = "<group>"; };
 		3D02CEE11D9237C000BA9160 /* LineChartDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LineChartDataSource.swift; path = TH_CFD/LineChartDataSource.swift; sourceTree = "<group>"; };
@@ -753,6 +762,7 @@
 		8F03A08E29BF45E69F97D1DE /* RNCookieManagerIOS.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCookieManagerIOS.xcodeproj; path = "../node_modules/react-native-cookies/RNCookieManagerIOS.xcodeproj"; sourceTree = "<group>"; };
 		ADAFAB0527AA419A8350A2B3 /* libRCTHotUpdate.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTHotUpdate.a; sourceTree = "<group>"; };
 		D8E9B8FF0CA943FB9D049E93 /* libBVLinearGradient.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBVLinearGradient.a; sourceTree = "<group>"; };
+		D9009717F0B9442A9A9C3188 /* RCTOrientation.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTOrientation.xcodeproj; path = "../node_modules/react-native-orientation/iOS/RCTOrientation.xcodeproj"; sourceTree = "<group>"; };
 		FC36C2CB97CE4D7DBE61CD48 /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -802,6 +812,7 @@
 				3D2A16D91D78047200FEB181 /* libGeTuiSdk-1.4.3.a in Frameworks */,
 				30EC836D765B4E7CBB7D0CA5 /* libRNCookieManagerIOS.a in Frameworks */,
 				3D15A96B1E278C5600B32C0E /* MeiQiaSDK.framework in Frameworks */,
+				F6CD2005BFCB4171B6F9ECB0 /* libRCTOrientation.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -896,6 +907,14 @@
 			children = (
 				146834041AC3E56700842450 /* libReact.a */,
 				3D5BED751DEEAE42006CC10F /* libReact-tvOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		234BD2DD1E555B49002C5860 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				234BD2EC1E555B49002C5860 /* libRCTOrientation.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1793,6 +1812,7 @@
 				FC36C2CB97CE4D7DBE61CD48 /* RNImagePicker.xcodeproj */,
 				4487FACCDD89490AA4A8E7F9 /* RealmReact.xcodeproj */,
 				8F03A08E29BF45E69F97D1DE /* RNCookieManagerIOS.xcodeproj */,
+				D9009717F0B9442A9A9C3188 /* RCTOrientation.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1917,6 +1937,10 @@
 					ProjectRef = 00C302D31ABCB9D200DB3ED1 /* RCTNetwork.xcodeproj */;
 				},
 				{
+					ProductGroup = 234BD2DD1E555B49002C5860 /* Products */;
+					ProjectRef = D9009717F0B9442A9A9C3188 /* RCTOrientation.xcodeproj */;
+				},
+				{
 					ProductGroup = 413E77CA1E09098B00419EC1 /* Products */;
 					ProjectRef = 413E77C91E09098B00419EC1 /* RCTQRCodeLocalImage.xcodeproj */;
 				},
@@ -2027,6 +2051,13 @@
 			fileType = archive.ar;
 			path = libReact.a;
 			remoteRef = 146834031AC3E56700842450 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		234BD2EC1E555B49002C5860 /* libRCTOrientation.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTOrientation.a;
+			remoteRef = 234BD2EB1E555B49002C5860 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		3D5BED5B1DEEAE42006CC10F /* libRCTImage-tvOS.a */ = {
@@ -2399,6 +2430,7 @@
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-cookies/RNCookieManagerIOS",
+					"$(SRCROOT)/../node_modules/react-native-orientation/iOS/RCTOrientation/**",
 				);
 				INFOPLIST_FILE = TH_CFD/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -2414,6 +2446,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/MeiQia/MQChatViewController/Vendors/MLAudioRecorder/amr_en_de/lib",
 					"$(PROJECT_DIR)/GtSdkLib",
+					"\"$(SRCROOT)/TH_CFD\"",
 					"\"$(SRCROOT)/TH_CFD\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
@@ -2453,6 +2486,7 @@
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-cookies/RNCookieManagerIOS",
+					"$(SRCROOT)/../node_modules/react-native-orientation/iOS/RCTOrientation/**",
 				);
 				INFOPLIST_FILE = TH_CFD/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -2468,6 +2502,7 @@
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/MeiQia/MQChatViewController/Vendors/MLAudioRecorder/amr_en_de/lib",
 					"$(PROJECT_DIR)/GtSdkLib",
+					"\"$(SRCROOT)/TH_CFD\"",
 					"\"$(SRCROOT)/TH_CFD\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
@@ -2528,6 +2563,7 @@
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-cookies/RNCookieManagerIOS",
+					"$(SRCROOT)/../node_modules/react-native-orientation/iOS/RCTOrientation/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -2578,6 +2614,7 @@
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios/**",
 					"$(SRCROOT)/../node_modules/realm/src/**",
 					"$(SRCROOT)/../node_modules/react-native-cookies/RNCookieManagerIOS",
+					"$(SRCROOT)/../node_modules/react-native-orientation/iOS/RCTOrientation/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;

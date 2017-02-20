@@ -21,6 +21,7 @@ export let MAX_NICKNAME_LENGTH = 8;
 export let LIST_ITEM_LEFT_MARGIN = 15;
 
 var VISIBLE_HEIGHT = Dimensions.get('window').height;
+var VISIBLE_WIDTH = Dimensions.get('window').width;
 export function setVisibleHeight(value){
 	// var pS = PixelRatio.getPixelSizeForLayoutSize(value);
 	// console.log("PixelRatio.get() " + PixelRatio.get());
@@ -35,4 +36,20 @@ export function setVisibleHeight(value){
 
 export function getVisibleHeight(){
 	return VISIBLE_HEIGHT;
+}
+
+export function setVisibleWidth(value){
+	// var pS = PixelRatio.getPixelSizeForLayoutSize(value);
+	// console.log("PixelRatio.get() " + PixelRatio.get());
+	// console.log("getPixelSizeForLayoutSize " + pS + ", height " + value)
+	var width = parseInt(value);
+	if(VISIBLE_WIDTH != width){
+		console.log("setVisibleWidth " + width)
+		VISIBLE_WIDTH = parseInt(width);
+		EventCenter.emitLayoutSizeChangedEvent()
+	}
+}
+
+export function getVisibleWidth(){
+	return VISIBLE_WIDTH;
 }

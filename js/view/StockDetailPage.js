@@ -740,10 +740,12 @@ var StockDetailPage = React.createClass({
 		var charge = 0
 		var viewMargin = Platform.OS === 'ios' ? 0:15
 		// console.log("render: " + JSON.stringify(this.state.stockInfo))
+		var viewHeight = Platform.OS === 'ios' ? height :  Math.max(height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER, this.state.height)
+
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
 				<View style={styles.wrapper}>
-					<LinearGradient colors={this.getGradientColor()} style={{height: Math.max(height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER, this.state.height)}}>
+					<LinearGradient colors={this.getGradientColor()} style={{height: viewHeight}}>
 						{this.renderTitleLandspace()}
 						<View style={{flex: 3.5,marginTop:5,marginLeft:viewMargin,marginRight:viewMargin}}>
 								{this.renderChart()}

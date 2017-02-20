@@ -56,6 +56,8 @@ var layoutSizeChangedSubscription = null
 var flashButtonTimer = null;
 var wattingLogin = false;
 var loadStockInfoSuccess = false;
+var ORIENTATION_PORTRAIT = 0;
+var ORIENTATION_LANDSPACE = 1;
 
 var StockDetailPage = React.createClass({
 	mixins: [TimerMixin],
@@ -111,7 +113,8 @@ var StockDetailPage = React.createClass({
 			minPercentage: 0,
 			dataStatus:0,//0正常 1等待刷新 2加载中
 			height: UIConstants.getVisibleHeight(),
-			widht: width
+			widht: width,
+			orientation: ORIENTATION_PORTRAIT,
 		};
 	},
 
@@ -651,23 +654,22 @@ var StockDetailPage = React.createClass({
 		var opacity = state == 0? 1.0 : 0.01;
 	  // if(state == 0){
 			return(
-				<LineChart style={[styles.lineChart,{opacity:opacity}]}
-					data={JSON.stringify(this.state.stockInfo)}
-					chartType={this.state.chartType}
-					chartIsActual={LogicData.getAccountState()}
-					>
-				</LineChart>
+					<LineChart style={[styles.lineChart,{opacity:opacity}]}
+						data={JSON.stringify(this.state.stockInfo)}
+						chartType={this.state.chartType}
+						chartIsActual={LogicData.getAccountState()}
+						>
+					</LineChart>
 			)
 		// }
 	},
 
-	render: function() {
+	renderPortrait:function(){
 		// 0.06%, limit to 0.01
 		var leftMoney = this.state.totalMoney - this.state.money
 		var charge = 0
 		var viewMargin = Platform.OS === 'ios' ? 0:15
 		// console.log("render: " + JSON.stringify(this.state.stockInfo))
-
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
 				<View style={styles.wrapper}>
@@ -678,8 +680,9 @@ var StockDetailPage = React.createClass({
 						{this.renderChartHeader()}
 
 						<View style={{flex: 3.5,marginTop:5,marginLeft:viewMargin,marginRight:viewMargin}}>
-							{this.renderChart()}
-						  {this.renderDataStatus()}
+						  {this.renderChart()}
+							{this.renderDataStatus()}
+							{this.renderOrientationClicker()}
 						</View>
 						<View>
 							<Text style={styles.tipsLine}>行情可能存在细微偏差</Text>
@@ -698,15 +701,70 @@ var StockDetailPage = React.createClass({
 							{this.renderStockCurrencyWarning()}
 						</View>
 					</LinearGradient>
-	    			<InputAccessory ref='InputAccessory'
-	    				textValue={this.state.inputText}
-	    				maxValue={parseFloat(this.state.totalMoney.toFixed(2))}
-	    				rightButtonOnClick={this.clearMoney}/>
+						<InputAccessory ref='InputAccessory'
+							textValue={this.state.inputText}
+							maxValue={parseFloat(this.state.totalMoney.toFixed(2))}
+							rightButtonOnClick={this.clearMoney}/>
 
-	    			<StockTransactionInfoModal ref='confirmPage'/>
+						<StockTransactionInfoModal ref='confirmPage'/>
 				</View>
-    		</TouchableWithoutFeedback>
+				</TouchableWithoutFeedback>
 		)
+	},
+
+	renderTitleLandspace:function(){
+		return(
+			<View style={{flexDirection:'row',width:width,justifyContent: 'space-between'}}>
+   			<Text style={{fontSize:18,color:'white',marginLeft:15,marginTop:10,marginBottom:10,}}>黄金 11795.6 -0。08% </Text>
+				<TouchableOpacity onPress={()=>this.closeLandspace()}>
+					<Image  style={{width:32,height:32,marginRight:10,alignSelf:'center'}} source={require('../../images/close.png')}></Image>
+				</TouchableOpacity>
+   		</View>
+		)
+	},
+
+	renderOrientationClicker:function(){
+		return(
+			<TouchableOpacity onPress={()=>this.changeOrientatioin()} style={[styles.dataStatus,{backgroundColor:'transparent'}]}>
+			</TouchableOpacity>
+		)
+	},
+
+	closeLandspace:function(){
+		this.changeOrientatioin();
+	},
+
+	renderLandscape:function(){
+		// 0.06%, limit to 0.01
+		var leftMoney = this.state.totalMoney - this.state.money
+		var charge = 0
+		var viewMargin = Platform.OS === 'ios' ? 0:15
+		// console.log("render: " + JSON.stringify(this.state.stockInfo))
+		return (
+			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
+				<View style={styles.wrapper}>
+					<LinearGradient colors={this.getGradientColor()} style={{height: Math.max(height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER, this.state.height)}}>
+						{this.renderTitleLandspace()}
+						<View style={{flex: 3.5,marginTop:5,marginLeft:viewMargin,marginRight:viewMargin}}>
+								{this.renderChart()}
+								{this.renderDataStatus()}
+						</View>
+						<View style={{marginTop:10,marginBottom:10}}>
+							{this.renderChartHeader()}
+						</View>
+
+					</LinearGradient>
+				</View>
+				</TouchableWithoutFeedback>
+		)
+	},
+
+	render: function() {
+		if(this.state.orientation == ORIENTATION_PORTRAIT){
+			{return this.renderPortrait()}
+		}else{
+			{return this.renderLandscape()}
+		}
 	},
 
 	clearMoney: function() {
@@ -919,12 +977,16 @@ var StockDetailPage = React.createClass({
 				height = Dimensions.get('window').width
 				width = Dimensions.get('window').height
  				Orientation.lockToLandscape()
-
+				this.setState({
+	 			 orientation:ORIENTATION_LANDSPACE
+	 		 })
 			}else{
 				height = Dimensions.get('window').width
 				width = Dimensions.get('window').height
 				Orientation.lockToPortrait()
-
+				this.setState({
+					orientation:ORIENTATION_PORTRAIT
+				})
 			}
 
 			console.log("Current Device Orientation: ", orientation);
@@ -938,7 +1000,7 @@ var StockDetailPage = React.createClass({
 
 	renderScrollHeader: function() {
 		return (
-			<TouchableWithoutFeedback onPress={()=> this.changeOrientatioin()}>
+			<TouchableWithoutFeedback>
 			<View style={[styles.rowView, {height:20}]}>
 				<Text style={styles.smallLabel}>本金（美元）</Text>
 				<Text style={styles.smallLabel}>杠杆（倍）</Text>
@@ -1244,9 +1306,11 @@ var StockDetailPage = React.createClass({
 	 if (orientation == 'LANDSCAPE') {
 		 //do something with landscape layout
 		 console.log("_orientationDidChange : " + orientation);
+
 	 } else {
 		 //do something with portrait layout
 		 console.log("_orientationDidChange : " + orientation);
+
 	 }
  },
 
@@ -1468,6 +1532,10 @@ var styles = StyleSheet.create({
 		color:'#adc7f4',
 		marginRight:10,
 		alignSelf:'flex-end',
+	},
+	title_landspace:{
+		backgroundColor:'red',
+
 	},
 
 });

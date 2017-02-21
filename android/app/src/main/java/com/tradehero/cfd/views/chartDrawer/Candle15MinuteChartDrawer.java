@@ -13,7 +13,7 @@ import java.util.Calendar;
 /**
  * Created by Neko on 16/9/19.
  */
-public class FiveMCandleChartDrawer extends CandleChartDrawer {
+public class Candle15MinuteChartDrawer extends CandleChartDrawer {
     @Override
     public boolean needDrawPreCloseLine() {
         return false;
@@ -21,12 +21,12 @@ public class FiveMCandleChartDrawer extends CandleChartDrawer {
 
     @Override
     public int getGapLineUnit() {
-        return Calendar.HOUR;
+        return Calendar.AM_PM;
     }
 
     @Override
     public int getLablesToSkip(JSONArray chartDataList) {
-       return ChartDrawerConstants.FIVE_MINUTE_POINT_NUMBER;
+        return ChartDrawerConstants.GetMinutePointerNumber(15);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class FiveMCandleChartDrawer extends CandleChartDrawer {
 
     @Override
     public int getGapLineUnitAddMount() {
-        return 1;
+        return 12;
     }
 
     @Override

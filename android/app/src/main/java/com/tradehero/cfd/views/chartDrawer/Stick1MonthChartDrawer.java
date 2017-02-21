@@ -1,28 +1,21 @@
 package com.tradehero.cfd.views.chartDrawer;
 
-import com.tradehero.cfd.views.chartDrawer.base.CandleChartDrawer;
-import com.tradehero.cfd.views.chartDrawer.base.ChartDrawerConstants;
+import com.tradehero.cfd.views.chartDrawer.base.LineStickChartDrawer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
  * Created by Neko on 16/9/19.
  */
-public class DayCandleChartDrawer extends CandleChartDrawer {
-    @Override
-    public boolean needDrawPreCloseLine() {
-        return false;
-    }
-
+public class Stick1MonthChartDrawer extends LineStickChartDrawer{
     @Override
     public int getGapLineUnit() {
-        return Calendar.WEEK_OF_MONTH;
+        return Calendar.DAY_OF_MONTH;
     }
 
     @Override
@@ -31,12 +24,12 @@ public class DayCandleChartDrawer extends CandleChartDrawer {
     }
 
     @Override
-    public int getGapLineUnitAddMount() {
-        return 2;
+    public boolean needDrawPreCloseLine() {
+        return false;
     }
 
     @Override
-    public Calendar getStartUpTimeLine(JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException{
+    public Calendar getStartUpTimeLine(JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
         Calendar lastOpen = timeStringToCalendar(stockInfoObject.getString("lastOpen"));
         Calendar firstDataDate = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
         Calendar nextLineAt = (Calendar) firstDataDate.clone();
@@ -44,13 +37,12 @@ public class DayCandleChartDrawer extends CandleChartDrawer {
         nextLineAt.set(Calendar.MINUTE, lastOpen.get(Calendar.MINUTE));
         nextLineAt.set(Calendar.MILLISECOND, lastOpen.get(Calendar.MILLISECOND));
 
-        nextLineAt.add(getGapLineUnit(), getGapLineUnitAddMount());
+        nextLineAt.add(getGapLineUnit(), 1);
         return nextLineAt;
     }
 
     @Override
-    public boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException{
-        return false;
+    protected boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException {
+        return !stockInfoObject.getBoolean("isOpen");
     }
-
 }

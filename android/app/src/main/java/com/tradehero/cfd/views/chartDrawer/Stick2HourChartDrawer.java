@@ -10,15 +10,20 @@ import java.util.Calendar;
 /**
  * Created by Neko on 16/9/19.
  */
-public class TodayChartDrawer extends LineStickChartDrawer {
+public class Stick2HourChartDrawer extends LineStickChartDrawer {
     @Override
-    public boolean needDrawPreCloseLine() {
-        return true;
+    public int getGapLineUnit() {
+        return Calendar.MINUTE;
     }
 
     @Override
-    public int getGapLineUnit() {
-        return Calendar.HOUR_OF_DAY;
+    public boolean needDrawPreCloseLine() {
+        return false;
+    }
+
+    @Override
+    public int getGapLineUnitAddMount() {
+        return 30;
     }
 
     @Override
@@ -26,4 +31,3 @@ public class TodayChartDrawer extends LineStickChartDrawer {
         return true;
     }
 }
-

@@ -2,7 +2,7 @@
 
 import React from 'react';
 var View = require('View');
-
+var ColorPropType = require('ColorPropType');
 
 var Touchable = require('Touchable');
 var TouchableWithoutFeedback = require('TouchableWithoutFeedback');
@@ -76,6 +76,26 @@ var LineChart = React.createClass({
 		rightAxisTextSize: React.PropTypes.number,
 
 		rightAxisDrawLabel: React.PropTypes.bool,
+
+		drawBackground: React.PropTypes.bool,
+
+		drawBorders: React.PropTypes.bool,
+
+		borderColor: ColorPropType,
+
+		textColor: ColorPropType,
+
+		backgroundColor: ColorPropType,
+
+		rightAxisDrawGridLines: React.PropTypes.bool,
+
+		chartPaddingTop: React.PropTypes.number,
+
+		chartPaddingBottom: React.PropTypes.number,
+
+		chartPaddingLeft: React.PropTypes.number,
+
+		chartPaddingRight: React.PropTypes.number,
 	},
 
 	getDefaultProps(): Object {
@@ -95,6 +115,16 @@ var LineChart = React.createClass({
 			rightAxisEnabled: true,
 			rightAxisDrawLabel: false,
 			rightAxisLabelCount: 2 - 2,
+			drawBackground: false,
+			drawBorders: false,
+			borderColor: 'white',
+			textColor: 'white',
+			backgroundColor: 'transparent',
+			rightAxisDrawGridLines: false,
+			chartPaddingTop: 0,
+			chartPaddingBottom: 0,
+			chartPaddingLeft: 0,
+			chartPaddingRight: 0,
 		};
 	},
 

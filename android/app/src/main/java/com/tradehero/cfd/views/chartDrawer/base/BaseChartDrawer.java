@@ -5,6 +5,7 @@ import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.formatter.XAxisValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.tradehero.cfd.views.ReactChart;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +27,19 @@ public abstract class BaseChartDrawer implements IChartDrawer {
     protected JSONArray mChartDataList;
     protected float preClose;
 
+    protected int borderColor = 0;
+    protected int textColor = 0;
+
+    @Override
+    public void setBorderColor(int color) {
+        borderColor = color;
+    }
+
+    @Override
+    public void setTextColor(int color) {
+        textColor = color;
+    }
+
     @Override
     public void draw(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
 
@@ -40,7 +54,6 @@ public abstract class BaseChartDrawer implements IChartDrawer {
         }catch (Exception e){
 
         }
-
 
         resetChart(chart);
 
@@ -223,7 +236,8 @@ public abstract class BaseChartDrawer implements IChartDrawer {
     private void drawPreCloseLine(CombinedChart chart, JSONObject stockInfoObject) throws JSONException {
         LimitLine line = new LimitLine((float) stockInfoObject.getDouble("preClose"));
 //      line.setLineColor(ChartDrawerConstants.CHART_LINE_COLOR);
-        line.setLineColor(chart.mDesColorType==0?ChartDrawerConstants.CHART_LINE_COLOR:ChartDrawerConstants.CHART_LINE_COLOR2);
+        line.setLineColor(borderColor);
+//        line.setLineColor(mDesColorType==0?ChartDrawerConstants.CHART_LINE_COLOR:ChartDrawerConstants.CHART_LINE_COLOR2);
 
         line.setLineWidth(ChartDrawerConstants.LINE_WIDTH * 2);
         line.enableDashedLine(10f, 10f, 0f);
@@ -274,11 +288,12 @@ public abstract class BaseChartDrawer implements IChartDrawer {
                 Calendar calendar = limitLineInfo.limitLineCalender.get(i);
 
                 LimitLine gapLine = new LimitLine(index);
-                gapLine.setLineColor(ChartDrawerConstants.CHART_LINE_COLOR);
+                gapLine.setLineColor(borderColor);
                 gapLine.setLineWidth(ChartDrawerConstants.LINE_WIDTH);
                 gapLine.enableDashedLine(10f, 0f, 0f);
                 gapLine.setTextSize(8f);
-                gapLine.setTextColor(ChartDrawerConstants.CHART_TEXT_COLOR);
+                gapLine.setTextColor(textColor);
+                gapLine.setYOffset(15);
 //                if (needSkipLabel && i < limitLineInfo.limitLineAt.size() - 1 && i % 2 == 1) {
                 if (needSkipLabel && isNeedHide(i,limitLineInfo.limitLineAt.size())) {
                     gapLine.setLabel("");

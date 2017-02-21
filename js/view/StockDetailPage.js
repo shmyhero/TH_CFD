@@ -56,20 +56,18 @@ var tabDataLandscopeLine = [
 			// {"type":NetConstants.PARAMETER_CHARTTYPE_TEN_MINUTE, "name":'10分钟'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_TWO_HOUR, "name":'2小时'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_WEEK, "name":'5日'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_DAY, "name":'1月'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'3月'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'6月'},]
+			{"type":NetConstants.PARAMETER_CHARTTYPE_MONTH, "name":'1月'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_3_MONTH, "name":'3月'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_6_MONTH, "name":'6月'},]
 
 var tabDataLandscopeCandle = [
-			{"type":NetConstants.PARAMETER_CHARTTYPE_TODAY, "name":'分时'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_TODAY_CANDLE, "name":'分时'},
 			// {"type":NetConstants.PARAMETER_CHARTTYPE_TEN_MINUTE, "name":'10分钟'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_TWO_HOUR, "name":'1分钟'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_1_MINUTE, "name":'1分钟'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'5分钟'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'15分钟'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'60分钟'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_15_MINUTE, "name":'15分钟'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_60_MINUTE, "name":'60分钟'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_DAY, "name":'日K'},]
-
-
 
 var didFocusSubscription = null;
 var updateStockInfoTimer = null;
@@ -302,6 +300,10 @@ var StockDetailPage = React.createClass({
 			console.log('live', url );
 	 	}
 
+		console.log("chartType " + chartType)
+		console.log("? " + chartType === NetConstants.PARAMETER_CHARTTYPE_15_MINUTE)
+		console.log(NetConstants.PARAMETER_CHARTTYPE_15_MINUTE)
+
 		if(chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE){
 			url = NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M;
 			if(LogicData.getAccountState()){
@@ -317,7 +319,33 @@ var StockDetailPage = React.createClass({
 				console.log('live', url );
 			}
 			url = url.replace(/<securityId>/, this.props.stockCode);
-		}else {
+		}
+		////////TEST DATA////////
+		//TODO: Replace the TEST DATA
+		else if(chartType === NetConstants.PARAMETER_CHARTTYPE_60_MINUTE
+			|| chartType === NetConstants.PARAMETER_CHARTTYPE_1_MINUTE
+			|| chartType === NetConstants.PARAMETER_CHARTTYPE_15_MINUTE ){
+			url = NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M;
+			if(LogicData.getAccountState()){
+				url = NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M_LIVE;
+				console.log('live', url );
+			}
+
+			url = url.replace(/<securityId>/, this.props.stockCode);
+		}else if(chartType === NetConstants.PARAMETER_CHARTTYPE_TODAY_CANDLE){
+			url = NetConstants.CFD_API.GET_STOCK_KLINE_DAY;
+			if(LogicData.getAccountState()){
+				url = NetConstants.CFD_API.GET_STOCK_KLINE_DAY_LIVE;
+				console.log('live', url );
+			}
+			url = url.replace(/<securityId>/, this.props.stockCode);
+		} else if(chartType === NetConstants.PARAMETER_CHARTTYPE_3_MONTH
+			 || chartType === NetConstants.PARAMETER_CHARTTYPE_6_MONTH){
+			 url = url.replace(/<stockCode>/, this.props.stockCode)
+			 url = url.replace(/<chartType>/, "week")
+		}
+		////////TEST DATA////////
+		else {
 			 url = url.replace(/<stockCode>/, this.props.stockCode)
 			 url = url.replace(/<chartType>/, chartType)
 		}
@@ -606,9 +634,17 @@ var StockDetailPage = React.createClass({
 
 	getGradientColor(){
 		if(LogicData.getAccountState()){
-			return [ColorConstants.TITLE_DARK_BLUE,ColorConstants.TITLE_DARK_BLUE]
+			if(this.state.orientation == ORIENTATION_LANDSPACE){
+				return ['#3f5680', '#3f5680'];
+			}else{
+				return [ColorConstants.TITLE_DARK_BLUE,ColorConstants.TITLE_DARK_BLUE];
+			}
 		}else{
-			return ['#3475e3','#123b80']
+			if(this.state.orientation == ORIENTATION_LANDSPACE){
+				return ['#1962dd', '#1962dd'];
+			}else{
+				return ['#3475e3','#123b80']
+			}
 		}
 	},
 
@@ -704,14 +740,62 @@ var StockDetailPage = React.createClass({
 		console.log("RAMBO: chartType = " + this.state.chartType)
 		var opacity = state == 0? 1.0 : 0.01;
 	  // if(state == 0){
-			return(
+			if(Platform.OS === "ios"){
+				return(
 					<LineChart style={[styles.lineChart,{opacity:opacity}]}
 						data={JSON.stringify(this.state.stockInfo)}
 						chartType={this.state.chartType}
 						chartIsActual={LogicData.getAccountState()}
 						>
 					</LineChart>
-			)
+				)
+			}else{
+				/*
+				public static int CHART_BORDER_COLOR = 0xff497bce;
+		    public static int CHART_LINE_COLOR = 0Xff759de2;
+		    public static int CHART_LINE_COLOR2 = 0Xff1d4fa2;
+		    public static int CHART_TEXT_COLOR = 0Xff70a5ff;
+				*/
+
+/// {"type":NetConstants.PARAMETER_CHARTTYPE_DAY, "name":'日K'},
+// {"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'5分钟'},
+//		if(this.state.orientation == ORIENTATION_PORTRAIT)
+				var rightAxisDrawGridLines = this.state.orientation == ORIENTATION_LANDSPACE && NetConstants.isCandleChart(this.state.chartType);
+			 	var textColor, backgroundColor, borderColor;
+				if(this.state.orientation == ORIENTATION_PORTRAIT){
+					textColor = "#70a5ff";
+					backgroundColor = "transparent"
+					borderColor = "#497bce";
+				}else{
+					textColor = LogicData.getAccountState() ? "#223555" : "#0740a7"
+					backgroundColor = LogicData.getAccountState() ? "#3f5680" : "#1962dd"
+					borderColor = LogicData.getAccountState() ? "#8596b5" : "#0d4ab6";
+				}
+
+				//8596b5
+				return(
+					<LineChart style={[styles.lineChart,{opacity:opacity}]}
+						data={JSON.stringify(this.state.stockInfo)}
+						chartType={this.state.chartType}
+						chartIsActual={LogicData.getAccountState()}
+						xAxisPosition="BOTTOM"
+						drawBackground={this.state.orientation == ORIENTATION_LANDSPACE}
+						borderColor={borderColor}
+						backgroundColor={backgroundColor}
+						textColor={textColor}
+						rightAxisLabelCount={7}
+						rightAxisPosition="OUTSIDE_CHART"
+						rightAxisEnabled={this.state.orientation == ORIENTATION_LANDSPACE}
+						rightAxisDrawLabel={this.state.orientation == ORIENTATION_LANDSPACE}
+						rightAxisDrawGridLines={rightAxisDrawGridLines}
+						chartPaddingTop={this.state.orientation == ORIENTATION_LANDSPACE ? 15 : 0}
+						chartPaddingBottom={this.state.orientation == ORIENTATION_LANDSPACE ? 15 : 0}
+						chartPaddingLeft={15}
+						chartPaddingRight={15}
+					>
+					</LineChart>
+				)
+			}
 		// }
 	},
 
@@ -719,7 +803,7 @@ var StockDetailPage = React.createClass({
 		// 0.06%, limit to 0.01
 		var leftMoney = this.state.totalMoney - this.state.money
 		var charge = 0
-		var viewMargin = Platform.OS === 'ios' ? 0:15
+		var viewMargin = 0;//= Platform.OS === 'ios' ? 0:15
 		// console.log("render: " + JSON.stringify(this.state.stockInfo))
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
@@ -843,7 +927,7 @@ var StockDetailPage = React.createClass({
 		// 0.06%, limit to 0.01
 		var leftMoney = this.state.totalMoney - this.state.money
 		var charge = 0
-		var viewMargin = Platform.OS === 'ios' ? 0:15
+		var viewMargin = 0;//Platform.OS === 'ios' ? 0:15
 		// console.log("render: " + JSON.stringify(this.state.stockInfo))
 		var viewHeight = Platform.OS === 'ios' ? height :  Math.max(height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER, this.state.height)
 

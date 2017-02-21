@@ -23,7 +23,7 @@ import java.util.Calendar;
 /**
  * Created by Neko on 16/9/19.
  */
-public class TenMChartDrawer extends LineStickChartDrawer {
+public class Stick10MinuteChartDrawer extends LineStickChartDrawer {
     @Override
     public boolean needDrawPreCloseLine() {
         return true;

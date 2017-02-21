@@ -13,7 +13,7 @@ import java.util.Calendar;
 /**
  * Created by Neko on 16/9/19.
  */
-public class WeekChartDrawer extends LineStickChartDrawer{
+public class StickWeekChartDrawer extends LineStickChartDrawer{
     @Override
     public int getGapLineUnit() {
         return Calendar.DAY_OF_MONTH;

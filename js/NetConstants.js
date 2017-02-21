@@ -207,6 +207,25 @@ export let PARAMETER_CHARTTYPE_MONTH = 'month'
 export let PARAMETER_CHARTTYPE_DAY = 'day'
 export let PARAMETER_CHARTTYPE_5_MINUTE = '5m'
 
+export let PARAMETER_CHARTTYPE_TODAY_CANDLE = 'todayK'
+export let PARAMETER_CHARTTYPE_1_MINUTE = '1m'
+export let PARAMETER_CHARTTYPE_15_MINUTE = '15m'
+export let PARAMETER_CHARTTYPE_60_MINUTE = '1h'
+export let PARAMETER_CHARTTYPE_3_MONTH = '3M'
+export let PARAMETER_CHARTTYPE_6_MONTH = '6M'
+
+export function isCandleChart(type){
+  if(type === PARAMETER_CHARTTYPE_TODAY_CANDLE
+  || type === PARAMETER_CHARTTYPE_1_MINUTE
+  || type === PARAMETER_CHARTTYPE_5_MINUTE
+  || type === PARAMETER_CHARTTYPE_15_MINUTE
+  || type === PARAMETER_CHARTTYPE_60_MINUTE
+  || type === PARAMETER_CHARTTYPE_DAY){
+    return true;
+  }
+  return false;
+}
+
 export let AUTH_ERROR = '需要OAuth授权'
 
 export let ANDROID_MARKET_URL = 'market://details?id=com.tradehero.cfd';

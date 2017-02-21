@@ -50,6 +50,27 @@ var tabData = [
 			{"type":NetConstants.PARAMETER_CHARTTYPE_WEEK, "name":'5日'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_DAY, "name":'日K'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'5分钟'},]
+
+var tabDataLandscopeLine = [
+			{"type":NetConstants.PARAMETER_CHARTTYPE_TODAY, "name":'分时'},
+			// {"type":NetConstants.PARAMETER_CHARTTYPE_TEN_MINUTE, "name":'10分钟'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_TWO_HOUR, "name":'2小时'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_WEEK, "name":'5日'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_DAY, "name":'1月'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'3月'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'6月'},]
+
+var tabDataLandscopeCandle = [
+			{"type":NetConstants.PARAMETER_CHARTTYPE_TODAY, "name":'分时'},
+			// {"type":NetConstants.PARAMETER_CHARTTYPE_TEN_MINUTE, "name":'10分钟'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_TWO_HOUR, "name":'1分钟'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'5分钟'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'15分钟'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'60分钟'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_DAY, "name":'日K'},]
+
+
+
 var didFocusSubscription = null;
 var updateStockInfoTimer = null;
 var layoutSizeChangedSubscription = null
@@ -58,6 +79,8 @@ var wattingLogin = false;
 var loadStockInfoSuccess = false;
 var ORIENTATION_PORTRAIT = 0;
 var ORIENTATION_LANDSPACE = 1;
+var CHARTVIEWTYPE_LINE = 0;
+var CHARTVIEWTYPE_CANDLE = 1;
 
 var StockDetailPage = React.createClass({
 	mixins: [TimerMixin],
@@ -80,10 +103,10 @@ var StockDetailPage = React.createClass({
 		return {
 			stockCode: 14993,
 			stockName: 'ABC company',
-			stockPrice: 10,
+			stockPrice: 1,
 			stockPriceAsk: '--',
 			stockPriceBid: '--',
-			lastClosePrice: 9,
+			lastClosePrice: 1,
 			onPopUp: ()=>{},
 		}
 	},
@@ -101,6 +124,7 @@ var StockDetailPage = React.createClass({
 			inputText: ''+money,
 			stockPrice: this.props.stockPrice,
 			stockCurrencyPrice: '--',
+			stockPreclose:'--',
 			stockPriceAsk: this.props.stockPriceAsk,
 			stockPriceBid: this.props.stockPriceBid,
 			isAddedToMyList: false,
@@ -115,6 +139,7 @@ var StockDetailPage = React.createClass({
 			height: UIConstants.getVisibleHeight(),
 			widht: width,
 			orientation: ORIENTATION_PORTRAIT,
+			chartViewType: CHARTVIEWTYPE_LINE,
 		};
 	},
 
@@ -227,6 +252,8 @@ var StockDetailPage = React.createClass({
 					stockInfo: responseJson,
 					stockPriceBid: responseJson.bid,
 					stockPriceAsk: responseJson.ask,
+					stockCurrencyPrice:responseJson.last,
+					stockPreclose:responseJson.preClose,
 				})
 
 				this.loadStockPriceToday(true, this.state.chartType, responseJson)
@@ -391,6 +418,7 @@ var StockDetailPage = React.createClass({
 								stockPrice: realtimeStockInfo[i].last,
 								stockPriceAsk: realtimeStockInfo[i].ask,
 								stockPriceBid: realtimeStockInfo[i].bid,
+								stockCurrencyPrice:realtimeStockInfo[i].last,
 							})
 						}
 						break;
@@ -555,7 +583,8 @@ var StockDetailPage = React.createClass({
 
 	renderChartHeaderLandscape: function() {
 		var tabcolorStyle = {color: ColorConstants.STOCK_TAB_BLUE}
-		var tabs = tabData.map(
+		var tabDataCurrent = this.state.chartViewType == CHARTVIEWTYPE_LINE ? tabDataLandscopeLine : tabDataLandscopeCandle;
+		var tabs = tabDataCurrent.map(
 			(data, i) =>
 			<TouchableOpacity style={{width:60}} key={i}
 					onPress={() => this.pressChartHeaderTab(data.type)}>
@@ -564,6 +593,8 @@ var StockDetailPage = React.createClass({
 				</Text>
 			</TouchableOpacity>
 		)
+
+
 		return(
 			<View>
 				<ScrollView horizontal={true} style={{marginTop: 6}}>
@@ -733,11 +764,42 @@ var StockDetailPage = React.createClass({
 	},
 
 	renderTitleLandspace:function(){
+		// var percentChange = 0
+		//
+		// if (this.props.lastClosePrice <= 0) {
+		// 	percentChange = 0
+		// } else {
+		// 	percentChange = (this.state.stockPrice - this.props.lastClosePrice) / this.props.lastClosePrice * 100
+		// }
+		//
+		// var subTitleColor = ColorConstants.stock_color(percentChange)
+		// var subTitleText = this.state.stockPrice + '  '
+		// if (percentChange > 0) {
+		// 	subTitleText += '+' + percentChange.toFixed(2) + '%'
+		// } else {
+		// 	subTitleText += percentChange.toFixed(2) + '%'
+		// }
+
+
+
+		var title  = this.props.stockName + "	"+this.state.stockCurrencyPrice+"	";
+		console.log("this.state.stockPreclose:"+this.state.stockPreclose+"	this.state.stockCurrencyPrice="+this.state.stockCurrencyPrice)
+		if(this.state.stockPreclose!=='--' && this.state.stockCurrencyPrice!=='--'){
+			var percentChange = (this.state.stockCurrencyPrice - this.state.stockPreclose) / this.state.stockPreclose * 100
+			if (percentChange > 0) {
+				title += '+' + percentChange.toFixed(2) + '%'
+			} else {
+				title += percentChange.toFixed(2) + '%'
+			}
+		}else{
+			title += '--'
+		}
+
 		return(
 			<View style={{flexDirection:'row',width:width,alignItems:'center',justifyContent: 'space-between'}}>
-   			<Text style={{fontSize:15,color:'white',marginLeft:15,marginTop:10,marginBottom:10,}}>黄金 11795.6 -0.08% </Text>
+   			<Text style={{fontSize:15,color:'white',marginLeft:15,marginTop:10,marginBottom:10,}}>{title}</Text>
 				<TouchableOpacity onPress={()=>this.closeLandspace()}>
-					<Image  style={{width:32,height:32,marginRight:10}} source={require('../../images/close.png')}></Image>
+					<Image  style={{width:20,height:20,marginRight:16}} source={require('../../images/icon_close_full_screen.png')}></Image>
 				</TouchableOpacity>
    		</View>
 		)
@@ -754,14 +816,24 @@ var StockDetailPage = React.createClass({
 		this.changeOrientatioin();
 	},
 
+	changeChartViewType:function(type){
+		this.setState({
+			chartViewType:type
+		})
+	},
+
 	renderBottomViewType:function(){
+		var isLive = LogicData.getAccountState;
+		var imageType0 = this.state.chartViewType == CHARTVIEWTYPE_LINE ? require('../../images/icon_chart_type_line_selected.png'):(isLive?require('../../images/icon_chart_type_line_unselected_live.png'):require('../../images/icon_chart_type_line_unselected.png'));
+		var imageType1 = this.state.chartViewType == CHARTVIEWTYPE_CANDLE ? require('../../images/icon_chart_type_candle_selected.png'):(isLive?require('../../images/icon_chart_type_candle_unselected_live.png'):require('../../images/icon_chart_type_candle_unselected.png'));
+
 		return(
 			<View style={{flex:1,height:30,justifyContent:'flex-end',marginRight:20,flexDirection:'row'}}>
-				<TouchableOpacity onPress={()=>this.closeLandspace()}>
-					<Image  style={{width:32,height:32,marginRight:10,alignSelf:'center'}} source={require('../../images/close.png')}></Image>
+				<TouchableOpacity onPress={()=>this.changeChartViewType(CHARTVIEWTYPE_LINE)}>
+					<Image  style={{width:35,height:26,marginRight:15,alignSelf:'center'}} source={imageType0}></Image>
 				</TouchableOpacity>
-				<TouchableOpacity onPress={()=>this.closeLandspace()}>
-					<Image  style={{width:32,height:32,marginRight:10,alignSelf:'center'}} source={require('../../images/close.png')}></Image>
+				<TouchableOpacity onPress={()=>this.changeChartViewType(CHARTVIEWTYPE_CANDLE)}>
+					<Image  style={{width:35,height:26,marginRight:10,alignSelf:'center'}} source={imageType1}></Image>
 				</TouchableOpacity>
 	   	</View>
 		)

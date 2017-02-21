@@ -642,8 +642,8 @@ var StockDetailPage = React.createClass({
 		var imageError = LogicData.getAccountState()?require('../../images/icon_network_connection_error_live.png'):require('../../images/icon_network_connection_error.png')
 		if(status === 1){
 			return (
-				<View style={styles.dataStatus}>
-					<View style={styles.dataStatus2}>
+				<View style={[styles.dataStatus,{width:this.state.width}]}>
+					<View style={[styles.dataStatus2,{width:this.state.width}]}>
 					<Image style={{width:24,height:24,marginBottom:5}} source={imageError}></Image>
 					<Text style={styles.textDataStatus}>暂时无法获取数据</Text>
 					<TouchableOpacity onPress={()=> this.dataRefreshClicked()}>
@@ -656,8 +656,8 @@ var StockDetailPage = React.createClass({
 			)
 		}else if(status === 2){
 			return (
-				<View style={styles.dataStatus}>
-					<View style={styles.dataStatus2}>
+				<View style={[styles.dataStatus,{width:this.state.width}]}>
+					<View style={[styles.dataStatus2,{width:this.state.width}]}>
 					{this._renderActivityIndicator()}
 					<Text style={styles.textDataStatus}>加载中...</Text>
 					</View>

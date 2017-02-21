@@ -553,6 +553,26 @@ var StockDetailPage = React.createClass({
 			);
 	},
 
+	renderChartHeaderLandscape: function() {
+		var tabcolorStyle = {color: ColorConstants.STOCK_TAB_BLUE}
+		var tabs = tabData.map(
+			(data, i) =>
+			<TouchableOpacity style={{width:60}} key={i}
+					onPress={() => this.pressChartHeaderTab(data.type)}>
+				<Text style={this.state.chartType == data.type? styles.chartTitleTextHighlighted : [styles.chartTitleText, tabcolorStyle]}>
+					{data.name}
+				</Text>
+			</TouchableOpacity>
+		)
+		return(
+			<View>
+				<ScrollView horizontal={true} style={{marginTop: 6}}>
+					{tabs}
+				</ScrollView>
+			</View>
+			);
+	},
+
 	getGradientColor(){
 		if(LogicData.getAccountState()){
 			return [ColorConstants.TITLE_DARK_BLUE,ColorConstants.TITLE_DARK_BLUE]
@@ -714,10 +734,10 @@ var StockDetailPage = React.createClass({
 
 	renderTitleLandspace:function(){
 		return(
-			<View style={{flexDirection:'row',width:width,justifyContent: 'space-between'}}>
-   			<Text style={{fontSize:18,color:'white',marginLeft:15,marginTop:10,marginBottom:10,}}>黄金 11795.6 -0。08% </Text>
+			<View style={{flexDirection:'row',width:width,alignItems:'center',justifyContent: 'space-between'}}>
+   			<Text style={{fontSize:15,color:'white',marginLeft:15,marginTop:10,marginBottom:10,}}>黄金 11795.6 -0.08% </Text>
 				<TouchableOpacity onPress={()=>this.closeLandspace()}>
-					<Image  style={{width:32,height:32,marginRight:10,alignSelf:'center'}} source={require('../../images/close.png')}></Image>
+					<Image  style={{width:32,height:32,marginRight:10}} source={require('../../images/close.png')}></Image>
 				</TouchableOpacity>
    		</View>
 		)
@@ -732,6 +752,19 @@ var StockDetailPage = React.createClass({
 
 	closeLandspace:function(){
 		this.changeOrientatioin();
+	},
+
+	renderBottomViewType:function(){
+		return(
+			<View style={{flex:1,height:30,justifyContent:'flex-end',marginRight:20,flexDirection:'row'}}>
+				<TouchableOpacity onPress={()=>this.closeLandspace()}>
+					<Image  style={{width:32,height:32,marginRight:10,alignSelf:'center'}} source={require('../../images/close.png')}></Image>
+				</TouchableOpacity>
+				<TouchableOpacity onPress={()=>this.closeLandspace()}>
+					<Image  style={{width:32,height:32,marginRight:10,alignSelf:'center'}} source={require('../../images/close.png')}></Image>
+				</TouchableOpacity>
+	   	</View>
+		)
 	},
 
 	renderLandscape:function(){
@@ -751,8 +784,9 @@ var StockDetailPage = React.createClass({
 								{this.renderChart()}
 								{this.renderDataStatus()}
 						</View>
-						<View style={{marginTop:10,marginBottom:10}}>
-							{this.renderChartHeader()}
+						<View style={{marginTop:10,marginBottom:10,flexDirection:'row'}}>
+							{this.renderChartHeaderLandscape()}
+							{this.renderBottomViewType()}
 						</View>
 
 					</LinearGradient>
@@ -979,6 +1013,7 @@ var StockDetailPage = React.createClass({
 				height = Dimensions.get('window').width
 				width = Dimensions.get('window').height
  				Orientation.lockToLandscape()
+				console.log("lockToLandscape 22");
 				this.setState({
 	 			 orientation:ORIENTATION_LANDSPACE
 	 		 })

@@ -146,8 +146,6 @@ var StockDetailPage = React.createClass({
 			this.onLayoutSizeChanged();
 		});
 
-		// this.pressChartHeaderTab(NetConstants.PARAMETER_CHARTTYPE_TODAY)
-
 	  Orientation.unlockAllOrientations(); //this will unlock the view to all Orientations
 		Orientation.lockToPortrait(); //this will lock the view to Portrait
     // Orientation.lockToLandscape(); //this will lock the view to Landscape
@@ -628,7 +626,6 @@ var StockDetailPage = React.createClass({
 			</TouchableOpacity>
 		)
 
-
 		return(
 			<View>
 				<ScrollView horizontal={true} style={{marginTop: 6}}>
@@ -899,7 +896,7 @@ var StockDetailPage = React.createClass({
 	changeChartViewType:function(type){
 		this.setState({
 			chartViewType:type
-		})
+		},this.pressChartHeaderTab(type == CHARTVIEWTYPE_LINE ? NetConstants.PARAMETER_CHARTTYPE_TODAY:NetConstants.PARAMETER_CHARTTYPE_1_MINUTE))
 	},
 
 	renderBottomViewType:function(){
@@ -1165,22 +1162,21 @@ var StockDetailPage = React.createClass({
 				height = Dimensions.get('window').width
 				width = Dimensions.get('window').height
  				Orientation.lockToLandscape()
-				console.log("lockToLandscape 22");
 				this.setState({
-	 			 orientation:ORIENTATION_LANDSPACE
-	 		 })
+					 orientation:ORIENTATION_LANDSPACE,
+					 chartViewType:NetConstants.isCandleChart(this.state.chartType)?CHARTVIEWTYPE_CANDLE:CHARTVIEWTYPE_LINE
+				},this.pressChartHeaderTab(this.state.chartType))
 			}else{
 				height = Dimensions.get('window').width
 				width = Dimensions.get('window').height
 				Orientation.lockToPortrait()
 				this.setState({
-					orientation:ORIENTATION_PORTRAIT
-				})
+					orientation:ORIENTATION_PORTRAIT,
+					// chartViewType:NetConstants.isCandleChart(this.state.chartType)?CHARTVIEWTYPE_CANDLE:CHARTVIEWTYPE_LINE
+				},this.pressChartHeaderTab(NetConstants.PARAMETER_CHARTTYPE_TODAY))
 			}
-
 			console.log("Current Device Orientation: ", orientation);
     });
-
 	},
 
 	resetToLandscape:function(){
@@ -1495,11 +1491,9 @@ var StockDetailPage = React.createClass({
 	 if (orientation == 'LANDSCAPE') {
 		 //do something with landscape layout
 		 console.log("_orientationDidChange : " + orientation);
-
 	 } else {
 		 //do something with portrait layout
 		 console.log("_orientationDidChange : " + orientation);
-
 	 }
  },
 

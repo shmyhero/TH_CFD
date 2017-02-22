@@ -4,6 +4,7 @@ import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.formatter.XAxisValueFormatter;
+import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.tradehero.cfd.views.ReactChart;
 
@@ -291,9 +292,10 @@ public abstract class BaseChartDrawer implements IChartDrawer {
                 gapLine.setLineColor(borderColor);
                 gapLine.setLineWidth(ChartDrawerConstants.LINE_WIDTH);
                 gapLine.enableDashedLine(10f, 0f, 0f);
-                gapLine.setTextSize(8f);
+                gapLine.setTextSize(8);
+                //gapLine.setTextSize(chart.getXAxis().getTextSize());
                 gapLine.setTextColor(textColor);
-                gapLine.setYOffset(15);
+                gapLine.setYOffset(Utils.convertPixelsToDp(chart.getXAxis().getYOffset()));
 //                if (needSkipLabel && i < limitLineInfo.limitLineAt.size() - 1 && i % 2 == 1) {
                 if (needSkipLabel && isNeedHide(i,limitLineInfo.limitLineAt.size())) {
                     gapLine.setLabel("");

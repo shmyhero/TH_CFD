@@ -3,6 +3,7 @@ package com.tradehero.cfd.views;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -10,7 +11,10 @@ import android.util.Log;
 import com.facebook.react.uimanager.MeasureSpecAssertions;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.CombinedData;
+import com.github.mikephil.charting.renderer.CombinedChartRenderer;
 import com.github.mikephil.charting.renderer.XAxisRenderer;
+import com.tradehero.cfd.views.chartDrawer.base.ReactCombinedChartRenderer;
 import com.tradehero.cfd.views.chartDrawer.base.ReactXAxisRenderer;
 import com.tradehero.cfd.views.chartDrawer.base.ReactYAxisRenderer;
 
@@ -77,27 +81,25 @@ public class ReactChart extends CombinedChart {
 
 //    @Override
 //    protected void onDraw(Canvas canvas) {
+//        Paint backgroundPaint = new Paint();
+//        backgroundPaint.setStyle(Paint.Style.FILL);
+//        backgroundPaint.setColor(Color.WHITE);
+//        RectF bg = new RectF(0,0,canvas.getWidth(), canvas.getHeight());
+//        canvas.drawRect(bg, backgroundPaint);
+//
 //        super.onDraw(canvas);
-//
-//        ((ReactYAxisRenderer)mAxisRendererRight).setBackgroundColor(mGridBackgroundPaint);
-//
-//        RectF new_Background = new RectF(mViewPortHandler.getContentRect());
-//        new_Background.left = mViewPortHandler.getContentRect().right;
-//        new_Background.right = canvas.getWidth();
-//        new_Background.bottom = canvas.getHeight();
-//        canvas.drawRect(new_Background, mGridBackgroundPaint);
-//
-//        mAxisRendererLeft.renderAxisLabels(canvas);
-//        mAxisRendererRight.renderAxisLabels(canvas);
+////
+////        ((ReactYAxisRenderer)mAxisRendererRight).setBackgroundColor(mGridBackgroundPaint);
+////
+////        RectF new_Background = new RectF(mViewPortHandler.getContentRect());
+////        new_Background.left = mViewPortHandler.getContentRect().right;
+////        new_Background.right = canvas.getWidth();
+////        new_Background.bottom = canvas.getHeight();
+////        canvas.drawRect(new_Background, mGridBackgroundPaint);
+////
+////        mAxisRendererLeft.renderAxisLabels(canvas);
+////        mAxisRendererRight.renderAxisLabels(canvas);
 //    }
-
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-        //canvas.drawRect(mViewPortHandler.getContentRect(), mBorderPaint);
-    }
 
     public void setGridBackgroundColor(int color) {
         super.setGridBackgroundColor(0);
@@ -105,6 +107,16 @@ public class ReactChart extends CombinedChart {
         ((ReactYAxisRenderer)mAxisRendererLeft).setBackgroundColor(color);
         ((ReactXAxisRenderer)mXAxisRenderer).setBackgroundColor(color);
     }
+
+    @Override
+    public void setData(CombinedData data) {
+        mData = null;
+        mRenderer = null;
+        super.setData(data);
+        mRenderer = new ReactCombinedChartRenderer(this, mAnimator, mViewPortHandler);
+        mRenderer.initBuffers();
+    }
+
 //
 //    @Override
 //    protected void drawGridBackground(Canvas c) {
@@ -123,4 +135,6 @@ public class ReactChart extends CombinedChart {
 //            c.drawRect(mViewPortHandler.getContentRect(), mBorderPaint);
 //        }
 //    }
+
+
 }

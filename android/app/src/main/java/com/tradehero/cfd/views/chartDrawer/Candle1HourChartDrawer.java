@@ -26,12 +26,12 @@ public class Candle1HourChartDrawer extends CandleChartDrawer {
 
     @Override
     public int getLablesToSkip(JSONArray chartDataList) {
-       return ChartDrawerConstants.GetMinutePointerNumber(60);
+       return ChartDrawerConstants.GetMinutePointerNumber(180);
     }
 
     @Override
     public boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException {
-        return !stockInfoObject.getBoolean("isOpen");
+        return true;
     }
 
     @Override
@@ -45,6 +45,7 @@ public class Candle1HourChartDrawer extends CandleChartDrawer {
         ArrayList<Calendar> limitLineCalender = new ArrayList<>();
 
         //Only return the hour.
+        Calendar lastCalendar = null;
         for(int i = 0; i < chartDataList.length(); i ++) {
             //TODO: use "time" if api returns it instead of Uppercase one.
             Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));

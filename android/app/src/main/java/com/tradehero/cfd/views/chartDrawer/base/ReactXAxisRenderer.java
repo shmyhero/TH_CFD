@@ -25,42 +25,42 @@ public class ReactXAxisRenderer extends XAxisRenderer {
         mBackgroundPaint.setColor(color);
         mBackgroundPaint.setStyle(Paint.Style.FILL);
     }
+//
+//    @Override
+//    public void renderLimitLines(Canvas c) {
+////        if (mXAxis.getPosition() == XAxis.XAxisPosition.TOP) {
+////            RectF new_Background = new RectF(mViewPortHandler.getContentRect());
+////            new_Background.top = 0;
+////            new_Background.bottom = mViewPortHandler.getContentRect().top - 1;
+////            c.drawRect(new_Background, mBackgroundPaint);
+////        }else {
+////            RectF new_Background = new RectF(mViewPortHandler.getContentRect());
+////            new_Background.top = mViewPortHandler.getContentRect().bottom + 1;
+////            new_Background.bottom = c.getHeight();
+////            c.drawRect(new_Background, mBackgroundPaint);
+////        }
+//        super.renderLimitLines(c);
+//    }
 
-    @Override
-    public void renderLimitLines(Canvas c) {
-        if (mXAxis.getPosition() == XAxis.XAxisPosition.TOP) {
-            RectF new_Background = new RectF(mViewPortHandler.getContentRect());
-            new_Background.top = 0;
-            new_Background.bottom = mViewPortHandler.getContentRect().top - 1;
-            c.drawRect(new_Background, mBackgroundPaint);
-        }else {
-            RectF new_Background = new RectF(mViewPortHandler.getContentRect());
-            new_Background.top = mViewPortHandler.getContentRect().bottom + 1;
-            new_Background.bottom = c.getHeight();
-            c.drawRect(new_Background, mBackgroundPaint);
-        }
-        super.renderLimitLines(c);
-    }
-
-    @Override
-    public void renderAxisLabels(Canvas c) {
-        if (!mXAxis.isEnabled() || !mXAxis.isDrawLabelsEnabled())
-            return;
-
-//        if (mXAxis.getPosition() == XAxis.XAxisPosition.TOP) {
-//            RectF new_Background = new RectF(mViewPortHandler.getContentRect());
-//            new_Background.top = 0;
-//            new_Background.bottom = mViewPortHandler.getContentRect().top;
-//            c.drawRect(new_Background, mBackgroundPaint);
-//        }else {
-//            RectF new_Background = new RectF(mViewPortHandler.getContentRect());
-//            new_Background.top = mViewPortHandler.getContentRect().bottom;
-//            new_Background.bottom = c.getHeight();
-//            c.drawRect(new_Background, mBackgroundPaint);
-//        }
-
-        super.renderAxisLabels(c);
-    }
+//    @Override
+//    public void renderAxisLabels(Canvas c) {
+//        if (!mXAxis.isEnabled() || !mXAxis.isDrawLabelsEnabled())
+//            return;
+//
+////        if (mXAxis.getPosition() == XAxis.XAxisPosition.TOP) {
+////            RectF new_Background = new RectF(mViewPortHandler.getContentRect());
+////            new_Background.top = 0;
+////            new_Background.bottom = mViewPortHandler.getContentRect().top;
+////            c.drawRect(new_Background, mBackgroundPaint);
+////        }else {
+////            RectF new_Background = new RectF(mViewPortHandler.getContentRect());
+////            new_Background.top = mViewPortHandler.getContentRect().bottom;
+////            new_Background.bottom = c.getHeight();
+////            c.drawRect(new_Background, mBackgroundPaint);
+////        }
+//
+//        super.renderAxisLabels(c);
+//    }
 //
 //    @Override
 //    protected void drawLabels(Canvas c, float pos, PointF anchor) {

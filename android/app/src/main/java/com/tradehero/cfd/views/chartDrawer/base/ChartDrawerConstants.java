@@ -17,6 +17,8 @@ public class ChartDrawerConstants {
 
     public static int FIVE_MINUTE_POINT_NUMBER = 300;//60s*5
     public static int TEN_MINUTE_POINT_NUMBER = 600;//60s*10
+    public static int FIFTEEN_MINUTE_POINT_NUMBER = 900;//60s*15
+    public static int ONE_HOUR_POINT_NUMBER = 3600;//60s*10
     public static float LINE_WIDTH = 0.5f; //竖线 分割 ｜分时｜10分钟｜2小时｜5日｜1月｜
     public static float LINE_WIDTH_PRICE = 1.5f; //行情走势曲线线粗
 

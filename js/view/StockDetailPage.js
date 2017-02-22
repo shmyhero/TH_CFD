@@ -298,10 +298,6 @@ var StockDetailPage = React.createClass({
 			console.log('live', url );
 	 	}
 
-		console.log("chartType " + chartType)
-		console.log("? " + chartType === NetConstants.PARAMETER_CHARTTYPE_15_MINUTE)
-		console.log(NetConstants.PARAMETER_CHARTTYPE_15_MINUTE)
-
 		if(chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE){
 			url = NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M;
 			if(LogicData.getAccountState()){
@@ -779,7 +775,8 @@ var StockDetailPage = React.createClass({
 						xAxisPosition="BOTTOM"
 						drawBackground={this.state.orientation == ORIENTATION_LANDSPACE}
 						borderColor={borderColor}
-						backgroundColor={backgroundColor}
+						// backgroundColor={NetConstants.isCandleChart(this.state.chartType) ? backgroundColor : 'transparent'}
+						// xAxisTextSize={this.state.orientation == ORIENTATION_LANDSPACE ? 5.5 : 4}
 						textColor={textColor}
 						rightAxisLabelCount={7}
 						rightAxisPosition="OUTSIDE_CHART"
@@ -787,7 +784,7 @@ var StockDetailPage = React.createClass({
 						rightAxisDrawLabel={this.state.orientation == ORIENTATION_LANDSPACE}
 						rightAxisDrawGridLines={rightAxisDrawGridLines}
 						chartPaddingTop={this.state.orientation == ORIENTATION_LANDSPACE ? 15 : 0}
-						chartPaddingBottom={this.state.orientation == ORIENTATION_LANDSPACE ? 15 : 0}
+						chartPaddingBottom={this.state.orientation == ORIENTATION_LANDSPACE ? 15 : 3}	//The limit line needs some space to show, set it to 3...
 						chartPaddingLeft={15}
 						chartPaddingRight={15}
 					>

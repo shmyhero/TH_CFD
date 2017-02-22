@@ -43,6 +43,6 @@ public class Stick3MonthChartDrawer extends LineStickChartDrawer{
 
     @Override
     protected boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException {
-        return !stockInfoObject.getBoolean("isOpen");
+        return true;
     }
 }

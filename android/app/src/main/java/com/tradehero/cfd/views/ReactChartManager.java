@@ -11,6 +11,7 @@ import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.formatter.YAxisValueFormatter;
+import com.github.mikephil.charting.utils.Utils;
 import com.tradehero.cfd.views.chartDrawer.ChartDrawerBuilder;
 import com.tradehero.cfd.views.chartDrawer.base.ChartDrawerConstants;
 import com.tradehero.cfd.views.chartDrawer.base.IChartDrawer;
@@ -385,8 +386,8 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
     @ReactProp(name = "chartPaddingTop")
     public void setChartPaddingTop(ReactChart chart, int padding){
         if (chart != null) {
+            //chartOffsetTop = (int)Utils.convertPixelsToDp(padding);
             chartOffsetTop = padding;
-            //chartOffsetTop
             if(chart.getXAxis().isEnabled() && chart.getXAxis().getPosition() == XAxis.XAxisPosition.TOP) {
                 chart.getXAxis().setYOffset(chartOffsetTop);
                 chart.setExtraTopOffset(0);
@@ -399,6 +400,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
     @ReactProp(name = "chartPaddingLeft")
     public void setChartPaddingLeft(ReactChart chart, int padding){
         if (chart != null) {
+            //chartOffsetLeft = (int)Utils.convertPixelsToDp(padding);
             chartOffsetLeft = padding;
             if(chart.getAxisLeft().isEnabled() && chart.getAxisLeft().isDrawLabelsEnabled()) {
                 chart.getAxisLeft().setXOffset(chartOffsetLeft);
@@ -412,6 +414,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
     @ReactProp(name = "chartPaddingRight")
     public void setChartPaddingRight(ReactChart chart, int padding){
         if (chart != null) {
+            //chartOffsetRight = (int)Utils.convertPixelsToDp(padding);
             chartOffsetRight = padding;
             if(chart.getAxisRight().isEnabled() && chart.getAxisRight().isDrawLabelsEnabled()) {
                 chart.getAxisRight().setXOffset(chartOffsetRight);
@@ -425,6 +428,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
     @ReactProp(name = "chartPaddingBottom")
     public void setChartPaddingBottom(ReactChart chart, int padding){
         if (chart != null) {
+            //chartOffsetBottom = (int)Utils.convertPixelsToDp(padding);
             chartOffsetBottom = padding;
             if(chart.getXAxis().isEnabled() && chart.getXAxis().getPosition() == XAxis.XAxisPosition.BOTTOM) {
                 chart.getXAxis().setYOffset(chartOffsetBottom);

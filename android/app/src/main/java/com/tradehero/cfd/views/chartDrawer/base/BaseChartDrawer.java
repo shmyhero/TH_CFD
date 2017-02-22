@@ -6,6 +6,7 @@ import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.formatter.XAxisValueFormatter;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.tradehero.cfd.MainActivity;
 import com.tradehero.cfd.views.ReactChart;
 
 import org.json.JSONArray;
@@ -358,6 +359,10 @@ public abstract class BaseChartDrawer implements IChartDrawer {
 
     //设置 左上左下右上右下 文本描述
     public void setDescription(CombinedChart chart, String lt, String lb, String rt, String rb) {
-        chart.setDescription(lt, lb, rt, rb);
+        if(MainActivity.isLandscape()){
+            chart.setDescription("", "", "", "");
+        }else{
+            chart.setDescription(lt, lb, rt, rb);
+        }
     }
 }

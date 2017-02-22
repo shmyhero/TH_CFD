@@ -103,6 +103,14 @@ function getCFDAPI(){
     GET_STOCK_KLINE_60M_LIVE: CFD_API_SERVER + '/api/quote/live/<securityId>/kline/60m/horizontal',
     GET_STOCK_KLINE_DAY: CFD_API_SERVER + '/api/quote/<securityId>/kline/day',
     GET_STOCK_KLINE_DAY_LIVE: CFD_API_SERVER + '/api/quote/live/<securityId>/kline/day',
+
+    GET_STOCK_MONTH: CFD_API_SERVER + '/api/quote/<securityId>/tick/month',
+    GET_STOCK_MONTH_LIVE: CFD_API_SERVER + '/api/quote/live/<securityId>/tick/month',
+    GET_STOCK_3MONTH: CFD_API_SERVER + '/api/quote/<securityId>/tick/3month',
+    GET_STOCK_3MONTH_LIVE: CFD_API_SERVER + '/api/quote/live/<securityId>/tick/3month',
+    GET_STOCK_6MONTH: CFD_API_SERVER + '/api/quote/<securityId>/tick/6month',
+    GET_STOCK_6MONTH_LIVE: CFD_API_SERVER + '/api/quote/live/<securityId>/tick/6month',
+
     GET_MY_MESSAGES: CFD_API_SERVER + '/api/user/message?pageNum=<pageNum>&pageSize=<pageSize>',
     GET_MY_MESSAGES_LIVE: CFD_API_SERVER + '/api/user/live/message?pageNum=<pageNum>&pageSize=<pageSize>',//LIVE ok
     SET_MESSAGE_READ: CFD_API_SERVER + '/api/user/message/<id>',

@@ -334,6 +334,28 @@ var StockDetailPage = React.createClass({
 				console.log('live', url );
 			}
 			url = url.replace(/<securityId>/, this.props.stockCode);
+		}else if(chartType === NetConstants.PARAMETER_CHARTTYPE_MONTH){
+			url = NetConstants.CFD_API.GET_STOCK_MONTH;
+			if(LogicData.getAccountState()){
+				url = NetConstants.CFD_API.GET_STOCK_MONTH_LIVE;
+				console.log('live', url );
+			}
+			url = url.replace(/<securityId>/, this.props.stockCode);
+		}else if(chartType === NetConstants.PARAMETER_CHARTTYPE_3_MONTH){
+			url = NetConstants.CFD_API.GET_STOCK_3MONTH;
+			if(LogicData.getAccountState()){
+				url = NetConstants.CFD_API.GET_STOCK_3MONTH_LIVE;
+				console.log('live', url );
+			}
+			console.log('live 3month ', url );
+			url = url.replace(/<securityId>/, this.props.stockCode);
+		}else if(chartType === NetConstants.PARAMETER_CHARTTYPE_6_MONTH){
+			url = NetConstants.CFD_API.GET_STOCK_6MONTH;
+			if(LogicData.getAccountState()){
+				url = NetConstants.CFD_API.GET_STOCK_6MONTH_LIVE;
+				console.log('live', url );
+			}
+			url = url.replace(/<securityId>/, this.props.stockCode);
 		}
 		// else if(chartType === NetConstants.PARAMETER_CHARTTYPE_TODAY_CANDLE){
 		// 	url = NetConstants.CFD_API.GET_STOCK_KLINE_DAY;
@@ -343,11 +365,11 @@ var StockDetailPage = React.createClass({
 		// 	}
 		// 	url = url.replace(/<securityId>/, this.props.stockCode);
 		// }
-		else if(chartType === NetConstants.PARAMETER_CHARTTYPE_3_MONTH
-			 || chartType === NetConstants.PARAMETER_CHARTTYPE_6_MONTH){
-			 url = url.replace(/<stockCode>/, this.props.stockCode)
-			 url = url.replace(/<chartType>/, "week")
-		}
+		// else if(chartType === NetConstants.PARAMETER_CHARTTYPE_3_MONTH
+		// 	 || chartType === NetConstants.PARAMETER_CHARTTYPE_6_MONTH){
+		// 	 url = url.replace(/<stockCode>/, this.props.stockCode)
+		// 	 url = url.replace(/<chartType>/, "week")
+		// }
 		////////TEST DATA////////
 		else {
 			 url = url.replace(/<stockCode>/, this.props.stockCode)
@@ -820,8 +842,8 @@ var StockDetailPage = React.createClass({
 
 						<View style={{flex: 3.5,marginTop:5,marginLeft:viewMargin,marginRight:viewMargin}}>
 						  {this.renderChart()}
-							{this.renderDataStatus()}
 							{this.renderOrientationClicker()}
+							{this.renderDataStatus()}
 						</View>
 						<View>
 							<Text style={styles.tipsLine}>行情可能存在细微偏差</Text>

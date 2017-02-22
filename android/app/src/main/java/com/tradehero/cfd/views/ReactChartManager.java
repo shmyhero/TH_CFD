@@ -20,6 +20,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ReactChartManager extends ViewGroupManager<ReactChart> {
@@ -436,6 +438,18 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
             }else {
                 chart.setExtraBottomOffset(chartOffsetBottom);
             }
+        }
+    }
+
+    @ReactProp(name = "lineChartGradient")
+    public void setLineChartGradient(ReactChart chart, ReadableArray input){
+        if (chart != null) {
+            int[] colors = new int[input.size()];
+            for (int i=0; i < colors.length; i++) {
+                String colorStr = input.getString(i);
+                colors[i] = getColor(colorStr);
+            }
+            chart.setGradientColors(colors);
         }
     }
 

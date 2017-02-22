@@ -27,12 +27,12 @@ public class CandleTodayChartDrawer extends CandleChartDrawer {
     }
 
     @Override
-    public int getLablesToSkip(JSONArray chartDataList) {
+    public int getLablesToSkip() {
         return ChartDrawerConstants.GetMinutePointerNumber(60);
     }
 
     @Override
-    public boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException {
+    public boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException {
         return !stockInfoObject.getBoolean("isOpen");
     }
 

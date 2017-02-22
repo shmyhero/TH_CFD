@@ -96,6 +96,8 @@ var LineChart = React.createClass({
 		chartPaddingLeft: React.PropTypes.number,
 
 		chartPaddingRight: React.PropTypes.number,
+
+		lineChartGradient: React.PropTypes.array,
 	},
 
 	getDefaultProps(): Object {
@@ -125,6 +127,7 @@ var LineChart = React.createClass({
 			chartPaddingBottom: 0,
 			chartPaddingLeft: 0,
 			chartPaddingRight: 0,
+			lineChartGradient: [],
 		};
 	},
 

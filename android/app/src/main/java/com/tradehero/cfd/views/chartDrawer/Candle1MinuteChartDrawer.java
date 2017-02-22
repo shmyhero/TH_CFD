@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -21,22 +22,22 @@ public class Candle1MinuteChartDrawer extends CandleChartDrawer {
 
     @Override
     public int getGapLineUnit() {
-        return Calendar.AM_PM;
+        return Calendar.MINUTE;
     }
 
     @Override
-    public int getLablesToSkip(JSONArray chartDataList) {
-        return ChartDrawerConstants.GetMinutePointerNumber(15);
-    }
-
-    @Override
-    public boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException {
+    public boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException {
         return !stockInfoObject.getBoolean("isOpen");
     }
 
     @Override
     public int getGapLineUnitAddMount() {
         return 12;
+    }
+
+    @Override
+    public int getLablesToSkip() {
+        return 0;
     }
 
     @Override
@@ -48,7 +49,7 @@ public class Candle1MinuteChartDrawer extends CandleChartDrawer {
         for(int i = 0; i < chartDataList.length(); i ++) {
             //TODO: use "time" if api returns it instead of Uppercase one.
             Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
-            if (calendar.getTime().getMinutes() == 0){
+            if (calendar.getTime().getMinutes() == 0 || calendar.getTime().getMinutes() == 15 || calendar.getTime().getMinutes() == 30 || calendar.getTime().getMinutes() == 45){
                 limitLineAt.add(i);
                 limitLineCalender.add(calendar);
             }

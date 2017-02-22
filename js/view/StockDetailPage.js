@@ -786,15 +786,17 @@ var StockDetailPage = React.createClass({
 // {"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'5分钟'},
 //		if(this.state.orientation == ORIENTATION_PORTRAIT)
 				var rightAxisDrawGridLines = this.state.orientation == ORIENTATION_LANDSPACE && NetConstants.isCandleChart(this.state.chartType);
-			 	var textColor, backgroundColor, borderColor;
+			 	var textColor, backgroundColor, borderColor, lineChartGradient;
 				if(this.state.orientation == ORIENTATION_PORTRAIT){
 					textColor = "#70a5ff";
 					backgroundColor = "transparent"
 					borderColor = "#497bce";
+					lineChartGradient = LogicData.getAccountState() ? ['#374d74','#6683b3'] : ['#99bfff', '#1954b9'];
 				}else{
 					textColor = LogicData.getAccountState() ? "#223555" : "#0740a7"
 					backgroundColor = LogicData.getAccountState() ? "#3f5680" : "#1962dd"
 					borderColor = LogicData.getAccountState() ? "#8596b5" : "#0d4ab6";
+					lineChartGradient = LogicData.getAccountState() ? ['#5f7baa','#3f5680'] : ['#387ae7', '#1962dd'];
 				}
 
 				//8596b5
@@ -818,6 +820,7 @@ var StockDetailPage = React.createClass({
 						chartPaddingBottom={this.state.orientation == ORIENTATION_LANDSPACE ? 15 : 3}	//The limit line needs some space to show, set it to 3...
 						chartPaddingLeft={15}
 						chartPaddingRight={15}
+						lineChartGradient={lineChartGradient}
 					>
 					</LineChart>
 				)
@@ -857,7 +860,7 @@ var StockDetailPage = React.createClass({
 						</View>
 						<View style={{flex: 2, alignItems: 'center', justifyContent: 'space-around', paddingTop: 30, paddingBottom:Platform.OS === 'ios'?10:48}}>
 							{this.renderLeftMoney()}
-							<Text style={styles.smallLabel}> 手续费为{charge}美元</Text>
+							{/* <Text style={styles.smallLabel}> 手续费为{charge}美元</Text> */}
 							{this.renderOKButton()}
 							{this.renderStockCurrencyWarning()}
 						</View>

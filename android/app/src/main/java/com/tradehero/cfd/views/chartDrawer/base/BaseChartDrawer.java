@@ -115,7 +115,7 @@ public abstract class BaseChartDrawer implements IChartDrawer {
      * @param stockInfoObject
      * @throws JSONException
      */
-    protected boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException {
+    protected boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException {
         return false;
     }
 
@@ -159,11 +159,12 @@ public abstract class BaseChartDrawer implements IChartDrawer {
             }
         }
 
-        if (needDrawEndLine(stockInfoObject)) {
-            int lastLine = chartDataList.length() - 1;
-            limitLineAt.add(lastLine);
-            limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
-        }
+        //if (needDrawEndLabel(stockInfoObject)) {
+        //Always add the last limit but do not display the label if no need to draw today's close price.
+        int lastLine = chartDataList.length() - 1;
+        limitLineAt.add(lastLine);
+        limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
+        //}
 
         LimitLineInfo info = new LimitLineInfo();
         info.limitLineAt = limitLineAt;
@@ -212,8 +213,8 @@ public abstract class BaseChartDrawer implements IChartDrawer {
      *
      * @return
      */
-    protected int getLablesToSkip(JSONArray chartDataList) {
-        return chartDataList.length();
+    protected int getLablesToSkip() {
+        return 1;
     }
 
     /**
@@ -249,12 +250,12 @@ public abstract class BaseChartDrawer implements IChartDrawer {
     }
 
     private void calculateAxis(CombinedChart chart, JSONArray chartDataList, CombinedData data) {
-        chart.getXAxis().setLabelsToSkip(getLablesToSkip(chartDataList));
+        chart.getXAxis().setLabelsToSkip(getLablesToSkip());
 
         chart.getXAxis().setValueFormatter(new XAxisValueFormatter() {
             @Override
             public String getXValue(String original, int index, ViewPortHandler viewPortHandler) {
-                return "";
+                return "";// getGapLineFormat().format(new Date(original));
             }
         });
         chart.getAxisLeft().removeAllLimitLines();
@@ -280,7 +281,7 @@ public abstract class BaseChartDrawer implements IChartDrawer {
 
             boolean needSkipLabel = false;
             if (limitLineInfo.limitLineAt.size() >= 7) {
-                needSkipLabel = true;
+                needSkipLabel = getLablesToSkip() > 0 ? true : false;
             }
 
             SimpleDateFormat format = getGapLineFormat();
@@ -317,12 +318,21 @@ public abstract class BaseChartDrawer implements IChartDrawer {
     }
 
     public boolean isNeedHide(int index,int count){
-        if(count % 2 == 0){//偶数
-            if(index == 0 || index == (count-1) || index%2 == 1){
-                return false;
+        int skipStep = getLablesToSkip() + 1;
+
+        if(skipStep == 2) {
+
+            if (count % 2 == 0) {//偶数
+                if (index == 0 || index == (count - 1) || index % 2 == 1) {
+                    return false;
+                }
+            } else {//奇数
+                if (index == 0 || index == (count - 1) || index % 2 == 0) {
+                    return false;
+                }
             }
-        }else{//奇数
-            if(index == 0 || index == (count-1) || index%2 == 0){
+        }else{
+            if (index == 0 || index == (count - 1) || (count - index) % skipStep == 1) {
                 return false;
             }
         }

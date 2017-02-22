@@ -25,38 +25,17 @@ public class Candle5MinuteChartDrawer extends CandleChartDrawer {
     }
 
     @Override
-    public int getLablesToSkip(JSONArray chartDataList) {
-       return ChartDrawerConstants.FIVE_MINUTE_POINT_NUMBER;
+    public int getLablesToSkip() {
+       return 1;
     }
 
     @Override
-    public boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException {
+    public boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException {
         return !stockInfoObject.getBoolean("isOpen");
     }
 
     @Override
     public int getGapLineUnitAddMount() {
         return 1;
-    }
-
-    @Override
-    protected LimitLineInfo calculateLimitLinesPosition(Calendar startUpLine, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
-        ArrayList<Integer> limitLineAt = new ArrayList<>();
-        ArrayList<Calendar> limitLineCalender = new ArrayList<>();
-
-        //Only return the hour.
-        for(int i = 0; i < chartDataList.length(); i ++) {
-            //TODO: use "time" if api returns it instead of Uppercase one.
-            Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
-            if (calendar.getTime().getMinutes() == 0){
-                limitLineAt.add(i);
-                limitLineCalender.add(calendar);
-            }
-        }
-
-        LimitLineInfo limitLineInfo = new LimitLineInfo();
-        limitLineInfo.limitLineAt = limitLineAt;
-        limitLineInfo.limitLineCalender = limitLineCalender;
-        return limitLineInfo;
     }
 }

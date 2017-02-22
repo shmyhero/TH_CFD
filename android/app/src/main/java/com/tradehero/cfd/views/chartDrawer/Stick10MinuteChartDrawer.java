@@ -40,12 +40,12 @@ public class Stick10MinuteChartDrawer extends LineStickChartDrawer {
     }
 
     @Override
-    public int getLablesToSkip(JSONArray chartDataList) {
+    public int getLablesToSkip() {
         return ChartDrawerConstants.TEN_MINUTE_POINT_NUMBER;
     }
 
     @Override
-    public boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException {
+    public boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException {
         return !stockInfoObject.getBoolean("isOpen");
     }
 

@@ -22,7 +22,7 @@ public class StickTodayChartDrawer extends LineStickChartDrawer {
     }
 
     @Override
-    public boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException{
+    public boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException{
         return true;
     }
 }

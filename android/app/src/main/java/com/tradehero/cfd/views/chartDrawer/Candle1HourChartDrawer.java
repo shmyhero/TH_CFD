@@ -25,18 +25,13 @@ public class Candle1HourChartDrawer extends CandleChartDrawer {
     }
 
     @Override
-    public int getLablesToSkip(JSONArray chartDataList) {
-       return ChartDrawerConstants.GetMinutePointerNumber(180);
-    }
-
-    @Override
-    public boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException {
+    public boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException {
         return true;
     }
 
     @Override
     public int getGapLineUnitAddMount() {
-        return 12;
+        return 3;
     }
 
     @Override

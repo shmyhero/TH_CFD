@@ -7,8 +7,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormatSymbols;
+import java.text.FieldPosition;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Neko on 16/9/19.
@@ -21,16 +26,21 @@ public class Candle15MinuteChartDrawer extends CandleChartDrawer {
 
     @Override
     public int getGapLineUnit() {
-        return Calendar.AM_PM;
+        return Calendar.HOUR;
     }
 
     @Override
-    public int getLablesToSkip(JSONArray chartDataList) {
-        return ChartDrawerConstants.GetMinutePointerNumber(15);
+    public int getLablesToSkip() {
+        return 3;
     }
 
     @Override
-    public boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException {
+    protected SimpleDateFormat getGapLineFormat() {
+        return new SimpleDateFormat("HH");
+    }
+
+    @Override
+    public boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException {
         return !stockInfoObject.getBoolean("isOpen");
     }
 

@@ -18,6 +18,8 @@ import com.tradehero.cfd.views.chartDrawer.base.ReactCombinedChartRenderer;
 import com.tradehero.cfd.views.chartDrawer.base.ReactXAxisRenderer;
 import com.tradehero.cfd.views.chartDrawer.base.ReactYAxisRenderer;
 
+import java.util.List;
+
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
  */
@@ -79,27 +81,14 @@ public class ReactChart extends CombinedChart {
         ((ReactXAxisRenderer)mXAxisRenderer).setBackgroundColor(Color.rgb(240, 240, 240)); // light
     }
 
-//    @Override
-//    protected void onDraw(Canvas canvas) {
-//        Paint backgroundPaint = new Paint();
-//        backgroundPaint.setStyle(Paint.Style.FILL);
-//        backgroundPaint.setColor(Color.WHITE);
-//        RectF bg = new RectF(0,0,canvas.getWidth(), canvas.getHeight());
-//        canvas.drawRect(bg, backgroundPaint);
-//
-//        super.onDraw(canvas);
-////
-////        ((ReactYAxisRenderer)mAxisRendererRight).setBackgroundColor(mGridBackgroundPaint);
-////
-////        RectF new_Background = new RectF(mViewPortHandler.getContentRect());
-////        new_Background.left = mViewPortHandler.getContentRect().right;
-////        new_Background.right = canvas.getWidth();
-////        new_Background.bottom = canvas.getHeight();
-////        canvas.drawRect(new_Background, mGridBackgroundPaint);
-////
-////        mAxisRendererLeft.renderAxisLabels(canvas);
-////        mAxisRendererRight.renderAxisLabels(canvas);
-//    }
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        if (mXAxis.isDrawLimitLinesBehindDataEnabled())
+            mXAxisRenderer.renderLimitLines(canvas);
+
+    }
 
     public void setGridBackgroundColor(int color) {
         super.setGridBackgroundColor(0);
@@ -136,5 +125,12 @@ public class ReactChart extends CombinedChart {
 //        }
 //    }
 
+    int[] gradientColors;
+    public void setGradientColors(int[] colors){
+        gradientColors = colors;
+    }
 
+    public int[] getGradientColors(){
+        return gradientColors;
+    }
 }

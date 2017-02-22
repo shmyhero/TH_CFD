@@ -19,6 +19,11 @@ public class Stick6MonthChartDrawer extends LineStickChartDrawer{
     }
 
     @Override
+    protected int getGapLineUnitAddMount() {
+        return 1;   //1 month
+    }
+
+    @Override
     public SimpleDateFormat getGapLineFormat() {
         return new SimpleDateFormat("MM/dd");
     }
@@ -42,7 +47,7 @@ public class Stick6MonthChartDrawer extends LineStickChartDrawer{
     }
 
     @Override
-    protected boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException {
-        return true;
+    protected boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException {
+        return !stockInfoObject.getBoolean("isOpen");
     }
 }

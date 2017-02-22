@@ -1,7 +1,11 @@
 package com.tradehero.cfd.views.chartDrawer.base;
 
 import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
@@ -19,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Neko on 16/9/19.
@@ -30,6 +35,14 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
         super.resetChart(chart);
         chart.setDragEnabled(false);
         chart.setTouchEnabled(false);
+    }
+
+    protected Drawable getGradientDrawable(int[] colors){
+        GradientDrawable gradient = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+        gradient.setShape(GradientDrawable.RECTANGLE);
+        //gradient.setShape(GradientDrawable.RECTANGLE);
+        //gradient.setCornerRadius(0);
+        return gradient;
     }
 
     @Override
@@ -87,7 +100,10 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
         } catch (Exception e) {
             Log.e("", e.toString());
         }
-        Drawable drawable = ContextCompat.getDrawable(chart.getContext(), isActual ? R.drawable.stock_price_fill_color_actual : R.drawable.stock_price_fill_color);
+
+        Drawable drawable = getGradientDrawable(((ReactChart)chart).getGradientColors());
+        //Drawable drawable = ContextCompat.getDrawable(chart.getContext(), isActual ? R.drawable.stock_price_fill_color_actual : R.drawable.stock_price_fill_color);
+
         set1.setFillDrawable(drawable);
         set1.setDrawFilled(true);
 

@@ -1,8 +1,10 @@
 package com.tradehero.cfd.views.chartDrawer.base;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.Region;
 
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.data.CandleEntry;
@@ -26,10 +28,11 @@ public class ReactCandleStickChartRenderer extends CandleStickChartRenderer {
     @Override
     public void drawData(Canvas c) {
         RectF rect = new RectF(mViewPortHandler.getContentRect().left, 0, mViewPortHandler.getContentRect().right, c.getHeight());
-        c.clipRect(rect);
-        //c.clipRect(mViewPortHandler.getContentRect());
+        //c.clipRect(rect);
+        c.save();
+        c.clipRect(mViewPortHandler.getContentRect());
         super.drawData(c);
-        c.clipRect(new RectF(0,0,c.getWidth(),c.getHeight()));
+        c.clipRect(new RectF(0,0,c.getWidth(),c.getHeight()), Region.Op.UNION);
     }
 
 }

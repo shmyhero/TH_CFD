@@ -60,7 +60,7 @@ var tabDataLandscopeLine = [
 			{"type":NetConstants.PARAMETER_CHARTTYPE_6_MONTH, "name":'6月'},]
 
 var tabDataLandscopeCandle = [
-			{"type":NetConstants.PARAMETER_CHARTTYPE_TODAY_CANDLE, "name":'分时'},
+			// {"type":NetConstants.PARAMETER_CHARTTYPE_TODAY_CANDLE, "name":'分时'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_1_MINUTE, "name":'1分钟'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'5分钟'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_15_MINUTE, "name":'15分钟'},
@@ -304,7 +304,6 @@ var StockDetailPage = React.createClass({
 				url = NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M_LIVE;
 				console.log('live', url );
 			}
-
 			url = url.replace(/<securityId>/, this.props.stockCode);
 		}else if(chartType == NetConstants.PARAMETER_CHARTTYPE_DAY){
 			url = NetConstants.CFD_API.GET_STOCK_KLINE_DAY;
@@ -316,24 +315,37 @@ var StockDetailPage = React.createClass({
 		}
 		////////TEST DATA////////
 		//TODO: Replace the TEST DATA
-		else if(chartType === NetConstants.PARAMETER_CHARTTYPE_60_MINUTE
-			|| chartType === NetConstants.PARAMETER_CHARTTYPE_1_MINUTE
-			|| chartType === NetConstants.PARAMETER_CHARTTYPE_15_MINUTE ){
-			url = NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M;
+		else if(chartType === NetConstants.PARAMETER_CHARTTYPE_1_MINUTE  ){
+			url = NetConstants.CFD_API.GET_STOCK_KLINE_1M;
 			if(LogicData.getAccountState()){
-				url = NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M_LIVE;
-				console.log('live', url );
-			}
-
-			url = url.replace(/<securityId>/, this.props.stockCode);
-		}else if(chartType === NetConstants.PARAMETER_CHARTTYPE_TODAY_CANDLE){
-			url = NetConstants.CFD_API.GET_STOCK_KLINE_DAY;
-			if(LogicData.getAccountState()){
-				url = NetConstants.CFD_API.GET_STOCK_KLINE_DAY_LIVE;
+				url = NetConstants.CFD_API.GET_STOCK_KLINE_1M_LIVE;
 				console.log('live', url );
 			}
 			url = url.replace(/<securityId>/, this.props.stockCode);
-		} else if(chartType === NetConstants.PARAMETER_CHARTTYPE_3_MONTH
+		}else if(chartType === NetConstants.PARAMETER_CHARTTYPE_15_MINUTE){
+			url = NetConstants.CFD_API.GET_STOCK_KLINE_15M;
+			if(LogicData.getAccountState()){
+				url = NetConstants.CFD_API.GET_STOCK_KLINE_15_LIVE;
+				console.log('live', url );
+			}
+			url = url.replace(/<securityId>/, this.props.stockCode);
+		}else if(chartType === NetConstants.PARAMETER_CHARTTYPE_60_MINUTE){
+			url = NetConstants.CFD_API.GET_STOCK_KLINE_60M;
+			if(LogicData.getAccountState()){
+				url = NetConstants.CFD_API.GET_STOCK_KLINE_60M_LIVE;
+				console.log('live', url );
+			}
+			url = url.replace(/<securityId>/, this.props.stockCode);
+		}
+		// else if(chartType === NetConstants.PARAMETER_CHARTTYPE_TODAY_CANDLE){
+		// 	url = NetConstants.CFD_API.GET_STOCK_KLINE_DAY;
+		// 	if(LogicData.getAccountState()){
+		// 		url = NetConstants.CFD_API.GET_STOCK_KLINE_DAY_LIVE;
+		// 		console.log('live', url );
+		// 	}
+		// 	url = url.replace(/<securityId>/, this.props.stockCode);
+		// }
+		else if(chartType === NetConstants.PARAMETER_CHARTTYPE_3_MONTH
 			 || chartType === NetConstants.PARAMETER_CHARTTYPE_6_MONTH){
 			 url = url.replace(/<stockCode>/, this.props.stockCode)
 			 url = url.replace(/<chartType>/, "week")

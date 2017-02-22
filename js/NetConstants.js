@@ -93,8 +93,14 @@ function getCFDAPI(){
     UPDATE_STOCK_ALERT_LIVE: CFD_API_SERVER + '/api/user/live/stockAlert',//LIVE
     POST_PUSH_TOKEN: CFD_API_SERVER + '/api/user/pushtoken',
     POST_PUSH_TOKEN_AUTH: CFD_API_SERVER + '/api/user/pushtokenauth',
+    GET_STOCK_KLINE_1M: CFD_API_SERVER + '/api/quote/<securityId>/kline/1m/horizontal',
+    GET_STOCK_KLINE_1M_LIVE: CFD_API_SERVER + '/api/quote/live/<securityId>/kline/1m/horizontal',
     GET_STOCK_KLINE_FIVE_M: CFD_API_SERVER + '/api/quote/<securityId>/kline/5m',
     GET_STOCK_KLINE_FIVE_M_LIVE: CFD_API_SERVER + '/api/quote/live/<securityId>/kline/5m',
+    GET_STOCK_KLINE_15M: CFD_API_SERVER + '/api/quote/<securityId>/kline/15m/horizontal',
+    GET_STOCK_KLINE_15M_LIVE: CFD_API_SERVER + '/api/quote/live/<securityId>/kline/15m/horizontal',
+    GET_STOCK_KLINE_60M: CFD_API_SERVER + '/api/quote/<securityId>/kline/60m/horizontal',
+    GET_STOCK_KLINE_60M_LIVE: CFD_API_SERVER + '/api/quote/live/<securityId>/kline/60m/horizontal',
     GET_STOCK_KLINE_DAY: CFD_API_SERVER + '/api/quote/<securityId>/kline/day',
     GET_STOCK_KLINE_DAY_LIVE: CFD_API_SERVER + '/api/quote/live/<securityId>/kline/day',
     GET_MY_MESSAGES: CFD_API_SERVER + '/api/user/message?pageNum=<pageNum>&pageSize=<pageSize>',
@@ -199,24 +205,24 @@ export let PARAMETER_VERFICATION_CODE = 'verifyCode'
 export let PARAMETER_NICKNAME = 'nickname'
 export let PARAMETER_STOCKIDS = 'securityIds'
 
-export let PARAMETER_CHARTTYPE_TEN_MINUTE = '10m'
-export let PARAMETER_CHARTTYPE_TWO_HOUR = '2h'
+// export let PARAMETER_CHARTTYPE_TEN_MINUTE = '10m'
 export let PARAMETER_CHARTTYPE_TODAY = 'today'
+export let PARAMETER_CHARTTYPE_TWO_HOUR = '2h'
 export let PARAMETER_CHARTTYPE_WEEK = 'week'
 export let PARAMETER_CHARTTYPE_MONTH = 'month'
-export let PARAMETER_CHARTTYPE_DAY = 'day'
-export let PARAMETER_CHARTTYPE_5_MINUTE = '5m'
-
-export let PARAMETER_CHARTTYPE_TODAY_CANDLE = 'todayK'
-export let PARAMETER_CHARTTYPE_1_MINUTE = '1m'
-export let PARAMETER_CHARTTYPE_15_MINUTE = '15m'
-export let PARAMETER_CHARTTYPE_60_MINUTE = '1h'
 export let PARAMETER_CHARTTYPE_3_MONTH = '3M'
 export let PARAMETER_CHARTTYPE_6_MONTH = '6M'
 
+// export let PARAMETER_CHARTTYPE_TODAY_CANDLE = 'todayK'
+export let PARAMETER_CHARTTYPE_1_MINUTE = '1m'
+export let PARAMETER_CHARTTYPE_5_MINUTE = '5m'
+export let PARAMETER_CHARTTYPE_15_MINUTE = '15m'
+export let PARAMETER_CHARTTYPE_60_MINUTE = '60m'
+export let PARAMETER_CHARTTYPE_DAY = 'day'
+
+
 export function isCandleChart(type){
-  if(type === PARAMETER_CHARTTYPE_TODAY_CANDLE
-  || type === PARAMETER_CHARTTYPE_1_MINUTE
+  if(type === PARAMETER_CHARTTYPE_1_MINUTE
   || type === PARAMETER_CHARTTYPE_5_MINUTE
   || type === PARAMETER_CHARTTYPE_15_MINUTE
   || type === PARAMETER_CHARTTYPE_60_MINUTE

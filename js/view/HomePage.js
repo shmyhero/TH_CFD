@@ -1021,7 +1021,7 @@ var HomePage = React.createClass({
 		if(firstLoad){
 			console.log("firstLoad true renderLoginWebView");
 			firstLoad = false
-			var url = 'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='
+			var url = 'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state=1'
 			return(
 				<WebView
 					style = {{height:0}}

@@ -53,7 +53,6 @@ var tabData = [
 
 var tabDataLandscopeLine = [
 			{"type":NetConstants.PARAMETER_CHARTTYPE_TODAY, "name":'分时'},
-			// {"type":NetConstants.PARAMETER_CHARTTYPE_TEN_MINUTE, "name":'10分钟'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_TWO_HOUR, "name":'2小时'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_WEEK, "name":'5日'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_MONTH, "name":'1月'},
@@ -62,7 +61,6 @@ var tabDataLandscopeLine = [
 
 var tabDataLandscopeCandle = [
 			{"type":NetConstants.PARAMETER_CHARTTYPE_TODAY_CANDLE, "name":'分时'},
-			// {"type":NetConstants.PARAMETER_CHARTTYPE_TEN_MINUTE, "name":'10分钟'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_1_MINUTE, "name":'1分钟'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'5分钟'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_15_MINUTE, "name":'15分钟'},
@@ -848,40 +846,29 @@ var StockDetailPage = React.createClass({
 	},
 
 	renderTitleLandspace:function(){
-		// var percentChange = 0
-		//
-		// if (this.props.lastClosePrice <= 0) {
-		// 	percentChange = 0
-		// } else {
-		// 	percentChange = (this.state.stockPrice - this.props.lastClosePrice) / this.props.lastClosePrice * 100
-		// }
-		//
-		// var subTitleColor = ColorConstants.stock_color(percentChange)
-		// var subTitleText = this.state.stockPrice + '  '
-		// if (percentChange > 0) {
-		// 	subTitleText += '+' + percentChange.toFixed(2) + '%'
-		// } else {
-		// 	subTitleText += percentChange.toFixed(2) + '%'
-		// }
 
-
-
-		var title  = this.props.stockName + "	"+this.state.stockCurrencyPrice+"	";
+		var titleText  = this.props.stockName;
+		var currentPriceText = this.state.stockCurrencyPrice;
+		var percentChangeText = "--"
 		console.log("this.state.stockPreclose:"+this.state.stockPreclose+"	this.state.stockCurrencyPrice="+this.state.stockCurrencyPrice)
 		if(this.state.stockPreclose!=='--' && this.state.stockCurrencyPrice!=='--'){
 			var percentChange = (this.state.stockCurrencyPrice - this.state.stockPreclose) / this.state.stockPreclose * 100
 			if (percentChange > 0) {
-				title += '+' + percentChange.toFixed(2) + '%'
+				percentChangeText = '+' + percentChange.toFixed(2) + '%'
 			} else {
-				title += percentChange.toFixed(2) + '%'
+				percentChangeText = percentChange.toFixed(2) + '%'
 			}
 		}else{
-			title += '--'
+			percentChangeText = '--'
 		}
 
 		return(
 			<View style={{flexDirection:'row',width:width,alignItems:'center',justifyContent: 'space-between'}}>
-   			<Text style={{fontSize:15,color:'white',marginLeft:15,marginTop:10,marginBottom:10,}}>{title}</Text>
+				<View style={{flexDirection:'row',alignItems:'center',marginTop:10,marginBottom:10,justifyContent: 'flex-start'}}>
+					<Text style={{fontSize:15,color:'white',marginLeft:15}}>{titleText}</Text>
+					<Text style={{fontSize:15,color:'white',marginLeft:10}}>{currentPriceText}</Text>
+					<Text style={{fontSize:15,color:'white',marginLeft:10}}>{percentChangeText}</Text>
+				</View>
 				<TouchableOpacity onPress={()=>this.closeLandspace()}>
 					<Image  style={{width:20,height:20,marginRight:16}} source={require('../../images/icon_close_full_screen.png')}></Image>
 				</TouchableOpacity>

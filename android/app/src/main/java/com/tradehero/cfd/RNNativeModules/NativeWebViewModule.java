@@ -316,6 +316,8 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
     @Override
     protected WebView createViewInstance(ThemedReactContext reactContext) {
         ReactWebView webView = new ReactWebView(reactContext);
+
+        webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {

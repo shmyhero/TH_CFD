@@ -814,8 +814,8 @@ var StockDetailPage = React.createClass({
 						drawBackground={this.state.orientation == ORIENTATION_LANDSPACE}
 						borderColor={borderColor}
 						// backgroundColor={NetConstants.isCandleChart(this.state.chartType) ? backgroundColor : 'transparent'}
-						xAxisTextSize={this.state.orientation == ORIENTATION_LANDSPACE ? 2 : 1}
-						rightAxisTextSize={this.state.orientation == ORIENTATION_LANDSPACE ? 14 : 4}
+						xAxisTextSize={this.state.orientation == ORIENTATION_LANDSPACE ? 11 : 8}
+						rightAxisTextSize={this.state.orientation == ORIENTATION_LANDSPACE ? 14 : 8}
 						textColor={textColor}
 						rightAxisLabelCount={7}
 						rightAxisPosition="OUTSIDE_CHART"
@@ -823,7 +823,7 @@ var StockDetailPage = React.createClass({
 						rightAxisDrawLabel={this.state.orientation == ORIENTATION_LANDSPACE}
 						rightAxisDrawGridLines={rightAxisDrawGridLines}
 						chartPaddingTop={this.state.orientation == ORIENTATION_LANDSPACE ? 15 : 0}
-						chartPaddingBottom={this.state.orientation == ORIENTATION_LANDSPACE ? 15 : 15}	//The limit line needs some space to show, set it to 3...
+						chartPaddingBottom={this.state.orientation == ORIENTATION_LANDSPACE ? 15 : 8}	//The limit line needs some space to show, set it to 3...
 						chartPaddingLeft={15}
 						chartPaddingRight={15}
 						lineChartGradient={lineChartGradient}

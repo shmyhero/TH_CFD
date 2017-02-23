@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.20.116:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.122:8081").apply();
 
         super.onCreate(null);
 
@@ -477,5 +477,16 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         Intent intent = new Intent("onConfigurationChanged");
         intent.putExtra("newConfig", newConfig);
         this.sendBroadcast(intent);
+    }
+
+    public static boolean isLandscape() {
+        Configuration mConfiguration = mInstance.getResources().getConfiguration(); //获取设置的配置信息
+        int ori = mConfiguration.orientation ; //获取屏幕方向
+        if(ori == mConfiguration.ORIENTATION_LANDSCAPE){
+            return true;
+        }else if(ori == mConfiguration.ORIENTATION_PORTRAIT){
+            return false;
+        }
+        return false;
     }
 }

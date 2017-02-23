@@ -84,11 +84,11 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 		if _chartType == "undefined" {
 			return
 		}
-		let width = _rect.width
-		let height = _rect.height
 		if (_rect == CGRectZero || _lineData.isEmpty) {
 			return
-		}
+        }
+        let width = chartWidth()
+        let height = chartHeight()
 		
 		if _lineData.count == 1 {
 			// only 1 point data, duplicate it.(one line need two points)
@@ -162,9 +162,7 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 	}
 	
 	func calculateVerticalLines() -> Void {
-		let width = _rect.width
-//		let height = _rect.height
-		if (width == 0 || _lineData.isEmpty) {
+		if (_rect == CGRectZero || _lineData.isEmpty) {
 			return
 		}
 		verticalLinesX = []

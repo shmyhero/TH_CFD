@@ -54,3 +54,24 @@ extension NSDate {
 		return calendar.dateFromComponents(components)!
 	}
 }
+
+// MARK: Double
+extension Double {
+    /// Rounds the double to decimal places value
+    func roundTo(places:Int) -> Double {
+        let divisor = pow(10.0, Double(places))
+        return round(self * divisor) / divisor
+    }
+    
+    func decimalPlace() -> Int {
+        let str = "\(self)"
+        if let range = str.rangeOfString(".") {
+            print (range.endIndex)
+            print (str.endIndex)
+            return range.endIndex.distanceTo(str.endIndex)
+        }
+        else {
+            return 0
+        }
+    }
+}

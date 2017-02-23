@@ -9,8 +9,8 @@
 class CandleChartRender: BaseRender {
 	weak var candleDataProvider: CandleChartDataProvider?
 	
-	override init(view:StockChartView, rect:CGRect) {
-		super.init(view: view, rect: rect)
+	override init(view:StockChartView) {
+		super.init(view: view)
 		candleDataProvider = dataProvider as? CandleChartDataProvider
 	}
 	
@@ -28,8 +28,8 @@ class CandleChartRender: BaseRender {
 		
 		CGContextSaveGState(context)
 		
-		let width = _rect.width
-		let height = _rect.height
+		let width = candleDataProvider!.chartWidth()
+		let height = candleDataProvider!.chartHeight()
 		let clippingBox:UIBezierPath = UIBezierPath.init(rect: CGRect(x: _margin+1, y: _topMargin-1, width: width-_margin*2, height: height-_bottomMargin-_topMargin+2))
 		clippingBox.addClip()
 		//set up the points line
@@ -85,8 +85,8 @@ class CandleChartRender: BaseRender {
 		
 		CGContextSaveGState(context)
 		
-		let width = _rect.width
-		let height = _rect.height
+		let width = candleDataProvider!.chartWidth()
+		let height = candleDataProvider!.chartHeight()
 		let clippingBox:UIBezierPath = UIBezierPath.init(rect: CGRect(x: _margin+1, y: _topMargin-1, width: width-_margin*2, height: height-_bottomMargin-_topMargin+2))
 		clippingBox.addClip()
 		// vertical lines
@@ -106,9 +106,9 @@ class CandleChartRender: BaseRender {
 	override func drawExtraText(context:CGContext) -> Void {
 		if (candleDataProvider == nil) {
 			return
-		}
-		let height = _rect.height
-		let width = _rect.width
+        }
+        let width = candleDataProvider!.chartWidth()
+		let height = candleDataProvider!.chartHeight()
 		let dateFormatter = NSDateFormatter()
 		let textWidth:CGFloat = 28.0
 		let chartType = candleDataProvider!.chartType()

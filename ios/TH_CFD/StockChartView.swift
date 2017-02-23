@@ -116,17 +116,17 @@ class StockChartView: UIView {
 		let context:CGContext! = UIGraphicsGetCurrentContext()
 		if dataSource == nil || dataSource!.isEmpty() {
 			// no data, only draw box
-			render = BaseRender.init(view: self, rect: rect)
+			render = BaseRender.init(view: self)
 			render!.render(context)
 		} else {
 			if dataSource!.isKindOfClass(CandleChartDataSource) {
-				render = CandleChartRender.init(view: self, rect: rect)
-				render?.dataProvider = dataSource
+				render = CandleChartRender.init(view: self)
+//				render?.dataProvider = dataSource
 				render!.render(context)
 			}
 			else {
-				render = LineChartRender.init(view: self, rect: rect)
-				render?.dataProvider = dataSource
+				render = LineChartRender.init(view: self)
+//				render?.dataProvider = dataSource
 				render!.render(context)
 			}
 		}

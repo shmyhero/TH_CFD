@@ -9,8 +9,8 @@
 class LineChartRender: BaseRender {
 	weak var lineDataProvider: LineChartDataProvider?
 	
-	override init(view:StockChartView, rect:CGRect) {
-		super.init(view: view, rect: rect)
+	override init(view:StockChartView) {
+		super.init(view: view)
 		lineDataProvider = dataProvider as? LineChartDataProvider
 	}
 	
@@ -29,8 +29,8 @@ class LineChartRender: BaseRender {
 			return
 		}
 		
-		let width = _rect.width
-		let height = _rect.height
+		let width = lineDataProvider!.chartWidth()
+		let height = lineDataProvider!.chartHeight()
 		
 		// draw the line graph
 		_colorSet.lineColor.setFill()
@@ -124,8 +124,8 @@ class LineChartRender: BaseRender {
 		CGContextSaveGState(context)
 		//center line
 		var linePath = UIBezierPath()
-		let width = _rect.width
-		let height = _rect.height
+		let width = lineDataProvider!.chartWidth()
+		let height = lineDataProvider!.chartHeight()
 		let middleLineY = lineDataProvider?.yPosOfMiddleLine()
 		if (middleLineY > 0) {
 			let centerY = round(middleLineY!)
@@ -158,9 +158,9 @@ class LineChartRender: BaseRender {
 	override func drawExtraText(context:CGContext) -> Void {
 		if (lineDataProvider == nil) {
 			return
-		}
-		let height = _rect.height
-		let width = _rect.width
+        }
+        let width = lineDataProvider!.chartWidth()
+		let height = lineDataProvider!.chartHeight()
 		let dateFormatter = NSDateFormatter()
 		var textWidth:CGFloat = 28.0
 		let chartType = lineDataProvider!.chartType()

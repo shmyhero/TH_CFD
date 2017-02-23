@@ -9,7 +9,7 @@
 protocol BaseDataProvider : class
 {
 	func chartType() -> String
-	func hasData() ->Bool
+	func hasData() -> Bool
 	func margin() -> CGFloat
 	func topMargin() -> CGFloat
 	func bottomMargin() -> CGFloat
@@ -17,6 +17,10 @@ protocol BaseDataProvider : class
 	func minPrice() -> Double
 	func maxPercent() -> Double
 	func minPercent() -> Double
+    func isPortrait() -> Bool
+    func chartWidth() -> CGFloat
+    func chartHeight() -> CGFloat
+    func rightPadding() -> CGFloat
 }
 
 class BaseData: NSObject {
@@ -35,7 +39,7 @@ class BaseDataSource: NSObject, BaseDataProvider {
 	var _rect = CGRectZero
 	let _margin:CGFloat = 15.0
 	let _topMargin:CGFloat = 2.0
-	let _bottomMargin:CGFloat = 15.0
+    let _bottomMargin:CGFloat = 15.0
 	
 	var _maxValue:Double = Double.NaN
 	var _minValue:Double = Double.NaN
@@ -122,5 +126,21 @@ class BaseDataSource: NSObject, BaseDataProvider {
 		else {
 			return Double.NaN
 		}
-	}
+    }
+    
+    func isPortrait() -> Bool {
+        return Orientation.getOrientation() == .Portrait || Orientation.getOrientation() == .PortraitUpsideDown
+    }
+    
+    func chartWidth() -> CGFloat {
+        return _rect.width - rightPadding()
+    }
+    
+    func chartHeight() -> CGFloat {
+        return _rect.height
+    }
+    
+    func rightPadding() ->CGFloat {
+        return isPortrait() ? 0 : 70
+    }
 }

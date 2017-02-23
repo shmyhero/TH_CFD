@@ -110,11 +110,11 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		if _chartType == "undefined" {
 			return
 		}
-		let width = _rect.width
-		let height = _rect.height
 		if (_rect == CGRectZero || _candleData.isEmpty) {
 			return
-		}
+        }
+        let width = chartWidth()
+        let height = chartHeight()
 		
 		let needRender = { (column: Int) -> Bool in
 			let x:CGFloat = width - CGFloat(column) * self.oneSpacer() - self._margin + self.panX()
@@ -207,7 +207,7 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		}
 		else {
 			let allCandleWidth = CGFloat(_candleData.count) * oneSpacer()
-			let viewWidth = _rect.width - _margin * 2
+			let viewWidth = chartWidth() - _margin * 2
 			if allCandleWidth > viewWidth {
 				return allCandleWidth - viewWidth
 			}

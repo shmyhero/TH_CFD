@@ -14,6 +14,7 @@ class ColorSet: NSObject {
 	var middleLineColor: UIColor
 	var dateTextColor: UIColor
 	var minmaxColor: UIColor
+    var rightTextColor: UIColor
 	
 	// line chart
 	var startColor: UIColor
@@ -40,7 +41,8 @@ class ColorSet: NSObject {
 				
 			bgLineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0x657798)
 			lineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0xffffff)
-			minmaxColor = type == 1 ? UIColor.whiteColor() : UIColor(hexInt: 0x94a9cf)
+            minmaxColor = type == 1 ? UIColor.whiteColor() : UIColor(hexInt: 0x94a9cf)
+            rightTextColor = type == 1 ? UIColor.whiteColor() : UIColor(hexInt: 0x223555)
 		}
 		else {
 			startColor = UIColor(hexInt: 0x7daeff)
@@ -50,7 +52,8 @@ class ColorSet: NSObject {
 			
 			bgLineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0x497bce)
 			lineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0xbbceed)
-			minmaxColor = type == 1 ? UIColor.whiteColor() : UIColor(hexInt: 0x70a5ff)
+            minmaxColor = type == 1 ? UIColor.whiteColor() : UIColor(hexInt: 0x70a5ff)
+            rightTextColor = type == 1 ? UIColor.whiteColor() : UIColor(hexInt: 0x053da1)
 		}
 		super.init()
 	}

@@ -151,19 +151,19 @@ function getCFDAPI(){
 
     GET_PAY_DEMO_TEST_ID:CFD_API_SERVER + '/api/user/live/deposit/id?amount=10',
 
-    GET_SUPPORT_WITHDRAW_BANKS: CFD_API_SERVER + "/api/banks",
-    GET_ALL_PROVINCES_AND_CITIES: CFD_API_SERVER + "/api/area/?id=-1",
-    GET_PROVINCES: CFD_API_SERVER + "/api/area/?id=0",
-    GET_CITY: CFD_API_SERVER + "/api/area/?id=<id>",
+    GET_SUPPORT_WITHDRAW_BANKS: CFD_API_SERVER + "/api/common/banks",
+    GET_ALL_PROVINCES_AND_CITIES: CFD_API_SERVER + "/api/common/area/?id=-1",
+    GET_PROVINCES: CFD_API_SERVER + "/api/common/area/?id=0",
+    GET_CITY: CFD_API_SERVER + "/api/common/area/?id=<id>",
     BIND_BANK_ACCOUNT: CFD_API_SERVER + "/api/user/live/refaccount",
-    REQUEST_UNBIND_CARD: CFD_API_SERVER + "/api/user/live/unbind",
-    GET_USER_INFO: CFD_API_SERVER + "/api/user/live/info",
+    REQUEST_UNBIND_CARD: CFD_API_SERVER + "/api/user/live/withdraw/unbind",
+    GET_USER_INFO: CFD_API_SERVER + "/api/user/live/withdraw/info",
     REFUNDABLE_BALANCE: CFD_API_SERVER + "/api/user/live/balance/refundable",
     REFUND_SETTINGS: CFD_API_SERVER + "/api/refund/setting",
     REQUEST_WITHDRAW: CFD_API_SERVER + "/api/user/live/withdraw",
 
     GET_TRANSFERS_LIST: CFD_API_SERVER + "/api/user/live/transfers",
-    GET_DEPOSIT_SETTING: CFD_API_SERVER + "/api/deposit/setting",
+    GET_DEPOSIT_SETTING: CFD_API_SERVER + "/api/common/setting/deposit",
     TIMESTAMP: CFD_API_SERVER + '/api/user/live/timestamp',//LIVE ok
   }
 }

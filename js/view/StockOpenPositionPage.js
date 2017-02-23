@@ -1281,6 +1281,7 @@ var StockOpenPositionPage = React.createClass({
 					chartType={this.state.chartType}
 					colorType={1}
 					chartIsActual={LogicData.getAccountState()}
+					lineChartGradient={LogicData.getAccountState() ? ['#374d74','#6683b3'] : ['#99bfff', '#1954b9']}
 					descriptionColor={1}>
 				</LineChart>
 			)

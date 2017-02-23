@@ -30,23 +30,22 @@ public class Candle15MinuteChartDrawer extends CandleChartDrawer {
     }
 
     @Override
-    public int getLablesToSkip() {
-        return 3;
+    public int getLabelsToSkip() {
+        return 0;
     }
 
     @Override
-    protected SimpleDateFormat getGapLineFormat() {
-        return new SimpleDateFormat("HH");
+    protected String formatXAxisLabelText(Date date) {
+        if(date.getHours() == 0){
+            return new SimpleDateFormat("M:d").format(date);
+        }else{
+            return new SimpleDateFormat("H").format(date);
+        }
     }
 
     @Override
     public boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException {
-        return !stockInfoObject.getBoolean("isOpen");
-    }
-
-    @Override
-    public int getGapLineUnitAddMount() {
-        return 12;
+        return true;//!stockInfoObject.getBoolean("isOpen");
     }
 
     @Override
@@ -58,7 +57,7 @@ public class Candle15MinuteChartDrawer extends CandleChartDrawer {
         for(int i = 0; i < chartDataList.length(); i ++) {
             //TODO: use "time" if api returns it instead of Uppercase one.
             Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
-            if (calendar.getTime().getMinutes() == 0){
+            if (calendar.getTime().getMinutes() == 0 && calendar.getTime().getHours() % 3 == 0){
                 limitLineAt.add(i);
                 limitLineCalender.add(calendar);
             }

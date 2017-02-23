@@ -25,7 +25,7 @@ public class Stick3MonthChartDrawer extends LineStickChartDrawer{
 
     @Override
     public SimpleDateFormat getGapLineFormat() {
-        return new SimpleDateFormat("MM/dd");
+        return new SimpleDateFormat("M/d");
     }
 
     @Override
@@ -34,20 +34,7 @@ public class Stick3MonthChartDrawer extends LineStickChartDrawer{
     }
 
     @Override
-    public Calendar getStartUpTimeLine(JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
-        Calendar lastOpen = timeStringToCalendar(stockInfoObject.getString("lastOpen"));
-        Calendar firstDataDate = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
-        Calendar nextLineAt = (Calendar) firstDataDate.clone();
-        nextLineAt.set(Calendar.HOUR_OF_DAY, lastOpen.get(Calendar.HOUR_OF_DAY));
-        nextLineAt.set(Calendar.MINUTE, lastOpen.get(Calendar.MINUTE));
-        nextLineAt.set(Calendar.MILLISECOND, lastOpen.get(Calendar.MILLISECOND));
-
-        nextLineAt.add(getGapLineUnit(), 1);
-        return nextLineAt;
-    }
-
-    @Override
     protected boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException {
-        return !stockInfoObject.getBoolean("isOpen");
+        return false;
     }
 }

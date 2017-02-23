@@ -4,7 +4,9 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.graphics.Region;
 
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.renderer.XAxisRenderer;
 import com.github.mikephil.charting.utils.Transformer;
@@ -16,6 +18,8 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 
 public class ReactXAxisRenderer extends XAxisRenderer {
     protected Paint mBackgroundPaint;
+    protected int horizontalPaddingLeft = 0;
+    protected int horizontalPaddingRight = 0;
     public ReactXAxisRenderer(ViewPortHandler viewPortHandler, XAxis xAxis, Transformer trans) {
         super(viewPortHandler, xAxis, trans);
     }
@@ -25,47 +29,31 @@ public class ReactXAxisRenderer extends XAxisRenderer {
         mBackgroundPaint.setColor(color);
         mBackgroundPaint.setStyle(Paint.Style.FILL);
     }
-//
-//    @Override
-//    public void renderLimitLines(Canvas c) {
-////        if (mXAxis.getPosition() == XAxis.XAxisPosition.TOP) {
-////            RectF new_Background = new RectF(mViewPortHandler.getContentRect());
-////            new_Background.top = 0;
-////            new_Background.bottom = mViewPortHandler.getContentRect().top - 1;
-////            c.drawRect(new_Background, mBackgroundPaint);
-////        }else {
-////            RectF new_Background = new RectF(mViewPortHandler.getContentRect());
-////            new_Background.top = mViewPortHandler.getContentRect().bottom + 1;
-////            new_Background.bottom = c.getHeight();
-////            c.drawRect(new_Background, mBackgroundPaint);
-////        }
-//        super.renderLimitLines(c);
-//    }
 
-//    @Override
-//    public void renderAxisLabels(Canvas c) {
-//        if (!mXAxis.isEnabled() || !mXAxis.isDrawLabelsEnabled())
-//            return;
-//
-////        if (mXAxis.getPosition() == XAxis.XAxisPosition.TOP) {
-////            RectF new_Background = new RectF(mViewPortHandler.getContentRect());
-////            new_Background.top = 0;
-////            new_Background.bottom = mViewPortHandler.getContentRect().top;
-////            c.drawRect(new_Background, mBackgroundPaint);
-////        }else {
-////            RectF new_Background = new RectF(mViewPortHandler.getContentRect());
-////            new_Background.top = mViewPortHandler.getContentRect().bottom;
-////            new_Background.bottom = c.getHeight();
-////            c.drawRect(new_Background, mBackgroundPaint);
-////        }
-//
-//        super.renderAxisLabels(c);
-//    }
-//
-//    @Override
-//    protected void drawLabels(Canvas c, float pos, PointF anchor) {
-//
-//
-//        super.drawLabels(c, pos, anchor);
-//    }
+    public void setHorizontalPaddingLeft(int value){
+        horizontalPaddingLeft = value;
+    }
+
+    public void setHorizontalPaddingRight(int value){
+        horizontalPaddingRight = value;
+    }
+
+    @Override
+    public void renderLimitLineLine(Canvas c, LimitLine limitLine, float[] position) {
+        c.clipRect(mViewPortHandler.getContentRect());
+        super.renderLimitLineLine(c, limitLine, position);
+        c.clipRect(new RectF(0,0,c.getWidth(),c.getHeight()), Region.Op.UNION);
+    }
+
+    @Override
+    public void renderLimitLineLabel(Canvas c, LimitLine limitLine, float[] position, float yOffset) {
+        RectF rect = new RectF();
+        rect.left = mViewPortHandler.getContentRect().left - (horizontalPaddingLeft * 2);
+        rect.right = mViewPortHandler.getContentRect().right + (horizontalPaddingRight * 2);
+        rect.top = 0;
+        rect.bottom = c.getHeight();
+        c.clipRect(rect);
+        super.renderLimitLineLabel(c, limitLine, position, yOffset);
+        c.clipRect(new RectF(0,0,c.getWidth(),c.getHeight()), Region.Op.UNION);
+    }
 }

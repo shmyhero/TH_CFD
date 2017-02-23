@@ -27,31 +27,31 @@ public class ReactYAxisRenderer extends YAxisRenderer {
         mBackgroundPaint.setColor(color);
         mBackgroundPaint.setStyle(Paint.Style.FILL);
     }
-
-    @Override
-    public void renderAxisLabels(Canvas c) {
-
-//        if(mYAxis.getAxisDependency() == YAxis.AxisDependency.LEFT){
-//            if(mViewPortHandler.getContentRect().left != 0) {
-//                RectF new_Background = new RectF(mViewPortHandler.getContentRect());
-//                new_Background.right = mViewPortHandler.getContentRect().left; //+ Utils.convertDpToPixel(1); //border
-//                new_Background.left = 0;
-//                new_Background.bottom = c.getHeight();
-//                c.drawRect(new_Background, mBackgroundPaint);
-//            }
-//        }else {
-//            if(mViewPortHandler.getContentRect().right != c.getWidth()) {
-//                RectF new_Background = new RectF(mViewPortHandler.getContentRect());
-//                new_Background.left = mViewPortHandler.getContentRect().right + Utils.convertDpToPixel(1); //+ Utils.convertDpToPixel(1); //border
-//                new_Background.right = c.getWidth();
-//                new_Background.bottom = c.getHeight();
-//                c.drawRect(new_Background, mBackgroundPaint);
-//            }
-//        }
-
-        if (!mYAxis.isEnabled() || !mYAxis.isDrawLabelsEnabled())
-            return;
-
-        super.renderAxisLabels(c);
-    }
+//
+//    @Override
+//    public void renderAxisLabels(Canvas c) {
+//
+////        if(mYAxis.getAxisDependency() == YAxis.AxisDependency.LEFT){
+////            if(mViewPortHandler.getContentRect().left != 0) {
+////                RectF new_Background = new RectF(mViewPortHandler.getContentRect());
+////                new_Background.right = mViewPortHandler.getContentRect().left; //+ Utils.convertDpToPixel(1); //border
+////                new_Background.left = 0;
+////                new_Background.bottom = c.getHeight();
+////                c.drawRect(new_Background, mBackgroundPaint);
+////            }
+////        }else {
+////            if(mViewPortHandler.getContentRect().right != c.getWidth()) {
+////                RectF new_Background = new RectF(mViewPortHandler.getContentRect());
+////                new_Background.left = mViewPortHandler.getContentRect().right + Utils.convertDpToPixel(1); //+ Utils.convertDpToPixel(1); //border
+////                new_Background.right = c.getWidth();
+////                new_Background.bottom = c.getHeight();
+////                c.drawRect(new_Background, mBackgroundPaint);
+////            }
+////        }
+//
+//        if (!mYAxis.isEnabled() || !mYAxis.isDrawLabelsEnabled())
+//            return;
+//
+//        super.renderAxisLabels(c);
+//    }
 }

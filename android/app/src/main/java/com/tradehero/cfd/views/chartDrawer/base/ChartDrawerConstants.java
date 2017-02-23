@@ -36,7 +36,7 @@ public class ChartDrawerConstants {
         day("day"),
 
         today("today"),
-        hour("1h"),
+        hour("60m"),
         week("week"),
         month("month"),
         threeMonth("3M"),

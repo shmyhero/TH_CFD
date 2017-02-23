@@ -71,14 +71,14 @@ public class ReactChart extends CombinedChart {
     @Override
     protected void init() {
         super.init();
-
-        mAxisRendererLeft = new ReactYAxisRenderer(mViewPortHandler, mAxisLeft, mLeftAxisTransformer);
-        ((ReactYAxisRenderer)mAxisRendererLeft).setBackgroundColor(Color.rgb(240, 240, 240)); // light
-        mAxisRendererRight = new ReactYAxisRenderer(mViewPortHandler, mAxisRight, mRightAxisTransformer);
-        ((ReactYAxisRenderer)mAxisRendererRight).setBackgroundColor(Color.rgb(240, 240, 240)); // light
+//
+//        mAxisRendererLeft = new ReactYAxisRenderer(mViewPortHandler, mAxisLeft, mLeftAxisTransformer);
+//        ((ReactYAxisRenderer)mAxisRendererLeft).setBackgroundColor(Color.rgb(240, 240, 240)); // light
+//        mAxisRendererRight = new ReactYAxisRenderer(mViewPortHandler, mAxisRight, mRightAxisTransformer);
+//        ((ReactYAxisRenderer)mAxisRendererRight).setBackgroundColor(Color.rgb(240, 240, 240)); // light
 
         mXAxisRenderer = new ReactXAxisRenderer(mViewPortHandler, mXAxis, mLeftAxisTransformer);
-        ((ReactXAxisRenderer)mXAxisRenderer).setBackgroundColor(Color.rgb(240, 240, 240)); // light
+        //((ReactXAxisRenderer)mXAxisRenderer).setBackgroundColor(Color.rgb(240, 240, 240)); // light
     }
 
     @Override
@@ -92,9 +92,9 @@ public class ReactChart extends CombinedChart {
 
     public void setGridBackgroundColor(int color) {
         super.setGridBackgroundColor(0);
-        ((ReactYAxisRenderer)mAxisRendererRight).setBackgroundColor(color);
-        ((ReactYAxisRenderer)mAxisRendererLeft).setBackgroundColor(color);
-        ((ReactXAxisRenderer)mXAxisRenderer).setBackgroundColor(color);
+//        ((ReactYAxisRenderer)mAxisRendererRight).setBackgroundColor(color);
+//        ((ReactYAxisRenderer)mAxisRendererLeft).setBackgroundColor(color);
+//        ((ReactXAxisRenderer)mXAxisRenderer).setBackgroundColor(color);
     }
 
     @Override
@@ -132,5 +132,13 @@ public class ReactChart extends CombinedChart {
 
     public int[] getGradientColors(){
         return gradientColors;
+    }
+
+    public void setXAxisPaddingLeft(int value){
+        ((ReactXAxisRenderer)mXAxisRenderer).setHorizontalPaddingLeft(value);
+    }
+
+    public void setXAxisPaddingRight(int value){
+        ((ReactXAxisRenderer)mXAxisRenderer).setHorizontalPaddingRight(value);
     }
 }

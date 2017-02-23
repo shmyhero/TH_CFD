@@ -27,7 +27,7 @@ public class Candle1MinuteChartDrawer extends CandleChartDrawer {
 
     @Override
     public boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException {
-        return !stockInfoObject.getBoolean("isOpen");
+        return true;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class Candle1MinuteChartDrawer extends CandleChartDrawer {
     }
 
     @Override
-    public int getLablesToSkip() {
+    public int getLabelsToSkip() {
         return 0;
     }
 
@@ -54,6 +54,10 @@ public class Candle1MinuteChartDrawer extends CandleChartDrawer {
                 limitLineCalender.add(calendar);
             }
         }
+
+//        int lastLine = chartDataList.length() - 1;
+//        limitLineAt.add(lastLine);
+//        limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
 
         LimitLineInfo limitLineInfo = new LimitLineInfo();
         limitLineInfo.limitLineAt = limitLineAt;

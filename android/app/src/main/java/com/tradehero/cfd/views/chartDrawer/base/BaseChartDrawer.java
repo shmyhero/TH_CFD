@@ -7,7 +7,6 @@ import com.github.mikephil.charting.formatter.XAxisValueFormatter;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.tradehero.cfd.MainActivity;
-import com.tradehero.cfd.views.ReactChart;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -213,7 +212,7 @@ public abstract class BaseChartDrawer implements IChartDrawer {
      *
      * @return
      */
-    protected int getLablesToSkip() {
+    protected int getLabelsToSkip() {
         return 1;
     }
 
@@ -250,7 +249,7 @@ public abstract class BaseChartDrawer implements IChartDrawer {
     }
 
     private void calculateAxis(CombinedChart chart, JSONArray chartDataList, CombinedData data) {
-        chart.getXAxis().setLabelsToSkip(getLablesToSkip());
+        chart.getXAxis().setLabelsToSkip(getLabelsToSkip());
 
         chart.getXAxis().setValueFormatter(new XAxisValueFormatter() {
             @Override
@@ -281,10 +280,8 @@ public abstract class BaseChartDrawer implements IChartDrawer {
 
             boolean needSkipLabel = false;
             if (limitLineInfo.limitLineAt.size() >= 7) {
-                needSkipLabel = getLablesToSkip() > 0 ? true : false;
+                needSkipLabel = getLabelsToSkip() > 0 ? true : false;
             }
-
-            SimpleDateFormat format = getGapLineFormat();
 
             for (int i = 0; i < limitLineInfo.limitLineAt.size(); i++) {
                 int index = limitLineInfo.limitLineAt.get(i);
@@ -294,15 +291,17 @@ public abstract class BaseChartDrawer implements IChartDrawer {
                 gapLine.setLineColor(borderColor);
                 gapLine.setLineWidth(ChartDrawerConstants.LINE_WIDTH);
                 gapLine.enableDashedLine(10f, 0f, 0f);
-                gapLine.setTextSize(8);
+                gapLine.setTextSize(8); //BUGBUG: Change the text size will cause the text not center align... Fix the bug later...
                 //gapLine.setTextSize(chart.getXAxis().getTextSize());
                 gapLine.setTextColor(textColor);
+                gapLine.setXOffset(0);
                 gapLine.setYOffset(Utils.convertPixelsToDp(chart.getXAxis().getYOffset()));
 //                if (needSkipLabel && i < limitLineInfo.limitLineAt.size() - 1 && i % 2 == 1) {
-                if (needSkipLabel && isNeedHide(i,limitLineInfo.limitLineAt.size())) {
+                if(needSkipLabel && isNeedHide(i,limitLineInfo.limitLineAt.size())
+                        ||i == limitLineInfo.limitLineAt.size() - 1 && !needDrawEndLabel(stockInfoObject)){
                     gapLine.setLabel("");
                 } else {
-                    String label = format.format(calendar.getTime());
+                    String label = formatXAxisLabelText(calendar.getTime());
                     if (i == 0) {
                         label = getLableBlank() + label;
                     } else if (i == limitLineInfo.limitLineAt.size() - 1) {
@@ -317,8 +316,13 @@ public abstract class BaseChartDrawer implements IChartDrawer {
         }
     }
 
+    protected String formatXAxisLabelText(Date date){
+        SimpleDateFormat format = getGapLineFormat();
+        return format.format(date);
+    }
+
     public boolean isNeedHide(int index,int count){
-        int skipStep = getLablesToSkip() + 1;
+        int skipStep = getLabelsToSkip() + 1;
 
         if(skipStep == 2) {
 

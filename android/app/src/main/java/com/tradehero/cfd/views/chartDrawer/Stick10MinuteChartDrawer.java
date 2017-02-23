@@ -40,7 +40,7 @@ public class Stick10MinuteChartDrawer extends LineStickChartDrawer {
     }
 
     @Override
-    public int getLablesToSkip() {
+    public int getLabelsToSkip() {
         return ChartDrawerConstants.TEN_MINUTE_POINT_NUMBER;
     }
 

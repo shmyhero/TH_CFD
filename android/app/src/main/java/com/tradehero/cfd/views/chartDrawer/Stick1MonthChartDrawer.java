@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -25,7 +26,7 @@ public class Stick1MonthChartDrawer extends LineStickChartDrawer{
 
     @Override
     public SimpleDateFormat getGapLineFormat() {
-        return new SimpleDateFormat("MM/dd");
+        return new SimpleDateFormat("M/d");
     }
 
     @Override
@@ -33,21 +34,48 @@ public class Stick1MonthChartDrawer extends LineStickChartDrawer{
         return false;
     }
 
-    @Override
-    public Calendar getStartUpTimeLine(JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
-        Calendar lastOpen = timeStringToCalendar(stockInfoObject.getString("lastOpen"));
-        Calendar firstDataDate = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
-        Calendar nextLineAt = (Calendar) firstDataDate.clone();
-        nextLineAt.set(Calendar.HOUR_OF_DAY, lastOpen.get(Calendar.HOUR_OF_DAY));
-        nextLineAt.set(Calendar.MINUTE, lastOpen.get(Calendar.MINUTE));
-        nextLineAt.set(Calendar.MILLISECOND, lastOpen.get(Calendar.MILLISECOND));
-
-        nextLineAt.add(getGapLineUnit(), 1);
-        return nextLineAt;
-    }
+//    @Override
+//    public Calendar getStartUpTimeLine(JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
+//        Calendar lastOpen = timeStringToCalendar(stockInfoObject.getString("lastOpen"));
+//        Calendar firstDataDate = timeStringToCalendar(chartDataList.getJSONObject(0).getString("time"));
+//        Calendar nextLineAt = (Calendar) firstDataDate.clone();
+//        nextLineAt.set(Calendar.HOUR_OF_DAY, lastOpen.get(Calendar.HOUR_OF_DAY));
+//        nextLineAt.set(Calendar.MINUTE, lastOpen.get(Calendar.MINUTE));
+//        nextLineAt.set(Calendar.MILLISECOND, lastOpen.get(Calendar.MILLISECOND));
+//
+//        nextLineAt.add(getGapLineUnit(), 1);
+//        return nextLineAt;
+//    }
 
     @Override
     protected boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException {
-        return !stockInfoObject.getBoolean("isOpen");
+        return false;
+    }
+
+    @Override
+    protected LimitLineInfo calculateLimitLinesPosition(Calendar startUpLine, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
+        ArrayList<Integer> limitLineAt = new ArrayList<>();
+        ArrayList<Calendar> limitLineCalender = new ArrayList<>();
+
+        //Only return the hour.
+        Calendar lastCalendar = null;
+        for(int i = 0; i < chartDataList.length(); i ++) {
+            //TODO: use "time" if api returns it instead of Uppercase one.
+            Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
+            if (lastCalendar != null) {
+                int days = (int) (lastCalendar.getTime().getTime() - calendar.getTime().getTime()) / (1000 * 60 * 60 * 24);
+                if(days < 7){
+                    continue;
+                }
+            }
+            limitLineAt.add(i);
+            limitLineCalender.add(calendar);
+            lastCalendar = calendar;
+        }
+
+        LimitLineInfo limitLineInfo = new LimitLineInfo();
+        limitLineInfo.limitLineAt = limitLineAt;
+        limitLineInfo.limitLineCalender = limitLineCalender;
+        return limitLineInfo;
     }
 }

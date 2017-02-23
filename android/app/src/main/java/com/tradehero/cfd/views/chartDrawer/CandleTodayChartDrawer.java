@@ -27,7 +27,7 @@ public class CandleTodayChartDrawer extends CandleChartDrawer {
     }
 
     @Override
-    public int getLablesToSkip() {
+    public int getLabelsToSkip() {
         return ChartDrawerConstants.GetMinutePointerNumber(60);
     }
 

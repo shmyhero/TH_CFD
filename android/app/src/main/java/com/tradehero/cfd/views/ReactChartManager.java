@@ -465,6 +465,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
             }else {
                 chart.setExtraLeftOffset(chartOffsetLeft);
             }
+            chart.setXAxisPaddingLeft(chartOffsetLeft);
         }
     }
 
@@ -479,6 +480,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
             }else {
                 chart.setExtraRightOffset(chartOffsetRight);
             }
+            chart.setXAxisPaddingRight(chartOffsetLeft);
         }
     }
 

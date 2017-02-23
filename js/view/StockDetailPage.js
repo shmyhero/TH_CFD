@@ -646,7 +646,7 @@ var StockDetailPage = React.createClass({
 		var tabDataCurrent = this.state.chartViewType == CHARTVIEWTYPE_LINE ? tabDataLandscopeLine : tabDataLandscopeCandle;
 		var tabs = tabDataCurrent.map(
 			(data, i) =>
-			<TouchableOpacity style={{width:60}} key={i}
+			<TouchableOpacity style={{width:60, justifyContent:'center',}} key={i}
 					onPress={() => this.pressChartHeaderTab(data.type)}>
 				<Text style={this.state.chartType == data.type? styles.chartTitleTextHighlighted : [styles.chartTitleText, tabcolorStyle]}>
 					{data.name}
@@ -656,7 +656,7 @@ var StockDetailPage = React.createClass({
 
 		return(
 			<View>
-				<ScrollView horizontal={true} style={{marginTop: 6}}>
+				<ScrollView horizontal={true}>
 					{tabs}
 				</ScrollView>
 			</View>
@@ -814,7 +814,8 @@ var StockDetailPage = React.createClass({
 						drawBackground={this.state.orientation == ORIENTATION_LANDSPACE}
 						borderColor={borderColor}
 						// backgroundColor={NetConstants.isCandleChart(this.state.chartType) ? backgroundColor : 'transparent'}
-						// xAxisTextSize={this.state.orientation == ORIENTATION_LANDSPACE ? 5.5 : 4}
+						xAxisTextSize={this.state.orientation == ORIENTATION_LANDSPACE ? 2 : 1}
+						rightAxisTextSize={this.state.orientation == ORIENTATION_LANDSPACE ? 14 : 4}
 						textColor={textColor}
 						rightAxisLabelCount={7}
 						rightAxisPosition="OUTSIDE_CHART"
@@ -822,7 +823,7 @@ var StockDetailPage = React.createClass({
 						rightAxisDrawLabel={this.state.orientation == ORIENTATION_LANDSPACE}
 						rightAxisDrawGridLines={rightAxisDrawGridLines}
 						chartPaddingTop={this.state.orientation == ORIENTATION_LANDSPACE ? 15 : 0}
-						chartPaddingBottom={this.state.orientation == ORIENTATION_LANDSPACE ? 15 : 3}	//The limit line needs some space to show, set it to 3...
+						chartPaddingBottom={this.state.orientation == ORIENTATION_LANDSPACE ? 15 : 15}	//The limit line needs some space to show, set it to 3...
 						chartPaddingLeft={15}
 						chartPaddingRight={15}
 						lineChartGradient={lineChartGradient}
@@ -941,7 +942,7 @@ var StockDetailPage = React.createClass({
 		var imageType1 = this.state.chartViewType == CHARTVIEWTYPE_CANDLE ? require('../../images/icon_chart_type_candle_selected.png'):(isLive?require('../../images/icon_chart_type_candle_unselected_live.png'):require('../../images/icon_chart_type_candle_unselected.png'));
 
 		return(
-			<View style={{flex:1,height:30,justifyContent:'flex-end',marginRight:20,flexDirection:'row'}}>
+			<View style={{flex:1, justifyContent:'flex-end', alignItems: 'center', marginRight:20,flexDirection:'row',}}>
 				<TouchableOpacity onPress={()=>this.changeChartViewType(CHARTVIEWTYPE_LINE)}>
 					<Image  style={{width:35,height:26,marginRight:15,alignSelf:'center'}} source={imageType0}></Image>
 				</TouchableOpacity>
@@ -959,7 +960,7 @@ var StockDetailPage = React.createClass({
 		var viewMargin = 0;//Platform.OS === 'ios' ? 0:15
 		// console.log("render: " + JSON.stringify(this.state.stockInfo))
 		var viewHeight = Platform.OS === 'ios' ? height :  Math.max(height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER, this.state.height)
-
+		var bottomBarBackgroundColor = LogicData.getAccountState() ? "#334a74": "#0741a8";
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
 				<View style={styles.wrapper}>
@@ -969,7 +970,7 @@ var StockDetailPage = React.createClass({
 								{this.renderChart()}
 								{this.renderDataStatus()}
 						</View>
-						<View style={{marginTop:10,marginBottom:10,flexDirection:'row'}}>
+						<View style={{marginTop:10, height: 47, justifyContent:'center', flexDirection:'row', backgroundColor: bottomBarBackgroundColor}}>
 							{this.renderChartHeaderLandscape()}
 							{this.renderBottomViewType()}
 						</View>

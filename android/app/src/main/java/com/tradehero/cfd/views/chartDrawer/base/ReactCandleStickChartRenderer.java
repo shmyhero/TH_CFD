@@ -27,9 +27,6 @@ public class ReactCandleStickChartRenderer extends CandleStickChartRenderer {
 
     @Override
     public void drawData(Canvas c) {
-        RectF rect = new RectF(mViewPortHandler.getContentRect().left, 0, mViewPortHandler.getContentRect().right, c.getHeight());
-        //c.clipRect(rect);
-        c.save();
         c.clipRect(mViewPortHandler.getContentRect());
         super.drawData(c);
         c.clipRect(new RectF(0,0,c.getWidth(),c.getHeight()), Region.Op.UNION);

@@ -25,13 +25,13 @@ public class Candle5MinuteChartDrawer extends CandleChartDrawer {
     }
 
     @Override
-    public int getLablesToSkip() {
+    public int getLabelsToSkip() {
        return 1;
     }
 
     @Override
     public boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException {
-        return !stockInfoObject.getBoolean("isOpen");
+        return true;
     }
 
     @Override

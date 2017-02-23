@@ -70,6 +70,7 @@ var tabDataLandscopeCandle = [
 var didFocusSubscription = null;
 var updateStockInfoTimer = null;
 var layoutSizeChangedSubscription = null
+var chartClickedSubscription = null;
 var flashButtonTimer = null;
 var wattingLogin = false;
 var loadStockInfoSuccess = false;
@@ -146,6 +147,10 @@ var StockDetailPage = React.createClass({
 			this.onLayoutSizeChanged();
 		});
 
+		chartClickedSubscription = EventCenter.getEventEmitter().addListener(EventConst.CHART_CLICKED, () => {
+			this.chartClicked();
+		});
+
 	  Orientation.unlockAllOrientations(); //this will unlock the view to all Orientations
 		Orientation.lockToPortrait(); //this will lock the view to Portrait
     // Orientation.lockToLandscape(); //this will lock the view to Landscape
@@ -157,13 +162,14 @@ var StockDetailPage = React.createClass({
 	componentWillUnmount: function() {
 		this.didFocusSubscription.remove();
 		layoutSizeChangedSubscription && layoutSizeChangedSubscription.remove();
-
+		chartClickedSubscription && chartClickedSubscription.remove();
 		Orientation.getOrientation((err,orientation)=> {
 		 console.log("Current Device Orientation: ", orientation);
 	 });
 
 	 Orientation.lockToPortrait();
 	 Orientation.removeOrientationListener(this._orientationDidChange);
+
 	},
 
 	onLayoutSizeChanged: function(){
@@ -699,7 +705,6 @@ var StockDetailPage = React.createClass({
 		//status 0:正常 1：暂时无法获取数据 2:加载中
 		var status = this.state.dataStatus;
 		// if(WebSocketModule.isConnected()){status=0}
-
 		var imageError = LogicData.getAccountState()?require('../../images/icon_network_connection_error_live.png'):require('../../images/icon_network_connection_error.png')
 		if(status === 1){
 			return (
@@ -844,8 +849,8 @@ var StockDetailPage = React.createClass({
 						{this.renderChartHeader()}
 
 						<View style={{flex: 3.5,marginTop:5,marginLeft:viewMargin,marginRight:viewMargin}}>
-						  {this.renderChart()}
-							{this.renderOrientationClicker()}
+							{/* {this.renderOrientationClicker()} */}
+							{this.renderChart()}
 							{this.renderDataStatus()}
 						</View>
 						<View>
@@ -907,11 +912,17 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
-	renderOrientationClicker:function(){
-		return(
-			<TouchableOpacity onPress={()=>this.changeOrientatioin()} style={[styles.dataStatus,{backgroundColor:'transparent'}]}>
-			</TouchableOpacity>
-		)
+	// renderOrientationClicker:function(){
+	// 	return(
+	// 		<TouchableOpacity
+	// 			onPress={()=>this.changeOrientatioin()}
+	// 			style={[styles.dataStatus,{backgroundColor:'transparent'}]}>
+	// 		</TouchableOpacity>
+	// 	)
+	// },
+
+	chartClicked:function(){
+		this.changeOrientatioin()
 	},
 
 	closeLandspace:function(){

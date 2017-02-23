@@ -14,6 +14,7 @@ import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.tradehero.cfd.MainActivity;
 import com.tradehero.cfd.R;
 import com.tradehero.cfd.StringUtils;
 import com.tradehero.cfd.views.ReactChart;
@@ -34,7 +35,7 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
     protected void resetChart(CombinedChart chart) {
         super.resetChart(chart);
         chart.setDragEnabled(false);
-        chart.setTouchEnabled(false);
+        chart.setTouchEnabled(!MainActivity.isLandscape());
     }
 
     protected Drawable getGradientDrawable(int[] colors){

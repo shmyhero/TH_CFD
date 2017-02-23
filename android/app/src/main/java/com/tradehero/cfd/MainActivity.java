@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.20.122:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.123:8081").apply();
 
         super.onCreate(null);
 
@@ -418,6 +418,13 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         if (context != null) {
             Boolean isProductEnvironment = BuildConfig.IS_PRODUCT_ENVIRONMENT;
             NativeDataModule.passDataToRN(context, NativeActions.ACTION_SET_IS_PRODUCT_SERVER, isProductEnvironment.toString());
+        }
+    }
+
+    public void passChartClickedToRN() {
+        ReactContext context = mReactInstanceManager.getCurrentReactContext();
+        if (context != null) {
+            NativeDataModule.passDataToRN(context, NativeActions.ACTION_CHART_CLICKED, "");
         }
     }
 

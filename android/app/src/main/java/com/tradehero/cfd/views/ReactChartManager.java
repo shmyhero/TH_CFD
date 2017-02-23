@@ -2,7 +2,11 @@ package com.tradehero.cfd.views;
 
 import android.graphics.Color;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 
+import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
@@ -11,7 +15,11 @@ import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.formatter.YAxisValueFormatter;
+import com.github.mikephil.charting.listener.ChartTouchListener;
+import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.utils.Utils;
+import com.tradehero.cfd.MainActivity;
+import com.tradehero.cfd.module.LogicData;
 import com.tradehero.cfd.views.chartDrawer.ChartDrawerBuilder;
 import com.tradehero.cfd.views.chartDrawer.base.ChartDrawerConstants;
 import com.tradehero.cfd.views.chartDrawer.base.IChartDrawer;
@@ -87,6 +95,53 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
         chart.setDragEnabled(false);
 
         //chart.setExtraLeftOffset(15);
+        chart.setHighlightPerDragEnabled(false);
+        chart.setHighlightPerTapEnabled(false);
+        chart.setOnChartGestureListener(new OnChartGestureListener() {
+            @Override
+            public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+            }
+
+            @Override
+            public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+            }
+
+            @Override
+            public void onChartLongPressed(MotionEvent me) {
+
+            }
+
+            @Override
+            public void onChartDoubleTapped(MotionEvent me) {
+
+            }
+
+            @Override
+            public void onChartSingleTapped(MotionEvent me) {
+                Log.d("","Chart onChartSingleTapped!!!");
+                if(!MainActivity.isLandscape()){
+                    LogicData.getInstance().sendChartClickedToRN();
+                }
+            }
+
+            @Override
+            public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
+
+            }
+
+            @Override
+            public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
+
+            }
+
+            @Override
+            public void onChartTranslate(MotionEvent me, float dX, float dY) {
+
+            }
+        });
+
 
         return chart;
 
@@ -452,6 +507,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
             chart.setGradientColors(colors);
         }
     }
+
 
     @Override
     public String getName() {

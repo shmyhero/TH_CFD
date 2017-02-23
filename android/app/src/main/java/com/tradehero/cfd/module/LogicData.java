@@ -160,4 +160,10 @@ public class LogicData {
             MainActivity.mInstance.sendDeviceTokenToRN();
         }
     }
+
+    public void sendChartClickedToRN(){
+        if(MainActivity.mInstance != null) {
+            MainActivity.mInstance.passChartClickedToRN();
+        }
+    }
 }

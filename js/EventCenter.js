@@ -16,6 +16,7 @@ const EventConst = {
 	ACCOUNT_LOGIN: 'account_login',
 	ACCOUNT_LOGOUT: 'account_logout',
 	LAYOUT_SIZE_CHANGED: 'layout_size_changed',
+	CHART_CLICKED: 'chart_clicked',
 }
 
 var EventCenter = {
@@ -63,6 +64,10 @@ var EventCenter = {
 
 	emitLayoutSizeChangedEvent: function(){
 		eventEmitter.emit(EventConst.LAYOUT_SIZE_CHANGED);
+	},
+
+	emitChartClickedEvent: function(){
+		eventEmitter.emit(EventConst.CHART_CLICKED);
 	},
 }
 

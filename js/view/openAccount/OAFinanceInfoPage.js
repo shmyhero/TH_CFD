@@ -60,41 +60,40 @@ var EmploymengStatusMapping = [
 	{"value": "UnEmployed", "displayText": "失业"},
 	{"value": "Retired", "displayText": "退休"},
 	{"value": "Student", "displayText": "学生"},
-	{"value": "Other", "displayText": "其他"},
+	// {"value": "Other", "displayText": "其他"},	//API Doesn't have this value!
 ]
 
 var EmploymengTypeMapping = [
-	{"value": "type0", "displayText": "汽车和零部件"},
-	{"value": "type1", "displayText": "资本产品"},
-	{"value": "type2", "displayText": "商业及专业服务"},
-	{"value": "type3", "displayText": "消费产品及服务"},
-	{"value": "type4", "displayText": "银行与金融服务"},
-	{"value": "type5", "displayText": "能源"},
-	{"value": "type6", "displayText": "食品，饮料和烟草"},
-	{"value": "type7", "displayText": "医疗保健设备和服务"},
-	{"value": "type8", "displayText": "家用和个人产品"},
-	{"value": "type9", "displayText": "保险"},
-	{"value": "type10", "displayText": "传媒"},
-	{"value": "type11", "displayText": "医疗"},
-	{"value": "type12", "displayText": "生物技术与生命科学"},
-	{"value": "type13", "displayText": "房地产"},
-	{"value": "type14", "displayText": "零售"},
-	{"value": "type15", "displayText": "软件与服务"},
-	{"value": "type16", "displayText": "科技"},
-	{"value": "type17", "displayText": "电信"},
-	{"value": "type18", "displayText": "运输"},
-	{"value": "type19", "displayText": "公共事业"},
-	{"value": "type20", "displayText": "其他"},
+	{"value": "automotive", "displayText": "汽车和零部件"},
+	{"value": "capital-goods", "displayText": "资本产品"},
+	{"value": "commercial", "displayText": "商业及专业服务"},
+	{"value": "consumer", "displayText": "消费产品及服务"},
+	{"value": "financials", "displayText": "银行与金融服务"},
+	{"value": "energy", "displayText": "能源"},
+	{"value": "food", "displayText": "食品，饮料和烟草"},
+	{"value": "health", "displayText": "医疗保健设备和服务"},
+	{"value": "household", "displayText": "家用和个人产品"},
+	{"value": "insurance", "displayText": "保险"},
+	{"value": "media", "displayText": "传媒"},
+	{"value": "pharma", "displayText": "医疗"},
+	// {"value": "type12", "displayText": "生物技术与生命科学"},	//API Doesn't have this value!
+	{"value": "real-estate", "displayText": "房地产"},
+	{"value": "retailing", "displayText": "零售"},
+	{"value": "software", "displayText": "软件与服务"},
+	{"value": "technology", "displayText": "科技"},
+	{"value": "telecomms", "displayText": "电信"},
+	{"value": "transportation", "displayText": "运输"},
+	{"value": "utilities", "displayText": "公共事业"},
+	{"value": "other", "displayText": "其他"},
 ]
 
 var PositionMapping = [
-	{"value": "type0", "displayText": "副经理"},
-	{"value": "type1", "displayText": "主管"},
-	{"value": "type2", "displayText": "经理"},
-	{"value": "type3", "displayText": "创始人"},
-	{"value": "type4", "displayText": "合伙人"},
-	{"value": "type5", "displayText": "职员"},
-	{"value": "type6", "displayText": "其他"},
+	{"value": "associate", "displayText": "副经理"},
+	{"value": "supervisor", "displayText": "主管"},
+	{"value": "manager", "displayText": "经理"},
+	{"value": "owner", "displayText": "创始人"},
+	{"value": "partner", "displayText": "合伙人"},
+	{"value": "other", "displayText": "其他"},
 ]
 
 var investFrqMappings = [
@@ -111,6 +110,7 @@ var amontOfMondyMappings = [
 	{"value": 3, "displayText": "25001- 50000 元"},
 	{"value": 4, "displayText": "50001- 100000 元"},
 	{"value": 5, "displayText": "高于 100000 元"},
+	//BUGBUG: There's a "6" here per API doc!!!
 ]
 
 var investProportionMapping = [
@@ -128,19 +128,19 @@ var expierenceMappings = [
 ]
 
 var InComeSourceMappings = [
-	{"key":"incomeSource0" , "displayText":"存款与投资",value:false},
-	{"key":"incomeSource1" , "displayText":"工作收入",value:false},
-	{"key":"incomeSource2" , "displayText":"赠予",value:false},
-	{"key":"incomeSource3" , "displayText":"遗产",value:false},
-	{"key":"incomeSource4" , "displayText":"养老金",value:false},
-	{"key":"incomeSource5" , "displayText":"其他",value:false},
+	{"key":"savings" , "displayText":"存款与投资",value:false},
+	{"key":"employment" , "displayText":"工作收入",value:false},
+	{"key":"gift" , "displayText":"赠予",value:false},
+	{"key":"inheritance" , "displayText":"遗产",value:false},
+	{"key":"pension" , "displayText":"养老金",value:false},
+	{"key":"other" , "displayText":"其他",value:false},
 ]
 
 var qualificationsMappings = [
-	{"key":"qualifications0" , "displayText":"专业资格", value:false},
-	{"key":"qualifications1" , "displayText":"大学学位", value:false},
-	{"key":"qualifications2" , "displayText":"职业资格", value:false},
-	{"key":"qualifications3" , "displayText":"其他资历", value:false},
+	{"key":"professional" , "displayText":"专业资格", value:false},
+	{"key":"university" , "displayText":"大学学位", value:false},
+	{"key":"vocational" , "displayText":"职业资格", value:false},
+	{"key":"other" , "displayText":"其他资历", value:false},
 ]
 
 //hard code for control hide line
@@ -164,34 +164,34 @@ var EXPCHANNEL2_1 = 23
 var EXPCHANNEL2_2 = 24
 
 var defaultRawData = [
-	{"key":"annualIncome", "title":"月净收入", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":IncomeMapping},
+	{"key":"monthlyIncome", "title":"月净收入", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":IncomeMapping},
 	{"key":"netWorth", "title":"净资产", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":NetWorthMapping},
-	{"optionsKey":"incomeSource" ,"title":"交易资金主要来源", "value":InComeSourceMappings, "type":"options"},
+	{"multiOptionsKey":"sourceOfFunds" ,"title":"交易资金主要来源", "value":InComeSourceMappings, "type":"options",},
 	// {"key":"investPct", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":InvestmentPortfolioMapping},
 	{"key":"empStatus", "title":"职业信息", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":EmploymengStatusMapping},
-	{"key":"empBossName", "title": "雇主名称", "value":"", hint: "请输入雇主名称", "type": "userName", maxLength: 20,"hide":true},
-	{"key":"empType", "title":"业务类型", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":EmploymengTypeMapping,"hide":true},
-	{"key":"empPosition", "title":"担任职位", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":PositionMapping,"hide":true},
+	{"key":"employerName", "title": "雇主名称", "value":"", hint: "请输入雇主名称", "type": "text", maxLength: 20,"hide":true, "parent":"empStatus"},
+	{"key":"employerSector", "title":"业务类型", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":EmploymengTypeMapping,"hide":true, "parent":"empStatus"},
+	{"key":"empPosition", "title":"担任职位", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":PositionMapping,"hide":true, "parent":"empStatus"},
 	// {"key":"investFrq", "title":"投资频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings},
 	{"key":"hasProExp", "title":"您是否曾经在金融领域担任专业杠杆交易相关职位至少一年？", "value":false, "type":"switch"},
-	{"key":"hasAyondoExp", "title":"您以前参加过培训研讨会或通过其他教育形式了解过我们的产品吗？", "value":false, "type":"switch"},
-	{"key":"hasOtherQualif", "title":"您是否用过点差交易或差价合约(CFD)的模拟账户？", "value":false, "type":"switch"},
-	{"key":"hasOther2", "title":"您是否有其他相关的资历证书，让您可以更好理解我们的金融服务？", "value":false, "type":"switch"},
-	{"optionsKey":"qualificationsKey" ,"title":"", "value":qualificationsMappings, "type":"options","hide":true},
+	{"key":"hasTraining", "title":"您以前参加过培训研讨会或通过其他教育形式了解过我们的产品吗？", "value":false, "type":"switch"},
+	{"key":"hasDemoAcc", "title":"您是否用过点差交易或差价合约(CFD)的模拟账户？", "value":false, "type":"switch"},
+	{"key":"otherQualifSelector", "title":"您是否有其他相关的资历证书，让您可以更好理解我们的金融服务？", "value":false, "type":"switch", "ignoreInRegistery":"ignoreInRegistery", },
+	{"multiOptionsKey":"otherQualif" ,"title":"", "value":qualificationsMappings, "type":"options","hide":true, "parent": "otherQualifSelector"},
 	// {"optionsKey":"tradingExp" ,"title":"您有以下哪种产品的实盘交易经验？", "value":expierenceMappings, "type":"options"},
 	{"title":"您有以下哪种产品的实盘交易经验？"},
-	{"key":"hasExpChannel0", "title":"差价合约、点差交易或外汇", "value":false, "type":"switch"},
-		{"key":"investFrq0", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true},
-		{"key":"amontOfMondy0", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMondyMappings,"hide":true},
-		{"key":"investProportion0", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true},
-	{"key":"hasExpChannel1", "title":"股票或债券", "value":false, "type":"switch"},
-		{"key":"investFrq1", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true},
-		{"key":"amontOfMondy1", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMondyMappings,"hide":true},
-		{"key":"investProportion1", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true},
-	{"key":"hasExpChannel2", "title":"期权，期货或认购权证", "value":false, "type":"switch"},
-		{"key":"investFrq2", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true},
-		{"key":"amontOfMondy2", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMondyMappings,"hide":true},
-		{"key":"investProportion2", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true},
+	{"key":"hasTradedHighLev", "title":"差价合约、点差交易或外汇", "value":false, "type":"switch"},
+		{"key":"highLevFrq", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true, "parent":"hasTradedHighLev"},
+		{"key":"highLevBalance", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMondyMappings,"hide":true, "parent":"hasTradedHighLev"},
+		{"key":"highLevRisk", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true, "parent":"hasTradedHighLev"},
+	{"key":"hasTradedMidLev", "title":"股票或债券", "value":false, "type":"switch"},
+		{"key":"midLevFrq", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true, "parent":"hasTradedMidLev"},
+		{"key":"midLevBalance", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMondyMappings,"hide":true, "parent":"hasTradedMidLev"},
+		{"key":"midLevRisk", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true, "parent":"hasTradedMidLev"},
+	{"key":"hasTradedNoLev", "title":"期权，期货或认购权证", "value":false, "type":"switch"},
+		{"key":"noLevBalance", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true, "parent":"hasTradedNoLev"},
+		{"key":"noLevBalance", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMondyMappings,"hide":true, "parent":"hasTradedNoLev"},
+		{"key":"noLevRisk", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true, "parent":"hasTradedNoLev"},
 ];
 
 var OAFinanceInfoPage = React.createClass({
@@ -233,6 +233,15 @@ var OAFinanceInfoPage = React.createClass({
 
 	getData: function(){
 		return OpenAccountUtils.getDataFromPageListRawData(this.listRawData);
+	},
+
+	textInputChange: function(text, rowID) {
+		this.listRawData[rowID].value = text;
+		this.listRawData[rowID].error = null;
+		this.setState({
+			error: null,
+			dataSource: this.ds.cloneWithRows(this.listRawData),
+		})
 	},
 
 	onDismiss: function(){
@@ -343,8 +352,15 @@ var OAFinanceInfoPage = React.createClass({
 		}
 	},
 
-	onCheckBoxPressed: function(data, selected){
-		data.value = selected;
+	onCheckBoxPressed: function(rowID, checkboxIndex, selected){
+		if(this.listRawData[rowID]){
+			if(this.listRawData[rowID].value[checkboxIndex]){
+				this.listRawData[rowID].value[checkboxIndex].value = selected;
+				this.setState({
+					dataSource: this.ds.cloneWithRows(this.listRawData),
+				})
+			}
+		}
 	},
 
 	renderRow: function(rowData, sectionID, rowID) {
@@ -417,13 +433,14 @@ var OAFinanceInfoPage = React.createClass({
 
 			var rows = array.map(
 				(boxRowData, i) =>{
-
 					var boxes = array[i].map(
 						(data, j) =>{
 							if(data){
-								return (<CheckBoxButton key={i*3+j} text={data.displayText}
+								var index = i*3+j;
+								console.log("data.displayText: " + data.displayText + ", data.value: " + data.value)
+								return (<CheckBoxButton key={index} text={data.displayText}
 									defaultSelected={data.value}
-									onPress={(selected)=>this.onCheckBoxPressed(data, selected)}>
+									onPress={(selected)=>this.onCheckBoxPressed(rowID, index, selected)}>
 									</CheckBoxButton>
 								);
 							}else{
@@ -451,7 +468,7 @@ var OAFinanceInfoPage = React.createClass({
 				</View>)
 
 		}
-		else if(rowData.type === 'userName'){
+		else if(rowData.type === 'text'){
 			return (
 				<View  style={rowData.hide?{height:0}:null}>
 					<View style={styles.rowWrapper}>
@@ -465,8 +482,7 @@ var OAFinanceInfoPage = React.createClass({
 							placeholderColor={ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR}
 							selectionColor={ColorConstants.INOUT_TEXT_SELECTION_COLOR}
 							underlineColorAndroid='transparent'
-							// onChangeText={(text)=>this.textInputChange(text, rowID)}
-							// onEndEditing={(event)=>this.textInputEndChange(event, rowID)}
+							onChangeText={(text)=>this.textInputChange(text, rowID)}
 							maxLength={rowData.maxLength}/>
 					</View>
 				</View>
@@ -492,10 +508,52 @@ var OAFinanceInfoPage = React.createClass({
 	render: function() {
 		var pickerModal = null
 		var enabled = true
+		var switchEmpStatus = false;
+		var lastParentSwitchIsOn = false;
 		for (var i = 0; i < this.listRawData.length; i++) {
-			if (this.listRawData[i].type === "choice" && this.listRawData[i].value === "") {
+			if(this.listRawData[i].key === "empStatus"){
+				if(this.listRawData[i].value === "Employed" || this.listRawData[i].value === "Self-Employed"){
+					lastParentSwitchIsOn = true;
+				}
+			}
+			/*
+			if(this.listRawData[i].key === "otherQualifSelector"){
+				lastParentSwitchIsOn = this.listRawData[i].value;
+			}*/
+			if(this.listRawData[i].type === "switch"){
+				lastParentSwitchIsOn = this.listRawData[i].value;
+			}
+
+			console.log("checking : " + i + ", lastParentSwitchIsOn: " + lastParentSwitchIsOn)
+			if (this.listRawData[i].parent && !lastParentSwitchIsOn){
+				console.log("continue : " + i)
+				continue;
+			}
+
+			console.log("checking : " + i)
+			if (this.listRawData[i].type === "options") {
+				var hasSelected = false;
+				for(var j = 0; j < this.listRawData[i].value.length; j++){
+					if(this.listRawData[i].value[j].value == true){
+						hasSelected = true;
+						break;
+					}
+				}
+				if(!hasSelected){
+					console.log("this.listRawData[i]: " + JSON.stringify(this.listRawData[i]));
+					enabled = false;
+					break;
+				}
+			}
+			if (this.listRawData[i].type === "text" && this.listRawData[i].value === "") {
+				console.log("this.listRawData[i]: " + JSON.stringify(this.listRawData[i]));
 				enabled = false
-				break
+				break;
+			}
+			if (this.listRawData[i].type === "choice" && this.listRawData[i].value === "") {
+				console.log("this.listRawData[i]: " + JSON.stringify(this.listRawData[i]));
+				enabled = false
+				break;
 			}
 		};
 		if (this.state.selectedPicker>=0) {

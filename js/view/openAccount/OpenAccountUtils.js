@@ -27,7 +27,24 @@ export function getDataFromPageListRawData(listRawData){
 	  var array = [];
 	  for(var i = 0 ; i < listRawData.length; i++){
 	    var data = listRawData[i];
-	    if(data.type == "options"){
+      if(data.multiOptionsKey){
+        var parsedData = {
+          "key": data.multiOptionsKey,
+          "ignoreInRegistery": data.ignoreInRegistery,
+          "isMultiOptions": true,
+        };
+        var valueStr = "";
+        for(var j = 0; j<data.value.length; j++){
+          if(data.value[j].value){
+            if(valueStr !== ""){
+              valueStr += ",";
+            }
+            valueStr += data.value[j].key;
+          }
+	      }
+        parsedData.value = valueStr;
+        array.push(parsedData);
+      }else if(data.type == "options"){
 	      for(var j = 0; j<data.value.length; j++){
 	        var parsedData = {
 	          "key": data.value[j].key,
@@ -54,14 +71,40 @@ export function getDataFromPageListRawData(listRawData){
 export function getPageListRawDataFromData(listRawData, pageData){
   console.log("getPageListRawDataFromData");
   if (pageData) {
+    var lastKey = "";
     for(var i = 0; i < pageData.length; i++){
+      lastKey = "";
       var data = pageData[i];
+
+      var needToFindMultiOptionsKey = false;
+      if(data.isMultiOptions && data.value !== ""){
+        needToFindMultiOptionsKey = true;
+      }
+
       var needToFindOptionsKey = false;
       if(data.optionsKey){
         needToFindOptionsKey = true;
       }
+
+      if(data.value){
+        lastKey = data.key;
+      }
       for(var j = 0; j < listRawData.length; j++){
-        if(data.optionsKey && data.optionsKey === listRawData[j].optionsKey){
+        if(listRawData[j].parent == lastKey){
+          listRawData[j].hide = false;
+        }
+        if(listRawData[j].multiOptionsKey){
+          if(data.key && data.key === listRawData[j].multiOptionsKey){
+            var valueList = data.value.split(",");
+            for(var l = 0; l < valueList.length; l++){
+              for(var k = 0; k < listRawData[j].value.length; k++){
+                if(valueList[l] === listRawData[j].value[k].key){
+                  listRawData[j].value[k].value = true;
+                }
+              }
+            }
+          }
+        }else if(data.optionsKey && data.optionsKey === listRawData[j].optionsKey){
           for(var k = 0; k < listRawData[j].value.length; k++){
             if(data.key === listRawData[j].value[k].key){
               listRawData[j].value[k].value = data.value;

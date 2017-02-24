@@ -206,7 +206,7 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 			}
 		}
 	}
-	
+    
 // MARK: delegate
 	func findHighlightPoint() -> CGPoint {
 		let point = _pointData.last!

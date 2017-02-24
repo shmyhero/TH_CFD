@@ -16,6 +16,7 @@ class StockChartView: UIView {
 	var dataSource:BaseDataSource?
 	var panGesture:UIPanGestureRecognizer?
 	var pinchGesture:UIPinchGestureRecognizer?
+    var tapGesture:UITapGestureRecognizer?
 
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -23,6 +24,7 @@ class StockChartView: UIView {
 		self.userInteractionEnabled = true
 		panGesture = UIPanGestureRecognizer(target: self, action: #selector(StockChartView.pan(_:)))
 		pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(StockChartView.pinch(_:)))
+        tapGesture = UITapGestureRecognizer(target: self, action: #selector(StockChartView.tap(_:)))
 		
 		if panGesture != nil {
 			self.addGestureRecognizer(panGesture!)
@@ -30,6 +32,9 @@ class StockChartView: UIView {
 		if pinchGesture != nil {
 			self.addGestureRecognizer(pinchGesture!)
 		}
+        if tapGesture != nil {
+            self.addGestureRecognizer(tapGesture!)
+        }
 	}
 	required init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
@@ -42,6 +47,9 @@ class StockChartView: UIView {
 		if pinchGesture != nil {
 			self.removeGestureRecognizer(pinchGesture!)
 		}
+        if tapGesture != nil {
+            self.removeGestureRecognizer(tapGesture!)
+        }
 	}
 	
 // MARK: action
@@ -63,6 +71,13 @@ class StockChartView: UIView {
 		}
 	}
 	
+    func tap(sender: UITapGestureRecognizer) {
+        if colorType == 0 && Orientation.getOrientation() == .Portrait || Orientation.getOrientation() == .PortraitUpsideDown {
+            let delegate:AppDelegate! = UIApplication.sharedApplication().delegate as! AppDelegate
+            delegate!.nativeData!.sendDataToRN("chart_clicked", data: nil)
+        }
+    }
+    
 // MARK: deal with raw data from RN
 	var data:String? { // use for RN manager
 		willSet {
@@ -89,7 +104,9 @@ class StockChartView: UIView {
 	}
 	
 	var colorType:Int=0 {
-		willSet {
+        willSet {
+            // type 0 is detail view.
+            // type 1 is open position view
 			colorSet = ColorSet.init(type: newValue)
 		}
 	}

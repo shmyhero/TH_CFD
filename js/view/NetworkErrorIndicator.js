@@ -138,14 +138,14 @@ const styles = StyleSheet.create({
     height: 164,
     width: 200,
     alignSelf: 'center',
-    resizeMode: "repeat",
+    resizeMode: "stretch",
   },
 
   loadingImage:{
     height: 191,
     width: 200,
     alignSelf: 'center',
-    resizeMode: "repeat",
+    resizeMode: "stretch",
   }
 });
 

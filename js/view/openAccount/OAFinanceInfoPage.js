@@ -32,10 +32,10 @@ var fontSize2 = Math.round(15*width/375)
 
 var IncomeMapping = [
 	{"value": 0, "displayText": "低于 1000 元"},
-	{"value": 15, "displayText": "1001-2500 元"},
-	{"value": 40, "displayText": "2501-4000 元"},
-	{"value": 70, "displayText": "4001-6000 元"},
-	{"value": 100, "displayText": "高于 6000 元"},
+	{"value": 1, "displayText": "1001-2500 元"},
+	{"value": 2, "displayText": "2501-4000 元"},
+	{"value": 3, "displayText": "4001-6000 元"},
+	{"value": 4, "displayText": "高于 6000 元"},
 ];
 
 var NetWorthMapping = [
@@ -128,13 +128,23 @@ var expierenceMappings = [
 ]
 
 var InComeSourceMappings = [
-	{"key":"savings" , "displayText":"存款与投资",value:false},
-	{"key":"employment" , "displayText":"工作收入",value:false},
-	{"key":"gift" , "displayText":"赠予",value:false},
-	{"key":"inheritance" , "displayText":"遗产",value:false},
-	{"key":"pension" , "displayText":"养老金",value:false},
-	{"key":"other" , "displayText":"其他",value:false},
+	{"value":"savings" , "displayText":"存款与投资"},
+	{"value":"employment" , "displayText":"工作收入"},
+	{"value":"gift" , "displayText":"赠予",},
+	{"value":"inheritance" , "displayText":"遗产"},
+	{"value":"pension" , "displayText":"养老金"},
+	{"value":"other" , "displayText":"其他"},
 ]
+//
+// //Options values
+// var InComeSourceMappings = [
+// 	{"key":"savings" , "displayText":"存款与投资",value:false},
+// 	{"key":"employment" , "displayText":"工作收入",value:false},
+// 	{"key":"gift" , "displayText":"赠予",value:false},
+// 	{"key":"inheritance" , "displayText":"遗产",value:false},
+// 	{"key":"pension" , "displayText":"养老金",value:false},
+// 	{"key":"other" , "displayText":"其他",value:false},
+// ]
 
 var qualificationsMappings = [
 	{"key":"professional" , "displayText":"专业资格", value:false},
@@ -166,9 +176,10 @@ var EXPCHANNEL2_2 = 24
 var defaultRawData = [
 	{"key":"monthlyIncome", "title":"月净收入", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":IncomeMapping},
 	{"key":"netWorth", "title":"净资产", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":NetWorthMapping},
-	{"multiOptionsKey":"sourceOfFunds" ,"title":"交易资金主要来源", "value":InComeSourceMappings, "type":"options",},
+	{"key":"sourceOfFunds", "title":"资金主要来源", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":InComeSourceMappings},
+	// {"multiOptionsKey":"sourceOfFunds" ,"title":"交易资金主要来源", "value":InComeSourceMappings, "type":"options",},
 	// {"key":"investPct", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":InvestmentPortfolioMapping},
-	{"key":"empStatus", "title":"职业信息", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":EmploymengStatusMapping},
+	{"key":"empStatus", "title":"职业信息", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":EmploymengStatusMapping, "trueChoice":["Employed", "Self-Employed"]},
 	{"key":"employerName", "title": "雇主名称", "value":"", hint: "请输入雇主名称", "type": "text", maxLength: 20,"hide":true, "parent":"empStatus"},
 	{"key":"employerSector", "title":"业务类型", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":EmploymengTypeMapping,"hide":true, "parent":"empStatus"},
 	{"key":"empPosition", "title":"担任职位", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":PositionMapping,"hide":true, "parent":"empStatus"},
@@ -176,7 +187,7 @@ var defaultRawData = [
 	{"key":"hasProExp", "title":"您是否曾经在金融领域担任专业杠杆交易相关职位至少一年？", "value":false, "type":"switch"},
 	{"key":"hasTraining", "title":"您以前参加过培训研讨会或通过其他教育形式了解过我们的产品吗？", "value":false, "type":"switch"},
 	{"key":"hasDemoAcc", "title":"您是否用过点差交易或差价合约(CFD)的模拟账户？", "value":false, "type":"switch"},
-	{"key":"otherQualifSelector", "title":"您是否有其他相关的资历证书，让您可以更好理解我们的金融服务？", "value":false, "type":"switch", "ignoreInRegistery":"ignoreInRegistery", },
+	{"key":"otherQualifSelector", "title":"您是否有其他相关的资历证书，让您可以更好理解我们的金融服务？", "value":false, "type":"switch", "ignoreInRegistery": true, },
 	{"multiOptionsKey":"otherQualif" ,"title":"", "value":qualificationsMappings, "type":"options","hide":true, "parent": "otherQualifSelector"},
 	// {"optionsKey":"tradingExp" ,"title":"您有以下哪种产品的实盘交易经验？", "value":expierenceMappings, "type":"options"},
 	{"title":"您有以下哪种产品的实盘交易经验？"},
@@ -189,7 +200,7 @@ var defaultRawData = [
 		{"key":"midLevBalance", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMondyMappings,"hide":true, "parent":"hasTradedMidLev"},
 		{"key":"midLevRisk", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true, "parent":"hasTradedMidLev"},
 	{"key":"hasTradedNoLev", "title":"期权，期货或认购权证", "value":false, "type":"switch"},
-		{"key":"noLevBalance", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true, "parent":"hasTradedNoLev"},
+		{"key":"noLevFrq", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true, "parent":"hasTradedNoLev"},
 		{"key":"noLevBalance", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMondyMappings,"hide":true, "parent":"hasTradedNoLev"},
 		{"key":"noLevRisk", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true, "parent":"hasTradedNoLev"},
 ];
@@ -274,12 +285,17 @@ var OAFinanceInfoPage = React.createClass({
 					if(data[0] === ""){
 						rowData.value = rowData.choices[0].value;
 					}else{
-						for(var i = 0; i < rowData.choices.length; i++){
-							if(data[0] === rowData.choices[i].displayText){
-								rowData.value = rowData.choices[i].value;
+						console.log("selected: "+data[0])
+
+						for(var i = 0; i < this.listRawData[rowID].choices.length; i++){
+							console.log("this.listRawData[rowID].choices[i]: " + JSON.stringify(this.listRawData[rowID].choices[i]))
+							if(data[0] === this.listRawData[rowID].choices[i].displayText){
+								this.listRawData[rowID].value = this.listRawData[rowID].choices[i].value;
+								break;
 							}
 						}
 
+						console.log("this.listRawData[rowID].value: " + this.listRawData[rowID].value)
 						if(rowID == EMPSWITCH){
 							var showEMPSwitches = (data[0] == "就业" || data[0] == "自雇")
 							this.listRawData[EMPSWITCH_0].hide = !showEMPSwitches
@@ -524,13 +540,10 @@ var OAFinanceInfoPage = React.createClass({
 				lastParentSwitchIsOn = this.listRawData[i].value;
 			}
 
-			console.log("checking : " + i + ", lastParentSwitchIsOn: " + lastParentSwitchIsOn)
 			if (this.listRawData[i].parent && !lastParentSwitchIsOn){
-				console.log("continue : " + i)
 				continue;
 			}
 
-			console.log("checking : " + i)
 			if (this.listRawData[i].type === "options") {
 				var hasSelected = false;
 				for(var j = 0; j < this.listRawData[i].value.length; j++){
@@ -540,18 +553,15 @@ var OAFinanceInfoPage = React.createClass({
 					}
 				}
 				if(!hasSelected){
-					console.log("this.listRawData[i]: " + JSON.stringify(this.listRawData[i]));
 					enabled = false;
 					break;
 				}
 			}
 			if (this.listRawData[i].type === "text" && this.listRawData[i].value === "") {
-				console.log("this.listRawData[i]: " + JSON.stringify(this.listRawData[i]));
 				enabled = false
 				break;
 			}
 			if (this.listRawData[i].type === "choice" && this.listRawData[i].value === "") {
-				console.log("this.listRawData[i]: " + JSON.stringify(this.listRawData[i]));
 				enabled = false
 				break;
 			}

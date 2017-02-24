@@ -90,6 +90,16 @@ export function getPageListRawDataFromData(listRawData, pageData){
         lastKey = data.key;
       }
       for(var j = 0; j < listRawData.length; j++){
+        if(listRawData[j].key == data.key && listRawData[j].trueChoice){
+          lastKey = "";
+          for(var k = 0; k < listRawData[j].trueChoice.length; k++){
+            if(data.value == listRawData[j].trueChoice[k].value){
+              console.log("data.value == data[j]: data: " + JSON.stringify(data));
+              lastKey = data.key;
+              break;
+            }
+          }
+        }
         if(listRawData[j].parent == lastKey){
           listRawData[j].hide = false;
         }

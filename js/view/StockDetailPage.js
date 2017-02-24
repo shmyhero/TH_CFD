@@ -798,9 +798,9 @@ var StockDetailPage = React.createClass({
 					borderColor = "#497bce";
 					lineChartGradient = LogicData.getAccountState() ? ['#374d74','#6683b3'] : ['#99bfff', '#1954b9'];
 				}else{
-					textColor = LogicData.getAccountState() ? "#223555" : "#0740a7"
+					textColor = LogicData.getAccountState() ? "#94a9cf" : "#0740a7"
 					backgroundColor = LogicData.getAccountState() ? "#3f5680" : "#1962dd"
-					borderColor = LogicData.getAccountState() ? "#8596b5" : "#0d4ab6";
+					borderColor = LogicData.getAccountState() ? "#91a4c5" : "#0d4ab6";
 					lineChartGradient = LogicData.getAccountState() ? ['#5f7baa','#3f5680'] : ['#387ae7', '#1962dd'];
 				}
 

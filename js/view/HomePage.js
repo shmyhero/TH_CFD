@@ -1018,7 +1018,7 @@ var HomePage = React.createClass({
 	},
 
 	renderLoginWebView:function(){
-		if(firstLoad){
+		// if(firstLoad){
 			console.log("firstLoad true renderLoginWebView");
 			firstLoad = false
 			var url = 'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state=1'
@@ -1028,10 +1028,10 @@ var HomePage = React.createClass({
 					source={{uri: url}}
 				/>
 			)
-		}else{
-			console.log("firstLoad false not renderLoginWebView");
-			return null;
-		}
+		// }else{
+		// 	console.log("firstLoad false not renderLoginWebView");
+		// 	return null;
+		// }
 
 	},
 

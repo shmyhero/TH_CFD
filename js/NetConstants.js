@@ -240,6 +240,17 @@ export function isCandleChart(type){
   return false;
 }
 
+export function isPortraitChart(type){
+  if(type === PARAMETER_CHARTTYPE_TODAY
+  || type === PARAMETER_CHARTTYPE_TWO_HOUR
+  || type === PARAMETER_CHARTTYPE_WEEK
+  || type === PARAMETER_CHARTTYPE_DAY
+  || type === PARAMETER_CHARTTYPE_5_MINUTE){
+    return true;
+  }
+  return false;
+}
+
 export let AUTH_ERROR = '需要OAuth授权'
 
 export let ANDROID_MARKET_URL = 'market://details?id=com.tradehero.cfd';

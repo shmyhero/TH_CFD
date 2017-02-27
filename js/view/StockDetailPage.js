@@ -835,7 +835,6 @@ var StockDetailPage = React.createClass({
 						chartIsActual={LogicData.getAccountState()}
 						data={JSON.stringify(this.state.stockInfo)}
 						xAxisPosition="BOTTOM"
-						drawBackground={this.state.orientation == ORIENTATION_LANDSPACE}
 						borderColor={borderColor}
 						// backgroundColor={NetConstants.isCandleChart(this.state.chartType) ? backgroundColor : 'transparent'}
 						xAxisTextSize={this.state.orientation == ORIENTATION_LANDSPACE ? 11 : 8}

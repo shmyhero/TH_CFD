@@ -1275,6 +1275,7 @@ var StockOpenPositionPage = React.createClass({
 		var state = this.state.dataStatus;
 		console.log("RAMBO: chartType = " + this.state.chartType)
 		var opacity = state == 0? 1.0 : 0.01;
+		if(Platform.OS === 'ios'){
 			return(
 				<LineChart style={[styles.lineChart,{opacity:opacity}]}
 					data={JSON.stringify(this.state.stockDetailInfo)}
@@ -1285,6 +1286,31 @@ var StockOpenPositionPage = React.createClass({
 					descriptionColor={1}>
 				</LineChart>
 			)
+		}else{
+			var textColor, borderColor, lineChartGradient;
+			textColor = LogicData.getAccountState() ? "#94a9cf" : "#0740a7"
+			borderColor = LogicData.getAccountState() ? "#91a4c5" : "#0d4ab6";
+			lineChartGradient = LogicData.getAccountState() ? ['#5f7baa','#3f5680'] : ['#387ae7', '#1962dd'];
+
+			return (
+				<LineChart style={[styles.lineChart,{opacity:opacity}]}
+					data={JSON.stringify(this.state.stockDetailInfo)}
+					chartType={this.state.chartType}
+					colorType={1}
+					chartIsActual={LogicData.getAccountState()}
+					lineChartGradient={LogicData.getAccountState() ? ['#374d74','#6683b3'] : ['#99bfff', '#1954b9']}
+					descriptionColor={1}
+					xAxisPosition="BOTTOM"
+					borderColor={borderColor}
+					xAxisTextSize={8}
+					textColor={textColor}
+					chartPaddingTop={0}
+					chartPaddingBottom={4}	//The limit line needs some space to show, set it to 3...
+					chartPaddingLeft={10}
+					chartPaddingRight={10}
+				>
+				</LineChart>)
+		}
 	},
 
 	renderDataStatus:function(){
@@ -1873,8 +1899,6 @@ var styles = StyleSheet.create({
 		justifyContent:'space-between',
 		paddingTop: 1,
 		paddingBottom: 11,
-		marginLeft: Platform.OS === 'ios' ? 0:10,
-		marginRight: Platform.OS === 'ios' ? 0:10,
 	},
 
 	okView: {

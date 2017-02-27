@@ -391,11 +391,12 @@ export default class DepositPage extends Component{
 				},
 			},
 			(responseJson) => {
-				 console.log('responseJson = ' + responseJson + 'payMethodSelected = ' + this.state.payMethodSelected);//rmbValue
- 			 		 var alipayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-alipay.html'+'?Amount='+rmbValue+'&TransRef='+responseJson
-					 var unionpayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-quick.html'+'?Amount='+rmbValue+'&TransRef='+responseJson
+				 console.log('responseJson = ' + responseJson + ' payMethodSelected = ' + this.state.payMethodSelected);//rmbValue
+				   var appendVal = '&TransRef='+responseJson.transferId+'&firstName='+responseJson.firstName+'&lastName='+responseJson.lastName+'&email='+responseJson.email+'&addr='+responseJson.addr
+ 			 		 var alipayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-alipay.html'+'?Amount='+rmbValue+appendVal
+					 var unionpayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-quick.html'+'?Amount='+rmbValue+appendVal
 					 var url = this.state.payMethodSelected == 0? alipayUrl:unionpayUrl;
-						//  if(index == 3){url = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-wechat.html';}
+					 console.log('selected Url = ' + url); 
 					 this.props.navigator.push({
 			 			name: MainPage.PAYMENT_PAGE,
 			 			url: url,

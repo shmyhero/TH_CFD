@@ -114,7 +114,7 @@ var StockDetailPage = React.createClass({
 		var available = balanceData === null ? 0 : (balanceData.available < 0 ? 0 : balanceData.available)
 		var money = available > 100 ? 100 : Math.floor(available)
 		return {
-			stockInfo: {isOpen: true},
+			stockInfo: {isOpen: true,status:1},
 			money: money,
 			leverage: 2,
 			totalMoney: available,
@@ -1165,10 +1165,15 @@ var StockDetailPage = React.createClass({
 	},
 
 	buyPress: function() {
-		if(!this.state.stockInfo.isOpen) {
+
+		if(this.state.stockInfo.status == 2) {
+			Alert.alert(this.state.stockInfo.name,'暂停交易')
+			return
+		}else	if(!this.state.stockInfo.isOpen) {
 			Alert.alert(this.state.stockInfo.name,'已停牌/休市,暂时不能进行交易')
 			return
 		}
+
 		var userData = LogicData.getUserData()
 		var loggined = Object.keys(userData).length !== 0
 		if (loggined) {
@@ -1192,7 +1197,10 @@ var StockDetailPage = React.createClass({
 	},
 
 	sellPress: function() {
-		if(!this.state.stockInfo.isOpen) {
+		if(this.state.stockInfo.status == 2) {
+			Alert.alert(this.state.stockInfo.name,'暂停交易')
+			return
+		}else if(!this.state.stockInfo.isOpen) {
 			Alert.alert(this.state.stockInfo.name,'已停牌/休市,暂时不能进行交易')
 			return
 		}
@@ -1388,7 +1396,7 @@ var StockDetailPage = React.createClass({
 				onPress={() => buttonEnable ? this.okPress():this.okPressInDisable()}
 				style={[styles.okView, !buttonEnable && (LogicData.getAccountState()?styles.okViewDisabledLive:styles.okViewDisabled), !this.state.stockInfo.isOpen && (LogicData.getAccountState()?styles.okViewNotOpenedLive:styles.okViewNotOpened)]}>
 				<Text style={[styles.okButton, !buttonEnable && styles.okButtonDisabled, !this.state.stockInfo.isOpen && styles.okButtonNotOpened]}>
-					{this.state.stockInfo.isOpen ? '确认' : '未开市'}
+					{this.state.stockInfo.isOpen ? '确认' : (this.state.stockInfo.status == 2 ?'暂停交易':'未开市')}
 				</Text>
 			</TouchableOpacity>
 		)

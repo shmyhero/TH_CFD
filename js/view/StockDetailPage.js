@@ -690,6 +690,20 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
+	renderMinTradeMondy:function(){
+		var tradeValue = this.state.money * this.state.leverage
+		var minValue = this.state.tradeDirection === 1 ? this.state.stockInfo.minValueLong : this.state.stockInfo.minValueShort
+		if(minValue){
+			return (
+				<Text style={styles.leftMoneyLabel}> 交易此产品：本金*杠杆需大于{minValue.toFixed(0)}美元</Text>
+			);
+		}else{
+			return (
+				null
+			);
+		}
+	},
+
 	renderLeftMoney:function(){
 			var leftMoney = this.state.totalMoney;// - this.state.money
 
@@ -875,6 +889,7 @@ var StockDetailPage = React.createClass({
 							{this.renderScroll()}
 						</View>
 						<View style={{flex: 2, alignItems: 'center', justifyContent: 'space-around', paddingTop: 30, paddingBottom:Platform.OS === 'ios'?10:48}}>
+							{this.renderMinTradeMondy()}
 							{this.renderLeftMoney()}
 							{/* <Text style={styles.smallLabel}> 手续费为{charge}美元</Text> */}
 							{this.renderOKButton()}

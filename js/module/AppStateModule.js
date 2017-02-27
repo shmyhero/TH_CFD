@@ -9,6 +9,7 @@ export let STATE_BACKGROUND = 'background'
 var appState = STATE_ACTIVE
 var turnToActiveListeners = []
 var turnToInactiveListeners = []
+var turnToBackgroundListeners = []
 AppState.addListener(
 	'appStateDidChange',
 	(stateData) => {
@@ -24,6 +25,9 @@ AppState.addListener(
 			}
 		}
 		else if(appState !== STATE_BACKGROUND && stateData.app_state === STATE_BACKGROUND) {
+			for (var i = 0; i < turnToBackgroundListeners.length; i++) {
+				turnToBackgroundListeners[i]()
+			}
 		}
 
 		appState = stateData.app_state
@@ -53,5 +57,16 @@ export function unregisterTurnToInactiveListener(listener) {
 	var index = turnToInactiveListeners.indexOf(listener);
 	if(index!== -1) {
 			 turnToInactiveListeners.splice(index, 1);
+	 }
+}
+
+export function registerTurnToBackgroundListener(listener) {
+	turnToBackgroundListeners.push(listener)
+}
+
+export function unregisterTurnToBackgroundListener(listener) {
+	var index = turnToBackgroundListeners.indexOf(listener);
+	if(index!== -1) {
+			 turnToBackgroundListeners.splice(index, 1);
 	 }
 }

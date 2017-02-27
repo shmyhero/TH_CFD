@@ -62,8 +62,8 @@ AppStateModule.registerTurnToActiveListener(() => {
 		start()
 	}
 })
-AppStateModule.registerTurnToInactiveListener(() => {
-	console.log('Stop Web sockets.')
+AppStateModule.registerTurnToBackgroundListener(() => {
+	console.log('App move to background. Stop Web sockets.')
 	stop();
 })
 

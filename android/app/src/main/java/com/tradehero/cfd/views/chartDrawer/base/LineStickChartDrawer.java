@@ -46,6 +46,24 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
         return gradient;
     }
 
+
+    @Override
+    protected boolean isDataAcceptable(JSONArray chartDataList){
+        try {
+            for (int i = 0; i < chartDataList.length(); i++) {
+                if(chartDataList.getJSONObject(i).has("p")) {
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        }catch (Exception e){
+            return false;
+        }
+        return true;
+    }
+
     @Override
     protected CombinedData generateData(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
         ArrayList<String> xVals = new ArrayList<String>();

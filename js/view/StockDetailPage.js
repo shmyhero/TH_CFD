@@ -831,9 +831,9 @@ var StockDetailPage = React.createClass({
 				//8596b5
 				return(
 					<LineChart style={[styles.lineChart,{opacity:opacity}]}
-						data={JSON.stringify(this.state.stockInfo)}
 						chartType={this.state.chartType}
 						chartIsActual={LogicData.getAccountState()}
+						data={JSON.stringify(this.state.stockInfo)}
 						xAxisPosition="BOTTOM"
 						drawBackground={this.state.orientation == ORIENTATION_LANDSPACE}
 						borderColor={borderColor}
@@ -847,7 +847,7 @@ var StockDetailPage = React.createClass({
 						rightAxisDrawLabel={this.state.orientation == ORIENTATION_LANDSPACE}
 						rightAxisDrawGridLines={rightAxisDrawGridLines}
 						chartPaddingTop={this.state.orientation == ORIENTATION_LANDSPACE ? 15 : 0}
-						chartPaddingBottom={this.state.orientation == ORIENTATION_LANDSPACE ? 15 : 8}	//The limit line needs some space to show, set it to 3...
+						chartPaddingBottom={this.state.orientation == ORIENTATION_LANDSPACE ? 15 : 4}	//The limit line needs some space to show, set it to 3...
 						chartPaddingLeft={15}
 						chartPaddingRight={15}
 						lineChartGradient={lineChartGradient}

@@ -99,6 +99,26 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
     }
 
     @Override
+    protected boolean isDataAcceptable(JSONArray chartDataList){
+        try {
+            for (int i = 0; i < chartDataList.length(); i++) {
+                if(chartDataList.getJSONObject(i).has("open")
+                    && chartDataList.getJSONObject(i).has("close")
+                    && chartDataList.getJSONObject(i).has("high")
+                    && chartDataList.getJSONObject(i).has("low")) {
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        }catch (Exception e){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     protected CombinedData generateData(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
         ArrayList<CandleEntry> yVals1 = new ArrayList<>();
 

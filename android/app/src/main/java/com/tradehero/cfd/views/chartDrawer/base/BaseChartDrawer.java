@@ -48,6 +48,10 @@ public abstract class BaseChartDrawer implements IChartDrawer {
             return;
         }
 
+        if(!isDataAcceptable(chartDataList)){
+            return;
+        }
+
         minVal = Float.MAX_VALUE;
         maxVal = Float.MIN_VALUE;
         try{
@@ -87,6 +91,12 @@ public abstract class BaseChartDrawer implements IChartDrawer {
         }
     }
 
+    /**
+     * Override the methods to check data is acceptable
+     *
+     * @param chartDataList
+     */
+    abstract boolean isDataAcceptable(JSONArray chartDataList);
 
     /**
      * Override the methods to generate data for chart
@@ -291,12 +301,13 @@ public abstract class BaseChartDrawer implements IChartDrawer {
                 gapLine.setLineColor(borderColor);
                 gapLine.setLineWidth(ChartDrawerConstants.LINE_WIDTH);
                 gapLine.enableDashedLine(10f, 0f, 0f);
-                gapLine.setTextSize(8);
-                //gapLine.setTextSize(Utils.convertPixelsToDp(chart.getXAxis().getTextSize())); //BUGBUG: Change the text size will cause the text not center align... Fix the bug later...
+                //gapLine.setTextSize(8);
+                gapLine.setTextSize(Utils.convertPixelsToDp(chart.getXAxis().getTextSize())); //BUGBUG: Change the text size will cause the text not center align... Fix the bug later...
                 //gapLine.setTextSize(chart.getXAxis().getTextSize());
                 gapLine.setTextColor(textColor);
                 gapLine.setXOffset(0);
-                gapLine.setYOffset(Math.max((Utils.convertPixelsToDp(chart.getXAxis().getYOffset()-gapLine.getTextSize()))/2, 0));
+                gapLine.setYOffset(Math.max((Utils.convertPixelsToDp(chart.getXAxis().getYOffset())), 0));
+                //gapLine.setYOffset(Math.max((Utils.convertPixelsToDp(chart.getXAxis().getYOffset()-gapLine.getTextSize())), 0));
 //                if (needSkipLabel && i < limitLineInfo.limitLineAt.size() - 1 && i % 2 == 1) {
                 if(needSkipLabel && isNeedHide(i,limitLineInfo.limitLineAt.size())
                         ||i == limitLineInfo.limitLineAt.size() - 1 && !needDrawEndLabel(stockInfoObject)){

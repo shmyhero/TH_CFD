@@ -10,6 +10,7 @@ import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.renderer.XAxisRenderer;
 import com.github.mikephil.charting.utils.Transformer;
+import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 /**
@@ -47,13 +48,33 @@ public class ReactXAxisRenderer extends XAxisRenderer {
 
     @Override
     public void renderLimitLineLabel(Canvas c, LimitLine limitLine, float[] position, float yOffset) {
-        RectF rect = new RectF();
-        rect.left = mViewPortHandler.getContentRect().left - (horizontalPaddingLeft * 2);
-        rect.right = mViewPortHandler.getContentRect().right + (horizontalPaddingRight * 2);
-        rect.top = 0;
-        rect.bottom = c.getHeight();
-        c.clipRect(rect);
+        float xOffset = limitLine.getLineWidth() + limitLine.getXOffset();
+        final LimitLine.LimitLabelPosition labelPosition = limitLine.getLabelPosition();
+        float textPosition = position[0];
+        if (labelPosition == LimitLine.LimitLabelPosition.RIGHT_TOP) {
+            textPosition = position[0] + xOffset;
+        } else if (labelPosition == LimitLine.LimitLabelPosition.RIGHT_BOTTOM) {
+            textPosition = position[0] + xOffset;
+        } else if (labelPosition == LimitLine.LimitLabelPosition.LEFT_TOP) {
+            textPosition = position[0] - xOffset;
+        } else if (labelPosition == LimitLine.LimitLabelPosition.LEFT_BOTTOM){
+            textPosition = position[0] - xOffset;
+        } else {
+            textPosition = position[0] - xOffset/2;
+        }
+
+        if(textPosition < mViewPortHandler.getContentRect().left || textPosition > mViewPortHandler.getContentRect().right ){
+            //The limit line is hiding. Don't draw label also.
+            return;
+        }
+//
+//        RectF rect = new RectF();
+//        rect.left = mViewPortHandler.getContentRect().left - (horizontalPaddingLeft * 2);
+//        rect.right = mViewPortHandler.getContentRect().right + (horizontalPaddingRight * 2);
+//        rect.top = 0;
+//        rect.bottom = c.getHeight();
+//        c.clipRect(rect);
         super.renderLimitLineLabel(c, limitLine, position, yOffset);
-        c.clipRect(new RectF(0,0,c.getWidth(),c.getHeight()), Region.Op.UNION);
+//        c.clipRect(new RectF(0,0,c.getWidth(),c.getHeight()), Region.Op.UNION);
     }
 }

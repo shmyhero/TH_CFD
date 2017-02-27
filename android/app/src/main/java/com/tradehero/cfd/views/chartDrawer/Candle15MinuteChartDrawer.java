@@ -37,7 +37,7 @@ public class Candle15MinuteChartDrawer extends CandleChartDrawer {
     @Override
     protected String formatXAxisLabelText(Date date) {
         if(date.getHours() == 0){
-            return new SimpleDateFormat("M:d").format(date);
+            return new SimpleDateFormat("M/d").format(date);
         }else{
             return new SimpleDateFormat("H").format(date);
         }

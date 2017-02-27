@@ -204,9 +204,11 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
             }
         }
 
-        int lastLine = chartDataList.length() - 1;
-        limitLineAt.add(lastLine);
-        limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
+        if(needDrawEndLine(stockInfoObject)) {
+            int lastLine = chartDataList.length() - 1;
+            limitLineAt.add(lastLine);
+            limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
+        }
 
         LimitLineInfo info = new LimitLineInfo();
         info.limitLineAt = limitLineAt;

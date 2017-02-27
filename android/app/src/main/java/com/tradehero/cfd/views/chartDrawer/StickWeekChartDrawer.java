@@ -41,9 +41,4 @@ public class StickWeekChartDrawer extends LineStickChartDrawer{
         nextLineAt.add(getGapLineUnit(), 1);
         return nextLineAt;
     }
-
-    @Override
-    protected boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException {
-        return !stockInfoObject.getBoolean("isOpen");
-    }
 }

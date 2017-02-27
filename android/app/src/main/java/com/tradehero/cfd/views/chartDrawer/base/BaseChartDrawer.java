@@ -124,7 +124,7 @@ public abstract class BaseChartDrawer implements IChartDrawer {
      * @param stockInfoObject
      * @throws JSONException
      */
-    protected boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException {
+    protected boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException {
         return false;
     }
 
@@ -168,12 +168,11 @@ public abstract class BaseChartDrawer implements IChartDrawer {
             }
         }
 
-        //if (needDrawEndLabel(stockInfoObject)) {
-        //Always add the last limit but do not display the label if no need to draw today's close price.
-        int lastLine = chartDataList.length() - 1;
-        limitLineAt.add(lastLine);
-        limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
-        //}
+        if (needDrawEndLine(stockInfoObject)) {
+            int lastLine = chartDataList.length() - 1;
+            limitLineAt.add(lastLine);
+            limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
+        }
 
         LimitLineInfo info = new LimitLineInfo();
         info.limitLineAt = limitLineAt;
@@ -309,8 +308,7 @@ public abstract class BaseChartDrawer implements IChartDrawer {
                 gapLine.setYOffset(Math.max((Utils.convertPixelsToDp(chart.getXAxis().getYOffset())), 0));
                 //gapLine.setYOffset(Math.max((Utils.convertPixelsToDp(chart.getXAxis().getYOffset()-gapLine.getTextSize())), 0));
 //                if (needSkipLabel && i < limitLineInfo.limitLineAt.size() - 1 && i % 2 == 1) {
-                if(needSkipLabel && isNeedHide(i,limitLineInfo.limitLineAt.size())
-                        ||i == limitLineInfo.limitLineAt.size() - 1 && !needDrawEndLabel(stockInfoObject)){
+                if(needSkipLabel && isNeedHide(i,limitLineInfo.limitLineAt.size())){
                     gapLine.setLabel("");
                 } else {
                     String label = formatXAxisLabelText(calendar.getTime());

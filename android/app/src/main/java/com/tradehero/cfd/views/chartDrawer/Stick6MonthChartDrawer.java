@@ -30,11 +30,6 @@ public class Stick6MonthChartDrawer extends LineStickChartDrawer{
     }
 
     @Override
-    protected boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException {
-        return false;
-    }
-
-    @Override
     protected LimitLineInfo calculateLimitLinesPosition(Calendar startUpLine, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
         ArrayList<Integer> limitLineAt = new ArrayList<>();
         ArrayList<Calendar> limitLineCalender = new ArrayList<>();
@@ -54,10 +49,6 @@ public class Stick6MonthChartDrawer extends LineStickChartDrawer{
             limitLineCalender.add(calendar);
             lastCalendar = calendar;
         }
-
-        int lastLine = chartDataList.length() - 1;
-        limitLineAt.add(lastLine);
-        limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
 
         LimitLineInfo limitLineInfo = new LimitLineInfo();
         limitLineInfo.limitLineAt = limitLineAt;

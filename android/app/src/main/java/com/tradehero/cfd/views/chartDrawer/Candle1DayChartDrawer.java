@@ -49,7 +49,7 @@ public class Candle1DayChartDrawer extends CandleChartDrawer {
     }
 
     @Override
-    public boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException{
+    public boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException{
         return false;
     }
 

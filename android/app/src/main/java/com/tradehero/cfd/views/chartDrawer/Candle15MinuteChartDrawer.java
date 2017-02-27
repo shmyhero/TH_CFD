@@ -44,8 +44,8 @@ public class Candle15MinuteChartDrawer extends CandleChartDrawer {
     }
 
     @Override
-    public boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException {
-        return true;//!stockInfoObject.getBoolean("isOpen");
+    public boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException {
+        return !stockInfoObject.getBoolean("isOpen");
     }
 
     @Override
@@ -53,14 +53,23 @@ public class Candle15MinuteChartDrawer extends CandleChartDrawer {
         ArrayList<Integer> limitLineAt = new ArrayList<>();
         ArrayList<Calendar> limitLineCalender = new ArrayList<>();
 
+        Calendar last = null;
         //Only return the hour.
         for(int i = 0; i < chartDataList.length(); i ++) {
             //TODO: use "time" if api returns it instead of Uppercase one.
             Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
-            if (calendar.getTime().getMinutes() == 0 && calendar.getTime().getHours() % 3 == 0){
+            if((last != null && (calendar.getTime().getHours() - last.getTime().getHours())>=16)
+                || calendar.getTime().getMinutes() == 0 && calendar.getTime().getHours() % 3 == 0){
                 limitLineAt.add(i);
                 limitLineCalender.add(calendar);
+                last = calendar;
             }
+        }
+
+        if (needDrawEndLine(stockInfoObject)) {
+            int lastLine = chartDataList.length() - 1;
+            limitLineAt.add(lastLine);
+            limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
         }
 
         LimitLineInfo limitLineInfo = new LimitLineInfo();

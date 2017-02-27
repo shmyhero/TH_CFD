@@ -87,6 +87,8 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
             }
         });
 
+        chart.setBorderWidth(0.5f);
+
         chart.getAxisLeft().setSpaceTop(10);
         chart.getAxisLeft().setSpaceBottom(10);
         chart.getAxisRight().setSpaceTop(10);

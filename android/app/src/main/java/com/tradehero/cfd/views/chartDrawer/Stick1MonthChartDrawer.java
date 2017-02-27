@@ -25,6 +25,11 @@ public class Stick1MonthChartDrawer extends LineStickChartDrawer{
     }
 
     @Override
+    public int getLabelsToSkip() {
+        return 0;
+    }
+
+    @Override
     public SimpleDateFormat getGapLineFormat() {
         return new SimpleDateFormat("M/d");
     }
@@ -48,8 +53,8 @@ public class Stick1MonthChartDrawer extends LineStickChartDrawer{
 //    }
 
     @Override
-    protected boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException {
-        return false;
+    public boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException {
+        return !stockInfoObject.getBoolean("isOpen");
     }
 
     @Override
@@ -63,7 +68,7 @@ public class Stick1MonthChartDrawer extends LineStickChartDrawer{
             //TODO: use "time" if api returns it instead of Uppercase one.
             Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("time"));
             if (lastCalendar != null) {
-                int days = (int) (lastCalendar.getTime().getTime() - calendar.getTime().getTime()) / (1000 * 60 * 60 * 24);
+                int days = (int) (calendar.getTime().getTime() - lastCalendar.getTime().getTime()) / (1000 * 60 * 60 * 24);
                 if(days < 7){
                     continue;
                 }

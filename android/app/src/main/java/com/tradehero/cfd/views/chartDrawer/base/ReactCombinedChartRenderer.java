@@ -22,7 +22,8 @@ import java.util.ArrayList;
  * Created by Neko on 2017/2/22.
  */
 
-public class ReactCombinedChartRenderer extends CombinedChartRenderer {
+public class ReactCombinedChartRenderer
+        extends CombinedChartRenderer {
     public ReactCombinedChartRenderer(CombinedChart chart, ChartAnimator animator, ViewPortHandler viewPortHandler) {
         super(chart, animator, viewPortHandler);
     }

@@ -84,18 +84,17 @@ public class ReactChart extends CombinedChart {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        if (mXAxis.isDrawLimitLinesBehindDataEnabled())
-            mXAxisRenderer.renderLimitLines(canvas);
+//        if (mXAxis.isDrawLimitLinesBehindDataEnabled())
+//            mXAxisRenderer.renderLimitLines(canvas);
 
     }
 
-    public void setGridBackgroundColor(int color) {
-        super.setGridBackgroundColor(0);
-//        ((ReactYAxisRenderer)mAxisRendererRight).setBackgroundColor(color);
-//        ((ReactYAxisRenderer)mAxisRendererLeft).setBackgroundColor(color);
-//        ((ReactXAxisRenderer)mXAxisRenderer).setBackgroundColor(color);
-    }
+//    public void setGridBackgroundColor(int color) {
+//        super.setGridBackgroundColor(color);
+////        ((ReactYAxisRenderer)mAxisRendererRight).setBackgroundColor(color);
+////        ((ReactYAxisRenderer)mAxisRendererLeft).setBackgroundColor(color);
+////        ((ReactXAxisRenderer)mXAxisRenderer).setBackgroundColor(color);
+//    }
 
     @Override
     public void setData(CombinedData data) {

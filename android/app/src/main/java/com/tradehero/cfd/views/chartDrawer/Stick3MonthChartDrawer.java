@@ -24,17 +24,17 @@ public class Stick3MonthChartDrawer extends LineStickChartDrawer{
     }
 
     @Override
+    public int getLabelsToSkip() {
+        return 0;
+    }
+
+    @Override
     public SimpleDateFormat getGapLineFormat() {
         return new SimpleDateFormat("M/d");
     }
 
     @Override
     public boolean needDrawPreCloseLine() {
-        return false;
-    }
-
-    @Override
-    protected boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException {
         return false;
     }
 }

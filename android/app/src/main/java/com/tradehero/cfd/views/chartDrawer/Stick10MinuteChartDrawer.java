@@ -45,7 +45,7 @@ public class Stick10MinuteChartDrawer extends LineStickChartDrawer {
     }
 
     @Override
-    public boolean needDrawEndLabel(JSONObject stockInfoObject) throws JSONException {
+    public boolean needDrawEndLine(JSONObject stockInfoObject) throws JSONException {
         return !stockInfoObject.getBoolean("isOpen");
     }
 

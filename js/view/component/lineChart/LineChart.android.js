@@ -118,7 +118,7 @@ var LineChart = React.createClass({
 			rightAxisDrawLabel: false,
 			rightAxisLabelCount: 2 - 2,
 			drawBackground: false,
-			drawBorders: false,
+			drawBorders: true,
 			borderColor: 'white',
 			textColor: 'white',
 			backgroundColor: 'transparent',

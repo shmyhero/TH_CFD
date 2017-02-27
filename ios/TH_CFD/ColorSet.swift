@@ -33,15 +33,22 @@ class ColorSet: NSObject {
 		_type = type;
 		// type 0 is detail view.
 		// type 1 is open position view
+        let isPortrait = Orientation.getOrientation() == .Portrait || Orientation.getOrientation() == .PortraitUpsideDown || Orientation.getOrientation() == .AllButUpsideDown
+//        print (Orientation.getOrientation())
 		if StockDataManager.sharedInstance().isLive {
 			startColor = UIColor(hexInt: 0x6683b3)
 			endColor = UIColor(hexInt: 0x374d74)
-			middleLineColor = type == 1 ? UIColor(hexInt:0x1d4fa2) : UIColor(hexInt: 0x657798)
-			dateTextColor = UIColor(hexInt: 0x657798)
-				
-			bgLineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0x657798)
+            //昨收线
+			middleLineColor = type == 1 ? UIColor(hexInt:0x1d4fa2) : (isPortrait ? UIColor(hexInt: 0x91a4c5) : UIColor(hexInt: 0x657798))
+            //图下面的日期
+            dateTextColor = type == 1 ? UIColor(hexInt: 0x657798) : (isPortrait ? UIColor(hexInt: 0x94a9cf) : UIColor(hexInt: 0x657798))
+            //线框
+            bgLineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : (isPortrait ? UIColor(hexInt: 0x91a4c5) : UIColor(hexInt: 0x657798))
+            //k线的颜色
 			lineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0xffffff)
+            //最大最小文字
             minmaxColor = type == 1 ? UIColor.whiteColor() : UIColor(hexInt: 0x94a9cf)
+            //横屏时候右边的时间文字
             rightTextColor = type == 1 ? UIColor.whiteColor() : UIColor(hexInt: 0x223555)
 		}
 		else {

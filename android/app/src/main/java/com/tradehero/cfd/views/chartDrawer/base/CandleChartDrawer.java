@@ -198,6 +198,9 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
     protected void calculateZoom(CombinedChart chart, CombinedData data) {
         float density = chart.getResources().getDisplayMetrics().density;
         float totalWidth = chart.getWidth() / density;
+        if(totalWidth == 0){
+            totalWidth = 400;
+        }
 
         int candleWidthDP = 4;
         int candleSpaceDP = 2;

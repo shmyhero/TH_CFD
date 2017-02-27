@@ -160,7 +160,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
                 JSONArray chartDataList = stockInfoObject.getJSONArray("priceData");
 
                 //TODO: If you want to enable Drawer, undo-comment the following lines.
-
+                Log.d("","setData chartType = " + mChartType);
                 IChartDrawer drawer = ChartDrawerBuilder.createDrawer(mChartType);
                 drawer.setTextColor(textColor);
                 drawer.setBorderColor(borderColor);

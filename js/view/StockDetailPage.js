@@ -15,6 +15,7 @@ import {
 	Platform,
 	ScrollView,
 	ProgressBarAndroid,
+	BackAndroid,
 	ActivityIndicatorIOS,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -157,6 +158,7 @@ var StockDetailPage = React.createClass({
     //Orientation.unlockAllOrientations(); //this will unlock the view to all Orientations
     Orientation.addOrientationListener(this._orientationDidChange);
 
+		BackAndroid.addEventListener('hardwareBackPress', this.hardwareBackPress);
 	},
 
 	componentWillUnmount: function() {
@@ -169,7 +171,16 @@ var StockDetailPage = React.createClass({
 
 	 Orientation.lockToPortrait();
 	 Orientation.removeOrientationListener(this._orientationDidChange);
+	 BackAndroid.removeEventListener('hardwareBackPress', this.hardwareBackPress);
+	},
 
+	hardwareBackPress:function(){
+		if (this.state.orientation == ORIENTATION_PORTRAIT) {
+        return false;
+    } else {
+				this.closeLandspace();
+        return true;
+    }
 	},
 
 	onLayoutSizeChanged: function(){
@@ -329,7 +340,7 @@ var StockDetailPage = React.createClass({
 		}else if(chartType === NetConstants.PARAMETER_CHARTTYPE_15_MINUTE){
 			url = NetConstants.CFD_API.GET_STOCK_KLINE_15M;
 			if(LogicData.getAccountState()){
-				url = NetConstants.CFD_API.GET_STOCK_KLINE_15_LIVE;
+				url = NetConstants.CFD_API.GET_STOCK_KLINE_15M_LIVE;
 				console.log('live', url );
 			}
 			url = url.replace(/<securityId>/, this.props.stockCode);
@@ -570,7 +581,7 @@ var StockDetailPage = React.createClass({
 		}
 
 		this.setState({
-			chartType: type
+			chartType: type,
 		},loadStockInfoSuccess?this.loadStockPriceToday(true, type, this.state.stockInfo):this.loadStockInfo())
 		// this.loadStockPriceToday(true, type, this.state.stockInfo)
 	},
@@ -803,7 +814,6 @@ var StockDetailPage = React.createClass({
 					borderColor = LogicData.getAccountState() ? "#91a4c5" : "#0d4ab6";
 					lineChartGradient = LogicData.getAccountState() ? ['#5f7baa','#3f5680'] : ['#387ae7', '#1962dd'];
 				}
-
 				//8596b5
 				return(
 					<LineChart style={[styles.lineChart,{opacity:opacity}]}
@@ -931,9 +941,11 @@ var StockDetailPage = React.createClass({
 	},
 
 	changeChartViewType:function(type){
-		this.setState({
-			chartViewType:type
-		},this.pressChartHeaderTab(type == CHARTVIEWTYPE_LINE ? NetConstants.PARAMETER_CHARTTYPE_TODAY:NetConstants.PARAMETER_CHARTTYPE_1_MINUTE))
+		if(type!==this.state.chartViewType){
+			this.setState({
+				chartViewType:type
+			},this.pressChartHeaderTab(type == CHARTVIEWTYPE_LINE ? NetConstants.PARAMETER_CHARTTYPE_TODAY:NetConstants.PARAMETER_CHARTTYPE_1_MINUTE))
+			}
 	},
 
 	renderBottomViewType:function(){
@@ -1194,7 +1206,6 @@ var StockDetailPage = React.createClass({
 	changeOrientatioin:function(){
 		console.log("changeOrientatioin");
 		Orientation.getOrientation((err,orientation)=> {
-
 			if(orientation === 'PORTRAIT'){
 				height = Dimensions.get('window').width
 				width = Dimensions.get('window').height
@@ -1202,19 +1213,23 @@ var StockDetailPage = React.createClass({
 				this.setState({
 					 orientation:ORIENTATION_LANDSPACE,
 					 chartViewType:NetConstants.isCandleChart(this.state.chartType)?CHARTVIEWTYPE_CANDLE:CHARTVIEWTYPE_LINE
-				},this.pressChartHeaderTab(this.state.chartType))
+				},()=>{
+					this.pressChartHeaderTab(this.state.chartType)
+				})
 			}else{
 				height = Dimensions.get('window').width
 				width = Dimensions.get('window').height
 				Orientation.lockToPortrait()
 				this.setState({
 					orientation:ORIENTATION_PORTRAIT,
-					// chartViewType:NetConstants.isCandleChart(this.state.chartType)?CHARTVIEWTYPE_CANDLE:CHARTVIEWTYPE_LINE
-				},this.pressChartHeaderTab(NetConstants.PARAMETER_CHARTTYPE_TODAY))
+				},()=>{
+					this.pressChartHeaderTab(NetConstants.isPortraitChart(this.state.chartType)?this.state.chartType:NetConstants.PARAMETER_CHARTTYPE_TODAY)
+				})
 			}
 			console.log("Current Device Orientation: ", orientation);
     });
 	},
+
 
 	resetToLandscape:function(){
 		Orientation.lockToPortrait();
@@ -1430,7 +1445,7 @@ var StockDetailPage = React.createClass({
 		var minValue = this.state.tradeDirection === 1 ? this.state.stockInfo.minValueLong : this.state.stockInfo.minValueShort
 		var maxValue = this.state.tradeDirection === 1 ? this.state.stockInfo.maxValueLong : this.state.stockInfo.maxValueShort
 		if (tradeValue < minValue) {
-			Alert.alert('提示', '低于最小交易额: ' + minValue.toFixed(0) + 'USD\n(交易额=交易本金X杠杆)')
+			Alert.alert('提示', '交易此产品: 本金X杠杆需大于' + minValue.toFixed(0) + '美元\n请增加交易本金或者提升杠杆')
 			return
 		} else if (tradeValue > maxValue) {
 			Alert.alert('提示', '高于最大交易额: ' + maxValue.toFixed(0) + 'USD\n(交易额=交易本金X杠杆)')
@@ -1527,14 +1542,17 @@ var StockDetailPage = React.createClass({
 	_orientationDidChange: function(orientation) {
 	 if (orientation == 'LANDSCAPE') {
 		 //do something with landscape layout
-		 console.log("_orientationDidChange : " + orientation);
+		 console.log("changeOrientatioin _orientationDidChange : " + orientation);
+
 	 } else {
 		 //do something with portrait layout
-		 console.log("_orientationDidChange : " + orientation);
+		 console.log("changeOrientatioin _orientationDidChange : " + orientation);
+
 	 }
  },
-
 });
+
+
 
 var styles = StyleSheet.create({
 	wrapper: {

@@ -199,10 +199,12 @@ var StockDetailPage = React.createClass({
 	},
 
 	onDidFocus: function(event) {
-        if (MainPage.STOCK_DETAIL_ROUTE === event.data.route.name) {
-            this.loadStockInfo()
-						NetworkModule.loadUserBalance(false, this.updateUserBalance)
-        }
+    if (MainPage.STOCK_DETAIL_ROUTE === event.data.route.name) {
+      this.loadStockInfo();
+			if(this.state.orientation == ORIENTATION_PORTRAIT){
+				NetworkModule.loadUserBalance(false, this.updateUserBalance);
+			}
+  	}
 	},
 
 	updateUserBalance: function(responseJson){

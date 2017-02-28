@@ -216,7 +216,7 @@ export default class BindCardPage extends Component {
 						this.setState({
 		          validateInProgress: false,
 		        });
-						Alert.alert('', result.errorMessage, [{text: '确认',}]);
+						Alert.alert('绑卡失败', result.errorMessage, [{text: '确认',}]);
 		      });
 				}else{
 					//Do something???
@@ -226,7 +226,7 @@ export default class BindCardPage extends Component {
         this.setState({
           validateInProgress: false,
         });
-				Alert.alert('', result.errorMessage, [{text: '确认',}]);
+				Alert.alert('绑卡失败', result.errorMessage, [{text: '确认',}]);
       });
 	}
 

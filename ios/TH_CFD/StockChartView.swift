@@ -83,7 +83,6 @@ class StockChartView: UIView {
 		willSet {
 			print ("set type data:",self.chartType)
 			if (newValue != nil) {
-//				if (chartType == "5m" || chartType == "day"){
 				if CandleChartDataSource.isValidData(newValue!) {
 					dataSource = CandleChartDataSource.init(json:newValue!, rect: self.bounds)
 				}

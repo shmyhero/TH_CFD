@@ -93,7 +93,7 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 	}
 	
 	override func setChartType(newValue:String) {
-		if ["day", "5m"].contains(newValue) {
+		if ["day", "1m", "5m", "15m", "60m"].contains(newValue) {
 			super.setChartType(newValue)
 		}
 	}
@@ -169,7 +169,7 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 	
 	func calculateVerticalLines() -> Void {
 		
-		let gaps = ["5m":3600.0, "day":3600.0*24*14]
+		let gaps = ["5m":3600.0, "day":3600.0*24*14, "1m":900.0, "15m":3600.0*3, "60m":3600.0*12,]
 		let gap = gaps[_chartType]!		// gap between two lines
 		
 		if let time0:NSDate? = _candleData.first?.time {

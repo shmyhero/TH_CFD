@@ -66,7 +66,7 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 	}
 	
 	override func setChartType(newValue:String) {
-		if ["today", "2h", "week", "month", "10m"].contains(newValue) {
+		if ["today", "2h", "week", "month", "3M", "6M"].contains(newValue) {
 			super.setChartType(newValue)
 			drawPreCloseLine = newValue == "today"
 		}
@@ -168,7 +168,7 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 		verticalLinesX = []
 		verticalTimes = []
 		
-		let gaps = ["today":3600.0, "2h":1800.0, "week":3600.0*24, "month":3600.0*24*7, "10m":120.0]
+		let gaps = ["today":3600.0, "2h":1800.0, "week":3600.0*24, "month":3600.0*24*7, "3M":3600.0*24*7*3, "6M":3600.0*24*7*6]
 		let gap = gaps[_chartType]!		// gap between two lines
 		
 		if let time0:NSDate? = _lineData.first?.time {

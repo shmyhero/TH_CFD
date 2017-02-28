@@ -309,90 +309,25 @@ var StockDetailPage = React.createClass({
 	},
 
 	loadStockPriceToday: function(showLoading, chartType, stockInfo) {
-		var url = NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_API;
-		if(LogicData.getAccountState()){
-			url = NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_LIVE_API
-			console.log('live', url );
-	 	}
-
-		if(chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE){
-			url = NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M;
-			if(LogicData.getAccountState()){
-				url = NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M_LIVE;
-				console.log('live', url );
+		var isLive = LogicData.getAccountState()
+		var url = "";
+		console.log(chartType)
+		if(NetConstants.isCandleChart(chartType)){
+			url = isLive ? NetConstants.CFD_API.GET_STOCK_PRICE_KLINE_LIVE_API : NetConstants.CFD_API.GET_STOCK_PRICE_KLINE_API
+			// why 1m,15m,60m url has '/horizontal' in the end?
+			if (chartType === NetConstants.PARAMETER_CHARTTYPE_1_MINUTE || chartType === NetConstants.PARAMETER_CHARTTYPE_15_MINUTE || chartType === NetConstants.PARAMETER_CHARTTYPE_60_MINUTE){
+			 url = url+'/horizontal'
 			}
-			url = url.replace(/<securityId>/, this.props.stockCode);
-		}else if(chartType == NetConstants.PARAMETER_CHARTTYPE_DAY){
-			url = NetConstants.CFD_API.GET_STOCK_KLINE_DAY;
-			if(LogicData.getAccountState()){
-				url = NetConstants.CFD_API.GET_STOCK_KLINE_DAY_LIVE;
-				console.log('live', url );
-			}
-			url = url.replace(/<securityId>/, this.props.stockCode);
 		}
-		////////TEST DATA////////
-		//TODO: Replace the TEST DATA
-		else if(chartType === NetConstants.PARAMETER_CHARTTYPE_1_MINUTE  ){
-			url = NetConstants.CFD_API.GET_STOCK_KLINE_1M;
-			if(LogicData.getAccountState()){
-				url = NetConstants.CFD_API.GET_STOCK_KLINE_1M_LIVE;
-				console.log('live', url );
-			}
-			url = url.replace(/<securityId>/, this.props.stockCode);
-		}else if(chartType === NetConstants.PARAMETER_CHARTTYPE_15_MINUTE){
-			url = NetConstants.CFD_API.GET_STOCK_KLINE_15M;
-			if(LogicData.getAccountState()){
-				url = NetConstants.CFD_API.GET_STOCK_KLINE_15M_LIVE;
-				console.log('live', url );
-			}
-			url = url.replace(/<securityId>/, this.props.stockCode);
-		}else if(chartType === NetConstants.PARAMETER_CHARTTYPE_60_MINUTE){
-			url = NetConstants.CFD_API.GET_STOCK_KLINE_60M;
-			if(LogicData.getAccountState()){
-				url = NetConstants.CFD_API.GET_STOCK_KLINE_60M_LIVE;
-				console.log('live', url );
-			}
-			url = url.replace(/<securityId>/, this.props.stockCode);
-		}else if(chartType === NetConstants.PARAMETER_CHARTTYPE_MONTH){
-			url = NetConstants.CFD_API.GET_STOCK_MONTH;
-			if(LogicData.getAccountState()){
-				url = NetConstants.CFD_API.GET_STOCK_MONTH_LIVE;
-				console.log('live', url );
-			}
-			url = url.replace(/<securityId>/, this.props.stockCode);
-		}else if(chartType === NetConstants.PARAMETER_CHARTTYPE_3_MONTH){
-			url = NetConstants.CFD_API.GET_STOCK_3MONTH;
-			if(LogicData.getAccountState()){
-				url = NetConstants.CFD_API.GET_STOCK_3MONTH_LIVE;
-				console.log('live', url );
-			}
-			console.log('live 3month ', url );
-			url = url.replace(/<securityId>/, this.props.stockCode);
-		}else if(chartType === NetConstants.PARAMETER_CHARTTYPE_6_MONTH){
-			url = NetConstants.CFD_API.GET_STOCK_6MONTH;
-			if(LogicData.getAccountState()){
-				url = NetConstants.CFD_API.GET_STOCK_6MONTH_LIVE;
-				console.log('live', url );
-			}
-			url = url.replace(/<securityId>/, this.props.stockCode);
-		}
-		// else if(chartType === NetConstants.PARAMETER_CHARTTYPE_TODAY_CANDLE){
-		// 	url = NetConstants.CFD_API.GET_STOCK_KLINE_DAY;
-		// 	if(LogicData.getAccountState()){
-		// 		url = NetConstants.CFD_API.GET_STOCK_KLINE_DAY_LIVE;
-		// 		console.log('live', url );
-		// 	}
-		// 	url = url.replace(/<securityId>/, this.props.stockCode);
-		// }
-		// else if(chartType === NetConstants.PARAMETER_CHARTTYPE_3_MONTH
-		// 	 || chartType === NetConstants.PARAMETER_CHARTTYPE_6_MONTH){
-		// 	 url = url.replace(/<stockCode>/, this.props.stockCode)
-		// 	 url = url.replace(/<chartType>/, "week")
-		// }
-		////////TEST DATA////////
 		else {
-			 url = url.replace(/<stockCode>/, this.props.stockCode)
-			 url = url.replace(/<chartType>/, chartType)
+		 url = isLive ? NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_LIVE_API : NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_API
+		}
+
+		url = url.replace(/<chartType>/, chartType)
+		url = url.replace(/<stockCode>/, this.props.stockCode)
+
+		if(isLive){
+		  console.log('live', url );
 		}
 
 		this.setState({

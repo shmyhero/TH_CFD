@@ -39,8 +39,8 @@ public class ChartDrawerConstants {
         hour("60m"),
         week("week"),
         month("month"),
-        threeMonth("3M"),
-        sixMonth("6M");
+        threeMonth("3month"),
+        sixMonth("6month");
 
         private String name;
 

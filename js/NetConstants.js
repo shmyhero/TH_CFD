@@ -59,6 +59,8 @@ function getCFDAPI(){
     GET_STOCK_DETAIL_LIVE_API: CFD_API_SERVER + '/api/security/live/<stockCode>',//LIVE OK
     GET_STOCK_PRICE_TODAY_API: CFD_API_SERVER + '/api/quote/<stockCode>/tick/<chartType>',
     GET_STOCK_PRICE_TODAY_LIVE_API: CFD_API_SERVER + '/api/quote/live/<stockCode>/tick/<chartType>',//LIVE OK
+    GET_STOCK_PRICE_KLINE_API: CFD_API_SERVER + '/api/quote/<stockCode>/kline/<chartType>',
+    GET_STOCK_PRICE_KLINE_LIVE_API: CFD_API_SERVER + '/api/quote/live/<stockCode>/kline/<chartType>',//LIVE OK
     GET_OPEN_POSITION_API: CFD_API_SERVER + '/api/position/open',
     GET_OPEN_POSITION_LIVE_API: CFD_API_SERVER + '/api/position/live/open',//LIVE ok
     GET_CLOSED_POSITION_API: CFD_API_SERVER + '/api/position/closed',
@@ -93,23 +95,23 @@ function getCFDAPI(){
     UPDATE_STOCK_ALERT_LIVE: CFD_API_SERVER + '/api/user/live/stockAlert',//LIVE
     POST_PUSH_TOKEN: CFD_API_SERVER + '/api/user/pushtoken',
     POST_PUSH_TOKEN_AUTH: CFD_API_SERVER + '/api/user/pushtokenauth',
-    GET_STOCK_KLINE_1M: CFD_API_SERVER + '/api/quote/<securityId>/kline/1m/horizontal',
-    GET_STOCK_KLINE_1M_LIVE: CFD_API_SERVER + '/api/quote/live/<securityId>/kline/1m/horizontal',
-    GET_STOCK_KLINE_FIVE_M: CFD_API_SERVER + '/api/quote/<securityId>/kline/5m',
-    GET_STOCK_KLINE_FIVE_M_LIVE: CFD_API_SERVER + '/api/quote/live/<securityId>/kline/5m',
-    GET_STOCK_KLINE_15M: CFD_API_SERVER + '/api/quote/<securityId>/kline/15m/horizontal',
-    GET_STOCK_KLINE_15M_LIVE: CFD_API_SERVER + '/api/quote/live/<securityId>/kline/15m/horizontal',
-    GET_STOCK_KLINE_60M: CFD_API_SERVER + '/api/quote/<securityId>/kline/60m/horizontal',
-    GET_STOCK_KLINE_60M_LIVE: CFD_API_SERVER + '/api/quote/live/<securityId>/kline/60m/horizontal',
-    GET_STOCK_KLINE_DAY: CFD_API_SERVER + '/api/quote/<securityId>/kline/day',
-    GET_STOCK_KLINE_DAY_LIVE: CFD_API_SERVER + '/api/quote/live/<securityId>/kline/day',
+    GET_STOCK_KLINE_1M: CFD_API_SERVER + '/api/quote/<stockCode>/kline/1m/horizontal',
+    GET_STOCK_KLINE_1M_LIVE: CFD_API_SERVER + '/api/quote/live/<stockCode>/kline/1m/horizontal',
+    GET_STOCK_KLINE_FIVE_M: CFD_API_SERVER + '/api/quote/<stockCode>/kline/5m',
+    GET_STOCK_KLINE_FIVE_M_LIVE: CFD_API_SERVER + '/api/quote/live/<stockCode>/kline/5m',
+    GET_STOCK_KLINE_15M: CFD_API_SERVER + '/api/quote/<stockCode>/kline/15m/horizontal',
+    GET_STOCK_KLINE_15M_LIVE: CFD_API_SERVER + '/api/quote/live/<stockCode>/kline/15m/horizontal',
+    GET_STOCK_KLINE_60M: CFD_API_SERVER + '/api/quote/<stockCode>/kline/60m/horizontal',
+    GET_STOCK_KLINE_60M_LIVE: CFD_API_SERVER + '/api/quote/live/<stockCode>/kline/60m/horizontal',
+    GET_STOCK_KLINE_DAY: CFD_API_SERVER + '/api/quote/<stockCode>/kline/day',
+    GET_STOCK_KLINE_DAY_LIVE: CFD_API_SERVER + '/api/quote/live/<stockCode>/kline/day',
 
-    GET_STOCK_MONTH: CFD_API_SERVER + '/api/quote/<securityId>/tick/month',
-    GET_STOCK_MONTH_LIVE: CFD_API_SERVER + '/api/quote/live/<securityId>/tick/month',
-    GET_STOCK_3MONTH: CFD_API_SERVER + '/api/quote/<securityId>/tick/3month',
-    GET_STOCK_3MONTH_LIVE: CFD_API_SERVER + '/api/quote/live/<securityId>/tick/3month',
-    GET_STOCK_6MONTH: CFD_API_SERVER + '/api/quote/<securityId>/tick/6month',
-    GET_STOCK_6MONTH_LIVE: CFD_API_SERVER + '/api/quote/live/<securityId>/tick/6month',
+    GET_STOCK_MONTH: CFD_API_SERVER + '/api/quote/<stockCode>/tick/month',
+    GET_STOCK_MONTH_LIVE: CFD_API_SERVER + '/api/quote/live/<stockCode>/tick/month',
+    GET_STOCK_3MONTH: CFD_API_SERVER + '/api/quote/<stockCode>/tick/3month',
+    GET_STOCK_3MONTH_LIVE: CFD_API_SERVER + '/api/quote/live/<stockCode>/tick/3month',
+    GET_STOCK_6MONTH: CFD_API_SERVER + '/api/quote/<stockCode>/tick/6month',
+    GET_STOCK_6MONTH_LIVE: CFD_API_SERVER + '/api/quote/live/<stockCode>/tick/6month',
 
     GET_MY_MESSAGES: CFD_API_SERVER + '/api/user/message?pageNum=<pageNum>&pageSize=<pageSize>',
     GET_MY_MESSAGES_LIVE: CFD_API_SERVER + '/api/user/live/message?pageNum=<pageNum>&pageSize=<pageSize>',//LIVE ok
@@ -218,8 +220,8 @@ export let PARAMETER_CHARTTYPE_TODAY = 'today'
 export let PARAMETER_CHARTTYPE_TWO_HOUR = '2h'
 export let PARAMETER_CHARTTYPE_WEEK = 'week'
 export let PARAMETER_CHARTTYPE_MONTH = 'month'
-export let PARAMETER_CHARTTYPE_3_MONTH = '3M'
-export let PARAMETER_CHARTTYPE_6_MONTH = '6M'
+export let PARAMETER_CHARTTYPE_3_MONTH = '3month'
+export let PARAMETER_CHARTTYPE_6_MONTH = '6month'
 
 // export let PARAMETER_CHARTTYPE_TODAY_CANDLE = 'todayK'
 export let PARAMETER_CHARTTYPE_1_MINUTE = '1m'

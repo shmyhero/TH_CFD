@@ -66,8 +66,8 @@ extension Double {
     func decimalPlace() -> Int {
         let str = "\(self)"
         if let range = str.rangeOfString(".") {
-            print (range.endIndex)
-            print (str.endIndex)
+//            print (range.endIndex)
+//            print (str.endIndex)
             return range.endIndex.distanceTo(str.endIndex)
         }
         else {

@@ -71,7 +71,7 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		_candleData = []
 		do {
 			let json: AnyObject? = try NSJSONSerialization.JSONObjectWithData(nsData, options: NSJSONReadingOptions.MutableLeaves)
-			print(json)
+//			print(json)
 			if let jsonDict = json as? NSDictionary {
 				if _jsonString.rangeOfString("priceData") != nil {
 					let jsonArray = jsonDict["priceData"] as! NSArray

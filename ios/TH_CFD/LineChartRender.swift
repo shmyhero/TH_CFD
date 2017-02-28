@@ -164,7 +164,7 @@ class LineChartRender: BaseRender {
 		let dateFormatter = NSDateFormatter()
 		var textWidth:CGFloat = 28.0
 		let chartType = lineDataProvider!.chartType()
-		if chartType == "week" || chartType == "month" || chartType == "3M" || chartType == "6M" {
+		if chartType == "week" || chartType == "month" || chartType == "3month" || chartType == "6month" {
 			dateFormatter.dateFormat = "MM/dd"
 		}
 		else if chartType == "10m" {

@@ -103,7 +103,7 @@ export function start() {
 	//receives broadcast messages from a hub function, called "broadcastMessage"
 	// StockInfo data structure: {"Symbol":"MSFT","Price":31.97,"DayOpen":30.31,"Change":1.66,"PercentChange":0.0519}
 	stockPriceWebSocketProxy.on(serverListenerName, (stockInfo) => {
-		 console.log("socketUpdate! " + JSON.stringify(stockInfo))
+		//  console.log("socketUpdate! " + JSON.stringify(stockInfo))
 
 		//Stock Price is changed.
 		stockInfo.forEach((data)=>{

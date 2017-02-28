@@ -496,4 +496,9 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         }
         return false;
     }
+
+    public static float getCurrentScreenWidth(){
+        if(isLandscape())return SCREEN_H;
+        else return SCREEN_W;
+    }
 }

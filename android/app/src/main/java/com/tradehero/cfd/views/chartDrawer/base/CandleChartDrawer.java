@@ -14,6 +14,7 @@ import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.tradehero.cfd.MainActivity;
 import com.tradehero.cfd.StringUtils;
 
 import org.json.JSONArray;
@@ -220,8 +221,9 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
     protected void calculateZoom(CombinedChart chart, CombinedData data) {
         float density = chart.getResources().getDisplayMetrics().density;
         float totalWidth = chart.getWidth() / density;
+
         if(totalWidth == 0){
-            totalWidth = 400;
+            totalWidth = MainActivity.getCurrentScreenWidth() - 20;
         }
 
         int candleWidthDP = 4;
@@ -246,8 +248,6 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
         }
 
         resetChartInScreen(chart, true);
-
-
     }
 
 

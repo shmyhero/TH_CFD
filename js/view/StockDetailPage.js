@@ -733,7 +733,7 @@ var StockDetailPage = React.createClass({
 					<LineChart style={[styles.lineChart,{opacity:opacity}]}
 						data={JSON.stringify(this.state.stockInfo)}
 						chartType={this.state.chartType}
-						chartIsActual={LogicData.getAccountState()}
+						// chartIsActual={LogicData.getAccountState()}
 						>
 					</LineChart>
 				)
@@ -765,7 +765,7 @@ var StockDetailPage = React.createClass({
 				return(
 					<LineChart style={[styles.lineChart,{opacity:opacity}]}
 						chartType={this.state.chartType}
-						chartIsActual={LogicData.getAccountState()}
+						// chartIsActual={LogicData.getAccountState()}
 						data={JSON.stringify(this.state.stockInfo)}
 						xAxisPosition="BOTTOM"
 						borderColor={borderColor}

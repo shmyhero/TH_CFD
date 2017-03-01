@@ -1275,7 +1275,7 @@ var StockOpenPositionPage = React.createClass({
 					data={JSON.stringify(this.state.stockDetailInfo)}
 					chartType={this.state.chartType}
 					colorType={1}
-					chartIsActual={LogicData.getAccountState()}
+					// chartIsActual={LogicData.getAccountState()}
 					lineChartGradient={LogicData.getAccountState() ? ['#374d74','#6683b3'] : ['#99bfff', '#1954b9']}
 					descriptionColor={1}>
 				</LineChart>
@@ -1291,7 +1291,7 @@ var StockOpenPositionPage = React.createClass({
 					data={JSON.stringify(this.state.stockDetailInfo)}
 					chartType={this.state.chartType}
 					colorType={1}
-					chartIsActual={LogicData.getAccountState()}
+					// chartIsActual={LogicData.getAccountState()}
 					lineChartGradient={LogicData.getAccountState() ? ['#374d74','#6683b3'] : ['#99bfff', '#1954b9']}
 					descriptionColor={1}
 					xAxisPosition="BOTTOM"

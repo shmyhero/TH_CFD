@@ -113,12 +113,12 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
         set1.setDrawCircleHole(false);
         set1.setCircleColors(circleColors);
         set1.setValueTextSize(0f);
-        boolean isActual = false;
-        try {
-            isActual = ((ReactChart) chart).isAcutal;
-        } catch (Exception e) {
-            Log.e("", e.toString());
-        }
+//        boolean isActual = false;
+//        try {
+//            isActual = ((ReactChart) chart).isAcutal;
+//        } catch (Exception e) {
+//            Log.e("", e.toString());
+//        }
 
         Drawable drawable = getGradientDrawable(((ReactChart)chart).getGradientColors());
         //Drawable drawable = ContextCompat.getDrawable(chart.getContext(), isActual ? R.drawable.stock_price_fill_color_actual : R.drawable.stock_price_fill_color);

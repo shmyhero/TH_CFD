@@ -24,7 +24,7 @@ import java.util.List;
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
  */
 public class ReactChart extends CombinedChart {
-    public boolean isAcutal = false;
+//    public boolean isAcutal = false;
 
     public ReactChart(Context context) {
         super(context);
@@ -64,9 +64,9 @@ public class ReactChart extends CombinedChart {
 //    }
 
 
-    public void setIsActual(boolean isActual){
-        this.isAcutal = isActual;
-    }
+//    public void setIsActual(boolean isActual){
+//        this.isAcutal = isActual;
+//    }
 
     @Override
     protected void init() {

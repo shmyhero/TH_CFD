@@ -197,11 +197,11 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
         }
     }
 
-    @ReactProp(name = "chartIsActual")
-    public void setChartIsActual(ReactChart chart, boolean chartIsActual){
-        chart.setIsActual(chartIsActual);
-        Log.d("ChartIsActual","chartIsActual = " + chartIsActual);
-    }
+//    @ReactProp(name = "chartIsActual")
+//    public void setChartIsActual(ReactChart chart, boolean chartIsActual){
+//        chart.setIsActual(chartIsActual);
+//        Log.d("ChartIsActual","chartIsActual = " + chartIsActual);
+//    }
 
 
 

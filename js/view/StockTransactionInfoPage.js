@@ -163,6 +163,14 @@ var StockTransactionInfoPage = React.createClass({
 	renderCardBorder: function(){
 		if(this.state.card){
 
+			var cardBorder = require('../../images/card_border_bronze.png');
+			if(this.state.card.cardType == 1){
+				cardBorder = require('../../images/card_border_bronze.png');
+			}else if(this.state.card.cardType == 2){
+				cardBorder = require('../../images/card_border_silver.png');
+			}else if(this.state.card.cardType == 3){
+				cardBorder = require('../../images/card_border_gold.png');
+			}
 			return (
 				<View style={{
 					position:'absolute',
@@ -170,13 +178,13 @@ var StockTransactionInfoPage = React.createClass({
 					left:BODY_HORIZON_MARGIN-CARD_BORDER_WIDTH,
 					right: BODY_HORIZON_MARGIN-CARD_BORDER_WIDTH,
 				}}>
-					<Image source={require('../../images/card_border_bronze.png')}
+					<Image source={cardBorder}
 						style={{width: BORDER_WIDTH, height: BORDER_HEIGHT,
 						resizeMode: "contain"}}>
 					</Image>
 					<View style={{position:'absolute', top: CARD_TITLE_POSITION, left:0, right:0, justifyContent:'center', alignItems:'center', height:CARD_TITLE_HEIGHT,}}>
 						<Text style={{textAlign: 'center', color:'white', fontSize: TITLE_FONT_SIZE, width:120,} }>
-							财富起航
+							{this.state.card.title}
 						</Text>
 					</View>
 				</View>

@@ -300,6 +300,7 @@ var styles = StyleSheet.create({
 
 	aboutCash:{
 		padding:15,
+		width:width,
 	},
 
 	textRound:{

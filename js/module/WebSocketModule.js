@@ -57,10 +57,8 @@ var wsErrorCallback = (errorMessage) =>
 }
 
 AppStateModule.registerTurnToActiveListener(() => {
-	console.log('Check Web sockets connection.')
-	if (webSocketConnection && webSocketConnection.state == 4) { // disconnected state
-		start()
-	}
+	console.log('App is back again. Always restart the socket')
+	start();
 })
 AppStateModule.registerTurnToBackgroundListener(() => {
 	console.log('App move to background. Stop Web sockets.')

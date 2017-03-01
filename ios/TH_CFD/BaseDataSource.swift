@@ -17,7 +17,6 @@ protocol BaseDataProvider : class
 	func minPrice() -> Double
 	func maxPercent() -> Double
 	func minPercent() -> Double
-    func isPortrait() -> Bool
     func chartWidth() -> CGFloat
     func chartHeight() -> CGFloat
     func rightPadding() -> CGFloat
@@ -128,10 +127,6 @@ class BaseDataSource: NSObject, BaseDataProvider {
 		}
     }
     
-    func isPortrait() -> Bool {
-        return Orientation.getOrientation() == .Portrait || Orientation.getOrientation() == .PortraitUpsideDown
-    }
-    
     func chartWidth() -> CGFloat {
         return _rect.width - rightPadding()
     }
@@ -141,6 +136,6 @@ class BaseDataSource: NSObject, BaseDataProvider {
     }
     
     func rightPadding() ->CGFloat {
-        return isPortrait() ? 0 : 70
+        return AppDelegate.isPortrait() ? 0 : 70
     }
 }

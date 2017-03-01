@@ -34,7 +34,7 @@ class ColorSet: NSObject {
 		// type 0 is detail view.
 		// type 1 is open position view
         let isPortrait = Orientation.getOrientation() == .Portrait || Orientation.getOrientation() == .PortraitUpsideDown || Orientation.getOrientation() == .AllButUpsideDown
-//        print (Orientation.getOrientation())
+//        let isPortrait = AppDelegate.isPortrait()
 		if StockDataManager.sharedInstance().isLive {
 			startColor = UIColor(hexInt: 0x6683b3)
 			endColor = UIColor(hexInt: 0x374d74)

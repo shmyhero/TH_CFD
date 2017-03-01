@@ -25,14 +25,10 @@ class BaseRender: NSObject {
 		super.init()
     }
 
-    // these 3 functions should only used in base render.
+    // these 2 functions should only used in base render.
     // In its child class, these data should be called from its data source.
-    func isPortrait() -> Bool {
-        return Orientation.getOrientation() == .Portrait || Orientation.getOrientation() == .PortraitUpsideDown
-    }
-    
     func chartWidth() -> CGFloat {
-        if isPortrait() {
+        if AppDelegate.isPortrait() {
             return _renderView.bounds.width
         }
         else {
@@ -95,7 +91,7 @@ class BaseRender: NSObject {
         //Draw horizontal graph lines on the top of everything
         let linePath = UIBezierPath()
         CGContextSaveGState(context)
-        if !isPortrait() {
+        if !AppDelegate.isPortrait() {
             // landscape mode have horizontal lines
             let hnum = _segment
             for i in 1..<hnum {
@@ -124,7 +120,7 @@ class BaseRender: NSObject {
         let height = chartHeight()
         let width = chartWidth()
         
-        if isPortrait() {
+        if AppDelegate.isPortrait() {
             // portrait mode
             // draw min/max text
             let textWidth:CGFloat = 40.0

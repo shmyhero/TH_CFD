@@ -135,8 +135,8 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		}
 		
 		//calculate the x point
-        let topBorder:CGFloat = isPortrait() ? height * 0.12 : 2
-        let bottomBorder:CGFloat = isPortrait() ? height * 0.15 : 2
+        let topBorder:CGFloat = AppDelegate.isPortrait() ? height * 0.12 : 2
+        let bottomBorder:CGFloat = AppDelegate.isPortrait() ? height * 0.15 : 2
 		let graphHeight:CGFloat = height - topBorder - bottomBorder
 		
 		let columnPosition = { (column:Int) -> CandlePositionData in

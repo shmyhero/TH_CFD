@@ -212,5 +212,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		NotificationManager.sharedInstance().showNotification(payloadMsg, taskId: taskId, msgId: msgId, offline: offLine)
 	}
 
+    static func isPortrait() -> Bool {
+        return Orientation.getOrientation() == .Portrait || Orientation.getOrientation() == .PortraitUpsideDown
+    }
 }
 

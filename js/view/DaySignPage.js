@@ -208,8 +208,15 @@ var DaySignPage = React.createClass({
 					},
 					cache: 'offline',
 				},
-				(responseJson) =>{
-
+				(responseJson, isCache) =>{
+					if(isCache){
+						var date = new Date();
+						var currentMonth = date.getMonth() + 1;
+						if(responseJson.month != currentMonth){
+							console.log("current month has changed! Do not show cache then!")
+							return;
+						}
+					}
 
 					if(responseJson!==null && responseJson.days!=null && responseJson.days.length>0){
 						var _days = this.state.days
@@ -225,7 +232,7 @@ var DaySignPage = React.createClass({
 						)
 					}
 				}
-			)
+			);
 		}
 	},
 

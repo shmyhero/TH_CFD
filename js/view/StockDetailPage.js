@@ -311,16 +311,12 @@ var StockDetailPage = React.createClass({
 	loadStockPriceToday: function(showLoading, chartType, stockInfo) {
 		var isLive = LogicData.getAccountState()
 		var url = "";
-		console.log(chartType)
+
 		if(NetConstants.isCandleChart(chartType)){
 			url = isLive ? NetConstants.CFD_API.GET_STOCK_PRICE_KLINE_LIVE_API : NetConstants.CFD_API.GET_STOCK_PRICE_KLINE_API
-			// why 1m,15m,60m url has '/horizontal' in the end?
-			if (chartType === NetConstants.PARAMETER_CHARTTYPE_1_MINUTE || chartType === NetConstants.PARAMETER_CHARTTYPE_15_MINUTE || chartType === NetConstants.PARAMETER_CHARTTYPE_60_MINUTE){
-			 url = url+'/horizontal'
-			}
 		}
 		else {
-		 url = isLive ? NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_LIVE_API : NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_API
+		 	url = isLive ? NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_LIVE_API : NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_API
 		}
 
 		url = url.replace(/<chartType>/, chartType)

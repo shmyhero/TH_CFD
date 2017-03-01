@@ -330,24 +330,18 @@ var StockOpenPositionPage = React.createClass({
 	// },
 
 	loadStockDetailInfo: function(chartType,stockCode) {
-		var url = NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_API
-		if(LogicData.getAccountState()){
-		 url = NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_LIVE_API
-		 console.log('live', url );
-	 	}
-		// url = url.replace(/<stockCode>/, stockCode)
-		// url = url.replace(/<chartType>/, this.state.chartType)
+		var isLive = LogicData.getAccountState()
+		var url = "";
 
-		if(chartType == NetConstants.PARAMETER_CHARTTYPE_5_MINUTE){
-			url = LogicData.getAccountState() ? NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M_LIVE : NetConstants.CFD_API.GET_STOCK_KLINE_FIVE_M;
-			url = url.replace(/<securityId>/, stockCode);
-		}else if(chartType == NetConstants.PARAMETER_CHARTTYPE_DAY){
-			url = LogicData.getAccountState() ? NetConstants.CFD_API.GET_STOCK_KLINE_DAY_LIVE : NetConstants.CFD_API.GET_STOCK_KLINE_DAY;
-			url = url.replace(/<securityId>/, stockCode);
-		}else {
-			 url = url.replace(/<stockCode>/, stockCode)
-			 url = url.replace(/<chartType>/, chartType)
+		if(NetConstants.isCandleChart(chartType)){
+			url = isLive ? NetConstants.CFD_API.GET_STOCK_PRICE_KLINE_LIVE_API : NetConstants.CFD_API.GET_STOCK_PRICE_KLINE_API
 		}
+		else {
+		 	url = isLive ? NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_LIVE_API : NetConstants.CFD_API.GET_STOCK_PRICE_TODAY_API
+		}
+		url = url.replace(/<stockCode>/, stockCode)
+		url = url.replace(/<chartType>/, chartType)
+
 		this.setState({
 			dataStatus : 2
 		})

@@ -95,23 +95,6 @@ function getCFDAPI(){
     UPDATE_STOCK_ALERT_LIVE: CFD_API_SERVER + '/api/user/live/stockAlert',//LIVE
     POST_PUSH_TOKEN: CFD_API_SERVER + '/api/user/pushtoken',
     POST_PUSH_TOKEN_AUTH: CFD_API_SERVER + '/api/user/pushtokenauth',
-    GET_STOCK_KLINE_1M: CFD_API_SERVER + '/api/quote/<stockCode>/kline/1m/horizontal',
-    GET_STOCK_KLINE_1M_LIVE: CFD_API_SERVER + '/api/quote/live/<stockCode>/kline/1m/horizontal',
-    GET_STOCK_KLINE_FIVE_M: CFD_API_SERVER + '/api/quote/<stockCode>/kline/5m',
-    GET_STOCK_KLINE_FIVE_M_LIVE: CFD_API_SERVER + '/api/quote/live/<stockCode>/kline/5m',
-    GET_STOCK_KLINE_15M: CFD_API_SERVER + '/api/quote/<stockCode>/kline/15m/horizontal',
-    GET_STOCK_KLINE_15M_LIVE: CFD_API_SERVER + '/api/quote/live/<stockCode>/kline/15m/horizontal',
-    GET_STOCK_KLINE_60M: CFD_API_SERVER + '/api/quote/<stockCode>/kline/60m/horizontal',
-    GET_STOCK_KLINE_60M_LIVE: CFD_API_SERVER + '/api/quote/live/<stockCode>/kline/60m/horizontal',
-    GET_STOCK_KLINE_DAY: CFD_API_SERVER + '/api/quote/<stockCode>/kline/day',
-    GET_STOCK_KLINE_DAY_LIVE: CFD_API_SERVER + '/api/quote/live/<stockCode>/kline/day',
-
-    GET_STOCK_MONTH: CFD_API_SERVER + '/api/quote/<stockCode>/tick/month',
-    GET_STOCK_MONTH_LIVE: CFD_API_SERVER + '/api/quote/live/<stockCode>/tick/month',
-    GET_STOCK_3MONTH: CFD_API_SERVER + '/api/quote/<stockCode>/tick/3month',
-    GET_STOCK_3MONTH_LIVE: CFD_API_SERVER + '/api/quote/live/<stockCode>/tick/3month',
-    GET_STOCK_6MONTH: CFD_API_SERVER + '/api/quote/<stockCode>/tick/6month',
-    GET_STOCK_6MONTH_LIVE: CFD_API_SERVER + '/api/quote/live/<stockCode>/tick/6month',
 
     GET_MY_MESSAGES: CFD_API_SERVER + '/api/user/message?pageNum=<pageNum>&pageSize=<pageSize>',
     GET_MY_MESSAGES_LIVE: CFD_API_SERVER + '/api/user/live/message?pageNum=<pageNum>&pageSize=<pageSize>',//LIVE ok

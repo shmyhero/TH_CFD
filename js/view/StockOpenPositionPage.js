@@ -56,7 +56,9 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {
 		return r1.id !== r2.id || r1.profitPercentage!==r2.profitPercentage || r1.hasSelected!==r2.hasSelected
 	}});
 
-var extendHeight = 222
+var DEFAULT_EXTENDED_HEIGHT = 222;
+
+var extendHeight = DEFAULT_EXTENDED_HEIGHT
 var rowHeight = 0
 var stockNameFontSize = Math.round(17*width/375.0)
 
@@ -180,6 +182,8 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	clearViews:function(){
+		extendHeight = DEFAULT_EXTENDED_HEIGHT;
+
 		this.setState({
 			isClear:true,
 
@@ -483,7 +487,7 @@ var StockOpenPositionPage = React.createClass({
 		var newData = []
 		$.extend(true, newData, this.state.stockInfoRowData)	// deep copy
 
-		extendHeight = 222
+		extendHeight = DEFAULT_EXTENDED_HEIGHT
 		if (this.state.selectedRow == rowID) {
 			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 			newData[rowID].hasSelected = false
@@ -529,30 +533,31 @@ var StockOpenPositionPage = React.createClass({
 				stopLossSwitchIsOn: stopLoss,
 				profitLossUpdated: false,
 				profitLossConfirmed: false,
-			})
-
-			this.doScrollAnimation()
+			}, ()=>{
+				this.doScrollAnimation();
+			});
 		}
 	},
 
 	subItemPress: function(item, rowData) {
 		var detalY = 0
 
-		this.setState({
+		var state = {
 			selectedSubItem: this.state.selectedSubItem === item ? 0 : item,
 			stockInfo: ds.cloneWithRows(this.state.stockInfoRowData)
-		})
+		};
 
 		if (item === 1) {
 			var stockid = rowData.security.id
-			this.setState({
-				chartType: this.state.chartType,
-				stockDetailInfo: rowData.security
-			}, ()=>{
-				this.loadStockDetailInfo(this.state.chartType,stockid)
-			})
+			state.chartType = this.state.chartType;
+			state.stockDetailInfo = rowData.security;
 		}
-		this.doScrollAnimation()
+		this.setState(state, ()=>{
+			if(item){
+				this.loadStockDetailInfo(this.state.chartType,stockid)
+			}
+			this.doScrollAnimation()
+		});
 	},
 
 	okPress: function(rowData) {
@@ -562,8 +567,9 @@ var StockOpenPositionPage = React.createClass({
 		if (this.state.showExchangeDoubleCheck === false) {
 			this.setState({
 				showExchangeDoubleCheck: true,
-			})
-			this.doScrollAnimation()
+			}, ()=>{
+				this.doScrollAnimation()
+			});
 			return
 		}
 
@@ -652,7 +658,7 @@ var StockOpenPositionPage = React.createClass({
 
 	currentExtendHeight: function(subItem) {
 		var showNetIncome = false
-		var newHeight = 222
+		var newHeight = DEFAULT_EXTENDED_HEIGHT
 		if (showNetIncome) {
 			newHeight += 20
 		}
@@ -671,16 +677,19 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	onSwitchPressed: function(type, value) {
+		var state = {};
 		if (type===1) {
-			this.setState({stopProfitSwitchIsOn: value})
+			state.stopProfitSwitchIsOn = value;
 			stopProfitUpdated = true
 		} else{
-			this.setState({stopLossSwitchIsOn: value})
+			state.stopLossSwitchIsOn = value;
 			stopLossUpdated = true
 		};
 
-		this.setState({profitLossUpdated: true})
-		this.doScrollAnimation()
+		state.profitLossUpdated = true;
+		this.setState(state,()=>{
+			this.doScrollAnimation();
+		});
 	},
 
 	switchConfrim: function(rowData) {

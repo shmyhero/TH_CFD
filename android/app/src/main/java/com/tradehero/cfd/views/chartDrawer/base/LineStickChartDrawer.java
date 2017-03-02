@@ -8,15 +8,19 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.listener.ChartTouchListener;
+import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.tradehero.cfd.MainActivity;
 import com.tradehero.cfd.R;
 import com.tradehero.cfd.StringUtils;
+import com.tradehero.cfd.module.LogicData;
 import com.tradehero.cfd.views.ReactChart;
 
 import org.json.JSONArray;
@@ -35,6 +39,7 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
     protected void resetChart(CombinedChart chart) {
         super.resetChart(chart);
         chart.setDragEnabled(false);
+        chart.setScaleEnabled(false);
         chart.setTouchEnabled(!MainActivity.isLandscape());
     }
 

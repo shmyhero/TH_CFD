@@ -36,6 +36,7 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
     protected void resetChart(final CombinedChart chart) {
         super.resetChart(chart);
         chart.setDragEnabled(true);
+        chart.setScaleEnabled(true);
         chart.setTouchEnabled(true);
         chart.setOnTouchListener(new View.OnTouchListener() {
             @Override

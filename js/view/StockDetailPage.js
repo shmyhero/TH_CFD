@@ -408,7 +408,8 @@ var StockDetailPage = React.createClass({
 				this.setState({
 					dataStatus :1,
 				})
-			}
+			},
+			true
 		)
 	},
 

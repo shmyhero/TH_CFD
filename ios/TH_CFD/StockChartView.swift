@@ -79,27 +79,13 @@ class StockChartView: UIView {
     }
     
 // MARK: deal with raw data from RN
-	var data:String? { // use for RN manager
+	var data:String?="undefined" { // use for RN manager
 		willSet {
-			print ("set type data:",self.chartType)
-			if (newValue != nil) {
-				if CandleChartDataSource.isValidData(newValue!) {
-					dataSource = CandleChartDataSource.init(json:newValue!, rect: self.bounds)
-				}
-				else if LineChartDataSource.isValidData(newValue!) {
-					dataSource = LineChartDataSource.init(json:newValue!, rect: self.bounds)
-				}
-				else {
-					dataSource = BaseDataSource.init(json: newValue!, rect: self.bounds)
-				}
-			}
-			else {
-				dataSource = BaseDataSource.init(json: "", rect: self.bounds)
-			}
-			dataSource?.setChartType(chartType)
-			dataSource?.calculateData()
-			self.setNeedsDisplay()
+			print ("set data, current type:",self.chartType)
 		}
+        didSet {
+            self.setupChartView()
+        }
 	}
 	
 	var colorType:Int=0 {
@@ -112,10 +98,40 @@ class StockChartView: UIView {
 	
 	var chartType:String="undefined" {
 		willSet {
-			print ("set type chart:", newValue)
+			print ("set chart type:", newValue)
 //			self.setNeedsDisplay()
 		}
+        didSet {
+            self.setupChartView()
+        }
 	}
+    
+    func setupChartView() {
+        if self.chartType == "undefined" {
+            return
+        }
+        else if self.data == "undefiend" {
+            dataSource = BaseDataSource.init(json: "", rect: self.bounds)
+            dataSource?.setChartType(chartType)
+            dataSource?.calculateData()
+            self.setNeedsDisplay()
+        }
+        else {
+            if CandleChartDataSource.isValidData(data!) {
+                dataSource = CandleChartDataSource.init(json:data!, rect: self.bounds)
+            }
+            else if LineChartDataSource.isValidData(data!) {
+                dataSource = LineChartDataSource.init(json:data!, rect: self.bounds)
+            }
+            else {
+                dataSource = BaseDataSource.init(json: data!, rect: self.bounds)
+            }
+           
+            dataSource?.setChartType(chartType)
+            dataSource?.calculateData()
+            self.setNeedsDisplay()
+        }
+    }
 	
 	override func didMoveToWindow() {
 		if dataSource?._rect == CGRectZero {

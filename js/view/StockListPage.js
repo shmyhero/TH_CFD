@@ -96,7 +96,6 @@ var StockListPage = React.createClass({
 					listData[i].lastAsk = info[j].ask;
 					listData[i].lastBid = info[j].bid;
 					hasUpdate = true;
-
 					break;
 				}
 			};
@@ -129,7 +128,7 @@ var StockListPage = React.createClass({
 			if(routes && routes[routes.length-1] &&
 				(routes[routes.length-1].name == MainPage.STOCK_LIST_VIEW_PAGER_ROUTE
 			|| routes[routes.length-1].name == MainPage.LOGIN_ROUTE)){
-				var currentIndex = LogicData.getCurrentPageTag();				
+				var currentIndex = LogicData.getCurrentPageTag();
 				if(this.props.pageKey == currentIndex){
 					this.isDisplayingCache = false;
 					//If the last shown list is read from cache, we also need to refresh the data by refetching the api
@@ -391,10 +390,20 @@ var StockListPage = React.createClass({
 					NetworkModule.updateOwnStocks(stockData)
 					.then(()=>{
 						//Do nothing?
+						var userData = LogicData.getUserData()
+						if(Object.keys(userData).length !== 0){
+							NetworkModule.syncOwnStocks(userData)
+								.then(()=>this.refreshData(true));
+						}
 					})
 					.catch(()=>{
 						LogicData.setOwnStocksData(oldData);
 						this.refreshOwnData()
+						var userData = LogicData.getUserData()
+						if(Object.keys(userData).length !== 0){
+							NetworkModule.syncOwnStocks(userData)
+								.then(()=>this.refreshData(true));
+						}
 					});
 				}
 				console.log('Get data from Native ' + args[0] + ' : ' + args[1])
@@ -628,7 +637,8 @@ var StockListPage = React.createClass({
 						</Text>
 
 						<View style={{flexDirection: 'row', alignItems: 'center'}}>
-							{this.renderCountyFlag(rowData)}
+							{/* {this.renderCountyFlag(rowData)} */}
+							{this.renderStockStatus(rowData)}
 							<Text style={styles.stockSymbolText}>
 								{rowData.symbol}
 							</Text>
@@ -659,6 +669,23 @@ var StockListPage = React.createClass({
 			</View>
 		);
 
+	},
+
+	renderStockStatus:function(rowData){
+		if(rowData!==undefined){
+			if(rowData.isOpen || rowData.status == undefined){
+				return null;
+			}else{
+				// console.log('rowData.isOpen = '+rowData.isOpen+' rowData.status = ' + rowData.status);
+				var statusTxt = rowData.status == 2 ? '暂停':'闭市'
+
+				return(
+					<View style={styles.statusLableContainer}>
+						<Text style={styles.statusLable}>{statusTxt}</Text>
+					</View>
+				)
+			}
+		}
 	},
 
 	renderContent: function(){
@@ -818,6 +845,18 @@ var styles = StyleSheet.create({
 		fontSize: 12,
 		color: '#185ed3',
 		marginTop: 14,
+	},
+	statusLableContainer: {
+		backgroundColor: '#999999',
+		borderRadius: 2,
+		paddingLeft: 1,
+		paddingRight: 1,
+		marginRight: 2,
+	},
+	statusLable:{
+		fontSize: 10,
+		textAlign: 'center',
+		color: '#ffffff',
 	},
 });
 

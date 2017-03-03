@@ -1010,6 +1010,22 @@ var StockOpenPositionPage = React.createClass({
 
 	},
 
+	renderStockStatus:function(rowData){
+		if(rowData.security!==undefined){
+			if(rowData.security.isOpen){
+				return null;
+			}else{
+				// console.log('rowData.security.status = ' + rowData.security.status);
+				var statusTxt = rowData.security.status == 2 ? '暂停':'闭市'
+				return(
+					<View style={styles.statusLableContainer}>
+						<Text style={styles.statusLable}>{statusTxt}</Text>
+					</View>
+				)
+			}
+		}
+	},
+
 	renderCountyFlag: function(rowData) {
 		if (rowData.tag !== undefined) {
 			return (
@@ -1656,6 +1672,7 @@ var StockOpenPositionPage = React.createClass({
 			}
 		}
 		var bgcolor = this.state.selectedRow == rowID ? '#e6e5eb' : 'white'
+
 		return (
 			<View>
 				<TouchableHighlight activeOpacity={1} onPress={() => this.stockPressed(rowData, sectionID, rowID, highlightRow)}>
@@ -1666,7 +1683,8 @@ var StockOpenPositionPage = React.createClass({
 							</Text>
 
 							<View style={{flexDirection: 'row', alignItems: 'center'}}>
-								{this.renderCountyFlag(rowData)}
+								{/* {this.renderCountyFlag(rowData)} */}
+								{this.renderStockStatus(rowData)}
 								<Text style={styles.stockSymbolText}>
 									{rowData.security.symbol}
 								</Text>
@@ -1680,9 +1698,9 @@ var StockOpenPositionPage = React.createClass({
 						<View style={styles.rowRightPart}>
 							{this.renderProfit(profitPercentage * 100, "%")}
 						</View>
-						{rowData.security.isOpen ? null :
+						{/* {rowData.security.isOpen ? null :
 							<Image style={styles.notOpenImage} source={require('../../images/not_open.png')}/>
-						}
+						} */}
 					</View>
 				</TouchableHighlight>
 
@@ -2107,6 +2125,18 @@ var styles = StyleSheet.create({
 		color:'#5b7eb9',
 		marginRight:10,
 		alignSelf:'flex-end',
+	},
+	statusLableContainer: {
+		backgroundColor: '#999999',
+		borderRadius: 2,
+		paddingLeft: 1,
+		paddingRight: 1,
+		marginRight: 2,
+	},
+	statusLable:{
+		fontSize: 10,
+		textAlign: 'center',
+		color: '#ffffff',
 	},
 });
 

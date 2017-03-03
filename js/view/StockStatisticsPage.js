@@ -196,7 +196,9 @@ var StockStatisticsPage = React.createClass({
 				if (Math.abs(maxBarSize) < Math.abs(barContent.pl)) {
 					maxBarSize = Math.abs(barContent.pl)
 				}
-				barContent.pl = 0
+				barContent.displayPL = barContent.pl;
+				barContent.pl = 0;
+				//For display...
 			}
 
 			if(initializeAnimation){
@@ -396,13 +398,33 @@ var StockStatisticsPage = React.createClass({
 				</View>
 		)
 		var plText = this.state.statisticsBarInfo.map(
-			(barContent, i) =>
-				<View key={i} style={{flex: 1, flexDirection:'column', alignItems:'flex-end', justifyContent: 'center'}}>
-					<Text style={[styles.plValueText,
-						barContent.pl == 0 ? styles.plValueTextZero : barContent.pl > 0 ? styles.plValueTextPositive : styles.plValueTextNegative]}>
-						{ (barContent.pl > 0 ? "+" : "") + Math.floor(barContent.pl) }
-					</Text>
-				</View>
+			(barContent, i) =>{
+				var valueStyle = null;
+				var valueText = "";
+				if(barContent.invest > 0){
+					var pl = Math.floor(barContent.pl);//.toFixed(2);
+					if(barContent.displayPL){
+						pl = Math.floor(barContent.displayPL);//.toFixed(2);
+					}
+					if(pl == 0){
+						valueStyle = styles.plValueTextZero;
+					}else if(pl > 0){
+						valueStyle = styles.plValueTextPositive;
+						valueText = "+" + pl;
+					}else{
+						valueStyle = styles.plValueTextNegative;
+						valueText = pl;
+					}
+				}
+				//displayPL
+					return (
+						<View key={i} style={{flex: 1, flexDirection:'column', alignItems:'flex-end', justifyContent: 'center'}}>
+							<Text style={[styles.plValueText, valueStyle]}>
+								{valueText}
+							</Text>
+						</View>
+					);
+				}
 		)
 		return (
 			<View style={{flexDirection:'row', flex: 1, padding: 20}}>

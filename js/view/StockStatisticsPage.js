@@ -193,8 +193,8 @@ var StockStatisticsPage = React.createClass({
 			var maxBarSize = 1
 			for (var i = 0; i < statisticsInfo.length; i++) {
 				var barContent = statisticsInfo[i]
-				if (maxBarSize < barContent.invest + barContent.pl) {
-					maxBarSize = barContent.invest + barContent.pl
+				if (Math.abs(maxBarSize) < Math.abs(barContent.pl)) {
+					maxBarSize = Math.abs(barContent.pl)
 				}
 				barContent.pl = 0
 			}
@@ -268,18 +268,19 @@ var StockStatisticsPage = React.createClass({
 				if (barContent.pl < 0) {
 					profitBarFlex *= -1
 					investBarFlex -= profitBarFlex
+				}else if (barContent.pl == 0){
+					profitBarStyle = {flex: 0};
 				}
 				return (
-					<View key={i}>
-						<View style={{flex: 100 - investBarFlex - profitBarFlex}} />
-						<View style={[{flex: profitBarFlex}, profitBarStyle]} />
-						<View style={[{flex: investBarFlex},styles.investBar]} />
+					<View key={i} style={{flexDirection:'row', flex:1, paddingTop: 14, paddingBottom: 14,}}>
+						<View style={[{flex: profitBarFlex}, styles.profitBar, profitBarStyle]} />
+						<View style={{flex: 100 - profitBarFlex}} />
 					</View>
 				)
 			}
 		)
 		return (
-			<View style={styles.barContainer}>
+			<View style={[styles.barContainer, {flexDirection:'column'}]}>
 				{bars}
 			</View>
 		);
@@ -354,8 +355,6 @@ var StockStatisticsPage = React.createClass({
 					<Text style={styles.chartHeaderText2}>盈利</Text>
 					<View style={styles.greenSquare}/>
 					<Text style={styles.chartHeaderText2}>亏损</Text>
-					<View style={styles.blueSquare}/>
-					<Text style={styles.chartHeaderText2}>当前资金</Text>
 				</View>
 			</View>
 		)
@@ -363,12 +362,7 @@ var StockStatisticsPage = React.createClass({
 
 	renderChart: function() {
 		var hasData = this.state.balanceData!==null
-		var barNameText = this.state.statisticsBarInfo.map(
-			(barContent, i) =>
-				<Text key={i} style={styles.barNameText}>
-					{barContent.name}
-				</Text>
-		)
+
 		var sumInvest = 0
 		for (var i = 0; i < this.state.statisticsSumInfo.length; i++) {
 			var barContent = this.state.statisticsSumInfo[i]
@@ -379,13 +373,7 @@ var StockStatisticsPage = React.createClass({
 				<View style={styles.chart}>
 					{this.renderChartHeader()}
 					<View style={styles.separator}/>
-					<View style={[styles.empty, {padding: 20}]}>
-						{this.renderBars()}
-					</View>
-					<View style={[styles.separator, {marginBottom: 10, marginRight:15}]}/>
-					<View style={styles.barNamesContainer}>
-						{barNameText}
-					</View>
+					{this.renderLineChart()}
 				</View>
 			)
 		}
@@ -396,6 +384,40 @@ var StockStatisticsPage = React.createClass({
 				</View>
 				)
 		}
+	},
+
+	renderLineChart: function(){
+		var barNameText = this.state.statisticsBarInfo.map(
+			(barContent, i) =>
+				<View key={i} style={{flex: 1, flexDirection:'column', alignItems:'center', justifyContent: 'center'}}>
+					<Text style={styles.barNameText}>
+						{barContent.name}
+					</Text>
+				</View>
+		)
+		var plText = this.state.statisticsBarInfo.map(
+			(barContent, i) =>
+				<View key={i} style={{flex: 1, flexDirection:'column', alignItems:'flex-end', justifyContent: 'center'}}>
+					<Text style={[styles.plValueText,
+						barContent.pl == 0 ? styles.plValueTextZero : barContent.pl > 0 ? styles.plValueTextPositive : styles.plValueTextNegative]}>
+						{ (barContent.pl > 0 ? "+" : "") + Math.floor(barContent.pl) }
+					</Text>
+				</View>
+		)
+		return (
+			<View style={{flexDirection:'row', flex: 1, padding: 20}}>
+				<View style={styles.barNamesContainer}>
+					{barNameText}
+				</View>
+				<View style={[styles.verticleSeparator,]}/>
+				<View style={[{width: 207}]}>
+					{this.renderBars()}
+				</View>
+				<View style={styles.plValue}>
+					{plText}
+				</View>
+			</View>
+		);
 	},
 
 	renderOrClear:function(){
@@ -519,6 +541,33 @@ var styles = StyleSheet.create({
 		backgroundColor: ColorConstants.SEPARATOR_GRAY,
 	},
 
+	verticleSeparator: {
+		marginTop: 15,
+		width: 0.5,
+		backgroundColor: ColorConstants.SEPARATOR_GRAY,
+	},
+
+	plValue:{
+		alignItems: 'stretch',
+		flex: 1,
+	},
+
+	plValueText:{
+		fontSize: 16,
+	},
+
+	plValueTextZero:{
+		color: '#adadad',
+	},
+
+	plValueTextPositive:{
+		color: '#f16b5f',
+	},
+
+	plValueTextNegative:{
+		color: '#5fd959',
+	},
+
 	container: {
 		alignItems: 'stretch',
 		flex: 1,
@@ -532,10 +581,8 @@ var styles = StyleSheet.create({
 	},
 
 	barNamesContainer: {
-		paddingLeft: 20,
-		paddingRight: 20,
-		marginBottom: 20,
-		flexDirection: 'row',
+		paddingRight: 5,
+		flexDirection: 'column',
 		justifyContent: 'space-around',
 		alignItems: 'stretch',
 	},
@@ -547,6 +594,11 @@ var styles = StyleSheet.create({
 	investBar: {
 		backgroundColor: ColorConstants.COLOR_CUSTOM_BLUE,
 		width: 20,
+	},
+
+	profitBar:{
+		borderTopRightRadius:4,
+		borderBottomRightRadius:4,
 	},
 
 	positiveProfitBar: {

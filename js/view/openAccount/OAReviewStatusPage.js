@@ -40,19 +40,27 @@ var OAReviewStatusPage = React.createClass({
 		//endDate.Format('yy/MM/dd')+"\n"+startDate.Format('hh:mm:ss')
 		return (
 			<View style={styles.wrapper}>
-				<Image source={require('../../../images/withdraw_submitted.png')} style={styles.checkImage}/>
-				<Text style={styles.hintText}>{"恭喜您，实盘开户申请审核通过！"}</Text>
-
-				<View style={{flex:1}}/>
-
-				<View style={styles.bottomArea}>
-					<Button style={styles.buttonArea}
-						enabled={true}
-						onPress={()=>this.gotoNext()}
-						textContainerStyle={styles.buttonView}
-						textStyle={styles.buttonText}
-						text={'完成'} />
+				<View />
+				<Text style={styles.text1}>感谢您开设盈交易实盘账户</Text>
+				<View style={styles.rowWrapper}>
+					<Image style={styles.image} source={require('../../../images/icon_review1.png')}/>
+					<Text style={styles.ellipse}>· · ·</Text>
+					<Image style={styles.image} source={require('../../../images/icon_review2.png')}/>
+					<Text style={styles.ellipse}>· · ·</Text>
+					<Image style={styles.image} source={require('../../../images/icon_review3.png')}/>
 				</View>
+				<View style={styles.rowWrapper}>
+					<Text style={styles.text2}>{"提交申请\n"+startDate.Format('yyyy-MM-dd')+"\n"+startDate.Format('hh:mm:ss')}</Text>
+					<Text style={styles.text2}>{"正在审核"}</Text>
+					<Text style={styles.text2}>{"预计审核时间\n3分钟内完成"}</Text>
+				</View>
+				<Text style={styles.text3}>{"开户成功后，\n您可以在我的页面里面登录实盘账户，同时您将收到欢迎邮件"}</Text>
+				<Button style={styles.buttonArea}
+					enabled={true}
+					onPress={this.gotoNext}
+					textContainerStyle={styles.buttonView}
+					textStyle={styles.buttonText}
+					text='完成' />
 			</View>
 		);
 	},
@@ -61,30 +69,43 @@ var OAReviewStatusPage = React.createClass({
 var styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-around',
+ 		alignItems: 'stretch',
+  	justifyContent: 'flex-start',
 		backgroundColor: ColorConstants.BACKGROUND_GREY,
 	},
-  checkImage:{
-    marginTop: 65,
-    width: 115,
-    height: 115,
-  },
-  hintText:{
-    marginTop: 51,
-    marginLeft: 15,
-    marginRight: 15,
-    fontSize: 15,
-    color: '#000000',
-  },
-	bottomArea: {
-		height: 72,
+	rowWrapper: {
+		flexDirection: 'row',
 		backgroundColor: 'white',
-		alignItems: 'flex-end',
-		flexDirection:'row'
+		justifyContent: 'center',
+		paddingBottom: 10,
 	},
-	buttonArea: {
+	text1: {
+		fontSize: 17,
+		textAlign: 'center',
+		paddingTop: 20,
+		paddingBottom: 20,
+		backgroundColor: 'white',
+	},
+	text2: {
 		flex: 1,
+		fontSize: 14,
+		textAlign: 'center',
+		color: '#f36b6f',
+		paddingBottom: 10,
+	},
+	text3: {
+		fontSize: 13,
+		textAlign: 'center',
+		padding: 15,
+		lineHeight: 20,
+	},
+	image: {
+		alignSelf: 'center',
+		width: 31,
+		height: 31,
+	},
+
+	buttonArea: {
 		marginLeft: 15,
 		marginRight: 15,
 		marginBottom: 16,
@@ -101,6 +122,12 @@ var styles = StyleSheet.create({
 		textAlign: 'center',
 		color: '#ffffff',
 	},
+	ellipse:{
+		fontSize: 50,
+		marginLeft: 20,
+		marginRight: 20,
+		color: ColorConstants.TITLE_DARK_BLUE,
+	}
 });
 
 

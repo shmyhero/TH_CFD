@@ -64,10 +64,10 @@ var stockNameFontSize = Math.round(17*width/375.0)
 
 var DEFAULT_PERCENT = -1
 var stopProfitPercent = DEFAULT_PERCENT
-var stopLossPercent = DEFAULT_PERCENT
+var stopLossPercent = MAX_LOSS_PERCENT
 var stopProfitUpdated = false
 var stopLossUpdated = false
-var MAX_PERCENT = 90
+var MAX_LOSS_PERCENT = -90
 var isWaiting = false
 
 var networkConnectionChangedSubscription = null;
@@ -517,10 +517,10 @@ var StockOpenPositionPage = React.createClass({
 
 			var stopProfit = rowData.takePx !== undefined
 			// var stopLoss = rowData.stopPx !== undefined
-			var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) <= MAX_PERCENT
+			var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) >= MAX_LOSS_PERCENT
 
 			stopProfitPercent = DEFAULT_PERCENT
-			stopLossPercent = DEFAULT_PERCENT
+			stopLossPercent = MAX_LOSS_PERCENT
 			stopProfitUpdated = false
 			stopLossUpdated = false
 
@@ -785,8 +785,8 @@ var StockOpenPositionPage = React.createClass({
 				console.log("stopLossUpdated " + stopLossUpdated)
 				if (stopLossUpdated) {
 					var userData = LogicData.getUserData()
-					if (stopLossSwitchIsOn && stopLossPercent > MAX_PERCENT) {
-						Alert.alert('', '止损超过'+MAX_PERCENT+'%，无法设置');
+					if (stopLossSwitchIsOn && stopLossPercent < MAX_LOSS_PERCENT) {
+						Alert.alert('', '止损超过'+MAX_LOSS_PERCENT+'%，无法设置');
 						reject();
 						return
 					}
@@ -1108,14 +1108,14 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	percentToPrice: function(percent, basePrice, leverage, type, isLong) {
-		if (type === 1) {
+		//if (type === 1) {
 			// 止盈
-			return isLong ? basePrice * (1+percent/100/leverage) : basePrice * (1-percent/100/leverage)
-		}
-		else {
-			// 止损
-			return isLong ? basePrice * (1-percent/100/leverage) : basePrice * (1+percent/100/leverage)
-		}
+		return isLong ? basePrice * (1+percent/100/leverage) : basePrice * (1-percent/100/leverage)
+		// }
+		// else {
+		// 	// 止损
+		// 	return isLong ? basePrice * (1-percent/100/leverage) : basePrice * (1+percent/100/leverage)
+		// }
 	},
 
 	percentToPriceWithRow: function(percent, rowData, type) {
@@ -1124,12 +1124,12 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	priceToPercent: function(price, basePrice, leverage, type, isLong) {
-		if (type === 1) {
+		//if (type === 1) {
 			return (price-basePrice)/basePrice*100*leverage * (isLong?1:-1)
-		}
-		else {
-			return (basePrice-price)/basePrice*100*leverage * (isLong?1:-1)
-		}
+		//}
+		//else {
+		//	return (basePrice-price)/basePrice*100*leverage * (isLong?1:-1)
+		//}
 	},
 
 	priceToPercentWithRow: function(price, rowData, type) {
@@ -1163,8 +1163,8 @@ var StockOpenPositionPage = React.createClass({
 		//2, stop loss
 		var disabled = false
 		if (type === 2) {
-			if (startPercent > MAX_PERCENT) {
-				endPercent = startPercent
+			if (endPercent < MAX_LOSS_PERCENT) {
+				startPercent = endPercent
 				disabled = true
 			}
 		}
@@ -1190,11 +1190,12 @@ var StockOpenPositionPage = React.createClass({
 	useNativePropsToUpdate: function(type, value, rowData){
 		var price = this.percentToPriceWithRow(value, rowData, type)
 		if (type === 1){
-			this._text1.setNativeProps({text: value.toFixed(1)+'%'});
+			this._text1.setNativeProps({text: value.toFixed(2)+'%'});
 			this._text3.setNativeProps({text: price.toFixed(rowData.security.dcmCount)})
 		}
 		else if (type === 2) {
-			this._text2.setNativeProps({text: value.toFixed(1)+'%'});
+			this._text2.setNativeProps({text: value.toFixed(2)+'%'});
+			this._text2.setNativeProps({color: value >= 0 ? ColorConstants.STOCK_RISE_RED : ColorConstants.STOCK_DOWN_GREEN });
 			this._text4.setNativeProps({text: price.toFixed(rowData.security.dcmCount)})
 		}
 	},
@@ -1221,20 +1222,18 @@ var StockOpenPositionPage = React.createClass({
 	renderStopProfitLoss: function(rowData, type) {
 		var titleText = type===1 ? "止盈" : "止损"
 		var switchIsOn = type===1 ? this.state.stopProfitSwitchIsOn : this.state.stopLossSwitchIsOn
-		var color = type===1 ? ColorConstants.STOCK_RISE_RED : ColorConstants.STOCK_DOWN_GREEN
 		var price = rowData.settlePrice
 		var percent = type===1 ? stopProfitPercent : stopLossPercent
 		var startPercent = 0
-		var endPercent = MAX_PERCENT
-
-		startPercent = this.priceToPercentWithRow(rowData.security.last, rowData, type)
-		// use gsmd to make sure this order is guaranteed.
-		startPercent += rowData.security.gsmd*100*rowData.leverage
-
-		if (startPercent < 0)
-			startPercent = 0
+		var endPercent = MAX_LOSS_PERCENT
 
 		if (type === 1) {
+			startPercent = this.priceToPercentWithRow(rowData.security.last, rowData, type)
+			// use gsmd to make sure this order is guaranteed.
+			startPercent += rowData.security.gsmd*100*rowData.leverage
+
+			if (startPercent < 0)
+				startPercent = 0
 			endPercent = startPercent + 100
 			if (percent === DEFAULT_PERCENT) {
 				percent = rowData.takePx === undefined ? startPercent
@@ -1242,18 +1241,30 @@ var StockOpenPositionPage = React.createClass({
 				stopProfitPercent = percent
 			}
 		} else{
-			if (percent=== DEFAULT_PERCENT) {
+			startPercent = MAX_LOSS_PERCENT
+			endPercent = this.priceToPercentWithRow(rowData.security.last, rowData, type)
+			// use smd to make sure this order is guaranteed.
+			endPercent -= rowData.security.gsmd*100*rowData.leverage
+
+			if(endPercent - startPercent > 100){
+				startPercent = endPercent - 100
+			}
+
+			if (!stopLossUpdated){//percent === MAX_LOSS_PERCENT) {
+
 				percent = this.priceToPercentWithRow(rowData.stopPx, rowData, type)
-				if (percent > endPercent) {
+				if (percent < startPercent) {
 					percent = startPercent
 				}
 				stopLossPercent = percent
 			}
 		};
 
+		var color = type===1 ? ColorConstants.STOCK_RISE_RED : ( percent >= 0 ? ColorConstants.STOCK_RISE_RED : ColorConstants.STOCK_DOWN_GREEN);
+
 		var disabled = false
 		if (type === 2) {
-			if (startPercent > MAX_PERCENT) {
+			if (startPercent < MAX_LOSS_PERCENT) {
 				disabled = true
 			}
 		}
@@ -1267,7 +1278,7 @@ var StockOpenPositionPage = React.createClass({
 					{
 						switchIsOn ?
 						<View style={[styles.extendMiddle, {flexDirection: 'row', flex:3, paddingTop:0, paddingBottom:0}]}>
-							<TextInput editable={false} ref={component => this.bindRef(type, component, 1)} defaultValue={percent.toFixed(1)+'%'}
+							<TextInput editable={false} ref={component => this.bindRef(type, component, 1)} defaultValue={percent.toFixed(2)+'%'}
 								style={{flex:3, textAlign:'right', fontSize:17, color: color}}
 								underlineColorAndroid='transparent'/>
 							<Text style={{flex:1, textAlign:'center', color: '#dfdfdf'}}>|</Text>
@@ -1557,7 +1568,7 @@ var StockOpenPositionPage = React.createClass({
 	  console.log('RAMBO _currentRowData.id = ' + _currentRowData.security.id)
 		var newExtendHeight = this.currentExtendHeight(this.state.selectedSubItem)
 		var stopLossImage = LogicData.getAccountState()?require('../../images/check_actual.png'):require('../../images/check.png')
-		var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) <= MAX_PERCENT
+		var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) >= MAX_LOSS_PERCENT
 		var stopProfit = rowData.takePx !== undefined
 		if (stopLoss || stopProfit) {
 			stopLossImage = LogicData.getAccountState()?require('../../images/check2_actual.png'):require('../../images/check2.png')

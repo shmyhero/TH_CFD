@@ -864,8 +864,8 @@ var StockDetailPage = React.createClass({
 					<Text style={{fontSize:15,color:'white',marginLeft:10}}>{currentPriceText}</Text>
 					<Text style={{fontSize:15,color:'white',marginLeft:10}}>{percentChangeText}</Text>
 				</View>
-				<TouchableOpacity onPress={()=>this.closeLandspace()}>
-					<Image  style={{width:20,height:20,marginRight:16}} source={require('../../images/icon_close_full_screen.png')}></Image>
+				<TouchableOpacity onPress={()=>this.closeLandspace()} style={{paddingTop:10, paddingBottom:10, paddingLeft:16, paddingRight:16}}>
+					<Image  style={{width:20,height:20}} source={require('../../images/icon_close_full_screen.png')}></Image>
 				</TouchableOpacity>
    		</View>
 		)

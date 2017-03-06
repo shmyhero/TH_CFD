@@ -288,9 +288,9 @@ var OADocumentInfoPage = React.createClass({
 
 var styles = StyleSheet.create({
 	wrapper: {
-		flex: 1,
-   		alignItems: 'stretch',
-    	justifyContent: 'space-around',
+		width:width,
+ 		alignItems: 'stretch',
+  	justifyContent: 'space-around',
 		backgroundColor: ColorConstants.BACKGROUND_GREY,
 	},
 
@@ -337,10 +337,12 @@ var styles = StyleSheet.create({
 		paddingTop: rowPadding,
 		backgroundColor: '#ffffff',
 	},
+
 	line: {
 		height: 0.5,
 		backgroundColor: 'white',
 	},
+
 	separator: {
 		marginLeft: 0,
 		height: 0.5,

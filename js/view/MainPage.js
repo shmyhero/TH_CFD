@@ -80,6 +80,7 @@ var StorageModule = require('../module/StorageModule');
 var OpenAccountRoutes = require('./openAccount/OpenAccountRoutes');
 var DepositWithdrawFlow = require('./DepositWithdrawFlow');
 var DepositPage = require('./DepositPage');
+var MainTospPage = require('./MainTopsPage');
 
 var TutorialPage = require('./TutorialPage');
 
@@ -137,6 +138,7 @@ export let WITHDRAW_BIND_CARD_ROUTE = 'withdrawBindCardRoute'
 export let WITHDRAW_ROUTE = 'withdrawRoute'
 export let WITHDRAW_SUBMITTED_ROUTE = 'withdrawSubmittedRoute'
 export let WITHDRAW_RESULT_ROUTE = 'withdrawFailedRoute'
+export let MAIN_TOPS_PAGE_ROUTE = 'mainTopsPageRoute'
 
 
 const glypy = glypyMapMaker({
@@ -606,6 +608,12 @@ var MainPage = React.createClass({
 			hideTabbar();
 			return (
 				<WithdrawSubmittedPage navigator={navigationOperations} routeMapper={this.RouteMapper}
+					popToOutsidePage={route.popToOutsidePage}/>
+			)
+		}else if (route.name === MAIN_TOPS_PAGE_ROUTE){
+			hideTabbar();
+			return (
+				<MainTospPage navigator={navigationOperations} routeMapper={this.RouteMapper}
 					popToOutsidePage={route.popToOutsidePage}/>
 			)
 		}

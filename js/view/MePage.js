@@ -448,7 +448,8 @@ var MePage = React.createClass({
 		}
 		else if(rowData.subtype === 'mycard'){
 			this.props.navigator.push({
-				name:MainPage.MY_CARD_ROUTE,
+				// name:MainPage.MY_CARD_ROUTE,
+				name:MainPage.MAIN_TOPS_PAGE_ROUTE,
 			})
 		}
 		else if(rowData.subtype === 'helpcenter') {

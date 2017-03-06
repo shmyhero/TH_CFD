@@ -274,8 +274,8 @@ var StockStatisticsPage = React.createClass({
 					profitBarStyle = {flex: 0};
 				}
 				return (
-					<View key={i} style={{flexDirection:'row', flex:1, paddingTop: 14, paddingBottom: 14,}}>
-						<View style={[{flex: profitBarFlex}, styles.profitBar, profitBarStyle]} />
+					<View key={i} style={{flexDirection:'row', flex:1, justifyContent:'center'}}>
+						<View style={[{flex: profitBarFlex, height: 16, }, styles.profitBar, profitBarStyle]} />
 						<View style={{flex: 100 - profitBarFlex}} />
 					</View>
 				)
@@ -579,7 +579,7 @@ var styles = StyleSheet.create({
 	},
 
 	plValueTextZero:{
-		color: '#adadad',
+		color: '#979797',
 	},
 
 	plValueTextPositive:{
@@ -621,6 +621,8 @@ var styles = StyleSheet.create({
 	profitBar:{
 		borderTopRightRadius:4,
 		borderBottomRightRadius:4,
+		height: 16,
+		alignSelf: 'center',
 	},
 
 	positiveProfitBar: {

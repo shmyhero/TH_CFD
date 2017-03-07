@@ -32,11 +32,13 @@ var signEnable = true;//防止网络不畅多次点击事件发生
 export default class OAWarningDialog extends Component {
 
   static propTypes = {
+    proceedCallback: PropTypes.func,
     messageLines: PropTypes.array,
     //headerImage: PropTypes.number
   }
 
   static defaultProps = {
+    proceedCallback: ()=>{},
     messageLines: [
       "根据您在申请过程中提供的有关您的知识、经验和财务状况的信息，我们认为您尚未完全了解点差交易及差价合约（CFD）交易所涉及的风险和潜在财务成本。因此该投资产品可能不适合您，我们建议您认真考虑是否仍希望继续该申请。",
       "如果在认真考虑之后，您仍希望参与点差交易或差价合约（CFD）交易，我们建议您在通过模拟交易账户熟悉我们的平台之后，以及查看我们的投资教育资料和产品风险警告提示后再寻求开立实盘账户。您也可寻求相关独立意见。",
@@ -95,7 +97,10 @@ export default class OAWarningDialog extends Component {
   }
 
   gotoNext(){
-
+    if(this.props.proceedCallback){
+      this.props.proceedCallback();
+    }
+    this.dismiss();
   }
 
   onClickCheckbox(value){
@@ -139,7 +144,7 @@ export default class OAWarningDialog extends Component {
                 <View style={styles.button}>
                   <Button style={styles.buttonArea}
         						enabled={this.state.hasRead}
-        						onPress={this.gotoNext}
+        						onPress={()=>this.gotoNext()}
         						textContainerStyle={styles.buttonView}
         						textStyle={styles.buttonText}
         						text={this.state.validateInProgress? "信息正在检查中...": '继续'} />
@@ -231,10 +236,6 @@ const styles = StyleSheet.create({
 
   cancelButton:{
     marginLeft: 5,
-  },
-
-  buttonText:{
-    color: 'white',
   },
 
   checkboxView: {

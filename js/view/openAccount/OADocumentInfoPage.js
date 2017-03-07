@@ -30,6 +30,8 @@ var OA_WARNING_DIALOG = "oaWarningDialog";
 var OAWarningDialog = require('./OAWarningDialog');
 
 var OADocumentInfoPage = React.createClass({
+	isProceedAnyway: false,
+
 	listRawData: [
 			{"key":"交易条款说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "1")},
 			{"key":"风险与注意事项告知说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "2")},
@@ -66,7 +68,12 @@ var OADocumentInfoPage = React.createClass({
 		};
 	},
 
-	gotoNext: function() {
+	proceedAnyway: function(){
+		this.isProceedAnyway = true;
+		this.gotoNext();
+	},
+
+	gotoNext: function(){
 		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP5, TalkingdataModule.LABEL_OPEN_ACCOUNT)
 
 		this.setState({
@@ -76,6 +83,9 @@ var OADocumentInfoPage = React.createClass({
 		});
 
 		var openAccountData = OpenAccountRoutes.getOpenAccountData();
+		if(this.isProceedAnyway){
+			openAccountData["confirmMifidOverride"] = true;
+		}
 		//Test errors
 		//openAccountData["username"] = "username";
 		//openAccountData["password"] = "2";
@@ -107,15 +117,19 @@ var OADocumentInfoPage = React.createClass({
 						},
 					},
 					(responseJson) => {
-						this.setState({
-							enabled: true,
-							validateInProgress: false,
-						});
-						if(!responseJson.success){
-							console.log(JSON.stringify(responseJson))
-							this.parseError(responseJson.message);
+						if(!responseJson.success && responseJson.message === "MifidTestFailed"){
+							this.refs[OA_WARNING_DIALOG].show();
 						}else{
-							OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
+							this.setState({
+								enabled: true,
+								validateInProgress: false,
+							});
+							if(!responseJson.success){
+								console.log(JSON.stringify(responseJson))
+								this.parseError(responseJson.message);
+							}else{
+								OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
+							}
 						}
 					},
 					(errorResult) => {
@@ -147,6 +161,10 @@ var OADocumentInfoPage = React.createClass({
 	},
 
 	parseError: function(errorMessage){
+		if(errorMessage === "MifidTestFailed"){
+			this.refs[OA_WARNING_DIALOG].show();
+			return;
+		}
 		if(!errorMessage){
 			this.setState({
 				error: "遇到错误，请稍后再试"
@@ -284,7 +302,8 @@ var OADocumentInfoPage = React.createClass({
 						textStyle={styles.buttonText}
 						text={this.state.validateInProgress? "信息正在检查中...": '下一步'} />
 				</View>
-				<OAWarningDialog ref={OA_WARNING_DIALOG}/>
+				<OAWarningDialog ref={OA_WARNING_DIALOG}
+					proceedCallback={()=>this.proceedAnyway()}/>
 			</View>
 		);
 	},

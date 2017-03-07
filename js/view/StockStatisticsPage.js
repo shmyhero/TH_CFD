@@ -264,14 +264,17 @@ var StockStatisticsPage = React.createClass({
 	renderBars: function() {
 		var bars = this.state.statisticsBarInfo.map(
 			(barContent, i) => {
-				var investBarFlex = Math.floor(barContent.invest / this.state.maxBarSize * 100)
+				//var investBarFlex = Math.floor(barContent.invest / this.state.maxBarSize * 100)
 				var profitBarFlex = Math.floor(barContent.pl / this.state.maxBarSize * 100)
 				var profitBarStyle = barContent.pl > 0 ? styles.positiveProfitBar : styles.negtiveProfitBar
 				if (barContent.pl < 0) {
 					profitBarFlex *= -1
-					investBarFlex -= profitBarFlex
+					//investBarFlex -= profitBarFlex
 				}else if (barContent.pl == 0){
 					profitBarStyle = {flex: 0};
+				}
+				if(profitBarFlex == 0){
+					profitBarFlex = 1;
 				}
 				return (
 					<View key={i} style={{flexDirection:'row', flex:1, justifyContent:'center'}}>
@@ -627,12 +630,10 @@ var styles = StyleSheet.create({
 
 	positiveProfitBar: {
 		backgroundColor: '#f16b5f',
-		width: 20,
 	},
 
 	negtiveProfitBar: {
 		backgroundColor: '#5fd959',
-		width: 20,
 	},
 
 	loadingText: {

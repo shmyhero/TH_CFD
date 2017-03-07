@@ -31,20 +31,20 @@ var fontSize = Math.round(16*width/375)
 var fontSize2 = Math.round(15*width/375)
 
 var IncomeMapping = [
-	{"value": 0, "displayText": "低于 1000 元"},
-	{"value": 1, "displayText": "1001-2500 元"},
-	{"value": 2, "displayText": "2501-4000 元"},
-	{"value": 3, "displayText": "4001-6000 元"},
-	{"value": 4, "displayText": "高于 6000 元"},
+	{"value": 0, "displayText": "低于 8000 元"},
+	{"value": 1, "displayText": "8001-20000 元"},
+	{"value": 2, "displayText": "20001-32000 元"},
+	{"value": 3, "displayText": "32001-48000 元"},
+	{"value": 4, "displayText": "高于 48000 元"},
 ];
 
 var NetWorthMapping = [
-	{"value": 0, "displayText": "12万以下（人民币）"},
-	{"value": 15, "displayText": "12-33万（人民币）"},
-	{"value": 40, "displayText": "33-58万（人民币）"},
-	{"value": 70, "displayText": "58-83万（人民币）"},
-	{"value": 100, "displayText": "83-413万以上（人民币）"},
-	{"value": 101, "displayText": "413万以上（人民币）"},
+	{"value": 0, "displayText": "9万以下（人民币）"},
+	{"value": 1, "displayText": "9-24万（人民币）"},
+	{"value": 2, "displayText": "24-42万（人民币）"},
+	{"value": 3, "displayText": "42-60万（人民币）"},
+	{"value": 4, "displayText": "60-300万以上（人民币）"},
+	{"value": 5, "displayText": "300万以上（人民币）"},
 ]
 
 var InvestmentPortfolioMapping = [
@@ -103,13 +103,13 @@ var investFrqMappings = [
 	{"value": 3, "displayText": "超过10次"},
 ]
 
-var amontOfMondyMappings = [
-	{"value": 0, "displayText": "低于 1000 元"},
-	{"value": 1, "displayText": "1001 - 5000 元"},
-	{"value": 2, "displayText": "5001 - 25000 元"},
-	{"value": 3, "displayText": "25001- 50000 元"},
-	{"value": 4, "displayText": "50001- 100000 元"},
-	{"value": 5, "displayText": "高于 100000 元"},
+var amontOfMoneyMappings = [
+	{"value": 0, "displayText": "低于 8000 元"},
+	{"value": 1, "displayText": "8001 - 40000 元"},
+	{"value": 2, "displayText": "40001 - 200000 元"},
+	{"value": 3, "displayText": "200001- 400000 元"},
+	{"value": 4, "displayText": "400001- 800000 元"},
+	{"value": 5, "displayText": "高于 800000 元"},
 	//BUGBUG: There's a "6" here per API doc!!!
 ]
 
@@ -175,7 +175,7 @@ var EXPCHANNEL2_2 = 24
 
 var defaultRawData = [
 	{"key":"monthlyIncome", "title":"月净收入", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":IncomeMapping},
-	{"key":"netWorth", "title":"净资产", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":NetWorthMapping},
+	{"key":"investments", "title":"净资产", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":NetWorthMapping},
 	{"key":"sourceOfFunds", "title":"资金主要来源", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":InComeSourceMappings},
 	// {"multiOptionsKey":"sourceOfFunds" ,"title":"交易资金主要来源", "value":InComeSourceMappings, "type":"options",},
 	// {"key":"investPct", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":InvestmentPortfolioMapping},
@@ -193,15 +193,15 @@ var defaultRawData = [
 	{"title":"您有以下哪种产品的实盘交易经验？"},
 	{"key":"hasTradedHighLev", "title":"差价合约、点差交易或外汇", "value":false, "type":"switch"},
 		{"key":"highLevFrq", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true, "parent":"hasTradedHighLev"},
-		{"key":"highLevBalance", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMondyMappings,"hide":true, "parent":"hasTradedHighLev"},
+		{"key":"highLevBalance", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMoneyMappings,"hide":true, "parent":"hasTradedHighLev"},
 		{"key":"highLevRisk", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true, "parent":"hasTradedHighLev"},
 	{"key":"hasTradedMidLev", "title":"股票或债券", "value":false, "type":"switch"},
 		{"key":"midLevFrq", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true, "parent":"hasTradedMidLev"},
-		{"key":"midLevBalance", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMondyMappings,"hide":true, "parent":"hasTradedMidLev"},
+		{"key":"midLevBalance", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMoneyMappings,"hide":true, "parent":"hasTradedMidLev"},
 		{"key":"midLevRisk", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true, "parent":"hasTradedMidLev"},
 	{"key":"hasTradedNoLev", "title":"期权，期货或认购权证", "value":false, "type":"switch"},
 		{"key":"noLevFrq", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true, "parent":"hasTradedNoLev"},
-		{"key":"noLevBalance", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMondyMappings,"hide":true, "parent":"hasTradedNoLev"},
+		{"key":"noLevBalance", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMoneyMappings,"hide":true, "parent":"hasTradedNoLev"},
 		{"key":"noLevRisk", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true, "parent":"hasTradedNoLev"},
 ];
 

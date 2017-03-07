@@ -1194,8 +1194,14 @@ var StockOpenPositionPage = React.createClass({
 			this._text3.setNativeProps({text: price.toFixed(rowData.security.dcmCount)})
 		}
 		else if (type === 2) {
-			this._text2.setNativeProps({text: value.toFixed(2)+'%'});
-			this._text2.setNativeProps({color: value >= 0 ? ColorConstants.STOCK_RISE_RED : ColorConstants.STOCK_DOWN_GREEN });
+			var props = {text: value.toFixed(2)+'%'};
+			if(Platform.OS === "ios"){
+				props.color = value >= 0
+				 ? ColorConstants.STOCK_RISE_RED : ColorConstants.STOCK_DOWN_GREEN;
+			}else{
+				props.style = {color: value >= 0 ? ColorConstants.STOCK_RISE_RED : ColorConstants.STOCK_DOWN_GREEN};
+			}
+			this._text2.setNativeProps(props);
 			this._text4.setNativeProps({text: price.toFixed(rowData.security.dcmCount)})
 		}
 	},
@@ -1230,7 +1236,7 @@ var StockOpenPositionPage = React.createClass({
 		if (type === 1) {
 			startPercent = this.priceToPercentWithRow(rowData.security.last, rowData, type)
 			// use gsmd to make sure this order is guaranteed.
-			startPercent += rowData.security.gsmd*100*rowData.leverage
+			startPercent += rowData.security.smd*100*rowData.leverage
 
 			if (startPercent < 0)
 				startPercent = 0

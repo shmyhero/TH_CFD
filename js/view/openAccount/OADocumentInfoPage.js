@@ -26,6 +26,9 @@ var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
 var fontSize = Math.round(15*width/375)
 
+var OA_WARNING_DIALOG = "oaWarningDialog";
+var OAWarningDialog = require('./OAWarningDialog');
+
 var OADocumentInfoPage = React.createClass({
 	listRawData: [
 			{"key":"交易条款说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "1")},
@@ -281,6 +284,7 @@ var OADocumentInfoPage = React.createClass({
 						textStyle={styles.buttonText}
 						text={this.state.validateInProgress? "信息正在检查中...": '下一步'} />
 				</View>
+				<OAWarningDialog ref={OA_WARNING_DIALOG}/>
 			</View>
 		);
 	},
@@ -288,6 +292,7 @@ var OADocumentInfoPage = React.createClass({
 
 var styles = StyleSheet.create({
 	wrapper: {
+		flex: 1,
 		width:width,
  		alignItems: 'stretch',
   	justifyContent: 'space-around',

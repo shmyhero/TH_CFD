@@ -448,8 +448,8 @@ var MePage = React.createClass({
 		}
 		else if(rowData.subtype === 'mycard'){
 			this.props.navigator.push({
-				// name:MainPage.MY_CARD_ROUTE,
-				name:MainPage.MAIN_TOPS_PAGE_ROUTE,
+				name:MainPage.MY_CARD_ROUTE,
+				// name:MainPage.MAIN_TOPS_PAGE_ROUTE,
 			})
 		}
 		else if(rowData.subtype === 'helpcenter') {
@@ -458,7 +458,10 @@ var MePage = React.createClass({
 			this.gotoWebviewPage(qaUrl, '帮助中心', true);
 		}
 		else if(rowData.subtype === 'onlinehelp') {
-			NativeSceneModule.launchNativeScene('MeiQia')
+			// NativeSceneModule.launchNativeScene('MeiQia')
+			this.props.navigator.push({
+				name:MainPage.USER_HOME_PAGE_ROUTE,
+			})
 		}
 		else if(rowData.subtype === 'aboutus') {
 			var aboutUrl = LogicData.getAccountState()?NetConstants.TRADEHERO_API.WEBVIEW_URL_ABOUT_US_ACTUAL:NetConstants.TRADEHERO_API.WEBVIEW_URL_ABOUT_US

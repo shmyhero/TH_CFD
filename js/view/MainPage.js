@@ -80,7 +80,8 @@ var StorageModule = require('../module/StorageModule');
 var OpenAccountRoutes = require('./openAccount/OpenAccountRoutes');
 var DepositWithdrawFlow = require('./DepositWithdrawFlow');
 var DepositPage = require('./DepositPage');
-var MainTospPage = require('./MainTopsPage');
+var RankingPage = require('./RankingPage');
+var UserHomePage = require('./UserHomePage');
 
 var TutorialPage = require('./TutorialPage');
 
@@ -138,7 +139,8 @@ export let WITHDRAW_BIND_CARD_ROUTE = 'withdrawBindCardRoute'
 export let WITHDRAW_ROUTE = 'withdrawRoute'
 export let WITHDRAW_SUBMITTED_ROUTE = 'withdrawSubmittedRoute'
 export let WITHDRAW_RESULT_ROUTE = 'withdrawFailedRoute'
-export let MAIN_TOPS_PAGE_ROUTE = 'mainTopsPageRoute'
+export let RANKING_PAGE_ROUTE = 'rankingPageRoute'
+export let USER_HOME_PAGE_ROUTE = 'userHomePageRoute'
 
 
 const glypy = glypyMapMaker({
@@ -610,10 +612,16 @@ var MainPage = React.createClass({
 				<WithdrawSubmittedPage navigator={navigationOperations} routeMapper={this.RouteMapper}
 					popToOutsidePage={route.popToOutsidePage}/>
 			)
-		}else if (route.name === MAIN_TOPS_PAGE_ROUTE){
+		}else if (route.name === RANKING_PAGE_ROUTE){
 			hideTabbar();
 			return (
-				<MainTospPage navigator={navigationOperations} routeMapper={this.RouteMapper}
+				<RankingPage navigator={navigationOperations} routeMapper={this.RouteMapper}
+					popToOutsidePage={route.popToOutsidePage}/>
+			)
+		}else if (route.name === USER_HOME_PAGE_ROUTE){
+			hideTabbar();
+			return (
+				<UserHomePage navigator={navigationOperations} routeMapper={this.RouteMapper}
 					popToOutsidePage={route.popToOutsidePage}/>
 			)
 		}
@@ -1102,7 +1110,18 @@ var MainPage = React.createClass({
 								renderScene={this.RouteMapper} />
 			          	</RawContent>
 			        </Tab>
-			        <Tab name="me">
+			        <Tab name="ranking">
+			          	<Icon ref={"rankingBtn"} label="达人榜" type={glypy.Favorite} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
+			          	<RawContent ref="rankingContent">
+							<Navigator
+								style={styles.container}
+								initialRoute={{name: RANKING_PAGE_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
+								configureScene={() => Navigator.SceneConfigs.PushFromRight}
+								renderScene={this.RouteMapper} />
+			          	</RawContent>
+		        	</Tab>
+
+							<Tab name="me">
 			          	<Icon ref={"meBtn"} label="我的" type={glypy.Settings} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
 			          	<RawContent ref="meContent">
 							<Navigator
@@ -1112,6 +1131,7 @@ var MainPage = React.createClass({
 								renderScene={this.RouteMapper} />
 			          	</RawContent>
 		        	</Tab>
+
 		      	</Tabbar>
 					<LoadingIndicator ref='progressBar'/>
 					{this.state.showTutorial ? <TutorialPage type={this.state.tutorialType} hideTutorial={this.hideTutorial}/> : null }

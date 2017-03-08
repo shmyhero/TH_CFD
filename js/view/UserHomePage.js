@@ -16,7 +16,7 @@ var UIConstants = require('../UIConstants')
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 
 
-export default class MainTopsPage extends Component{
+export default class UserHomePage extends Component{
 
 	constructor(props){
 		super(props);
@@ -30,9 +30,9 @@ export default class MainTopsPage extends Component{
 	render(){
 		return(
 			<View style={{flex:1}}>
-				<NavBar title='排行榜' navigator={this.props.navigator}/>
+				<NavBar title='用户主页' showBackButton={true} navigator={this.props.navigator}/>
 				<View>
-					<Text>显示排行榜单</Text>
+					<Text>显示用户主页</Text>
 				</View>
 			</View>
 		);
@@ -71,4 +71,4 @@ const styles = StyleSheet.create({
 });
 
 
-module.exports = MainTopsPage;
+module.exports = UserHomePage;

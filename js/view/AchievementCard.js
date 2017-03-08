@@ -113,8 +113,8 @@ const styles = StyleSheet.create({
 
   cardImage:{
     padding: 0,
-    borderTopLeftRadius: 4,
-    borderTopRightRadius: 4,
+//    borderTopLeftRadius: 4,
+//    borderTopRightRadius: 4,
     borderWidth: 0,
     resizeMode: "stretch",
   },

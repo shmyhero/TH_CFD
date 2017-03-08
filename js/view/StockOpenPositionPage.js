@@ -1176,6 +1176,7 @@ var StockOpenPositionPage = React.createClass({
 					minimumValue={startPercent}
 					value={percent}
 					maximumValue={endPercent}
+					step={0.01}
 					disabled={disabled}
 					onSlidingComplete={(value) => this.setState({profitLossUpdated: true})}
 					onValueChange={(value) => this.setSliderValue(type, value, rowData)} />

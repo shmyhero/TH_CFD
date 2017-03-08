@@ -59,7 +59,10 @@ export default class OAWarningDialog extends Component {
   }
 
   _setModalVisible(visible) {
-    this.setState({modalVisible: visible});
+    this.setState({
+      modalVisible: visible,
+      hasRead:false,
+    });
   }
 
   show(){

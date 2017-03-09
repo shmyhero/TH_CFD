@@ -44,7 +44,7 @@ export default class UserHomePage extends Component{
 
 	topWarpperRender(){
 		return(
-			<Image style = {styles.topWapper} source={require('../../images/super_priority_bg.png')}>
+			<Image style = {[styles.topWapper,{backgroundColor:ColorConstants.title_blue()}]} source={require('../../images/super_priority_bg.png')}>
 
 				<TouchableOpacity style = {styles.topOneOfThree} onPress = {()=>this._onPressedCares()}>
     			<Text style = {{fontSize:40,backgroundColor:'transparent',color:'white'}}>8</Text>
@@ -165,7 +165,7 @@ export default class UserHomePage extends Component{
          		</View>
      			</View>
 					<View style = {styles.ceilRight}>
-						<View style = {styles.tipIcon}></View>
+						<View style = {[styles.tipIcon,{backgroundColor:ColorConstants.title_blue()}]}></View>
      				<Text>TA的收益走势</Text>
      			</View>
     		</View>
@@ -187,7 +187,7 @@ export default class UserHomePage extends Component{
 					</TouchableOpacity>
 				</View>
 
-				<View style = {styles.cardShowWapper}>
+				<View style = {[styles.cardShowWapper,{backgroundColor:ColorConstants.title_blue()}]}>
 
     		</View>
 			</View>
@@ -264,7 +264,6 @@ const styles = StyleSheet.create({
 		width:width,
 		height:160,
 		flexDirection:'row',
-		backgroundColor:ColorConstants.TITLE_BLUE,
 	},
 
 	middleWapper:{
@@ -312,7 +311,6 @@ const styles = StyleSheet.create({
 	oneOfThree:{
 		flex:1,
 		backgroundColor:'transparent',
-		margin:2,
 		alignItems:'center',
 		justifyContent:'center',
 		paddingTop:5,
@@ -371,7 +369,6 @@ const styles = StyleSheet.create({
 		width:10,
 		height:2,
 		marginRight:5,
-		backgroundColor:ColorConstants.TITLE_BLUE,
 	},
 
 	chartTypeBorder:{
@@ -397,7 +394,6 @@ const styles = StyleSheet.create({
 	cardShowWapper:{
 		width:width,
 		height:width*4/5,
-		backgroundColor:ColorConstants.TITLE_BLUE,
 	},
 
 	topOneOfThree:{
@@ -422,6 +418,7 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 		color: '#ffffff',
 	},
+
 
 
 });

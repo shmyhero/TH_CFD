@@ -15,7 +15,7 @@ import {
   TouchableHighlight
 } from 'react-native'
 
-
+var {EventCenter, EventConst} = require('../EventCenter')
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 var NavBar = require('./NavBar')
@@ -28,6 +28,8 @@ var UIConstants = require('../UIConstants')
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 var ColorConstants = require('../ColorConstants')
 var MainPage = require('./MainPage')
+
+var didTabSelectSubscription = null
 
 var RANKING_TYPE_0 = 0;
 var RANKING_TYPE_1 = 1;
@@ -44,7 +46,12 @@ export default class RankingPage extends Component{
 	}
 
 	componentDidMount(){
+    didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.EXCHANGE_TAB_PRESS_EVENT, this.onTabChanged);
 	}
+
+  componentWillUnmount() {
+    didTabSelectSubscription && didTabSelectSubscription.remove();
+  }
 
   renderTopSticker(){
     return(
@@ -71,6 +78,10 @@ export default class RankingPage extends Component{
 		this.props.navigator.push({
 			name: MainPage.USER_HOME_PAGE_ROUTE,
 		});
+	}
+
+  onTabChanged(){
+	  LogicData.setTabIndex(MainPage.RANKING_TAB_INDEX);
 	}
 
   renderHead(){
@@ -212,13 +223,9 @@ const styles = StyleSheet.create({
 		marginBottom:10,
 	},
 
-	list:{
-		marginLeft:5,
-		marginTop:5,
-		marginRight:5,
-		flexDirection:'row',
-		justifyContent: 'flex-start',
-		flexWrap:'wrap',
+  list: {
+		flex: 1,
+		alignSelf: 'stretch',
 	},
 
 	emptyContent: {
@@ -268,10 +275,6 @@ const styles = StyleSheet.create({
     marginTop:6,
     marginBottom:6,
   },
-  list: {
-		flex: 1,
-		alignSelf: 'stretch',
-	},
   line: {
 		height: 0.5,
 		backgroundColor: 'transparent',

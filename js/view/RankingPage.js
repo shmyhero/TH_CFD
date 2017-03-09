@@ -153,6 +153,13 @@ export default class RankingPage extends Component{
     );
   }
 
+  renderFooter(){
+    return(
+      <View style={{width:width,height:UIConstants.TAB_BAR_HEIGHT}}>
+      </View>
+    )
+	}
+
   renderRankList(){
       return(
         <View style = {{flex:1}}>
@@ -162,7 +169,7 @@ export default class RankingPage extends Component{
             initialListSize={11}
             dataSource={this.state.rankData}
             enableEmptySections={true}
-            // renderFooter={this.renderFooter}
+            renderFooter={this.renderFooter}
             renderRow={this.renderRow.bind(this)}
             renderSeparator={this.renderSeparator}
             // onEndReached={this.onEndReached}

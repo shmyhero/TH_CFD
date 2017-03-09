@@ -148,7 +148,7 @@ const glypy = glypyMapMaker({
   Camera: 'f04e',
   Stat: 'f050',
   Settings: 'f054',
-  Favorite: 'f051'
+  Ranking: 'f051'
 });
 
 const systemBlue = '#1a61dd'
@@ -1111,7 +1111,7 @@ var MainPage = React.createClass({
 			          	</RawContent>
 			        </Tab>
 			        <Tab name="ranking">
-			          	<Icon ref={"rankingBtn"} label="达人榜" type={glypy.Favorite} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
+			          	<Icon ref={"rankingBtn"} label="达人榜" type={glypy.Ranking} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
 			          	<RawContent ref="rankingContent">
 							<Navigator
 								style={styles.container}

@@ -29,10 +29,10 @@ export default class UserHomePage extends Component{
 
 	render(){
 		return(
-			<View style={{flex:1}}>
-				<NavBar title='用户主页' showBackButton={true} navigator={this.props.navigator}/>
+			<View style={styles.wapper}>
+				<NavBar title='巴菲特' showBackButton={true} navigator={this.props.navigator}/>
 				<View>
-					<Text>显示用户主页</Text>
+					<Text>巴菲特</Text>
 				</View>
 			</View>
 		);
@@ -41,6 +41,11 @@ export default class UserHomePage extends Component{
 
 
 const styles = StyleSheet.create({
+	wapper:{
+    width:width,
+    height:height
+  },
+
 	scroolItem:{
 		width:(width-20)/2,
 		height:((width-20)/2) + 80,

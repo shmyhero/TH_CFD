@@ -11,7 +11,8 @@ import {
   ListView,
   Alert,
   TouchableOpacity,
-  StatusBar
+  StatusBar,
+  TouchableHighlight
 } from 'react-native'
 
 
@@ -26,6 +27,7 @@ var StockTransactionInfoModal = require('./StockTransactionInfoModal')
 var UIConstants = require('../UIConstants')
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 var ColorConstants = require('../ColorConstants')
+var MainPage = require('./MainPage')
 
 var RANKING_TYPE_0 = 0;
 var RANKING_TYPE_1 = 1;
@@ -37,7 +39,7 @@ export default class RankingPage extends Component{
 		super(props);
 		this.state = {
       rankType : RANKING_TYPE_0,
-      rankData: ds.cloneWithRows(['','','','','']),
+      rankData: ds.cloneWithRows(['','','','','','','','','','','','','','','','','']),
 		}
 	}
 
@@ -53,12 +55,23 @@ export default class RankingPage extends Component{
     );
   }
 
-  onRankTypeSelected(rankSelected){
+  _onRankTypeSelected(rankSelected){
     console.log('rankType = ' + rankSelected);
     this.setState({
       rankType : rankSelected
     })
   }
+
+  _onPressedUserItem(rowData){
+    console.log('onPressedUserItem = ' + rowData);
+    this.gotoUserHomePage(rowData);
+  }
+
+  gotoUserHomePage(id) {
+		this.props.navigator.push({
+			name: MainPage.USER_HOME_PAGE_ROUTE,
+		});
+	}
 
   renderHead(){
     var backgroundColor = ColorConstants.title_blue();
@@ -79,12 +92,12 @@ export default class RankingPage extends Component{
         <StatusBar barStyle="light-content" backgroundColor={navBarColor}/>
         <View style = {styles.headerContainer}>
           <TouchableOpacity
-            onPress={()=>{this.onRankTypeSelected(RANKING_TYPE_0)}}
+            onPress={()=>{this._onRankTypeSelected(RANKING_TYPE_0)}}
             style = {{backgroundColor:this.state.rankType == RANKING_TYPE_0?colorBgSelected:'transparent'}}>
             <Text style={[styles.fontHeaderType,{color:this.state.rankType == RANKING_TYPE_0?'white':colorTextUnSelected}]}>达人榜</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={()=>{this.onRankTypeSelected(RANKING_TYPE_1)}}
+            onPress={()=>{this._onRankTypeSelected(RANKING_TYPE_1)}}
             style = {{backgroundColor:this.state.rankType == RANKING_TYPE_1?colorBgSelected:'transparent'}}>
             <Text style={[styles.fontHeaderType,{color:this.state.rankType == RANKING_TYPE_1?'white':colorTextUnSelected}]}>关注的</Text>
           </TouchableOpacity>
@@ -98,7 +111,7 @@ export default class RankingPage extends Component{
       return(
         <View>
           {this.renderRow()}
-          <View style = {{height:10,backgroundColor:'#F1F1F1'}}></View>
+          <View style = {{height:10,backgroundColor:'transparent'}}></View>
         </View>
       )
     }else{
@@ -106,12 +119,38 @@ export default class RankingPage extends Component{
     }
   }
 
-  renderRow(){
+  renderRow(rowData, sectionID, rowID, highlightRow){
     return(
-      <View style={{height:60*heightRate}}>
-        <Text>111</Text>
-      </View>
+      <TouchableHighlight onPress={()=>this._onPressedUserItem(rowData)}>
+        <View style={styles.rowData}>
+          <View style={{flexDirection:'row'}}>
+            <Image style = {styles.userHeader} source={require('../../images/head_portrait.png')}></Image>
+            <View style = {{marginLeft:2}}>
+              <Text style={[styles.userName]}>巴菲特在线</Text>
+              <View style = {styles.userInfo}>
+                <Text style={styles.userName}>胜率:</Text>
+                <Text style={styles.userWinRate}>96%</Text>
+                <Text style={[styles.userName,{marginLeft:10}]}>平仓笔数:</Text>
+                <Text style={styles.userWinRate}>12</Text>
+              </View>
+            </View>
+          </View>
+          <View>
+            <View style = {styles.rateArea}>
+              <Text style = {styles.rateText}>120.12%</Text>
+            </View>
+          </View>
+        </View>
+      </TouchableHighlight>
     )
+  }
+
+  renderSeparator(sectionID, rowID, adjacentRowHighlighted) {
+    return (
+      <View style={styles.line} key={rowID}>
+        <View style={styles.separator}/>
+      </View>
+    );
   }
 
   renderRankList(){
@@ -124,8 +163,8 @@ export default class RankingPage extends Component{
             dataSource={this.state.rankData}
             enableEmptySections={true}
             // renderFooter={this.renderFooter}
-            renderRow={this.renderRow}
-            // renderSeparator={this.renderSeparator}
+            renderRow={this.renderRow.bind(this)}
+            renderSeparator={this.renderSeparator}
             // onEndReached={this.onEndReached}
             removeClippedSubviews={false}/>
         </View>
@@ -134,7 +173,7 @@ export default class RankingPage extends Component{
 
 	render(){
 		return(
-      <View style={{flex:1}}>
+      <View style={styles.wapper}>
         {this.renderHead()}
         {this.renderTopSticker()}
         {this.renderMyRank()}
@@ -146,6 +185,11 @@ export default class RankingPage extends Component{
 
 
 const styles = StyleSheet.create({
+  wapper:{
+    width:width,
+    height:height
+  },
+
   container: {
 		height: UIConstants.HEADER_HEIGHT,
 		backgroundColor: ColorConstants.TITLE_BLUE,
@@ -178,6 +222,14 @@ const styles = StyleSheet.create({
   emptyText: {
     marginTop: 14,
     color: '#afafaf'
+  },
+  rowData:{
+     flex:1,
+     flexDirection:'row',
+     height:60*heightRate,
+     backgroundColor:'white',
+     justifyContent:'space-between',
+     alignItems:'center'
   },
   topSticker:{
     width:width,
@@ -213,6 +265,43 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignSelf: 'stretch',
 	},
+  line: {
+		height: 0.5,
+		backgroundColor: 'transparent',
+	},
+  userHeader:{
+    width:40,
+    height:40,
+    marginLeft:10,
+  },
+  rateArea:{
+    width:100,
+    height:30,
+    backgroundColor:'#c24a17',
+    marginRight:10,
+    alignItems:'flex-end',
+    justifyContent:'center',
+    borderRadius:4,
+  },
+  rateText:{
+    fontSize:15,
+    color:'white',
+    marginRight:5,
+  },
+  userName:{
+    fontSize:12,
+    marginTop:5,
+  },
+  userWinRate:{
+    fontSize:15,
+    marginTop:5,
+  },
+  userInfo:{
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center'
+  }
+
 
 });
 

@@ -381,7 +381,13 @@ var MainPage = React.createClass({
 				<MePage navigator={navigationOperations}
 				/>
 			)
-		} else if(route.name === MY_INCOME_ROUTE) {
+		} else if (route.name === RANKING_PAGE_ROUTE){
+			showTabbar();
+			return (
+				<RankingPage navigator={navigationOperations} routeMapper={this.RouteMapper}
+					popToOutsidePage={route.popToOutsidePage}/>
+			)
+		}else if(route.name === MY_INCOME_ROUTE) {
 			hideTabbar();
 			return (
 				<MyIncomePage navigator={navigationOperations} />
@@ -610,12 +616,6 @@ var MainPage = React.createClass({
 			hideTabbar();
 			return (
 				<WithdrawSubmittedPage navigator={navigationOperations} routeMapper={this.RouteMapper}
-					popToOutsidePage={route.popToOutsidePage}/>
-			)
-		}else if (route.name === RANKING_PAGE_ROUTE){
-			hideTabbar();
-			return (
-				<RankingPage navigator={navigationOperations} routeMapper={this.RouteMapper}
 					popToOutsidePage={route.popToOutsidePage}/>
 			)
 		}else if (route.name === USER_HOME_PAGE_ROUTE){

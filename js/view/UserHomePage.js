@@ -71,7 +71,7 @@ export default class UserHomePage extends Component{
 					<View style = {[styles.oneOfThree,{flexDirection:'row'}]}>
      				<Text style={styles.font1}>交易等级</Text>
 							<TouchableOpacity onPress={()=>this._onPressedAskForRank()}>
-								<Image style={{width:16,height:16,marginLeft:2}} source = {require('../../images/head_portrait.png')}></Image>
+								<Image style={{width:16,height:16,marginLeft:2}} source = {require('../../images/icon_ask.png')}></Image>
 							</TouchableOpacity>
 
      			</View>

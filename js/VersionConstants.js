@@ -20,6 +20,7 @@ export const SERVER_TYPE_PRODUCT = "product";
 export const SERVER_TYPE_STAGE = "stage";
 export const SERVER_TYPE_DEVELOP = "develop";
 
+// var CFDServerType = SERVER_TYPE_STAGE;
 var CFDServerType = SERVER_TYPE_PRODUCT;
 
 // //Not used any more

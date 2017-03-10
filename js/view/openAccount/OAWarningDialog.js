@@ -28,6 +28,7 @@ var roundR = (width-10)/2
 var dialog_horizontal_padding = 20;
 var modelTextW = 15;//width/28;
 var signEnable = true;//防止网络不畅多次点击事件发生
+var CHECKBOX_REF = 'checkbox_ref'
 
 export default class OAWarningDialog extends Component {
 
@@ -110,6 +111,7 @@ export default class OAWarningDialog extends Component {
     this.setState({
       hasRead: value,
     })
+    this.refs[CHECKBOX_REF].setSelectedState(value)
   }
 
   render() {
@@ -130,10 +132,20 @@ export default class OAWarningDialog extends Component {
                 <View style={{width:width}}></View>
               </ScrollView>
               <View style={styles.checkboxView}>
-                <CheckBoxButton
-                  text={"我将确保预先熟悉相关产品、模拟帐户和投资教育材料，我只会在确信的情况下继续申请。"}
-                  defaultSelected={false}
-                  onPress={(value)=>{this.onClickCheckbox(value)}}/>
+                <View style={{flexDirection:'row'}}>
+                  <View>
+                    <CheckBoxButton
+                      ref={CHECKBOX_REF}
+                      text={""}
+                      defaultSelected={false}
+                      onPress={(value)=>{this.onClickCheckbox(value)}}/>
+                  </View>
+
+                  <TouchableOpacity onPress={()=>{this.onClickCheckbox(!this.state.hasRead)}} style = {{marginRight:20}}>
+                    <Text>我将确保预先熟悉相关产品、模拟帐户和投资教育材料，我只会在确信的情况下继续申请。</Text>
+                  </TouchableOpacity>
+
+                </View>
               </View>
               <View style={styles.buttonLine}>
                 <View style={styles.button}>
@@ -246,13 +258,14 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginTop:10,
     marginBottom:10,
+    flexDirection:'row',
   },
 
   buttonArea: {
 		flex: 1,
 		marginLeft: 15,
 		marginRight: 15,
-		marginBottom: 16,
+		marginBottom: 10,
 		borderRadius: 3,
 	},
 

@@ -58,6 +58,12 @@ var CheckBoxButton = React.createClass({
 		})
 	},
 
+	setSelectedState:function(newState){
+		this.setState({
+			selected: newState,
+		})
+	},
+
 	render: function() {
 		var icon = this.state.selected ?
 			(this.props.selectedIcon ? this.props.selectedIcon : require('../../../images/checkbox1.png'))
@@ -66,7 +72,7 @@ var CheckBoxButton = React.createClass({
 			<TouchableOpacity style={styles.wrapper} onPress={this.props.enabled ? this.onPressed : null} >
 				<View style={this.props.containerStyle}>
 					<Image style={styles.image} source={icon} />
-					<Text style = {this.props.textStyle}>{this.props.text} </Text>
+					<Text style = {this.props.textStyle}>{this.props.text}</Text>
 					{this.props.children}
 				</View>
 			</TouchableOpacity>
@@ -83,6 +89,7 @@ var styles = StyleSheet.create({
 	image: {
 		width: 20.5,
 		height: 20,
+		marginLeft: 0,
 	},
 });
 

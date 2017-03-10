@@ -95,8 +95,8 @@ export default class RankingPage extends Component{
 			navBarColor = this.props.backgroundColor;
 		}
 
-    var colorBgSelected = '#7191c7'
-    var colorTextUnSelected = '#7091c7'
+    var colorBgSelected = '#6485c2'
+    var colorTextUnSelected = '#6485c2'
 
     return(
       <View style={[styles.container, {backgroundColor: backgroundColor}, this.props.barStyle]} >
@@ -139,9 +139,9 @@ export default class RankingPage extends Component{
             <View style = {{marginLeft:2}}>
               <Text style={[styles.userName]}>巴菲特在线</Text>
               <View style = {styles.userInfo}>
-                <Text style={styles.userName}>胜率:</Text>
+                <Text style={styles.userInfoTitle}>胜率:</Text>
                 <Text style={styles.userWinRate}>96%</Text>
-                <Text style={[styles.userName,{marginLeft:10}]}>平仓笔数:</Text>
+                <Text style={[styles.userInfoTitle,{marginLeft:10}]}>平仓笔数:</Text>
                 <Text style={styles.userWinRate}>12</Text>
               </View>
             </View>
@@ -252,8 +252,8 @@ const styles = StyleSheet.create({
     justifyContent:'space-between',
   },
   fontTopSticker:{
-    fontSize:14,
-    color:'#65799f',
+    fontSize:15,
+    color:'#666999',
     marginTop:6,
     marginBottom:6,
     marginLeft:10,
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     borderColor:'#7091c7',
   },
   fontHeaderType:{
-    fontSize:14,
+    fontSize:15,
     color:'white',
     marginLeft:15,
     marginRight:15,
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
   },
   line: {
 		height: 0.5,
-		backgroundColor: 'transparent',
+		backgroundColor: '#e2e2e2',
 	},
   userHeader:{
     width:40,
@@ -291,20 +291,27 @@ const styles = StyleSheet.create({
     marginRight:10,
     alignItems:'flex-end',
     justifyContent:'center',
-    borderRadius:4,
+    borderRadius:2,
   },
   rateText:{
-    fontSize:15,
+    fontSize:16,
     color:'white',
     marginRight:5,
   },
   userName:{
-    fontSize:12,
+    fontSize:11,
     marginTop:5,
+    color:'#2d2d2d'
+  },
+  userInfoTitle:{
+    fontSize:11,
+    marginTop:5,
+    color:'#5d5d5d'
   },
   userWinRate:{
-    fontSize:15,
+    fontSize:14,
     marginTop:5,
+    color:'#000000',
   },
   userInfo:{
     flexDirection:'row',

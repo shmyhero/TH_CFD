@@ -47,16 +47,17 @@ export default class UserHomePage extends Component{
 			<Image style = {[styles.topWapper,{backgroundColor:ColorConstants.title_blue()}]} source={require('../../images/super_priority_bg.png')}>
 
 				<TouchableOpacity style = {styles.topOneOfThree} onPress = {()=>this._onPressedCares()}>
-    			<Text style = {{fontSize:40,backgroundColor:'transparent',color:'white'}}>8</Text>
+    			<Text style = {{fontSize:36,backgroundColor:'transparent',color:'white'}}>8</Text>
 					<Text style = {{fontSize:12,backgroundColor:'transparent',color:'white'}}>关注数</Text>
     		</TouchableOpacity>
 
 				<View style = {styles.topOneOfThree}>
-					<Image style = {styles.userHeaderIcon} source={require('../../images/head_portrait.png')}></Image>
+						<Image style = {styles.userHeaderIcon} source={require('../../images/head_portrait.png')}></Image>
+						{/* <Image style = {styles.userHeaderIconRound} source={require('../../images/head_gd.png')}></Image> */}
 				</View>
 
 				<TouchableOpacity style = {styles.topOneOfThree} onPress={()=>this._onPressedCards()}>
-					<Text style = {{fontSize:40,backgroundColor:'transparent',color:'white'}}>0</Text>
+					<Text style = {{fontSize:36,backgroundColor:'transparent',color:'white'}}>0</Text>
 					<Text style = {{fontSize:12,backgroundColor:'transparent',color:'white'}}>卡片数</Text>
 				</TouchableOpacity>
 
@@ -89,11 +90,13 @@ export default class UserHomePage extends Component{
      			</View>
 					{this.rowSepartor()}
 					<View style = {styles.oneOfThree}>
-     				<Text style={styles.font2}>$210</Text>
+						<Text style={{fontSize:12,color:'#424242',marginTop:5}}>$</Text>
+     				<Text style={styles.font2}>210</Text>
      			</View>
 					{this.rowSepartor()}
 					<View style = {styles.oneOfThree}>
-     				<Text style={styles.font2}>93.12%</Text>
+     				<Text style={styles.font2}>93.12</Text>
+						<Text style={{fontSize:12,color:'#424242',marginTop:5}}>%</Text>
      			</View>
 				</View>
    		</View>
@@ -149,8 +152,8 @@ export default class UserHomePage extends Component{
 		return(
 			<View style = {styles.bottomWapper}>
    			<View style ={styles.ceilWapper}>
-      		<Text>累计收益：</Text>
-					<Text>6700.21</Text>
+      		<Text style = {{color:'#474747',fontSize:15}}>累计收益：</Text>
+					<Text style = {{color:'#fa2c21',fontSize:15}}>6700.21</Text>
       	</View>
 				{this.lineSepartor()}
 				<View style ={styles.ceilWapper2}>
@@ -166,7 +169,7 @@ export default class UserHomePage extends Component{
      			</View>
 					<View style = {styles.ceilRight}>
 						<View style = {[styles.tipIcon,{backgroundColor:ColorConstants.title_blue()}]}></View>
-     				<Text>TA的收益走势</Text>
+     				<Text style = {{fontSize:10,color:'#474747'}}>TA的收益走势</Text>
      			</View>
     		</View>
    		</View>
@@ -314,14 +317,18 @@ const styles = StyleSheet.create({
 		alignItems:'center',
 		justifyContent:'center',
 		paddingTop:5,
+		flexDirection:'row',
+
 	},
 
 	font1:{
-		fontSize:12,
+		fontSize:11,
+		color:'#9c9b9b'
 	},
 
 	font2:{
-		fontSize:18,
+		fontSize:19,
+		color:'#424242'
 	},
 
 	ceilWapper:{
@@ -329,16 +336,16 @@ const styles = StyleSheet.create({
 		height:40*heightRate,
 		flexDirection:'row',
 		alignItems:'center',
-		paddingLeft:10,
+		paddingLeft:15,
 	},
 
 	ceilWapper2:{
 		width:width,
-		height:50*heightRate,
+		height:30*heightRate,
 		flexDirection:'row',
 		alignItems:'center',
-		paddingLeft:10,
-		paddingRight:10,
+		paddingLeft:15,
+		paddingRight:15,
 		marginTop:10,
 	},
 
@@ -372,8 +379,8 @@ const styles = StyleSheet.create({
 	},
 
 	chartTypeBorder:{
-		width:160,
-		height:36,
+		width:140,
+		height:30,
 		borderRadius:2,
 		borderWidth:1,
 		borderColor:'grey',
@@ -389,6 +396,12 @@ const styles = StyleSheet.create({
 	userHeaderIcon:{
 		width:80,
 		height:80,
+	},
+
+	userHeaderIconRound:{
+		width:80,
+		height:80,
+		marginTop:-60,
 	},
 
 	cardShowWapper:{

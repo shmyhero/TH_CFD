@@ -190,6 +190,10 @@ function getTradeHeroAPI(){
     //用户协议
     WEBVIEW_SIGNTERMS_PAGE: TRADEHERO_SERVER_IP + '/TH_CFD_WEB/SignTerms.html',
     WEBVIEW_SIGNTERMS_PAGE_ACTUAL: TRADEHERO_SERVER_IP + '/TH_CFD_SP/SignTerms.html',
+    
+    //卡片详情
+    WEBVIEW_CARD_RULE:TRADEHERO_SERVER_IP + '/TH_CFD_SP/cardRule.html',
+
   }
 }
 
@@ -212,6 +216,9 @@ export let PARAMETER_CHARTTYPE_5_MINUTE = '5m'
 export let PARAMETER_CHARTTYPE_15_MINUTE = '15m'
 export let PARAMETER_CHARTTYPE_60_MINUTE = '60m'
 export let PARAMETER_CHARTTYPE_DAY = 'day'
+
+export let PARAMETER_CHARTTYPE_2WEEK_YIELD = '2WeekYield'
+export let PARAMETER_CHARTTYPE_ALL_YIELD = 'allYield'
 
 
 export function isCandleChart(type){

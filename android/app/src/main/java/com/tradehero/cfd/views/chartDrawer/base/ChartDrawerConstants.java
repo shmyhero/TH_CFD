@@ -14,6 +14,8 @@ public class ChartDrawerConstants {
     public static int CHART_LINE_COLOR = 0Xff759de2;
     public static int CHART_LINE_COLOR2 = 0Xff1d4fa2;
     public static int CHART_TEXT_COLOR = 0Xff70a5ff;
+    public static int CHART_DATA_SET_COLOR = 0xffffffff;
+    public static int CHART_DATA_SET_COLOR2 = 0xff0066cc;
 
     public static int FIVE_MINUTE_POINT_NUMBER = 300;//60s*5
     public static int TEN_MINUTE_POINT_NUMBER = 600;//60s*10
@@ -40,7 +42,10 @@ public class ChartDrawerConstants {
         week("week"),
         month("month"),
         threeMonth("3month"),
-        sixMonth("6month");
+        sixMonth("6month"),
+
+        towWeekYield("2WeekYield"),//2周收益曲线
+        allYield("allYield");//全部收益曲线
 
         private String name;
 

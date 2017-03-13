@@ -69,6 +69,10 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
         return true;
     }
 
+    protected int getDataSetColor(){
+        return ChartDrawerConstants.CHART_DATA_SET_COLOR;
+    }
+
     @Override
     protected CombinedData generateData(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
         ArrayList<String> xVals = new ArrayList<String>();
@@ -112,7 +116,7 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
 
         // set the line to be drawn like this "- - - - - -"
         set1.enableDashedLine(10f, 0f, 0f);
-        set1.setColor(Color.WHITE);
+        set1.setColor(getDataSetColor());
         set1.setLineWidth(ChartDrawerConstants.LINE_WIDTH_PRICE);
         set1.setDrawCircles(true);
         set1.setDrawCircleHole(false);
@@ -149,6 +153,11 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
         return "          ";
     }
 
+
+    public boolean needDrawDescription(){
+        return true;
+    }
+
     @Override
     protected void calculateZoom(CombinedChart chart, CombinedData data) {
         chart.setVisibleXRangeMinimum(1);
@@ -159,6 +168,10 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
             float minPercentage = (minPrice - preClose) / preClose * 100;
             setDescription(chart, StringUtils.formatNumber(maxPrice), StringUtils.formatNumber(minPrice), StringUtils.formatNumber(maxPercentage) + "%", StringUtils.formatNumber(minPercentage) + "%");
         } else {
+            setDescription(chart, "", "", "", "");
+        }
+
+        if(!needDrawDescription()){
             setDescription(chart, "", "", "", "");
         }
 

@@ -133,6 +133,17 @@ public class ReactChart extends CombinedChart {
         return gradientColors;
     }
 
+    int dataSetColor;
+
+    public void setDataSetColor(int color){
+        dataSetColor = color;
+    }
+
+    public int getDataSetColor(){
+        return dataSetColor;
+    }
+
+
     public void setXAxisPaddingLeft(int value){
         ((ReactXAxisRenderer)mXAxisRenderer).setHorizontalPaddingLeft(value);
     }

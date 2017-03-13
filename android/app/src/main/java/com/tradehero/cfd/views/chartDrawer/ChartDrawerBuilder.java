@@ -35,6 +35,9 @@ public class ChartDrawerBuilder {
                 return new Stick6MonthChartDrawer();
             case todayK:
                 return new CandleTodayChartDrawer();
+            case towWeekYield:
+            case allYield:
+                return new Stick2WeekYieldChartDrawer();
             default:
                 return null;
         }

@@ -57,7 +57,7 @@ var InvestmentPortfolioMapping = [
 var EmploymengStatusMapping = [
 	{"value": "Employed", "displayText": "就业"},
 	{"value": "Self-Employed", "displayText": "自雇"},
-	{"value": "UnEmployed", "displayText": "失业"},
+	{"value": "Unemployed", "displayText": "失业"},
 	{"value": "Retired", "displayText": "退休"},
 	{"value": "Student", "displayText": "学生"},
 	// {"value": "Other", "displayText": "其他"},	//API Doesn't have this value!

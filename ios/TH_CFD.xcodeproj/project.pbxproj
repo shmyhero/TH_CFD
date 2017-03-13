@@ -153,10 +153,7 @@
 		3D15A9EB1E278C5600B32C0E /* MQMessageFormInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D15A9641E278C5600B32C0E /* MQMessageFormInputView.m */; };
 		3D15A9EC1E278C5600B32C0E /* MQMessageFormTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D15A9671E278C5600B32C0E /* MQMessageFormTextView.m */; };
 		3D15A9ED1E278C5600B32C0E /* MQMessageFormImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D15A96A1E278C5600B32C0E /* MQMessageFormImageView.m */; };
-		3D2A16D91D78047200FEB181 /* libGeTuiSdk-1.4.3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A16D81D78047200FEB181 /* libGeTuiSdk-1.4.3.a */; };
-		3D2A16EC1D7804E600FEB181 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A16EB1D7804E600FEB181 /* JavaScriptCore.framework */; };
 		3D2A16EE1D7804F600FEB181 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A16ED1D7804F600FEB181 /* CoreLocation.framework */; };
-		3D2A16F01D7804FD00FEB181 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A16EF1D7804FD00FEB181 /* CoreBluetooth.framework */; };
 		3D2A39F31C7C3ECD0085264D /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A39F21C7C3ECD0085264D /* libsqlite3.tbd */; };
 		3D2A39FF1C7C3EDA0085264D /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A39FE1C7C3EDA0085264D /* libc++.tbd */; };
 		3D2A3A011C7C3EE70085264D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A3A001C7C3EE70085264D /* libz.tbd */; };
@@ -170,6 +167,9 @@
 		3D4B37B01D504A06004BD09C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4B37AF1D504A06004BD09C /* SystemConfiguration.framework */; };
 		3D4C814B1D61A56900A58712 /* libTalkingDataAppCpa.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4C81491D61A56900A58712 /* libTalkingDataAppCpa.a */; };
 		3D4EA75E1D865636009D2C45 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4EA75D1D865636009D2C45 /* SoundManager.swift */; };
+		3D4EF3471E764B0600731333 /* libGeTuiSdk-1.6.2.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4EF3451E764B0600731333 /* libGeTuiSdk-1.6.2.0.a */; };
+		3D4EF3481E764B0600731333 /* libGtExtensionSdk-1.1.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4EF3461E764B0600731333 /* libGtExtensionSdk-1.1.0.a */; };
+		3D4EF34A1E764B5A00731333 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4EF3491E764B5A00731333 /* UserNotifications.framework */; };
 		3D5080C21D9122EE00914327 /* ColorSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5080C11D9122EE00914327 /* ColorSet.swift */; };
 		3D5080D51D9123E400914327 /* LineChartRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5080D41D9123E400914327 /* LineChartRender.swift */; };
 		3D5080D71D91385C00914327 /* CandleChartRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5080D61D91385C00914327 /* CandleChartRender.swift */; };
@@ -693,8 +693,6 @@
 		3D15A9671E278C5600B32C0E /* MQMessageFormTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQMessageFormTextView.m; sourceTree = "<group>"; };
 		3D15A9691E278C5600B32C0E /* MQMessageFormImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQMessageFormImageView.h; sourceTree = "<group>"; };
 		3D15A96A1E278C5600B32C0E /* MQMessageFormImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQMessageFormImageView.m; sourceTree = "<group>"; };
-		3D2A16D71D78047200FEB181 /* GeTuiSdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeTuiSdk.h; sourceTree = "<group>"; };
-		3D2A16D81D78047200FEB181 /* libGeTuiSdk-1.4.3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libGeTuiSdk-1.4.3.a"; sourceTree = "<group>"; };
 		3D2A16EB1D7804E600FEB181 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		3D2A16ED1D7804F600FEB181 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		3D2A16EF1D7804FD00FEB181 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
@@ -715,6 +713,11 @@
 		3D4C81491D61A56900A58712 /* libTalkingDataAppCpa.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTalkingDataAppCpa.a; sourceTree = "<group>"; };
 		3D4C814A1D61A56900A58712 /* TalkingDataAppCpa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TalkingDataAppCpa.h; sourceTree = "<group>"; };
 		3D4EA75D1D865636009D2C45 /* SoundManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SoundManager.swift; path = TH_CFD/SoundManager.swift; sourceTree = "<group>"; };
+		3D4EF3431E764B0600731333 /* GeTuiExtSdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeTuiExtSdk.h; sourceTree = "<group>"; };
+		3D4EF3441E764B0600731333 /* GeTuiSdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeTuiSdk.h; sourceTree = "<group>"; };
+		3D4EF3451E764B0600731333 /* libGeTuiSdk-1.6.2.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libGeTuiSdk-1.6.2.0.a"; sourceTree = "<group>"; };
+		3D4EF3461E764B0600731333 /* libGtExtensionSdk-1.1.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libGtExtensionSdk-1.1.0.a"; sourceTree = "<group>"; };
+		3D4EF3491E764B5A00731333 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		3D5080C11D9122EE00914327 /* ColorSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ColorSet.swift; path = TH_CFD/ColorSet.swift; sourceTree = "<group>"; };
 		3D5080D41D9123E400914327 /* LineChartRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LineChartRender.swift; path = TH_CFD/LineChartRender.swift; sourceTree = "<group>"; };
 		3D5080D61D91385C00914327 /* CandleChartRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CandleChartRender.swift; path = TH_CFD/CandleChartRender.swift; sourceTree = "<group>"; };
@@ -771,13 +774,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D4EF34A1E764B5A00731333 /* UserNotifications.framework in Frameworks */,
 				413E77EF1E0909B400419EC1 /* libRNViewShot.a in Frameworks */,
 				3D15A9C91E278C5600B32C0E /* libopencore-amrwb.a in Frameworks */,
 				413E77EE1E09099900419EC1 /* libRCTQRCodeLocalImage.a in Frameworks */,
 				4139073B1DC096CC0015FF54 /* libRCTBEEPickerManager.a in Frameworks */,
-				3D2A16F01D7804FD00FEB181 /* CoreBluetooth.framework in Frameworks */,
 				3D2A16EE1D7804F600FEB181 /* CoreLocation.framework in Frameworks */,
-				3D2A16EC1D7804E600FEB181 /* JavaScriptCore.framework in Frameworks */,
 				3DB9F24E1D6449CA00DC5C63 /* MobileCoreServices.framework in Frameworks */,
 				3DB9F24C1D6449AA00DC5C63 /* AVFoundation.framework in Frameworks */,
 				3DB9F24A1D64499800DC5C63 /* libicucore.tbd in Frameworks */,
@@ -802,14 +804,15 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				E30C3760AD2343E4BF815D6D /* libBVLinearGradient.a in Frameworks */,
+				3D4EF3481E764B0600731333 /* libGtExtensionSdk-1.1.0.a in Frameworks */,
 				C5971F975A91415B996BBB9C /* libRealmReact.a in Frameworks */,
 				3D4C814B1D61A56900A58712 /* libTalkingDataAppCpa.a in Frameworks */,
+				3D4EF3471E764B0600731333 /* libGeTuiSdk-1.6.2.0.a in Frameworks */,
 				3D4B37971D504942004BD09C /* libTalkingData.a in Frameworks */,
 				3D15A9C81E278C5600B32C0E /* libopencore-amrnb.a in Frameworks */,
 				80BCA2B8147C419E82DF3DFB /* libRCTHotUpdate.a in Frameworks */,
 				CBDAB12CB32E43B38DF342E5 /* libRCTWeChat.a in Frameworks */,
 				D5C95DE6EB174E6896A7067C /* libRNImagePicker.a in Frameworks */,
-				3D2A16D91D78047200FEB181 /* libGeTuiSdk-1.4.3.a in Frameworks */,
 				30EC836D765B4E7CBB7D0CA5 /* libRNCookieManagerIOS.a in Frameworks */,
 				3D15A96B1E278C5600B32C0E /* MeiQiaSDK.framework in Frameworks */,
 				F6CD2005BFCB4171B6F9ECB0 /* libRCTOrientation.a in Frameworks */,
@@ -1610,8 +1613,10 @@
 		3D2A16D61D78047200FEB181 /* GtSdkLib */ = {
 			isa = PBXGroup;
 			children = (
-				3D2A16D71D78047200FEB181 /* GeTuiSdk.h */,
-				3D2A16D81D78047200FEB181 /* libGeTuiSdk-1.4.3.a */,
+				3D4EF3431E764B0600731333 /* GeTuiExtSdk.h */,
+				3D4EF3441E764B0600731333 /* GeTuiSdk.h */,
+				3D4EF3451E764B0600731333 /* libGeTuiSdk-1.6.2.0.a */,
+				3D4EF3461E764B0600731333 /* libGtExtensionSdk-1.1.0.a */,
 			);
 			path = GtSdkLib;
 			sourceTree = "<group>";
@@ -1737,6 +1742,7 @@
 		43D0F270D79E4680AD511CD9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3D4EF3491E764B5A00731333 /* UserNotifications.framework */,
 				3D2A16EF1D7804FD00FEB181 /* CoreBluetooth.framework */,
 				3D2A16ED1D7804F600FEB181 /* CoreLocation.framework */,
 				3D2A16EB1D7804E600FEB181 /* JavaScriptCore.framework */,

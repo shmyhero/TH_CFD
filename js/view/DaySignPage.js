@@ -265,7 +265,7 @@ var DaySignPage = React.createClass({
 
 							</View>
 
-							<View style = {styles.lineLittleTop}>
+							<View style = {[styles.lineLittleTop,{backgroundColor:LogicData.getAccountState()?'#7f99c9':'#4c86ec'}]}>
 							</View>
 
 							<View style = {styles.topSep}>

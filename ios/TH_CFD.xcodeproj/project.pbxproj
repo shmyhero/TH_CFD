@@ -169,7 +169,6 @@
 		3D4EA75E1D865636009D2C45 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4EA75D1D865636009D2C45 /* SoundManager.swift */; };
 		3D4EF3471E764B0600731333 /* libGeTuiSdk-1.6.2.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4EF3451E764B0600731333 /* libGeTuiSdk-1.6.2.0.a */; };
 		3D4EF3481E764B0600731333 /* libGtExtensionSdk-1.1.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4EF3461E764B0600731333 /* libGtExtensionSdk-1.1.0.a */; };
-		3D4EF34A1E764B5A00731333 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4EF3491E764B5A00731333 /* UserNotifications.framework */; };
 		3D5080C21D9122EE00914327 /* ColorSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5080C11D9122EE00914327 /* ColorSet.swift */; };
 		3D5080D51D9123E400914327 /* LineChartRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5080D41D9123E400914327 /* LineChartRender.swift */; };
 		3D5080D71D91385C00914327 /* CandleChartRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5080D61D91385C00914327 /* CandleChartRender.swift */; };
@@ -181,6 +180,7 @@
 		3D6A24091C9AB90000FF1306 /* NativeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A24081C9AB90000FF1306 /* NativeData.m */; };
 		3D6A240B1C9ABDE900FF1306 /* StockDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */; };
 		3D6A24181C9C026200FF1306 /* SwiftExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A24171C9C026200FF1306 /* SwiftExtensions.swift */; };
+		3D915BB01E77EDD200FE2408 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D915BAF1E77EDD200FE2408 /* UserNotifications.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		3DB98C0F1CE1CF1A00DB3FA5 /* frontPage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3DB98C0E1CE1CF1A00DB3FA5 /* frontPage.jpg */; };
 		3DB9F24A1D64499800DC5C63 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DB9F2491D64499800DC5C63 /* libicucore.tbd */; };
 		3DB9F24C1D6449AA00DC5C63 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DB9F24B1D6449AA00DC5C63 /* AVFoundation.framework */; };
@@ -717,7 +717,6 @@
 		3D4EF3441E764B0600731333 /* GeTuiSdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeTuiSdk.h; sourceTree = "<group>"; };
 		3D4EF3451E764B0600731333 /* libGeTuiSdk-1.6.2.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libGeTuiSdk-1.6.2.0.a"; sourceTree = "<group>"; };
 		3D4EF3461E764B0600731333 /* libGtExtensionSdk-1.1.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libGtExtensionSdk-1.1.0.a"; sourceTree = "<group>"; };
-		3D4EF3491E764B5A00731333 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		3D5080C11D9122EE00914327 /* ColorSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ColorSet.swift; path = TH_CFD/ColorSet.swift; sourceTree = "<group>"; };
 		3D5080D41D9123E400914327 /* LineChartRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LineChartRender.swift; path = TH_CFD/LineChartRender.swift; sourceTree = "<group>"; };
 		3D5080D61D91385C00914327 /* CandleChartRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CandleChartRender.swift; path = TH_CFD/CandleChartRender.swift; sourceTree = "<group>"; };
@@ -731,6 +730,7 @@
 		3D6A24081C9AB90000FF1306 /* NativeData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NativeData.m; path = TH_CFD/NativeData.m; sourceTree = "<group>"; };
 		3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StockDataManager.swift; path = TH_CFD/StockDataManager.swift; sourceTree = "<group>"; };
 		3D6A24171C9C026200FF1306 /* SwiftExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftExtensions.swift; path = TH_CFD/SwiftExtensions.swift; sourceTree = "<group>"; };
+		3D915BAF1E77EDD200FE2408 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		3D9AAE8B1DB8B8030033CA98 /* TH_CFD.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = TH_CFD.entitlements; path = TH_CFD/TH_CFD.entitlements; sourceTree = "<group>"; };
 		3DB98C0E1CE1CF1A00DB3FA5 /* frontPage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = frontPage.jpg; path = ../images/frontPage.jpg; sourceTree = "<group>"; };
 		3DB9F2491D64499800DC5C63 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
@@ -774,7 +774,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D4EF34A1E764B5A00731333 /* UserNotifications.framework in Frameworks */,
+				3D915BB01E77EDD200FE2408 /* UserNotifications.framework in Frameworks */,
 				413E77EF1E0909B400419EC1 /* libRNViewShot.a in Frameworks */,
 				3D15A9C91E278C5600B32C0E /* libopencore-amrwb.a in Frameworks */,
 				413E77EE1E09099900419EC1 /* libRCTQRCodeLocalImage.a in Frameworks */,
@@ -1742,7 +1742,7 @@
 		43D0F270D79E4680AD511CD9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3D4EF3491E764B5A00731333 /* UserNotifications.framework */,
+				3D915BAF1E77EDD200FE2408 /* UserNotifications.framework */,
 				3D2A16EF1D7804FD00FEB181 /* CoreBluetooth.framework */,
 				3D2A16ED1D7804F600FEB181 /* CoreLocation.framework */,
 				3D2A16EB1D7804E600FEB181 /* JavaScriptCore.framework */,
@@ -1886,7 +1886,7 @@
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = Z288KMGX4C;
 						LastSwiftMigration = 800;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -2458,8 +2458,8 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ayondo.CFD;
 				PRODUCT_NAME = TH_CFD;
-				PROVISIONING_PROFILE = "751319a3-f031-4f6e-b45f-d938625cd36e";
-				PROVISIONING_PROFILE_SPECIFIER = "CFD Dev";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "TH_CFD-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 2.3;
@@ -2473,7 +2473,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = TH_CFD/TH_CFD.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = Z288KMGX4C;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2514,8 +2514,8 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ayondo.CFD;
 				PRODUCT_NAME = TH_CFD;
-				PROVISIONING_PROFILE = "dc43ea81-c7da-4329-b61e-b4af7039a848";
-				PROVISIONING_PROFILE_SPECIFIER = "Ayondo CFD Distribution";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "TH_CFD-Bridging-Header.h";
 				SWIFT_VERSION = 2.3;
 			};

@@ -2,6 +2,7 @@ package com.tradehero.cfd.views.chartDrawer;
 
 import com.tradehero.cfd.views.chartDrawer.base.ChartDrawerConstants;
 import com.tradehero.cfd.views.chartDrawer.base.LineStickChartDrawer;
+import com.tradehero.cfd.views.chartDrawer.base.LineStickPLChartDrawer;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,7 +12,7 @@ import java.util.Calendar;
 /**
  * Created by Neko on 16/9/19.
  */
-public class Stick2WeekYieldChartDrawer extends LineStickChartDrawer {
+public class Stick2WeekYieldChartDrawer extends LineStickPLChartDrawer {
     @Override
     public boolean needDrawPreCloseLine() {
         return false;

@@ -150,6 +150,10 @@ function getCFDAPI(){
     GET_TRANSFERS_LIST: CFD_API_SERVER + "/api/user/live/transfers",
     GET_DEPOSIT_SETTING: CFD_API_SERVER + "/api/common/setting/deposit",
     TIMESTAMP: CFD_API_SERVER + '/api/user/live/timestamp',//LIVE ok
+
+    // GET_POSITION_CHART_PLCLOSE:CFD_API_SERVER + "/api/position/chart/plClosed",
+    GET_POSITION_CHART_PLCLOSE_LIVE:CFD_API_SERVER + "/api/user/3265/live/position/chart/plClosed",
+    GET_POSITION_CHART_PLCLOSE_2W_LIVE:CFD_API_SERVER + "/api/user/3265/live/position/chart/plClosed/2w",
   }
 }
 
@@ -190,7 +194,7 @@ function getTradeHeroAPI(){
     //用户协议
     WEBVIEW_SIGNTERMS_PAGE: TRADEHERO_SERVER_IP + '/TH_CFD_WEB/SignTerms.html',
     WEBVIEW_SIGNTERMS_PAGE_ACTUAL: TRADEHERO_SERVER_IP + '/TH_CFD_SP/SignTerms.html',
-    
+
     //卡片详情
     WEBVIEW_CARD_RULE:TRADEHERO_SERVER_IP + '/TH_CFD_SP/cardRule.html',
 

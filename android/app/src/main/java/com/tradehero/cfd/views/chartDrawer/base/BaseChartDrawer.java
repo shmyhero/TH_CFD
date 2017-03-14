@@ -276,7 +276,7 @@ public abstract class BaseChartDrawer implements IChartDrawer {
         void OnLimitLinesPositionCalculated();
     }
 
-    private void drawLimitLine(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
+    protected void drawLimitLine(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
         if (needDrawPreCloseLine()) {
             drawPreCloseLine(chart, stockInfoObject);
         }

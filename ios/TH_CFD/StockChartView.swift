@@ -110,14 +110,14 @@ class StockChartView: UIView {
         if self.chartType == "undefined" {
             return
         }
-        else if self.data == "undefiend" {
+        else if self.data == "undefined" {
             dataSource = BaseDataSource.init(json: "", rect: self.bounds)
             dataSource?.setChartType(chartType)
             dataSource?.calculateData()
             self.setNeedsDisplay()
         }
         else {
-            print ("setup chart:", self.bounds)
+//            print ("setup chart:", self.bounds, self.frame)
             if CandleChartDataSource.isValidData(data!) {
                 dataSource = CandleChartDataSource.init(json:data!, rect: self.bounds)
             }

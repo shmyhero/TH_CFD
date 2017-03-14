@@ -71,7 +71,7 @@ export default class DepositPage extends Component{
 			payStateTip:'最低入金额度：100美元',
 			payStateTip2:'等额人民币：0.00元',
 			payStateTip3:'手续费：0美元',
-			payStateTip4:'注意：入金手续费为入金金额的1%(最低5美元)',
+			payStateTip4:'注意：入金手续费为入金金额的1%(最低5美元)，入金账户必须与自己的身份证保持一致，以免发生交易风险。',
 			payMethodSelected:0,
 			dataSource:ds.cloneWithRows(listRawData),
 			dataSourceBank:dsBank.cloneWithRows(bankListData),
@@ -396,7 +396,7 @@ export default class DepositPage extends Component{
  			 		 var alipayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-alipay.html'+'?Amount='+rmbValue+appendVal
 					 var unionpayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-quick.html'+'?Amount='+rmbValue+appendVal
 					 var url = this.state.payMethodSelected == 0? alipayUrl:unionpayUrl;
-					 console.log('selected Url = ' + url); 
+					 console.log('selected Url = ' + url);
 					 this.props.navigator.push({
 			 			name: MainPage.PAYMENT_PAGE,
 			 			url: url,
@@ -448,9 +448,12 @@ export default class DepositPage extends Component{
 				<View style = {{flex:1}}>
 					{this.renderDetail()}
 					<TouchableWithoutFeedback style={styles.blank} onPress={()=>this.pressBlank()}>
-						<View>
-						<Text style={styles.psLine}>注意：入金手续费为入金金额的{this.state.chargeRate*100}%(最低{this.state.chargeMin}美元)</Text>
-						</View>
+						<View style={{flexDirection:'row'}}>
+							<Text style={styles.psLine}>注意：</Text>
+							<View style={{marginRight:15,flex:1}}>
+								<Text style={styles.psLine2}>入金手续费为入金金额的{this.state.chargeRate*100}%(最低{this.state.chargeMin}美元)，入金账户必须与自己的身份证保持一致，以免发生交易风险。</Text>
+							</View>
+					  </View>
 				  </TouchableWithoutFeedback>
 					<TouchableOpacity style={styles.blank} onPress={()=>this.pressBlank()}>
 						<View></View>
@@ -637,7 +640,14 @@ const styles = StyleSheet.create({
 	psLine:{
 		fontSize:12,
 		color:'#858585',
-		margin:15,
+		marginTop:15,
+		marginLeft:15,
+	},
+
+	psLine2:{
+		fontSize:12,
+		color:'#858585',
+		marginTop:15,
 	},
 
 	protocalRight:{

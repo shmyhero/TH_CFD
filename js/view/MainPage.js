@@ -621,7 +621,10 @@ var MainPage = React.createClass({
 		}else if (route.name === USER_HOME_PAGE_ROUTE){
 			hideTabbar();
 			return (
-				<UserHomePage navigator={navigationOperations} routeMapper={this.RouteMapper}
+				<UserHomePage navigator={navigationOperations}
+					userId={route.userData.userId}
+					userName={route.userData.userName}
+					routeMapper={this.RouteMapper}
 					popToOutsidePage={route.popToOutsidePage}/>
 			)
 		}

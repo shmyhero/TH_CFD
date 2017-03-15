@@ -1,6 +1,6 @@
 'use strict';
 
-import React,{Component} from 'react'
+import React,{Component,PropTypes} from 'react'
 import {StyleSheet,
 	ScrollView,
 	Text,
@@ -32,41 +32,106 @@ var MainPage = require('./MainPage')
 var CHART_TYPE_2MONTH = 0;
 var CHART_TYPE_ALL = 1;
 
+// { followerCount: 0,
+//   totalPl: -400.62942932,
+//   avgPl: -9.538795936190477,
+//   winRate: 0.3333333333333333,
+//   cards: [],
+//   id: 2030,
+//   nickname: 'RamboOne',
+//   picUrl: 'https://cfdstorage.blob.core.chinacloudapi.cn/user-picture/13b07850f6fa484dbc2337216acda804' }
+
 
 export default class UserHomePage extends Component{
+
+	static propTypes = {
+    userId: PropTypes.string.isRequired,
+		userName: PropTypes.string.isRequired,
+  }
+
+  static defaultProps = {
+    userId:'',
+		userName:''
+  }
 
 	constructor(props){
 		super(props);
 		this.state = {
 			chartType:CHART_TYPE_2MONTH,
-			isCared:false,
 			chartTypeName:NetConstants.PARAMETER_CHARTTYPE_2WEEK_YIELD,
+			id:this.props.userId,
 			plCloseData:null,
+			avgPl:0,
+			winRate:0,
+			nickname:'',
+			followerCount:0,
+			cards:[],
+			totalPl:0,
+			picUrl:undefined,
+			isFollowing:false,
 		}
+
+		console.log("defaultProps userId is "+this.props.userId);
+		console.log("defaultProps userName is "+this.props.userName);
 	}
 
 	componentDidMount(){
+		this.loadUserInfo()
+	}
 
+	loadUserInfo(){
+		var url = NetConstants.CFD_API.GET_USER_LIVE_DETAIL;
+		url = url.replace("<id>", this.props.userId);
+		var userData = LogicData.getUserData()
+		NetworkModule.fetchTHUrl(
+			url,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Content-Type': 'application/json; charset=utf-8',
+				},
+			},
+			(responseJson) => {
+				 console.log(responseJson);
+				 this.setState({
+					 id:responseJson.id,
+					 avgPl:responseJson.avgPl,
+					 winRate:responseJson.winRate*100,
+					 nickname:responseJson.nickname,
+					 followerCount:responseJson.followerCount,
+					 cards:responseJson.cards,
+					 totalPl:responseJson.totalPl,
+					 picUrl:responseJson.picUrl,
+					 isFollowing:responseJson.isFollowing,
+				 })
+			},
+			(result) => {
+
+			},
+			true
+		)
 	}
 
 	topWarpperRender(){
 		return(
-			<Image style = {[styles.topWapper,{backgroundColor:ColorConstants.title_blue()}]} source={require('../../images/super_priority_bg.png')}>
-
-				<TouchableOpacity style = {styles.topOneOfThree} onPress = {()=>this._onPressedCares()}>
-    			<Text style = {{fontSize:36,backgroundColor:'transparent',color:'white'}}>8</Text>
-					<Text style = {{fontSize:12,backgroundColor:'transparent',color:'white'}}>关注数</Text>
-    		</TouchableOpacity>
+			<Image style = {[styles.topWapper,{backgroundColor:ColorConstants.title_blue()}]} source={require('../../images/bgbanner.jpg')}>
 
 				<View style = {styles.topOneOfThree}>
-						<Image style = {styles.userHeaderIcon} source={require('../../images/head_portrait.png')}></Image>
+    			<Text style = {{fontSize:36,backgroundColor:'transparent',color:'white'}}>{this.state.followerCount}</Text>
+					<Text style = {{fontSize:12,backgroundColor:'transparent',color:'white'}}>关注数</Text>
+    		</View>
+
+				<View style = {styles.topOneOfThree}>
+						<Image style = {styles.userHeaderIcon} source={{uri:this.state.picUrl}}></Image>
+						{/* <Image style = {styles.userHeaderIcon} source={require('../../images/head_portrait.png')}></Image> */}
 						{/* <Image style = {styles.userHeaderIconRound} source={require('../../images/head_gd.png')}></Image> */}
 				</View>
 
-				<TouchableOpacity style = {styles.topOneOfThree} onPress={()=>this._onPressedCards()}>
-					<Text style = {{fontSize:36,backgroundColor:'transparent',color:'white'}}>0</Text>
+				<View style = {styles.topOneOfThree}>
+					<Text style = {{fontSize:36,backgroundColor:'transparent',color:'white'}}>{this.state.cards.length}</Text>
 					<Text style = {{fontSize:12,backgroundColor:'transparent',color:'white'}}>卡片数</Text>
-				</TouchableOpacity>
+				</View>
 
    		</Image>
 		)
@@ -98,11 +163,11 @@ export default class UserHomePage extends Component{
 					{this.rowSepartor()}
 					<View style = {styles.oneOfThree}>
 						<Text style={{fontSize:12,color:'#424242',marginTop:5}}>$</Text>
-     				<Text style={styles.font2}>210</Text>
+     				<Text style={styles.font2}>{this.state.avgPl.toFixed(2)}</Text>
      			</View>
 					{this.rowSepartor()}
 					<View style = {styles.oneOfThree}>
-     				<Text style={styles.font2}>93.12</Text>
+     				<Text style={styles.font2}>{this.state.winRate.toFixed(2)}</Text>
 						<Text style={{fontSize:12,color:'#424242',marginTop:5}}>%</Text>
      			</View>
 				</View>
@@ -153,10 +218,64 @@ export default class UserHomePage extends Component{
 		console.log('_onPressedCards')
 	}
 
-	_onPressedAddCare(){
+	_onPressedAddFollow(){
 		this.setState({
-			isCared: !this.state.isCared
-		})
+			isFollowing: !this.state.isFollowing
+		},this.follow())
+	}
+
+	follow(){
+
+		var userData = LogicData.getUserData()
+
+		if(this.state.isFollowing){
+			var url = NetConstants.CFD_API.DEL_USER_FOLLOW
+			url = url.replace("<id>", this.props.userId);
+			NetworkModule.fetchTHUrl(
+				url,
+				{
+					method: 'DELETE',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						'Content-Type': 'application/json; charset=utf-8',
+					},
+				},
+				(responseJson) => {
+					 console.log(responseJson);
+					 	this.setState({
+			 				isFollowing: false
+			 			})
+				},
+				(result) => {
+
+				},
+				true
+			)
+		}else{
+			var url = NetConstants.CFD_API.PUT_USER_FOLLOW
+			url = url.replace("<id>", this.props.userId);
+			NetworkModule.fetchTHUrl(
+				url,
+				{
+					method: 'PUT',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						'Content-Type': 'application/json; charset=utf-8',
+					},
+				},
+				(responseJson) => {
+					 console.log(responseJson);
+					 this.setState({
+						 isFollowing: true
+					 })
+				},
+				(result) => {
+
+				},
+				true
+			)
+		}
+
 	}
 
 	loadPlCloseData(){
@@ -194,7 +313,7 @@ export default class UserHomePage extends Component{
 			<View style = {styles.bottomWapper}>
    			<View style ={styles.ceilWapper}>
       		<Text style = {{color:'#474747',fontSize:15}}>累计收益：</Text>
-					<Text style = {{color:'#fa2c21',fontSize:15}}>6700.21</Text>
+					<Text style = {{color:'#fa2c21',fontSize:15}}>{this.state.totalPl.toFixed(2)}</Text>
       	</View>
 				{this.lineSepartor()}
 				<View style ={styles.ceilWapper2}>
@@ -259,33 +378,37 @@ export default class UserHomePage extends Component{
 	}
 
 	cardWarpperRender(){
-		return(
-			<View style = {styles.cardWapper}>
-				<View style={styles.cardWapperContainer}>
-					<Text style={styles.cardWapperTitle}>
-						卡片成就
-					</Text>
-					<TouchableOpacity onPress={()=>this._onPressedCardDetail()}>
-						<Text style={styles.more}>
-							了解详情 >
+		if(this.state.cards.length>0){
+			return(
+				<View style = {styles.cardWapper}>
+					<View style={styles.cardWapperContainer}>
+						<Text style={styles.cardWapperTitle}>
+							卡片成就
 						</Text>
-					</TouchableOpacity>
+						<TouchableOpacity onPress={()=>this._onPressedCardDetail()}>
+							<Text style={styles.more}>
+								了解详情 >
+							</Text>
+						</TouchableOpacity>
+					</View>
+
+					<View style = {[styles.cardShowWapper,{backgroundColor:ColorConstants.title_blue()}]}>
+
+	    		</View>
 				</View>
-
-				<View style = {[styles.cardShowWapper,{backgroundColor:ColorConstants.title_blue()}]}>
-
-    		</View>
-			</View>
-		)
+			)
+		}else{
+			return null
+		}
 	}
 
 	renderAddCareButton() {
 		return (
 			<TouchableOpacity
-					onPress={()=>this._onPressedAddCare()}>
+					onPress={()=>this._onPressedAddFollow()}>
 				<View style={[styles.addToCareContainer,{backgroundColor:ColorConstants.title_blue()}]}>
 					<Text style={styles.addToCareText}>
-						{this.state.isCared ? '取消关注':'+关注'}
+						{this.state.isFollowing ? '取消关注':'+关注'}
 					</Text>
 				</View>
 			</TouchableOpacity>
@@ -295,7 +418,7 @@ export default class UserHomePage extends Component{
 	render(){
 		return(
 			<View style={styles.wapper}>
-				<NavBar title='巴菲特'
+				<NavBar title={this.state.nickname==''?this.props.userName:this.state.nickname}
 				showBackButton={true}
 				navigator={this.props.navigator}
 				rightCustomContent={() => this.renderAddCareButton()}/>
@@ -478,6 +601,7 @@ const styles = StyleSheet.create({
 	userHeaderIcon:{
 		width:80,
 		height:80,
+		borderRadius:40,
 	},
 
 	userHeaderIconRound:{

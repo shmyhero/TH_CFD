@@ -151,9 +151,11 @@ function getCFDAPI(){
     GET_DEPOSIT_SETTING: CFD_API_SERVER + "/api/common/setting/deposit",
     TIMESTAMP: CFD_API_SERVER + '/api/user/live/timestamp',//LIVE ok
 
-    // GET_POSITION_CHART_PLCLOSE:CFD_API_SERVER + "/api/position/chart/plClosed",
     GET_POSITION_CHART_PLCLOSE_LIVE:CFD_API_SERVER + "/api/user/3265/live/position/chart/plClosed",
     GET_POSITION_CHART_PLCLOSE_2W_LIVE:CFD_API_SERVER + "/api/user/3265/live/position/chart/plClosed/2w",
+    GET_USER_LIVE_DETAIL:CFD_API_SERVER + "/api/user/<id>/live/detail",
+    PUT_USER_FOLLOW:CFD_API_SERVER + "/api/user/follow/<id>",//add follow
+    DEL_USER_FOLLOW:CFD_API_SERVER + "/api/user/follow/<id>",//cancel follow
   }
 }
 

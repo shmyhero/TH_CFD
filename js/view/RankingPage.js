@@ -41,7 +41,20 @@ export default class RankingPage extends Component{
 		super(props);
 		this.state = {
       rankType : RANKING_TYPE_0,
-      rankData: ds.cloneWithRows(['','','','','','','','','','','','','','','','','']),
+      rankData: ds.cloneWithRows([
+        {id:'1'},
+        {id:'2'},
+        {id:'4'},
+        {id:'19'},
+        {id:'2017'},
+        {id:'2026'},
+        {id:'2028'},
+        {id:'2030'},
+        {id:'2031'},
+        {id:'2142'},
+        {id:'2150'},
+        {id:'3265'},
+        ]),
 		}
 	}
 
@@ -70,13 +83,14 @@ export default class RankingPage extends Component{
   }
 
   _onPressedUserItem(rowData){
-    console.log('onPressedUserItem = ' + rowData);
+    console.log('_onPressedUserItem = ' + rowData.id);
     this.gotoUserHomePage(rowData);
   }
 
-  gotoUserHomePage(id) {
+  gotoUserHomePage(rowData) {
 		this.props.navigator.push({
 			name: MainPage.USER_HOME_PAGE_ROUTE,
+      userData:{userId:rowData.id,userName:'Rambo'},
 		});
 	}
 
@@ -121,7 +135,7 @@ export default class RankingPage extends Component{
     if(this.state.rankType == RANKING_TYPE_0){
       return(
         <View>
-          {this.renderRow()}
+          {/* {this._renderRow()} */}
           <View style = {{height:10,backgroundColor:'transparent'}}></View>
         </View>
       )
@@ -130,14 +144,14 @@ export default class RankingPage extends Component{
     }
   }
 
-  renderRow(rowData, sectionID, rowID, highlightRow){
+  _renderRow(rowData,sectionID,rowID){
     return(
       <TouchableHighlight onPress={()=>this._onPressedUserItem(rowData)}>
-        <View style={styles.rowData}>
+        <View style={styles.rowDataStyle}>
           <View style={{flexDirection:'row'}}>
             <Image style = {styles.userHeader} source={require('../../images/head_portrait.png')}></Image>
             <View style = {{marginLeft:2}}>
-              <Text style={[styles.userName]}>巴菲特在线</Text>
+              <Text style={[styles.userName]}>{rowData.id}</Text>
               <View style = {styles.userInfo}>
                 <Text style={styles.userInfoTitle}>胜率:</Text>
                 <Text style={styles.userWinRate}>96%</Text>
@@ -181,7 +195,7 @@ export default class RankingPage extends Component{
             dataSource={this.state.rankData}
             enableEmptySections={true}
             renderFooter={this.renderFooter}
-            renderRow={this.renderRow.bind(this)}
+            renderRow={this._renderRow.bind(this)}
             renderSeparator={this.renderSeparator}
             // onEndReached={this.onEndReached}
             removeClippedSubviews={false}/>
@@ -237,7 +251,7 @@ const styles = StyleSheet.create({
     marginTop: 14,
     color: '#afafaf'
   },
-  rowData:{
+  rowDataStyle:{
      flex:1,
      flexDirection:'row',
      height:60*heightRate,

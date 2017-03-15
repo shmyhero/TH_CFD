@@ -11,7 +11,6 @@ import {StyleSheet,
 	Alert,
 	Platform,
 	TouchableOpacity,
-
 } from 'react-native'
 
 
@@ -41,6 +40,28 @@ var CHART_TYPE_ALL = 1;
 //   nickname: 'RamboOne',
 //   picUrl: 'https://cfdstorage.blob.core.chinacloudapi.cn/user-picture/13b07850f6fa484dbc2337216acda804' }
 
+// { cardId: 1,
+//        invest: 1000,
+//        isLong: true,
+//        leverage: 50,
+//        tradePrice: 5226.63,
+//        settlePrice: 5308.38,
+//        imgUrlBig: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/brozne_large_20170306.png',
+//        imgUrlMiddle: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/brozne_middle_20170222.jpg',
+//        imgUrlSmall: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/brozne_small_20170222.jpg',
+//        reward: 1,
+//        tradeTime: '2017-02-15T23:34:10.107',
+//        ccy: 'USD',
+//        stockID: 36004,
+//        stockName: '美国科技股100',
+//        themeColor: '#af6c47',
+//        title: '独门技法',
+//        cardType: 1,
+//        pl: 782.05,
+//        plRate: 78.2053,
+//        likes: 29,
+//        shared: true,
+//        isNew: false }
 
 export default class UserHomePage extends Component{
 
@@ -199,7 +220,11 @@ export default class UserHomePage extends Component{
 	}
 
 	_onPressedAskForRank(){
-		console.log('what is rank ???')
+		this.props.navigator.push({
+			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			url: NetConstants.TRADEHERO_API.WEBVIEW_TRADE_LEVEL,
+			isShowNav: false,
+		});
 	}
 
 	_onPressedCardDetail(){
@@ -284,6 +309,9 @@ export default class UserHomePage extends Component{
 		if(!this.state.chartType==CHART_TYPE_2MONTH){
 			url = NetConstants.CFD_API.GET_POSITION_CHART_PLCLOSE_2W_LIVE
 		}
+
+		url = url.replace("<id>", this.props.userId)
+
 		var userData = LogicData.getUserData()
 		NetworkModule.fetchTHUrl(
 			url,
@@ -377,8 +405,29 @@ export default class UserHomePage extends Component{
 		}
 	}
 
+	pressCard(index){
+		console.log("pressedCard:"+index);
+	}
+
 	cardWarpperRender(){
+		var _scrollView: ScrollView;
+
 		if(this.state.cards.length>0){
+			var lastIndex = this.state.cards.length-1;
+			var cardItems = this.state.cards.map(
+			(card, i) =>
+				<TouchableOpacity onPress={() => this.pressCard(i)} key={i}>
+					<View style={[styles.cardItem,{marginRight:i==0?4:10},{marginRight:i==lastIndex?10:4}]}>
+						<Image style={styles.cardImage} source={{uri:this.state.cards[i].imgUrlMiddle}}></Image>
+						<View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
+							<Text style={{color:'#fa2c21',fontSize:14,marginBottom:5}}>{this.state.cards[i].plRate.toFixed(2)}%</Text>
+							<Text style={{color:'#3f3f3f',fontSize:14}}>{this.state.cards[i].stockName}</Text>
+						</View>
+					</View>
+				</TouchableOpacity>
+			)
+
+
 			return(
 				<View style = {styles.cardWapper}>
 					<View style={styles.cardWapperContainer}>
@@ -391,10 +440,16 @@ export default class UserHomePage extends Component{
 							</Text>
 						</TouchableOpacity>
 					</View>
-
-					<View style = {[styles.cardShowWapper,{backgroundColor:ColorConstants.title_blue()}]}>
-
-	    		</View>
+					<View style={{flexDirection:'row',
+					  backgroundColor: ColorConstants.TITLE_BLUE,}}>
+						<ScrollView
+							ref={(scrollView) => { _scrollView = scrollView; }}
+							automaticallyAdjustContentInsets={false}
+							horizontal={true}
+							style={styles.horizontalScrollView}>
+							{cardItems}
+						</ScrollView>
+					</View>
 				</View>
 			)
 		}else{
@@ -610,11 +665,6 @@ const styles = StyleSheet.create({
 		marginTop:-60,
 	},
 
-	cardShowWapper:{
-		width:width,
-		height:width*4/5,
-	},
-
 	topOneOfThree:{
 		backgroundColor:'transparent',
 		flex:1,
@@ -647,7 +697,31 @@ const styles = StyleSheet.create({
 		marginBottom:10,
 	},
 
+	cardShowWapper:{
+		width:width,
+		height:width*4/5,
+	},
 
+  horizontalScrollView: {
+		height: width*4/5,
+		width:width-20,
+  },
+
+	cardItem:{
+		width:(width-30)/2,
+		height:width*4/5-40,
+		marginTop:20,
+		marginBottom:20,
+		marginLeft:10,
+		marginRight:10,
+		backgroundColor:'white',
+		borderRadius:2,
+	},
+	cardImage:{
+		backgroundColor:'green',
+		height:(width*4/5)*2/3,
+		width:(width-30)/2
+	},
 });
 
 

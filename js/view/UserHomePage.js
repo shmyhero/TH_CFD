@@ -98,6 +98,7 @@ export default class UserHomePage extends Component{
 
 	componentDidMount(){
 		this.loadUserInfo()
+		this.loadPlCloseData()
 	}
 
 	loadUserInfo(){
@@ -216,7 +217,7 @@ export default class UserHomePage extends Component{
 		}
 		this.setState({
 			chartType:type
-		},this.loadPlCloseData())
+		},()=>this.loadPlCloseData())
 	}
 
 	_onPressedAskForRank(){
@@ -306,7 +307,7 @@ export default class UserHomePage extends Component{
 	loadPlCloseData(){
 		console.log("loadPlCloseData:start " + this.state.chartType);
 		var url = NetConstants.CFD_API.GET_POSITION_CHART_PLCLOSE_LIVE
-		if(!this.state.chartType==CHART_TYPE_2MONTH){
+		if(this.state.chartType==CHART_TYPE_2MONTH){
 			url = NetConstants.CFD_API.GET_POSITION_CHART_PLCLOSE_2W_LIVE
 		}
 
@@ -484,6 +485,7 @@ export default class UserHomePage extends Component{
 					{this.bottomWarpperRender()}
 					<View style = {styles.separator}></View>
 					{this.cardWarpperRender()}
+					<View style={{height:20,width:width}}></View>
 				</ScrollView>
 			</View>
 		);

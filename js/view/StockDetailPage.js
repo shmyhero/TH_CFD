@@ -33,7 +33,6 @@ var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
 var TalkingdataModule = require('../module/TalkingdataModule')
-//var TongDaoModule = require('../module/TongDaoModule')
 var NavBar = require('../view/NavBar')
 var InputAccessory = require('./component/InputAccessory')
 var MainPage = require('./MainPage')
@@ -46,7 +45,6 @@ var commonUtil = require('../utils/commonUtil');
 
 var tabData = [
 			{"type":NetConstants.PARAMETER_CHARTTYPE_TODAY, "name":'分时'},
-			// {"type":NetConstants.PARAMETER_CHARTTYPE_TEN_MINUTE, "name":'10分钟'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_TWO_HOUR, "name":'2小时'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_WEEK, "name":'5日'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_DAY, "name":'日K'},
@@ -61,7 +59,6 @@ var tabDataLandscopeLine = [
 			{"type":NetConstants.PARAMETER_CHARTTYPE_6_MONTH, "name":'6月'},]
 
 var tabDataLandscopeCandle = [
-			// {"type":NetConstants.PARAMETER_CHARTTYPE_TODAY_CANDLE, "name":'分时'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_1_MINUTE, "name":'1分钟'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'5分钟'},
 			{"type":NetConstants.PARAMETER_CHARTTYPE_15_MINUTE, "name":'15分钟'},
@@ -663,7 +660,6 @@ var StockDetailPage = React.createClass({
 	renderDataStatus:function(){
 		//status 0:正常 1：暂时无法获取数据 2:加载中
 		var status = this.state.dataStatus;
-		// if(WebSocketModule.isConnected()){status=0}
 		var imageError = LogicData.getAccountState()?require('../../images/icon_network_connection_error_live.png'):require('../../images/icon_network_connection_error.png')
 		if(status === 1){
 			return (
@@ -739,16 +735,6 @@ var StockDetailPage = React.createClass({
 					</LineChart>
 				)
 			}else{
-				/*
-				public static int CHART_BORDER_COLOR = 0xff497bce;
-		    public static int CHART_LINE_COLOR = 0Xff759de2;
-		    public static int CHART_LINE_COLOR2 = 0Xff1d4fa2;
-		    public static int CHART_TEXT_COLOR = 0Xff70a5ff;
-				*/
-
-/// {"type":NetConstants.PARAMETER_CHARTTYPE_DAY, "name":'日K'},
-// {"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'5分钟'},
-//		if(this.state.orientation == ORIENTATION_PORTRAIT)
 				var rightAxisDrawGridLines = this.state.orientation == ORIENTATION_LANDSPACE && NetConstants.isCandleChart(this.state.chartType);
 			 	var textColor, backgroundColor, borderColor, lineChartGradient;
 				if(this.state.orientation == ORIENTATION_PORTRAIT){
@@ -807,7 +793,6 @@ var StockDetailPage = React.createClass({
 						{this.renderChartHeader()}
 
 						<View style={{flex: 3.5,marginTop:5,marginLeft:viewMargin,marginRight:viewMargin}}>
-							{/* {this.renderOrientationClicker()} */}
 							{this.renderChart()}
 							{this.renderDataStatus()}
 						</View>
@@ -870,15 +855,6 @@ var StockDetailPage = React.createClass({
    		</View>
 		)
 	},
-
-	// renderOrientationClicker:function(){
-	// 	return(
-	// 		<TouchableOpacity
-	// 			onPress={()=>this.changeOrientatioin()}
-	// 			style={[styles.dataStatus,{backgroundColor:'transparent'}]}>
-	// 		</TouchableOpacity>
-	// 	)
-	// },
 
 	chartClicked:function(){
 		this.changeOrientatioin()
@@ -1073,11 +1049,6 @@ var StockDetailPage = React.createClass({
 			onNavigationStateChange: this.onWebViewNavigationStateChange,
 			url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
 			// url:'http://cn.tradehero.mobi/tradehub/login.html'
-			// url:'http://www.baidu.com'
-			// url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
-			// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
-			// url:'https://www.tradehub.net/demo/ff-beta/tradehero-login-debug.html',
-			// url:'http://cn.tradehero.mobi/TH_CFD_WEB/bangdan1.html',
 		});
 
 	},

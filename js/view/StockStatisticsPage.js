@@ -330,6 +330,7 @@ var StockStatisticsPage = React.createClass({
 			avgPlRate = (sumInvest > 0) ? sumPl / sumInvest * 100: 0
 			sumPl = sumPl.toFixed(2)
 			avgPlRate = avgPlRate.toFixed(2)
+			sumInvest = sumInvest.toFixed(2)
 		}
 		return (
 			<View style={styles.center}>
@@ -337,6 +338,12 @@ var StockStatisticsPage = React.createClass({
 					<View style={styles.empty}/>
 					<Text style={styles.centerText1}>近1月收益(美元)</Text>
 					<Text style={[styles.centerText2,{color:LogicData.getAccountState()?'#85b1fb':'#1962dd'}]}>{sumPl}</Text>
+					<View style={styles.empty}/>
+				</View>
+				<View style={styles.centerView}>
+					<View style={styles.empty}/>
+					<Text style={styles.centerText1}>近1月交易本金(美元)</Text>
+					<Text style={[styles.centerText2,{color:LogicData.getAccountState()?'#85b1fb':'#1962dd'}]}>{sumInvest}</Text>
 					<View style={styles.empty}/>
 				</View>
 				<View style={styles.centerView}>
@@ -511,11 +518,11 @@ var styles = StyleSheet.create({
 		justifyContent: 'space-around',
 	},
 	centerText1: {
-		fontSize: 14,
+		fontSize: 10,
 		color: '#8a95a5',
 	},
 	centerText2: {
-		fontSize: 29,
+		fontSize: 22,
 		color: '#1962dd',
 	},
 

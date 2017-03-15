@@ -89,7 +89,8 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
         }
         let width = chartWidth()
         let height = chartHeight()
-		
+		print ("width: ", width, "height: ", height)
+        
 		if _lineData.count == 1 {
 			// only 1 point data, duplicate it.(one line need two points)
 			_lineData.append(_lineData[0])

@@ -1164,6 +1164,8 @@ var StockOpenPositionPage = React.createClass({
 		var disabled = false
 		if (type === 2) {
 			if (endPercent < MAX_LOSS_PERCENT) {
+				// max visible percent should be not less than MAX_LOSS_PERCENT(-90)
+				endPercent = MAX_LOSS_PERCENT
 				startPercent = endPercent
 				disabled = true
 			}
@@ -1235,6 +1237,7 @@ var StockOpenPositionPage = React.createClass({
 		var endPercent = MAX_LOSS_PERCENT
 
 		if (type === 1) {
+			// stop profit
 			startPercent = this.priceToPercentWithRow(rowData.security.last, rowData, type)
 			// use gsmd to make sure this order is guaranteed.
 			startPercent += rowData.security.smd*100*rowData.leverage
@@ -1248,6 +1251,7 @@ var StockOpenPositionPage = React.createClass({
 				stopProfitPercent = percent
 			}
 		} else{
+			// stop loss
 			startPercent = MAX_LOSS_PERCENT
 			endPercent = this.priceToPercentWithRow(rowData.security.last, rowData, type)
 			// use smd to make sure this order is guaranteed.

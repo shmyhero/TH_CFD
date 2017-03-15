@@ -117,7 +117,7 @@ class StockChartView: UIView {
             self.setNeedsDisplay()
         }
         else {
-            print ("setup chart:", self.bounds, self.frame)
+//            print ("setup chart:", self.bounds, self.frame)
             if CandleChartDataSource.isValidData(data!) {
                 dataSource = CandleChartDataSource.init(json:data!, rect: self.bounds)
             }

@@ -90,6 +90,7 @@ export default class UserHomePage extends Component{
 			totalPl:0,
 			picUrl:undefined,
 			isFollowing:false,
+			titleOpacity:0,
 		}
 
 		console.log("defaultProps userId is "+this.props.userId);
@@ -471,22 +472,60 @@ export default class UserHomePage extends Component{
 		)
 	}
 
+	renderEmptyBottom(){
+		if(Platform.OS === "ios"){
+			return null
+		}else{
+			return(
+				<View style={{height:20,width:width}}></View>
+			)
+		}
+	}
+
+	handleScroll(event: Object) {
+		var opt = Math.min(Math.abs(event.nativeEvent.contentOffset.y),100)
+		opt /= 100; 
+		this.setState({
+			titleOpacity:opt
+		})
+	}
+
 	render(){
 		return(
 			<View style={styles.wapper}>
-				<NavBar title={this.state.nickname==''?this.props.userName:this.state.nickname}
-				showBackButton={true}
-				navigator={this.props.navigator}
-				rightCustomContent={() => this.renderAddCareButton()}/>
-				<ScrollView>
-				 	{this.topWarpperRender()}
-					{this.middleWarpperRender()}
-					<View style = {styles.separator}></View>
-					{this.bottomWarpperRender()}
-					<View style = {styles.separator}></View>
-					{this.cardWarpperRender()}
-					<View style={{height:20,width:width}}></View>
-				</ScrollView>
+
+				<View style={{position:'absolute',width:width,height:height,backgroundColor:'#425a85'}}>
+
+    		</View>
+
+				<View style={{position:'absolute',width:width,height:height}}>
+					<ScrollView
+						showsHorizontalScrollIndicator={false}
+				 		onScroll={(event)=>this.handleScroll(event)}
+						scrollEventThrottle={16}>
+					 	{this.topWarpperRender()}
+						{this.middleWarpperRender()}
+						<View style = {styles.separator}></View>
+						{this.bottomWarpperRender()}
+						<View style = {styles.separator}></View>
+						{this.cardWarpperRender()}
+						{this.renderEmptyBottom()}
+					</ScrollView>
+				</View>
+
+
+				<View style={{opacity:this.state.titleOpacity,position:'absolute',backgroundColor:'#425a85',width:width,height:60}}>
+
+				</View>
+
+				<View style={{position:'absolute',width:width,height:60}}>
+					<NavBar title={this.state.nickname==''?this.props.userName:this.state.nickname}
+					showBackButton={true}
+					backgroundColor={'transparent'}
+					navigator={this.props.navigator}
+					rightCustomContent={() => this.renderAddCareButton()}/>
+				</View>
+
 			</View>
 		);
 	}
@@ -527,7 +566,7 @@ const styles = StyleSheet.create({
 
 	topWapper:{
 		width:width,
-		height:160,
+		height:220,
 		flexDirection:'row',
 	},
 
@@ -546,7 +585,7 @@ const styles = StyleSheet.create({
 	separator:{
 		width:width,
 		height:10,
-		backgroundColor:'transparent',
+		backgroundColor:'#f3f3f5',
 	},
 
 	cardWapper:{

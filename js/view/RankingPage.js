@@ -49,6 +49,7 @@ export default class RankingPage extends Component{
 		this.state = {
       rankType : RANKING_TYPE_0,
       rankData: ds.cloneWithRows([]),
+      rankDataFollowing:ds.cloneWithRows([]),
 		}
 	}
 
@@ -85,12 +86,15 @@ export default class RankingPage extends Component{
   gotoUserHomePage(rowData) {
 		this.props.navigator.push({
 			name: MainPage.USER_HOME_PAGE_ROUTE,
-      userData:{userId:rowData.id,userName:'Rambo'},
+      userData:{userId:rowData.id,userName:rowData.username},
 		});
 	}
 
   getRankList(){
     var url = NetConstants.CFD_API.GET_RANK_LIVE_PLCLOSED_2W
+    if(this.state.rankType == RANKING_TYPE_1){
+      url = NetConstants.CFD_API.GET_RANK_LIVE_FOLLOWING_2W
+    }
 		var userData = LogicData.getUserData()
 
 		NetworkModule.fetchTHUrl(
@@ -104,15 +108,25 @@ export default class RankingPage extends Component{
 			},
 			(responseJson) => {
 				 console.log(responseJson);
-         this.setState({
-           rankData:ds.cloneWithRows(responseJson),
-         })
+          if(this.isRankingType0()){
+            this.setState({
+                rankData:ds.cloneWithRows(responseJson),
+            })
+          }else{
+            this.setState({
+              rankDataFollowing:ds.cloneWithRows(responseJson),
+            })
+          }
 			},
 			(result) => {
 
 			},
 			true
 		)
+  }
+
+  isRankingType0(){
+    return this.state.rankType == RANKING_TYPE_0
   }
 
   onTabChanged(){
@@ -152,42 +166,52 @@ export default class RankingPage extends Component{
     )
   }
 
-  renderMyRank(){
-    if(this.state.rankType == RANKING_TYPE_0){
-      return(
-        <View>
-          {/* {this._renderRow()} */}
-          <View style = {{height:10,backgroundColor:'transparent'}}></View>
-        </View>
-      )
+  renderMyRankBottomView(id){
+    if(this.state.rankType == RANKING_TYPE_1){
+      return null
     }else{
-      return null;
+      if(id==0){
+        return(
+          <View style = {{height:8,backgroundColor:'transparent'}}></View>
+        )
+      }else{
+        return null
+      }
     }
   }
 
   _renderRow(rowData,sectionID,rowID){
     var rate = (rowData.winRate*100).toFixed(2)
     var roi = (rowData.roi*100).toFixed(2)
+    var head = (rowData.picUrl)
+    if(head){
+      head = {uri:head}
+    }else{
+      head = require('../../images/head_portrait.png')
+    }
     return(
       <TouchableHighlight onPress={()=>this._onPressedUserItem(rowData)}>
-        <View style={styles.rowDataStyle}>
-          <View style={{flexDirection:'row'}}>
-            <Image style = {styles.userHeader} source={require('../../images/head_portrait.png')}></Image>
-            <View style = {{marginLeft:2}}>
-              <Text style={[styles.userName]}>{rowData.nickname}</Text>
-              <View style = {styles.userInfo}>
-                <Text style={styles.userInfoTitle}>胜率:</Text>
-                <Text style={styles.userWinRate}>{rate}%</Text>
-                <Text style={[styles.userInfoTitle,{marginLeft:10}]}>平仓笔数:</Text>
-                <Text style={styles.userWinRate}>{rowData.posCount}</Text>
+        <View>
+          <View style={styles.rowDataStyle}>
+            <View style={{flexDirection:'row',}}>
+              <Image style = {styles.userHeader} source={head}></Image>
+              <View style = {{marginLeft:2}}>
+                <Text style={[styles.userName]}>{rowData.nickname}</Text>
+                <View style = {styles.userInfo}>
+                  <Text style={styles.userInfoTitle}>胜率:</Text>
+                  <Text style={styles.userWinRate}>{rate}%</Text>
+                  <Text style={[styles.userInfoTitle,{marginLeft:10}]}>平仓笔数:</Text>
+                  <Text style={styles.userWinRate}>{rowData.posCount}</Text>
+                </View>
+              </View>
+            </View>
+            <View>
+              <View style = {[styles.rateArea,{backgroundColor:roi<0?ColorConstants.STOCK_DOWN_GREEN:'#c24a17'}]}>
+                <Text style = {styles.rateText}>{roi}%</Text>
               </View>
             </View>
           </View>
-          <View>
-            <View style = {styles.rateArea}>
-              <Text style = {styles.rateText}>{roi}%</Text>
-            </View>
-          </View>
+          {this.renderMyRankBottomView(rowID)}
         </View>
       </TouchableHighlight>
     )
@@ -208,20 +232,42 @@ export default class RankingPage extends Component{
     )
 	}
 
-  renderRankList(){
+  renderListView(){
+    if(this.isRankingType0()){
+      return (
+          <ListView
+          style={styles.list}
+          ref="listview"
+          initialListSize={11}
+          dataSource={this.state.rankData}
+          enableEmptySections={true}
+          renderFooter={this.renderFooter}
+          renderRow={this._renderRow.bind(this)}
+          renderSeparator={this.renderSeparator}
+          // onEndReached={this.onEndReached}
+          removeClippedSubviews={false}/>
+      )
+    }else{
       return(
-        <View style = {{flex:1}}>
           <ListView
             style={styles.list}
             ref="listview"
             initialListSize={11}
-            dataSource={this.state.rankData}
+            dataSource={this.state.rankDataFollowing}
             enableEmptySections={true}
             renderFooter={this.renderFooter}
             renderRow={this._renderRow.bind(this)}
             renderSeparator={this.renderSeparator}
             // onEndReached={this.onEndReached}
             removeClippedSubviews={false}/>
+      )
+    }
+  }
+
+  renderRankList(){
+      return(
+        <View style = {{flex:1}}>
+          {this.renderListView()}
         </View>
       )
   }
@@ -231,7 +277,7 @@ export default class RankingPage extends Component{
       <View style={styles.wapper}>
         {this.renderHead()}
         {this.renderTopSticker()}
-        {this.renderMyRank()}
+        {/* {this.renderMyRank()} */}
         {this.renderRankList()}
       </View>
 		);
@@ -263,6 +309,8 @@ const styles = StyleSheet.create({
   list: {
 		flex: 1,
 		alignSelf: 'stretch',
+    position:'absolute',
+    height:height-90
 	},
 
 	emptyContent: {
@@ -320,11 +368,12 @@ const styles = StyleSheet.create({
     width:40,
     height:40,
     marginLeft:10,
+    borderRadius:20,
   },
   rateArea:{
     width:100,
     height:30,
-    backgroundColor:'#c24a17',
+    // backgroundColor:'#c24a17',
     marginRight:10,
     alignItems:'flex-end',
     justifyContent:'center',

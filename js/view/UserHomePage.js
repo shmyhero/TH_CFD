@@ -66,7 +66,7 @@ var CHART_TYPE_ALL = 1;
 export default class UserHomePage extends Component{
 
 	static propTypes = {
-    userId: PropTypes.string.isRequired,
+    userId: PropTypes.number.isRequired,
 		userName: PropTypes.string.isRequired,
   }
 
@@ -93,8 +93,6 @@ export default class UserHomePage extends Component{
 			titleOpacity:0,
 		}
 
-		console.log("defaultProps userId is "+this.props.userId);
-		console.log("defaultProps userName is "+this.props.userName);
 	}
 
 	componentDidMount(){
@@ -137,21 +135,30 @@ export default class UserHomePage extends Component{
 	}
 
 	topWarpperRender(){
+		var head = (this.state.picUrl)
+    if(head){
+      head = {uri:head}
+    }else{
+      head = require('../../images/head_portrait.png')
+    }
 		return(
 			<Image style = {[styles.topWapper,{backgroundColor:ColorConstants.title_blue()}]} source={require('../../images/bgbanner.jpg')}>
 
 				<View style = {styles.topOneOfThree}>
+					<View style={{marginTop:40}}></View>
     			<Text style = {{fontSize:36,backgroundColor:'transparent',color:'white'}}>{this.state.followerCount}</Text>
 					<Text style = {{fontSize:12,backgroundColor:'transparent',color:'white'}}>关注数</Text>
     		</View>
 
 				<View style = {styles.topOneOfThree}>
-						<Image style = {styles.userHeaderIcon} source={{uri:this.state.picUrl}}></Image>
+						<View style={{marginTop:40}}></View>
+						<Image style = {styles.userHeaderIcon} source={head}></Image>
 						{/* <Image style = {styles.userHeaderIcon} source={require('../../images/head_portrait.png')}></Image> */}
 						{/* <Image style = {styles.userHeaderIconRound} source={require('../../images/head_gd.png')}></Image> */}
 				</View>
 
 				<View style = {styles.topOneOfThree}>
+					<View style={{marginTop:40}}></View>
 					<Text style = {{fontSize:36,backgroundColor:'transparent',color:'white'}}>{this.state.cards.length}</Text>
 					<Text style = {{fontSize:12,backgroundColor:'transparent',color:'white'}}>卡片数</Text>
 				</View>
@@ -484,7 +491,7 @@ export default class UserHomePage extends Component{
 
 	handleScroll(event: Object) {
 		var opt = Math.min(Math.abs(event.nativeEvent.contentOffset.y),100)
-		opt /= 100; 
+		opt /= 100;
 		this.setState({
 			titleOpacity:opt
 		})

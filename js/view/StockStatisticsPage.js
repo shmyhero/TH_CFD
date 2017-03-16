@@ -359,7 +359,7 @@ var StockStatisticsPage = React.createClass({
 	renderChartHeader: function() {
 		return (
 			<View style={styles.chartHeader}>
-				<View style={styles.centerView}>
+				<View style={styles.centerView2}>
 					<Text style={styles.chartHeaderText1}>累计收益</Text>
 				</View>
 				<View style={styles.chartHeaderRightPart}>
@@ -513,6 +513,11 @@ var styles = StyleSheet.create({
 		flexDirection: 'row',
 	},
 	centerView: {
+		flex: 1,
+		justifyContent: 'space-around',
+		alignItems:'center'
+	},
+	centerView2: {
 		flex: 1,
 		paddingLeft: 15,
 		justifyContent: 'space-around',

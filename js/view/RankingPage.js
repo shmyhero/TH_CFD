@@ -30,7 +30,7 @@ var ColorConstants = require('../ColorConstants')
 var MainPage = require('./MainPage')
 
 var didTabSelectSubscription = null
-
+const NETWORK_ERROR_INDICATOR = "networkErrorIndicator";
 var RANKING_TYPE_0 = 0;
 var RANKING_TYPE_1 = 1;
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -47,6 +47,8 @@ export default class RankingPage extends Component{
 	constructor(props){
 		super(props);
 		this.state = {
+      contentLoaded: false,
+			isRefreshing: true,
       rankType : RANKING_TYPE_0,
       rankData: ds.cloneWithRows([]),
       rankDataFollowing:ds.cloneWithRows([]),
@@ -91,6 +93,12 @@ export default class RankingPage extends Component{
 	}
 
   getRankList(){
+    if(!this.state.contentLoaded){
+			this.setState({
+				isRefreshing: true,
+			});
+		}
+
     var url = NetConstants.CFD_API.GET_RANK_LIVE_PLCLOSED_2W
     if(this.state.rankType == RANKING_TYPE_1){
       url = NetConstants.CFD_API.GET_RANK_LIVE_FOLLOWING_2W
@@ -111,15 +119,23 @@ export default class RankingPage extends Component{
           if(this.isRankingType0()){
             this.setState({
                 rankData:ds.cloneWithRows(responseJson),
+                contentLoaded: true,
+                isRefreshing: false,
             })
           }else{
             this.setState({
-              rankDataFollowing:ds.cloneWithRows(responseJson),
+                rankDataFollowing:ds.cloneWithRows(responseJson),
+                contentLoaded: true,
+                isRefreshing: false,
             })
           }
 			},
 			(result) => {
-
+        this.setState({
+          contentLoaded: false,
+          isRefreshing: false,
+        })
+        this.refs[NETWORK_ERROR_INDICATOR] && this.refs[NETWORK_ERROR_INDICATOR].stopRefresh();
 			},
 			true
 		)
@@ -232,36 +248,47 @@ export default class RankingPage extends Component{
     )
 	}
 
+  refreshData(forceRefetch){
+    this.getRankList()
+  }
+
   renderListView(){
-    if(this.isRankingType0()){
-      return (
-          <ListView
-          style={styles.list}
-          ref="listview"
-          initialListSize={11}
-          dataSource={this.state.rankData}
-          enableEmptySections={true}
-          renderFooter={this.renderFooter}
-          renderRow={this._renderRow.bind(this)}
-          renderSeparator={this.renderSeparator}
-          // onEndReached={this.onEndReached}
-          removeClippedSubviews={false}/>
-      )
-    }else{
-      return(
-          <ListView
+    if(!this.state.contentLoaded){
+			return (
+				<NetworkErrorIndicator onRefresh={()=>this.refreshData(true)} ref={NETWORK_ERROR_INDICATOR} refreshing={this.state.isRefreshing}/>
+			)
+		}else{
+      if(this.isRankingType0()){
+        return (
+            <ListView
             style={styles.list}
             ref="listview"
             initialListSize={11}
-            dataSource={this.state.rankDataFollowing}
+            dataSource={this.state.rankData}
             enableEmptySections={true}
             renderFooter={this.renderFooter}
             renderRow={this._renderRow.bind(this)}
             renderSeparator={this.renderSeparator}
             // onEndReached={this.onEndReached}
             removeClippedSubviews={false}/>
-      )
+        )
+      }else{
+        return(
+            <ListView
+              style={styles.list}
+              ref="listview"
+              initialListSize={11}
+              dataSource={this.state.rankDataFollowing}
+              enableEmptySections={true}
+              renderFooter={this.renderFooter}
+              renderRow={this._renderRow.bind(this)}
+              renderSeparator={this.renderSeparator}
+              // onEndReached={this.onEndReached}
+              removeClippedSubviews={false}/>
+        )
+      }
     }
+
   }
 
   renderRankList(){

@@ -121,6 +121,8 @@ function getCFDAPI(){
     ID_CHECK: CFD_API_SERVER + '/api/user/faceCheck', //验证身份证正确性
     USER_ACTUAL_LOGOUT: CFD_API_SERVER + '/api/user/live/logout',
 
+    UPLOAD_ADDRESS_PHOTO: CFD_API_SERVER + '/api/user/live/poa', //身份证OCR
+
     GET_USER_LIVE_CARDS:CFD_API_SERVER + '/api/card/my',//我的卡片
     GET_HOME_CARDS:CFD_API_SERVER + '/api/card/top',//首页卡片
     SET_CARD_READ: CFD_API_SERVER + '/api/card/<id>',

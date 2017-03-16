@@ -127,46 +127,45 @@ var OAAddressPhotoPage = React.createClass({
 		InteractionManager.runAfterInteractions(() => {
 			if (this.state.addressPhotoData != null) {
 				var userData = LogicData.getUserData();
-        // todo
-        OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
-				// NetworkModule.fetchTHUrl(
-				// 	NetConstants.CFD_API.ID_CARD_OCR,
-				// 	{
-				// 		method: 'POST',
-				// 		body: JSON.stringify({
-				// 			frontImg: this.state.addressPhotoData,
-				// 			frontImgExt: 'jpg',
-				// 		}),
-				// 		headers: {
-				// 			'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-				// 			'Content-Type': 'application/json; charset=utf-8',
-				// 		},
-				// 		showLoading: true,
-				// 	},
-				// 	(responseJson) => {
-				// 		this.setState({
-				// 			nextEnabled: true,
-				// 			validateInProgress: false,
-				// 		})
-        //
-				// 		if (responseJson.result == 0) {
-				// 			var dataList = OpenAccountUtils.getAyondoValuesFromGZTValue(responseJson);
-				// 			OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop, dataList);
-				// 		} else {
-				// 			console.log("ocr failed. error: " + JSON.stringify(decodeURIComponent(responseJson.message)))
-				// 			this.setState({
-				// 				error: "图片识别失败，请重新上传图片"
-				// 			});
-				// 		}
-				// 	},
-				// 	(result) => {
-				// 		this.setState({
-				// 			nextEnabled: true,
-				// 			validateInProgress: false,
-				// 			error: result.errorMessage
-				// 		});
-				// 	}
-				// )
+
+				NetworkModule.fetchTHUrl(
+					NetConstants.CFD_API.UPLOAD_ADDRESS_PHOTO,
+					{
+						method: 'POST',
+						body: JSON.stringify({
+							imageBase64: this.state.addressPhotoData,
+							text: 'jpg',
+						}),
+						headers: {
+							'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+							'Content-Type': 'application/json; charset=utf-8',
+						},
+						showLoading: true,
+					},
+					(responseJson) => {
+						this.setState({
+							nextEnabled: true,
+							validateInProgress: false,
+						})
+
+						if (responseJson.success) {
+							var dataList = OpenAccountUtils.getAyondoValuesFromGZTValue(responseJson);
+							OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop, dataList);
+						} else {
+							console.log("upload address photo failed. error: " + JSON.stringify(decodeURIComponent(responseJson.message)))
+							this.setState({
+								error: "图片上传失败，请重新上传图片"
+							});
+						}
+					},
+					(result) => {
+						this.setState({
+							nextEnabled: true,
+							validateInProgress: false,
+							error: result.errorMessage
+						});
+					}
+				)
 			} else {
 				OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
 			}

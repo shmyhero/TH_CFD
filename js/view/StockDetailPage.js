@@ -873,7 +873,7 @@ var StockDetailPage = React.createClass({
 	},
 
 	renderBottomViewType:function(){
-		var isLive = LogicData.getAccountState;
+		var isLive = LogicData.getAccountState();
 		var imageType0 = this.state.chartViewType == CHARTVIEWTYPE_LINE ? require('../../images/icon_chart_type_line_selected.png'):(isLive?require('../../images/icon_chart_type_line_unselected_live.png'):require('../../images/icon_chart_type_line_unselected.png'));
 		var imageType1 = this.state.chartViewType == CHARTVIEWTYPE_CANDLE ? require('../../images/icon_chart_type_candle_selected.png'):(isLive?require('../../images/icon_chart_type_candle_unselected_live.png'):require('../../images/icon_chart_type_candle_unselected.png'));
 

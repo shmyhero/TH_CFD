@@ -34,6 +34,13 @@ var didTabSelectSubscription = null
 var RANKING_TYPE_0 = 0;
 var RANKING_TYPE_1 = 1;
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+//
+// { roi: 0,
+//     posCount: 0,
+//     winRate: 0,
+//     id: 3235,
+//     nickname: 'nexus52',
+//     picUrl: 'https://cfdstorage.blob.core.chinacloudapi.cn/user-picture/9f5661d8e8084fc9a9ca28b240a4e82f' },
 
 export default class RankingPage extends Component{
 
@@ -41,25 +48,13 @@ export default class RankingPage extends Component{
 		super(props);
 		this.state = {
       rankType : RANKING_TYPE_0,
-      rankData: ds.cloneWithRows([
-        {id:'1'},
-        {id:'2'},
-        {id:'4'},
-        {id:'19'},
-        {id:'2017'},
-        {id:'2026'},
-        {id:'2028'},
-        {id:'2030'},
-        {id:'2031'},
-        {id:'2142'},
-        {id:'2150'},
-        {id:'3265'},
-        ]),
+      rankData: ds.cloneWithRows([]),
 		}
 	}
 
 	componentDidMount(){
     didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.EXCHANGE_TAB_PRESS_EVENT, this.onTabChanged);
+    this.getRankList();
 	}
 
   componentWillUnmount() {
@@ -79,7 +74,7 @@ export default class RankingPage extends Component{
     console.log('rankType = ' + rankSelected);
     this.setState({
       rankType : rankSelected
-    })
+    },()=>{this.getRankList()})
   }
 
   _onPressedUserItem(rowData){
@@ -93,6 +88,32 @@ export default class RankingPage extends Component{
       userData:{userId:rowData.id,userName:'Rambo'},
 		});
 	}
+
+  getRankList(){
+    var url = NetConstants.CFD_API.GET_RANK_LIVE_PLCLOSED_2W
+		var userData = LogicData.getUserData()
+
+		NetworkModule.fetchTHUrl(
+			url,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Content-Type': 'application/json; charset=utf-8',
+				},
+			},
+			(responseJson) => {
+				 console.log(responseJson);
+         this.setState({
+           rankData:ds.cloneWithRows(responseJson),
+         })
+			},
+			(result) => {
+
+			},
+			true
+		)
+  }
 
   onTabChanged(){
 	  LogicData.setTabIndex(MainPage.RANKING_TAB_INDEX);
@@ -145,24 +166,26 @@ export default class RankingPage extends Component{
   }
 
   _renderRow(rowData,sectionID,rowID){
+    var rate = (rowData.winRate*100).toFixed(2)
+    var roi = (rowData.roi*100).toFixed(2)
     return(
       <TouchableHighlight onPress={()=>this._onPressedUserItem(rowData)}>
         <View style={styles.rowDataStyle}>
           <View style={{flexDirection:'row'}}>
             <Image style = {styles.userHeader} source={require('../../images/head_portrait.png')}></Image>
             <View style = {{marginLeft:2}}>
-              <Text style={[styles.userName]}>{rowData.id}</Text>
+              <Text style={[styles.userName]}>{rowData.nickname}</Text>
               <View style = {styles.userInfo}>
                 <Text style={styles.userInfoTitle}>胜率:</Text>
-                <Text style={styles.userWinRate}>96%</Text>
+                <Text style={styles.userWinRate}>{rate}%</Text>
                 <Text style={[styles.userInfoTitle,{marginLeft:10}]}>平仓笔数:</Text>
-                <Text style={styles.userWinRate}>12</Text>
+                <Text style={styles.userWinRate}>{rowData.posCount}</Text>
               </View>
             </View>
           </View>
           <View>
             <View style = {styles.rateArea}>
-              <Text style = {styles.rateText}>120.12%</Text>
+              <Text style = {styles.rateText}>{roi}%</Text>
             </View>
           </View>
         </View>

@@ -57,7 +57,7 @@ class StockChartView: UIView {
 		if dataSource != nil {
 			let translation : CGPoint = sender.translationInView(self)
 			dataSource!.panTranslation(translation, isEnd: sender.state == UIGestureRecognizerState.Ended)
-			dataSource!.calculateData()
+//			dataSource!.calculateData()
 			self.setNeedsDisplay()
 		}
 	}
@@ -66,7 +66,7 @@ class StockChartView: UIView {
 		if dataSource != nil {
 			let scale : CGFloat = sender.scale
 			dataSource!.pinchScale(scale, isEnd: sender.state == UIGestureRecognizerState.Ended)
-			dataSource!.calculateData()
+//			dataSource!.calculateData()
 			self.setNeedsDisplay()
 		}
 	}
@@ -113,7 +113,7 @@ class StockChartView: UIView {
         else if self.data == "undefined" {
             dataSource = BaseDataSource.init(json: "", rect: self.bounds)
             dataSource?.setChartType(chartType)
-            dataSource?.calculateData()
+//            dataSource?.calculateData()
             self.setNeedsDisplay()
         }
         else {
@@ -129,7 +129,7 @@ class StockChartView: UIView {
             }
            
             dataSource?.setChartType(chartType)
-            dataSource?.calculateData()
+//            dataSource?.calculateData()
             self.setNeedsDisplay()
         }
     }
@@ -139,7 +139,7 @@ class StockChartView: UIView {
 			// sometimes when the data is updated, the view do not finished inited.
 			// so need to recalculate again.
 			dataSource?._rect = self.bounds
-			dataSource?.calculateData()
+//			dataSource?.calculateData()
 		}
 	}
 	
@@ -155,11 +155,13 @@ class StockChartView: UIView {
 			if dataSource!.isKindOfClass(CandleChartDataSource) {
 				render = CandleChartRender.init(view: self)
 //				render?.dataProvider = dataSource
+                dataSource!.calculateData(rect)
 				render!.render(context)
 			}
 			else {
 				render = LineChartRender.init(view: self)
 //				render?.dataProvider = dataSource
+                dataSource!.calculateData(rect)
 				render!.render(context)
 			}
 		}

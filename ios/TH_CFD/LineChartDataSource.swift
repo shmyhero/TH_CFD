@@ -80,15 +80,17 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 		return _lineData.isEmpty
 	}
 	
-	override func calculateData() {
+	override func calculateData(rect:CGRect) {
 		if _chartType == "undefined" {
 			return
-		}
+        }
+        _rect = rect
 		if (_rect == CGRectZero || _lineData.isEmpty) {
 			return
         }
         let width = chartWidth()
         let height = chartHeight()
+        print ("portrait:", AppDelegate.isPortrait())
 		print ("width: ", width, "height: ", height)
         
 		if _lineData.count == 1 {

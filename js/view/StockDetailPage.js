@@ -181,7 +181,7 @@ var StockDetailPage = React.createClass({
 	},
 
 	onLayoutSizeChanged: function(){
-
+		// only huawei phones
 		var routes = this.props.navigator.getCurrentRoutes();
 		if(routes && routes[routes.length-1]
 			&& routes[routes.length-1].name == MainPage.STOCK_DETAIL_ROUTE){

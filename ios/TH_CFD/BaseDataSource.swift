@@ -62,7 +62,7 @@ class BaseDataSource: NSObject, BaseDataProvider {
 		return _data.isEmpty
 	}
 	
-	func calculateData() {
+    func calculateData(rect:CGRect) {
 		
 	}
 	

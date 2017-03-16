@@ -106,10 +106,11 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		return _candleData.isEmpty
 	}
 	
-	override func calculateData() {
+	override func calculateData(rect:CGRect) {
 		if _chartType == "undefined" {
 			return
 		}
+        _rect = rect
 		if (_rect == CGRectZero || _candleData.isEmpty) {
 			return
         }

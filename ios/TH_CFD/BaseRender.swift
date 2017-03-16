@@ -7,7 +7,6 @@
 //
 
 class BaseRender: NSObject {
-//	var _rect:CGRect = CGRectMake(0, 0, 0, 0)
 	let _segment = 6
 	var _colorSet:ColorSet
 	var _renderView:StockChartView
@@ -18,7 +17,6 @@ class BaseRender: NSObject {
     var _rightPadding:CGFloat = 0.0
 	
 	init(view:StockChartView) {
-//		_rect = rect
 		_renderView = view
 		_colorSet = view.colorSet
 		dataProvider = view.dataSource

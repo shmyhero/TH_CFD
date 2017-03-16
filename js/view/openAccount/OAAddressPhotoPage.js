@@ -149,8 +149,8 @@ var OAAddressPhotoPage = React.createClass({
 						})
 
 						if (responseJson.success) {
-							var dataList = OpenAccountUtils.getAyondoValuesFromGZTValue(responseJson);
-							OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop, dataList);
+							// var dataList = OpenAccountUtils.getAyondoValuesFromGZTValue(responseJson);
+							OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
 						} else {
 							console.log("upload address photo failed. error: " + JSON.stringify(decodeURIComponent(responseJson.message)))
 							this.setState({

@@ -121,13 +121,13 @@ export default class RankingPage extends Component{
                 rankData:ds.cloneWithRows(responseJson),
                 contentLoaded: true,
                 isRefreshing: false,
-            })
+            },()=>this.refs['listview'].scrollTo({x:0,y:0,false}))
           }else{
             this.setState({
                 rankDataFollowing:ds.cloneWithRows(responseJson),
                 contentLoaded: true,
                 isRefreshing: false,
-            })
+            },()=>this.refs['listview2'].scrollTo({x:0,y:0,false}))
           }
 			},
 			(result) => {
@@ -263,28 +263,26 @@ export default class RankingPage extends Component{
             <ListView
             style={styles.list}
             ref="listview"
-            initialListSize={11}
+            // initialListSize={11}
             dataSource={this.state.rankData}
             enableEmptySections={true}
             renderFooter={this.renderFooter}
             renderRow={this._renderRow.bind(this)}
             renderSeparator={this.renderSeparator}
-            // onEndReached={this.onEndReached}
-            removeClippedSubviews={false}/>
+            removeClippedSubviews={true}/>
         )
       }else{
         return(
             <ListView
               style={styles.list}
-              ref="listview"
-              initialListSize={11}
+              ref="listview2"
+              // initialListSize={11}
               dataSource={this.state.rankDataFollowing}
               enableEmptySections={true}
               renderFooter={this.renderFooter}
               renderRow={this._renderRow.bind(this)}
               renderSeparator={this.renderSeparator}
-              // onEndReached={this.onEndReached}
-              removeClippedSubviews={false}/>
+              removeClippedSubviews={true}/>
         )
       }
     }
@@ -337,7 +335,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignSelf: 'stretch',
     position:'absolute',
-    height:height-90
+    height:height-90-UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
 	},
 
 	emptyContent: {

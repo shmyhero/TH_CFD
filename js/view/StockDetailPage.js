@@ -1651,7 +1651,7 @@ var styles = StyleSheet.create({
 		marginBottom: 5,
 	},
 	chartTitleTextHighlighted: {
-		fontSize: 15,
+		fontSize: 17,
 		textAlign: 'center',
 		color: '#ffffff'
 	},

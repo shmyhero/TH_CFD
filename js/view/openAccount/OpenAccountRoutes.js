@@ -15,10 +15,10 @@ var MainPage = require('../MainPage')
 
 var OpenAccountInfos = [
 	{"title": "开户准备", "page": require('./OAStartPage')},
-  {"title": "上传地址证明信息(4/6)", "page": require('./OAAddressPhotoPage')},
 	{"title": "设置账户信息(1/6)", "page": require('./OAAccountBasicSettingsPage')},
 	{"title": "上传身份证照片(2/6)", "page": require('./OAIdPhotoPage')},
   {"title": "完善个人信息(3/6)", "page": require('./OAPersonalInfoPage')},
+  {"title": "上传地址证明信息(4/6)", "page": require('./OAAddressPhotoPage')},
   {"title": "完善财务信息(5/6)", "page": require('./OAFinanceInfoPage')},
   {"title": "提交申请(6/6)", "page": require('./OADocumentInfoPage')},
   {"title": "审核通过", "page": require('./OAReviewStatusPage'), "removeStoredData": true},

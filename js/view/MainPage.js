@@ -686,6 +686,12 @@ var MainPage = React.createClass({
 		this.refs["trendBtn"].setActiveColor(ColorConstants.TITLE_BLUE);
 		this.refs["meBtn"].setActiveColor(ColorConstants.TITLE_BLUE);
 
+		if(!LogicData.getAccountState()){
+			this.refs['myTabbar'].hideTab("ranking");
+		}else{
+			this.refs['myTabbar'].showTab("ranking");
+		}
+
 		console.log('refresh for Tab Icon Color ... ');
 
 
@@ -1070,72 +1076,77 @@ var MainPage = React.createClass({
 		}
 	},
 
+	renderTabbar: function(){
+		return (
+			<Tabbar ref="myTabbar" barColor='#f7f7f7' style={{alignItems: 'stretch'}}>
+				<Tab name="home">
+						<Icon ref={"homepageBtn"} label="首页"
+							type={glypy.Home}
+							from={'myhero'}
+							onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue}
+							onInactiveColor={iconGrey}/>
+						<RawContent ref="homeContent">
+							<Navigator
+					style={styles.container}
+					initialRoute={{name: HOME_PAGE_ROUTE,
+									showTabbar: this.showTabbar,
+									hideTabbar: this.hideTabbar,
+									showProgress: this.showProgress,
+									hideProgress: this.hideProgress}}
+					configureScene={() => Navigator.SceneConfigs.PushFromRight}
+					renderScene={this.RouteMapper} />
+						</RawContent>
+				</Tab>
+				<Tab name="trend">
+						<Icon ref={"trendBtn"} label="行情" type={glypy.Camera} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
+						<RawContent style={{width: 100}} ref="stockContent">
+							<Navigator
+					style={styles.container}
+					initialRoute={{name: STOCK_LIST_VIEW_PAGER_ROUTE}}
+					configureScene={() => Navigator.SceneConfigs.PushFromRight}
+					renderScene={this.RouteMapper} />
+						</RawContent>
+				</Tab>
+				<Tab name="trade">
+						<Icon ref={"tradeBtn"} label="仓位" type={glypy.Stat} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
+					<RawContent ref="exchangeContent">
+							<Navigator
+					style={styles.container}
+					initialRoute={{name: STOCK_EXCHANGE_ROUTE}}
+					configureScene={() => Navigator.SceneConfigs.PushFromRight}
+					renderScene={this.RouteMapper} />
+						</RawContent>
+				</Tab>
+				<Tab name="ranking">
+						<Icon ref={"rankingBtn"} label="达人榜" type={glypy.Ranking} from={'myhero'} onActiveColor={systemBuleActual} onInactiveColor={iconGrey}/>
+						<RawContent ref="rankingContent">
+				<Navigator
+					style={styles.container}
+					initialRoute={{name: RANKING_PAGE_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
+					configureScene={() => Navigator.SceneConfigs.PushFromRight}
+					renderScene={this.RouteMapper} />
+						</RawContent>
+				</Tab>
+				<Tab name="me">
+						<Icon ref={"meBtn"} label="我的" type={glypy.Settings} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
+						<RawContent ref="meContent">
+				<Navigator
+					style={styles.container}
+					initialRoute={{name: ME_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
+					configureScene={() => Navigator.SceneConfigs.PushFromRight}
+					renderScene={this.RouteMapper} />
+						</RawContent>
+				</Tab>
+
+			</Tabbar>
+		);
+	},
+
 	render: function() {
 	    return (
 	    	<View style={styles.container}>
 					{this.renderShareView()}
-		      	<Tabbar ref="myTabbar" barColor='#f7f7f7' style={{alignItems: 'stretch'}}>
-			        <Tab name="home">
-									<Icon ref={"homepageBtn"} label="首页"
-										type={glypy.Home}
-										from={'myhero'}
-										onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue}
-										onInactiveColor={iconGrey}/>
-			          	<RawContent ref="homeContent">
-		            		<Navigator
-								style={styles.container}
-								initialRoute={{name: HOME_PAGE_ROUTE,
-												showTabbar: this.showTabbar,
-												hideTabbar: this.hideTabbar,
-												showProgress: this.showProgress,
-												hideProgress: this.hideProgress}}
-								configureScene={() => Navigator.SceneConfigs.PushFromRight}
-								renderScene={this.RouteMapper} />
-			          	</RawContent>
-			        </Tab>
-			        <Tab name="trend">
-			          	<Icon ref={"trendBtn"} label="行情" type={glypy.Camera} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
-			          	<RawContent style={{width: 100}} ref="stockContent">
-		            		<Navigator
-								style={styles.container}
-								initialRoute={{name: STOCK_LIST_VIEW_PAGER_ROUTE}}
-								configureScene={() => Navigator.SceneConfigs.PushFromRight}
-								renderScene={this.RouteMapper} />
-			          	</RawContent>
-			        </Tab>
-			        <Tab name="trade">
-			          	<Icon ref={"tradeBtn"} label="仓位" type={glypy.Stat} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
-			        	<RawContent ref="exchangeContent">
-			            	<Navigator
-								style={styles.container}
-								initialRoute={{name: STOCK_EXCHANGE_ROUTE}}
-								configureScene={() => Navigator.SceneConfigs.PushFromRight}
-								renderScene={this.RouteMapper} />
-			          	</RawContent>
-			        </Tab>
-			        <Tab name="ranking">
-			          	<Icon ref={"rankingBtn"} label="达人榜" type={glypy.Ranking} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
-			          	<RawContent ref="rankingContent">
-							<Navigator
-								style={styles.container}
-								initialRoute={{name: RANKING_PAGE_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
-								configureScene={() => Navigator.SceneConfigs.PushFromRight}
-								renderScene={this.RouteMapper} />
-			          	</RawContent>
-		        	</Tab>
-
-							<Tab name="me">
-			          	<Icon ref={"meBtn"} label="我的" type={glypy.Settings} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
-			          	<RawContent ref="meContent">
-							<Navigator
-								style={styles.container}
-								initialRoute={{name: ME_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
-								configureScene={() => Navigator.SceneConfigs.PushFromRight}
-								renderScene={this.RouteMapper} />
-			          	</RawContent>
-		        	</Tab>
-
-		      	</Tabbar>
+					{this.renderTabbar()}
 					<LoadingIndicator ref='progressBar'/>
 					{this.state.showTutorial ? <TutorialPage type={this.state.tutorialType} hideTutorial={this.hideTutorial}/> : null }
 					{this.renderRegisterSuccessPage()}

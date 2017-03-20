@@ -24,7 +24,8 @@ export default class Tabbar extends Component {
       registerTabContent: this.registerTabContent.bind(this),
       registerTabIcon: this.registerTabIcon.bind(this),
       gotoTab: this.gotoTab.bind(this),
-      getBarRef: this.getBarRef.bind(this)
+      getBarRef: this.getBarRef.bind(this),
+
     };
   }
 
@@ -76,14 +77,50 @@ export default class Tabbar extends Component {
     });
   }
 
+  hideTab(tabName){
+    this.state.tabs.some((tab) => {
+      if (tab.name !== tabName) {
+        return false;
+      }
+      console.log("hideTab " + tabName)
+      tab.isHidden = true;
+      return true;
+    });
+    this.setState({
+      tabs: this.state.tabs,
+    });
+  }
+
+  showTab(tabName){
+    this.state.tabs.some((tab) => {
+      if (tab.name !== tabName) {
+        return false;
+      }
+      console.log("hideTab " + tabName)
+      tab.isHidden = false;
+      return true;
+    });
+    this.setState({
+      tabs: this.state.tabs,
+    });
+  }
+
   renderContents() {
     const { tabs } = this.state;
-    return tabs.map((tab, index) => tab.content);
+    return tabs.map((tab, index) => {
+      if(!tab.isHidden){
+        return tab.content
+      }
+    });
   }
 
   renderIcons() {
     const { tabs } = this.state;
-    return tabs.map((tab) => tab.icon);
+    return tabs.map((tab, index) => {
+      if(!tab.isHidden){
+        return tab.icon
+      }
+    });
   }
 
   componentDidMount() {

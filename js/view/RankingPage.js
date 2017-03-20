@@ -209,34 +209,36 @@ export default class RankingPage extends Component{
 
 
     return(
-      <TouchableHighlight onPress={()=>this._onPressedUserItem(rowData)}>
-        <View>
-          <View style={styles.rowDataStyle}>
-            <View style={{flexDirection:'row'}}>
-              <View style={{'paddingTop':5}}>
-                <Image style = {[styles.userHeader, headRank?styles.HeaderOffset:null]} source={head}></Image>
-                <Image style = {styles.userHeaderIconRound} source={headRank}></Image>
-              </View>
 
-              <View style = {{marginLeft:10}}>
-                <Text style={[styles.userName]}>{rowData.nickname}</Text>
-                <View style = {styles.userInfo}>
-                  <Text style={styles.userInfoTitle}>胜率:</Text>
-                  <Text style={styles.userWinRate}>{rate}%</Text>
-                  <Text style={[styles.userInfoTitle,{marginLeft:10}]}>平仓笔数:</Text>
-                  <Text style={styles.userWinRate}>{rowData.posCount}</Text>
+        <View>
+          <TouchableHighlight onPress={()=>this._onPressedUserItem(rowData)} >
+            <View style={styles.rowDataStyle}>
+              <View style={{flexDirection:'row'}}>
+                <View style={{'paddingTop':5}}>
+                  <Image style = {[styles.userHeader, headRank?styles.HeaderOffset:null]} source={head}></Image>
+                  <Image style = {styles.userHeaderIconRound} source={headRank}></Image>
+                </View>
+
+                <View style = {{marginLeft:10}}>
+                  <Text style={[styles.userName]}>{rowData.nickname}</Text>
+                  <View style = {styles.userInfo}>
+                    <Text style={styles.userInfoTitle}>胜率:</Text>
+                    <Text style={styles.userWinRate}>{rate}%</Text>
+                    <Text style={[styles.userInfoTitle,{marginLeft:10}]}>平仓笔数:</Text>
+                    <Text style={styles.userWinRate}>{rowData.posCount}</Text>
+                  </View>
+                </View>
+              </View>
+              <View>
+                <View style = {[styles.rateArea,{backgroundColor:roi<0?ColorConstants.STOCK_DOWN_GREEN:'#c24a17'}]}>
+                  <Text style = {styles.rateText}>{roi}%</Text>
                 </View>
               </View>
             </View>
-            <View>
-              <View style = {[styles.rateArea,{backgroundColor:roi<0?ColorConstants.STOCK_DOWN_GREEN:'#c24a17'}]}>
-                <Text style = {styles.rateText}>{roi}%</Text>
-              </View>
-            </View>
-          </View>
+          </TouchableHighlight>
           {this.renderMyRankBottomView(rowID)}
         </View>
-      </TouchableHighlight>
+
     )
   }
 

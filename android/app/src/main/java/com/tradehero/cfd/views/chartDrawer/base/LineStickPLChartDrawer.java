@@ -29,6 +29,14 @@ import java.util.Date;
  */
 public abstract class LineStickPLChartDrawer extends BaseChartDrawer {
 
+    /*
+     * Set the count of limit lines. If the function returns 0, it means there's no limitation.
+     * @return
+     */
+    protected int getMaxLimitLineCount(){
+        return 0;
+    }
+
     @Override
     protected void resetChart(CombinedChart chart) {
         super.resetChart(chart);
@@ -132,6 +140,9 @@ public abstract class LineStickPLChartDrawer extends BaseChartDrawer {
         return "          ";
     }
 
+    public int getGapLineUnitAddMount(int dataSize){
+        return 1;
+    }
 
     public boolean needDrawDescription(){
         return false;
@@ -197,16 +208,17 @@ public abstract class LineStickPLChartDrawer extends BaseChartDrawer {
         limitLineAt.add(firstLine);
         limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(firstLine).getString("date")));
 
+        int dataSize = chartDataList.length();
         for (int i = 0; i < chartDataList.length(); i++) {
             Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("date"));
 
             if (nextLineAt == null) {
-                calendar.add(getGapLineUnit(), getGapLineUnitAddMount());
+                //calendar.add(getGapLineUnit(), getGapLineUnitAddMount());
                 nextLineAt = calendar;
             } else if (calendar.after(nextLineAt)) {
 
                 while (calendar.after(nextLineAt)) {
-                    nextLineAt.add(getGapLineUnit(), getGapLineUnitAddMount());
+                    nextLineAt.add(getGapLineUnit(), getGapLineUnitAddMount(dataSize));
                 }
 
                 limitLineAt.add(i);

@@ -229,8 +229,16 @@ export default class UserHomePage extends Component{
 			console.log('same type clicked , return null')
 			return
 		}
+		var chartTypeName = "";
+		if(type == CHART_TYPE_2MONTH ) {
+			chartTypeName = NetConstants.PARAMETER_CHARTTYPE_2WEEK_YIELD;
+		}else if(type == CHART_TYPE_ALL){
+			chartTypeName = NetConstants.PARAMETER_CHARTTYPE_ALL_YIELD;
+		}
+
 		this.setState({
-			chartType:type
+			chartType:type,
+			chartTypeName: chartTypeName,
 		},()=>this.loadPlCloseData())
 	}
 

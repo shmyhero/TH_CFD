@@ -133,6 +133,7 @@ export default class WithdrawPage extends Component {
     this.setState({
       withdrawValueText: "" + this.state.refundableBanalce,
       withdrawValue: this.state.refundableBanalce,
+      fee: this.generateFee(this.state.refundableBanalce),
     }, ()=>{
       console.log("this.state.withdrawValue2" + this.state.withdrawValue);
     })

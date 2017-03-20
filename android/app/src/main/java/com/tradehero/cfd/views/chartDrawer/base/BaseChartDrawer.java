@@ -1,5 +1,7 @@
 package com.tradehero.cfd.views.chartDrawer.base;
 
+import android.graphics.Color;
+
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.data.CombinedData;
@@ -30,15 +32,21 @@ public abstract class BaseChartDrawer implements IChartDrawer {
 
     protected int borderColor = 0;
     protected int textColor = 0;
+    protected int gapLineColor = 0;
 
     @Override
     public void setBorderColor(int color) {
         borderColor = color;
+
     }
 
     @Override
     public void setTextColor(int color) {
         textColor = color;
+    }
+
+    public int getGapLineColor(){
+       return borderColor;
     }
 
     @Override

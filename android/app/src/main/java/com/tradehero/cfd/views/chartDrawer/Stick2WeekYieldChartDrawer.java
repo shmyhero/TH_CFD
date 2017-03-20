@@ -1,5 +1,7 @@
 package com.tradehero.cfd.views.chartDrawer;
 
+import android.graphics.Color;
+
 import com.tradehero.cfd.views.chartDrawer.base.ChartDrawerConstants;
 import com.tradehero.cfd.views.chartDrawer.base.LineStickChartDrawer;
 import com.tradehero.cfd.views.chartDrawer.base.LineStickPLChartDrawer;
@@ -31,6 +33,11 @@ public class Stick2WeekYieldChartDrawer extends LineStickPLChartDrawer {
     @Override
     public boolean needDrawDescription() {
         return false;
+    }
+
+
+    public int getGapLineColor() {
+        return Color.TRANSPARENT;
     }
 
     @Override

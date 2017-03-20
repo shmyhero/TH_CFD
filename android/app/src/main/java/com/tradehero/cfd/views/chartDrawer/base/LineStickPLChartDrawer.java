@@ -157,7 +157,7 @@ public abstract class LineStickPLChartDrawer extends BaseChartDrawer {
                 Calendar calendar = limitLineInfo.limitLineCalender.get(i);
 
                 LimitLine gapLine = new LimitLine(index);
-                gapLine.setLineColor(borderColor);
+                gapLine.setLineColor(getGapLineColor());
                 gapLine.setLineWidth(ChartDrawerConstants.LINE_WIDTH);
                 gapLine.enableDashedLine(10f, 0f, 0f);
                 //gapLine.setTextSize(8);

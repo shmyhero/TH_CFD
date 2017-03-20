@@ -152,19 +152,19 @@ export default class UserHomePage extends Component{
 			<Image style = {[styles.topWapper,{backgroundColor:ColorConstants.TITLE_BLUE_LIVE}]} source={require('../../images/bgbanner.jpg')}>
 
 				<View style = {styles.topOneOfThree}>
-					<View style={{marginTop:40}}></View>
+					<View style={{marginTop:32}}></View>
     			<Text style = {{fontSize:36,backgroundColor:'transparent',color:'white'}}>{this.state.followerCount}</Text>
 					<Text style = {{fontSize:12,backgroundColor:'transparent',color:'white'}}>关注数</Text>
     		</View>
 
-				<View style = {styles.topOneOfThree}>
-						<View style={{marginTop:40}}></View>
+				<View style = {[styles.topOneOfThree,]}>
+						<View style={{marginTop:32}}></View>
 						<Image style = {styles.userHeaderIcon} source={head}></Image>
 						<Image style = {styles.userHeaderIconRound} source={headRank}></Image>
 				</View>
 
 				<View style = {styles.topOneOfThree}>
-					<View style={{marginTop:40}}></View>
+					<View style={{marginTop:32}}></View>
 					<Text style = {{fontSize:36,backgroundColor:'transparent',color:'white'}}>{this.state.cards.length}</Text>
 					<Text style = {{fontSize:12,backgroundColor:'transparent',color:'white'}}>卡片数</Text>
 				</View>
@@ -403,7 +403,8 @@ export default class UserHomePage extends Component{
 					xAxisTextSize={8}
 					rightAxisTextSize={8}
 					textColor={textColor}
-					rightAxisLabelCount={7}
+					rightAxisDrawGridLines={true}
+					rightAxisLabelCount={5}
 					rightAxisPosition="OUTSIDE_CHART"
 					rightAxisEnabled={true}
 					rightAxisDrawLabel={true}
@@ -716,11 +717,11 @@ const styles = StyleSheet.create({
 	},
 
 	userHeaderIconRound:{
-		width:112,
-		height:126,
-		marginTop:-95,
-		marginLeft:5,
-		position:'absolute'
+		width:158,
+		height:158,
+		marginTop:-118,
+		marginLeft: (width/3-158)/2,
+		position:'absolute',
 	},
 
 	topOneOfThree:{

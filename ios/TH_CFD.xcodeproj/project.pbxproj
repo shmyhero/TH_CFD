@@ -185,6 +185,7 @@
 		3DB9F24A1D64499800DC5C63 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DB9F2491D64499800DC5C63 /* libicucore.tbd */; };
 		3DB9F24C1D6449AA00DC5C63 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DB9F24B1D6449AA00DC5C63 /* AVFoundation.framework */; };
 		3DB9F24E1D6449CA00DC5C63 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DB9F24D1D6449CA00DC5C63 /* MobileCoreServices.framework */; };
+		3DBDE4B41E7F893000B57462 /* THRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBDE4B31E7F893000B57462 /* THRootViewController.swift */; };
 		3DC618011CA2747E00F36541 /* ChartDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC618001CA2747E00F36541 /* ChartDataManager.swift */; };
 		3DC618051CA29F9900F36541 /* StockChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC618041CA29F9900F36541 /* StockChartView.swift */; };
 		3DC6182D1CA3922A00F36541 /* StockChartViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DC6182C1CA3922A00F36541 /* StockChartViewManager.m */; };
@@ -736,6 +737,7 @@
 		3DB9F2491D64499800DC5C63 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		3DB9F24B1D6449AA00DC5C63 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		3DB9F24D1D6449CA00DC5C63 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		3DBDE4B31E7F893000B57462 /* THRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = THRootViewController.swift; path = TH_CFD/THRootViewController.swift; sourceTree = "<group>"; };
 		3DC618001CA2747E00F36541 /* ChartDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChartDataManager.swift; path = TH_CFD/ChartDataManager.swift; sourceTree = "<group>"; };
 		3DC618041CA29F9900F36541 /* StockChartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StockChartView.swift; path = TH_CFD/StockChartView.swift; sourceTree = "<group>"; };
 		3DC6182B1CA3922A00F36541 /* StockChartViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StockChartViewManager.h; path = TH_CFD/StockChartViewManager.h; sourceTree = "<group>"; };
@@ -896,6 +898,7 @@
 				3D4B37A81D504961004BD09C /* TalkingData */,
 				3D5C46C71C92B51000BF6FD3 /* main.jsbundle */,
 				3D47CB481C897882000EF6EF /* AppDelegate.swift */,
+				3DBDE4B31E7F893000B57462 /* THRootViewController.swift */,
 				3D47CB471C897879000EF6EF /* TH_CFD-Bridging-Header.h */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -2266,6 +2269,7 @@
 				3D15A9E91E278C5600B32C0E /* MQMessageFormViewService.m in Sources */,
 				3D15A9951E278C5600B32C0E /* MQBotWebViewBubbleAnswerCellModel.m in Sources */,
 				3D15A97A1E278C5600B32C0E /* MQChatViewConfig.m in Sources */,
+				3DBDE4B41E7F893000B57462 /* THRootViewController.swift in Sources */,
 				3DC618051CA29F9900F36541 /* StockChartView.swift in Sources */,
 				3D15A9AF1E278C5600B32C0E /* MQWebViewBubbleCell.m in Sources */,
 				3D15A9AA1E278C5600B32C0E /* MQMessageDateCell.m in Sources */,

@@ -81,7 +81,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		let rootView = RCTRootView(bundleURL:jsCodeLocation,moduleName: "TH_CFD",initialProperties:nil,launchOptions:launchOptions)
 		
 		// Initialize a Controller to use view as React View
-		let rootViewController:UIViewController = UIViewController()
+		let rootViewController:UIViewController = THRootViewController()
 		rootViewController.view = rootView
 		let loadingView = UIImageView(frame: UIScreen.mainScreen().bounds)
 		loadingView.image = UIImage(named: "frontPage.jpg")

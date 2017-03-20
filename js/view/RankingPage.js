@@ -200,18 +200,25 @@ export default class RankingPage extends Component{
     var rate = (rowData.winRate*100).toFixed(2)
     var roi = (rowData.roi*100).toFixed(2)
     var head = (rowData.picUrl)
+    var headRank = LogicData.getRankHead(rowData.rank);
     if(head){
       head = {uri:head}
     }else{
       head = require('../../images/head_portrait.png')
     }
+
+
     return(
       <TouchableHighlight onPress={()=>this._onPressedUserItem(rowData)}>
         <View>
           <View style={styles.rowDataStyle}>
-            <View style={{flexDirection:'row',}}>
-              <Image style = {styles.userHeader} source={head}></Image>
-              <View style = {{marginLeft:2}}>
+            <View style={{flexDirection:'row'}}>
+              <View style={{'paddingTop':5}}>
+                <Image style = {[styles.userHeader, headRank?styles.HeaderOffset:null]} source={head}></Image>
+                <Image style = {styles.userHeaderIconRound} source={headRank}></Image>
+              </View>
+
+              <View style = {{marginLeft:10}}>
                 <Text style={[styles.userName]}>{rowData.nickname}</Text>
                 <View style = {styles.userInfo}>
                   <Text style={styles.userInfoTitle}>胜率:</Text>
@@ -350,7 +357,7 @@ const styles = StyleSheet.create({
   rowDataStyle:{
      flex:1,
      flexDirection:'row',
-     height:60*heightRate,
+     height:60,
      backgroundColor:'white',
      justifyContent:'space-between',
      alignItems:'center'
@@ -395,10 +402,23 @@ const styles = StyleSheet.create({
     marginLeft:10,
     borderRadius:20,
   },
+  HeaderOffset:{
+    width:28,
+    height:28,
+    marginRight:5,
+    marginLeft:15.5,
+    borderRadius:14,
+  },
+  userHeaderIconRound:{
+    width:44.8,
+    height:50.4,
+    marginTop:-36,
+    marginLeft:7.5,
+    position:'absolute'
+  },
   rateArea:{
     width:100,
     height:30,
-    // backgroundColor:'#c24a17',
     marginRight:10,
     alignItems:'flex-end',
     justifyContent:'center',
@@ -411,12 +431,12 @@ const styles = StyleSheet.create({
   },
   userName:{
     fontSize:11,
-    marginTop:5,
+    marginTop:3,
     color:'#2d2d2d'
   },
   userInfoTitle:{
     fontSize:11,
-    marginTop:5,
+    marginTop:3,
     color:'#5d5d5d'
   },
   userWinRate:{
@@ -428,7 +448,8 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems:'center',
     justifyContent:'center'
-  }
+  },
+
 
 
 });

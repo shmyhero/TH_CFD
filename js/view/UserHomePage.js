@@ -91,6 +91,7 @@ export default class UserHomePage extends Component{
 			picUrl:undefined,
 			isFollowing:false,
 			titleOpacity:0,
+			rank:1,
 		}
 
 	}
@@ -125,6 +126,7 @@ export default class UserHomePage extends Component{
 					 totalPl:responseJson.totalPl,
 					 picUrl:responseJson.picUrl,
 					 isFollowing:responseJson.isFollowing,
+					 rank:responseJson.rank,
 				 })
 			},
 			(result) => {
@@ -135,14 +137,19 @@ export default class UserHomePage extends Component{
 	}
 
 	topWarpperRender(){
+		console.log("this.state.rank = "+this.state.rank);
 		var head = (this.state.picUrl)
+		var headRank = LogicData.getRankHead(this.state.rank);
     if(head){
       head = {uri:head}
     }else{
       head = require('../../images/head_portrait.png')
     }
+
+
+
 		return(
-			<Image style = {[styles.topWapper,{backgroundColor:ColorConstants.title_blue()}]} source={require('../../images/bgbanner.jpg')}>
+			<Image style = {[styles.topWapper,{backgroundColor:ColorConstants.TITLE_BLUE_LIVE}]} source={require('../../images/bgbanner.jpg')}>
 
 				<View style = {styles.topOneOfThree}>
 					<View style={{marginTop:40}}></View>
@@ -153,8 +160,7 @@ export default class UserHomePage extends Component{
 				<View style = {styles.topOneOfThree}>
 						<View style={{marginTop:40}}></View>
 						<Image style = {styles.userHeaderIcon} source={head}></Image>
-						{/* <Image style = {styles.userHeaderIcon} source={require('../../images/head_portrait.png')}></Image> */}
-						{/* <Image style = {styles.userHeaderIconRound} source={require('../../images/head_gd.png')}></Image> */}
+						<Image style = {styles.userHeaderIconRound} source={headRank}></Image>
 				</View>
 
 				<View style = {styles.topOneOfThree}>
@@ -356,16 +362,16 @@ export default class UserHomePage extends Component{
 				<View style ={styles.ceilWapper2}>
 					<View style = {styles.ceilLeft}>
      				<View style = {styles.chartTypeBorder}>
-							<TouchableOpacity onPress={()=>this._onPressedChartType(CHART_TYPE_2MONTH)} style = {[styles.chartType,{backgroundColor:this.state.chartType == CHART_TYPE_2MONTH ? ColorConstants.title_blue():'white'}]}>
+							<TouchableOpacity onPress={()=>this._onPressedChartType(CHART_TYPE_2MONTH)} style = {[styles.chartType,{backgroundColor:this.state.chartType == CHART_TYPE_2MONTH ? ColorConstants.TITLE_BLUE_LIVE:'white'}]}>
        					<Text style = {{fontSize:13,color:this.state.chartType == CHART_TYPE_2MONTH ? 'white' : ColorConstants.INPUT_TEXT_COLOR}}>近2周</Text>
        				</TouchableOpacity>
-							<TouchableOpacity onPress={()=>this._onPressedChartType(CHART_TYPE_ALL)} style = {[styles.chartType,{backgroundColor:this.state.chartType == CHART_TYPE_ALL ? ColorConstants.title_blue():'white'}]}>
+							<TouchableOpacity onPress={()=>this._onPressedChartType(CHART_TYPE_ALL)} style = {[styles.chartType,{backgroundColor:this.state.chartType == CHART_TYPE_ALL ? ColorConstants.TITLE_BLUE_LIVE:'white'}]}>
        					<Text style = {{fontSize:13,color:this.state.chartType == CHART_TYPE_ALL ? 'white' : ColorConstants.INPUT_TEXT_COLOR}}>全部</Text>
        				</TouchableOpacity>
          		</View>
      			</View>
 					<View style = {styles.ceilRight}>
-						<View style = {[styles.tipIcon,{backgroundColor:ColorConstants.title_blue()}]}></View>
+						<View style = {[styles.tipIcon,{backgroundColor:ColorConstants.TITLE_BLUE_LIVE}]}></View>
      				<Text style = {{fontSize:10,color:'#474747'}}>TA的收益走势</Text>
      			</View>
     		</View>
@@ -450,7 +456,7 @@ export default class UserHomePage extends Component{
 						</TouchableOpacity>
 					</View>
 					<View style={{flexDirection:'row',
-					  backgroundColor: ColorConstants.TITLE_BLUE,}}>
+					  backgroundColor: ColorConstants.TITLE_BLUE_LIVE,}}>
 						<ScrollView
 							ref={(scrollView) => { _scrollView = scrollView; }}
 							automaticallyAdjustContentInsets={false}
@@ -470,7 +476,7 @@ export default class UserHomePage extends Component{
 		return (
 			<TouchableOpacity
 					onPress={()=>this._onPressedAddFollow()}>
-				<View style={[styles.addToCareContainer,{backgroundColor:ColorConstants.title_blue()}]}>
+				<View style={[styles.addToCareContainer,{backgroundColor:ColorConstants.TITLE_BLUE_LIVE}]}>
 					<Text style={styles.addToCareText}>
 						{this.state.isFollowing ? '取消关注':'+关注'}
 					</Text>
@@ -708,9 +714,11 @@ const styles = StyleSheet.create({
 	},
 
 	userHeaderIconRound:{
-		width:80,
-		height:80,
-		marginTop:-60,
+		width:112,
+		height:126,
+		marginTop:-95,
+		marginLeft:5,
+		position:'absolute'
 	},
 
 	topOneOfThree:{

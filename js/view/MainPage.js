@@ -179,7 +179,8 @@ var isTabbarShown = true
 export var HOME_PAGE_TAB_INDEX = 0;
 export var STOCK_LIST_PAGE_TAB_INDEX = 1;
 export var STOCK_EXCHANGE_TAB_INDEX = 2;
-export var ME_PAGE_TAB_INDEX = 3;
+export var RANKING_TAB_INDEX = 3;
+export var ME_PAGE_TAB_INDEX = 4;
 var MainPage = React.createClass({
 	getInitialState: function() {
 		return {
@@ -760,6 +761,9 @@ var MainPage = React.createClass({
 		var exchangeRef = this.refs['exchangeContent'].refs['wrap'].getWrappedRef()
 		exchangeRef.tabWillFocus = EventCenter.emitExchangeTabPressEvent;
 
+		var rankingRef = this.refs['rankingContent'].refs['wrap'].getWrappedRef();
+		rankingRef.tabWillFocus = EventCenter.emitRankingTabPressEvent;
+
 		var meRef = this.refs['meContent'].refs['wrap'].getWrappedRef()
 		meRef.tabWillFocus = EventCenter.emitMeTabPressEvent;
 	},
@@ -841,6 +845,12 @@ var MainPage = React.createClass({
 					this.refs[SUPER_PRIORITY_HINT].show();
 				}
 			});
+
+			if(!LogicData.getAccountState()){
+				this.refs['myTabbar'].hideTab("ranking");
+			}else{
+				this.refs['myTabbar'].showTab("ranking");
+			}
 	},
 
 	backAndroidHandler: function(){
@@ -926,6 +936,10 @@ var MainPage = React.createClass({
 				initExchangeTab = 2
 				this.refs['myTabbar'].gotoTab("trade")
 				EventCenter.emitExchangeTabPressEvent()
+			}
+			else if(url==='cfd://page/ranking') {
+				this.refs['myTabbar'].gotoTab("ranking")
+				EventCenter.emitRankingTabPressEvent()
 			}
 			else if(url==='cfd://page/me') {
 				this.refs['myTabbar'].gotoTab("me")

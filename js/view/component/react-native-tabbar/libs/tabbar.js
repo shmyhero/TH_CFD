@@ -78,31 +78,45 @@ export default class Tabbar extends Component {
   }
 
   hideTab(tabName){
+    var updated = false;
     this.state.tabs.some((tab) => {
       if (tab.name !== tabName) {
         return false;
       }
       console.log("hideTab " + tabName)
-      tab.isHidden = true;
+      if(!tab.isHidden){
+        tab.isHidden = true;
+        updated = true;
+      }
       return true;
     });
-    this.setState({
-      tabs: this.state.tabs,
-    });
+
+    if(updated){
+      this.setState({
+        tabs: this.state.tabs,
+      });
+    }
   }
 
   showTab(tabName){
+    var updated = false;
     this.state.tabs.some((tab) => {
       if (tab.name !== tabName) {
         return false;
       }
       console.log("hideTab " + tabName)
-      tab.isHidden = false;
+      if(tab.isHidden){
+        tab.isHidden = false;
+        updated = true;
+      }
       return true;
     });
-    this.setState({
-      tabs: this.state.tabs,
-    });
+    
+    if(updated){
+      this.setState({
+        tabs: this.state.tabs,
+      });
+    }
   }
 
   renderContents() {

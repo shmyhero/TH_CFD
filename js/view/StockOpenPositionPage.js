@@ -140,7 +140,7 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	refreshData: function(){
-		if(LogicData.getTabIndex() == 2){
+		if(LogicData.getTabIndex() == MainPage.STOCK_EXCHANGE_TAB_INDEX){
 			var currentPageTag = LogicData.getCurrentPageTag();
 			if(currentPageTag == 0){
 				var routes = this.props.navigator.getCurrentRoutes();
@@ -299,7 +299,7 @@ var StockOpenPositionPage = React.createClass({
 				}
 				// Alert.alert('', errorMessage);
 				if(NetConstants.AUTH_ERROR === result.errorMessage){
-					if(LogicData.getTabIndex() == 2){
+					if(LogicData.getTabIndex() == MainPage.STOCK_EXCHANGE_TAB_INDEX){
 
 						var length = this.props.navigator.state.routeStack.length;
 						console.log("---> " +this.props.navigator.state.routeStack[length-1].name );

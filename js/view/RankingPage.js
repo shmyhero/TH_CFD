@@ -56,7 +56,7 @@ export default class RankingPage extends Component{
 	}
 
 	componentDidMount(){
-    didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.EXCHANGE_TAB_PRESS_EVENT, this.onTabChanged);
+    didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.RANKING_TAB_PRESS_EVENT, this.onTabChanged);
     this.getRankList();
 	}
 

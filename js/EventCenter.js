@@ -9,6 +9,7 @@ const EventConst = {
 	HOME_TAB_RESS_EVENT: 'homeTabPress',
 	STOCK_TAB_PRESS_EVENT : 'stockTabEvent',
 	EXCHANGE_TAB_PRESS_EVENT : 'exchangeTabEvent',
+	RANKING_TAB_PRESS_EVENT : 'rankingTabEvent',
 	ME_TAB_PRESS_EVENT : 'meTabEvent',
 	ACCOUNT_STATE_CHANGE : 'account_state_change',
 	NETWORK_CONNECTION_CHANGED: 'network_connection_changed',
@@ -36,6 +37,11 @@ var EventCenter = {
 	emitExchangeTabPressEvent: function() {
 		// this.eventEmitter.emit('eventname', { someArg: 'argValue' });
 		eventEmitter.emit(EventConst.EXCHANGE_TAB_PRESS_EVENT)
+	},
+
+	emitRankingTabPressEvent: function() {
+		// this.eventEmitter.emit('eventname', { someArg: 'argValue' });
+		eventEmitter.emit(EventConst.RANKING_TAB_PRESS_EVENT)
 	},
 
 	emitMeTabPressEvent: function(){

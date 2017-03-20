@@ -110,7 +110,7 @@ var StockStatisticsPage = React.createClass({
 	},
 
 	refreshData: function(){
-		if(LogicData.getTabIndex() == 2){
+		if(LogicData.getTabIndex() == MainPage.STOCK_EXCHANGE_TAB_INDEX){
 			var routes = this.props.navigator.getCurrentRoutes();
 			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE){
 				var currentPageTag = LogicData.getCurrentPageTag();
@@ -221,7 +221,7 @@ var StockStatisticsPage = React.createClass({
 				//We need to check if the layout will be changed.
 				//If the profit bar won't change, we will not apply the LayoutAnimation.configureNext,
 				//because it will affect the tab switch and display a wrong animation.
-				if(LogicData.getTabIndex() == 2){
+				if(LogicData.getTabIndex() == MainPage.STOCK_EXCHANGE_TAB_INDEX){
 					var hasData = this.state.balanceData!==null;
 
 					var sumInvest = 0

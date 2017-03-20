@@ -272,7 +272,7 @@ export default class RankingPage extends Component{
             <ListView
             style={styles.list}
             ref="listview"
-            // initialListSize={11}
+            initialListSize={11}
             dataSource={this.state.rankData}
             enableEmptySections={true}
             renderFooter={this.renderFooter}
@@ -285,7 +285,7 @@ export default class RankingPage extends Component{
             <ListView
               style={styles.list}
               ref="listview2"
-              // initialListSize={11}
+              initialListSize={11}
               dataSource={this.state.rankDataFollowing}
               enableEmptySections={true}
               renderFooter={this.renderFooter}

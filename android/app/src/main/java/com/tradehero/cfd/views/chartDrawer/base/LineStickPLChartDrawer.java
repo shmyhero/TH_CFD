@@ -5,10 +5,12 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 
 import com.github.mikephil.charting.charts.CombinedChart;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.utils.Utils;
 import com.tradehero.cfd.MainActivity;
 import com.tradehero.cfd.StringUtils;
 import com.tradehero.cfd.views.ReactChart;
@@ -17,7 +19,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * for plClose lineStickChart
@@ -135,6 +140,99 @@ public abstract class LineStickPLChartDrawer extends BaseChartDrawer {
     @Override
     protected void drawLimitLine(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
 
+
+        // Set the yAxis lines with 1 hour in between.
+        Calendar startUpLine = getStartUpTimeLine(stockInfoObject, chartDataList);
+
+        if (chartDataList.length() > 0) {
+            LimitLineInfo limitLineInfo = calculateLimitLinesPosition(startUpLine, stockInfoObject, chartDataList);
+
+            boolean needSkipLabel = false;
+            if (limitLineInfo.limitLineAt.size() >= 7) {
+                needSkipLabel = getLabelsToSkip() > 0 ? true : false;
+            }
+
+            for (int i = 0; i < limitLineInfo.limitLineAt.size(); i++) {
+                int index = limitLineInfo.limitLineAt.get(i);
+                Calendar calendar = limitLineInfo.limitLineCalender.get(i);
+
+                LimitLine gapLine = new LimitLine(index);
+                gapLine.setLineColor(borderColor);
+                gapLine.setLineWidth(ChartDrawerConstants.LINE_WIDTH);
+                gapLine.enableDashedLine(10f, 0f, 0f);
+                //gapLine.setTextSize(8);
+                gapLine.setTextSize(Utils.convertPixelsToDp(chart.getXAxis().getTextSize())); //BUGBUG: Change the text size will cause the text not center align... Fix the bug later...
+                //gapLine.setTextSize(chart.getXAxis().getTextSize());
+                gapLine.setTextColor(textColor);
+                gapLine.setXOffset(0);
+                gapLine.setYOffset(Math.max((Utils.convertPixelsToDp(chart.getXAxis().getYOffset())), 0));
+                //gapLine.setYOffset(Math.max((Utils.convertPixelsToDp(chart.getXAxis().getYOffset()-gapLine.getTextSize())), 0));
+//                if (needSkipLabel && i < limitLineInfo.limitLineAt.size() - 1 && i % 2 == 1) {
+                if(needSkipLabel && isNeedHide(i,limitLineInfo.limitLineAt.size())){
+                    gapLine.setLabel("");
+                } else {
+                    String label = formatXAxisLabelText(calendar.getTime());
+                    if (i == 0) {
+                        label = getLableBlank() + label;
+                    } else if (i == limitLineInfo.limitLineAt.size() - 1) {
+                        label = label + getLableBlank();
+                    }
+                    gapLine.setLabel(label);
+                }
+                gapLine.setLabelPosition(LimitLine.LimitLabelPosition.BELOW_BOTTOM);
+
+                chart.getXAxis().addLimitLine(gapLine);
+            }
+        }
+    }
+
+    @Override
+    protected LimitLineInfo calculateLimitLinesPosition(Calendar startUpLine, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
+        ArrayList<Integer> limitLineAt = new ArrayList<>();
+        ArrayList<Calendar> limitLineCalender = new ArrayList<>();
+
+        Calendar nextLineAt = startUpLine;
+
+        int firstLine = 0;
+        limitLineAt.add(firstLine);
+        limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(firstLine).getString("date")));
+
+        for (int i = 0; i < chartDataList.length(); i++) {
+            Calendar calendar = timeStringToCalendar(chartDataList.getJSONObject(i).getString("date"));
+
+            if (nextLineAt == null) {
+                calendar.add(getGapLineUnit(), getGapLineUnitAddMount());
+                nextLineAt = calendar;
+            } else if (calendar.after(nextLineAt)) {
+
+                while (calendar.after(nextLineAt)) {
+                    nextLineAt.add(getGapLineUnit(), getGapLineUnitAddMount());
+                }
+
+                limitLineAt.add(i);
+                limitLineCalender.add(calendar);
+            }
+        }
+
+        if (needDrawEndLine(stockInfoObject)) {
+            int lastLine = chartDataList.length() - 1;
+            limitLineAt.add(lastLine);
+            limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("date")));
+        }
+
+        LimitLineInfo info = new LimitLineInfo();
+        info.limitLineAt = limitLineAt;
+        info.limitLineCalender = limitLineCalender;
+        return info;
+    }
+
+    @Override
+    protected String formatXAxisLabelText(Date date) {
+//        if(date.getHours() == 0){
+            return new SimpleDateFormat("M/d").format(date);
+//        }else{
+//            return new SimpleDateFormat("H").format(date);
+//        }
     }
 
     @Override

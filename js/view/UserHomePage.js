@@ -401,8 +401,8 @@ export default class UserHomePage extends Component{
 					rightAxisPosition="OUTSIDE_CHART"
 					rightAxisEnabled={true}
 					rightAxisDrawLabel={true}
-					chartPaddingTop={0}
-					chartPaddingBottom={4}
+					chartPaddingTop={15}
+					chartPaddingBottom={5}
 					drawBackground={true}
 					backgroundColor={backgroundColor}
 					chartPaddingLeft={15}

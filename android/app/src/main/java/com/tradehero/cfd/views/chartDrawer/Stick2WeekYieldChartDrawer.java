@@ -20,7 +20,7 @@ public class Stick2WeekYieldChartDrawer extends LineStickPLChartDrawer {
 
     @Override
     public int getGapLineUnit() {
-        return Calendar.HOUR_OF_DAY;
+        return Calendar.DAY_OF_MONTH;
     }
 
     @Override

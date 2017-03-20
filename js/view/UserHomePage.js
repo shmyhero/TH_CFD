@@ -711,6 +711,8 @@ const styles = StyleSheet.create({
 		width:80,
 		height:80,
 		borderRadius:40,
+		borderWidth:2,
+		borderColor:'white'
 	},
 
 	userHeaderIconRound:{

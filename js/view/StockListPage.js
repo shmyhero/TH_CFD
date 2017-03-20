@@ -405,8 +405,8 @@ var StockListPage = React.createClass({
 								.then(()=>this.refreshData(true));
 						}
 					});
+					console.log('Get data from Native ' + args[0] + ' : ' + args[1])
 				}
-				console.log('Get data from Native ' + args[0] + ' : ' + args[1])
 			});
 		}
 		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>{

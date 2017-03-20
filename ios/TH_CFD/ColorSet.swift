@@ -33,19 +33,14 @@ class ColorSet: NSObject {
 		_type = type;
 		// type 0 is detail view.
 		// type 1 is open position view
-//        let isPortrait = Orientation.getOrientation() == .Portrait || Orientation.getOrientation() == .PortraitUpsideDown || Orientation.getOrientation() == .AllButUpsideDown
-//        let isPortrait = AppDelegate.isPortrait()
 		if StockDataManager.sharedInstance().isLive {
 			startColor = UIColor(hexInt: 0x6683b3)
 			endColor = UIColor(hexInt: 0x374d74)
             //昨收线
-//			middleLineColor = type == 1 ? UIColor(hexInt:0x1d4fa2) : (isPortrait ? UIColor(hexInt: 0x91a4c5) : UIColor(hexInt: 0x657798))
             middleLineColor = type == 1 ? UIColor(hexInt:0x1d4fa2) : UIColor(hexInt: 0x657798)
             //图下面的日期
             dateTextColor = type == 1 ? UIColor(hexInt: 0x657798) : UIColor(hexInt: 0x657798)
-//            dateTextColor = type == 1 ? UIColor(hexInt: 0x657798) : (isPortrait ? UIColor(hexInt: 0x94a9cf) : UIColor(hexInt: 0x657798))
             //线框
-//            bgLineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : (isPortrait ? UIColor(hexInt: 0x91a4c5) : UIColor(hexInt: 0x657798))
             bgLineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0x657798)
             //k线的颜色
 			lineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0xffffff)

@@ -12,11 +12,11 @@ class THRootViewController: UIViewController {
     override func viewWillTransitionToSize(size:CGSize,
                                            withTransitionCoordinator coordinator:UIViewControllerTransitionCoordinator)
     {
-        coordinator.animateAlongsideTransition(nil, completion:
-            {_ in
-                UIView.setAnimationsEnabled(true)
-        })
-        UIView.setAnimationsEnabled(false)
+//        coordinator.animateAlongsideTransition(nil, completion:
+//            {_ in
+//                UIView.setAnimationsEnabled(true)
+//        })
+//        UIView.setAnimationsEnabled(false)
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator);
     }
     

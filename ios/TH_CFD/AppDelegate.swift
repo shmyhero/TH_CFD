@@ -86,6 +86,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		let loadingView = UIImageView(frame: UIScreen.mainScreen().bounds)
 		loadingView.image = UIImage(named: "frontPage.jpg")
 		rootView.loadingView = loadingView
+        rootView.backgroundColor = UIColor(hexInt: 0x374d74)
+//        rootView.clipsToBounds = true
 		self.rnRootViewController = rootViewController
 		
 		// Set window to use rootViewController

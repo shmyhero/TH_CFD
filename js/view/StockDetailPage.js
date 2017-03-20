@@ -181,18 +181,20 @@ var StockDetailPage = React.createClass({
 	},
 
 	onLayoutSizeChanged: function(){
-		// only huawei phones
-		var routes = this.props.navigator.getCurrentRoutes();
-		if(routes && routes[routes.length-1]
-			&& routes[routes.length-1].name == MainPage.STOCK_DETAIL_ROUTE){
-			console.log("onLayoutSizeChanged stock detail page");
-			this.setState({
-				height: UIConstants.getVisibleHeight(),
-			})
-			return;
-		}
+		if (Platform.OS == 'android') {
+			// only huawei phones
+			var routes = this.props.navigator.getCurrentRoutes();
+			if(routes && routes[routes.length-1]
+				&& routes[routes.length-1].name == MainPage.STOCK_DETAIL_ROUTE){
+				console.log("onLayoutSizeChanged stock detail page");
+				this.setState({
+					height: UIConstants.getVisibleHeight(),
+				})
+				return;
+			}
 
-		this.state.height = UIConstants.getVisibleHeight();
+			this.state.height = UIConstants.getVisibleHeight();
+		}
 	},
 
 	onDidFocus: function(event) {
@@ -785,7 +787,7 @@ var StockDetailPage = React.createClass({
 		// console.log("render: " + JSON.stringify(this.state.stockInfo))
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
-				<View style={styles.wrapper}>
+				<View style={styles.wrapper, {width:width}}>
 					<LinearGradient colors={this.getGradientColor()} style={{height: Math.max(height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER, this.state.height)}}>
 
 						{this.renderHeader()}
@@ -899,7 +901,7 @@ var StockDetailPage = React.createClass({
 		var bottomBarBackgroundColor = LogicData.getAccountState() ? "#334a74": "#0741a8";
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
-				<View style={styles.wrapper}>
+				<View style={styles.wrapper, {width:width}}>
 					<LinearGradient colors={this.getGradientColor()} style={{height: viewHeight}}>
 						{this.renderTitleLandspace()}
 						<View style={{flex: 3.5,marginTop:5,marginLeft:viewMargin,marginRight:viewMargin}}>
@@ -1136,20 +1138,20 @@ var StockDetailPage = React.createClass({
 			if(orientation === 'PORTRAIT'){
 				height = Dimensions.get('window').width
 				width = Dimensions.get('window').height
- 				Orientation.lockToLandscape()
 				this.setState({
 					 orientation:ORIENTATION_LANDSPACE,
 					 chartViewType:NetConstants.isCandleChart(this.state.chartType)?CHARTVIEWTYPE_CANDLE:CHARTVIEWTYPE_LINE
 				},()=>{
+ 					Orientation.lockToLandscape()
 					this.pressChartHeaderTab(this.state.chartType)
 				})
 			}else{
 				height = Dimensions.get('window').width
 				width = Dimensions.get('window').height
-				Orientation.lockToPortrait()
 				this.setState({
 					orientation:ORIENTATION_PORTRAIT,
 				},()=>{
+					Orientation.lockToPortrait()
 					this.pressChartHeaderTab(NetConstants.isPortraitChart(this.state.chartType)?this.state.chartType:NetConstants.PARAMETER_CHARTTYPE_TODAY)
 				})
 			}
@@ -1157,6 +1159,14 @@ var StockDetailPage = React.createClass({
     });
 	},
 
+	_orientationDidChange: function(orientation) {
+	 	console.log("changeOrientatioin _orientationDidChange : " + orientation);
+		if (orientation == 'LANDSCAPE') {
+		 //do something with landscape layout
+		} else {
+		 //do something with portrait layout
+		}
+ },
 
 	resetToLandscape:function(){
 		Orientation.lockToPortrait();
@@ -1466,17 +1476,6 @@ var StockDetailPage = React.createClass({
 			})
 	},
 
-	_orientationDidChange: function(orientation) {
-	 if (orientation == 'LANDSCAPE') {
-		 //do something with landscape layout
-		 console.log("changeOrientatioin _orientationDidChange : " + orientation);
-
-	 } else {
-		 //do something with portrait layout
-		 console.log("changeOrientatioin _orientationDidChange : " + orientation);
-
-	 }
- },
 });
 
 

@@ -43,7 +43,7 @@ export default class Dynamicbar extends Component {
 
   show(enable, duration) {
     const { size } = this.props;
-    const toValue = !!enable? 0 : -size;
+    const toValue = !!enable? 0 : -500-size;// -500, not show when change orientaion on iOS.
     this._sizeLimit.reset(!!enable? size : 0);
     Animated.timing(this.value, {
       duration: duration,

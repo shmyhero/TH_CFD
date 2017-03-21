@@ -98,6 +98,8 @@ var LineChart = React.createClass({
 		chartPaddingRight: React.PropTypes.number,
 
 		lineChartGradient: React.PropTypes.array,
+
+		isLandspace:React.PropTypes.bool,
 	},
 
 	getDefaultProps(): Object {
@@ -128,6 +130,7 @@ var LineChart = React.createClass({
 			chartPaddingLeft: 0,
 			chartPaddingRight: 0,
 			lineChartGradient: [],
+			isLandspace:false,
 		};
 	},
 

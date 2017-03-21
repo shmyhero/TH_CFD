@@ -729,6 +729,7 @@ var StockDetailPage = React.createClass({
 			)
 	},
 
+
 	renderChart:function(){
 		var state = this.state.dataStatus;
 		console.log("RAMBO: chartType = " + this.state.chartType)
@@ -746,10 +747,12 @@ var StockDetailPage = React.createClass({
 			}else{
 				var rightAxisDrawGridLines = this.state.orientation == ORIENTATION_LANDSPACE && NetConstants.isCandleChart(this.state.chartType);
 			 	var textColor, backgroundColor, borderColor, lineChartGradient;
+
 				if(this.state.orientation == ORIENTATION_PORTRAIT){
 					textColor = "#70a5ff";
 					backgroundColor = "transparent"
 					borderColor = "#497bce";
+
 					lineChartGradient = LogicData.getAccountState() ? ['#374d74','#6683b3'] : ['#99bfff', '#1954b9'];
 				}else{
 					textColor = LogicData.getAccountState() ? "#94a9cf" : "#0740a7"
@@ -757,14 +760,17 @@ var StockDetailPage = React.createClass({
 					borderColor = LogicData.getAccountState() ? "#91a4c5" : "#0d4ab6";
 					lineChartGradient = LogicData.getAccountState() ? ['#5f7baa','#3f5680'] : ['#387ae7', '#1962dd'];
 				}
+
+				console.log("renderChart width = " + width);
 				//8596b5
 				return(
-					<LineChart style={[styles.lineChart,{opacity:opacity}]}
+					<LineChart style={[styles.lineChart,{width:width},{opacity:opacity}]}
 						chartType={this.state.chartType}
 						// chartIsActual={LogicData.getAccountState()}
 						data={JSON.stringify(this.state.stockInfo)}
 						xAxisPosition="BOTTOM"
 						borderColor={borderColor}
+						isLandspace={this.state.orientation == ORIENTATION_LANDSPACE}
 						// backgroundColor={NetConstants.isCandleChart(this.state.chartType) ? backgroundColor : 'transparent'}
 						xAxisTextSize={this.state.orientation == ORIENTATION_LANDSPACE ? 11 : 8}
 						rightAxisTextSize={this.state.orientation == ORIENTATION_LANDSPACE ? 14 : 8}

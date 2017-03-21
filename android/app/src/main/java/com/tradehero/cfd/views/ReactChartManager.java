@@ -513,6 +513,12 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
     }
 
 
+    @ReactProp(name = "isLandspace")
+    public void setOritentation(ReactChart chart, boolean isLandscape){
+        chart.setOritentation(isLandscape);
+    }
+
+
     @Override
     public String getName() {
         return REACT_CLASS;

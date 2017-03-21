@@ -16,6 +16,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.tradehero.cfd.MainActivity;
 import com.tradehero.cfd.StringUtils;
+import com.tradehero.cfd.views.ReactChart;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -101,20 +102,19 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
     }
 
     @Override
-    protected boolean isDataAcceptable(JSONArray chartDataList){
+    protected boolean isDataAcceptable(JSONArray chartDataList) {
         try {
             for (int i = 0; i < chartDataList.length(); i++) {
-                if(chartDataList.getJSONObject(i).has("open")
-                    && chartDataList.getJSONObject(i).has("close")
-                    && chartDataList.getJSONObject(i).has("high")
-                    && chartDataList.getJSONObject(i).has("low")) {
+                if (chartDataList.getJSONObject(i).has("open")
+                        && chartDataList.getJSONObject(i).has("close")
+                        && chartDataList.getJSONObject(i).has("high")
+                        && chartDataList.getJSONObject(i).has("low")) {
                     return true;
-                }
-                else{
+                } else {
                     return false;
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
         return true;
@@ -206,7 +206,7 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
             }
         }
 
-        if(needDrawEndLine(stockInfoObject)) {
+        if (needDrawEndLine(stockInfoObject)) {
             int lastLine = chartDataList.length() - 1;
             limitLineAt.add(lastLine);
             limitLineCalender.add(timeStringToCalendar(chartDataList.getJSONObject(lastLine).getString("time")));
@@ -223,8 +223,10 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
         float density = chart.getResources().getDisplayMetrics().density;
         float totalWidth = chart.getWidth() / density;
 
-        if(totalWidth == 0){
-            totalWidth = MainActivity.getCurrentScreenWidth() - 20;
+        if (totalWidth == 0) {
+//            totalWidth = MainActivity.getCurrentScreenWidth() - 20;
+            float SH = ((ReactChart) chart).isLandspace() ? MainActivity.SCREEN_H : MainActivity.SCREEN_W;
+            totalWidth = SH - 20;
         }
 
         int candleWidthDP = 4;

@@ -140,4 +140,12 @@ public class ReactChart extends CombinedChart {
     public void setXAxisPaddingRight(int value){
         ((ReactXAxisRenderer)mXAxisRenderer).setHorizontalPaddingRight(value);
     }
+
+    boolean isLandspace = false;
+    public boolean isLandspace(){
+        return isLandspace;
+    }
+    public void setOritentation(boolean isLandspace){
+        this.isLandspace = isLandspace;
+    }
 }

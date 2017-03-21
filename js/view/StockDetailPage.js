@@ -899,9 +899,10 @@ var StockDetailPage = React.createClass({
 		// console.log("render: " + JSON.stringify(this.state.stockInfo))
 		var viewHeight = Platform.OS === 'ios' ? height :  Math.max(height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER, this.state.height)
 		var bottomBarBackgroundColor = LogicData.getAccountState() ? "#334a74": "#0741a8";
+		var styleAppend = Platform.OS === 'ios'?{width:width}:null;
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
-				<View style={styles.wrapper, {width:width}}>
+				<View style={[styles.wrapper,styleAppend]}>
 					<LinearGradient colors={this.getGradientColor()} style={{height: viewHeight}}>
 						{this.renderTitleLandspace()}
 						<View style={{flex: 3.5,marginTop:5,marginLeft:viewMargin,marginRight:viewMargin}}>

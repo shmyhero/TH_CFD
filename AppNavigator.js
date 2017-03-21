@@ -39,6 +39,7 @@ var didAccountChangeSubscription = null;
 var networkConnectionChangedSubscription = null;
 var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 var {EventCenter, EventConst} = require('./js/EventCenter');
+var Orientation = require('react-native-orientation');
 
 require('./js/utils/dateUtils')
 
@@ -127,6 +128,9 @@ var AppNavigator = React.createClass({
 				this.initializeApp();
 			});
 		})
+
+	  Orientation.unlockAllOrientations(); //this will unlock the view to all Orientations
+		Orientation.lockToPortrait(); //this will lock the view to Portrait
 	},
 
 	initializeApp: function(){

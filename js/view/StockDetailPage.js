@@ -1141,30 +1141,28 @@ var StockDetailPage = React.createClass({
 	},
 
 	changeOrientatioin:function(){
-		console.log("changeOrientatioin");
-		Orientation.getOrientation((err,orientation)=> {
-			if(orientation === 'PORTRAIT'){
-				height = Dimensions.get('window').width
-				width = Dimensions.get('window').height
-				this.setState({
-					 orientation:ORIENTATION_LANDSPACE,
-					 chartViewType:NetConstants.isCandleChart(this.state.chartType)?CHARTVIEWTYPE_CANDLE:CHARTVIEWTYPE_LINE
-				},()=>{
- 					Orientation.lockToLandscape()
-					this.pressChartHeaderTab(this.state.chartType)
-				})
-			}else{
-				height = Dimensions.get('window').width
-				width = Dimensions.get('window').height
-				this.setState({
-					orientation:ORIENTATION_PORTRAIT,
-				},()=>{
-					Orientation.lockToPortrait()
-					this.pressChartHeaderTab(NetConstants.isPortraitChart(this.state.chartType)?this.state.chartType:NetConstants.PARAMETER_CHARTTYPE_TODAY)
-				})
-			}
-			console.log("Current Device Orientation: ", orientation);
-    });
+		console.log("changeOrientatioin:", this.state.orientation);
+		if(this.state.orientation === ORIENTATION_PORTRAIT){
+			height = Dimensions.get('window').width
+			width = Dimensions.get('window').height
+			this.setState({
+				 orientation:ORIENTATION_LANDSPACE,
+				 chartViewType:NetConstants.isCandleChart(this.state.chartType)?CHARTVIEWTYPE_CANDLE:CHARTVIEWTYPE_LINE
+			},()=>{
+					Orientation.lockToLandscape()
+				this.pressChartHeaderTab(this.state.chartType)
+			})
+		}else{
+			height = Dimensions.get('window').width
+			width = Dimensions.get('window').height
+			this.setState({
+				orientation:ORIENTATION_PORTRAIT,
+			},()=>{
+				Orientation.lockToPortrait()
+				this.pressChartHeaderTab(NetConstants.isPortraitChart(this.state.chartType)?this.state.chartType:NetConstants.PARAMETER_CHARTTYPE_TODAY)
+			})
+		}
+		console.log("Set Orientation: ", this.state.orientation);
 	},
 
 	_orientationDidChange: function(orientation) {

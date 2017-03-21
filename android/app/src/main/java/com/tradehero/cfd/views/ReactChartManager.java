@@ -354,7 +354,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
     public void setRightAxisEnabled(ReactChart chart, boolean enabled) {
         if (chart != null) {
             chart.getAxisRight().setEnabled(enabled);
-            this.setChartPaddingRight(chart, chartOffsetLeft);
+            this.setChartPaddingRight(chart, chartOffsetRight);
         }
     }
 

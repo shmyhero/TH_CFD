@@ -6,10 +6,12 @@ import android.graphics.drawable.GradientDrawable;
 
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.YAxisValueFormatter;
 import com.github.mikephil.charting.utils.Utils;
 import com.tradehero.cfd.MainActivity;
 import com.tradehero.cfd.StringUtils;
@@ -43,6 +45,12 @@ public abstract class LineStickPLChartDrawer extends BaseChartDrawer {
         chart.setDragEnabled(false);
         chart.setScaleEnabled(false);
         chart.setTouchEnabled(!MainActivity.isLandscape());
+        chart.getAxisRight().setValueFormatter(new YAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, YAxis yAxis) {
+                return String.format("%.2f", value);
+            }
+        });
     }
 
     protected Drawable getGradientDrawable(int[] colors){

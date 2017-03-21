@@ -60,8 +60,8 @@ public abstract class BaseChartDrawer implements IChartDrawer {
             return;
         }
 
-        minVal = Float.MAX_VALUE;
-        maxVal = Float.MIN_VALUE;
+//        minVal = Float.MAX_VALUE;
+//        maxVal = Float.MIN_VALUE;
         try{
             preClose = (float) stockInfoObject.getDouble("preClose");
         }catch (Exception e){
@@ -276,8 +276,8 @@ public abstract class BaseChartDrawer implements IChartDrawer {
         });
         chart.getAxisLeft().removeAllLimitLines();
         chart.getAxisRight().removeAllLimitLines();
-        chart.getAxisLeft().setAxisMinValue(minVal);
-        chart.getAxisLeft().setAxisMaxValue(maxVal);
+//        chart.getAxisLeft().setAxisMinValue(minVal);
+//        chart.getAxisLeft().setAxisMaxValue(maxVal);
     }
 
     protected interface OnLimitLinesPositionCalculatedHandler {

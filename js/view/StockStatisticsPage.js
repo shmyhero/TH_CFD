@@ -271,7 +271,7 @@ var StockStatisticsPage = React.createClass({
 					profitBarFlex *= -1
 					//investBarFlex -= profitBarFlex
 				}else if (barContent.pl == 0){
-					profitBarStyle = {flex: 0};
+					profitBarStyle = {flex: 1};
 				}
 				if(profitBarFlex == 0){
 					profitBarFlex = 1;

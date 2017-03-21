@@ -163,12 +163,19 @@ var StockDetailPage = React.createClass({
 		layoutSizeChangedSubscription && layoutSizeChangedSubscription.remove();
 		chartClickedSubscription && chartClickedSubscription.remove();
 		Orientation.getOrientation((err,orientation)=> {
-		 console.log("Current Device Orientation: ", orientation);
-	 });
+			console.log("componentWillUnmount Current Device Orientation: ", orientation);
+			if(orientation === 'PORTRAIT'){
+				height = Dimensions.get('window').height
+				width = Dimensions.get('window').width
+			}else{
+				height = Dimensions.get('window').width
+				width = Dimensions.get('window').height
+			}
+		});
+		Orientation.lockToPortrait();
 
-	 Orientation.lockToPortrait();
-	 Orientation.removeOrientationListener(this._orientationDidChange);
-	 BackAndroid.removeEventListener('hardwareBackPress', this.hardwareBackPress);
+		Orientation.removeOrientationListener(this._orientationDidChange);
+		BackAndroid.removeEventListener('hardwareBackPress', this.hardwareBackPress);
 	},
 
 	hardwareBackPress:function(){

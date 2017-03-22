@@ -63,11 +63,12 @@ var accountInfoData = [
 
 var OpenAccountInfos = [
 	 "",
-	 "设置账户信息(1/5)",
-	 "上传身份证照片(2/5)",
-	 "完善个人信息(3/5)",
-	 "完善财务信息(4/5)",
-	 "提交申请(5/5)",
+	 "设置账户信息(1/6)",
+	 "上传身份证照片(2/6)",
+	 "完善个人信息(3/6)",
+	 "完善地址证明信息(4/6)",
+	 "完善财务信息(5/6)",
+	 "提交申请(6/6)",
 ]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -547,7 +548,8 @@ var MePage = React.createClass({
 		var meData = LogicData.getMeData();
 		console.log('提示：','liveAccStatus = '+meData.liveAccStatus + ', liveAccRejReason = '+ meData.liveAccRejReason)
 	  accStatus = meData.liveAccStatus;
-		// accStatus = 0
+		accStatus = 0
+		this.state.lastStep = 6
 		var strStatus = '';
 		var colorStatus = ColorConstants.TITLE_BLUE
 

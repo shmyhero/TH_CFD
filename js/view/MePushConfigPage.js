@@ -176,26 +176,15 @@ var MePushConfigPage = React.createClass({
 
 	render: function() {
 		var userData = LogicData.getUserData()
-		var loggined = Object.keys(userData).length !== 0
-		if(loggined){
-			return (<View style={styles.wrapper}>
-				<NavBar title="推送设置" showBackButton={true} navigator={this.props.navigator}/>
-				<ListView
-					style={styles.list}
-					dataSource={this.state.dataSource}
-					renderRow={this.renderRow}
-					renderSeparator={this.renderSeparator} />
-			</View>
-			);
-		}else{
-			return (<Navigator
-				style={styles.container}
-				initialRoute={{name: MainPage.LOGIN_ROUTE,
-					popToRoute: MainPage.ME_PUSH_CONFIG_ROUTE,
-					onPopToRoute: this.loadPushConfigInfo}}
-				configureScene={() => Navigator.SceneConfigs.PushFromRight}
-				renderScene={this.props.routeMapper} />);
-		}
+		return (<View style={styles.wrapper}>
+			<NavBar title="推送设置" showBackButton={true} navigator={this.props.navigator}/>
+			<ListView
+				style={styles.list}
+				dataSource={this.state.dataSource}
+				renderRow={this.renderRow}
+				renderSeparator={this.renderSeparator} />
+		</View>
+		);
 	},
 });
 

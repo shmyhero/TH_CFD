@@ -138,6 +138,12 @@ export let WITHDRAW_ROUTE = 'withdrawRoute'
 export let WITHDRAW_SUBMITTED_ROUTE = 'withdrawSubmittedRoute'
 export let WITHDRAW_RESULT_ROUTE = 'withdrawFailedRoute'
 
+const NoBackSwipe ={
+  ...Navigator.SceneConfigs.PushFromRight,
+    gestures: {
+      pop: {},
+    },
+};
 
 const glypy = glypyMapMaker({
   Home: 'f04f',
@@ -182,6 +188,15 @@ var MainPage = React.createClass({
 			showTutorial: false,
 			tutorialType: 'trade',
 		};
+	},
+
+	_configureScene(route){
+		if (route.name === STOCK_DETAIL_ROUTE) {
+			return NoBackSwipe
+		}
+		else {
+			return Navigator.SceneConfigs.PushFromRight
+		}
 	},
 
 	RouteMapper : function(route, navigationOperations, onComponentRef) {
@@ -1070,7 +1085,7 @@ var MainPage = React.createClass({
 												hideTabbar: this.hideTabbar,
 												showProgress: this.showProgress,
 												hideProgress: this.hideProgress}}
-								configureScene={() => Navigator.SceneConfigs.PushFromRight}
+								configureScene={this._configureScene}
 								renderScene={this.RouteMapper} />
 			          	</RawContent>
 			        </Tab>
@@ -1080,7 +1095,7 @@ var MainPage = React.createClass({
 		            		<Navigator
 								style={styles.container}
 								initialRoute={{name: STOCK_LIST_VIEW_PAGER_ROUTE}}
-								configureScene={() => Navigator.SceneConfigs.PushFromRight}
+								configureScene={this._configureScene}
 								renderScene={this.RouteMapper} />
 			          	</RawContent>
 			        </Tab>
@@ -1090,7 +1105,7 @@ var MainPage = React.createClass({
 			            	<Navigator
 								style={styles.container}
 								initialRoute={{name: STOCK_EXCHANGE_ROUTE}}
-								configureScene={() => Navigator.SceneConfigs.PushFromRight}
+								configureScene={this._configureScene}
 								renderScene={this.RouteMapper} />
 			          	</RawContent>
 			        </Tab>
@@ -1100,7 +1115,7 @@ var MainPage = React.createClass({
 							<Navigator
 								style={styles.container}
 								initialRoute={{name: ME_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
-								configureScene={() => Navigator.SceneConfigs.PushFromRight}
+								configureScene={this._configureScene}
 								renderScene={this.RouteMapper} />
 			          	</RawContent>
 		        	</Tab>

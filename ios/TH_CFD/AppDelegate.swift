@@ -102,6 +102,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 	}
     
     func application(application: UIApplication, supportedInterfaceOrientationsForWindow window: UIWindow?) -> UIInterfaceOrientationMask {
+        print ("iOS get from RN orientation:", Orientation.getOrientation())
         return Orientation.getOrientation()
     }
 	

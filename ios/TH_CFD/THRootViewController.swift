@@ -20,4 +20,7 @@ class THRootViewController: UIViewController {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator);
     }
     
+    override func shouldAutorotate() -> Bool {
+        return true
+    }
 }

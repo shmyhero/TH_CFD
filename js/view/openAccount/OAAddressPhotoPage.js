@@ -194,10 +194,10 @@ var OAAddressPhotoPage = React.createClass({
 				</TouchableOpacity>
 				<View style={styles.reminderArea}>
 					<Text style={styles.reminderText}>有效的地址信息包含：</Text>
+  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>居住证、户口本、房产证</Text></Text>
+  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>宽带/水电煤/固定电话账单（近3个月）</Text></Text>
+  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>银行账单（近3个月）</Text></Text>
   					<Text style={styles.reminderText}>• <Text style={styles.highlight}>驾照</Text></Text>
-  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>水电煤缴费账单</Text></Text>
-  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>固定电话账单</Text></Text>
-  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>宽带账单</Text></Text>
   				<Text style={styles.reminderText}>您只需上传其中一种有效的地址证明照片，上传的照片信息必须与本人身份证保持一致，以免产生不必要的交易风险。</Text>
 				</View>
 				<View style={styles.bottomArea}>

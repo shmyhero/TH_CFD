@@ -52,9 +52,9 @@ var OAReviewStatusPage = React.createClass({
 				<View style={styles.rowWrapper}>
 					<Text style={styles.text2}>{"提交申请\n"+startDate.Format('yyyy-MM-dd')+"\n"+startDate.Format('hh:mm:ss')}</Text>
 					<Text style={styles.text2}>{"正在审核"}</Text>
-					<Text style={styles.text2}>{"预计审核时间\n3分钟内完成"}</Text>
+					<Text style={styles.text2}>{"审核通过后\n3短信提醒"}</Text>
 				</View>
-				<Text style={styles.text3}>{"开户成功后，\n您可以在我的页面里面登录实盘账户，同时您将收到欢迎邮件"}</Text>
+				<Text style={styles.text3}>{"开户成功后，\n盈交易会以短信告知您，同时您将收到欢迎邮件"}</Text>
 				<Button style={styles.buttonArea}
 					enabled={true}
 					onPress={this.gotoNext}

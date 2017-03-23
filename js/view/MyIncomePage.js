@@ -37,7 +37,8 @@ var listRawData = [
 {'type':'normal','title':'签到交易金(元)', 'subtype': 'totalDailySign'},
 {'type':'normal','title':'模拟下单交易金(元)', 'subtype': 'demoTransaction'},
 {'type':'normal','title':'注册交易金(元)', 'subtype': 'demoRegister'},
-{'type':'normal','title':'卡片交易金(元)', 'subtype': 'totalCard'}
+{'type':'normal','title':'卡片交易金(元)', 'subtype': 'totalCard'},
+{'type':'normal','title':'开户交易金(元)', 'subtype': 'liveRegister'},
 ]
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var RULE_DIALOG = "ruleDialog";
@@ -57,6 +58,7 @@ var MyIncomePage = React.createClass({
 			totalCard: '--',
 			demoTransaction: '--',
 			demoRegister: '--',
+			liveRegister: '--',
 			dataSource: ds.cloneWithRows(listRawData),
 		};
 	},
@@ -129,16 +131,19 @@ var MyIncomePage = React.createClass({
 					var totalDailySign = responseJson.totalDailySign;
 					var demoTransaction = responseJson.totalDemoTransaction;
 					var demoRegister = responseJson.demoRegister
+					var liveRegister = responseJson.liveRegister ? responseJson.liveRegister : 0;
 					var totalCard = responseJson.totalCard ? responseJson.totalCard : 0;
 					console.log("totalDailySign: " + totalDailySign.toString())
 					console.log("demoTransaction: " + demoTransaction.toString())
 					console.log("demoRegister: " + demoRegister.toString())
+					console.log("liveRegister: " + liveRegister.toString())
 					console.log("totalCard: " + totalCard.toString())
 					this.setState({
 						totalDailySign : totalDailySign.toString(),
 						totalCard: totalCard.toString(),
 						demoTransaction: demoTransaction.toString(),
 						demoRegister: demoRegister.toString(),
+						liveRegister: liveRegister.toString(),
 						dataSource: ds.cloneWithRows(listRawData),
 					});
 				},
@@ -153,6 +158,7 @@ var MyIncomePage = React.createClass({
 				totalDailySign: 0,
 				demoTransaction: 0,
 				demoRegister: 0,
+				liveRegister: 0,
 				totalCard: 0,
 				dataSource: ds.cloneWithRows(listRawData),
 			})
@@ -237,13 +243,16 @@ var MyIncomePage = React.createClass({
 			if(rowData.subtype == 'totalDailySign'){
 				value = this.state.totalDailySign;
 			}
-			if(rowData.subtype == 'demoTransaction'){
+			else if(rowData.subtype == 'demoTransaction'){
 				value = this.state.demoTransaction;
 			}
-			if(rowData.subtype == 'demoRegister'){
+			else if(rowData.subtype == 'demoRegister'){
 				value = this.state.demoRegister;
 			}
-			if(rowData.subtype == 'totalCard'){
+			else if(rowData.subtype == 'liveRegister'){
+				value = this.state.liveRegister;
+			}
+			else if(rowData.subtype == 'totalCard'){
 				value = this.state.totalCard;
 			}
 

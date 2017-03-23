@@ -221,7 +221,6 @@ var styles = StyleSheet.create({
 	},
 
 	imageArea: {
-		flex: 2,
 		alignSelf: 'center',
 		alignItems: 'center',
 	},

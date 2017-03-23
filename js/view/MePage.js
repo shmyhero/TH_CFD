@@ -548,8 +548,7 @@ var MePage = React.createClass({
 		var meData = LogicData.getMeData();
 		console.log('提示：','liveAccStatus = '+meData.liveAccStatus + ', liveAccRejReason = '+ meData.liveAccRejReason)
 	  accStatus = meData.liveAccStatus;
-		accStatus = 0
-		this.state.lastStep = 6
+		//accStatus = 0
 		var strStatus = '';
 		var colorStatus = ColorConstants.TITLE_BLUE
 

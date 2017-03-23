@@ -1232,7 +1232,7 @@ var StockDetailPage = React.createClass({
 		// insert the user input value
 		var exist = false
 		var input = parseInt(this.state.inputText)
-		if (input > 0) {
+		if (input > 10) {
 			for (var i = moneyArray.length - 1; i >= 0; i--) {
 				var value = parseInt(moneyArray[i])
 				if (value === input) {

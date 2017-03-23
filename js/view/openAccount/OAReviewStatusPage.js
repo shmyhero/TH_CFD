@@ -52,15 +52,18 @@ var OAReviewStatusPage = React.createClass({
 				<View style={styles.rowWrapper}>
 					<Text style={styles.text2}>{"提交申请\n"+startDate.Format('yyyy-MM-dd')+"\n"+startDate.Format('hh:mm:ss')}</Text>
 					<Text style={styles.text2}>{"正在审核"}</Text>
-					<Text style={styles.text2}>{"审核通过后\n3短信提醒"}</Text>
+					<Text style={styles.text2}>{"审核通过后\n短信提醒"}</Text>
 				</View>
-				<Text style={styles.text3}>{"开户成功后，\n盈交易会以短信告知您，同时您将收到欢迎邮件"}</Text>
-				<Button style={styles.buttonArea}
-					enabled={true}
-					onPress={this.gotoNext}
-					textContainerStyle={styles.buttonView}
-					textStyle={styles.buttonText}
-					text='完成' />
+				<Text style={styles.text3}>{"开户成功后，\n盈交易会以短信告知您，同时您将收到欢迎邮件。"}</Text>
+				<View style={{flex:1}}/>
+				<View style={styles.bottomArea}>
+					<Button style={styles.buttonArea}
+						enabled={true}
+						onPress={this.gotoNext}
+						textContainerStyle={styles.buttonView}
+						textStyle={styles.buttonText}
+						text='完成' />
+				</View>
 			</View>
 		);
 	},
@@ -106,6 +109,7 @@ var styles = StyleSheet.create({
 	},
 
 	buttonArea: {
+		flex: 1,
 		marginLeft: 15,
 		marginRight: 15,
 		marginBottom: 16,
@@ -127,7 +131,13 @@ var styles = StyleSheet.create({
 		marginLeft: 20,
 		marginRight: 20,
 		color: ColorConstants.TITLE_DARK_BLUE,
-	}
+	},
+	bottomArea: {
+		height: 72,
+		backgroundColor: 'white',
+		alignItems: 'flex-end',
+		flexDirection:'row'
+	},
 });
 
 

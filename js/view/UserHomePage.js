@@ -92,6 +92,7 @@ export default class UserHomePage extends Component{
 			isFollowing:false,
 			titleOpacity:0,
 			rank:1,
+			rankDescription:''
 		}
 
 	}
@@ -127,6 +128,7 @@ export default class UserHomePage extends Component{
 					 picUrl:responseJson.picUrl,
 					 isFollowing:responseJson.isFollowing,
 					 rank:responseJson.rank,
+					 rankDescription:responseJson.rankDescription,
 				 })
 			},
 			(result) => {
@@ -174,6 +176,8 @@ export default class UserHomePage extends Component{
 	}
 
 	middleWarpperRender(){
+
+		var rankColor = this.state.rank > 0 ? {color:'#fa2c21'}:null;
 		return(
 			<View style = {styles.middleWapper}>
 				<View style={{flexDirection:'row',height:40}}>
@@ -194,7 +198,7 @@ export default class UserHomePage extends Component{
 				</View>
 				<View style={{flexDirection:'row',flex:1,marginBottom:15}}>
 					<View style = {styles.oneOfThree}>
-     				<Text style={styles.font2}>超越平凡</Text>
+     				<Text style={[styles.font2,rankColor]}>{this.state.rankDescription}</Text>
      			</View>
 					{this.rowSepartor()}
 					<View style = {styles.oneOfThree}>

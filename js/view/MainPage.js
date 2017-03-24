@@ -420,7 +420,7 @@ var MainPage = React.createClass({
 			hideTabbar();
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title="设置" showBackButton={true} navigator={navigationOperations}/>
+					<NavBar title="更多" showBackButton={true} navigator={navigationOperations}/>
 					<MeConfigPage navigator={navigationOperations} onPopBack={route.onPopBack}/>
 				</View>
 			)

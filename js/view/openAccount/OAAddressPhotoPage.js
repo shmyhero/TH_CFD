@@ -195,10 +195,10 @@ var OAAddressPhotoPage = React.createClass({
 				<View style={styles.reminderArea}>
 					<Text style={styles.reminderText}>有效的地址证明包含：</Text>
   					<Text style={styles.reminderText}>• <Text style={styles.highlight}>居住证、户口本、房产证</Text></Text>
-  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>宽带/水电煤/固定电话账单（近3个月内）</Text></Text>
-  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>银行账单（近3个月内）</Text></Text>
+  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>宽带/水电煤/固话账单(近3个月内)</Text></Text>
+  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>银行账单(近3个月内)</Text></Text>
   					<Text style={styles.reminderText}>• <Text style={styles.highlight}>驾照</Text></Text>
-  				<Text style={styles.reminderText}>您只需上传其中一种有效的地址证明照片，上传的照片信息必须与本人身份证保持一致，以免产生不必要的交易风险。</Text>
+  				<Text style={styles.reminderText}>请上传上述任意一种证明照片，照片信息必须与开户身份证一致。</Text>
 				</View>
 				<View style={styles.bottomArea}>
 					<Button style={styles.buttonArea}
@@ -247,7 +247,11 @@ var styles = StyleSheet.create({
 
 	reminderArea:{
     paddingTop: 10,
-    margin: width*0.09,
+    marginLeft: width*0.09,
+    marginRight: width*0.09,
+    marginBottom: width*0.09,
+		justifyContent: 'center',
+		//alignItems: 'center',
 		flex:3,
 	},
 

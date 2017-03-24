@@ -875,7 +875,14 @@ var MainPage = React.createClass({
 	_handleDeepLink: function(url) {
 		console.log('handleDeeplink: ' + url)
 
-		if(url.startsWith('cfd://page/share')) {
+		if(url.startsWith('cfd://page/share/session')){
+			var json = this.getJsonFromUrl(url)
+			this.refs[SHARE_PAGE].shareToSession(json);
+		}else if(url.startsWith('cfd://page/share/timeline')){
+			var json = this.getJsonFromUrl(url)
+			this.refs[SHARE_PAGE].shareToTimeline(json);
+		}
+		else if(url.startsWith('cfd://page/share')) {
 			TalkingdataModule.trackCurrentEvent();
 
 			var json = this.getJsonFromUrl(url)

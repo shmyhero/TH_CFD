@@ -39,6 +39,7 @@ var listRawData = [
 {'type':'normal','title':'注册交易金(元)', 'subtype': 'demoRegister'},
 {'type':'normal','title':'卡片交易金(元)', 'subtype': 'totalCard'},
 {'type':'normal','title':'开户交易金(元)', 'subtype': 'liveRegister'},
+{'type':'normal','title':'好友推荐奖励金(元)', 'subtype': 'referralReward'},
 ]
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var RULE_DIALOG = "ruleDialog";
@@ -59,6 +60,7 @@ var MyIncomePage = React.createClass({
 			demoTransaction: '--',
 			demoRegister: '--',
 			liveRegister: '--',
+			referralReward: '--',
 			dataSource: ds.cloneWithRows(listRawData),
 		};
 	},
@@ -133,17 +135,20 @@ var MyIncomePage = React.createClass({
 					var demoRegister = responseJson.demoRegister
 					var liveRegister = responseJson.liveRegister ? responseJson.liveRegister : 0;
 					var totalCard = responseJson.totalCard ? responseJson.totalCard : 0;
+					var referralReward = responseJson.referralReward ? responseJson.referralReward : 0;
 					console.log("totalDailySign: " + totalDailySign.toString())
 					console.log("demoTransaction: " + demoTransaction.toString())
 					console.log("demoRegister: " + demoRegister.toString())
 					console.log("liveRegister: " + liveRegister.toString())
 					console.log("totalCard: " + totalCard.toString())
+					console.log("referralReward: " + referralReward.toString())
 					this.setState({
 						totalDailySign : totalDailySign.toString(),
 						totalCard: totalCard.toString(),
 						demoTransaction: demoTransaction.toString(),
 						demoRegister: demoRegister.toString(),
 						liveRegister: liveRegister.toString(),
+						referralReward: referralReward.toString(),
 						dataSource: ds.cloneWithRows(listRawData),
 					});
 				},
@@ -159,6 +164,7 @@ var MyIncomePage = React.createClass({
 				demoTransaction: 0,
 				demoRegister: 0,
 				liveRegister: 0,
+				referralReward: 0,
 				totalCard: 0,
 				dataSource: ds.cloneWithRows(listRawData),
 			})
@@ -254,6 +260,9 @@ var MyIncomePage = React.createClass({
 			}
 			else if(rowData.subtype == 'totalCard'){
 				value = this.state.totalCard;
+			}			
+			else if(rowData.subtype == 'referralReward'){
+				value = this.state.referralReward;
 			}
 
 			return(

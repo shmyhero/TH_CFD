@@ -39,15 +39,16 @@ var listRawData = [{'type':'account','subtype':'accountInfo'},
 // {'type':'button','title':'开设实盘账户'},
 {'type':'Separator', 'height':10},
 {'type':'accountState'},
+{'type':'normal','title':'邀请好友', 'image':require('../../images/icon_invite_friends.png'), 'subtype':'inviteFriends'},
 {'type':'normal','title':'存取资金', 'image':require('../../images/icon_depositwithdraw.png'), 'subtype':'depositWithdraw'},
 {'type':'normal','title':'我的交易金', 'image':require('../../images/icon_income.png'), 'subtype':'income'},
 {'type':'normal','title':'我的卡片', 'image':require('../../images/icon_mycard.png'), 'subtype':'mycard'},
 {'type':'normal','title':'帮助中心', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'helpcenter'},
 {'type':'normal','title':'线上咨询', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':'onlinehelp'},
-{'type':'normal','title':'产品反馈', 'image':require('../../images/icon_response.png'), 'subtype':'feedback'},
+//{'type':'normal','title':'产品反馈', 'image':require('../../images/icon_response.png'), 'subtype':'feedback'},
 // {'type':'normal','title':'关于我们', 'image':require('../../images/icon_aboutus.png'), 'subtype':'aboutus'},
-{'type':'normal','title':'用户协议', 'image':require('../../images/icon_protocol.png'), 'subtype':'protocol'},
-{'type':'normal','title':'设置', 'image':require('../../images/icon_config.png'), 'subtype':'config'},
+//{'type':'normal','title':'用户协议', 'image':require('../../images/icon_protocol.png'), 'subtype':'protocol'},
+{'type':'normal','title':'更多', 'image':require('../../images/icon_config.png'), 'subtype':'config'},
 ]
 
 
@@ -415,7 +416,10 @@ var MePage = React.createClass({
 	},
 
 	onSelectNormalRow: function(rowData) {
-		if(rowData.subtype === 'depositWithdraw'){
+		if(rowData.subtype === 'inviteFriends'){
+			var url = LogicData.getAccountState()?NetConstants.TRADEHERO_API.NEW_USER_INVITATION_ACTUAL:NetConstants.TRADEHERO_API.NEW_USER_INVITATION;
+			this.gotoWebviewPage(url, '邀请好友', true);
+		}else if(rowData.subtype === 'depositWithdraw'){
 			console.log("LogicData.getActualLogin() " + LogicData.getActualLogin())
 			if(LogicData.getActualLogin()){
 				this.props.navigator.push({

@@ -33,9 +33,9 @@ var VersionControlModule = require('../module/VersionControlModule')
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 var listRawData = [
+{'type':'normal','title':'用户协议', 'subtype': 'protocol'},
 {'type':'normal','title':'推送设置', 'subtype': 'pushconfig'},
 {'type':'normal','title':'账号绑定', 'subtype': 'accountbinding'},
-{'type':'normal','title':'推荐给好友', 'subtype': 'share'},
 {'type':'normal','title':'切换到模拟交易', 'subtype': 'change2Simulator'},
 {'type':'normal','title':'登出实盘账号', 'subtype': 'logoutAccountActual'},
 {'type':'normal','title':'修改实盘登录密码', 'subtype': 'modifyLoginActualPwd'},
@@ -66,9 +66,33 @@ var MeConfigPage = React.createClass({
 		};
 	},
 
+	gotoWebviewPage: function(targetUrl, title, hideNavBar) {
+		var userData = LogicData.getUserData()
+		var userId = userData.userId
+		if (userId == undefined) {
+			userId = 0
+		}
+
+		if (targetUrl.indexOf('?') !== -1) {
+			targetUrl = targetUrl + '&userId=' + userId
+		} else {
+			targetUrl = targetUrl + '?userId=' + userId
+		}
+
+		this.props.navigator.push({
+			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			url: targetUrl,
+			title: title,
+			isShowNav: hideNavBar ? false : true,
+		});
+	},
+
 	onSelectNormalRow: function(rowData) {
 		//todo
-		if(rowData.subtype === 'pushconfig') {
+		if(rowData.subtype === 'protocol'){
+			var protocolUrl = LogicData.getAccountState()?NetConstants.TRADEHERO_API.WEBVIEW_SIGNTERMS_PAGE_ACTUAL:NetConstants.TRADEHERO_API.WEBVIEW_SIGNTERMS_PAGE
+			this.gotoWebviewPage(protocolUrl, '用户协议',true);
+		}else if(rowData.subtype === 'pushconfig') {
 			this.props.navigator.push({
 				name: MainPage.ME_PUSH_CONFIG_ROUTE,
 			});

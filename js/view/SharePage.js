@@ -178,25 +178,42 @@ var SharePage = React.createClass({
     );
   },
 
+	shareToSession: function(data){
+		if(data){
+			console.log("shareToSession data: " + JSON.stringify(data));
+			WechatModule.wechatShare(data.title,
+						data.description,
+						data.webpageUrl,
+						data.imageUrl,
+						WechatModule.WECHAT_SESSION,
+				()=>{ },
+				()=>{ });
+		}
+	},
+
+	shareToTimeline: function(data){
+		if(data){
+			console.log("shareToTimeline data: " + JSON.stringify(data));
+			WechatModule.wechatShare(data.title,
+						data.description,
+						data.webpageUrl,
+						data.imageUrl,
+						WechatModule.WECHAT_SESSION,
+				()=>{ },
+				()=>{ });
+		}
+	},
+
   shareToWeChat: function(type){
 	  if(this.data){
 	    if(type == "session"){
-	      WechatModule.wechatShare(this.data.title,
-							this.data.description,
-							this.data.webpageUrl,
-							this.data.imageUrl,
-							WechatModule.WECHAT_SESSION,
-	        ()=>{ },
-	        ()=>{ })
+	      this.shareToSession(this.data);
 	    }else{
-				var title = this.data.circleTitle ? this.data.circleTitle : this.data.title;
-	      WechatModule.wechatShare(title,
-							this.data.description,
-							this.data.webpageUrl,
-							this.data.imageUrl,
-							WechatModule.WECHAT_TIMELINE,
-	        ()=>{ },
-	        ()=>{ })
+				var data = {
+					...this.data,
+					title: this.data.circleTitle ? this.data.circleTitle : this.data.title,
+				};
+				this.shareToTimeline(data);
 	    }
 		  this.hide();
 		}

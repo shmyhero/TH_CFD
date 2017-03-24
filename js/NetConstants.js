@@ -192,6 +192,9 @@ function getTradeHeroAPI(){
     //用户协议
     WEBVIEW_SIGNTERMS_PAGE: TRADEHERO_SERVER_IP + '/TH_CFD_WEB/SignTerms.html',
     WEBVIEW_SIGNTERMS_PAGE_ACTUAL: TRADEHERO_SERVER_IP + '/TH_CFD_SP/SignTerms.html',
+
+    NEW_USER_INVITATION: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER + '/Invitation.html',
+    NEW_USER_INVITATION_ACTUAL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/Invitation.html',
   }
 }
 

@@ -12,6 +12,7 @@ import {
 	Text,
 	Image,
 	TouchableOpacity,
+	Alert,
 } from 'react-native';
 
 var LogicData = require('../LogicData')

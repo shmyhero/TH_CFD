@@ -367,7 +367,7 @@ var OAPersonalInfoPage = React.createClass({
 							placeholder="开始日期"
 						/>
 					</TouchableOpacity>
-					<View style={{alignItems:'center', alignSelf:'center', width: 80,}}>
+					<View style={{alignItems:'center', alignSelf:'center', width: 60,}}>
 						<Text>-</Text>
 					</View>
 					<TouchableOpacity style={styles.datePeriodButton} onPress={()=>this.chooseEndDatePicker()}>
@@ -698,7 +698,7 @@ var styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	datePeriodPicker:{
-		width: 100,
+		width: 80,
 	}
 });
 
@@ -726,7 +726,7 @@ var datePickerStyle = StyleSheet.create({
 var datePeriodPickerStyle = StyleSheet.create({
 	dateTouchBody:{
 		height: Platform.OS === 'ios' ? 0: 40,
-	  width: 100,
+	  width: 80,
 	},
   dateInput: {
     flex: 1,

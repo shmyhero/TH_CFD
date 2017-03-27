@@ -3,6 +3,7 @@
 import React from 'react';
 import {
   AsyncStorage,
+	Alert,
 } from 'react-native';
 
 var LogicData = require('../LogicData')

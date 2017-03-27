@@ -442,7 +442,7 @@ var StockStatisticsPage = React.createClass({
 					{barNameText}
 				</View>
 				<View style={[styles.verticleSeparator,]}/>
-				<View style={[{width: 207}]}>
+				<View style={[{width: width/7*4}]}>
 					{this.renderBars()}
 				</View>
 				<View style={styles.plValue}>

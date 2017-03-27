@@ -57,6 +57,7 @@ var UpdateUserInfoPage = React.createClass({
 		popToRoute: React.PropTypes.string,
 		showRegisterSuccessDialog: React.PropTypes.func,
 		popToStackTop: React.PropTypes.bool,
+		getNextRoute: React.PropTypes.func,
 	},
 
 	getDefaultProps() {
@@ -64,6 +65,7 @@ var UpdateUserInfoPage = React.createClass({
 			popToRoute: null,
 			showRegisterSuccessDialog: ()=>{},
 			popToStackTop: false,
+			getNextRoute: null,
 		}
 	},
 
@@ -193,6 +195,18 @@ var UpdateUserInfoPage = React.createClass({
 	backButtonPressed: function(){
 		if(this.props.popToStackTop){
 			this.props.navigator.popToTop();
+		}else if(this.props.getNextRoute != null){
+			var routes = this.props.navigator.getCurrentRoutes();
+			var currentRouteIndex = -1;
+			for (var i=0; i<routes.length; ++i) {
+				if(routes[i].name === MainPage.LOGIN_ROUTE){
+					currentRouteIndex = i;
+				}
+			}
+			var nextRoute = this.props.getNextRoute();
+			this.props.navigator.replaceAtIndex(nextRoute, currentRouteIndex, ()=>{
+				this.props.navigator.pop();
+			});
 		}else	if(this.props.popToRoute != null){
 			var routes = this.props.navigator.getCurrentRoutes();
 			var backRoute = null;

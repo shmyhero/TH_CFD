@@ -198,7 +198,7 @@ var SharePage = React.createClass({
 						data.description,
 						data.webpageUrl,
 						data.imageUrl,
-						WechatModule.WECHAT_SESSION,
+						WechatModule.WECHAT_TIMELINE,
 				()=>{ },
 				()=>{ });
 		}

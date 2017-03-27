@@ -39,8 +39,8 @@ var listRawData = [{'type':'account','subtype':'accountInfo'},
 // {'type':'button','title':'开设实盘账户'},
 {'type':'Separator', 'height':10},
 {'type':'accountState'},
-{'type':'normal','title':'邀请好友', 'image':require('../../images/icon_invite_friends.png'), 'subtype':'inviteFriends'},
 {'type':'normal','title':'存取资金', 'image':require('../../images/icon_depositwithdraw.png'), 'subtype':'depositWithdraw'},
+{'type':'normal','title':'邀请好友', 'image':require('../../images/icon_invite_friends.png'), 'subtype':'inviteFriends'},
 {'type':'normal','title':'我的交易金', 'image':require('../../images/icon_income.png'), 'subtype':'income'},
 {'type':'normal','title':'我的卡片', 'image':require('../../images/icon_mycard.png'), 'subtype':'mycard'},
 {'type':'normal','title':'帮助中心', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'helpcenter'},
@@ -387,7 +387,7 @@ var MePage = React.createClass({
 		});
 	},
 
-	gotoWebviewPage: function(targetUrl, title, hideNavBar) {
+	getWebViewPageScene: function(targetUrl, title, hideNavBar) {
 		var userData = LogicData.getUserData()
 		var userId = userData.userId
 		if (userId == undefined) {
@@ -400,12 +400,16 @@ var MePage = React.createClass({
 			targetUrl = targetUrl + '?userId=' + userId
 		}
 
-		this.props.navigator.push({
+		return {
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			url: targetUrl,
 			title: title,
 			isShowNav: hideNavBar ? false : true,
-		});
+		}
+	},
+
+	gotoWebviewPage: function(targetUrl, title, hideNavBar) {
+		this.props.navigator.push(this.getWebViewPageScene(targetUrl, title, hideNavBar));
 	},
 
 	goToMailPage: function(){
@@ -418,7 +422,16 @@ var MePage = React.createClass({
 	onSelectNormalRow: function(rowData) {
 		if(rowData.subtype === 'inviteFriends'){
 			var url = LogicData.getAccountState()?NetConstants.TRADEHERO_API.NEW_USER_INVITATION_ACTUAL:NetConstants.TRADEHERO_API.NEW_USER_INVITATION;
-			this.gotoWebviewPage(url, '邀请好友', true);
+			var userData = LogicData.getUserData()
+			var notLogin = Object.keys(userData).length === 0
+			if(!notLogin){
+				this.gotoWebviewPage(url, '邀请好友', true);
+			}else{
+				this.props.navigator.push({
+					name: MainPage.LOGIN_ROUTE,
+					getNextRoute: ()=> this.getWebViewPageScene(url, '邀请好友', true),					
+				});
+			}
 		}else if(rowData.subtype === 'depositWithdraw'){
 			console.log("LogicData.getActualLogin() " + LogicData.getActualLogin())
 			if(LogicData.getActualLogin()){

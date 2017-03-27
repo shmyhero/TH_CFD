@@ -247,7 +247,8 @@ var MainPage = React.createClass({
 					showRegisterSuccessDialog={this.showRegisterSuccessDialog}
 					isTabbarShown={this.getIsTabbarShown}
 					isMobileBinding={route.isMobileBinding}
-					popToStackTop={route.popToStackTop}/>
+					popToStackTop={route.popToStackTop}
+					getNextRoute={route.getNextRoute}/>
 			);
 		} else if (route.name === UPDATE_USER_INFO_ROUTE) {
 			return (
@@ -255,7 +256,8 @@ var MainPage = React.createClass({
 					<UpdateUserInfoPage navigator={navigationOperations}
 					popToRoute={route.popToRoute}
 					showRegisterSuccessDialog={this.showRegisterSuccessDialog}
-					popToStackTop={route.popToStackTop}/>
+					popToStackTop={route.popToStackTop}
+					getNextRoute={route.getNextRoute}/>
 				</View>
 			);
 		} else if (route.name === MY_HOME_ROUTE) {

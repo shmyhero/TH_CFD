@@ -57,6 +57,7 @@ var LoginPage = React.createClass({
 		isTabbarShown: React.PropTypes.func,
 		isMobileBinding: React.PropTypes.bool,
 		popToStackTop: React.PropTypes.bool,
+		getNextRoute: React.PropTypes.func,
 	},
 
 	getDefaultProps() {
@@ -68,6 +69,7 @@ var LoginPage = React.createClass({
 			isTabbarShown: ()=>{},
 			isMobileBinding: false,
 			popToStackTop: false,
+			getNextRoute: null,
 		}
 	},
 
@@ -387,6 +389,7 @@ var LoginPage = React.createClass({
 			if(userData.isNewUser){
 				this.props.navigator.push({
 					name: MainPage.UPDATE_USER_INFO_ROUTE,
+					getNextRoute: this.props.getNextRoute,
 					popToRoute: this.props.popToRoute,
 					popToStackTop: this.props.popToStackTop,
 				});
@@ -394,6 +397,15 @@ var LoginPage = React.createClass({
 				var routes = this.props.navigator.getCurrentRoutes();
 				if(this.props.popToStackTop){
 					this.props.navigator.popToTop();
+				}else if(this.props.getNextRoute != null){
+					var nextRoute = this.props.getNextRoute();
+					var currentRouteIndex = -1;
+					for (var i=0; i<routes.length; ++i) {
+						if(routes[i].name === MainPage.LOGIN_ROUTE){
+							currentRouteIndex = i;
+						}
+					}
+					this.props.navigator.replaceAtIndex(nextRoute, currentRouteIndex);
 				}else if(this.props.nextRoute != null){
 					var currentRouteIndex = -1;
 					for (var i=0; i<routes.length; ++i) {

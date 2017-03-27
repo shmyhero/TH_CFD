@@ -39,7 +39,7 @@ var listRawData = [
 {'type':'normal','title':'注册交易金(元)', 'subtype': 'demoRegister'},
 {'type':'normal','title':'卡片交易金(元)', 'subtype': 'totalCard'},
 {'type':'normal','title':'开户交易金(元)', 'subtype': 'liveRegister'},
-{'type':'normal','title':'好友推荐奖励金(元)', 'subtype': 'referralReward'},
+{'type':'normal','title':'好友邀请交易金(元)', 'subtype': 'referralReward'},
 ]
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var RULE_DIALOG = "ruleDialog";
@@ -260,7 +260,7 @@ var MyIncomePage = React.createClass({
 			}
 			else if(rowData.subtype == 'totalCard'){
 				value = this.state.totalCard;
-			}			
+			}
 			else if(rowData.subtype == 'referralReward'){
 				value = this.state.referralReward;
 			}

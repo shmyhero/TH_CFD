@@ -436,13 +436,14 @@ var StockStatisticsPage = React.createClass({
 					);
 				}
 		)
+		var viewWidth = Math.round(width/7*4);
 		return (
 			<View style={{flexDirection:'row', flex: 1, padding: 20}}>
 				<View style={styles.barNamesContainer}>
 					{barNameText}
 				</View>
 				<View style={[styles.verticleSeparator,]}/>
-				<View style={[{width: width/7*4}]}>
+				<View style={[{width: viewWidth}]}>
 					{this.renderBars()}
 				</View>
 				<View style={styles.plValue}>

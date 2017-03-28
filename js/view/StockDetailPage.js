@@ -119,6 +119,7 @@ var StockDetailPage = React.createClass({
 			inputText: ''+money,
 			stockPrice: this.props.stockPrice,
 			stockCurrencyPrice: '--',
+			stockLastPrice: '--',
 			stockPreclose:'--',
 			stockPriceAsk: this.props.stockPriceAsk,
 			stockPriceBid: this.props.stockPriceBid,
@@ -271,7 +272,7 @@ var StockDetailPage = React.createClass({
 					stockInfo: responseJson,
 					stockPriceBid: responseJson.bid,
 					stockPriceAsk: responseJson.ask,
-					stockCurrencyPrice:responseJson.last,
+					stockLastPrice:responseJson.last,
 					stockPreclose:responseJson.preClose,
 				})
 
@@ -429,7 +430,7 @@ var StockDetailPage = React.createClass({
 								stockPrice: realtimeStockInfo[i].last,
 								stockPriceAsk: realtimeStockInfo[i].ask,
 								stockPriceBid: realtimeStockInfo[i].bid,
-								stockCurrencyPrice:realtimeStockInfo[i].last,
+								stockLastPrice:realtimeStockInfo[i].last,
 							})
 						}
 						break;
@@ -843,11 +844,11 @@ var StockDetailPage = React.createClass({
 	renderTitleLandspace:function(){
 
 		var titleText  = this.props.stockName;
-		var currentPriceText = this.state.stockCurrencyPrice;
+		var currentPriceText = this.state.stockLastPrice;
 		var percentChangeText = "--"
-		console.log("this.state.stockPreclose:"+this.state.stockPreclose+"	this.state.stockCurrencyPrice="+this.state.stockCurrencyPrice)
-		if(this.state.stockPreclose!=='--' && this.state.stockCurrencyPrice!=='--'){
-			var percentChange = (this.state.stockCurrencyPrice - this.state.stockPreclose) / this.state.stockPreclose * 100
+		console.log("this.state.stockPreclose:"+this.state.stockPreclose+"	this.state.stockLastPrice="+this.state.stockLastPrice)
+		if(this.state.stockPreclose!=='--' && this.state.stockLastPrice!=='--'){
+			var percentChange = (this.state.stockLastPrice - this.state.stockPreclose) / this.state.stockPreclose * 100
 			if (percentChange > 0) {
 				percentChangeText = '+' + percentChange.toFixed(2) + '%'
 			} else {

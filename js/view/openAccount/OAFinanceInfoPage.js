@@ -106,10 +106,11 @@ var investFrqMappings = [
 var amontOfMoneyMappings = [
 	{"value": 0, "displayText": "低于 8000 元"},
 	{"value": 1, "displayText": "8001 - 40000 元"},
-	{"value": 2, "displayText": "40001 - 200000 元"},
-	{"value": 3, "displayText": "200001- 400000 元"},
-	{"value": 4, "displayText": "400001- 800000 元"},
-	{"value": 5, "displayText": "高于 800000 元"},
+	{"value": 2, "displayText": "40001 - 80000 元"},
+	{"value": 3, "displayText": "80001 - 200000 元"},
+	{"value": 4, "displayText": "200001- 400000 元"},
+	{"value": 5, "displayText": "400001- 800000 元"},
+	{"value": 6, "displayText": "高于 800000 元"},
 	//BUGBUG: There's a "6" here per API doc!!!
 ]
 

@@ -52,6 +52,7 @@ export default class RankingPage extends Component{
       rankType : RANKING_TYPE_0,
       rankData: ds.cloneWithRows([]),
       rankDataFollowing:ds.cloneWithRows([]),
+      noMessage: false,
 		}
 	}
 
@@ -89,10 +90,19 @@ export default class RankingPage extends Component{
 		this.props.navigator.push({
 			name: MainPage.USER_HOME_PAGE_ROUTE,
       userData:{userId:rowData.id,userName:rowData.username},
+      backRefresh:()=>this.backRefresh(),
 		});
 	}
 
+  backRefresh(){
+    // console.log("backRefresh ...");
+    if(this.state.rankType == RANKING_TYPE_1){
+      this.getRankList();
+    }
+  }
+
   getRankList(){
+    console.log("getRankList");
     if(!this.state.contentLoaded){
 			this.setState({
 				isRefreshing: true,
@@ -123,10 +133,12 @@ export default class RankingPage extends Component{
                 isRefreshing: false,
             },()=>this.refs['listview'].scrollTo({x:0,y:0,false}))
           }else{
+            var noMessage = responseJson.length == 0;
             this.setState({
                 rankDataFollowing:ds.cloneWithRows(responseJson),
                 contentLoaded: true,
                 isRefreshing: false,
+                noMessage:noMessage,
             },()=>this.refs['listview2'].scrollTo({x:0,y:0,false}))
           }
 			},
@@ -261,6 +273,16 @@ export default class RankingPage extends Component{
     this.getRankList()
   }
 
+  renderEmptyView(){
+    if(this.state.noMessage){
+      return (
+        <View style={styles.emptyContent}>
+            <Text style={styles.emptyText}>没有关注的人</Text>
+        </View>
+      );
+    }
+  }
+
   renderListView(){
     if(!this.state.contentLoaded){
 			return (
@@ -282,16 +304,19 @@ export default class RankingPage extends Component{
         )
       }else{
         return(
-            <ListView
-              style={styles.list}
-              ref="listview2"
-              initialListSize={11}
-              dataSource={this.state.rankDataFollowing}
-              enableEmptySections={true}
-              renderFooter={this.renderFooter}
-              renderRow={this._renderRow.bind(this)}
-              renderSeparator={this.renderSeparator}
-              removeClippedSubviews={true}/>
+          <View>
+              {this.renderEmptyView()}
+              <ListView
+                style={styles.list}
+                ref="listview2"
+                initialListSize={11}
+                dataSource={this.state.rankDataFollowing}
+                enableEmptySections={true}
+                renderFooter={this.renderFooter}
+                renderRow={this._renderRow.bind(this)}
+                renderSeparator={this.renderSeparator}
+                removeClippedSubviews={true}/>
+          </View>
         )
       }
     }
@@ -451,6 +476,7 @@ const styles = StyleSheet.create({
     alignItems:'center',
     justifyContent:'center'
   },
+
 
 
 

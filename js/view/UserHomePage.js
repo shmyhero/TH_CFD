@@ -68,6 +68,7 @@ export default class UserHomePage extends Component{
 	static propTypes = {
     userId: PropTypes.number.isRequired,
 		userName: PropTypes.string.isRequired,
+		backRefresh: React.PropTypes.func,
   }
 
   static defaultProps = {
@@ -92,7 +93,8 @@ export default class UserHomePage extends Component{
 			isFollowing:false,
 			titleOpacity:0,
 			rank:1,
-			rankDescription:''
+			rankDescription:'',
+			isFollowingStatusChanged:false,
 		}
 
 	}
@@ -100,6 +102,12 @@ export default class UserHomePage extends Component{
 	componentDidMount(){
 		this.loadUserInfo()
 		this.loadPlCloseData()
+	}
+
+	componentWillUnmount(){
+		if(this.props.backRefresh&&this.state.isFollowingStatusChanged){
+			this.props.backRefresh();
+		}
 	}
 
 	loadUserInfo(){
@@ -295,7 +303,8 @@ export default class UserHomePage extends Component{
 				(responseJson) => {
 					 console.log(responseJson);
 					 	this.setState({
-			 				isFollowing: false
+			 				isFollowing: false,
+							isFollowingStatusChanged:true,
 			 			})
 				},
 				(result) => {
@@ -318,7 +327,8 @@ export default class UserHomePage extends Component{
 				(responseJson) => {
 					 console.log(responseJson);
 					 this.setState({
-						 isFollowing: true
+						 isFollowing: true,
+						 isFollowingStatusChanged:true,
 					 })
 				},
 				(result) => {
@@ -486,16 +496,23 @@ export default class UserHomePage extends Component{
 	}
 
 	renderAddCareButton() {
-		return (
-			<TouchableOpacity
-					onPress={()=>this._onPressedAddFollow()}>
-				<View style={[styles.addToCareContainer,{backgroundColor:ColorConstants.TITLE_BLUE_LIVE}]}>
-					<Text style={styles.addToCareText}>
-						{this.state.isFollowing ? '取消关注':'+关注'}
-					</Text>
-				</View>
-			</TouchableOpacity>
-		)
+		var userData = LogicData.getUserData()
+		// console.log("userData id = " + userData.userId + " state.id = " + this.state.id);
+		if(userData.userId == this.state.id){
+			return null
+		}else{
+			return (
+				<TouchableOpacity
+						onPress={()=>this._onPressedAddFollow()}>
+					<View style={[styles.addToCareContainer,{backgroundColor:ColorConstants.TITLE_BLUE_LIVE}]}>
+						<Text style={styles.addToCareText}>
+							{this.state.isFollowing ? '取消关注':'+关注'}
+						</Text>
+					</View>
+				</TouchableOpacity>
+			)
+		}
+
 	}
 
 	renderEmptyBottom(){

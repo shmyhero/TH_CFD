@@ -625,6 +625,7 @@ var MainPage = React.createClass({
 				<UserHomePage navigator={navigationOperations}
 					userId={route.userData.userId}
 					userName={route.userData.userName}
+					backRefresh={route.backRefresh}
 					routeMapper={this.RouteMapper}
 					popToOutsidePage={route.popToOutsidePage}/>
 			)

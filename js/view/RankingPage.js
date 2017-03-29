@@ -33,6 +33,7 @@ var didTabSelectSubscription = null
 const NETWORK_ERROR_INDICATOR = "networkErrorIndicator";
 var RANKING_TYPE_0 = 0;
 var RANKING_TYPE_1 = 1;
+var emptyStar = '***'
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 //
 // { roi: 0,
@@ -218,7 +219,8 @@ export default class RankingPage extends Component{
     }else{
       head = require('../../images/head_portrait.png')
     }
-
+    var winRateShow = rowData.showData?rate:emptyStar;
+    var posCountShow = rowData.posCount?rowData.posCount:emptyStar;
 
     return(
 
@@ -235,7 +237,7 @@ export default class RankingPage extends Component{
                   <Text style={[styles.userName]}>{rowData.nickname}</Text>
                   <View style = {styles.userInfo}>
                     <Text style={styles.userInfoTitle}>胜率:</Text>
-                    <Text style={styles.userWinRate}>{rate}%</Text>
+                    <Text style={styles.userWinRate}>{winRateShow}%</Text>
                     <Text style={[styles.userInfoTitle,{marginLeft:10}]}>平仓笔数:</Text>
                     <Text style={styles.userWinRate}>{rowData.posCount}</Text>
                   </View>

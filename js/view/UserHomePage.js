@@ -144,7 +144,7 @@ export default class UserHomePage extends Component{
 					 isFollowing:responseJson.isFollowing,
 					 rank:responseJson.rank,
 					 rankDescription:responseJson.rankDescription,
-					 isPrivate:responseJson.showData==undefined?true:responseJson.showData,
+					 isPrivate:responseJson.showData==undefined?true:(!responseJson.showData),
 				 })
 			},
 			(result) => {

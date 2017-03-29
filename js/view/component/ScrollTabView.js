@@ -147,6 +147,8 @@ var ScrollTabView = React.createClass({
 	},
 
 	render: function() {
+		width = Dimensions.get('window').width;
+		height = Dimensions.get('window').height;
 		return (
 			<View style={[styles.wrapper, {width: width}]}>
 				{this.renderTabs()}

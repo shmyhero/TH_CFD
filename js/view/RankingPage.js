@@ -302,7 +302,7 @@ export default class RankingPage extends Component{
             renderFooter={this.renderFooter}
             renderRow={this._renderRow.bind(this)}
             renderSeparator={this.renderSeparator}
-            removeClippedSubviews={true}/>
+            removeClippedSubviews={false}/>
         )
       }else{
         return(
@@ -317,7 +317,7 @@ export default class RankingPage extends Component{
                 renderFooter={this.renderFooter}
                 renderRow={this._renderRow.bind(this)}
                 renderSeparator={this.renderSeparator}
-                removeClippedSubviews={true}/>
+                removeClippedSubviews={false}/>
           </View>
         )
       }

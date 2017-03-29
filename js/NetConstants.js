@@ -158,6 +158,8 @@ function getCFDAPI(){
     DEL_USER_FOLLOW:CFD_API_SERVER + "/api/user/follow/<id>",//cancel follow
     GET_RANK_LIVE_PLCLOSED_2W:CFD_API_SERVER + "/api/rank/live/user/plClosed/2w",//2 weeks rank
     GET_RANK_LIVE_FOLLOWING_2W:CFD_API_SERVER + "/api/user/following",//follow
+
+    SHOW_USER_DATA_API: CFD_API_SERVER + '/api/user/live/profit',
   }
 }
 

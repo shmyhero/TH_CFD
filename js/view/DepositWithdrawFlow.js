@@ -40,6 +40,7 @@ export default class DepositWithdrawFlow extends Component{
 		var title = rowData.transferType;
 		var date = rowData.date;
 		var amount = rowData.amount;
+		var amount_color = rowData.color;
 
 		return(
 			<TouchableOpacity style={styles.scroolItem}>
@@ -48,7 +49,7 @@ export default class DepositWithdrawFlow extends Component{
 						 <Text style = {styles.itemTime}>{date}</Text>
 					 </View>
 					 <View style = {styles.rightView}	>
-					 	<Text style = {styles.itemMoney}>{amount}</Text>
+					 	<Text style = {[styles.itemMoney,{color:amount_color}]}>{amount}</Text>
 					 </View>
 		  </TouchableOpacity>
 	 	);

@@ -122,6 +122,7 @@ var MePushConfigPage = React.createClass({
 					method: 'POST',
 					headers: {
 						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						'Content-Type': 'application/json; charset=utf-8',
 					},
 					body: JSON.stringify({
 						showData: value,

@@ -741,7 +741,7 @@ var HomePage = React.createClass({
 
 	renderNewUser:function(){
 		return(
-			<TouchableOpacity style = {styles.newUser} activeOpacity={0.5} onPress={()=>this.gotoNewUserGuide()}>
+			<TouchableOpacity style = {[styles.newUser, {width:width}]} activeOpacity={0.5} onPress={()=>this.gotoNewUserGuide()}>
 				<View style={{padding:20}}>
 					<View style={{flexDirection:'row'}}>
 						<Text style={{fontSize:19,color:'#4b4b4b'}}>新手学堂</Text>
@@ -760,7 +760,7 @@ var HomePage = React.createClass({
 			var cardItems = this.state.rawCardsInfo.map(
 			(card, i) =>
 				<TouchableOpacity onPress={() => this.pressCard(i)} key={i}>
-					<View style={styles.scroolItem}>
+					<View style={[styles.scrollItem,{width:Math.round((width-20)/3)}]}>
 						<Reward card={card} type={1} divideInLine={3} id={card}></Reward>
 					</View>
 				</TouchableOpacity>
@@ -775,7 +775,7 @@ var HomePage = React.createClass({
 							</Text>
 						</View>
 						<View style={styles.separator}/>
-						<ScrollView ref={CARDS_LIST} style={styles.scrollViewStyle}
+						<ScrollView ref={CARDS_LIST} style={[styles.scrollViewStyle,{height:Math.round((width-20)/3)+100}]}
 							horizontal={true}
 							showsHorizontalScrollIndicator={false}>
 						 	{cardItems}
@@ -851,7 +851,7 @@ var HomePage = React.createClass({
 		return(
 			<TouchableOpacity style={styles.newsContainer} onPress={() => this.tapTopNews(url)}>
 				<View style={[styles.bluePoint,{backgroundColor:ColorConstants.title_blue()}]}/>
-				<Text style={styles.newsText}
+				<Text style={[styles.newsText,{width: width-30}]}
 					ellipsizeMode="tail"
 					numberOfLines={1}>
 					{header}
@@ -878,9 +878,10 @@ var HomePage = React.createClass({
 
 				firstNews = this.state.topNews[0];
 			}
+
 			return (
 				<TouchableOpacity onPress={() => this.tapFirstTopNews(firstNews)}>
-					<View style={[styles.topnewsContainer, {height: rowHeight}]}>
+					<View style={[styles.topnewsContainer, {height: rowHeight, width: width}]}>
 						<Swiper
 							ref="topnewsswiper"
 							horizontal={false}
@@ -920,6 +921,9 @@ var HomePage = React.createClass({
 			image = check_in_image;
 			onPress = () => this.gotoCheckinPage();
 		}
+		var fontSize = width > 320 ? 11 : 9;	//iOS 5 fix
+		var imageWidth = width > 320 ? 46 : 39;	//iOS 5 fix
+		var imageHeight = imageWidth;
 		return(
 			<TouchableOpacity style={[styles.eventsItemContainer]}
 				onPress={onPress}>
@@ -928,12 +932,12 @@ var HomePage = React.createClass({
 						<Text style={styles.eventsTitleText}>
 							{title}
 						</Text>
-						<Text style={styles.eventsDescriptionText}>
+						<Text style={[styles.eventsDescriptionText, {fontSize:fontSize}]}>
 							{description}
 						</Text>
 					</View>
 					<Image
-						style={[styles.eventsIcon]}
+						style={[styles.eventsIcon, {width:imageWidth, height:imageHeight}]}
 						source={image}/>
 					{/* <Image style={[styles.eventsHotIcon]}
 						source={hot_image}/> */}
@@ -953,7 +957,7 @@ var HomePage = React.createClass({
 			)
 		}else{
 			return (
-				<View style={[styles.eventsRowContainer]}>
+				<View style={[styles.eventsRowContainer, {width: width}]}>
 					{this.renderEventItem(1)}
 					{this.renderEventSeparator()}
 					{this.renderEventItem(2)}
@@ -1010,7 +1014,7 @@ var HomePage = React.createClass({
 
 	renderBgHint:function(){
 		return(
-			<View style={styles.bgHint}>
+			<View style={[styles.bgHint, {width: width}]}>
 				<Image style = {{width:20,height:20}} source={bg_hint_image}></Image>
 				<Text style={{marginTop:5,fontSize:12,color:'#c4c4c4'}}>具有全套FCA牌照，受FCA授权与监管</Text>
 			</View>
@@ -1036,6 +1040,10 @@ var HomePage = React.createClass({
 	},
 
 	render: function() {
+		height = Dimensions.get('window').height;
+		width = Dimensions.get('window').width;
+		barWidth = Math.round(width/3)-12
+		imageHeight = 300 / 750 * width;
 		var activeDot = <View style={styles.guideActiveDot} />
 		var dot = <View style={styles.guideDot} />
 		var slides = []
@@ -1263,7 +1271,6 @@ var styles = StyleSheet.create({
 
 	topnewsContainer:{
 		flexDirection: 'row',
-		width: width,
 		backgroundColor: 'white',
 		alignItems: 'center',
 	},
@@ -1296,7 +1303,6 @@ var styles = StyleSheet.create({
 		borderRadius: 2,
 	},
 	newsText: {
-		width: width-30,
 		fontSize: 14,
 		color: '#333333',
 		marginRight: 10,
@@ -1304,7 +1310,6 @@ var styles = StyleSheet.create({
 	eventsRowContainer:{
 		flexDirection: 'row',
 		height: 80,
-		width: width,
 		backgroundColor: 'white',
 	},
 	eventsItemContainer:{
@@ -1328,13 +1333,10 @@ var styles = StyleSheet.create({
 		color: '#4c4c4c'
 	},
 	eventsDescriptionText: {
-		fontSize: width > 320 ? 11 : 9,	//iOS 5 fix
 		marginTop: 7,
 		color: '#626262'
 	},
 	eventsIcon: {
-		width: width > 320 ? 46 : 39,	//iOS 5 fix
-		height: width > 320 ? 46 : 39,
 		alignSelf: 'center',
 		marginRight:6,
 	},
@@ -1346,20 +1348,17 @@ var styles = StyleSheet.create({
 		height:27
 	},
 	scrollViewStyle:{
-		height:(width-20)/3 + 100,
 		paddingLeft:5,
 		paddingRight:5,
 		paddingTop:10,
 		paddingBottom:10,
 		backgroundColor:'white'
 	},
-	scroolItem:{
-		width:(width-20)/3,
+	scrollItem:{
 		flex:1,
 		marginRight:5,
 	},
 	bgHint:{
-		width:width,
 		height:80,
 		position:'absolute',
 		alignItems:'center',
@@ -1367,7 +1366,6 @@ var styles = StyleSheet.create({
 
 	},
 	newUser:{
-		width:width,
 		flexDirection:'row',
 		backgroundColor:'white',
 		marginBottom:10,

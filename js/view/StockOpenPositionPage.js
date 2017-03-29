@@ -1617,11 +1617,11 @@ var StockOpenPositionPage = React.createClass({
 				<View style={styles.extendRowWrapper}>
 					<View style={styles.extendLeft}>
 						<Text style={styles.extendTextTop}>开仓价格</Text>
-						<Text style={styles.extendTextBottom}>{rowData.settlePrice}</Text>
+						<Text style={styles.extendTextBottom}>{rowData.settlePrice.toFixed(2)}</Text>
 					</View>
 					<View style={styles.extendMiddle}>
 						<Text style={styles.extendTextTop}>{currentPriceLabel}</Text>
-						<Text style={styles.extendTextBottom}>{lastPrice}</Text>
+						<Text style={styles.extendTextBottom}>{lastPrice.toFixed(2)}</Text>
 					</View>
 					<View style={styles.extendRight}>
 						<Text style={styles.extendTextTop}>{openDate.Format('yy/MM/dd')}</Text>

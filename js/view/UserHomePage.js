@@ -31,6 +31,8 @@ var MainPage = require('./MainPage')
 var CHART_TYPE_2MONTH = 0;
 var CHART_TYPE_ALL = 1;
 
+var emptyStar = '***'
+
 // { followerCount: 0,
 //   totalPl: -400.62942932,
 //   avgPl: -9.538795936190477,
@@ -95,13 +97,18 @@ export default class UserHomePage extends Component{
 			rank:1,
 			rankDescription:'',
 			isFollowingStatusChanged:false,
+			isPrivate:true,
 		}
-
 	}
 
 	componentDidMount(){
 		this.loadUserInfo()
 		this.loadPlCloseData()
+    if(this.isUserSelf()){
+      this.setState({
+        isPrivate:false,
+      })
+    }
 	}
 
 	componentWillUnmount(){
@@ -137,6 +144,7 @@ export default class UserHomePage extends Component{
 					 isFollowing:responseJson.isFollowing,
 					 rank:responseJson.rank,
 					 rankDescription:responseJson.rankDescription,
+					 isPrivate:responseJson.showData==undefined?true:responseJson.showData,
 				 })
 			},
 			(result) => {
@@ -156,12 +164,12 @@ export default class UserHomePage extends Component{
       head = require('../../images/head_portrait.png')
     }
 
-
+    var privateStyle = this.state.isPrivate ? {height:0} : null;
 
 		return(
 			<Image style = {[styles.topWapper,{backgroundColor:ColorConstants.TITLE_BLUE_LIVE}]} source={require('../../images/bgbanner.jpg')}>
 
-				<View style = {styles.topOneOfThree}>
+				<View style = {[styles.topOneOfThree,privateStyle]}>
 					<View style={{marginTop:32}}></View>
     			<Text style = {{fontSize:36,backgroundColor:'transparent',color:'white'}}>{this.state.followerCount}</Text>
 					<Text style = {{fontSize:12,backgroundColor:'transparent',color:'white'}}>关注数</Text>
@@ -173,7 +181,7 @@ export default class UserHomePage extends Component{
 						<Image style = {styles.userHeaderIconRound} source={headRank}></Image>
 				</View>
 
-				<View style = {styles.topOneOfThree}>
+				<View style = {[styles.topOneOfThree,privateStyle]}>
 					<View style={{marginTop:32}}></View>
 					<Text style = {{fontSize:36,backgroundColor:'transparent',color:'white'}}>{this.state.cards.length}</Text>
 					<Text style = {{fontSize:12,backgroundColor:'transparent',color:'white'}}>卡片数</Text>
@@ -182,6 +190,27 @@ export default class UserHomePage extends Component{
    		</Image>
 		)
 	}
+
+  isUserSelf(){
+    var userData = LogicData.getUserData()
+		return userData.userId == this.state.id;
+  }
+
+  renderPrivateOne(){
+    if(this.state.isPrivate){
+      return(null)
+    }else{
+      return(<Text style={{fontSize:12,color:'#424242',marginTop:5}}>$</Text>)
+    }
+  }
+
+  renderPrivateTwo(){
+    if(this.state.isPrivate){
+      return(null)
+    }else{
+      return(<Text style={{fontSize:12,color:'#424242',marginTop:5}}>%</Text>)
+    }
+  }
 
 	middleWarpperRender(){
 
@@ -198,7 +227,7 @@ export default class UserHomePage extends Component{
      			</View>
 					<View style = {styles.oneOfThree}>
 						<Text style={styles.font1}>平均每笔收益</Text>
-
+            {this.renderPrivateOne()}
      			</View>
 					<View style = {styles.oneOfThree}>
 						<Text style={styles.font1}>胜率</Text>
@@ -206,17 +235,18 @@ export default class UserHomePage extends Component{
 				</View>
 				<View style={{flexDirection:'row',flex:1,marginBottom:15}}>
 					<View style = {styles.oneOfThree}>
-     				<Text style={[styles.font2,rankColor]}>{this.state.rankDescription}</Text>
+     				<Text style={[styles.font2,rankColor]}>{this.state.isPrivate ? emptyStar:this.state.rankDescription}</Text>
      			</View>
 					{this.rowSepartor()}
 					<View style = {styles.oneOfThree}>
-						<Text style={{fontSize:12,color:'#424242',marginTop:5}}>$</Text>
-     				<Text style={styles.font2}>{this.state.avgPl.toFixed(2)}</Text>
+
+     				<Text style={styles.font2}>{this.state.isPrivate ? emptyStar:this.state.avgPl.toFixed(2)}</Text>
      			</View>
 					{this.rowSepartor()}
 					<View style = {styles.oneOfThree}>
-     				<Text style={styles.font2}>{this.state.winRate.toFixed(2)}</Text>
-						<Text style={{fontSize:12,color:'#424242',marginTop:5}}>%</Text>
+     				<Text style={styles.font2}>{this.state.isPrivate ? emptyStar:this.state.winRate.toFixed(2)}</Text>
+
+            {this.renderPrivateTwo()}
      			</View>
 				</View>
    		</View>
@@ -377,7 +407,7 @@ export default class UserHomePage extends Component{
 		return(
 			<View style = {styles.bottomWapper}>
    			<View style ={styles.ceilWapper}>
-      		<Text style = {{color:'#474747',fontSize:15}}>累计收益：</Text>
+      		<Text style = {{color:'#474747',fontSize:15}}>近2周收益：</Text>
 					<Text style = {{color:'#fa2c21',fontSize:15}}>{this.state.totalPl.toFixed(2)}</Text>
       	</View>
 				{this.lineSepartor()}

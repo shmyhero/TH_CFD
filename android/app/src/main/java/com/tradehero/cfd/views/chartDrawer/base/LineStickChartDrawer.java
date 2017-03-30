@@ -89,8 +89,10 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
             yVals.add(new Entry(val, i));
         }
 
-        minVal = Math.min(minVal, (float) stockInfoObject.getDouble("preClose"));
-        maxVal = Math.max(maxVal, (float) stockInfoObject.getDouble("preClose"));
+        if(needDrawPreCloseLine()) {
+            minVal = Math.min(minVal, (float) stockInfoObject.getDouble("preClose"));
+            maxVal = Math.max(maxVal, (float) stockInfoObject.getDouble("preClose"));
+        }
 
         minVal -= (maxVal - minVal) / 5;
         maxVal += (maxVal - minVal) / 5;
@@ -152,7 +154,7 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
     @Override
     protected void calculateZoom(CombinedChart chart, CombinedData data) {
         chart.setVisibleXRangeMinimum(1);
-        if (preClose != 0) {
+        if (needDrawPreCloseLine() && preClose != 0) {
             float maxPrice = data.getYMax();
             float minPrice = data.getYMin();
             float maxPercentage = (maxPrice - preClose) / preClose * 100;

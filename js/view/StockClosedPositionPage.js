@@ -14,6 +14,8 @@ import {
 	LayoutAnimation,
 } from 'react-native';
 
+import PullToRefreshListView from 'react-native-smart-pull-to-refresh-listview'
+
 var LogicData = require('../LogicData')
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
@@ -23,6 +25,7 @@ var UIConstants = require('../UIConstants');
 var TimerMixin = require('react-timer-mixin');
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 var MainPage = require('./MainPage')
+var WaitingRing = require('./component/WaitingRing');
 var {EventCenter, EventConst} = require('../EventCenter');
 
 var {height, width} = Dimensions.get('window');
@@ -30,6 +33,7 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var extendHeight = 204
 var rowHeight = 0
+var perPageCount = 20;
 var stockNameFontSize = Math.round(17*width/375.0)
 
 var networkConnectionChangedSubscription = null;
@@ -99,8 +103,33 @@ var StockClosedPositionPage = React.createClass({
 		})
 	},
 
+	currentTicks: 0,
+
 	tabPressed: function(index) {
-		this.loadClosedPositionInfo()
+		var d = new Date();
+		this.currentTicks = d.getTime();
+		console.log("tabpressed ")
+
+		if(this.scrollViewYOffset != 0){
+			//If current scrollview offset isn't 0, scroll to 0.
+			if(this._pullToRefreshListView && this._pullToRefreshListView._scrollView){
+				console.log("scroll to top")
+				this._pullToRefreshListView._scrollView.scrollTo({x:0, y:0, animated:false})
+			}
+
+			//BUGBUG: We need to move the following code to scroll to callback.
+			if(!this.state.contentLoaded){
+				this.setState({
+					isRefreshing: true,
+				});
+			}
+
+			setTimeout(()=>{
+				this.loadClosedPositionInfo();
+			}, 1000);
+		}else{
+			this.loadClosedPositionInfo();
+		}
 
 		WebSocketModule.registerCallbacks(
 			() => {
@@ -108,6 +137,13 @@ var StockClosedPositionPage = React.createClass({
 	},
 
 	clearViews:function(){
+		if(this._pullToRefreshListView && this._pullToRefreshListView._scrollView){
+			this.endNextPageLoadingState(false);
+			if(this.scrollViewYOffset != 0){
+				this._pullToRefreshListView._scrollView.scrollTo({x:0, y:0, animated:false})
+			}
+		}
+
 		this.setState({
 			isClear:true,
 			contentLoaded: false,
@@ -119,6 +155,8 @@ var StockClosedPositionPage = React.createClass({
 	},
 
 	loadClosedPositionInfo: function() {
+		var lastTicks = this.currentTicks;
+
 		if(!this.state.contentLoaded){
 			this.setState({
 				isRefreshing: true,
@@ -131,6 +169,8 @@ var StockClosedPositionPage = React.createClass({
 			url = NetConstants.CFD_API.GET_CLOSED_POSITION_LIVE_API
 			console.log('live', url );
 		}
+		url = url + "?count=" + perPageCount
+
 		NetworkModule.fetchTHUrl(
 			url,
 			{
@@ -142,6 +182,11 @@ var StockClosedPositionPage = React.createClass({
 				//timeout: 1000,
 			},
 			(responseJson) => {
+				if(lastTicks !== this.currentTicks){
+					console.log("It is the response of the request of previous views. Ignore it.")
+					return;
+				}
+
 				this.setState({
 					stockInfoRowData: responseJson,
 					stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
@@ -149,8 +194,15 @@ var StockClosedPositionPage = React.createClass({
 					contentLoaded: true,
 					isRefreshing: false,
 				})
+
+				this.endNextPageLoadingState(responseJson.length < perPageCount);
 			},
 			(result) => {
+				if(lastTicks !== this.currentTicks){
+					console.log("It is the response of the request of previous views. Ignore it.")
+					return;
+				}
+
 				if(!result.loadedOfflineCache){
 					this.setState({
 						contentLoaded: false,
@@ -167,13 +219,78 @@ var StockClosedPositionPage = React.createClass({
 		)
 	},
 
-	onEndReached: function() {
+	loadClosedPositionInfoWithLastDateTime: function(dateTime, count) {
+		var lastTicks = this.currentTicks;
 
+		console.log("loadClosedPositionInfoWithLastDateTime: " + dateTime + ", " + count);
+		var userData = LogicData.getUserData()
+		var url = NetConstants.CFD_API.GET_CLOSED_POSITION_API
+		if(LogicData.getAccountState()){
+			url = NetConstants.CFD_API.GET_CLOSED_POSITION_LIVE_API
+			console.log('live', url );
+		}
+		url = url + "?closedBefore=" + dateTime + "&count=" + count
+
+		NetworkModule.fetchTHUrl(
+			url,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+				cache: 'none', //Do not load offline cache here
+				//timeout: 1000,
+			},
+			(responseJson) => {
+				if(lastTicks !== this.currentTicks){
+					console.log("It is the response of the request of previous views. Ignore it.")
+					return;
+				}
+
+				//this.setTimeout(()=>{
+					var stockInfoRowData = this.state.stockInfoRowData.concat(responseJson);
+					this.setState({
+						stockInfoRowData: stockInfoRowData,
+						stockInfo: ds.cloneWithRows(stockInfoRowData),
+					}, ()=>{
+						this.endNextPageLoadingState(responseJson.length < count);
+					})
+				//}, 1000);
+			},
+			(result) => {
+				if(lastTicks !== this.currentTicks){
+					console.log("It is the response of the request of previous views. Ignore it.")
+					return;
+				}
+
+				this.endNextPageLoadingState(false);
+				// if(NetConstants.AUTH_ERROR === result.errorMessage){
+				//
+				// }else{
+				// 	// Alert.alert('', errorMessage);
+				// }
+			}
+		)
+	},
+
+	endNextPageLoadingState: function(endLoadMore){
+		console.log("endLoadMore " + endLoadMore)
+		this._pullToRefreshListView.endLoadMore(endLoadMore);
+	},
+
+	onLoadMore: function() {
+		if(this.state.stockInfoRowData && this.state.stockInfoRowData.length>0){
+			var lastItem = this.state.stockInfoRowData[this.state.stockInfoRowData.length-1];
+			var dateTime = lastItem.openAt;
+
+			this.loadClosedPositionInfoWithLastDateTime(dateTime, perPageCount);
+		}
 	},
 
 	stockPressed: function(rowData, sectionID, rowID, highlightRow) {
+		var contentLength = this._pullToRefreshListView._scrollView.getMetrics().contentLength;
 		if (rowHeight === 0) {
-			rowHeight = this.refs['listview'].getMetrics().contentLength/this.state.stockInfoRowData.length
+			rowHeight = contentLength/this.state.stockInfoRowData.length
 		}
 
 		var newData = []
@@ -188,12 +305,11 @@ var StockClosedPositionPage = React.createClass({
 				selectedRow: -1,
 			},()=>{
 				if (Platform.OS === 'android') {
-					var listHeight = this.refs['listview'].getMetrics().contentLength
-					var currentY = listHeight/newData.length*(parseInt(rowID)) + UIConstants.LIST_HEADER_BAR_HEIGHT
+					var currentY = contentLength/newData.length*(parseInt(rowID)) + UIConstants.LIST_HEADER_BAR_HEIGHT
 					this.setTimeout(
 						() => {
-							if (currentY > 300 && currentY + 3 * rowHeight > this.refs['listview'].getMetrics().contentLength) {
-								this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY), animated:true})
+							if (currentY > 300 && currentY + 3 * rowHeight > contentLength) {
+								this._pullToRefreshListView._scrollView.scrollTo({x:0, y:Math.floor(currentY), animated:true})
 							}
 						 },
 						500
@@ -206,7 +322,7 @@ var StockClosedPositionPage = React.createClass({
 				- UIConstants.SCROLL_TAB_HEIGHT - UIConstants.LIST_HEADER_BAR_HEIGHT - UIConstants.TAB_BAR_HEIGHT)*20/21
 				- extendHeight
 			: (height- 114 - UIConstants.LIST_HEADER_BAR_HEIGHT)*20/21 - extendHeight
-			var listHeight = this.refs['listview'].getMetrics().contentLength
+			var listHeight = contentLength
 			if (this.state.selectedRow !== -1) {
 				listHeight -= extendHeight
 			}
@@ -216,7 +332,7 @@ var StockClosedPositionPage = React.createClass({
 			this.setTimeout(
 				() => {
 					if (currentY > maxY && parseInt(previousSelectedRow) < parseInt(rowID)) {
-						this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
+						this._pullToRefreshListView._scrollView.scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
 					}
 				},
 				Platform.OS === 'android' ? 1000 : 0
@@ -260,8 +376,38 @@ var StockClosedPositionPage = React.createClass({
 		);
 	},
 
-	renderFooter: function() {
+	renderFooter: function(viewState) {
+		let {pullState, pullDistancePercent} = viewState
+		let {load_more_none, load_more_idle, will_load_more, loading_more, loaded_all, } = PullToRefreshListView.constants.viewState
+		pullDistancePercent = Math.round(pullDistancePercent * 100)
+		switch(pullState) {
+			case load_more_none:
+			case load_more_idle:
+			case will_load_more:
+				return (
+					<View style={{height: 35, justifyContent: 'center', alignItems: 'center'}}>
+						<Text style={styles.refreshTextStyle}>加载更多</Text>
+					</View>
+				)
+			case loading_more:
+				return (
+					<View style={{flexDirection: 'row', height: 35, justifyContent: 'center', alignItems: 'center'}}>
+						{this.renderActivityIndicator()}<Text style={styles.refreshTextStyle}>加载中...</Text>
+					</View>
+				)
+			case loaded_all:
+				return (
+					<View/>
+				)
+		}
+	},
 
+	renderActivityIndicator: function(){
+		var color = "#7a7987";
+		var styleAttr = 'small' //or "large"
+		return (
+			<WaitingRing color={color} styleAttr={styleAttr}/>
+		);
 	},
 
 	renderCountyFlag: function(rowData) {
@@ -495,22 +641,42 @@ var StockClosedPositionPage = React.createClass({
 				<NetworkErrorIndicator onRefresh={()=>this.loadClosedPositionInfo()} refreshing={this.state.isRefreshing}/>
 			)
 		}else{
+      var pullUpDistance = 35;
+      var pullUpStayDistance = 35;
+
 			return (<View style={{flex:1}}>
 				{this.renderOrClear()}
 				{this.renderHeaderBar()}
 				{this.renderLoadingText()}
-				<ListView
+				<PullToRefreshListView
 					style={styles.list}
-					ref="listview"
-					initialListSize={11}
+					ref={ (component) => this._pullToRefreshListView = component }
+					initialListSize={20}
+					viewType={PullToRefreshListView.constants.viewType.listView}
 					dataSource={this.state.stockInfo}
 					enableEmptySections={true}
 					renderFooter={this.renderFooter}
+					pageSize={20}
 					renderRow={this.renderRow}
 					renderSeparator={this.renderSeparator}
-					onEndReached={this.onEndReached}/>
-			</View>)
+					autoLoadMore={false}
+					enabledPullDown={false}
+					onEndReachedThreshold={30}
+					onScroll={this.onScroll}
+					//onRefresh={this._onRefresh.bind(this)}
+					onLoadMore={this.onLoadMore}
+					pullUpDistance={pullUpDistance}
+					pullUpStayDistance={pullUpStayDistance}
+				/>
+			</View>);
 		}
+	},
+
+	scrollViewYOffset: 0,
+
+	onScroll: function(event){
+		this.scrollViewYOffset = event.nativeEvent.contentOffset.y;
+		console.log(event.nativeEvent.contentOffset.y);
 	},
 
 	render: function() {
@@ -708,6 +874,10 @@ var styles = StyleSheet.create({
 		right: 3,
 		height: 17,
 		width: 17,
+	},
+
+	refreshTextStyle: {
+		color: '#afafaf',
 	},
 });
 

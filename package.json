@@ -18,7 +18,7 @@
     "react-native-linear-gradient": "1.5.12",
     "react-native-orientation": "yamill/react-native-orientation",
     "react-native-picker": "4.0.8",
-    "react-native-smart-pull-to-refresh-listview": "^1.0.17",
+    "react-native-smart-pull-to-refresh-listview": "^1.6.10",
     "react-native-swiper": "1.5.2",
     "react-native-update": "^4.0.0",
     "react-native-view-shot": "1.5.1",

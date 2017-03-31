@@ -412,12 +412,20 @@ var StockStatisticsPage = React.createClass({
 				var valueStyle = null;
 				var valueText = "";
 				if(barContent.invest > 0){
-					var pl = Math.floor(barContent.pl);//.toFixed(2);
+					var pl = barContent.pl;//.toFixed(2);
 					if(barContent.displayPL){
-						pl = Math.floor(barContent.displayPL);//.toFixed(2);
+						pl = barContent.displayPL;//.toFixed(2);
 					}
+
+					if(this.state.maxBarSize >= 100){
+						pl = Math.round(pl)
+					}else{
+						pl = pl.toFixed(2);
+					}
+
 					if(pl == 0){
 						valueStyle = styles.plValueTextZero;
+						valueText = pl;
 					}else if(pl > 0){
 						valueStyle = styles.plValueTextPositive;
 						valueText = "+" + pl;

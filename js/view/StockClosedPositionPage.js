@@ -281,7 +281,7 @@ var StockClosedPositionPage = React.createClass({
 	onLoadMore: function() {
 		if(this.state.stockInfoRowData && this.state.stockInfoRowData.length>0){
 			var lastItem = this.state.stockInfoRowData[this.state.stockInfoRowData.length-1];
-			var dateTime = lastItem.openAt;
+			var dateTime = lastItem.closeAt;
 
 			this.loadClosedPositionInfoWithLastDateTime(dateTime, perPageCount);
 		}
@@ -676,7 +676,6 @@ var StockClosedPositionPage = React.createClass({
 
 	onScroll: function(event){
 		this.scrollViewYOffset = event.nativeEvent.contentOffset.y;
-		console.log(event.nativeEvent.contentOffset.y);
 	},
 
 	render: function() {

@@ -340,7 +340,7 @@ var MyIncomePage = React.createClass({
 		}
 
 		return (
-			<View style={{flex: 1}}>
+			<View style={styles.wrapper}>
 				<NavBar title='我的交易金' showBackButton={true} navigator={this.props.navigator}
 					textOnRight='规则'
 					rightTextOnClick={()=>this.showDialog()}/>
@@ -367,8 +367,7 @@ var MyIncomePage = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  wrapper:{
-		flex: 1,
+  wrapper:{		
 		width: width,
    	alignItems: 'stretch',
   },

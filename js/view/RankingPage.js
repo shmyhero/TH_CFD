@@ -219,9 +219,13 @@ export default class RankingPage extends Component{
     }else{
       head = require('../../images/head_portrait.png')
     }
-    var winRateShow = rowData.showData?rate:emptyStar;
-    var posCountShow = rowData.posCount?rowData.posCount:emptyStar;
 
+    var isUserSelf = LogicData.isUserSelf(rowData.id);
+    // console.log("rowDataid = " + rowData.id + " isUserSelf = " + isUserSelf);
+
+    var winRateShow = (rowData.showData || isUserSelf)?rate:emptyStar;
+    var posCountShow = (rowData.showData || isUserSelf)?rowData.posCount:emptyStar;
+    // console.log("rowDara.posCount = " + rowData.posCount + " emptyStar = " + emptyStar);
     return(
 
         <View>
@@ -239,7 +243,7 @@ export default class RankingPage extends Component{
                     <Text style={styles.userInfoTitle}>胜率:</Text>
                     <Text style={styles.userWinRate}>{winRateShow}%</Text>
                     <Text style={[styles.userInfoTitle,{marginLeft:10}]}>平仓笔数:</Text>
-                    <Text style={styles.userWinRate}>{rowData.posCount}</Text>
+                    <Text style={styles.userWinRate}>{posCountShow}</Text>
                   </View>
                 </View>
               </View>

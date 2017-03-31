@@ -103,12 +103,14 @@ export default class UserHomePage extends Component{
 
 	componentDidMount(){
 		this.loadUserInfo()
-		this.loadPlCloseData()
-    if(this.isUserSelf()){
+		// this.loadPlCloseData()
+
+    if(LogicData.isUserSelf(this.state.id)){
       this.setState({
         isPrivate:false,
       })
     }
+
 	}
 
 	componentWillUnmount(){
@@ -145,7 +147,15 @@ export default class UserHomePage extends Component{
 					 rank:responseJson.rank,
 					 rankDescription:responseJson.rankDescription,
 					 isPrivate:responseJson.showData==undefined?true:(!responseJson.showData),
+				 },()=>{
+					 if(LogicData.isUserSelf(this.state.id)){
+			       this.setState({
+			         isPrivate:false,
+			       })
+			     }
 				 })
+
+				 this.loadPlCloseData()
 			},
 			(result) => {
 
@@ -155,7 +165,7 @@ export default class UserHomePage extends Component{
 	}
 
 	topWarpperRender(){
-		console.log("this.state.rank = "+this.state.rank);
+		// console.log("this.state.rank = "+this.state.rank);
 		var head = (this.state.picUrl)
 		var headRank = LogicData.getRankHead(this.state.rank);
     if(head){
@@ -219,15 +229,16 @@ export default class UserHomePage extends Component{
 			<View style = {styles.middleWapper}>
 				<View style={{flexDirection:'row',height:40}}>
 					<View style = {[styles.oneOfThree,{flexDirection:'row'}]}>
-     				<Text style={styles.font1}>交易等级</Text>
-							<TouchableOpacity onPress={()=>this._onPressedAskForRank()}>
+
+							<TouchableOpacity style={{flexDirection:'row',alignItems:'center'}} onPress={()=>this._onPressedAskForRank()}>
+								<Text style={styles.font1}>交易等级</Text>
 								<Image style={{width:16,height:16,marginLeft:2}} source = {require('../../images/icon_ask.png')}></Image>
 							</TouchableOpacity>
 
      			</View>
 					<View style = {styles.oneOfThree}>
 						<Text style={styles.font1}>平均每笔收益</Text>
-            {this.renderPrivateOne()}
+
      			</View>
 					<View style = {styles.oneOfThree}>
 						<Text style={styles.font1}>胜率</Text>
@@ -239,13 +250,12 @@ export default class UserHomePage extends Component{
      			</View>
 					{this.rowSepartor()}
 					<View style = {styles.oneOfThree}>
-
+						{this.renderPrivateOne()}
      				<Text style={styles.font2}>{this.state.isPrivate ? emptyStar:this.state.avgPl.toFixed(2)}</Text>
      			</View>
 					{this.rowSepartor()}
 					<View style = {styles.oneOfThree}>
      				<Text style={styles.font2}>{this.state.isPrivate ? emptyStar:this.state.winRate.toFixed(2)}</Text>
-
             {this.renderPrivateTwo()}
      			</View>
 				</View>
@@ -267,6 +277,7 @@ export default class UserHomePage extends Component{
 
 	_onPressedChartType(type){
 		console.log('loadPlCloseData:'+type)
+
 		if(this.state.chartType==type){
 			console.log('same type clicked , return null')
 			return
@@ -371,6 +382,8 @@ export default class UserHomePage extends Component{
 	}
 
 	loadPlCloseData(){
+		console.log("loadPlCloseData this.state.isPrivate =" + this.state.isPrivate);
+		if(this.state.isPrivate){return}
 		console.log("loadPlCloseData:start " + this.state.chartType);
 		var url = NetConstants.CFD_API.GET_POSITION_CHART_PLCLOSE_LIVE
 		if(this.state.chartType==CHART_TYPE_2MONTH){
@@ -403,12 +416,18 @@ export default class UserHomePage extends Component{
 	}
 
 	bottomWarpperRender(){
+		var totalPlShow = this.state.isPrivate ? emptyStar : this.state.totalPl.toFixed(2);
+		var totolPlColor = totolPlColor='#474747'
+		if(!this.state.isPrivate){
+			totolPlColor = this.state.totalPl.toFixed(2) >=0 ? '#fa2c21' : ColorConstants.STOCK_DOWN_GREEN
+		}
+
 
 		return(
 			<View style = {styles.bottomWapper}>
    			<View style ={styles.ceilWapper}>
       		<Text style = {{color:'#474747',fontSize:15}}>近2周收益：</Text>
-					<Text style = {{color:'#fa2c21',fontSize:15}}>{this.state.totalPl.toFixed(2)}</Text>
+					<Text style = {[{color:totolPlColor,fontSize:15},]}>{totalPlShow}</Text>
       	</View>
 				{this.lineSepartor()}
 				<View style ={styles.ceilWapper2}>
@@ -480,7 +499,7 @@ export default class UserHomePage extends Component{
 	cardWarpperRender(){
 		var _scrollView: ScrollView;
 
-		if(this.state.cards.length>0){
+		if(this.state.cards.length>0 && !this.state.isPrivate){
 			var lastIndex = this.state.cards.length-1;
 			var cardItems = this.state.cards.map(
 			(card, i) =>

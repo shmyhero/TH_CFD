@@ -384,7 +384,13 @@ var LogicData = {
 		else{
 			return undefined
 		}
-	}
+	},
+
+	isUserSelf:function(userId){
+		// console.log("meData.userId " + userData.userId);
+		return userData.userId == userId
+	},
+
 };
 
 module.exports = LogicData;

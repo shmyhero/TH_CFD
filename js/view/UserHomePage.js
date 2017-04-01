@@ -34,7 +34,7 @@ var CHART_TYPE_ALL = 1;
 var emptyStar = '***'
 
 // { followerCount: 0,
-//   totalPl: -400.62942932,
+//   pl2w: -400.62942932,
 //   avgPl: -9.538795936190477,
 //   winRate: 0.3333333333333333,
 //   cards: [],
@@ -90,7 +90,7 @@ export default class UserHomePage extends Component{
 			nickname:'',
 			followerCount:0,
 			cards:[],
-			totalPl:0,
+			pl2w:0,
 			picUrl:undefined,
 			isFollowing:false,
 			titleOpacity:0,
@@ -141,7 +141,7 @@ export default class UserHomePage extends Component{
 					 nickname:responseJson.nickname,
 					 followerCount:responseJson.followerCount,
 					 cards:responseJson.cards,
-					 totalPl:responseJson.totalPl,
+					 pl2w:responseJson.pl2w,
 					 picUrl:responseJson.picUrl,
 					 isFollowing:responseJson.isFollowing,
 					 rank:responseJson.rank,
@@ -416,10 +416,10 @@ export default class UserHomePage extends Component{
 	}
 
 	bottomWarpperRender(){
-		var totalPlShow = this.state.isPrivate ? emptyStar : this.state.totalPl.toFixed(2);
+		var pl2wShow = this.state.isPrivate ? emptyStar : this.state.pl2w.toFixed(2);
 		var totolPlColor = totolPlColor='#474747'
 		if(!this.state.isPrivate){
-			totolPlColor = this.state.totalPl.toFixed(2) >=0 ? '#fa2c21' : ColorConstants.STOCK_DOWN_GREEN
+			totolPlColor = this.state.pl2w.toFixed(2) >=0 ? '#fa2c21' : ColorConstants.STOCK_DOWN_GREEN
 		}
 
 
@@ -427,7 +427,7 @@ export default class UserHomePage extends Component{
 			<View style = {styles.bottomWapper}>
    			<View style ={styles.ceilWapper}>
       		<Text style = {{color:'#474747',fontSize:15}}>近2周收益：</Text>
-					<Text style = {[{color:totolPlColor,fontSize:15},]}>{totalPlShow}</Text>
+					<Text style = {[{color:totolPlColor,fontSize:15},]}>{pl2wShow}</Text>
       	</View>
 				{this.lineSepartor()}
 				<View style ={styles.ceilWapper2}>

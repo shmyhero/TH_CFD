@@ -71,7 +71,7 @@ export default class DepositPage extends Component{
 			payStateTip:'最低入金额度：100美元',
 			payStateTip2:'等额人民币：0.00元',
 			payStateTip3:'手续费：0美元',
-			payStateTip4:'注意：入金手续费为入金金额的1%(最低5美元)，入金账户必须与自己的身份证保持一致，以免发生交易风险。',
+			payStateTip4:'注意：入金手续费为入金金额的1%，入金账户必须与自己的身份证保持一致，以免发生交易风险。',
 			payMethodSelected:0,
 			dataSource:ds.cloneWithRows(listRawData),
 			dataSourceBank:dsBank.cloneWithRows(bankListData),

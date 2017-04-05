@@ -133,7 +133,7 @@ var StockDetailPage = React.createClass({
 			minPercentage: 0,
 			dataStatus:0,//0正常 1等待刷新 2加载中
 			height: UIConstants.getVisibleHeight(),
-			widht: width,
+			width: width,
 			orientation: ORIENTATION_PORTRAIT,
 			chartViewType: CHARTVIEWTYPE_LINE,
 		};
@@ -201,7 +201,7 @@ var StockDetailPage = React.createClass({
 				})
 				return;
 			}
-
+			this.state.width = UIConstants.getVisibleWidth();
 			this.state.height = UIConstants.getVisibleHeight();
 		}
 	},
@@ -672,10 +672,13 @@ var StockDetailPage = React.createClass({
 		//status 0:正常 1：暂时无法获取数据 2:加载中
 		var status = this.state.dataStatus;
 		var imageError = LogicData.getAccountState()?require('../../images/icon_network_connection_error_live.png'):require('../../images/icon_network_connection_error.png')
+
+		var _width = this.state.orientation == ORIENTATION_LANDSPACE ? Math.max(this.state.width,this.state.height):Math.min(this.state.width,this.state.height);
+
 		if(status === 1){
 			return (
-				<View style={[styles.dataStatus,{width:this.state.width}]}>
-					<View style={[styles.dataStatus2,{width:this.state.width}]}>
+				<View style={[styles.dataStatus,{width:_width}]}>
+					<View style={[styles.dataStatus2,{width:_width}]}>
 					<Image style={{width:24,height:24,marginBottom:5}} source={imageError}></Image>
 					<Text style={styles.textDataStatus}>暂时无法获取数据</Text>
 					<TouchableOpacity onPress={()=> this.dataRefreshClicked()}>
@@ -688,8 +691,8 @@ var StockDetailPage = React.createClass({
 			)
 		}else if(status === 2){
 			return (
-				<View style={[styles.dataStatus,{width:this.state.width}]}>
-					<View style={[styles.dataStatus2,{width:this.state.width}]}>
+				<View style={[styles.dataStatus,{width:_width}]}>
+					<View style={[styles.dataStatus2,{width:_width}]}>
 					{this._renderActivityIndicator()}
 					<Text style={styles.textDataStatus}>加载中...</Text>
 					</View>
@@ -912,15 +915,19 @@ var StockDetailPage = React.createClass({
 		var charge = 0
 		var viewMargin = 0;//Platform.OS === 'ios' ? 0:15
 		// console.log("render: " + JSON.stringify(this.state.stockInfo))
-		var viewHeight = Platform.OS === 'ios' ? height :  Math.max(height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER, this.state.height)
+		var viewHeight = Platform.OS === 'ios' ? height :  Math.min(height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER, this.state.height)
 		var bottomBarBackgroundColor = LogicData.getAccountState() ? "#334a74": "#0741a8";
-		var styleAppend = Platform.OS === 'ios'?{width:this.state.width}:null;
+
+		var styleAppend = Platform.OS === 'ios'?{width:width}:null;
+		console.log("width = " + width + " viewHeight = "+ viewHeight);
+		var maxWidth = Math.max(this.state.height,this.state.width)
+ 
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
 				<View style={[styles.wrapper,styleAppend]}>
 					<LinearGradient colors={this.getGradientColor()} style={{height: viewHeight}}>
 						{this.renderTitleLandspace()}
-						<View style={{flex: 3.5,marginTop:5,marginLeft:viewMargin,marginRight:viewMargin}}>
+						<View style={{height:viewHeight - 100 ,width:maxWidth,marginTop:5,marginLeft:viewMargin,marginRight:viewMargin}}>
 								{this.renderChart()}
 								{this.renderDataStatus()}
 						</View>
@@ -1682,7 +1689,7 @@ var styles = StyleSheet.create({
 		left:0,
 		right:0,
 		bottom:0,
-		width:width,
+		width:width- 48,
 		alignItems:'center',
 		justifyContent:'center',
 		backgroundColor:'transparent',

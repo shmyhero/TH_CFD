@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.20.123:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.88.206:8081").apply();
 
         super.onCreate(null);
 
@@ -110,8 +110,9 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                 Integer height = bottom - top;
+                Integer width = right - left;
                 Integer oldHeight = oldBottom - oldTop;
-
+                Integer oldWidth = oldRight - oldLeft;
                 if(oldHeight != height){
                     Log.i(TAG, "onLayoutChange top " + top + ", bottom " + bottom + ", oldTop " + oldTop + ", oldBottom " + oldBottom );
                     Resources resources = MainActivity.this.getResources();
@@ -121,6 +122,18 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
                     if (context != null) {
                         NativeDataModule.passDataToRN(mReactInstanceManager.getCurrentReactContext(),
                                 NativeActions.ACTION_GET_ANDROID_VISIBLE_HEIGHT, dp.toString());
+                    }
+
+                }
+                if(oldWidth != width){
+                    Log.i(TAG, "onLayoutChange right " + right + ", left " + left + ", oldRight " + oldRight + ", oldLeft " + oldLeft );
+                    Resources resources = MainActivity.this.getResources();
+                    DisplayMetrics metrics = resources.getDisplayMetrics();
+                    Integer dp = (int)(width / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+                    ReactContext context = mReactInstanceManager.getCurrentReactContext();
+                    if (context != null) {
+                        NativeDataModule.passDataToRN(mReactInstanceManager.getCurrentReactContext(),
+                                NativeActions.ACTION_GET_ANDROID_VISIBLE_WIDTH, dp.toString());
                     }
 
                 }

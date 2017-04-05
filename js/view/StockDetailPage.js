@@ -197,6 +197,7 @@ var StockDetailPage = React.createClass({
 				console.log("onLayoutSizeChanged stock detail page");
 				this.setState({
 					height: UIConstants.getVisibleHeight(),
+					width: UIConstants.getVisibleWidth(),
 				})
 				return;
 			}
@@ -765,7 +766,7 @@ var StockDetailPage = React.createClass({
 				console.log("renderChart width = " + width);
 				//8596b5
 				return(
-					<LineChart style={[styles.lineChart,{width:width},{opacity:opacity}]}
+					<LineChart style={[styles.lineChart,{width:this.state.width},{opacity:opacity}]}
 						chartType={this.state.chartType}
 						// chartIsActual={LogicData.getAccountState()}
 						data={JSON.stringify(this.state.stockInfo)}
@@ -859,7 +860,7 @@ var StockDetailPage = React.createClass({
 		}
 
 		return(
-			<View style={{flexDirection:'row',width:width,alignItems:'center',justifyContent: 'space-between'}}>
+			<View style={{flexDirection:'row',width:this.state.width,alignItems:'center',justifyContent: 'space-between'}}>
 				<View style={{flexDirection:'row',alignItems:'center',marginTop:10,marginBottom:10,justifyContent: 'flex-start'}}>
 					<Text style={{fontSize:15,color:'white',marginLeft:15}}>{titleText}</Text>
 					<Text style={{fontSize:15,color:'white',marginLeft:10}}>{currentPriceText}</Text>
@@ -913,7 +914,7 @@ var StockDetailPage = React.createClass({
 		// console.log("render: " + JSON.stringify(this.state.stockInfo))
 		var viewHeight = Platform.OS === 'ios' ? height :  Math.max(height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER, this.state.height)
 		var bottomBarBackgroundColor = LogicData.getAccountState() ? "#334a74": "#0741a8";
-		var styleAppend = Platform.OS === 'ios'?{width:width}:null;
+		var styleAppend = Platform.OS === 'ios'?{width:this.state.width}:null;
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
 				<View style={[styles.wrapper,styleAppend]}>
@@ -930,7 +931,7 @@ var StockDetailPage = React.createClass({
 
 					</LinearGradient>
 				</View>
-				</TouchableWithoutFeedback>
+			</TouchableWithoutFeedback>
 		)
 	},
 
@@ -1154,6 +1155,8 @@ var StockDetailPage = React.createClass({
 			width = Dimensions.get('window').height
 			this.setState({
 				 orientation:ORIENTATION_LANDSPACE,
+				 height: height,
+				 width: width,
 				 chartViewType:NetConstants.isCandleChart(this.state.chartType)?CHARTVIEWTYPE_CANDLE:CHARTVIEWTYPE_LINE
 			},()=>{
 					Orientation.lockToLandscape()
@@ -1164,6 +1167,8 @@ var StockDetailPage = React.createClass({
 			width = Dimensions.get('window').height
 			this.setState({
 				orientation:ORIENTATION_PORTRAIT,
+				height: height,
+				width: width,
 			},()=>{
 				Orientation.lockToPortrait()
 				this.pressChartHeaderTab(NetConstants.isPortraitChart(this.state.chartType)?this.state.chartType:NetConstants.PARAMETER_CHARTTYPE_TODAY)

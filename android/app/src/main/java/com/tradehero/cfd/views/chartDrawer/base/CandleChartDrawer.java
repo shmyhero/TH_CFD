@@ -13,6 +13,7 @@ import com.github.mikephil.charting.data.CandleEntry;
 import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.formatter.YAxisValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.tradehero.cfd.MainActivity;
 import com.tradehero.cfd.StringUtils;
@@ -173,6 +174,8 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
 
         minVal -= (maxVal - minVal) / 5;
         maxVal += (maxVal - minVal) / 5;
+
+        formatRightAxisText(chart, maxVal, minVal);
 
         return data;
     }

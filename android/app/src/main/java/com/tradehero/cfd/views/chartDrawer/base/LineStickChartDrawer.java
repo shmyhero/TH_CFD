@@ -97,6 +97,7 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
         minVal -= (maxVal - minVal) / 5;
         maxVal += (maxVal - minVal) / 5;
 
+        formatRightAxisText(chart, maxVal, minVal);
 
         int[] circleColors = {Color.TRANSPARENT};
         if (yVals.size() > 0 && stockInfoObject.getBoolean("isOpen")) {

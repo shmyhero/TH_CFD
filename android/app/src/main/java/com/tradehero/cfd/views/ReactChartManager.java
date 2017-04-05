@@ -80,13 +80,6 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
         chart.getXAxis().setTextColor(textColor);
         chart.getXAxis().setTextSize(8f);
 
-        chart.getAxisRight().setValueFormatter(new YAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, YAxis yAxis) {
-                return String.format("%.1f", value);
-            }
-        });
-
         chart.setBorderWidth(0.5f);
 
         chart.getAxisLeft().setSpaceTop(10);

@@ -2,8 +2,10 @@ package com.tradehero.cfd.views.chartDrawer.base;
 
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.formatter.XAxisValueFormatter;
+import com.github.mikephil.charting.formatter.YAxisValueFormatter;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.tradehero.cfd.MainActivity;
@@ -54,6 +56,9 @@ public abstract class BaseChartDrawer implements IChartDrawer {
 
         minVal = Float.MAX_VALUE;
         maxVal = Float.MIN_VALUE;
+
+        formatRightAxisText(chart, maxVal, minVal);
+
         try{
             preClose = (float) stockInfoObject.getDouble("preClose");
         }catch (Exception e){
@@ -178,6 +183,34 @@ public abstract class BaseChartDrawer implements IChartDrawer {
         info.limitLineAt = limitLineAt;
         info.limitLineCalender = limitLineCalender;
         return info;
+    }
+
+    protected void formatRightAxisText(CombinedChart chart, final float maxVal, final float minVal){
+
+        chart.getAxisRight().setValueFormatter(new YAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, YAxis yAxis) {
+                float offset = Math.abs(maxVal - minVal);
+                if(offset > 1){
+                    return String.format("%.1f", value);
+                }else{
+                    String text = Double.toString(offset);
+                    int integerPlaces = text.indexOf('.');
+                    String afterDecimal = text.substring(integerPlaces+1);
+                    String[] decimals = afterDecimal.split("0");
+                    int noneZeroIndex = 0;
+                    for(int i = 0; i < decimals.length; i++){
+                       if(!decimals[i].equals("")) {
+                           noneZeroIndex = i + 1;
+                           break;
+                       }
+                    }
+
+                    noneZeroIndex += 1;
+                    return String.format("%." + noneZeroIndex + "f", value);
+                }
+            }
+        });
     }
 
     /**

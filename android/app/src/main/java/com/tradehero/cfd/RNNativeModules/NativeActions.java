@@ -12,6 +12,7 @@ public class NativeActions {
     public final static String ACTION_SET_IS_PRODUCT_SERVER = "isProductServer";
     public final static String ACTION_VERSION_CODE = "versionCode";
     public final static String ACTION_GET_ANDROID_VISIBLE_HEIGHT = "getAndroidVisibleHeight";
+    public final static String ACTION_GET_ANDROID_VISIBLE_WIDTH = "getAndroidVisibleWidth";
     public final static String ACTION_CHART_CLICKED = "chart_clicked";
 
     //

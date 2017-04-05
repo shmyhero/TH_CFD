@@ -674,7 +674,7 @@ var StockDetailPage = React.createClass({
 		var imageError = LogicData.getAccountState()?require('../../images/icon_network_connection_error_live.png'):require('../../images/icon_network_connection_error.png')
 
 		var _width = this.state.orientation == ORIENTATION_LANDSPACE ? Math.max(this.state.width,this.state.height):Math.min(this.state.width,this.state.height);
-
+		console.log("_width : " + _width + " state.width = " + this.state.width +" state.height = " + this.state.height);
 		if(status === 1){
 			return (
 				<View style={[styles.dataStatus,{width:_width}]}>
@@ -769,7 +769,7 @@ var StockDetailPage = React.createClass({
 				console.log("renderChart width = " + width);
 				//8596b5
 				return(
-					<LineChart style={[styles.lineChart,{width:this.state.width},{opacity:opacity}]}
+					<LineChart style={[styles.lineChart,{width:width},{opacity:opacity}]}
 						chartType={this.state.chartType}
 						// chartIsActual={LogicData.getAccountState()}
 						data={JSON.stringify(this.state.stockInfo)}
@@ -863,7 +863,7 @@ var StockDetailPage = React.createClass({
 		}
 
 		return(
-			<View style={{flexDirection:'row',width:this.state.width,alignItems:'center',justifyContent: 'space-between'}}>
+			<View style={{flexDirection:'row',width:width,alignItems:'center',justifyContent: 'space-between'}}>
 				<View style={{flexDirection:'row',alignItems:'center',marginTop:10,marginBottom:10,justifyContent: 'flex-start'}}>
 					<Text style={{fontSize:15,color:'white',marginLeft:15}}>{titleText}</Text>
 					<Text style={{fontSize:15,color:'white',marginLeft:10}}>{currentPriceText}</Text>
@@ -921,9 +921,9 @@ var StockDetailPage = React.createClass({
 		var styleAppend = Platform.OS === 'ios'?{width:width}:null;
 		console.log("width = " + width + " viewHeight = "+ viewHeight);
 		var maxWidth = Math.max(this.state.height,this.state.width)
- 
+
 		return (
-			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
+
 				<View style={[styles.wrapper,styleAppend]}>
 					<LinearGradient colors={this.getGradientColor()} style={{height: viewHeight}}>
 						{this.renderTitleLandspace()}
@@ -938,7 +938,7 @@ var StockDetailPage = React.createClass({
 
 					</LinearGradient>
 				</View>
-			</TouchableWithoutFeedback>
+
 		)
 	},
 

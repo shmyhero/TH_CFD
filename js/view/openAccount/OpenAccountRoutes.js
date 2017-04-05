@@ -209,6 +209,9 @@ export function getOpenAccountData(){
     for(var i = 0; i < OpenAccountInfos.length; i++){
       if(lastStoredData[i]){
         var dataArray = lastStoredData[i];
+        if(dataArray.values && dataArray.values.length>0){
+          dataArray = dataArray.values
+        }
         //console.log("dataArray.length " + dataArray.length);
         for( var j = 0; j < dataArray.length; j++){
           //console.log("dataArray[j]: j" + j + ", "+ JSON.stringify(dataArray[j]));

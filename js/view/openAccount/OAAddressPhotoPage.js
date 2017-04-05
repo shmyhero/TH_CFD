@@ -10,6 +10,9 @@ import {
 	Dimensions,
 	Alert,
 	InteractionManager,
+	TextInput,
+	ScrollView,
+	Keyboard,
 } from 'react-native';
 
 var ImagePicker = require('react-native-image-picker');
@@ -28,6 +31,7 @@ var {height, width} = Dimensions.get('window')
 const imageWidth = Math.round(width * 0.85)
 const imageHeight = Math.round(height * 0.3)
 
+var SCROLL_VIEW = "scrollView";
 // const GZT_Ayondo_Key_Mappings = [
 // 	{"GZTKey": "real_name", "AyondoKey": "realName"},
 // 	{"GZTKey": "gender", "AyondoKey": "gender"},
@@ -78,20 +82,44 @@ var OAAddressPhotoPage = React.createClass({
 	getInitialState: function() {
 		var addressPhotoData = null;
     var addressPhoto = defaultAddressPhoto;
+		var addressText = "";
 
-		if(this.props.data && this.props.data.addressPhotoData){
-			addressPhoto = {uri: 'data:image/jpeg;base64,' + this.props.data.addressPhotoData};
-			addressPhotoData = this.props.data.addressPhotoData;
+		if(this.props.data){
+			if(this.props.data.addressPhotoData){
+				addressPhoto = {uri: 'data:image/jpeg;base64,' + this.props.data.addressPhotoData};
+				addressPhotoData = this.props.data.addressPhotoData;
+			}
+
+			if(this.props.data.values){
+				for(var i = 0; i < this.props.data.values.length; i++ ){
+					if(this.props.data.values[i].key === "addr"){
+						addressText = this.props.data.values[i].value;
+					}
+				}
+			}
 		}
 
 		var nextEnabled = addressPhotoData != null;
 		return {
 			addressPhoto: addressPhoto,
 			addressPhotoData: addressPhotoData,
+			addressText: addressText,
 			error: null,
 			nextEnabled: nextEnabled,
 			validateInProgress: false,
 		};
+	},
+
+	componentWillMount: function(){
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+	},
+
+	componentWillUnmount: function(){
+		this.keyboardDidHideListener.remove();
+	},
+
+	_keyboardDidHide: function(){
+		this.refs[SCROLL_VIEW] && this.refs[SCROLL_VIEW].scrollTo({y:0})
 	},
 
 	pressAddImage: function() {
@@ -174,32 +202,59 @@ var OAAddressPhotoPage = React.createClass({
 
 	getData: function(){
 		var addressPhotoData = null;
-
+		var addressText = null;
 		if(this.state.addressPhoto !== defaultAddressPhoto){
 			addressPhotoData = this.state.addressPhotoData;
 		}
 
+		if(this.state.addressText !== ""){
+			addressText = this.state.addressText;
+		}
+
 		return {
 			addressPhotoData: addressPhotoData,
+			values: [{"key":"addr","value":addressText}],
 		};
+	},
+
+	textInputChange: function(text){
+		this.setState({
+			addressText: text,
+		})
 	},
 
 	render: function() {
 		return (
 			<View style={styles.wrapper}>
 				<ErrorBar error={this.state.error}/>
-				<View style={{height: 15}} />
-				<TouchableOpacity style={styles.imageArea} onPress={() => this.pressAddImage()}>
-					<Image style={styles.addImage} source={this.state.addressPhoto}/>
-				</TouchableOpacity>
-				<View style={styles.reminderArea}>
-					<Text style={styles.reminderText}>有效的地址证明包含：</Text>
-  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>居住证、户口本、房产证</Text></Text>
-  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>宽带/水电煤/固话账单(近3个月内)</Text></Text>
-  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>银行账单(近3个月内)</Text></Text>
-  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>驾照</Text></Text>
-  				<Text style={styles.reminderText}>请上传上述任意一种证明照片，照片信息必须与开户身份证一致。</Text>
-				</View>
+				<ScrollView style={{flex:1}} ref={SCROLL_VIEW}>
+					<View style={styles.container}>
+						<Text style={styles.hintText}>请上传以下任意一种与本人身份证信息一致的图片：</Text>
+						<TouchableOpacity style={styles.imageArea} onPress={() => this.pressAddImage()}>
+							<Image style={styles.addImage} source={this.state.addressPhoto}/>
+						</TouchableOpacity>
+						<View style={styles.reminderArea}>
+							<Text style={styles.hintText}>有效的地址证明包含：</Text>
+		  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>居住证、户口本、房产证</Text></Text>
+		  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>宽带/水电煤/固话账单(近3个月内)</Text></Text>
+		  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>银行账单(近3个月内)</Text></Text>
+		  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>驾照</Text></Text>
+						</View>
+						<Text style={styles.hintText}>输入的地址必须与上传图片中的地址保持一致！</Text>
+						<TextInput style={styles.inputText}
+							autoCapitalize="none"
+							autoCorrect={false}
+							defaultValue={this.state.addressText}
+							multiline={false}
+							numberOfLines={3}
+							maxLength={100}
+							selectionColor={ColorConstants.INOUT_TEXT_SELECTION_COLOR}
+							underlineColorAndroid='transparent'
+							onChangeText={(text)=>this.textInputChange(text)}
+							/>
+					</View>
+					<View style={{height: 150}}></View>
+				</ScrollView>
 				<View style={styles.bottomArea}>
 					<Button style={styles.buttonArea}
 						enabled={this.state.nextEnabled}
@@ -218,6 +273,13 @@ var styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'stretch',
 		backgroundColor: ColorConstants.BACKGROUND_GREY,
+	},
+
+	container: {
+		marginTop: 15,
+    marginLeft: width*0.09,
+    marginRight: width*0.09,
+		flex: 1,
 	},
 
 	imageArea: {
@@ -247,9 +309,7 @@ var styles = StyleSheet.create({
 
 	reminderArea:{
     paddingTop: 10,
-    marginLeft: width*0.09,
-    marginRight: width*0.09,
-    marginBottom: width*0.09,
+    marginBottom: 10,
 		justifyContent: 'center',
 		//alignItems: 'center',
 		flex:3,
@@ -284,6 +344,19 @@ var styles = StyleSheet.create({
 		fontSize: 14,
 		color: 'red',
 		textAlign: 'center',
+	},
+	hintText:{
+		fontSize: 12,
+		color: "#6c6c6c",
+	},
+	inputText:{
+		textAlign: 'left',
+		marginTop: 10,
+		marginBottom: 10,
+		borderRadius:3,
+		height: 49,
+		fontSize: 25,
+		backgroundColor:'white',
 	}
 });
 

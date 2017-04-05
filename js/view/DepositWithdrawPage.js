@@ -90,7 +90,7 @@ export default class DepositWithdrawPage extends Component {
 		this.loadLiveUserInfo();
 	}
 
-	loadLiveUserInfo(onSuccess){
+	loadLiveUserInfo(onSuccess, onError){
 		var userData = LogicData.getUserData()
   	if(userData.token == undefined){return}	//This must not be true!!!
 
@@ -111,14 +111,16 @@ export default class DepositWithdrawPage extends Component {
 
 			this.setState({
 				hasWithdrawError: response.bankCardStatus === "Rejected",
+			}, ()=>{
+				if(onSuccess){
+					onSuccess();
+				}
 			});
-
-			if(onSuccess){
-				onSuccess();
-			}
 			//{"lastName":"张","firstName":"三","identityID":"310104000000000000","bankCardNumber":"1234567890","bankName":"光大银行","branch":"光大银行上海分行","province":"上海","city":"上海"}
 		}, (error)=>{
-
+			if(onError){
+				onError();
+			}
 		});
 	}
 
@@ -132,9 +134,12 @@ export default class DepositWithdrawPage extends Component {
         return;
       case 'withdraw':
 				var liveUserInfo = LogicData.getLiveUserInfo();
+				console.log("liveUserInfo " + JSON.stringify(liveUserInfo))
 				if(liveUserInfo == null){
 					this.loadLiveUserInfo((userInfo)=>{
 						this.goToWithdrawPage(userInfo);
+					}, ()=>{
+						alert("网络错误，请重试！");
 					});
 				}else{
 					this.goToWithdrawPage(liveUserInfo);

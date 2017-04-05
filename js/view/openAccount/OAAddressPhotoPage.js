@@ -229,7 +229,7 @@ var OAAddressPhotoPage = React.createClass({
 				<ErrorBar error={this.state.error}/>
 				<ScrollView style={{flex:1}} ref={SCROLL_VIEW}>
 					<View style={styles.container}>
-						<Text style={styles.hintText}>请上传以下任意一种与本人身份证信息一致的图片：</Text>
+						<Text style={styles.hintText}>请上传以下任意一种与身份证名字一致的图片：</Text>
 						<TouchableOpacity style={styles.imageArea} onPress={() => this.pressAddImage()}>
 							<Image style={styles.addImage} source={this.state.addressPhoto}/>
 						</TouchableOpacity>

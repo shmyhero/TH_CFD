@@ -203,7 +203,7 @@ var AppNavigator = React.createClass({
 					}else if (args[0] == 'versionCode'){
 						this.setCurrentVersionCode(args[1]);
 					}else if (args[0] == 'getAndroidVisibleSize'){
-						UIConstants.setVisibleAreaSize(args[1]);
+						UIConstants.setVisibleAreaSize(JSON.parse(args[1]));
 					}else if(args[0] == 'chart_clicked'){
 						EventCenter.emitChartClickedEvent()
 					}

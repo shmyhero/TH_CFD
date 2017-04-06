@@ -877,7 +877,14 @@ var StockDetailPage = React.createClass({
 	},
 
 	chartClicked:function(){
-		this.changeOrientatioin()
+		console.log("chartClicked ")
+		if(Platform.OS === "andriod"){
+			setTimeout(()=>{
+				this.changeOrientatioin()
+			}, 500);
+		}else{
+			this.changeOrientatioin()
+		}
 	},
 
 	closeLandspace:function(){

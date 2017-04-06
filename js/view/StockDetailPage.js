@@ -878,7 +878,7 @@ var StockDetailPage = React.createClass({
 
 	chartClicked:function(){
 		console.log("chartClicked ")
-		if(Platform.OS === "andriod"){
+		if(Platform.OS == 'android'){
 			setTimeout(()=>{
 				this.changeOrientatioin()
 			}, 500);
@@ -1517,7 +1517,7 @@ var styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'stretch',
 		// width:width,
-		backgroundColor: Platform.OS === 'andriod' ? '#123b80' : 'transparent',
+		backgroundColor: Platform.OS == 'android' ? '#123b80' : 'transparent',
 	},
 	rowView: {
 		flexDirection: 'row',

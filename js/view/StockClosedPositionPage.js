@@ -138,9 +138,13 @@ var StockClosedPositionPage = React.createClass({
 
 	clearViews:function(){
 		if(this._pullToRefreshListView && this._pullToRefreshListView._scrollView){
-			this.endNextPageLoadingState(false);
-			if(this.scrollViewYOffset != 0){
-				this._pullToRefreshListView._scrollView.scrollTo({x:0, y:0, animated:false})
+			try{
+				this.endNextPageLoadingState(false);
+				if(this.scrollViewYOffset != 0){
+					this._pullToRefreshListView._scrollView.scrollTo({x:0, y:0, animated:false})
+				}
+			}catch(e){
+				console.log("Met error when clear closed position page!" + e)
 			}
 		}
 

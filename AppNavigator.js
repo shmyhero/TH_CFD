@@ -462,7 +462,7 @@ var AppNavigator = React.createClass({
 		var statusBar = <StatusBar barStyle="light-content"/>
 
 		if (this.state.startUpPhase == MAIN_PAGE_PHASE) {
-			if(Platform.OS === 'android'){
+			if(Platform.OS == 'android'){
 				StatusBar.setBackgroundColor(ColorConstants.TITLE_BLUE);
 			}
 			return (

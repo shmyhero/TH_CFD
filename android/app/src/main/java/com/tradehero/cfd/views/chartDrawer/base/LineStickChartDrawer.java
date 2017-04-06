@@ -40,7 +40,8 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
         super.resetChart(chart);
         chart.setDragEnabled(false);
         chart.setScaleEnabled(false);
-        chart.setTouchEnabled(!MainActivity.isLandscape());
+        chart.setTouchEnabled(!((ReactChart)chart).isLandspace());
+//        chart.setTouchEnabled(!MainActivity.isLandscape());
     }
 
     protected Drawable getGradientDrawable(int[] colors){

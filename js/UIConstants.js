@@ -38,6 +38,22 @@ export function getVisibleHeight(){
 	return VISIBLE_HEIGHT;
 }
 
+
+export function setVisibleAreaSize(value){
+	var changed = false;
+	if(VISIBLE_HEIGHT != height){
+		VISIBLE_HEIGHT = parseInt(value.height);
+		changed = true;
+	}
+	if(VISIBLE_WIDTH != width){
+		VISIBLE_WIDTH = parseInt(value.width)
+		changed = true;
+	}
+	if(changed){
+		EventCenter.emitLayoutSizeChangedEvent();
+	}
+}
+
 export function setVisibleWidth(value){
 	// var pS = PixelRatio.getPixelSizeForLayoutSize(value);
 	// console.log("PixelRatio.get() " + PixelRatio.get());

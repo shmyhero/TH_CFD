@@ -48,6 +48,8 @@ import static android.content.pm.PackageManager.GET_META_DATA;
 import android.content.Intent; // <--- import
 import android.content.res.Configuration; // <--- import
 
+import org.json.JSONObject;
+
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
  */
@@ -113,29 +115,31 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
                 Integer width = right - left;
                 Integer oldHeight = oldBottom - oldTop;
                 Integer oldWidth = oldRight - oldLeft;
-                if(oldHeight != height){
-                    Log.i(TAG, "onLayoutChange top " + top + ", bottom " + bottom + ", oldTop " + oldTop + ", oldBottom " + oldBottom );
-                    Resources resources = MainActivity.this.getResources();
-                    DisplayMetrics metrics = resources.getDisplayMetrics();
-                    Integer dp = (int)(height / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
-                    ReactContext context = mReactInstanceManager.getCurrentReactContext();
-                    if (context != null) {
-                        NativeDataModule.passDataToRN(mReactInstanceManager.getCurrentReactContext(),
-                                NativeActions.ACTION_GET_ANDROID_VISIBLE_HEIGHT, dp.toString());
-                    }
 
+                if(oldHeight == height && oldWidth == width){
+                    //Size not changed. Do nothing.
+                    return;
                 }
-                if(oldWidth != width){
-                    Log.i(TAG, "onLayoutChange right " + right + ", left " + left + ", oldRight " + oldRight + ", oldLeft " + oldLeft );
-                    Resources resources = MainActivity.this.getResources();
-                    DisplayMetrics metrics = resources.getDisplayMetrics();
-                    Integer dp = (int)(width / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+
+                JSONObject jsonObject = new JSONObject();
+
+
+                Log.i(TAG, "onLayoutChange top " + top + ", bottom " + bottom + ", oldTop " + oldTop + ", oldBottom " + oldBottom );
+                Log.i(TAG, "onLayoutChange right " + right + ", left " + left + ", oldRight " + oldRight + ", oldLeft " + oldLeft );
+                Resources resources = MainActivity.this.getResources();
+                DisplayMetrics metrics = resources.getDisplayMetrics();
+                Integer heightDp = (int)(height / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+                Integer widthDp = (int)(width / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+                try {
+                    jsonObject.put("height", heightDp);
+                    jsonObject.put("width", widthDp);
                     ReactContext context = mReactInstanceManager.getCurrentReactContext();
                     if (context != null) {
                         NativeDataModule.passDataToRN(mReactInstanceManager.getCurrentReactContext(),
-                                NativeActions.ACTION_GET_ANDROID_VISIBLE_WIDTH, dp.toString());
+                                NativeActions.ACTION_GET_ANDROID_VISIBLE_SIZE, jsonObject.toString());
                     }
-
+                }catch (Exception e){
+                    Log.e("onLayoutSizeChanged", e.getMessage(), e);
                 }
             }
         });

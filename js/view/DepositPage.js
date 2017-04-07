@@ -451,7 +451,7 @@ export default class DepositPage extends Component{
 						<View style={{flexDirection:'row'}}>
 							<Text style={styles.psLine}>注意：</Text>
 							<View style={{marginRight:15,flex:1}}>
-								<Text style={styles.psLine2}>入金手续费为入金金额的{this.state.chargeRate*100}%(最低{this.state.chargeMin}美元)，入金账户必须与自己的身份证保持一致，以免发生交易风险。</Text>
+								<Text style={styles.psLine2}>入金手续费为入金金额的{this.state.chargeRate*100}%，入金账户必须与自己的身份证保持一致，以免发生交易风险。</Text>
 							</View>
 					  </View>
 				  </TouchableWithoutFeedback>

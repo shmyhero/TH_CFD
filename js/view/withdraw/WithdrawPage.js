@@ -81,7 +81,7 @@ export default class WithdrawPage extends Component {
         withdrawValue: 0,
         hasRead: true,
         withdrawChargeHint: withdrawChargeHint,
-        refundETA: 3,
+        refundETA: "3-5",
         feeRate: 0.01,
         minFee: 5.00,
         fee: (0.00).toFixed(2),
@@ -371,7 +371,7 @@ export default class WithdrawPage extends Component {
           />
         <View style={{flex:1}}>
 					{this.renderListView()}
-          <Text style={styles.bottomHintText}>{this.state.withdrawChargeHint}</Text>
+          <Text style={styles.bottomHintText}>{"注意："+this.state.withdrawChargeHint}</Text>
           <TouchableOpacity style={{flex:1}} onPress={()=>this.hideKeyboard()}></TouchableOpacity>
           <View style={styles.checkboxView}>
             <CheckBoxButton

@@ -40,15 +40,17 @@ export function getVisibleHeight(){
 
 
 export function setVisibleAreaSize(value){
+	console.log("setVisibleAreaSize " + JSON.stringify(value));
 	var changed = false;
-	if(VISIBLE_HEIGHT != height){
+	if(VISIBLE_HEIGHT != value.height){
 		VISIBLE_HEIGHT = parseInt(value.height);
 		changed = true;
 	}
-	if(VISIBLE_WIDTH != width){
+	if(VISIBLE_WIDTH != value.width){
 		VISIBLE_WIDTH = parseInt(value.width)
 		changed = true;
 	}
+
 	if(changed){
 		EventCenter.emitLayoutSizeChangedEvent();
 	}

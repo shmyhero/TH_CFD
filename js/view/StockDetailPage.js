@@ -876,14 +876,20 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
+	chartClickable: true,
+
 	chartClicked:function(){
-		console.log("chartClicked ")
-		if(Platform.OS == 'android'){
-			setTimeout(()=>{
+		//Make sure the chart can only be pressed once.
+		if(this.chartClickable){
+			this.chartClickable = false;
+			console.log("chartClicked ")
+			if(Platform.OS == 'android'){
+				setTimeout(()=>{
+					this.changeOrientatioin()
+				}, 500);
+			}else{
 				this.changeOrientatioin()
-			}, 500);
-		}else{
-			this.changeOrientatioin()
+			}
 		}
 	},
 
@@ -1193,6 +1199,8 @@ var StockDetailPage = React.createClass({
 
 	_orientationDidChange: function(orientation) {
 	 	console.log("changeOrientatioin _orientationDidChange : " + orientation);
+
+		this.chartClickable = true;
 		if (orientation == 'LANDSCAPE') {
 		 //do something with landscape layout
 		} else {

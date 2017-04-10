@@ -99,14 +99,13 @@ var OAAddressPhotoPage = React.createClass({
 			}
 		}
 
-		var nextEnabled = addressPhotoData != null;
 		return {
 			addressPhoto: addressPhoto,
 			addressPhotoData: addressPhotoData,
 			addressText: addressText,
 			error: null,
-			nextEnabled: nextEnabled,
 			validateInProgress: false,
+			isProcessing: false,
 		};
 	},
 
@@ -139,7 +138,6 @@ var OAAddressPhotoPage = React.createClass({
 				this.setState({
 					addressPhoto: source,
 					addressPhotoData: response.data,
-					nextEnabled: true,
 				});
 			}
 		});
@@ -147,7 +145,7 @@ var OAAddressPhotoPage = React.createClass({
 
 	gotoNext: function() {
 		this.setState({
-			nextEnabled: false,
+			isProcessing: true,
 			validateInProgress: true,
 			error: null,
 		})
@@ -172,7 +170,7 @@ var OAAddressPhotoPage = React.createClass({
 					},
 					(responseJson) => {
 						this.setState({
-							nextEnabled: true,
+							isProcessing: false,
 							validateInProgress: false,
 						})
 
@@ -188,7 +186,7 @@ var OAAddressPhotoPage = React.createClass({
 					},
 					(result) => {
 						this.setState({
-							nextEnabled: true,
+							isProcessing: false,
 							validateInProgress: false,
 							error: result.errorMessage
 						});
@@ -224,6 +222,8 @@ var OAAddressPhotoPage = React.createClass({
 	},
 
 	render: function() {
+		var nextEnabled = this.state.addressPhotoData != null && this.state.addressText!= null && this.state.addressText != "";
+
 		return (
 			<View style={styles.wrapper}>
 				<ErrorBar error={this.state.error}/>
@@ -247,7 +247,7 @@ var OAAddressPhotoPage = React.createClass({
 							defaultValue={this.state.addressText}
 							multiline={false}
 							numberOfLines={3}
-							maxLength={100}
+							maxLength={50}
 							selectionColor={ColorConstants.INOUT_TEXT_SELECTION_COLOR}
 							underlineColorAndroid='transparent'
 							onChangeText={(text)=>this.textInputChange(text)}
@@ -257,7 +257,7 @@ var OAAddressPhotoPage = React.createClass({
 				</ScrollView>
 				<View style={styles.bottomArea}>
 					<Button style={styles.buttonArea}
-						enabled={this.state.nextEnabled}
+						enabled={nextEnabled && !this.state.isProcessing}
 						onPress={this.gotoNext}
 						textContainerStyle={styles.buttonView}
 						textStyle={styles.buttonText}
@@ -355,7 +355,7 @@ var styles = StyleSheet.create({
 		marginBottom: 10,
 		borderRadius:3,
 		height: 49,
-		fontSize: 25,
+		fontSize: 15,
 		backgroundColor:'white',
 	}
 });

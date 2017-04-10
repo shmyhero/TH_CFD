@@ -32,7 +32,7 @@ var {height, width} = Dimensions.get('window');
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var extendHeight = 204
-var rowHeight = 0
+var rowHeight = 56
 var perPageCount = 20;
 var stockNameFontSize = Math.round(17*width/375.0)
 
@@ -211,6 +211,7 @@ var StockClosedPositionPage = React.createClass({
 					console.log("It is the response of the request of previous views. Ignore it.")
 					return;
 				}
+				// responseJson = [responseJson[0], responseJson[1], responseJson[2]]
 
 				this.setState({
 					stockInfoRowData: responseJson,
@@ -317,9 +318,9 @@ var StockClosedPositionPage = React.createClass({
 
 	stockPressed: function(rowData, sectionID, rowID, highlightRow) {
 		var contentLength = this._pullToRefreshListView._scrollView.getMetrics().contentLength;
-		if (rowHeight === 0) {
-			rowHeight = contentLength/this.state.stockInfoRowData.length
-		}
+		// if (rowHeight === 0) {
+		// 	rowHeight = contentLength/this.state.stockInfoRowData.length
+		// }
 
 		var newData = []
 		$.extend(true, newData, this.state.stockInfoRowData)	// deep copy
@@ -350,12 +351,8 @@ var StockClosedPositionPage = React.createClass({
 				- UIConstants.SCROLL_TAB_HEIGHT - UIConstants.LIST_HEADER_BAR_HEIGHT - UIConstants.TAB_BAR_HEIGHT)*20/21
 				- extendHeight
 			: (height- 114 - UIConstants.LIST_HEADER_BAR_HEIGHT)*20/21 - extendHeight
-			var listHeight = contentLength
-			if (this.state.selectedRow !== -1) {
-				listHeight -= extendHeight
-			}
-			var currentY = listHeight/this.state.stockInfoRowData.length*(parseInt(rowID)+1)
 
+			var currentY = (rowHeight+0.5)*(parseInt(rowID)+1)
 			var previousSelectedRow = this.state.selectedRow
 			this.setTimeout(
 				() => {
@@ -732,6 +729,7 @@ var styles = StyleSheet.create({
 	},
 
 	rowWrapper: {
+		height: rowHeight,
 		flexDirection: 'row',
 		alignSelf: 'stretch',
 		alignItems: 'center',

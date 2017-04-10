@@ -17,6 +17,7 @@ include ':react-native-cookies'
 include ':react-native-view-shot'
 include ':react-native-qrcode-local-image'
 include ':react-native-orientation'
+include ':openCVLibrary320'
 
 project(':react-native-wx').projectDir = new File(settingsDir, '../node_modules/react-native-wx/android')
 project(':MPChartLib').projectDir = new File(settingsDir, './MPChartLib')

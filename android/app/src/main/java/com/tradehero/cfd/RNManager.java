@@ -9,8 +9,9 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.github.yamill.orientation.OrientationPackage;
 import com.reactnativecomponent.swiperefreshlayout.RCTSwipeRefreshLayoutPackage;
-import com.imagepicker.ImagePickerPackage;
+//import com.imagepicker.ImagePickerPackage;
 import com.rnfs.RNFSPackage;
+import com.tradehero.cfd.ImagePicker.ImagePickerPackage;
 import com.tradehero.cfd.RNNativeModules.RNNativePackage;
 import com.tradehero.cfd.qrcodeReader.RCTQRCodeLocalImagePackage;
 import com.tradehero.cfd.talkingdata.TalkingDataPackage;
@@ -44,7 +45,7 @@ public class RNManager {
                 new LinearGradientPackage(),
                 new UpdatePackage(),
                 new RNFSPackage(),
-                new ImagePickerPackage(),
+                new ImagePickerPackage(),   //It's a local-edited package instead of the library on git hub version.
                 new TalkingDataPackage(),
                 new RCTSwipeRefreshLayoutPackage(),
                 new PickerViewPackage(),

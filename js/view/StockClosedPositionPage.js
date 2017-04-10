@@ -103,30 +103,37 @@ var StockClosedPositionPage = React.createClass({
 		})
 	},
 
+	isLoadedAll: false,
+
 	currentTicks: 0,
+
+	isResetScroll: false,
+
+	scrollViewYOffset: 0,
 
 	tabPressed: function(index) {
 		var d = new Date();
 		this.currentTicks = d.getTime();
 		console.log("tabpressed ")
 
+		this.setState({
+			selectedRow: -1,
+		})
+		if(this._pullToRefreshListView && this._pullToRefreshListView._scrollView){
+			try{
+				this.endNextPageLoadingState(false);
+			}catch(e){
+				console.log("Met error when clear closed position page!" + e)
+			}
+		}
+
 		if(this.scrollViewYOffset != 0){
 			//If current scrollview offset isn't 0, scroll to 0.
 			if(this._pullToRefreshListView && this._pullToRefreshListView._scrollView){
-				console.log("scroll to top")
+				console.log("tabPressed - scroll to top")
+				this.isResetScroll = true;
 				this._pullToRefreshListView._scrollView.scrollTo({x:0, y:0, animated:false})
 			}
-
-			//BUGBUG: We need to move the following code to scroll to callback.
-			if(!this.state.contentLoaded){
-				this.setState({
-					isRefreshing: true,
-				});
-			}
-
-			setTimeout(()=>{
-				this.loadClosedPositionInfo();
-			}, 1000);
 		}else{
 			this.loadClosedPositionInfo();
 		}
@@ -134,6 +141,20 @@ var StockClosedPositionPage = React.createClass({
 		WebSocketModule.registerCallbacks(
 			() => {
 		})
+	},
+
+	onScroll: function(event){
+		this.scrollViewYOffset = event.nativeEvent.contentOffset.y;
+		if(this.isResetScroll && this.scrollViewYOffset == 0){
+			this.isResetScroll = false;
+			//BUGBUG: We need to move the following code to scroll to callback.
+			if(!this.state.contentLoaded){
+				this.setState({
+					isRefreshing: true,
+				});
+			}
+			this.loadClosedPositionInfo();
+		}
 	},
 
 	clearViews:function(){
@@ -279,7 +300,10 @@ var StockClosedPositionPage = React.createClass({
 
 	endNextPageLoadingState: function(endLoadMore){
 		console.log("endLoadMore " + endLoadMore)
-		this._pullToRefreshListView.endLoadMore(endLoadMore);
+		if(this.isLoadedAll != endLoadMore){
+			this.isLoadedAll = endLoadMore;
+			this._pullToRefreshListView.endLoadMore(endLoadMore);
+		}
 	},
 
 	onLoadMore: function() {
@@ -674,12 +698,6 @@ var StockClosedPositionPage = React.createClass({
 				/>
 			</View>);
 		}
-	},
-
-	scrollViewYOffset: 0,
-
-	onScroll: function(event){
-		this.scrollViewYOffset = event.nativeEvent.contentOffset.y;
 	},
 
 	render: function() {

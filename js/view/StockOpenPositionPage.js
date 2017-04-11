@@ -801,7 +801,7 @@ var StockOpenPositionPage = React.createClass({
 					console.log('Rambo: price = ' + price)
 					if(!stopLossSwitchIsOn){
 						stopLossPercent=DEFAULT_PERCENT
-						price = this.percentToPriceWithRow(100, rowData, 2)
+						price = this.percentToPriceWithRow(-100, rowData, 2)
 						var dcm = Math.pow(10, rowData.security.dcmCount)
 						if (rowData.isLong){
 							price = Math.ceil(price * dcm)/dcm

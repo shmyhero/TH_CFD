@@ -515,6 +515,8 @@ var StockClosedPositionPage = React.createClass({
 		if(rowData.dividendSum){
 			financing_dividend_sum += rowData.dividendSum;
 		}
+
+		var netEarning = financing_dividend_sum + rowData.pl;
 		return (
 			<View style={[{height: extendHeight}, styles.extendWrapper]} >
 				<View style={[styles.darkSeparator, {marginLeft: 0}]} />
@@ -570,7 +572,7 @@ var StockClosedPositionPage = React.createClass({
 					</View>
 					<View style={styles.extendMiddle}>
 						<Text style={styles.extendTextTop}>净收益(美元)</Text>
-						<Text style={[styles.extendTextBottom, {color:profitColor}]}>{rowData.pl.toFixed(2)}</Text>
+						<Text style={[styles.extendTextBottom, {color:profitColor}]}>{netEarning.toFixed(2)}</Text>
 					</View>
 					<View style={styles.extendRight}>
 					</View>

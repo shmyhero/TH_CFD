@@ -101,6 +101,7 @@ var StockOpenPositionPage = React.createClass({
 			isRefreshing: false,
 			dataStatus:0,//0正常 1等待刷新 2加载中
 			height: UIConstants.getVisibleHeight(),
+			totalCount:0,
 		};
 	},
 
@@ -212,6 +213,37 @@ var StockOpenPositionPage = React.createClass({
 		return url;
 	},
 
+	refreshFooterBar(responseJson){
+		var totalCount = 0;
+		for (var i = 0; i < responseJson.length; i++) {
+			var rowData = responseJson[i];
+			var profitPercentage = 0
+			var profitAmount = rowData.upl
+			if (rowData.settlePrice !== 0) {
+				profitPercentage = (this.getLastPrice(rowData) - rowData.settlePrice) / rowData.settlePrice * rowData.leverage
+				profitPercentage *= (rowData.isLong ? 1 : -1)
+				profitAmount = profitPercentage * rowData.invest
+
+				//Only use the fxdata for non-usd
+				if (rowData.security.ccy != UIConstants.USD_CURRENCY) {
+					if (rowData.fxData && rowData.fxData.ask) {
+						profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxData)
+					}	else if(rowData.fxOutright && rowData.fxOutright.ask){
+						profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxOutright)
+					} else {
+						profitAmount = rowData.upl
+					}
+				}
+			}
+			totalCount += profitAmount;
+
+		};
+
+		this.setState({
+			totalCount:totalCount
+		})
+	},
+
 	loadOpenPositionInfo: function() {
 		if(!this.state.contentLoaded){
 			this.setState({
@@ -273,12 +305,16 @@ var StockOpenPositionPage = React.createClass({
 					}
 				}, 1);
 
+
 				for (var i = 0; i < responseJson.length; i++) {
+
 					var stockId = responseJson[i].security.id
 					if (interestedStockIds.indexOf(stockId) < 0) {
 						interestedStockIds.push(stockId)
 					}
 				};
+
+				this.refreshFooterBar(responseJson)
 
 				WebSocketModule.registerInterestedStocks(interestedStockIds.join(','))
 				WebSocketModule.registerCallbacks(
@@ -433,7 +469,7 @@ var StockOpenPositionPage = React.createClass({
 		if (hasUpdate) {
 			this.setState({
 				stockInfo: ds.cloneWithRows(this.state.stockInfoRowData)
-			})
+			},this.refreshFooterBar(this.state.stockInfoRowData))
 		}
 
 		// if (hasUpdateDetail) {
@@ -993,6 +1029,21 @@ var StockOpenPositionPage = React.createClass({
 					</View>
 				</View>
 			);
+	},
+
+	renderFootBar: function() {
+
+			return (
+				<View style={styles.headerBar}>
+					<View style={[styles.rowLeftPart, {	paddingTop: 5,}]}>
+						<Text style={styles.headerTextLeft}>持仓盈亏</Text>
+					</View>
+					<View style={[styles.rowCenterPart, {	paddingRight:width/3,}]}>
+						<Text style={[styles.headerTextLeft, {paddingRight: 0,}]}>{this.state.totalCount.toFixed(2)}</Text>
+					</View>
+				</View>
+			);
+
 	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
@@ -1768,7 +1819,7 @@ var StockOpenPositionPage = React.createClass({
 						renderRow={this.renderRow}
 						renderSeparator={this.renderSeparator}
 						onEndReached={this.onEndReached}/>
-
+				  {this.renderFootBar()}
 					<StockTransactionInfoModal ref='confirmPage'/>
 				</View>
 			)

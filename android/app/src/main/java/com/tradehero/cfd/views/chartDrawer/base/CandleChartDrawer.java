@@ -78,6 +78,11 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
             Log.e("resetChartInScreen", e.toString());
         }
 
+        if(maxV == minV || maxY == minY){
+            setDescription(chart, "", "", "", "");
+            return;
+        }
+
         if (chart.getScaleY() > 0) {
             chart.zoom(1, 1 / chart.getScaleY(), 0, 0);
         }
@@ -172,8 +177,13 @@ public abstract class CandleChartDrawer extends BaseChartDrawer {
         maxVal = data.getYMax();
         minVal = data.getYMin();
 
-        minVal -= (maxVal - minVal) / 5;
-        maxVal += (maxVal - minVal) / 5;
+        if(maxVal != minVal) {
+            minVal -= (maxVal - minVal) / 5;
+            maxVal += (maxVal - minVal) / 5;
+        }else{
+            maxVal *= 1.05f;
+            minVal *= 0.95f;
+        }
 
         formatRightAxisText(chart, maxVal, minVal);
 

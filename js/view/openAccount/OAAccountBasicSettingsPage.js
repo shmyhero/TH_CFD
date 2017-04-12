@@ -21,6 +21,7 @@ var OpenAccountUtils = require('./OpenAccountUtils')
 var ErrorBar = require('../component/ErrorBar')
 var NetworkModule = require('../../module/NetworkModule')
 var NetConstants = require('../../NetConstants')
+var OpenAccountHintBlock = require('./OpenAccountHintBlock')
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
@@ -32,6 +33,7 @@ var defaultRawData = [
 	{"key":"passwordOnceMore", "title":"确认密码", "value":"", hint: "确认登入密码", "type": "pwd", ignoreInRegistery: true, maxLength: 25},
 	{"key":"email", "title":"常用邮箱", "value":"", hint: "请输入常用邮箱", "type": "email", maxLength: 60},
 	{"title":"账户信息将自动绑定到盈交易实盘账户", "type": "hint"},
+	{"type":"openAccountHintBlock"},
 ];
 
 var OAAccountBasicSettingsPage = React.createClass({
@@ -258,7 +260,11 @@ var OAAccountBasicSettingsPage = React.createClass({
 	},
 
 	renderRow: function(rowData, sectionID, rowID) {
-		if(rowData.type === "hint"){
+		if (rowData.type === "openAccountHintBlock"){
+			return (
+				<OpenAccountHintBlock />
+			)
+		} else if(rowData.type === "hint"){
 			return (
 				<Text style={styles.hintText}>
 					{rowData.title}

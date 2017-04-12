@@ -24,6 +24,7 @@ var ColorConstants = require('../../ColorConstants')
 var TalkingdataModule = require('../../module/TalkingdataModule')
 var OpenAccountRoutes = require('./OpenAccountRoutes')
 var OpenAccountUtils = require('./OpenAccountUtils')
+var OpenAccountHintBlock = require('./OpenAccountHintBlock')
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
@@ -175,7 +176,7 @@ var EXPCHANNEL2_1 = 23
 var EXPCHANNEL2_2 = 24
 
 var defaultRawData = [
-	{"key":"monthlyIncome", "title":"月净收入", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":IncomeMapping},
+	{"key":"monthlyIncome", "title":"每月可支配净收入", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":IncomeMapping},
 	{"key":"investments", "title":"净资产", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":NetWorthMapping},
 	{"key":"sourceOfFunds", "title":"资金主要来源", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":InComeSourceMappings},
 	// {"multiOptionsKey":"sourceOfFunds" ,"title":"交易资金主要来源", "value":InComeSourceMappings, "type":"options",},
@@ -204,6 +205,7 @@ var defaultRawData = [
 		{"key":"midLevFrq", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true, "parent":"hasTradedNoLev"},
 		{"key":"midLevBalance", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMoneyMappings,"hide":true, "parent":"hasTradedNoLev"},
 		{"key":"midLevRisk", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true, "parent":"hasTradedNoLev"},
+		{"type": "openAccountHintBlock", "ignoreInRegistery": true}
 ];
 
 var OAFinanceInfoPage = React.createClass({
@@ -382,8 +384,11 @@ var OAFinanceInfoPage = React.createClass({
 
 	renderRow: function(rowData, sectionID, rowID) {
 
-
-		if (rowData.type === "choice") {
+		if (rowData.type === "openAccountHintBlock"){
+			return (
+				<OpenAccountHintBlock />
+			)
+		}else if (rowData.type === "choice") {
 
 			var displayText = "";
 			var textColor = ColorConstants.INPUT_TEXT_COLOR;
@@ -400,18 +405,20 @@ var OAFinanceInfoPage = React.createClass({
 			return (
 				<TouchableOpacity style = {rowData.hide?{height:0}:null} activeOpacity={0.9} onPress={() => this.onPressPicker(rowData, rowID)}>
 				<View style={styles.rowWrapper}>
-					<Text style={styles.rowTitle}>{rowData.title}</Text>
-					<View style={{flex: 2, flexDirection: 'column', justifyContent: "center"}}>
-						<Text style={[styles.centerText, {color: textColor}]}
-							autoCapitalize="none"
-							autoCorrect={false}
-							editable={false}
-							placeholder={rowData.defaultValue}
-							placeholderTextColor={"#3f6dbd"}>
-							{displayText}
-						</Text>
+					<Text style={[styles.rowTitle, {flex:3}]}>{rowData.title}</Text>
+					<View style={{flex:4, flexDirection: 'row'}}>
+						<View style={{flex: 1, flexDirection: 'column', justifyContent: "center",}}>
+							<Text style={[styles.centerText, {color: textColor}]}
+								autoCapitalize="none"
+								autoCorrect={false}
+								editable={false}
+								placeholder={rowData.defaultValue}
+								placeholderTextColor={"#3f6dbd"}>
+								{displayText}
+							</Text>
+						</View>
+						<Image style={{width:17.5, height:13.5}} source={require("../../../images/icon_down_arrow.png")} />
 					</View>
-					<Image style={{width:17.5, height:13.5}} source={require("../../../images/icon_down_arrow.png")} />
 				</View>
 				</TouchableOpacity>
 				)
@@ -489,7 +496,7 @@ var OAFinanceInfoPage = React.createClass({
 			return (
 				<View  style={rowData.hide?{height:0}:null}>
 					<View style={styles.rowWrapper}>
-						<Text style={styles.rowTitle}>{rowData.title}</Text>
+						<Text style={[styles.rowTitle, {flex: 3}]}>{rowData.title}</Text>
 						<TextInput style={styles.valueText}
 							autoCapitalize="none"
 							autoCorrect={false}
@@ -644,7 +651,7 @@ var styles = StyleSheet.create({
 	valueText: {
 		fontSize: fontSize,
 		color: 'black',
-		flex: 2,
+		flex: 4,
 		marginTop: -rowPadding,
 		marginBottom: -rowPadding,
 	},

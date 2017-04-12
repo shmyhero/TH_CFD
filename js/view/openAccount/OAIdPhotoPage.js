@@ -10,6 +10,7 @@ import {
 	Dimensions,
 	Alert,
 	InteractionManager,
+	ScrollView,
 } from 'react-native';
 
 var ImagePicker = require('react-native-image-picker');
@@ -24,6 +25,7 @@ var TalkingdataModule = require('../../module/TalkingdataModule')
 var OpenAccountRoutes = require('./OpenAccountRoutes')
 var ErrorBar = require('../component/ErrorBar')
 var OpenAccountUtils = require('./OpenAccountUtils')
+var OpenAccountHintBlock = require('./OpenAccountHintBlock')
 var {height, width} = Dimensions.get('window')
 
 const ID_CARD_FRONT = 1
@@ -230,18 +232,21 @@ var OAIdPhotoPage = React.createClass({
 		return (
 			<View style={styles.wrapper}>
 				<ErrorBar error={this.state.error}/>
-				<View style={{height: 15}} />
-				<TouchableOpacity style={styles.imageArea} onPress={() => this.pressAddImage(ID_CARD_FRONT)}>
-					<Image style={styles.addImage} source={this.state.idCardFront}/>
-				</TouchableOpacity>
-				<TouchableOpacity style={styles.imageArea} onPress={() => this.pressAddImage(ID_CARD_BACK)}>
-					<Image style={styles.addImage} source={this.state.idCardBack}/>
-				</TouchableOpacity>
-				<View style={styles.reminderArea}>
-					<Text style={styles.reminderText}>
-						请保持身份证四边框清晰完整，背景干净
-					</Text>
-				</View>
+				<ScrollView style={{flex:1}}>
+					<View style={{height: 15}} />
+					<TouchableOpacity style={styles.imageArea} onPress={() => this.pressAddImage(ID_CARD_FRONT)}>
+						<Image style={styles.addImage} source={this.state.idCardFront}/>
+					</TouchableOpacity>
+					<TouchableOpacity style={styles.imageArea} onPress={() => this.pressAddImage(ID_CARD_BACK)}>
+						<Image style={styles.addImage} source={this.state.idCardBack}/>
+					</TouchableOpacity>
+					<View style={styles.reminderArea}>
+						<Text style={styles.reminderText}>
+							请保持身份证四边框清晰完整，背景干净
+						</Text>
+					</View>
+					<OpenAccountHintBlock/>
+				</ScrollView>
 				<View style={styles.bottomArea}>
 					<Button style={styles.buttonArea}
 						enabled={this.state.nextEnabled}

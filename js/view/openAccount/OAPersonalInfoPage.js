@@ -32,6 +32,7 @@ var ErrorBar = require('../component/ErrorBar')
 var NetworkModule = require('../../module/NetworkModule');
 var NetConstants = require('../../NetConstants');
 var LogicData = require('../../LogicData');
+var OpenAccountHintBlock = require('./OpenAccountHintBlock');
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
@@ -54,7 +55,9 @@ var defaultRawData = [
 		{"title":"身份证号", "key": "idCode", "value":"", hint:"请输入身份证号", maxLength: 18, minLength: 18, "ignoreInRegistery": true},
 		//{"title":"证件地址", "key": "addr", "value":"", hint:"请输入证件地址", maxLength:75, maxLine: 2},
 		//{"title":"签发机关", "key": "issueAuth", hint:"请输入签发机关", "value":""},
-		{"title":"有效期限", "key": "validPeriod", "value":"", "type": "datePeriod"}];
+		{"title":"有效期限", "key": "validPeriod", "value":"", "type": "datePeriod"},
+		{"type":"openAccountHintBlock", "ignoreInRegistery": true,},
+	];
 
 const DEFAULT_ERROR = "身份一致性验证失败";
 const SCROLL_VIEW = "scrollView"
@@ -398,7 +401,12 @@ var OAPersonalInfoPage = React.createClass({
 			rowTitleStyle = styles.errorRowTitle;
 		}
 
-		if (rowData.type === "choice") {
+		if (rowData.type === "openAccountHintBlock"){
+			return (
+				<OpenAccountHintBlock />
+			)
+		}
+		else if (rowData.type === "choice") {
 			var displayText = "";
 			var textColor = ColorConstants.INPUT_TEXT_COLOR;
 			for(var i = 0; i < rowData.choices.length; i++){

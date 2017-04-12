@@ -25,6 +25,7 @@ var NetConstants = require('../../NetConstants');
 var NetworkModule = require('../../module/NetworkModule')
 var OpenAccountRoutes = require('./OpenAccountRoutes')
 var ErrorBar = require('../component/ErrorBar')
+var OpenAccountHintBlock = require('./OpenAccountHintBlock')
 // var OpenAccountUtils = require('./OpenAccountUtils')
 var {height, width} = Dimensions.get('window')
 
@@ -253,7 +254,7 @@ var OAAddressPhotoPage = React.createClass({
 							onChangeText={(text)=>this.textInputChange(text)}
 							/>
 					</View>
-					<View style={{height: 150}}></View>
+					<OpenAccountHintBlock />
 				</ScrollView>
 				<View style={styles.bottomArea}>
 					<Button style={styles.buttonArea}

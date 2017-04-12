@@ -7,6 +7,7 @@ import {
 	Text,
 	Image,
 	Dimensions,
+	ScrollView,
 } from 'react-native';
 
 var Button = require('../component/Button')
@@ -15,6 +16,7 @@ var ColorConstants = require('../../ColorConstants')
 var OpenAccountRoutes = require('./OpenAccountRoutes')
 var NetworkModule = require('../../module/NetworkModule')
 var NetConstants = require('../../NetConstants')
+var OpenAccountHintBlock = require('./OpenAccountHintBlock');
 
 var {height, width} = Dimensions.get('window')
 
@@ -40,22 +42,23 @@ var OAReviewStatusPage = React.createClass({
 		//endDate.Format('yy/MM/dd')+"\n"+startDate.Format('hh:mm:ss')
 		return (
 			<View style={styles.wrapper}>
-				<View />
-				<Text style={styles.text1}>感谢您开设盈交易实盘账户</Text>
-				<View style={styles.rowWrapper}>
-					<Image style={styles.image} source={require('../../../images/icon_review1.png')}/>
-					<Text style={styles.ellipse}>· · ·</Text>
-					<Image style={styles.image} source={require('../../../images/icon_review2.png')}/>
-					<Text style={styles.ellipse}>· · ·</Text>
-					<Image style={styles.image} source={require('../../../images/icon_review3.png')}/>
-				</View>
-				<View style={styles.rowWrapper}>
-					<Text style={styles.text2}>{"提交申请\n"+startDate.Format('yyyy-MM-dd')+"\n"+startDate.Format('hh:mm:ss')}</Text>
-					<Text style={styles.text2}>{"正在审核"}</Text>
-					<Text style={styles.text2}>{"审核通过后\n短信提醒"}</Text>
-				</View>
-				<Text style={styles.text3}>{"开户成功后，\n盈交易会以短信告知您，同时您将收到欢迎邮件。"}</Text>
-				<View style={{flex:1}}/>
+				<ScrollView style={{flex:1}}>
+					<Text style={styles.text1}>感谢您开设盈交易实盘账户</Text>
+					<View style={styles.rowWrapper}>
+						<Image style={styles.image} source={require('../../../images/icon_review1.png')}/>
+						<Text style={styles.ellipse}>· · ·</Text>
+						<Image style={styles.image} source={require('../../../images/icon_review2.png')}/>
+						<Text style={styles.ellipse}>· · ·</Text>
+						<Image style={styles.image} source={require('../../../images/icon_review3.png')}/>
+					</View>
+					<View style={styles.rowWrapper}>
+						<Text style={styles.text2}>{"提交申请\n"+startDate.Format('yyyy-MM-dd')+"\n"+startDate.Format('hh:mm:ss')}</Text>
+						<Text style={styles.text2}>{"正在审核"}</Text>
+						<Text style={styles.text2}>{"审核通过后\n短信提醒"}</Text>
+					</View>
+					<Text style={styles.text3}>{"开户成功后，\n盈交易会以短信告知您，同时您将收到欢迎邮件。"}</Text>
+					<OpenAccountHintBlock/>
+			 	</ScrollView>
 				<View style={styles.bottomArea}>
 					<Button style={styles.buttonArea}
 						enabled={true}

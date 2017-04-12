@@ -21,6 +21,7 @@ var LogicData = require('../../LogicData')
 var NetworkModule = require('../../module/NetworkModule')
 var NetConstants = require('../../NetConstants')
 var ErrorBar = require('../component/ErrorBar')
+var OpenAccountHintBlock = require('./OpenAccountHintBlock')
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
@@ -40,6 +41,7 @@ var OADocumentInfoPage = React.createClass({
 			{"key":"交易通知说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "5")},
 			{"key":"用户头像使用说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "6")},
 			{"key":"关于保证金交易", },
+			{"type":"openAccountHintBlock", },
 		],
 
 	propTypes: {
@@ -252,7 +254,11 @@ var OADocumentInfoPage = React.createClass({
 	},
 
 	renderRow: function(rowData, sectionID, rowID) {
-		if(rowID == 6){//关于保证金交易
+		if(rowData.type == 'openAccountHintBlock'){
+			return (
+				<OpenAccountHintBlock />
+			);
+		}else if(rowID == 6){//关于保证金交易
 			return this.renderAboutCashDeposit()
 		}else{
 			return (
@@ -323,13 +329,15 @@ var styles = StyleSheet.create({
 	},
 
 	aboutCash:{
-		padding:15,
+		paddingTop:15,
+		paddingLeft:15,
+		paddingRight:15,
 		width:width,
 	},
 
 	textRound:{
 		fontSize:12,
-		color:'#b8ceeb'
+		color:'#cccccc'
 	},
 
 	textTitle:{
@@ -340,8 +348,8 @@ var styles = StyleSheet.create({
 	},
 
 	textValue:{
-		fontSize:13,
-		color:'#515356',
+		fontSize:12,
+		color:'#7b7b7b',
 		marginLeft:5,
 		marginRight:10,
 	},

@@ -7,6 +7,7 @@ import {
 	Text,
 	Image,
 	Dimensions,
+	ScrollView
 } from 'react-native';
 
 var Button = require('../component/Button')
@@ -14,6 +15,7 @@ var MainPage = require('../MainPage')
 var ColorConstants = require('../../ColorConstants')
 var TalkingdataModule = require('../../module/TalkingdataModule')
 var OpenAccountRoutes = require('./OpenAccountRoutes')
+var OpenAccountHintBlock = require('./OpenAccountHintBlock')
 
 var {height, width} = Dimensions.get('window')
 
@@ -40,14 +42,19 @@ var OAStartPage = React.createClass({
 	render: function() {
 		return (
 			<View style={styles.wrapper}>
-				<View style={{flex: 1}} />
-				<Text style={styles.text1}>开户前请准备好</Text>
-				<Image style={styles.image} source={require('../../../images/icon1.png')}/>
-				<Text style={styles.text2}>您的二代身份证，您必须年满18周岁</Text>
-				<Image style={styles.image} source={require('../../../images/icon2.png')}/>
-				<Text style={styles.text3}>{"有效的地址证明(以下其中的一项就行)\n居住证、户口本、房产证、宽带/水电煤/固话账单(近3个月内)、银行账单(近3个月内)、驾照"}</Text>
-				<Image style={styles.image} source={require('../../../images/icon3.png')}/>
-				<Text style={styles.text4}>{"开户需要上传图片等大流量数据，建议使用\nWIFI，4G或者3G网络"}</Text>
+				<ScrollView style={{flex: 1}}>
+					<View style={{height:height/5*3}}>
+						<View style={{flex: 1}} />
+						<Text style={styles.text1}>开户前请准备好</Text>
+						<Image style={styles.image} source={require('../../../images/icon1.png')}/>
+						<Text style={styles.text2}>您的二代身份证，您必须年满18周岁</Text>
+						<Image style={styles.image} source={require('../../../images/icon2.png')}/>
+						<Text style={styles.text3}>{"有效的地址证明(以下其中的一项就行)\n居住证、户口本、房产证、宽带/水电煤/固话账单(近3个月内)、银行账单(近3个月内)、驾照"}</Text>
+						<Image style={styles.image} source={require('../../../images/icon3.png')}/>
+						<Text style={styles.text4}>{"开户需要上传图片等大流量数据，建议使用\nWIFI，4G或者3G网络"}</Text>
+					</View>
+					<OpenAccountHintBlock />
+				</ScrollView>
 				<View style={styles.bottomArea}>
 					<Button style={styles.buttonArea}
 						enabled={true}
@@ -91,7 +98,7 @@ var styles = StyleSheet.create({
 		marginRight: 10,
 	},
 	text4: {
-		flex: 3,
+		flex: 2,
 		fontSize: 14,
 		textAlign: 'center',
 		paddingTop: 10,

@@ -8,7 +8,7 @@
 
 class BaseRender: NSObject {
 //	var _rect:CGRect = CGRectMake(0, 0, 0, 0)
-	let _segment = 6
+	var _segment = 6
 	var _colorSet:ColorSet
 	var _renderView:StockChartView
 	weak var dataProvider:BaseDataProvider?
@@ -48,12 +48,12 @@ class BaseRender: NSObject {
 			_bottomMargin = dataProvider!.bottomMargin()
             _rightPadding = dataProvider!.rightPadding()
 		}
-		self.drawBorderLines(context)
+		self.drawBorderLines(context, lineColor: _colorSet.bgLineColor)
 //        self.drawHorizontalLines(context)
 		self.drawExtraText(context)
 	}
 	
-	func drawBorderLines(context: CGContext) -> Void {
+    func drawBorderLines(context: CGContext, lineColor: UIColor) -> Void {
 		let width = chartWidth()
 		let height = chartHeight()
 		//Draw horizontal graph lines on the top of everything
@@ -76,7 +76,12 @@ class BaseRender: NSObject {
 		linePath.moveToPoint(CGPoint(x:width - _margin + 0.5, y:_topMargin))
 		linePath.addLineToPoint(CGPoint(x:width - _margin + 0.5, y:height - _bottomMargin))
         
-		_colorSet.bgLineColor.setStroke()
+//        if(lineColor == UIColor.whiteColor()) {
+//            _colorSet.bgLineColor.setStroke()
+//        }
+//        else {
+            lineColor.setStroke()
+//        }
 		linePath.lineWidth = 1
 		linePath.stroke()
 		

@@ -87,7 +87,7 @@ class LineChartRender: BaseRender {
 			CGContextRestoreGState(context)
 		}
 		
-		self.drawBorderLines(context)
+		self.drawBorderLines(context, lineColor: _colorSet.bgLineColor)
 		self.drawMiddleLines(context)
 		
 		CGContextSaveGState(context)

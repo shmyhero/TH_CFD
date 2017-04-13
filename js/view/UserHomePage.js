@@ -455,8 +455,8 @@ export default class UserHomePage extends Component{
 		if(Platform.OS === "ios"){
 			return(
 				<LineChart style={styles.lineChart}
-					data={null}
-					chartType={"today"}>
+					data={JSON.stringify(this.state.plCloseData)}
+					chartType={this.state.chartTypeName}>
 				</LineChart>
 			)
 		}else{

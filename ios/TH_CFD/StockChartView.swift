@@ -120,6 +120,9 @@ class StockChartView: UIView {
             if CandleChartDataSource.isValidData(data!) {
                 dataSource = CandleChartDataSource.init(json:data!, rect: self.bounds)
             }
+            else if YieldLineChartDataSource.isValidData(data!) {
+                dataSource = YieldLineChartDataSource.init(json:data!, rect: self.bounds)
+            }
             else if LineChartDataSource.isValidData(data!) {
                 dataSource = LineChartDataSource.init(json:data!, rect: self.bounds)
             }
@@ -153,12 +156,14 @@ class StockChartView: UIView {
 		} else {
 			if dataSource!.isKindOfClass(CandleChartDataSource) {
 				render = CandleChartRender.init(view: self)
-//				render?.dataProvider = dataSource
 				render!.render(context)
 			}
+            else if dataSource!.isKindOfClass(YieldLineChartDataSource) {
+                render = YieldLineChartRender.init(view: self)
+                render!.render(context)
+            }
 			else {
 				render = LineChartRender.init(view: self)
-//				render?.dataProvider = dataSource
 				render!.render(context)
 			}
 		}

@@ -20,6 +20,11 @@ class ColorSet: NSObject {
 	var startColor: UIColor
 	var endColor: UIColor
 	var lineColor: UIColor
+    
+    // yield line chart
+    var yieldLineColor: UIColor = UIColor(hexInt: 0x0066cc)
+    var yieldBgLineColor: UIColor = UIColor(hexInt: 0xacabab)
+    var yieldDateTextColor: UIColor = UIColor(hexInt: 0xacabab)
 	
 	// candle chart
 	var upColor: UIColor = UIColor(hexInt: 0xe34b4f)

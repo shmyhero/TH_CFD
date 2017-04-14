@@ -62,11 +62,13 @@ class BaseRender: NSObject {
 		
 		//top line
 		linePath.moveToPoint(CGPoint(x:_margin, y: _topMargin + 0.5))
-		linePath.addLineToPoint(CGPoint(x: width - _margin, y:_topMargin + 0.5))
+        linePath.addLineToPoint(CGPoint(x: width - _margin, y:_topMargin + 0.5))
+//        print("top lineY:",_topMargin)
 		
 		//bottom line
 		linePath.moveToPoint(CGPoint(x:_margin-0.5, y:height - _bottomMargin + 0.5))
-		linePath.addLineToPoint(CGPoint(x:width - _margin+0.5, y:height - _bottomMargin + 0.5))
+        linePath.addLineToPoint(CGPoint(x:width - _margin+0.5, y:height - _bottomMargin + 0.5))
+//        print("bottom lineY:", height - _bottomMargin)
 		
 		//left line
 		linePath.moveToPoint(CGPoint(x:_margin - 0.5, y: _topMargin))

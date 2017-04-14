@@ -125,8 +125,12 @@ class YieldLineChartDataSource: BaseDataSource, YieldLineChartDataProvider {
             var y:CGFloat = graphHeight/2
             if (maxValue > minValue) {
                 y = CGFloat(graphPoint-minValue) / CGFloat(maxValue - minValue) * graphHeight
+                y = graphHeight + topBorder - y // Flip the graph
             }
-            y = graphHeight + topBorder - y // Flip the graph
+            else {
+                // no data
+                y = self._topMargin + (height-self._bottomMargin-self._topMargin)/2
+            }
             return y
         }
         if (preClose > 0 && maxValue > minValue) {

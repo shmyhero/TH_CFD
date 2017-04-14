@@ -59,26 +59,6 @@ class YieldLineChartRender: BaseRender {
         
         CGContextSaveGState(context)
         
-        let clippingPath = graphPath.copy() as! UIBezierPath
-        
-        //3 - add lines to the copied path to complete the clip area
-        clippingPath.addLineToPoint(CGPoint(
-            x: pointData.last!.x,
-            y:height))
-        clippingPath.addLineToPoint(CGPoint(
-            x: pointData[0].x,
-            y:height))
-        clippingPath.closePath()
-        
-        //4 - add the clipping path to the context
-        clippingPath.addClip()
-        
-        let clippingBox:UIBezierPath = UIBezierPath.init(rect: CGRect(x: _margin-1, y: _topMargin-1, width: width-_margin*2+2, height: height-_bottomMargin-_topMargin+2))
-        clippingBox.addClip()
-        
-        CGContextSaveGState(context)
-        clippingBox.addClip()
-        
         //draw the line on top of the clipped gradient
         graphPath.lineWidth = 2.0
         graphPath.stroke()
@@ -130,14 +110,18 @@ class YieldLineChartRender: BaseRender {
         }
         
         self.drawRightText(context)
-//        super.drawExtraText(context)
+
     }
     
     func drawRightText(context: CGContext) {
-        let maxPrice = dataProvider!.maxPrice()
-        let minPrice = dataProvider!.minPrice()
+        var maxPrice = dataProvider!.maxPrice()
+        var minPrice = dataProvider!.minPrice()
         if (maxPrice.isNaN || minPrice.isNaN) {
             return
+        }
+        if maxPrice == 0 && minPrice == 0 {
+            maxPrice = 100
+            minPrice = -100
         }
         let height = chartHeight()
         let width = chartWidth()
@@ -164,6 +148,29 @@ class YieldLineChartRender: BaseRender {
             let textY = round(height - (height - _bottomMargin - _topMargin - textHeight) / CGFloat(segmentNumber) * CGFloat(i)) - _bottomMargin - textHeight
             text.drawInRect(CGRect(x: textX, y: textY, width: textWidth, height: textHeight), withAttributes: attributes)
         }
+    }
+    
+    override func drawHorizontalLines(context: CGContext) -> Void {
+        let width = chartWidth()
+        let height = chartHeight()
+        //Draw horizontal graph lines on the top of everything
+        let linePath = UIBezierPath()
+        CGContextSaveGState(context)
+        
+        // horizontal lines
+        let hnum = _segment
+        for i in 1..<hnum {
+            let lineY = round(_topMargin + (height - _bottomMargin - _topMargin) / CGFloat(hnum) * CGFloat(i))
+//            print("lineY:",lineY)
+            linePath.moveToPoint(CGPoint(x:_margin, y: lineY + 0.5))
+            linePath.addLineToPoint(CGPoint(x: width - _margin, y:lineY + 0.5))
+        }
+        
+        _colorSet.bgLineColor.setStroke()
+        linePath.lineWidth = 1
+        linePath.stroke()
+        
+        CGContextRestoreGState(context)
     }
 }
 

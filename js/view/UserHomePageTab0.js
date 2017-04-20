@@ -16,10 +16,15 @@ var StockTransactionInfoModal = require('./StockTransactionInfoModal')
 var UIConstants = require('../UIConstants')
 var MainPage = require('./MainPage')
 var ColorConstants = require('../ColorConstants')
+var StatisticBarBlock = require('./personalPage/StatisticBarBlock')
+var TradeStyleBlock = require('./personalPage/TradeStyleBlock')
 
 var CHART_TYPE_2MONTH = 0;
 var CHART_TYPE_ALL = 1;
 var emptyStar = '***'
+
+const STATISTIC_BAR_BLOCK = "statisticBarBlock";
+const TRADE_STYLE_BLOCK = "tradeStyleBlock";
 
 export default class UserHomePageTab0 extends Component{
 
@@ -134,7 +139,13 @@ export default class UserHomePageTab0 extends Component{
 	}
 
   tabPressed(index) {
-     console.log("tabPressed==>"+index);
+    console.log("tabPressed==>"+index);
+    this.refreshData();
+  }
+
+  refreshData(){
+    this.refs[STATISTIC_BAR_BLOCK].refresh();
+    this.refs[TRADE_STYLE_BLOCK].refresh();
   }
 
   middleWarpperRender() {
@@ -186,6 +197,8 @@ export default class UserHomePageTab0 extends Component{
 		if(!this.state.isPrivate) {
 			totolPlColor = this.state.pl2w.toFixed(2) >= 0 ? '#fa2c21' : ColorConstants.STOCK_DOWN_GREEN
 		}
+
+		var userData = LogicData.getUserData();
 
 		return(
 			<View style = {styles.bottomWapper}>
@@ -411,6 +424,15 @@ export default class UserHomePageTab0 extends Component{
         {this.bottomWarpperRender()}
         <View style = {styles.separator}></View>
         {this.cardWarpperRender()}
+
+				<StatisticBarBlock userId={this.props.userId}
+					ref={STATISTIC_BAR_BLOCK}/>
+        <View style = {styles.separator}></View>
+
+				<TradeStyleBlock userId={this.props.userId}
+					ref={TRADE_STYLE_BLOCK}/>
+        <View style = {styles.separator}></View>
+
         {this.renderEmptyBottom()}
 			</ScrollView>
 		);

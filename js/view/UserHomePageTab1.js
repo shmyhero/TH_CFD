@@ -13,6 +13,7 @@ var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var StockTransactionInfoModal = require('./StockTransactionInfoModal')
 var UIConstants = require('../UIConstants')
+var PositionBlock = require('./personalPage/PositionBlock')
 
 export default class UserHomePageTab0 extends Component{
 
@@ -36,6 +37,7 @@ export default class UserHomePageTab0 extends Component{
 		return(
 			<View style={{flex:1}}>
 				<Text>主页Tab1</Text>
+				<PositionBlock/>
 			</View>
 		);
 	}

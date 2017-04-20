@@ -77,9 +77,6 @@ var StockExchangePage = React.createClass({
 			currentSelectedTab: index,
 		})
 		LogicData.setCurrentPageTag(index);
-		if (index == 2) {
-			this.refs['page' + index].playStartAnim()
-		}
 
 		var userData = LogicData.getUserData()
 		var loggined = Object.keys(userData).length !== 0
@@ -225,7 +222,8 @@ var StockExchangePage = React.createClass({
 			<StockOpenPositionPage navigator={this.props.navigator} ref={'page0'}
 					showTutorial={(type)=>this.props.showTutorial(type)}/>,
 			<StockClosedPositionPage navigator={this.props.navigator} ref={'page1'}/>,
-			<StockStatisticsPage navigator={this.props.navigator} ref={'page2'}/>
+			<StockStatisticsPage navigator={this.props.navigator} ref={'page2'}
+				style={{paddingTop:10}}/>
 		]
 
 		var viewPages = tabNames.map(

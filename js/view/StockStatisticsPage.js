@@ -22,6 +22,8 @@ var WebSocketModule = require('../module/WebSocketModule');
 var MainPage = require('./MainPage');
 var AppStateModule = require('../module/AppStateModule');
 var {EventCenter, EventConst} = require('../EventCenter');
+var StatisticBarBlock = require('./personalPage/StatisticBarBlock');
+var TradeStyleBlock = require('./personalPage/TradeStyleBlock')
 
 var {height, width} = Dimensions.get('window');
 
@@ -30,18 +32,15 @@ var accountStateChangedSubscription = null;
 var accountLogoutEventSubscription = null;
 var layoutSizeChangedSubscription = null
 
+const STATISTIC_BAR_BLOCK = "statisticBarBlock";
+const TRADE_STYLE_BLOCK = "tradeStyleBlock";
+
 var StockStatisticsPage = React.createClass({
 	mixins: [TimerMixin],
-
-	lastStatisticsInfo: null,
 
 	getInitialState: function() {
 		var balanceData = LogicData.getBalanceData()
 		return {
-			statisticsBarInfo: [],
-			statisticsSumInfo: [],
-			maxBarSize: 1,
-			barAnimPlayed: false,
 			balanceData: balanceData,
 			isClear: false,
 			height: UIConstants.getVisibleHeight(),
@@ -50,10 +49,6 @@ var StockStatisticsPage = React.createClass({
 
 	clearViews:function(){
 		this.setState({
-			statisticsBarInfo: [],
-			statisticsSumInfo: [],
-			maxBarSize: 1,
-			barAnimPlayed: false,
 			balanceData: null,
 			isClear:true,
 		})
@@ -61,9 +56,13 @@ var StockStatisticsPage = React.createClass({
 
 	tabPressed: function(index) {
 		var balanceData = LogicData.getBalanceData()
-		this.setState({balanceData: balanceData,},
+		this.setState({
+				balanceData: balanceData,
+				isClear:false,
+			},
 			()=>{
 				NetworkModule.loadUserBalance(true, (responseJson)=>{this.setState({balanceData: responseJson,})});
+				this.refreshData();
 			}
 		);
 	},
@@ -110,6 +109,7 @@ var StockStatisticsPage = React.createClass({
 	},
 
 	refreshData: function(){
+		console.log("refreshData")
 		if(LogicData.getTabIndex() == MainPage.STOCK_EXCHANGE_TAB_INDEX){
 			var routes = this.props.navigator.getCurrentRoutes();
 			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE){
@@ -120,172 +120,14 @@ var StockStatisticsPage = React.createClass({
 					if(!notLogin){
 						NetworkModule.loadUserBalance(true, (responseJson)=>{
 							this.setState({balanceData: responseJson,});
-							this.playStartAnim();
 						})
+
+						this.refs[STATISTIC_BAR_BLOCK].refresh();
+						//this.refs[TRADE_STYLE_BLOCK].refresh();
 					}
 				}
 			}
 		}
-	},
-
-	playStartAnim: function() {
-		this.setState({
-			statisticsBarInfo: [],
-			statisticsSumInfo: [],
-			isClear:false,
-		})
-
-		this.lastStatisticsInfo = null;
-
-		var userData = LogicData.getUserData()
-
-		var url = NetConstants.CFD_API.GET_USER_STATISTICS_API
-		if(LogicData.getAccountState()){
-			url = NetConstants.CFD_API.GET_USER_STATISTICS_LIVE_API
-			console.log('live', url );
-		}
-
-		NetworkModule.fetchTHUrl(
-			url,
-			{
-				method: 'GET',
-				headers: {
-					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-				},
-				cache: 'offline',
-			},
-			(responseJson) => {
-				this.playStatisticsAnim(responseJson);
-			},
-			(result) => {
-				if(NetConstants.AUTH_ERROR === result.errorMessage){
-
-				}else{
-					// Alert.alert('', errorMessage);
-				}
-			}
-		)
-	},
-
-	playStatisticsAnim: function(statisticsInfo) {
-		var hasDifference = false;
-		var initializeAnimation = false;
-		if(this.lastStatisticsInfo != null){
-			for(var i = 0; i < statisticsInfo.length; i++){
-				if(this.lastStatisticsInfo[i].pl != statisticsInfo[i].pl){
-					hasDifference = true;
-					break;
-				}
-			}
-		}else{
-			//Start the anim from 0.
-			initializeAnimation = true;
-			hasDifference = true;
-		}
-
-		if(hasDifference){
-
-			var originalStatisticsInfo = []
-			$.extend(true, originalStatisticsInfo, statisticsInfo)	// deep copy
-
-			this.lastStatisticsInfo = originalStatisticsInfo;
-
-			var maxBarSize = 1
-			for (var i = 0; i < statisticsInfo.length; i++) {
-				var barContent = statisticsInfo[i]
-				if (Math.abs(maxBarSize) < Math.abs(barContent.pl)) {
-					maxBarSize = Math.abs(barContent.pl)
-				}
-				barContent.displayPL = barContent.pl;
-				barContent.pl = 0;
-				//For display...
-			}
-
-			if(initializeAnimation){
-				this.setState({
-					maxBarSize: maxBarSize,
-					statisticsBarInfo: statisticsInfo,
-					statisticsSumInfo: originalStatisticsInfo,
-					barAnimPlayed: true,
-				}, ()=>{
-						this.runAnimationIfNecessary(originalStatisticsInfo);
-					});
-				}else{
-					this.runAnimationIfNecessary(originalStatisticsInfo);
-				}
-			}
-	},
-
-	runAnimationIfNecessary: function(originalStatisticsInfo){
-		this.setTimeout(() => {
-				//We need to check if the layout will be changed.
-				//If the profit bar won't change, we will not apply the LayoutAnimation.configureNext,
-				//because it will affect the tab switch and display a wrong animation.
-				if(LogicData.getTabIndex() == MainPage.STOCK_EXCHANGE_TAB_INDEX){
-					var hasData = this.state.balanceData!==null;
-
-					var sumInvest = 0
-					for (var i = 0; i < this.state.statisticsSumInfo.length; i++) {
-						var barContent = this.state.statisticsSumInfo[i]
-						sumInvest += barContent.invest
-					}
-					if (hasData && sumInvest > 0) {
-						var needAnimation = false;
-						for(var i = 0; i < this.state.statisticsBarInfo.length; i++) {
-							if(originalStatisticsInfo[i]
-								&& this.state.statisticsBarInfo[i].pl !== originalStatisticsInfo[i].pl){
-									var oldInvestBarFlex = Math.floor(this.state.statisticsBarInfo[i].invest / this.state.maxBarSize * 100)
-									var oldProfitBarFlex = Math.floor(this.state.statisticsBarInfo[i].pl / this.state.maxBarSize * 100)
-									var newInvestBarFlex = Math.floor(originalStatisticsInfo[i].invest / this.state.maxBarSize * 100)
-									var newProfitBarFlex = Math.floor(originalStatisticsInfo[i].pl / this.state.maxBarSize * 100)
-
-									if(oldInvestBarFlex != newInvestBarFlex || oldProfitBarFlex != newProfitBarFlex){
-										needAnimation = true;
-										break;
-									}
-							}
-						}
-
-						if(needAnimation){
-							console.log("anim started");
-							LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-						}
-					}
-					this.setState({
-						statisticsBarInfo: originalStatisticsInfo,
-						barAnimPlayed: true,
-					});
-				}
-			},
-			1000
-		);
-	},
-
-	renderBars: function() {
-		var bars = this.state.statisticsBarInfo.map(
-			(barContent, i) => {
-				var investBarFlex = Math.floor(barContent.invest / this.state.maxBarSize * 100)
-				var profitBarFlex = Math.floor(barContent.pl / this.state.maxBarSize * 100)
-				var profitBarStyle = barContent.pl > 0 ? styles.positiveProfitBar : styles.negtiveProfitBar
-				if (barContent.pl < 0) {
-					profitBarFlex *= -1
-					investBarFlex -= profitBarFlex
-				}else if (barContent.pl == 0){
-					profitBarStyle = {flex: 0};
-				}
-				return (
-					<View key={i} style={{flexDirection:'row', flex:1, paddingTop: 14, paddingBottom: 14,}}>
-						<View style={[{flex: profitBarFlex}, styles.profitBar, profitBarStyle]} />
-						<View style={{flex: 100 - profitBarFlex}} />
-					</View>
-				)
-			}
-		)
-		return (
-			<View style={[styles.barContainer, {flexDirection:'column'}]}>
-				{bars}
-			</View>
-		);
 	},
 
 	renderHeader: function() {
@@ -312,135 +154,7 @@ var StockStatisticsPage = React.createClass({
 		)
 	},
 
-	renderBody: function() {
-		var sumPl = '--'
-		var avgPlRate = '--'
-		if (this.state.statisticsSumInfo.length > 0) {
-			sumPl = 0
-			var sumInvest = 0
-			for (var i = 0; i < this.state.statisticsSumInfo.length; i++) {
-				var barContent = this.state.statisticsSumInfo[i]
-				sumPl += barContent.pl
-				sumInvest += barContent.invest
-			}
 
-			avgPlRate = (sumInvest > 0) ? sumPl / sumInvest * 100: 0
-			sumPl = sumPl.toFixed(2)
-			avgPlRate = avgPlRate.toFixed(2)
-		}
-		return (
-			<View style={styles.center}>
-				<View style={styles.centerView}>
-					<View style={styles.empty}/>
-					<Text style={styles.centerText1}>近1月收益(美元)</Text>
-					<Text style={[styles.centerText2,{color:LogicData.getAccountState()?'#85b1fb':'#1962dd'}]}>{sumPl}</Text>
-					<View style={styles.empty}/>
-				</View>
-				<View style={styles.centerView}>
-					<View style={styles.empty}/>
-					<Text style={styles.centerText1}>近1月投资回报率</Text>
-					<Text style={[styles.centerText2,{color:LogicData.getAccountState()?'#85b1fb':'#1962dd'}]}>{avgPlRate}%</Text>
-					<View style={styles.empty}/>
-				</View>
-			</View>
-		)
-	},
-
-	renderChartHeader: function() {
-		return (
-			<View style={styles.chartHeader}>
-				<View style={styles.centerView}>
-					<Text style={styles.chartHeaderText1}>累计收益</Text>
-				</View>
-				<View style={styles.chartHeaderRightPart}>
-					<View style={styles.redSquare}/>
-					<Text style={styles.chartHeaderText2}>盈利</Text>
-					<View style={styles.greenSquare}/>
-					<Text style={styles.chartHeaderText2}>亏损</Text>
-				</View>
-			</View>
-		)
-	},
-
-	renderChart: function() {
-		var hasData = this.state.balanceData!==null
-
-		var sumInvest = 0
-		for (var i = 0; i < this.state.statisticsSumInfo.length; i++) {
-			var barContent = this.state.statisticsSumInfo[i]
-			sumInvest += barContent.invest
-		}
-		if (hasData && sumInvest > 0) {
-			return (
-				<View style={styles.chart}>
-					{this.renderChartHeader()}
-					<View style={styles.separator}/>
-					{this.renderLineChart()}
-				</View>
-			)
-		}
-		else {
-			return (
-				<View style={[styles.header, styles.chart]}>
-					<Text style={styles.loadingText}>暂无盈亏分布记录</Text>
-				</View>
-				)
-		}
-	},
-
-	renderLineChart: function(){
-		var barNameText = this.state.statisticsBarInfo.map(
-			(barContent, i) =>
-				<View key={i} style={{flex: 1, flexDirection:'column', alignItems:'center', justifyContent: 'center'}}>
-					<Text style={styles.barNameText}>
-						{barContent.name}
-					</Text>
-				</View>
-		)
-		var plText = this.state.statisticsBarInfo.map(
-			(barContent, i) =>{
-				var valueStyle = null;
-				var valueText = "";
-				if(barContent.invest > 0){
-					var pl = Math.floor(barContent.pl);//.toFixed(2);
-					if(barContent.displayPL){
-						pl = Math.floor(barContent.displayPL);//.toFixed(2);
-					}
-					if(pl == 0){
-						valueStyle = styles.plValueTextZero;
-					}else if(pl > 0){
-						valueStyle = styles.plValueTextPositive;
-						valueText = "+" + pl;
-					}else{
-						valueStyle = styles.plValueTextNegative;
-						valueText = pl;
-					}
-				}
-				//displayPL
-					return (
-						<View key={i} style={{flex: 1, flexDirection:'column', alignItems:'flex-end', justifyContent: 'center'}}>
-							<Text style={[styles.plValueText, valueStyle]}>
-								{valueText}
-							</Text>
-						</View>
-					);
-				}
-		)
-		return (
-			<View style={{flexDirection:'row', flex: 1, padding: 20}}>
-				<View style={styles.barNamesContainer}>
-					{barNameText}
-				</View>
-				<View style={[styles.verticleSeparator,]}/>
-				<View style={[{width: 207}]}>
-					{this.renderBars()}
-				</View>
-				<View style={styles.plValue}>
-					{plText}
-				</View>
-			</View>
-		);
-	},
 
 	renderOrClear:function(){
 		if(this.state.isClear){
@@ -449,6 +163,7 @@ var StockStatisticsPage = React.createClass({
 	},
 
 	render: function() {
+		var userData = LogicData.getUserData()
 		return (
 			<View style={[styles.wrapper, {width:width,
 				height: this.state.height
@@ -456,10 +171,14 @@ var StockStatisticsPage = React.createClass({
 						//- UIConstants.SCROLL_TAB_HEIGHT
 						- UIConstants.LIST_HEADER_BAR_HEIGHT
 						- UIConstants.TAB_BAR_HEIGHT,}]}>
-				{this.renderOrClear()}
+				{/* {this.renderOrClear()} */}
 				{this.renderHeader()}
-				{this.renderBody()}
-				{this.renderChart()}
+				<StatisticBarBlock userId={userData.userId}
+					style={{marginTop: 10}}
+					ref={STATISTIC_BAR_BLOCK}/>
+				{/* <TradeStyleBlock userId={userData.userId}
+					style={{marginTop: 10}}
+					ref={TRADE_STYLE_BLOCK}/> */}
 			</View>
 		);
 	},
@@ -514,128 +233,6 @@ var styles = StyleSheet.create({
 	centerText2: {
 		fontSize: 29,
 		color: '#1962dd',
-	},
-
-	chart: {
-		flex: 3,
-		backgroundColor: 'white',
-	},
-
-	chartHeader: {
-		height: 40,
-		flexDirection: 'row',
-	},
-	chartHeaderRightPart: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-around',
-		marginRight: 10,
-	},
-	chartHeaderText1: {
-		fontSize: 14,
-		color: '#333333',
-	},
-	chartHeaderText2: {
-		fontSize: 11,
-		color: '#adadad',
-		marginLeft: 3,
-		marginRight: 3,
-	},
-	redSquare: {
-		width: 10,
-		height: 6,
-		backgroundColor: '#f16b5f',
-	},
-	greenSquare: {
-		width: 10,
-		height: 6,
-		backgroundColor: '#5fd959',
-	},
-	blueSquare: {
-		width: 10,
-		height: 6,
-		backgroundColor: ColorConstants.COLOR_CUSTOM_BLUE,
-	},
-
-	separator: {
-		marginLeft: 15,
-		height: 0.5,
-		backgroundColor: ColorConstants.SEPARATOR_GRAY,
-	},
-
-	verticleSeparator: {
-		marginTop: 15,
-		width: 0.5,
-		backgroundColor: ColorConstants.SEPARATOR_GRAY,
-	},
-
-	plValue:{
-		alignItems: 'stretch',
-		flex: 1,
-	},
-
-	plValueText:{
-		fontSize: 16,
-	},
-
-	plValueTextZero:{
-		color: '#adadad',
-	},
-
-	plValueTextPositive:{
-		color: '#f16b5f',
-	},
-
-	plValueTextNegative:{
-		color: '#5fd959',
-	},
-
-	container: {
-		alignItems: 'stretch',
-		flex: 1,
-	},
-
-	barContainer: {
-		flex: 1,
-		flexDirection: 'row',
-		justifyContent: 'space-around',
-		alignItems: 'stretch',
-	},
-
-	barNamesContainer: {
-		paddingRight: 5,
-		flexDirection: 'column',
-		justifyContent: 'space-around',
-		alignItems: 'stretch',
-	},
-	barNameText: {
-		fontSize: 13,
-		color: '#adadad',
-	},
-
-	investBar: {
-		backgroundColor: ColorConstants.COLOR_CUSTOM_BLUE,
-		width: 20,
-	},
-
-	profitBar:{
-		borderTopRightRadius:4,
-		borderBottomRightRadius:4,
-	},
-
-	positiveProfitBar: {
-		backgroundColor: '#f16b5f',
-		width: 20,
-	},
-
-	negtiveProfitBar: {
-		backgroundColor: '#5fd959',
-		width: 20,
-	},
-
-	loadingText: {
-		fontSize: 13,
-		color: '#9f9f9f'
 	},
 });
 

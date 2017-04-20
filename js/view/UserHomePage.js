@@ -356,10 +356,10 @@ export default class UserHomePage extends Component {
 				</View>
 
 				<View style={{position:'absolute',width:width,height:height}}>
-					<ScrollView
+					{/* <ScrollView
 						showsHorizontalScrollIndicator={false}
 				 		onScroll={(event)=>this.handleScroll(event)}
-						scrollEventThrottle={16}>
+						scrollEventThrottle={16}> */}
 					 	{this.topWarpperRender()}
 
 						{this.renderContent()}
@@ -369,7 +369,7 @@ export default class UserHomePage extends Component {
 						<View style = {styles.separator}></View>
 						{this.cardWarpperRender()}
 						{this.renderEmptyBottom()} */}
-					</ScrollView>
+					{/* </ScrollView> */}
 				</View>
 
 

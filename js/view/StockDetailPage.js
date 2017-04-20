@@ -138,6 +138,7 @@ var StockDetailPage = React.createClass({
 			widht: width,
 			orientation: ORIENTATION_PORTRAIT,
 			chartViewType: CHARTVIEWTYPE_LINE,
+			minInvestUSD: 10,
 		};
 	},
 
@@ -261,12 +262,21 @@ var StockDetailPage = React.createClass({
 				}
 				loadStockInfoSuccess = true
 				console.log("loadStockInfo: " + JSON.stringify(responseJson))
+				console.log("responseJson.minInvestUSD: " + responseJson.minInvestUSD)
+				var minInvestUSD = 10;
+				if(responseJson.minInvestUSD > 0){
+					minInvestUSD = responseJson.minInvestUSD;
+				}
+
+				console.log("minInvestUSD: " + minInvestUSD);
+
 				this.setState({
 					stockInfo: responseJson,
 					stockPriceBid: responseJson.bid,
 					stockPriceAsk: responseJson.ask,
 					stockCurrencyPrice:responseJson.last,
 					stockPreclose:responseJson.preClose,
+					minInvestUSD:minInvestUSD,
 				})
 
 				this.loadStockPriceToday(true, this.state.chartType, responseJson)
@@ -832,7 +842,8 @@ var StockDetailPage = React.createClass({
 						<InputAccessory ref='InputAccessory'
 							textValue={this.state.inputText}
 							maxValue={parseFloat(this.state.totalMoney.toFixed(2))}
-							rightButtonOnClick={this.clearMoney}/>
+							rightButtonOnClick={this.clearMoney}
+							minInvestUSD={this.state.minInvestUSD}/>
 
 						<StockTransactionInfoModal ref='confirmPage'/>
 				</View>

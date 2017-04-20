@@ -14,6 +14,7 @@ var NetworkModule = require('../module/NetworkModule')
 var StockTransactionInfoModal = require('./StockTransactionInfoModal')
 var UIConstants = require('../UIConstants')
 var PositionBlock = require('./personalPage/PositionBlock')
+var POSITION_BLOCK = "positionBlock"
 
 export default class UserHomePageTab0 extends Component{
 
@@ -31,13 +32,15 @@ export default class UserHomePageTab0 extends Component{
 
   tabPressed(index) {
      console.log("tabPressed==>"+index);
+		 this.refs[POSITION_BLOCK].refresh();
   }
 
 	render(){
 		return(
 			<View style={{flex:1}}>
-				<Text>主页Tab1</Text>
-				<PositionBlock/>
+				<PositionBlock userId={this.props.userId}
+					type="open"
+					ref={POSITION_BLOCK}/>
 			</View>
 		);
 	}

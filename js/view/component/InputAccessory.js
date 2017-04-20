@@ -28,6 +28,7 @@ var InputAccessory = React.createClass({
 		textValue: React.PropTypes.string,
 		maxValue: React.PropTypes.number,
 		rightButtonOnClick: React.PropTypes.func,	// use to clear text when error occured.
+		minInvestUSD: React.PropTypes.number,
 	},
 
 	getDefaultProps(): Object {
@@ -36,6 +37,7 @@ var InputAccessory = React.createClass({
 			textValue: '',
 			maxValue: 0,
 			rightButtonOnClick: null,
+			minInvestUSD: 20,
 		};
 	},
 
@@ -108,7 +110,7 @@ var InputAccessory = React.createClass({
 
 	dismissKeyboardHandler: function() {
 		var value = parseInt(this.props.textValue)
-		if (value < 10) {
+		if (value < this.props.minInvestUSD) {
 			this.setState({
 				validValue: 1
 			})
@@ -153,7 +155,7 @@ var InputAccessory = React.createClass({
 
 		var warningText = <View />
 		if (this.state.validValue===1) {
-			warningText = <Text style = {[s.InputAccessoryNoticeText]}>最低金额10美元！ </Text>
+			warningText = <Text style = {[s.InputAccessoryNoticeText]}>{"最低金额" + this.props.minInvestUSD + "美元！"}</Text>
 		} else if (this.state.validValue===2) {
 			warningText = <Text style = {[s.InputAccessoryNoticeText]}>剩余资金不足! </Text>
 		}

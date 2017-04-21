@@ -91,12 +91,14 @@ export default class UserHomePage extends Component {
 	static propTypes = {
 		userId: PropTypes.number.isRequired,
 		userName: PropTypes.string.isRequired,
+		isPrivate: PropTypes.string.isRequired,
 		backRefresh: React.PropTypes.func,
 	}
 
 	static defaultProps = {
 		userId: '',
-		userName: ''
+		userName: '',
+		isPrivate: true,
 	}
 
 	constructor(props) {
@@ -176,7 +178,6 @@ export default class UserHomePage extends Component {
 						})
 					}
 				})
-
 				this.loadPlCloseData()
 			},
 			(result) => {

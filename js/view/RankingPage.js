@@ -88,9 +88,14 @@ export default class RankingPage extends Component{
   }
 
   gotoUserHomePage(rowData) {
+    var isPrivate = !rowData.showData
+    if(LogicData.isUserSelf(rowData.id)) {
+				isPrivate = false
+		}
+
 		this.props.navigator.push({
 			name: MainPage.USER_HOME_PAGE_ROUTE,
-      userData:{userId:rowData.id,userName:rowData.username},
+      userData:{userId:rowData.id,userName:rowData.username,isPrivate:isPrivate},
       backRefresh:()=>this.backRefresh(),
 		});
 	}

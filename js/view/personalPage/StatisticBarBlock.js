@@ -122,11 +122,11 @@ export default class StatisticBarBlock extends Component {
 	}
 
 	refresh(staticBarBlock) {
-    console.log("staticBarBlock isPrivate = " + staticBarBlock.isPrivate);
+
     this.setState({
       statisticsBarInfo: [],
       statisticsSumInfo: [],
-      isPrivate:staticBarBlock.isPrivate,
+      isPrivate:staticBarBlock==undefined?false:staticBarBlock.isPrivate,
     })
 
     var userData = LogicData.getUserData()

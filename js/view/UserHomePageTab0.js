@@ -219,33 +219,48 @@ export default class UserHomePageTab0 extends Component{
 		}
 
 		var userData = LogicData.getUserData();
+    if(this.state.isPrivate){
+      return(
+        <View style = {[styles.bottomWapper]}>
+          <View style ={styles.ceilWapper}>
+            <Text style = {{color:'#474747',fontSize:15}}>近2周收益：</Text>
+            <Text style = {[{color:totolPlColor,fontSize:15},]}>{emptyStar}</Text>
+          </View>
+          {this.lineSepartor()}
+          <View style = {{flex:1, alignItems:'center',justifyContent:'center'}} >
+            <Text style = {styles.loadingText}>数据已隐藏</Text>
+          </View>
+        </View>
+      )
+    }else{
+      return(
+  			<View style = {styles.bottomWapper}>
+     			<View style ={styles.ceilWapper}>
+        		<Text style = {{color:'#474747',fontSize:15}}>近2周收益：</Text>
+  					<Text style = {[{color:totolPlColor,fontSize:15},]}>{pl2wShow}</Text>
+        	</View>
 
-		return(
-			<View style = {styles.bottomWapper}>
-   			<View style ={styles.ceilWapper}>
-      		<Text style = {{color:'#474747',fontSize:15}}>近2周收益：</Text>
-					<Text style = {[{color:totolPlColor,fontSize:15},]}>{pl2wShow}</Text>
-      	</View>
-				{this.lineSepartor()}
-				<View style ={styles.ceilWapper2}>
-					<View style = {styles.ceilLeft}>
-     				<View style = {styles.chartTypeBorder}>
-							<TouchableOpacity onPress={()=>this._onPressedChartType(CHART_TYPE_2MONTH)} style = {[styles.chartType,{backgroundColor:this.state.chartType == CHART_TYPE_2MONTH ? ColorConstants.TITLE_BLUE_LIVE:'white'}]}>
-       					<Text style = {{fontSize:13,color:this.state.chartType == CHART_TYPE_2MONTH ? 'white' : ColorConstants.INPUT_TEXT_COLOR}}>近2周</Text>
-       				</TouchableOpacity>
-							<TouchableOpacity onPress={()=>this._onPressedChartType(CHART_TYPE_ALL)} style = {[styles.chartType,{backgroundColor:this.state.chartType == CHART_TYPE_ALL ? ColorConstants.TITLE_BLUE_LIVE:'white'}]}>
-       					<Text style = {{fontSize:13,color:this.state.chartType == CHART_TYPE_ALL ? 'white' : ColorConstants.INPUT_TEXT_COLOR}}>全部</Text>
-       				</TouchableOpacity>
-         		</View>
-     			</View>
-					<View style = {styles.ceilRight}>
-						<View style = {[styles.tipIcon,{backgroundColor:ColorConstants.TITLE_BLUE_LIVE}]}></View>
-     				<Text style = {{fontSize:10,color:'#474747'}}>TA的收益走势</Text>
-     			</View>
-    		</View>
-				{this.chartRender()}
-   		</View>
-		)
+  				<View style ={styles.ceilWapper2}>
+  					<View style = {styles.ceilLeft}>
+       				<View style = {styles.chartTypeBorder}>
+  							<TouchableOpacity onPress={()=>this._onPressedChartType(CHART_TYPE_2MONTH)} style = {[styles.chartType,{backgroundColor:this.state.chartType == CHART_TYPE_2MONTH ? ColorConstants.TITLE_BLUE_LIVE:'white'}]}>
+         					<Text style = {{fontSize:13,color:this.state.chartType == CHART_TYPE_2MONTH ? 'white' : ColorConstants.INPUT_TEXT_COLOR}}>近2周</Text>
+         				</TouchableOpacity>
+  							<TouchableOpacity onPress={()=>this._onPressedChartType(CHART_TYPE_ALL)} style = {[styles.chartType,{backgroundColor:this.state.chartType == CHART_TYPE_ALL ? ColorConstants.TITLE_BLUE_LIVE:'white'}]}>
+         					<Text style = {{fontSize:13,color:this.state.chartType == CHART_TYPE_ALL ? 'white' : ColorConstants.INPUT_TEXT_COLOR}}>全部</Text>
+         				</TouchableOpacity>
+           		</View>
+       			</View>
+  					<View style = {styles.ceilRight}>
+  						<View style = {[styles.tipIcon,{backgroundColor:ColorConstants.TITLE_BLUE_LIVE}]}></View>
+       				<Text style = {{fontSize:10,color:'#474747'}}>TA的收益走势</Text>
+       			</View>
+      		</View>
+  				{this.chartRender()}
+     		</View>
+  		)
+    }
+
 	}
 
   _onPressedChartType(type) {
@@ -442,7 +457,7 @@ export default class UserHomePageTab0 extends Component{
         {this.middleWarpperRender()}
         <View style = {styles.separator}></View>
         {this.bottomWarpperRender()}
-
+        <View style = {styles.separator}></View>
 				<StatisticBarBlock userId={this.props.userId}
 					ref={STATISTIC_BAR_BLOCK}/>
         <View style = {styles.separator}></View>
@@ -699,6 +714,10 @@ const styles = StyleSheet.create({
     height: (width * 4 / 5) * 2 / 3,
     width: (width - 30) / 2
   },
+  loadingText: {
+		fontSize: 13,
+		color: '#9f9f9f'
+	},
 
 });
 

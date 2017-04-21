@@ -117,7 +117,7 @@ export default class StatisticBarBlock extends Component {
 				});
 
 			},
-			1000
+			100
 		);
 	}
 
@@ -148,7 +148,7 @@ export default class StatisticBarBlock extends Component {
     		{
     			method: 'GET',
     			headers: headers,
-    			//cache: 'offline',
+    			cache: 'offline',
     		},
     		(responseJson) => {
           console.log("playStatisticsAnim " + JSON.stringify(responseJson))

@@ -132,6 +132,8 @@ export default class UserHomePage extends Component {
 			})
 		}
 
+		this.onPageSelected(0)
+
 	}
 
 	componentWillUnmount() {

@@ -318,7 +318,7 @@ export default class StatisticBarBlock extends Component {
         <View style={styles.chart}>
 					{this.renderChartHeader()}
 					<View style={styles.separator}/>
-          <View style={[styles.header, styles.chart]}>
+          <View style={styles.emptyView}>
   					<Text style={styles.loadingText}>暂无盈亏分布记录</Text>
   				</View>
 				</View>
@@ -423,15 +423,14 @@ const styles = StyleSheet.create({
 	},
 
   separator: {
-    marginLeft: 15,
     height: 0.5,
-    backgroundColor: ColorConstants.SEPARATOR_GRAY,
+    backgroundColor: '#f2f2f2',
   },
 
   verticleSeparator: {
     marginTop: 15,
     width: 0.5,
-    backgroundColor: ColorConstants.SEPARATOR_GRAY,
+    backgroundColor: '#f2f2f2',
   },
 
 	chart: {
@@ -452,9 +451,9 @@ const styles = StyleSheet.create({
 	},
 
 	chartHeaderText1: {
-		fontSize: 14,
-		color: '#333333',
-	},
+    fontSize: 15,
+    color: '#474747',
+  },
 
 	chartHeaderText2: {
 		fontSize: 11,
@@ -463,9 +462,9 @@ const styles = StyleSheet.create({
 		marginRight: 3,
 	},
 
-	header: {
+	emptyView: {
 		flex: 2,
-		backgroundColor: '#1b65e1',
+		backgroundColor: 'white',
 		alignItems: 'center',
 		justifyContent: 'space-around',
 	},

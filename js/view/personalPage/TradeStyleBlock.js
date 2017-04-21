@@ -63,16 +63,19 @@ export default class TradeStyleBlock extends Component {
             <Text style={styles.contentTitleBlock}>平均杠杆（倍）</Text>
             <Text style={styles.contentValueBlock}>{this.state.averageLeverage}</Text>
           </View>
+          <View style={styles.verticalSeparator}/>
           <View style={styles.contentBlock}>
             <Text style={styles.contentTitleBlock}>累计下单（次）</Text>
             <Text style={styles.contentValueBlock}>{this.state.totalTradeCount}</Text>
           </View>
         </View>
+        <View style={[styles.separator, {marginLeft: 15, marginRight: 15,}]}/>
         <View style={styles.contentRow}>
           <View style={styles.contentBlock}>
             <Text style={styles.contentTitleBlock}>平均持仓时间（天）</Text>
             <Text style={styles.contentValueBlock}>{this.state.averageOpenTime}</Text>
           </View>
+          <View style={styles.verticalSeparator}/>
           <View style={styles.contentBlock}>
             <Text style={styles.contentTitleBlock}>平均本金（美元）</Text>
             <Text style={styles.contentValueBlock}>{this.state.averageInvestUSD}</Text>
@@ -89,9 +92,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   separator: {
-    marginLeft: 15,
     height: 0.5,
     backgroundColor: ColorConstants.SEPARATOR_GRAY,
+  },
+  verticalSeparator: {
+    width: 0.5,
+    backgroundColor: ColorConstants.SEPARATOR_GRAY,
+    marginTop: 10,
+    marginBottom: 9,
   },
   titleRow: {
     paddingLeft: 15,
@@ -99,8 +107,8 @@ const styles = StyleSheet.create({
     height: 39,
   },
   titleText: {
-    fontSize: 14,
-    color: '#333333',
+    fontSize: 15,
+    color: '#474747',
   },
   contentRow:{
     flex:1,
@@ -119,7 +127,7 @@ const styles = StyleSheet.create({
   contentValueBlock:{
     fontSize: 19,
     color: '#595959',
-    marginTop: 10,
+    marginTop: 8,
   },
 });
 

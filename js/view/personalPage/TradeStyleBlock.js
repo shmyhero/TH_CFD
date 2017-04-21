@@ -34,12 +34,21 @@ export default class TradeStyleBlock extends Component {
   refresh(tradeStyle){
     console.log("tradeStyle isPrivate = " + tradeStyle.isPrivate);
     //TODO: add api
-    this.setState({
-      averageLeverage: tradeStyle.avgLeverage,
-      totalTradeCount: tradeStyle.orderCount,
-      averageOpenTime: tradeStyle.avgHoldPeriod,
-      averageInvestUSD: tradeStyle.avgInvestUSD
-    })
+    if(tradeStyle.isPrivate){
+      this.setState({
+        averageLeverage: "***",
+        totalTradeCount: "***",
+        averageOpenTime: "***",
+        averageInvestUSD: "***",
+      })
+    }else{
+      this.setState({
+        averageLeverage: tradeStyle.avgLeverage,
+        totalTradeCount: tradeStyle.orderCount,
+        averageOpenTime: tradeStyle.avgHoldPeriod,
+        averageInvestUSD: tradeStyle.avgInvestUSD
+      })
+    }
   }
 
   clear(){

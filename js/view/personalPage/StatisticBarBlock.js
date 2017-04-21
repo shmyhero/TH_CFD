@@ -126,9 +126,18 @@ export default class StatisticBarBlock extends Component {
     this.setState({
       statisticsBarInfo: [],
       statisticsSumInfo: [],
-      isPrivate:staticBarBlock==undefined?false:staticBarBlock.isPrivate,
+      isPrivate: staticBarBlock==undefined?false:staticBarBlock.isPrivate,
+    }, ()=>{
+      if(!this.state.isPrivate){
+        this.loadData();
+      }else{
+        //No need to load private data.
+      }
     })
 
+	}
+
+  loadData(){
     var userData = LogicData.getUserData()
     if(userData.userId == this.props.userId){
       var headers = {};
@@ -170,7 +179,7 @@ export default class StatisticBarBlock extends Component {
         { name: '商品', invest: 2093, pl: -0.94 } ]
       this.playStatisticsAnim(data);
     }
-	}
+  }
 
 
   render() {
@@ -259,22 +268,27 @@ export default class StatisticBarBlock extends Component {
 	renderChartHeader() {
     var sumPl = ''
     var proFitStyle = styles.plValueTextZero;
-    if (LogicData.getAccountState()){
-      sumPl = 0;
-      if(this.state.statisticsSumInfo.length > 0) {
-        sumPl = 0
-        for (var i = 0; i < this.state.statisticsSumInfo.length; i++) {
-          var barContent = this.state.statisticsSumInfo[i]
-          sumPl += barContent.pl
-        }
+    if(this.state.isPrivate){
+      sumPl = "***";
+      proFitStyle = styles.chartHeaderText1;
+    }else{
+      if (LogicData.getAccountState()){
+        sumPl = 0;
+        if(this.state.statisticsSumInfo.length > 0) {
+          sumPl = 0
+          for (var i = 0; i < this.state.statisticsSumInfo.length; i++) {
+            var barContent = this.state.statisticsSumInfo[i]
+            sumPl += barContent.pl
+          }
 
-        sumPl = sumPl.toFixed(2)
+          sumPl = sumPl.toFixed(2)
 
-        if(sumPl>0){
-          sumPl = "+" + sumPl;
-          proFitStyle = styles.plValueTextPositive;
-        }else if(sumPl<0){
-          proFitStyle = styles.plValueTextNegative;
+          if(sumPl>0){
+            sumPl = "+" + sumPl;
+            proFitStyle = styles.plValueTextPositive;
+          }else if(sumPl<0){
+            proFitStyle = styles.plValueTextNegative;
+          }
         }
       }
     }
@@ -297,33 +311,43 @@ export default class StatisticBarBlock extends Component {
 	}
 
 	renderChart() {
-		var hasData = this.state.balanceData!==null
+    if(this.state.isPrivate){
+      return (  <View style={styles.chart}>
+        {this.renderChartHeader()}
+        <View style={styles.separator}/>
+        <View style={styles.emptyView}>
+          <Text style={styles.loadingText}>数据已隐藏</Text>
+        </View>
+      </View>);
+    }else{
+  		var hasData = this.state.balanceData!==null
 
-		var sumInvest = 0
-		for (var i = 0; i < this.state.statisticsSumInfo.length; i++) {
-			var barContent = this.state.statisticsSumInfo[i]
-			sumInvest += barContent.invest
-		}
-		if (hasData && sumInvest > 0) {
-			return (
-				<View style={styles.chart}>
-					{this.renderChartHeader()}
-					<View style={styles.separator}/>
-					{this.renderLineChart()}
-				</View>
-			)
-		}
-		else {
-			return (
-        <View style={styles.chart}>
-					{this.renderChartHeader()}
-					<View style={styles.separator}/>
-          <View style={styles.emptyView}>
-  					<Text style={styles.loadingText}>暂无盈亏分布记录</Text>
+  		var sumInvest = 0
+  		for (var i = 0; i < this.state.statisticsSumInfo.length; i++) {
+  			var barContent = this.state.statisticsSumInfo[i]
+  			sumInvest += barContent.invest
+  		}
+  		if (hasData && sumInvest > 0) {
+  			return (
+  				<View style={styles.chart}>
+  					{this.renderChartHeader()}
+  					<View style={styles.separator}/>
+  					{this.renderLineChart()}
   				</View>
-				</View>
-			)
-		}
+  			)
+  		}
+  		else {
+  			return (
+          <View style={styles.chart}>
+  					{this.renderChartHeader()}
+  					<View style={styles.separator}/>
+            <View style={styles.emptyView}>
+    					<Text style={styles.loadingText}>暂无盈亏分布记录</Text>
+    				</View>
+  				</View>
+  			)
+  		}
+    }
 	}
 
 	renderLineChart(){

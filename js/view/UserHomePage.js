@@ -341,8 +341,8 @@ export default class UserHomePage extends Component {
 		// userName: PropTypes.string.isRequired,
 		var tabPages = [
 			<UserHomePageTab0 navigator={this.props.navigator} userName = {this.props.userName} userId={this.props.userId} ref={'page0'}/>,
-			<UserHomePageTab1 navigator={this.props.navigator} ref={'page1'}/>,
-			<UserHomePageTab2 navigator={this.props.navigator} ref={'page2'}/>
+			<UserHomePageTab1 navigator={this.props.navigator} userId={this.props.userId} isPrivate={this.props.isPrivate} ref={'page1'}/>,
+			<UserHomePageTab2 navigator={this.props.navigator} userId={this.props.userId} isPrivate={this.props.isPrivate} ref={'page2'}/>
 		]
 
 		var viewPages = tabNames.map(

@@ -1,6 +1,6 @@
 'use strict';
 
-import React,{Component} from 'react'
+import React,{Component, PropTypes} from 'react'
 import {StyleSheet,Text,Image,View,Dimensions,ListView,Alert,TouchableOpacity} from 'react-native'
 
 
@@ -17,6 +17,15 @@ var PositionBlock = require('./personalPage/PositionBlock')
 
 var POSITION_BLOCK = "positionBlock"
 export default class UserHomePageTab0 extends Component{
+	static propTypes = {
+    userId: PropTypes.number.isRequired,
+    isPrivate: PropTypes.bool,
+  }
+
+  static defaultProps = {
+    userId: '',
+    isPrivate: false,
+  }
 
 	constructor(props){
 		super(props);
@@ -38,7 +47,9 @@ export default class UserHomePageTab0 extends Component{
 	render(){
 		return(
 			<View style={{flex:1}}>
+        <View style = {styles.separator}></View>
 				<PositionBlock userId={this.props.userId}
+					isPrivate={this.props.isPrivate}
 					type="close"
 					ref={POSITION_BLOCK}/>
 			</View>
@@ -49,9 +60,11 @@ export default class UserHomePageTab0 extends Component{
 
 
 const styles = StyleSheet.create({
-
-
-
+	separator: {
+    width: width,
+    height: 10,
+    backgroundColor: '#f3f3f5',
+  },
 });
 
 

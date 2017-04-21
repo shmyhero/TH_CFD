@@ -29,15 +29,17 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {
 
 export default class PositionBlock extends Component {
   static propTypes = {
-    userId: PropTypes.number,
+    userId: PropTypes.number.isRequired,
+    type: PropTypes.string.isRequired,
+    isPrivate: PropTypes.bool.isRequired,
     style: PropTypes.object,
-    type: PropTypes.string,
   }
 
   static defaultProps = {
     userId: 0,
     style: {},
     type: "open",
+    isPrivate: false,
   }
 
   constructor(props) {
@@ -59,6 +61,14 @@ export default class PositionBlock extends Component {
 	}
 
   refresh(){
+    if(this.props.isPrivate){
+      return;
+    }
+
+    this.loadData();
+  }
+
+  loadData(){
     var data = [
     { id: 'aaaa',
       security:
@@ -284,19 +294,27 @@ export default class PositionBlock extends Component {
 	}
 
   render() {
-    return (
-      <View style={styles.container}>
-        {this.renderHeaderBar()}
-        <ListView
-          style={styles.list}
-          ref="listview"
-          initialListSize={11}
-          dataSource={this.state.stockInfo}
-          enableEmptySections={true}
-          renderRow={(rowData, sectionID, rowID, highlightRow)=>this.renderRow(rowData, sectionID, rowID, highlightRow)}
-          renderSeparator={this.renderSeparator}/>
-      </View>
-    );
+    if(this.props.isPrivate){
+      return (
+        <View style={styles.emptyView}>
+          <Text style={styles.loadingText}>数据已隐藏</Text>
+        </View>
+      )
+    }else{
+      return (
+        <View style={styles.container}>
+          {this.renderHeaderBar()}
+          <ListView
+            style={styles.list}
+            ref="listview"
+            initialListSize={11}
+            dataSource={this.state.stockInfo}
+            enableEmptySections={true}
+            renderRow={(rowData, sectionID, rowID, highlightRow)=>this.renderRow(rowData, sectionID, rowID, highlightRow)}
+            renderSeparator={this.renderSeparator}/>
+        </View>
+      );
+    }
   }
 }
 
@@ -384,6 +402,17 @@ const styles = StyleSheet.create({
 		textAlign: 'left',
 		color:'#576b95',
 	},
+
+	emptyView: {
+		flex: 2,
+		backgroundColor: 'white',
+		alignItems: 'center',
+		justifyContent: 'space-around',
+	},
+  loadingText: {
+    fontSize: 13,
+    color: '#9f9f9f'
+  },
 });
 
 module.exports = PositionBlock;

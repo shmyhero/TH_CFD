@@ -15,7 +15,8 @@ var LogicData = require('../../LogicData');
 var NetConstants = require('../../NetConstants');
 var UIConstants = require('../../UIConstants');
 var NetworkModule = require('../../module/NetworkModule');
-var stockNameFontSize = Math.round(17*width/375.0)
+var NetworkErrorIndicator = require('../../view/NetworkErrorIndicator');
+var stockNameFontSize = Math.round(17*width/375.0);
 
 var {height, width} = Dimensions.get('window');
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {
@@ -51,6 +52,8 @@ export default class PositionBlock extends Component {
       statisticsSumInfo: [],
       maxBarSize: 1,
       barAnimPlayed: false,
+      contentLoaded: false,
+			isRefreshing: false,
     }
   }
 
@@ -69,138 +72,48 @@ export default class PositionBlock extends Component {
   }
 
   loadData(){
-    var data = [
-    { id: 'aaaa',
-      security:
-       { dcmCount: 2,
-         bid: 5400.13,
-         ask: 5411.63,
-         lastOpen: '2017-04-20T05:20:13.256Z',
-         lastClose: '2017-04-20T04:55:04.078Z',
-         maxLeverage: 100,
-         smd: 0.0005,
-         gsmd: 0.003,
-         ccy: 'USD',
-         isPriceDown: false,
-         id: 36004,
-         symbol: 'NDX',
-         name: '开仓1',
-         preClose: 5395.63,
-         open: 5399.63,
-         last: 5410.88,
-         isOpen: true,
-         status: 1 },
-      invest: 514.99998588335,
-      isLong: true,
-      leverage: 10,
-      settlePrice: 5410.13,
-      quantity: 0.19038359,
-      upl: 0,
-      createAt: '2017-04-20T08:03:27.166Z',
-      stopPx: 5330.8174942000005,
-      stopOID: '102404243106' },
-    { id: 'aaaa',
-      security:
-       { dcmCount: 2,
-         bid: 5400.13,
-         ask: 5411.63,
-         lastOpen: '2017-04-20T05:20:13.256Z',
-         lastClose: '2017-04-20T04:55:04.078Z',
-         maxLeverage: 100,
-         smd: 0.0005,
-         gsmd: 0.003,
-         ccy: 'USD',
-         isPriceDown: false,
-         id: 36004,
-         symbol: 'NDX',
-         name: '开仓1',
-         preClose: 5395.63,
-         open: 5399.63,
-         last: 5410.88,
-         isOpen: true,
-         status: 1 },
-      invest: 514.99998588335,
-      isLong: true,
-      leverage: 10,
-      settlePrice: 5410.13,
-      quantity: 0.19038359,
-      upl: 0,
-      createAt: '2017-04-20T08:03:27.166Z',
-      stopPx: 5330.8174942000005,
-      stopOID: '102404243106' },
-    { id: 'aaaa',
-        security:
-         { dcmCount: 2,
-           bid: 5400.13,
-           ask: 5411.63,
-           lastOpen: '2017-04-20T05:20:13.256Z',
-           lastClose: '2017-04-20T04:55:04.078Z',
-           maxLeverage: 100,
-           smd: 0.0005,
-           gsmd: 0.003,
-           ccy: 'USD',
-           isPriceDown: false,
-           id: 36004,
-           symbol: 'NDX',
-           name: '开仓1',
-           preClose: 5395.63,
-           open: 5399.63,
-           last: 5410.88,
-           isOpen: true,
-           status: 1 },
-        invest: 514.99998588335,
-        isLong: true,
-        leverage: 10,
-        settlePrice: 5410.13,
-        quantity: 0.19038359,
-        upl: 0,
-        createAt: '2017-04-20T08:03:27.166Z',
-        stopPx: 5330.8174942000005,
-        stopOID: '102404243106' },
-    { id: 'aaaa',
-      security:
-       { dcmCount: 2,
-         bid: 5411.13,
-         ask: 5411.63,
-         lastOpen: '2017-04-20T05:20:13.256Z',
-         lastClose: '2017-04-20T04:55:04.078Z',
-         maxLeverage: 100,
-         smd: 0.0005,
-         gsmd: 0.003,
-         ccy: 'USD',
-         isPriceDown: false,
-         id: 36004,
-         symbol: 'NDX',
-         name: '开仓2',
-         preClose: 5395.63,
-         open: 5399.63,
-         last: 5410.88,
-         isOpen: true,
-         status: 1 },
-      invest: 514.99998588335,
-      isLong: true,
-      leverage: 10,
-      settlePrice: 5410.13,
-      quantity: 0.19038359,
-      upl: 0,
-      createAt: '2017-04-20T08:03:27.166Z',
-      stopPx: 5330.8174942000005,
-      stopOID: '102404243106' }  ];
-    if(this.props.type == "open"){
-      for(var i=0;i<data.length;i++){
-        data[i].security.name = "持仓"+i
+		this.setState({
+			isRefreshing: true,
+		}, ()=>{
+      var url = '';
+      if(this.props.type == 'open'){
+        url = NetConstants.CFD_API.PERSONAL_PAGE_POSITION_OPEN;
+      }else if(this.props.type == 'close'){
+        url = NetConstants.CFD_API.PERSONAL_PAGE_POSITION_CLOSE;
       }
 
-    }else{
-      for(var i=0;i<data.length;i++){
-        data[i].security.name = "平仓"+i
+      if(url == ''){
+        return;
       }
-    }
-    this.setState({
-      stockInfo: ds.cloneWithRows(data),
-      stockInfoRowData: data,
-    })
-  }
+
+      url = url.replace("<userID>", this.props.userId);
+
+      NetworkModule.fetchTHUrl(
+        url,
+        {
+          method: 'GET',
+          cache: 'none',
+        },
+        (responseJson) => {
+          this.setState({
+            contentLoaded: true,
+            isRefreshing: false,
+            stockInfoRowData: responseJson,
+            stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
+          });
+        },
+        (result) => {
+          if(!result.loadedOfflineCache){
+            this.setState({
+              contentLoaded: false,
+              isRefreshing: false,
+            })
+          }
+          // Alert.alert('', errorMessage);
+        }
+      )
+    });
+	}
 
   renderSeparator(sectionID, rowID, adjacentRowHighlighted) {
 		return (
@@ -227,40 +140,24 @@ export default class PositionBlock extends Component {
   }
 
   renderRow(rowData, sectionID, rowID, highlightRow) {
-		var profitPercentage = 0
-		var profitAmount = rowData.upl
-		if (rowData.settlePrice !== 0) {
-			profitPercentage = (this.getLastPrice(rowData) - rowData.settlePrice) / rowData.settlePrice * rowData.leverage
-			profitPercentage *= (rowData.isLong ? 1 : -1)
-			profitAmount = profitPercentage * rowData.invest
-
-			//Only use the fxdata for non-usd
-			if (rowData.security.ccy != UIConstants.USD_CURRENCY) {
-				if (rowData.fxData && rowData.fxData.ask) {
-					profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxData)
-				}	else if(rowData.fxOutright && rowData.fxOutright.ask){
-					profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxOutright)
-				} else {
-					profitAmount = rowData.upl
-				}
-			}
-		}
+		var profitPercentage = rowData.rate
+		var profitAmount = rowData.pl
 		var bgcolor = 'white'
 
 		return (
 			<View>
 				<TouchableHighlight activeOpacity={1}>
-					<View style={[styles.rowWrapper, {backgroundColor: bgcolor}]} key={rowData.key}>
+					<View style={[styles.rowWrapper, {backgroundColor: bgcolor}]} key={rowID}>
 						<View style={styles.rowLeftPart}>
 							<Text style={styles.stockNameText} allowFontScaling={false} numberOfLines={1}>
-								{rowData.security.name}
+								{rowData.name}
 							</Text>
 
 							<View style={{flexDirection: 'row', alignItems: 'center'}}>
 								{/* {this.renderCountyFlag(rowData)} */}
 								{/* {this.renderStockStatus(rowData)} */}
 								<Text style={styles.stockSymbolText}>
-									{rowData.security.symbol}
+									{rowData.symbol}
 								</Text>
 							</View>
 						</View>
@@ -272,9 +169,6 @@ export default class PositionBlock extends Component {
 						<View style={styles.rowRightPart}>
 							{this.renderProfit(profitPercentage * 100, "%")}
 						</View>
-						{/* {rowData.security.isOpen ? null :
-							<Image style={styles.notOpenImage} source={require('../../images/not_open.png')}/>
-						} */}
 					</View>
 				</TouchableHighlight>
 			</View>
@@ -301,19 +195,25 @@ export default class PositionBlock extends Component {
         </View>
       )
     }else{
-      return (
-        <View style={styles.container}>
-          {this.renderHeaderBar()}
-          <ListView
-            style={styles.list}
-            ref="listview"
-            initialListSize={11}
-            dataSource={this.state.stockInfo}
-            enableEmptySections={true}
-            renderRow={(rowData, sectionID, rowID, highlightRow)=>this.renderRow(rowData, sectionID, rowID, highlightRow)}
-            renderSeparator={this.renderSeparator}/>
-        </View>
-      );
+      if(!this.state.contentLoaded){
+  			return (
+  				<NetworkErrorIndicator onRefresh={()=>this.loadData()} refreshing={this.state.isRefreshing}/>
+  			)
+  		}else{
+        return (
+          <View style={styles.container}>
+            {this.renderHeaderBar()}
+            <ListView
+              style={styles.list}
+              ref="listview"
+              initialListSize={11}
+              dataSource={this.state.stockInfo}
+              enableEmptySections={true}
+              renderRow={(rowData, sectionID, rowID, highlightRow)=>this.renderRow(rowData, sectionID, rowID, highlightRow)}
+              renderSeparator={this.renderSeparator}/>
+          </View>
+        );
+      }
     }
   }
 }

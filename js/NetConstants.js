@@ -160,6 +160,9 @@ function getCFDAPI(){
     GET_RANK_LIVE_FOLLOWING_2W:CFD_API_SERVER + "/api/user/following",//follow
 
     SHOW_USER_DATA_API: CFD_API_SERVER + '/api/user/live/profit',
+
+    PERSONAL_PAGE_POSITION_OPEN: CFD_API_SERVER + '/api/position/live/open/<userID>',
+    PERSONAL_PAGE_POSITION_CLOSE: CFD_API_SERVER + '/api/position/live/closed/<userID>',
   }
 }
 

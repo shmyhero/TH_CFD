@@ -92,6 +92,10 @@ export default class UserHomePageTab0 extends Component{
 			},
 			(responseJson) => {
 				console.log(responseJson);
+        var isPrivate = responseJson.showData == undefined ? true : (!responseJson.showData);
+        if(LogicData.isUserSelf(this.state.id)) {
+          isPrivate = false;
+        }
 				this.setState({
 					id: responseJson.id,
 					avgPl: responseJson.avgPl,
@@ -104,17 +108,12 @@ export default class UserHomePageTab0 extends Component{
 					isFollowing: responseJson.isFollowing,
 					rank: responseJson.rank,
 					rankDescription: responseJson.rankDescription,
-					isPrivate: responseJson.showData == undefined ? true : (!responseJson.showData),
+					isPrivate: isPrivate,
           avgLeverage: responseJson.avgLeverage,
           orderCount: responseJson.orderCount,
           avgHoldPeriod: responseJson.avgHoldPeriod,
           avgInvestUSD: responseJson.avgInvestUSD,
-				}, () => {
-					if(LogicData.isUserSelf(this.state.id)) {
-						this.setState({
-							isPrivate: false,
-						})
-					}
+				}, () => {					
           this.refreshData();
 				})
 				this.loadPlCloseData()

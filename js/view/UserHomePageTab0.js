@@ -455,7 +455,6 @@ export default class UserHomePageTab0 extends Component{
 		return(
       <ScrollView showsHorizontalScrollIndicator={false}>
         <View style = {styles.separator}></View>
-        <View style = {styles.separator}></View>
         {this.middleWarpperRender()}
         <View style = {styles.separator}></View>
         {this.bottomWarpperRender()}

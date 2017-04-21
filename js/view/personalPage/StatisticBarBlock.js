@@ -122,47 +122,52 @@ export default class StatisticBarBlock extends Component {
 	}
 
 	refresh() {
-		this.setState({
-			statisticsBarInfo: [],
-			statisticsSumInfo: [],
-		})
+    this.setState({
+      statisticsBarInfo: [],
+      statisticsSumInfo: [],
+    })
 
-    var headers = {};
-		var userData = LogicData.getUserData()
+    var userData = LogicData.getUserData()
     if(userData.userId == this.props.userId){
+      var headers = {};
+
       headers = {
         'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
       }
+
+    	var url = NetConstants.CFD_API.GET_USER_STATISTICS_API
+    	if(LogicData.getAccountState()){
+    		url = NetConstants.CFD_API.GET_USER_STATISTICS_LIVE_API
+    		console.log('live', url );
+    	}
+
+    	NetworkModule.fetchTHUrl(
+    		url,
+    		{
+    			method: 'GET',
+    			headers: headers,
+    			//cache: 'offline',
+    		},
+    		(responseJson) => {
+          console.log("playStatisticsAnim " + JSON.stringify(responseJson))
+    			this.playStatisticsAnim(responseJson);
+    		},
+    		(result) => {
+    			if(NetConstants.AUTH_ERROR === result.errorMessage){
+
+    			}else{
+    				// Alert.alert('', errorMessage);
+    			}
+    		}
+    	)
     }else{
-
+      //TODO: use the real api.
+      var data = [ { name: '美股', invest: 46, pl: -8.26 },
+        { name: '指数', invest: 3712.99998588335, pl: 15.6772176315 },
+        { name: '外汇', invest: 0, pl: 0 },
+        { name: '商品', invest: 2093, pl: -0.94 } ]
+      this.playStatisticsAnim(data);
     }
-
-		var url = NetConstants.CFD_API.GET_USER_STATISTICS_API
-		if(LogicData.getAccountState()){
-			url = NetConstants.CFD_API.GET_USER_STATISTICS_LIVE_API
-			console.log('live', url );
-		}
-
-
-		NetworkModule.fetchTHUrl(
-			url,
-			{
-				method: 'GET',
-				headers: headers,
-				//cache: 'offline',
-			},
-			(responseJson) => {
-        console.log("playStatisticsAnim " + JSON.stringify(responseJson))
-				this.playStatisticsAnim(responseJson);
-			},
-			(result) => {
-				if(NetConstants.AUTH_ERROR === result.errorMessage){
-
-				}else{
-					// Alert.alert('', errorMessage);
-				}
-			}
-		)
 	}
 
 

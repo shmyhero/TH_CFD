@@ -362,6 +362,7 @@ export default class UserHomePageTab0 extends Component{
 							{cardItems}
 						</ScrollView>
 					</View>
+          {/* {this.renderEmptyBottom()} */}
 				</View>
 			)
 		} else {
@@ -469,7 +470,7 @@ export default class UserHomePageTab0 extends Component{
         <View style = {styles.separator}></View>
         {this.cardWarpperRender()}
 
-        {this.renderEmptyBottom()}
+
 			</ScrollView>
 		);
 	}

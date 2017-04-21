@@ -91,7 +91,7 @@ export default class UserHomePage extends Component {
 	static propTypes = {
 		userId: PropTypes.number.isRequired,
 		userName: PropTypes.string.isRequired,
-		isPrivate: PropTypes.string.isRequired,
+		isPrivate: PropTypes.bool.isRequired,
 		backRefresh: React.PropTypes.func,
 	}
 

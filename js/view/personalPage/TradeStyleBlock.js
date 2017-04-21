@@ -15,17 +15,14 @@ var NetworkModule = require('../../module/NetworkModule');
 export default class TradeStyleBlock extends Component {
   static propTypes = {
     userId: PropTypes.number,
-    style: PropTypes.object,
   }
 
   static defaultProps = {
     userId: 0,
-    style: {},
   }
 
   constructor(props) {
     super(props);
-
     this.state = {
       averageLeverage: '--',
       totalTradeCount: '--',
@@ -34,13 +31,14 @@ export default class TradeStyleBlock extends Component {
     }
   }
 
-  refresh(){
+  refresh(tradeStyle){
+    console.log("tradeStyle isPrivate = " + tradeStyle.isPrivate);
     //TODO: add api
     this.setState({
-      averageLeverage: '50',
-      totalTradeCount: '40',
-      averageOpenTime: '2.5',
-      averageInvestUSD: '100',
+      averageLeverage: tradeStyle.avgLeverage,
+      totalTradeCount: tradeStyle.orderCount,
+      averageOpenTime: tradeStyle.avgHoldPeriod,
+      averageInvestUSD: tradeStyle.avgInvestUSD
     })
   }
 

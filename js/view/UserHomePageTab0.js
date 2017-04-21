@@ -59,6 +59,10 @@ export default class UserHomePageTab0 extends Component{
 			rankDescription: '',
 			isFollowingStatusChanged: false,
 			isPrivate: false,
+      avgLeverage: 0,
+      orderCount: 0,
+      avgHoldPeriod: 0,
+      avgInvestUSD: 0,
 		}
 	}
 
@@ -101,14 +105,18 @@ export default class UserHomePageTab0 extends Component{
 					rank: responseJson.rank,
 					rankDescription: responseJson.rankDescription,
 					isPrivate: responseJson.showData == undefined ? true : (!responseJson.showData),
+          avgLeverage: responseJson.avgLeverage,
+          orderCount: responseJson.orderCount,
+          avgHoldPeriod: responseJson.avgHoldPeriod,
+          avgInvestUSD: responseJson.avgInvestUSD,
 				}, () => {
 					if(LogicData.isUserSelf(this.state.id)) {
 						this.setState({
 							isPrivate: false,
 						})
 					}
+          this.refreshData();
 				})
-
 				this.loadPlCloseData()
 			},
 			(result) => {
@@ -144,8 +152,20 @@ export default class UserHomePageTab0 extends Component{
   }
 
   refreshData(){
-    this.refs[STATISTIC_BAR_BLOCK].refresh();
-    this.refs[TRADE_STYLE_BLOCK].refresh();
+    var tradeStyle = {
+      avgLeverage: this.state.avgLeverage,
+      orderCount:this.state.orderCount,
+      avgHoldPeriod: this.state.avgHoldPeriod,
+      avgInvestUSD: this.state.avgInvestUSD,
+      isPrivate:this.state.isPrivate,
+    }
+
+    var staticBarBlock = {
+      isPrivate:this.state.isPrivate,
+    }
+
+    this.refs[STATISTIC_BAR_BLOCK].refresh(staticBarBlock);
+    this.refs[TRADE_STYLE_BLOCK].refresh(tradeStyle);
   }
 
   middleWarpperRender() {
@@ -422,8 +442,6 @@ export default class UserHomePageTab0 extends Component{
         {this.middleWarpperRender()}
         <View style = {styles.separator}></View>
         {this.bottomWarpperRender()}
-        <View style = {styles.separator}></View>
-        {this.cardWarpperRender()}
 
 				<StatisticBarBlock userId={this.props.userId}
 					ref={STATISTIC_BAR_BLOCK}/>
@@ -432,6 +450,9 @@ export default class UserHomePageTab0 extends Component{
 				<TradeStyleBlock userId={this.props.userId}
 					ref={TRADE_STYLE_BLOCK}/>
         <View style = {styles.separator}></View>
+
+        <View style = {styles.separator}></View>
+        {this.cardWarpperRender()}
 
         {this.renderEmptyBottom()}
 			</ScrollView>

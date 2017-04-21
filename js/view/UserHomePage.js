@@ -46,14 +46,22 @@ var tabNames = ['主页', '持仓', '平仓']
 
 var emptyStar = '***'
 
-// { followerCount: 0,
-//   pl2w: -400.62942932,
-//   avgPl: -9.538795936190477,
-//   winRate: 0.3333333333333333,
+// { followerCount: 5,
+//   isFollowing: false,
+//   totalPl: 689.62,
+//   pl2w: 468.32,
+//   avgPl: 9.194933333333333,
+//   winRate: 0.7333333333333333,
 //   cards: [],
-//   id: 2030,
-//   nickname: 'RamboOne',
-//   picUrl: 'https://cfdstorage.blob.core.chinacloudapi.cn/user-picture/13b07850f6fa484dbc2337216acda804' }
+//   rank: 1,
+//   rankDescription: '财富起航',
+//   showData: true,
+//   avgLeverage: 0,
+//   orderCount: 0,
+//   avgHoldPeriod: 0,
+//   avgInvestUSD: 0,
+//   id: 3807,
+//   nickname: 'cooler' }
 
 // { cardId: 1,
 //        invest: 1000,

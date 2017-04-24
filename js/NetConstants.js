@@ -163,8 +163,8 @@ function getCFDAPI(){
 
     SHOW_USER_DATA_API: CFD_API_SERVER + '/api/user/live/profit',
 
-    PERSONAL_PAGE_POSITION_OPEN: CFD_API_SERVER + '/api/<userID>/position/live/open/',
-    PERSONAL_PAGE_POSITION_CLOSE: CFD_API_SERVER + '/api/<userID>/position/live/closed/',
+    PERSONAL_PAGE_POSITION_OPEN: CFD_API_SERVER + '/api/user/<userID>/position/live/open/',
+    PERSONAL_PAGE_POSITION_CLOSE: CFD_API_SERVER + '/api/user/<userID>/position/live/closed/',
   }
 }
 

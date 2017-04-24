@@ -134,6 +134,11 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
             String url2 = "cn.tradehero.mobi";
             cookieManager.setCookie(url2, "username="+ LogicData.getInstance().getLiveName());
             cookieManager.setCookie(url2, "email="+LogicData.getInstance().getLiveEmail());
+
+            String url3 = "web.typhoontechnology.hk";
+            cookieManager.setCookie(url3, "username="+ LogicData.getInstance().getLiveName());
+            cookieManager.setCookie(url3, "email="+LogicData.getInstance().getLiveEmail());
+
             if (Build.VERSION.SDK_INT < 21) {
                 CookieSyncManager.getInstance().sync();
             } else {

@@ -323,6 +323,34 @@ var MePage = React.createClass({
 				  console.log(err);
 				  console.log(res);
 				});
+
+				CookieManager.set({
+				  name: 'username',
+				  value: meData.liveUsername,
+				  domain: 'web.typhoontechnology.hk',
+				  origin: 'web.typhoontechnology.hk',
+				  path: '/',
+				  version: '1',
+				  expiration: '2029-05-30T12:30:00.00-05:00'
+				}, (err, res) => {
+				  console.log('cookie set username!');
+				  console.log(err);
+				  console.log(res);
+				});
+
+				CookieManager.set({
+					  name: 'email',
+					  value: meData.liveEmail,
+					  domain: 'web.typhoontechnology.hk',
+					  origin: 'web.typhoontechnology.hk',
+					  path: '/',
+					  version: '1',
+					  expiration: '2029-05-30T12:30:00.00-05:00'
+					}, (err, res) => {
+					  console.log('cookie set email!');
+					  console.log(err);
+					  console.log(res);
+					});
 	},
 
 	onWebViewNavigationStateChange: function(navState, doNotPopWhenFinished, onSuccess) {
@@ -429,7 +457,7 @@ var MePage = React.createClass({
 			}else{
 				this.props.navigator.push({
 					name: MainPage.LOGIN_ROUTE,
-					getNextRoute: ()=> this.getWebViewPageScene(url, '邀请好友', true),					
+					getNextRoute: ()=> this.getWebViewPageScene(url, '邀请好友', true),
 				});
 			}
 		}else if(rowData.subtype === 'depositWithdraw'){

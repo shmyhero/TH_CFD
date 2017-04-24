@@ -41,3 +41,5 @@ android/app/libs
 android/keystores/debug.keystore
 
 android/app/src/main/java/com/tradehero/cfd/views/chartDrawer/base/CandleChartDrawer.java
+
+.project

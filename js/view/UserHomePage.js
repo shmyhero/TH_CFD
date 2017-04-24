@@ -46,6 +46,9 @@ var tabNames = ['主页', '持仓', '平仓']
 
 var emptyStar = '***'
 
+var btnBgColor = ['#425a85','#425a85','#425a85','#6f3d23','#55707c','#9a820e',]
+var btnBorderColor = ['#ffffff','#ffffff','#ffffff','#c79779','#94afbe','#e9d670']
+
 // { followerCount: 5,
 //   isFollowing: false,
 //   totalPl: 689.62,
@@ -117,7 +120,7 @@ export default class UserHomePage extends Component {
 			picUrl: undefined,
 			isFollowing: false,
 			titleOpacity: 0,
-			rank: 1,
+			rank: 0,
 			rankDescription: '',
 			isFollowingStatusChanged: false,
 			isPrivate: true,
@@ -203,28 +206,34 @@ export default class UserHomePage extends Component {
 			height: 0
 		} : null;
 
+		var bgBanner = LogicData.getRankBanner(this.state.rank);
+
 		return(
-			<Image style = {[styles.topWapper,{backgroundColor:ColorConstants.TITLE_BLUE_LIVE}]} source={require('../../images/bgbanner.jpg')}>
 
-				<View style = {[styles.topOneOfThree,privateStyle]}>
-					<View style={{marginTop:32}}></View>
-    			<Text style = {{fontSize:36,backgroundColor:'transparent',color:'white'}}>{this.state.followerCount}</Text>
-					<Text style = {{fontSize:12,backgroundColor:'transparent',color:'white'}}>关注数</Text>
-    		</View>
+			<View>
+				<Image style = {[styles.topWapper,{backgroundColor:ColorConstants.TITLE_BLUE_LIVE}]} source={bgBanner}>
 
-				<View style = {[styles.topOneOfThree,]}>
+					<View style = {[styles.topOneOfThree,privateStyle]}>
 						<View style={{marginTop:32}}></View>
-						<Image style = {styles.userHeaderIcon} source={head}></Image>
-						<Image style = {styles.userHeaderIconRound} source={headRank}></Image>
-				</View>
+	    			<Text style = {{fontSize:36,backgroundColor:'transparent',color:'white'}}>{this.state.followerCount}</Text>
+						<Text style = {{fontSize:12,backgroundColor:'transparent',color:'white'}}>关注数</Text>
+	    		</View>
 
-				<View style = {[styles.topOneOfThree,privateStyle]}>
-					<View style={{marginTop:32}}></View>
-					<Text style = {{fontSize:36,backgroundColor:'transparent',color:'white'}}>{this.state.cards.length}</Text>
-					<Text style = {{fontSize:12,backgroundColor:'transparent',color:'white'}}>卡片数</Text>
-				</View>
+					<View style = {[styles.topOneOfThree,]}>
+							<View style={{marginTop:32}}></View>
+							<Image style = {styles.userHeaderIcon} source={head}></Image>
+							<Image style = {styles.userHeaderIconRound} source={headRank}></Image>
+					</View>
 
-   		</Image>
+					<View style = {[styles.topOneOfThree,privateStyle]}>
+						<View style={{marginTop:32}}></View>
+						<Text style = {{fontSize:36,backgroundColor:'transparent',color:'white'}}>{this.state.cards.length}</Text>
+						<Text style = {{fontSize:12,backgroundColor:'transparent',color:'white'}}>卡片数</Text>
+					</View>
+
+	   		</Image>
+			</View>
+
 		)
 	}
 
@@ -302,10 +311,14 @@ export default class UserHomePage extends Component {
 		if(userData.userId == this.state.id) {
 			return null
 		} else {
+
+			var borderColor = btnBorderColor[this.state.rank]
+			var bgColor = btnBgColor[this.state.rank]
+
 			return(
 				<TouchableOpacity
 						onPress={()=>this._onPressedAddFollow()}>
-					<View style={[styles.addToCareContainer,{backgroundColor:ColorConstants.TITLE_BLUE_LIVE}]}>
+					<View style={[styles.addToCareContainer,{backgroundColor:bgColor,borderColor:borderColor}]}>
 						<Text style={styles.addToCareText}>
 							{this.state.isFollowing ? '取消关注':'+关注'}
 						</Text>
@@ -363,38 +376,21 @@ export default class UserHomePage extends Component {
 	render() {
 		return(
 				<View style={styles.wapper}>
-					<View style={{position:'absolute',width:width,height:height,backgroundColor:'#425a85'}}>
-				</View>
+					{/* <View style={{position:'absolute',width:width,height:height,backgroundColor:'#425a85'}}>
+			    </View> */}
 
-				<View style={{position:'absolute',width:width,height:height}}>
-					{/* <ScrollView
-						showsHorizontalScrollIndicator={false}
-				 		onScroll={(event)=>this.handleScroll(event)}
-						scrollEventThrottle={16}> */}
-					 	{this.topWarpperRender()}
+					<View style={{position:'absolute',width:width,height:height}}>
+						 	{this.topWarpperRender()}
+							{this.renderContent()}
+					</View>
 
-						{this.renderContent()}
-						{/* {this.middleWarpperRender()}
-						<View style = {styles.separator}></View>
-						{this.bottomWarpperRender()}
-						<View style = {styles.separator}></View>
-						{this.cardWarpperRender()}
-						{this.renderEmptyBottom()} */}
-					{/* </ScrollView> */}
-				</View>
-
-
-				<View style={{opacity:this.state.titleOpacity,position:'absolute',backgroundColor:'#425a85',width:width,height:60}}>
-
-				</View>
-
-				<View style={{position:'absolute',width:width,height:60}}>
-					<NavBar title={this.state.nickname==''?this.props.userName:this.state.nickname}
-					showBackButton={true}
-					backgroundColor={'transparent'}
-					navigator={this.props.navigator}
-					rightCustomContent={() => this.renderAddCareButton()}/>
-				</View>
+					<View style={{position:'absolute',width:width,height:60}}>
+						<NavBar title={this.state.nickname==''?this.props.userName:this.state.nickname}
+						showBackButton={true}
+						backgroundColor={'transparent'}
+						navigator={this.props.navigator}
+						rightCustomContent={() => this.renderAddCareButton()}/>
+					</View>
 
 			</View>
 		);

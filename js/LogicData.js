@@ -386,6 +386,15 @@ var LogicData = {
 		}
 	},
 
+	getRankBanner:function(rank){
+		if(rank==3){return require('../images/bgbanner_cu.jpg')}
+		else if(rank == 4){return require('../images/bgbanner_ag.jpg')}
+		else if(rank == 5){return require('../images/bgbanner_gd.jpg')}
+		else{
+			return require('../images/bgbanner.jpg')
+		}
+	},
+
 	isUserSelf:function(userId){
 		// console.log("meData.userId " + userData.userId);
 		return userData.userId == userId

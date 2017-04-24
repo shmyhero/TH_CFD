@@ -144,8 +144,22 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
 
     @ReactProp(name = "data")
     public void setData(ReactChart chart, String stockInfoData) {
-        if (chart != null && stockInfoData != null && stockInfoData.length() > 0) {
+        if(mChartType!=null&&(mChartType.equals(ChartDrawerConstants.CHART_TYPE.towWeekYield)||mChartType.equals(ChartDrawerConstants.CHART_TYPE.allYield))){
+            Log.d("","stockInfoData = " + stockInfoData);
+            try{
+//                JSONObject plData = new JSONObject(stockInfoData);
+                JSONArray plDataArray = new JSONArray(stockInfoData);
+                IChartDrawer drawer = ChartDrawerBuilder.createDrawer(mChartType);
+                drawer.setTextColor(textColor);
+                drawer.setBorderColor(borderColor);
+                if(drawer != null){
+                    drawer.draw(chart, null, plDataArray);
+                    return;
+                }
+            }catch (Exception e){
 
+            }
+        }else if (chart != null && stockInfoData != null && stockInfoData.length() > 0) {
             try {
                 JSONObject stockInfoObject = new JSONObject(stockInfoData);
                 if (!stockInfoObject.has("priceData")) {
@@ -333,7 +347,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
     public void setRightAxisEnabled(ReactChart chart, boolean enabled) {
         if (chart != null) {
             chart.getAxisRight().setEnabled(enabled);
-            this.setChartPaddingRight(chart, chartOffsetLeft);
+            this.setChartPaddingRight(chart, chartOffsetRight);
         }
     }
 

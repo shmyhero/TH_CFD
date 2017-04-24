@@ -33,6 +33,7 @@ var VersionControlModule = require('../module/VersionControlModule')
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 var listRawData = [
+
 {'type':'normal','title':'用户协议', 'subtype': 'protocol'},
 {'type':'normal','title':'推送设置', 'subtype': 'pushconfig'},
 {'type':'normal','title':'账号绑定', 'subtype': 'accountbinding'},

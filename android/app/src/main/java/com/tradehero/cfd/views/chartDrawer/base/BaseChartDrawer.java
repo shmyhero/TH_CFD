@@ -1,5 +1,7 @@
 package com.tradehero.cfd.views.chartDrawer.base;
 
+import android.graphics.Color;
+
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.YAxis;
@@ -32,15 +34,21 @@ public abstract class BaseChartDrawer implements IChartDrawer {
 
     protected int borderColor = 0;
     protected int textColor = 0;
+    protected int gapLineColor = 0;
 
     @Override
     public void setBorderColor(int color) {
         borderColor = color;
+
     }
 
     @Override
     public void setTextColor(int color) {
         textColor = color;
+    }
+
+    public int getGapLineColor(){
+       return borderColor;
     }
 
     @Override
@@ -53,7 +61,7 @@ public abstract class BaseChartDrawer implements IChartDrawer {
         if(!isDataAcceptable(chartDataList)){
             return;
         }
-
+ 
         minVal = Float.MAX_VALUE;
         maxVal = Float.MIN_VALUE;
 
@@ -301,15 +309,15 @@ public abstract class BaseChartDrawer implements IChartDrawer {
         });
         chart.getAxisLeft().removeAllLimitLines();
         chart.getAxisRight().removeAllLimitLines();
-        chart.getAxisLeft().setAxisMinValue(minVal);
-        chart.getAxisLeft().setAxisMaxValue(maxVal);
+//        chart.getAxisLeft().setAxisMinValue(minVal);
+//        chart.getAxisLeft().setAxisMaxValue(maxVal);
     }
 
     protected interface OnLimitLinesPositionCalculatedHandler {
         void OnLimitLinesPositionCalculated();
     }
 
-    private void drawLimitLine(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
+    protected void drawLimitLine(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
         if (needDrawPreCloseLine()) {
             drawPreCloseLine(chart, stockInfoObject);
         }

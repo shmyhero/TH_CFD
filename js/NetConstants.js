@@ -11,7 +11,7 @@ SERVER_MAPPING[VersionConstants.SERVER_TYPE_DEVELOP] = 'http://cfd-webapi-dev.ch
 
 //const GZT_SERVER_IP = 'http://124.192.161.110:8080'
 const GZT_SERVER_IP_LIVE = 'http://219.143.253.206:2025'
-const TRADEHERO_SERVER_IP = 'http://cn.tradehero.mobi'
+const TRADEHERO_SERVER_IP = 'https://web.typhoontechnology.hk/'
 
 
 var CFD_API_SERVER = SERVER_MAPPING[VersionConstants.getCFDServerType()];
@@ -152,6 +152,19 @@ function getCFDAPI(){
     GET_TRANSFERS_LIST: CFD_API_SERVER + "/api/user/live/transfers",
     GET_DEPOSIT_SETTING: CFD_API_SERVER + "/api/common/setting/deposit",
     TIMESTAMP: CFD_API_SERVER + '/api/user/live/timestamp',//LIVE ok
+
+    GET_POSITION_CHART_PLCLOSE_LIVE:CFD_API_SERVER + "/api/user/<id>/live/position/chart/plClosed",
+    GET_POSITION_CHART_PLCLOSE_2W_LIVE:CFD_API_SERVER + "/api/user/<id>/live/position/chart/plClosed/2w",
+    GET_USER_LIVE_DETAIL:CFD_API_SERVER + "/api/user/<id>/live/detail",
+    PUT_USER_FOLLOW:CFD_API_SERVER + "/api/user/follow/<id>",//add follow
+    DEL_USER_FOLLOW:CFD_API_SERVER + "/api/user/follow/<id>",//cancel follow
+    GET_RANK_LIVE_PLCLOSED_2W:CFD_API_SERVER + "/api/rank/live/user/plClosed/2w",//2 weeks rank
+    GET_RANK_LIVE_FOLLOWING_2W:CFD_API_SERVER + "/api/user/following",//follow
+
+    SHOW_USER_DATA_API: CFD_API_SERVER + '/api/user/live/profit',
+
+    PERSONAL_PAGE_POSITION_OPEN: CFD_API_SERVER + '/api/position/live/open/<userID>',
+    PERSONAL_PAGE_POSITION_CLOSE: CFD_API_SERVER + '/api/position/live/closed/<userID>',
   }
 }
 
@@ -193,8 +206,13 @@ function getTradeHeroAPI(){
     WEBVIEW_SIGNTERMS_PAGE: TRADEHERO_SERVER_IP + '/TH_CFD_WEB/SignTerms.html',
     WEBVIEW_SIGNTERMS_PAGE_ACTUAL: TRADEHERO_SERVER_IP + '/TH_CFD_SP/SignTerms.html',
 
+<<<<<<< HEAD
     NEW_USER_INVITATION: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER + '/Invitation.html',
     NEW_USER_INVITATION_ACTUAL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/Invitation.html',
+=======
+    WEBVIEW_CARD_RULE:TRADEHERO_SERVER_IP + '/TH_CFD_SP/cardRule.html',//卡片详情
+    WEBVIEW_TRADE_LEVEL:TRADEHERO_SERVER_IP+'/TH_CFD_SP/level.html',//交易等级
+>>>>>>> mainTabTops
   }
 }
 
@@ -217,6 +235,9 @@ export let PARAMETER_CHARTTYPE_5_MINUTE = '5m'
 export let PARAMETER_CHARTTYPE_15_MINUTE = '15m'
 export let PARAMETER_CHARTTYPE_60_MINUTE = '60m'
 export let PARAMETER_CHARTTYPE_DAY = 'day'
+
+export let PARAMETER_CHARTTYPE_2WEEK_YIELD = '2WeekYield'
+export let PARAMETER_CHARTTYPE_ALL_YIELD = 'allYield'
 
 
 export function isCandleChart(type){

@@ -451,52 +451,67 @@ var StockClosedPositionPage = React.createClass({
 		var {height, width} = Dimensions.get('window');
 		var textSize = Math.round(18*width/375.0)
 		pl = pl.toFixed(2)
-		if (pl > 0) {
-			return (
-				<Text style={[styles.stockPercentText, {color: '#f19296', fontSize:textSize}]}>
-					 +{pl}
-				</Text>
-			);
-		} else if (pl < 0) {
-			return (
-				<Text style={[styles.stockPercentText, {color: '#82d2bb', fontSize:textSize}]}>
-					 {pl}
-				</Text>
-			);
 
-		} else {
-			return (
-				<Text style={[styles.stockPercentText, {color: '#c5c5c5', fontSize:textSize}]}>
-					 {pl}
-				</Text>
-			);
-		}
+
+		return (
+			<Text style={[styles.stockPercentText, {color: ColorConstants.stock_color(pl), fontSize:textSize}]}>
+				 +{pl}
+			</Text>
+		);
+
+		// if (pl > 0) {
+		// 	return (
+		// 		<Text style={[styles.stockPercentText, {color: '#f19296', fontSize:textSize}]}>
+		// 			 +{pl}
+		// 		</Text>
+		// 	);
+		// } else if (pl < 0) {
+		// 	return (
+		// 		<Text style={[styles.stockPercentText, {color: '#82d2bb', fontSize:textSize}]}>
+		// 			 {pl}
+		// 		</Text>
+		// 	);
+		//
+		// } else {
+		// 	return (
+		// 		<Text style={[styles.stockPercentText, {color: '#c5c5c5', fontSize:textSize}]}>
+		// 			 {pl}
+		// 		</Text>
+		// 	);
+		// }
 	},
 
 	renderProfitPercentage: function(percentChange) {
 		var {height, width} = Dimensions.get('window');
 		var textSize = Math.round(18*width/375.0)
 		percentChange = percentChange.toFixed(2)
-		if (percentChange > 0) {
-			return (
-				<Text style={[styles.stockPercentText, {color: '#f19296', fontSize:textSize}]}>
-					 +{percentChange} %
-				</Text>
-			);
-		} else if (percentChange < 0) {
-			return (
-				<Text style={[styles.stockPercentText, {color: '#82d2bb', fontSize:textSize}]}>
-					 {percentChange} %
-				</Text>
-			);
 
-		} else {
-			return (
-				<Text style={[styles.stockPercentText, {color: '#c5c5c5', fontSize:textSize}]}>
-					 {percentChange} %
-				</Text>
-			);
-		}
+		return (
+		<Text style={[styles.stockPercentText, {color: ColorConstants.stock_color(percentChange), fontSize:textSize}]}>
+		  			 +{percentChange} %
+		</Text>
+		)
+
+		// if (percentChange > 0) {
+		// 	return (
+		// 		<Text style={[styles.stockPercentText, {color: '#f19296', fontSize:textSize}]}>
+		// 			 +{percentChange} %
+		// 		</Text>
+		// 	);
+		// } else if (percentChange < 0) {
+		// 	return (
+		// 		<Text style={[styles.stockPercentText, {color: '#82d2bb', fontSize:textSize}]}>
+		// 			 {percentChange} %
+		// 		</Text>
+		// 	);
+		//
+		// } else {
+		// 	return (
+		// 		<Text style={[styles.stockPercentText, {color: '#c5c5c5', fontSize:textSize}]}>
+		// 			 {percentChange} %
+		// 		</Text>
+		// 	);
+		// }
 	},
 
 	renderDetailInfo: function(rowData) {

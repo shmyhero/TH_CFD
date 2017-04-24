@@ -80,6 +80,8 @@ var StorageModule = require('../module/StorageModule');
 var OpenAccountRoutes = require('./openAccount/OpenAccountRoutes');
 var DepositWithdrawFlow = require('./DepositWithdrawFlow');
 var DepositPage = require('./DepositPage');
+var RankingPage = require('./RankingPage');
+var UserHomePage = require('./UserHomePage');
 
 var TutorialPage = require('./TutorialPage');
 
@@ -137,6 +139,8 @@ export let WITHDRAW_BIND_CARD_ROUTE = 'withdrawBindCardRoute'
 export let WITHDRAW_ROUTE = 'withdrawRoute'
 export let WITHDRAW_SUBMITTED_ROUTE = 'withdrawSubmittedRoute'
 export let WITHDRAW_RESULT_ROUTE = 'withdrawFailedRoute'
+export let RANKING_PAGE_ROUTE = 'rankingPageRoute'
+export let USER_HOME_PAGE_ROUTE = 'userHomePageRoute'
 
 const NoBackSwipe ={
   ...Navigator.SceneConfigs.PushFromRight,
@@ -150,7 +154,7 @@ const glypy = glypyMapMaker({
   Camera: 'f04e',
   Stat: 'f050',
   Settings: 'f054',
-  Favorite: 'f051'
+  Ranking: 'f051'
 });
 
 const systemBlue = '#1a61dd'
@@ -181,7 +185,8 @@ var isTabbarShown = true
 export var HOME_PAGE_TAB_INDEX = 0;
 export var STOCK_LIST_PAGE_TAB_INDEX = 1;
 export var STOCK_EXCHANGE_TAB_INDEX = 2;
-export var ME_PAGE_TAB_INDEX = 3;
+export var RANKING_TAB_INDEX = 3;
+export var ME_PAGE_TAB_INDEX = 4;
 var MainPage = React.createClass({
 	getInitialState: function() {
 		return {
@@ -394,7 +399,13 @@ var MainPage = React.createClass({
 				<MePage navigator={navigationOperations}
 				/>
 			)
-		} else if(route.name === MY_INCOME_ROUTE) {
+		} else if (route.name === RANKING_PAGE_ROUTE){
+			showTabbar();
+			return (
+				<RankingPage navigator={navigationOperations} routeMapper={this.RouteMapper}
+					popToOutsidePage={route.popToOutsidePage}/>
+			)
+		}else if(route.name === MY_INCOME_ROUTE) {
 			hideTabbar();
 			return (
 				<MyIncomePage navigator={navigationOperations} />
@@ -625,6 +636,17 @@ var MainPage = React.createClass({
 				<WithdrawSubmittedPage navigator={navigationOperations} routeMapper={this.RouteMapper}
 					popToOutsidePage={route.popToOutsidePage}/>
 			)
+		}else if (route.name === USER_HOME_PAGE_ROUTE){
+			hideTabbar();
+			return (
+				<UserHomePage navigator={navigationOperations}
+					userId={route.userData.userId}
+					userName={route.userData.userName}
+          isPrivate={route.userData.isPrivate}
+					backRefresh={route.backRefresh}
+					routeMapper={this.RouteMapper}
+					popToOutsidePage={route.popToOutsidePage}/>
+			)
 		}
 
 	},
@@ -683,6 +705,12 @@ var MainPage = React.createClass({
 		this.refs["tradeBtn"].setActiveColor(ColorConstants.TITLE_BLUE);
 		this.refs["trendBtn"].setActiveColor(ColorConstants.TITLE_BLUE);
 		this.refs["meBtn"].setActiveColor(ColorConstants.TITLE_BLUE);
+
+		if(!LogicData.getAccountState()){
+			this.refs['myTabbar'].hideTab("ranking");
+		}else{
+			this.refs['myTabbar'].showTab("ranking");
+		}
 
 		console.log('refresh for Tab Icon Color ... ');
 
@@ -751,6 +779,9 @@ var MainPage = React.createClass({
 
 		var exchangeRef = this.refs['exchangeContent'].refs['wrap'].getWrappedRef()
 		exchangeRef.tabWillFocus = EventCenter.emitExchangeTabPressEvent;
+
+		var rankingRef = this.refs['rankingContent'].refs['wrap'].getWrappedRef();
+		rankingRef.tabWillFocus = EventCenter.emitRankingTabPressEvent;
 
 		var meRef = this.refs['meContent'].refs['wrap'].getWrappedRef()
 		meRef.tabWillFocus = EventCenter.emitMeTabPressEvent;
@@ -833,6 +864,12 @@ var MainPage = React.createClass({
 					this.refs[SUPER_PRIORITY_HINT].show();
 				}
 			});
+
+			if(!LogicData.getAccountState()){
+				this.refs['myTabbar'].hideTab("ranking");
+			}else{
+				this.refs['myTabbar'].showTab("ranking");
+			}
 	},
 
 	backAndroidHandler: function(){
@@ -925,6 +962,10 @@ var MainPage = React.createClass({
 				initExchangeTab = 2
 				this.refs['myTabbar'].gotoTab("trade")
 				EventCenter.emitExchangeTabPressEvent()
+			}
+			else if(url==='cfd://page/ranking') {
+				this.refs['myTabbar'].gotoTab("ranking")
+				EventCenter.emitRankingTabPressEvent()
 			}
 			else if(url==='cfd://page/me') {
 				this.refs['myTabbar'].gotoTab("me")
@@ -1075,60 +1116,77 @@ var MainPage = React.createClass({
 		}
 	},
 
+	renderTabbar: function(){
+		return (
+			<Tabbar ref="myTabbar" barColor='#f7f7f7' style={{alignItems: 'stretch'}}>
+				<Tab name="home">
+						<Icon ref={"homepageBtn"} label="首页"
+							type={glypy.Home}
+							from={'myhero'}
+							onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue}
+							onInactiveColor={iconGrey}/>
+						<RawContent ref="homeContent">
+							<Navigator
+					style={styles.container}
+					initialRoute={{name: HOME_PAGE_ROUTE,
+									showTabbar: this.showTabbar,
+									hideTabbar: this.hideTabbar,
+									showProgress: this.showProgress,
+									hideProgress: this.hideProgress}}
+					configureScene={() => Navigator.SceneConfigs.PushFromRight}
+					renderScene={this.RouteMapper} />
+						</RawContent>
+				</Tab>
+				<Tab name="trend">
+						<Icon ref={"trendBtn"} label="行情" type={glypy.Camera} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
+						<RawContent style={{width: 100}} ref="stockContent">
+							<Navigator
+					style={styles.container}
+					initialRoute={{name: STOCK_LIST_VIEW_PAGER_ROUTE}}
+					configureScene={() => Navigator.SceneConfigs.PushFromRight}
+					renderScene={this.RouteMapper} />
+						</RawContent>
+				</Tab>
+				<Tab name="trade">
+						<Icon ref={"tradeBtn"} label="仓位" type={glypy.Stat} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
+					<RawContent ref="exchangeContent">
+							<Navigator
+					style={styles.container}
+					initialRoute={{name: STOCK_EXCHANGE_ROUTE}}
+					configureScene={() => Navigator.SceneConfigs.PushFromRight}
+					renderScene={this.RouteMapper} />
+						</RawContent>
+				</Tab>
+				<Tab name="ranking">
+						<Icon ref={"rankingBtn"} label="达人榜" type={glypy.Ranking} from={'myhero'} onActiveColor={systemBuleActual} onInactiveColor={iconGrey}/>
+						<RawContent ref="rankingContent">
+				<Navigator
+					style={styles.container}
+					initialRoute={{name: RANKING_PAGE_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
+					configureScene={() => Navigator.SceneConfigs.PushFromRight}
+					renderScene={this.RouteMapper} />
+						</RawContent>
+				</Tab>
+				<Tab name="me">
+						<Icon ref={"meBtn"} label="我的" type={glypy.Settings} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
+						<RawContent ref="meContent">
+				<Navigator
+					style={styles.container}
+					initialRoute={{name: ME_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
+					configureScene={() => Navigator.SceneConfigs.PushFromRight}
+					renderScene={this.RouteMapper} />
+						</RawContent>
+				</Tab>
+
+			</Tabbar>
+		);
+	},
+
 	render: function() {
 	    return (
 	    	<View style={styles.container}>
 					{this.renderShareView()}
-		      	<Tabbar ref="myTabbar" barColor='#f7f7f7' style={{alignItems: 'stretch'}}>
-			        <Tab name="home">
-									<Icon ref={"homepageBtn"} label="首页"
-										type={glypy.Home}
-										from={'myhero'}
-										onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue}
-										onInactiveColor={iconGrey}/>
-			          	<RawContent ref="homeContent">
-		            		<Navigator
-								style={styles.container}
-								initialRoute={{name: HOME_PAGE_ROUTE,
-												showTabbar: this.showTabbar,
-												hideTabbar: this.hideTabbar,
-												showProgress: this.showProgress,
-												hideProgress: this.hideProgress}}
-								configureScene={this._configureScene}
-								renderScene={this.RouteMapper} />
-			          	</RawContent>
-			        </Tab>
-			        <Tab name="trend">
-			          	<Icon ref={"trendBtn"} label="行情" type={glypy.Camera} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
-			          	<RawContent style={{width: 100}} ref="stockContent">
-		            		<Navigator
-								style={styles.container}
-								initialRoute={{name: STOCK_LIST_VIEW_PAGER_ROUTE}}
-								configureScene={this._configureScene}
-								renderScene={this.RouteMapper} />
-			          	</RawContent>
-			        </Tab>
-			        <Tab name="trade">
-			          	<Icon ref={"tradeBtn"} label="仓位" type={glypy.Stat} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
-			        	<RawContent ref="exchangeContent">
-			            	<Navigator
-								style={styles.container}
-								initialRoute={{name: STOCK_EXCHANGE_ROUTE}}
-								configureScene={this._configureScene}
-								renderScene={this.RouteMapper} />
-			          	</RawContent>
-			        </Tab>
-			        <Tab name="me">
-			          	<Icon ref={"meBtn"} label="我的" type={glypy.Settings} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
-			          	<RawContent ref="meContent">
-							<Navigator
-								style={styles.container}
-								initialRoute={{name: ME_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
-								configureScene={this._configureScene}
-								renderScene={this.RouteMapper} />
-			          	</RawContent>
-		        	</Tab>
-		      	</Tabbar>
+					{this.renderTabbar()}
 					<LoadingIndicator ref='progressBar'/>
 					{this.state.showTutorial ? <TutorialPage type={this.state.tutorialType} hideTutorial={this.hideTutorial}/> : null }
 					{this.renderRegisterSuccessPage()}

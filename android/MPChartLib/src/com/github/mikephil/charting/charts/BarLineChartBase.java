@@ -377,8 +377,8 @@ public abstract class BarLineChartBase<T extends BarLineScatterCandleBubbleData<
         }
 
         if (rightRange == 0f) {
-            maxRight = maxRight + 1f;
-            minRight = minRight - 1f;
+            maxRight = maxRight + 100f;
+            minRight = minRight - 100f;
         }
 
         float topSpaceLeft = leftRange / 100f * mAxisLeft.getSpaceTop();

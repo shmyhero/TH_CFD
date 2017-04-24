@@ -27,6 +27,7 @@ var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 var listRawData = [
 {'type':'normal', 'title':'系统平仓提示', 'subtype': 'closepositionpush'},
+{'type':'normal', 'title':'公布我的详细交易数据', 'subtype': 'showPersonalData'},
 {'type':'text', 'title':'虽然全力以赴传递通知，却也不能保证。', 'subtype': 'hint'}
 ]
 
@@ -52,6 +53,7 @@ var MePushConfigPage = React.createClass({
 		return {
 			dataSource: ds.cloneWithRows(listRawData),
 			autoCloseAlertIsOn: true,
+			showPersonalData: true,
 		};
 	},
 
@@ -91,10 +93,43 @@ var MePushConfigPage = React.createClass({
 				},
 				function(responseJson) {
 					var autoCloseAlert = LogicData.getAccountState() ? responseJson.autoCloseAlert_Live : responseJson.autoCloseAlert;
+					var showPersonalData = responseJson.showData;
 					this.setState({
 						autoCloseAlertIsOn: autoCloseAlert,
+						showPersonalData: showPersonalData,
 						dataSource: ds.cloneWithRows(listRawData),
 					});
+
+
+				}.bind(this),
+				function(result) {
+					Alert.alert('提示', result.errorMessage);
+				}
+			)
+		}
+	},
+
+	changeShowPersonalDataSetting: function(value){
+		var userData = LogicData.getUserData()
+		var notLogin = Object.keys(userData).length === 0
+		if (notLogin) {
+		}else{
+			var url = NetConstants.CFD_API.SHOW_USER_DATA_API
+
+			NetworkModule.fetchTHUrl(
+				url,
+				{
+					method: 'POST',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						'Content-Type': 'application/json; charset=utf-8',
+					},
+					body: JSON.stringify({
+						showData: value,
+					}),
+				},
+				function(responseJson) {
+					//Do nothing?
 				}.bind(this),
 				function(result) {
 					Alert.alert('提示', result.errorMessage);
@@ -137,6 +172,13 @@ var MePushConfigPage = React.createClass({
 			})
 
 			this.changeAutoCloseAlertSetting(value);
+		}else if(rowData.subtype === 'showPersonalData'){
+			this.setState({
+				dataSource: ds.cloneWithRows(listRawData),
+				showPersonalData: value
+			})
+
+			this.changeShowPersonalDataSetting(value);
 		}
 	},
 
@@ -154,7 +196,15 @@ var MePushConfigPage = React.createClass({
 
 	renderRow: function(rowData, sectionID, rowID) {
 		if (rowData.type === 'normal') {
-			var switchIsOn = this.state.autoCloseAlertIsOn;
+			var switchIsOn = false;
+			if(rowData.subtype === 'closepositionpush'){
+				switchIsOn = this.state.autoCloseAlertIsOn;
+			} else if(rowData.subtype === 'showPersonalData') {
+				if(!LogicData.getAccountState()){
+					return null;
+				}
+				switchIsOn = this.state.showPersonalData;
+			}
 			return(
 				<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
 					<Text style={styles.title}>{rowData.title}</Text>
@@ -232,7 +282,7 @@ var styles = StyleSheet.create({
 		height: 40,
 	},
 	title: {
-		flex: 1,
+		flex: 2,
 		fontSize: 17,
 		color: '#303030',
 	},

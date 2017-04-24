@@ -376,6 +376,21 @@ var LogicData = {
 	getCurrentPageTag: function(){
 		return currentPageTag;
 	},
+
+	getRankHead:function(rank){
+		if(rank==3){return require('../images/head_cu.png')}
+		else if(rank == 4){return require('../images/head_ag.png')}
+		else if(rank == 5){return require('../images/head_gd.png')}
+		else{
+			return undefined
+		}
+	},
+
+	isUserSelf:function(userId){
+		// console.log("meData.userId " + userData.userId);
+		return userData.userId == userId
+	},
+
 };
 
 module.exports = LogicData;

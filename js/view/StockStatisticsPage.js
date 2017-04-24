@@ -22,6 +22,8 @@ var WebSocketModule = require('../module/WebSocketModule');
 var MainPage = require('./MainPage');
 var AppStateModule = require('../module/AppStateModule');
 var {EventCenter, EventConst} = require('../EventCenter');
+var StatisticBarBlock = require('./personalPage/StatisticBarBlock');
+var TradeStyleBlock = require('./personalPage/TradeStyleBlock')
 
 var {height, width} = Dimensions.get('window');
 
@@ -30,18 +32,15 @@ var accountStateChangedSubscription = null;
 var accountLogoutEventSubscription = null;
 var layoutSizeChangedSubscription = null
 
+const STATISTIC_BAR_BLOCK = "statisticBarBlock";
+const TRADE_STYLE_BLOCK = "tradeStyleBlock";
+
 var StockStatisticsPage = React.createClass({
 	mixins: [TimerMixin],
-
-	lastStatisticsInfo: null,
 
 	getInitialState: function() {
 		var balanceData = LogicData.getBalanceData()
 		return {
-			statisticsBarInfo: [],
-			statisticsSumInfo: [],
-			maxBarSize: 1,
-			barAnimPlayed: false,
 			balanceData: balanceData,
 			isClear: false,
 			height: UIConstants.getVisibleHeight(),
@@ -50,10 +49,6 @@ var StockStatisticsPage = React.createClass({
 
 	clearViews:function(){
 		this.setState({
-			statisticsBarInfo: [],
-			statisticsSumInfo: [],
-			maxBarSize: 1,
-			barAnimPlayed: false,
 			balanceData: null,
 			isClear:true,
 		})
@@ -61,9 +56,13 @@ var StockStatisticsPage = React.createClass({
 
 	tabPressed: function(index) {
 		var balanceData = LogicData.getBalanceData()
-		this.setState({balanceData: balanceData,},
+		this.setState({
+				balanceData: balanceData,
+				isClear:false,
+			},
 			()=>{
 				NetworkModule.loadUserBalance(true, (responseJson)=>{this.setState({balanceData: responseJson,})});
+				this.refreshData();
 			}
 		);
 	},
@@ -110,7 +109,8 @@ var StockStatisticsPage = React.createClass({
 	},
 
 	refreshData: function(){
-		if(LogicData.getTabIndex() == 2){
+		console.log("refreshData")
+		if(LogicData.getTabIndex() == MainPage.STOCK_EXCHANGE_TAB_INDEX){
 			var routes = this.props.navigator.getCurrentRoutes();
 			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE){
 				var currentPageTag = LogicData.getCurrentPageTag();
@@ -120,141 +120,11 @@ var StockStatisticsPage = React.createClass({
 					if(!notLogin){
 						NetworkModule.loadUserBalance(true, (responseJson)=>{
 							this.setState({balanceData: responseJson,});
-							this.playStartAnim();
 						})
+
+						this.refs[STATISTIC_BAR_BLOCK].refresh();
+						//this.refs[TRADE_STYLE_BLOCK].refresh();
 					}
-				}
-			}
-		}
-	},
-
-	playStartAnim: function() {
-		this.setState({
-			statisticsBarInfo: [],
-			statisticsSumInfo: [],
-			isClear:false,
-		})
-
-		this.lastStatisticsInfo = null;
-
-		var userData = LogicData.getUserData()
-
-		var url = NetConstants.CFD_API.GET_USER_STATISTICS_API
-		if(LogicData.getAccountState()){
-			url = NetConstants.CFD_API.GET_USER_STATISTICS_LIVE_API
-			console.log('live', url );
-		}
-
-		NetworkModule.fetchTHUrl(
-			url,
-			{
-				method: 'GET',
-				headers: {
-					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-				},
-				cache: 'offline',
-			},
-			(responseJson) => {
-				this.playStatisticsAnim(responseJson);
-			},
-			(result) => {
-				if(NetConstants.AUTH_ERROR === result.errorMessage){
-
-				}else{
-					// Alert.alert('', errorMessage);
-				}
-			}
-		)
-	},
-
-	playStatisticsAnim: function(statisticsInfo) {
-		var hasDifference = false;
-		var initializeAnimation = false;
-		if(this.lastStatisticsInfo != null){
-			for(var i = 0; i < statisticsInfo.length; i++){
-				if(this.lastStatisticsInfo[i].pl != statisticsInfo[i].pl){
-					hasDifference = true;
-					break;
-				}
-			}
-		}else{
-			//Start the anim from 0.
-			initializeAnimation = true;
-			hasDifference = true;
-		}
-
-		if(hasDifference){
-
-			var originalStatisticsInfo = []
-			$.extend(true, originalStatisticsInfo, statisticsInfo)	// deep copy
-
-			this.lastStatisticsInfo = originalStatisticsInfo;
-
-			var maxBarSize = 1
-			for (var i = 0; i < statisticsInfo.length; i++) {
-				var barContent = statisticsInfo[i]
-				if (Math.abs(maxBarSize) < Math.abs(barContent.pl)) {
-					maxBarSize = Math.abs(barContent.pl)
-				}
-				barContent.displayPL = barContent.pl;
-				barContent.pl = 0;
-				//For display...
-			}
-
-			if(initializeAnimation){
-				this.setState({
-					maxBarSize: maxBarSize,
-					statisticsBarInfo: statisticsInfo,
-					statisticsSumInfo: originalStatisticsInfo,
-					barAnimPlayed: true,
-				}, ()=>{
-						this.runAnimationIfNecessary(originalStatisticsInfo);
-					});
-				}else{
-					this.runAnimationIfNecessary(originalStatisticsInfo);
-				}
-			}
-	},
-
-	runAnimationIfNecessary: function(originalStatisticsInfo){
-		this.setTimeout(() => {
-				//We need to check if the layout will be changed.
-				//If the profit bar won't change, we will not apply the LayoutAnimation.configureNext,
-				//because it will affect the tab switch and display a wrong animation.
-				if(LogicData.getTabIndex() == 2){
-					var hasData = this.state.balanceData!==null;
-
-					var sumInvest = 0
-					for (var i = 0; i < this.state.statisticsSumInfo.length; i++) {
-						var barContent = this.state.statisticsSumInfo[i]
-						sumInvest += barContent.invest
-					}
-					if (hasData && sumInvest > 0) {
-						var needAnimation = false;
-						for(var i = 0; i < this.state.statisticsBarInfo.length; i++) {
-							if(originalStatisticsInfo[i]
-								&& this.state.statisticsBarInfo[i].pl !== originalStatisticsInfo[i].pl){
-									var oldInvestBarFlex = Math.floor(this.state.statisticsBarInfo[i].invest / this.state.maxBarSize * 100)
-									var oldProfitBarFlex = Math.floor(this.state.statisticsBarInfo[i].pl / this.state.maxBarSize * 100)
-									var newInvestBarFlex = Math.floor(originalStatisticsInfo[i].invest / this.state.maxBarSize * 100)
-									var newProfitBarFlex = Math.floor(originalStatisticsInfo[i].pl / this.state.maxBarSize * 100)
-
-									if(oldInvestBarFlex != newInvestBarFlex || oldProfitBarFlex != newProfitBarFlex){
-										needAnimation = true;
-										break;
-									}
-							}
-						}
-
-						if(needAnimation){
-							console.log("anim started");
-							LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-						}
-					}
-					this.setState({
-						statisticsBarInfo: originalStatisticsInfo,
-						barAnimPlayed: true,
-					});
 				}
 			},
 			1000
@@ -283,12 +153,7 @@ var StockStatisticsPage = React.createClass({
 					</View>
 				)
 			}
-		)
-		return (
-			<View style={[styles.barContainer, {flexDirection:'column'}]}>
-				{bars}
-			</View>
-		);
+		}
 	},
 
 	renderHeader: function() {
@@ -468,6 +333,7 @@ var StockStatisticsPage = React.createClass({
 	},
 
 	render: function() {
+		var userData = LogicData.getUserData()
 		return (
 			<View style={[styles.wrapper, {width:width,
 				height: this.state.height
@@ -475,10 +341,14 @@ var StockStatisticsPage = React.createClass({
 						//- UIConstants.SCROLL_TAB_HEIGHT
 						- UIConstants.LIST_HEADER_BAR_HEIGHT
 						- UIConstants.TAB_BAR_HEIGHT,}]}>
-				{this.renderOrClear()}
+				{/* {this.renderOrClear()} */}
 				{this.renderHeader()}
-				{this.renderBody()}
-				{this.renderChart()}
+				<StatisticBarBlock userId={userData.userId}
+					style={{marginTop: 10}}
+					ref={STATISTIC_BAR_BLOCK}/>
+				{/* <TradeStyleBlock userId={userData.userId}
+					style={{marginTop: 10}}
+					ref={TRADE_STYLE_BLOCK}/> */}
 			</View>
 		);
 	},
@@ -660,7 +530,7 @@ var styles = StyleSheet.create({
 	loadingText: {
 		fontSize: 13,
 		color: '#9f9f9f'
-	},
+	}, 
 });
 
 

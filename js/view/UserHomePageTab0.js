@@ -29,12 +29,14 @@ const TRADE_STYLE_BLOCK = "tradeStyleBlock";
 export default class UserHomePageTab0 extends Component{
 
   static propTypes = {
+    isStatisticPage: PropTypes.bool,
     userId: PropTypes.number.isRequired,
     userName: PropTypes.string.isRequired,
     backRefresh: React.PropTypes.func,
   }
 
   static defaultProps = {
+    isStatisticPage: false,
     userId: '',
     userName: ''
   }
@@ -147,6 +149,10 @@ export default class UserHomePageTab0 extends Component{
 
   tabPressed(index) {
     console.log("tabPressed==>"+index);
+    this.refreshData();
+  }
+
+  refresh(){
     this.refreshData();
   }
 
@@ -453,7 +459,7 @@ export default class UserHomePageTab0 extends Component{
 	render(){
 		return(
       <ScrollView showsHorizontalScrollIndicator={false}>
-        <View style = {styles.separator}></View>
+        {this.state.isStatisticPage?(<View style = {styles.separator}></View>):null}        
         {this.middleWarpperRender()}
         <View style = {styles.separator}></View>
         {this.bottomWarpperRender()}

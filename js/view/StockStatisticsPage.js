@@ -10,6 +10,7 @@ import {
 	Dimensions,
 	Platform,
 	Alert,
+	ScrollView,
 } from 'react-native';
 
 var TimerMixin = require('react-timer-mixin');
@@ -24,6 +25,7 @@ var AppStateModule = require('../module/AppStateModule');
 var {EventCenter, EventConst} = require('../EventCenter');
 var StatisticBarBlock = require('./personalPage/StatisticBarBlock');
 var TradeStyleBlock = require('./personalPage/TradeStyleBlock')
+var UserHomePageTab0 =require('./UserHomePageTab0');
 
 var {height, width} = Dimensions.get('window');
 
@@ -162,8 +164,32 @@ var StockStatisticsPage = React.createClass({
 		}
 	},
 
-	render: function() {
+	renderBody: function(){
 		var userData = LogicData.getUserData()
+		if(LogicData.getAccountState()){
+			return (
+				<ScrollView style={{flex:1}}>
+					{this.renderHeader()}
+					<UserHomePageTab0 userId={userData.userId}
+						isStatisticPage={true}
+						ref={STATISTIC_BAR_BLOCK}/>
+				</ScrollView>
+			);
+		}else{
+			return (
+				<View style={{flex:1}}>
+					{this.renderHeader()}
+					<StatisticBarBlock userId={userData.userId}
+						style={{marginTop: 10}}
+						ref={STATISTIC_BAR_BLOCK}/>
+				</View>
+
+			);
+		}
+	},
+
+	render: function() {
+
 		return (
 			<View style={[styles.wrapper, {width:width,
 				height: this.state.height
@@ -172,10 +198,8 @@ var StockStatisticsPage = React.createClass({
 						- UIConstants.LIST_HEADER_BAR_HEIGHT
 						- UIConstants.TAB_BAR_HEIGHT,}]}>
 				{/* {this.renderOrClear()} */}
-				{this.renderHeader()}
-				<StatisticBarBlock userId={userData.userId}
-					style={{marginTop: 10}}
-					ref={STATISTIC_BAR_BLOCK}/>
+
+				{this.renderBody()}
 				{/* <TradeStyleBlock userId={userData.userId}
 					style={{marginTop: 10}}
 					ref={TRADE_STYLE_BLOCK}/> */}
@@ -198,6 +222,7 @@ var styles = StyleSheet.create({
 		backgroundColor: '#1b65e1',
 		alignItems: 'center',
 		justifyContent: 'space-around',
+		minHeight: 200,
 	},
 	headerText1: {
 		fontSize: 17,

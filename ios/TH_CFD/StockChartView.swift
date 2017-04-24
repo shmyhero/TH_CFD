@@ -117,7 +117,6 @@ class StockChartView: UIView {
             self.setNeedsDisplay()
         }
         else {
-//            print ("setup chart:", self.bounds, self.frame)
             if CandleChartDataSource.isValidData(data!) {
                 dataSource = CandleChartDataSource.init(json:data!, rect: self.bounds)
             }
@@ -137,6 +136,7 @@ class StockChartView: UIView {
         }
     }
 	
+    
 	override func didMoveToWindow() {
 		if dataSource?._rect == CGRectZero {
 			// sometimes when the data is updated, the view do not finished inited.
@@ -155,9 +155,9 @@ class StockChartView: UIView {
 			render = BaseRender.init(view: self)
 			render!.render(context)
 		} else {
+            dataSource!.calculateData(rect)
 			if dataSource!.isKindOfClass(CandleChartDataSource) {
 				render = CandleChartRender.init(view: self)
-
 				render!.render(context)
 			}
             else if dataSource!.isKindOfClass(YieldLineChartDataSource) {
@@ -166,7 +166,6 @@ class StockChartView: UIView {
             }
 			else {
 				render = LineChartRender.init(view: self)
-
 				render!.render(context)
 			}
 		}

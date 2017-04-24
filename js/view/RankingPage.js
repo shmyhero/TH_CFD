@@ -108,13 +108,14 @@ export default class RankingPage extends Component{
   }
 
   getRankList(){
-    console.log("getRankList");
+    console.log("getRankList ==> " + LogicData.getAccountState());
+    if(!LogicData.getAccountState())return;
+
     if(!this.state.contentLoaded){
 			this.setState({
 				isRefreshing: true,
 			});
 		}
-
     var url = NetConstants.CFD_API.GET_RANK_LIVE_PLCLOSED_2W
     if(this.state.rankType == RANKING_TYPE_1){
       url = NetConstants.CFD_API.GET_RANK_LIVE_FOLLOWING_2W

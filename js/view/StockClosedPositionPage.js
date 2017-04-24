@@ -451,11 +451,11 @@ var StockClosedPositionPage = React.createClass({
 		var {height, width} = Dimensions.get('window');
 		var textSize = Math.round(18*width/375.0)
 		pl = pl.toFixed(2)
-
+		var add = (pl > 0)?'+':'';
 
 		return (
 			<Text style={[styles.stockPercentText, {color: ColorConstants.stock_color(pl), fontSize:textSize}]}>
-				 +{pl}
+				 {add}{pl}
 			</Text>
 		);
 
@@ -485,10 +485,10 @@ var StockClosedPositionPage = React.createClass({
 		var {height, width} = Dimensions.get('window');
 		var textSize = Math.round(18*width/375.0)
 		percentChange = percentChange.toFixed(2)
-
+		var add = (percentChange > 0)?'+':'';
 		return (
 		<Text style={[styles.stockPercentText, {color: ColorConstants.stock_color(percentChange), fontSize:textSize}]}>
-		  			 +{percentChange} %
+		  			 {add}{percentChange} %
 		</Text>
 		)
 

@@ -924,7 +924,7 @@ var StockDetailPage = React.createClass({
 		return(
 			<View style={{flex:1, justifyContent:'flex-end', alignItems: 'center', marginRight:20,flexDirection:'row',}}>
 				<TouchableOpacity onPress={()=>this.changeChartViewType(CHARTVIEWTYPE_LINE)}>
-					<Image  style={{width:35,height:26,marginRight:15,alignSelf:'center'}} source={imageType0}></Image>
+					<Image  style={{width:35,height:35,marginRight:15,alignSelf:'center'}} source={imageType0}></Image>
 				</TouchableOpacity>
 				<TouchableOpacity onPress={()=>this.changeChartViewType(CHARTVIEWTYPE_CANDLE)}>
 					<Image  style={{width:35,height:26,marginRight:10,alignSelf:'center'}} source={imageType1}></Image>

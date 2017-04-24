@@ -113,7 +113,7 @@ export default class UserHomePageTab0 extends Component{
           orderCount: responseJson.orderCount,
           avgHoldPeriod: responseJson.avgHoldPeriod,
           avgInvestUSD: responseJson.avgInvestUSD,
-				}, () => {					
+				}, () => {
           this.refreshData();
 				})
 				this.loadPlCloseData()
@@ -361,7 +361,7 @@ export default class UserHomePageTab0 extends Component{
 							{cardItems}
 						</ScrollView>
 					</View>
-          {/* {this.renderEmptyBottom()} */}
+
 				</View>
 			)
 		} else {
@@ -417,7 +417,7 @@ export default class UserHomePageTab0 extends Component{
 			)
 		} else {
 			return(
-				<View style={{height:120,width:width}}></View>
+				<View style={{height:280,width:width}}></View>
 			)
 		}
 	}
@@ -466,6 +466,7 @@ export default class UserHomePageTab0 extends Component{
         <View style = {styles.separator}></View>
         <View style = {styles.separator}></View>
         {this.cardWarpperRender()}
+        {this.renderEmptyBottom()}
 			</ScrollView>
 		);
 	}

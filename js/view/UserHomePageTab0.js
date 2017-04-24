@@ -413,7 +413,7 @@ export default class UserHomePageTab0 extends Component{
   renderEmptyBottom() {
 		if(Platform.OS === "ios") {
       return(
-				<View style={{height:100,width:width}}></View>
+				<View style={{height:0,width:width}}></View>
 			)
 		} else {
 			return(

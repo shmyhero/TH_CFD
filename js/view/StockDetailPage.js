@@ -773,7 +773,7 @@ var StockDetailPage = React.createClass({
 					textColor = LogicData.getAccountState() ? "#94a9cf" : "#0740a7"
 					backgroundColor = LogicData.getAccountState() ? "#3f5680" : "#1962dd"
 					borderColor = LogicData.getAccountState() ? "#374e78" : "#0d4ab6";
-					lineChartGradient = LogicData.getAccountState() ? ['#5f7baa','#3f5680'] : ['#387ae7', '#1962dd'];
+					lineChartGradient = LogicData.getAccountState() ? ['#3f5680', '#5f7baa'] : ['#387ae7', '#1962dd'];
 				}
 
 				console.log("renderChart width = " + width);

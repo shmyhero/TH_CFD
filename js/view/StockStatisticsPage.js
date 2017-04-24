@@ -143,8 +143,13 @@ var StockStatisticsPage = React.createClass({
 			}
 		}
 
+		var additionalStyle = {backgroundColor:ColorConstants.title_blue()};
+		if(LogicData.getAccountState()){
+			additionalStyle.minHeight = 200;
+		}
+
 		return (
-			<View style={[styles.header,{backgroundColor:ColorConstants.title_blue()}]}>
+			<View style={[styles.header, additionalStyle]}>
 				<View style={styles.empty}/>
 				<Text style={styles.headerText1}>总资产(美元)</Text>
 				<Text style={styles.headerText2}>{total}</Text>
@@ -180,7 +185,6 @@ var StockStatisticsPage = React.createClass({
 				<View style={{flex:1}}>
 					{this.renderHeader()}
 					<StatisticBarBlock userId={userData.userId}
-						style={{marginTop: 10}}
 						ref={STATISTIC_BAR_BLOCK}/>
 				</View>
 
@@ -222,7 +226,6 @@ var styles = StyleSheet.create({
 		backgroundColor: '#1b65e1',
 		alignItems: 'center',
 		justifyContent: 'space-around',
-		minHeight: 200,
 	},
 	headerText1: {
 		fontSize: 17,

@@ -196,18 +196,19 @@ export default class StatisticBarBlock extends Component {
       return null;
     }
 		var sumPl = '--'
+		var sumInvest = '--'
 		var avgPlRate = '--'
 		if (this.state.statisticsSumInfo.length > 0) {
+      invest = 0;
 			sumPl = 0
-			var sumInvest = 0
 			for (var i = 0; i < this.state.statisticsSumInfo.length; i++) {
 				var barContent = this.state.statisticsSumInfo[i]
 				sumPl += barContent.pl
-				sumInvest += barContent.invest
+				invest += barContent.invest
 			}
 
-			avgPlRate = (sumInvest > 0) ? sumPl / sumInvest * 100: 0
-      sumInvest = sumInvest.toFixed(2)
+			avgPlRate = (invest > 0) ? sumPl / invest * 100: 0
+      sumInvest = invest.toFixed(2)
 			sumPl = sumPl.toFixed(2)
 			avgPlRate = avgPlRate.toFixed(2)
 		}
@@ -296,7 +297,7 @@ export default class StatisticBarBlock extends Component {
 		return (
 			<View style={styles.chartHeader}>
 				<View style={styles.centerView2}>
-					<Text style={styles.chartHeaderText1}>累计收益：
+					<Text style={styles.chartHeaderText1}>{ (LogicData.getAccountState() ? "累计收益" : "盈亏分布") + "："}
             <Text style={proFitStyle}>{sumPl}</Text>
           </Text>
 				</View>

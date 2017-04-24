@@ -459,7 +459,7 @@ export default class UserHomePageTab0 extends Component{
 	render(){
 		return(
       <ScrollView showsHorizontalScrollIndicator={false}>
-        {this.state.isStatisticPage?(<View style = {styles.separator}></View>):null}        
+        {this.state.isStatisticPage?null:(<View style = {styles.separator}></View>)}
         {this.middleWarpperRender()}
         <View style = {styles.separator}></View>
         {this.bottomWarpperRender()}
@@ -471,8 +471,6 @@ export default class UserHomePageTab0 extends Component{
 					ref={TRADE_STYLE_BLOCK}/>
         <View style = {styles.separator}></View>
         <View style = {styles.separator}></View>
-        {this.cardWarpperRender()}
-        {this.renderEmptyBottom()}
 			</ScrollView>
 		);
 	}

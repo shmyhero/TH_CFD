@@ -75,7 +75,7 @@ class YieldLineChartDataSource: BaseDataSource, YieldLineChartDataProvider {
         return _lineData.isEmpty
     }
     
-    override func calculateData() {
+    override func calculateData(rect:CGRect) {
         if _chartType == "undefined" {
             return
         }

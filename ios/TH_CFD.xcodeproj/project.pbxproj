@@ -192,6 +192,8 @@
 		3DC7D1CB1D90DBE2001B2406 /* BaseRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DC7D1CA1D90DBE2001B2406 /* BaseRender.swift */; };
 		3DCE765D1D743375008BA33D /* EditOwnStocksViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DCE765C1D743375008BA33D /* EditOwnStocksViewManager.m */; };
 		3DD744771CCE18040021304F /* myhero.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3DD744761CCE18040021304F /* myhero.ttf */; };
+		3DD7EDD51EAD995E0070CF97 /* YieldLineChartDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD7EDD31EAD995E0070CF97 /* YieldLineChartDataSource.swift */; };
+		3DD7EDD61EAD995E0070CF97 /* YieldLineChartRender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD7EDD41EAD995E0070CF97 /* YieldLineChartRender.swift */; };
 		3DDB311C1D868476009E1D01 /* coin.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3DDB311B1D868476009E1D01 /* coin.mp3 */; };
 		3DE8F4581D75236C00B07DFC /* EditOwnStocksView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DE8F4571D75236C00B07DFC /* EditOwnStocksView.m */; };
 		3DE90F481D505035004D264A /* RCTTalkingData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DE90F471D505035004D264A /* RCTTalkingData.m */; };
@@ -746,6 +748,8 @@
 		3DCE765B1D743375008BA33D /* EditOwnStocksViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditOwnStocksViewManager.h; path = TH_CFD/EditOwnStocksViewManager.h; sourceTree = "<group>"; };
 		3DCE765C1D743375008BA33D /* EditOwnStocksViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditOwnStocksViewManager.m; path = TH_CFD/EditOwnStocksViewManager.m; sourceTree = "<group>"; };
 		3DD744761CCE18040021304F /* myhero.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = myhero.ttf; sourceTree = "<group>"; };
+		3DD7EDD31EAD995E0070CF97 /* YieldLineChartDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YieldLineChartDataSource.swift; sourceTree = "<group>"; };
+		3DD7EDD41EAD995E0070CF97 /* YieldLineChartRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YieldLineChartRender.swift; sourceTree = "<group>"; };
 		3DDB311B1D868476009E1D01 /* coin.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = coin.mp3; sourceTree = "<group>"; };
 		3DE8F4561D75236C00B07DFC /* EditOwnStocksView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditOwnStocksView.h; path = TH_CFD/EditOwnStocksView.h; sourceTree = "<group>"; };
 		3DE8F4571D75236C00B07DFC /* EditOwnStocksView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditOwnStocksView.m; path = TH_CFD/EditOwnStocksView.m; sourceTree = "<group>"; };
@@ -1707,6 +1711,8 @@
 		3DECB95C1D8FF23900A67CB6 /* charts */ = {
 			isa = PBXGroup;
 			children = (
+				3DD7EDD31EAD995E0070CF97 /* YieldLineChartDataSource.swift */,
+				3DD7EDD41EAD995E0070CF97 /* YieldLineChartRender.swift */,
 				3D5080C11D9122EE00914327 /* ColorSet.swift */,
 				3DC7D1CA1D90DBE2001B2406 /* BaseRender.swift */,
 				3D5080D41D9123E400914327 /* LineChartRender.swift */,
@@ -2361,6 +2367,7 @@
 				3D15A9AC1E278C5600B32C0E /* MQTextMessageCell.m in Sources */,
 				3D15A9DC1E278C5600B32C0E /* MQRecordView.m in Sources */,
 				3D15A9C31E278C5600B32C0E /* MEIQIA_FBLCDFontView.m in Sources */,
+				3DD7EDD51EAD995E0070CF97 /* YieldLineChartDataSource.swift in Sources */,
 				3D15A9A01E278C5600B32C0E /* MQBotAnswerCell.m in Sources */,
 				3D4EA75E1D865636009D2C45 /* SoundManager.swift in Sources */,
 				3D15A9BE1E278C5600B32C0E /* MEIQIA_CustomIOSAlertView.m in Sources */,
@@ -2370,6 +2377,7 @@
 				3D15A9E51E278C5600B32C0E /* MQMessageFormViewStyleBlue.m in Sources */,
 				3D15A9751E278C5600B32C0E /* UIImage+MQGenerate.m in Sources */,
 				3D15A9AD1E278C5600B32C0E /* MQTipsCell.m in Sources */,
+				3DD7EDD61EAD995E0070CF97 /* YieldLineChartRender.swift in Sources */,
 				3D15A9D01E278C5600B32C0E /* wav.mm in Sources */,
 				3D47CB491C897882000EF6EF /* AppDelegate.swift in Sources */,
 				3D15A9C61E278C5600B32C0E /* MEIQIA_HPGrowingTextView.m in Sources */,

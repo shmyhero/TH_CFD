@@ -206,13 +206,10 @@ function getTradeHeroAPI(){
     WEBVIEW_SIGNTERMS_PAGE: TRADEHERO_SERVER_IP + '/TH_CFD_WEB/SignTerms.html',
     WEBVIEW_SIGNTERMS_PAGE_ACTUAL: TRADEHERO_SERVER_IP + '/TH_CFD_SP/SignTerms.html',
 
-<<<<<<< HEAD
     NEW_USER_INVITATION: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER + '/Invitation.html',
     NEW_USER_INVITATION_ACTUAL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/Invitation.html',
-=======
     WEBVIEW_CARD_RULE:TRADEHERO_SERVER_IP + '/TH_CFD_SP/cardRule.html',//卡片详情
     WEBVIEW_TRADE_LEVEL:TRADEHERO_SERVER_IP+'/TH_CFD_SP/level.html',//交易等级
->>>>>>> mainTabTops
   }
 }
 

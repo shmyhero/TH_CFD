@@ -28,6 +28,7 @@ const TRADE_STYLE_BLOCK = "tradeStyleBlock";
 
 export default class UserHomePageTab0 extends Component{
 
+
   static propTypes = {
     isStatisticPage: PropTypes.bool,
     userId: PropTypes.number.isRequired,
@@ -43,6 +44,7 @@ export default class UserHomePageTab0 extends Component{
 
 	constructor(props){
 		super(props);
+
 		this.state = {
       chartType: CHART_TYPE_2MONTH,
 			chartTypeName: NetConstants.PARAMETER_CHARTTYPE_2WEEK_YIELD,
@@ -70,8 +72,13 @@ export default class UserHomePageTab0 extends Component{
 
 
 	componentDidMount(){
+
+    // this.timer = setTimeout(
+    //   () => { this.loadUserInfo() },
+    //   500
+    // );
+
     this.loadUserInfo()
-    // this.loadPlCloseData()
 
     if(LogicData.isUserSelf(this.state.id)) {
       this.setState({
@@ -79,6 +86,12 @@ export default class UserHomePageTab0 extends Component{
       })
     }
 	}
+
+  componentWillUnmount() {
+    // 如果存在this.timer，则使用clearTimeout清空。
+    // 如果你使用多个timer，那么用多个变量，或者用个数组来保存引用，然后逐个clear
+    // this.timer && clearTimeout(this.timer);
+  }
 
   loadUserInfo() {
 		var url = NetConstants.CFD_API.GET_USER_LIVE_DETAIL;

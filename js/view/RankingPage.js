@@ -189,12 +189,12 @@ export default class RankingPage extends Component{
           <TouchableOpacity
             onPress={()=>{this._onRankTypeSelected(RANKING_TYPE_0)}}
             style = {{backgroundColor:this.state.rankType == RANKING_TYPE_0?colorBgSelected:'transparent'}}>
-            <Text style={[styles.fontHeaderType,{color:this.state.rankType == RANKING_TYPE_0?'white':colorTextUnSelected}]}>达人榜</Text>
+            <Text style={[styles.fontHeaderType,{color:this.state.rankType == RANKING_TYPE_0?'white':colorTextUnSelected}]}>达人</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={()=>{this._onRankTypeSelected(RANKING_TYPE_1)}}
             style = {{backgroundColor:this.state.rankType == RANKING_TYPE_1?colorBgSelected:'transparent'}}>
-            <Text style={[styles.fontHeaderType,{color:this.state.rankType == RANKING_TYPE_1?'white':colorTextUnSelected}]}>关注的</Text>
+            <Text style={[styles.fontHeaderType,{color:this.state.rankType == RANKING_TYPE_1?'white':colorTextUnSelected}]}>关注</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -456,7 +456,7 @@ const styles = StyleSheet.create({
     position:'absolute'
   },
   rateArea:{
-    width:100,
+    width:80,
     height:30,
     marginRight:10,
     alignItems:'flex-end',

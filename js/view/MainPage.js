@@ -1158,7 +1158,7 @@ var MainPage = React.createClass({
 						</RawContent>
 				</Tab>
 				<Tab name="ranking">
-						<Icon ref={"rankingBtn"} label="达人榜" type={glypy.Ranking} from={'myhero'} onActiveColor={systemBuleActual} onInactiveColor={iconGrey}/>
+						<Icon ref={"rankingBtn"} label="达人" type={glypy.Ranking} from={'myhero'} onActiveColor={systemBuleActual} onInactiveColor={iconGrey}/>
 						<RawContent ref="rankingContent">
 				<Navigator
 					style={styles.container}

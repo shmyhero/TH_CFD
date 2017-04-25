@@ -41,9 +41,9 @@ public class ReactXAxisRenderer extends XAxisRenderer {
 
     @Override
     public void renderLimitLineLine(Canvas c, LimitLine limitLine, float[] position) {
-        c.clipRect(mViewPortHandler.getContentRect());
+//        c.clipRect(mViewPortHandler.getContentRect());
         super.renderLimitLineLine(c, limitLine, position);
-        c.clipRect(new RectF(0,0,c.getWidth(),c.getHeight()), Region.Op.UNION);
+//        c.clipRect(new RectF(0,0,c.getWidth(),c.getHeight()), Region.Op.UNION);
     }
 
     @Override

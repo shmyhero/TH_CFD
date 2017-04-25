@@ -106,10 +106,10 @@ export default class StatisticBarBlock extends Component {
 						}
 					}
 
-					if(needAnimation){
-						console.log("anim started");
-						LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-					}
+					// if(needAnimation){
+					// 	console.log("anim started");
+					// 	LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+					// }
 				}
 				this.setState({
 					statisticsBarInfo: originalStatisticsInfo,

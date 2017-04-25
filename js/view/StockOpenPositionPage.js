@@ -426,8 +426,8 @@ var StockOpenPositionPage = React.createClass({
 					if (fxData.id == realtimeStockInfo[j].id &&
 								fxData.last !== realtimeStockInfo[j].last) {
 						fxData.last = realtimeStockInfo[j].last
-						fxData.ask = realtimeStockInfo[j].ask * 1.005
-						fxData.bid = realtimeStockInfo[j].bid * 0.995
+						fxData.ask = realtimeStockInfo[j].ask// * 1.005	//Server has already calculated with 0.005, no need to calculate it again!
+						fxData.bid = realtimeStockInfo[j].bid// * 0.995
 						hasUpdate = true;
 					}
 				}
@@ -1204,6 +1204,7 @@ var StockOpenPositionPage = React.createClass({
 			} else { // XXX/USD
 				fxPrice = fxData.ask
 			}
+			console.log("fxData" + JSON.stringify(fxData))
 			profitAmount *= fxPrice
 		}
 		return profitAmount
@@ -1566,9 +1567,12 @@ var StockOpenPositionPage = React.createClass({
 			//Only use the fxdata for non-usd
 			if (rowData.security.ccy != UIConstants.USD_CURRENCY) {
 				if (rowData.fxData && rowData.fxData.ask) {
+					//This fxData returned by socket instead of the API response!
 					profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxData)
 				}
 				else if(rowData.fxOutright && rowData.fxOutright.ask){
+					//Only use this value when there's no fxData returned from socket.
+					//rowData.fxOutright won't change once it's fetched from the api!
 					profitAmount = this.calculateProfitWithOutright(profitAmount, rowData.fxOutright)
 				} else {
 					//Error below! Use the upl will make the percentage and price not synchronized...

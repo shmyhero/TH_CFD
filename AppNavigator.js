@@ -228,6 +228,19 @@ var AppNavigator = React.createClass({
 
 		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>{
 			console.log("ACCOUNT_STATE_CHANGE");
+			NetworkModule.fetchTHUrl(
+				(LogicData.getAccountState()?NetConstants.CFD_API.GET_OUT_RIGHT_LIVE_API:NetConstants.CFD_API.GET_OUT_RIGHT_API) + '?page=1&perPage=999',
+				{
+					method: 'GET',
+				},
+				(responseJson) => {
+					LogicData.setFxData(responseJson)
+				},
+				(result) => {
+					console.log(result.errorMessage)
+				}
+			)
+
 			NetworkModule.loadUserBalance(true);
 		});
 

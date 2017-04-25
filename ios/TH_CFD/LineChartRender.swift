@@ -67,7 +67,7 @@ class LineChartRender: BaseRender {
 		let clippingBox:UIBezierPath = UIBezierPath.init(rect: CGRect(x: _margin-1, y: _topMargin-1, width: width-_margin*2+2, height: height-_bottomMargin-_topMargin+2))
 		clippingBox.addClip()
 		
-		let colors = [_colorSet.startColor.CGColor, _colorSet.endColor.CGColor]
+		let colors = [_colorSet.getStartColor().CGColor, _colorSet.getEndColor().CGColor]
 		//set up the color space
 		let colorSpace = CGColorSpaceCreateDeviceRGB()
 		//set up the color stops
@@ -87,7 +87,7 @@ class LineChartRender: BaseRender {
 			CGContextRestoreGState(context)
 		}
 		
-		self.drawBorderLines(context, lineColor: _colorSet.bgLineColor)
+		self.drawBorderLines(context, lineColor: _colorSet.getBgLineColor())
 		self.drawMiddleLines(context)
 		
 		CGContextSaveGState(context)
@@ -148,7 +148,7 @@ class LineChartRender: BaseRender {
 				linePath.moveToPoint(CGPoint(x: px, y: _topMargin))
 				linePath.addLineToPoint(CGPoint(x:px, y:height - _bottomMargin))
 			}
-			_colorSet.bgLineColor.setStroke()
+			_colorSet.getBgLineColor().setStroke()
 			linePath.lineWidth = 1
 			linePath.stroke()
 			CGContextRestoreGState(context)

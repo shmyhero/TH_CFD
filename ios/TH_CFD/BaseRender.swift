@@ -48,7 +48,7 @@ class BaseRender: NSObject {
 			_bottomMargin = dataProvider!.bottomMargin()
             _rightPadding = dataProvider!.rightPadding()
 		}
-		self.drawBorderLines(context, lineColor: _colorSet.bgLineColor)
+		self.drawBorderLines(context, lineColor: _colorSet.getBgLineColor())
 //        self.drawHorizontalLines(context)
 		self.drawExtraText(context)
 	}
@@ -107,7 +107,7 @@ class BaseRender: NSObject {
                 linePath.addLineToPoint(CGPoint(x: width - _margin, y:lineY + 0.5))
             }
         }
-        _colorSet.bgLineColor.setStroke()
+        _colorSet.getBgLineColor().setStroke()
         linePath.lineWidth = 1
         linePath.stroke()
 

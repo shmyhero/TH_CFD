@@ -39,6 +39,7 @@ class ColorSet: NSObject {
 		// type 0 is detail view.
 		// type 1 is open position view
 		if StockDataManager.sharedInstance().isLive {
+            //实盘渐变色
 			startColor = UIColor(hexInt: 0x6683b3)
 			endColor = UIColor(hexInt: 0x374d74)
             //昨收线
@@ -78,4 +79,32 @@ class ColorSet: NSObject {
 			headLabelColor = UIColor(hexInt: 0xabcaff)
 		}
 	}
+    
+    func getBgLineColor() -> UIColor {
+        if StockDataManager.sharedInstance().isLive && !AppDelegate.isPortrait() {
+            return UIColor(hexInt: 0x374e78)
+        }
+        else {
+            return bgLineColor
+        }
+    }
+    
+    func getStartColor() -> UIColor {
+        if AppDelegate.isPortrait() {
+            return startColor
+        }
+        else {
+            return StockDataManager.sharedInstance().isLive ? UIColor(hexInt: 0x5f7baa) : UIColor(hexInt: 0x387ae7)
+        }
+    }
+    
+    func getEndColor() -> UIColor {
+        if AppDelegate.isPortrait() {
+            return endColor
+        }
+        else {
+            return StockDataManager.sharedInstance().isLive ? UIColor(hexInt: 0x3f5680) : UIColor(hexInt: 0x1962dd)
+        }
+    }
+    
 }

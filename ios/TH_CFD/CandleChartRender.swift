@@ -97,7 +97,7 @@ class CandleChartRender: BaseRender {
 			linePath.moveToPoint(CGPoint(x: px, y: _topMargin))
 			linePath.addLineToPoint(CGPoint(x:px, y:height - _bottomMargin))
 		}
-		_colorSet.bgLineColor.setStroke()
+		_colorSet.getBgLineColor().setStroke()
 		linePath.lineWidth = 1
 		linePath.stroke()
 		CGContextRestoreGState(context)

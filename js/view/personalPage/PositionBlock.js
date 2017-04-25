@@ -191,7 +191,7 @@ export default class PositionBlock extends Component {
     if(this.props.isPrivate){
       return (
         <View style={styles.emptyView}>
-          <Text style={styles.loadingText}>数据已隐藏</Text>
+          <Text style={styles.loadingText}>用户未公开数据</Text>
         </View>
       )
     }else{

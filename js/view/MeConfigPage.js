@@ -35,7 +35,7 @@ var heightRate = height/667.0
 var listRawData = [
 
 {'type':'normal','title':'用户协议', 'subtype': 'protocol'},
-{'type':'normal','title':'推送设置', 'subtype': 'pushconfig'},
+{'type':'normal','title':'设置', 'subtype': 'pushconfig'},
 {'type':'normal','title':'账号绑定', 'subtype': 'accountbinding'},
 {'type':'normal','title':'切换到模拟交易', 'subtype': 'change2Simulator'},
 {'type':'normal','title':'登出实盘账号', 'subtype': 'logoutAccountActual'},

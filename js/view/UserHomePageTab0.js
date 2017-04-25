@@ -233,7 +233,7 @@ export default class UserHomePageTab0 extends Component{
           </View>
           {this.lineSepartor()}
           <View style = {{flex:1, alignItems:'center',justifyContent:'center'}} >
-            <Text style = {styles.loadingText}>数据已隐藏</Text>
+            <Text style = {styles.loadingText}>用户未公开数据</Text>
           </View>
         </View>
       )

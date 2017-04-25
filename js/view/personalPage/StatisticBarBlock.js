@@ -317,7 +317,7 @@ export default class StatisticBarBlock extends Component {
         {this.renderChartHeader()}
         <View style={styles.separator}/>
         <View style={styles.emptyView}>
-          <Text style={styles.loadingText}>数据已隐藏</Text>
+          <Text style={styles.loadingText}>用户未公开数据</Text>
         </View>
       </View>);
     }else{
@@ -454,6 +454,7 @@ const styles = StyleSheet.create({
 
   verticleSeparator: {
     marginTop: 15,
+    marginBottom: 15,
     width: 0.5,
     backgroundColor: '#f2f2f2',
   },

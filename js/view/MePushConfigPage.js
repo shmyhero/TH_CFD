@@ -228,7 +228,7 @@ var MePushConfigPage = React.createClass({
 	render: function() {
 		var userData = LogicData.getUserData()
 		return (<View style={styles.wrapper}>
-			<NavBar title="推送设置" showBackButton={true} navigator={this.props.navigator}/>
+			<NavBar title="设置" showBackButton={true} navigator={this.props.navigator}/>
 			<ListView
 				style={styles.list}
 				dataSource={this.state.dataSource}

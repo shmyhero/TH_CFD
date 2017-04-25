@@ -199,7 +199,7 @@ export default class StatisticBarBlock extends Component {
 		var sumInvest = '--'
 		var avgPlRate = '--'
 		if (this.state.statisticsSumInfo.length > 0) {
-      invest = 0;
+      var invest = 0;
 			sumPl = 0
 			for (var i = 0; i < this.state.statisticsSumInfo.length; i++) {
 				var barContent = this.state.statisticsSumInfo[i]

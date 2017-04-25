@@ -47,7 +47,7 @@ export default class UserHomePageTab0 extends Component{
 	render(){
 		return(
 			<View style={{flex:1}}>
-        <View style = {styles.separator}></View>
+        {/* <View style = {styles.separator}></View> */}
 				<PositionBlock userId={this.props.userId}
 					isPrivate={this.props.isPrivate}
 					type="close"

@@ -218,6 +218,7 @@ export default class UserHomePageTab0 extends Component{
 
   bottomWarpperRender() {
 		var pl2wShow = this.state.isPrivate ? emptyStar : this.state.pl2w.toFixed(2);
+    var addValue = this.state.pl2w>0 ? "+":""
 		var totolPlColor = totolPlColor = '#474747'
 		if(!this.state.isPrivate) {
 			totolPlColor = this.state.pl2w.toFixed(2) >= 0 ? '#fa2c21' : ColorConstants.STOCK_DOWN_GREEN
@@ -242,7 +243,7 @@ export default class UserHomePageTab0 extends Component{
   			<View style = {styles.bottomWapper}>
      			<View style ={styles.ceilWapper}>
         		<Text style = {{color:'#474747',fontSize:15}}>近2周收益：</Text>
-  					<Text style = {[{color:totolPlColor,fontSize:15},]}>{pl2wShow}</Text>
+  					<Text style = {[{color:totolPlColor,fontSize:15},]}>{addValue}{pl2wShow}</Text>
         	</View>
 
   				<View style ={styles.ceilWapper2}>
@@ -384,9 +385,9 @@ export default class UserHomePageTab0 extends Component{
 				</LineChart>
 			)
 		} else {
-			var textColor = "#70a5ff"; //text bottom and right
+			var textColor = "#999999"; //text bottom and right
 			var backgroundColor = "white"
-			var borderColor = "#497bce"; //line
+			var borderColor = "#EEEEEE"; //line
 			var lineChartGradient = ['transparent', 'transparent']
 
 			return(
@@ -459,7 +460,6 @@ export default class UserHomePageTab0 extends Component{
 	render(){
 		return(
       <ScrollView showsHorizontalScrollIndicator={false}>
-        {this.state.isStatisticPage?null:(<View style = {styles.separator}></View>)}
         {this.middleWarpperRender()}
         <View style = {styles.separator}></View>
         {this.bottomWarpperRender()}

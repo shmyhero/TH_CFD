@@ -183,7 +183,7 @@ export default class RankingPage extends Component{
     var colorTextUnSelected = '#6485c2'
 
     return(
-      <View style={[styles.container, {backgroundColor: backgroundColor}, this.props.barStyle]} >
+      <View style={[styles.container,  this.props.barStyle]} >
         <StatusBar barStyle="light-content" backgroundColor={navBarColor}/>
         <View style = {styles.headerContainer}>
           <TouchableOpacity
@@ -364,7 +364,7 @@ const styles = StyleSheet.create({
 
   container: {
 		height: UIConstants.HEADER_HEIGHT,
-		backgroundColor: ColorConstants.TITLE_BLUE,
+		backgroundColor: '#425a85',
 		alignItems:'center',
     justifyContent:'center',
 		paddingTop: (Platform.OS === 'ios') ? 15 : 0,
@@ -417,7 +417,7 @@ const styles = StyleSheet.create({
   },
   headerContainer:{
     flexDirection:'row',
-    backgroundColor:'#4c668e',
+    // backgroundColor:'#4c668e',
     padding:0,
     borderWidth:1,
     borderRadius:4,
@@ -467,6 +467,7 @@ const styles = StyleSheet.create({
     fontSize:16,
     color:'white',
     marginRight:5,
+    fontWeight: 'bold',
   },
   userName:{
     fontSize:11,
@@ -475,18 +476,20 @@ const styles = StyleSheet.create({
   },
   userInfoTitle:{
     fontSize:11,
-    marginTop:3,
+    marginTop:6,
     color:'#5d5d5d'
   },
   userWinRate:{
     fontSize:14,
     marginTop:5,
     color:'#000000',
+    fontWeight: 'bold',
+    marginLeft:2,
   },
   userInfo:{
     flexDirection:'row',
     alignItems:'center',
-    justifyContent:'center'
+    justifyContent:'center',
   },
 
 

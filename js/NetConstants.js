@@ -11,7 +11,7 @@ SERVER_MAPPING[VersionConstants.SERVER_TYPE_DEVELOP] = 'http://cfd-webapi-dev.ch
 
 //const GZT_SERVER_IP = 'http://124.192.161.110:8080'
 const GZT_SERVER_IP_LIVE = 'http://219.143.253.206:2025'
-const TRADEHERO_SERVER_IP = 'https://web.typhoontechnology.hk/'//http://cn.tradehero.mobi
+const TRADEHERO_SERVER_IP = 'http://web.typhoontechnology.hk'//http://cn.tradehero.mobi
 
 
 var CFD_API_SERVER = SERVER_MAPPING[VersionConstants.getCFDServerType()];

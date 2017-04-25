@@ -122,6 +122,7 @@ class StockChartView: UIView {
             }
             else if YieldLineChartDataSource.isValidData(data!) {
                 dataSource = YieldLineChartDataSource.init(json:data!, rect: self.bounds)
+                self.userInteractionEnabled = false
             }
             else if LineChartDataSource.isValidData(data!) {
                 dataSource = LineChartDataSource.init(json:data!, rect: self.bounds)

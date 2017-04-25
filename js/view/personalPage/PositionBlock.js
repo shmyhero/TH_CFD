@@ -16,6 +16,8 @@ var NetConstants = require('../../NetConstants');
 var UIConstants = require('../../UIConstants');
 var NetworkModule = require('../../module/NetworkModule');
 var NetworkErrorIndicator = require('../../view/NetworkErrorIndicator');
+
+var {height, width} = Dimensions.get('window');
 var stockNameFontSize = Math.round(17*width/375.0);
 
 var {height, width} = Dimensions.get('window');

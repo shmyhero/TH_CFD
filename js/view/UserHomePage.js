@@ -37,6 +37,7 @@ var UserHomePageTab0 = require('./UserHomePageTab0')
 var UserHomePageTab1 = require('./UserHomePageTab1')
 var UserHomePageTab2 = require('./UserHomePageTab2')
 var ScrollTabView = require('./component/ScrollTabView2')
+var {EventCenter, EventConst} = require('../EventCenter')
 
 var CHART_TYPE_2MONTH = 0;
 var CHART_TYPE_ALL = 1;
@@ -49,6 +50,7 @@ var emptyStar = '***'
 var btnBgColor = ['#425a85','#425a85','#425a85','#6f3d23','#55707c','#9a820e',]
 var btnBorderColor = ['#ffffff','#ffffff','#ffffff','#c79779','#94afbe','#e9d670']
 
+var layoutSizeChangedSubscription = null
 // { followerCount: 5,
 //   isFollowing: false,
 //   totalPl: 689.62,
@@ -125,11 +127,16 @@ export default class UserHomePage extends Component {
 			isFollowingStatusChanged: false,
 			isPrivate: true,
 			currentSelectedTab : 0,
+			height: UIConstants.getVisibleHeight(),
 		}
 	}
 
 	componentDidMount() {
 		this.loadUserInfo()
+
+		layoutSizeChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.LAYOUT_SIZE_CHANGED, () => {
+			this.onLayoutSizeChanged();
+		});
 
 		if(LogicData.isUserSelf(this.state.id)) {
 			this.setState({
@@ -142,8 +149,19 @@ export default class UserHomePage extends Component {
 	}
 
 	componentWillUnmount() {
+
+		layoutSizeChangedSubscription && layoutSizeChangedSubscription.remove();
+
 		if(this.props.backRefresh && this.state.isFollowingStatusChanged) {
 			this.props.backRefresh();
+		}
+	}
+
+	onLayoutSizeChanged(){
+		if (Platform.OS == 'android') {
+			this.setState({
+				height: UIConstants.getVisibleHeight(),
+			});
 		}
 	}
 
@@ -375,11 +393,11 @@ export default class UserHomePage extends Component {
 
 	render() {
 		return(
-				<View style={styles.wapper}>
+				<View style={[styles.wapper, {height: this.state.height}]}>
 					{/* <View style={{position:'absolute',width:width,height:height,backgroundColor:'#425a85'}}>
 			    </View> */}
 
-					<View style={{position:'absolute',width:width,height:height}}>
+					<View style={{position:'absolute',width:width,height:this.state.height}}>
 						 	{this.topWarpperRender()}
 							{this.renderContent()}
 					</View>

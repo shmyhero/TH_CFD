@@ -166,7 +166,7 @@ export default class UserHomePageTab0 extends Component{
   }
 
   refresh(){
-    this.refreshData();
+    this.loadUserInfo();
   }
 
   refreshData(){

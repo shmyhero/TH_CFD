@@ -177,6 +177,7 @@ var StockStatisticsPage = React.createClass({
 					{this.renderHeader()}
 					<UserHomePageTab0 userId={userData.userId}
 						isStatisticPage={true}
+						navigator={this.props.navigator}
 						ref={STATISTIC_BAR_BLOCK}/>
 				</ScrollView>
 			);

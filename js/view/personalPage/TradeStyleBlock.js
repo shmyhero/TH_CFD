@@ -69,24 +69,24 @@ export default class TradeStyleBlock extends Component {
 				<View style={styles.separator}/>
         <View style={styles.contentRow}>
           <View style={styles.contentBlock}>
-            <Text style={styles.contentTitleBlock}>平均杠杆（倍）</Text>
+            <Text style={styles.contentTitleBlock}>平均杠杆(倍)</Text>
             <Text style={styles.contentValueBlock}>{this.state.averageLeverage}</Text>
           </View>
           <View style={styles.verticalSeparator}/>
           <View style={styles.contentBlock}>
-            <Text style={styles.contentTitleBlock}>累计下单（次）</Text>
+            <Text style={styles.contentTitleBlock}>累计下单(次)</Text>
             <Text style={styles.contentValueBlock}>{this.state.totalTradeCount}</Text>
           </View>
         </View>
         <View style={[styles.separator, {marginLeft: 15, marginRight: 15,}]}/>
         <View style={styles.contentRow}>
           <View style={styles.contentBlock}>
-            <Text style={styles.contentTitleBlock}>平均持仓时间（天）</Text>
+            <Text style={styles.contentTitleBlock}>平均持仓时间(天)</Text>
             <Text style={styles.contentValueBlock}>{this.state.averageOpenTime}</Text>
           </View>
           <View style={styles.verticalSeparator}/>
           <View style={styles.contentBlock}>
-            <Text style={styles.contentTitleBlock}>平均本金（美元）</Text>
+            <Text style={styles.contentTitleBlock}>平均本金(美元)</Text>
             <Text style={styles.contentValueBlock}>{this.state.averageInvestUSD}</Text>
           </View>
         </View>

@@ -34,11 +34,11 @@ var OADocumentInfoPage = React.createClass({
 	isProceedAnyway: false,
 
 	listRawData: [
-			{"key":"交易条款说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "1")},
-			{"key":"风险与注意事项告知说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "2")},
-			{"key":"数据信息共享说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "3")},
-			{"key":"Ayondo服务协议说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "4")},
-			{"key":"交易通知说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "5")},
+			{"key":"服务条款", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "1")},
+			{"key":"风险披露", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "2")},
+			{"key":"数据共享协议", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "3")},
+			{"key":"交易执行政策", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "4")},
+			{"key":"投诉信息", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "5")},
 			{"key":"用户头像使用说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "6")},
 			{"key":"关于保证金交易", },
 			{"type":"openAccountHintBlock", },

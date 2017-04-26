@@ -80,7 +80,7 @@ export default class DepositPage extends Component{
 			showBankList:false,
 			chargeRate:0.01,
 			chargeMin:5,
-			alipayIntro:'单笔固定50美元',
+			alipayIntro:'',
 		}
 	}
 

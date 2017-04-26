@@ -170,6 +170,8 @@ var StockTransactionInfoPage = React.createClass({
 				cardBorder = require('../../images/card_border_silver.png');
 			}else if(this.state.card.cardType == 3){
 				cardBorder = require('../../images/card_border_gold.png');
+			}else if(this.state.card.cardType == 4){
+				cardBorder = require('../../images/card_border_blue.png');
 			}
 			return (
 				<View style={{

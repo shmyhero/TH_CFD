@@ -165,6 +165,7 @@ function getCFDAPI(){
 
     PERSONAL_PAGE_POSITION_OPEN: CFD_API_SERVER + '/api/user/<userID>/live/position/open/',
     PERSONAL_PAGE_POSITION_CLOSE: CFD_API_SERVER + '/api/user/<userID>/live/position/closed/',
+    GET_OTHER_USER_STATISTICS_API: CFD_API_SERVER + '/api/user/<userID>/live/plreport',
   }
 }
 

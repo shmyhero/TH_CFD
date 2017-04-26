@@ -478,11 +478,13 @@ export default class UserHomePageTab0 extends Component{
         {this.bottomWarpperRender()}
         <View style = {styles.separator}></View>
 				<StatisticBarBlock userId={this.props.userId}
+          isStatisticPage={this.props.isStatisticPage}
 					ref={STATISTIC_BAR_BLOCK}/>
         <View style = {styles.separator}></View>
 				<TradeStyleBlock userId={this.props.userId}
 					ref={TRADE_STYLE_BLOCK}/>
         <View style = {styles.separator}></View>
+        {this.props.isStatisticPage ? null : this.cardWarpperRender()}
         <View style = {styles.separator}></View>
 			</ScrollView>
 		);

@@ -41,9 +41,27 @@ public class ReactXAxisRenderer extends XAxisRenderer {
 
     @Override
     public void renderLimitLineLine(Canvas c, LimitLine limitLine, float[] position) {
-//        c.clipRect(mViewPortHandler.getContentRect());
+        float xOffset = limitLine.getLineWidth() + limitLine.getXOffset();
+        final LimitLine.LimitLabelPosition labelPosition = limitLine.getLabelPosition();
+        float textPosition = position[0];
+        if (labelPosition == LimitLine.LimitLabelPosition.RIGHT_TOP) {
+            textPosition = position[0] + xOffset;
+        } else if (labelPosition == LimitLine.LimitLabelPosition.RIGHT_BOTTOM) {
+            textPosition = position[0] + xOffset;
+        } else if (labelPosition == LimitLine.LimitLabelPosition.LEFT_TOP) {
+            textPosition = position[0] - xOffset;
+        } else if (labelPosition == LimitLine.LimitLabelPosition.LEFT_BOTTOM){
+            textPosition = position[0] - xOffset;
+        } else {
+            textPosition = position[0] - xOffset/2;
+        }
+
+        if(textPosition < mViewPortHandler.getContentRect().left || textPosition > mViewPortHandler.getContentRect().right ){
+            //The limit line is hiding. Don't draw label also.
+            return;
+        }
+
         super.renderLimitLineLine(c, limitLine, position);
-//        c.clipRect(new RectF(0,0,c.getWidth(),c.getHeight()), Region.Op.UNION);
     }
 
     @Override

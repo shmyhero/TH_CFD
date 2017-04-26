@@ -367,13 +367,13 @@ var MyIncomePage = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  wrapper:{		
+  wrapper:{
 		width: width,
    	alignItems: 'stretch',
   },
 	headerWrapper: {
 		backgroundColor: ColorConstants.MAIN_CONTENT_BLUE,
-    height: 186,
+    height: 154,
 	},
   totalTextContainer:{
     flexDirection: 'column',

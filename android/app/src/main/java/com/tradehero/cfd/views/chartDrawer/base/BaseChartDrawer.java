@@ -11,6 +11,7 @@ import com.github.mikephil.charting.formatter.YAxisValueFormatter;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.tradehero.cfd.MainActivity;
+import com.tradehero.cfd.views.ReactChart;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,13 +34,18 @@ public abstract class BaseChartDrawer implements IChartDrawer {
     protected float preClose;
 
     protected int borderColor = 0;
+    protected int preCloseColor = 0;
     protected int textColor = 0;
     protected int gapLineColor = 0;
 
     @Override
     public void setBorderColor(int color) {
         borderColor = color;
+    }
 
+    @Override
+    public void setPreCloseColor(int color) {
+        preCloseColor = color;
     }
 
     @Override
@@ -61,7 +67,7 @@ public abstract class BaseChartDrawer implements IChartDrawer {
         if(!isDataAcceptable(chartDataList)){
             return;
         }
- 
+
         minVal = Float.MAX_VALUE;
         maxVal = Float.MIN_VALUE;
 
@@ -288,7 +294,7 @@ public abstract class BaseChartDrawer implements IChartDrawer {
     private void drawPreCloseLine(CombinedChart chart, JSONObject stockInfoObject) throws JSONException {
         LimitLine line = new LimitLine((float) stockInfoObject.getDouble("preClose"));
 //      line.setLineColor(ChartDrawerConstants.CHART_LINE_COLOR);
-        line.setLineColor(borderColor);
+        line.setLineColor(preCloseColor);
 //        line.setLineColor(mDesColorType==0?ChartDrawerConstants.CHART_LINE_COLOR:ChartDrawerConstants.CHART_LINE_COLOR2);
 
         line.setLineWidth(ChartDrawerConstants.LINE_WIDTH * 2);

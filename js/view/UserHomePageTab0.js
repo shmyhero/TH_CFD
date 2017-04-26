@@ -191,6 +191,8 @@ export default class UserHomePageTab0 extends Component{
 		var rankColor = this.state.rank > 0 ? {
 			color: '#fa2c21'
 		} : null;
+
+    var add = this.state.avgPl >0? '+':'';
 		return(
 			<View style = {styles.middleWapper}>
 				<View style={{flexDirection:'row',height:40}}>
@@ -216,8 +218,8 @@ export default class UserHomePageTab0 extends Component{
      			</View>
 					{this.rowSepartor()}
 					<View style = {styles.oneOfThree}>
-						{this.renderPrivateOne()}
-     				<Text style={styles.font2}>{this.state.isPrivate ? emptyStar:this.state.avgPl.toFixed(2)}</Text>
+						{/* {this.renderPrivateOne()} */}
+     				<Text style={styles.font2}>{this.state.isPrivate ? emptyStar:add+this.state.avgPl.toFixed(2)}</Text>
      			</View>
 					{this.rowSepartor()}
 					<View style = {styles.oneOfThree}>
@@ -258,6 +260,8 @@ export default class UserHomePageTab0 extends Component{
         		<Text style = {{color:'#474747',fontSize:15}}>近2周收益：</Text>
   					<Text style = {[{color:totolPlColor,fontSize:15},]}>{addValue}{pl2wShow}</Text>
         	</View>
+
+          <View style={styles.separatorLine}/> 
 
   				<View style ={styles.ceilWapper2}>
   					<View style = {styles.ceilLeft}>
@@ -591,7 +595,8 @@ const styles = StyleSheet.create({
 
   font2: {
     fontSize: 19,
-    color: '#424242'
+    color: '#424242',
+    fontWeight:'bold'
   },
 
   ceilWapper: {
@@ -646,7 +651,7 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 2,
     borderWidth: 1,
-    borderColor: 'grey',
+    borderColor: '#EEEEEE',
     flexDirection: 'row',
   },
 
@@ -734,6 +739,11 @@ const styles = StyleSheet.create({
 		fontSize: 13,
 		color: '#9f9f9f'
 	},
+
+  separatorLine: {
+    height: 0.5,
+    backgroundColor: ColorConstants.SEPARATOR_GRAY,
+  },
 
 });
 

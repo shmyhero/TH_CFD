@@ -534,9 +534,9 @@ var MePage = React.createClass({
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
 		var marginLeft = 0
-		if (rowID > 1 && rowID < 6){
+		// if (rowID > 1 && rowID < 6){
 			marginLeft = 15
-		}
+		// }
 		return (
 			<View style={styles.line} key={rowID}>
 				<View style={[styles.separator, {marginLeft: marginLeft}]}/>

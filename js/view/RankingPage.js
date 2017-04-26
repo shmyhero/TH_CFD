@@ -269,7 +269,7 @@ export default class RankingPage extends Component{
   renderSeparator(sectionID, rowID, adjacentRowHighlighted) {
     return (
       <View style={styles.line} key={rowID}>
-        <View style={styles.separator}/>
+        <View style = {styles.separator}></View>
       </View>
     );
   }
@@ -409,7 +409,7 @@ const styles = StyleSheet.create({
   },
   fontTopSticker:{
     fontSize:15,
-    color:'#666999',
+    color:'#576b95',
     marginTop:6,
     marginBottom:6,
     marginLeft:10,
@@ -433,7 +433,13 @@ const styles = StyleSheet.create({
   },
   line: {
 		height: 0.5,
-		backgroundColor: '#e2e2e2',
+		backgroundColor: 'white',
+    marginLeft:0,
+	},
+  separator: {
+		height: 0.5,
+		backgroundColor: '#eeeeee',
+    marginLeft:15,
 	},
   userHeader:{
     width:40,
@@ -491,6 +497,7 @@ const styles = StyleSheet.create({
     alignItems:'center',
     justifyContent:'center',
   },
+
 
 
 

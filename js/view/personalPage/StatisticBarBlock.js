@@ -334,7 +334,8 @@ export default class StatisticBarBlock extends Component {
 
 	renderChart() {
     if(this.state.isPrivate){
-      return (  <View style={styles.chart}>
+      return (
+      <View style={styles.chart}>
         {this.renderChartHeader()}
         <View style={styles.separator}/>
         <View style={styles.emptyView}>
@@ -420,7 +421,7 @@ export default class StatisticBarBlock extends Component {
 		)
     var viewWidth = Math.round(width/7*4);
 		return (
-			<View style={{flexDirection:'row', flex: 1, padding: 20}}>
+			<View style={{flexDirection:'row', flex: 1, paddingTop: 16, paddingBottom: 16, paddingLeft: 20, paddingRight: 20}}>
 				<View style={styles.barNamesContainer}>
 					{barNameText}
 				</View>
@@ -441,7 +442,7 @@ const styles = StyleSheet.create({
   },
 
 	center: {
-		height: height / 8,
+    height: height / 8,
 		backgroundColor: '#eff5ff',
 		flexDirection: 'row',
 	},
@@ -481,12 +482,12 @@ const styles = StyleSheet.create({
   },
 
 	chart: {
-		height: height / 8 * 3,
 		backgroundColor: 'white',
+    height: 216
 	},
 
 	chartHeader: {
-		height: 40,
+		height: 39,
 		flexDirection: 'row',
 	},
 
@@ -582,8 +583,9 @@ const styles = StyleSheet.create({
   profitBar:{
 		borderTopRightRadius:4,
 		borderBottomRightRadius:4,
-		height: 16,
-		alignSelf: 'center',
+    marginTop:9,
+    marginBottom:9,
+		alignSelf: 'stretch',
 	},
 
 	positiveProfitBar: {

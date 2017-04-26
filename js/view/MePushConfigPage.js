@@ -25,6 +25,7 @@ var UIConstants = require('../UIConstants')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
+
 var listRawData = [
 {'type':'normal', 'title':'系统平仓提示', 'subtype': 'closepositionpush'},
 {'type':'normal', 'title':'公布我的详细交易数据', 'subtype': 'showPersonalData'},
@@ -200,7 +201,7 @@ var MePushConfigPage = React.createClass({
 			if(rowData.subtype === 'closepositionpush'){
 				switchIsOn = this.state.autoCloseAlertIsOn;
 			} else if(rowData.subtype === 'showPersonalData') {
-				if(!LogicData.getAccountState()){
+				if(!LogicData.getAccountState() || MainPage.HIDE_RANKING_TAB){
 					return null;
 				}
 				switchIsOn = this.state.showPersonalData;

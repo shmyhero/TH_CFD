@@ -167,17 +167,20 @@ export default class StatisticBarBlock extends Component {
   loadData(){
     var userData = LogicData.getUserData()
   	var url = '';
-    if(this.props.isStatisticPage){
-      url = NetConstants.CFD_API.GET_USER_STATISTICS_API
-      if(LogicData.getAccountState()){
-    		url = NetConstants.CFD_API.GET_USER_STATISTICS_LIVE_API
-    		console.log('live', url );
-    	}
-    }
-    else{
-      url = NetConstants.CFD_API.GET_OTHER_USER_STATISTICS_API;
-      url = url.replace('<userID>', this.props.userId)
-    }
+    // if(this.props.isStatisticPage){
+    //   url = NetConstants.CFD_API.GET_USER_STATISTICS_API
+    //   if(LogicData.getAccountState()){
+    // 		url = NetConstants.CFD_API.GET_USER_STATISTICS_LIVE_API
+    // 		console.log('live', url );
+    // 	}
+    // }
+    // else{
+
+    //Always use the same api
+    url = NetConstants.CFD_API.GET_OTHER_USER_STATISTICS_API;
+    url = url.replace('<userID>', this.props.userId)
+
+    //}
 
   	NetworkModule.fetchTHUrl(
   		url,

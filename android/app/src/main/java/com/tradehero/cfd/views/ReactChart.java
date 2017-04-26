@@ -152,6 +152,16 @@ public class ReactChart extends CombinedChart {
         ((ReactXAxisRenderer)mXAxisRenderer).setHorizontalPaddingRight(value);
     }
 
+    protected int preCloseColor = 0;
+    public void setPreCloseColor(int value){
+        preCloseColor = value;
+        invalidate();
+    }
+
+    public int getPreCloseColor(){
+        return preCloseColor;
+    }
+
     boolean isLandspace = false;
     public boolean isLandspace(){
         return isLandspace;

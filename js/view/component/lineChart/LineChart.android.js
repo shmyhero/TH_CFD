@@ -85,6 +85,8 @@ var LineChart = React.createClass({
 
 		textColor: ColorPropType,
 
+		preCloseColor: ColorPropType,
+
 		backgroundColor: ColorPropType,
 
 		rightAxisDrawGridLines: React.PropTypes.bool,
@@ -122,6 +124,7 @@ var LineChart = React.createClass({
 			drawBackground: false,
 			drawBorders: true,
 			borderColor: 'white',
+			preCloseColor: 'white',
 			textColor: 'white',
 			backgroundColor: 'transparent',
 			rightAxisDrawGridLines: false,

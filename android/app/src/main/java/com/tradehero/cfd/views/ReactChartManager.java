@@ -40,6 +40,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
 
     int textColor = ChartDrawerConstants.CHART_TEXT_COLOR;
     int borderColor = ChartDrawerConstants.CHART_BORDER_COLOR;
+    int preCloseColor = ChartDrawerConstants.CHART_BORDER_COLOR;
     int chartOffsetLeft = 0;
     int chartOffsetRight = 0;
     int chartOffsetTop = 0;
@@ -152,6 +153,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
                 IChartDrawer drawer = ChartDrawerBuilder.createDrawer(mChartType);
                 drawer.setTextColor(textColor);
                 drawer.setBorderColor(borderColor);
+                drawer.setPreCloseColor(preCloseColor);
                 if(drawer != null){
                     drawer.draw(chart, null, plDataArray);
                     return;
@@ -173,7 +175,7 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
                 IChartDrawer drawer = ChartDrawerBuilder.createDrawer(mChartType);
                 drawer.setTextColor(textColor);
                 drawer.setBorderColor(borderColor);
-
+                drawer.setPreCloseColor(preCloseColor);
                 if(drawer != null){
                     drawer.draw(chart, stockInfoObject, chartDataList);
                     return;
@@ -446,6 +448,15 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
             chart.getAxisRight().setGridColor(colorInt);
             chart.getXAxis().setAxisLineColor(colorInt);
             borderColor = colorInt;
+        }
+    }
+
+    @ReactProp(name = "preCloseColor")
+    public void setPreCloseColor(ReactChart chart, String color) {
+        if (chart != null) {
+            int colorInt = getColor(color);
+            chart.setPreCloseColor(colorInt);
+            preCloseColor = colorInt;
         }
     }
 

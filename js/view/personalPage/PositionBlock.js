@@ -205,21 +205,29 @@ export default class PositionBlock extends Component {
   			return (
   				<NetworkErrorIndicator onRefresh={()=>this.loadData()} refreshing={this.state.isRefreshing}/>
   			)
-  		}else{
-        return (
-          <View style={styles.container}>
-            {this.renderHeaderBar()}
-            <ListView
-              style={styles.list}
-              ref="listview"
-              initialListSize={11}
-              dataSource={this.state.stockInfo}
-              enableEmptySections={true}
-              renderRow={(rowData, sectionID, rowID, highlightRow)=>this.renderRow(rowData, sectionID, rowID, highlightRow)}
-              renderSeparator={this.renderSeparator}/>
-          </View>
-        );
-      }
+  		}else {
+        if(this.state.stockInfo.length === 0) {
+  			return (
+  				<View style={styles.emptyView}>
+  					<Text style={styles.loadingText}>{ this.props.type== "open" ? "暂无持仓记录":"暂无平仓记录"}</Text>
+  				</View>
+  				)
+        }else{
+          return (
+            <View style={styles.container}>
+              {this.renderHeaderBar()}
+              <ListView
+                style={styles.list}
+                ref="listview"
+                initialListSize={11}
+                dataSource={this.state.stockInfo}
+                enableEmptySections={true}
+                renderRow={(rowData, sectionID, rowID, highlightRow)=>this.renderRow(rowData, sectionID, rowID, highlightRow)}
+                renderSeparator={this.renderSeparator}/>
+            </View>
+          );
+        }
+      }      
     }
   }
 }

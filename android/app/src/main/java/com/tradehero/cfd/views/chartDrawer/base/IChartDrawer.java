@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
  */
 public interface IChartDrawer {
     void setBorderColor(int color);
+    void setPreCloseColor(int color);
     void setTextColor(int color);
 
     void draw(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException;

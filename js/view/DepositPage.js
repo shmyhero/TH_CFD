@@ -80,6 +80,7 @@ export default class DepositPage extends Component{
 			showBankList:false,
 			chargeRate:0.01,
 			chargeMin:5,
+			alipayIntro:'单笔固定50美元',
 		}
 	}
 
@@ -107,6 +108,7 @@ export default class DepositPage extends Component{
 					dataSourceBank:dsBank.cloneWithRows(responseJson.banks),
 					chargeRate:responseJson.charge.rate,
 					chargeMin:responseJson.charge.minimum,
+					alipayIntro:responseJson.alipay,
 				},()=>this.onChangeWithdrawValue(''))
 			},
 			(result) => {
@@ -262,7 +264,7 @@ export default class DepositPage extends Component{
 												//  onBlur={() => this.onTextBlur(type)}
 											 value={inputValue}
 											 defaultValue={inputValue}
-											 maxLength={8}
+											 maxLength={7}
 											 autoFocus={true}
 											 underlineColorAndroid='transparent'
 											 keyboardType='numeric'>
@@ -323,6 +325,7 @@ export default class DepositPage extends Component{
 					<Image source={checkBox} style={styles.checkbox} />
 					<Image source={rowData.image} style={styles.image} />
 					<Text style={styles.title}>支付宝钱包</Text>
+					<Text style={styles.titleIntro}>{this.state.alipayIntro}</Text>
 				</View>
 			</TouchableOpacity>
 		);
@@ -511,6 +514,15 @@ const styles = StyleSheet.create({
 		fontSize:17,
 		marginLeft:15,
 	},
+
+	titleIntro:{
+        flex:1,
+        fontSize:13,
+        marginLeft:15,
+        color:'#b4b4b4',
+        alignItems:'flex-end',
+        textAlign:'right',
+    },
 
 	rowWrapper: {
 		width:width,

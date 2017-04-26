@@ -187,6 +187,9 @@ export var STOCK_LIST_PAGE_TAB_INDEX = 1;
 export var STOCK_EXCHANGE_TAB_INDEX = 2;
 export var RANKING_TAB_INDEX = 3;
 export var ME_PAGE_TAB_INDEX = 4;
+
+const HIDE_RANKING_TAB = false;			//Hide ranking tab if necessary
+
 var MainPage = React.createClass({
 	getInitialState: function() {
 		return {
@@ -780,8 +783,11 @@ var MainPage = React.createClass({
 		var exchangeRef = this.refs['exchangeContent'].refs['wrap'].getWrappedRef()
 		exchangeRef.tabWillFocus = EventCenter.emitExchangeTabPressEvent;
 
-		var rankingRef = this.refs['rankingContent'].refs['wrap'].getWrappedRef();
-		rankingRef.tabWillFocus = EventCenter.emitRankingTabPressEvent;
+		//Disable ranking tab if necessary
+		if(!HIDE_RANKING_TAB){
+			var rankingRef = this.refs['rankingContent'].refs['wrap'].getWrappedRef();
+			rankingRef.tabWillFocus = EventCenter.emitRankingTabPressEvent;
+		}
 
 		var meRef = this.refs['meContent'].refs['wrap'].getWrappedRef()
 		meRef.tabWillFocus = EventCenter.emitMeTabPressEvent;
@@ -1116,6 +1122,25 @@ var MainPage = React.createClass({
 		}
 	},
 
+	renderRankingTab: function(){
+		if(HIDE_RANKING_TAB){
+			return;
+		}else {
+			return (
+				<Tab name="ranking">
+					<Icon ref={"rankingBtn"} label="达人" type={glypy.Ranking} from={'myhero'} onActiveColor={systemBuleActual} onInactiveColor={iconGrey}/>
+					<RawContent ref="rankingContent">
+					<Navigator
+						style={styles.container}
+						initialRoute={{name: RANKING_PAGE_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
+						configureScene={() => Navigator.SceneConfigs.PushFromRight}
+						renderScene={this.RouteMapper} />
+					</RawContent>
+				</Tab>
+			);
+		}
+	},
+
 	renderTabbar: function(){
 		return (
 			<Tabbar ref="myTabbar" barColor='#f7f7f7' style={{alignItems: 'stretch'}}>
@@ -1157,16 +1182,9 @@ var MainPage = React.createClass({
 					renderScene={this.RouteMapper} />
 						</RawContent>
 				</Tab>
-				<Tab name="ranking">
-						<Icon ref={"rankingBtn"} label="达人" type={glypy.Ranking} from={'myhero'} onActiveColor={systemBuleActual} onInactiveColor={iconGrey}/>
-						<RawContent ref="rankingContent">
-				<Navigator
-					style={styles.container}
-					initialRoute={{name: RANKING_PAGE_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
-					configureScene={() => Navigator.SceneConfigs.PushFromRight}
-					renderScene={this.RouteMapper} />
-						</RawContent>
-				</Tab>
+
+				{this.renderRankingTab()}
+
 				<Tab name="me">
 						<Icon ref={"meBtn"} label="我的" type={glypy.Settings} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
 						<RawContent ref="meContent">

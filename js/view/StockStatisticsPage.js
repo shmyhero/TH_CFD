@@ -185,6 +185,7 @@ var StockStatisticsPage = React.createClass({
 				<View style={{flex:1}}>
 					{this.renderHeader()}
 					<StatisticBarBlock userId={userData.userId}
+						isStatisticPage={true}
 						ref={STATISTIC_BAR_BLOCK}/>
 				</View>
 

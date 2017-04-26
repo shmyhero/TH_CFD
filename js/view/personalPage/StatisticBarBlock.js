@@ -19,11 +19,13 @@ export default class StatisticBarBlock extends Component {
   static propTypes = {
     userId: PropTypes.number,
     style: PropTypes.object,
+    isStatisticPage: PropTypes.bool,
   }
 
   static defaultProps = {
     userId: 0,
     style: {},
+    isStatisticPage: false,
   }
 
   constructor(props) {
@@ -46,6 +48,30 @@ export default class StatisticBarBlock extends Component {
     })
   }
 
+  showBars(statisticsInfo){
+    var initializeAnimation = false;
+
+		var originalStatisticsInfo = []
+		$.extend(true, originalStatisticsInfo, statisticsInfo)	// deep copy
+
+		var maxBarSize = 1
+		for (var i = 0; i < statisticsInfo.length; i++) {
+			var barContent = statisticsInfo[i]
+			if (Math.abs(maxBarSize) < Math.abs(barContent.pl)) {
+				maxBarSize = Math.abs(barContent.pl)
+			}
+		}
+
+		this.setState({
+			maxBarSize: maxBarSize,
+			statisticsBarInfo: statisticsInfo,
+			statisticsSumInfo: originalStatisticsInfo,
+			barAnimPlayed: true,
+		}, ()=>{
+
+		});
+  }
+
 	playStatisticsAnim(statisticsInfo) {
 		var initializeAnimation = false;
 
@@ -64,14 +90,15 @@ export default class StatisticBarBlock extends Component {
 		}
 
 		//if(initializeAnimation){
-			this.setState({
-				maxBarSize: maxBarSize,
-				statisticsBarInfo: statisticsInfo,
-				statisticsSumInfo: originalStatisticsInfo,
-				barAnimPlayed: true,
-			}, ()=>{
-					this.runAnimationIfNecessary(originalStatisticsInfo);
-				});
+  		this.setState({
+  			maxBarSize: maxBarSize,
+  			statisticsBarInfo: statisticsInfo,
+  			statisticsSumInfo: originalStatisticsInfo,
+  			barAnimPlayed: true,
+  		});
+    // , ()=>{
+		// 		this.runAnimationIfNecessary(originalStatisticsInfo);
+		// });
 		// }else{
 		// 	this.runAnimationIfNecessary(originalStatisticsInfo);
 		// }
@@ -106,10 +133,10 @@ export default class StatisticBarBlock extends Component {
 						}
 					}
 
-					// if(needAnimation){
-					// 	console.log("anim started");
-					// 	LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-					// }
+					if(needAnimation){
+						console.log("anim started");
+						LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+					}
 				}
 				this.setState({
 					statisticsBarInfo: originalStatisticsInfo,
@@ -139,46 +166,40 @@ export default class StatisticBarBlock extends Component {
 
   loadData(){
     var userData = LogicData.getUserData()
-    if(userData.userId == this.props.userId){
-      var headers = {};
-
-      headers = {
-        'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-      }
-
-    	var url = NetConstants.CFD_API.GET_USER_STATISTICS_API
-    	if(LogicData.getAccountState()){
+  	var url = '';
+    if(this.props.isStatisticPage){
+      url = NetConstants.CFD_API.GET_USER_STATISTICS_API
+      if(LogicData.getAccountState()){
     		url = NetConstants.CFD_API.GET_USER_STATISTICS_LIVE_API
     		console.log('live', url );
     	}
-
-    	NetworkModule.fetchTHUrl(
-    		url,
-    		{
-    			method: 'GET',
-    			headers: headers,
-    			cache: 'offline',
-    		},
-    		(responseJson) => {
-          console.log("playStatisticsAnim " + JSON.stringify(responseJson))
-    			this.playStatisticsAnim(responseJson);
-    		},
-    		(result) => {
-    			if(NetConstants.AUTH_ERROR === result.errorMessage){
-
-    			}else{
-    				// Alert.alert('', errorMessage);
-    			}
-    		}
-    	)
-    }else{
-      //TODO: use the real api.
-      var data = [ { name: '美股', invest: 46, pl: -8.26 },
-        { name: '指数', invest: 3712.99998588335, pl: 15.6772176315 },
-        { name: '外汇', invest: 0, pl: 0 },
-        { name: '商品', invest: 2093, pl: -0.94 } ]
-      this.playStatisticsAnim(data);
     }
+    else{
+      url = NetConstants.CFD_API.GET_OTHER_USER_STATISTICS_API;
+      url = url.replace('<userID>', this.props.userId)
+    }
+
+  	NetworkModule.fetchTHUrl(
+  		url,
+  		{
+  			method: 'GET',
+  			headers: {
+          'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+        },
+  			cache: 'offline',
+  		},
+  		(responseJson) => {
+        console.log("playStatisticsAnim " + JSON.stringify(responseJson))
+  			this.showBars(responseJson);
+  		},
+  		(result) => {
+  			if(NetConstants.AUTH_ERROR === result.errorMessage){
+
+  			}else{
+  				// Alert.alert('', errorMessage);
+  			}
+  		}
+  	)
   }
 
 
@@ -403,7 +424,7 @@ export default class StatisticBarBlock extends Component {
 				<View style={styles.barNamesContainer}>
 					{barNameText}
 				</View>
-				<View style={[styles.verticleSeparator,]}/>
+				{/* <View style={[styles.verticleSeparator,]}/> */}
 				<View style={[{width: viewWidth}]}>
 					{this.renderBars()}
 				</View>

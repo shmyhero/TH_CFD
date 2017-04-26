@@ -145,7 +145,7 @@ var StockStatisticsPage = React.createClass({
 
 		var additionalStyle = {backgroundColor:ColorConstants.title_blue()};
 		if(LogicData.getAccountState()){
-			additionalStyle.minHeight = 200;
+			additionalStyle.height = 179;
 		}
 
 		return (

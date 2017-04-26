@@ -1395,6 +1395,7 @@ var StockOpenPositionPage = React.createClass({
 					descriptionColor={1}
 					xAxisPosition="BOTTOM"
 					borderColor={borderColor}
+					preCloseColor={borderColor}
 					xAxisTextSize={8}
 					textColor={textColor}
 					chartPaddingTop={0}

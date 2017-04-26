@@ -631,7 +631,7 @@ var StockDetailPage = React.createClass({
 			if(this.state.orientation == ORIENTATION_LANDSPACE){
 				return ['#3f5680', '#3f5680'];
 			}else{
-				return [ColorConstants.TITLE_DARK_BLUE,ColorConstants.TITLE_DARK_BLUE];
+				return ['#425a85', '#1f3150'];
 			}
 		}else{
 			if(this.state.orientation == ORIENTATION_LANDSPACE){

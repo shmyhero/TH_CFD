@@ -175,10 +175,13 @@ export default class StatisticBarBlock extends Component {
     // 	}
     // }
     // else{
-
-    //Always use the same api
-    url = NetConstants.CFD_API.GET_OTHER_USER_STATISTICS_API;
-    url = url.replace('<userID>', this.props.userId)
+    if(!LogicData.getAccountState()){
+      url = NetConstants.CFD_API.GET_USER_STATISTICS_API;
+    }else{
+      //Always use the same api
+      url = NetConstants.CFD_API.GET_OTHER_USER_STATISTICS_API;
+      url = url.replace('<userID>', this.props.userId)
+    }
 
     //}
 

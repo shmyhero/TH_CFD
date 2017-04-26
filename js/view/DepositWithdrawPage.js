@@ -82,7 +82,7 @@ export default class DepositWithdrawPage extends Component {
 		NetworkModule.loadUserBalance(true, (response, isCache)=>{
 			if(!isCache){
 				this.setState({
-					balance: response.available,
+					balance: response.refundable,
 				});
 			}
 		});
@@ -218,7 +218,7 @@ export default class DepositWithdrawPage extends Component {
     return(
 			<View style={styles.totalTextContainer}>
         <Text style={styles.totalIncomeTitleText}>
-          剩余资金(美元)
+          可出资金(美元)
         </Text>
         <Text style={styles.totalIncomeText}>
           {balance}

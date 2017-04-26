@@ -424,7 +424,7 @@ export default class StatisticBarBlock extends Component {
 				<View style={styles.barNamesContainer}>
 					{barNameText}
 				</View>
-				<View style={[styles.verticleSeparator,]}/>
+				{/* <View style={[styles.verticleSeparator,]}/> */}
 				<View style={[{width: viewWidth}]}>
 					{this.renderBars()}
 				</View>

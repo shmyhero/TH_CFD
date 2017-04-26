@@ -89,11 +89,15 @@ export default class PositionBlock extends Component {
       }
 
       url = url.replace("<userID>", this.props.userId);
+      var userData = LogicData.getUserData()
 
       NetworkModule.fetchTHUrl(
         url,
         {
           method: 'GET',
+          headers: {
+            'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+          },
           cache: 'none',
         },
         (responseJson) => {

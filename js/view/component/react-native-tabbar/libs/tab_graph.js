@@ -57,6 +57,10 @@ export const buildTabGraph = (children, tabs) => {
   })();
 
   React.Children.forEach(children, (tabChild) => {
+    if(!tabChild){
+      return;
+    }
+
     let tab = {};
 
     if (__DEV__ && tabChild.type !== Tab) {

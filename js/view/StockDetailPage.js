@@ -609,7 +609,7 @@ var StockDetailPage = React.createClass({
 		var tabDataCurrent = this.state.chartViewType == CHARTVIEWTYPE_LINE ? tabDataLandscopeLine : tabDataLandscopeCandle;
 		var tabs = tabDataCurrent.map(
 			(data, i) =>
-			<TouchableOpacity style={{width:60, justifyContent:'center',}} key={i}
+			<TouchableOpacity style={{justifyContent:'center',marginLeft:25}} key={i}
 					onPress={() => this.pressChartHeaderTab(data.type)}>
 				<Text style={this.state.chartType == data.type? styles.chartTitleTextHighlighted : [styles.chartTitleText, tabcolorStyle]}>
 					{data.name}

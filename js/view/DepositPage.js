@@ -414,7 +414,7 @@ export default class DepositPage extends Component{
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			url: NetConstants.TRADEHERO_API.HELP_CENTER_URL_ACTUAL,
 			isShowNav: false,
-			title: "入金帮助",
+      title: "帮助中心",
 		});
 	}
 

@@ -184,7 +184,6 @@ var MyIncomePage = React.createClass({
 		this.props.navigator.push({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			title:'交易金规则',
-			isShowNav:false,
 			url:NetConstants.TRADEHERO_API.INCOME_RULE
 		});
 	},

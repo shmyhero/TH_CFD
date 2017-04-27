@@ -28,6 +28,7 @@ var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
 var WebSocketModule = require('../module/WebSocketModule')
 var TalkingdataModule = require('../module/TalkingdataModule')
+
 //var TongDaoModule = require('../module/TongDaoModule')
 var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
@@ -1673,11 +1674,11 @@ var StockOpenPositionPage = React.createClass({
 				<View style={styles.extendRowWrapper}>
 					<View style={styles.extendLeft}>
 						<Text style={styles.extendTextTop}>开仓价格</Text>
-						<Text style={styles.extendTextBottom}>{rowData.settlePrice.toFixed(2)}</Text>
+						<Text style={styles.extendTextBottom}>{rowData.settlePrice.maxDecimal(5)}</Text>
 					</View>
 					<View style={styles.extendMiddle}>
 						<Text style={styles.extendTextTop}>{currentPriceLabel}</Text>
-						<Text style={styles.extendTextBottom}>{lastPrice.toFixed(2)}</Text>
+						<Text style={styles.extendTextBottom}>{lastPrice.maxDecimal(5)}</Text>
 					</View>
 					<View style={styles.extendRight}>
 						<Text style={styles.extendTextTop}>{openDate.Format('yy/MM/dd')}</Text>

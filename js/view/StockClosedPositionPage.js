@@ -553,7 +553,7 @@ var StockClosedPositionPage = React.createClass({
 				<View style={styles.extendRowWrapper}>
 					<View style={styles.extendLeft}>
 						<Text style={styles.extendTextTop}>开仓价格</Text>
-						<Text style={styles.extendTextBottom}>{rowData.openPrice.toFixed(2)}</Text>
+						<Text style={styles.extendTextBottom}>{rowData.openPrice.maxDecimal(5)}</Text>
 					</View>
 					<View style={styles.extendMiddle}>
 						<Text style={styles.extendTextTop}>开仓费</Text>
@@ -568,7 +568,7 @@ var StockClosedPositionPage = React.createClass({
 				<View style={styles.extendRowWrapper}>
 					<View style={styles.extendLeft}>
 						<Text style={styles.extendTextTop}>平仓价格</Text>
-						<Text style={styles.extendTextBottom}>{rowData.closePrice.toFixed(2)}</Text>
+						<Text style={styles.extendTextBottom}>{rowData.closePrice.maxDecimal(5)}</Text>
 					</View>
 					<View style={styles.extendMiddle}>
 						<Text style={styles.extendTextTop}>平仓费</Text>

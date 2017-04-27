@@ -42,6 +42,7 @@ var {EventCenter, EventConst} = require('./js/EventCenter');
 var Orientation = require('react-native-orientation');
 
 require('./js/utils/dateUtils')
+require('./js/utils/numberUtils')
 
 var SCREEN_WIDTH = Dimensions.get('window').width;
 var ToTheLeft = {

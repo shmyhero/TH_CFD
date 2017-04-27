@@ -315,8 +315,8 @@ public abstract class BaseChartDrawer implements IChartDrawer {
         });
         chart.getAxisLeft().removeAllLimitLines();
         chart.getAxisRight().removeAllLimitLines();
-//        chart.getAxisLeft().setAxisMinValue(minVal);
-//        chart.getAxisLeft().setAxisMaxValue(maxVal);
+        chart.getAxisLeft().setAxisMinValue(minVal);
+        chart.getAxisLeft().setAxisMaxValue(maxVal);
     }
 
     protected interface OnLimitLinesPositionCalculatedHandler {

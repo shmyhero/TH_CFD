@@ -839,7 +839,7 @@ var StockDetailPage = React.createClass({
 							{this.renderScrollHeader()}
 							{this.renderScroll()}
 						</View>
-						<View style={{flex: 2, alignItems: 'center', justifyContent: 'space-around', paddingTop: 30, paddingBottom:Platform.OS === 'ios'?10:48}}>
+						<View style={{flex: 2, alignItems: 'center', justifyContent: 'space-around', paddingTop: 30, paddingBottom: 10}}>
 							{this.renderMinTradeMondy()}
 							{this.renderLeftMoney()}
 							{/* <Text style={styles.smallLabel}> 手续费为{charge}美元</Text> */}

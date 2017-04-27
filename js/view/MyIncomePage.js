@@ -180,6 +180,15 @@ var MyIncomePage = React.createClass({
 		this.refs[RULE_DIALOG].show();
 	},
 
+	showRules: function(){
+		this.props.navigator.push({
+			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			title:'交易金规则',
+			isShowNav:false,
+			url:NetConstants.TRADEHERO_API.INCOME_RULE
+		});
+	},
+
 	gotoNext: function(){
 		this.props.navigator.push({
 			name: MainPage.WITHDRAW_INCOME_ROUTE,
@@ -343,7 +352,7 @@ var MyIncomePage = React.createClass({
 			<View style={styles.wrapper}>
 				<NavBar title='我的交易金' showBackButton={true} navigator={this.props.navigator}
 					textOnRight='规则'
-					rightTextOnClick={()=>this.showDialog()}/>
+					rightTextOnClick={()=>this.showRules()}/>
 				<ListView
 					style={styles.list}
 					dataSource={this.state.dataSource}
@@ -358,9 +367,9 @@ var MyIncomePage = React.createClass({
 						textStyle={styles.buttonText}
 						text={'转入实盘账户'} />
 				</View>
-				<HeaderLineDialog ref={RULE_DIALOG}
+				{/* <HeaderLineDialog ref={RULE_DIALOG}
 				headerImage={require('../../images/my_income_strategy.png')}
-				messageLines={this.rules}/>
+				messageLines={this.rules}/> */}
 			</View>
 		);
 	},

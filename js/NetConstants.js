@@ -211,6 +211,8 @@ function getTradeHeroAPI(){
     NEW_USER_INVITATION_ACTUAL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/Invitation.html',
     WEBVIEW_CARD_RULE:TRADEHERO_SERVER_IP + '/TH_CFD_SP/cardRule.html',//卡片详情
     WEBVIEW_TRADE_LEVEL:TRADEHERO_SERVER_IP+'/TH_CFD_SP/level.html',//交易等级
+
+    INCOME_RULE:TRADEHERO_SERVER_IP+'/TH_CFD_WEB/TradgoldRule.html',
   }
 }
 

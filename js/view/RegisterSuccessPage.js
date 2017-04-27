@@ -42,7 +42,7 @@ var RegisterSuccessPage = React.createClass({
       dialogVisible: false,
       fadeAnim: new Animated.Value(1),
 			modalVisible: false,
-			rewardAmount: 20,
+			rewardAmount: 50,
     };
   },
 

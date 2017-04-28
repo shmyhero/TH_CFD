@@ -37,7 +37,7 @@ var InputAccessory = React.createClass({
 			textValue: '',
 			maxValue: 0,
 			rightButtonOnClick: null,
-			minInvestUSD: 20,
+			minInvestUSD: 50,
 		};
 	},
 
@@ -106,6 +106,10 @@ var InputAccessory = React.createClass({
 			hideKA: true,
 			opacity: 0,
 		})
+	},
+
+	isShow: function(){
+		return !this.state.hideKA;
 	},
 
 	dismissKeyboardHandler: function() {

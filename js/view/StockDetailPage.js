@@ -894,6 +894,11 @@ var StockDetailPage = React.createClass({
 
 	chartClicked:function(){
 		//Make sure the chart can only be pressed once.
+		if(this.refs['InputAccessory'] && this.refs['InputAccessory'].isShow()){
+			this.refs['InputAccessory'].dismissKeyboardHandler()
+			return;
+		}
+
 		if(this.chartClickable){
 			this.chartClickable = false;
 			console.log("chartClicked ")

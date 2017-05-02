@@ -20,6 +20,7 @@ var InputAccessory = React.createClass({
 			visibleHeight: Dimensions.get('window').height,
 			opacity: 0,
 			validValue: 0, //0, ok; 1, too less; 2, too much
+			hideKA: true,
 		};
 	},
 

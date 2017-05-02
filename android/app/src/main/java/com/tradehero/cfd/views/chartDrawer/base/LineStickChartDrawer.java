@@ -158,14 +158,15 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
     }
 
 
-    public boolean needDrawDescription(){
+    public boolean needDrawDescription(CombinedChart chart){
+        if(((ReactChart)chart).isLandspace())return false;
         return true;
     }
 
     @Override
     protected void calculateZoom(CombinedChart chart, CombinedData data) {
         chart.setVisibleXRangeMinimum(1);
-        if (needDrawPreCloseLine() && preClose != 0) {
+        if (needDrawDescription(chart) && preClose != 0) {
             float maxPrice = data.getYMax();
             float minPrice = data.getYMin();
             float maxPercentage = (maxPrice - preClose) / preClose * 100;
@@ -175,7 +176,7 @@ public abstract class LineStickChartDrawer extends BaseChartDrawer {
             setDescription(chart, "", "", "", "");
         }
 
-        if(!needDrawDescription()){
+        if(!needDrawDescription(chart)){
             setDescription(chart, "", "", "", "");
         }
 

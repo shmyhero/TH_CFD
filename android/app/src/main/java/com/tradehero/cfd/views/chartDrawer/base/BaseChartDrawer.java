@@ -430,7 +430,7 @@ public abstract class BaseChartDrawer implements IChartDrawer {
 
     //设置 左上左下右上右下 文本描述
     public void setDescription(CombinedChart chart, String lt, String lb, String rt, String rb) {
-        if(MainActivity.isLandscape()){
+        if(((ReactChart)chart).isLandspace()){
             chart.setDescription("", "", "", "");
         }else{
             chart.setDescription(lt, lb, rt, rb);

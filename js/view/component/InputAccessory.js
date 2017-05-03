@@ -175,16 +175,20 @@ var InputAccessory = React.createClass({
 			}
 		}
 
-		return ( <View style = {[s.InputAccessory, {opacity: this.state.opacity}, styleOfPosition]}
-					onLayout = {(e) => this.rotateDevice(e)} >
-					<Text numberOfLines={1} style = {[s.InputAccessoryLabelText]} >
-					{this.props.enableNumberText ? this.props.textValue : ''}
-					</Text>
-					{warningText}
-					<TouchableOpacity onPress = {() => this.dismissKeyboardHandler()} >
-						<Text style = {[s.InputAccessoryButtonText]} >完成 </Text>
-					</TouchableOpacity>
-				</View>)
+		if(this.state.hideKA){
+			return null;
+		}else{
+			return ( <View style = {[s.InputAccessory, {opacity: this.state.opacity}, styleOfPosition]}
+						onLayout = {(e) => this.rotateDevice(e)} >
+						<Text numberOfLines={1} style = {[s.InputAccessoryLabelText]} >
+						{this.props.enableNumberText ? this.props.textValue : ''}
+						</Text>
+						{warningText}
+						<TouchableOpacity onPress = {() => this.dismissKeyboardHandler()} >
+							<Text style = {[s.InputAccessoryButtonText]} >完成 </Text>
+						</TouchableOpacity>
+					</View>)
+		}
 	}
 });
 

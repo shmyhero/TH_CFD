@@ -43,6 +43,7 @@ var Orientation = require('react-native-orientation');
 
 require('./js/utils/dateUtils')
 require('./js/utils/numberUtils')
+require('./js/utils/stringUtils')
 
 var SCREEN_WIDTH = Dimensions.get('window').width;
 var ToTheLeft = {

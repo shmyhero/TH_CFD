@@ -164,7 +164,7 @@ var OAPersonalInfoPage = React.createClass({
 									idData = this.listRawData[i];
 								}
 							}
-							if(errorMessage.inculdes("库中无此号")){
+							if(errorMessage.contains("库中无此号")){
 								idData.error = "身份证号码不存在";
 							}
 						}

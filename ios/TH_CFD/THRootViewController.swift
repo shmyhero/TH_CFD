@@ -21,7 +21,8 @@ class THRootViewController: UIViewController,CLLocationManagerDelegate {
     init() {
         super.init(nibName: nil, bundle: nil)
         //Do whatever you want here
-        self.checkLocation()
+//        self.checkLocation()
+        self.checkIP()
     }
     
     override func viewWillTransitionToSize(size:CGSize,
@@ -39,6 +40,7 @@ class THRootViewController: UIViewController,CLLocationManagerDelegate {
         return true
     }
     
+    // MARK: - Location Check
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
 //        SwiftNotice.showNoticeWithText(SwiftNotice.NoticeType.info, text: "定位发生异常：\(error)", autoClear: true, autoClearTime: 1)
     }
@@ -134,7 +136,7 @@ class THRootViewController: UIViewController,CLLocationManagerDelegate {
         let alertController = UIAlertController(title: message,
                                                 message: "",
                                                 preferredStyle: .Alert)
-        let okAction = UIAlertAction(title: "好的", style: .Default, handler: {
+        let okAction = UIAlertAction(title: "确定", style: .Default, handler: {
             action in
             self.byebyeApp(message)
         })
@@ -143,6 +145,32 @@ class THRootViewController: UIViewController,CLLocationManagerDelegate {
     }
     
     func byebyeApp(message:String!) {
-        fatalError(message)
+//        fatalError(message)
+        exit(0)
+    }
+    
+    // MARK: - IP Check
+    func checkIP()
+    {
+        //(1）设置请求路径
+        let urlStr:NSString = String(format:"http://cfd-webapi.chinacloudapp.cn/api/ipcheck")
+        let url:NSURL = NSURL(string: urlStr as String)!
+        
+        //(2) 创建请求对象
+        let request:NSURLRequest = NSURLRequest(URL: url)
+        
+        //(3) 发送请求
+        NSURLConnection.sendAsynchronousRequest(request, queue:NSOperationQueue()) { (res, data, error)in
+            //服务器返回：请求方式 = GET，返回数据格式 = JSON
+            let  str = NSString(data: data!, encoding:NSUTF8StringEncoding)
+            if str == "false" {
+                self.noticeAndQuit("检测到您当前所在的位置，不在本产品的许可区域内，点击确定退出")
+            }
+            else {
+                print ("IP address available.")
+//                self.noticeAndQuit("检测到您当前所在的位置，不在本产品的许可区域内，点击确定退出")
+            }
+            
+        }
     }
 }

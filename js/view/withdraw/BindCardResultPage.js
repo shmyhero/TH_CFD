@@ -94,6 +94,7 @@ export default class BindCardResultPage extends Component {
 		var liveUserInfo = LogicData.getLiveUserInfo();
 		this.setState({
 			bankCardRejectReason: liveUserInfo.bankCardRejectReason,
+			pendingDays: liveUserInfo.pendingDays,
 		})
 		this.listRawData[0].value = liveUserInfo.lastName + liveUserInfo.firstName;
 
@@ -138,19 +139,19 @@ export default class BindCardResultPage extends Component {
           this.listRawData[i].value = finalText;
 
           break;
-				case "lastWithdraw":
-					if(this.props.bankCardStatus !== "Approved"){
-						this.listRawData[i].value = liveUserInfo.lastWithdraw;
-					}
-					break;
-				case "lastWithdrawAt":
-					if(this.props.bankCardStatus !== "Approved"){
-						var dt = new Date(liveUserInfo.lastWithdrawAt);
-			      var month = dt.getMonth()+1;
-			      var timeString = dateFormat(dt, "yyyy.mm.dd HH:MM:ss");
-						this.listRawData[i].value = timeString;
-					}
-					break;
+				// case "lastWithdraw":
+				// 	if(this.props.bankCardStatus !== "Approved"){
+				// 		this.listRawData[i].value = liveUserInfo.lastWithdraw;
+				// 	}
+				// 	break;
+				// case "lastWithdrawAt":
+				// 	if(this.props.bankCardStatus !== "Approved"){
+				// 		var dt = new Date(liveUserInfo.lastWithdrawAt);
+			  //     var month = dt.getMonth()+1;
+			  //     var timeString = dateFormat(dt, "yyyy.mm.dd HH:MM:ss");
+				// 		this.listRawData[i].value = timeString;
+				// 	}
+				// 	break;
         default:
           break;
     	}
@@ -321,10 +322,10 @@ export default class BindCardResultPage extends Component {
 		var hintText = "";
 		switch(this.props.bankCardStatus){
 			case "PendingReview":
-			 	hintText = "注意：首次出金需审核银行卡信息，出金于3个工作日内完成";
+			 	hintText = "";//"注意：首次出金需审核银行卡信息，出金于3个工作日内完成";
 				break;
 			case "Rejected":
-				hintText = "注意：出金金额于3个工作日内退还到您的实盘账户";
+				hintText = "";//"注意：出金金额于3个工作日内退还到您的实盘账户";
 				break;
 		}
 		if(hintText!==""){
@@ -343,7 +344,7 @@ export default class BindCardResultPage extends Component {
 		var buttonAction = ()=>{};
 		switch(this.props.bankCardStatus){
 			case "PendingReview":
-				buttonText = "出金审核在3个工作日内完成";
+				buttonText = "预计"+ this.state.pendingDays + "个工作日内绑定成功";
 				nextEnabled = false;
 				break;
 			case "Rejected":
@@ -379,16 +380,17 @@ export default class BindCardResultPage extends Component {
 	render() {
 		var title = "";
 		console.log("this.props.bankCardStatus " + this.props.bankCardStatus)
-		switch(this.props.bankCardStatus){
-			case "PendingReview":
-				title = "出金";
-				break;
-			case "Approved":
-				title = "我的银行卡";
-				break;
-			case "Rejected":
-				title = "出金";
-		}
+		title = "我的银行卡";
+		// switch(this.props.bankCardStatus){
+		// 	case "PendingReview":
+		// 		title = "我的银行卡";
+		// 		break;
+		// 	case "Approved":
+		// 		title = "我的银行卡";
+		// 		break;
+		// 	case "Rejected":
+		// 		title = "我的银行卡";
+		//	}
 		return (
 			<View style={styles.wrapper}>
         <NavBar title={title}
@@ -421,7 +423,7 @@ export default class BindCardResultPage extends Component {
 		return (
 			<View>
 				{listDataView}
-				{this.renderHintView()}
+				{/* {this.renderHintView()} */}
 			</View>);
 	}
 };

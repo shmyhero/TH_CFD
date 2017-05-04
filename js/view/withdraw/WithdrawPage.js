@@ -69,6 +69,8 @@ export default class WithdrawPage extends Component {
 
       var cardBank = liveUserInfo.bankName;
       var bankIcon = liveUserInfo.bankIcon;
+      var bankCardStatus = liveUserInfo.bankCardStatus;
+      var pendingDays = liveUserInfo.pendingDays;
       var withdrawChargeHint = balanceData.comment;
 
       this.state={
@@ -85,6 +87,8 @@ export default class WithdrawPage extends Component {
         feeRate: 0.01,
         minFee: 5.00,
         fee: (0.00).toFixed(2),
+        bankCardStatus: bankCardStatus,
+        pendingDays: pendingDays,
       }
     }
   }
@@ -191,8 +195,21 @@ export default class WithdrawPage extends Component {
     this.props.navigator.push({
       name: MainPage.WITHDRAW_RESULT_ROUTE,
       popToOutsidePage: this.props.popToOutsidePage,
-      bankCardStatus: "Approved",
+      bankCardStatus: this.state.bankCardStatus,
     })
+  }
+
+  renderBindCardStatus(){
+    if(this.state.bankCardStatus === "PendingReview"){
+      return(
+        <Text style={[styles.hintText, styles.warningHintText]}>信息检查中...</Text>
+      )
+    }
+    else{
+      return(
+        <Text style={[styles.hintText, styles.successHintText]}>绑卡成功，解除绑定</Text>
+      )
+    }
   }
 
   renderRow(rowData, section, rowID){
@@ -204,6 +221,7 @@ export default class WithdrawPage extends Component {
    					<Text style={styles.bankTitle}>{this.state.cardBank}</Text>
   	        <Text style={styles.cardNumberText}>{"尾号"+this.state.lastCardNumber}</Text>
           </View>
+          {this.renderBindCardStatus()}
           <Image style={styles.moreImage} source={require("../../../images/icon_arrow_right.png")} />
         </TouchableOpacity>
       );
@@ -360,6 +378,12 @@ export default class WithdrawPage extends Component {
       nextEnabled = false;
     }
 
+    var buttonText = this.state.refundETA + '个工作日内到账，确认出金';
+    if(this.state.bankCardStatus === "PendingReview"){
+      nextEnabled = false;
+      buttonText = "预计"+ this.state.pendingDays + "个工作日内绑定成功";
+    }
+
     return (
 			<View style={styles.wrapper}>
         <NavBar title="出金"
@@ -401,7 +425,7 @@ export default class WithdrawPage extends Component {
   						onPress={()=>this.gotoNext()}
   						textContainerStyle={styles.buttonView}
   						textStyle={styles.buttonText}
-  						text={this.state.validateInProgress? "信息正在检查中...": this.state.refundETA + '个工作日内到账，确认出金'} />
+  						text={this.state.validateInProgress? "信息正在检查中...": buttonText} />
   				</View>
         </View>
         {this.renderAccessoryBar()}
@@ -577,7 +601,17 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#5a5a5a',
     marginTop: 18,
-  }
+  },
+  hintText:{
+    fontSize:12,
+    marginRight:5,
+  },
+  warningHintText:{
+    color: '#ff6666',
+  },
+  successHintText:{
+    color: 'gray',
+  },
 });
 
 module.exports = WithdrawPage;

@@ -159,26 +159,14 @@ export default class DepositWithdrawPage extends Component {
 			alert("网络错误，请重试！");	//What should happen if there's no internet connection?
 		} else if(liveUserInfo.bankCardStatus == "PendingReview"
 						||liveUserInfo.bankCardStatus == "Rejected"){
-			if(liveUserInfo.bankCardStatus == "PendingReview"
-			&& !liveUserInfo.lastWithdrawAt && !liveUserInfo.lastWithdraw){
-				//User's first withdraw request should not be stucked if user's bank card isn't rejected.
-				//If there's no lastWithdrawAt and lastWithdraw, we treat it as the first withdraw request.
-				this.props.navigator.push({
-					name: MainPage.WITHDRAW_ROUTE,
-					bankCardStatus: liveUserInfo.bankCardStatus,
-					popToOutsidePage: ()=>{this.refreshData();}
-				});
-			}else{
-				this.props.navigator.push({
-					name: MainPage.WITHDRAW_RESULT_ROUTE,
-					bankCardStatus: liveUserInfo.bankCardStatus,
-					popToOutsidePage: ()=>{this.refreshData();}
-				});
-			}
+			this.props.navigator.push({
+				name: MainPage.WITHDRAW_RESULT_ROUTE,
+				bankCardStatus: liveUserInfo.bankCardStatus,
+				popToOutsidePage: ()=>{this.refreshData();}
+			});
 		} else if(liveUserInfo.bankCardNumber && liveUserInfo.bankCardNumber !== ""){
 			this.props.navigator.push({
 				name: MainPage.WITHDRAW_ROUTE,
-				bankCardStatus: liveUserInfo.bankCardStatus,
 				popToOutsidePage: ()=>{this.refreshData();}
 			});
 		}else{

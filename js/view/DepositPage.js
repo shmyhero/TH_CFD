@@ -384,8 +384,10 @@ export default class DepositPage extends Component{
 
 	requestPayConfirm(){
 		var userData = LogicData.getUserData()
+		var url = NetConstants.CFD_API.GET_PAY_DEMO_TEST_ID + '?amount=' + inputValue
+		console.log("requestPayConfirm url = " + url);
 		NetworkModule.fetchTHUrl(
-				NetConstants.CFD_API.GET_PAY_DEMO_TEST_ID,
+				url,
 			{
 				method: 'GET',
 				headers: {

@@ -69,6 +69,7 @@ var lastForceloopTime = 0
 var firstLoad = false
 const CARDS_LIST = "cardList"
 const SCROLL_VIEW = "scrollView"
+var accStatus
 
 var HomePage = React.createClass({
 	mixins: [TimerMixin],
@@ -142,7 +143,7 @@ var HomePage = React.createClass({
 
 		this.refs[CARDS_LIST] && this.refs[CARDS_LIST].scrollTo({x:0})
 		NetworkModule.fetchTHUrl(
-			NetConstants.CFD_API.GET_HOMEPAGE_BANNER_API,
+			NetConstants.CFD_API.GET_HOMEPAGE_BANNER_ALL_API,
 			{
 				method: 'GET',
 				cache: 'offline',
@@ -338,7 +339,8 @@ var HomePage = React.createClass({
 		var header = images[index].header
 		var digest = images[index].digest
 		var id = images[index].id
-		var filePath = images[index].imgUrl;
+		var filePath = images[index].imgUrl
+		var type = images[index].bannerType
 		// RN will cache the image.
 		// FSModule.getBannerImageLocalPath(imagePath)
 		// 	.then(filePath => {
@@ -351,6 +353,7 @@ var HomePage = React.createClass({
 			PAGES[index].url = targetUrl
 			PAGES[index].header = header
 			PAGES[index].digest = digest
+			PAGES[index].type = type
 			this.setState({
 				dataSource: ds.cloneWithRows(PAGES)
 			})
@@ -362,14 +365,115 @@ var HomePage = React.createClass({
 		var trackingData = {};
 		trackingData[TalkingdataModule.KEY_BANNER_PAGE] = PAGES[i].header;
 		TalkingdataModule.trackEvent(TalkingdataModule.BANNER_EVENT, "", trackingData)
-		this.gotoWebviewPage(PAGES[i].url,
-			'推荐',
-			PAGES[i].id,
-			PAGES[i].header,
-			PAGES[i].digest,
-			TalkingdataModule.BANNER_SHARE_EVENT)
 
-		//TongDaoModule.trackTopBannerEvent()
+
+		if(PAGES[i].type == 1){//根据type==1开通实盘
+			this.gotoCreateLiveAccount()
+		}else if(PAGES[i].type == 2){//根据type==2邀请好友
+			this.gotoInviteFriends()
+		}else{//默认是跳 ID 对应的网页
+			this.gotoWebviewPage(PAGES[i].url,
+				'推荐',
+				PAGES[i].id,
+				PAGES[i].header,
+				PAGES[i].digest,
+				TalkingdataModule.BANNER_SHARE_EVENT)
+		}
+	},
+
+	gotoWebviewPage2: function(targetUrl, title, hideNavBar) {
+		this.props.navigator.push(this.getWebViewPageScene(targetUrl, title, hideNavBar));
+	},
+
+	getWebViewPageScene: function(targetUrl, title, hideNavBar) {
+		var userData = LogicData.getUserData()
+		var userId = userData.userId
+		if (userId == undefined) {
+			userId = 0
+		}
+
+		if (targetUrl.indexOf('?') !== -1) {
+			targetUrl = targetUrl + '&userId=' + userId
+		} else {
+			targetUrl = targetUrl + '?userId=' + userId
+		}
+
+		return {
+			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			url: targetUrl,
+			title: title,
+			isShowNav: hideNavBar ? false : true,
+		}
+	},
+
+	gotoInviteFriends:function(){
+		console.log("跳转至邀请好友");
+		var url = LogicData.getAccountState()?NetConstants.TRADEHERO_API.NEW_USER_INVITATION_ACTUAL:NetConstants.TRADEHERO_API.NEW_USER_INVITATION;
+		var userData = LogicData.getUserData()
+		var notLogin = Object.keys(userData).length === 0
+		if(!notLogin){
+			this.gotoWebviewPage2(url, '邀请好友', true);
+		}else{
+			this.props.navigator.push({
+				name: MainPage.LOGIN_ROUTE,
+				getNextRoute: ()=> this.getWebViewPageScene(url, '邀请好友', true),
+			});
+		}
+	},
+
+	gotoCreateLiveAccount:function(){
+		console.log("跳转至开通实盘");
+		var url = LogicData.getAccountState()?NetConstants.TRADEHERO_API.NEW_USER_INVITATION_ACTUAL:NetConstants.TRADEHERO_API.NEW_USER_INVITATION;
+		var userData = LogicData.getUserData()
+		var notLogin = Object.keys(userData).length === 0
+		if(!notLogin){
+			this.gotoAccountStateExce()
+		}else{
+			this.props.navigator.push({
+				name: MainPage.LOGIN_ROUTE,
+				// getNextRoute: ()=> this.gotoAccountStateExce(),
+			});
+		}
+	},
+
+	////0未注册 1已注册 2审核中 3审核失败
+	gotoAccountStateExce:function(){
+		var meData = LogicData.getMeData();
+		console.log('提示：','liveAccStatus = '+meData.liveAccStatus + ', liveAccRejReason = '+ meData.liveAccRejReason)
+	  accStatus = meData.liveAccStatus;
+
+		if(accStatus == 0){
+			this.gotoOpenLiveAccount();
+		}else if(accStatus == 1){//已注册，去登录
+			Alert.alert('温馨提示','您的实盘账户已开通');
+		}else if(accStatus == 2){
+			Alert.alert('温馨提示','您的实盘开户正在审核中');
+		}else if(accStatus == 3){
+			this.gotoOpenLiveAccount();
+		}else{
+
+		}
+	},
+
+	gotoOpenLiveAccount:function(){
+		var meData = LogicData.getMeData();
+	  console.log("showOARoute medata: " + JSON.stringify(meData));
+
+		var OARoute = {
+			name: MainPage.OPEN_ACCOUNT_ROUTE,
+			step: 0,
+			// onPop: this.reloadMeData,
+		};
+
+	  if(!meData.phone){
+			this.props.navigator.push({
+				name: MainPage.LOGIN_ROUTE,
+				nextRoute: OARoute,
+				isMobileBinding: true,
+			});
+		}else{
+				this.props.navigator.push(OARoute);
+		}
 	},
 
 	// getShareMovieEventInfo: function(){
@@ -501,81 +605,81 @@ var HomePage = React.createClass({
 	    return str.indexOf(suffix, str.length - suffix.length) !== -1;
 	},
 
-	payDemoTest:function(index){
-		var userData = LogicData.getUserData()
-		NetworkModule.fetchTHUrl(
-				NetConstants.CFD_API.GET_PAY_DEMO_TEST_ID,
-			{
-				method: 'GET',
-				headers: {
-					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-					'Content-Type': 'application/json; charset=UTF-8',
-				},
-			},
-			(responseJson) => {
-				 console.log('responseJson = ' + responseJson + 'index = ' + index);
+//	payDemoTest:function(index){
+//		var userData = LogicData.getUserData()
+//		NetworkModule.fetchTHUrl(
+//				NetConstants.CFD_API.GET_PAY_DEMO_TEST_ID,
+//			{
+//				method: 'GET',
+//				headers: {
+//					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+//					'Content-Type': 'application/json; charset=UTF-8',
+//				},
+//			},
+//			(responseJson) => {
+//				 console.log('responseJson = ' + responseJson + 'index = ' + index);
+//
+//				 if (Platform.OS === 'ios') {
+//					 var url =            'http://cn.tradehero.mobi/test_form/test_form_Ayondo-wechat.html';
+//					 if(index == 1){url = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-alipay.html';}
+//					 if(index == 2){url = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-quick.html';}
+//					 if(index == 3){url = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-wechat.html';}
+//					 this.props.navigator.push({
+//			 			name: MainPage.PAYMENT_PAGE,
+//			 			url: url,
+//			 			title: responseJson,
+//			 			backFunction: this.forceloopSwipers,
+//			 		});
+//				 }else{
+//					 var payMethod;
+//					 if(index == 1){payMethod = 'alipay'}
+//					 if(index == 2){payMethod = 'quick'}
+//					 if(index == 3){payMethod = 'wechat'}
+//					 this.props.navigator.push({
+//			 			name: MainPage.PAYMENT_PAGE,
+//			 			url: 'http://www.test.paytest/'+payMethod,
+//			 			title: responseJson,
+//			 			backFunction: this.forceloopSwipers,
+//			 		});
+//				 }
+//			}
+//		);
+//	},
 
-				 if (Platform.OS === 'ios') {
-					 var url =            'http://cn.tradehero.mobi/test_form/test_form_Ayondo-wechat.html';
-					 if(index == 1){url = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-alipay.html';}
-					 if(index == 2){url = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-quick.html';}
-					 if(index == 3){url = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-wechat.html';}
-					 this.props.navigator.push({
-			 			name: MainPage.PAYMENT_PAGE,
-			 			url: url,
-			 			title: responseJson,
-			 			backFunction: this.forceloopSwipers,
-			 		});
-				 }else{
-					 var payMethod;
-					 if(index == 1){payMethod = 'alipay'}
-					 if(index == 2){payMethod = 'quick'}
-					 if(index == 3){payMethod = 'wechat'}
-					 this.props.navigator.push({
-			 			name: MainPage.PAYMENT_PAGE,
-			 			url: 'http://www.test.paytest/'+payMethod,
-			 			title: responseJson,
-			 			backFunction: this.forceloopSwipers,
-			 		});
-				 }
-			}
-		);
-	},
-
-	magicButtonPress: function(index) {
-
-		//Pay Demo Test
-
-		this.payDemoTest(index);
-		return;
-
-		if (NO_MAGIC) {
-			return
-		}
-
-		// magicCode += ""+index
-
-		// if(this.endsWith(magicCode, "12341234")){
-		// 	// open account
-		// 	this.props.navigator.push({
-		// 		name: MainPage.OPEN_ACCOUNT_ROUTE,
-		// 		step: 0,
-		// 	});
-		// }
-		// else if(this.endsWith(magicCode, "41414141")) {
-		// 	this.logoutPress()
-		// }
-		var targetUrl = 'http://cn.tradehero.mobi/TH_CFD_WEB/detail0'+index+'.html'
-		if(LogicData.getAccountState()){
-			targetUrl = 'http://cn.tradehero.mobi/TH_CFD_SP/detail0'+index+'.html'
-		}
-		this.props.navigator.push({
-			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
-			url: targetUrl,
-			title: '',
-			backFunction: this.forceloopSwipers,
-		});
-	},
+//	magicButtonPress: function(index) {
+//
+//		//Pay Demo Test
+//
+//		this.payDemoTest(index);
+//		return;
+//
+//		if (NO_MAGIC) {
+//			return
+//		}
+//
+//		// magicCode += ""+index
+//
+//		// if(this.endsWith(magicCode, "12341234")){
+//		// 	// open account
+//		// 	this.props.navigator.push({
+//		// 		name: MainPage.OPEN_ACCOUNT_ROUTE,
+//		// 		step: 0,
+//		// 	});
+//		// }
+//		// else if(this.endsWith(magicCode, "41414141")) {
+//		// 	this.logoutPress()
+//		// }
+//		var targetUrl = 'http://cn.tradehero.mobi/TH_CFD_WEB/detail0'+index+'.html'
+//		if(LogicData.getAccountState()){
+//			targetUrl = 'http://cn.tradehero.mobi/TH_CFD_SP/detail0'+index+'.html'
+//		}
+//		this.props.navigator.push({
+//			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+//			url: targetUrl,
+//			title: '',
+//			backFunction: this.forceloopSwipers,
+//		});
+//	},
 
 	gotoNewUserGuide:function(){
 		var targetUrl = LogicData.getAccountState()?NetConstants.TRADEHERO_API.WEBVIEW_URL_SCHOOL_ACTUAL:NetConstants.TRADEHERO_API.WEBVIEW_URL_SCHOOL;
@@ -703,40 +807,42 @@ var HomePage = React.createClass({
 		}
 	},
 
-	renderIntroduceView: function(index, head, body, image) {
-		return (
-			<TouchableOpacity style={styles.blockContainer} activeOpacity={0.95} onPress={()=>this.magicButtonPress(index)}>
-				<View style={styles.blockContainer}>
-					<View style={styles.blockTextContainer}>
-						<Text style={[styles.blockTitleText],{color:LogicData.getAccountState()?ColorConstants.TITLE_DARK_BLUE:'#1862df'}}>
-							{head}
-						</Text>
-						<Text style={styles.blockBodyContent}>
-							{body}
-						</Text>
-					</View>
-					<Image style={styles.blockImage} source={image}/>
-				</View>
-			</TouchableOpacity>
-		)
-	},
-	renderBottomViews: function() {
-		return (
-			<View style={{flex:1}}>
-				<View style={styles.rowContainer}>
-					{this.renderIntroduceView(1, '涨跌双盈','买对趋势就是盈利',LogicData.getAccountState()?require('../../images/updown_actual.png'):require('../../images/updown.png'))}
-					<View style={styles.vertLine}/>
-					{this.renderIntroduceView(2, '以小搏大','本金加上杠杆交易',LogicData.getAccountState()?require('../../images/small_big_actual.png'):require('../../images/smallbig.png'))}
-				</View>
-				<View style={styles.horiLine}/>
-				<View style={styles.rowContainer}>
-					{this.renderIntroduceView(3, '实时行情','免费实时全球行情',LogicData.getAccountState()?require('../../images/markets_actual.png'):require('../../images/markets.png'))}
-					<View style={styles.vertLine}/>
-					{this.renderIntroduceView(4, '体验简单','极简交易三步骤',LogicData.getAccountState()?require('../../images/advantage_actual.png'):require('../../images/advantage.png'))}
-				</View>
-			</View>
-		)
-	},
+//	renderIntroduceView: function(index, head, body, image) {
+//		return (
+//			<TouchableOpacity style={styles.blockContainer} activeOpacity={0.95} onPress={()=>this.magicButtonPress(index)}>
+//				<View style={styles.blockContainer}>
+//					<View style={styles.blockTextContainer}>
+//						<Text style={[styles.blockTitleText],{color:LogicData.getAccountState()?ColorConstants.TITLE_DARK_BLUE:'#1862df'}}>
+//							{head}
+//						</Text>
+//						<Text style={styles.blockBodyContent}>
+//							{body}
+//						</Text>
+//					</View>
+//					<Image style={styles.blockImage} source={image}/>
+//				</View>
+//			</TouchableOpacity>
+//		)
+//	},
+
+
+//	renderBottomViews: function() {
+//		return (
+//			<View style={{flex:1}}>
+//				<View style={styles.rowContainer}>
+//					{this.renderIntroduceView(1, '涨跌双盈','买对趋势就是盈利',LogicData.getAccountState()?require('../../images/updown_actual.png'):require('../../images/updown.png'))}
+//					<View style={styles.vertLine}/>
+//					{this.renderIntroduceView(2, '以小搏大','本金加上杠杆交易',LogicData.getAccountState()?require('../../images/small_big_actual.png'):require('../../images/smallbig.png'))}
+//				</View>
+//				<View style={styles.horiLine}/>
+//				<View style={styles.rowContainer}>
+//					{this.renderIntroduceView(3, '实时行情','免费实时全球行情',LogicData.getAccountState()?require('../../images/markets_actual.png'):require('../../images/markets.png'))}
+//					<View style={styles.vertLine}/>
+//					{this.renderIntroduceView(4, '体验简单','极简交易三步骤',LogicData.getAccountState()?require('../../images/advantage_actual.png'):require('../../images/advantage.png'))}
+//				</View>
+//			</View>
+//		)
+//	},
 
 
 	renderNewUser:function(){
@@ -811,7 +917,7 @@ var HomePage = React.createClass({
 	renderBannar: function(i) {
 		return(
 			<TouchableOpacity
-				activeOpacity = {1.0}
+				activeOpacity = {0.8}
 				onPress={() => this.goToBannerPage(i)} key={i}>
 				<Image
 					style={[styles.image, {height: imageHeight, width: width}]}
@@ -1048,14 +1154,14 @@ var HomePage = React.createClass({
 		var dot = <View style={styles.guideDot} />
 		var slides = []
 		for (var i = 0; i < PAGES.length; i++) {
-			if (PAGES[i].imgUrl !== undefined && PAGES[i].imgUrl !== null) {
+			if (PAGES[i].imgUrl !== undefined && PAGES[i].imgUrl !== null) {//加载到了真实的banner位数据
 				slides.push (
 					this.renderBannar(i)
 				);
-			} else {
+			} else {//默认的2个banner位置,在没有加载到真实数据之前.
 				var index = i;
 				slides.push (
-					<TouchableOpacity
+					<TouchableOpacity activeOpacity = {0.8}
 						onPress={() => this.goToBannerPage(index)} key={index}>
 						<Image
 							style={[styles.image, {height: imageHeight, width: width}]}

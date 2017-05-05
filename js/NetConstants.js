@@ -66,6 +66,7 @@ function getCFDAPI(){
     GET_CLOSED_POSITION_API: CFD_API_SERVER + '/api/position/closed',
     GET_CLOSED_POSITION_LIVE_API: CFD_API_SERVER + '/api/position/live/closed',//LIVE ok
     GET_HOMEPAGE_BANNER_API: CFD_API_SERVER + '/api/banner2',
+    GET_HOMEPAGE_BANNER_ALL_API: CFD_API_SERVER + '/api/banner/all',
     OWN_STOCK_LIST_API: CFD_API_SERVER + '/api/security/bookmark',
     OWN_STOCK_LIST_LIVE_API: CFD_API_SERVER + '/api/security/live/bookmark',//LIVE ok
     POST_CREATE_POSITION_API: CFD_API_SERVER + '/api/position',

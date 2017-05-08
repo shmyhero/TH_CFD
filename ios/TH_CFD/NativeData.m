@@ -68,6 +68,12 @@ RCT_EXPORT_MODULE();
 	else if([dataName isEqualToString:@"accountState"])	{
 		[manager setIsLive:[(NSString *)data isEqualToString:@"true"]];
 	}
+    else if([dataName isEqualToString:@"toast"]){
+        dispatch_queue_t queue = dispatch_get_main_queue();
+        dispatch_async(queue, ^{
+            [SwiftNotice showToastNotice:(NSString *)data];
+        });
+    }
 }
 
 - (void)sendDataToRN:(NSString *)dataName data:(NSString *)jsonData

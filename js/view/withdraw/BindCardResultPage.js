@@ -34,6 +34,7 @@ var dateFormat = require('dateformat');
 var NetworkModule = require('../../module/NetworkModule');
 var NetConstants = require('../../NetConstants');
 var LogicData = require('../../LogicData');
+var Toast = require('../component/toast/Toast');
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
@@ -212,9 +213,9 @@ export default class BindCardResultPage extends Component {
 	}
 
   unbindCard(){
-		// this.setState({
-		// 	modalVisible: false,
-		// });
+		this.setState({
+			validateInProgress: true,
+		});
 
 		var userData = LogicData.getUserData()
 		if(userData.token == undefined){return}
@@ -235,8 +236,8 @@ export default class BindCardResultPage extends Component {
 				clearedInfo.lastName = liveUserInfo.lastName;
 				LogicData.setLiveUserInfo(clearedInfo);
 
-				if(this.props.bankCardStatus === "Approved"){
-					console.log("bbbb");
+				if(this.props.bankCardStatus === "Approved"
+					|| this.props.bankCardStatus === "PendingReview"){
 
 					var routes = this.props.navigator.getCurrentRoutes();
 					var popToRoute = null;
@@ -246,6 +247,8 @@ export default class BindCardResultPage extends Component {
 							break;
 						}
 					}
+
+					Toast.show("解绑成功");
 
 					if(popToRoute){
 						this.props.navigator.popToRoute(popToRoute);
@@ -322,7 +325,7 @@ export default class BindCardResultPage extends Component {
 		var hintText = "";
 		switch(this.props.bankCardStatus){
 			case "PendingReview":
-			 	hintText = "";//"注意：首次出金需审核银行卡信息，出金于3个工作日内完成";
+			 	hintText = "注意：信息正在检查中，预计一个工作日内审核成功！";
 				break;
 			case "Rejected":
 				hintText = "";//"注意：出金金额于3个工作日内退还到您的实盘账户";
@@ -344,8 +347,8 @@ export default class BindCardResultPage extends Component {
 		var buttonAction = ()=>{};
 		switch(this.props.bankCardStatus){
 			case "PendingReview":
-				buttonText = "预计"+ this.state.pendingDays + "个工作日内绑定成功";
-				nextEnabled = false;
+				buttonText = "解除绑定";
+				buttonAction = ()=>this.readyToUnbindCard();
 				break;
 			case "Rejected":
 				buttonText = "重新绑卡";
@@ -423,7 +426,7 @@ export default class BindCardResultPage extends Component {
 		return (
 			<View>
 				{listDataView}
-				{/* {this.renderHintView()} */}
+				{this.renderHintView()}
 			</View>);
 	}
 };
@@ -475,8 +478,8 @@ var styles = StyleSheet.create({
 		paddingLeft:0
 	},
 	hintText: {
-		fontSize: 12,
-		color: '#858585',//ColorConstants.INPUT_TEXT_COLOR,
+		fontSize: 15,
+		color: '#ff6666',//ColorConstants.INPUT_TEXT_COLOR,
 		alignItems:'center',
 		justifyContent:'center',
 		margin: 15,

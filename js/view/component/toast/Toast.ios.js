@@ -14,7 +14,7 @@ Toast.SHORT=500;
 Toast.LONG=2000;
 
 Toast.show = function(message){
-  NativeDataModule.passDataToNative('toast', message);
+  NativeDataModule.passRawDataToNative('toast', message);
 }
 
 module.exports = Toast;

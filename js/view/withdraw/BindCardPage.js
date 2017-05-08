@@ -207,10 +207,12 @@ export default class BindCardPage extends Component {
 		      },
 		      (responseJson)=>{
 		        LogicData.setLiveUserInfo(responseJson);
-						this.props.navigator.replace({
-							'name': MainPage.WITHDRAW_ROUTE,
-							'popToOutsidePage': this.props.popToOutsidePage,
-						});
+						this.props.popToOutsidePage && this.props.popToOutsidePage();
+						this.props.navigator.pop();
+						// this.props.navigator.replace({
+						// 	'name': MainPage.WITHDRAW_ROUTE,
+						// 	'popToOutsidePage': this.props.popToOutsidePage,
+						// });
 					},
 		      (result)=>{
 						this.setState({

@@ -517,6 +517,7 @@ var StockClosedPositionPage = React.createClass({
 	renderDetailInfo: function(rowData) {
 		var tradeImage = rowData.isLong ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
 		var profitColor = rowData.pl > 0 ? ColorConstants.STOCK_RISE_RED : ColorConstants.STOCK_DOWN_GREEN
+
 		if (rowData.pl === 0) {
 			profitColor = 'black'
 		}
@@ -532,6 +533,7 @@ var StockClosedPositionPage = React.createClass({
 		}
 
 		var netEarning = financing_dividend_sum + rowData.pl;
+		var netEarningColor = netEarning > 0 ? ColorConstants.STOCK_RISE_RED : ColorConstants.STOCK_DOWN_GREEN
 		return (
 			<View style={[{height: extendHeight}, styles.extendWrapper]} >
 				<View style={[styles.darkSeparator, {marginLeft: 0}]} />
@@ -587,7 +589,7 @@ var StockClosedPositionPage = React.createClass({
 					</View>
 					<View style={styles.extendMiddle}>
 						<Text style={styles.extendTextTop}>净收益(美元)</Text>
-						<Text style={[styles.extendTextBottom, {color:profitColor}]}>{netEarning.toFixed(2)}</Text>
+						<Text style={[styles.extendTextBottom, {color:netEarningColor}]}>{netEarning.toFixed(2)}</Text>
 					</View>
 					<View style={styles.extendRight}>
 					</View>

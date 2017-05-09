@@ -727,6 +727,7 @@
 		3D5080C11D9122EE00914327 /* ColorSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ColorSet.swift; path = TH_CFD/ColorSet.swift; sourceTree = "<group>"; };
 		3D5080D41D9123E400914327 /* LineChartRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LineChartRender.swift; path = TH_CFD/LineChartRender.swift; sourceTree = "<group>"; };
 		3D5080D61D91385C00914327 /* CandleChartRender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CandleChartRender.swift; path = TH_CFD/CandleChartRender.swift; sourceTree = "<group>"; };
+		3D51BECA1EC1B69D003D2750 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		3D5C46C71C92B51000BF6FD3 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditOwnStocksViewController.swift; path = TH_CFD/EditOwnStocksViewController.swift; sourceTree = "<group>"; };
 		3D61C5F01C9931810037816A /* EditOwnStockCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditOwnStockCell.swift; path = TH_CFD/EditOwnStockCell.swift; sourceTree = "<group>"; };
@@ -1919,7 +1920,6 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
@@ -2421,6 +2421,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				13B07FB21A68108700A75B9A /* Base */,
+				3D51BECA1EC1B69D003D2750 /* zh-Hans */,
 			);
 			name = LaunchScreen.xib;
 			path = TH_CFD;
@@ -2545,6 +2546,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -2602,6 +2604,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;

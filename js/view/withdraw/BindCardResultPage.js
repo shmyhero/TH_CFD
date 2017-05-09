@@ -213,9 +213,11 @@ export default class BindCardResultPage extends Component {
 	}
 
   unbindCard(){
-		this.setState({
-			validateInProgress: true,
-		});
+		if(this.state.bankCardStatus == "Rejected"){
+			this.setState({
+				validateInProgress: true,
+			});
+		}
 
 		var userData = LogicData.getUserData()
 		if(userData.token == undefined){return}

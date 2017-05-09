@@ -221,7 +221,7 @@ export default class WithdrawPage extends Component {
    					<Text style={styles.bankTitle}>{this.state.cardBank}</Text>
   	        <Text style={styles.cardNumberText}>{"尾号"+this.state.lastCardNumber}</Text>
           </View>
-          {this.renderBindCardStatus()}
+          {/* {this.renderBindCardStatus()} */}
           <Image style={styles.moreImage} source={require("../../../images/icon_arrow_right.png")} />
         </TouchableOpacity>
       );

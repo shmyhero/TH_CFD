@@ -219,7 +219,7 @@ export default class DepositWithdrawPage extends Component {
 		if(rowData.subtype === "withdraw" && this.state.hasWithdrawError){
 			return (
 				<View style={{flexDirection: 'row', alignItems:'center', justifyContent:'center'}}>
-					<Image source={require('../../images/icon_new.png')} style={styles.newEventImage}/>
+					<View style={styles.newEventImage}/>
 					<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
 				</View>
 			)
@@ -410,6 +410,8 @@ var styles = StyleSheet.create({
 	newEventImage:{
 		width: 6,
 		height: 6,
+		backgroundColor: '#ff0000',
+		borderRadius: 5,
 		marginRight: 8,
 	},
 });

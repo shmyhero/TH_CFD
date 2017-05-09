@@ -65,8 +65,8 @@ function getCFDAPI(){
     GET_OPEN_POSITION_LIVE_API: CFD_API_SERVER + '/api/position/live/open',//LIVE ok
     GET_CLOSED_POSITION_API: CFD_API_SERVER + '/api/position/closed',
     GET_CLOSED_POSITION_LIVE_API: CFD_API_SERVER + '/api/position/live/closed',//LIVE ok
-    GET_HOMEPAGE_BANNER_API: CFD_API_SERVER + '/api/banner2',
-    GET_HOMEPAGE_BANNER_ALL_API: CFD_API_SERVER + '/api/banner/all',
+    GET_HOMEPAGE_BANNER_API: CFD_API_SERVER + '/api/banner2',//实盘Banner，无实盘开户引导Banner位
+    GET_HOMEPAGE_BANNER_ALL_API: CFD_API_SERVER + '/api/banner/all',//模拟盘Banner，可能有实盘开户引导Banner位
     OWN_STOCK_LIST_API: CFD_API_SERVER + '/api/security/bookmark',
     OWN_STOCK_LIST_LIVE_API: CFD_API_SERVER + '/api/security/live/bookmark',//LIVE ok
     POST_CREATE_POSITION_API: CFD_API_SERVER + '/api/position',

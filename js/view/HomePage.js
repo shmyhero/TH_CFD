@@ -142,8 +142,14 @@ var HomePage = React.createClass({
 		var userData = LogicData.getUserData();
 
 		this.refs[CARDS_LIST] && this.refs[CARDS_LIST].scrollTo({x:0})
+
+		var url = NetConstants.CFD_API.GET_HOMEPAGE_BANNER_ALL_API
+		if(LogicData.getAccountState()){
+			var url = NetConstants.CFD_API.GET_HOMEPAGE_BANNER_API
+		}
+
 		NetworkModule.fetchTHUrl(
-			NetConstants.CFD_API.GET_HOMEPAGE_BANNER_ALL_API,
+			url,
 			{
 				method: 'GET',
 				cache: 'offline',

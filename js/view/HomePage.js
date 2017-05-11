@@ -54,7 +54,10 @@ const bg_hint_image = require("../../images/icon_bg_hint.png")
 
 var {height, width} = Dimensions.get('window');
 var barWidth = Math.round(width/3)-12
-var imageHeight = 300 / 750 * width
+
+var BANNER_HEIGHT = 450
+var BANNER_WIDTH = 750
+var imageHeight = BANNER_HEIGHT / BANNER_WIDTH * width
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var bsds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -87,6 +90,7 @@ var HomePage = React.createClass({
 			//winMovieTicket: false,
 			isConnected: false,
 			unreadMessageCount: 0,
+			navBarBackgroundColor: 'rgba(255,255,255,0)'
 		};
 	},
 
@@ -1201,10 +1205,12 @@ var HomePage = React.createClass({
 			<TouchableOpacity
 				activeOpacity={1}
 				onPress={()=>this.pressedNavBar()}
+				style={{position:'absolute', top:0, left: 0, right: width, width:width}}
 				>
 				<NavBar title={this.state.connected ? "首页" : "首页（未连接）"}
 					viewOnRight={this.renderMessageIcon()}
 					viewOnLeft={this.renderCheckInView()}
+					backgroundColor={this.state.navBarBackgroundColor}
 					navigator={this.props.navigator}/>
 			</TouchableOpacity>
 		)
@@ -1237,12 +1243,33 @@ var HomePage = React.createClass({
 
 	},
 
+	hexToRgb: function(hex) {
+	    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	    return result ? {
+	        r: parseInt(result[1], 16),
+	        g: parseInt(result[2], 16),
+	        b: parseInt(result[3], 16)
+	    } : null;
+	},
+
+	onScroll: function(event){
+		console.log("event " + event.nativeEvent.contentOffset.y)
+		var rgb = this.hexToRgb(ColorConstants.title_blue())
+		var alpha = 0;
+		var height = imageHeight - 64;
+		if(event.nativeEvent.contentOffset.y > height){
+			alpha = 1;
+		}else{
+			alpha = event.nativeEvent.contentOffset.y / height
+		}
+		this.setState({navBarBackgroundColor: 'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+alpha+')'})
+	},
 
 	render: function() {
 		height = Dimensions.get('window').height;
 		width = Dimensions.get('window').width;
 		barWidth = Math.round(width/3)-12
-		imageHeight = 300 / 750 * width;
+		imageHeight = BANNER_HEIGHT / BANNER_WIDTH * width;
 		var activeDot = <View style={styles.guideActiveDot} />
 		var dot = <View style={styles.guideDot} />
 		var slides = []
@@ -1265,11 +1292,11 @@ var HomePage = React.createClass({
 		}
 		return (
 			<View style={{width: width, flex: 1, paddingBottom: UIConstants.TAB_BAR_HEIGHT}}>
-				{this.renderNavBar()}
-
 				<View style={{width:width, flex: 1}}>
 					{this.renderBgHint()}
-					<ScrollView ref={SCROLL_VIEW} >
+					<ScrollView ref={SCROLL_VIEW}
+						onScroll={this.onScroll}
+						scrollEventThrottle={8} >
 						<View style={{width: width, height: imageHeight}}>
 							<Swiper
 							  style={{backgroundColor:'#eaeaea'}}
@@ -1308,6 +1335,7 @@ var HomePage = React.createClass({
 
 					</ScrollView>
 				</View>
+				{this.renderNavBar()}
 			</View>
 
 		);
@@ -1558,11 +1586,11 @@ var styles = StyleSheet.create({
 		marginRight:5,
 	},
 	bgHint:{
+		marginTop:36,
 		height:80,
 		position:'absolute',
 		alignItems:'center',
 		justifyContent:'center',
-
 	},
 	newUser:{
 		flexDirection:'row',

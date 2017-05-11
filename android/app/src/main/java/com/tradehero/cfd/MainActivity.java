@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
 
         CrashReport.initCrashReport(getApplicationContext());
         TalkingDataModule.register(getApplicationContext(), null, null, true);
-        TalkingDataAppCpa.init(this.getApplicationContext(), "d505985d4e8e494fbd59aab89d4b8b96", null);
+        TalkingDataAppCpa.init(this.getApplicationContext(), "f6b640d35afe4672b55a2666bdaa811f", null);
 
         initMeiQia();
         //initTongDao();

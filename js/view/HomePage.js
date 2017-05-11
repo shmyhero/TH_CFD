@@ -86,6 +86,7 @@ var HomePage = React.createClass({
 			//attendedMovieEvent: false,
 			//winMovieTicket: false,
 			isConnected: false,
+			unreadMessageCount: 0,
 		};
 	},
 
@@ -113,9 +114,41 @@ var HomePage = React.createClass({
 		// 		}
 		// 	})
 		// 	.done();
+
+		this.loadUnreadMessage();
 		this.reloadBanner();
 		this.loadHomeData();
 		this.loadCards();
+	},
+
+	loadUnreadMessage: function(){
+		var userData = LogicData.getUserData();
+		var url = NetConstants.CFD_API.GET_UNREAD_MESSAGE;
+		if(LogicData.getAccountState()){
+			url = NetConstants.CFD_API.GET_UNREAD_MESSAGE_LIVE
+			console.log('live', url );
+		}
+
+		NetworkModule.fetchTHUrl(
+			url,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+				//cache: 'offline',
+			},
+			function(response) {
+				this.setState(
+					{
+						unreadMessageCount: response,
+					}
+				)
+			}.bind(this),
+			(result) => {
+				console.log(result.errorMessage)
+			}
+		);
 	},
 
 	resetPage: function(){
@@ -131,6 +164,7 @@ var HomePage = React.createClass({
 			if(routes && routes[routes.length-1] &&
 					(routes[routes.length-1].name == MainPage.HOME_PAGE_ROUTE
 				|| routes[routes.length-1].name == MainPage.LOGIN_ROUTE)){
+				this.loadUnreadMessage();
 				this.reloadBanner();
 				this.loadHomeData();
 				this.loadCards();
@@ -218,6 +252,12 @@ var HomePage = React.createClass({
 
 	},
 
+	goToMailPage: function(){
+		this.props.navigator.push({
+			name: MainPage.MY_MESSAGES_ROUTE,
+			onPopToRoute: this.reloadMeData,
+		});
+	},
 
 	loadHomeData: function() {
 
@@ -1110,18 +1150,64 @@ var HomePage = React.createClass({
 		}
 	},
 
-	renderNavBar: function(){
-		var image = require('../../images/icon_day_sign_live.png');
+	renderUnreadCount: function(){
+		if(this.state.unreadMessageCount > 0){
+			var text = this.state.unreadMessageCount > 9 ? "9+" : "" + this.state.unreadMessageCount;
+			return (
+				<View style={styles.unreadMessageView}>
+					<Text style={styles.unreadMessageText}>
+						{text}
+					</Text>
+				</View>
+			)
+		}else{
+			return null;
+		}
+	},
 
-		return (
+	renderMessageIcon: function(){
+		var userData = LogicData.getUserData()
+		var login = Object.keys(userData).length !== 0
+		if(login){
+			return (
+				<TouchableOpacity onPress={()=>this.goToMailPage()}
+					style={styles.navBarRightView}>
+					<Image
+							style={[styles.navBarIcon, styles.navBarIconRight]}
+							source={require('../../images/icon_my_message.png')}/>
+					{this.renderUnreadCount()}
+				</TouchableOpacity>
+			);
+		}
+		return null;
+	},
+
+	renderCheckInView: function(){
+		if(LogicData.getAccountState()){
+			return (
+				<TouchableOpacity onPress={()=>this.gotoCheckinPage()}
+					style={styles.navBarLeftView}>
+					<Image
+							style={[styles.navBarIcon, styles.navBarIconLeft]}
+							source={require('../../images/icon_day_sign_live.png')}/>
+				</TouchableOpacity>
+			);
+		}
+		return null
+	},
+
+	renderNavBar: function(){
+		return(
 			<TouchableOpacity
 				activeOpacity={1}
 				onPress={()=>this.pressedNavBar()}
 				>
 				<NavBar title={this.state.connected ? "首页" : "首页（未连接）"}
-					imageOnRight={LogicData.getAccountState()?image:null}
-					rightImageOnClick={this.gotoCheckinPage}/>
-			</TouchableOpacity>);
+					viewOnRight={this.renderMessageIcon()}
+					viewOnLeft={this.renderCheckInView()}
+					navigator={this.props.navigator}/>
+			</TouchableOpacity>
+		)
 	},
 
 	renderBgHint:function(){
@@ -1150,6 +1236,7 @@ var HomePage = React.createClass({
 		// }
 
 	},
+
 
 	render: function() {
 		height = Dimensions.get('window').height;
@@ -1497,6 +1584,50 @@ var styles = StyleSheet.create({
 		marginRight:20,
 	},
 
+	unreadMessageView:{
+		backgroundColor:'#ff3333',
+		position:'absolute',
+		top:0,
+		right:13,
+		width:20,
+		height:14,
+		alignItems:'center',
+		justifyContent:'center',
+		borderRadius: 6,
+	},
+
+	unreadMessageText:{
+		color:'white',
+		fontSize:10,
+	},
+
+	navBarIcon: {
+		width: 21,
+		height: 21,
+		resizeMode: Image.resizeMode.contain,
+	},
+
+	navBarIconRight: {
+		marginRight: 20,
+	},
+
+	navBarIconLeft: {
+		marginLeft: 20,
+	},
+
+	navBarRightView:{
+		flex:1,
+		height: 30,
+		alignItems:"flex-end",
+		justifyContent:"center",
+	},
+
+	navBarLeftView:{
+		flex:1,
+		height: 30,
+		alignItems:"flex-start",
+		justifyContent:"center",
+	},
 });
 
 module.exports = HomePage;

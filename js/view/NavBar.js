@@ -30,6 +30,7 @@ var NavBar = React.createClass({
 		imageOnRight: React.PropTypes.number,
 		rightImageStyle: React.PropTypes.object,
 		viewOnRight: React.PropTypes.element,
+		viewOnLeft: React.PropTypes.element,
 		leftTextOnClick: React.PropTypes.func,
 		leftButtonOnClick: React.PropTypes.func,
 		rightTextOnClick: React.PropTypes.func,
@@ -54,6 +55,7 @@ var NavBar = React.createClass({
 			imageOnRight: null,
 			rightImageStyle: null,
 			viewOnRight: null,
+			viewOnLeft: null,
 			leftTextOnClick: null,
 			leftButtonOnClick: null,
 			rightTextOnClick: null,
@@ -118,11 +120,7 @@ var NavBar = React.createClass({
 		return (
 			<View style={[styles.container, {backgroundColor: backgroundColor}, this.props.barStyle]} >
 	    	<StatusBar barStyle="light-content" backgroundColor={navBarColor}/>
-				<View style={styles.leftContainer}>
-					{this.renderBackButton()}
-					{this.renderLeftText()}
-				</View>
-
+				{this.renderLeftPart()}
 				<View style={styles.centerContainer}>
 					<Text style={[styles.title, this.props.titleStyle]}>
 						{this.props.title}
@@ -134,6 +132,19 @@ var NavBar = React.createClass({
 
 			</View>
 		);
+	},
+
+	renderLeftPart: function(){
+		//viewOnRight
+		if(this.props.viewOnLeft){
+			return this.props.viewOnLeft;
+		}else{
+			return (
+				<View style={styles.leftContainer}>
+					{this.renderBackButton()}
+					{this.renderLeftText()}
+				</View>)
+		}
 	},
 
 	renderRightPart: function(){

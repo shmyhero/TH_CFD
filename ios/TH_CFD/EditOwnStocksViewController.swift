@@ -9,7 +9,7 @@
 import UIKit
 
 @objc protocol EditOwnStocksViewControllerDelegate: class {
-	optional func onClickEditAlert(sender: EditOwnStocksViewController, alertData:AnyObject )
+	@objc optional func onClickEditAlert(_ sender: EditOwnStocksViewController, alertData:AnyObject )
 }
 
 class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
@@ -33,21 +33,21 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		editTableView.editing = true
+		editTableView.isEditing = true
 		// remove empty lines
 		editTableView.tableFooterView = UIView()
 	}
 	
-	override func viewDidAppear(animated: Bool) {
+	override func viewDidAppear(_ animated: Bool) {
 		editTableView.reloadData()
 	}
 	
-	override func viewWillAppear(animated: Bool) {
+	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
 		self.updateColors()
 		
-		self.alertHeaderLabel.hidden = !showAlert
+		self.alertHeaderLabel.isHidden = !showAlert
 		topLabelTrailConstraint.constant = showAlert ? 0:-30
 		
 		rawData = StockDataManager.sharedInstance().stockDataArray
@@ -56,13 +56,13 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		self.updateButtons()
 	}
 	
-	override func viewWillDisappear(animated: Bool) {
+	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
 		
 		StockDataManager.sharedInstance().stockDataArray = rawData
 		let dataString:String = StockDataManager.sharedInstance().jsonOwnStockData()
-		let delegate:AppDelegate! = UIApplication.sharedApplication().delegate as! AppDelegate
-		delegate!.nativeData!.sendDataToRN("myList", data: dataString)
+		let delegate:AppDelegate! = UIApplication.shared.delegate as! AppDelegate
+		delegate!.nativeData!.send(toRN: "myList", data: dataString)
 	}
 	
 	override func didReceiveMemoryWarning() {
@@ -83,32 +83,32 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 			stock.choose == true
 		})
 		allSelect = selectedRows.count == rawData.count
-		allButton.setTitle(allSelect ? "取消":"全部", forState: .Normal)
-		allButton.enabled = rawData.count > 0
-		allButton.backgroundColor = allButton.enabled ? _colorSet.bgColor : UIColor(hexInt: 0xe0e0e0)
+		allButton.setTitle(allSelect ? "取消":"全部", for: UIControlState())
+		allButton.isEnabled = rawData.count > 0
+		allButton.backgroundColor = allButton.isEnabled ? _colorSet.bgColor : UIColor(hexInt: 0xe0e0e0)
 		
-		deleteButton.enabled = selectedRows.count > 0
-		if deleteButton.enabled {
+		deleteButton.isEnabled = selectedRows.count > 0
+		if deleteButton.isEnabled {
 			deleteButton.backgroundColor = UIColor(hexInt: 0xf1585c)
-			deleteButton.setTitle("删除(\(selectedRows.count))", forState: .Normal)
+			deleteButton.setTitle("删除(\(selectedRows.count))", for: UIControlState())
 		}
 		else {
 			deleteButton.backgroundColor = UIColor(hexInt: 0xe0e0e0)
-			deleteButton.setTitle("删除", forState: .Normal)
+			deleteButton.setTitle("删除", for: UIControlState())
 		}
 	}
 	
 	// MARK: - Table view data source
-	func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+	func numberOfSections(in tableView: UITableView) -> Int {
 		return 1
 	}
 	
-	func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return rawData.count
 	}
 	
-	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCellWithIdentifier("EditStockCell", forIndexPath: indexPath) as! EditOwnStockCell
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		let cell = tableView.dequeueReusableCell(withIdentifier: "EditStockCell", for: indexPath) as! EditOwnStockCell
 		
 		// Configure the cell...
 		let stock:StockData = rawData[indexPath.row]
@@ -119,13 +119,13 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 			self.rawData = self.rawData.filter({ (stock) -> Bool in
 				stock != selectStock
 			})
-			self.rawData.insert(selectStock, atIndex: 0)
+			self.rawData.insert(selectStock, at: 0)
 			self.editTableView.reloadData()
 			
 			for i in 0..<self.rawData.count {
 				if self.rawData[i] == selectStock {
-					let path:NSIndexPath = NSIndexPath(forRow: i, inSection: 0)
-					self.editTableView.moveRowAtIndexPath(path, toIndexPath: NSIndexPath(forRow: 0, inSection: 0))
+					let path:IndexPath = IndexPath(row: i, section: 0)
+					self.editTableView.moveRow(at: path, to: IndexPath(row: 0, section: 0))
 					break
 				}
 			}
@@ -138,10 +138,10 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		}
 		
 		cell.pushAlert { (selectStock) in
-			self.delegate?.onClickEditAlert!(self, alertData: selectStock.stockId)
+			self.delegate?.onClickEditAlert!(self, alertData: selectStock.stockId as AnyObject)
 		}
 		
-		cell.alertButton.hidden = !showAlert
+		cell.alertButton.isHidden = !showAlert
 		cell.topButtonTrailConstraint.constant = showAlert ? 40:10
 		
 		if showAlert {
@@ -152,27 +152,27 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		return cell
 	}
 	
-	func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
-		return .None
+	func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+		return .none
 	}
 	
-	func tableView(tableView: UITableView, shouldIndentWhileEditingRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+	func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
 		return false
 	}
 	
 	// Override to support rearranging the table view.
-	func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
+	func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to toIndexPath: IndexPath) {
 		let movedObject = rawData[fromIndexPath.row]
-		rawData.removeAtIndex(fromIndexPath.row)
-		rawData.insert(movedObject, atIndex: toIndexPath.row)
+		rawData.remove(at: fromIndexPath.row)
+		rawData.insert(movedObject, at: toIndexPath.row)
 	}
 	
 	// Override to support conditional rearranging of the table view.
-	func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+	func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
 		return true
 	}
 	
-	@IBAction func didTapAllButton(sender: AnyObject) {
+	@IBAction func didTapAllButton(_ sender: AnyObject) {
 		allSelect = !allSelect
 		for stock in rawData {
 			stock.choose = allSelect
@@ -181,31 +181,31 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		updateButtons()
 	}
 	
-	@IBAction func didTapDeleteButton(sender: AnyObject) {
-		let refreshAlert = UIAlertController(title: "确认删除", message: "", preferredStyle: UIAlertControllerStyle.Alert)
+	@IBAction func didTapDeleteButton(_ sender: AnyObject) {
+		let refreshAlert = UIAlertController(title: "确认删除", message: "", preferredStyle: UIAlertControllerStyle.alert)
 		
-		refreshAlert.addAction(UIAlertAction(title: "取消", style: .Default, handler: { (action: UIAlertAction!) in
+		refreshAlert.addAction(UIAlertAction(title: "取消", style: .default, handler: { (action: UIAlertAction!) in
 			// do nothing
 		}))
 		
-		refreshAlert.addAction(UIAlertAction(title: "确定", style: .Default, handler: { (action: UIAlertAction!) in
+		refreshAlert.addAction(UIAlertAction(title: "确定", style: .default, handler: { (action: UIAlertAction!) in
 			self.deleteStocks()
 			self.updateButtons()
 		}))
 		
-		presentViewController(refreshAlert, animated: true, completion: nil)
+		present(refreshAlert, animated: true, completion: nil)
 	}
 	
 	func deleteStocks() {
 		editTableView.beginUpdates()
-		var indexPaths:[NSIndexPath] = []
+		var indexPaths:[IndexPath] = []
 		for i in 0..<rawData.count {
 			if self.rawData[i].choose {
-				let path:NSIndexPath = NSIndexPath(forRow: i, inSection: 0)
+				let path:IndexPath = IndexPath(row: i, section: 0)
 				indexPaths.append(path)
 			}
 		}
-		editTableView.deleteRowsAtIndexPaths(indexPaths, withRowAnimation: .Fade)
+		editTableView.deleteRows(at: indexPaths, with: .fade)
 		
 		rawData = rawData.filter({ (stock) -> Bool in
 			stock.choose == false
@@ -214,17 +214,17 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 		editTableView.endUpdates()
 	}
 	
-	@IBAction func didTapOKButton(sender: AnyObject) {
+	@IBAction func didTapOKButton(_ sender: AnyObject) {
 		StockDataManager.sharedInstance().stockDataArray = rawData
 		let dataString:String = StockDataManager.sharedInstance().jsonOwnStockData()
-		let delegate:AppDelegate! = UIApplication.sharedApplication().delegate as! AppDelegate
-		delegate!.nativeData!.sendDataToRN("myList", data: dataString)
-		delegate!.rnRootViewController.dismissViewControllerAnimated(true, completion: { () -> Void in
+		let delegate:AppDelegate! = UIApplication.shared.delegate as! AppDelegate
+		delegate!.nativeData!.send(toRN: "myList", data: dataString)
+		delegate!.rnRootViewController.dismiss(animated: true, completion: { () -> Void in
 		})
 	}
 	
 	func refresh() {
-		dispatch_async(dispatch_get_main_queue(), {
+		DispatchQueue.main.async(execute: {
 			self.editTableView.reloadData()
 		})
 	}

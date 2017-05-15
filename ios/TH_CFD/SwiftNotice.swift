@@ -16,24 +16,24 @@ class SwiftNotice: NSObject {
     }
     
 	static var windows = Array<UIWindow!>()
-	static let rv = UIApplication.sharedApplication().keyWindow?.subviews.first as UIView!
-	static var timer: dispatch_source_t!
+	static let rv = UIApplication.shared.keyWindow?.subviews.first as UIView!
+	static var timer: DispatchSource!
 	static var timerTimes = 0
 	static var degree: Double {
 		get {
-			return [0, 0, 180, 270, 90][UIApplication.sharedApplication().statusBarOrientation.hashValue] as Double
+			return [0, 0, 180, 270, 90][UIApplication.shared.statusBarOrientation.hashValue] as Double
 		}
 	}
 	   
-    static func showToastNotice(text: String) {
+    static func showToastNotice(_ text: String) {
 		print ("show toast notice:%s", text)
         showNoticeWithText(.message, text: text, autoClear: true, autoClearTime: 1)
     }
     
-	static func showNoticeWithText(type: NoticeType,text: String, autoClear: Bool, autoClearTime: Int) {
-		let frame = CGRectMake(0, 0, 105, 105)
+	static func showNoticeWithText(_ type: NoticeType,text: String, autoClear: Bool, autoClearTime: Int) {
+		let frame = CGRect(x: 0, y: 0, width: 105, height: 105)
 		let window = UIWindow()
-		window.backgroundColor = UIColor.clearColor()
+		window.backgroundColor = UIColor.clear
 		let mainView = UIView()
 		mainView.layer.cornerRadius = 4
 		mainView.backgroundColor = UIColor(hexInt: 0xd0e3f3, alpha:0.7)
@@ -52,15 +52,15 @@ class SwiftNotice: NSObject {
         
         if(type != .message){
             let checkmarkView = UIImageView(image: image)
-            checkmarkView.frame = CGRectMake(30, 15, 46, 46)
+            checkmarkView.frame = CGRect(x: 30, y: 15, width: 46, height: 46)
             mainView.addSubview(checkmarkView)
         }
 		let labelY:CGFloat = type == .message ? 42 : 70
-		let label = UILabel(frame: CGRectMake(0, labelY, 105, 20))
-		label.font = UIFont.systemFontOfSize(17)
+		let label = UILabel(frame: CGRect(x: 0, y: labelY, width: 105, height: 20))
+		label.font = UIFont.systemFont(ofSize: 17)
 		label.textColor = UIColor(hexInt: 0x4883e7)
 		label.text = text
-		label.textAlignment = NSTextAlignment.Center
+		label.textAlignment = NSTextAlignment.center
 		mainView.addSubview(label)
 		
 		window.frame = frame
@@ -69,33 +69,33 @@ class SwiftNotice: NSObject {
 		window.windowLevel = UIWindowLevelAlert
 		window.center = getRealCenter()
 		// change orientation
-		window.transform = CGAffineTransformMakeRotation(CGFloat(degree * M_PI / 180))
-		window.hidden = false
+		window.transform = CGAffineTransform(rotationAngle: CGFloat(degree * M_PI / 180))
+		window.isHidden = false
 		window.addSubview(mainView)
 		windows.append(window)
 		
 		if autoClear {
 			let selector = #selector(SwiftNotice.hideNotice(_:))
-			self.performSelector(selector, withObject: window, afterDelay: NSTimeInterval(autoClearTime))
+			self.perform(selector, with: window, afterDelay: TimeInterval(autoClearTime))
 		}
 	}
 	
 	// fix orientation problem
 	static func getRealCenter() -> CGPoint {
-		if UIApplication.sharedApplication().statusBarOrientation.hashValue >= 3 {
-			return CGPoint(x: rv.center.y, y: rv.center.x)
+		if UIApplication.shared.statusBarOrientation.hashValue >= 3 {
+			return CGPoint(x: rv!.center.y, y: rv!.center.x)
 		} else {
-			return rv.center
+			return rv!.center
 		}
 	}
 	
-	static func hideNotice(sender: AnyObject) {
+	static func hideNotice(_ sender: AnyObject) {
 		print ("hide notice:start")
 		if let window = sender as? UIWindow {
-			if let index = windows.indexOf({ (item) -> Bool in
+			if let index = windows.index(where: { (item) -> Bool in
 				return item == window
 			}) {
-				windows.removeAtIndex(index)
+				windows.remove(at: index)
 				print ("hide notice:success")
 			}
 		}

@@ -51,9 +51,9 @@ class ColorSet: NSObject {
             //k线的颜色
 			lineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0xffffff)
             //最大最小文字
-            minmaxColor = type == 1 ? UIColor.whiteColor() : UIColor(hexInt: 0x94a9cf)
+            minmaxColor = type == 1 ? UIColor.white : UIColor(hexInt: 0x94a9cf)
             //横屏时候右边的时间文字
-            rightTextColor = type == 1 ? UIColor.whiteColor() : UIColor(hexInt: 0x223555)
+            rightTextColor = type == 1 ? UIColor.white : UIColor(hexInt: 0x223555)
 		}
 		else {
 			startColor = UIColor(hexInt: 0x7daeff)
@@ -63,8 +63,8 @@ class ColorSet: NSObject {
 			
 			bgLineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0x497bce)
 			lineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0xbbceed)
-            minmaxColor = type == 1 ? UIColor.whiteColor() : UIColor(hexInt: 0x70a5ff)
-            rightTextColor = type == 1 ? UIColor.whiteColor() : UIColor(hexInt: 0x053da1)
+            minmaxColor = type == 1 ? UIColor.white : UIColor(hexInt: 0x70a5ff)
+            rightTextColor = type == 1 ? UIColor.white : UIColor(hexInt: 0x053da1)
 		}
 		super.init()
 	}

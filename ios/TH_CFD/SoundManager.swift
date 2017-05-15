@@ -17,11 +17,11 @@ class SoundManager: NSObject {
 		return SoundManager.singleton
 	}
 	
-	func playSound(sound:String) {
+	func playSound(_ sound:String) {
 		//todo, currently sound is "0"
-		let soundURL = NSBundle.mainBundle().URLForResource("coin", withExtension: "mp3")
+		let soundURL = Bundle.main.url(forResource: "coin", withExtension: "mp3")
 		do {
-			audioPlayer = try AVAudioPlayer(contentsOfURL: soundURL!)
+			audioPlayer = try AVAudioPlayer(contentsOf: soundURL!)
 			audioPlayer?.volume = 0.5
 			audioPlayer!.play()
 		} catch {

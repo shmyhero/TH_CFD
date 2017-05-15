@@ -23,17 +23,17 @@ class NotificationData: NSObject {
 	}
 	
 	init(coder aDecoder:NSCoder!){
-		self.payload=aDecoder.decodeObjectForKey("payload") as? String
-		self.taskId=aDecoder.decodeObjectForKey("taskId") as? String
-		self.msgId=aDecoder.decodeObjectForKey("msgId") as? String
-		self.offline=aDecoder.decodeObjectForKey("offline") as! Bool
+		self.payload=aDecoder.decodeObject(forKey: "payload") as? String
+		self.taskId=aDecoder.decodeObject(forKey: "taskId") as? String
+		self.msgId=aDecoder.decodeObject(forKey: "msgId") as? String
+		self.offline=aDecoder.decodeObject(forKey: "offline") as! Bool
 	}
 	
-	func encodeWithCoder(aCoder:NSCoder!){
-		aCoder.encodeObject(payload,forKey:"payload")
-		aCoder.encodeObject(taskId,forKey:"taskId")
-		aCoder.encodeObject(msgId,forKey:"msgId")
-		aCoder.encodeObject(offline,forKey:"offline")
+	func encodeWithCoder(_ aCoder:NSCoder!){
+		aCoder.encode(payload,forKey:"payload")
+		aCoder.encode(taskId,forKey:"taskId")
+		aCoder.encode(msgId,forKey:"msgId")
+		aCoder.encode(offline,forKey:"offline")
 	}
 }
 
@@ -45,18 +45,18 @@ class NotificationManager: NSObject {
 	var delegate:AppDelegate!
 
 	class func sharedInstance() ->NotificationManager {
-		singleton.delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+		singleton.delegate = UIApplication.shared.delegate as! AppDelegate
 		singleton.notificationArray = singleton.loadNofificationData()
 		return NotificationManager.singleton
 	}
 	
-	func showNotification(data:NotificationData!){
+	func showNotification(_ data:NotificationData!){
 		if (delegate.nativeData != nil) {
 			if data.offline! {
 				// background, goto the page directly.
 //				if(currentPayload!.containsString(data.payload!)) {
 				if(self.canShowNow(data)) {
-					delegate.nativeData!.sendDataToRN("PushShowDetail", data: data.payload)
+					delegate.nativeData!.send(toRN: "PushShowDetail", data: data.payload)
 //					currentPayload = nil
 				}
 				else {
@@ -64,7 +64,7 @@ class NotificationManager: NSObject {
 				}
 			}
 			else {
-				delegate.nativeData!.sendDataToRN("PushShowDialog", data: data.payload)
+				delegate.nativeData!.send(toRN: "PushShowDialog", data: data.payload)
 			}
 		}
 		else {
@@ -73,7 +73,7 @@ class NotificationManager: NSObject {
 		self.saveNotificationData()
 	}
 	
-	func showNotification(payload:String!, taskId:String!, msgId:String!, offline:Bool?){
+	func showNotification(_ payload:String!, taskId:String!, msgId:String!, offline:Bool?){
 		let notification:NotificationData = NotificationData(payload: payload, taskId: taskId, msgId: msgId, offline: offline)
 		self.showNotification(notification)
 	}
@@ -88,34 +88,34 @@ class NotificationManager: NSObject {
 //			if(currentPayload!.containsString(data.payload!)) {
 			if(self.canShowNow(data)) {
 				if(data.offline!) {
-					delegate.nativeData!.sendDataToRN("PushShowDetail", data: data.payload)
+					delegate.nativeData!.send(toRN: "PushShowDetail", data: data.payload)
 				}
 				else {
-					delegate.nativeData!.sendDataToRN("PushShowDialog", data: data.payload)
+					delegate.nativeData!.send(toRN: "PushShowDialog", data: data.payload)
 				}
 				self.currentPayload = nil
-				self.notificationArray.removeAtIndex(index)
+				self.notificationArray.remove(at: index)
 				break
 			}
 		}
 		self.saveNotificationData()
 	}
 	
-	func showNotificationWithGmid(gmid:String!) -> Void {
+	func showNotificationWithGmid(_ gmid:String!) -> Void {
 		self.currentPayload = gmid
 		self.showCurrentNotification()
 	}
 	
 	func saveNotificationData() {
-		let userDefault = NSUserDefaults.standardUserDefaults()
-		let data:NSData = NSKeyedArchiver.archivedDataWithRootObject(self.notificationArray)
-		userDefault.setObject(data, forKey: "notifications")
+		let userDefault = UserDefaults.standard
+		let data:Data = NSKeyedArchiver.archivedData(withRootObject: self.notificationArray)
+		userDefault.set(data, forKey: "notifications")
 	}
 	
 	func loadNofificationData() -> [NotificationData] {
-		let userDefault = NSUserDefaults.standardUserDefaults()
-		if let data = userDefault.objectForKey("notifications") as? NSData {
-			let array = NSKeyedUnarchiver.unarchiveObjectWithData(data) as! [NotificationData]
+		let userDefault = UserDefaults.standard
+		if let data = userDefault.object(forKey: "notifications") as? Data {
+			let array = NSKeyedUnarchiver.unarchiveObject(with: data) as! [NotificationData]
 			return array
 		}
 		else {
@@ -123,14 +123,14 @@ class NotificationManager: NSObject {
 		}
 	}
 	
-	func canShowNow(data:NotificationData) -> Bool{
+	func canShowNow(_ data:NotificationData) -> Bool{
 		var can = false
 		if self.currentPayload != nil {
-			can = currentPayload!.containsString(data.payload!)
+			can = currentPayload!.contains(data.payload!)
 		}
 		else {
 			if data.payload != nil {
-				can = data.payload!.containsString("title") && data.payload!.containsString("message")
+				can = data.payload!.contains("title") && data.payload!.contains("message")
 			}
 		}
 		return can

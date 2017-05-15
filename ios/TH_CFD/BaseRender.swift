@@ -41,7 +41,7 @@ class BaseRender: NSObject {
     }
 
 
-	func render(context: CGContext) {
+	func render(_ context: CGContext) {
 		if dataProvider != nil {
 			_margin = dataProvider!.margin()
 			_topMargin = dataProvider!.topMargin()
@@ -53,30 +53,30 @@ class BaseRender: NSObject {
 		self.drawExtraText(context)
 	}
 
-    func drawBorderLines(context: CGContext, lineColor: UIColor) -> Void {
+    func drawBorderLines(_ context: CGContext, lineColor: UIColor) -> Void {
 		let width = chartWidth()
 		let height = chartHeight()
 		//Draw horizontal graph lines on the top of everything
 		let linePath = UIBezierPath()
-		CGContextSaveGState(context)
+		context.saveGState()
 
 		//top line
-		linePath.moveToPoint(CGPoint(x:_margin, y: _topMargin + 0.5))
-        linePath.addLineToPoint(CGPoint(x: width - _margin, y:_topMargin + 0.5))
+		linePath.move(to: CGPoint(x:_margin, y: _topMargin + 0.5))
+        linePath.addLine(to: CGPoint(x: width - _margin, y:_topMargin + 0.5))
 //        print("top lineY:",_topMargin)
 
 		//bottom line
-		linePath.moveToPoint(CGPoint(x:_margin-0.5, y:height - _bottomMargin + 0.5))
-        linePath.addLineToPoint(CGPoint(x:width - _margin+0.5, y:height - _bottomMargin + 0.5))
+		linePath.move(to: CGPoint(x:_margin-0.5, y:height - _bottomMargin + 0.5))
+        linePath.addLine(to: CGPoint(x:width - _margin+0.5, y:height - _bottomMargin + 0.5))
 //        print("bottom lineY:", height - _bottomMargin)
 
 		//left line
-		linePath.moveToPoint(CGPoint(x:_margin - 0.5, y: _topMargin))
-		linePath.addLineToPoint(CGPoint(x:_margin - 0.5, y:height - _bottomMargin))
+		linePath.move(to: CGPoint(x:_margin - 0.5, y: _topMargin))
+		linePath.addLine(to: CGPoint(x:_margin - 0.5, y:height - _bottomMargin))
 
 		//right line
-		linePath.moveToPoint(CGPoint(x:width - _margin + 0.5, y:_topMargin))
-		linePath.addLineToPoint(CGPoint(x:width - _margin + 0.5, y:height - _bottomMargin))
+		linePath.move(to: CGPoint(x:width - _margin + 0.5, y:_topMargin))
+		linePath.addLine(to: CGPoint(x:width - _margin + 0.5, y:height - _bottomMargin))
 
 //        if(lineColor == UIColor.whiteColor()) {
 //            _colorSet.bgLineColor.setStroke()
@@ -87,34 +87,34 @@ class BaseRender: NSObject {
 		linePath.lineWidth = 1
 		linePath.stroke()
 
-		CGContextRestoreGState(context)
+		context.restoreGState()
 
         self.drawHorizontalLines(context)
 	}
 
-    func drawHorizontalLines(context: CGContext) -> Void {
+    func drawHorizontalLines(_ context: CGContext) -> Void {
         let width = chartWidth()
         let height = chartHeight()
         //Draw horizontal graph lines on the top of everything
         let linePath = UIBezierPath()
-        CGContextSaveGState(context)
+        context.saveGState()
         if !AppDelegate.isPortrait() {
             // landscape mode have horizontal lines
             let hnum = _segment
             for i in 1..<hnum {
                 let lineY = round(_topMargin + (height - _bottomMargin - _topMargin) / CGFloat(hnum) * CGFloat(i))
-                linePath.moveToPoint(CGPoint(x:_margin, y: lineY + 0.5))
-                linePath.addLineToPoint(CGPoint(x: width - _margin, y:lineY + 0.5))
+                linePath.move(to: CGPoint(x:_margin, y: lineY + 0.5))
+                linePath.addLine(to: CGPoint(x: width - _margin, y:lineY + 0.5))
             }
         }
         _colorSet.getBgLineColor().setStroke()
         linePath.lineWidth = 1
         linePath.stroke()
 
-        CGContextRestoreGState(context)
+        context.restoreGState()
     }
 
-	func drawExtraText(context:CGContext) -> Void {
+	func drawExtraText(_ context:CGContext) -> Void {
 		if dataProvider == nil {
 			return
 		}
@@ -134,19 +134,19 @@ class BaseRender: NSObject {
             let textColor = _colorSet.minmaxColor
             let textFont = UIFont(name: "Helvetica Neue", size: 8)
             let textStyle = NSMutableParagraphStyle()
-            textStyle.alignment = .Left
+            textStyle.alignment = .left
             let attributes: [String:AnyObject] = [
                 NSForegroundColorAttributeName: textColor,
                 NSFontAttributeName: textFont!,
                 NSParagraphStyleAttributeName: textStyle,
                 ]
 
-            var maxText: NSString = "\(maxPrice)"
-            var minText: NSString = "\(minPrice)"
+            var maxText: NSString = "\(maxPrice)" as NSString
+            var minText: NSString = "\(minPrice)" as NSString
             var textX = _margin+5
             let textHeight:CGFloat = 10
-            maxText.drawInRect(CGRect(x: textX, y: _topMargin+5, width: textWidth, height: textHeight), withAttributes: attributes)
-            minText.drawInRect(CGRect(x: textX, y: height-_bottomMargin-textHeight-5, width: textWidth, height: textHeight), withAttributes: attributes)
+            maxText.draw(in: CGRect(x: textX, y: _topMargin+5, width: textWidth, height: textHeight), withAttributes: attributes)
+            minText.draw(in: CGRect(x: textX, y: height-_bottomMargin-textHeight-5, width: textWidth, height: textHeight), withAttributes: attributes)
 
             let maxPercent = dataProvider!.maxPercent()
             let minPercent = dataProvider!.minPercent()
@@ -154,13 +154,13 @@ class BaseRender: NSObject {
                 return
             }
 
-            textStyle.alignment = .Right
+            textStyle.alignment = .right
             maxText = NSString(format: "%.2f%%", maxPercent)
             minText = NSString(format: "%.2f%%", minPercent)
             textX = width-_margin-5-textWidth
 
-            maxText.drawInRect(CGRect(x: textX, y: _topMargin+5, width: textWidth, height: textHeight), withAttributes: attributes)
-            minText.drawInRect(CGRect(x: textX, y: height-_bottomMargin-textHeight-5, width: textWidth, height: textHeight), withAttributes: attributes)
+            maxText.draw(in: CGRect(x: textX, y: _topMargin+5, width: textWidth, height: textHeight), withAttributes: attributes)
+            minText.draw(in: CGRect(x: textX, y: height-_bottomMargin-textHeight-5, width: textWidth, height: textHeight), withAttributes: attributes)
         }
         else {
             // landscape
@@ -168,7 +168,7 @@ class BaseRender: NSObject {
             let textColor = _colorSet.rightTextColor
             let textFont = UIFont(name: "Helvetica Neue", size: 14)
             let textStyle = NSMutableParagraphStyle()
-            textStyle.alignment = .Left
+            textStyle.alignment = .left
             let attributes: [String:AnyObject] = [
                 NSForegroundColorAttributeName: textColor,
                 NSFontAttributeName: textFont!,
@@ -179,12 +179,12 @@ class BaseRender: NSObject {
             let n = max(minPrice.decimalPlace(), maxPrice.decimalPlace()) + 1
             for i in 0 ..< segmentNumber+1 {
                 // render from bottom to top
-                let price: Double = (maxPrice-minPrice) / Double(segmentNumber) * Double(i) + minPrice
-                let text: NSString = "\(price.roundTo(n))"
+                var price: Double = (maxPrice-minPrice) / Double(segmentNumber) * Double(i) + minPrice
+                let text: NSString = "\(price.roundTo(n))" as NSString
                 let textX = chartWidth()
                 let textHeight:CGFloat = 14
                 let textY = round(height - (height - _bottomMargin - _topMargin - textHeight) / CGFloat(segmentNumber) * CGFloat(i)) - _bottomMargin - textHeight
-                text.drawInRect(CGRect(x: textX, y: textY, width: textWidth, height: textHeight), withAttributes: attributes)
+                text.draw(in: CGRect(x: textX, y: textY, width: textWidth, height: textHeight), withAttributes: attributes)
             }
 
         }

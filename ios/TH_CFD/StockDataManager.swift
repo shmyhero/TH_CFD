@@ -18,9 +18,9 @@ class StockData: NSObject {
 	var preClose: Double?
 	var stockTag: String?
 	var choose: Bool = false
-	var lastOpen: NSDate?
+	var lastOpen: Date?
 	
-	func initWithId(stockId:Int, symbol:String, name:String, open:Double, close:Double, stockTag:String) -> Void {
+	func initWithId(_ stockId:Int, symbol:String, name:String, open:Double, close:Double, stockTag:String) -> Void {
 		self.stockId = stockId
 		self.symbol = symbol
 		self.name = name
@@ -29,7 +29,7 @@ class StockData: NSObject {
 		self.stockTag = stockTag
 	}
 	
-	func initWithDictionay(dict:NSDictionary) -> Void {
+	func initWithDictionay(_ dict:NSDictionary) -> Void {
 		self.stockId = dict["id"] as! Int
 		self.symbol = dict["symbol"] as! String
 		self.name = dict["name"] as! String
@@ -39,7 +39,7 @@ class StockData: NSObject {
 		self.stockTag = dict["tag"] == nil ? nil : dict["tag"] as? String
 		
 		let timeString = dict["lastOpen"] as? String
-		self.lastOpen = timeString?.toDate()
+		self.lastOpen = timeString?.toDate()!
 	}
 	
 	func outputDictionay() -> NSDictionary {
@@ -68,7 +68,7 @@ class AlertData: NSObject {
 	var highEnabled: Bool = false
 	var lowEnabled: Bool = false
 	
-	func initWithDictionay(dict:NSDictionary) -> Void {
+	func initWithDictionay(_ dict:NSDictionary) -> Void {
 		self.securityId = dict["SecurityId"] as! Int
 		self.lowEnabled = dict["LowEnabled"] as! Bool
 		self.highEnabled = dict["HighEnabled"] as! Bool
@@ -93,12 +93,12 @@ class StockDataManager: NSObject {
 		return StockDataManager.singleton
 	}
 	
-	func loadOwnStocksData(jsonString:String) -> Void {
+	func loadOwnStocksData(_ jsonString:String) -> Void {
 		// load stocks data from RN
-		let nsData: NSData = jsonString.dataUsingEncoding(NSUTF8StringEncoding)!
+		let nsData: Data = jsonString.data(using: String.Encoding.utf8)!
 		stockDataArray = []
 		do {
-			let json: AnyObject? = try NSJSONSerialization.JSONObjectWithData(nsData, options: NSJSONReadingOptions.MutableLeaves)
+			let json: Any? = try JSONSerialization.jsonObject(with: nsData, options: JSONSerialization.ReadingOptions.mutableLeaves)
 			if let jsonArray = json as? NSArray {
 				for stockDict in jsonArray {
 					let stockData:StockData = StockData()
@@ -120,8 +120,8 @@ class StockDataManager: NSObject {
 		}
 		
 		do {
-			let nsData: NSData = try NSJSONSerialization.dataWithJSONObject(array, options: NSJSONWritingOptions.PrettyPrinted)
-			dataString = NSString(data: nsData, encoding:NSUTF8StringEncoding) as! String
+			let nsData: Data = try JSONSerialization.data(withJSONObject: array, options: JSONSerialization.WritingOptions.prettyPrinted)
+			dataString = NSString(data: nsData, encoding:String.Encoding.utf8.rawValue)! as String
 		}
 		catch {
 			print("error serializing data: \(error)")
@@ -129,22 +129,22 @@ class StockDataManager: NSObject {
 		return dataString
 	}
 	
-	func loadUserLogo(jsonString:String) -> Void {
+	func loadUserLogo(_ jsonString:String) -> Void {
 		if(jsonString != "default") {
-			if let url = NSURL(string: jsonString){
-				if let data = NSData(contentsOfURL: url) {
+			if let url = URL(string: jsonString){
+				if let data = try? Data(contentsOf: url) {
 					logoImage = UIImage.init(data: data)
 				}
 			}
 		}
 	}
 	
-	func loadOwnAlertData(jsonString:String) -> Void {
+	func loadOwnAlertData(_ jsonString:String) -> Void {
 		// load alert data from RN
-		let nsData: NSData = jsonString.dataUsingEncoding(NSUTF8StringEncoding)!
+		let nsData: Data = jsonString.data(using: String.Encoding.utf8)!
 		alertDataArray = []
 		do {
-			let json: AnyObject? = try NSJSONSerialization.JSONObjectWithData(nsData, options: NSJSONReadingOptions.MutableLeaves)
+			let json: Any? = try JSONSerialization.jsonObject(with: nsData, options: JSONSerialization.ReadingOptions.mutableLeaves)
 			if let jsonArray = json as? NSArray {
 				for data in jsonArray {
 					let alertData:AlertData = AlertData()
@@ -158,7 +158,7 @@ class StockDataManager: NSObject {
 		}
 	}
 	
-	func alertEnabled(securityId: Int) -> Bool {
+	func alertEnabled(_ securityId: Int) -> Bool {
 		var enabled = false
 		for alert in alertDataArray {
 			if (alert.securityId == securityId) {

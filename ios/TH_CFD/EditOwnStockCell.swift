@@ -25,29 +25,29 @@ class EditOwnStockCell: UITableViewCell {
 	var reminderOnImageName = "Reminder01"
 	var topImageName = "Top"
 	
-	func setData(data:StockData) {
+	func setData(_ data:StockData) {
 		self.setupColor()
 		self.stockData = data
 		self.nameLabel.text = data.name
 		self.codeLabel.text = data.symbol
 		if (data.stockTag != nil) {
 			self.codeLabelLeftConstraint.constant = 18
-			self.tagLabel.hidden = false
+			self.tagLabel.isHidden = false
 			self.tagLabel.text = data.stockTag
 			self.tagLabel.layer.cornerRadius = 2
 		}
 		else {
 			self.codeLabelLeftConstraint.constant = 0
-			self.tagLabel.hidden = true
+			self.tagLabel.isHidden = true
 		}
 		let name:String = data.choose ? selectImageName : unselectImageName
-		self.selectButton.setImage(UIImage.init(named: name), forState: .Normal)
-		self.topButton.setImage(UIImage.init(named: topImageName), forState: .Normal)
+		self.selectButton.setImage(UIImage.init(named: name), for: UIControlState())
+		self.topButton.setImage(UIImage.init(named: topImageName), for: UIControlState())
 	}
 	
-	func setAlert(hasAlert: Bool) {
+	func setAlert(_ hasAlert: Bool) {
 		let name:String = hasAlert ? reminderOnImageName : reminderOffImageName
-		self.alertButton.setImage(UIImage.init(named: name), forState: .Normal)
+		self.alertButton.setImage(UIImage.init(named: name), for: UIControlState())
 	}
 	
 	func setupColor() {
@@ -69,20 +69,21 @@ class EditOwnStockCell: UITableViewCell {
 		}
 	}
 	
-	typealias callbackfunc=(selectStock:StockData)->Void
-	var tapTop = callbackfunc?()
-	var tapSelect = callbackfunc?()
-	var tapAlert = callbackfunc?()
+	typealias callbackfunc=(StockData)->Void
+    
+    var tapTop : callbackfunc?
+    var tapSelect : callbackfunc?
+    var tapAlert : callbackfunc?
 	
-	func moveToTop( tapTopFunction:callbackfunc ){
+	func moveToTop(tapTopFunction:@escaping callbackfunc ){
 		tapTop = tapTopFunction
 	}
 	
-	func selectCell( tapSelectButton:callbackfunc ){
+	func selectCell(tapSelectButton:@escaping callbackfunc ){
 		tapSelect = tapSelectButton
 	}
 	
-	func pushAlert( tapAlertButton:callbackfunc) {
+	func pushAlert(tapAlertButton:@escaping callbackfunc) {
 		tapAlert = tapAlertButton
 	}
 	
@@ -91,20 +92,20 @@ class EditOwnStockCell: UITableViewCell {
 		// Initialization code
 	}
 	
-	@IBAction func tapSelectButton(sender: AnyObject) {
+	@IBAction func tapSelectButton(_ sender: AnyObject) {
 		self.stockData!.choose = !self.stockData!.choose
 		let name:String = self.stockData!.choose ? selectImageName : unselectImageName
-		self.selectButton.setImage(UIImage.init(named: name), forState: .Normal)
+		self.selectButton.setImage(UIImage.init(named: name), for: UIControlState())
 		
-		tapSelect!(selectStock: stockData!)
+		tapSelect!(stockData!)
 	}
 	
-	@IBAction func tapTopButton(sender: AnyObject) {
-		tapTop!(selectStock: stockData!);
+	@IBAction func tapTopButton(_ sender: AnyObject) {
+		tapTop!(stockData!);
 	}
 	
-	@IBAction func tapAlertButton(sender: AnyObject) {
-		tapAlert!(selectStock: stockData!);
+	@IBAction func tapAlertButton(_ sender: AnyObject) {
+		tapAlert!(stockData!);
 	}
 }
 

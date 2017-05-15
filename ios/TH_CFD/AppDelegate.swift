@@ -30,20 +30,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 	var nativeData: NativeData?
 	var getuiID: String?
 	
-	func showAlert(title:String!, alert:String!) {
-		let alert = UIAlertController(title: title, message: alert, preferredStyle: UIAlertControllerStyle.Alert)
-		alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-		self.window?.rootViewController!.presentViewController(alert, animated: true, completion: nil)
+	func showAlert(_ title:String!, alert:String!) {
+		let alert = UIAlertController(title: title, message: alert, preferredStyle: UIAlertControllerStyle.alert)
+		alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+		self.window?.rootViewController!.present(alert, animated: true, completion: nil)
 	}
 	
-	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.
 		TalkingData.sessionStarted("9E5885AAFCB333653031970C2AF5614E", withChannelId: "AppStore")
 		TalkingDataAppCpa.init("605dc6928f4c4244a889282a7ee132cf", withChannelId: "AppStore")
 		
 		// register push notification
 		if((launchOptions) != nil) {
-			if let dict = launchOptions![UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {
+			if let dict = launchOptions![UIApplicationLaunchOptionsKey.remoteNotification] as? NSDictionary {
 				NotificationManager.sharedInstance().currentPayload = dict["payload"] as? String
 			}
 		}
@@ -53,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		}
 		
 		// 通过 appId、 appKey 、appSecret 启动SDK，注：该方法需要在主线程中调用
-		GeTuiSdk.startSdkWithAppId(kGtAppId, appKey: kGtAppKey, appSecret: kGtAppSecret, delegate: self);
+		GeTuiSdk.start(withAppId: kGtAppId, appKey: kGtAppKey, appSecret: kGtAppSecret, delegate: self);
 		
 		// 注册Apns
 		self.registerUserNotification(application);
@@ -69,9 +69,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		})
 		
 		// initialize the rootView to fetch JS from the dev server
-		let jsCodeLocation:NSURL?
+		let jsCodeLocation:URL?
 		if Platform.isSimulator {
-			jsCodeLocation = NSURL(string: "http://localhost:8081/index.ios.bundle?platform=ios&dev=true")
+			jsCodeLocation = URL(string: "http://localhost:8081/index.ios.bundle?platform=ios&dev=true")
 		} else {
             jsCodeLocation = RCTHotUpdate.bundleURL();
 //			jsCodeLocation = NSBundle.mainBundle().URLForResource("main", withExtension: "jsbundle")
@@ -83,15 +83,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		// Initialize a Controller to use view as React View
 		let rootViewController:UIViewController = THRootViewController()
 		rootViewController.view = rootView
-		let loadingView = UIImageView(frame: UIScreen.mainScreen().bounds)
+		let loadingView = UIImageView(frame: UIScreen.main.bounds)
 		loadingView.image = UIImage(named: "frontPage.jpg")
-		rootView.loadingView = loadingView
+		rootView?.loadingView = loadingView
 //        rootView.backgroundColor = UIColor(hexInt: 0x374d74)
 //        rootView.clipsToBounds = true
 		self.rnRootViewController = rootViewController
 		
 		// Set window to use rootViewController
-		self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+		self.window = UIWindow(frame: UIScreen.main.bounds)
 		self.window?.rootViewController = rootViewController
 		self.window?.makeKeyAndVisible()
 		
@@ -101,49 +101,49 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		return true
 	}
     
-    func application(application: UIApplication, supportedInterfaceOrientationsForWindow window: UIWindow?) -> UIInterfaceOrientationMask {
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         print ("iOS get from RN orientation:", Orientation.getOrientation())
         return Orientation.getOrientation()
     }
 	
 	/** 注册用户通知(推送) */
-	func registerUserNotification(application: UIApplication) {
-		let result = UIDevice.currentDevice().systemVersion.compare("8.0.0", options: NSStringCompareOptions.NumericSearch)
-		if (result != NSComparisonResult.OrderedAscending) {
-			UIApplication.sharedApplication().registerForRemoteNotifications()
+	func registerUserNotification(_ application: UIApplication) {
+		let result = UIDevice.current.systemVersion.compare("8.0.0", options: NSString.CompareOptions.numeric)
+		if (result != ComparisonResult.orderedAscending) {
+			UIApplication.shared.registerForRemoteNotifications()
 			
-			let userSettings = UIUserNotificationSettings(forTypes: [.Badge, .Sound, .Alert], categories: nil)
-			UIApplication.sharedApplication().registerUserNotificationSettings(userSettings)
+			let userSettings = UIUserNotificationSettings(types: [.badge, .sound, .alert], categories: nil)
+			UIApplication.shared.registerUserNotificationSettings(userSettings)
 		} else {
-			UIApplication.sharedApplication().registerForRemoteNotificationTypes([.Alert, .Sound, .Badge])
+			UIApplication.shared.registerForRemoteNotifications(matching: [.alert, .sound, .badge])
 		}
 	}
 	
-	func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
-		return RCTLinkingManager.application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
+	func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+		return RCTLinkingManager.application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
 	}
 	
-	func applicationWillResignActive(application: UIApplication) {
+	func applicationWillResignActive(_ application: UIApplication) {
 		// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
 		// Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 	}
 	
-	func applicationDidEnterBackground(application: UIApplication) {
+	func applicationDidEnterBackground(_ application: UIApplication) {
 		// Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
 		// If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 		MQManager.closeMeiqiaService()
 	}
 	
-	func applicationWillEnterForeground(application: UIApplication) {
+	func applicationWillEnterForeground(_ application: UIApplication) {
 		// Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 		MQManager.openMeiqiaService()
 	}
 	
-	func applicationDidBecomeActive(application: UIApplication) {
+	func applicationDidBecomeActive(_ application: UIApplication) {
 		// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 	}
 	
-	func applicationWillTerminate(application: UIApplication) {
+	func applicationWillTerminate(_ application: UIApplication) {
 		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 	}
 
@@ -152,17 +152,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 //		return RCTLinkingManager.application(application, continueUserActivity: userActivity, restorationHandler: restorationHandler)
 //	}
 
-	func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+	func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
 		print("Device token:", deviceToken)
 		TalkingData.setDeviceToken(deviceToken)
 		MQManager.registerDeviceToken(deviceToken)
 		// [3]:向个推服务器注册deviceToken
-		var token = deviceToken.description.stringByTrimmingCharactersInSet(NSCharacterSet(charactersInString: "<>"));
-		token = token.stringByReplacingOccurrencesOfString(" ", withString: "")
+		var token = deviceToken.description.trimmingCharacters(in: CharacterSet(charactersIn: "<>"));
+		token = token.replacingOccurrences(of: " ", with: "")
 		GeTuiSdk.registerDeviceToken(token);
 	}
 	
-	func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+	func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
 		NSLog("receive remote notification: %@", [userInfo .description])
 		if (!TalkingData.handlePushMessage(userInfo)) {
 			// 非来自TalkingData的消息，可以在此处处理该消息。
@@ -172,40 +172,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		}
 	}
 	
-	func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
-		NSLog("\n>>>[DeviceToken Error]:%@\n\n",error.description)
+	func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+		NSLog("\n>>>[DeviceToken Error]:%@\n\n",error.localizedDescription)
 	}
 	
 	// MARK: - GeTuiSdkDelegate
 	
 	/** SDK启动成功返回cid */
-	func GeTuiSdkDidRegisterClient(clientId: String!) {
+	func geTuiSdkDidRegisterClient(_ clientId: String!) {
 		// [4-EXT-1]: 个推SDK已注册，返回clientId
 		NSLog("\n>>>[GeTuiSdk RegisterClient]:%@\n\n", clientId)
 		getuiID = clientId;
 		if (self.nativeData != nil) {
-			self.nativeData!.sendDataToRN("deviceToken", data: clientId)
+			self.nativeData!.send(toRN: "deviceToken", data: clientId)
 		}
 	}
 	
 	/** SDK遇到错误回调 */
-	func GeTuiSdkDidOccurError(error: NSError!) {
+	func geTuiSdkDidOccurError(_ error: NSError!) {
 		// [EXT]:个推错误报告，集成步骤发生的任何错误都在这里通知，如果集成后，无法正常收到消息，查看这里的通知。
 		NSLog("\n>>>[GeTuiSdk error]:%@\n\n", error.localizedDescription)
 	}
 	
 	/** SDK收到sendMessage消息回调 */
-	func GeTuiSdkDidSendMessage(messageId: String!, result: Int32) {
+	func geTuiSdkDidSendMessage(_ messageId: String!, result: Int32) {
 		// [4-EXT]:发送上行消息结果反馈
 		let msg:String = "sendmessage=\(messageId),result=\(result)"
 		NSLog("\n>>>[GeTuiSdk DidSendMessage]:%@\n\n",msg)
 	}
 	
-	func GeTuiSdkDidReceivePayloadData(payloadData: NSData!, andTaskId taskId: String!, andMsgId msgId: String!, andOffLine offLine: Bool, fromGtAppId appId: String!) {
+	func geTuiSdkDidReceivePayloadData(_ payloadData: Data!, andTaskId taskId: String!, andMsgId msgId: String!, andOffLine offLine: Bool, fromGtAppId appId: String!) {
 		
 		var payloadMsg = ""
 		if((payloadData) != nil) {
-			payloadMsg = String.init(data: payloadData, encoding: NSUTF8StringEncoding)!
+			payloadMsg = String.init(data: payloadData, encoding: String.Encoding.utf8)!
 		}
 		
 		let msg:String = "Receive Payload: \(payloadMsg), taskId:\(taskId), messageId:\(msgId)"
@@ -216,7 +216,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 	}
 
     static func isPortrait() -> Bool {
-        return Orientation.getOrientation() == .Portrait || Orientation.getOrientation() == .PortraitUpsideDown
+        return Orientation.getOrientation() == .portrait || Orientation.getOrientation() == .portraitUpsideDown
     }
 }
 

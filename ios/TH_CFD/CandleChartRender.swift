@@ -14,19 +14,19 @@ class CandleChartRender: BaseRender {
 		candleDataProvider = dataProvider as? CandleChartDataProvider
 	}
 	
-	override func render(context: CGContext) {
+	override func render(_ context: CGContext) {
 		super.render(context)
 		self.drawMiddleLines(context)
 		self.drawCandles(context)
 	}
 	
-	func drawCandles(context: CGContext) {
+	func drawCandles(_ context: CGContext) {
 		if (candleDataProvider == nil) {
 			return
 		}
 		let candleRenderData = candleDataProvider!.candleRenderData()
 		
-		CGContextSaveGState(context)
+		context.saveGState()
 		
 		let width = candleDataProvider!.chartWidth()
 		let height = candleDataProvider!.chartHeight()
@@ -53,16 +53,16 @@ class CandleChartRender: BaseRender {
 			let close = CGPoint(x: candle.x, y: candle.close+0.5+closeAdjY)
 			if(candle.open >= candle.close) {
 				// this is position data, so open large means price low.
-				graphPathThinUp.moveToPoint(high)
-				graphPathThinUp.addLineToPoint(low)
-				graphPathFatUp.moveToPoint(open)
-				graphPathFatUp.addLineToPoint(close)
+				graphPathThinUp.move(to: high)
+				graphPathThinUp.addLine(to: low)
+				graphPathFatUp.move(to: open)
+				graphPathFatUp.addLine(to: close)
 			}
 			else {
-				graphPathThinDown.moveToPoint(high)
-				graphPathThinDown.addLineToPoint(low)
-				graphPathFatDown.moveToPoint(open)
-				graphPathFatDown.addLineToPoint(close)
+				graphPathThinDown.move(to: high)
+				graphPathThinDown.addLine(to: low)
+				graphPathFatDown.move(to: open)
+				graphPathFatDown.addLine(to: close)
 			}
 		}
 		_colorSet.upColor.setFill()
@@ -75,15 +75,15 @@ class CandleChartRender: BaseRender {
 		graphPathThinDown.stroke()
 		graphPathFatDown.stroke()
 		
-		CGContextRestoreGState(context)
+		context.restoreGState()
 	}
 	
-	func drawMiddleLines(context: CGContext) {
+	func drawMiddleLines(_ context: CGContext) {
 		if (candleDataProvider == nil) {
 			return
 		}
 		
-		CGContextSaveGState(context)
+		context.saveGState()
 		
 		let width = candleDataProvider!.chartWidth()
 		let height = candleDataProvider!.chartHeight()
@@ -94,22 +94,22 @@ class CandleChartRender: BaseRender {
 		let xVerticalLines = candleDataProvider!.xVerticalLines()
 		for i in 0..<xVerticalLines.count {
 			let px = xVerticalLines[i]
-			linePath.moveToPoint(CGPoint(x: px, y: _topMargin))
-			linePath.addLineToPoint(CGPoint(x:px, y:height - _bottomMargin))
+			linePath.move(to: CGPoint(x: px, y: _topMargin))
+			linePath.addLine(to: CGPoint(x:px, y:height - _bottomMargin))
 		}
 		_colorSet.getBgLineColor().setStroke()
 		linePath.lineWidth = 1
 		linePath.stroke()
-		CGContextRestoreGState(context)
+		context.restoreGState()
 	}
 	
-	override func drawExtraText(context:CGContext) -> Void {
+	override func drawExtraText(_ context:CGContext) -> Void {
 		if (candleDataProvider == nil) {
 			return
         }
         let width = candleDataProvider!.chartWidth()
 		let height = candleDataProvider!.chartHeight()
-		let dateFormatter = NSDateFormatter()
+		let dateFormatter = DateFormatter()
 		let textWidth:CGFloat = 28.0
 		let chartType = candleDataProvider!.chartType()
 		if chartType == "day"{
@@ -122,7 +122,7 @@ class CandleChartRender: BaseRender {
 		let textColor = _colorSet.dateTextColor
 		let textFont = UIFont(name: "Helvetica Neue", size: 8)
 		let textStyle = NSMutableParagraphStyle()
-		textStyle.alignment = .Center
+		textStyle.alignment = .center
 		let attributes: [String:AnyObject] = [
 			NSForegroundColorAttributeName: textColor,
 			NSFontAttributeName: textFont!,
@@ -136,9 +136,9 @@ class CandleChartRender: BaseRender {
 			if (verticalLinesX[i] < _margin || verticalLinesX[i] > width - _margin) {
 				continue
 			}
-			let text:NSString = dateFormatter.stringFromDate(verticalTimes[i])
+			let text:NSString = dateFormatter.string(from: verticalTimes[i] as Date) as NSString
 			let rect = CGRect(x: verticalLinesX[i]-textWidth/2, y: textY, width: textWidth, height: 10)
-			text.drawInRect(rect, withAttributes: attributes)
+			text.draw(in: rect, withAttributes: attributes)
 		}
 		
 		super.drawExtraText(context)

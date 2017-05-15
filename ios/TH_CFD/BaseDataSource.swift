@@ -23,11 +23,11 @@ protocol BaseDataProvider : class
 }
 
 class BaseData: NSObject {
-	var time: NSDate?
+	var time: Date?
 	
 	init(dict:NSDictionary) {
 		let timeString = dict["time"] as? String
-		time = timeString?.toDate()
+		time = timeString?.toDate()!
 		super.init()
 	}
 }
@@ -35,13 +35,13 @@ class BaseData: NSObject {
 class BaseDataSource: NSObject, BaseDataProvider {
 	var _jsonString:String
 	var _data = [BaseData]()
-	var _rect = CGRectZero
+	var _rect = CGRect.zero
 	let _margin:CGFloat = 15.0
 	let _topMargin:CGFloat = 2.0
     let _bottomMargin:CGFloat = 15.0
 	
-	var _maxValue:Double = Double.NaN
-	var _minValue:Double = Double.NaN
+	var _maxValue:Double = Double.nan
+	var _minValue:Double = Double.nan
 	var _preCloseValue:Double? = 0
 	
 	var _chartType:String="undefined"
@@ -62,18 +62,18 @@ class BaseDataSource: NSObject, BaseDataProvider {
 		return _data.isEmpty
 	}
 	
-    func calculateData(rect:CGRect) {
+    func calculateData(_ rect:CGRect) {
 		
 	}
 	
-	func setChartType(type:String) {
+	func setChartType(_ type:String) {
 		_chartType = type
 	}
 	
-	func panTranslation(translation:CGPoint, isEnd:Bool = false) {
+	func panTranslation(_ translation:CGPoint, isEnd:Bool = false) {
 	}
 	
-	func pinchScale(scale:CGFloat, isEnd:Bool = false) {
+	func pinchScale(_ scale:CGFloat, isEnd:Bool = false) {
 	}
 	
 //	func needUpdate() -> Bool {
@@ -110,20 +110,20 @@ class BaseDataSource: NSObject, BaseDataProvider {
 	}
 	
 	func maxPercent() -> Double {
-		if (_preCloseValue > 0) {
+		if (_preCloseValue != nil && _preCloseValue! > 0.0) {
 			return (_maxValue - _preCloseValue!) / _preCloseValue! * 100
 		}
 		else {
-			return Double.NaN
+			return Double.nan
 		}
 	}
 	
 	func minPercent() -> Double {
-		if (_preCloseValue > 0) {
+		if ( _preCloseValue != nil && _preCloseValue! > 0.0) {
 			return (_minValue - _preCloseValue!) / _preCloseValue! * 100
 		}
 		else {
-			return Double.NaN
+			return Double.nan
 		}
     }
     

@@ -10,7 +10,7 @@ protocol CandleChartDataProvider: BaseDataProvider
 {
 	func candleRenderData() -> [CandlePositionData]
 	func xVerticalLines() -> [CGFloat]
-	func timeVerticalLines() -> [NSDate]
+	func timeVerticalLines() -> [Date]
 	func oneCandleWidth() -> CGFloat
 }
 
@@ -55,7 +55,7 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 	
 	var _candlePositionData:[CandlePositionData] = []
 	var verticalLinesX:[CGFloat] = []
-	var verticalLinesTime:[NSDate] = []
+	var verticalLinesTime:[Date] = []
 	
 	var currentPanX:CGFloat = 0
 	var lastPanX:CGFloat = 0
@@ -67,21 +67,21 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 	
 	override func parseJson() {
 		// demo:{\"lastOpen\":\"2016-03-24T13:31:00Z\",\"preClose\":100.81,\"longPct\":0.415537619225466,\"id\":14993,\"symbol\":\"CVS UN\",\"name\":\"CVS\",\"open\":0,\"last\":101.48,\"isOpen\":false,\"priceData\":[{\"p\":100.56,\"time\":\"2016-03-24T13:30:00Z\"},{\"p\":100.84,\"time\":\"2016-03-24T13:31:00Z\"}]}
-		let nsData: NSData = _jsonString.dataUsingEncoding(NSUTF8StringEncoding)!
+		let nsData: Data = _jsonString.data(using: String.Encoding.utf8)!
 		_candleData = []
 		do {
-			let json: AnyObject? = try NSJSONSerialization.JSONObjectWithData(nsData, options: NSJSONReadingOptions.MutableLeaves)
+			let json: Any? = try JSONSerialization.jsonObject(with: nsData, options: JSONSerialization.ReadingOptions.mutableLeaves)
 //			print(json)
 			if let jsonDict = json as? NSDictionary {
-				if _jsonString.rangeOfString("priceData") != nil {
+				if _jsonString.range(of: "priceData") != nil {
 					let jsonArray = jsonDict["priceData"] as! NSArray
 					for chartDict in jsonArray {
 						let data:CandleData = CandleData.init(dict: chartDict as! NSDictionary)
 						_candleData.append(data)
 					}
-					_candleData = _candleData.reverse()
+					_candleData = _candleData.reversed()
 				}
-				if _jsonString.rangeOfString("preClose") != nil {
+				if _jsonString.range(of: "preClose") != nil {
 					self.stockData = StockData()
 					self.stockData?.initWithDictionay(jsonDict)
 				}
@@ -92,26 +92,26 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		}
 	}
 	
-	override func setChartType(newValue:String) {
+	override func setChartType(_ newValue:String) {
 		if ["day", "1m", "5m", "15m", "60m"].contains(newValue) {
 			super.setChartType(newValue)
 		}
 	}
 	
-	static func isValidData(json:String) -> Bool {
-		return json.containsString("open") && json.containsString("close") && json.containsString("high") && json.containsString("low")
+	static func isValidData(_ json:String) -> Bool {
+		return json.contains("open") && json.contains("close") && json.contains("high") && json.contains("low")
 	}
 	
 	override func isEmpty() -> Bool {
 		return _candleData.isEmpty
 	}
 	
-	override func calculateData(rect:CGRect) {
+	override func calculateData(_ rect:CGRect) {
 		if _chartType == "undefined" {
 			return
 		}
         _rect = rect
-		if (_rect == CGRectZero || _candleData.isEmpty) {
+		if (_rect == CGRect.zero || _candleData.isEmpty) {
 			return
         }
         let width = chartWidth()
@@ -173,24 +173,24 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		let gaps = ["5m":3600.0, "day":3600.0*24*14, "1m":900.0, "15m":3600.0*3, "60m":3600.0*12,]
 		let gap = gaps[_chartType]!		// gap between two lines
 		
-		if let time0:NSDate? = _candleData.first?.time {
+		if let time0:Date? = _candleData.first?.time as! Date {
 			var endTime = time0
 			verticalLinesX = []
 			verticalLinesTime = []
 			for i in 0 ..< _candleData.count {
-				if let time:NSDate? = _candleData[i].time {
-					let interval:NSTimeInterval = -time!.timeIntervalSinceDate(endTime!)
+				if let time:Date? = _candleData[i].time as! Date {
+					let interval:TimeInterval = -time!.timeIntervalSince(endTime!)
 					if interval > gap*0.99 {
 						verticalLinesX.append(_candlePositionData[i].x)
 						endTime = time
-						verticalLinesTime.append(self._candleData[i].time!)
+						verticalLinesTime.append(self._candleData[i].time! as Date)
 					}
 				}
 			}
 		}
 	}
 	
-	override func panTranslation(translation: CGPoint, isEnd:Bool = false) {
+	override func panTranslation(_ translation: CGPoint, isEnd:Bool = false) {
 		currentPanX = translation.x	//pan right means go earlier
 		
 		if (isEnd) {
@@ -228,7 +228,7 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		return panx
 	}
 	
-	override func pinchScale(scale:CGFloat, isEnd:Bool = false) {
+	override func pinchScale(_ scale:CGFloat, isEnd:Bool = false) {
 		currentScale = scale
 		if (isEnd) {
 			lastScale = self.scale()
@@ -255,7 +255,7 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		return verticalLinesX
 	}
 	
-	func timeVerticalLines() -> [NSDate] {
+	func timeVerticalLines() -> [Date] {
 		return verticalLinesTime
 	}
 	

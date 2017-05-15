@@ -24,51 +24,49 @@ extension UIColor {
 
 // MARK: UIViewController
 extension UIViewController {
-	func noticeSuccess(text: String, autoClear: Bool = true, autoClearTime: Int = 1) {
+	func noticeSuccess(_ text: String, autoClear: Bool = true, autoClearTime: Int = 1) {
 		SwiftNotice.showNoticeWithText(SwiftNotice.NoticeType.success, text: text, autoClear: autoClear, autoClearTime: autoClearTime)
 	}
 }
 
 // MARK: String
 extension String {
-	func toDate() -> NSDate?{
-		let dateFormatter = NSDateFormatter()
+	func toDate() -> Date?{
+		let dateFormatter = DateFormatter()
 		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-		if let date:NSDate = dateFormatter.dateFromString(self) {
+		if let date:Date = dateFormatter.date(from: self) {
 			return date
 		}
 		else {
 			dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-			let date = dateFormatter.dateFromString(self)
+			let date = dateFormatter.date(from: self)
 			return date
 		}
 	}
 }
 
 // MARK: NSDate
-extension NSDate {
-	func sameTimeOnLastSunday() -> NSDate {
-		let calendar:NSCalendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
-		let components:NSDateComponents = calendar.components([.YearForWeekOfYear, .WeekOfYear, .Weekday, .Hour, .Minute, .Second, .Nanosecond], fromDate: self)
+extension Date {
+	func sameTimeOnLastSunday() -> Date {
+		let calendar:Calendar = Calendar(identifier: Calendar.Identifier.gregorian)
+		var components:DateComponents = (calendar as NSCalendar).components([.yearForWeekOfYear, .weekOfYear, .weekday, .hour, .minute, .second, .nanosecond], from: self)
 		components.weekday = 1
-		return calendar.dateFromComponents(components)!
+		return calendar.date(from: components)!
 	}
 }
 
 // MARK: Double
 extension Double {
     /// Rounds the double to decimal places value
-    func roundTo(places:Int) -> Double {
+    mutating func roundTo(_ places:Int) -> Double {
         let divisor = pow(10.0, Double(places))
-        return round(self * divisor) / divisor
+        return Darwin.round(self * divisor) / divisor
     }
     
     func decimalPlace() -> Int {
         let str = "\(self)"
-        if let range = str.rangeOfString(".") {
-//            print (range.endIndex)
-//            print (str.endIndex)
-            return range.endIndex.distanceTo(str.endIndex)
+        if let range = str.range(of: ".") {
+            return str.distance(from:range.upperBound, to:str.endIndex)
         }
         else {
             return 0

@@ -21,7 +21,7 @@ class StockChartView: UIView {
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		// add touch function
-		self.userInteractionEnabled = true
+		self.isUserInteractionEnabled = true
 		panGesture = UIPanGestureRecognizer(target: self, action: #selector(StockChartView.pan(_:)))
 		pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(StockChartView.pinch(_:)))
         tapGesture = UITapGestureRecognizer(target: self, action: #selector(StockChartView.tap(_:)))
@@ -53,28 +53,28 @@ class StockChartView: UIView {
 	}
 	
 // MARK: action
-	func pan(sender: UIPanGestureRecognizer) {
+	func pan(_ sender: UIPanGestureRecognizer) {
 		if dataSource != nil {
-			let translation : CGPoint = sender.translationInView(self)
-			dataSource!.panTranslation(translation, isEnd: sender.state == UIGestureRecognizerState.Ended)
+			let translation : CGPoint = sender.translation(in: self)
+			dataSource!.panTranslation(translation, isEnd: sender.state == UIGestureRecognizerState.ended)
 //			dataSource!.calculateData()
 			self.setNeedsDisplay()
 		}
 	}
 	
-	func pinch(sender: UIPinchGestureRecognizer) {
+	func pinch(_ sender: UIPinchGestureRecognizer) {
 		if dataSource != nil {
 			let scale : CGFloat = sender.scale
-			dataSource!.pinchScale(scale, isEnd: sender.state == UIGestureRecognizerState.Ended)
+			dataSource!.pinchScale(scale, isEnd: sender.state == UIGestureRecognizerState.ended)
 //			dataSource!.calculateData()
 			self.setNeedsDisplay()
 		}
 	}
 	
-    func tap(sender: UITapGestureRecognizer) {
-        if colorType == 0 && Orientation.getOrientation() == .Portrait || Orientation.getOrientation() == .PortraitUpsideDown {
-            let delegate:AppDelegate! = UIApplication.sharedApplication().delegate as! AppDelegate
-            delegate!.nativeData!.sendDataToRN("chart_clicked", data: nil)
+    func tap(_ sender: UITapGestureRecognizer) {
+        if colorType == 0 && Orientation.getOrientation() == .portrait || Orientation.getOrientation() == .portraitUpsideDown {
+            let delegate:AppDelegate! = UIApplication.shared.delegate as! AppDelegate
+            delegate!.nativeData!.send(toRN: "chart_clicked", data: nil)
         }
     }
     
@@ -122,7 +122,7 @@ class StockChartView: UIView {
             }
             else if YieldLineChartDataSource.isValidData(data!) {
                 dataSource = YieldLineChartDataSource.init(json:data!, rect: self.bounds)
-                self.userInteractionEnabled = false
+                self.isUserInteractionEnabled = false
             }
             else if LineChartDataSource.isValidData(data!) {
                 dataSource = LineChartDataSource.init(json:data!, rect: self.bounds)
@@ -139,7 +139,7 @@ class StockChartView: UIView {
 	
     
 	override func didMoveToWindow() {
-		if dataSource?._rect == CGRectZero {
+		if dataSource?._rect == CGRect.zero {
 			// sometimes when the data is updated, the view do not finished inited.
 			// so need to recalculate again.
 			dataSource?._rect = self.bounds
@@ -148,7 +148,7 @@ class StockChartView: UIView {
 	}
 	
 // MARK: render
-	override func drawRect(rect: CGRect) {
+	override func draw(_ rect: CGRect) {
 		// draw line chart
 		let context:CGContext! = UIGraphicsGetCurrentContext()
 		if dataSource == nil || dataSource!.isEmpty() {
@@ -157,11 +157,11 @@ class StockChartView: UIView {
 			render!.render(context)
 		} else {
             dataSource!.calculateData(rect)
-			if dataSource!.isKindOfClass(CandleChartDataSource) {
+			if dataSource!.isKind(of: CandleChartDataSource.self) {
 				render = CandleChartRender.init(view: self)
 				render!.render(context)
 			}
-            else if dataSource!.isKindOfClass(YieldLineChartDataSource) {
+            else if dataSource!.isKind(of: YieldLineChartDataSource.self) {
                 render = YieldLineChartRender.init(view: self)
                 render!.render(context)
             }

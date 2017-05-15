@@ -13,9 +13,9 @@ protocol LineChartDataProvider: BaseDataProvider
 	func pointData() -> [CGPoint]
 	func yPosOfMiddleLine() ->CGFloat
 	func xVerticalLines() -> [CGFloat]
-	func timesOnBottom() -> [NSDate]
-	func firstTime() -> NSDate?
-	func lastTime() -> NSDate?
+	func timesOnBottom() -> [Date]
+	func firstTime() -> Date?
+	func lastTime() -> Date?
 }
 
 class LineData: BaseData {
@@ -33,7 +33,7 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 	
 	var _pointData:[CGPoint] = []
 	var verticalLinesX:[CGFloat] = []
-	var verticalTimes:[NSDate] = []
+	var verticalTimes:[Date] = []
 	var middleLineY:CGFloat = 0
 	var topLineY:CGFloat = 0
 	var bottomLineY:CGFloat = 0
@@ -42,19 +42,19 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 	
 	override func parseJson() {
 		// demo:{\"lastOpen\":\"2016-03-24T13:31:00Z\",\"preClose\":100.81,\"longPct\":0.415537619225466,\"id\":14993,\"symbol\":\"CVS UN\",\"name\":\"CVS\",\"open\":0,\"last\":101.48,\"isOpen\":false,\"priceData\":[{\"p\":100.56,\"time\":\"2016-03-24T13:30:00Z\"},{\"p\":100.84,\"time\":\"2016-03-24T13:31:00Z\"}]}
-		let nsData: NSData = _jsonString.dataUsingEncoding(NSUTF8StringEncoding)!
+		let nsData: Data = _jsonString.data(using: String.Encoding.utf8)!
 		_lineData = []
 		do {
-			let json: AnyObject? = try NSJSONSerialization.JSONObjectWithData(nsData, options: NSJSONReadingOptions.MutableLeaves)
+			let json: Any? = try JSONSerialization.jsonObject(with: nsData, options: JSONSerialization.ReadingOptions.mutableLeaves)
 			if let jsonDict = json as? NSDictionary {
-				if _jsonString.rangeOfString("priceData") != nil {
+				if _jsonString.range(of: "priceData") != nil {
 					let jsonArray = jsonDict["priceData"] as! NSArray
 					for chartDict in jsonArray {
 						let lineData:LineData = LineData.init(dict: chartDict as! NSDictionary)
 						_lineData.append(lineData)
 					}
 				}
-				if _jsonString.rangeOfString("preClose") != nil {
+				if _jsonString.range(of: "preClose") != nil {
 					self.stockData = StockData()
 					self.stockData?.initWithDictionay(jsonDict)
 				}
@@ -65,27 +65,27 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 		}
 	}
 	
-	override func setChartType(newValue:String) {
+	override func setChartType(_ newValue:String) {
 		if ["today", "2h", "week", "month", "3month", "6month"].contains(newValue) {
 			super.setChartType(newValue)
 			drawPreCloseLine = newValue == "today"
 		}
 	}
 	
-	static func isValidData(json:String) -> Bool {
-		return json.containsString("p")
+	static func isValidData(_ json:String) -> Bool {
+		return json.contains("p")
 	}
 	
 	override func isEmpty() -> Bool {
 		return _lineData.isEmpty
 	}
 	
-	override func calculateData(rect:CGRect) {
+	override func calculateData(_ rect:CGRect) {
 		if _chartType == "undefined" {
 			return
         }
         _rect = rect
-		if (_rect == CGRectZero || _lineData.isEmpty) {
+		if (_rect == CGRect.zero || _lineData.isEmpty) {
 			return
         }
         let width = chartWidth()
@@ -107,9 +107,9 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 		}
 		
 		let preClose = self.stockData?.preClose
-		if (preClose > 0 && drawPreCloseLine) {
-			maxValue = maxValue < preClose ? preClose! : maxValue
-			minValue = minValue > preClose ? preClose! : minValue
+		if (preClose! > 0 && drawPreCloseLine) {
+			maxValue = maxValue < preClose! ? preClose! : maxValue
+			minValue = minValue > preClose! ? preClose! : minValue
 		}
 		
 		//calculate the x point
@@ -137,7 +137,7 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 			y = graphHeight + topBorder - y // Flip the graph
 			return y
 		}
-		if (preClose > 0 && maxValue > minValue) {
+		if (preClose! > 0 && maxValue > minValue) {
 			middleLineY = (height-topBorder-bottomBorder) * CGFloat(maxValue - preClose!) / CGFloat(maxValue - minValue)+topBorder
 		}
 		else {
@@ -165,7 +165,7 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 	}
 	
 	func calculateVerticalLines() -> Void {
-		if (_rect == CGRectZero || _lineData.isEmpty) {
+		if (_rect == CGRect.zero || _lineData.isEmpty) {
 			return
 		}
 		verticalLinesX = []
@@ -174,36 +174,36 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 		let gaps = ["today":3600.0, "2h":1800.0, "week":3600.0*24, "month":3600.0*24*7, "3month":3600.0*24*7*3, "6month":3600.0*24*7*6]
 		let gap = gaps[_chartType]!		// gap between two lines
 		
-		if let time0:NSDate? = _lineData.first?.time {
+		if let time0:Date? = _lineData.first?.time as! Date {
 			var startTime = stockData?.lastOpen
 			if startTime == nil {
-				startTime = NSDate()
+				startTime = Date()
 			}
 			
 			if _chartType == "week" {
 				// 1 day, 1 line
-				let interval:NSTimeInterval = time0!.timeIntervalSinceDate(startTime!)
+				let interval:TimeInterval = time0!.timeIntervalSince(startTime! as Date)
 				let days = floor(interval / gap)
-				startTime = NSDate(timeInterval: days*gap, sinceDate: startTime!)
+				startTime = Date(timeInterval: days*gap, since: startTime! as Date)
 			}
 			else if _chartType == "month" {
 				// 1 week, 1 line
 				startTime = startTime?.sameTimeOnLastSunday()
-				let interval:NSTimeInterval = time0!.timeIntervalSinceDate(startTime!)
+				let interval:TimeInterval = time0!.timeIntervalSince(startTime! as Date)
 				let weeks = floor(interval / gap)
-				startTime = NSDate(timeInterval: weeks*gap, sinceDate: startTime!)
+				startTime = Date(timeInterval: weeks*gap, since: startTime! as Date)
 			}
 			else {
 				startTime = _lineData.first?.time
 			}
 			
 			for i in 0 ..< _lineData.count {
-				if let time:NSDate? = _lineData[i].time {
-					let interval:NSTimeInterval = time!.timeIntervalSinceDate(startTime!)
+				if let time:Date? = _lineData[i].time as! Date {
+					let interval:TimeInterval = time!.timeIntervalSince(startTime! as Date)
 					if interval > gap*0.99 {
 						verticalLinesX.append(_pointData[i].x+0.5)
-						startTime = time
-						verticalTimes.append(self._lineData[i].time!)
+						startTime = time!
+						verticalTimes.append(self._lineData[i].time! as Date)
 					}
 				}
 			}
@@ -232,15 +232,15 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 		return verticalLinesX
 	}
 	
-	func timesOnBottom() -> [NSDate] {
+	func timesOnBottom() -> [Date] {
 		return verticalTimes
 	}
 	
-	func firstTime() -> NSDate? {
-		return _lineData.first?.time
+	func firstTime() -> Date? {
+		return _lineData.first?.time as! Date
 	}
 	
-	func lastTime() -> NSDate? {
-		return _lineData.last?.time
+	func lastTime() -> Date? {
+		return _lineData.last?.time as! Date
 	}
 }

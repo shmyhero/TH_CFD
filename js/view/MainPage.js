@@ -9,6 +9,7 @@ import {
   Navigator,
   Linking,
 	Platform,
+	StatusBar,
 } from 'react-native';
 
 import Tabbar, { Tab, RawContent,  Icon, IconWithBar, glypyMapMaker } from './component/react-native-tabbar';
@@ -775,22 +776,36 @@ var MainPage = React.createClass({
 
 	initTabbarEvent() {
 		var homeRef = this.refs['homeContent'].refs['wrap'].getWrappedRef()
-		homeRef.tabWillFocus = EventCenter.emitHomeTabPressEvent;
+		homeRef.tabWillFocus = ()=>{
+			EventCenter.emitHomeTabPressEvent();
+		}
 
 		var stockRef = this.refs['stockContent'].refs['wrap'].getWrappedRef()
-		stockRef.tabWillFocus = EventCenter.emitStockTabPressEvent;
+		stockRef.tabWillFocus = ()=>{
+			StatusBar.setBackgroundColor(ColorConstants.TITLE_BLUE)
+			EventCenter.emitStockTabPressEvent();
+		}
 
 		var exchangeRef = this.refs['exchangeContent'].refs['wrap'].getWrappedRef()
-		exchangeRef.tabWillFocus = EventCenter.emitExchangeTabPressEvent;
+		exchangeRef.tabWillFocus = ()=>{
+			StatusBar.setBackgroundColor(ColorConstants.TITLE_BLUE)
+			EventCenter.emitExchangeTabPressEvent();
+		}
 
 		//Disable ranking tab if necessary
 		if(!HIDE_RANKING_TAB){
 			var rankingRef = this.refs['rankingContent'].refs['wrap'].getWrappedRef();
-			rankingRef.tabWillFocus = EventCenter.emitRankingTabPressEvent;
+			rankingRef.tabWillFocus = ()=>{
+				StatusBar.setBackgroundColor(ColorConstants.TITLE_BLUE)
+				EventCenter.emitRankingTabPressEvent();
+			}
 		}
 
 		var meRef = this.refs['meContent'].refs['wrap'].getWrappedRef()
-		meRef.tabWillFocus = EventCenter.emitMeTabPressEvent;
+		meRef.tabWillFocus = ()=>{
+			StatusBar.setBackgroundColor(ColorConstants.TITLE_BLUE)
+			EventCenter.emitMeTabPressEvent();
+		}
 	},
 
 	componentDidMount: function() {

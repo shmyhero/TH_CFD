@@ -14,6 +14,7 @@ import {
 	Alert,
 	ScrollView,
 	WebView,
+	StatusBar,
 } from 'react-native';
 
 var Swiper = require('react-native-swiper')
@@ -43,8 +44,8 @@ var PAGES = [
 	{name: 'Page1', url: RECOMMAND_URL + "1", header:""},
 ];
 var BANNERS = [
-	require('../../images/bannar01.png'),
-	require('../../images/bannar02.png'),
+	require('../../images/bannar_01.jpg'),
+	require('../../images/bannar_02.jpg'),
 ];
 const check_in_image = require("../../images/check_in.png")
 //const movie_image = require("../../images/movie.png")
@@ -55,7 +56,7 @@ const bg_hint_image = require("../../images/icon_bg_hint.png")
 var {height, width} = Dimensions.get('window');
 var barWidth = Math.round(width/3)-12
 
-var BANNER_HEIGHT = 450
+var BANNER_HEIGHT = 428
 var BANNER_WIDTH = 750
 var imageHeight = BANNER_HEIGHT / BANNER_WIDTH * width
 
@@ -127,6 +128,10 @@ var HomePage = React.createClass({
 
 	loadUnreadMessage: function(){
 		var userData = LogicData.getUserData();
+		var login = Object.keys(userData).length !== 0
+		if (!login){
+			return
+		}
 		var url = NetConstants.CFD_API.GET_UNREAD_MESSAGE;
 		if(LogicData.getAccountState()){
 			url = NetConstants.CFD_API.GET_UNREAD_MESSAGE_LIVE
@@ -337,6 +342,8 @@ var HomePage = React.createClass({
 	},
 
 	onTabChanged: function(){
+		StatusBar.setBackgroundColor(this.state.navBarBackgroundColor);
+
 		LogicData.setTabIndex(MainPage.HOME_PAGE_TAB_INDEX);
 
 		console.log("onTabChanged reloadPage");
@@ -1307,7 +1314,7 @@ var HomePage = React.createClass({
 								autoplay={true}
 								autoplayTimeout={3}
 								paginationStyle={{
-									bottom: null, top: 12, left: null, right: 10,
+									bottom: 0, top: null, left: 12, right: 12,
 								}}
 								activeDot={activeDot}
 								dot={dot}>

@@ -106,6 +106,15 @@ var NavBar = React.createClass({
 		});
 	},
 
+	hexToRgb: function(hex) {
+	    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	    return result ? {
+	        r: parseInt(result[1], 16),
+	        g: parseInt(result[2], 16),
+	        b: parseInt(result[3], 16)
+	    } : null;
+	},
+
 	render: function() {
 		var backgroundColor = ColorConstants.title_blue();
 		if(this.props.backgroundColor){
@@ -114,7 +123,9 @@ var NavBar = React.createClass({
 
 		var navBarColor = ColorConstants.title_blue();
 		if(this.props.backgroundColor !== "transparent"){
-			navBarColor = this.props.backgroundColor;
+			if(this.hexToRgb(this.props.backgroundColor)){	//Which means the background doesn't have an alpha channel
+				navBarColor = this.props.backgroundColor;
+			}
 		}
 
 		return (

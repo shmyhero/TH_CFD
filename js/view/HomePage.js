@@ -342,8 +342,6 @@ var HomePage = React.createClass({
 	},
 
 	onTabChanged: function(){
-		StatusBar.setBackgroundColor(this.state.navBarBackgroundColor);
-
 		LogicData.setTabIndex(MainPage.HOME_PAGE_TAB_INDEX);
 
 		console.log("onTabChanged reloadPage");

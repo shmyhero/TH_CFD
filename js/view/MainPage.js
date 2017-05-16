@@ -309,7 +309,11 @@ var MainPage = React.createClass({
 		} else if (route.name === STOCK_SEARCH_ROUTE) {
 			hideTabbar()
 			return (
-				<StockSearchPage navigator={navigationOperations} style={{flex: 1}}/>
+				<View style={{flex: 1}}>
+					<NavBar onlyShowStatusBar={true}
+						backgroundColor={ColorConstants.title_blue()}/>
+					<StockSearchPage navigator={navigationOperations} style={{flex: 1}}/>
+				</View>
 			);
 		} else if (route.name === STOCK_DETAIL_ROUTE) {
 			hideTabbar()

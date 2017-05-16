@@ -42,7 +42,9 @@ var NavBar = React.createClass({
 		rightCustomContent: React.PropTypes.func,
 		barStyle: View.propTypes.style,
 		titleStyle: Text.propTypes.style,
-		enableRightText: React.PropTypes.bool
+		enableRightText: React.PropTypes.bool,
+		hideStatusBar: React.PropTypes.bool,
+		onlyShowStatusBar: React.PropTypes.bool,
 	},
 
 	getDefaultProps() {
@@ -65,6 +67,8 @@ var NavBar = React.createClass({
 			backgroundColor: null,
 			rightCustomContent: null,
 			enableRightText: true,
+			hideStatusBar: false,
+			onlyShowStatusBar: false,
 		}
 	},
 
@@ -115,6 +119,31 @@ var NavBar = React.createClass({
 	    } : null;
 	},
 
+	renderStatusBar: function(navBarColor){
+		var translucent = false;
+		var backgroundColor = navBarColor
+		if(Platform.OS == "android"){
+			translucent = this.props.hideStatusBar?true:false
+			backgroundColor = this.props.hideStatusBar?"#00ffffff":navBarColor
+		}
+		var view = null;
+		if(this.props.hideStatusBar){
+			view = (<View style={{height: StatusBar.height}}></View>)
+		}
+
+	},
+
+	renderPlaceholder: function(navBarColor){
+		if(Platform.OS === "android"){
+			if(Platform.Version >= 21){
+				return (<View style={{height: StatusBar.currentHeight, backgroundColor: navBarColor}}/>);
+			}else{
+				StatusBar.setBackgroundColor(navBarColor);
+			}
+		}
+		return null;
+	},
+
 	render: function() {
 		var backgroundColor = ColorConstants.title_blue();
 		if(this.props.backgroundColor){
@@ -122,15 +151,22 @@ var NavBar = React.createClass({
 		}
 
 		var navBarColor = ColorConstants.title_blue();
-		if(this.props.backgroundColor !== "transparent"){
-			if(this.hexToRgb(this.props.backgroundColor)){	//Which means the background doesn't have an alpha channel
-				navBarColor = this.props.backgroundColor;
-			}
+		if(this.props.backgroundColor && this.props.backgroundColor !== "transparent"){
+			//Which means the background doesn't have an alpha channel
+			navBarColor = this.props.backgroundColor;
 		}
+
+		if(this.props.onlyShowStatusBar){
+			//StatusBar.setBackgroundColor(navBarColor)
+			return this.renderPlaceholder(navBarColor);
+		}
+		var h = Platform.OS === 'android' ? (Platform.Version >= 21 ? StatusBar.currentHeight : 0) : 0
+		console.log("STATUS_BAR_ACTUAL_HEIGHT " + UIConstants.STATUS_BAR_ACTUAL_HEIGHT + ", " + h)
 
 		return (
 			<View style={[styles.container, {backgroundColor: backgroundColor}, this.props.barStyle]} >
-	    	<StatusBar barStyle="light-content" backgroundColor={navBarColor}/>
+				<StatusBar barStyle="light-content" backgroundColor={Platform.OS === "android"? "transparent":navBarColor}
+					translucent={Platform.OS === "android"}/>
 				{this.renderLeftPart()}
 				<View style={styles.centerContainer}>
 					<Text style={[styles.title, this.props.titleStyle]}>
@@ -305,7 +341,7 @@ var styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		paddingTop: (Platform.OS === 'ios') ? 15 : 0,
+		paddingTop: (Platform.OS === 'ios') ? 15 : UIConstants.STATUS_BAR_ACTUAL_HEIGHT,
 	},
 	leftContainer: {
 		flex: 1,

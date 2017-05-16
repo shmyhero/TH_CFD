@@ -54,7 +54,6 @@ var WebViewPage = React.createClass({
 			shareTrackingEvent: null,
 			shareUrl: null,
 			isShowNav: true,
-			hideNavBar: false,
 		}
 	},
 
@@ -240,7 +239,10 @@ var WebViewPage = React.createClass({
 	renderNavBar: function() {
 		console.log("this.props.isShowNav" + this.props.isShowNav)
 		if(!this.props.isShowNav && this.state.isLoaded){
-			return <View></View>
+			return(
+				<NavBar onlyShowStatusBar={true}
+					backgroundColor={this.props.themeColor}/>
+			);
 		}
 		if((this.props.shareID || this.props.shareUrl) && (this.props.shareTitle || this.props.shareDescription)){
 			return(

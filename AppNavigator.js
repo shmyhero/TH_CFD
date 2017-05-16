@@ -474,11 +474,17 @@ var AppNavigator = React.createClass({
 
 	render: function() {
 		var {height, width} = Dimensions.get('window')
-		var statusBar = <StatusBar barStyle="light-content"/>
+		var statusBar = <StatusBar barStyle="light-content" translucent={Platform.OS === "android"}/>
 
 		if (this.state.startUpPhase == MAIN_PAGE_PHASE) {
 			if(Platform.OS == 'android'){
-				StatusBar.setBackgroundColor(ColorConstants.TITLE_BLUE);
+				console.log("Platform.Version " + Platform.Version)
+				if(Platform.Version >= 21){
+					StatusBar.setBackgroundColor('transparent');
+					StatusBar.setTranslucent(true)
+				}else{
+					StatusBar.setBackgroundColor(ColorConstants.title_blue());
+				}
 			}
 			return (
 				<View style={styles.container}>

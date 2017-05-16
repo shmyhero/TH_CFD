@@ -114,9 +114,8 @@ var AccountNameModifyPage = React.createClass({
 	renderHeader(){
 		var barHeight = 68
 		if (Platform.OS == 'android') {
-			barHeight = 50
+			barHeight = 50 + UIConstants.STATUS_BAR_ACTUAL_HEIGHT
 		}
-
 		return (
 			<NavBar showBackButton={true} navigator={this.props.navigator}
 				barStyle={{height: barHeight}}	titleStyle={{fontSize:18}}

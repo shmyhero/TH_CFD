@@ -19,6 +19,7 @@ var {EventCenter, EventConst} = require('../EventCenter')
 import LinearGradient from 'react-native-linear-gradient';
 var TimerMixin = require('react-timer-mixin');
 
+var NavBar = require('./NavBar')
 var LogicData = require('../LogicData')
 var MyHomePage = require('./MyHomePage')
 var StorageModule = require('../module/StorageModule')
@@ -773,8 +774,9 @@ var LoginPage = React.createClass({
 		//ScrollView need to be wrapped with a non-styled view...
 		return (
 			<View style={{flex:1}}>
+				<NavBar onlyShowStatusBar={true}/>
 				<ScrollView style={{flex:1}}>
-					<LinearGradient colors={gradientColors} style={[styles.wrapper, {height: this.state.height}]}>
+					<LinearGradient colors={gradientColors} style={[styles.wrapper, {height: this.state.height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER}]}>
 						{/* {this.renderTab()} */}
 						<View style={styles.tabContainer}>
 							<Text style={{flex: 1, fontSize: 18, textAlign: 'center', color: '#ffffff'}}>
@@ -813,7 +815,7 @@ var styles = StyleSheet.create({
 	},
 
 	tabContainer: {
-		height: UIConstants.HEADER_HEIGHT,
+		height: UIConstants.NAVBAR_HEIGHT,
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',

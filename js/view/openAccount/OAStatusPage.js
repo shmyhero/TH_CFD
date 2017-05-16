@@ -152,7 +152,7 @@ var styles = StyleSheet.create({
 		color: '#ffffff',
 	},
 	helpContainer: {
-		paddingBottom: 30,
+		paddingBottom: 30 - UIConstants.STATUS_BAR_ACTUAL_HEIGHT,
 		alignItems: 'stretch',
 		//height: 30,
 	},

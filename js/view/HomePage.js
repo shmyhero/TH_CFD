@@ -309,6 +309,8 @@ var HomePage = React.createClass({
 	},
 
 	componentDidMount: function() {
+		StatusBar.setBackgroundColor('transparent');
+		StatusBar.setTranslucent(true)
 		var isConnected = WebSocketModule.isConnected();
 		this.setState({
 			connected: isConnected
@@ -1215,6 +1217,7 @@ var HomePage = React.createClass({
 				<NavBar title={this.state.connected ? "首页" : "首页（未连接）"}
 					viewOnRight={this.renderMessageIcon()}
 					viewOnLeft={this.renderCheckInView()}
+					hideStatusBar={true}
 					backgroundColor={this.state.navBarBackgroundColor}
 					navigator={this.props.navigator}/>
 			</TouchableOpacity>
@@ -1261,7 +1264,7 @@ var HomePage = React.createClass({
 		console.log("event " + event.nativeEvent.contentOffset.y)
 		var rgb = this.hexToRgb(ColorConstants.title_blue())
 		var alpha = 0;
-		var height = imageHeight - 64;
+		var height = imageHeight - StatusBar.currentHeight - UIConstants.HEADER_HEIGHT;
 		if(event.nativeEvent.contentOffset.y > height){
 			alpha = 1;
 		}else{

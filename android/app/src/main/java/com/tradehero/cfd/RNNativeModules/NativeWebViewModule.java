@@ -10,6 +10,8 @@ package com.tradehero.cfd.RNNativeModules;
  */
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Picture;
@@ -48,6 +50,7 @@ import com.facebook.react.views.webview.WebViewConfig;
 import com.facebook.react.views.webview.events.TopLoadingErrorEvent;
 import com.facebook.react.views.webview.events.TopLoadingFinishEvent;
 import com.facebook.react.views.webview.events.TopLoadingStartEvent;
+import com.tradehero.cfd.R;
 import com.tradehero.cfd.module.LogicData;
 
 import java.io.UnsupportedEncodingException;
@@ -450,17 +453,39 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
     }
 
     @Override
-    protected void addEventEmitters(ThemedReactContext reactContext, WebView view) {
+    protected void addEventEmitters(final ThemedReactContext reactContext, WebView view) {
         // Do not register default touch emitter and let WebView implementation handle touches
         view.setWebViewClient(new ReactWebViewClient(reactContext) {
             @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
 
-                // *** NEVER DO THIS!!! ***
-                // super.onReceivedSslError(view, handler, error);
+//                // *** NEVER DO THIS!!! ***
+//                // super.onReceivedSslError(view, handler, error);
+//
+//                // let's ignore ssl error
+//                handler.proceed();
 
-                // let's ignore ssl error
-                handler.proceed();
+
+                final AlertDialog.Builder builder = new AlertDialog.Builder(reactContext);
+//                builder.setMessage(R.string.notification_error_ssl_cert_invalid);
+                builder.setMessage("是您信任的证书吗？");
+                builder.setPositiveButton("继续", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handler.proceed();
+                    }
+                });
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        handler.cancel();
+                    }
+                });
+                final AlertDialog dialog = builder.create();
+                dialog.show();
+
+
+
             }
         });
 

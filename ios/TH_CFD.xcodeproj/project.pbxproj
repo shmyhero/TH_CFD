@@ -158,9 +158,8 @@
 		3D2A39FF1C7C3EDA0085264D /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A39FE1C7C3EDA0085264D /* libc++.tbd */; };
 		3D2A3A011C7C3EE70085264D /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A3A001C7C3EE70085264D /* libz.tbd */; };
 		3D2A3A0A1C7C44C50085264D /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D2A3A091C7C44C50085264D /* CoreTelephony.framework */; };
+		3D3D56CC1ECC4357007E3F69 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D915BAF1E77EDD200FE2408 /* UserNotifications.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		3D3E1EFF1C9F9C1C0064F187 /* SwiftNotice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3E1EFE1C9F9C1C0064F187 /* SwiftNotice.swift */; };
-		3D47476F1EB421C200EC1D05 /* china.geojson in Resources */ = {isa = PBXBuildFile; fileRef = 3D47476D1EB4215C00EC1D05 /* china.geojson */; };
-		3D4747711EB423F700EC1D05 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4747701EB423F700EC1D05 /* MapKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		3D47CB491C897882000EF6EF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D47CB481C897882000EF6EF /* AppDelegate.swift */; };
 		3D4B37971D504942004BD09C /* libTalkingData.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4B37941D504942004BD09C /* libTalkingData.a */; };
 		3D4B37AA1D5049B6004BD09C /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4B37A91D5049B6004BD09C /* AdSupport.framework */; };
@@ -182,7 +181,6 @@
 		3D6A24091C9AB90000FF1306 /* NativeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A24081C9AB90000FF1306 /* NativeData.m */; };
 		3D6A240B1C9ABDE900FF1306 /* StockDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */; };
 		3D6A24181C9C026200FF1306 /* SwiftExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A24171C9C026200FF1306 /* SwiftExtensions.swift */; };
-		3D915BB01E77EDD200FE2408 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D915BAF1E77EDD200FE2408 /* UserNotifications.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		3DB98C0F1CE1CF1A00DB3FA5 /* frontPage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3DB98C0E1CE1CF1A00DB3FA5 /* frontPage.jpg */; };
 		3DB9F24A1D64499800DC5C63 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DB9F2491D64499800DC5C63 /* libicucore.tbd */; };
 		3DB9F24C1D6449AA00DC5C63 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DB9F24B1D6449AA00DC5C63 /* AVFoundation.framework */; };
@@ -706,7 +704,6 @@
 		3D2A3A001C7C3EE70085264D /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		3D2A3A091C7C44C50085264D /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		3D3E1EFE1C9F9C1C0064F187 /* SwiftNotice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftNotice.swift; path = TH_CFD/SwiftNotice.swift; sourceTree = "<group>"; };
-		3D47476D1EB4215C00EC1D05 /* china.geojson */ = {isa = PBXFileReference; lastKnownFileType = text; path = china.geojson; sourceTree = "<group>"; };
 		3D4747701EB423F700EC1D05 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		3D47CB471C897879000EF6EF /* TH_CFD-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TH_CFD-Bridging-Header.h"; sourceTree = "<group>"; };
 		3D47CB481C897882000EF6EF /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = TH_CFD/AppDelegate.swift; sourceTree = "<group>"; };
@@ -785,9 +782,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D3D56CC1ECC4357007E3F69 /* UserNotifications.framework in Frameworks */,
 				3D2A16EE1D7804F600FEB181 /* CoreLocation.framework in Frameworks */,
-				3D4747711EB423F700EC1D05 /* MapKit.framework in Frameworks */,
-				3D915BB01E77EDD200FE2408 /* UserNotifications.framework in Frameworks */,
 				413E77EF1E0909B400419EC1 /* libRNViewShot.a in Frameworks */,
 				3D15A9C91E278C5600B32C0E /* libopencore-amrwb.a in Frameworks */,
 				413E77EE1E09099900419EC1 /* libRCTQRCodeLocalImage.a in Frameworks */,
@@ -914,7 +910,6 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				3D61C5F21C9931A10037816A /* MainStoryboard.storyboard */,
-				3D47476D1EB4215C00EC1D05 /* china.geojson */,
 			);
 			name = TH_CFD;
 			sourceTree = "<group>";
@@ -2223,7 +2218,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3DB98C0F1CE1CF1A00DB3FA5 /* frontPage.jpg in Resources */,
-				3D47476F1EB421C200EC1D05 /* china.geojson in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				3D61C5F31C9931A10037816A /* MainStoryboard.storyboard in Resources */,

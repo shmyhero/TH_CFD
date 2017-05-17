@@ -99,7 +99,7 @@ class YieldLineChartDataSource: BaseDataSource, YieldLineChartDataProvider {
         }
         
         let preClose = self.stockData?.preClose
-        if (preClose! > 0 && drawPreCloseLine) {
+        if (preClose != nil && preClose! > 0 && drawPreCloseLine) {
             maxValue = maxValue < preClose! ? preClose! : maxValue
             minValue = minValue > preClose! ? preClose! : minValue
         }
@@ -133,7 +133,7 @@ class YieldLineChartDataSource: BaseDataSource, YieldLineChartDataProvider {
             }
             return y
         }
-        if (preClose! > 0 && maxValue > minValue) {
+        if (preClose != nil && preClose! > 0 && maxValue > minValue) {
             middleLineY = (height-topBorder-bottomBorder) * CGFloat(maxValue - preClose!) / CGFloat(maxValue - minValue)+topBorder
         }
         else {

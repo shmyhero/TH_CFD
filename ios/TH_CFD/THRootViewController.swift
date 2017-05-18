@@ -11,7 +11,7 @@ import Foundation
 class THRootViewController: UIViewController {
     
     var checked = false
-    var enableIPCheck = false
+    var enableIPCheck = true
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -70,16 +70,18 @@ class THRootViewController: UIViewController {
         
         //(3) 发送请求
         NSURLConnection.sendAsynchronousRequest(request, queue:OperationQueue()) { (res, data, error)in
-            //服务器返回：请求方式 = GET，返回数据格式 = JSON
-            let  str = NSString(data: data!, encoding:String.Encoding.utf8.rawValue)
-            if str == "false" {
-                self.noticeAndQuit("检测到您当前所在的位置，不在本产品的许可区域内，点击确定退出")
+            if error == nil && data != nil {
+                //服务器返回：请求方式 = GET，返回数据格式 = JSON
+                let  str = NSString(data: data!, encoding:String.Encoding.utf8.rawValue)
+                if str == "false" {
+                    self.noticeAndQuit("检测到您当前所在的位置，不在本产品的许可区域内，点击确定退出")
+                }
+                else {
+                    print ("IP address available.")
+                    //                self.noticeAndQuit("检测到您当前所在的位置，不在本产品的许可区域内，点击确定退出")
+                }
+                
             }
-            else {
-                print ("IP address available.")
-//                self.noticeAndQuit("检测到您当前所在的位置，不在本产品的许可区域内，点击确定退出")
-            }
-            
         }
     }
 }

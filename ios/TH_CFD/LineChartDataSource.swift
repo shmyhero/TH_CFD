@@ -107,10 +107,12 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 		}
 		
 		let preClose = self.stockData?.preClose
-		if (preClose != nil && preClose! > 0 && drawPreCloseLine) {
-			maxValue = maxValue < preClose! ? preClose! : maxValue
-			minValue = minValue > preClose! ? preClose! : minValue
-		}
+        if let preClose = preClose {
+            if (preClose > 0 && drawPreCloseLine) {
+                maxValue = maxValue < preClose ? preClose : maxValue
+                minValue = minValue > preClose ? preClose : minValue
+            }
+        }
 		
 		//calculate the x point
 		let lastIndex = _lineData.count - 1
@@ -136,13 +138,14 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 			}
 			y = graphHeight + topBorder - y // Flip the graph
 			return y
-		}
-		if (preClose != nil && preClose! > 0 && maxValue > minValue) {
-			middleLineY = (height-topBorder-bottomBorder) * CGFloat(maxValue - preClose!) / CGFloat(maxValue - minValue)+topBorder
-		}
-		else {
-			middleLineY = height/2
-		}
+        }
+        
+        middleLineY = height/2
+        if let preClose = preClose {
+            if (preClose > 0 && maxValue > minValue) {
+                middleLineY = (height-topBorder-bottomBorder) * CGFloat(maxValue - preClose) / CGFloat(maxValue - minValue)+topBorder
+            }
+        }
 		
 		if !drawPreCloseLine {
 			middleLineY = 0		// do not draw this line
@@ -174,36 +177,33 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 		let gaps = ["today":3600.0, "2h":1800.0, "week":3600.0*24, "month":3600.0*24*7, "3month":3600.0*24*7*3, "6month":3600.0*24*7*6]
 		let gap = gaps[_chartType]!		// gap between two lines
 		
-		if let time0:Date? = _lineData.first?.time as! Date {
-			var startTime = stockData?.lastOpen
-			if startTime == nil {
-				startTime = Date()
-			}
+		if let time0 = _lineData.first?.time {
+			var startTime = stockData?.lastOpen ?? Date()
 			
 			if _chartType == "week" {
 				// 1 day, 1 line
-				let interval:TimeInterval = time0!.timeIntervalSince(startTime! as Date)
+				let interval:TimeInterval = time0.timeIntervalSince(startTime)
 				let days = floor(interval / gap)
-				startTime = Date(timeInterval: days*gap, since: startTime! as Date)
+				startTime = Date(timeInterval: days*gap, since: startTime)
 			}
 			else if _chartType == "month" {
 				// 1 week, 1 line
-				startTime = startTime?.sameTimeOnLastSunday()
-				let interval:TimeInterval = time0!.timeIntervalSince(startTime! as Date)
+				startTime = startTime.sameTimeOnLastSunday()
+				let interval:TimeInterval = time0.timeIntervalSince(startTime)
 				let weeks = floor(interval / gap)
-				startTime = Date(timeInterval: weeks*gap, since: startTime! as Date)
+				startTime = Date(timeInterval: weeks*gap, since: startTime)
 			}
 			else {
-				startTime = _lineData.first?.time
+				startTime = (_lineData.first?.time)!
 			}
 			
 			for i in 0 ..< _lineData.count {
-				if let time:Date? = _lineData[i].time as! Date {
-					let interval:TimeInterval = time!.timeIntervalSince(startTime! as Date)
+				if let time = _lineData[i].time {
+					let interval:TimeInterval = time.timeIntervalSince(startTime)
 					if interval > gap*0.99 {
 						verticalLinesX.append(_pointData[i].x+0.5)
-						startTime = time!
-						verticalTimes.append(self._lineData[i].time! as Date)
+						startTime = time
+						verticalTimes.append(self._lineData[i].time!)
 					}
 				}
 			}
@@ -237,10 +237,10 @@ class LineChartDataSource: BaseDataSource, LineChartDataProvider {
 	}
 	
 	func firstTime() -> Date? {
-		return _lineData.first?.time as! Date
+		return _lineData.first?.time
 	}
 	
 	func lastTime() -> Date? {
-		return _lineData.last?.time as! Date
+		return _lineData.last?.time
 	}
 }

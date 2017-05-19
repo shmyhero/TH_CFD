@@ -51,11 +51,11 @@ class StockData: NSObject {
 			"last":self.last!,
 			"preClose":self.preClose!,
 		]
-		if (self.stockTag != nil) {
-			dict.setValue(self.stockTag, forKey: "tag")
+		if let stockTag = self.stockTag {
+			dict.setValue(stockTag, forKey: "tag")
 		}
-		if (self.lastOpen != nil) {
-			dict.setValue(self.lastOpen, forKey: "lastClose")
+		if let lastOpen = self.lastOpen {
+			dict.setValue(lastOpen, forKey: "lastClose")
 		}
 		return dict
 	}

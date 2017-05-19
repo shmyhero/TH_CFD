@@ -61,10 +61,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		// meiqia
 		MQManager.initWithAppkey("2a59beff6f1875815ea399fdad79a46e", completion:{ (clientId, error) in
 			if((error) != nil) {
-				print("init meiqia error:", error)
+				print("init meiqia error:", error!)
 			}
 			else {
-				print("init meiqia completion:", clientId)
+				print("init meiqia completion:", clientId!)
 			}
 		})
 		

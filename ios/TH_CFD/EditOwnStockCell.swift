@@ -30,10 +30,10 @@ class EditOwnStockCell: UITableViewCell {
 		self.stockData = data
 		self.nameLabel.text = data.name
 		self.codeLabel.text = data.symbol
-		if (data.stockTag != nil) {
+		if let stockTag = data.stockTag {
 			self.codeLabelLeftConstraint.constant = 18
 			self.tagLabel.isHidden = false
-			self.tagLabel.text = data.stockTag
+			self.tagLabel.text = stockTag
 			self.tagLabel.layer.cornerRadius = 2
 		}
 		else {

@@ -110,21 +110,22 @@ class BaseDataSource: NSObject, BaseDataProvider {
 	}
 	
 	func maxPercent() -> Double {
-		if (_preCloseValue != nil && _preCloseValue! > 0.0) {
-			return (_maxValue - _preCloseValue!) / _preCloseValue! * 100
-		}
-		else {
-			return Double.nan
-		}
+        if let _preCloseValue = _preCloseValue {
+            if _preCloseValue > 0 {
+                return (_maxValue - _preCloseValue) / _preCloseValue * 100
+            }
+        }
+        return Double.nan
 	}
 	
-	func minPercent() -> Double {
-		if ( _preCloseValue != nil && _preCloseValue! > 0.0) {
-			return (_minValue - _preCloseValue!) / _preCloseValue! * 100
+    func minPercent() -> Double {
+        if let _preCloseValue = _preCloseValue {
+            if _preCloseValue > 0 {
+                return (_minValue - _preCloseValue) / _preCloseValue * 100
+            }
 		}
-		else {
-			return Double.nan
-		}
+        return Double.nan
+
     }
     
     func chartWidth() -> CGFloat {

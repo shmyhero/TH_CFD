@@ -38,8 +38,8 @@ class YieldLineChartRender: BaseRender {
         self.drawBorderLines(context, lineColor: _colorSet.yieldBgLineColor)
         self.drawExtraText(context)
         
-        let width = lineDataProvider!.chartWidth()
-        let height = lineDataProvider!.chartHeight()
+//        let width = lineDataProvider!.chartWidth()
+//        let height = lineDataProvider!.chartHeight()
         
         // draw the line graph
         _colorSet.yieldLineColor.setFill()
@@ -124,7 +124,7 @@ class YieldLineChartRender: BaseRender {
             minPrice = -100
         }
         let height = chartHeight()
-        let width = chartWidth()
+//        let width = chartWidth()
         
         let textWidth:CGFloat = dataProvider!.rightPadding()
         let textColor = _colorSet.yieldDateTextColor

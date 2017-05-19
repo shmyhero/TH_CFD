@@ -42,11 +42,11 @@ class BaseRender: NSObject {
 
 
 	func render(_ context: CGContext) {
-		if dataProvider != nil {
-			_margin = dataProvider!.margin()
-			_topMargin = dataProvider!.topMargin()
-			_bottomMargin = dataProvider!.bottomMargin()
-            _rightPadding = dataProvider!.rightPadding()
+		if let dataProvider = dataProvider {
+			_margin = dataProvider.margin()
+			_topMargin = dataProvider.topMargin()
+			_bottomMargin = dataProvider.bottomMargin()
+            _rightPadding = dataProvider.rightPadding()
 		}
 		self.drawBorderLines(context, lineColor: _colorSet.getBgLineColor())
 //        self.drawHorizontalLines(context)

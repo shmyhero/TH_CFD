@@ -7,7 +7,7 @@
 //
 
 #import "RCTViewManager.h"
-#import "TH_CFD-swift.h"
+#import "TH_CFD-Swift.h"
 
 @interface EditOwnStocksViewManager : RCTViewManager<EditOwnStocksViewControllerDelegate>
 

@@ -69,7 +69,7 @@ class SwiftNotice: NSObject {
 		window.windowLevel = UIWindowLevelAlert
 		window.center = getRealCenter()
 		// change orientation
-		window.transform = CGAffineTransform(rotationAngle: CGFloat(degree * M_PI / 180))
+		window.transform = CGAffineTransform(rotationAngle: CGFloat(degree * .pi / 180))
 		window.isHidden = false
 		window.addSubview(mainView)
 		windows.append(window)

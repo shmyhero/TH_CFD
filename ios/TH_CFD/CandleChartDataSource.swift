@@ -173,13 +173,13 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 		let gaps = ["5m":3600.0, "day":3600.0*24*14, "1m":900.0, "15m":3600.0*3, "60m":3600.0*12,]
 		let gap = gaps[_chartType]!		// gap between two lines
 		
-		if let time0:Date? = _candleData.first?.time as! Date {
+		if let time0 = _candleData.first?.time {
 			var endTime = time0
 			verticalLinesX = []
 			verticalLinesTime = []
 			for i in 0 ..< _candleData.count {
-				if let time:Date? = _candleData[i].time as! Date {
-					let interval:TimeInterval = -time!.timeIntervalSince(endTime!)
+				if let time = _candleData[i].time {
+					let interval:TimeInterval = -time.timeIntervalSince(endTime)
 					if interval > gap*0.99 {
 						verticalLinesX.append(_candlePositionData[i].x)
 						endTime = time

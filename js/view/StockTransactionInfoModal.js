@@ -25,6 +25,7 @@ var SharePage = require('./SharePage')
 var MainPage = require('./MainPage')
 var StockTransactionInfoPage = require('./StockTransactionInfoPage');
 var NetworkModule = require('../module/NetworkModule');
+var NetConstants = require('../NetConstants');
 
 var {height, width} = Dimensions.get('window');
 

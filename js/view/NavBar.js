@@ -119,20 +119,6 @@ var NavBar = React.createClass({
 	    } : null;
 	},
 
-	renderStatusBar: function(navBarColor){
-		var translucent = false;
-		var backgroundColor = navBarColor
-		if(Platform.OS == "android"){
-			translucent = this.props.hideStatusBar?true:false
-			backgroundColor = this.props.hideStatusBar?"#00ffffff":navBarColor
-		}
-		var view = null;
-		if(this.props.hideStatusBar){
-			view = (<View style={{height: StatusBar.height}}></View>)
-		}
-
-	},
-
 	renderPlaceholder: function(navBarColor){
 		if(Platform.OS === "android"){
 			if(Platform.Version >= 21){
@@ -144,12 +130,10 @@ var NavBar = React.createClass({
 		return null;
 	},
 
-	renderStatusBar: function(){
+	renderStatusBar: function(navBarColor){
 		if (Platform.OS === "android"){
-		return (<StatusBar barStyle="light-content" backgroundColor={Platform.OS === "android"? "transparent":navBarColor}
-			translucent={Platform.OS === "android"}/>)
-		}else{
-			
+			return (<StatusBar barStyle="light-content" backgroundColor={Platform.Version >= 21 ? "transparent" : navBarColor}
+				translucent={Platform.OS === "android"}/>)
 		}
 	},
 
@@ -174,7 +158,7 @@ var NavBar = React.createClass({
 
 		return (
 			<View style={[styles.container, {backgroundColor: backgroundColor}, this.props.barStyle]} >
-				{this.renderStatusBar()}
+				{this.renderStatusBar(navBarColor)}
 				{this.renderLeftPart()}
 				<View style={styles.centerContainer}>
 					<Text style={[styles.title, this.props.titleStyle]}>

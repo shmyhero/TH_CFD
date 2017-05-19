@@ -310,7 +310,7 @@ var HomePage = React.createClass({
 
 	componentDidMount: function() {
 		if(Platform.OS === 'android'){
-			StatusBar.setBackgroundColor('transparent');
+			StatusBar.setBackgroundColor(Platform.version >= 21 ? 'transparent' : ColorConstants.title_blue());
 			StatusBar.setTranslucent(true)
 		}
 		var isConnected = WebSocketModule.isConnected();

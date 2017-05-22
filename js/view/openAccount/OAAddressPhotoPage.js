@@ -52,7 +52,7 @@ var PhotoTypeMapping = [
 	{"value": 'HuKou', "displayText": "户口本", "imageHint": ["上传户主页图片", "上传本人页图片"]},
 	{"value": 'JuZhuZheng', "displayText": "居住证", "imageHint": ["上传带头像面的图片"]},
 	{"value": 'House', "displayText": "房产证", "imageHint": ["上传房产证图片"]},
-	{"value": 'DriveLincense', "displayText": "驾照", "imageHint": ["上传带图像面的图片"]},
+	{"value": 'DriveLincense', "displayText": "驾照", "imageHint": ["上传带头像面的图片"]},
 	{"value": 'Internet', "displayText": "宽带", "imageHint": ["上传近3个月内宽带费用图片"]},
 	{"value": 'LivingFair', "displayText": "水电煤", "imageHint": ["上传近3个月内水电煤费用图片"]},
 	{"value": 'Phone', "displayText": "固话账单", "imageHint": ["上传近3个月内固话账单图片"]},
@@ -83,6 +83,7 @@ var options = {
 		skipBackup: true, // ios only - image will NOT be backed up to icloud
 		path: 'images' // ios only - will save image at /Documents/images rather than the root
 	},
+	scrollEnabled: true,
 };
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -291,8 +292,13 @@ var OAAddressPhotoPage = React.createClass({
 
 	selectAddressFileType: function(rowData){
 		console.log("this.state.showAddressFileTypeList - " + this.state.showAddressFileTypeList)
+		var showAddressFileTypeList = !this.state.showAddressFileTypeList;
+		if (showAddressFileTypeList){
+			this.refs[SCROLL_VIEW] && this.refs[SCROLL_VIEW].scrollTo({y:0})
+		}
 		this.setState({
-			showAddressFileTypeList: !this.state.showAddressFileTypeList,
+			showAddressFileTypeList: showAddressFileTypeList,
+			scrollEnabled: !showAddressFileTypeList,
 		})
 	},
 
@@ -315,29 +321,28 @@ var OAAddressPhotoPage = React.createClass({
 		}
 
 		var imageView = imageHint.map((data, i)=>{
+			var view = null;
 			if (this.state.uploadData.type === value && this.state.uploadData.imageList && this.state.uploadData.imageList[i]){
 				var image = {uri: 'data:image/jpeg;base64,' + this.state.uploadData.imageList[i]};
-				return (
-					<View style={styles.imageArea}>
-						<View key={i} style={styles.addImageContainer} >
-							<Image style={styles.addImage} source={image}/>
-						</View>
-					</View>
-				);
+				view = (<View style={styles.addImageContainer} >
+					<Image style={styles.addImage} source={image}/>
+				</View>)
 			}else{
 				var image = require('../../../images/add_photo_background.png');
-				return(
-					<TouchableOpacity key={i} style={styles.imageArea} onPress={() => this.pressAddImage(i, rowData)}>
-						<View style={styles.addImageContainer} >
-							<Image style={styles.addImage} source={image}/>
-							<Text style={styles.addImageText}>{imageHint[i]}</Text>
-						</View>
-					</TouchableOpacity>
-				);
+				view = (<View style={styles.addImageContainer} >
+					<Image style={styles.addImage} source={image}/>
+					<Text style={styles.addImageText}>{imageHint[i]}</Text>
+				</View>);
 			}
+
+			return(
+				<TouchableOpacity key={i} style={styles.imageArea} onPress={() => this.pressAddImage(i, rowData)}>
+					{view}
+				</TouchableOpacity>
+			);
 		})
 		return (
-			<View style={{backgroundColor:'white', paddingBottom: 16}}>
+			<View style={{backgroundColor:'white', paddingBottom: 16, paddingTop: 6}}>
 				{imageView}
 			</View>);
 	},
@@ -390,7 +395,7 @@ var OAAddressPhotoPage = React.createClass({
 			return (
 				<View style={{position: 'absolute', left: 0, right:0, top: TOP_HINT_BAR_HEIGHT + ADDRESS_FILE_TYPE_PICKER_HEIGHT, bottom:0,}}>
 					{this.renderSeparator()}
-					<View style={{height: 113, backgroundColor: 'white'}}>
+					<View style={{height: 80, backgroundColor: 'white'}}>
 						<ListView
 							style={styles.list}
 							contentContainerStyle={styles.listAddressType}
@@ -398,9 +403,9 @@ var OAAddressPhotoPage = React.createClass({
 							enableEmptySections={true}
 							removeClippedSubviews={false}
 							initialListSize={16}
-							renderRow={(rowData, sectionID, rowID)=>this.renderAddressTypeRow(rowData, sectionID, rowID)} />
-
-						<Text style={styles.addressTypeHint}>注意: 宽带/水电煤/固话账单/银行账单(近3月内)</Text>
+							renderRow={(rowData, sectionID, rowID)=>this.renderAddressTypeRow(rowData, sectionID, rowID)}
+							scrollEnabled={false}/>
+						{/* <Text style={styles.addressTypeHint}>注意: 宽带/水电煤/固话账单/银行账单(近3月内)</Text> */}
 					</View>
 					{this.renderSeparator()}
 					<TouchableOpacity style={{flex: 1, backgroundColor:'rgba(0,0,0,0.5)'}} onPress={this.selectAddressFileType}>
@@ -438,7 +443,8 @@ var OAAddressPhotoPage = React.createClass({
 		return (
 			<View style={styles.wrapper}>
 				<ErrorBar error={this.state.error}/>
-				<ScrollView style={{flex:1}} ref={SCROLL_VIEW}>
+				<ScrollView style={{flex:1}} ref={SCROLL_VIEW}
+					scrollEnabled={this.state.scrollEnabled}>
 					<View style={styles.hintBar}>
 						<Text style={styles.hintText}>请上传任意一种与本人身份证信息一致的图片</Text>
 					</View>
@@ -483,7 +489,7 @@ var styles = StyleSheet.create({
 	},
 
 	container: {
-		marginTop: 15,
+		marginTop: 26,
     marginLeft: width*0.09,
     marginRight: width*0.09,
 		flex: 1,
@@ -492,11 +498,11 @@ var styles = StyleSheet.create({
 	imageArea: {
 		alignSelf: 'center',
 		alignItems: 'center',
+		marginTop: 10,
 	},
 	addImageContainer: {
 		width: imageWidth,
 		height: imageHeight,
-		marginTop: 16,
 		alignItems:'center',
 	},
 	addImage: {
@@ -580,7 +586,6 @@ var styles = StyleSheet.create({
 	inputText:{
 		textAlign: 'left',
 		marginTop: 10,
-		marginBottom: 10,
 		borderRadius:3,
 		height: 49,
 		fontSize: 15,

@@ -146,7 +146,8 @@ const styles = StyleSheet.create({
     backgroundColor:'#faf8f8',
 		borderWidth:1,
 		borderRadius:5,
-		borderColor:'#699fff'
+    borderColor:'#faf8f8'
+		// borderColor:'#699fff'
   },
 
   imgReward:{

@@ -390,7 +390,7 @@ var HomePage = React.createClass({
 			resolve()
 			return
 		}
-		var imagePath = images[index].imgUrl
+		var imagePath = images[index].imgUrlBig
 		var targetUrl = images[index].url
 		if (targetUrl == '') {
 			targetUrl = RECOMMAND_URL + images[index].id
@@ -398,7 +398,7 @@ var HomePage = React.createClass({
 		var header = images[index].header
 		var digest = images[index].digest
 		var id = images[index].id
-		var filePath = images[index].imgUrl
+		var filePath = images[index].imgUrlBig
 		var type = images[index].bannerType
 		// RN will cache the image.
 		// FSModule.getBannerImageLocalPath(imagePath)
@@ -408,7 +408,7 @@ var HomePage = React.createClass({
 				PAGES.push({name: 'PAGE' + PAGES.length})
 			}
 			PAGES[index].id = id
-			PAGES[index].imgUrl = filePath
+			PAGES[index].imgUrlBig = filePath
 			PAGES[index].url = targetUrl
 			PAGES[index].header = header
 			PAGES[index].digest = digest
@@ -980,7 +980,7 @@ var HomePage = React.createClass({
 				onPress={() => this.goToBannerPage(i)} key={i}>
 				<Image
 					style={[styles.image, {height: imageHeight, width: width}]}
-					source={{uri: PAGES[i].imgUrl}}/>
+					source={{uri: PAGES[i].imgUrlBig}}/>
 			</TouchableOpacity>
 		)
 	},
@@ -1285,7 +1285,7 @@ var HomePage = React.createClass({
 		var dot = <View style={styles.guideDot} />
 		var slides = []
 		for (var i = 0; i < PAGES.length; i++) {
-			if (PAGES[i].imgUrl !== undefined && PAGES[i].imgUrl !== null) {//加载到了真实的banner位数据
+			if (PAGES[i].imgUrlBig !== undefined && PAGES[i].imgUrlBig !== null) {//加载到了真实的banner位数据
 				slides.push (
 					this.renderBannar(i)
 				);

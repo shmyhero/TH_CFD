@@ -1263,16 +1263,18 @@ var HomePage = React.createClass({
 	},
 
 	onScroll: function(event){
-		console.log("event " + event.nativeEvent.contentOffset.y)
-		var rgb = this.hexToRgb(ColorConstants.title_blue())
-		var alpha = 0;
-		var height = imageHeight - StatusBar.currentHeight - UIConstants.HEADER_HEIGHT;
-		if(event.nativeEvent.contentOffset.y > height){
-			alpha = 1;
-		}else{
-			alpha = event.nativeEvent.contentOffset.y / height
+		if(Platform.OS === 'android'){
+			console.log("event " + event.nativeEvent.contentOffset.y)
+			var rgb = this.hexToRgb(ColorConstants.title_blue())
+			var alpha = 0;
+			var height = imageHeight - StatusBar.currentHeight - UIConstants.HEADER_HEIGHT;
+			if(event.nativeEvent.contentOffset.y > height){
+				alpha = 1;
+			}else{
+				alpha = event.nativeEvent.contentOffset.y / height
+			}
+			this.setState({navBarBackgroundColor: 'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+alpha+')'})
 		}
-		this.setState({navBarBackgroundColor: 'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+alpha+')'})
 	},
 
 	render: function() {

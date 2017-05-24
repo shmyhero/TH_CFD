@@ -42,7 +42,7 @@ var LogicData = require('../LogicData')
 var MyHomePage = React.createClass({
 	getInitialState: function() {
 		return {
-			avatarSource: require('../../images/bannar01.png'),
+			avatarSource: require('../../images/bannar_01.jpg'),
 		};
 	},
 

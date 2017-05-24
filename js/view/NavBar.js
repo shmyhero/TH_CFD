@@ -30,6 +30,7 @@ var NavBar = React.createClass({
 		imageOnRight: React.PropTypes.number,
 		rightImageStyle: React.PropTypes.object,
 		viewOnRight: React.PropTypes.element,
+		viewOnLeft: React.PropTypes.element,
 		leftTextOnClick: React.PropTypes.func,
 		leftButtonOnClick: React.PropTypes.func,
 		rightTextOnClick: React.PropTypes.func,
@@ -41,7 +42,9 @@ var NavBar = React.createClass({
 		rightCustomContent: React.PropTypes.func,
 		barStyle: View.propTypes.style,
 		titleStyle: Text.propTypes.style,
-		enableRightText: React.PropTypes.bool
+		enableRightText: React.PropTypes.bool,
+		hideStatusBar: React.PropTypes.bool,
+		onlyShowStatusBar: React.PropTypes.bool,
 	},
 
 	getDefaultProps() {
@@ -54,6 +57,7 @@ var NavBar = React.createClass({
 			imageOnRight: null,
 			rightImageStyle: null,
 			viewOnRight: null,
+			viewOnLeft: null,
 			leftTextOnClick: null,
 			leftButtonOnClick: null,
 			rightTextOnClick: null,
@@ -63,6 +67,8 @@ var NavBar = React.createClass({
 			backgroundColor: null,
 			rightCustomContent: null,
 			enableRightText: true,
+			hideStatusBar: false,
+			onlyShowStatusBar: false,
 		}
 	},
 
@@ -104,6 +110,33 @@ var NavBar = React.createClass({
 		});
 	},
 
+	hexToRgb: function(hex) {
+	    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	    return result ? {
+	        r: parseInt(result[1], 16),
+	        g: parseInt(result[2], 16),
+	        b: parseInt(result[3], 16)
+	    } : null;
+	},
+
+	renderPlaceholder: function(navBarColor){
+		if(Platform.OS === "android"){
+			if(Platform.Version >= 21){
+				return (<View style={{height: StatusBar.currentHeight, backgroundColor: navBarColor}}/>);
+			}else{
+				StatusBar.setBackgroundColor(navBarColor);
+			}
+		}
+		return null;
+	},
+
+	renderStatusBar: function(navBarColor){
+		if (Platform.OS === "android"){
+			return (<StatusBar barStyle="light-content" backgroundColor={Platform.Version >= 21 ? "transparent" : navBarColor}
+				translucent={Platform.OS === "android"}/>)
+		}
+	},
+
 	render: function() {
 		var backgroundColor = ColorConstants.title_blue();
 		if(this.props.backgroundColor){
@@ -111,18 +144,22 @@ var NavBar = React.createClass({
 		}
 
 		var navBarColor = ColorConstants.title_blue();
-		if(this.props.backgroundColor !== "transparent"){
+		if(this.props.backgroundColor && this.props.backgroundColor !== "transparent"){
+			//Which means the background doesn't have an alpha channel
 			navBarColor = this.props.backgroundColor;
 		}
 
+		if(this.props.onlyShowStatusBar){
+			//StatusBar.setBackgroundColor(navBarColor)
+			return this.renderPlaceholder(navBarColor);
+		}
+		var h = Platform.OS === 'android' ? (Platform.Version >= 21 ? StatusBar.currentHeight : 0) : 0
+		console.log("STATUS_BAR_ACTUAL_HEIGHT " + UIConstants.STATUS_BAR_ACTUAL_HEIGHT + ", " + h)
+
 		return (
 			<View style={[styles.container, {backgroundColor: backgroundColor}, this.props.barStyle]} >
-	    	<StatusBar barStyle="light-content" backgroundColor={navBarColor}/>
-				<View style={styles.leftContainer}>
-					{this.renderBackButton()}
-					{this.renderLeftText()}
-				</View>
-
+				{this.renderStatusBar(navBarColor)}
+				{this.renderLeftPart()}
 				<View style={styles.centerContainer}>
 					<Text style={[styles.title, this.props.titleStyle]}>
 						{this.props.title}
@@ -134,6 +171,19 @@ var NavBar = React.createClass({
 
 			</View>
 		);
+	},
+
+	renderLeftPart: function(){
+		//viewOnRight
+		if(this.props.viewOnLeft){
+			return this.props.viewOnLeft;
+		}else{
+			return (
+				<View style={styles.leftContainer}>
+					{this.renderBackButton()}
+					{this.renderLeftText()}
+				</View>)
+		}
 	},
 
 	renderRightPart: function(){
@@ -283,7 +333,7 @@ var styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		paddingTop: (Platform.OS === 'ios') ? 15 : 0,
+		paddingTop: (Platform.OS === 'ios') ? 15 : UIConstants.STATUS_BAR_ACTUAL_HEIGHT,
 	},
 	leftContainer: {
 		flex: 1,

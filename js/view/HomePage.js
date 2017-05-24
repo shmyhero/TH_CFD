@@ -14,6 +14,7 @@ import {
 	Alert,
 	ScrollView,
 	WebView,
+	StatusBar,
 } from 'react-native';
 
 var Swiper = require('react-native-swiper')
@@ -43,8 +44,8 @@ var PAGES = [
 	{name: 'Page1', url: RECOMMAND_URL + "1", header:""},
 ];
 var BANNERS = [
-	require('../../images/bannar01.png'),
-	require('../../images/bannar02.png'),
+	require('../../images/bannar_01.jpg'),
+	require('../../images/bannar_02.jpg'),
 ];
 const check_in_image = require("../../images/check_in.png")
 //const movie_image = require("../../images/movie.png")
@@ -54,7 +55,10 @@ const bg_hint_image = require("../../images/icon_bg_hint.png")
 
 var {height, width} = Dimensions.get('window');
 var barWidth = Math.round(width/3)-12
-var imageHeight = 300 / 750 * width
+
+var BANNER_HEIGHT = 428
+var BANNER_WIDTH = 750
+var imageHeight = BANNER_HEIGHT / BANNER_WIDTH * width
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var bsds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -86,6 +90,8 @@ var HomePage = React.createClass({
 			//attendedMovieEvent: false,
 			//winMovieTicket: false,
 			isConnected: false,
+			unreadMessageCount: 0,
+			navBarBackgroundColor: 'rgba(255,255,255,0)'
 		};
 	},
 
@@ -113,9 +119,45 @@ var HomePage = React.createClass({
 		// 		}
 		// 	})
 		// 	.done();
+
+		this.loadUnreadMessage();
 		this.reloadBanner();
 		this.loadHomeData();
 		this.loadCards();
+	},
+
+	loadUnreadMessage: function(){
+		var userData = LogicData.getUserData();
+		var login = Object.keys(userData).length !== 0
+		if (!login){
+			return
+		}
+		var url = NetConstants.CFD_API.GET_UNREAD_MESSAGE;
+		if(LogicData.getAccountState()){
+			url = NetConstants.CFD_API.GET_UNREAD_MESSAGE_LIVE
+			console.log('live', url );
+		}
+
+		NetworkModule.fetchTHUrl(
+			url,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+				//cache: 'offline',
+			},
+			function(response) {
+				this.setState(
+					{
+						unreadMessageCount: response,
+					}
+				)
+			}.bind(this),
+			(result) => {
+				console.log(result.errorMessage)
+			}
+		);
 	},
 
 	resetPage: function(){
@@ -131,6 +173,7 @@ var HomePage = React.createClass({
 			if(routes && routes[routes.length-1] &&
 					(routes[routes.length-1].name == MainPage.HOME_PAGE_ROUTE
 				|| routes[routes.length-1].name == MainPage.LOGIN_ROUTE)){
+				this.loadUnreadMessage();
 				this.reloadBanner();
 				this.loadHomeData();
 				this.loadCards();
@@ -218,6 +261,12 @@ var HomePage = React.createClass({
 
 	},
 
+	goToMailPage: function(){
+		this.props.navigator.push({
+			name: MainPage.MY_MESSAGES_ROUTE,
+			onPopToRoute: this.reloadMeData,
+		});
+	},
 
 	loadHomeData: function() {
 
@@ -260,6 +309,10 @@ var HomePage = React.createClass({
 	},
 
 	componentDidMount: function() {
+		if(Platform.OS === 'android'){
+			StatusBar.setBackgroundColor(Platform.version >= 21 ? 'transparent' : ColorConstants.title_blue());
+			StatusBar.setTranslucent(true)
+		}
 		var isConnected = WebSocketModule.isConnected();
 		this.setState({
 			connected: isConnected
@@ -337,7 +390,7 @@ var HomePage = React.createClass({
 			resolve()
 			return
 		}
-		var imagePath = images[index].imgUrl
+		var imagePath = images[index].imgUrlBig
 		var targetUrl = images[index].url
 		if (targetUrl == '') {
 			targetUrl = RECOMMAND_URL + images[index].id
@@ -345,7 +398,7 @@ var HomePage = React.createClass({
 		var header = images[index].header
 		var digest = images[index].digest
 		var id = images[index].id
-		var filePath = images[index].imgUrl
+		var filePath = images[index].imgUrlBig
 		var type = images[index].bannerType
 		// RN will cache the image.
 		// FSModule.getBannerImageLocalPath(imagePath)
@@ -355,7 +408,7 @@ var HomePage = React.createClass({
 				PAGES.push({name: 'PAGE' + PAGES.length})
 			}
 			PAGES[index].id = id
-			PAGES[index].imgUrl = filePath
+			PAGES[index].imgUrlBig = filePath
 			PAGES[index].url = targetUrl
 			PAGES[index].header = header
 			PAGES[index].digest = digest
@@ -927,7 +980,7 @@ var HomePage = React.createClass({
 				onPress={() => this.goToBannerPage(i)} key={i}>
 				<Image
 					style={[styles.image, {height: imageHeight, width: width}]}
-					source={{uri: PAGES[i].imgUrl}}/>
+					source={{uri: PAGES[i].imgUrlBig}}/>
 			</TouchableOpacity>
 		)
 	},
@@ -1110,18 +1163,67 @@ var HomePage = React.createClass({
 		}
 	},
 
-	renderNavBar: function(){
-		var image = require('../../images/icon_day_sign_live.png');
+	renderUnreadCount: function(){
+		if(this.state.unreadMessageCount > 0){
+			var text = this.state.unreadMessageCount > 9 ? "9+" : "" + this.state.unreadMessageCount;
+			return (
+				<View style={styles.unreadMessageView}>
+					<Text style={styles.unreadMessageText}>
+						{text}
+					</Text>
+				</View>
+			)
+		}else{
+			return null;
+		}
+	},
 
-		return (
+	renderMessageIcon: function(){
+		var userData = LogicData.getUserData()
+		var login = Object.keys(userData).length !== 0
+		if(login){
+			return (
+				<TouchableOpacity onPress={()=>this.goToMailPage()}
+					style={styles.navBarRightView}>
+					<Image
+							style={[styles.navBarIcon, styles.navBarIconRight]}
+							source={require('../../images/icon_my_message.png')}/>
+					{this.renderUnreadCount()}
+				</TouchableOpacity>
+			);
+		}
+		return null;
+	},
+
+	renderCheckInView: function(){
+		if(LogicData.getAccountState()){
+			return (
+				<TouchableOpacity onPress={()=>this.gotoCheckinPage()}
+					style={styles.navBarLeftView}>
+					<Image
+							style={[styles.navBarIcon, styles.navBarIconLeft]}
+							source={require('../../images/icon_day_sign_live.png')}/>
+				</TouchableOpacity>
+			);
+		}
+		return null
+	},
+
+	renderNavBar: function(){
+		return(
 			<TouchableOpacity
 				activeOpacity={1}
 				onPress={()=>this.pressedNavBar()}
+				style={{position:'absolute', top:0, left: 0, right: width, width:width}}
 				>
 				<NavBar title={this.state.connected ? "首页" : "首页（未连接）"}
-					imageOnRight={LogicData.getAccountState()?image:null}
-					rightImageOnClick={this.gotoCheckinPage}/>
-			</TouchableOpacity>);
+					viewOnRight={this.renderMessageIcon()}
+					viewOnLeft={this.renderCheckInView()}
+					hideStatusBar={true}
+					backgroundColor={this.state.navBarBackgroundColor}
+					navigator={this.props.navigator}/>
+			</TouchableOpacity>
+		)
 	},
 
 	renderBgHint:function(){
@@ -1151,16 +1253,39 @@ var HomePage = React.createClass({
 
 	},
 
+	hexToRgb: function(hex) {
+	    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	    return result ? {
+	        r: parseInt(result[1], 16),
+	        g: parseInt(result[2], 16),
+	        b: parseInt(result[3], 16)
+	    } : null;
+	},
+
+	onScroll: function(event){
+		console.log("event " + event.nativeEvent.contentOffset.y)
+		var rgb = this.hexToRgb(ColorConstants.title_blue())
+		var alpha = 0;
+		var statusBarHeight = StatusBar.currentHeight ? StatusBar.currentHeight : 0
+		var height = imageHeight - statusBarHeight - UIConstants.HEADER_HEIGHT;
+		if(event.nativeEvent.contentOffset.y > height){
+			alpha = 1;
+		}else{
+			alpha = event.nativeEvent.contentOffset.y / height
+		}
+		this.setState({navBarBackgroundColor: 'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+alpha+')'})
+	},
+
 	render: function() {
 		height = Dimensions.get('window').height;
 		width = Dimensions.get('window').width;
 		barWidth = Math.round(width/3)-12
-		imageHeight = 300 / 750 * width;
+		imageHeight = BANNER_HEIGHT / BANNER_WIDTH * width;
 		var activeDot = <View style={styles.guideActiveDot} />
 		var dot = <View style={styles.guideDot} />
 		var slides = []
 		for (var i = 0; i < PAGES.length; i++) {
-			if (PAGES[i].imgUrl !== undefined && PAGES[i].imgUrl !== null) {//加载到了真实的banner位数据
+			if (PAGES[i].imgUrlBig !== undefined && PAGES[i].imgUrlBig !== null) {//加载到了真实的banner位数据
 				slides.push (
 					this.renderBannar(i)
 				);
@@ -1178,11 +1303,11 @@ var HomePage = React.createClass({
 		}
 		return (
 			<View style={{width: width, flex: 1, paddingBottom: UIConstants.TAB_BAR_HEIGHT}}>
-				{this.renderNavBar()}
-
 				<View style={{width:width, flex: 1}}>
 					{this.renderBgHint()}
-					<ScrollView ref={SCROLL_VIEW} >
+					<ScrollView ref={SCROLL_VIEW}
+						onScroll={this.onScroll}
+						scrollEventThrottle={8} >
 						<View style={{width: width, height: imageHeight}}>
 							<Swiper
 							  style={{backgroundColor:'#eaeaea'}}
@@ -1193,7 +1318,7 @@ var HomePage = React.createClass({
 								autoplay={true}
 								autoplayTimeout={3}
 								paginationStyle={{
-									bottom: null, top: 12, left: null, right: 10,
+									bottom: 0, top: null, left: 12, right: 12,
 								}}
 								activeDot={activeDot}
 								dot={dot}>
@@ -1221,6 +1346,7 @@ var HomePage = React.createClass({
 
 					</ScrollView>
 				</View>
+				{this.renderNavBar()}
 			</View>
 
 		);
@@ -1471,11 +1597,11 @@ var styles = StyleSheet.create({
 		marginRight:5,
 	},
 	bgHint:{
+		marginTop:36,
 		height:80,
 		position:'absolute',
 		alignItems:'center',
 		justifyContent:'center',
-
 	},
 	newUser:{
 		flexDirection:'row',
@@ -1497,6 +1623,50 @@ var styles = StyleSheet.create({
 		marginRight:20,
 	},
 
+	unreadMessageView:{
+		backgroundColor:'#ff3333',
+		position:'absolute',
+		top:0,
+		right:13,
+		width:20,
+		height:14,
+		alignItems:'center',
+		justifyContent:'center',
+		borderRadius: 6,
+	},
+
+	unreadMessageText:{
+		color:'white',
+		fontSize:10,
+	},
+
+	navBarIcon: {
+		width: 21,
+		height: 21,
+		resizeMode: Image.resizeMode.contain,
+	},
+
+	navBarIconRight: {
+		marginRight: 20,
+	},
+
+	navBarIconLeft: {
+		marginLeft: 20,
+	},
+
+	navBarRightView:{
+		flex:1,
+		height: 30,
+		alignItems:"flex-end",
+		justifyContent:"center",
+	},
+
+	navBarLeftView:{
+		flex:1,
+		height: 30,
+		alignItems:"flex-start",
+		justifyContent:"center",
+	},
 });
 
 module.exports = HomePage;

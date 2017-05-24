@@ -85,7 +85,6 @@ var MePage = React.createClass({
 	getInitialState: function() {
 		return {
 			loggedIn: false,
-			unreadMessageCount: 0,
 			dataSource: ds.cloneWithRows(listRawData),
 			lastStep:0,
 		};
@@ -187,33 +186,6 @@ var MePage = React.createClass({
 						)
 					});
 				}
-
-				var url = NetConstants.CFD_API.GET_UNREAD_MESSAGE;
-		    if(LogicData.getAccountState()){
-					url = NetConstants.CFD_API.GET_UNREAD_MESSAGE_LIVE
-					console.log('live', url );
-				}
-
-				NetworkModule.fetchTHUrl(
-					url,
-					{
-						method: 'GET',
-						headers: {
-							'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-						},
-						//cache: 'offline',
-					},
-					function(response) {
-						this.setState(
-							{
-								unreadMessageCount: response,
-							}
-						)
-					}.bind(this),
-					(result) => {
-						console.log(result.errorMessage)
-					}
-				);
 
 				NetworkModule.fetchTHUrl(
 					NetConstants.CFD_API.GET_USER_INFO_API,
@@ -438,13 +410,6 @@ var MePage = React.createClass({
 
 	gotoWebviewPage: function(targetUrl, title, hideNavBar) {
 		this.props.navigator.push(this.getWebViewPageScene(targetUrl, title, hideNavBar));
-	},
-
-	goToMailPage: function(){
-		this.props.navigator.push({
-			name: MainPage.MY_MESSAGES_ROUTE,
-			onPopToRoute: this.reloadMeData,
-		});
 	},
 
 	onSelectNormalRow: function(rowData) {
@@ -718,48 +683,11 @@ var MePage = React.createClass({
 		}
 	},
 
-	renderUnreadCount: function(){
-		if(this.state.unreadMessageCount > 0){
-			var text = this.state.unreadMessageCount > 9 ? "9+" : "" + this.state.unreadMessageCount;
-			return (
-				<View style={styles.unreadMessageView}>
-					<Text style={styles.unreadMessageText}>
-						{text}
-					</Text>
-				</View>
-			)
-		}else{
-			return null;
-		}
-	},
-
-	renderMessageIcon: function(){
-		return (
-			<TouchableOpacity onPress={()=>this.goToMailPage()}
-				style={styles.navBarRightView}>
-				<Image
-						style={styles.navBarRightImage}
-						source={require('../../images/icon_my_message.png')}/>
-				{this.renderUnreadCount()}
-			</TouchableOpacity>
-		);
-	},
-
 	renderNavBar: function(){
-		var userData = LogicData.getUserData()
-		var notLogin = Object.keys(userData).length === 0
-		if(!notLogin){
-
-			return(
-				<NavBar title="我的" viewOnRight={this.renderMessageIcon()}
-					navigator={this.props.navigator}/>
-			)
-		}else{
-			return(
-				<NavBar title="我的"
-					navigator={this.props.navigator}/>
-			);
-		}
+		return(
+			<NavBar title="我的"
+				navigator={this.props.navigator}/>
+		);
 	},
 
 	renderListView: function(){
@@ -933,36 +861,6 @@ var styles = StyleSheet.create({
 		marginRight: 8,
   },
 
-	navBarRightImage: {
-		width: 21,
-		height: 21,
-		marginRight: 20,
-		resizeMode: Image.resizeMode.contain,
-	},
-
-	navBarRightView:{
-		flex:1,
-		height: 30,
-		alignItems:"flex-end",
-		justifyContent:"center",
-	},
-
-	unreadMessageView:{
-		backgroundColor:'#ff3333',
-		position:'absolute',
-		top:0,
-		right:13,
-		width:20,
-		height:14,
-		alignItems:'center',
-		justifyContent:'center',
-		borderRadius: 6,
-	},
-
-	unreadMessageText:{
-		color:'white',
-		fontSize:10,
-	},
 });
 
 

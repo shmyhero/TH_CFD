@@ -957,6 +957,8 @@ var StockDetailPage = React.createClass({
 		return (
 
 				<View style={[styles.wrapper,styleAppend]}>
+					<NavBar onlyShowStatusBar={true}
+						backgroundColor={ColorConstants.title_blue()}/>
 					<LinearGradient colors={this.getGradientColor()} style={{height: viewHeight}}>
 						{this.renderTitleLandspace()}
 						<View style={{height:viewHeight - 100 ,width:maxWidth,marginTop:5,marginLeft:viewMargin,marginRight:viewMargin}}>
@@ -1008,7 +1010,7 @@ var StockDetailPage = React.createClass({
 
 		var barHeight = 68
 		if (Platform.OS == 'android') {
-			barHeight = 50
+			barHeight = 50 + UIConstants.STATUS_BAR_ACTUAL_HEIGHT
 		}
 		return (
 			<NavBar showBackButton={true} navigator={this.props.navigator}

@@ -346,6 +346,8 @@ export default class RankingPage extends Component{
 	render(){
 		return(
       <View style={styles.wapper}>
+        <NavBar onlyShowStatusBar={true}
+          backgroundColor={ColorConstants.title_blue()}/>
         {this.renderHead()}
         {this.renderTopSticker()}
         {/* {this.renderMyRank()} */}

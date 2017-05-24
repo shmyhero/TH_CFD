@@ -13,6 +13,7 @@ import {
 	TextInput,
 	ScrollView,
 	Keyboard,
+	ListView,
 } from 'react-native';
 
 var ImagePicker = require('react-native-image-picker');
@@ -26,6 +27,8 @@ var NetworkModule = require('../../module/NetworkModule')
 var OpenAccountRoutes = require('./OpenAccountRoutes')
 var ErrorBar = require('../component/ErrorBar')
 var OpenAccountHintBlock = require('./OpenAccountHintBlock')
+var UIConstants = require('../../UIConstants')
+var TalkingdataModule = require('../../module/TalkingdataModule')
 // var OpenAccountUtils = require('./OpenAccountUtils')
 var {height, width} = Dimensions.get('window')
 
@@ -43,7 +46,23 @@ var SCROLL_VIEW = "scrollView";
 // 	{"GZTKey": "valid_period", "AyondoKey": "validPeriod"},
 // ];
 
-const defaultAddressPhoto = require('../../../images/add_photo.png');
+var ADDRESS_FILE_TYPE_PICKER_HEIGHT = 55;
+var TOP_HINT_BAR_HEIGHT = 36;
+
+var PhotoTypeMapping = [
+	{"value": 'HuKou', "displayText": "户口本", "imageHint": ["上传户主页图片", "上传本人页图片"]},
+	{"value": 'JuZhuZheng', "displayText": "居住证", "imageHint": ["上传带头像面的图片"]},
+	{"value": 'House', "displayText": "房产证", "imageHint": ["上传房产证图片"]},
+	{"value": 'DriveLincense', "displayText": "驾照", "imageHint": ["上传带头像面的图片"]},
+	{"value": 'Internet', "displayText": "宽带", "imageHint": ["上传近3个月内宽带费用图片"]},
+	{"value": 'LivingFair', "displayText": "水电煤", "imageHint": ["上传近3个月内水电煤费用图片"]},
+	{"value": 'Phone', "displayText": "固话账单", "imageHint": ["上传近3个月内固话账单图片"]},
+	{"value": 'Bank', "displayText": "银行账单", "imageHint": ["上传近3个月内银行流水图片"]},
+];
+
+var defaultRawData = [
+	{"key":"imageType", "title":"地址证明", "defaultValue":"HuKou", "value":"", "type":"choice", "choices":PhotoTypeMapping},
+];
 
 var options = {
 	title: null, // specify null or empty string to remove the title
@@ -65,7 +84,10 @@ var options = {
 		skipBackup: true, // ios only - image will NOT be backed up to icloud
 		path: 'images' // ios only - will save image at /Documents/images rather than the root
 	},
+	scrollEnabled: true,
 };
+
+var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var OAAddressPhotoPage = React.createClass({
 	propTypes: {
@@ -81,15 +103,9 @@ var OAAddressPhotoPage = React.createClass({
 	},
 
 	getInitialState: function() {
-		var addressPhotoData = null;
-    var addressPhoto = defaultAddressPhoto;
 		var addressText = "";
-
+		var uploadData = null;
 		if(this.props.data){
-			if(this.props.data.addressPhotoData){
-				addressPhoto = {uri: 'data:image/jpeg;base64,' + this.props.data.addressPhotoData};
-				addressPhotoData = this.props.data.addressPhotoData;
-			}
 
 			if(this.props.data.values){
 				for(var i = 0; i < this.props.data.values.length; i++ ){
@@ -98,15 +114,33 @@ var OAAddressPhotoPage = React.createClass({
 					}
 				}
 			}
+
+			if(this.props.data.uploadData){
+				uploadData = this.props.data.uploadData;
+			}
 		}
 
+		var rowData = defaultRawData[0];
+
+		if(!uploadData){
+			uploadData = {}
+			uploadData.type = rowData.value;
+			if (!uploadData.type){
+				uploadData.type = rowData.defaultValue;
+			}
+		}
+		var selectedAddressType = uploadData.type;
+
 		return {
-			addressPhoto: addressPhoto,
-			addressPhotoData: addressPhotoData,
 			addressText: addressText,
 			error: null,
 			validateInProgress: false,
 			isProcessing: false,
+			showAddressFileTypeList: false,
+		  rowData: rowData,
+			dataSourceAddressTypeList: ds.cloneWithRows(rowData.choices),
+			selectedAddressType: selectedAddressType,
+			uploadData: uploadData,
 		};
 	},
 
@@ -119,10 +153,10 @@ var OAAddressPhotoPage = React.createClass({
 	},
 
 	_keyboardDidHide: function(){
-		this.refs[SCROLL_VIEW] && this.refs[SCROLL_VIEW].scrollTo({y:0})
+		//this.refs[SCROLL_VIEW] && this.refs[SCROLL_VIEW].scrollTo({y:0})
 	},
 
-	pressAddImage: function() {
+	pressAddImage: function(imageIndex, rowData) {
 		ImagePicker.showImagePicker(options, (response) => {
 			console.log('Response = ', response);
 
@@ -134,11 +168,38 @@ var OAAddressPhotoPage = React.createClass({
 			}
 			else {
 				// You can display the image using either data:
-				const source = {uri: 'data:image/jpeg;base64,' + response.data};
+
+				var imageList = this.state.uploadData.imageList;
+				var addressText = this.state.addressText;
+				if(this.state.uploadData.type != this.state.selectedAddressType){
+					this.state.uploadData.type = this.state.selectedAddressType;
+					imageList = [];
+					addressText = "";
+				}
+				if (!imageList){
+					imageList = [];
+				}
+
+				//Initialize the image list
+				if (imageList.length == 0){
+					var listLength = 1;
+					for(var i = 0; i < rowData.choices.length; i++){
+						if(rowData.choices[i].value === this.state.uploadData.type){
+							 listLength = rowData.choices[i].imageHint.length;
+							 break;
+						}
+					}
+
+					for(var i = 0; i < listLength; i++) {
+						imageList.push(null);
+					}
+				}
+				imageList[imageIndex] = response.data
+				this.state.uploadData.imageList = imageList;
 
 				this.setState({
-					addressPhoto: source,
-					addressPhotoData: response.data,
+					uploadData: this.state.uploadData,
+					addressText: addressText,
 				});
 			}
 		});
@@ -151,68 +212,89 @@ var OAAddressPhotoPage = React.createClass({
 			error: null,
 		})
 
-		InteractionManager.runAfterInteractions(() => {
-			if (this.state.addressPhotoData != null) {
-				var userData = LogicData.getUserData();
+		//OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
 
-				NetworkModule.fetchTHUrl(
-					NetConstants.CFD_API.UPLOAD_ADDRESS_PHOTO,
-					{
-						method: 'POST',
-						body: JSON.stringify({
-							imageBase64: this.state.addressPhotoData,
-							text: 'jpg',
-						}),
-						headers: {
-							'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-							'Content-Type': 'application/json; charset=utf-8',
+		if(this.hasImageData()){
+
+			InteractionManager.runAfterInteractions(() => {
+				if (this.state.uploadData != null && this.state.uploadData.imageList && this.state.uploadData.imageList.length > 0) {
+					var userData = LogicData.getUserData();
+
+					var body = {
+						imageBase64: this.state.uploadData.imageList[0],
+						type: this.state.selectedAddressType,
+						text: 'jpg',
+					};
+					if(this.state.uploadData.imageList.length > 1){
+						body.imageBase64II = this.state.uploadData.imageList[1]
+					}
+
+					NetworkModule.fetchTHUrl(
+						NetConstants.CFD_API.UPLOAD_ADDRESS_PHOTO,
+						{
+							method: 'POST',
+							body: JSON.stringify(body),
+							headers: {
+								'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+								'Content-Type': 'application/json; charset=utf-8',
+							},
+							showLoading: true,
 						},
-						showLoading: true,
-					},
-					(responseJson) => {
-						this.setState({
-							isProcessing: false,
-							validateInProgress: false,
-						})
-
-						if (responseJson.success) {
-							// var dataList = OpenAccountUtils.getAyondoValuesFromGZTValue(responseJson);
-							OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
-						} else {
-							console.log("upload address photo failed. error: " + JSON.stringify(decodeURIComponent(responseJson.message)))
+						(responseJson) => {
 							this.setState({
-								error: "图片上传失败，请重新上传图片"
+								isProcessing: false,
+								validateInProgress: false,
+							})
+
+							if (responseJson.success) {
+								// var dataList = OpenAccountUtils.getAyondoValuesFromGZTValue(responseJson);
+								var trackingData = {};
+								for(var i = 0; i < PhotoTypeMapping.length; i++){
+									if(PhotoTypeMapping[i].value === this.state.selectedAddressType){
+										trackingData[TalkingdataModule.KEY_ADDRESS_TYPE] = PhotoTypeMapping[i].displayText;
+										break;
+									}
+								}
+
+								TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP4, TalkingdataModule.LABEL_OPEN_ACCOUNT, trackingData);
+								OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
+							} else {
+								console.log("upload address photo failed. error: " + JSON.stringify(decodeURIComponent(responseJson.message)))
+								this.setState({
+									error: "图片上传失败，请重新上传图片"
+								});
+							}
+						},
+						(result) => {
+							this.setState({
+								isProcessing: false,
+								validateInProgress: false,
+								error: result.errorMessage
 							});
 						}
-					},
-					(result) => {
-						this.setState({
-							isProcessing: false,
-							validateInProgress: false,
-							error: result.errorMessage
-						});
-					}
-				)
-			} else {
-				OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
-			}
-		});
+					)
+				} else {
+					OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
+				}
+			});
+		}
 	},
 
 	getData: function(){
-		var addressPhotoData = null;
 		var addressText = null;
-		if(this.state.addressPhoto !== defaultAddressPhoto){
-			addressPhotoData = this.state.addressPhotoData;
-		}
+		var uploadData = null;
 
 		if(this.state.addressText !== ""){
 			addressText = this.state.addressText;
 		}
 
+		if(this.hasImageData()){
+			uploadData = this.state.uploadData;
+		}
+		console.log("uploadData: " + JSON.stringify(uploadData))
 		return {
-			addressPhotoData: addressPhotoData,
 			values: [{"key":"addr","value":addressText}],
+			uploadData: uploadData,
 		};
 	},
 
@@ -222,25 +304,171 @@ var OAAddressPhotoPage = React.createClass({
 		})
 	},
 
-	render: function() {
-		var nextEnabled = this.state.addressPhotoData != null && this.state.addressText!= null && this.state.addressText != "";
+	dismissKB: function(){
+		Keyboard.dismiss();
+	},
+
+	selectAddressFileType: function(rowData){
+		console.log("this.state.showAddressFileTypeList - " + this.state.showAddressFileTypeList)
+		var showAddressFileTypeList = !this.state.showAddressFileTypeList;
+		if (showAddressFileTypeList){
+			this.refs[SCROLL_VIEW] && this.refs[SCROLL_VIEW].scrollTo({y:0})
+		}
+		this.setState({
+			showAddressFileTypeList: showAddressFileTypeList,
+			scrollEnabled: !showAddressFileTypeList,
+		})
+	},
+
+	onAddressTypeSelected: function(rowData){
+		this.setState({
+			showAddressFileTypeList: false,
+			selectedAddressType: rowData.value,
+		})
+	},
+
+	renderImagePicker: function(rowData){
+		var title = rowData.title;
+		var value = this.state.selectedAddressType;
+
+		var imageHint = [];
+		for(var i = 0; i < rowData.choices.length; i++){
+			if(rowData.choices[i].value === value){
+				imageHint = rowData.choices[i].imageHint
+			}
+		}
+
+		var imageView = imageHint.map((data, i)=>{
+			var view = null;
+			if (this.state.uploadData.type === value && this.state.uploadData.imageList && this.state.uploadData.imageList[i]){
+				var image = {uri: 'data:image/jpeg;base64,' + this.state.uploadData.imageList[i]};
+				view = (<View style={styles.addImageContainer} >
+					<Image style={styles.addImage} source={image}/>
+				</View>)
+			}else{
+				var image = require('../../../images/add_photo_background.png');
+				view = (<View style={styles.addImageContainer} >
+					<Image style={styles.addImage} source={image}/>
+					<Text style={styles.addImageText}>{imageHint[i]}</Text>
+				</View>);
+			}
+
+			return(
+				<TouchableOpacity key={i} style={styles.imageArea} onPress={() => this.pressAddImage(i, rowData)}>
+					{view}
+				</TouchableOpacity>
+			);
+		})
+		return (
+			<View style={{backgroundColor:'white', paddingBottom: 16, paddingTop: 6}}>
+				{imageView}
+			</View>);
+	},
+
+	renderAddressTypePicker: function(rowData){
+		var imageArrow = this.state.showAddressFileTypeList ? require('../../../images/more_up.png'):require('../../../images/more_down.png')
+
+		var title = rowData.title;
+		var value = this.state.selectedAddressType;
+
+		var selectedText = "";
+		for(var i = 0; i < rowData.choices.length; i++){
+			if(rowData.choices[i].value === value){
+				selectedText = rowData.choices[i].displayText;
+			}
+		}
+
+		return (
+			<View >
+				<View style={styles.rowWrapper}>
+					<Text style={styles.rowTitle}>{rowData.title}</Text>
+					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.selectAddressFileType()}>
+						<View style = {{flexDirection:'row',alignItems:'center'}}>
+							<Text style = {styles.addressTypeText}>{selectedText}</Text>
+							<Image style = {styles.arrow} source={imageArrow}></Image>
+						</View>
+					</TouchableOpacity>
+				</View>
+				{this.renderSeparator()}
+			</View>
+		)
+	},
+
+	renderSeparator: function(){
+		return (
+			<View style={styles.line}>
+				<View style={[styles.separator, {marginLeft: 15}]}/>
+			</View>);
+	},
+
+	renderAddressTypeRow: function(rowData, sectionID, rowID) {
+		return (
+			<TouchableOpacity style={{width:width/5, height:30}} onPress={()=>this.onAddressTypeSelected(rowData)}>
+				<Text key={rowID} style={styles.addressTypeText}>{rowData.displayText}</Text>
+			</TouchableOpacity>)
+	},
+
+	renderAddressTypeList:function(){
+		if (this.state.showAddressFileTypeList){
+			return (
+				<View style={{position: 'absolute', left: 0, right:0, top: TOP_HINT_BAR_HEIGHT + ADDRESS_FILE_TYPE_PICKER_HEIGHT, bottom:0,}}>
+					{this.renderSeparator()}
+					<View style={{backgroundColor: 'white'}}>
+						<ListView
+							style={styles.list}
+							contentContainerStyle={styles.listAddressType}
+							dataSource={this.state.dataSourceAddressTypeList}
+							enableEmptySections={true}
+							removeClippedSubviews={false}
+							initialListSize={16}
+							renderRow={(rowData, sectionID, rowID)=>this.renderAddressTypeRow(rowData, sectionID, rowID)}
+							scrollEnabled={false}/>
+						{/* <Text style={styles.addressTypeHint}>注意: 宽带/水电煤/固话账单/银行账单(近3月内)</Text> */}
+					</View>
+					{this.renderSeparator()}
+					<TouchableOpacity style={{flex: 1, backgroundColor:'rgba(0,0,0,0.5)'}} onPress={this.selectAddressFileType}>
+
+					</TouchableOpacity>
+				</View>);
+		}
+		return null;
+	},
+
+	hasImageData: function(){
+		var imageDataComplete = true;
+		if (!this.state.uploadData){
+			imageDataComplete = false
+		}else if (this.state.uploadData.type != this.state.selectedAddressType){
+			imageDataComplete = false;
+		}else if(!this.state.uploadData.imageList){
+			imageDataComplete = false;
+		}else{
+			for(var i=0; i < this.state.uploadData.imageList.length; i++){
+				if(!this.state.uploadData.imageList[i]){
+					imageDataComplete = false;
+					break;
+				}
+			}
+		}
+		return imageDataComplete;
+	},
+
+	render: function(){
+		var nextEnabled = this.hasImageData() && this.state.addressText!= null && this.state.addressText != "";
+
+		var rowData = this.state.rowData;
 
 		return (
 			<View style={styles.wrapper}>
 				<ErrorBar error={this.state.error}/>
-				<ScrollView style={{flex:1}} ref={SCROLL_VIEW}>
+				<ScrollView style={{flex:1}} ref={SCROLL_VIEW}
+					scrollEnabled={this.state.scrollEnabled}>
+					<View style={styles.hintBar}>
+						<Text style={styles.hintText}>请上传任意一种与本人身份证信息一致的图片</Text>
+					</View>
+					{this.renderAddressTypePicker(rowData)}
+					{this.renderImagePicker(rowData)}
 					<View style={styles.container}>
-						<Text style={styles.hintText}>请上传以下任意一种与身份证名字一致的图片：</Text>
-						<TouchableOpacity style={styles.imageArea} onPress={() => this.pressAddImage()}>
-							<Image style={styles.addImage} source={this.state.addressPhoto}/>
-						</TouchableOpacity>
-						<View style={styles.reminderArea}>
-							<Text style={styles.hintText}>有效的地址证明包含：</Text>
-		  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>居住证、户口本、房产证</Text></Text>
-		  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>宽带/水电煤/固话账单(近3个月内)</Text></Text>
-		  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>银行账单(近3个月内)</Text></Text>
-		  					<Text style={styles.reminderText}>• <Text style={styles.highlight}>驾照</Text></Text>
-						</View>
 						<Text style={styles.hintText}>输入的地址必须与上传图片中的地址保持一致！</Text>
 						<TextInput style={styles.inputText}
 							autoCapitalize="none"
@@ -251,6 +479,7 @@ var OAAddressPhotoPage = React.createClass({
 							maxLength={50}
 							selectionColor={ColorConstants.INOUT_TEXT_SELECTION_COLOR}
 							underlineColorAndroid='transparent'
+							placeholder="请输入上传图片中的地址"
 							onChangeText={(text)=>this.textInputChange(text)}
 							/>
 					</View>
@@ -264,8 +493,9 @@ var OAAddressPhotoPage = React.createClass({
 						textStyle={styles.buttonText}
 						text={this.state.validateInProgress? "信息正在检查中...": '下一步'} />
 				</View>
-			</View>
-		);
+				{this.renderAddressTypeList()}
+			</View>);
+
 	},
 });
 
@@ -273,11 +503,11 @@ var styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
 		alignItems: 'stretch',
-		backgroundColor: ColorConstants.BACKGROUND_GREY,
+		backgroundColor:'#edf0f5',
 	},
 
 	container: {
-		marginTop: 15,
+		marginTop: 26,
     marginLeft: width*0.09,
     marginRight: width*0.09,
 		flex: 1,
@@ -286,16 +516,28 @@ var styles = StyleSheet.create({
 	imageArea: {
 		alignSelf: 'center',
 		alignItems: 'center',
+		marginTop: 10,
+	},
+	addImageContainer: {
+		width: imageWidth,
+		height: imageHeight,
+		alignItems:'center',
 	},
 	addImage: {
 		width: imageWidth,
 		height: imageHeight,
-		marginTop: 10,
-		marginBottom: 10,
-		borderRadius: 3,
 		resizeMode: 'contain',
 	},
-
+	addImageText:{
+		fontSize: 13,
+		backgroundColor: 'transparent',
+		color: '#bbbbbb',
+		position: 'absolute',
+		top: imageHeight / 380 * 290,
+		left: 0,
+		right: 0,
+		textAlign: 'center'
+	},
 	reminderText: {
 		textAlign: 'left',
 		fontSize: 14,
@@ -350,14 +592,73 @@ var styles = StyleSheet.create({
 		fontSize: 12,
 		color: "#6c6c6c",
 	},
+	hintBar:{
+		flex: 1,
+		backgroundColor:'#edf0f5',
+		height: TOP_HINT_BAR_HEIGHT,
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingLeft: 15,
+		paddingRight: 15,
+	},
 	inputText:{
 		textAlign: 'left',
 		marginTop: 10,
-		marginBottom: 10,
 		borderRadius:3,
 		height: 49,
 		fontSize: 15,
 		backgroundColor:'white',
+	},
+
+	rowWrapper: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		backgroundColor: 'white',
+		paddingLeft: 15,
+		paddingRight: 15,
+		height: ADDRESS_FILE_TYPE_PICKER_HEIGHT,
+	},
+	rowTitle:{
+		flex:1,
+	},
+	titleIntro:{
+    flex:1,
+    fontSize:13,
+    marginLeft:15,
+    color:ColorConstants.TITLE_DARK_BLUE,
+    alignItems:'flex-end',
+    textAlign:'right',
+  },
+	separator: {
+		height: 0.5,
+		backgroundColor: ColorConstants.SEPARATOR_GRAY,
+	},
+	listAddressType:{
+		marginLeft:15,
+		marginTop:5,
+		marginRight:15,
+		flexDirection:'row',
+		justifyContent: 'space-between',
+		flexWrap:'wrap',
+	},
+	addressTypeText:{
+		fontSize: 15,
+		color: '#3f6dbd',
+	},
+	addressTypeHint:{
+		fontSize: 12,
+		color: '#999999',
+		alignSelf:'center',
+		marginBottom: 12,
+	},
+	arrow:{
+		height: 6,
+		width: 12,
+		marginLeft: 30
+	},
+	list:{
+		marginTop:12,
+		marginBottom:12,
 	}
 });
 

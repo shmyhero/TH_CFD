@@ -76,7 +76,7 @@ var OADocumentInfoPage = React.createClass({
 	},
 
 	gotoNext: function(){
-		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP5, TalkingdataModule.LABEL_OPEN_ACCOUNT)
+		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP6, TalkingdataModule.LABEL_OPEN_ACCOUNT)
 
 		this.setState({
 			enabled: false,

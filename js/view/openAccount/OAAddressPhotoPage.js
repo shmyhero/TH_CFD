@@ -28,6 +28,7 @@ var OpenAccountRoutes = require('./OpenAccountRoutes')
 var ErrorBar = require('../component/ErrorBar')
 var OpenAccountHintBlock = require('./OpenAccountHintBlock')
 var UIConstants = require('../../UIConstants')
+var TalkingdataModule = require('../../module/TalkingdataModule')
 // var OpenAccountUtils = require('./OpenAccountUtils')
 var {height, width} = Dimensions.get('window')
 
@@ -247,6 +248,15 @@ var OAAddressPhotoPage = React.createClass({
 
 							if (responseJson.success) {
 								// var dataList = OpenAccountUtils.getAyondoValuesFromGZTValue(responseJson);
+								var trackingData = {};
+								for(var i = 0; i < PhotoTypeMapping.length; i++){
+									if(PhotoTypeMapping[i].value === this.state.selectedAddressType){
+										trackingData[TalkingdataModule.KEY_ADDRESS_TYPE] = PhotoTypeMapping[i].displayText;
+										break;
+									}
+								}
+
+								TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP4, TalkingdataModule.LABEL_OPEN_ACCOUNT, trackingData);
 								OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
 							} else {
 								console.log("upload address photo failed. error: " + JSON.stringify(decodeURIComponent(responseJson.message)))

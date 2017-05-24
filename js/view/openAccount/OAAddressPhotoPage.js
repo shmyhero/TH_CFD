@@ -403,7 +403,7 @@ var OAAddressPhotoPage = React.createClass({
 
 	renderAddressTypeRow: function(rowData, sectionID, rowID) {
 		return (
-			<TouchableOpacity style={{width:width/5}} onPress={()=>this.onAddressTypeSelected(rowData)}>
+			<TouchableOpacity style={{width:width/5, height:30}} onPress={()=>this.onAddressTypeSelected(rowData)}>
 				<Text key={rowID} style={styles.addressTypeText}>{rowData.displayText}</Text>
 			</TouchableOpacity>)
 	},
@@ -413,7 +413,7 @@ var OAAddressPhotoPage = React.createClass({
 			return (
 				<View style={{position: 'absolute', left: 0, right:0, top: TOP_HINT_BAR_HEIGHT + ADDRESS_FILE_TYPE_PICKER_HEIGHT, bottom:0,}}>
 					{this.renderSeparator()}
-					<View style={{height: 80, backgroundColor: 'white'}}>
+					<View style={{backgroundColor: 'white'}}>
 						<ListView
 							style={styles.list}
 							contentContainerStyle={styles.listAddressType}
@@ -657,7 +657,8 @@ var styles = StyleSheet.create({
 		marginLeft: 30
 	},
 	list:{
-		marginTop:12
+		marginTop:12,
+		marginBottom:12,
 	}
 });
 

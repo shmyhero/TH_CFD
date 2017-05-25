@@ -73,7 +73,8 @@ public abstract class LineStickPLChartDrawer extends BaseChartDrawer {
     protected CombinedData generateData(CombinedChart chart, JSONObject stockInfoObject, JSONArray chartDataList) throws JSONException {
         ArrayList<String> xVals = new ArrayList<String>();
         ArrayList<Entry> yVals = new ArrayList<Entry>();
-
+        minVal = 1000000;
+        maxVal = -1000000;
 
         for (int i = 0; i < chartDataList.length(); i++) {
             xVals.add((i) + "");
@@ -91,6 +92,11 @@ public abstract class LineStickPLChartDrawer extends BaseChartDrawer {
 
         minVal = Math.min(minVal, (float) 0);
         maxVal = Math.max(maxVal, (float) 0);
+
+        if(minVal == 0 && maxVal == 0){
+            minVal = -100;
+            maxVal = 100;
+        }
 
         minVal -= (maxVal - minVal) / 5;
         maxVal += (maxVal - minVal) / 5;

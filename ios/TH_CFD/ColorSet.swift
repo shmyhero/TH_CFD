@@ -47,7 +47,7 @@ class ColorSet: NSObject {
             //图下面的日期
             dateTextColor = type == 1 ? UIColor(hexInt: 0x657798) : UIColor(hexInt: 0x657798)
             //线框
-            bgLineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0x657798)
+            bgLineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0x4c638d)
             //k线的颜色
 			lineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0xffffff)
             //最大最小文字
@@ -61,7 +61,7 @@ class ColorSet: NSObject {
             middleLineColor = type == 1 ? UIColor(hexInt:0x1d4fa2) : UIColor(hexInt: 0xf8f8f8)
 			dateTextColor = UIColor(hexInt: 0x70a5ff)
 			
-			bgLineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0x497bce)
+			bgLineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0x1e6bef)
 			lineColor = type == 1 ? UIColor(hexInt: 0xffffff, alpha: 0.5) : UIColor(hexInt: 0xbbceed)
             minmaxColor = type == 1 ? UIColor.white : UIColor(hexInt: 0x70a5ff)
             rightTextColor = type == 1 ? UIColor.white : UIColor(hexInt: 0x053da1)

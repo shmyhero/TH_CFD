@@ -323,6 +323,7 @@ var OAAddressPhotoPage = React.createClass({
 	onAddressTypeSelected: function(rowData){
 		this.setState({
 			showAddressFileTypeList: false,
+			scrollEnabled: true,
 			selectedAddressType: rowData.value,
 		})
 	},

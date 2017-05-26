@@ -11,6 +11,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.ReadableType;
+import com.tendcloud.appcpa.TalkingDataAppCpa;
 import com.tendcloud.tenddata.TCAgent;
 import com.tendcloud.tenddata.TalkingDataSMS;
 import com.tendcloud.tenddata.TalkingDataSMSApplyCallback;
@@ -109,6 +110,36 @@ public class TalkingDataModule extends ReactContextBaseJavaModule {
             }
         }
     }
+
+    static private String AD_TRACKING_TYPE_LOGIN = "login";
+    static private String AD_TRACKING_TYPE_REGISTER = "register";
+    static private String AD_TRACKING_TYPE_DEEPLINK = "deeplink";
+    static private String AD_TRACKING_TYPE_PAY = "pay";
+
+    static private String AD_TRACKING_KEY_USER_ID = "userId";
+    static private String AD_TRACKING_KEY_DEEP_LINK = "link";
+    static private String AD_TRACKING_KEY_ORDER_ID = "orderId";
+    static private String AD_TRACKING_KEY_AMOUNT = "amount";
+    static private String AD_TRACKING_KEY_CURRENCY = "currency";
+    static private String AD_TRACKING_KEY_PAY_TYPE = "payType";
+
+    @ReactMethod
+    public void trackADEvent(String eventName, ReadableMap parameters){
+        if (eventName == AD_TRACKING_TYPE_LOGIN){
+            TalkingDataAppCpa.onLogin(parameters.getString(AD_TRACKING_KEY_USER_ID));
+        }else if(eventName == AD_TRACKING_TYPE_REGISTER) {
+            TalkingDataAppCpa.onRegister(parameters.getString(AD_TRACKING_KEY_USER_ID));
+        }else if(eventName == AD_TRACKING_TYPE_DEEPLINK) {
+            TalkingDataAppCpa.onReceiveDeepLink(parameters.getString(AD_TRACKING_KEY_DEEP_LINK));
+        }else if(eventName == AD_TRACKING_TYPE_PAY) {
+            TalkingDataAppCpa.onPay(parameters.getString(AD_TRACKING_KEY_USER_ID),
+                    parameters.getString(AD_TRACKING_KEY_ORDER_ID),
+                    Integer.parseInt(parameters.getString(AD_TRACKING_KEY_AMOUNT)),
+                    parameters.getString(AD_TRACKING_KEY_CURRENCY),
+                    parameters.getString(AD_TRACKING_KEY_PAY_TYPE));
+        }
+    }
+
 
     @ReactMethod
     public void getDeviceID(Callback callback) {

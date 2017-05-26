@@ -18,6 +18,7 @@ var UIConstants = require('../UIConstants')
 var ColorConstants = require('../ColorConstants')
 var MainPage = require('./MainPage')
 var InputAccessory = require('./component/InputAccessory')
+var TalkingdataModule = require('../module/TalkingdataModule')
 
 var listRawData = [
 {'type':'paytype','title':'支付宝钱包', 'image':require('../../images/icon_alipay.png'), 'subtype': 'alipay', },
@@ -402,6 +403,15 @@ export default class DepositPage extends Component{
 					 var unionpayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-quick.html'+'?Amount='+rmbValue+appendVal
 					 var url = this.state.payMethodSelected == 0? alipayUrl:unionpayUrl;
 					 console.log('selected Url = ' + url);
+
+						var trackingData = {};
+						trackingData[TalkingdataModule.AD_TRACKING_KEY_USER_ID] = userData.userId;
+						trackingData[TalkingdataModule.AD_TRACKING_KEY_ORDER_ID] = responseJson.transferId;	//don't know the order id..
+						trackingData[TalkingdataModule.AD_TRACKING_KEY_AMOUNT] = rmbValue;
+						trackingData[TalkingdataModule.AD_TRACKING_KEY_CURRENCY] = "RMB";
+						trackingData[TalkingdataModule.AD_TRACKING_KEY_PAY_TYPE] = this.state.payMethodSelected == 0 ? "支付宝" : "银联";
+						TalkingdataModule.trackADEvent(TalkingdataModule.AD_TRACKING_EVENT_PAY, trackingData);
+
 					 this.props.navigator.push({
 			 			name: MainPage.PAYMENT_PAGE,
 			 			url: url,

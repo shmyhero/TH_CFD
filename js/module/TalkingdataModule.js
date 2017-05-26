@@ -78,6 +78,28 @@ export const KEY_PROFIT = "盈利";
 export const KEY_SEARCH_TEXT = "搜索字段";
 export const KEY_SEARCH_TEXT_FAILED = "搜索字段失败";
 
+export const AD_TRACKING_EVENT_LOGIN = "login"        //模拟盘登录
+export const AD_TRACKING_EVENT_REGISTER = "register"  //实盘注册
+export const AD_TRACKING_EVENT_DEEPLINK = "deeplink"  //deeplink //not used now
+export const AD_TRACKING_EVENT_PAY = "pay"            //入金
+//export const AD_TRACKING_EVENT_CUSTOM1 = "custom1" //TODO
+
+export const AD_TRACKING_KEY_USER_ID = "userId";
+export const AD_TRACKING_KEY_DEEP_LINK = "link";
+export const AD_TRACKING_KEY_ORDER_ID = "orderId";
+export const AD_TRACKING_KEY_AMOUNT = "amount";
+export const AD_TRACKING_KEY_CURRENCY = "currency";
+export const AD_TRACKING_KEY_PAY_TYPE = "payType";
+
+export function trackADEvent(event_name, parameters) {
+  try{
+    console.log("parameters: " + JSON.stringify(parameters))
+    nativeModule.trackADEvent(event_name, parameters);
+  }catch(e){
+    console.log(e)
+  }
+}
+
 export function trackPageBegin(page_name) {
   nativeModule.trackPageBegin(page_name);
 }

@@ -130,6 +130,10 @@ var OADocumentInfoPage = React.createClass({
 								console.log(JSON.stringify(responseJson))
 								this.parseError(responseJson.message);
 							}else{
+								var trackingData = {};
+								trackingData[TalkingdataModule.AD_TRACKING_KEY_USER_ID] = userData.userId;
+								TalkingdataModule.trackADEvent(TalkingdataModule.AD_TRACKING_EVENT_REGISTER, trackingData);								
+
 								OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
 							}
 						}

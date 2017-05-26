@@ -72,6 +72,19 @@ var NavBar = React.createClass({
 		}
 	},
 
+	onDidFocus: function(){
+		if(Platform.OS === 'android'){
+			var navBarColor = ColorConstants.title_blue();
+			if(this.props.backgroundColor && this.props.backgroundColor !== "transparent"){
+				//Which means the background doesn't have an alpha channel
+				navBarColor = this.props.backgroundColor;
+			}
+			var bgColor = Platform.Version >= 21 ? "transparent" : navBarColor;
+			var translucent = Platform.OS === "android";
+			StatusBar.setBackgroundColor(bgColor);
+			StatusBar.setTranslucent(translucent);
+		}
+	},
 
 	backOnClick: function() {
 		if(this.props.leftButtonOnClick){
@@ -132,8 +145,12 @@ var NavBar = React.createClass({
 
 	renderStatusBar: function(navBarColor){
 		if (Platform.OS === "android"){
-			return (<StatusBar barStyle="light-content" backgroundColor={Platform.Version >= 21 ? "transparent" : navBarColor}
-				translucent={Platform.OS === "android"}/>)
+			var bgColor = Platform.Version >= 21 ? "transparent" : navBarColor;
+			var translucent = Platform.OS === "android";
+			// StatusBar.setBackgroundColor(bgColor);
+			// StatusBar.setBackgroundColor(bgColor);
+			return (<StatusBar barStyle="light-content" backgroundColor={bgColor}
+				translucent={translucent}/>)
 		}
 	},
 

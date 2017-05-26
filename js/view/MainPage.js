@@ -9,7 +9,6 @@ import {
   Navigator,
   Linking,
 	Platform,
-	StatusBar,
 } from 'react-native';
 
 import Tabbar, { Tab, RawContent,  Icon, IconWithBar, glypyMapMaker } from './component/react-native-tabbar';

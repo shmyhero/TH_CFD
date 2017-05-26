@@ -71,7 +71,7 @@ export default class WithdrawPage extends Component {
       var bankIcon = liveUserInfo.bankIcon;
       var bankCardStatus = liveUserInfo.bankCardStatus;
       var pendingDays = liveUserInfo.pendingDays;
-      var withdrawChargeHint = balanceData.comment;
+      var withdrawChargeHint = balanceData ? balanceData.comment : "出金手续费为出金金额的1%";
 
       this.state={
         dataSource: this.ds.cloneWithRows(this.listRawData),

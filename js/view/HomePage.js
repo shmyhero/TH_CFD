@@ -39,6 +39,7 @@ var {EventCenter, EventConst} = require('../EventCenter')
 
 //Change URL may be wrong.
 var RECOMMAND_URL = NetConstants.TRADEHERO_API.WEBVIEW_RECOMMAND_PAGE
+var RECOMMAND_URL_ACTUAL = NetConstants.TRADEHERO_API.WEBVIEW_RECOMMAND_PAGE_ACTUAL
 var PAGES = [
 	{name: 'Page0', url: RECOMMAND_URL + "1", header:""},
 	{name: 'Page1', url: RECOMMAND_URL + "1", header:""},
@@ -73,6 +74,7 @@ var lastForceloopTime = 0
 var firstLoad = false
 const CARDS_LIST = "cardList"
 const SCROLL_VIEW = "scrollView"
+const NAV_BAR = "navBar"
 var accStatus
 
 var HomePage = React.createClass({
@@ -198,7 +200,7 @@ var HomePage = React.createClass({
 				cache: 'offline',
 			},
 			(responseJson) => {
-				console.log(JSON.stringify(responseJson))
+				console.log("GET_HOMEPAGE_BANNER_ALL_API " + JSON.stringify(responseJson))
 				this.downloadBannerImages(responseJson)
 				//StorageModule.setBanners(JSON.stringify(responseJson))
 			}
@@ -309,10 +311,6 @@ var HomePage = React.createClass({
 	},
 
 	componentDidMount: function() {
-		if(Platform.OS === 'android'){
-			StatusBar.setBackgroundColor(Platform.version >= 21 ? 'transparent' : ColorConstants.title_blue());
-			StatusBar.setTranslucent(true)
-		}
 		var isConnected = WebSocketModule.isConnected();
 		this.setState({
 			connected: isConnected
@@ -356,6 +354,9 @@ var HomePage = React.createClass({
 	onDidFocus: function(event) {
 		//didfocus emit in componentDidMount
 		if (MainPage.HOME_PAGE_ROUTE === event.data.route.name) {
+			console.log("on did focus homepage")
+			this.refs[NAV_BAR].onDidFocus();
+
 			this.forceloopSwipers()
 		}
 	},
@@ -393,7 +394,7 @@ var HomePage = React.createClass({
 		var imagePath = images[index].imgUrlBig
 		var targetUrl = images[index].url
 		if (targetUrl == '') {
-			targetUrl = RECOMMAND_URL + images[index].id
+			targetUrl = (LogicData.getAccountState() ? RECOMMAND_URL_ACTUAL : RECOMMAND_URL) + images[index].id
 		}
 		var header = images[index].header
 		var digest = images[index].digest
@@ -1216,7 +1217,7 @@ var HomePage = React.createClass({
 				onPress={()=>this.pressedNavBar()}
 				style={{position:'absolute', top:0, left: 0, right: width, width:width}}
 				>
-				<NavBar title={this.state.connected ? "首页" : "首页（未连接）"}
+				<NavBar ref={NAV_BAR} title={this.state.connected ? "首页" : "首页（未连接）"}
 					viewOnRight={this.renderMessageIcon()}
 					viewOnLeft={this.renderCheckInView()}
 					hideStatusBar={true}

@@ -11,7 +11,6 @@ import {
   ListView,
   Alert,
   TouchableOpacity,
-  StatusBar,
   TouchableHighlight
 } from 'react-native'
 
@@ -184,7 +183,6 @@ export default class RankingPage extends Component{
 
     return(
       <View style={[styles.container,  this.props.barStyle]} >
-        <StatusBar barStyle="light-content" backgroundColor={navBarColor}/>
         <View style = {styles.headerContainer}>
           <TouchableOpacity
             onPress={()=>{this._onRankTypeSelected(RANKING_TYPE_0)}}

@@ -392,7 +392,7 @@ var LoginPage = React.createClass({
 				var trackingData = {};
 				trackingData[TalkingdataModule.AD_TRACKING_KEY_USER_ID] = userData.userId;
 				TalkingdataModule.trackADEvent(TalkingdataModule.AD_TRACKING_EVENT_LOGIN, trackingData);
-				
+
 				this.props.navigator.push({
 					name: MainPage.UPDATE_USER_INFO_ROUTE,
 					getNextRoute: this.props.getNextRoute,

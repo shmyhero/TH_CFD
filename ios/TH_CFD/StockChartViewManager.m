@@ -7,7 +7,7 @@
 //
 
 #import "StockChartViewManager.h"
-#import "TH_CFD-swift.h"
+#import "TH_CFD-Swift.h"
 
 @implementation StockChartViewManager
 

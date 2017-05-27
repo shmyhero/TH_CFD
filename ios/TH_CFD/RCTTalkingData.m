@@ -10,6 +10,7 @@
 #import "TalkingData.h"
 #import "TalkingDataSMS.h"
 #import "RCTUtils.h"
+#import "TalkingDataAppCpa.h"
 
 @interface RCTSMSDelegate: NSObject <TalkingDataSMSDelegate>
 
@@ -74,6 +75,7 @@ RCT_EXPORT_METHOD(trackEvent:(NSString *)event_name label:(NSString *)event_labe
     }
 }
 
+
 RCT_EXPORT_METHOD(setLocation:(double)latitude longitude:(double)longitude)
 {
     [TalkingData setLatitude:latitude longitude:longitude];
@@ -126,6 +128,28 @@ RCT_EXPORT_METHOD(verifyAuthCode:(NSString *)countryCode
     
 }
 
+
+RCT_EXPORT_METHOD(trackADEvent:(NSString *)event_name parameters:(NSDictionary *)parameters)
+{
+    if ([event_name isEqualToString: @"login"]) {
+        [TalkingDataAppCpa onRegister:[parameters objectForKey:@"userId"]];
+    }
+    else if([event_name isEqualToString:@"register"]) {
+        [TalkingDataAppCpa onRegister:[parameters objectForKey:@"userId"]];
+    }
+    else if([event_name isEqualToString:@"deeplink"]) {
+        [TalkingDataAppCpa onReceiveDeepLink:[parameters objectForKey:@"link"]];
+    }
+    else if([event_name isEqualToString:@"pay"]) {
+        [TalkingDataAppCpa onPay:[parameters objectForKey:@"userId"]
+                     withOrderId:[parameters objectForKey:@"orderId"]
+                      withAmount:[[parameters objectForKey:@"amount"] intValue]
+                withCurrencyType:[parameters objectForKey:@"currency"]
+                     withPayType:[parameters objectForKey:@"payType"]];
+    }
+}
+
+
 @end
 
 
@@ -160,6 +184,5 @@ RCT_EXPORT_METHOD(verifyAuthCode:(NSString *)countryCode
         self.reject([NSString stringWithFormat:@"%d",errorCode], errorMessage, nil);
     }
 }
-
 
 @end

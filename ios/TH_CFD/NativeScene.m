@@ -7,7 +7,7 @@
 //
 
 #import "NativeScene.h"
-#import "TH_CFD-swift.h"
+#import "TH_CFD-Swift.h"
 #import "MQChatViewManager.h"
 
 @implementation NativeScene

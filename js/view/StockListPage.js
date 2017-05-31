@@ -122,27 +122,35 @@ var StockListPage = React.createClass({
 		}
 	},
 
-	refreshData: function(forceRefetch) {
+	isCurrentPage: function(){
 		if(LogicData.getTabIndex() == MainPage.STOCK_LIST_PAGE_TAB_INDEX){
 			var routes = this.props.navigator.getCurrentRoutes();
 			if(routes && routes[routes.length-1] &&
 				(routes[routes.length-1].name == MainPage.STOCK_LIST_VIEW_PAGER_ROUTE
 			|| routes[routes.length-1].name == MainPage.LOGIN_ROUTE)){
-				var currentIndex = LogicData.getCurrentPageTag();
-				if(this.props.pageKey == currentIndex){
-					this.isDisplayingCache = false;
-					//If the last shown list is read from cache, we also need to refresh the data by refetching the api
-					if (this.props.isOwnStockPage) {
-						if(forceRefetch || this.isDisplayingCache){
-							//Always read server data.
-							this.syncOwnData();
-						}else{
-							this.refreshOwnData();
-						}
+				return true;
+			}
+		}
+		return false;
+	},
+
+	refreshData: function(forceRefetch) {
+		console.log("refreshData")
+		if(this.isCurrentPage()){
+			var currentIndex = LogicData.getCurrentPageTag();
+			if(this.props.pageKey == currentIndex){
+				this.isDisplayingCache = false;
+				//If the last shown list is read from cache, we also need to refresh the data by refetching the api
+				if (this.props.isOwnStockPage) {
+					if(forceRefetch || this.isDisplayingCache){
+						//Always read server data.
+						this.syncOwnData();
+					}else{
+						this.refreshOwnData();
 					}
-					else {
-						this.reFetchStockData(forceRefetch || this.isDisplayingCache)
-					}
+				}
+				else {
+					this.reFetchStockData(forceRefetch || this.isDisplayingCache)
 				}
 			}
 		}
@@ -156,11 +164,14 @@ var StockListPage = React.createClass({
 		}
 	},
 
+	//Only Android has the layout size changed issue because the navigation bar can be hidden.
 	onLayoutSizeChanged: function(){
-		console.log("onLayoutSizeChanged");
-		this.setState({
-			height: UIConstants.getVisibleHeight(),
-		})
+		if(Platform.OS === "android" && this.isCurrentPage()){
+			console.log("onLayoutSizeChanged");
+			this.setState({
+				height: UIConstants.getVisibleHeight(),
+			});
+		}
 	},
 
 	fetchStockData: function() {
@@ -386,6 +397,7 @@ var StockListPage = React.createClass({
 					var stockData = JSON.parse(args[1])
 					var oldData = LogicData.getOwnStocksData();
 					LogicData.setOwnStocksData(stockData);
+					this.onLayoutSizeChanged();
 					this.refreshOwnData()
 					NetworkModule.updateOwnStocks(stockData)
 					.then(()=>{
@@ -456,6 +468,7 @@ var StockListPage = React.createClass({
 	},
 
 	onDidFocus: function(event) {
+		this.onLayoutSizeChanged()
 		var currentRoute = this.props.navigator.navigationContext.currentRoute;
 		//didfocus emit in componentDidMount
       if (currentRoute === event.data.route) {
@@ -524,9 +537,9 @@ var StockListPage = React.createClass({
   	},
 
   	handleAddStock: function() {
-		this.props.navigator.push({
-			name: MainPage.STOCK_SEARCH_ROUTE,
-		});
+			this.props.navigator.push({
+				name: MainPage.STOCK_SEARCH_ROUTE,
+			});
   	},
 
   	stockPressed: function(rowData) {
@@ -535,6 +548,7 @@ var StockListPage = React.createClass({
 			stockRowData: rowData,
 			onPopUp: ()=>{
 				console.log("STOCK_DETAIL_ROUTE onPopUp")
+				this.onLayoutSizeChanged();
 				this.refreshData(true);
 			},
 		});

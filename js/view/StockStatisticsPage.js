@@ -57,6 +57,7 @@ var StockStatisticsPage = React.createClass({
 	},
 
 	tabPressed: function(index) {
+		this.onLayoutSizeChanged()
 		var balanceData = LogicData.getBalanceData()
 		this.setState({
 				balanceData: balanceData,
@@ -97,11 +98,27 @@ var StockStatisticsPage = React.createClass({
 		AppStateModule.unregisterTurnToActiveListener(this.refreshData);
 	},
 
+	//Only Android has the layout size changed issue because the navigation bar can be hidden.
 	onLayoutSizeChanged: function(){
-		console.log("onLayoutSizeChanged StockStatisticsPage");
-		this.setState({
-			height: UIConstants.getVisibleHeight(),
-		})
+		if(Platform.OS === "android" && this.isCurrentPage()){
+			console.log("onLayoutSizeChanged StockStatisticsPage");
+			this.setState({
+				height: UIConstants.getVisibleHeight(),
+			})
+		}
+	},
+
+	isCurrentPage: function(){
+		if(LogicData.getTabIndex() == MainPage.STOCK_EXCHANGE_TAB_INDEX){
+			var routes = this.props.navigator.getCurrentRoutes();
+			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE){
+				var currentPageTag = LogicData.getCurrentPageTag();
+				if(currentPageTag == 2){
+					return true;
+				}
+			}
+		}
+		return false;
 	},
 
 	onConnectionStateChanged: function(){
@@ -112,22 +129,16 @@ var StockStatisticsPage = React.createClass({
 
 	refreshData: function(){
 		console.log("refreshData")
-		if(LogicData.getTabIndex() == MainPage.STOCK_EXCHANGE_TAB_INDEX){
-			var routes = this.props.navigator.getCurrentRoutes();
-			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE){
-				var currentPageTag = LogicData.getCurrentPageTag();
-				if(currentPageTag == 2){
-					var userData = LogicData.getUserData();
-					var notLogin = Object.keys(userData).length === 0;
-					if(!notLogin){
-						NetworkModule.loadUserBalance(true, (responseJson)=>{
-							this.setState({balanceData: responseJson,});
-						})
+		if(this.isCurrentPage()){
+			var userData = LogicData.getUserData();
+			var notLogin = Object.keys(userData).length === 0;
+			if(!notLogin){
+				NetworkModule.loadUserBalance(true, (responseJson)=>{
+					this.setState({balanceData: responseJson,});
+				})
 
-						this.refs[STATISTIC_BAR_BLOCK].refresh();
-						//this.refs[TRADE_STYLE_BLOCK].refresh();
-					}
-				}
+				this.refs[STATISTIC_BAR_BLOCK].refresh();
+				//this.refs[TRADE_STYLE_BLOCK].refresh();
 			}
 		}
 	},

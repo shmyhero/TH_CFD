@@ -77,14 +77,11 @@ var StockClosedPositionPage = React.createClass({
 	},
 
 	onConnectionStateChanged: function(){
-		if(LogicData.getTabIndex() == MainPage.STOCK_EXCHANGE_TAB_INDEX && !this.state.contentLoaded && !this.state.isRefreshing && WebSocketModule.isConnected()){
-			var routes = this.props.navigator.getCurrentRoutes();
-			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE){
-				var userData = LogicData.getUserData();
-				var notLogin = Object.keys(userData).length === 0;
-				if(!notLogin){
-					this.loadClosedPositionInfo();
-				}
+		if(this.isCurrentPage()){
+			var userData = LogicData.getUserData();
+			var notLogin = Object.keys(userData).length === 0;
+			if(!notLogin){
+				this.loadClosedPositionInfo();
 			}
 		}
 	},
@@ -96,11 +93,27 @@ var StockClosedPositionPage = React.createClass({
 		layoutSizeChangedSubscription && layoutSizeChangedSubscription.remove();
 	},
 
+	//Only Android has the layout size changed issue because the navigation bar can be hidden.
 	onLayoutSizeChanged: function(){
-		console.log("onLayoutSizeChanged StockClosedPositionPage");
-		this.setState({
-			height: UIConstants.getVisibleHeight(),
-		})
+		if(Platform.OS === "android" && this.isCurrentPage()){
+			console.log("onLayoutSizeChanged StockClosedPositionPage");
+			this.setState({
+				height: UIConstants.getVisibleHeight(),
+			})
+		}
+	},
+
+	isCurrentPage: function(){
+		if(LogicData.getTabIndex() == MainPage.STOCK_EXCHANGE_TAB_INDEX && !this.state.contentLoaded && !this.state.isRefreshing && WebSocketModule.isConnected()){
+			var currentPageTag = LogicData.getCurrentPageTag();
+			if(currentPageTag == 1){
+				var routes = this.props.navigator.getCurrentRoutes();
+				if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE){
+					return true;
+				}
+			}
+		}
+		return false;
 	},
 
 	isLoadedAll: false,
@@ -116,6 +129,7 @@ var StockClosedPositionPage = React.createClass({
 		this.currentTicks = d.getTime();
 		console.log("tabpressed ")
 
+		this.onLayoutSizeChanged()
 		this.setState({
 			selectedRow: -1,
 		})

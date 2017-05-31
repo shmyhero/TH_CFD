@@ -128,11 +128,27 @@ var StockOpenPositionPage = React.createClass({
 		AppStateModule.registerTurnToActiveListener(this.refreshData);
 	},
 
+	//Only Android has the layout size changed issue because the navigation bar can be hidden.
 	onLayoutSizeChanged: function(){
-		console.log("onLayoutSizeChanged StockOpenPositionPage");
-		this.setState({
-			height: UIConstants.getVisibleHeight(),
-		})
+		if(Platform.OS === "android" && this.isCurrentPage()){
+			console.log("onLayoutSizeChanged StockOpenPositionPage");
+			this.setState({
+				height: UIConstants.getVisibleHeight(),
+			})
+		}
+	},
+
+	isCurrentPage: function(){
+		if(LogicData.getTabIndex() == MainPage.STOCK_EXCHANGE_TAB_INDEX){
+			var currentPageTag = LogicData.getCurrentPageTag();
+			if(currentPageTag == 0){
+				var routes = this.props.navigator.getCurrentRoutes();
+				if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE){
+					return true;
+				}
+			}
+		}
+		return false;
 	},
 
 	onConnectionStateChanged: function(){
@@ -142,18 +158,12 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	refreshData: function(){
-		if(LogicData.getTabIndex() == MainPage.STOCK_EXCHANGE_TAB_INDEX){
-			var currentPageTag = LogicData.getCurrentPageTag();
-			if(currentPageTag == 0){
-				var routes = this.props.navigator.getCurrentRoutes();
-				if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE){
-					//Refresh current page data.
-					var userData = LogicData.getUserData();
-					var notLogin = Object.keys(userData).length === 0;
-					if(!notLogin){
-						this.loadOpenPositionInfo();
-					}
-				}
+		if(this.isCurrentPage()){
+			//Refresh current page data.
+			var userData = LogicData.getUserData();
+			var notLogin = Object.keys(userData).length === 0;
+			if(!notLogin){
+				this.loadOpenPositionInfo();
 			}
 		}
 	},
@@ -180,6 +190,7 @@ var StockOpenPositionPage = React.createClass({
 			profitLossUpdated: false,
 			profitLossConfirmed: false,
 		});
+		this.onLayoutSizeChanged()
 		this.loadOpenPositionInfo()
 	},
 

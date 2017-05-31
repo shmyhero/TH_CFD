@@ -45,6 +45,7 @@ var NavBar = React.createClass({
 		enableRightText: React.PropTypes.bool,
 		hideStatusBar: React.PropTypes.bool,
 		onlyShowStatusBar: React.PropTypes.bool,
+		titleOpacity: React.PropTypes.number,
 	},
 
 	getDefaultProps() {
@@ -69,6 +70,7 @@ var NavBar = React.createClass({
 			enableRightText: true,
 			hideStatusBar: false,
 			onlyShowStatusBar: false,
+			titleOpacity: 1,
 		}
 	},
 
@@ -154,6 +156,21 @@ var NavBar = React.createClass({
 		}
 	},
 
+	renderTitle: function(){
+		if(this.props.titleOpacity > 0){
+			return(
+				<View style={styles.centerContainer}>
+					<Text style={[styles.title, this.props.titleStyle, {opacity: this.props.titleOpacity}]}>
+						{this.props.title}
+					</Text>
+					{this.renderSubTitle()}
+				</View>
+			);
+		}else{
+			return ( <View style={styles.centerContainer}/>)
+		}
+	},
+
 	render: function() {
 		var backgroundColor = ColorConstants.title_blue();
 		if(this.props.backgroundColor){
@@ -164,6 +181,13 @@ var NavBar = React.createClass({
 		if(this.props.backgroundColor && this.props.backgroundColor !== "transparent"){
 			//Which means the background doesn't have an alpha channel
 			navBarColor = this.props.backgroundColor;
+		}
+
+		if(this.props.titleOpacity < 1){
+			var rgb = this.hexToRgb(navBarColor)
+			var alpha = this.props.titleOpacity;
+			navBarColor = 'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+alpha+')'
+			backgroundColor = navBarColor
 		}
 
 		if(this.props.onlyShowStatusBar){
@@ -177,12 +201,7 @@ var NavBar = React.createClass({
 			<View style={[styles.container, {backgroundColor: backgroundColor}, this.props.barStyle]} >
 				{this.renderStatusBar(navBarColor)}
 				{this.renderLeftPart()}
-				<View style={styles.centerContainer}>
-					<Text style={[styles.title, this.props.titleStyle]}>
-						{this.props.title}
-					</Text>
-					{this.renderSubTitle()}
-				</View>
+				{this.renderTitle()}
 
 				{this.renderRightPart()}
 

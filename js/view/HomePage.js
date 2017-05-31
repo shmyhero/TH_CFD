@@ -93,7 +93,8 @@ var HomePage = React.createClass({
 			//winMovieTicket: false,
 			isConnected: false,
 			unreadMessageCount: 0,
-			navBarBackgroundColor: 'rgba(255,255,255,0)'
+			//navBarBackgroundColor: 'rgba(255,255,255,0)'
+			titleOpacity: 0,
 		};
 	},
 
@@ -1221,8 +1222,9 @@ var HomePage = React.createClass({
 					viewOnRight={this.renderMessageIcon()}
 					viewOnLeft={this.renderCheckInView()}
 					hideStatusBar={true}
-					backgroundColor={this.state.navBarBackgroundColor}
-					navigator={this.props.navigator}/>
+					//backgroundColor={this.state.navBarBackgroundColor}
+					navigator={this.props.navigator}
+					titleOpacity={this.state.titleOpacity}/>
 			</TouchableOpacity>
 		)
 	},
@@ -1263,18 +1265,31 @@ var HomePage = React.createClass({
 	    } : null;
 	},
 
+	contentHeight: 0,
+
+	onContentSizeChange: function(contentWidth, contentHeight){
+		this.contentHeight = contentHeight;
+	},
+
 	onScroll: function(event){
 		console.log("event " + event.nativeEvent.contentOffset.y)
 		var rgb = this.hexToRgb(ColorConstants.title_blue())
 		var alpha = 0;
 		var statusBarHeight = StatusBar.currentHeight ? StatusBar.currentHeight : 0
-		var height = imageHeight - statusBarHeight - UIConstants.HEADER_HEIGHT;
-		if(event.nativeEvent.contentOffset.y > height){
+		var scrollAbleHeight = this.contentHeight - (height - UIConstants.TAB_BAR_HEIGHT);
+		var visibleBannerHeight = imageHeight - statusBarHeight - UIConstants.HEADER_HEIGHT;
+		if (visibleBannerHeight > scrollAbleHeight && scrollAbleHeight > 0){
+			visibleBannerHeight = scrollAbleHeight
+		}
+		if(event.nativeEvent.contentOffset.y > visibleBannerHeight){
 			alpha = 1;
 		}else{
-			alpha = event.nativeEvent.contentOffset.y / height
+			alpha = event.nativeEvent.contentOffset.y / visibleBannerHeight
 		}
-		this.setState({navBarBackgroundColor: 'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+alpha+')'})
+		this.setState({
+			//navBarBackgroundColor: 'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+alpha+')',
+			titleOpacity: alpha
+		});
 	},
 
 	render: function() {
@@ -1308,6 +1323,7 @@ var HomePage = React.createClass({
 					{this.renderBgHint()}
 					<ScrollView ref={SCROLL_VIEW}
 						onScroll={this.onScroll}
+						onContentSizeChange={this.onContentSizeChange}
 						scrollEventThrottle={8} >
 						<View style={{width: width, height: imageHeight}}>
 							<Swiper

@@ -46,6 +46,8 @@ function getCFDAPI(){
     GET_USER_BOOKMARK_LIST_LIVE_API: CFD_API_SERVER + '/api/security/live/byIds', //LIVE OK
     GET_US_STOCK_TOP_GAIN_API: CFD_API_SERVER + '/api/security/stock/topGainer',
     GET_US_STOCK_TOP_GAIN_LIVE_API: CFD_API_SERVER + '/api/security/live/stock/topGainer',//LIVE OK
+    GET_US_STOCK_HK_API: CFD_API_SERVER + '/api/security/stock/hk',
+    GET_US_STOCK_HK_LIVE_API: CFD_API_SERVER + '/api/security/live/stock/hk',//LIVE OK
     GET_US_STOCK_TOP_LOSER_API: CFD_API_SERVER + '/api/security/stock/topLoser',
     GET_INDEX_LIST_API: CFD_API_SERVER + '/api/security/index',
     GET_INDEX_LIST_LIVE_API: CFD_API_SERVER + '/api/security/live/index',//LIVE OK

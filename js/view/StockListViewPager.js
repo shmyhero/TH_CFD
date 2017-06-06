@@ -26,10 +26,11 @@ var NavBar = require('../view/NavBar')
 var MainPage = require('./MainPage')
 
 
-var tabNames = ['自选', '美股', '指数', '外汇', '商品']
+var tabNames = ['自选', '美股','港股', '指数', '外汇', '商品']
 var urlKeys = [
 	'GET_USER_BOOKMARK_LIST_API',
 	'GET_US_STOCK_TOP_GAIN_API',
+	'GET_US_STOCK_HK_API',
 	'GET_INDEX_LIST_API',
 	'GET_FX_LIST_API',
 	'GET_FUTURE_LIST_API',
@@ -37,6 +38,7 @@ var urlKeys = [
 var urlKeysLive = [
 	'GET_USER_BOOKMARK_LIST_LIVE_API',
 	'GET_US_STOCK_TOP_GAIN_LIVE_API',
+	'GET_US_STOCK_HK_LIVE_API',
 	'GET_INDEX_LIST_LIVE_API',
 	'GET_FX_LIST_LIVE_API',
 	'GET_FUTURE_LIST_LIVE_API',
@@ -132,7 +134,7 @@ var StockListViewPager = React.createClass({
 		this.setState({
 			currentSelectedTab: index,
 		})
-		_currentSelectedTab = index;		
+		_currentSelectedTab = index;
 		LogicData.setCurrentPageTag(_currentSelectedTab);
 		this.refs['page' + _currentSelectedTab].onPageSelected()
 

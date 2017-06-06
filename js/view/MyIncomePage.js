@@ -29,6 +29,9 @@ var OpenAccountRoutes = require('./openAccount/OpenAccountRoutes');
 var StorageModule = require('../module/StorageModule');
 var heightRate = height/667.0
 
+var buttonFontSize = heightRate * 17;
+buttonFontSize = buttonFontSize > 17 ? 17 : buttonFontSize;
+
 var UP_INPUT_REF = "upInput"
 var DOWN_INPUT_REF = "downInput"
 
@@ -62,6 +65,9 @@ var MyIncomePage = React.createClass({
 			liveRegister: '--',
 			referralReward: '--',
 			dataSource: ds.cloneWithRows(listRawData),
+			minTransfer: 60,
+			canTransfer: false,
+			transferMessage: "",
 		};
 	},
 
@@ -110,6 +116,9 @@ var MyIncomePage = React.createClass({
 					this.setState({
 						unpaidReward: unpaid,
 						totalReward: responseJson.total,
+						canTransfer: responseJson.canTransfer,
+						transferMessage: responseJson.message,
+						minTransfer: responseJson.minTransfer,
 					});
 				},
 				(result) => {
@@ -191,6 +200,7 @@ var MyIncomePage = React.createClass({
 	gotoNext: function(){
 		this.props.navigator.push({
 			name: MainPage.WITHDRAW_INCOME_ROUTE,
+			minTransfer: this.state.minTransfer,
 			popToOutsidePage: ()=>{this.refreshData();}
 		});
 	},
@@ -339,13 +349,33 @@ var MyIncomePage = React.createClass({
 		return null;
 	},
 
-	render: function() {
+	renderTrasferButton: function(){
 		var nextEnabled = false;
 		var meData = LogicData.getMeData();
 		var notLogin = Object.keys(meData).length === 0
+		var buttonText = '转入实盘账户'
 		if(!notLogin && meData.liveAccStatus === 1){
-			nextEnabled = true;
+			if(this.state.canTransfer){
+				nextEnabled = true;
+			}else{
+				buttonText = this.state.transferMessage;
+				nextEnabled = false;
+			}
 		}
+		return (
+			<View style={styles.bottomArea}>
+				<Button style={styles.buttonArea}
+					enabled={this.state.validateInProgress ? false : nextEnabled}
+					onPress={()=>this.gotoNext()}
+					textContainerStyle={[styles.buttonView, {backgroundColor: ColorConstants.TITLE_BLUE,}]}
+					textStyle={styles.buttonText}
+					text={buttonText} />
+			</View>
+		);
+	},
+
+	render: function() {
+
 
 		return (
 			<View style={styles.wrapper}>
@@ -358,14 +388,7 @@ var MyIncomePage = React.createClass({
 					renderRow={this.renderRow}
 					renderSeparator={this.renderSeparator} />
 				{this.renderNoticeView()}
-				<View style={styles.bottomArea}>
-					<Button style={styles.buttonArea}
-						enabled={this.state.validateInProgress ? false : nextEnabled}
-						onPress={()=>this.gotoNext()}
-						textContainerStyle={[styles.buttonView, {backgroundColor: ColorConstants.TITLE_BLUE,}]}
-						textStyle={styles.buttonText}
-						text={'转入实盘账户'} />
-				</View>
+				{this.renderTrasferButton()}
 				{/* <HeaderLineDialog ref={RULE_DIALOG}
 				headerImage={require('../../images/my_income_strategy.png')}
 				messageLines={this.rules}/> */}
@@ -470,7 +493,7 @@ var styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	buttonText: {
-		fontSize: 17,
+		fontSize: buttonFontSize,
 		textAlign: 'center',
 		color: '#ffffff',
 	},

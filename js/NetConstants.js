@@ -115,6 +115,7 @@ function getCFDAPI(){
     GET_TOTAL_REWARD: CFD_API_SERVER + '/api/reward/total',
     GET_CHECK_IN_SHARE_DATA: CFD_API_SERVER + '/api/reward/checkIn/share',
     GET_REGISTER_SHARE_DATA: CFD_API_SERVER + '/api/reward/demoReg/share',
+    GET_REGISTER_REWARD: CFD_API_SERVER + '/api/reward/register',
     TRANSFER_REWARD: CFD_API_SERVER + '/api/reward/transfer/<amount>/',
 
     CHECK_LIVE_USERNAME: CFD_API_SERVER + '/api/user/live/checkUsername?username=<userName>',

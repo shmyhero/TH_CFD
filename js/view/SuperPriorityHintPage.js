@@ -148,7 +148,7 @@ var SuperPriorityHintPage = React.createClass({
               注册送
               </Text>
               <Text style={styles.bodyTextHighlight}>
-              50元
+              {LogicData.getRegisterReward()+"元"}
               </Text>
             </View>
           </View>

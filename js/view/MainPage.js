@@ -421,6 +421,7 @@ var MainPage = React.createClass({
 			hideTabbar();
 			return (
 				<WithdrawIncomePage navigator={navigationOperations} routeMapper={this.RouteMapper}
+					minTransfer={route.minTransfer}
 					popToOutsidePage={route.popToOutsidePage}/>
 			)
 		} else if(route.name === WITHDRAW_INCOME_SUBMITTED_ROUTE) {

@@ -43,10 +43,12 @@ var defaultRawData = [
 export default class WithdrawIncomePage extends Component {
   static propTypes = {
 		popToOutsidePage: PropTypes.func,
+    minTransfer: PropTypes.number,
   }
 
   static defaultProps = {
 		popToOutsidePage: ()=>{},
+    minTransfer: 60,
   }
 
   hardwareBackPress = ()=>{return this.onBackButtonPressed();}
@@ -135,11 +137,18 @@ export default class WithdrawIncomePage extends Component {
     })
   }
 
-  isWithdrawValueAvailable(){
-    if(this.state.withdrawValue > this.state.refundableBanalce){
+  isWithdrawValueAvailable() {
+    if(this.state.withdrawValue > this.state.refundableBanalce) {
       return false;
     }
     return true;
+  }
+
+  isWithdrawValueAboveMinium() {
+    if(this.state.withdrawValue > this.props.minTransfer){
+      return true;
+    }
+    return false;
   }
 
   gotoCardInfoPage(){
@@ -161,6 +170,12 @@ export default class WithdrawIncomePage extends Component {
       fundableValueStyle = styles.errorInputText;
       withdrawValueError = true;
       fundableValueText = "大于剩余交易金: " + this.state.refundableBanalce + "元， ";
+    }
+    else if (withdrawValue != "" && !this.isWithdrawValueAboveMinium()){
+      inputStyle = styles.errorInputText;
+      fundableValueStyle = styles.errorInputText;
+      withdrawValueError = true;
+      fundableValueText = "每次转入的交易金必须≥"+this.props.minTransfer+"元，";
     }
 
     return (
@@ -290,11 +305,27 @@ export default class WithdrawIncomePage extends Component {
     return true;
   }
 
-  render() {
-		var nextEnabled = false;
-    if(this.state.withdrawValue > 0 && this.isWithdrawValueAvailable()){
-      nextEnabled = true;
+  renderTransferButton(){
+    var nextEnabled = false;
+    if(this.isWithdrawValueAboveMinium()){
+      if(this.isWithdrawValueAvailable()){
+        nextEnabled = true;
+      }
     }
+
+    return(
+      <View style={styles.bottomArea}>
+        <Button style={styles.buttonArea}
+          enabled={this.state.validateInProgress ? false : nextEnabled}
+          onPress={()=>this.gotoNext()}
+          textContainerStyle={[styles.buttonView, {backgroundColor: ColorConstants.TITLE_BLUE,}]}
+          textStyle={styles.buttonText}
+          text={this.state.validateInProgress? "信息正在检查中...": '确认转入'} />
+      </View>
+    );
+  }
+
+  render() {
 
     return (
 			<View style={styles.wrapper}>
@@ -307,17 +338,10 @@ export default class WithdrawIncomePage extends Component {
 					{this.renderWithdraw()}
           <TouchableOpacity style={{flex:1}} onPress={()=>this.hideKeyboard()} activeOpacity={1}>
             <Text style={[styles.readMeText, {margin:15, }]}>
-              注意：转入申请在3个工作日内完成，资金到账后，系统会根据汇率兑换成相应的美元金额，并以短信告知您。
+              {"注意：每次转入实盘账户的交易金必须≥"+this.props.minTransfer+"元，转入申请在3个工作日内完成，资金到账后，系统会根据固定转换汇率(6.5人民币=1美元)，兑换成相应的美元金额，并以短信告知您。"}
             </Text>
           </TouchableOpacity>
-  				<View style={styles.bottomArea}>
-  					<Button style={styles.buttonArea}
-  						enabled={this.state.validateInProgress ? false : nextEnabled}
-  						onPress={()=>this.gotoNext()}
-  						textContainerStyle={[styles.buttonView, {backgroundColor: ColorConstants.TITLE_BLUE,}]}
-  						textStyle={styles.buttonText}
-  						text={this.state.validateInProgress? "信息正在检查中...": '确认转入'} />
-  				</View>
+          {this.renderTransferButton()}
         </View>
 			</View>
 		);

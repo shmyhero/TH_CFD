@@ -21,6 +21,7 @@ var OPEN_ACCOUNT_DATA = '@TH_CFD:openAccountDataStep<step>'
 var OPEN_ACCOUNT_LAST_STEP = '@TH_CFD:lastOpenAccountStep'
 var LAST_ONLINE_VERSION_INFO = '@TH_CFD:lastOnlineVersionInfo'
 var UNPAID_REWARD = '@TH_CFD:unpaidReward'
+var REGISTER_REWARD = '@TH_CFD:registerReward'
 
 export async function loadUserData() {
 	try {
@@ -343,6 +344,24 @@ export async function setUnpaidReward(value){
 export async function loadUnpaidReward(){
   try {
 		  var value = await AsyncStorage.getItem(UNPAID_REWARD);
+      return value;
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+
+export async function setRegisterReward(value){
+  try {
+		await AsyncStorage.setItem(REGISTER_REWARD, value);
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function loadRegisterReward(){
+  try {
+		  var value = await AsyncStorage.getItem(REGISTER_REWARD);
       return value;
 	} catch (error) {
 		console.log('AsyncStorage error: ' + error.message);

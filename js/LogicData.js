@@ -30,6 +30,7 @@ var onlineVersionName = null;
 var liveUserInfo = null;
 var unpaidIncome = null;
 var currentPageTag = null;
+var registerReward = 30;
 
 var LogicData = {
 
@@ -252,6 +253,10 @@ var LogicData = {
 		fxData = data
 	},
 
+	getFxData: function(){
+		return fxData;
+	},
+
 	setGeTuiToken(token){
 		getui_token = token
 	},
@@ -394,6 +399,14 @@ var LogicData = {
 	isUserSelf:function(userId){
 		// console.log("meData.userId " + userData.userId);
 		return userData.userId == userId
+	},
+
+	getRegisterReward:function(){
+		return registerReward;
+	},
+
+	setRegisterReward: function(value){
+		registerReward = value;
 	},
 
 };

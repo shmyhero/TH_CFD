@@ -98,6 +98,9 @@ var AppNavigator = React.createClass({
 
 	mixins: [TimerMixin],
 
+	registerRewardInitialized: false,
+	fxDataInitialized: false,
+
 	getInitialState: function() {
 		return {
 			startUpPhase: LOADING_PHASE,
@@ -115,6 +118,11 @@ var AppNavigator = React.createClass({
 		}
 
 		UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+		StorageModule.loadRegisterReward().then((value) => {
+			if (value !== null) {
+				LogicData.setRegisterReward(value)
+			}
+		});
 
 		//Load the server setting should always be the first step.
 		StorageModule.loadAccountState().then((value) => {
@@ -185,6 +193,7 @@ var AppNavigator = React.createClass({
 				method: 'GET',
 			},
 			(responseJson) => {
+				this.fxDataInitialized = true;
 				LogicData.setFxData(responseJson)
 			},
 			(result) => {
@@ -236,6 +245,7 @@ var AppNavigator = React.createClass({
 					method: 'GET',
 				},
 				(responseJson) => {
+					this.fxDataInitialized = true;
 					LogicData.setFxData(responseJson)
 				},
 				(result) => {
@@ -247,6 +257,39 @@ var AppNavigator = React.createClass({
 		});
 
 		networkConnectionChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.NETWORK_CONNECTION_CHANGED, () => {
+			if (!this.fxDataInitialized){
+				NetworkModule.fetchTHUrl(
+					(LogicData.getAccountState()?NetConstants.CFD_API.GET_OUT_RIGHT_LIVE_API:NetConstants.CFD_API.GET_OUT_RIGHT_API) + '?page=1&perPage=99',
+					{
+						method: 'GET',
+					},
+					(responseJson) => {
+						this.fxDataInitialized = true;
+						LogicData.setFxData(responseJson)
+					},
+					(result) => {
+						console.log(result.errorMessage)
+					}
+				)
+			}
+
+			if(!this.registerRewardInitialized){
+				NetworkModule.fetchTHUrl(
+					NetConstants.CFD_API.GET_REGISTER_REWARD,
+					{
+						method: 'GET',
+					},
+					(responseJson) => {
+						this.registerRewardInitialized = true;
+						LogicData.setRegisterReward(responseJson);
+						StorageModule.setRegisterReward(responseJson.toString());
+					},
+					(result) => {
+						console.log(result.errorMessage)
+					}
+				)
+			}
+
 			console.log("NETWORK_STATE_CHANGE");
 			NetworkModule.loadUserBalance(true);
 		});

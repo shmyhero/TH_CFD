@@ -438,7 +438,7 @@ var DaySignPage = React.createClass({
 						</View>
 						<View style = {styles.bottomSep2}>
 							<View style = {styles.lineLittle}></View>
-							<Text style = {styles.textBottom}>注册盈交易即送50元</Text>
+							<Text style = {styles.textBottom}>{"注册盈交易即送" + LogicData.getRegisterReward() + "元"}</Text>
 						</View>
 					</View>
 			</View>

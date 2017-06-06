@@ -159,7 +159,7 @@ var StockListViewPager = React.createClass({
 			<View style={styles.slide} key={i}>
 				<StockListPage dataURL={NetConstants.getUrl(urlKeys[i])}
 											 activeDataURL={NetConstants.getUrl(urlKeysLive[i])}
-											 ref={'page' + i} showHeaderBar={i==1} isOwnStockPage={i==0} navigator={this.props.navigator}
+											 ref={'page' + i} showHeaderBar={i==1||i==2} isOwnStockPage={i==0} navigator={this.props.navigator}
 											 pageKey={i}/>
 			</View>
 		)

@@ -145,7 +145,7 @@ export default class WithdrawIncomePage extends Component {
   }
 
   isWithdrawValueAboveMinium() {
-    if(this.state.withdrawValue > this.props.minTransfer){
+    if(this.state.withdrawValue >= this.props.minTransfer){
       return true;
     }
     return false;

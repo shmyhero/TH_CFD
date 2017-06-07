@@ -11,7 +11,8 @@ export const LIVE_REGISTER_EVENT = '实盘注册'
 
 export const LIVE_QUIT = '退出实盘'		// todo
 export const LIVE_OPEN_ACCOUNT_START = '实盘开户-开始'
-export const LIVE_OPEN_ACCOUNT_STEP1 = '实盘开户-准备完成'
+export const LIVE_OPEN_ACCOUNT_STEP0 = '实盘开户-准备完成'
+export const LIVE_OPEN_ACCOUNT_STEP1 = '实盘开户-用户名密码完成'
 export const LIVE_OPEN_ACCOUNT_STEP2 = '实盘开户-上传照片完成'
 export const LIVE_OPEN_ACCOUNT_STEP3 = '实盘开户-个人信息完成'
 export const LIVE_OPEN_ACCOUNT_STEP4 = '实盘开户-上传地址证明完成'

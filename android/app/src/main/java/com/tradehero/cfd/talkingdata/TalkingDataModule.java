@@ -125,16 +125,16 @@ public class TalkingDataModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void trackADEvent(String eventName, ReadableMap parameters){
-        if (eventName == AD_TRACKING_TYPE_LOGIN){
-            TalkingDataAppCpa.onLogin(parameters.getString(AD_TRACKING_KEY_USER_ID));
-        }else if(eventName == AD_TRACKING_TYPE_REGISTER) {
-            TalkingDataAppCpa.onRegister(parameters.getString(AD_TRACKING_KEY_USER_ID));
-        }else if(eventName == AD_TRACKING_TYPE_DEEPLINK) {
+        if (eventName.equals(AD_TRACKING_TYPE_LOGIN)){
+            TalkingDataAppCpa.onLogin(String.valueOf(parameters.getInt(AD_TRACKING_KEY_USER_ID)));
+        }else if(eventName.equals(AD_TRACKING_TYPE_REGISTER)){
+            TalkingDataAppCpa.onRegister(String.valueOf(parameters.getInt(AD_TRACKING_KEY_USER_ID)));
+        }else if(eventName.equals(AD_TRACKING_TYPE_DEEPLINK)){
             TalkingDataAppCpa.onReceiveDeepLink(parameters.getString(AD_TRACKING_KEY_DEEP_LINK));
-        }else if(eventName == AD_TRACKING_TYPE_PAY) {
-            TalkingDataAppCpa.onPay(parameters.getString(AD_TRACKING_KEY_USER_ID),
+        }else if(eventName.equals(AD_TRACKING_TYPE_PAY)){
+            TalkingDataAppCpa.onPay(String.valueOf(parameters.getInt(AD_TRACKING_KEY_USER_ID)),
                     parameters.getString(AD_TRACKING_KEY_ORDER_ID),
-                    Integer.parseInt(parameters.getString(AD_TRACKING_KEY_AMOUNT)),
+                    (int)(Float.parseFloat(parameters.getString(AD_TRACKING_KEY_AMOUNT))),
                     parameters.getString(AD_TRACKING_KEY_CURRENCY),
                     parameters.getString(AD_TRACKING_KEY_PAY_TYPE));
         }

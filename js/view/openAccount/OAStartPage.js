@@ -31,7 +31,7 @@ var OAStartPage = React.createClass({
 	},
 
 	gotoNext: function() {
-		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP1, TalkingdataModule.LABEL_OPEN_ACCOUNT);
+		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP0, TalkingdataModule.LABEL_OPEN_ACCOUNT);
 		OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
 	},
 

@@ -77,7 +77,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 
 		OpenAccountUtils.validateRows(this.listRawData, this.validateRowValue, ()=>{
 			if(OpenAccountUtils.canGoNext(this.listRawData)){
-				TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP3, TalkingdataModule.LABEL_OPEN_ACCOUNT);
+				TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP1, TalkingdataModule.LABEL_OPEN_ACCOUNT);
 				OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
 			}else{
 				this.setState({

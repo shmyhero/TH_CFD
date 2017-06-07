@@ -43,7 +43,7 @@ var listRawData = [
 {'type':'normal','title':'卡片交易金(元)', 'subtype': 'totalCard'},
 {'type':'normal','title':'开户交易金(元)', 'subtype': 'liveRegister'},
 {'type':'normal','title':'好友邀请交易金(元)', 'subtype': 'referralReward'},
-{'type':'normal','title':'首笔入金交易金(元)', 'subtype': 'firstDeposit'},
+{'type':'normal','title':'首日入金交易金(元)', 'subtype': 'firstDeposit'},
 ]
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var RULE_DIALOG = "ruleDialog";

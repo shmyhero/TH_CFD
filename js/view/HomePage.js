@@ -1511,7 +1511,7 @@ var styles = StyleSheet.create({
 		marginLeft: 3,
 		marginRight: 3,
 		marginTop: 3,
-		marginBottom: 20,
+		marginBottom: 6,
 	},
 	guideDot: {
 		backgroundColor:'rgba(0,0,0,.2)',
@@ -1521,7 +1521,7 @@ var styles = StyleSheet.create({
 		marginLeft: 3,
 		marginRight: 3,
 		marginTop: 3,
-		marginBottom: 20,
+		marginBottom: 6,
 	},
 
 	topnewsContainer:{

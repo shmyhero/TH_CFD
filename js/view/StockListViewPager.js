@@ -26,7 +26,7 @@ var NavBar = require('../view/NavBar')
 var MainPage = require('./MainPage')
 
 
-var tabNames = ['自选', '美股','港股', '指数', '外汇', '商品']
+var tabNames = ['自选', '美股','港股','指数', '外汇', '商品']
 var urlKeys = [
 	'GET_USER_BOOKMARK_LIST_API',
 	'GET_US_STOCK_TOP_GAIN_API',
@@ -35,14 +35,20 @@ var urlKeys = [
 	'GET_FX_LIST_API',
 	'GET_FUTURE_LIST_API',
 ]
+
+var tabNamesLive = ['自选', '美股', '指数', '外汇', '商品']
 var urlKeysLive = [
 	'GET_USER_BOOKMARK_LIST_LIVE_API',
 	'GET_US_STOCK_TOP_GAIN_LIVE_API',
-	'GET_US_STOCK_HK_LIVE_API',
+	// 'GET_US_STOCK_HK_LIVE_API',
 	'GET_INDEX_LIST_LIVE_API',
 	'GET_FX_LIST_LIVE_API',
 	'GET_FUTURE_LIST_LIVE_API',
 ]
+
+
+
+
 
 var didFocusSubscription = null;
 var didTabSelectSubscription = null;
@@ -154,24 +160,47 @@ var StockListViewPager = React.createClass({
 
 	render: function() {
 		var {height, width} = Dimensions.get('window');
-		var viewPages = tabNames.map(
-			(tabName, i) =>
-			<View style={styles.slide} key={i}>
-				<StockListPage dataURL={NetConstants.getUrl(urlKeys[i])}
-											 activeDataURL={NetConstants.getUrl(urlKeysLive[i])}
-											 ref={'page' + i} showHeaderBar={i==1||i==2} isOwnStockPage={i==0} navigator={this.props.navigator}
-											 pageKey={i}/>
-			</View>
-		)
-		return (
-			<View style={[styles.wrapper, {width: width}]}>
-				{this.renderNavBar()}
-				<ScrollTabView
-						tabNames={tabNames}
-						viewPages={viewPages}
-						onPageSelected={(index) => this.onPageSelected(index)} />
-			</View>
-		)
+
+		if(LogicData.getAccountState()){
+			var viewPages = tabNamesLive.map(
+				(tabName, i) =>
+				<View style={styles.slide} key={i}>
+					<StockListPage dataURL={NetConstants.getUrl(urlKeys[i])}
+												 activeDataURL={NetConstants.getUrl(urlKeysLive[i])}
+												 ref={'page' + i} showHeaderBar={i==1||i==2} isOwnStockPage={i==0} navigator={this.props.navigator}
+												 pageKey={i}/>
+				</View>
+			)
+			return (
+				<View style={[styles.wrapper, {width: width}]}>
+					{this.renderNavBar()}
+					<ScrollTabView
+							tabNames={tabNamesLive}
+							viewPages={viewPages}
+							onPageSelected={(index) => this.onPageSelected(index)} />
+				</View>
+			)
+		}else{
+			var viewPages = tabNames.map(
+				(tabName, i) =>
+				<View style={styles.slide} key={i}>
+					<StockListPage dataURL={NetConstants.getUrl(urlKeys[i])}
+												 activeDataURL={NetConstants.getUrl(urlKeysLive[i])}
+												 ref={'page' + i} showHeaderBar={i==1||i==2} isOwnStockPage={i==0} navigator={this.props.navigator}
+												 pageKey={i}/>
+				</View>
+			)
+			return (
+				<View style={[styles.wrapper, {width: width}]}>
+					{this.renderNavBar()}
+					<ScrollTabView
+							tabNames={tabNames}
+							viewPages={viewPages}
+							onPageSelected={(index) => this.onPageSelected(index)} />
+				</View>
+			)
+		}
+
 	}
 })
 

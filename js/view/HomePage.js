@@ -427,18 +427,26 @@ var HomePage = React.createClass({
 		trackingData[TalkingdataModule.KEY_BANNER_PAGE] = PAGES[i].header;
 		TalkingdataModule.trackEvent(TalkingdataModule.BANNER_EVENT, "", trackingData)
 
-
 		if(PAGES[i].type == 1){//根据type==1开通实盘
 			this.gotoCreateLiveAccount()
 		}else if(PAGES[i].type == 2){//根据type==2邀请好友
 			this.gotoInviteFriends()
+		}else if(PAGES[i].type == 3){
+			this.gotoWebviewPage(PAGES[i].url,
+				'推荐',
+				PAGES[i].id,
+				PAGES[i].header,
+				PAGES[i].digest,
+				TalkingdataModule.BANNER_SHARE_EVENT,
+			null,false)//是否需要webview顶部导航栏
 		}else{//默认是跳 ID 对应的网页
 			this.gotoWebviewPage(PAGES[i].url,
 				'推荐',
 				PAGES[i].id,
 				PAGES[i].header,
 				PAGES[i].digest,
-				TalkingdataModule.BANNER_SHARE_EVENT)
+				TalkingdataModule.BANNER_SHARE_EVENT,
+			null,true)//是否需要webview顶部导航栏
 		}
 	},
 
@@ -555,7 +563,7 @@ var HomePage = React.createClass({
 	// 	return info;
 	// },
 
-	gotoWebviewPage: function(targetUrl, title, shareID, shareTitle, shareDescription, sharingTrackingEvent, shareUrl) {
+	gotoWebviewPage: function(targetUrl, title, shareID, shareTitle, shareDescription, sharingTrackingEvent, shareUrl,isShowNav) {
 		var userData = LogicData.getUserData()
 		var userId = userData.userId
 		if (userId == undefined) {
@@ -591,6 +599,7 @@ var HomePage = React.createClass({
 		}
 		this.props.navigator.push({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			isShowNav:isShowNav,
 			url: targetUrl,
 			title: title,
 			shareID: shareID,

@@ -267,7 +267,7 @@ var StockDetailPage = React.createClass({
 						}
 						if(responseJson.fxOutright && responseJson.fxOutright.id == fxId){
 							this.setState({
-								stockCurrencyPrice: responseJson.fxOutright.last ? responseJson.fxOutright.last : ((responseJson.fxOutright.ask+responseJson.fxOutright.bid)/2).toPrecision(6)
+								stockCurrencyPrice: responseJson.fxOutright.last
 							});
 						}
 						WebSocketModule.registerInterestedStocks(previousInterestedStocks)

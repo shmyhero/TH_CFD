@@ -216,6 +216,22 @@ var MePage = React.createClass({
 		// }
 	},
 
+	requestForFirstDayClicked:function(){
+		var userData = LogicData.getUserData();
+		NetworkModule.fetchTHUrl(
+			NetConstants.CFD_API.GET_REWARD_FIRSTDAY_CLICKED,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+				cache: 'offline',
+			},
+			function(responseJson) {
+			}.bind(this)
+		)
+	},
+
 	gotoOpenAccount: function() {
 		this.props.navigator.push({
 			name: MainPage.LOGIN_ROUTE,
@@ -432,6 +448,7 @@ var MePage = React.createClass({
 					name: MainPage.DEPOSIT_WITHDRAW_ROUTE,
 					onPopToOutsidePage: this.reloadMeData,
 				});
+				this.requestForFirstDayClicked();
 			}else{
 				this.gotoLiveLogin(true,
 					()=>{
@@ -590,6 +607,7 @@ var MePage = React.createClass({
 	},
 
 	renderRowRight: function(rowData){
+		var meData = LogicData.getMeData();
 		if(rowData.subtype === "depositWithdraw"){
 			var hasError = LogicData.getMeData().bankCardStatus === "Rejected";
 			if(hasError){
@@ -599,10 +617,20 @@ var MePage = React.createClass({
 						<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
 					</View>
 				);
+			}else if(!meData.firstDayClicked){
+				return (
+					<View style={{flexDirection:'row'}}>
+						<Image style={styles.redPackageImage} source={require('../../images/icon_red_package.png')} />
+						<Text style={styles.redPackageText}>入金最高获20%赠金</Text>
+						<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
+					</View>
+				)
 			}
 		}
 		return (
-			<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
+			<View style={{flexDirection:'row'}}>
+				<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
+			</View>
 		);
 	},
 
@@ -784,6 +812,20 @@ var styles = StyleSheet.create({
 		alignSelf: 'center',
 		width: 7.5,
 		height: 12.5,
+	},
+
+	redPackageImage:{
+		alignSelf:'center',
+		width:24,
+		height:24,
+		marginRight:1,
+	},
+
+	redPackageText:{
+		alignSelf:'center',
+		color:'#e60012',
+		fontSize:11,
+		marginRight:1,
 	},
 
 	buttonArea: {

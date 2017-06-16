@@ -1317,7 +1317,7 @@ var StockDetailPage = React.createClass({
 		if (this.state.stockInfo.maxLeverage !== undefined) {
 			maxLeverage = this.state.stockInfo.maxLeverage
 		}
-		var leverageArray = new Array(maxLeverage)
+		var leverageArray = new Array(Math.floor(maxLeverage))
 		for (var i = 0; i < maxLeverage; i++) {
 			leverageArray[i]=i+1
 		};

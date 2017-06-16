@@ -173,6 +173,7 @@ export var refreshMainPage
 export var showSharePage
 export var gotoLoginPage
 export var gotoTrade
+export var gotoLiveLogin;
 
 var recevieDataSubscription = null
 var didAccountChangeSubscription = null;
@@ -256,7 +257,8 @@ var MainPage = React.createClass({
 					isTabbarShown={this.getIsTabbarShown}
 					isMobileBinding={route.isMobileBinding}
 					popToStackTop={route.popToStackTop}
-					getNextRoute={route.getNextRoute}/>
+					getNextRoute={route.getNextRoute}
+					onLoginFinish={route.onLoginFinish}/>
 			);
 		} else if (route.name === UPDATE_USER_INFO_ROUTE) {
 			return (
@@ -265,7 +267,8 @@ var MainPage = React.createClass({
 					popToRoute={route.popToRoute}
 					showRegisterSuccessDialog={this.showRegisterSuccessDialog}
 					popToStackTop={route.popToStackTop}
-					getNextRoute={route.getNextRoute}/>
+					getNextRoute={route.getNextRoute}
+					onLoginFinish={route.onLoginFinish}/>
 				</View>
 			);
 		} else if (route.name === MY_HOME_ROUTE) {
@@ -804,6 +807,7 @@ var MainPage = React.createClass({
 		showSharePage = this._doShare
 		gotoLoginPage = this.gotoLoginPage
 		gotoTrade = this.gotoTrade
+		gotoLiveLogin = this.gotoLiveLogin
 		this.initTabbarEvent()
 		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>this.refreshMainPage());
 		didAccountLoginOutSideSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGIN_OUT_SIDE, ()=>this.gotoLoginPage());
@@ -981,6 +985,9 @@ var MainPage = React.createClass({
 			else if(url==='cfd://page/me') {
 				this.refs['myTabbar'].gotoTab("me")
 			}
+			else if(url==='cfd://page/registerAndDeposit') {
+				this.doRegisterAndDeposit()
+			}
 			initExchangeTab = 0
 			initStockListTab = 1
 		}
@@ -995,6 +1002,141 @@ var MainPage = React.createClass({
 	  });
 	  return result;
 	},
+
+	//***
+	//入金活动流程：
+	//	未开户用户：-> 登录 -> 开户
+	//	已开户用户、未登录模拟盘：-> 登录 -> 实盘登录 -> 入金
+	//	已开户用户、已登录模拟盘、未登录实盘：-> 实盘登录 -> 入金
+	//	已开户用户、已登录模拟盘、已登录实盘：-> 入金
+	//  *入金及开户的返回会回到我的页面
+	//***
+	goToDeposit: function(afterLogin){
+		if(LogicData.getActualLogin()){
+			console.log("getOpenLiveAccountRoute 实盘已登录")
+			var routes = _navigator.getCurrentRoutes();
+			var new_routes = []
+			new_routes[0] = routes[0]
+			new_routes.push({
+				name: DEPOSIT_WITHDRAW_ROUTE,
+				onPopToOutsidePage: ()=>{
+					_navigator.popToTop()
+					this.refs['myTabbar'].gotoTab("me")
+				},
+			});
+			new_routes.push({
+				name: DEPOSIT_PAGE,
+				onPopToOutsidePage:()=>{
+					_navigator.popToTop()
+					this.refs['myTabbar'].gotoTab("me")
+				},
+			});
+			_navigator.immediatelyResetRouteStack(new_routes)
+		}else{
+			console.log("getOpenLiveAccountRoute 准备实盘登录")
+			this.gotoLiveLogin(true,
+				()=>{
+					this.goToDeposit(afterLogin);
+			},
+			afterLogin);
+		}
+	},
+
+	getOpenLiveAccountRoute: function(){
+		return new Promise((resolve)=>{
+			var meData = LogicData.getMeData();
+			OpenAccountRoutes.getLatestInputStep()
+			.then(step=>{
+				console.log("getLatestInputStep " + step)
+				var lastStep = step
+
+				var OARoute = {
+					name: OPEN_ACCOUNT_ROUTE,
+					step: lastStep,
+					onPop: ()=>{
+						_navigator.popToTop()
+						this.refs['myTabbar'].gotoTab("me")
+					},
+				};
+
+				if(!meData.phone){
+					OARoute = {
+						name: LOGIN_ROUTE,
+						nextRoute: OARoute,
+						isMobileBinding: true,
+					};
+				}
+
+				resolve(OARoute)
+			});
+		});
+	},
+
+	goToRouteAfterLogin: function(route){
+		console.log("登录后转换页面")
+		var routes = _navigator.getCurrentRoutes();
+		var currentRouteIndex = -1;
+		for (var i=0; i<routes.length; ++i) {
+			if(routes[i].name === LOGIN_ROUTE){
+				currentRouteIndex = i;
+			}
+		}
+		if (currentRouteIndex >= 0){
+			routes = routes.slice(0, currentRouteIndex+1)
+			routes[currentRouteIndex] = route
+		}else{
+			routes.push(route)
+		}
+		_navigator.immediatelyResetRouteStack(routes);
+	},
+
+	gotoOpenLiveAccount:function(afterLogin){
+		if(afterLogin){
+			this.getOpenLiveAccountRoute().then((route)=>{
+				this.goToRouteAfterLogin(route)
+			})
+		}else{
+			this.getOpenLiveAccountRoute().then((OARoute) => {
+				_navigator.push(OARoute);
+			})
+		}
+	},
+
+	doRegisterAndDeposit: function(){
+		doRegisterAndDeposit(false);
+	},
+
+	doRegisterAndDeposit: function(afterLogin){
+		//this.refs['myTabbar'].gotoTab("me")
+		if (LogicData.getAccountState()){
+			console.log("doRegisterAndDeposit 实盘状态")
+			return this.goToDeposit(afterLogin);
+		}else{
+			var meData = LogicData.getMeData();
+			var userData = LogicData.getUserData()
+			var notLogin = Object.keys(userData).length === 0
+			if(!notLogin){
+				console.log('提示：','liveAccStatus = '+meData.liveAccStatus + ', liveAccRejReason = '+ meData.liveAccRejReason)
+			  var accStatus = meData.liveAccStatus;
+				if (accStatus == 1){
+					console.log("doRegisterAndDeposit 实盘已开户，未登录")
+					this.goToDeposit(afterLogin);
+				}else{
+					console.log("doRegisterAndDeposit 实盘未开户")
+					this.gotoOpenLiveAccount(afterLogin);
+				}
+			}else{
+				console.log("doRegisterAndDeposit 未登录")
+				_navigator.push({
+					name: LOGIN_ROUTE,
+					onLoginFinish: ()=> this.doRegisterAndDeposit(true),
+				});
+			}
+		}
+	},
+	//***
+	//入金活动
+	//***
 
 	renderShareView: function(){
 		return (
@@ -1095,6 +1237,72 @@ var MainPage = React.createClass({
 				_navigators[currentNavigatorIndex].popToTop();
 			}
 		});
+	},
+
+	gotoLiveLogin: function(doNotPopWhenFinished, onSuccess){
+		this.gotoLiveLogin(doNotPopWhenFinished, onSuccess, false)
+	},
+
+	gotoLiveLogin: function(doNotPopWhenFinished, onSuccess, afterLogin){
+		var userData = LogicData.getUserData()
+		var userId = userData.userId
+		if (userId == undefined) {
+			userId = 0
+		}
+		var currentNavigatorIndex = LogicData.getTabIndex();
+		if(_navigators && _navigators.length > currentNavigatorIndex){
+			_navigator = _navigators[currentNavigatorIndex];
+
+			console.log("gotoAccountStateExce userId = " + userId);
+			console.log("_navigator LogicData.getTabIndex() " + LogicData.getTabIndex())
+			//console.log(_navigator)
+			var route = {
+				name: NAVIGATOR_WEBVIEW_ROUTE,
+				title:'实盘交易',
+				themeColor: ColorConstants.TITLE_BLUE_LIVE,
+				onNavigationStateChange: (navState)=>{
+					this.onWebViewNavigationStateChange(navState, doNotPopWhenFinished, onSuccess)
+				},
+				url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
+				// url:'http://cn.tradehero.mobi/tradehub/live/login1.html'
+				// url:'http://www.baidu.com'
+				// url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
+				// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
+				// url:'https://www.tradehub.net/demo/ff-beta/tradehero-login-debug.html',
+				// url:'http://cn.tradehero.mobi/TH_CFD_WEB/bangdan1.html',
+			};
+
+			if (afterLogin){
+				console.log("刚登录过，接着实盘登录")
+				this.goToRouteAfterLogin(route)
+			}else{
+				console.log("直接实盘登录")
+				_navigator.push(route);
+			}
+		}
+	},
+
+	onWebViewNavigationStateChange: function(navState, doNotPopWhenFinished, onSuccess) {
+		// todo
+		console.log("my web view state changed: "+navState.url)
+
+		CookieManager.get('http://cn.tradehero.mobi', (err, res) => {
+  			console.log('about cookie 2', res);
+		})
+
+		// console.log('about cookie 3',navState.url)
+
+		if(navState.url.indexOf('live/loginload')>0){
+			console.log('success login ok');
+			ayondoLoginResult(true, doNotPopWhenFinished);
+
+			if(onSuccess){
+				onSuccess();
+			}
+		}else if(navState.url.indexOf('live/oauth/error')>0){
+			console.log('success login error');
+			ayondoLoginResult(false, doNotPopWhenFinished)
+		}
 	},
 
 	showNotification: function() {

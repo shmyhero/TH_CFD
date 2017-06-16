@@ -341,35 +341,12 @@ var MePage = React.createClass({
 					});
 	},
 
-	onWebViewNavigationStateChange: function(navState, doNotPopWhenFinished, onSuccess) {
-		// todo
-		console.log("my web view state changed: "+navState.url)
-
-		CookieManager.get('http://cn.tradehero.mobi', (err, res) => {
-  			console.log('about cookie 2', res);
-		})
-
-		// console.log('about cookie 3',navState.url)
-
-		if(navState.url.indexOf('live/loginload')>0){
-			console.log('success login ok');
-			MainPage.ayondoLoginResult(true, doNotPopWhenFinished);
-
-			if(onSuccess){
-				onSuccess();
-			}
-		}else if(navState.url.indexOf('live/oauth/error')>0){
-			console.log('success login error');
-			MainPage.ayondoLoginResult(false, doNotPopWhenFinished)
-		}
-	},
-
 	////0未注册 1已注册 2审核中 3审核失败
 	gotoAccountStateExce:function(){
 		if(accStatus == 0){
 			this.gotoOpenLiveAccount();
 		}else if(accStatus == 1){//已注册，去登录
-			this.gotoLiveLogin(false, ()=>this.forceUpdate());
+			MainPage.gotoLiveLogin(false, ()=>this.forceUpdate());
 		}else if(accStatus == 2){
 			console.log('审核中...');
 		}else if(accStatus == 3){
@@ -377,30 +354,6 @@ var MePage = React.createClass({
 		}else{
 
 		}
-	},
-
-	gotoLiveLogin: function(doNotPopWhenFinished, onSuccess){
-		var userData = LogicData.getUserData()
-		var userId = userData.userId
-		if (userId == undefined) {
-			userId = 0
-		}
-		console.log("gotoAccountStateExce userId = " + userId);
-		this.props.navigator.push({
-			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
-			title:'实盘交易',
-			themeColor: ColorConstants.TITLE_BLUE_LIVE,
-			onNavigationStateChange: (navState)=>{
-				this.onWebViewNavigationStateChange(navState, doNotPopWhenFinished, onSuccess)
-			},
-			url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
-			// url:'http://cn.tradehero.mobi/tradehub/live/login1.html'
-			// url:'http://www.baidu.com'
-			// url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
-			// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
-			// url:'https://www.tradehub.net/demo/ff-beta/tradehero-login-debug.html',
-			// url:'http://cn.tradehero.mobi/TH_CFD_WEB/bangdan1.html',
-		});
 	},
 
 	getWebViewPageScene: function(targetUrl, title, hideNavBar) {
@@ -450,7 +403,7 @@ var MePage = React.createClass({
 				});
 				this.requestForFirstDayClicked();
 			}else{
-				this.gotoLiveLogin(true,
+				MainPage.gotoLiveLogin(true,
 					()=>{
 					this.props.navigator.replace({
 						name: MainPage.DEPOSIT_WITHDRAW_ROUTE,

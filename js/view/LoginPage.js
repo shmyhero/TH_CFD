@@ -59,6 +59,7 @@ var LoginPage = React.createClass({
 		isMobileBinding: React.PropTypes.bool,
 		popToStackTop: React.PropTypes.bool,
 		getNextRoute: React.PropTypes.func,
+		onLoginFinish: React.PropTypes.func,
 	},
 
 	getDefaultProps() {
@@ -71,6 +72,7 @@ var LoginPage = React.createClass({
 			isMobileBinding: false,
 			popToStackTop: false,
 			getNextRoute: null,
+			onLoginFinish: null,
 		}
 	},
 
@@ -398,51 +400,57 @@ var LoginPage = React.createClass({
 					getNextRoute: this.props.getNextRoute,
 					popToRoute: this.props.popToRoute,
 					popToStackTop: this.props.popToStackTop,
+					onLoginFinish: this.props.onLoginFinish,
 				});
 			}else{
-				var routes = this.props.navigator.getCurrentRoutes();
-				if(this.props.popToStackTop){
-					this.props.navigator.popToTop();
-				}else if(this.props.getNextRoute != null){
-					var nextRoute = this.props.getNextRoute();
-					var currentRouteIndex = -1;
-					for (var i=0; i<routes.length; ++i) {
-						if(routes[i].name === MainPage.LOGIN_ROUTE){
-							currentRouteIndex = i;
-						}
-					}
-					this.props.navigator.replaceAtIndex(nextRoute, currentRouteIndex);
-				}else if(this.props.nextRoute != null){
-					var currentRouteIndex = -1;
-					for (var i=0; i<routes.length; ++i) {
-						if(routes[i].name === MainPage.LOGIN_ROUTE){
-							currentRouteIndex = i;
-						}
-					}
-					this.props.navigator.replaceAtIndex(this.props.nextRoute, currentRouteIndex);
-				}
-				else if(this.props.popToRoute != null){
-					var backRoute = null;
-					var currentRouteIndex = -1;
-					for (var i=0; i<routes.length; ++i) {
-						if(routes[i].name === this.props.popToRoute){
-							backRoute = routes[i];
-							break;
-						}
-						if(routes[i].name === MainPage.LOGIN_ROUTE){
-							currentRouteIndex = i;
-						}
-					}
 
-					if(backRoute!=null){
-						this.props.navigator.popToRoute(backRoute);
-					}else if(currentRouteIndex >= 0 ){
-						this.props.navigator.replaceAtIndex({name: this.props.popToRoute}, currentRouteIndex);
+				if (this.props.onLoginFinish){
+					this.props.onLoginFinish()
+				}else{
+					var routes = this.props.navigator.getCurrentRoutes();
+					if(this.props.popToStackTop){
+						this.props.navigator.popToTop();
+					}else if(this.props.getNextRoute != null){
+						var nextRoute = this.props.getNextRoute();
+						var currentRouteIndex = -1;
+						for (var i=0; i<routes.length; ++i) {
+							if(routes[i].name === MainPage.LOGIN_ROUTE){
+								currentRouteIndex = i;
+							}
+						}
+						this.props.navigator.replaceAtIndex(nextRoute, currentRouteIndex);
+					}else if(this.props.nextRoute != null){
+						var currentRouteIndex = -1;
+						for (var i=0; i<routes.length; ++i) {
+							if(routes[i].name === MainPage.LOGIN_ROUTE){
+								currentRouteIndex = i;
+							}
+						}
+						this.props.navigator.replaceAtIndex(this.props.nextRoute, currentRouteIndex);
+					}
+					else if(this.props.popToRoute != null){
+						var backRoute = null;
+						var currentRouteIndex = -1;
+						for (var i=0; i<routes.length; ++i) {
+							if(routes[i].name === this.props.popToRoute){
+								backRoute = routes[i];
+								break;
+							}
+							if(routes[i].name === MainPage.LOGIN_ROUTE){
+								currentRouteIndex = i;
+							}
+						}
+
+						if(backRoute!=null){
+							this.props.navigator.popToRoute(backRoute);
+						}else if(currentRouteIndex >= 0 ){
+							this.props.navigator.replaceAtIndex({name: this.props.popToRoute}, currentRouteIndex);
+						}else{
+							this.props.navigator.pop();
+						}
 					}else{
 						this.props.navigator.pop();
 					}
-				}else{
-					this.props.navigator.pop();
 				}
 
 				if(this.props.showRegisterSuccessDialog){

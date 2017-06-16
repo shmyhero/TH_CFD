@@ -354,7 +354,7 @@ var HomePage = React.createClass({
 
 	onDidFocus: function(event) {
 		//didfocus emit in componentDidMount
-		if (MainPage.HOME_PAGE_ROUTE === event.data.route.name) {
+		if (event.data.route && MainPage.HOME_PAGE_ROUTE === event.data.route.name) {
 			console.log("on did focus homepage")
 			this.refs[NAV_BAR].onDidFocus();
 

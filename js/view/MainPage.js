@@ -1034,7 +1034,7 @@ var MainPage = React.createClass({
 			_navigator.immediatelyResetRouteStack(new_routes)
 		}else{
 			console.log("getOpenLiveAccountRoute 准备实盘登录")
-			this.gotoLiveLogin(true,
+			this.gotoLiveLogin(_navigator, true,
 				()=>{
 					this.goToDeposit(afterLogin);
 			},
@@ -1239,47 +1239,44 @@ var MainPage = React.createClass({
 		});
 	},
 
-	gotoLiveLogin: function(doNotPopWhenFinished, onSuccess){
-		this.gotoLiveLogin(doNotPopWhenFinished, onSuccess, false)
+	gotoLiveLogin: function(navigator, doNotPopWhenFinished, onSuccess){
+		this.gotoLiveLogin(navigator, doNotPopWhenFinished, onSuccess, false)
 	},
 
-	gotoLiveLogin: function(doNotPopWhenFinished, onSuccess, afterLogin){
+	gotoLiveLogin: function(navigator, doNotPopWhenFinished, onSuccess, afterLogin){
 		var userData = LogicData.getUserData()
 		var userId = userData.userId
 		if (userId == undefined) {
 			userId = 0
 		}
-		var currentNavigatorIndex = LogicData.getTabIndex();
-		if(_navigators && _navigators.length > currentNavigatorIndex){
-			_navigator = _navigators[currentNavigatorIndex];
 
-			console.log("gotoAccountStateExce userId = " + userId);
-			console.log("_navigator LogicData.getTabIndex() " + LogicData.getTabIndex())
-			//console.log(_navigator)
-			var route = {
-				name: NAVIGATOR_WEBVIEW_ROUTE,
-				title:'实盘交易',
-				themeColor: ColorConstants.TITLE_BLUE_LIVE,
-				onNavigationStateChange: (navState)=>{
-					this.onWebViewNavigationStateChange(navState, doNotPopWhenFinished, onSuccess)
-				},
-				url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
-				// url:'http://cn.tradehero.mobi/tradehub/live/login1.html'
-				// url:'http://www.baidu.com'
-				// url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
-				// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
-				// url:'https://www.tradehub.net/demo/ff-beta/tradehero-login-debug.html',
-				// url:'http://cn.tradehero.mobi/TH_CFD_WEB/bangdan1.html',
-			};
+		console.log("gotoAccountStateExce userId = " + userId);
+		console.log("_navigator LogicData.getTabIndex() " + LogicData.getTabIndex())
+		//console.log(_navigator)
+		var route = {
+			name: NAVIGATOR_WEBVIEW_ROUTE,
+			title:'实盘交易',
+			themeColor: ColorConstants.TITLE_BLUE_LIVE,
+			onNavigationStateChange: (navState)=>{
+				this.onWebViewNavigationStateChange(navState, doNotPopWhenFinished, onSuccess)
+			},
+			url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
+			// url:'http://cn.tradehero.mobi/tradehub/live/login1.html'
+			// url:'http://www.baidu.com'
+			// url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
+			// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
+			// url:'https://www.tradehub.net/demo/ff-beta/tradehero-login-debug.html',
+			// url:'http://cn.tradehero.mobi/TH_CFD_WEB/bangdan1.html',
+		};
 
-			if (afterLogin){
-				console.log("刚登录过，接着实盘登录")
-				this.goToRouteAfterLogin(route)
-			}else{
-				console.log("直接实盘登录")
-				_navigator.push(route);
-			}
+		if (afterLogin){
+			console.log("刚登录过，接着实盘登录")
+			this.goToRouteAfterLogin(route)
+		}else{
+			console.log("直接实盘登录")
+			navigator.push(route);
 		}
+
 	},
 
 	onWebViewNavigationStateChange: function(navState, doNotPopWhenFinished, onSuccess) {

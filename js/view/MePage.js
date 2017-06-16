@@ -346,7 +346,7 @@ var MePage = React.createClass({
 		if(accStatus == 0){
 			this.gotoOpenLiveAccount();
 		}else if(accStatus == 1){//已注册，去登录
-			MainPage.gotoLiveLogin(false, ()=>this.forceUpdate());
+			MainPage.gotoLiveLogin(this.props.navigator, false, ()=>this.forceUpdate());
 		}else if(accStatus == 2){
 			console.log('审核中...');
 		}else if(accStatus == 3){
@@ -403,7 +403,7 @@ var MePage = React.createClass({
 				});
 				this.requestForFirstDayClicked();
 			}else{
-				MainPage.gotoLiveLogin(true,
+				MainPage.gotoLiveLogin(this.props.navigator, true,
 					()=>{
 					this.props.navigator.replace({
 						name: MainPage.DEPOSIT_WITHDRAW_ROUTE,

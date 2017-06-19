@@ -203,11 +203,9 @@ var MePage = React.createClass({
 						NativeDataModule.passRawDataToNative('userEmail', responseJson.liveEmail)
 						if(responseJson.firstDayRewarded&&responseJson.firstDayRewarded==true){
 							StorageModule.loadFirstDayWithDraw().then((value) => {
-								if (value !== null) {
+								if (value !== null&&value !== '2'||value==undefined) {
 									console.log("meData num2="+value);
-									if(value !== '2'){
 									 LogicData.setFirstDayWithDraw('1');
-								 }
 								}
 							});
 						}

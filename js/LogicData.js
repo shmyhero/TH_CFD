@@ -31,6 +31,7 @@ var liveUserInfo = null;
 var unpaidIncome = null;
 var currentPageTag = null;
 var registerReward = 30;
+var firstDayWithDraw = false;
 
 var LogicData = {
 
@@ -413,6 +414,25 @@ var LogicData = {
 	setRegisterReward: function(value){
 		registerReward = value;
 	},
+
+	setFirstDayWithDraw:function(value){
+		StorageModule.setFirstDayWithDraw(value);
+	},
+
+	// getFirstDayWithDraw: function(){
+	// 	// return '1';
+	// 	// StorageModule.loadFirstDayWithDraw(value);
+	//
+	// 	StorageModule.loadFirstDayWithDraw()
+	// 	.then((value) => {
+	// 		if (value !== null) {
+	// 			 return value
+	// 		}else{
+	// 			return '0'
+	// 		}
+	// 	})
+	// }
+
 
 };
 

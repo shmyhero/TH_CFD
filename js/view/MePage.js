@@ -201,6 +201,16 @@ var MePage = React.createClass({
 						LogicData.setMeData(responseJson);
 						NativeDataModule.passRawDataToNative('userName', responseJson.liveUsername)
 						NativeDataModule.passRawDataToNative('userEmail', responseJson.liveEmail)
+						if(responseJson.firstDayRewarded&&responseJson.firstDayRewarded==true){
+							StorageModule.loadFirstDayWithDraw().then((value) => {
+								if (value !== null) {
+									console.log("meData num2="+value);
+									if(value !== '2'){
+									 LogicData.setFirstDayWithDraw('1');
+								 }
+								}
+							});
+						}
 						if (Platform.OS === 'ios') {
 							this.setCookie();
 						}

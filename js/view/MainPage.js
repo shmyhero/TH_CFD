@@ -62,6 +62,7 @@ var LogicData = require('../LogicData')
 var DaySignPage = require('./DaySignPage')
 var RegisterSuccessPage = require('./RegisterSuccessPage')
 var SuperPriorityHintPage = require('./SuperPriorityHintPage')
+var FirstDayWithDrawHint = require('./FirstDayWithDrawHint')
 var MyMessagesPage = require('./MyMessagesPage')
 var DevelopPage = require('./DevelopPage')
 var PaymentPage = require('./PaymentPage')
@@ -181,6 +182,7 @@ var didAccountLoginOutSideSubscription = null;
 var SHARE_PAGE = 'SharePage'
 var REGISTER_SUCCESS_DIALOG = 'RegisterSuccessDialog'
 var SUPER_PRIORITY_HINT = 'SuperPriorityHint'
+var FIRST_DAY_WITHDRAW_HINT = 'FirstDayWithDrawHint'
 var isTabbarShown = true
 
 export var HOME_PAGE_TAB_INDEX = 0;
@@ -408,6 +410,7 @@ var MainPage = React.createClass({
 			showTabbar();
 			return (
 				<MePage navigator={navigationOperations}
+				showFirstDayWithDrawHint={this.showFirstDayWithDrawHint}
 				/>
 			)
 		} else if (route.name === RANKING_PAGE_ROUTE){
@@ -782,6 +785,36 @@ var MainPage = React.createClass({
 		}
 	},
 
+	showFirstDayWithDrawHint(){
+		var userData = LogicData.getUserData()
+		var notLogin = Object.keys(userData).length === 0
+		StorageModule.loadFirstDayWithDraw().then((value) => {
+			if (value !== null) {
+				console.log("meData num="+value);
+				if(!notLogin && value === '1'){
+				 this.refs[FIRST_DAY_WITHDRAW_HINT] && this.refs[FIRST_DAY_WITHDRAW_HINT].show();
+				 this.requestForFirstDayRewarded();
+			 }
+			}
+		});
+	},
+
+	requestForFirstDayRewarded:function(){
+		var userData = LogicData.getUserData();
+		NetworkModule.fetchTHUrl(
+			NetConstants.CFD_API.GET_REWARD_FIRSTDAY_REWARDED,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+				cache: 'offline',
+			},
+			function(responseJson) {
+			}.bind(this)
+		)
+	},
+
 	initTabbarEvent() {
 		var homeRef = this.refs['homeContent'].refs['wrap'].getWrappedRef()
 		homeRef.tabWillFocus = EventCenter.emitHomeTabPressEvent;
@@ -886,6 +919,9 @@ var MainPage = React.createClass({
 			}else{
 				this.refs['myTabbar'].showTab("ranking");
 			}
+
+
+			this.showFirstDayWithDrawHint();
 	},
 
 	backAndroidHandler: function(){
@@ -1179,6 +1215,13 @@ var MainPage = React.createClass({
 		);
 	},
 
+	renderFirstDayWithDrawHintPage:function(){
+		return (
+			<FirstDayWithDrawHint ref={FIRST_DAY_WITHDRAW_HINT}
+				getNavigator={this.getNavigator}/>
+		);
+	},
+
 	gotoStockDetail: function(pushData) {
 
 		var currentNavigatorIndex = LogicData.getTabIndex();
@@ -1432,6 +1475,7 @@ var MainPage = React.createClass({
 					{this.state.showTutorial ? <TutorialPage type={this.state.tutorialType} hideTutorial={this.hideTutorial}/> : null }
 					{this.renderRegisterSuccessPage()}
 					{this.renderSuperPriorityHintPage()}
+					{this.renderFirstDayWithDrawHintPage()}
       	</View>
 		);
 	}

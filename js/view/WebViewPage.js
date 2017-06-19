@@ -41,6 +41,7 @@ var WebViewPage = React.createClass({
 		themeColor: ColorPropType,
 		onNavigationStateChange: React.PropTypes.func,
 		onWebPageLoaded: React.PropTypes.func,
+		isLoadingColorSameAsTheme: React.PropTypes.bool,
 	},
 
 	getDefaultProps() {
@@ -54,6 +55,7 @@ var WebViewPage = React.createClass({
 			shareTrackingEvent: null,
 			shareUrl: null,
 			isShowNav: true,
+			isLoadingColorSameAsTheme: true,
 		}
 	},
 
@@ -244,12 +246,14 @@ var WebViewPage = React.createClass({
 					backgroundColor={this.props.themeColor}/>
 			);
 		}
+
+		var themeColor = this.props.isLoadingColorSameAsTheme ? this.props.themeColor : ColorConstants.title_blue();
 		if((this.props.shareID || this.props.shareUrl) && (this.props.shareTitle || this.props.shareDescription)){
 			return(
 			<NavBar title={this.props.title}
 				showBackButton={true}
 				backButtonOnClick={this.pressBackButton}
-				backgroundColor={this.props.themeColor}
+				backgroundColor={themeColor}
 				imageOnRight={require('../../images/share01.png')}
 				rightImageOnClick={this.pressShareButton}
 				navigator={this.props.navigator}/>
@@ -258,7 +262,7 @@ var WebViewPage = React.createClass({
 			return(
 			<NavBar title={this.props.title}
 				showBackButton={true}
-				backgroundColor={this.props.themeColor}
+				backgroundColor={themeColor}
 				backButtonOnClick={this.pressBackButton}
 				navigator={this.props.navigator}/>
 			);

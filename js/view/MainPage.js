@@ -365,7 +365,8 @@ var MainPage = React.createClass({
 					shareFunction={this._doShare}
 					shareTrackingEvent={route.shareTrackingEvent}
 					themeColor={route.themeColor}
-					isShowNav={route.isShowNav}/>
+					isShowNav={route.isShowNav}
+					isLoadingColorSameAsTheme={route.isLoadingColorSameAsTheme}/>
 			)
 		} else if (route.name === QA_ROUTE) {
 			hideTabbar();
@@ -986,7 +987,7 @@ var MainPage = React.createClass({
 				this.refs['myTabbar'].gotoTab("me")
 			}
 			else if(url==='cfd://page/registerAndDeposit') {
-				this.doRegisterAndDeposit()
+				this.doRegisterAndDeposit(false)
 			}
 			initExchangeTab = 0
 			initStockListTab = 1
@@ -1100,10 +1101,6 @@ var MainPage = React.createClass({
 				_navigator.push(OARoute);
 			})
 		}
-	},
-
-	doRegisterAndDeposit: function(){
-		doRegisterAndDeposit(false);
 	},
 
 	doRegisterAndDeposit: function(afterLogin){
@@ -1237,10 +1234,6 @@ var MainPage = React.createClass({
 				_navigators[currentNavigatorIndex].popToTop();
 			}
 		});
-	},
-
-	gotoLiveLogin: function(navigator, doNotPopWhenFinished, onSuccess){
-		this.gotoLiveLogin(navigator, doNotPopWhenFinished, onSuccess, false)
 	},
 
 	gotoLiveLogin: function(navigator, doNotPopWhenFinished, onSuccess, afterLogin){

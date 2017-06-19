@@ -402,6 +402,7 @@ var HomePage = React.createClass({
 		var id = images[index].id
 		var filePath = images[index].imgUrlBig
 		var type = images[index].bannerType
+		var color = images[index].color
 		// RN will cache the image.
 		// FSModule.getBannerImageLocalPath(imagePath)
 		// 	.then(filePath => {
@@ -415,6 +416,7 @@ var HomePage = React.createClass({
 			PAGES[index].header = header
 			PAGES[index].digest = digest
 			PAGES[index].type = type
+			PAGES[index].color = color
 			this.setState({
 				dataSource: ds.cloneWithRows(PAGES)
 			})
@@ -438,7 +440,7 @@ var HomePage = React.createClass({
 				PAGES[i].header,
 				PAGES[i].digest,
 				TalkingdataModule.BANNER_SHARE_EVENT,
-			null,false)//是否需要webview顶部导航栏
+			null,false, PAGES[i].color)//是否需要webview顶部导航栏
 		}else{//默认是跳 ID 对应的网页
 			this.gotoWebviewPage(PAGES[i].url,
 				'推荐',
@@ -563,7 +565,7 @@ var HomePage = React.createClass({
 	// 	return info;
 	// },
 
-	gotoWebviewPage: function(targetUrl, title, shareID, shareTitle, shareDescription, sharingTrackingEvent, shareUrl,isShowNav) {
+	gotoWebviewPage: function(targetUrl, title, shareID, shareTitle, shareDescription, sharingTrackingEvent, shareUrl,isShowNav, themeColor) {
 		var userData = LogicData.getUserData()
 		var userId = userData.userId
 		if (userId == undefined) {
@@ -597,7 +599,8 @@ var HomePage = React.createClass({
 		if(!shareUrl){
 			shareUrl = null
 		}
-		this.props.navigator.push({
+
+		var result = {
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			isShowNav:isShowNav,
 			url: targetUrl,
@@ -608,7 +611,12 @@ var HomePage = React.createClass({
 			shareDescription: shareDescription,
 			shareTrackingEvent: sharingTrackingEvent,
 			backFunction: this.forceloopSwipers,
-		});
+		}
+		if(themeColor && themeColor.startsWith("#")){
+			result.themeColor = themeColor;
+			result.isLoadingColorSameAsTheme = false;
+		}
+		this.props.navigator.push(result);
 	},
 
 	gotoCompetitionPage: function(){

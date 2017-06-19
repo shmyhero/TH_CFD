@@ -59,6 +59,11 @@ var LogicData = {
 				})
 				.done()
 			}
+
+			if(!state){
+				this.setActualLogin(false)
+			}
+
 			searchStockHistory = null;
 
 			StorageModule.setAccountState(state)

@@ -953,6 +953,9 @@ var MainPage = React.createClass({
 		else if(url==='cfd://page/back') {
 			this.backAndShowTabbar()
 		}
+		else if(url==='cfd://page/registerAndDeposit') {
+			this.doRegisterAndDeposit(false)
+		}
 		else{
 			_navigator.popToTop()
 			if(url==='cfd://page/1') {//首页
@@ -986,9 +989,6 @@ var MainPage = React.createClass({
 			else if(url==='cfd://page/me') {
 				this.refs['myTabbar'].gotoTab("me")
 			}
-			else if(url==='cfd://page/registerAndDeposit') {
-				this.doRegisterAndDeposit(false)
-			}
 			initExchangeTab = 0
 			initStockListTab = 1
 		}
@@ -1006,7 +1006,8 @@ var MainPage = React.createClass({
 
 	//***
 	//入金活动流程：
-	//	未开户用户：-> 登录 -> 开户
+	//	未开户用户（未绑定手机号）：-> 登录 -> 绑定手机号 -> 开户
+	//	未开户用户（已绑定手机号）：-> 登录 -> 开户
 	//	已开户用户、未登录模拟盘：-> 登录 -> 实盘登录 -> 入金
 	//	已开户用户、已登录模拟盘、未登录实盘：-> 实盘登录 -> 入金
 	//	已开户用户、已登录模拟盘、已登录实盘：-> 入金
@@ -1014,7 +1015,7 @@ var MainPage = React.createClass({
 	//***
 	goToDeposit: function(afterLogin){
 		if(LogicData.getActualLogin()){
-			console.log("getOpenLiveAccountRoute 实盘已登录")
+			console.log("doRegisterAndDeposit 实盘已登录")
 			var routes = _navigator.getCurrentRoutes();
 			var new_routes = []
 			new_routes[0] = routes[0]
@@ -1034,7 +1035,7 @@ var MainPage = React.createClass({
 			});
 			_navigator.immediatelyResetRouteStack(new_routes)
 		}else{
-			console.log("getOpenLiveAccountRoute 准备实盘登录")
+			console.log("doRegisterAndDeposit 准备实盘登录")
 			this.gotoLiveLogin(_navigator, true,
 				()=>{
 					this.goToDeposit(afterLogin);
@@ -1092,15 +1093,30 @@ var MainPage = React.createClass({
 	},
 
 	gotoOpenLiveAccount:function(afterLogin){
-		if(afterLogin){
-			this.getOpenLiveAccountRoute().then((route)=>{
-				this.goToRouteAfterLogin(route)
-			})
-		}else{
-			this.getOpenLiveAccountRoute().then((OARoute) => {
-				_navigator.push(OARoute);
-			})
-		}
+		this.getOpenLiveAccountRoute().then((route)=>{
+			//绑定手机号
+			var meData = LogicData.getMeData();
+			if(!meData.phone){
+				console.log("doRegisterAndDeposit 准备开户 未绑定手机号")
+				var nextRoute = {
+					name: LOGIN_ROUTE,
+					nextRoute: route,
+					isMobileBinding: true,
+				};
+				if(afterLogin){
+					this.goToRouteAfterLogin(nextRoute)
+				}else{
+					_navigator.push(nextRoute);
+				}
+			}else{
+				console.log("doRegisterAndDeposit 准备开户 已绑定手机号")
+				if(afterLogin){
+					this.goToRouteAfterLogin(route)
+				}else{
+					_navigator.push(route);
+				}
+			}
+		});
 	},
 
 	doRegisterAndDeposit: function(afterLogin){
@@ -1118,7 +1134,11 @@ var MainPage = React.createClass({
 				if (accStatus == 1){
 					console.log("doRegisterAndDeposit 实盘已开户，未登录")
 					this.goToDeposit(afterLogin);
-				}else{
+				}else if(accStatus == 2){
+					console.log("doRegisterAndDeposit 实盘已开户，审核中")
+					alert("实盘开户审核中...")
+				}
+				else{
 					console.log("doRegisterAndDeposit 实盘未开户")
 					this.gotoOpenLiveAccount(afterLogin);
 				}

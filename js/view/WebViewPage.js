@@ -8,6 +8,7 @@ import {
 	NetInfo,
 	Image,
 	Platform,
+	Dimensions,
 } from 'react-native';
 
 var WEBVIEW_REF = 'webview';
@@ -21,6 +22,8 @@ var ColorPropType = require('ColorPropType');
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 var NativeDataModule = require('../module/NativeDataModule');
 var ColorConstants = require('../ColorConstants');
+
+var {height, width} = Dimensions.get('window');
 
 const NETWORK_ERROR_INDICATOR = "networkErrorIndicator";
 var WebViewPage = React.createClass({
@@ -282,6 +285,7 @@ var WebViewPage = React.createClass({
 var styles = StyleSheet.create({
 	webView: {
 		backgroundColor: 'white',
+		width: width
 	},
 
 	containerView: {

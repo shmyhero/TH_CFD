@@ -32,6 +32,7 @@ var unpaidIncome = null;
 var currentPageTag = null;
 var registerReward = 30;
 var firstDayWithDraw = false;
+var debugStatus = false;
 
 var LogicData = {
 
@@ -417,6 +418,14 @@ var LogicData = {
 
 	setFirstDayWithDraw:function(value){
 		StorageModule.setFirstDayWithDraw(value);
+	},
+
+	setDebugStatus: function(value){
+		debugStatus = value
+	},
+
+	getDebugStatus: function(){
+		return debugStatus
 	},
 
 	// getFirstDayWithDraw: function(){

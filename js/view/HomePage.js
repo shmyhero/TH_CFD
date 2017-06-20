@@ -418,11 +418,6 @@ var HomePage = React.createClass({
 			PAGES[index].type = type
 			PAGES[index].color = color
 
-			if(index == 2){
-				PAGES[index].url = 'https://cn.tradehero.mobi/CFD_Channel/ChannelRJZJ1.html'
-				PAGES[index].color = '#2c9df6'
-			}
-
 			this.setState({
 				dataSource: ds.cloneWithRows(PAGES)
 			})
@@ -440,13 +435,24 @@ var HomePage = React.createClass({
 		}else if(PAGES[i].type == 2){//根据type==2邀请好友
 			this.gotoInviteFriends()
 		}else if(PAGES[i].type == 3){
-			this.gotoWebviewPage(PAGES[i].url,
-				'推荐',
-				PAGES[i].id,
-				PAGES[i].header,
-				PAGES[i].digest,
-				TalkingdataModule.BANNER_SHARE_EVENT,
-			null,false, PAGES[i].color)//是否需要webview顶部导航栏
+			console.log("LogicData.getDebugStatus " + LogicData.getDebugStatus())
+			if(LogicData.getDebugStatus() && i == 2){
+				this.gotoWebviewPage('https://cn.tradehero.mobi/CFD_Channel/ChannelRJZJ1.html',
+					'推荐',
+					PAGES[i].id,
+					PAGES[i].header,
+					PAGES[i].digest,
+					TalkingdataModule.BANNER_SHARE_EVENT,
+				null,false, '#2c9df6')//是否需要webview顶部导航栏
+			}else{
+				this.gotoWebviewPage(PAGES[i].url,
+					'推荐',
+					PAGES[i].id,
+					PAGES[i].header,
+					PAGES[i].digest,
+					TalkingdataModule.BANNER_SHARE_EVENT,
+				null,false, PAGES[i].color)//是否需要webview顶部导航栏
+			}
 		}else{//默认是跳 ID 对应的网页
 			this.gotoWebviewPage(PAGES[i].url,
 				'推荐',

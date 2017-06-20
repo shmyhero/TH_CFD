@@ -32,6 +32,7 @@ export default class DevelopPage extends Component {
     var server = NetConstants.getAPIServerIP();
     this.state = {
       server: server,
+      debugStatus: LogicData.getDebugStatus()
     }
   }
 
@@ -96,6 +97,13 @@ export default class DevelopPage extends Component {
     }
   }
 
+  updateDebugStatus(){
+    LogicData.setDebugStatus(!this.state.debugStatus);
+    this.setState({
+      debugStatus : LogicData.getDebugStatus()
+    });
+  }
+
   render() {
     var liveColor = LogicData.getAccountState()
     return (
@@ -129,6 +137,13 @@ export default class DevelopPage extends Component {
             <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}} onPress={()=>this.updateColor(liveColor)}>
               <Text style={{color:'white', fontSize: 16}}>
                 {liveColor?"切换到模拟盘颜色":"切换到实盘颜色"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{flexDirection: 'row', padding:15,}}>
+            <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}} onPress={()=>this.updateDebugStatus()}>
+              <Text style={{color:'white', fontSize: 16}}>
+                {!this.state.debugStatus ? "开启测试功能": "关闭测试功能"}
               </Text>
             </TouchableOpacity>
           </View>

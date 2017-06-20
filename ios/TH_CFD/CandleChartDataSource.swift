@@ -80,6 +80,7 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 						_candleData.append(data)
 					}
 					_candleData = _candleData.reversed()
+//                    unitTest()
 				}
 				if _jsonString.range(of: "preClose") != nil {
 					self.stockData = StockData()
@@ -266,4 +267,17 @@ class CandleChartDataSource: BaseDataSource, CandleChartDataProvider {
 	func oneSpacer() -> CGFloat {
 		return scale() * spacer
 	}
+    
+    func unitTest() {
+        // the latest data is the first one in _candleData
+        var sum = 0.0
+        if _candleData.count > 20 {
+            for i in 0..<20 {
+                let data = _candleData[i]
+                let percent = (data.high - data.low) / data.open
+                sum += percent
+            }
+        }
+        print("avg: \(sum/20)")
+    }
 }

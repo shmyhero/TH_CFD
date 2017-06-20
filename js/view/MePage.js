@@ -587,6 +587,14 @@ var MePage = React.createClass({
 					</View>
 				)
 			}
+		}else if(rowData.subtype === "config"&&meData.phone==null){
+			return (
+				<View style={{flexDirection:'row'}}>
+					<Image style={styles.redPackageImage} source={require('../../images/icon_red_package.png')} />
+					<Text style={styles.redPackageText}>绑定手机号,再送25元交易金</Text>
+					<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
+				</View>
+			)
 		}
 		return (
 			<View style={{flexDirection:'row'}}>

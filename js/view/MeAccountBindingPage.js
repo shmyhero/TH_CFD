@@ -140,7 +140,7 @@ var MeAccountBindingPage = React.createClass({
 	renderRow: function(rowData, sectionID, rowID) {
 		if (rowData.type === 'mobile'){
 			//TODO: Use Real Data
-			if(this.state.phoneNumber != null){
+			if(this.state.phoneNumber !== null){
 				return(
 					<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
 						<Text style={styles.title}>{rowData.title}</Text>
@@ -155,7 +155,11 @@ var MeAccountBindingPage = React.createClass({
 						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]} showView={false}>
 							<Text style={styles.title}>{rowData.title}</Text>
 							<View style={styles.extendRight}>
-								<Text style={[styles.clickableMessage,{color:ColorConstants.title_blue()}]}>未绑定</Text>
+								{/* <Text style={[styles.clickableMessage,{color:ColorConstants.title_blue()}]}>未绑定</Text> */}
+								<View style={{flexDirection:'row'}}>
+									<Image style={styles.redPackageImage} source={require('../../images/icon_red_package.png')} />
+									<Text style={styles.redPackageText}>绑定手机号,再送25元交易金</Text>
+								</View>
 							</View>
 							<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
 						</View>
@@ -288,6 +292,18 @@ var styles = StyleSheet.create({
 	headImage: {
 		width: Math.round(62*heightRate),
 		height: Math.round(62*heightRate),
+	},
+	redPackageImage:{
+		alignSelf:'center',
+		width:24,
+		height:24,
+		marginRight:1,
+	},
+	redPackageText:{
+		alignSelf:'center',
+		color:'#e60012',
+		fontSize:11,
+		marginRight:1,
 	},
 });
 

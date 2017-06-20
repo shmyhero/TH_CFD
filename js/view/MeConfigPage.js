@@ -308,6 +308,8 @@ var MeConfigPage = React.createClass({
 	},
 
 	renderRow: function(rowData, sectionID, rowID) {
+		var meData = LogicData.getMeData();
+
 		if(!LogicData.getAccountState() &&
 		(rowData.subtype === 'change2Simulator' ||
 		 rowData.subtype === 'logoutAccountActual' ||
@@ -328,11 +330,15 @@ var MeConfigPage = React.createClass({
 			  </TouchableOpacity>
 			 )
 		 } else{
+			 var visable = rowData.subtype === 'accountbinding'&&meData.phone==null ? 1.0:0;
 			 return(
 	 			<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
 	 				<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
 	 					<Text style={styles.title}>{rowData.title}</Text>
-	 					<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
+						<View style={styles.rightContent}>
+							<Text style={[styles.circle,{opacity:visable}]}>●</Text>
+		 					<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
+						</View>
 	 				</View>
 	 			</TouchableOpacity>
 	 		)
@@ -371,8 +377,8 @@ var styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
 		width: width,
-   		alignItems: 'stretch',
-    	justifyContent: 'space-around',
+ 		alignItems: 'stretch',
+  	justifyContent: 'space-around',
 		backgroundColor: ColorConstants.BACKGROUND_GREY,
 	},
 
@@ -402,6 +408,12 @@ var styles = StyleSheet.create({
 		flex: 1,
 		fontSize: 17,
 		color: '#303030',
+	},
+
+	circle: {
+		flex: 1,
+		fontSize: 8,
+		color: '#e30e20',
 	},
 
 	moreImage: {
@@ -439,6 +451,10 @@ var styles = StyleSheet.create({
 	headImage: {
 		width: Math.round(62*heightRate),
 		height: Math.round(62*heightRate),
+	},
+	rightContent:{
+		flexDirection:'row',
+		width:20,
 	},
 });
 

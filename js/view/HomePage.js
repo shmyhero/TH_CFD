@@ -417,6 +417,12 @@ var HomePage = React.createClass({
 			PAGES[index].digest = digest
 			PAGES[index].type = type
 			PAGES[index].color = color
+
+			if(index == 2){
+				PAGES[index].url = 'https://cn.tradehero.mobi/CFD_Channel/ChannelRJZJ1.html'
+				PAGES[index].color = '#2c9df6'
+			}
+
 			this.setState({
 				dataSource: ds.cloneWithRows(PAGES)
 			})

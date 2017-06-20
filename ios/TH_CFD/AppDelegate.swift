@@ -83,7 +83,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		// Initialize a Controller to use view as React View
 		let rootViewController:UIViewController = THRootViewController()
 		rootViewController.view = rootView
-		let loadingView = UIImageView(frame: UIScreen.main.bounds)
+        let bounds = UIScreen.main.bounds
+
+		let loadingView = UIImageView(frame: bounds)
 		loadingView.image = UIImage(named: "frontPage.jpg")
 		rootView?.loadingView = loadingView
 //        rootView.backgroundColor = UIColor(hexInt: 0x374d74)
@@ -91,12 +93,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		self.rnRootViewController = rootViewController
 		
 		// Set window to use rootViewController
-		self.window = UIWindow(frame: UIScreen.main.bounds)
+		self.window = UIWindow(frame: bounds)
 		self.window?.rootViewController = rootViewController
 		self.window?.makeKeyAndVisible()
 		
 		let home = NSHomeDirectory()
 		print(home)
+        Orientation.setOrientation(.portrait)
 
 		return true
 	}
@@ -105,6 +108,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
         print ("iOS get from RN orientation:", Orientation.getOrientation())
         return Orientation.getOrientation()
     }
+    
+    static func isPortrait() -> Bool {
+        return Orientation.getOrientation() == .portrait
+    }
+    
+    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+        return RCTLinkingManager.application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
+    }
+    
+    func applicationWillResignActive(_ application: UIApplication) {
+        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
+        // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    }
+    
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
+        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        MQManager.closeMeiqiaService()
+    }
+    
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        MQManager.openMeiqiaService()
+    }
+    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    }
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+    
+// MARK: - notifications
 	
 	/** 注册用户通知(推送) */
 	func registerUserNotification(_ application: UIApplication) {
@@ -117,34 +154,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		} else {
 			UIApplication.shared.registerForRemoteNotifications(matching: [.alert, .sound, .badge])
 		}
-	}
-	
-	func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-		return RCTLinkingManager.application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
-	}
-	
-	func applicationWillResignActive(_ application: UIApplication) {
-		// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-		// Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-	}
-	
-	func applicationDidEnterBackground(_ application: UIApplication) {
-		// Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-		// If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-		MQManager.closeMeiqiaService()
-	}
-	
-	func applicationWillEnterForeground(_ application: UIApplication) {
-		// Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-		MQManager.openMeiqiaService()
-	}
-	
-	func applicationDidBecomeActive(_ application: UIApplication) {
-		// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-	}
-	
-	func applicationWillTerminate(_ application: UIApplication) {
-		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 	}
 
 //	// Only if your app is using [Universal Links](https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/AppSearch/UniversalLinks.html).
@@ -214,9 +223,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		
 		NotificationManager.sharedInstance().showNotification(payloadMsg, taskId: taskId, msgId: msgId, offline: offLine)
 	}
-
-    static func isPortrait() -> Bool {
-        return Orientation.getOrientation() == .portrait || Orientation.getOrientation() == .portraitUpsideDown
-    }
 }
 

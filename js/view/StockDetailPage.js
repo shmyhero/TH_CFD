@@ -136,7 +136,7 @@ var StockDetailPage = React.createClass({
 			width: width,
 			orientation: ORIENTATION_PORTRAIT,
 			chartViewType: CHARTVIEWTYPE_LINE,
-			minInvestUSD: 10,
+			minInvestUSD: 50,
 		};
 	},
 
@@ -276,7 +276,7 @@ var StockDetailPage = React.createClass({
 				loadStockInfoSuccess = true
 				console.log("loadStockInfo: " + JSON.stringify(responseJson))
 				console.log("responseJson.minInvestUSD: " + responseJson.minInvestUSD)
-				var minInvestUSD = 10;
+				var minInvestUSD = 50;
 				if(responseJson.minInvestUSD > 0){
 					minInvestUSD = responseJson.minInvestUSD;
 				}
@@ -822,7 +822,7 @@ var StockDetailPage = React.createClass({
 		var viewMargin = 0;//= Platform.OS === 'ios' ? 0:15
 		// console.log("render: " + JSON.stringify(this.state.stockInfo))
 		return (
-			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
+			<TouchableWithoutFeedback onPress={()=> this.dismissKeyboard()}>
 				<View style={styles.wrapper, {width:width}}>
 					<LinearGradient colors={this.getGradientColor()} style={{height: Math.max(height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER, this.state.height)}}>
 
@@ -897,10 +897,19 @@ var StockDetailPage = React.createClass({
 
 	chartClickable: true,
 
+	dismissKeyboard:function(){
+		if (this.state.money < this.state.minInvestUSD){
+			this.setState({
+				money: this.state.minInvestUSD,
+			})
+		}
+		dismissKeyboard()
+	},
+
 	chartClicked:function(){
 		//Make sure the chart can only be pressed once.
 		if(this.refs['InputAccessory'] && this.refs['InputAccessory'].isShow()){
-			dismissKeyboard()
+			this.dismissKeyboard()
 			return;
 		}
 
@@ -1447,7 +1456,10 @@ var StockDetailPage = React.createClass({
 		var tradeValue = this.state.money * this.state.leverage
 		var minValue = this.state.tradeDirection === 1 ? this.state.stockInfo.minValueLong : this.state.stockInfo.minValueShort
 		var maxValue = this.state.tradeDirection === 1 ? this.state.stockInfo.maxValueLong : this.state.stockInfo.maxValueShort
-		if (tradeValue < minValue) {
+		if (this.state.money < this.state.minInvestUSD) {
+			Alert.alert('提示', '小于最小本金: ' + this.state.minInvestUSD.toFixed(0) + 'USD')
+			return
+		}else if (tradeValue < minValue) {
 			Alert.alert('提示', '交易此产品: 本金X杠杆需大于' + minValue.toFixed(0) + '美元\n请增加交易本金或者提升杠杆')
 			return
 		} else if (tradeValue > maxValue) {

@@ -76,12 +76,16 @@ export default class DepositPage extends Component{
 			payMethodSelected:0,
 			dataSource:ds.cloneWithRows(listRawData),
 			dataSourceBank:dsBank.cloneWithRows(bankListData),
-			protocolSeleceted:true,
+			protocolSeleceted:false,
 			confirmButtonEnable:false,
 			showBankList:false,
 			chargeRate:0.01,
 			chargeMin:5,
 			alipayIntro:'',
+			alipayMin: 50,
+			alipayMax: 0,
+			cupMin: 50,
+			cupMax: 20000,
 		}
 	}
 
@@ -103,13 +107,35 @@ export default class DepositPage extends Component{
 			},
 			(responseJson) =>{
 				console.log('minimun = ' + responseJson.minimum +' fxRate = ' + responseJson.fxRate);
+
+				var noMoreMoney = 0;
+				var noLessMoney = 0;
+
+				var payMethodSelected = this.state.payMethodSelected
+				if (payMethodSelected == 0 && responseJson.alipayMax <=0){
+					payMethodSelected = 1;
+				}
+				if (payMethodSelected==0){
+					noMoreMoney = responseJson.alipayMax
+					noLessMoney = responseJson.alipayMin
+				}else{
+					noMoreMoney = responseJson.cupMax
+					noLessMoney = responseJson.cupMin
+				}
+
 				this.setState({
-					noLessMoney: responseJson.minimum,
+					payMethodSelected: payMethodSelected,
+					noLessMoney: noLessMoney,
+					noMoreMoney: noMoreMoney,
 					fxRate : responseJson.fxRate,
 					dataSourceBank:dsBank.cloneWithRows(responseJson.banks),
 					chargeRate:responseJson.charge.rate,
 					chargeMin:responseJson.charge.minimum,
 					alipayIntro:responseJson.alipay,
+					alipayMax:responseJson.alipayMax,
+					alipayMin:responseJson.alipayMin,
+					cupMin:responseJson.cupMin,
+					cupMax:responseJson.cupMax,
 				},()=>this.onChangeWithdrawValue(''))
 			},
 			(result) => {
@@ -119,20 +145,32 @@ export default class DepositPage extends Component{
 
 	onSelectNormalRow(rowData){
 		this.dismissKB()
+		console.log("rowData.subtype " + rowData.subtype)
+		var payMethodSelected = 0;
+		var noMoreMoney = 0;
+		var noLessMoney = 50;
 		switch(rowData.subtype){
 			case 'alipay':
-				this.setState({
-					payMethodSelected:0,
-					dataSource:ds.cloneWithRows(listRawData),
-				})
-				return;
+				payMethodSelected = 0;
+				noMoreMoney = this.state.alipayMax;
+				noLessMoney = this.state.alipayMin;
+				break;
 			case 'unionpay':
-				this.setState({
-					payMethodSelected:1,
-					dataSource:ds.cloneWithRows(listRawData),
-				})
-				return;
+				console.log("rowData.subtype " + rowData.subtype)
+				payMethodSelected = 1;
+				noMoreMoney = this.state.cupMax;
+				noLessMoney = this.state.cupMin;
+				break;
 		}
+
+		this.setState({
+			payMethodSelected:payMethodSelected,
+			dataSource:ds.cloneWithRows(listRawData),
+			noMoreMoney: noMoreMoney,
+			noLessMoney: noLessMoney,
+		}, ()=>{
+			this.onChangeWithdrawValue(inputValue);
+		})
 	}
 
 	getCurrentTime(){
@@ -212,25 +250,36 @@ export default class DepositPage extends Component{
 		rmbValue = (text.length>0 ? rmbValue.toFixed(2):0.00.toFixed(2))
 		var charge = (text.length>0 ? Math.max(value*this.state.chargeRate,this.state.chargeMin).toFixed(2):0.00.toFixed(2))
 
-		if(text_ && value < this.state.noLessMoney){
-			error = "入金金额不低于"+this.state.noLessMoney+'美元！';
+		if(text_ && text_.length>0){
+			if(value < this.state.noLessMoney){
+				error = "入金金额不低于"+this.state.noLessMoney+'美元！';
+			}else if(value > this.state.noMoreMoney){
+				error = "入金金额不高于"+this.state.noMoreMoney+'美元！';
+			}
+		}
 
+		if(error){
 			console.log("Text1 = " + text_);
 			this.setState({
 				payStateTip: error,
-			  payStateTip2:/*'当前汇率：'+(1/this.state.fxRate).toFixed(2)+*/'等额人民币：'+rmbValue+'元',
+				payStateTip2:/*'当前汇率：'+(1/this.state.fxRate).toFixed(2)+*/'等额人民币：'+rmbValue+'元',
 				payStateTip3:'手续费'+charge+'美元',
-			})
-				inputError = true
-		}else{
-			console.log("Text2 = " + text_);
+			});
+			inputError = true
+		} else{
+
+			var payStateTip = "";
+			if(this.state.noLessMoney == this.state.noMoreMoney){
+				payStateTip = "单笔固定" + this.state.noMoreMoney + '美元';
+			}else{
+				payStateTip = this.state.noLessMoney + '≤入金额度≤'+ this.state.noMoreMoney + '美元';
+			}
 			this.setState({
-				payStateTip: '最低入金额度：'+this.state.noLessMoney+'美元',
+				payStateTip: payStateTip,
 				payStateTip2:/*'当前汇率：'+(1/this.state.fxRate).toFixed(2)+*/'等额人民币：'+rmbValue+'元',
 				payStateTip3:'手续费'+charge+'美元',
 			})
-
-		  inputError = false
+			inputError = false;
 		}
 
 		if(text !== ""){
@@ -259,7 +308,8 @@ export default class DepositPage extends Component{
 				<Text style = {[styles.payStateTip,{color:textColor}]}>{this.state.payStateTip}</Text>
 					<View style = {styles.cellWrapper}>
 						<Text style = {styles.moneyUSD}>美元</Text>
-						<TextInput style={[styles.cellInput, {color: textColor}]}
+						<TextInput ref="textInput"
+											 style={[styles.cellInput, {color: textColor}]}
 											 onChangeText={(text) => this.onChangeWithdrawValue(text)}
 												//  onFocus={() => this.onTextFocus(type)}
 												//  onBlur={() => this.onTextBlur(type)}
@@ -317,43 +367,55 @@ export default class DepositPage extends Component{
 	}
 
 	renderAliPay(){
-		var checkBox = this.state.payMethodSelected == 0 ? require('../../images/check_selected.png'):require('../../images/check_unselected.png')
-		var rowData = listRawData[0]
-		return(
-			<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
+		if (this.state.alipayMax > 0){
+			var checkBox = this.state.payMethodSelected == 0 ? require('../../images/check_selected.png'):require('../../images/check_unselected.png')
+			var rowData = listRawData[0]
+			return(
+				<View>
+					{this.renderSeparator()}
+					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
 
-				<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-					<Image source={checkBox} style={styles.checkbox} />
-					<Image source={rowData.image} style={styles.image} />
-					<Text style={styles.title}>支付宝钱包</Text>
-					<Text style={styles.titleIntro}>{this.state.alipayIntro}</Text>
+						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
+							<Image source={checkBox} style={styles.checkbox} />
+							<Image source={rowData.image} style={styles.image} />
+							<Text style={styles.title}>支付宝钱包</Text>
+							<Text style={styles.titleIntro}>{this.state.alipayIntro}</Text>
+						</View>
+					</TouchableOpacity>
 				</View>
-			</TouchableOpacity>
-		);
+			);
+		}else{
+			return null;
+		}
 	}
 
 	renderUnionPay(){
-		var checkBox = this.state.payMethodSelected == 1 ? require('../../images/check_selected.png'):require('../../images/check_unselected.png')
-		var imageArrow = this.state.showBankList ? require('../../images/arrow_up.png'):require('../../images/arrow_down.png')
-		var rowData = listRawData[1]
-		return(
-			<View>
-				<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
-					<View style={[styles.rowWrapper2, {height:Math.round(64*heightRate)}]}>
-						<Image source={checkBox} style={styles.checkbox} />
-						<Image source={rowData.image} style={styles.image} />
-						<Text style={styles.title}>银联借记卡</Text>
-						<TouchableOpacity activeOpacity={0.5} onPress={()=>this.bankSupport()}>
-							<View style = {{flexDirection:'row',alignItems:'center'}}>
-								<Text style = {styles.blankSupport}>支持的银行</Text>
-								<Image style = {styles.arrow} source={imageArrow}></Image>
-							</View>
-						</TouchableOpacity>
-					</View>
-				</TouchableOpacity>
-				{this.renderBankList()}
-			</View>
-		)
+		if(this.state.cupMax > 0){
+			var checkBox = this.state.payMethodSelected == 1 ? require('../../images/check_selected.png'):require('../../images/check_unselected.png')
+			var imageArrow = this.state.showBankList ? require('../../images/arrow_up.png'):require('../../images/arrow_down.png')
+			var rowData = listRawData[1]
+			return(
+				<View>
+					{this.renderSeparator()}
+					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
+						<View style={[styles.rowWrapper2, {height:Math.round(64*heightRate)}]}>
+							<Image source={checkBox} style={styles.checkbox} />
+							<Image source={rowData.image} style={styles.image} />
+							<Text style={styles.title}>银联借记卡</Text>
+							<TouchableOpacity activeOpacity={0.5} onPress={()=>this.bankSupport()}>
+								<View style = {{flexDirection:'row',alignItems:'center'}}>
+									<Text style = {styles.blankSupport}>支持的银行</Text>
+									<Image style = {styles.arrow} source={imageArrow}></Image>
+								</View>
+							</TouchableOpacity>
+						</View>
+					</TouchableOpacity>
+					{this.renderBankList()}
+				</View>
+			)
+		}else{
+			return null;
+		}
 	}
 
 	bankSupport(){
@@ -454,9 +516,8 @@ export default class DepositPage extends Component{
 						renderRow={(rowData, sectionID, rowID)=>this.renderRow(rowData, sectionID, rowID)}
 						renderSeparator={(sectionID, rowID, adjacentRowHighlighted)=>this.renderSeparator(sectionID, rowID, adjacentRowHighlighted)} />
 				</View> */}
-				{this.renderSeparator()}
+
 				{this.renderAliPay()}
-				{this.renderSeparator()}
 				{this.renderUnionPay()}
 				{this.renderSeparator()}
 

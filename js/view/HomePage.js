@@ -830,7 +830,7 @@ var HomePage = React.createClass({
 		return (
 			<TouchableOpacity style={styles.popularityRowContainer} onPress={()=>this.gotoStockDetail(rowData)}>
 				<View style={styles.popularityRowLeft}>
-					<Text style={styles.buyTitle}>做多 {percent}%</Text>
+					<Text style={styles.buyTitle}>看多 {percent}%</Text>
 					<View style={[styles.grayBar, {width:barWidth}]}>
 						<View style={[styles.redBar, {width:buyWidth}]}/>
 					</View>
@@ -841,7 +841,7 @@ var HomePage = React.createClass({
 					<Text style={styles.stockPeople}>{peopleNum}人参与</Text>
 				</View>
 				<View style={styles.popularityRowRight}>
-					<Text style={styles.sellTitle}>做空 {100-percent}%</Text>
+					<Text style={styles.sellTitle}>看空 {100-percent}%</Text>
 					<View style={[styles.grayBar, {width:barWidth}]}>
 						<View style={[styles.greenBar, {width:sellWidth}]}/>
 					</View>
@@ -871,7 +871,7 @@ var HomePage = React.createClass({
 			<View style={{height:249, backgroundColor:'white'}}>
 				<View style={styles.popularityHeaderContainer}>
 					<Text style={styles.popularityTitle}>
-						多空博弈
+						市场情绪
 					</Text>
 					<TouchableOpacity onPress={this.showPopularityDetail}>
 						<Text style={styles.more}>

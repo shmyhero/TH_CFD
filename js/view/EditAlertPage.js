@@ -299,8 +299,8 @@ var EditAlertPage = React.createClass({
 	},
 
 	renderAlertCell: function(type){
-		//type 1:买涨， 2:买跌
-		var title = type === 1 ? '买涨价格高于':'买跌价格低于'
+		//type 1:做多， 2:做空
+		var title = type === 1 ? '做多价格高于':'做空价格低于'
 		var textColor = "black";
 		var text = null;
 		var inputEnable = false;
@@ -465,7 +465,7 @@ var EditAlertPage = React.createClass({
 						{this.props.stockInfo.name}
 					</Text>
 					<Text style={styles.priceText}>
-						当前买涨价格 {this.state.stockPriceAsk} 当前买跌价格 {this.state.stockPriceBid}
+						当前做多价格 {this.state.stockPriceAsk} 当前做空价格 {this.state.stockPriceBid}
 					</Text>
 				</View>
 				{this.renderSeparator(0)}

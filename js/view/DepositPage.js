@@ -73,7 +73,7 @@ export default class DepositPage extends Component{
 			payStateTip2:'等额人民币：0.00元',
 			payStateTip3:'手续费：0美元',
 			payStateTip4:'注意：入金手续费为入金金额的1%，入金账户必须与自己的身份证保持一致，以免发生交易风险。',
-			payMethodSelected:0,
+			payMethodSelected:1,
 			dataSource:ds.cloneWithRows(listRawData),
 			dataSourceBank:dsBank.cloneWithRows(bankListData),
 			protocolSeleceted:false,
@@ -111,16 +111,24 @@ export default class DepositPage extends Component{
 				var noMoreMoney = 0;
 				var noLessMoney = 0;
 
+				var cupMax = responseJson.cupMax == undefined ? this.state.cupMax : responseJson.cupMax;
+				var alipayMax = responseJson.alipayMax == undefined ? this.state.alipayMax : responseJson.alipayMax;
+				var cupMin = responseJson.cupMin == undefined ? this.state.cupMin : responseJson.cupMin;
+				var alipayMin = responseJson.alipayMin == undefined ? this.state.alipayMin : responseJson.alipayMin;
+
 				var payMethodSelected = this.state.payMethodSelected
-				if (payMethodSelected == 0 && responseJson.alipayMax <=0){
+				if (alipayMax <=0){
 					payMethodSelected = 1;
-				}
-				if (payMethodSelected==0){
-					noMoreMoney = responseJson.alipayMax
-					noLessMoney = responseJson.alipayMin
 				}else{
-					noMoreMoney = responseJson.cupMax
-					noLessMoney = responseJson.cupMin
+					payMethodSelected = 0;
+				}
+
+				if (payMethodSelected==0){
+					noMoreMoney = alipayMax
+					noLessMoney = alipayMin
+				}else{
+					noMoreMoney = cupMax
+					noLessMoney = cupMin
 				}
 
 				this.setState({
@@ -132,10 +140,10 @@ export default class DepositPage extends Component{
 					chargeRate:responseJson.charge.rate,
 					chargeMin:responseJson.charge.minimum,
 					alipayIntro:responseJson.alipay,
-					alipayMax:responseJson.alipayMax,
-					alipayMin:responseJson.alipayMin,
-					cupMin:responseJson.cupMin,
-					cupMax:responseJson.cupMax,
+					alipayMax:alipayMax,
+					alipayMin:alipayMin,
+					cupMin:cupMin,
+					cupMax:cupMax,
 				},()=>this.onChangeWithdrawValue(''))
 			},
 			(result) => {

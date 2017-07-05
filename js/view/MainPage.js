@@ -368,7 +368,8 @@ var MainPage = React.createClass({
 					shareTrackingEvent={route.shareTrackingEvent}
 					themeColor={route.themeColor}
 					isShowNav={route.isShowNav}
-					isLoadingColorSameAsTheme={route.isLoadingColorSameAsTheme}/>
+					isLoadingColorSameAsTheme={route.isLoadingColorSameAsTheme}
+					logTimedelta={route.logTimedelta}/>
 			)
 		} else if (route.name === QA_ROUTE) {
 			hideTabbar();
@@ -1315,7 +1316,8 @@ var MainPage = React.createClass({
 			themeColor: ColorConstants.TITLE_BLUE_LIVE,
 			onNavigationStateChange: (navState)=>{
 				this.onWebViewNavigationStateChange(navState, doNotPopWhenFinished, onSuccess)
-			},
+			},			
+			logTimedelta: true,
 			url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
 			// url:'http://cn.tradehero.mobi/tradehub/live/login1.html'
 			// url:'http://www.baidu.com'

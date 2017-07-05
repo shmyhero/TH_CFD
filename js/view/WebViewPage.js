@@ -45,6 +45,7 @@ var WebViewPage = React.createClass({
 		onNavigationStateChange: React.PropTypes.func,
 		onWebPageLoaded: React.PropTypes.func,
 		isLoadingColorSameAsTheme: React.PropTypes.bool,
+		logTimedelta: React.PropTypes.bool,
 	},
 
 	getDefaultProps() {
@@ -59,6 +60,7 @@ var WebViewPage = React.createClass({
 			shareUrl: null,
 			isShowNav: true,
 			isLoadingColorSameAsTheme: true,
+			logTimedelta: false,
 		}
 	},
 
@@ -195,12 +197,39 @@ var WebViewPage = React.createClass({
 		)
 	},
 
+	start_time: 0,
+
+	webViewLoadingStart: function(content){
+		console.log("webview onLoadStart " +content);
+		if (this.props.logTimedelta && content.nativeEvent && content.nativeEvent.url){
+			if (this.start_time != 0){
+				this.trackPageLoadingTime(content.nativeEvent.url)
+			}
+			this.start_time = new Date();
+		}
+	},
+
 	webViewLoaded: function(content){
-		console.log("onLoadEnd " +content);
+		console.log("webview onLoadEnd " +content);
 		this.setState({isLoaded:true});
 		if(this.props.onWebPageLoaded){
 			this.props.onWebPageLoaded(content.nativeEvent);
 		}
+
+		if (this.props.logTimedelta && content.nativeEvent && content.nativeEvent.url){
+			this.trackPageLoadingTime(content.nativeEvent.url)
+		}
+
+		this.start_time = 0
+	},
+
+	trackPageLoadingTime: function(url){
+		var current_time = new Date();
+		var timedelta = ((current_time - this.start_time) / 1000).toFixed(1);
+		var trackingData = {};
+		trackingData["hour"] = current_time.getHours();
+		trackingData["url"] = url
+		TalkingdataModule.trackEvent(TalkingdataModule.DEBUG_TIME_DELTA, timedelta.toString(), trackingData)
 	},
 
 	renderWebView: function(){
@@ -217,8 +246,9 @@ var WebViewPage = React.createClass({
 					scalesPageToFit={true}
 					automaticallyAdjustContentInsets={true}
 					onNavigationStateChange={this.onNavigationStateChange}
+					onLoadStart = {this.webViewLoadingStart}
 					onLoad ={(content)=>this.webViewLoaded(content)}
-					onMessage={(message)=>console.log("onMessage " +message)}
+					onMessage={(message)=>console.log("webview onMessage " +message)}
 					onError={(error)=>{
 						console.log("webview error" + error);
 						this._handleConnectivityChange(false)

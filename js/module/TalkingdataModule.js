@@ -92,6 +92,8 @@ export const AD_TRACKING_KEY_AMOUNT = "amount";
 export const AD_TRACKING_KEY_CURRENCY = "currency";
 export const AD_TRACKING_KEY_PAY_TYPE = "payType";
 
+export const DEBUG_TIME_DELTA = "DEBUG_页面用时"
+
 export function trackADEvent(event_name, parameters) {
   try{
     console.log("parameters: " + JSON.stringify(parameters))

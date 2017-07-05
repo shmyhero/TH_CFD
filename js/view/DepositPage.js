@@ -85,7 +85,7 @@ export default class DepositPage extends Component{
 			alipayMin: 50,
 			alipayMax: 0,
 			cupMin: 50,
-			cupMax: 20000,
+			cupMax: 4000,
 		}
 	}
 
@@ -483,11 +483,13 @@ export default class DepositPage extends Component{
 						TalkingdataModule.trackADEvent(TalkingdataModule.AD_TRACKING_EVENT_PAY, trackingData);
 
 					 this.props.navigator.push({
-			 			name: MainPage.PAYMENT_PAGE,
-			 			url: url,
+				 		name: MainPage.PAYMENT_PAGE,
+				 		url: url,
 						popToOutsidePage: this.props.popToOutsidePage,
-			 			title: responseJson,
-			 		});
+				 		title: responseJson,
+				 	});
+			 	},(result) => {
+				 Alert.alert("温馨提示","请检查网络");
 				})
 			}
 

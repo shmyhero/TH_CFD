@@ -198,14 +198,16 @@ var WebViewPage = React.createClass({
 	},
 
 	start_time: 0,
+	last_url: "",
 
 	webViewLoadingStart: function(content){
-		console.log("webview onLoadStart " +content);
+		console.log("webview onLoadStart " + content);
 		if (this.props.logTimedelta && content.nativeEvent && content.nativeEvent.url){
-			if (this.start_time != 0){
-				this.trackPageLoadingTime(content.nativeEvent.url)
+			if (this.start_time != 0 && this.last_url != ""){
+				this.trackPageLoadingTime(this.last_url)
 			}
 			this.start_time = new Date();
+			this.last_url = content.nativeEvent.url;
 		}
 	},
 
@@ -219,8 +221,8 @@ var WebViewPage = React.createClass({
 		if (this.props.logTimedelta && content.nativeEvent && content.nativeEvent.url){
 			this.trackPageLoadingTime(content.nativeEvent.url)
 		}
-
-		this.start_time = 0
+		this.start_time = 0;
+		this.last_url = "";
 	},
 
 	trackPageLoadingTime: function(url){
@@ -228,8 +230,8 @@ var WebViewPage = React.createClass({
 		var timedelta = ((current_time - this.start_time) / 1000).toFixed(1);
 		var trackingData = {};
 		trackingData["hour"] = current_time.getHours();
-		trackingData["url"] = url
-		TalkingdataModule.trackEvent(TalkingdataModule.DEBUG_TIME_DELTA, timedelta.toString(), trackingData)
+		trackingData["timedelta"] = timedelta
+		TalkingdataModule.trackEvent(TalkingdataModule.DEBUG_TIME_DELTA + url, current_time.getHours().toString(), trackingData)
 	},
 
 	renderWebView: function(){

@@ -523,7 +523,7 @@ var MainPage = React.createClass({
 			hideTabbar()
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title='多空博弈' showBackButton={true}
+					<NavBar title='市场情绪' showBackButton={true}
 						backButtonOnClick={()=>{
 								this.backAndShowTabbar()
 								if(route.backFunction) {

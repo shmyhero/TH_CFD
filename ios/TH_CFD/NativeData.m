@@ -54,6 +54,19 @@ RCT_EXPORT_MODULE();
         }
         [self sendDataToRN:@"versionCode" data: [NSString stringWithFormat:@"%d", versionCode]];
     }
+    else if([dataName isEqualToString:@"getIpAddress"]) {
+        NSError *error;
+        NSURL *ipURL = [NSURL URLWithString:@"http://ipof.in/txt"];
+        NSString *ip = [NSString stringWithContentsOfURL:ipURL encoding:NSUTF8StringEncoding error:&error];
+        if (error != nil) {
+            ipURL = [NSURL URLWithString:@"http://ifconfig.me/ip"];
+            ip = [NSString stringWithContentsOfURL:ipURL encoding:NSUTF8StringEncoding error:&error];
+            if (error != nil) {
+                ip = @"127.0.0.1";
+            }
+        }
+        [self sendDataToRN:@"ipAddress" data: ip];
+    }
 }
 
 - (void)receiveRawDataFromRN:(NSString *)dataName data:(id)data
@@ -95,6 +108,5 @@ RCT_EXPORT_METHOD(passDataToNative:(NSString *)dataName data:(NSString *)jsonDat
 RCT_EXPORT_METHOD(passRawDataToNative:(NSString *)dataName data:(id)data) {
 	[self receiveRawDataFromRN:dataName data:data];
 }
-
 
 @end

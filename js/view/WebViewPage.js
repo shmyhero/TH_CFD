@@ -22,7 +22,9 @@ var ColorPropType = require('ColorPropType');
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 var NativeDataModule = require('../module/NativeDataModule');
 var ColorConstants = require('../ColorConstants');
-
+var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
+var LogicData = require('../LogicData')
+var NetworkModule = require('../module/NetworkModule')
 var {height, width} = Dimensions.get('window');
 
 const NETWORK_ERROR_INDICATOR = "networkErrorIndicator";
@@ -228,10 +230,35 @@ var WebViewPage = React.createClass({
 	trackPageLoadingTime: function(url){
 		var current_time = new Date();
 		var timedelta = ((current_time - this.start_time) / 1000).toFixed(1);
+		console.log("track url loading time: " + timedelta);
 		var trackingData = {};
 		trackingData["hour"] = current_time.getHours();
-		trackingData["timedelta"] = timedelta
-		TalkingdataModule.trackEvent(TalkingdataModule.DEBUG_TIME_DELTA + url, current_time.getHours().toString(), trackingData)
+		trackingData["time"] = timedelta
+		var userData = LogicData.getUserData()
+		trackingData["uid"] = userData.userId
+		trackingData["date"] = current_time.toISOString().slice(0,10);
+
+		if(timedelta > 3){
+			// Get Local IP
+			fetch(NetConstants.CHECK_IP_URL, {method: 'GET',})
+			.then((response) => {
+				if (response.status === 200) {
+					return response.text();
+				} else{
+					return "127.0.0.1"
+				}
+			}).then((response) => {
+				console.log("track url loading response: " + response);
+				this.parseIPAddress(url, response, trackingData)
+			})
+		}
+	},
+
+	parseIPAddress: function(url, ipAddress, trackingData){
+		trackingData["IP"] = ipAddress
+		var label = trackingData["time"] + "_" + trackingData["hour"] + "_" + trackingData["IP"] + "_" + trackingData["uid"] + "_" + trackingData["date"]
+		console.log("track url loading info: " + label);
+		TalkingdataModule.trackEvent(TalkingdataModule.DEBUG_TIME_DELTA + url, label, trackingData)
 	},
 
 	renderWebView: function(){

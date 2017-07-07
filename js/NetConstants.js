@@ -272,3 +272,4 @@ export function isPortraitChart(type){
 export let AUTH_ERROR = '需要OAuth授权'
 
 export let ANDROID_MARKET_URL = 'market://details?id=com.tradehero.cfd';
+export let CHECK_IP_URL = "http://ipof.in/txt"

@@ -75,7 +75,9 @@ var UpdateUserInfoPage = React.createClass({
 		return {
 			noteState: NOTE_STATE_NORMAL,
 			nickName: '',
+			promoCode: '',
 			saveButtonEnabled: false,
+			errorPromo:'推广码不正确！'
 		};
 	},
 
@@ -141,17 +143,51 @@ var UpdateUserInfoPage = React.createClass({
 		})
 	},
 
+	setPromoCode: function(code) {
+		this.setState({
+			promoCode: code
+		})
+
+		this.verifyPromoCode(code);
+	},
+
+	verifyPromoCode: function(code) {
+		var errorMsg = undefined
+
+		// if (code.length == 0) {
+		// 	errorMsg = "昵称不能为空"
+		// }
+		// else if(name.length > UIConstants.MAX_NICKNAME_LENGTH){
+		// 	errorMsg = "昵称不能超过" + UIConstants.MAX_NICKNAME_LENGTH + "个字段"
+		// }
+
+		// this.setState({
+		// 	isShowError: errorMsg != undefined,
+		// 	errorText: errorMsg,
+		// 	saveButtonEnabled: errorMsg == undefined
+		// })
+	},
+
 	savePressed: function() {
 		var userData = LogicData.getUserData();
-
+		var promoCode = this.state.promoCode;
+		var promoUrl = '';
+		if(promoCode!=undefined&&promoCode.length>=3){
+			 promoUrl = promoCode;
+		}
 		//Use the old me data since the reward amount only occur once.
 		NetworkModule.fetchTHUrl(
-			NetConstants.CFD_API.SET_USER_NICKNAME_API + '?' + NetConstants.PARAMETER_NICKNAME + '=' + this.state.nickName,
+			NetConstants.CFD_API.POST_UPDATE_FIRST_LOGIN_INFO, // + '?' + NetConstants.PARAMETER_NICKNAME + '=' + this.state.nickName + promoUrl,
 			{
 				method: 'POST',
 				headers: {
+					'Content-Type': 'application/json; charset=UTF-8',
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 				},
+				body: JSON.stringify({
+					nickName: this.state.nickName,
+					promotionCode: promoUrl,
+				}),
 			},
 			function(responseJson) {
 				LocalDataUpdateModule.updateMeData(userData, function(){
@@ -173,7 +209,7 @@ var UpdateUserInfoPage = React.createClass({
 				return (
 					<View style={styles.noteView}>
 						<Text style={styles.noteText}>
-							请设置一个您喜欢的昵称！
+							此昵称为系统自动分配给您的，您也可以修改
 						</Text>
 					</View>
 				);
@@ -192,6 +228,20 @@ var UpdateUserInfoPage = React.createClass({
 				</View>
 			);
 		}
+	},
+
+	renderPromoHintOrError: function(){
+			return (
+				<View style={styles.noteView}>
+					<Text style={styles.noteText}>
+						推广码是用于确定归属关系，确定后不能修改
+					</Text>
+				</View>
+			);
+	},
+
+	renderPromoNotes: function() {
+	 		return this.renderPromoHintOrError();
 	},
 
 	backButtonPressed: function(){
@@ -251,7 +301,7 @@ var UpdateUserInfoPage = React.createClass({
 
 		return (
 			<View>
-				<NavBar title="设置昵称" textOnLeft="返回"
+				<NavBar title="设置昵称" textOnLeft="跳过"
 							leftTextOnClick={this.backButtonPressed}/>
 
 				<View style={[styles.wrapper, {height: height}]}>
@@ -266,6 +316,7 @@ var UpdateUserInfoPage = React.createClass({
 
 							<TextInput style={styles.nickNameInput}
 								autoFocus={true}
+								placeholder='请输入昵称'
 								onChangeText={(text) => this.setUserName(text)}
 								underlineColorAndroid='#ffffff'
 								maxLength={UIConstants.MAX_NICKNAME_LENGTH}
@@ -274,13 +325,31 @@ var UpdateUserInfoPage = React.createClass({
 
 						{this.renderNotes()}
 
+						<View style={[styles.rowWrapperWithBorder,{marginTop:15}]}>
+							<View style={styles.nickNameTextView}>
+								<Text style={styles.nickNameText}>
+									推广码
+								</Text>
+							</View>
+
+							<TextInput style={styles.nickNameInput}
+								autoFocus={true}
+								placeholder='请输入推广码'
+								onChangeText={(text) => this.setPromoCode(text)}
+								underlineColorAndroid='#ffffff'
+								maxLength={UIConstants.MAX_NICKNAME_LENGTH}
+								value={this.state.promoCode}/>
+						</View>
+
+						{this.renderPromoNotes()}
+
 						<View style={styles.rowWrapper}>
 							<Button style={styles.saveClickableArea}
 								enabled={this.state.saveButtonEnabled}
 								onPress={this.savePressed}
 								textContainerStyle={styles.saveTextView}
 								textStyle={styles.saveText}
-								text='保存' />
+								text='确认' />
 						</View>
 
 					</View>
@@ -299,12 +368,12 @@ var UpdateUserInfoPage = React.createClass({
 var styles = StyleSheet.create({
 
 	upperContainer: {
-		flex: 1,
+		marginTop:30,
 		alignItems: 'stretch',
 		justifyContent: 'center',
 	},
 	lowerContainer: {
-		flex: 3,
+
 		alignItems: 'stretch',
 	},
 	rowWrapperWithBorder: {

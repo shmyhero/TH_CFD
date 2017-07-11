@@ -173,6 +173,7 @@ function getCFDAPI(){
 
     GET_REWARD_FIRSTDAY_CLICKED: CFD_API_SERVER + '/api/reward/firstday/clicked',//通知Server客户端点击过了只需要显示一次的 ‘入金最高获得20%赠金’
     GET_REWARD_FIRSTDAY_REWARDED: CFD_API_SERVER + '/api/reward/firstday/rewarded',//通知Server首页的提示已经展示过了，只需展示一次。
+    POST_UPDATE_FIRST_LOGIN_INFO: CFD_API_SERVER + '/api/user/updateFirstLoginInfo',
   }
 }
 

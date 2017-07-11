@@ -34,6 +34,7 @@ var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 var listRawData = [
 
+{'type':'normal','title':'推广码', 'subtype': 'promotionCode'},
 {'type':'normal','title':'用户协议', 'subtype': 'protocol'},
 {'type':'normal','title':'设置', 'subtype': 'pushconfig'},
 {'type':'normal','title':'账号绑定', 'subtype': 'accountbinding'},
@@ -64,7 +65,25 @@ var MeConfigPage = React.createClass({
 			currentVersionCode: LogicData.getCurrentVersionCode(),
 			onlineVersionCode: LogicData.getOnlineVersionCode(),
 			onlineVersionName: LogicData.getOnlineVersionName(),
+			promotionCode: null,
 		};
+	},
+
+	componentWillMount: function(){
+		//TODO: use real API.
+		this.refreshData();
+	},
+
+	refreshData: function(){
+		var meData = LogicData.getMeData();
+		var notLogin = Object.keys(meData).length === 0
+
+    meData = LogicData.getMeData()
+		if (!notLogin && meData.promotionCode){
+			this.setState({
+				promotionCode: meData.promotionCode,
+			})
+		}
 	},
 
 	gotoWebviewPage: function(targetUrl, title, hideNavBar) {
@@ -90,6 +109,12 @@ var MeConfigPage = React.createClass({
 
 	onSelectNormalRow: function(rowData) {
 		//todo
+		if(rowData.subtype === 'promotionCode'){
+			this.props.navigator.push({
+				name: MainPage.PROMOTION_CODE_PAGE_ROUTE,
+				onPop: this.refreshData
+			});
+		}
 		if(rowData.subtype === 'protocol'){
 			var protocolUrl = LogicData.getAccountState()?NetConstants.TRADEHERO_API.WEBVIEW_SIGNTERMS_PAGE_ACTUAL:NetConstants.TRADEHERO_API.WEBVIEW_SIGNTERMS_PAGE
 			this.gotoWebviewPage(protocolUrl, '用户协议',true);
@@ -329,6 +354,15 @@ var MeConfigPage = React.createClass({
 			 	 </View>
 			  </TouchableOpacity>
 			 )
+		 } else if (rowData.subtype === 'promotionCode' && this.state.promotionCode){
+			 return(
+				<TouchableOpacity activeOpacity={0.5}>
+				 	<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
+					 	<Text style={styles.title}>{rowData.title}</Text>
+					 	<Text style={styles.contentValue}>{this.state.promotionCode}</Text>
+			 		</View>
+				</TouchableOpacity>
+		 		);
 		 } else{
 			 var visable = rowData.subtype === 'accountbinding'&&meData.phone==null ? 1.0:0;
 			 return(

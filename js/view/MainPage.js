@@ -73,6 +73,7 @@ var BindCardPage = require('./withdraw/BindCardPage')
 var BindCardResultPage = require('./withdraw/BindCardResultPage')
 var WithdrawPage = require('./withdraw/WithdrawPage')
 var WithdrawSubmittedPage = require('./withdraw/WithdrawSubmittedPage')
+var PromotionCodePage = require('./PromotionCodePage');
 
 var TalkingdataModule = require('../module/TalkingdataModule')
 var WebSocketModule = require('../module/WebSocketModule');
@@ -142,6 +143,7 @@ export let WITHDRAW_SUBMITTED_ROUTE = 'withdrawSubmittedRoute'
 export let WITHDRAW_RESULT_ROUTE = 'withdrawFailedRoute'
 export let RANKING_PAGE_ROUTE = 'rankingPageRoute'
 export let USER_HOME_PAGE_ROUTE = 'userHomePageRoute'
+export let PROMOTION_CODE_PAGE_ROUTE = 'promotionCodePage'
 
 const NoBackSwipe ={
   ...Navigator.SceneConfigs.PushFromRight,
@@ -662,6 +664,13 @@ var MainPage = React.createClass({
 					backRefresh={route.backRefresh}
 					routeMapper={this.RouteMapper}
 					popToOutsidePage={route.popToOutsidePage}/>
+			)
+		}else if (route.name === PROMOTION_CODE_PAGE_ROUTE){
+			hideTabbar();
+			return (
+				<PromotionCodePage navigator={navigationOperations}
+					routeMapper={this.RouteMapper}
+					onPop={route.onPop}/>
 			)
 		}
 
@@ -1316,7 +1325,7 @@ var MainPage = React.createClass({
 			themeColor: ColorConstants.TITLE_BLUE_LIVE,
 			onNavigationStateChange: (navState)=>{
 				this.onWebViewNavigationStateChange(navState, doNotPopWhenFinished, onSuccess)
-			},			
+			},
 			logTimedelta: true,
 			url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
 			// url:'http://cn.tradehero.mobi/tradehub/live/login1.html'

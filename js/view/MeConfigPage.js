@@ -110,10 +110,26 @@ var MeConfigPage = React.createClass({
 	onSelectNormalRow: function(rowData) {
 		//todo
 		if(rowData.subtype === 'promotionCode'){
-			this.props.navigator.push({
-				name: MainPage.PROMOTION_CODE_PAGE_ROUTE,
-				onPop: this.refreshData
-			});
+			var meData = LogicData.getMeData();
+			console.log(JSON.stringify(meData))
+			meData.phone = null
+			if(meData.phone){
+				this.props.navigator.push({
+					name: MainPage.PROMOTION_CODE_PAGE_ROUTE,
+					onPop: this.refreshData
+				});
+			}else{
+				this.props.navigator.push({
+					name: MainPage.LOGIN_ROUTE,
+					isMobileBinding: true,
+					getNextRoute: ()=>{
+						return {
+							name: MainPage.PROMOTION_CODE_PAGE_ROUTE,
+							onPop: this.refreshData
+						}
+					}
+				});
+			}
 		}
 		if(rowData.subtype === 'protocol'){
 			var protocolUrl = LogicData.getAccountState()?NetConstants.TRADEHERO_API.WEBVIEW_SIGNTERMS_PAGE_ACTUAL:NetConstants.TRADEHERO_API.WEBVIEW_SIGNTERMS_PAGE

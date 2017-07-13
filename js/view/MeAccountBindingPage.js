@@ -61,9 +61,12 @@ var MeAccountBindingPage = React.createClass({
 			this.wechatPressed();
 		}else if(rowData.subtype === 'bindMobile'){
 			this.props.navigator.push({
-				name: MainPage.ME_BINDING_MOBILE_ROUTE,
-				onPopBack: this.loadAccountBindingInfo,
-				existingMobile: this.state.existingMobile,
+				name: MainPage.LOGIN_ROUTE,
+				onLoginFinish: ()=>{
+					this.loadAccountBindingInfo()
+					this.props.navigator.pop();
+				},
+				isMobileBinding: true,
 			});
 		}
 	},

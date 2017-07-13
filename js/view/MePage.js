@@ -64,12 +64,12 @@ var accountInfoData = [
 
 var OpenAccountInfos = [
 	 "",
-	 "设置账户信息(1/6)",
-	 "上传身份证照片(2/6)",
-	 "完善个人信息(3/6)",
-	 "上传地址证明信息(4/6)",
-	 "完善财务信息(5/6)",
-	 "提交申请(6/6)",
+	 "设置账户信息",
+	 "上传身份证照片",
+	 "完善个人信息",
+	 //"上传地址证明信息",
+	 "完善财务信息",
+	 "提交申请",
 ]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -546,7 +546,9 @@ var MePage = React.createClass({
 
 			if(accStatus == 0 && this.state.lastStep > 0 ){
 				//未注册 显示最后的Step
+				var totalSteps = OpenAccountInfos.length - 1
 				strStatus = '继续开户:' + OpenAccountInfos[this.state.lastStep]
+				+ "(" + this.state.lastStep + "/"+ totalSteps +")"
 			}
 
 			return(

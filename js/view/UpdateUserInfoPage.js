@@ -59,6 +59,7 @@ var UpdateUserInfoPage = React.createClass({
 		popToStackTop: React.PropTypes.bool,
 		getNextRoute: React.PropTypes.func,
 		onLoginFinish: React.PropTypes.func,
+		needShowPromoCode:React.PropTypes.bool,
 	},
 
 	getDefaultProps() {
@@ -296,6 +297,59 @@ var UpdateUserInfoPage = React.createClass({
 		}
 	},
 
+	renderNickName:function(){
+		return(
+			<View>
+				<View style={styles.rowWrapperWithBorder}>
+					<View style={styles.nickNameTextView}>
+						<Text style={styles.nickNameText}>
+							昵称
+						</Text>
+					</View>
+
+					<TextInput style={styles.nickNameInput}
+						autoFocus={true}
+						placeholder='请输入昵称'
+						onChangeText={(text) => this.setUserName(text)}
+						underlineColorAndroid='#ffffff'
+						maxLength={UIConstants.MAX_NICKNAME_LENGTH}
+						value={this.state.nickName}/>
+				</View>
+				{this.renderNotes()}
+			</View>
+		)
+	},
+
+	renderPromoCode:function(){
+		if(this.props.needShowPromoCode){
+			return(
+				<View>
+					<View style={[styles.rowWrapperWithBorder,{marginTop:15}]}>
+						<View style={styles.nickNameTextView}>
+							<Text style={styles.nickNameText}>
+								推广码
+							</Text>
+						</View>
+
+						<TextInput style={styles.nickNameInput}
+							autoFocus={true}
+							placeholder='请输入推广码'
+							onChangeText={(text) => this.setPromoCode(text)}
+							underlineColorAndroid='#ffffff'
+							maxLength={UIConstants.MAX_NICKNAME_LENGTH}
+							value={this.state.promoCode}/>
+					</View>
+					{this.renderPromoNotes()}
+				</View>
+			)
+		}else{
+			return(
+				<View></View>
+			)
+		}
+
+	},
+
 	render: function() {
 		var {height, width} = Dimensions.get('window');
 
@@ -307,41 +361,9 @@ var UpdateUserInfoPage = React.createClass({
 				<View style={[styles.wrapper, {height: height}]}>
 					<View style={styles.upperContainer}>
 
-						<View style={styles.rowWrapperWithBorder}>
-							<View style={styles.nickNameTextView}>
-								<Text style={styles.nickNameText}>
-									昵称
-								</Text>
-							</View>
+						{this.renderNickName()}
 
-							<TextInput style={styles.nickNameInput}
-								autoFocus={true}
-								placeholder='请输入昵称'
-								onChangeText={(text) => this.setUserName(text)}
-								underlineColorAndroid='#ffffff'
-								maxLength={UIConstants.MAX_NICKNAME_LENGTH}
-								value={this.state.nickName}/>
-						</View>
-
-						{this.renderNotes()}
-
-						<View style={[styles.rowWrapperWithBorder,{marginTop:15}]}>
-							<View style={styles.nickNameTextView}>
-								<Text style={styles.nickNameText}>
-									推广码
-								</Text>
-							</View>
-
-							<TextInput style={styles.nickNameInput}
-								autoFocus={true}
-								placeholder='请输入推广码'
-								onChangeText={(text) => this.setPromoCode(text)}
-								underlineColorAndroid='#ffffff'
-								maxLength={UIConstants.MAX_NICKNAME_LENGTH}
-								value={this.state.promoCode}/>
-						</View>
-
-						{this.renderPromoNotes()}
+						{this.renderPromoCode()}
 
 						<View style={styles.rowWrapper}>
 							<Button style={styles.saveClickableArea}

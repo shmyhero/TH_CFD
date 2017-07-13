@@ -385,10 +385,19 @@ var LoginPage = React.createClass({
 		this.updateMeData();
 	},
 
+
 	updateMeData: function(){
 		var userData = LogicData.getUserData();
 		LocalDataUpdateModule.updateMeData(userData, ()=>{
 			var meData = LogicData.getMeData();
+
+			// userData.isNewUser = true
+			var needShowPromoCode = true
+
+			if(meData.weChatOpenId != undefined || meData.promotionCode!=undefined){//如果是微信登录，则不需要显示推广码
+				needShowPromoCode = false
+			}
+
 			if(userData.isNewUser){
 				//Add AD tracking
 				var trackingData = {};
@@ -401,6 +410,7 @@ var LoginPage = React.createClass({
 					popToRoute: this.props.popToRoute,
 					popToStackTop: this.props.popToStackTop,
 					onLoginFinish: this.props.onLoginFinish,
+					needShowPromoCode: needShowPromoCode,
 				});
 			}else{
 

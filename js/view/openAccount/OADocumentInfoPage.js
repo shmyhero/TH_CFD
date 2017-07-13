@@ -132,7 +132,7 @@ var OADocumentInfoPage = React.createClass({
 							}else{
 								var trackingData = {};
 								trackingData[TalkingdataModule.AD_TRACKING_KEY_USER_ID] = userData.userId;
-								TalkingdataModule.trackADEvent(TalkingdataModule.AD_TRACKING_EVENT_REGISTER, trackingData);								
+								TalkingdataModule.trackADEvent(TalkingdataModule.AD_TRACKING_EVENT_REGISTER, trackingData);
 
 								OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
 							}
@@ -310,7 +310,7 @@ var OADocumentInfoPage = React.createClass({
 						onPress={this.gotoNext}
 						textContainerStyle={styles.buttonView}
 						textStyle={styles.buttonText}
-						text={this.state.validateInProgress? "信息正在检查中...": '下一步'} />
+						text={this.state.validateInProgress? "信息正在检查中...": '提交申请'} />
 				</View>
 				<OAWarningDialog ref={OA_WARNING_DIALOG}
 					proceedCallback={()=>this.proceedAnyway()}/>

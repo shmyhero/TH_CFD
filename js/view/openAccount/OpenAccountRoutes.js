@@ -21,7 +21,7 @@ var OpenAccountInfos = [
   //{"title": "上传地址证明信息(4/6)", "page": require('./OAAddressPhotoPage')},
   {"title": "完善财务信息(4/5)", "page": require('./OAFinanceInfoPage')},
   {"title": "提交申请(5/5)", "page": require('./OADocumentInfoPage')},
-  {"title": "审核通过", "page": require('./OAReviewStatusPage'), "removeStoredData": true},
+  {"title": "审核状态", "page": require('./OAReviewStatusPage'), "removeStoredData": true},
 ]
 
 var errorRoutes = [];

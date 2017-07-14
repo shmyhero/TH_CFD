@@ -111,8 +111,7 @@ var MeConfigPage = React.createClass({
 		//todo
 		if(rowData.subtype === 'promotionCode'){
 			var meData = LogicData.getMeData();
-			console.log(JSON.stringify(meData))
-			meData.phone = null
+			console.log(JSON.stringify(meData));
 			if(meData.phone){
 				this.props.navigator.push({
 					name: MainPage.PROMOTION_CODE_PAGE_ROUTE,

@@ -312,7 +312,7 @@ var UpdateUserInfoPage = React.createClass({
 						placeholder='请输入昵称'
 						onChangeText={(text) => this.setUserName(text)}
 						underlineColorAndroid='#ffffff'
-						maxLength={UIConstants.MAX_NICKNAME_LENGTH}
+						maxLength={4}
 						value={this.state.nickName}/>
 				</View>
 				{this.renderNotes()}

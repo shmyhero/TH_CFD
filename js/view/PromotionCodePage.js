@@ -121,7 +121,7 @@ export default class PromotionCodePage extends Component {
             autoFocus={true}
             onChangeText={(text) => this.setPromotionCode(text)}
             underlineColorAndroid='#ffffff'
-            maxLength={20}/>
+            maxLength={4}/>
         </View>
 
         {this.renderHintOrError()}

@@ -765,17 +765,18 @@ const styles = StyleSheet.create({
 	},
 
 	listBank:{
-			marginLeft:15,
+			marginLeft:0,
 			marginTop:5,
-			marginRight:15,
+			marginRight:0,
 			flexDirection:'row',
-			justifyContent: 'space-between',
+			// justifyContent: 'space-between',
 			flexWrap:'wrap',
 	},
 
 	imageBank:{
 		width:74.7,
 		height:29.7,
+		marginLeft:(width-20)/4 - 74.7,
 		marginBottom:5,
 	},
 

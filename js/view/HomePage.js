@@ -1227,7 +1227,7 @@ var HomePage = React.createClass({
 	},
 
 	renderCheckInView: function(){
-		if(LogicData.getAccountState()){
+		// if(LogicData.getAccountState()){
 			return (
 				<TouchableOpacity onPress={()=>this.gotoCheckinPage()}
 					style={styles.navBarLeftView}>
@@ -1236,8 +1236,8 @@ var HomePage = React.createClass({
 							source={require('../../images/icon_day_sign_live.png')}/>
 				</TouchableOpacity>
 			);
-		}
-		return null
+		// }
+		// return null
 	},
 
 	renderNavBar: function(){
@@ -1375,8 +1375,8 @@ var HomePage = React.createClass({
 						{this.renderTopNews()}
 						<View style={styles.bigSeparator}/>
 
-						{this.renderEventsRow()}
-						{this.renderEventSeparator2()}
+						{/* {this.renderEventsRow()} */}
+						{/* {this.renderEventSeparator2()} */}
 
 
 						{this.renderPopularityView()}

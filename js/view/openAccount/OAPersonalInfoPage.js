@@ -50,7 +50,7 @@ var defaultRawData = [
 		{"title":"姓", "key": "lastName", "value":"", hint:"请输入姓", maxLength: 50, "ignoreInRegistery": true},	//TODO: add ignoreInRegistery when API is avaliable.
 		{"title":"名", "key": "firstName", "value":"", hint:"请输入名", maxLength: 50, "ignoreInRegistery": true},
 		{"title":"性别", "key": "gender", "value":"", hint: "点击选择", "type": "choice", "choices": GenderTranslater},
-		{"title":"出生日期", "key": "birthday", "value":"", hint: "点击选择", "type": "date"},
+		//{"title":"出生日期", "key": "birthday", "value":"", hint: "点击选择", "type": "date"},
 		//{"title":"民族", "key": "ethnic", "value":"", hint:"请输入民族", maxLength: 10,},
 		{"title":"身份证号", "key": "idCode", "value":"", hint:"请输入身份证号", maxLength: 18, minLength: 18, "ignoreInRegistery": true},
 		{"title":"证件地址", "key": "addr", "value":"", hint:"请输入证件地址", maxLength:75, maxLine: 2},

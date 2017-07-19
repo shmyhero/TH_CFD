@@ -36,11 +36,11 @@ var urlKeys = [
 	'GET_FUTURE_LIST_API',
 ]
 
-var tabNamesLive = ['自选', '美股', '指数', '外汇', '商品']
+var tabNamesLive = ['自选', '美股', '港股','指数', '外汇', '商品']
 var urlKeysLive = [
 	'GET_USER_BOOKMARK_LIST_LIVE_API',
 	'GET_US_STOCK_TOP_GAIN_LIVE_API',
-	// 'GET_US_STOCK_HK_LIVE_API',
+	'GET_US_STOCK_HK_LIVE_API',
 	'GET_INDEX_LIST_LIVE_API',
 	'GET_FX_LIST_LIVE_API',
 	'GET_FUTURE_LIST_LIVE_API',

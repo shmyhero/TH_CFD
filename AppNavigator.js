@@ -133,9 +133,13 @@ var AppNavigator = React.createClass({
 		.done(()=>{
 			VersionConstants.loadServerSettings()
 			.then(()=>{
-				this.initializeApp();
-			},()=>{
-				this.initializeApp();
+				StorageModule.loadDebugSettings().then(
+					(value)=>{
+						if (value !== null) {
+							LogicData.setDebugStatus(value == 'true');
+						}
+						this.initializeApp();
+					})
 			});
 		})
 

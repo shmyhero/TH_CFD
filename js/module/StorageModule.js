@@ -23,6 +23,7 @@ var LAST_ONLINE_VERSION_INFO = '@TH_CFD:lastOnlineVersionInfo'
 var UNPAID_REWARD = '@TH_CFD:unpaidReward'
 var REGISTER_REWARD = '@TH_CFD:registerReward'
 var FIRSTDAYWITHDRAW = '@TH_CFD:firstDayWithDraw'
+var DEBUG_SETTINGS = '@TH_CFD:debugSettings'
 
 export async function loadUserData() {
 	try {
@@ -380,6 +381,23 @@ export async function setFirstDayWithDraw(value){
 export async function loadFirstDayWithDraw(){
   try {
 		  var value = await AsyncStorage.getItem(FIRSTDAYWITHDRAW);
+      return value;
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function setDebugSettings(value){
+  try {
+		await AsyncStorage.setItem(DEBUG_SETTINGS, value);
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function loadDebugSettings(){
+  try {
+		  var value = await AsyncStorage.getItem(DEBUG_SETTINGS);
       return value;
 	} catch (error) {
 		console.log('AsyncStorage error: ' + error.message);

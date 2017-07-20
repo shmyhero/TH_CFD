@@ -23,6 +23,7 @@ var ColorConstants = require('../ColorConstants');
 var StockTransactionInfoModal = require('./StockTransactionInfoModal');
 var StockTransactionInfoBar = require('./StockTransactionInfoBar')
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
+var StorageModule = require('../module/StorageModule')
 
 export default class DevelopPage extends Component {
 
@@ -98,10 +99,16 @@ export default class DevelopPage extends Component {
   }
 
   updateDebugStatus(){
-    LogicData.setDebugStatus(!this.state.debugStatus);
-    this.setState({
-      debugStatus : LogicData.getDebugStatus()
-    });
+    var value = !this.state.debugStatus;
+    console.log("this.state.debugStatus "+this.state.debugStatus)
+    console.log("!this.state.debugStatus "+(!this.state.debugStatus))
+
+    StorageModule.setDebugSettings(value.toString()).then(()=>{
+      LogicData.setDebugStatus(value);
+      this.setState({
+        debugStatus : value
+      });
+    })
   }
 
   render() {
@@ -143,7 +150,7 @@ export default class DevelopPage extends Component {
           <View style={{flexDirection: 'row', padding:15,}}>
             <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}} onPress={()=>this.updateDebugStatus()}>
               <Text style={{color:'white', fontSize: 16}}>
-                {!this.state.debugStatus ? "开启测试功能": "关闭测试功能"}
+                {!this.state.debugStatus ? "开启开发中功能,下次启动app时生效": "关闭开发中功能,下次启动app时生效"}
               </Text>
             </TouchableOpacity>
           </View>

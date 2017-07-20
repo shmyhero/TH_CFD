@@ -193,7 +193,7 @@ export var STOCK_EXCHANGE_TAB_INDEX = 2;
 export var RANKING_TAB_INDEX = 3;
 export var ME_PAGE_TAB_INDEX = 4;
 
-const HIDE_RANKING_TAB = true;			//Hide ranking tab if necessary
+var HIDE_RANKING_TAB = true;			//Hide ranking tab if necessary
 
 var MainPage = React.createClass({
 	getInitialState: function() {
@@ -949,6 +949,7 @@ var MainPage = React.createClass({
 	},
 
 	componentWillMount: function(){
+		HIDE_RANKING_TAB = !LogicData.getDebugStatus();
  		BackAndroid.addEventListener('hardwareBackPress', this.backAndroidHandler);
 	},
 

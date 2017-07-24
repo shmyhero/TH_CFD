@@ -45,6 +45,10 @@ var listRawData = [
 {'type':'normal','title':'版本号', 'subtype': 'version'},
 ]
 
+if (Platform.OS === 'ios') {
+	listRawData.pop()
+}
+
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var MeConfigPage = React.createClass({

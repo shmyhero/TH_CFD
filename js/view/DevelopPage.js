@@ -10,6 +10,10 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
+import {
+	packageVersion,
+} from 'react-native-update';
+
 
 import Picker from 'react-native-picker';
 var MainPage = require('./MainPage');
@@ -119,6 +123,12 @@ export default class DevelopPage extends Component {
 
           {/* <NetworkErrorIndicator onRefresh={()=>this.refresh()}/> */}
 
+          <View style={{flexDirection: 'column',
+            padding:15,
+            }}>
+            <Text>版本号：</Text>
+            <Text>{packageVersion}</Text>
+          </View>
           <View style={{flexDirection: 'column',
             padding:15,
             }}>

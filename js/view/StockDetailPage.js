@@ -283,14 +283,20 @@ var StockDetailPage = React.createClass({
 
 				console.log("minInvestUSD: " + minInvestUSD);
 
-				this.setState({
+				var newState = {
 					stockInfo: responseJson,
 					stockPriceBid: responseJson.bid,
 					stockPriceAsk: responseJson.ask,
 					stockLastPrice:responseJson.last,
 					stockPreclose:responseJson.preClose,
 					minInvestUSD:minInvestUSD,
-				})
+				};
+
+				if (responseJson.levList && responseJson.levList.length > 0 && !responseJson.levList.includes(this.state.leverage)){
+					newState.leverage = responseJson.levList[0];
+				}
+
+				this.setState(newState)
 
 				this.loadStockPriceToday(true, this.state.chartType, responseJson)
 

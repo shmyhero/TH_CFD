@@ -79,6 +79,9 @@ export const KEY_PROFIT = "盈利";
 export const KEY_SEARCH_TEXT = "搜索字段";
 export const KEY_SEARCH_TEXT_FAILED = "搜索字段失败";
 
+export const KEY_ACTIVITY_PRESSED = "<ACTIVITY>_查看弹窗";
+export const KEY_ACTIVITY_CANCELED = "<ACTIVITY>_关闭弹窗";
+
 export const AD_TRACKING_EVENT_LOGIN = "login"        //模拟盘登录
 export const AD_TRACKING_EVENT_REGISTER = "register"  //实盘注册
 export const AD_TRACKING_EVENT_DEEPLINK = "deeplink"  //deeplink //not used now

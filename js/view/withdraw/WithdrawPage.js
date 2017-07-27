@@ -79,9 +79,10 @@ export default class WithdrawPage extends Component {
   			cardBank: cardBank,
   			lastCardNumber: lastCardNumber,
         refundableBanalce: LogicData.getBalanceData().refundable,
+        minRefundableBanalce: LogicData.getBalanceData().minRefundable,
         withdrawValueText: "",
         withdrawValue: 0,
-        hasRead: true,
+        hasRead: false,
         withdrawChargeHint: withdrawChargeHint,
         refundETA: "3-5",
         feeRate: 0.01,
@@ -100,6 +101,7 @@ export default class WithdrawPage extends Component {
     NetworkModule.loadUserBalance(true, (response)=>{
       this.setState({
         refundableBanalce: response.refundable,
+        minRefundableBanalce: response.minRefundable,
       })
     })
 
@@ -185,10 +187,23 @@ export default class WithdrawPage extends Component {
   }
 
   isWithdrawValueAvailable(){
-    if(this.state.withdrawValue > this.state.refundableBanalce){
-      return false;
+    var error = this.getWithdrawValueError()
+    return error == null;
+  }
+
+  getWithdrawValueError(){
+    if(this.state.withdrawValueText && this.state.withdrawValueText.length > 0){
+      if(this.state.withdrawValue > this.state.refundableBanalce){
+        return "大于可出资金: " + this.state.refundableBanalce + "美元， ";
+      }
+      if (this.state.refundableBanalce < this.state.minRefundableBanalce && this.state.withdrawValue < this.state.refundableBanalce){
+        return "可出资金小于5美元时，"
+      }
+      if(this.state.withdrawValue < this.state.minRefundableBanalce && this.state.refundableBanalce >= this.state.minRefundableBanalce){
+        return "最低出金金额5美元， "
+      }
+      return null;
     }
-    return true;
   }
 
   gotoCardInfoPage(){
@@ -235,12 +250,19 @@ export default class WithdrawPage extends Component {
         refundableBalance = (0.00).toFixed(2)
       }
 
+      var withdrawAllText = "全部出金";
+
       var fundableValueText = "可出资金: " + refundableBalance + "美元， ";
-      if(!this.isWithdrawValueAvailable()){
+      var errorText = this.getWithdrawValueError();
+      if(errorText != null){
         inputStyle = styles.errorInputText;
         fundableValueStyle = styles.errorInputText;
         withdrawValueError = true;
-        fundableValueText = "大于可出资金: " + this.state.refundableBanalce + "美元， ";
+        fundableValueText = errorText;
+        if (this.state.refundableBanalce < this.state.minRefundableBanalce
+           && this.state.withdrawValue < this.state.refundableBanalce){
+          withdrawAllText = "只能全部出金";
+        }
       }
 
       return (
@@ -273,7 +295,7 @@ export default class WithdrawPage extends Component {
         		<Text style={fundableValueStyle}>{fundableValueText}</Text>
             <TouchableOpacity onPress={()=>this.withdrawAll()}>
               <Text style={{fontSize: 14, color: '#415a86', }}>
-                全部出金
+                {withdrawAllText}
                 <Text style={{color: 'transparent'}}>
                   0
                 </Text>

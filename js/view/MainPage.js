@@ -9,6 +9,7 @@ import {
   Navigator,
   Linking,
 	Platform,
+	Image,
 } from 'react-native';
 
 import Tabbar, { Tab, RawContent,  Icon, IconWithBar, glypyMapMaker } from './component/react-native-tabbar';
@@ -63,6 +64,7 @@ var DaySignPage = require('./DaySignPage')
 var RegisterSuccessPage = require('./RegisterSuccessPage')
 var SuperPriorityHintPage = require('./SuperPriorityHintPage')
 var FirstDayWithDrawHint = require('./FirstDayWithDrawHint')
+var ActivityModal = require('./ActivityModal')
 var MyMessagesPage = require('./MyMessagesPage')
 var DevelopPage = require('./DevelopPage')
 var PaymentPage = require('./PaymentPage')
@@ -84,6 +86,7 @@ var DepositWithdrawFlow = require('./DepositWithdrawFlow');
 var DepositPage = require('./DepositPage');
 var RankingPage = require('./RankingPage');
 var UserHomePage = require('./UserHomePage');
+var FSModule = require('../module/FSModule');
 
 var TutorialPage = require('./TutorialPage');
 
@@ -184,6 +187,7 @@ var didAccountLoginOutSideSubscription = null;
 var SHARE_PAGE = 'SharePage'
 var REGISTER_SUCCESS_DIALOG = 'RegisterSuccessDialog'
 var SUPER_PRIORITY_HINT = 'SuperPriorityHint'
+var ACTIVITY_MODAL = 'activityModal'
 var FIRST_DAY_WITHDRAW_HINT = 'FirstDayWithDrawHint'
 var isTabbarShown = true
 
@@ -915,13 +919,18 @@ var MainPage = React.createClass({
 							this.refs[SUPER_PRIORITY_HINT].updateLastShow();
 						}
 					}
-
 				}else{
 					needShowDialog = true;
 				}
 
 				if(needShowDialog){
 					this.refs[SUPER_PRIORITY_HINT].show();
+				}
+				else {
+					var notLogin = Object.keys(userData).length === 0
+					if(!notLogin){
+						this.showActivityModal();
+					}
 				}
 			});
 
@@ -933,6 +942,29 @@ var MainPage = React.createClass({
 
 
 			this.showFirstDayWithDrawHint();
+	},
+
+	showActivityModal: function(){
+		var userData = LogicData.getUserData()
+		var notLogin = Object.keys(userData).length === 0
+		if(!notLogin){
+			StorageModule.loadLastActivityData()
+			.then((LastActivityData) => {
+				//Display last activity modal
+				console.log("LastActivityData " + LastActivityData)
+				var data = JSON.parse(LastActivityData);
+				console.log("showActivityModal " + JSON.stringify(data))
+					//data = {"id":1,"name":"DemoActivity0001","picUrl":"https://cfdstorage.blob.core.chinacloudapi.cn/activity/demo1.jpg","pageUrl":"https://cn.tradehero.mobi/TH_CFD_WEB/Invitation.html"}
+				if (data != null && data.id != 0 && !data.shown){
+					data.shown = true;
+					this.refs[ACTIVITY_MODAL].show(data.name,
+						data.pageUrl,
+						data.picUrl)
+					console.log("finish loadAndShowActivityModal")
+					StorageModule.setLastActivityData(JSON.stringify(data))
+				}
+			});
+		}
 	},
 
 	backAndroidHandler: function(){
@@ -1227,6 +1259,12 @@ var MainPage = React.createClass({
 		);
 	},
 
+	renderActivityModal: function(){
+		return (
+			<ActivityModal ref={ACTIVITY_MODAL} getNavigator={this.getNavigator}/>
+		);
+	},
+
 	renderFirstDayWithDrawHintPage:function(){
 		return (
 			<FirstDayWithDrawHint ref={FIRST_DAY_WITHDRAW_HINT}
@@ -1489,6 +1527,7 @@ var MainPage = React.createClass({
 					{this.renderRegisterSuccessPage()}
 					{this.renderSuperPriorityHintPage()}
 					{this.renderFirstDayWithDrawHintPage()}
+					{this.renderActivityModal()}
       	</View>
 		);
 	}

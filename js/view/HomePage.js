@@ -936,20 +936,24 @@ var HomePage = React.createClass({
 
 
 	renderNewUser:function(){
-		return(
-			<TouchableOpacity style = {[styles.newUser, {width:width}]} activeOpacity={0.5} onPress={()=>this.gotoNewUserGuide()}>
-				<View style={{padding:20}}>
-					<View style={{flexDirection:'row'}}>
-						<Text style={{fontSize:19,color:'#4b4b4b'}}>新手学堂</Text>
-						<Text style={{fontSize:19,color:'#ff7500',marginLeft:5}}>场景教学</Text>
-     			</View>
-					<Text style={{marginTop:12,fontSize:13,color:'#6a6a6a'}}>一站式尽览盈交易赚钱秘诀</Text>
-	   		</View>
-				<View style={styles.imageContainer}>
-					<Image style = {styles.newUserImage} source={require('../../images/user_guide.png')}></Image>
-				</View>
-   		</TouchableOpacity>
-		)
+		if(LogicData.getAccountState()){
+			return (<View/>)
+		}else{
+			return(
+				<TouchableOpacity style = {[styles.newUser, {width:width}]} activeOpacity={0.5} onPress={()=>this.gotoNewUserGuide()}>
+					<View style={{padding:20}}>
+						<View style={{flexDirection:'row'}}>
+							<Text style={{fontSize:19,color:'#4b4b4b'}}>新手学堂</Text>
+							<Text style={{fontSize:19,color:'#ff7500',marginLeft:5}}>场景教学</Text>
+	     			</View>
+						<Text style={{marginTop:12,fontSize:13,color:'#6a6a6a'}}>一站式尽览盈交易赚钱秘诀</Text>
+		   		</View>
+					<View style={styles.imageContainer}>
+						<Image style = {styles.newUserImage} source={require('../../images/user_guide.png')}></Image>
+					</View>
+	   		</TouchableOpacity>
+			)
+		}
 	},
 	renderCards: function(){
 

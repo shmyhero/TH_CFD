@@ -296,6 +296,43 @@ var AppNavigator = React.createClass({
 
 			console.log("NETWORK_STATE_CHANGE");
 			NetworkModule.loadUserBalance(true);
+
+			var userData = LogicData.getUserData()
+			var notLogin = Object.keys(userData).length === 0
+			if(!notLogin){
+				//Load new activity
+				NetworkModule.fetchTHUrl(
+					NetConstants.CFD_API.START_UP_ACTIVITY,
+					{
+						method: 'GET',
+						headers: {
+							'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						},
+					},
+					(responseJson) =>{
+						console.log("currentActivityData " + JSON.stringify(responseJson))
+						StorageModule.loadLastActivityData()
+						.then((LastActivityData) => {
+							//Display last activity modal
+							console.log("LastActivityData " + LastActivityData)
+							var data = JSON.parse(LastActivityData);
+							console.log("loadActivityData responseJson " + JSON.stringify(responseJson))
+							if (responseJson.id == 0){
+								StorageModule.setLastActivityData(JSON.stringify(responseJson))
+							}else if (data == null || data.id != responseJson.id || !data.shown){
+								Image.prefetch(responseJson.picUrl).then(()=>{
+									console.log("loadActivityData finished")
+									responseJson.isShown = false;
+									StorageModule.setLastActivityData(JSON.stringify(responseJson))
+								});
+							}
+						});
+					},
+					(result) => {
+
+					}
+				);
+			}
 		});
 		// var alertData = {'title':'盈交易','msg':'打开苹果股票详情','type':'1','stockName':'英国100', 'stockId':34854};
 		// this.alertForPush(alertData);

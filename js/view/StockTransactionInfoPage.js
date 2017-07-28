@@ -109,7 +109,44 @@ var StockTransactionInfoPage = React.createClass({
       webpageUrl: url,
       imageUrl: NetConstants.TRADEHERO_API.SHARE_LOGO_URL,
 			card: this.state.card,
+			onShareToSession: ()=>{this.shareToWechat(2)},
+			onShareToTimeline: ()=>{this.shareToWechat(3)},
 		});
+	},
+
+	shareToWechat: function(type){
+		console.log("shareToWechat " + type)
+
+		var url = NetConstants.CFD_API.SHARE_CARD_TO_HOME;
+		url = url.replace("<id>", this.state.card.cardId);
+		url = url.replace("<share_id>", type);
+		var userData = LogicData.getUserData();
+		var login = Object.keys(userData).length !== 0
+		if(login){
+			NetworkModule.fetchTHUrl(
+				url,
+				{
+					method: 'GET',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						'Content-Type': 'application/json; charset=UTF-8',
+					},
+				},
+				(responseJson) => {
+					if(responseJson.success){
+						card.shared = true;
+						if(responseJson.score){
+							Toast.show("分享成功，赚" + responseJson.score + "积分", {
+								duration: 500,
+							})
+						}
+					}
+				},
+				(result) => {
+					console.log(result.errorMessage)
+				}
+			)
+		}
 	},
 
 	likeTransaction: function(){

@@ -99,6 +99,7 @@ var SharePage = React.createClass({
 		if(login){
 			var url = NetConstants.CFD_API.SHARE_CARD_TO_HOME;
 			url = url.replace("<id>", card.cardId);
+			url = url.replace("<share_id>", 1);
 
 			NetworkModule.fetchTHUrl(
 				url,
@@ -192,8 +193,13 @@ var SharePage = React.createClass({
 						data.webpageUrl,
 						data.imageUrl,
 						WechatModule.WECHAT_SESSION,
-				()=>{ },
+				()=>{
+					if(data.onShareToSession){
+						data.onShareToSession();
+					}
+				},
 				()=>{ });
+
 		}
 	},
 
@@ -205,7 +211,11 @@ var SharePage = React.createClass({
 						data.webpageUrl,
 						data.imageUrl,
 						WechatModule.WECHAT_TIMELINE,
-				()=>{ },
+				()=>{
+					if(data.onShareToTimeline){
+						data.onShareToTimeline();
+					}
+				},
 				()=>{ });
 		}
 	},

@@ -927,12 +927,11 @@ var MainPage = React.createClass({
 					this.refs[SUPER_PRIORITY_HINT].show();
 				}
 				else {
-					var notLogin = Object.keys(userData).length === 0
-					if(!notLogin){
-						this.showActivityModal();
-					}
+					this.canShowActivityModal = true;
 				}
 			});
+
+			this.showActivityModal();
 
 			if(!LogicData.getAccountState()){
 				this.refs['myTabbar'].hideTab("ranking");
@@ -940,30 +939,70 @@ var MainPage = React.createClass({
 				this.refs['myTabbar'].showTab("ranking");
 			}
 
-
 			this.showFirstDayWithDrawHint();
 	},
+
+	canShowActivityModal : false,
 
 	showActivityModal: function(){
 		var userData = LogicData.getUserData()
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
-			StorageModule.loadLastActivityData()
-			.then((LastActivityData) => {
-				//Display last activity modal
-				console.log("LastActivityData " + LastActivityData)
-				var data = JSON.parse(LastActivityData);
-				console.log("showActivityModal " + JSON.stringify(data))
-					//data = {"id":1,"name":"DemoActivity0001","picUrl":"https://cfdstorage.blob.core.chinacloudapi.cn/activity/demo1.jpg","pageUrl":"https://cn.tradehero.mobi/TH_CFD_WEB/Invitation.html"}
-				if (data != null && data.id != 0 && !data.shown){
-					data.shown = true;
-					this.refs[ACTIVITY_MODAL].show(data.name,
-						data.pageUrl,
-						data.picUrl)
-					console.log("finish loadAndShowActivityModal")
-					StorageModule.setLastActivityData(JSON.stringify(data))
+			//Load new activity
+			NetworkModule.fetchTHUrl(
+				NetConstants.CFD_API.START_UP_ACTIVITY,
+				{
+					method: 'GET',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					},
+				},
+				(responseJson) => {
+
+					StorageModule.loadLastActivityData()
+					.then((LastActivityData) => {
+
+						console.log("currentActivityData " + JSON.stringify(responseJson))
+						StorageModule.loadLastActivityData()
+						.then((LastActivityData) => {
+							//Display last activity modal
+							console.log("LastActivityData " + LastActivityData)
+							var data = JSON.parse(LastActivityData);
+
+							if (responseJson.id == 0){
+								StorageModule.setLastActivityData(JSON.stringify(responseJson))
+							}else if (data != null && data.id == responseJson.id){
+								//The API returns same activity body. Display last activity modal
+								if (this.canShowActivityModal && data != null && data.id != 0 && !data.shown){
+									data.shown = true;
+									this.refs[ACTIVITY_MODAL].show(data.name,
+										data.pageUrl,
+										data.picUrl)
+									console.log("Show Activity Modal")
+									StorageModule.setLastActivityData(JSON.stringify(data))
+								}
+							}
+							else if (data == null || data.id != responseJson.id || !data.shown){
+								//Preload the image and display it at next time.
+								Image.prefetch(responseJson.picUrl).then(()=>{
+									console.log("loadActivityData finished")
+									responseJson.isShown = false;
+									StorageModule.setLastActivityData(JSON.stringify(responseJson))
+								});
+							}
+						});
+
+
+					});
+
+
+				},
+				(result) => {
+
 				}
-			});
+			);
+
+
 		}
 	},
 

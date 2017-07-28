@@ -81,6 +81,12 @@ var StockTransactionInfoModal = React.createClass({
 			modalVisible: false,
 		});
 		this.state.hideCallback && this.state.hideCallback();
+
+		if(this.state.transactionInfo && this.state.transactionInfo.score){
+			Toast.show("赚" + this.state.transactionInfo.score + "积分", {
+				duration: 500,
+			})
+		}
 	},
 
 	_setModalVisible: function(visible) {

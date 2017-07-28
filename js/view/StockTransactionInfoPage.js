@@ -25,6 +25,7 @@ var MainPage = require('./MainPage')
 var NetConstants = require('../NetConstants');
 var LogicData = require('../LogicData');
 var NetworkModule = require('../module/NetworkModule');
+var Toast = require('./component/toast/Toast');
 
 var {height, width} = Dimensions.get('window');
 var actionButtonSize = 61;
@@ -135,6 +136,11 @@ var StockTransactionInfoPage = React.createClass({
 								likes: this.state.liked ? this.state.likes - 1 : this.state.likes + 1,
 								liked: !this.state.liked,
 							})
+							if(responseJson.score){
+								Toast.show("赚" + responseJson.score + "积分", {
+									duration: 500,
+								})
+							}
 						}
 					},
 					(result) => {

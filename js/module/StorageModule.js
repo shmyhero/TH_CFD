@@ -13,6 +13,7 @@ var SEARCH_HISTORY_KEY = '@TH_CFD:searchHistory';
 var LIVE_SEARCH_HISTORY_KEY = '@TH_CFD:searchHistoryLive';
 var BANNER_STORAGE_KEY = '@TH_CFD:bannerData';
 var GUIDE_STORAGE_KEY = '@TH_CFD:guideData';
+var GUIDE_RANKING_KEY = '@TH_CFD:guideRankingData';
 var TUTORIAL_KEY = '@TH_CFD:tutorialData';
 var LAST_SUPER_PRIORITY_HINT_DATE = '@TH_CFD:lastSuperPriorityDateData'
 var ACCOUNT_STATE = '@TH_CFD:accountState'
@@ -204,6 +205,23 @@ export async function setGuide(guideData) {
 export async function loadGuide() {
 	try {
 		var value = await AsyncStorage.getItem(GUIDE_STORAGE_KEY);
+		return value;
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function setGuideRanking(guideData) {
+	try {
+		await AsyncStorage.setItem(GUIDE_RANKING_KEY, guideData)
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function loadGuideRanking() {
+	try {
+		var value = await AsyncStorage.getItem(GUIDE_RANKING_KEY);
 		return value;
 	} catch (error) {
 		console.log('AsyncStorage error: ' + error.message);

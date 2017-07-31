@@ -21,6 +21,8 @@ var {
 	height,
 	width
 } = Dimensions.get('window')
+
+var StorageModule = require('../module/StorageModule')
 var heightRate = height / 667.0
 var NavBar = require('./NavBar')
 var Reward = require('./Reward')
@@ -127,6 +129,7 @@ export default class UserHomePage extends Component {
 			isFollowingStatusChanged: false,
 			isPrivate: true,
 			currentSelectedTab : 0,
+			isShowGuide:false,
 			height: UIConstants.getVisibleHeight(),
 		}
 	}
@@ -139,9 +142,17 @@ export default class UserHomePage extends Component {
 		});
 
 		if(LogicData.isUserSelf(this.state.id)) {
-			this.setState({
-				isPrivate: false,
-			})
+
+			StorageModule.loadGuideRanking()
+			.then((value) => {
+				 if(value==null){
+					 this.setState({
+		 				isShowGuide:true,
+				 	})
+					console.log("Rambo loadGuideRanking :"+value);
+					StorageModule.setGuideRanking('True')
+			   }
+			}).done() 
 		}
 
 		this.onPageSelected(0)
@@ -193,11 +204,11 @@ export default class UserHomePage extends Component {
 					rankDescription: responseJson.rankDescription,
 					isPrivate: responseJson.showData == undefined ? true : (!responseJson.showData),
 				}, () => {
-					if(LogicData.isUserSelf(this.state.id)) {
-						this.setState({
-							isPrivate: false,
-						})
-					}
+					// if(LogicData.isUserSelf(this.state.id)) {
+					// 	this.setState({
+					// 		isPrivate: false,
+					// 	})
+					// }
 				})
 				this.loadPlCloseData()
 			},
@@ -268,6 +279,18 @@ export default class UserHomePage extends Component {
 		}, this.follow())
 	}
 
+	_onPressedSetPrivate() {
+		this.setState({
+			isPrivate: !this.state.isPrivate
+		}, this.setPrivate())
+	}
+
+	setPrivate(){
+		console.log("setPrivate function clicked!");
+		this.changeShowPersonalDataSetting(this.state.isPrivate)
+
+	}
+
 	follow() {
 
 		var userData = LogicData.getUserData()
@@ -322,13 +345,22 @@ export default class UserHomePage extends Component {
 
 	}
 
+	renderRightCustomButton(){
+		var userData = LogicData.getUserData()
+		if(userData.userId == this.state.id) {
+			return this.renderPrivateSetButton()
+		} else {
+			return this.renderAddCareButton()
+		}
+	}
+
 
 	renderAddCareButton() {
-		var userData = LogicData.getUserData()
-		// console.log("userData id = " + userData.userId + " state.id = " + this.state.id);
-		if(userData.userId == this.state.id) {
-			return null
-		} else {
+		// var userData = LogicData.getUserData()
+		// // console.log("userData id = " + userData.userId + " state.id = " + this.state.id);
+		// if(userData.userId == this.state.id) {
+		// 	return null
+		// } else {
 
 			var borderColor = btnBorderColor[this.state.rank]
 			var bgColor = btnBgColor[this.state.rank]
@@ -343,8 +375,56 @@ export default class UserHomePage extends Component {
 					</View>
 				</TouchableOpacity>
 			)
-		}
+		// }
 
+	}
+
+	//用户自己设置 公开数据or隐藏数据
+	renderPrivateSetButton() {
+
+			var borderColor = btnBorderColor[this.state.rank]
+			var bgColor = btnBgColor[this.state.rank]
+
+			return(
+				<TouchableOpacity
+						onPress={()=>this._onPressedSetPrivate()}>
+					<View style={[styles.addToCareContainer,{backgroundColor:bgColor,borderColor:borderColor}]}>
+						<Text style={styles.addToCareText}>
+							{this.state.isPrivate ? '公开数据':'隐藏数据'}
+						</Text>
+					</View>
+				</TouchableOpacity>
+			)
+	}
+
+	changeShowPersonalDataSetting(value){
+		var userData = LogicData.getUserData()
+		var notLogin = Object.keys(userData).length === 0
+		if (notLogin) {
+		}else{
+			var url = NetConstants.CFD_API.SHOW_USER_DATA_API
+
+			NetworkModule.fetchTHUrl(
+				url,
+				{
+					method: 'POST',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						'Content-Type': 'application/json; charset=utf-8',
+					},
+					body: JSON.stringify({
+						showData: value,
+					}),
+				},
+				function(responseJson) {
+					//Do nothing?
+					this.onPageSelected(this.state.currentSelectedTab)
+				}.bind(this),
+				function(result) {
+					Alert.alert('提示', result.errorMessage);
+				}
+			)
+		}
 	}
 
 
@@ -371,9 +451,9 @@ export default class UserHomePage extends Component {
 		// userId: PropTypes.number.isRequired,
 		// userName: PropTypes.string.isRequired,
 		var tabPages = [
-			<UserHomePageTab0 navigator={this.props.navigator} userName = {this.props.userName} userId={this.props.userId} ref={'page0'}/>,
-			<UserHomePageTab1 navigator={this.props.navigator} userId={this.props.userId} isPrivate={this.props.isPrivate} ref={'page1'}/>,
-			<UserHomePageTab2 navigator={this.props.navigator} userId={this.props.userId} isPrivate={this.props.isPrivate} ref={'page2'}/>
+			<UserHomePageTab0 navigator={this.props.navigator} userName = {this.props.userName} userId={this.props.userId} isPrivate={this.state.isPrivate} ref={'page0'}/>,
+			<UserHomePageTab1 navigator={this.props.navigator} userId={this.props.userId} isPrivate={this.state.isPrivate} ref={'page1'}/>,
+			<UserHomePageTab2 navigator={this.props.navigator} userId={this.props.userId} isPrivate={this.state.isPrivate} ref={'page2'}/>
 		]
 
 		var viewPages = tabNames.map(
@@ -389,6 +469,38 @@ export default class UserHomePage extends Component {
 					onPageSelected={(index) => this.onPageSelected(index)} />
 			</View>
 		)
+	}
+
+	onPressIKnow(){
+		this.setState({
+			isShowGuide:false
+		})
+	}
+
+	showGuide(){
+		if(this.state.isShowGuide){
+			return(
+				<View>
+					<View style={styles.guide}>
+					</View>
+						<View style={{position:'absolute',width:width,height:height}}>
+							<Image style={{width:122,height:142,marginLeft:width-122}} source = {require('../../images/icon_guide_1.png')}></Image>
+							<View style={styles.guideContent}>
+								<Image style={{width:106,height:82,marginBottom:5}} source = {require('../../images/icon_guide_2.png')}></Image>
+								<Text style={styles.textGuide}>打开开关，即可查看自己的交易数据，</Text>
+								<Text style={styles.textGuide}>也可以让更多的人了结我哦！</Text>
+								<TouchableOpacity
+										onPress={()=>this.onPressIKnow()}>
+										<Text style={styles.guideButton}>知道了</Text>
+								</TouchableOpacity>
+							</View>
+						</View>
+				</View>
+
+			)
+		}else{
+			return null
+		}
 	}
 
 	render() {
@@ -407,300 +519,15 @@ export default class UserHomePage extends Component {
 						showBackButton={true}
 						backgroundColor={'transparent'}
 						navigator={this.props.navigator}
-						rightCustomContent={() => this.renderAddCareButton()}/>
+						rightCustomContent={() => this.renderRightCustomButton()}/>
 					</View>
+
+					{this.showGuide()}
 
 			</View>
 		);
 	}
 
-	// renderPrivateOne() {
-	// 	if(this.state.isPrivate) {
-	// 		return(null)
-	// 	} else {
-	// 		return(<Text style={{fontSize:12,color:'#424242',marginTop:5}}>$</Text>)
-	// 	}
-	// }
-	//
-	// renderPrivateTwo() {
-	// 	if(this.state.isPrivate) {
-	// 		return(null)
-	// 	} else {
-	// 		return(<Text style={{fontSize:12,color:'#424242',marginTop:5}}>%</Text>)
-	// 	}
-	// }
-
-	// middleWarpperRender() {
-	//
-	// 	var rankColor = this.state.rank > 0 ? {
-	// 		color: '#fa2c21'
-	// 	} : null;
-	// 	return(
-	// 		<View style = {styles.middleWapper}>
-	// 			<View style={{flexDirection:'row',height:40}}>
-	// 				<View style = {[styles.oneOfThree,{flexDirection:'row'}]}>
-	//
-	// 						<TouchableOpacity style={{flexDirection:'row',alignItems:'center'}} onPress={()=>this._onPressedAskForRank()}>
-	// 							<Text style={styles.font1}>交易等级</Text>
-	// 							<Image style={{width:16,height:16,marginLeft:2}} source = {require('../../images/icon_ask.png')}></Image>
-	// 						</TouchableOpacity>
-	//
-	//    			</View>
-	// 				<View style = {styles.oneOfThree}>
-	// 					<Text style={styles.font1}>平均每笔收益</Text>
-	//
-	//    			</View>
-	// 				<View style = {styles.oneOfThree}>
-	// 					<Text style={styles.font1}>胜率</Text>
-	//    			</View>
-	// 			</View>
-	// 			<View style={{flexDirection:'row',flex:1,marginBottom:15}}>
-	// 				<View style = {styles.oneOfThree}>
-	//    				<Text style={[styles.font2,rankColor]}>{this.state.isPrivate ? emptyStar:this.state.rankDescription}</Text>
-	//    			</View>
-	// 				{this.rowSepartor()}
-	// 				<View style = {styles.oneOfThree}>
-	// 					{this.renderPrivateOne()}
-	//    				<Text style={styles.font2}>{this.state.isPrivate ? emptyStar:this.state.avgPl.toFixed(2)}</Text>
-	//    			</View>
-	// 				{this.rowSepartor()}
-	// 				<View style = {styles.oneOfThree}>
-	//    				<Text style={styles.font2}>{this.state.isPrivate ? emptyStar:this.state.winRate.toFixed(2)}</Text>
-	//           {this.renderPrivateTwo()}
-	//    			</View>
-	// 			</View>
-	//  		</View>
-	// 	)
-	// }
-
-	// lineSepartor() {
-	// 	return(
-	// 		<View style ={styles.lineSepartor}></View>
-	// 	)
-	// }
-	//
-	// rowSepartor() {
-	// 	return(
-	// 		<View style ={styles.rowSepartor}></View>
-	// 	)
-	// }
-	//
-	// _onPressedChartType(type) {
-	// 	console.log('loadPlCloseData:' + type)
-	//
-	// 	if(this.state.chartType == type) {
-	// 		console.log('same type clicked , return null')
-	// 		return
-	// 	}
-	// 	var chartTypeName = "";
-	// 	if(type == CHART_TYPE_2MONTH) {
-	// 		chartTypeName = NetConstants.PARAMETER_CHARTTYPE_2WEEK_YIELD;
-	// 	} else if(type == CHART_TYPE_ALL) {
-	// 		chartTypeName = NetConstants.PARAMETER_CHARTTYPE_ALL_YIELD;
-	// 	}
-	//
-	// 	this.setState({
-	// 		chartType: type,
-	// 		chartTypeName: chartTypeName,
-	// 	}, () => this.loadPlCloseData())
-	// }
-	//
-	// _onPressedAskForRank() {
-	// 	this.props.navigator.push({
-	// 		name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
-	// 		url: NetConstants.TRADEHERO_API.WEBVIEW_TRADE_LEVEL,
-	// 		isShowNav: false,
-	// 	});
-	// }
-	//
-	// _onPressedCardDetail() {
-	// 	this.props.navigator.push({
-	// 		name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
-	// 		url: NetConstants.TRADEHERO_API.WEBVIEW_CARD_RULE,
-	// 		isShowNav: false,
-	// 	});
-	// }
-	//
-	// _onPressedCares() {
-	// 	console.log('_onPressedCares')
-	// }
-	//
-	// _onPressedCards() {
-	// 	console.log('_onPressedCards')
-	// }
-
-	// loadPlCloseData() {
-	// 	console.log("loadPlCloseData this.state.isPrivate =" + this.state.isPrivate);
-	// 	if(this.state.isPrivate) {
-	// 		return
-	// 	}
-	// 	console.log("loadPlCloseData:start " + this.state.chartType);
-	// 	var url = NetConstants.CFD_API.GET_POSITION_CHART_PLCLOSE_LIVE
-	// 	if(this.state.chartType == CHART_TYPE_2MONTH) {
-	// 		url = NetConstants.CFD_API.GET_POSITION_CHART_PLCLOSE_2W_LIVE
-	// 	}
-	//
-	// 	url = url.replace("<id>", this.props.userId)
-	//
-	// 	var userData = LogicData.getUserData()
-	// 	NetworkModule.fetchTHUrl(
-	// 		url, {
-	// 			method: 'GET',
-	// 			headers: {
-	// 				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-	// 				'Content-Type': 'application/json; charset=utf-8',
-	// 			},
-	// 		},
-	// 		(responseJson) => {
-	// 			console.log(responseJson);
-	// 			this.setState({
-	// 				plCloseData: responseJson
-	// 			})
-	// 		},
-	// 		(result) => {
-	//
-	// 		},
-	// 		true
-	// 	)
-	// }
-	//
-	// bottomWarpperRender() {
-	// 	var pl2wShow = this.state.isPrivate ? emptyStar : this.state.pl2w.toFixed(2);
-	// 	var totolPlColor = totolPlColor = '#474747'
-	// 	if(!this.state.isPrivate) {
-	// 		totolPlColor = this.state.pl2w.toFixed(2) >= 0 ? '#fa2c21' : ColorConstants.STOCK_DOWN_GREEN
-	// 	}
-	//
-	// 	return(
-	// 		<View style = {styles.bottomWapper}>
-  //  			<View style ={styles.ceilWapper}>
-  //     		<Text style = {{color:'#474747',fontSize:15}}>近2周收益：</Text>
-	// 				<Text style = {[{color:totolPlColor,fontSize:15},]}>{pl2wShow}</Text>
-  //     	</View>
-	// 			{this.lineSepartor()}
-	// 			<View style ={styles.ceilWapper2}>
-	// 				<View style = {styles.ceilLeft}>
-  //    				<View style = {styles.chartTypeBorder}>
-	// 						<TouchableOpacity onPress={()=>this._onPressedChartType(CHART_TYPE_2MONTH)} style = {[styles.chartType,{backgroundColor:this.state.chartType == CHART_TYPE_2MONTH ? ColorConstants.TITLE_BLUE_LIVE:'white'}]}>
-  //      					<Text style = {{fontSize:13,color:this.state.chartType == CHART_TYPE_2MONTH ? 'white' : ColorConstants.INPUT_TEXT_COLOR}}>近2周</Text>
-  //      				</TouchableOpacity>
-	// 						<TouchableOpacity onPress={()=>this._onPressedChartType(CHART_TYPE_ALL)} style = {[styles.chartType,{backgroundColor:this.state.chartType == CHART_TYPE_ALL ? ColorConstants.TITLE_BLUE_LIVE:'white'}]}>
-  //      					<Text style = {{fontSize:13,color:this.state.chartType == CHART_TYPE_ALL ? 'white' : ColorConstants.INPUT_TEXT_COLOR}}>全部</Text>
-  //      				</TouchableOpacity>
-  //        		</View>
-  //    			</View>
-	// 				<View style = {styles.ceilRight}>
-	// 					<View style = {[styles.tipIcon,{backgroundColor:ColorConstants.TITLE_BLUE_LIVE}]}></View>
-  //    				<Text style = {{fontSize:10,color:'#474747'}}>TA的收益走势</Text>
-  //    			</View>
-  //   		</View>
-	// 			{this.chartRender()}
-  //  		</View>
-	// 	)
-	// }
-	//
-	// chartRender() {
-	// 	if(Platform.OS === "ios") {
-	// 		return(
-	// 			<LineChart style={styles.lineChart}
-	// 				data={JSON.stringify(this.state.plCloseData)}
-	// 				chartType={this.state.chartTypeName}>
-	// 			</LineChart>
-	// 		)
-	// 	} else {
-	// 		var textColor = "#70a5ff"; //text bottom and right
-	// 		var backgroundColor = "white"
-	// 		var borderColor = "#497bce"; //line
-	// 		var lineChartGradient = ['transparent', 'transparent']
-	//
-	// 		return(
-	// 			<LineChart style={styles.lineChart}
-	// 				chartType={this.state.chartTypeName}
-	// 				data={JSON.stringify(this.state.plCloseData)}
-	// 				xAxisPosition="BOTTOM"
-	// 				borderColor={borderColor}
-	// 				xAxisTextSize={8}
-	// 				rightAxisTextSize={8}
-	// 				textColor={textColor}
-	// 				rightAxisDrawGridLines={true}
-	// 				rightAxisLabelCount={5}
-	// 				rightAxisPosition="OUTSIDE_CHART"
-	// 				rightAxisEnabled={true}
-	// 				rightAxisDrawLabel={true}
-	// 				chartPaddingTop={15}
-	// 				chartPaddingBottom={5}
-	// 				drawBackground={true}
-	// 				backgroundColor={backgroundColor}
-	// 				chartPaddingLeft={15}
-	// 				chartPaddingRight={15}
-	// 				lineChartGradient={lineChartGradient}
-	// 			>
-	// 			</LineChart>
-	// 		)
-	// 	}
-	// }
-	//
-	// pressCard(index) {
-	// 	console.log("pressedCard:" + index);
-	// }
-	//
-	// cardWarpperRender() {
-	// 	var _scrollView: ScrollView;
-	//
-	// 	if(this.state.cards.length > 0 && !this.state.isPrivate) {
-	// 		var lastIndex = this.state.cards.length - 1;
-	// 		var cardItems = this.state.cards.map(
-	// 			(card, i) =>
-	// 			<TouchableOpacity onPress={() => this.pressCard(i)} key={i}>
-	// 				<View style={[styles.cardItem,{marginRight:i==0?4:10},{marginRight:i==lastIndex?10:4}]}>
-	// 					<Image style={styles.cardImage} source={{uri:this.state.cards[i].imgUrlMiddle}}></Image>
-	// 					<View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
-	// 						<Text style={{color:'#fa2c21',fontSize:14,marginBottom:5}}>{this.state.cards[i].plRate.toFixed(2)}%</Text>
-	// 						<Text style={{color:'#3f3f3f',fontSize:14}}>{this.state.cards[i].stockName}</Text>
-	// 					</View>
-	// 				</View>
-	// 			</TouchableOpacity>
-	// 		)
-	//
-	// 		return(
-	// 			<View style = {styles.cardWapper}>
-	// 				<View style={styles.cardWapperContainer}>
-	// 					<Text style={styles.cardWapperTitle}>
-	// 						卡片成就
-	// 					</Text>
-	// 					<TouchableOpacity onPress={()=>this._onPressedCardDetail()}>
-	// 						<Text style={styles.more}>
-	// 							了解详情 >
-	// 						</Text>
-	// 					</TouchableOpacity>
-	// 				</View>
-	// 				<View style={{flexDirection:'row',
-	// 				  backgroundColor: ColorConstants.TITLE_BLUE_LIVE,}}>
-	// 					<ScrollView
-	// 						ref={(scrollView) => { _scrollView = scrollView; }}
-	// 						automaticallyAdjustContentInsets={false}
-	// 						horizontal={true}
-	// 						style={styles.horizontalScrollView}>
-	// 						{cardItems}
-	// 					</ScrollView>
-	// 				</View>
-	// 			</View>
-	// 		)
-	// 	} else {
-	// 		return null
-	// 	}
-	// }
-
-
-		// renderEmptyBottom() {
-		// 	if(Platform.OS === "ios") {
-		// 		return null
-		// 	} else {
-		// 		return(
-		// 			<View style={{height:20,width:width}}></View>
-		// 		)
-		// 	}
-		// }
 }
 
 const styles = StyleSheet.create({
@@ -939,6 +766,39 @@ const styles = StyleSheet.create({
 		height: (width * 4 / 5) * 2 / 3,
 		width: (width - 30) / 2
 	},
+	guide:{
+		position:'absolute',
+		width:width,
+		height:height,
+		opacity:0.75,
+		backgroundColor:'#4c4c4c'
+	},
+	textGuide:{
+		color:'#FFFFFF',
+		fontSize:17,
+		width:width,
+		marginTop:5,
+		textAlign:'center',
+		justifyContent:'center',
+	},
+	guideButton:{
+		borderWidth:1,
+		borderColor:'#FFFFFF',
+		fontSize:18,
+		borderRadius:22,
+		color:'white',
+		paddingLeft:50,
+		paddingRight:50,
+		paddingTop:10,
+		paddingBottom:10,
+		marginTop:20
+	},
+	guideContent:{
+		flex:1,
+		marginTop:-80,
+		alignItems:'center',
+		justifyContent:'center'
+	}
 });
 
 module.exports = UserHomePage;

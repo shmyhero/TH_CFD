@@ -199,7 +199,7 @@ public abstract class BaseChartDrawer implements IChartDrawer {
         return info;
     }
 
-    protected void formatRightAxisText(CombinedChart chart, final float maxVal, final float minVal){
+    protected void formatRightAxisText(final CombinedChart chart, final float maxVal, final float minVal){
 
         chart.getAxisRight().setValueFormatter(new YAxisValueFormatter() {
             @Override
@@ -226,6 +226,8 @@ public abstract class BaseChartDrawer implements IChartDrawer {
             }
         });
     }
+
+    protected boolean isPrivate(CombinedChart chart){return false;}
 
     /**
      * Return true if the chart need to draw a horizontal pre-close line. Else false.

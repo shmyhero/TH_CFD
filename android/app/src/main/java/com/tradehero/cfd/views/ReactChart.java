@@ -169,4 +169,10 @@ public class ReactChart extends CombinedChart {
     public void setOritentation(boolean isLandspace){
         this.isLandspace = isLandspace;
     }
+
+    private boolean isPrivate = false;
+    public boolean isPrivate(){return isPrivate;}
+    public void setIsPrivate(boolean isPrivate){
+        this.isPrivate = isPrivate;
+    }
 }

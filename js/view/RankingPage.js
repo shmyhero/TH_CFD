@@ -88,9 +88,9 @@ export default class RankingPage extends Component{
 
   gotoUserHomePage(rowData) {
     var isPrivate = !rowData.showData
-    if(LogicData.isUserSelf(rowData.id)) {
-				isPrivate = false
-		}
+    // if(LogicData.isUserSelf(rowData.id)) {
+		// 		isPrivate = false
+		// }
 
 		this.props.navigator.push({
 			name: MainPage.USER_HOME_PAGE_ROUTE,
@@ -225,10 +225,9 @@ export default class RankingPage extends Component{
     }
 
     var isUserSelf = LogicData.isUserSelf(rowData.id);
-    // console.log("rowDataid = " + rowData.id + " isUserSelf = " + isUserSelf);
 
-    var winRateShow = (rowData.showData || isUserSelf)?rate:emptyStar;
-    var posCountShow = (rowData.showData || isUserSelf)?rowData.posCount:emptyStar;
+    var winRateShow = (rowData.showData)?rate:emptyStar;
+    var posCountShow = (rowData.showData)?rowData.posCount:emptyStar;
     // console.log("rowDara.posCount = " + rowData.posCount + " emptyStar = " + emptyStar);
     return(
 

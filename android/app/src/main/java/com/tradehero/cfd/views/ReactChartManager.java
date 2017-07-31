@@ -536,6 +536,12 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
         chart.setOritentation(isLandscape);
     }
 
+    @ReactProp(name= "chartIsPrivate")
+    public void setIsPrivate(ReactChart chart, boolean isPrivate){
+        Log.d("setIsPrivte",""+isPrivate);
+        chart.setIsPrivate(isPrivate);
+    }
+
 
     @Override
     public String getName() {

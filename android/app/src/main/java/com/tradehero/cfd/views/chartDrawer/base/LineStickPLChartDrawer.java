@@ -40,7 +40,7 @@ public abstract class LineStickPLChartDrawer extends BaseChartDrawer {
     }
 
     @Override
-    protected void resetChart(CombinedChart chart) {
+    protected void resetChart(final CombinedChart chart) {
         super.resetChart(chart);
         chart.setDragEnabled(false);
         chart.setScaleEnabled(false);
@@ -48,6 +48,9 @@ public abstract class LineStickPLChartDrawer extends BaseChartDrawer {
         chart.getAxisRight().setValueFormatter(new YAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, YAxis yAxis) {
+                if(isPrivate(chart)){
+                    return "***";
+                }
                 return String.format("%.2f", value);
             }
         });
@@ -278,5 +281,13 @@ public abstract class LineStickPLChartDrawer extends BaseChartDrawer {
 //            setDescription(chart, "", "", "", "");
 //        }
 
+    }
+
+    @Override
+    protected boolean isPrivate(CombinedChart chart){
+        if(chart instanceof ReactChart){
+            return ((ReactChart) chart).isPrivate();
+        }
+        return true;
     }
 }

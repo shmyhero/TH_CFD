@@ -272,6 +272,7 @@ var MainPage = React.createClass({
 					showRegisterSuccessDialog={this.showRegisterSuccessDialog}
 					popToStackTop={route.popToStackTop}
 					getNextRoute={route.getNextRoute}
+					needShowPromoCode={route.needShowPromoCode}
 					onLoginFinish={route.onLoginFinish}/>
 				</View>
 			);

@@ -34,12 +34,14 @@ export default class UserHomePageTab0 extends Component{
     userId: PropTypes.number.isRequired,
     userName: PropTypes.string.isRequired,
     backRefresh: React.PropTypes.func,
+    isPrivate: PropTypes.bool,
   }
 
   static defaultProps = {
     isStatisticPage: false,
     userId: '',
-    userName: ''
+    userName: '',
+    isPrivate: false,
   }
 
 	constructor(props){
@@ -62,7 +64,7 @@ export default class UserHomePageTab0 extends Component{
 			rank: 1,
 			rankDescription: '',
 			isFollowingStatusChanged: false,
-			isPrivate: false,
+			// isPrivate: false,
       avgLeverage: 0,
       orderCount: 0,
       avgHoldPeriod: 0,
@@ -80,11 +82,11 @@ export default class UserHomePageTab0 extends Component{
 
     this.loadUserInfo()
 
-    if(LogicData.isUserSelf(this.state.id)) {
-      this.setState({
-        isPrivate: false,
-      })
-    }
+    // if(LogicData.isUserSelf(this.state.id)) {
+    //   this.setState({
+    //     isPrivate: false,
+    //   })
+    // }
 	}
 
   componentWillUnmount() {
@@ -107,10 +109,10 @@ export default class UserHomePageTab0 extends Component{
 			},
 			(responseJson) => {
 				console.log(responseJson);
-        var isPrivate = responseJson.showData == undefined ? true : (!responseJson.showData);
-        if(LogicData.isUserSelf(this.state.id)) {
-          isPrivate = false;
-        }
+        // var isPrivate = responseJson.showData == undefined ? true : (!responseJson.showData);
+        // if(LogicData.isUserSelf(this.state.id)) {
+        //   isPrivate = false;
+        // }
 				this.setState({
 					id: responseJson.id,
 					avgPl: responseJson.avgPl,
@@ -123,7 +125,7 @@ export default class UserHomePageTab0 extends Component{
 					isFollowing: responseJson.isFollowing,
 					rank: responseJson.rank,
 					rankDescription: responseJson.rankDescription,
-					isPrivate: isPrivate,
+					// isPrivate: isPrivate,
           avgLeverage: responseJson.avgLeverage,
           orderCount: responseJson.orderCount,
           avgHoldPeriod: responseJson.avgHoldPeriod,
@@ -163,6 +165,7 @@ export default class UserHomePageTab0 extends Component{
   tabPressed(index) {
     console.log("tabPressed==>"+index);
     this.refreshData();
+    // this.loadUserInfo();
   }
 
   refresh(){
@@ -175,11 +178,11 @@ export default class UserHomePageTab0 extends Component{
       orderCount:this.state.orderCount,
       avgHoldPeriod: this.state.avgHoldPeriod,
       avgInvestUSD: this.state.avgInvestUSD,
-      isPrivate:this.state.isPrivate,
+      isPrivate:this.props.isPrivate,
     }
 
     var staticBarBlock = {
-      isPrivate:this.state.isPrivate,
+      isPrivate:this.props.isPrivate,
     }
 
     this.refs[STATISTIC_BAR_BLOCK].refresh(staticBarBlock);
@@ -214,16 +217,16 @@ export default class UserHomePageTab0 extends Component{
 				</View>
 				<View style={{flexDirection:'row',flex:1,marginBottom:15}}>
 					<View style = {styles.oneOfThree}>
-     				<Text style={[styles.font2,rankColor]}>{this.state.isPrivate ? emptyStar:this.state.rankDescription}</Text>
+     				<Text style={[styles.font2,rankColor]}>{this.props.isPrivate ? emptyStar:this.state.rankDescription}</Text>
      			</View>
 					{this.rowSepartor()}
 					<View style = {styles.oneOfThree}>
 						{/* {this.renderPrivateOne()} */}
-     				<Text style={styles.font2}>{this.state.isPrivate ? emptyStar:add+this.state.avgPl.toFixed(2)}</Text>
+     				<Text style={styles.font2}>{this.props.isPrivate ? emptyStar:add+this.state.avgPl.toFixed(2)}</Text>
      			</View>
 					{this.rowSepartor()}
 					<View style = {styles.oneOfThree}>
-     				<Text style={styles.font2}>{this.state.isPrivate ? emptyStar:this.state.winRate.toFixed(2)}</Text>
+     				<Text style={styles.font2}>{this.props.isPrivate ? emptyStar:this.state.winRate.toFixed(2)}</Text>
             {this.renderPrivateTwo()}
      			</View>
 				</View>
@@ -232,28 +235,28 @@ export default class UserHomePageTab0 extends Component{
 	}
 
   bottomWarpperRender() {
-		var pl2wShow = this.state.isPrivate ? emptyStar : this.state.pl2w.toFixed(2);
+		var pl2wShow = this.props.isPrivate ? emptyStar : this.state.pl2w.toFixed(2);
     var addValue = this.state.pl2w>0 ? "+":""
 		var totolPlColor = totolPlColor = '#474747'
-		if(!this.state.isPrivate) {
+		if(!this.props.isPrivate) {
 			totolPlColor = this.state.pl2w.toFixed(2) >= 0 ? '#fa2c21' : ColorConstants.STOCK_DOWN_GREEN
 		}
 
 		var userData = LogicData.getUserData();
-    if(this.state.isPrivate){
-      return(
-        <View style = {[styles.bottomWapper]}>
-          <View style ={styles.ceilWapper}>
-            <Text style = {{color:'#474747',fontSize:15}}>近2周收益：</Text>
-            <Text style = {[{color:totolPlColor,fontSize:15},]}>{emptyStar}</Text>
-          </View>
-          {this.lineSepartor()}
-          <View style = {{flex:1, alignItems:'center',justifyContent:'center'}} >
-            <Text style = {styles.loadingText}>用户未公开数据</Text>
-          </View>
-        </View>
-      )
-    }else{
+    // if(this.props.isPrivate){
+    //   return(
+    //     <View style = {[styles.bottomWapper]}>
+    //       <View style ={styles.ceilWapper}>
+    //         <Text style = {{color:'#474747',fontSize:15}}>近2周收益：</Text>
+    //         <Text style = {[{color:totolPlColor,fontSize:15},]}>{emptyStar}</Text>
+    //       </View>
+    //       {this.lineSepartor()}
+    //       <View style = {{flex:1, alignItems:'center',justifyContent:'center'}} >
+    //         <Text style = {styles.loadingText}>用户未公开数据</Text>
+    //       </View>
+    //     </View>
+    //   )
+    // }else{
       return(
   			<View style = {styles.bottomWapper}>
      			<View style ={styles.ceilWapper}>
@@ -261,7 +264,7 @@ export default class UserHomePageTab0 extends Component{
   					<Text style = {[{color:totolPlColor,fontSize:15},]}>{addValue}{pl2wShow}</Text>
         	</View>
 
-          <View style={styles.separatorLine}/> 
+          <View style={styles.separatorLine}/>
 
   				<View style ={styles.ceilWapper2}>
   					<View style = {styles.ceilLeft}>
@@ -282,7 +285,7 @@ export default class UserHomePageTab0 extends Component{
   				{this.chartRender()}
      		</View>
   		)
-    }
+    // }
 
 	}
 
@@ -307,10 +310,10 @@ export default class UserHomePageTab0 extends Component{
 	}
 
   loadPlCloseData() {
-		console.log("loadPlCloseData this.state.isPrivate =" + this.state.isPrivate);
-		if(this.state.isPrivate) {
-			return
-		}
+		console.log("loadPlCloseData this.props.isPrivate =" + this.props.isPrivate);
+		// if(this.props.isPrivate) {
+		// 	return
+		// }
 		console.log("loadPlCloseData:start " + this.state.chartType);
 		var url = NetConstants.CFD_API.GET_POSITION_CHART_PLCLOSE_LIVE
 		if(this.state.chartType == CHART_TYPE_2MONTH) {
@@ -348,7 +351,7 @@ export default class UserHomePageTab0 extends Component{
   cardWarpperRender() {
 		var _scrollView: ScrollView;
 
-		if(this.state.cards.length > 0 && !this.state.isPrivate) {
+		if(this.state.cards.length > 0 && !this.props.isPrivate) {
 			var lastIndex = this.state.cards.length - 1;
 			var cardItems = this.state.cards.map(
 				(card, i) =>
@@ -427,6 +430,7 @@ export default class UserHomePageTab0 extends Component{
 					backgroundColor={backgroundColor}
 					chartPaddingLeft={15}
 					chartPaddingRight={15}
+          chartIsPrivate={this.props.isPrivate}
 					lineChartGradient={lineChartGradient}
 				>
 				</LineChart>
@@ -459,7 +463,7 @@ export default class UserHomePageTab0 extends Component{
 	}
 
   renderPrivateOne() {
-		if(this.state.isPrivate) {
+		if(this.props.isPrivate) {
 			return(null)
 		} else {
 			return(<Text style={{fontSize:12,color:'#424242',marginTop:5}}>$</Text>)
@@ -467,7 +471,7 @@ export default class UserHomePageTab0 extends Component{
 	}
 
 	renderPrivateTwo() {
-		if(this.state.isPrivate) {
+		if(this.props.isPrivate) {
 			return(null)
 		} else {
 			return(<Text style={{fontSize:12,color:'#424242',marginTop:5}}>%</Text>)

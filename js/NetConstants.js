@@ -176,6 +176,7 @@ function getCFDAPI(){
     POST_UPDATE_FIRST_LOGIN_INFO: CFD_API_SERVER + '/api/user/updateFirstLoginInfo',
 
     START_UP_ACTIVITY: CFD_API_SERVER + '/api/common/activity',
+    GET_SCORE: CFD_API_SERVER + '/api/score',
   }
 }
 
@@ -223,6 +224,8 @@ function getTradeHeroAPI(){
     WEBVIEW_TRADE_LEVEL:TRADEHERO_SERVER_IP+'/TH_CFD_SP/level.html',//交易等级
 
     INCOME_RULE:TRADEHERO_SERVER_IP+'/TH_CFD_WEB/TradgoldRule.html',
+    CREDITS_RULE:TRADEHERO_SERVER_IP+'/CFD_Channel/jifenguize.html',
+    CREDITS_PLAY:TRADEHERO_SERVER_IP+'/CFD_Channel/jifenchouj.html',
   }
 }
 

@@ -43,6 +43,7 @@ var AccountInfoPage = require('./AccountInfoPage');
 var AccountNameModifyPage = require('./AccountNameModifyPage');
 var MePage = require('./MePage')
 var MyIncomePage = require('./MyIncomePage')
+var MyCreditsPage = require('./MyCreditsPage')
 var WithdrawIncomePage = require('./income/WithdrawIncomePage');
 var WithdrawIncomeSubmittedPage = require('./income/WithdrawIncomeSubmittedPage');
 var MyCard = require('./MyCard')
@@ -114,6 +115,7 @@ export let QA_ROUTE = 'q&a'
 export let ME_ROUTE = 'me'
 export let MY_CARD_ROUTE = 'myCard'
 export let MY_INCOME_ROUTE = 'myIncome'
+export let MY_CREDITS_ROUTE = 'myCredits'
 export let WITHDRAW_INCOME_ROUTE = 'withdrawIncomePage';
 export let WITHDRAW_INCOME_SUBMITTED_ROUTE = 'withdrawIncomeSubmittedPage';
 export let ABOUT_US_ROUTE = 'aboutUs'
@@ -427,12 +429,17 @@ var MainPage = React.createClass({
 				<RankingPage navigator={navigationOperations} routeMapper={this.RouteMapper}
 					popToOutsidePage={route.popToOutsidePage}/>
 			)
-		}else if(route.name === MY_INCOME_ROUTE) {
+		} else if(route.name === MY_CREDITS_ROUTE) {
+			hideTabbar();
+			return (
+				<MyCreditsPage navigator={navigationOperations} />
+			)
+		} else if(route.name === MY_INCOME_ROUTE) {
 			hideTabbar();
 			return (
 				<MyIncomePage navigator={navigationOperations} />
 			)
-		}  else if(route.name === WITHDRAW_INCOME_ROUTE) {
+		} else if(route.name === WITHDRAW_INCOME_ROUTE) {
 			hideTabbar();
 			return (
 				<WithdrawIncomePage navigator={navigationOperations} routeMapper={this.RouteMapper}

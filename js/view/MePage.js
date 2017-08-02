@@ -41,6 +41,7 @@ var listRawData = [{'type':'account','subtype':'accountInfo'},
 {'type':'accountState'},
 {'type':'normal','title':'存取资金', 'image':require('../../images/icon_depositwithdraw.png'), 'subtype':'depositWithdraw'},
 {'type':'normal','title':'邀请好友', 'image':require('../../images/icon_invite_friends.png'), 'subtype':'inviteFriends'},
+{'type':'normal','title':'我的积分', 'image':require('../../images/icon_credits.png'), 'subtype':'credits'},
 {'type':'normal','title':'我的交易金', 'image':require('../../images/icon_income.png'), 'subtype':'income'},
 {'type':'normal','title':'我的卡片', 'image':require('../../images/icon_mycard.png'), 'subtype':'mycard'},
 {'type':'normal','title':'帮助中心', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'helpcenter'},
@@ -419,6 +420,21 @@ var MePage = React.createClass({
 					});
 				});
 			}
+		}else if(rowData.subtype === 'credits'){
+			var userData = LogicData.getUserData()
+			var notLogin = Object.keys(userData).length === 0
+			if(!notLogin){
+				this.props.navigator.push({
+					name: MainPage.MY_CREDITS_ROUTE,
+				})
+			}else{
+				this.props.navigator.push({
+					name: MainPage.LOGIN_ROUTE,
+					nextRoute: {
+						name: MainPage.MY_CREDITS_ROUTE,
+					},
+				});
+			}
 		}else if(rowData.subtype === 'income'){
 			var userData = LogicData.getUserData()
 			var notLogin = Object.keys(userData).length === 0
@@ -434,8 +450,7 @@ var MePage = React.createClass({
 					},
 				});
 			}
-		}
-		else if(rowData.subtype === 'mycard'){
+		}else if(rowData.subtype === 'mycard'){
 			this.props.navigator.push({
 				name:MainPage.MY_CARD_ROUTE,
 			})
@@ -612,12 +627,16 @@ var MePage = React.createClass({
 					null
 				);
 			}
-			else if((rowData.subtype === 'depositWithdraw' || rowData.subtype === 'mycard') && !LogicData.getAccountState()){
+			else if((rowData.subtype === 'depositWithdraw' || rowData.subtype === 'mycard'|| rowData.subtype === 'credits') && !LogicData.getAccountState()){
 				return (
 					null
 				);
 			}
-			else{
+			else if(rowData.subtype === 'onlinehelp' && LogicData.getAccountState() ){
+				return (
+					null
+				);
+			}else{
 				return(
 					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
 						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>

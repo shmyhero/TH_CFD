@@ -20,6 +20,7 @@ protocol BaseDataProvider : class
     func chartWidth() -> CGFloat
     func chartHeight() -> CGFloat
     func rightPadding() -> CGFloat
+    func chartSetting() -> Dictionary<String, AnyObject>
 }
 
 class BaseData: NSObject {
@@ -45,6 +46,7 @@ class BaseDataSource: NSObject, BaseDataProvider {
 	var _preCloseValue:Double? = 0
 	
 	var _chartType:String="undefined"
+    var _chartSetting:Dictionary<String, AnyObject>=[:]
 	
 	init(json:String, rect:CGRect) {
 		_jsonString = json
@@ -69,6 +71,10 @@ class BaseDataSource: NSObject, BaseDataProvider {
 	func setChartType(_ type:String) {
 		_chartType = type
 	}
+    
+    func addSetting(_ key:String, value:AnyObject){
+        _chartSetting[key] = value
+    }
 	
 	func panTranslation(_ translation:CGPoint, isEnd:Bool = false) {
 	}
@@ -138,5 +144,9 @@ class BaseDataSource: NSObject, BaseDataProvider {
     
     func rightPadding() ->CGFloat {
         return AppDelegate.isPortrait() ? 0 : 70
+    }
+    
+    func chartSetting() -> Dictionary<String, AnyObject> {
+        return _chartSetting
     }
 }

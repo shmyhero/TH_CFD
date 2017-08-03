@@ -95,6 +95,13 @@ class StockChartView: UIView {
 			colorSet = ColorSet.init(type: newValue)
 		}
 	}
+    
+    var isPrivate:Bool=false {
+        willSet {
+            print("set isPrivate:", isPrivate)
+            dataSource?.addSetting("Private", value: self.isPrivate as AnyObject)
+        }
+    }
 	
 	var chartType:String="undefined" {
 		willSet {
@@ -123,6 +130,7 @@ class StockChartView: UIView {
             else if YieldLineChartDataSource.isValidData(data!) {
                 dataSource = YieldLineChartDataSource.init(json:data!, rect: self.bounds)
                 self.isUserInteractionEnabled = false
+                dataSource?.addSetting("private", value: self.isPrivate as AnyObject)
             }
             else if LineChartDataSource.isValidData(data!) {
                 dataSource = LineChartDataSource.init(json:data!, rect: self.bounds)

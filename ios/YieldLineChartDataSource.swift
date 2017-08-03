@@ -16,6 +16,7 @@ protocol YieldLineChartDataProvider: BaseDataProvider
     func timesOnBottom() -> [Date]
     func firstTime() -> Date?
     func lastTime() -> Date?
+    func isPrivate() -> Bool
 }
 
 class YieldLineData: BaseData {
@@ -237,6 +238,10 @@ class YieldLineChartDataSource: BaseDataSource, YieldLineChartDataProvider {
     
     func lastTime() -> Date? {
         return _lineData.last?.time
+    }
+    
+    func isPrivate() -> Bool {
+        return _chartSetting["private"] as! Bool
     }
     
     override func rightPadding() ->CGFloat {

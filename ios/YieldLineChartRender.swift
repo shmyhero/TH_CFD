@@ -109,7 +109,9 @@ class YieldLineChartRender: BaseRender {
             lastX = verticalLinesX[i]
         }
         
-        self.drawRightText(context)
+        if !lineDataProvider!.isPrivate() {
+            self.drawRightText(context)
+        }
 
     }
     

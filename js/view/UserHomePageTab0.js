@@ -401,7 +401,8 @@ export default class UserHomePageTab0 extends Component{
 			return(
 				<LineChart style={styles.lineChart}
 					data={JSON.stringify(this.state.plCloseData)}
-					chartType={this.state.chartTypeName}>
+					chartType={this.state.chartTypeName}
+          isPrivate={this.props.isPrivate}>
 				</LineChart>
 			)
 		} else {

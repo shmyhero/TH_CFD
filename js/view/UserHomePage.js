@@ -41,6 +41,8 @@ var UserHomePageTab2 = require('./UserHomePageTab2')
 var ScrollTabView = require('./component/ScrollTabView2')
 var {EventCenter, EventConst} = require('../EventCenter')
 
+var HeaderLineDialog2 = require('./HeaderLineDialog2')
+
 var CHART_TYPE_2MONTH = 0;
 var CHART_TYPE_ALL = 1;
 
@@ -48,10 +50,9 @@ var CHART_TYPE_ALL = 1;
 var tabNames = ['主页', '持仓', '平仓']
 
 var emptyStar = '***'
-
 var btnBgColor = ['#425a85','#425a85','#425a85','#6f3d23','#55707c','#9a820e',]
 var btnBorderColor = ['#ffffff','#ffffff','#ffffff','#c79779','#94afbe','#e9d670']
-
+var RULE_DIALOG = "ruleDialog";
 var layoutSizeChangedSubscription = null
 // { followerCount: 5,
 //   isFollowing: false,
@@ -106,6 +107,13 @@ export default class UserHomePage extends Component {
 		userId: '',
 		userName: '',
 		isPrivate: true,
+
+		messageTitle:'公布数据',
+		messageLines: [
+      "公布数据以后，别的用户会在达人榜中看到您的交易数据信息1公布数据以后，别的用户会在达人榜中看到您的交易数据信息",
+      "公布数据以后，别的用户会在达人榜中看到您的交易数据信息2公布数据以后，别的用户会在达人榜中看到您的交易数据信息",
+      "公布数据以后，别的用户会在达人榜中看到您的交易数据信息3公布数据以后，别的用户会在达人榜中看到您的交易数据信息",
+    ],
 	}
 
 	constructor(props) {
@@ -152,7 +160,7 @@ export default class UserHomePage extends Component {
 					console.log("Rambo loadGuideRanking :"+value);
 					StorageModule.setGuideRanking('True')
 			   }
-			}).done() 
+			}).done()
 		}
 
 		this.onPageSelected(0)
@@ -280,15 +288,18 @@ export default class UserHomePage extends Component {
 	}
 
 	_onPressedSetPrivate() {
-		this.setState({
-			isPrivate: !this.state.isPrivate
-		}, this.setPrivate())
+		if (this.state.isPrivate == true){
+			this.refs[RULE_DIALOG].show();
+		}else{
+			this.setState({
+				isPrivate: !this.state.isPrivate
+			}, this.setPrivate())
+		}
 	}
 
 	setPrivate(){
 		console.log("setPrivate function clicked!");
 		this.changeShowPersonalDataSetting(this.state.isPrivate)
-
 	}
 
 	follow() {
@@ -503,6 +514,24 @@ export default class UserHomePage extends Component {
 		}
 	}
 
+	proceedCallback(result){
+		console.log("Rambo  llll ",result);
+		if(result){
+			this.setState({
+				isPrivate: !this.state.isPrivate
+			}, this.setPrivate())
+		}
+	}
+
+	renderModal(){ 
+		return(
+				<HeaderLineDialog2 ref={RULE_DIALOG}
+					proceedCallback={(value)=>this.proceedCallback(value)}
+					messageTitle={this.props.messageTitle}
+					messageLines={this.props.messageLines}/>
+		);
+	}
+
 	render() {
 		return(
 				<View style={[styles.wapper, {height: this.state.height}]}>
@@ -523,6 +552,7 @@ export default class UserHomePage extends Component {
 					</View>
 
 					{this.showGuide()}
+					{this.renderModal()}
 
 			</View>
 		);

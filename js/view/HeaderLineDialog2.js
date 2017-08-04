@@ -130,7 +130,7 @@ export default class HeaderLineDialog extends Component {
         >
           <View style={styles.modalContainer}>
               <TouchableOpacity style={styles.bgStyle} onPress={() => {this._setModalVisible(false)}}/>
-             
+
               <View style={[styles.modalInnerContainer]}>
                   <Text style={{fontSize:16,color:'black',margin:10}}>{this.props.messageTitle}</Text>
                   <View style = {styles.modalTexContainer}>
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     // backgroundColor: 'yellow',
     width: dialogWidth,
-    height:(height/2)*2/3,
+    height:(height/2) - 110,
     paddingLeft: 20,
     paddingRight: 20,
     paddingBottom: 20,

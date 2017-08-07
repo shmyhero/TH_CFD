@@ -103,11 +103,17 @@ var MyCreditsPage = React.createClass({
 	},
 
 	enterCredits:function(){
-		this.props.navigator.push({
-			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
-			url:NetConstants.TRADEHERO_API.CREDITS_PLAY,
-			isShowNav:false
-		});
+		var userData = LogicData.getUserData();
+		var notLogin = Object.keys(userData).length === 0
+		if(!notLogin){
+			var url = NetConstants.TRADEHERO_API.CREDITS_PLAY;
+			url = url.replace("<id>", userData.userId);
+			this.props.navigator.push({
+				name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+				url: url,
+				isShowNav:false
+			});
+		}
 	},
 
   renderTotalIncome: function(){

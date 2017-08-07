@@ -956,8 +956,11 @@ var MainPage = React.createClass({
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
 			//Load new activity
+			var url = NetConstants.CFD_API.START_UP_ACTIVITY;
+			url = url.replace("<isLive>", LogicData.getAccountState())
+
 			NetworkModule.fetchTHUrl(
-				NetConstants.CFD_API.START_UP_ACTIVITY,
+				url,
 				{
 					method: 'GET',
 					headers: {

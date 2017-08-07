@@ -175,7 +175,7 @@ function getCFDAPI(){
     GET_REWARD_FIRSTDAY_REWARDED: CFD_API_SERVER + '/api/reward/firstday/rewarded',//通知Server首页的提示已经展示过了，只需展示一次。
     POST_UPDATE_FIRST_LOGIN_INFO: CFD_API_SERVER + '/api/user/updateFirstLoginInfo',
 
-    START_UP_ACTIVITY: CFD_API_SERVER + '/api/common/activity',
+    START_UP_ACTIVITY: CFD_API_SERVER + '/api/common/activity?isLive=<isLive>',
     GET_SCORE: CFD_API_SERVER + '/api/score',
   }
 }
@@ -225,7 +225,7 @@ function getTradeHeroAPI(){
 
     INCOME_RULE:TRADEHERO_SERVER_IP+'/TH_CFD_WEB/TradgoldRule.html',
     CREDITS_RULE:TRADEHERO_SERVER_IP+'/CFD_Channel/jifenguize.html',
-    CREDITS_PLAY:TRADEHERO_SERVER_IP+'/CFD_Channel/jifenchouj.html',
+    CREDITS_PLAY:TRADEHERO_SERVER_IP+'/CFD_Channel/jifenchouj.html?userId=<id>',
   }
 }
 

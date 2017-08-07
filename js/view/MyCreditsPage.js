@@ -74,6 +74,7 @@ var MyCreditsPage = React.createClass({
 					console.log("my score: " + JSON.stringify(responseJson));
 					//{"total":310,"remaining":310,"liveOrder":90,"like":20,"share":200}
 					this.setState({
+						dataSource: ds.cloneWithRows(listRawData),
 						creditsTotal:responseJson.total,
 						creditsRemain:responseJson.remaining,
 						creditsGetLiveOrder:responseJson.liveOrder,

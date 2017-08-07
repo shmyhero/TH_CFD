@@ -14,24 +14,24 @@ import {
 } from 'react-native';
 var MainPage = require('../view/MainPage')
 
-import * as WechatAPI from 'react-native-wx';
+var RNWechatAPI = require('./WechatAPI')
 var LogicData = require('../LogicData')
 
 var mSuccessCallback = null
 var mErrorCallback = null
 
 export function isWechatInstalled() {
-	return WechatAPI.isWXAppInstalled()
+	return RNWechatAPI.isWXAppInstalled()
 }
 
 export function wechatLogin(successCallback, errorCallback) {
 	mSuccessCallback = successCallback
 	mErrorCallback = errorCallback
 
-	WechatAPI.isWXAppInstalled()
+	RNWechatAPI.isWXAppInstalled()
 	.then((installed) => {
 		if (installed) {
-			WechatAPI.login()
+			RNWechatAPI.login()
 			.then((response) => {
 				wechatLoginCodeHandler(response)
 			})
@@ -122,11 +122,11 @@ export function wechatShare(title,
 		imageUrl: imageUrl,
 	}
 
-	WechatAPI.isWXAppInstalled()
+	RNWechatAPI.isWXAppInstalled()
 	.then((installed) => {
 		if (installed) {
 			if(type == WECHAT_SESSION){
-				WechatAPI.shareToSession(data)
+				RNWechatAPI.shareToSession(data)
 				.then((response) => {
 					console.log("wechatShareToSession success")
 					if(successCallback){
@@ -141,7 +141,7 @@ export function wechatShare(title,
 				})
 				.done();
 			}else if(type == WECHAT_TIMELINE){
-				WechatAPI.shareToTimeline(data)
+				RNWechatAPI.shareToTimeline(data)
 				.then((response) => {
 					console.log("wechatShareToSession success")
 					if(successCallback){

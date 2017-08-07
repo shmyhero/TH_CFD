@@ -131,7 +131,7 @@ function getCFDAPI(){
     GET_HOME_CARDS:CFD_API_SERVER + '/api/card/top',//首页卡片
     SET_CARD_READ: CFD_API_SERVER + '/api/card/<id>',
     SET_CARD_LIKED: CFD_API_SERVER + '/api/card/like/<id>',
-    SHARE_CARD_TO_HOME: CFD_API_SERVER + '/api/card/share/<id>',
+    SHARE_CARD_TO_HOME: CFD_API_SERVER + '/api/card/share/<id>?shareID=<share_id>',
 
     RESET_PASSWORD:CFD_API_SERVER + '/api/user/live/resetPwd',//忘记密码/重置密码
 

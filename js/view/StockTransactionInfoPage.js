@@ -133,14 +133,11 @@ var StockTransactionInfoPage = React.createClass({
 					},
 				},
 				(responseJson) => {
-					if(responseJson.success){
-						card.shared = true;
-						if(responseJson.score){
-							Toast.show("分享成功，赚" + responseJson.score + "积分", {
-								duration: 500,
-							})
-						}
-					}
+					if(responseJson.score){
+						Toast.show("分享成功，赚" + responseJson.score + "积分", {
+							duration: 500,
+						})
+					}					
 				},
 				(result) => {
 					console.log(result.errorMessage)

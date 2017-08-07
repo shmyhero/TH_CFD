@@ -18,6 +18,7 @@ var WechatModule = require('../module/WechatModule');
 var NetworkModule = require('../module/NetworkModule');
 var NetConstants = require('../NetConstants');
 var LogicData = require('../LogicData');
+var AppState = require('AppState');
 
 var Toast = require('./component/toast/Toast');
 //import Toast from 'react-native-root-toast';
@@ -194,12 +195,12 @@ var SharePage = React.createClass({
 						data.imageUrl,
 						WechatModule.WECHAT_SESSION,
 				()=>{
-					if(data.onShareToSession){
-						data.onShareToSession();
-					}
 				},
-				()=>{ });
-
+				()=>{
+				});
+				if(data.onShareToSession){
+					this.functionOnBackFromOtherApp(data.onShareToSession)
+				}
 		}
 	},
 
@@ -212,12 +213,25 @@ var SharePage = React.createClass({
 						data.imageUrl,
 						WechatModule.WECHAT_TIMELINE,
 				()=>{
-					if(data.onShareToTimeline){
-						data.onShareToTimeline();
-					}
 				},
-				()=>{ });
+				()=>{
+				});
+				if(data.onShareToTimeline){
+					this.functionOnBackFromOtherApp(data.onShareToTimeline)
+				}
 		}
+	},
+
+	functionOnBackFromOtherApp: function(callback){
+		var subscription = AppState.addListener(
+			'appStateDidChange',
+			(stateData) => {
+				console.log("appStateDidChange " + stateData.app_state)
+				if (stateData.app_state == 'active'){
+					subscription.remove()
+					callback && callback();
+				}
+			});
 	},
 
   shareToWeChat: function(type){

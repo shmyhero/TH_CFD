@@ -116,7 +116,6 @@ var StockTransactionInfoPage = React.createClass({
 
 	shareToWechat: function(type){
 		console.log("shareToWechat " + type)
-
 		var url = NetConstants.CFD_API.SHARE_CARD_TO_HOME;
 		url = url.replace("<id>", this.state.card.cardId);
 		url = url.replace("<share_id>", type);
@@ -137,7 +136,7 @@ var StockTransactionInfoPage = React.createClass({
 						Toast.show("分享成功，赚" + responseJson.score + "积分", {
 							duration: 500,
 						})
-					}					
+					}
 				},
 				(result) => {
 					console.log(result.errorMessage)

@@ -16,6 +16,7 @@ var MainPage = require('../view/MainPage')
 
 var RNWechatAPI = require('./WechatAPI')
 var LogicData = require('../LogicData')
+var AppState = require('AppState');
 
 var mSuccessCallback = null
 var mErrorCallback = null
@@ -128,10 +129,6 @@ export function wechatShare(title,
 			if(type == WECHAT_SESSION){
 				RNWechatAPI.shareToSession(data)
 				.then((response) => {
-					console.log("wechatShareToSession success")
-					if(successCallback){
-						successCallback();
-					}
 				})
 				.catch((e) => {
 					console.log('wechat shareTo error catches: ' + e)
@@ -140,13 +137,14 @@ export function wechatShare(title,
 					}
 				})
 				.done();
+
+				if(successCallback){
+					console.log("successCallback not null")
+					functionOnBackFromOtherApp(successCallback)
+				}
 			}else if(type == WECHAT_TIMELINE){
 				RNWechatAPI.shareToTimeline(data)
 				.then((response) => {
-					console.log("wechatShareToSession success")
-					if(successCallback){
-						successCallback();
-					}
 				})
 				.catch((e) => {
 					console.log('wechat shareTo error catches: ' + e)
@@ -155,6 +153,10 @@ export function wechatShare(title,
 					}
 				})
 				.done();
+
+				if(successCallback){
+					functionOnBackFromOtherApp(successCallback)
+				}
 			}
 		}
 	})
@@ -163,4 +165,17 @@ export function wechatShare(title,
 			errorCallback(e.message);
 		}
 	})
+}
+
+function functionOnBackFromOtherApp(callback){
+	console.log("functionOnBackFromOtherApp")
+	var subscription = AppState.addListener(
+		'appStateDidChange',
+		(stateData) => {
+			console.log("appStateDidChange " + stateData.app_state)
+			if (stateData.app_state == 'active'){
+				subscription.remove()
+				callback && callback();
+			}
+		});
 }

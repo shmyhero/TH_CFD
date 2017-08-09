@@ -147,6 +147,8 @@ var InputAccessory = React.createClass({
 				hideKA: true,
 				opacity: 0,
 			})
+
+		this.props.rightButtonOnClick && this.props.rightButtonOnClick()
 		dismissKeyboard();
 	},
 

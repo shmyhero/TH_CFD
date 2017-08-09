@@ -904,10 +904,15 @@ var StockDetailPage = React.createClass({
 	chartClickable: true,
 
 	dismissKeyboard:function(){
-		if (this.state.money < this.state.minInvestUSD){
+		var value = parseInt(this.state.inputText)
+		if (this.state.inputText.length == 0) {
+			value = 0
+		}
+		if(value >= this.state.minInvestUSD && value <= this.state.totalMoney){
 			this.setState({
-				money: this.state.minInvestUSD,
-			})
+				money: value,
+			});
+		}else{
 		}
 		dismissKeyboard()
 	},
@@ -1008,6 +1013,8 @@ var StockDetailPage = React.createClass({
 		var value = parseInt(this.state.inputText)
 		if (value > this.state.totalMoney) {
 			this.setState({inputText:'0', money:0})
+		}else{
+			this.setState({money:value})
 		}
 	},
 
@@ -1300,7 +1307,7 @@ var StockDetailPage = React.createClass({
 
 		// insert the user input value
 		var exist = false
-		var input = parseInt(this.state.inputText)
+		var input = this.state.money//parseInt(this.state.inputText)
 		if (input > 10) {
 			for (var i = moneyArray.length - 1; i >= 0; i--) {
 				var value = parseInt(moneyArray[i])
@@ -1555,9 +1562,9 @@ var StockDetailPage = React.createClass({
 		else {
 			this.refs['InputAccessory'].resetValidState()
 		}
-		this.setState({inputText:""+value,
-			money: value,
-			})
+		this.setState({
+				inputText:""+value,
+		})
 	},
 
 });

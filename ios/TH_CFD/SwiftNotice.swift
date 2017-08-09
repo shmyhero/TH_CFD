@@ -31,7 +31,8 @@ class SwiftNotice: NSObject {
     }
     
 	static func showNoticeWithText(_ type: NoticeType,text: String, autoClear: Bool, autoClearTime: Int) {
-		let frame = CGRect(x: 0, y: 0, width: 105, height: 105)
+        let width:CGFloat = type == .message ? 120 : 105
+		let frame = CGRect(x: 0, y: 0, width: width, height: 105)
 		let window = UIWindow()
 		window.backgroundColor = UIColor.clear
 		let mainView = UIView()
@@ -55,12 +56,13 @@ class SwiftNotice: NSObject {
             checkmarkView.frame = CGRect(x: 30, y: 15, width: 46, height: 46)
             mainView.addSubview(checkmarkView)
         }
-		let labelY:CGFloat = type == .message ? 42 : 70
-		let label = UILabel(frame: CGRect(x: 0, y: labelY, width: 105, height: 20))
+		let labelY:CGFloat = type == .message ? 12 : 30
+		let label = UILabel(frame: CGRect(x: 5, y: labelY, width: width-10, height: 80))
 		label.font = UIFont.systemFont(ofSize: 17)
 		label.textColor = UIColor(hexInt: 0x4883e7)
-		label.text = text
+        label.text = text
 		label.textAlignment = NSTextAlignment.center
+        label.numberOfLines = 0
 		mainView.addSubview(label)
 		
 		window.frame = frame

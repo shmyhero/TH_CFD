@@ -274,7 +274,7 @@ var StockOpenPositionPage = React.createClass({
 				cache: 'offline',
 				//timeout: 1000,
 			},
-			(responseJson) => {
+			(responseJson, isCache) => {
 				this.setState({
 					contentLoaded: true,
 					isRefreshing: false,
@@ -300,6 +300,8 @@ var StockOpenPositionPage = React.createClass({
 
 				//Fix the issue that the listview content may not be shown when the data
 				//is refreshed too quickily by set a very short timeout.
+				var timeout = isCache ? 0 : 10;
+
 				setTimeout(()=>{
 					if (this.state.selectedRow >= responseJson.length) {
 						this.setState ({
@@ -315,7 +317,7 @@ var StockOpenPositionPage = React.createClass({
 							stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
 						});
 					}
-				}, 1);
+				}, timeout);
 
 
 				for (var i = 0; i < responseJson.length; i++) {

@@ -111,7 +111,8 @@ var MyCreditsPage = React.createClass({
 			this.props.navigator.push({
 				name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 				url: url,
-				isShowNav:false
+				isShowNav:false,
+				backFunction: ()=>{this.refreshData()}
 			});
 		}
 	},

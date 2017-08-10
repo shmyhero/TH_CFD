@@ -540,9 +540,6 @@ var MainPage = React.createClass({
 					<NavBar title='市场情绪' showBackButton={true}
 						backButtonOnClick={()=>{
 								this.backAndShowTabbar()
-								if(route.backFunction) {
-									route.backFunction()
-								}
 							}
 						}
 						navigator={navigationOperations}/>
@@ -701,6 +698,9 @@ var MainPage = React.createClass({
 			var routes = _navigator.getCurrentRoutes();
 			if(routes && routes.length == 2){
 				this.showTabbar();
+			}
+			if(routes.length > 0 && routes[routes.length - 1].backFunction){
+				routes[routes.length - 1].backFunction()
 			}
 			_navigator.pop();
 		}

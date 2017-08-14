@@ -103,7 +103,7 @@ var WebViewPage = React.createClass({
 		);
   },
 
-	_handleConnectivityChange: function(isConnected) {
+	_handleConnectivityChange: function(isConnected, error) {
 		console.log("isConnected? " + isConnected);
 		if (!this.state.isLoaded) {
 			this.setState({
@@ -175,6 +175,7 @@ var WebViewPage = React.createClass({
 	onRefresh: function(){
 		NetInfo.isConnected.fetch().done(
 			(isConnected) => {
+				console.log("isConnected " + isConnected)
 				//Do not change the connected status to not-connected.
 				this.setState(
 					{
@@ -227,7 +228,15 @@ var WebViewPage = React.createClass({
 		this.last_url = "";
 	},
 
-	trackPageLoadingTime: function(url){
+	webViewLoadFailed: function(content){
+		console.log("webview error:" + content.nativeEvent.description);
+		this._handleConnectivityChange(false, content)
+		if(this.props.logTimedelta && content.nativeEvent && content.nativeEvent.description){
+			this.trackPageLoadingTime(this.last_url, content.nativeEvent.description)
+		}
+	},
+
+	trackPageLoadingTime: function(url, error){
 		var current_time = new Date();
 		var timedelta = ((current_time - this.start_time) / 1000).toFixed(1);
 		console.log("track url loading time: " + timedelta);
@@ -237,11 +246,15 @@ var WebViewPage = React.createClass({
 		var userData = LogicData.getUserData()
 		trackingData["uid"] = userData.userId
 		trackingData["date"] = current_time.toISOString().slice(0,10);
+		if (error){
+			trackingData["error"] = error
+		}
 
-		if(timedelta > 3){
+		if(error || timedelta > 3){
 			// Get Local IP
-			fetch(NetConstants.CHECK_IP_URL, {method: 'GET',})
+			fetch(NetConstants.CHECK_IP_URL, {method: 'GET',timeout: 5000})
 			.then((response) => {
+				console.log("CHECK_IP_URL " + response.status)
 				if (response.status === 200) {
 					return response.text();
 				} else{
@@ -251,14 +264,25 @@ var WebViewPage = React.createClass({
 				console.log("track url loading response: " + response);
 				this.parseIPAddress(url, response, trackingData)
 			})
+			.catch((err)=>{
+				console.log("error " + err)
+				this.parseIPAddress(url, "unknown", trackingData)
+			})
 		}
 	},
 
 	parseIPAddress: function(url, ipAddress, trackingData){
 		trackingData["IP"] = ipAddress
-		var label = trackingData["time"] + "_" + trackingData["hour"] + "_" + trackingData["IP"] + "_" + trackingData["uid"] + "_" + trackingData["date"]
-		console.log("track url loading info: " + label);
-		TalkingdataModule.trackEvent(TalkingdataModule.DEBUG_TIME_DELTA + url, label, trackingData)
+
+		if(trackingData["error"]){
+			var label = trackingData["time"] + "_" + trackingData["hour"] + "_" + trackingData["IP"] + "_" + trackingData["uid"] + "_" + trackingData["date"] + "_" + trackingData["error"]
+			console.log("track url loading error info: " + label);
+			TalkingdataModule.trackEvent(TalkingdataModule.DEBUG_LOADING_ERROR + url, label, trackingData)
+		}else{
+			var label = trackingData["time"] + "_" + trackingData["hour"] + "_" + trackingData["IP"] + "_" + trackingData["uid"] + "_" + trackingData["date"]
+			console.log("track url loading info: " + label);
+			TalkingdataModule.trackEvent(TalkingdataModule.DEBUG_TIME_DELTA + url, label, trackingData)
+		}
 	},
 
 	renderWebView: function(){
@@ -278,10 +302,7 @@ var WebViewPage = React.createClass({
 					onLoadStart = {this.webViewLoadingStart}
 					onLoad ={(content)=>this.webViewLoaded(content)}
 					onMessage={(message)=>console.log("webview onMessage " +message)}
-					onError={(error)=>{
-						console.log("webview error" + error);
-						this._handleConnectivityChange(false)
-					}}
+					onError={(content)=>this.webViewLoadFailed(content)}
 					decelerationRate="normal"
 					source={{uri: this.props.url}}
 					renderLoading={()=>this.renderLoading()}

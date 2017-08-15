@@ -1133,6 +1133,7 @@ var StockDetailPage = React.createClass({
 			title:'实盘交易',
 			themeColor: "#3f5781",//ColorConstants.TITLE_DARK_BLUE,
 			onNavigationStateChange: this.onWebViewNavigationStateChange,
+			logTimedelta: true,
 			url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
 			// url:'http://cn.tradehero.mobi/tradehub/login.html'
 		});

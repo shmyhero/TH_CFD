@@ -161,6 +161,7 @@ var StockExchangePage = React.createClass({
 			name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			title:'实盘交易',
 			onNavigationStateChange: this.onWebViewNavigationStateChange,
+			logTimedelta: true,
 			url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
 			// url:'http://cn.tradehero.mobi/tradehub/live/login1.html'
 			// url:'http://cn.tradehero.mobi/tradehub/live/login1.html?client_id=62d275a211'

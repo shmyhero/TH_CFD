@@ -96,6 +96,7 @@ export const AD_TRACKING_KEY_CURRENCY = "currency";
 export const AD_TRACKING_KEY_PAY_TYPE = "payType";
 
 export const DEBUG_TIME_DELTA = "页面用时_"
+export const DEBUG_LOADING_ERROR = "页面加载失败_"
 
 export function trackADEvent(event_name, parameters) {
   try{

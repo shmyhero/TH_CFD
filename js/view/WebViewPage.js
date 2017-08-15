@@ -252,6 +252,12 @@ var WebViewPage = React.createClass({
 
 		if(error || timedelta > 3){
 			// Get Local IP
+			this.trackingData = trackingData;
+			setTimeout(()=>{
+				console.log("fetch ip address timeout");
+				this.parseData(url, "unknown", trackingData)
+			}, 5000);
+
 			fetch(NetConstants.CHECK_IP_URL, {method: 'GET',timeout: 5000})
 			.then((response) => {
 				console.log("CHECK_IP_URL " + response.status)
@@ -262,16 +268,22 @@ var WebViewPage = React.createClass({
 				}
 			}).then((response) => {
 				console.log("track url loading response: " + response);
-				this.parseIPAddress(url, response, trackingData)
+				this.parseData(url, response, trackingData)
 			})
 			.catch((err)=>{
 				console.log("error " + err)
-				this.parseIPAddress(url, "unknown", trackingData)
+				this.parseData(url, "unknown", trackingData)
 			})
 		}
 	},
 
-	parseIPAddress: function(url, ipAddress, trackingData){
+	parseData: function(url, ipAddress, trackingData){
+		if(this.trackingData != trackingData){
+			return;
+		}
+
+		this.trackingData = null;
+
 		trackingData["IP"] = ipAddress
 
 		if(trackingData["error"]){

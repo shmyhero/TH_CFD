@@ -226,7 +226,7 @@ function getTradeHeroAPI(){
 
     INCOME_RULE:TRADEHERO_SERVER_IP+'/TH_CFD_WEB/TradgoldRule.html',
     CREDITS_RULE:TRADEHERO_SERVER_IP+'/CFD_Channel/jifenguize.html',
-    CREDITS_PLAY:TRADEHERO_TEST_SERVER_IP+'/CFD_Channel/jifenchouj.html?userId=<id>',
+    CREDITS_PLAY:TRADEHERO_SERVER_IP+'/CFD_Channel/jifenchouj.html?userId=<id>',
   }
 }
 

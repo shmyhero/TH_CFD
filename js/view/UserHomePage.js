@@ -106,7 +106,7 @@ export default class UserHomePage extends Component {
 	static defaultProps = {
 		userId: '',
 		userName: '',
-		isPrivate: true,
+		isPrivate: false,
 
 		messageTitle:'公布数据',
 		messageLines: [
@@ -135,7 +135,7 @@ export default class UserHomePage extends Component {
 			rank: 0,
 			rankDescription: '',
 			isFollowingStatusChanged: false,
-			isPrivate: true,
+			isPrivate: false,
 			currentSelectedTab : 0,
 			isShowGuide:false,
 			height: UIConstants.getVisibleHeight(),
@@ -523,7 +523,7 @@ export default class UserHomePage extends Component {
 		}
 	}
 
-	renderModal(){ 
+	renderModal(){
 		return(
 				<HeaderLineDialog2 ref={RULE_DIALOG}
 					proceedCallback={(value)=>this.proceedCallback(value)}

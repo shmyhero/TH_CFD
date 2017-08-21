@@ -33,15 +33,20 @@ var actionButtonSize = 61;
 const BODY_HORIZON_MARGIN = Platform.OS === 'ios' ? 15 : 20;
 const BODY_TOP_MARGIN = 0;
 const BODY_BOTTOM_MARGIN = Platform.OS === 'ios' ? 0 : 30;
-const CONTENT_WIDTH = width - BODY_HORIZON_MARGIN * 2;
-const CARD_BORDER_WIDTH = CONTENT_WIDTH * 0.02;
+const CONTENT_WIDTH = width - BODY_HORIZON_MARGIN * 2 - 2;
+const CARD_BORDER_WIDTH = CONTENT_WIDTH * 0.035;
 const BOTTOM_CARD_BORDER_WIDTH = CARD_BORDER_WIDTH*3;
 const BORDER_WIDTH = (width - BODY_HORIZON_MARGIN * 2 + CARD_BORDER_WIDTH * 2);
-const BORDER_HEIGHT = (BORDER_WIDTH/ 720 * 1090);
+const BORDER_HEIGHT = (BORDER_WIDTH/ 622 * 915);
 const CARD_BORDER_HEADER_HEIGHT = BORDER_HEIGHT * 0.063;
-const CARD_TITLE_POSITION = BORDER_HEIGHT * 0.026;
-const CARD_TITLE_HEIGHT = BORDER_HEIGHT * 0.04;
 const TITLE_FONT_SIZE = 20 / 375 * width;
+const IMAGE_RESIZE_SCALE =  BORDER_HEIGHT / (915 / 2)
+const CARD_TITLE_POSITION = 22 * IMAGE_RESIZE_SCALE;
+const ACHIEVEMENT_HEIGHT = 488 / 2 * IMAGE_RESIZE_SCALE;
+const ACHIEVEMENT_WIDTH = 496 / 2 * IMAGE_RESIZE_SCALE;
+const ACHIEVEMENT_MARGIN_TOP = 30 * IMAGE_RESIZE_SCALE;
+// const CONTENT_WIDTH = 570;
+// const CONTENT_HEIGHT = 827;
 
 var StockTransactionInfoPage = React.createClass({
 	mixins: [Touchable.Mixin],
@@ -188,7 +193,8 @@ var StockTransactionInfoPage = React.createClass({
 		if(this.state.card){
 			return (
 				<AchievementCard card={this.state.card} showReward={this.props.showReward}
-					width={CONTENT_WIDTH}
+					style={{marginTop: ACHIEVEMENT_MARGIN_TOP,}}
+					width={ACHIEVEMENT_WIDTH}
 				/>
 			)
 		}
@@ -201,34 +207,15 @@ var StockTransactionInfoPage = React.createClass({
 
 	renderCardBorder: function(){
 		if(this.state.card){
-
-			var cardBorder = require('../../images/card_border_bronze.png');
-			if(this.state.card.cardType == 1){
-				cardBorder = require('../../images/card_border_bronze.png');
-			}else if(this.state.card.cardType == 2){
-				cardBorder = require('../../images/card_border_silver.png');
-			}else if(this.state.card.cardType == 3){
-				cardBorder = require('../../images/card_border_gold.png');
-			}else if(this.state.card.cardType == 4){
-				cardBorder = require('../../images/card_border_blue.png');
-			}
+			var cardBorder = require('../../images/card_border.png');
 			return (
-				<View style={{
-					position:'absolute',
-					top: 0, bottom:0,
+				<Image source={cardBorder}
+					style={{width: BORDER_WIDTH, height: BORDER_HEIGHT,
+					resizeMode: "contain", top:0, bottom:0, position:'absolute',
 					left:BODY_HORIZON_MARGIN-CARD_BORDER_WIDTH,
 					right: BODY_HORIZON_MARGIN-CARD_BORDER_WIDTH,
 				}}>
-					<Image source={cardBorder}
-						style={{width: BORDER_WIDTH, height: BORDER_HEIGHT,
-						resizeMode: "contain"}}>
-					</Image>
-					<View style={{position:'absolute', top: CARD_TITLE_POSITION, left:0, right:0, justifyContent:'center', alignItems:'center', height:CARD_TITLE_HEIGHT,}}>
-						<Text style={{textAlign: 'center', color:'white', fontSize: TITLE_FONT_SIZE, width:120,} }>
-							{this.state.card.title}
-						</Text>
-					</View>
-				</View>
+				</Image>
 			)
 		}
 	},
@@ -238,23 +225,29 @@ var StockTransactionInfoPage = React.createClass({
 			return (
 				<View style={{/*flex: 1,*/ flexDirection:'column', alignSelf: 'stretch',
 					paddingTop:CARD_BORDER_HEADER_HEIGHT,
-					paddingBottom: BOTTOM_CARD_BORDER_WIDTH}}>
+					paddingBottom: BOTTOM_CARD_BORDER_WIDTH,
+				}}>
+					{this.renderCardBorder()}
 					<View style={styles.realContent}>
-						<View style={{/*flex: 1,*/ flexDirection:'column', alignSelf: 'stretch'}}>
+						<View style={{/*flex: 1,*/ flexDirection:'column', alignSelf: 'stretch',}}>
 							{this.renderAchievementCard()}
+							<View style={{position:'absolute', top: CARD_TITLE_POSITION, left:0, right:0,
+							 alignItems:'center', }}>
+								<Text style={{textAlign: 'center', color:'white', fontSize: TITLE_FONT_SIZE, width:120,} }>
+									{this.state.card.title}
+								</Text>
+							</View>
 							<StockTransactionInfoBar card={this.state.card} transactionInfo={this.state.transactionInfo}
 								hideTopCornerRadius={this.state.card !== undefined && this.state.card !== null}
 								width={CONTENT_WIDTH} bigMargin={true}/>
 						</View>
 					</View>
-					{this.renderCardBorder()}
 				</View>
 			);
 		}else{
 			return (
 				<View style={{marginLeft: 10, marginRight: 10,}}>
 					<View style={{/*flex: 1,*/ flexDirection:'column', alignSelf: 'stretch'}}>
-						{this.renderAchievementCard()}
 						<TouchableOpacity activeOpacity={1.0} onPress={()=>this.gotoTrade()}>
 							<StockTransactionInfoBar transactionInfo={this.state.transactionInfo}
 								hideTopCornerRadius={this.state.card !== undefined && this.state.card !== null}
@@ -270,7 +263,7 @@ var StockTransactionInfoPage = React.createClass({
 		if(this.state.card && this.state.showShare){
 			return (
 				<TouchableOpacity style={styles.actionButton} onPress={() => this._showSharePanel()}>
-					<Image style = {styles.imgAction} source = {require('../../images/action_share.png')} ></Image>
+					<Image style = {styles.imgAction} source = {require('../../images/card_sharing.png')} ></Image>
 				</TouchableOpacity>
 			);
 		}
@@ -278,7 +271,7 @@ var StockTransactionInfoPage = React.createClass({
 
 	renderLike: function(){
 		if(this.state.card  && this.state.showLike){
-			var imgSource = this.state.liked ? require('../../images/action_like_liked.png') : require('../../images/action_like.png');
+			var imgSource = this.state.liked ? require('../../images/card_liked.png') : require('../../images/cald_unliked.png');
 			return (
 				<TouchableOpacity style={[styles.actionButton, {flexDirection: 'row'}]} onPress={() => this.likeTransaction()}>
 					<Image style={styles.imgAction} source={imgSource} ></Image>
@@ -296,7 +289,7 @@ var StockTransactionInfoPage = React.createClass({
 						{this.renderContent()}
 					</View>
 				</TouchableOpacity>
-				<View style={{alignItems: 'center', flexDirection: 'row', justifyContent: 'space-around',}}>
+				<View style={{alignItems: 'center', flexDirection: 'row', justifyContent: 'space-around'}}>
 					{this.renderShare()}
 					{this.renderLike()}
 				</View>
@@ -325,6 +318,9 @@ var styles = StyleSheet.create({
 	realContent: {
 		marginLeft: BODY_HORIZON_MARGIN,
 		marginRight: BODY_HORIZON_MARGIN,
+		paddingLeft: 1,
+		paddingRight: 1,
+
 	},
 
   modalInnerContainer: {
@@ -334,9 +330,9 @@ var styles = StyleSheet.create({
   },
 
   actionButton:{
-    marginTop: (height - actionButtonSize - BORDER_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER)/3,
+    marginTop: 0,//(height - actionButtonSize - BORDER_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER)/4,
 		flexDirection: 'row',
-		marginBottom:BODY_BOTTOM_MARGIN,
+		marginBottom: Platform.OS == 'android' ? 48 : 0,
   },
 
   imgAction:{

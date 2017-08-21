@@ -31,7 +31,7 @@ var {height, width} = Dimensions.get('window')
 const ID_CARD_FRONT = 1
 const ID_CARD_BACK = 2
 const imageWidth = Math.round(width * 0.85)
-const imageHeight = Math.round(height * 0.3)
+const imageHeight = Math.round(height * 0.3) - 64 //(height - 64 - 15 - 15 - 15 - 168 - 72) / 2
 
 const GZT_Ayondo_Key_Mappings = [
 	{"GZTKey": "real_name", "AyondoKey": "realName"},
@@ -43,8 +43,8 @@ const GZT_Ayondo_Key_Mappings = [
 	{"GZTKey": "valid_period", "AyondoKey": "validPeriod"},
 ];
 
-const defaultIDFront = require('../../../images/add_front.png');
-const defaultIDBack = require('../../../images/add_back.png');
+const defaultIDFront = require('../../../images/openAccountIDFront.jpg');
+const defaultIDBack = require('../../../images/openAccountIDBack.jpg');
 var options = {
 	title: null, // specify null or empty string to remove the title
 	cancelButtonTitle: '取消',
@@ -233,17 +233,24 @@ var OAIdPhotoPage = React.createClass({
 			<View style={styles.wrapper}>
 				<ErrorBar error={this.state.error}/>
 				<ScrollView style={{flex:1}}>
-					<View style={{height: 15}} />
+					<Text style={styles.reminderText}>
+						请上传您的身份证正反面照片
+					</Text>
 					<TouchableOpacity style={styles.imageArea} onPress={() => this.pressAddImage(ID_CARD_FRONT)}>
 						<Image style={styles.addImage} source={this.state.idCardFront}/>
 					</TouchableOpacity>
 					<TouchableOpacity style={styles.imageArea} onPress={() => this.pressAddImage(ID_CARD_BACK)}>
 						<Image style={styles.addImage} source={this.state.idCardBack}/>
 					</TouchableOpacity>
-					<View style={styles.reminderArea}>
-						<Text style={styles.reminderText}>
-							请保持身份证四边框清晰完整，背景干净
-						</Text>
+					<View style={{backgroundColor: 'white', width:width,
+						paddingLeft:15, paddingRight:15}}>
+						<View style={{height: 40, justifyContent:'center'}}>
+							<Text style={{}}>
+							请拍摄身份证原件:
+							</Text>
+						</View>
+						<View style={styles.separator}/>
+						<Image source={require('../../../images/openAccountIDHint.jpg')} style={{height: 128, width:width - 30, resizeMode:'contain'}}/>
 					</View>
 					<OpenAccountHintBlock/>
 				</ScrollView>
@@ -275,14 +282,15 @@ var styles = StyleSheet.create({
 	addImage: {
 		width: imageWidth,
 		height: imageHeight,
-		marginTop: 10,
-		marginBottom: 10,
+		marginTop: 0,
+		marginBottom: 15,
 		borderRadius: 3,
 		resizeMode: 'contain',
 	},
 
 	reminderText: {
-		marginTop: 10,
+		marginTop: 15,
+		marginBottom: 15,
 		textAlign: 'center',
 		fontSize: 14,
 	},
@@ -320,7 +328,11 @@ var styles = StyleSheet.create({
 		fontSize: 14,
 		color: 'red',
 		textAlign: 'center',
-	}
+	},
+	separator: {
+		height: 0.5,
+		backgroundColor: ColorConstants.SEPARATOR_GRAY,
+	},
 });
 
 

@@ -165,7 +165,7 @@ export default class DevelopPage extends Component {
             </TouchableOpacity>
           </View>
 
-          {/* <View style={{flexDirection: 'row', padding:15,}}>
+          <View style={{flexDirection: 'row', padding:15,}}>
             <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}}
               onPress={()=>this.showPage()}>
               <Text style={{color:'white', fontSize: 16}}>
@@ -173,7 +173,7 @@ export default class DevelopPage extends Component {
               </Text>
             </TouchableOpacity>
           </View>
-          <StockTransactionInfoModal ref='page'/> */}
+          <StockTransactionInfoModal ref='page'/>
         </ScrollView>
       </View>
     );
@@ -232,27 +232,36 @@ export default class DevelopPage extends Component {
       createAt: '2016-11-09T08:02:37.975Z',
       time: new Date('2016-11-08T07:58:29.67'),
       card:
-       { cardId: 11,
-         invest: 2000,
-         isLong: true,
-         leverage: 1,
-         tradePrice: 1284.6,
-         settlePrice: 1308.6,
-         imgUrlBig: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/brozne_1_1_big.png',
-         imgUrlMiddle: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/brozne_1_1_middle.png',
-         imgUrlSmall: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/brozne_1_1_small.png',
-         reward: 1,
-         tradeTime: '2016-11-08T07:58:29.67',
-         ccy: 'USD',
-         stockName: '美国100',
-         themeColor: '#ee9922',
-         likes: 22,
+      {
+        cardId: 22,
+        invest: 100,
+        isLong: false,
+        leverage: 100,
+        tradePrice: 5743,
+        settlePrice: 5664.83,
+        imgUrlBig: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/blue_big.jpg',
+        imgUrlMiddle: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/blue_middle.jpg',
+        imgUrlSmall: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/blue_small.jpg',
+        reward: 1,
+        tradeTime: '2017-06-27T22:52:58.35',
+        ccy: 'USD',
+        stockID: 36004,
+        stockName: '美国科技股100',
+        themeColor: '#1658d8',
+        title: '财富启航',
+        cardType: 4,
+        pl: 136.11,
+        plRate: 136.1135,
+        likes: 5,
+        liked: true,
+        isNew: false,
+        userName: '晴天'
       }
     }
 
     //this.refs['page'].showAchievement(array, 1, ()=>{}, {showShare: true});
     //{/*showShare: true, */showLike: true}
-    this.refs['page'].show(info, ()=>{}, {showShare: true});
+    this.refs['page'].show(info, ()=>{}, {showShare: true, showLike: true});
   }
 }
 

@@ -120,9 +120,39 @@ export default class StockTransactionInfoBar extends Component {
 
     console.log("this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN " + this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN)
 
+    var backgroundStyle = {}
+    var itemTitleTextStyle = {}
+    var itemValueTextStyle = {}
+    var upTextStyle = {}
+    var lineStyle = {};
+    var extraTitleImageBackground = (<View/>);
+
+    var headerHeight = this.props.width / 690 * 82
+    var longImageSrc = this.state.isLong ? require('../../images/dark_up.png') : require('../../images/dark_down.png');
+
+    if(this.props.card){
+      backgroundStyle.backgroundColor = "transparent";
+      extraTitleContainerStyle.backgroundColor = "transparent";
+
+      extraTitleImageBackground = (<Image source={require('../../images/card_tittle.jpg')}
+      style={{"position":'absolute', 'top':0, 'bottom':0, 'height': headerHeight, 'resizeMode': 'stretch', width: this.props.width}}
+      />)
+      itemTitleTextStyle.color = "#5077c9";
+      itemValueTextStyle.color = "white";
+
+      plColor = plRate > 0 ? "#f95a5a" : "#428e1b";
+
+      lineStyle.backgroundColor = "#203040";
+      lineStyle.marginLeft = 20;
+      lineStyle.marginRight = 20;
+      longImageSrc = this.state.isLong ? require('../../images/light_up.png') : require('../../images/light_down.png');
+
+    }
+
     return (
-      <View style={[styles.container, {width: this.props.width}]}>
-        <View style={[styles.titleContainer, extraTitleContainerStyle, {height: this.props.width / 690 * 82, justifyContent:'center'}]}>
+      <View style={[styles.container, {width: this.props.width}, backgroundStyle]}>
+        {extraTitleImageBackground}
+        <View style={[styles.titleContainer, extraTitleContainerStyle, {height: headerHeight, justifyContent:'center'}]}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch'}}>
             <Text style={[styles.titleText, {flex:1, marginLeft: this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN}]} numberOfLines={1} ellipsizeMode={'head'}>
               {this.state.name} - {this.state.isCreate?'开仓':'平仓'}
@@ -136,42 +166,42 @@ export default class StockTransactionInfoBar extends Component {
 
           </View>
         </View>
-        <View style={[styles.centerContainer, {height: this.props.width / 690 * 122}]}>
+        <View style={[styles.centerContainer, {height: this.props.width / 690 * 122, }, backgroundStyle]}>
           <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN, paddingVertical: 8}}>
-            <Text style={styles.itemTitleText}>
+            <Text style={[styles.itemTitleText, itemTitleTextStyle]}>
               类型
             </Text>
-            <Image style={styles.longImage} source={this.state.isLong ? require('../../images/dark_up.png') : require('../../images/dark_down.png')}/>
+            <Image style={styles.longImage} source={longImageSrc}/>
           </View>
           <View style={{flex: 2, alignItems: 'center'}}>
-            <Text style={styles.itemTitleText}>
+            <Text style={[styles.itemTitleText, itemTitleTextStyle]}>
               本金({currency})
             </Text>
-            <Text style={styles.itemValueText}>
+            <Text style={[styles.itemValueText, itemValueTextStyle]}>
               {this.state.invest.toFixed(2)}
             </Text>
           </View>
           <View style={{flex: 1, alignItems: 'flex-end', paddingRight: this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN}}>
-            <Text style={styles.itemTitleText}>
+            <Text style={[styles.itemTitleText, itemTitleTextStyle]}>
               杠杆
             </Text>
-            <Text style={styles.itemValueText}>
+            <Text style={[styles.itemValueText, itemValueTextStyle]}>
               {this.state.leverage}
             </Text>
           </View>
         </View>
-        <View style={styles.line}/>
-        <View style={[styles.bottomContainer, {height: this.props.width / 690 * 122}]}>
+        <View style={[styles.line, lineStyle]}/>
+        <View style={[styles.bottomContainer, {height: this.props.width / 690 * 122}, backgroundStyle]}>
           <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN, paddingVertical: 8}}>
-            <Text style={styles.itemTitleText}>
+            <Text style={[styles.itemTitleText, itemTitleTextStyle]}>
               交易价格
             </Text>
-            <Text style={styles.itemValueText}>
+            <Text style={[styles.itemValueText, itemValueTextStyle]}>
               {this.state.settlePrice}
             </Text>
           </View>
           <View style={{flex: 2, alignItems: 'center'}}>
-            <Text style={styles.itemTitleText}>
+            <Text style={[styles.itemTitleText, itemTitleTextStyle]}>
               {this.state.isCreate? ('最大风险('+currency+')') : '盈亏(美元)'}
             </Text>
             <Text style={[styles.itemValueText, {color: plColor}]}>
@@ -179,10 +209,10 @@ export default class StockTransactionInfoBar extends Component {
             </Text>
           </View>
           <View style={{flex: 1, alignItems: 'flex-end', paddingRight: this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN}}>
-            <Text style={styles.itemTitleText}>
+            <Text style={[styles.itemTitleText, itemValueTextStyle]}>
               {this.state.time.Format('yy/MM/dd')}
             </Text>
-            <Text style={styles.itemValueText}>
+            <Text style={[styles.itemValueText, itemValueTextStyle]}>
               {this.state.time.Format('hh:mm')}
             </Text>
           </View>
@@ -252,6 +282,7 @@ const styles = StyleSheet.create({
 	longImage: {
 		width: itemValueFontSize+5,
 		height: itemValueFontSize+5,
+		paddingTop: 4,
 	},
 
 	line: {

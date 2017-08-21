@@ -83,17 +83,19 @@ export default class AchievementCard extends Component {
   }
 
   render() {
+    var imageHeight = this.props.width / 488 * 496;
+
     /* {this.renderReward()} */
     if(this.props.card){
       var source = null;
       source = {uri: this.props.card.imgUrlBig}
+
+      //Use Temp image for now.
+      source = require('../../images/card_content.gif')
       //source = require('../../images/blue_big.jpg');
-      var imgStyle = [styles.cardImage, {width: this.props.width, height: this.props.width / 690 * 644}];
-      if(this.props.card.themeColor){
-        imgStyle.push({backgroundColor: this.props.card.themeColor});
-      }
+      var imgStyle = [styles.cardImage, {width: this.props.width, height: imageHeight,}];
       return (
-        <View style={styles.container}>
+        <View style={[styles.container, this.props.style]}>
           <Image style={imgStyle} source={source} onLoad={()=>this.onLoad()}>
           </Image>
           {this.renderWaitingRing()}
@@ -108,7 +110,8 @@ export default class AchievementCard extends Component {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    alignItems: 'stretch',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   cardImage:{
@@ -116,7 +119,7 @@ const styles = StyleSheet.create({
 //    borderTopLeftRadius: 4,
 //    borderTopRightRadius: 4,
     borderWidth: 0,
-    resizeMode: "stretch",
+    resizeMode: "contain",
   },
 
   rewardImage: {

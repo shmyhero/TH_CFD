@@ -31,7 +31,7 @@ var {height, width} = Dimensions.get('window')
 const ID_CARD_FRONT = 1
 const ID_CARD_BACK = 2
 const imageWidth = Math.round(width * 0.85)
-const imageHeight = Math.round(height * 0.3) - 64 //(height - 64 - 15 - 15 - 15 - 168 - 72) / 2
+const imageHeight = (height - 64 - 45 - 15 - 15 - 168 - 72) / 2
 
 const GZT_Ayondo_Key_Mappings = [
 	{"GZTKey": "real_name", "AyondoKey": "realName"},

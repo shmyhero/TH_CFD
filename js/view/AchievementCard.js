@@ -83,7 +83,7 @@ export default class AchievementCard extends Component {
   }
 
   render() {
-    var imageHeight = this.props.width / 488 * 496;
+    var imageHeight = this.props.width / 530 * 496;
 
     /* {this.renderReward()} */
     if(this.props.card){
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
 //    borderTopLeftRadius: 4,
 //    borderTopRightRadius: 4,
     borderWidth: 0,
-    resizeMode: "contain",
+    resizeMode: "stretch",
   },
 
   rewardImage: {

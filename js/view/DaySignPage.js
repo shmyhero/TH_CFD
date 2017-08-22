@@ -479,8 +479,9 @@ var DaySignPage = React.createClass({
 		return (
 			<View style={{flex: 1}}>
 				<NavBar title='每日签到' showBackButton={true} navigator={this.props.navigator}
-							imageOnRight={require('../../images/share01.png')}
-							rightImageOnClick={this._share}/>
+							// imageOnRight={require('../../images/share01.png')}
+							// rightImageOnClick={this._share}
+							/>
 				<View style = {styles.scrollView}>
 				  {this.renderModal()}
 					{this.renderModalCoin()}

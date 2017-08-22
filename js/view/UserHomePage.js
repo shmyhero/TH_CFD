@@ -135,7 +135,7 @@ export default class UserHomePage extends Component {
 			rank: 0,
 			rankDescription: '',
 			isFollowingStatusChanged: false,
-			isPrivate: false,
+			isPrivate: true,
 			currentSelectedTab : 0,
 			isShowGuide:false,
 			height: UIConstants.getVisibleHeight(),
@@ -198,6 +198,10 @@ export default class UserHomePage extends Component {
 			},
 			(responseJson) => {
 				console.log(responseJson);
+
+				let res = responseJson.showData == undefined ? true : (!responseJson.showData)
+				console.log("Rambo:::"+res);
+
 				this.setState({
 					id: responseJson.id,
 					avgPl: responseJson.avgPl,
@@ -212,11 +216,7 @@ export default class UserHomePage extends Component {
 					rankDescription: responseJson.rankDescription,
 					isPrivate: responseJson.showData == undefined ? true : (!responseJson.showData),
 				}, () => {
-					// if(LogicData.isUserSelf(this.state.id)) {
-					// 	this.setState({
-					// 		isPrivate: false,
-					// 	})
-					// }
+					this.refs['page0'].tabPressed()
 				})
 				this.loadPlCloseData()
 			},
@@ -459,6 +459,7 @@ export default class UserHomePage extends Component {
 	}
 
 	renderContent(){
+		console.log("Rambo:::renderContent:"+this.state.isPrivate);
 		// userId: PropTypes.number.isRequired,
 		// userName: PropTypes.string.isRequired,
 		var tabPages = [

@@ -275,11 +275,11 @@ var StockOpenPositionPage = React.createClass({
 				//timeout: 1000,
 			},
 			(responseJson, isCache) => {
-				this.setState({
+				var newState = {
 					contentLoaded: true,
 					isRefreshing: false,
 					isClear:false,
-				})
+				}
 
 				var interestedStockIds = []
 				for (var i = 0; i < responseJson.length; i++) {
@@ -304,21 +304,18 @@ var StockOpenPositionPage = React.createClass({
 
 				setTimeout(()=>{
 					if (this.state.selectedRow >= responseJson.length) {
-						this.setState ({
-							stockInfoRowData: responseJson,
-							stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
-							selectedRow: -1,
-							selectedSubItem: 0,
-						});
+						newState.stockInfoRowData = responseJson;
+						newState.stockInfo = this.state.stockInfo.cloneWithRows(responseJson)
+						newState.selectedRow = -1
+						newState.selectedSubItem = 0
 					}
 					else {
-						this.setState({
-							stockInfoRowData: responseJson,
-							stockInfo: this.state.stockInfo.cloneWithRows(responseJson),
-						});
+						newState.stockInfoRowData = responseJson;
+						newState.stockInfo = this.state.stockInfo.cloneWithRows(responseJson)
 					}
-				}, timeout);
 
+					this.setState(newState)
+				}, timeout);
 
 				for (var i = 0; i < responseJson.length; i++) {
 

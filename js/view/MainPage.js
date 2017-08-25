@@ -621,7 +621,7 @@ var MainPage = React.createClass({
 						popToOutsidePage={route.popToOutsidePage}
 						onNavigationStateChange={route.onNavigationStateChange}
 						showTabbar={showTabbar}
-						title={route.title}
+						//title={route.title}
 						backFunction={()=>{
 							if (route.backFunction) {
 								route.backFunction()

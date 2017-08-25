@@ -142,6 +142,7 @@ function getCFDAPI(){
     LATEST_APP_VERSION:CFD_API_SERVER + '/api/version/' + (Platform.OS === "ios" ? "ios" : "android"),
 
     GET_PAY_DEMO_TEST_ID:CFD_API_SERVER + '/api/user/live/deposit/id',
+    GET_PAY_DEMO_TEST_ADYEN:CFD_API_SERVER + '/api/user/live/deposit/adyen',
 
     GET_SUPPORT_WITHDRAW_BANKS: CFD_API_SERVER + "/api/common/banks",
     GET_ALL_PROVINCES_AND_CITIES: CFD_API_SERVER + "/api/common/area/?id=-1",

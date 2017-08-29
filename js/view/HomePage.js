@@ -312,6 +312,8 @@ var HomePage = React.createClass({
 	},
 
 	componentDidMount: function() {
+		LogicData.setTabIndex(MainPage.HOME_PAGE_TAB_INDEX);
+
 		var isConnected = WebSocketModule.isConnected();
 		this.setState({
 			connected: isConnected

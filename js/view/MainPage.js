@@ -1380,22 +1380,25 @@ var MainPage = React.createClass({
 	},
 
 	gotoLoginPage: function(){
-		console.log("gotoLoginPage");
-		LocalDataUpdateModule.removeUserData()
-		.then(()=>{
-			var currentNavigatorIndex = LogicData.getTabIndex();
-			console.log("gotoLoginPage " + currentNavigatorIndex);
-			if(currentNavigatorIndex != 2){
-				if(_navigators[currentNavigatorIndex]){
-					_navigators[currentNavigatorIndex].push({
-						name: LOGIN_ROUTE,
-						popToStackTop: true,
-					});
+		var userData = LogicData.getUserData();
+		if (Object.keys(userData).length !== 0) {
+			console.log("gotoLoginPage");
+			LocalDataUpdateModule.removeUserData()
+			.then(()=>{
+				var currentNavigatorIndex = LogicData.getTabIndex();
+				console.log("gotoLoginPage " + currentNavigatorIndex);
+				if(currentNavigatorIndex != 2){
+					if(_navigators[currentNavigatorIndex]){
+						_navigators[currentNavigatorIndex].push({
+							name: LOGIN_ROUTE,
+							popToStackTop: true,
+						});
+					}
+				}else{
+					_navigators[currentNavigatorIndex].popToTop();
 				}
-			}else{
-				_navigators[currentNavigatorIndex].popToTop();
-			}
-		});
+			});
+		}
 	},
 
 	gotoLiveLogin: function(navigator, doNotPopWhenFinished, onSuccess, afterLogin){

@@ -331,8 +331,9 @@ export default class DepositPage extends Component{
 					</View>
 				<View style = {styles.lineSep}></View>
 				<View style = {styles.tipsLine}>
-					<Text style = {styles.payStateTip2}>{this.state.payStateTip2}</Text>
-					<Text style = {styles.payStateTip3}>{this.state.payStateTip3}</Text>
+					<Text style = {styles.payStateTip2}>{this.state.payStateTip3}</Text>
+					{/* <Text style = {styles.payStateTip2}>{this.state.payStateTip2}</Text>
+					<Text style = {styles.payStateTip3}>{this.state.payStateTip3}</Text> */}
 				</View>
 
 
@@ -489,13 +490,13 @@ export default class DepositPage extends Component{
 					 var url = this.state.payMethodSelected == 0? alipayUrl:unionpayUrl;
 					 console.log('selected Url = ' + url);
 
-						var trackingData = {};
-						trackingData[TalkingdataModule.AD_TRACKING_KEY_USER_ID] = userData.userId;
-						trackingData[TalkingdataModule.AD_TRACKING_KEY_ORDER_ID] = responseJson.transferId;	//don't know the order id..
-						trackingData[TalkingdataModule.AD_TRACKING_KEY_AMOUNT] = rmbValue;
-						trackingData[TalkingdataModule.AD_TRACKING_KEY_CURRENCY] = "RMB";
-						trackingData[TalkingdataModule.AD_TRACKING_KEY_PAY_TYPE] = this.state.payMethodSelected == 0 ? "支付宝" : "银联";
-						TalkingdataModule.trackADEvent(TalkingdataModule.AD_TRACKING_EVENT_PAY, trackingData);
+						// var trackingData = {};
+						// trackingData[TalkingdataModule.AD_TRACKING_KEY_USER_ID] = userData.userId;
+						// trackingData[TalkingdataModule.AD_TRACKING_KEY_ORDER_ID] = responseJson.transferId;	//don't know the order id..
+						// trackingData[TalkingdataModule.AD_TRACKING_KEY_AMOUNT] = rmbValue;
+						// trackingData[TalkingdataModule.AD_TRACKING_KEY_CURRENCY] = "RMB";
+						// trackingData[TalkingdataModule.AD_TRACKING_KEY_PAY_TYPE] = this.state.payMethodSelected == 0 ? "支付宝" : "银联";
+						// TalkingdataModule.trackADEvent(TalkingdataModule.AD_TRACKING_EVENT_PAY, trackingData);
 
 					 this.props.navigator.push({
 				 		name: MainPage.PAYMENT_PAGE,

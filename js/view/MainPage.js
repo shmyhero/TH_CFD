@@ -186,6 +186,8 @@ export var gotoLiveLogin;
 var recevieDataSubscription = null
 var didAccountChangeSubscription = null;
 var didAccountLoginOutSideSubscription = null;
+var didDisableTabbarSubscription = null;
+
 var SHARE_PAGE = 'SharePage'
 var REGISTER_SUCCESS_DIALOG = 'RegisterSuccessDialog'
 var SUPER_PRIORITY_HINT = 'SuperPriorityHint'
@@ -710,6 +712,7 @@ var MainPage = React.createClass({
 		if(this.refs['myTabbar']){
 			isTabbarShown = true;
 			console.log("showTabbar")
+			this.setTabbarEnable(true);
 			this.refs['myTabbar'].getBarRef().show(true);
 	 	}
 	},
@@ -784,6 +787,7 @@ var MainPage = React.createClass({
 		if(this.refs['myTabbar']){
 			isTabbarShown = false;
 			console.log("hideTabbar")
+			this.setTabbarEnable(false);
 			this.refs['myTabbar'].getBarRef().show(false);
 		}
 	},
@@ -858,6 +862,7 @@ var MainPage = React.createClass({
 	},
 
 	componentDidMount: function() {
+		this.setTabbarEnable(true);
 		ayondoLoginResult = this.ayondoLoginResult
 		refreshMainPage = this.refreshMainPage
 		showSharePage = this._doShare
@@ -867,6 +872,8 @@ var MainPage = React.createClass({
 		this.initTabbarEvent()
 		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>this.refreshMainPage());
 		didAccountLoginOutSideSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGIN_OUT_SIDE, ()=>this.gotoLoginPage());
+		didDisableTabbarSubscription = EventCenter.getEventEmitter().addListener(EventConst.DISABLE_TABBAR, ()=>this.setTabbarEnable(false));
+
 		var currentNavigatorIndex = LogicData.getTabIndex();
 		if(_navigators && _navigators.length > currentNavigatorIndex){
 			_navigator = _navigators[currentNavigatorIndex];
@@ -1379,9 +1386,20 @@ var MainPage = React.createClass({
 		}
 	},
 
+	setTabbarEnable: function(value){
+		this.refs["homepageBtn"].setEnable(value);
+		this.refs["tradeBtn"].setEnable(value);
+		this.refs["trendBtn"].setEnable(value);
+		this.refs["meBtn"].setEnable(value);
+		if(LogicData.getAccountState()){
+			this.refs['rankingBtn'] && this.refs['rankingBtn'].setEnable(value);
+		}
+	},
+
 	gotoLoginPage: function(){
 		var userData = LogicData.getUserData();
 		if (Object.keys(userData).length !== 0) {
+			this.setTabbarEnable(false);
 			console.log("gotoLoginPage");
 			LocalDataUpdateModule.removeUserData()
 			.then(()=>{
@@ -1395,6 +1413,7 @@ var MainPage = React.createClass({
 						});
 					}
 				}else{
+					this.setTabbarEnable(true);
 					_navigators[currentNavigatorIndex].popToTop();
 				}
 			});

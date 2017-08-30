@@ -36,6 +36,10 @@ const extendRawIcon = (ChildComponent) => {
       this.refs['wrap'].refs['child'].setActiveColor(color)
     }
 
+    setEnable(value){
+      this.refs['wrap'].refs['child'].setEnable(value)
+    }
+
     render() {
       const component = ChildComponent? <ChildComponent ref="child" {...this.props}/> : this.props.children;
       const { barSize } = this.context;

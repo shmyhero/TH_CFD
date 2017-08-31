@@ -91,7 +91,15 @@ export default class AchievementCard extends Component {
       source = {uri: this.props.card.imgUrlBig}
 
       //Use Temp image for now.
-      source = require('../../images/card_content.gif')
+      if(this.props.card.imgUrlBig.contains("blue_big.jpg")){
+        source = require('../../images/card_content.gif')
+      }
+      else if(this.props.card.imgUrlBig.contains("brozne_large_20170306.png")){
+        source = require('../../images/card_content_2.gif')
+      }
+      else if(this.props.card.imgUrlBig.contains("silver_big_20170306.png")){
+        source = require('../../images/card_content_4.gif')
+      }
       //source = require('../../images/blue_big.jpg');
       var imgStyle = [styles.cardImage, {width: this.props.width, height: imageHeight,}];
       return (

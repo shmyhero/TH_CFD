@@ -18,6 +18,7 @@ const EventConst = {
 	ACCOUNT_LOGOUT: 'account_logout',
 	LAYOUT_SIZE_CHANGED: 'layout_size_changed',
 	CHART_CLICKED: 'chart_clicked',
+	DISABLE_TABBAR: 'disable_tabbar',
 }
 
 var EventCenter = {
@@ -74,6 +75,10 @@ var EventCenter = {
 
 	emitChartClickedEvent: function(){
 		eventEmitter.emit(EventConst.CHART_CLICKED);
+	},
+
+	emitDisableTabbarEvent: function(){
+		eventEmitter.emit(EventConst.DISABLE_TABBAR);
 	},
 }
 

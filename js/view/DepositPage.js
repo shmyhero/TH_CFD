@@ -331,8 +331,9 @@ export default class DepositPage extends Component{
 					</View>
 				<View style = {styles.lineSep}></View>
 				<View style = {styles.tipsLine}>
-					<Text style = {styles.payStateTip2}>{this.state.payStateTip2}</Text>
-					<Text style = {styles.payStateTip3}>{this.state.payStateTip3}</Text>
+					<Text style = {styles.payStateTip2}>{this.state.payStateTip3}</Text>
+					{/* <Text style = {styles.payStateTip2}>{this.state.payStateTip2}</Text>
+					<Text style = {styles.payStateTip3}>{this.state.payStateTip3}</Text> */}
 				</View>
 
 
@@ -455,7 +456,19 @@ export default class DepositPage extends Component{
 
 	requestPayConfirm(){
 		var userData = LogicData.getUserData()
-		var url = NetConstants.CFD_API.GET_PAY_DEMO_TEST_ID + '?amount=' + inputValue
+		// var url = NetConstants.CFD_API.GET_PAY_DEMO_TEST_ID + '?amount=' + inputValue
+		var url = NetConstants.CFD_API.GET_PAY_DEMO_TEST_ADYEN + '?amount=' + inputValue
+	// 	{ merchantSig: '2kNmP+lx9RaKejwrJ9xgYv4Rv/HeeQCgMkz+dMTEHz0=',
+  // signingString: 'brandCode:currencyCode:merchantAccount:merchantReference:paymentAmount:sessionValidity:shipBeforeDate:shopperLocale:skinCode:moneybookers:USD:AyoMarLimTHCN:142381748277:33300:2017-08-23T08\\:42\\:46Z:2017-08-24T08\\:12\\:46Z:en_GB:UtmJpnab',
+  // currencyCode: 'USD',
+  // merchantAccount: 'AyoMarLimTHCN',
+  // merchantReference: '142381748277',
+  // paymentAmount: '33300',
+  // sessionValidity: '2017-08-23T08:42:46Z',
+  // skinCode: 'UtmJpnab',
+  // shipBeforeDate: '2017-08-24T08:12:46Z',
+  // brandCode: 'moneybookers',
+  // shopperLocale: 'en_GB' }
 		console.log("requestPayConfirm url = " + url);
 		NetworkModule.fetchTHUrl(
 				url,
@@ -468,19 +481,22 @@ export default class DepositPage extends Component{
 			},
 			(responseJson) => {
 				 console.log('responseJson = ' + responseJson + ' payMethodSelected = ' + this.state.payMethodSelected);//rmbValue
-				   var appendVal = '&TransRef='+responseJson.transferId+'&firstName='+responseJson.firstName+'&lastName='+responseJson.lastName+'&email='+responseJson.email+'&addr='+responseJson.addr
- 			 		 var alipayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-alipay.html'+'?Amount='+rmbValue+appendVal
-					 var unionpayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-quick.html'+'?Amount='+rmbValue+appendVal
+				  //  var appendVal = '&TransRef='+responseJson.transferId+'&firstName='+responseJson.firstName+'&lastName='+responseJson.lastName+'&email='+responseJson.email+'&addr='+responseJson.addr
+
+					 var appendVal = '&merchantSig='+responseJson.merchantSig+'&currencyCode='+responseJson.currencyCode+'&merchantAccount='+responseJson.merchantAccount+'&merchantReference='+responseJson.merchantReference+'&paymentAmount='+responseJson.paymentAmount+'&sessionValidity='+responseJson.sessionValidity+'&skinCode='+responseJson.skinCode+'&shipBeforeDate='+responseJson.shipBeforeDate+'&brandCode='+responseJson.brandCode+'&shopperLocale='+responseJson.shopperLocale
+					 var alipayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-alipay.html'+'?Amount='+rmbValue+appendVal
+					//  var unionpayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-quick.html'+'?Amount='+rmbValue+appendVal
+					 var unionpayUrl = 'https://cn.tradehero.mobi/test_form/test_form_Ayondo-adyen.html?'+appendVal
 					 var url = this.state.payMethodSelected == 0? alipayUrl:unionpayUrl;
 					 console.log('selected Url = ' + url);
 
-						var trackingData = {};
-						trackingData[TalkingdataModule.AD_TRACKING_KEY_USER_ID] = userData.userId;
-						trackingData[TalkingdataModule.AD_TRACKING_KEY_ORDER_ID] = responseJson.transferId;	//don't know the order id..
-						trackingData[TalkingdataModule.AD_TRACKING_KEY_AMOUNT] = rmbValue;
-						trackingData[TalkingdataModule.AD_TRACKING_KEY_CURRENCY] = "RMB";
-						trackingData[TalkingdataModule.AD_TRACKING_KEY_PAY_TYPE] = this.state.payMethodSelected == 0 ? "支付宝" : "银联";
-						TalkingdataModule.trackADEvent(TalkingdataModule.AD_TRACKING_EVENT_PAY, trackingData);
+						// var trackingData = {};
+						// trackingData[TalkingdataModule.AD_TRACKING_KEY_USER_ID] = userData.userId;
+						// trackingData[TalkingdataModule.AD_TRACKING_KEY_ORDER_ID] = responseJson.transferId;	//don't know the order id..
+						// trackingData[TalkingdataModule.AD_TRACKING_KEY_AMOUNT] = rmbValue;
+						// trackingData[TalkingdataModule.AD_TRACKING_KEY_CURRENCY] = "RMB";
+						// trackingData[TalkingdataModule.AD_TRACKING_KEY_PAY_TYPE] = this.state.payMethodSelected == 0 ? "支付宝" : "银联";
+						// TalkingdataModule.trackADEvent(TalkingdataModule.AD_TRACKING_EVENT_PAY, trackingData);
 
 					 this.props.navigator.push({
 				 		name: MainPage.PAYMENT_PAGE,

@@ -14,13 +14,16 @@ class Icon extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      selected: false
+      selected: false,
+      enable: true,
     };
   }
 
   onPress() {
     const { tabName, gotoTab } = this.context;
-    gotoTab(tabName);
+    if(this.state.enable){
+      gotoTab(tabName);
+    }
   }
 
   tabDidActive() {
@@ -37,6 +40,10 @@ class Icon extends Component {
     this.setState({
       onActiveColor: color,
     })
+  }
+
+  setEnable(value){
+    this.state.enable = value;
   }
 
   render() {

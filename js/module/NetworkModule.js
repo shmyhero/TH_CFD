@@ -102,13 +102,17 @@ export function fetchTHUrl(url, params, successCallback, errorCallback, notShowR
 			console.log('fetchTHUrl catches: ' + e + ", " + url);
 
 			if(e.message=='身份验证失败'){
-				console.log('多点登录 = ' + e);
-				if (!loginOutsideAlertShown) {
-					loginOutsideAlertShown = true
- 					Alert.alert('风险提示！', '盈交易账号已登录其他设备', [{text: '我知道了', onPress: () => {
- 						EventCenter.emitAccountLoginOutSideEvent();
-					}}],{cancelable:false})
-				};
+				var userData = LogicData.getUserData();
+				if (Object.keys(userData).length !== 0) {
+					console.log('多点登录 = ' + e);
+					if (!loginOutsideAlertShown) {
+						EventCenter.emitDisableTabbarEvent();
+						loginOutsideAlertShown = true
+	 					Alert.alert('风险提示！', '盈交易账号已登录其他设备', [{text: '我知道了', onPress: () => {
+	 						EventCenter.emitAccountLoginOutSideEvent();
+						}}],{cancelable:false})
+					};
+				}
 			}
 			var message = e.message
 

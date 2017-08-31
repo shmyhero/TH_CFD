@@ -41,7 +41,7 @@ export default class UserHomePageTab0 extends Component{
     isStatisticPage: false,
     userId: '',
     userName: '',
-    isPrivate: false,
+    isPrivate: true,
   }
 
 	constructor(props){
@@ -184,6 +184,7 @@ export default class UserHomePageTab0 extends Component{
     var staticBarBlock = {
       isPrivate:this.props.isPrivate,
     }
+
 
     this.refs[STATISTIC_BAR_BLOCK].refresh(staticBarBlock);
     this.refs[TRADE_STYLE_BLOCK].refresh(tradeStyle);

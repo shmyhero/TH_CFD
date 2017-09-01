@@ -1305,7 +1305,12 @@ var MainPage = React.createClass({
 	},
 
 	getNavigator: function(){
-		return _navigator;
+		var currentNavigatorIndex = LogicData.getTabIndex()
+		console.log("_navigators[currentNavigatorIndex] " + currentNavigatorIndex)
+		if(currentNavigatorIndex >= _navigators.length){
+			return _navigators[_navigators.length - 1];
+		}
+		return _navigators[currentNavigatorIndex];
 	},
 
 	renderSuperPriorityHintPage: function(){

@@ -386,7 +386,9 @@ var LogicData = {
 	},
 
 	getRankHead:function(rank){
-		if(rank==3){return require('../images/head_cu.png')}
+		if(rank==1){return require('../images/head_01.png')}
+		else if(rank==2){return require('../images/head_02.png')}
+		else if(rank==3){return require('../images/head_cu.png')}
 		else if(rank == 4){return require('../images/head_ag.png')}
 		else if(rank == 5){return require('../images/head_gd.png')}
 		else{
@@ -395,7 +397,9 @@ var LogicData = {
 	},
 
 	getRankBanner:function(rank){
-		if(rank==3){return require('../images/bgbanner_cu.jpg')}
+		// if(rank==1){return require('../images/bgbanner_cu.jpg')}
+		if(rank==2){return require('../images/bgbanner_02.jpg')}
+	  else if(rank==3){return require('../images/bgbanner_cu.jpg')}
 		else if(rank == 4){return require('../images/bgbanner_ag.jpg')}
 		else if(rank == 5){return require('../images/bgbanner_gd.jpg')}
 		else{

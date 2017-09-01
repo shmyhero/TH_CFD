@@ -733,9 +733,9 @@ const styles = StyleSheet.create({
 	},
 
 	userHeaderIconRound: {
-		width: 158,
-		height: 158,
-		marginTop: -118,
+		width: 156,
+		height: 156,
+		marginTop: -120,
 		marginLeft: (width / 3 - 158) / 2,
 		position: 'absolute',
 	},

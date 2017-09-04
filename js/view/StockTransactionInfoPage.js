@@ -32,14 +32,14 @@ var actionButtonSize = 61;
 
 const BODY_HORIZON_MARGIN = Platform.OS === 'ios' ? 15 : 20;
 const BODY_TOP_MARGIN = 0;
-const BODY_BOTTOM_MARGIN = Platform.OS === 'ios' ? 0 : 30;
-const CONTENT_WIDTH = width - BODY_HORIZON_MARGIN * 2 - 2;
+const BODY_BOTTOM_MARGIN = 30;
+const CONTENT_WIDTH = width - BODY_HORIZON_MARGIN * 2 - 2 - BODY_BOTTOM_MARGIN * 2;
 const CARD_BORDER_WIDTH = CONTENT_WIDTH * 0.035;
 const BOTTOM_CARD_BORDER_WIDTH = Platform.OS === 'ios' ? CARD_BORDER_WIDTH * 3 : CARD_BORDER_WIDTH * 2;
-const BORDER_WIDTH = (width - BODY_HORIZON_MARGIN * 2 + CARD_BORDER_WIDTH * 2);
+const BORDER_WIDTH = (width - BODY_HORIZON_MARGIN * 2 + CARD_BORDER_WIDTH * 2 - BODY_BOTTOM_MARGIN * 2);
 const BORDER_HEIGHT = (BORDER_WIDTH/ 622 * 915);
 const CARD_BORDER_HEADER_HEIGHT = BORDER_HEIGHT * 0.063;
-const TITLE_FONT_SIZE = 20 / 375 * width;
+const TITLE_FONT_SIZE = 17 / 375 * width;
 const IMAGE_RESIZE_SCALE =  BORDER_HEIGHT / (915 / 2)
 const CARD_TITLE_POSITION = 22 * IMAGE_RESIZE_SCALE;
 const ACHIEVEMENT_HEIGHT = 530 / 2 * IMAGE_RESIZE_SCALE;
@@ -239,7 +239,7 @@ var StockTransactionInfoPage = React.createClass({
 							</View>
 							<StockTransactionInfoBar card={this.state.card} transactionInfo={this.state.transactionInfo}
 								hideTopCornerRadius={this.state.card !== undefined && this.state.card !== null}
-								width={CONTENT_WIDTH} bigMargin={true}/>
+								width={CONTENT_WIDTH} bigMargin={false}/>
 						</View>
 					</View>
 				</View>
@@ -251,6 +251,7 @@ var StockTransactionInfoPage = React.createClass({
 						<TouchableOpacity activeOpacity={1.0} onPress={()=>this.gotoTrade()}>
 							<StockTransactionInfoBar transactionInfo={this.state.transactionInfo}
 								hideTopCornerRadius={this.state.card !== undefined && this.state.card !== null}
+								bigMargin={true}
 								/>
 					 </TouchableOpacity>
 					</View>

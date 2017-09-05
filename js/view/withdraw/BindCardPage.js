@@ -91,23 +91,23 @@ export default class BindCardPage extends Component {
 		this.listRawData[0].value = liveUserInfo.lastName + liveUserInfo.firstName;
 
     //Get banks
-    NetworkModule.fetchTHUrl(NetConstants.CFD_API.GET_SUPPORT_WITHDRAW_BANKS,
-      {
-				method: 'GET',
-			},
-      (responseJson)=>{
-        try{
-          this.SupportedBanks = [];
-          for(var i = 0; i < responseJson.length; i++){
-            this.SupportedBanks.push({"value": responseJson[i].cname, "logo": responseJson[i].logo});
-          }
-        }catch(err){
-          console.log("error " + err)
-        }
-      },
-      (result)=>{
-
-      });
+    // NetworkModule.fetchTHUrl(NetConstants.CFD_API.GET_SUPPORT_WITHDRAW_BANKS,
+    //   {
+		// 		method: 'GET',
+		// 	},
+    //   (responseJson)=>{
+    //     try{
+    //       this.SupportedBanks = [];
+    //       for(var i = 0; i < responseJson.length; i++){
+    //         this.SupportedBanks.push({"value": responseJson[i].cname, "logo": responseJson[i].logo});
+    //       }
+    //     }catch(err){
+    //       console.log("error " + err)
+    //     }
+    //   },
+    //   (result)=>{
+		//
+    //   });
 
 		//console.log("get all areas");
 		var responseJson = UserInfoSelectorProvider.getAllAreas();

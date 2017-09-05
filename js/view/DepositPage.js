@@ -27,22 +27,18 @@ var listRawData = [
 ]
 
 var bankListData = [
-	{'bankID':'00','logo':require('../../images/icon_bank0.png')},
-	{'bankID':'01','logo':require('../../images/icon_bank1.png')},
-	{'bankID':'02','logo':require('../../images/icon_bank2.png')},
-	{'bankID':'03','logo':require('../../images/icon_bank3.png')},
-	{'bankID':'04','logo':require('../../images/icon_bank4.png')},
-	{'bankID':'05','logo':require('../../images/icon_bank5.png')},
-	{'bankID':'06','logo':require('../../images/icon_bank6.png')},
-	{'bankID':'07','logo':require('../../images/icon_bank7.png')},
-	{'bankID':'08','logo':require('../../images/icon_bank8.png')},
-	{'bankID':'09','logo':require('../../images/icon_bank9.png')},
-	{'bankID':'10','logo':require('../../images/icon_bank10.png')},
-	{'bankID':'11','logo':require('../../images/icon_bank11.png')},
-	{'bankID':'12','logo':require('../../images/icon_bank12.png')},
-	{'bankID':'13','logo':require('../../images/icon_bank13.png')},
-	{'bankID':'14','logo':require('../../images/icon_bank14.png')},
-	{'bankID':'15','logo':require('../../images/icon_bank15.png')},
+	{'bankID':'00','logo':require('../../images/icon_bank_0.png')},
+	{'bankID':'01','logo':require('../../images/icon_bank_1.png')},
+	{'bankID':'02','logo':require('../../images/icon_bank_2.png')},
+	{'bankID':'03','logo':require('../../images/icon_bank_3.png')},
+	{'bankID':'04','logo':require('../../images/icon_bank_4.png')},
+	{'bankID':'05','logo':require('../../images/icon_bank_5.png')},
+	{'bankID':'06','logo':require('../../images/icon_bank_6.png')},
+	{'bankID':'07','logo':require('../../images/icon_bank_7.png')},
+	{'bankID':'08','logo':require('../../images/icon_bank_8.png')},
+	{'bankID':'09','logo':require('../../images/icon_bank_9.png')},
+	{'bankID':'10','logo':require('../../images/icon_bank_10.png')},
+	{'bankID':'11','logo':require('../../images/icon_bank_11.png')},
 ]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});

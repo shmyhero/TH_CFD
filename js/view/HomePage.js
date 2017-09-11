@@ -267,7 +267,7 @@ var HomePage = React.createClass({
 	goToMailPage: function(){
 		this.props.navigator.push({
 			name: MainPage.MY_MESSAGES_ROUTE,
-			onPopToRoute: this.reloadMeData,
+			onPopToRoute: this.loadUnreadMessage,
 		});
 	},
 

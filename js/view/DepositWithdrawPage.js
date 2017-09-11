@@ -299,7 +299,7 @@ export default class DepositWithdrawPage extends Component {
 
 	render() {
 		return (
-			<View style={{flex: 1}}>
+			<View style={{flex: 1, width:width}}>
 				<NavBar title='存取资金' showBackButton={true} leftButtonOnClick={()=>this.pressBackButton()} navigator={this.props.navigator}/>
 				<ScrollView >
 					{this.renderListView()}

@@ -91,18 +91,18 @@ export default class AchievementCard extends Component {
       var source = null;
       source = {uri: this.props.card.imgUrlBig}
 
-      if(LogicData.getDebugStatus()){
-        //Use Temp image for now.
-        if(this.props.card.imgUrlBig.contains("blue_big.jpg")){
-          source = require('../../images/card_content.gif')
-        }
-        else if(this.props.card.imgUrlBig.contains("brozne_large_20170306.png")){
-          source = require('../../images/card_content_2.gif')
-        }
-        else if(this.props.card.imgUrlBig.contains("silver_big_20170306.png")){
-          source = require('../../images/card_content_4.gif')
-        }
-      }
+      // if(LogicData.getDebugStatus()){
+      //   //Use Temp image for now.
+      //   if(this.props.card.imgUrlBig.contains("blue_big.jpg")){
+      //     source = require('../../images/card_content.gif')
+      //   }
+      //   else if(this.props.card.imgUrlBig.contains("brozne_large_20170306.png")){
+      //     source = require('../../images/card_content_2.gif')
+      //   }
+      //   else if(this.props.card.imgUrlBig.contains("silver_big_20170306.png")){
+      //     source = require('../../images/card_content_4.gif')
+      //   }
+      // }
       //source = require('../../images/blue_big.jpg');
       var imgStyle = [styles.cardImage, {width: this.props.width, height: imageHeight,}];
       return (

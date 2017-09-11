@@ -25,6 +25,7 @@ var TalkingdataModule = require('../../module/TalkingdataModule')
 var OpenAccountRoutes = require('./OpenAccountRoutes')
 var OpenAccountUtils = require('./OpenAccountUtils')
 var OpenAccountHintBlock = require('./OpenAccountHintBlock')
+var ErrorBar = require('../component/ErrorBar')
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
@@ -237,7 +238,24 @@ var OAFinanceInfoPage = React.createClass({
 		return {
 			dataSource: dataSource,
 			selectedPicker: -1,
+			disableChanges: false,
 		};
+	},
+
+	componentWillMount: function(){
+		OpenAccountRoutes.loadMIFIDTestVerified((value)=>{
+			if(value){
+				this.setState({
+					disableChanges: true,
+				})
+			}
+		});
+
+		this.setForHideValues(this.listRawData[EMPSWITCH].value, EMPSWITCH)
+		this.setForHideValues(this.listRawData[QUALIFICATION].value, QUALIFICATION)
+		this.setForHideValues(this.listRawData[EXPCHANNEL0].value, EXPCHANNEL0)
+		this.setForHideValues(this.listRawData[EXPCHANNEL1].value, EXPCHANNEL1)
+		this.setForHideValues(this.listRawData[EXPCHANNEL2].value, EXPCHANNEL2)
 	},
 
 	gotoNext: function() {
@@ -403,7 +421,8 @@ var OAFinanceInfoPage = React.createClass({
 			}
 
 			return (
-				<TouchableOpacity style = {rowData.hide?{height:0}:null} activeOpacity={0.9} onPress={() => this.onPressPicker(rowData, rowID)}>
+				<TouchableOpacity style = {rowData.hide?{height:0}:null} activeOpacity={0.9} onPress={() => this.onPressPicker(rowData, rowID)}
+													disabled={this.state.disableChanges}>
 				<View style={styles.rowWrapper}>
 					<Text style={[styles.rowTitle, {flex:3}]}>{rowData.title}</Text>
 					<View style={{flex:4, flexDirection: 'row'}}>
@@ -431,6 +450,7 @@ var OAFinanceInfoPage = React.createClass({
 						onValueChange={(value) => this.onPressSwitch(value, rowID)}
 						style={{height: 22}}
 						value={rowData.value}
+						disabled={this.state.disableChanges}
 						onTintColor={ColorConstants.TITLE_DARK_BLUE}/>
 				</View>)
 		}
@@ -464,7 +484,8 @@ var OAFinanceInfoPage = React.createClass({
 								console.log("data.displayText: " + data.displayText + ", data.value: " + data.value)
 								return (<CheckBoxButton key={index} text={data.displayText}
 									defaultSelected={data.value}
-									onPress={(selected)=>this.onCheckBoxPressed(rowID, index, selected)}>
+									onPress={(selected)=>this.onCheckBoxPressed(rowID, index, selected)}
+									enabled={!this.state.disableChanges}>
 									</CheckBoxButton>
 								);
 							}else{
@@ -492,7 +513,19 @@ var OAFinanceInfoPage = React.createClass({
 				</View>)
 
 		}
-		else if(rowData.type === 'text'){
+		else if(rowData.type === 'text'){			
+			if(this.state.disableChanges){
+				return (
+					<View  style={rowData.hide?{height:0}:null}>
+						<View style={styles.rowWrapper}>
+							<Text style={[styles.rowTitle, {flex: 3}]}>{rowData.title}</Text>
+							<Text style={styles.valueText}>
+								{rowData.value}
+							</Text>
+						</View>
+					</View>
+				);
+			}
 			return (
 				<View  style={rowData.hide?{height:0}:null}>
 					<View style={styles.rowWrapper}>
@@ -585,7 +618,8 @@ var OAFinanceInfoPage = React.createClass({
 		}
 		return (
 			<View style={styles.wrapper}>
-			    <ListView
+				<ErrorBar error={this.state.disableChanges ? "财务信息填写后，不能再次修改！": null}/>
+		    <ListView
 			    	style={styles.list}
 					dataSource={this.state.dataSource}
 					renderRow={this.renderRow}

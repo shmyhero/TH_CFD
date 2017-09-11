@@ -88,82 +88,89 @@ var OADocumentInfoPage = React.createClass({
 		if(this.isProceedAnyway){
 			openAccountData["confirmMifidOverride"] = true;
 		}
-		//Test errors
-		//openAccountData["username"] = "username";
-		//openAccountData["password"] = "2";
-		//openAccountData["idCode"] = "9"
 
-		var userData = LogicData.getUserData();
+		OpenAccountRoutes.loadMIFIDTestVerified((value)=>{
+			if(!value){
+				OpenAccountRoutes.storeMIFIDTestVerified(true);
+			}
 
-		var url = NetConstants.CFD_API.CHECK_LIVE_USERNAME;
-		url = url.replace('<userName>', openAccountData["username"]);
+			//Test errors
+			//openAccountData["username"] = "username";
+			//openAccountData["password"] = "2";
+			//openAccountData["idCode"] = "9"
 
-		NetworkModule.fetchTHUrl(
-			url,
-			{
-				method: 'GET',
-				headers: {
-					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-				},
-			},
-			(responseJson) => {
-				//User name duplication check success. Do register.
-				NetworkModule.fetchTHUrl(
-					NetConstants.CFD_API.REGISTER_LIVE_ACCOUNT,
-					{
-						method: 'POST',
-						body: JSON.stringify(openAccountData),
-						headers: {
-							'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-							'Content-Type': 'application/json; charset=utf-8',
-						},
+			var userData = LogicData.getUserData();
+
+			var url = NetConstants.CFD_API.CHECK_LIVE_USERNAME;
+			url = url.replace('<userName>', openAccountData["username"]);
+
+			NetworkModule.fetchTHUrl(
+				url,
+				{
+					method: 'GET',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 					},
-					(responseJson) => {
-						if(!responseJson.success && responseJson.message === "MifidTestFailed"){
-							this.refs[OA_WARNING_DIALOG].show();
-						}else{
+				},
+				(responseJson) => {
+					//User name duplication check success. Do register.
+					NetworkModule.fetchTHUrl(
+						NetConstants.CFD_API.REGISTER_LIVE_ACCOUNT,
+						{
+							method: 'POST',
+							body: JSON.stringify(openAccountData),
+							headers: {
+								'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+								'Content-Type': 'application/json; charset=utf-8',
+							},
+						},
+						(responseJson) => {
+							if(!responseJson.success && responseJson.message === "MifidTestFailed"){
+								this.refs[OA_WARNING_DIALOG].show();
+							}else{
+								this.setState({
+									enabled: true,
+									validateInProgress: false,
+								});
+								if(!responseJson.success){
+									console.log(JSON.stringify(responseJson))
+									this.parseError(responseJson.message);
+								}else{
+									var trackingData = {};
+									trackingData[TalkingdataModule.AD_TRACKING_KEY_USER_ID] = userData.userId;
+									TalkingdataModule.trackADEvent(TalkingdataModule.AD_TRACKING_EVENT_REGISTER, trackingData);
+
+									OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
+								}
+							}
+						},
+						(errorResult) => {
+							console.log("api Error: " + errorResult.errorMessage);
 							this.setState({
 								enabled: true,
 								validateInProgress: false,
 							});
-							if(!responseJson.success){
-								console.log(JSON.stringify(responseJson))
-								this.parseError(responseJson.message);
-							}else{
-								var trackingData = {};
-								trackingData[TalkingdataModule.AD_TRACKING_KEY_USER_ID] = userData.userId;
-								TalkingdataModule.trackADEvent(TalkingdataModule.AD_TRACKING_EVENT_REGISTER, trackingData);
-
-								OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
-							}
-						}
-					},
-					(errorResult) => {
-						console.log("api Error: " + errorResult.errorMessage);
-						this.setState({
-							enabled: true,
-							validateInProgress: false,
+							this.parseError(errorResult.errorMessage);
 						});
-						this.parseError(errorResult.errorMessage);
-					});
-			},
-			(errorResult) => {
-				console.log("api Error: " + errorResult.errorMessage);
-				this.setState({
-					enabled: true,
-					validateInProgress: false,
-				});
-				if(errorResult.errorMessage.includes("服务器繁忙")){
+				},
+				(errorResult) => {
+					console.log("api Error: " + errorResult.errorMessage);
 					this.setState({
-						error: errorResult.errorMessage
+						enabled: true,
+						validateInProgress: false,
 					});
-				} else {
-					var errorList = [];
-					errorList.push({"key": "username", "error": errorResult.errorMessage});
-					OpenAccountRoutes.showError(errorList, this.props.navigator, this.props.onPop);
+					if(errorResult.errorMessage.includes("服务器繁忙")){
+						this.setState({
+							error: errorResult.errorMessage
+						});
+					} else {
+						var errorList = [];
+						errorList.push({"key": "username", "error": errorResult.errorMessage});
+						OpenAccountRoutes.showError(errorList, this.props.navigator, this.props.onPop);
+					}
 				}
-			}
-		);
+			);
+		})
 	},
 
 	parseError: function(errorMessage){

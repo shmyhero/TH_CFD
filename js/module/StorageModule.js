@@ -26,6 +26,7 @@ var REGISTER_REWARD = '@TH_CFD:registerReward'
 var FIRSTDAYWITHDRAW = '@TH_CFD:firstDayWithDraw'
 var DEBUG_SETTINGS = '@TH_CFD:debugSettings'
 var LAST_ACTIVITY_DATA = '@TH_CFD:lastActivityData'
+var MIFID_TEST_VERIFIED = '@TH_CFD:MIFIDTestVerified'
 
 export async function loadUserData() {
 	try {
@@ -434,6 +435,23 @@ export async function setLastActivityData(value){
 export async function loadLastActivityData(){
   try {
 		  var value = await AsyncStorage.getItem(LAST_ACTIVITY_DATA);
+      return value;
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function setMIFIDTestVerified(value){
+  try {
+		await AsyncStorage.setItem(MIFID_TEST_VERIFIED, value);
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function loadMIFIDTestVerified(){
+  try {
+		  var value = await AsyncStorage.getItem(MIFID_TEST_VERIFIED);
       return value;
 	} catch (error) {
 		console.log('AsyncStorage error: ' + error.message);

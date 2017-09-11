@@ -41,6 +41,10 @@ export function setCurrentRouteStateAsLatest(navigator, data){
   }
 }
 
+export function setMIFIDCalled(){
+    StorageModule.setLastOpenAccountRoute(currentStep.toString());
+}
+
 export function backToPreviousRoute(navigator, data, onPop, onPageDismiss){
   console.log("backToPreviousRoute");
   if(onPageDismiss){
@@ -164,6 +168,28 @@ export function showErrorRoute(navigator, onPop, nextRouteData){
       isError: true,
     });
   }
+}
+
+
+export function loadMIFIDTestVerified(resolve){
+  return new Promise((r)=>{
+    StorageModule.loadMIFIDTestVerified().
+    then((value)=>{
+      var handler = resolve ? resolve : r;
+      if(value === "true"){
+        handler(true);
+      }else{
+        handler(false);
+      }
+    }, ()=>{
+      console.log("error?");
+      resolve(false);
+    });
+  })
+}
+
+export function storeMIFIDTestVerified(value){
+  StorageModule.setMIFIDTestVerified(value.toString());
 }
 
 export function goToNextRoute(navigator, data, onPop, nextRouteData){
@@ -303,6 +329,8 @@ export function clearAllInputData(currentIndex){
   var index = 0;
   if(currentIndex){
     index = currentIndex;
+  }else{
+    storeMIFIDTestVerified(false)
   }
   StorageModule.removeOpenAccountData(index)
   .then(()=>{

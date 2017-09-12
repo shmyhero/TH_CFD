@@ -124,13 +124,40 @@ export default class DepositWithdrawPage extends Component {
 		});
 	}
 
+	getWebViewPageScene(targetUrl, title, hideNavBar) {
+		console.log("getWebViewPageScene:::"+targetUrl+" title = "+title +" hideNavBar = " + hideNavBar);
+		var userData = LogicData.getUserData()
+		var userId = userData.userId
+		if (userId == undefined) {
+			userId = 0
+		}
+
+		if (targetUrl.indexOf('?') !== -1) {
+			targetUrl = targetUrl + '&userId=' + userId
+		} else {
+			targetUrl = targetUrl + '?userId=' + userId
+		}
+
+		return {
+			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			url: targetUrl,
+			title: title,
+			isShowNav: hideNavBar ? false : true,
+		}
+	}
+
+	gotoWebviewPage(targetUrl, title, hideNavBar) {
+		this.props.navigator.push(this.getWebViewPageScene(targetUrl, title, hideNavBar));
+	}
+
   onSelectNormalRow(rowData){
     switch(rowData.subtype){
       case 'deposit':
-				this.props.navigator.push({
-					name: MainPage.DEPOSIT_PAGE,
-					popToOutsidePage: ()=>{this.refreshData();}
-				});
+				// this.props.navigator.push({
+				// 	name: MainPage.DEPOSIT_PAGE,
+				// 	popToOutsidePage: ()=>{this.refreshData();}
+				// });
+				this.gotoWebviewPage(NetConstants.TRADEHERO_API.DEPOSIT_FLOW_HTML,'入金',false)
         return;
       case 'withdraw':
 				var liveUserInfo = LogicData.getLiveUserInfo();

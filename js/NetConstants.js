@@ -228,6 +228,9 @@ function getTradeHeroAPI(){
     INCOME_RULE:TRADEHERO_SERVER_IP+'/TH_CFD_WEB/TradgoldRule.html',
     CREDITS_RULE:TRADEHERO_SERVER_IP+'/CFD_Channel/jifenguize.html',
     CREDITS_PLAY:TRADEHERO_SERVER_IP+'/CFD_Channel/jifenchouj.html?userId=<id>',
+
+    DEPOSIT_FLOW_HTML:TRADEHERO_SERVER_IP+'/TH_CFD_SP/rujinliucheng.html',//入金流程网页介绍
+
   }
 }
 

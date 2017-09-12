@@ -79,9 +79,9 @@ export default class DepositPage extends Component{
 			chargeMin:5,
 			alipayIntro:'',
 			alipayMin: 50,
-			alipayMax: 0,
+			alipayMax: 3000,
 			cupMin: 50,
-			cupMax: 4000,
+			cupMax: 3000,
 		}
 	}
 
@@ -108,9 +108,10 @@ export default class DepositPage extends Component{
 				var noLessMoney = 0;
 
 				var cupMax = responseJson.cupMax == undefined ? this.state.cupMax : responseJson.cupMax;
-				var alipayMax = responseJson.alipayMax == undefined ? this.state.alipayMax : responseJson.alipayMax;
+				var alipayMax = responseJson.alipayMaxPing == undefined ? this.state.alipayMax : responseJson.alipayMaxPing;
+
 				var cupMin = responseJson.cupMin == undefined ? this.state.cupMin : responseJson.cupMin;
-				var alipayMin = responseJson.alipayMin == undefined ? this.state.alipayMin : responseJson.alipayMin;
+				var alipayMin = responseJson.alipayMinPing == undefined ? this.state.alipayMin : responseJson.alipayMinPing;
 
 				var payMethodSelected = this.state.payMethodSelected
 				if (alipayMax <=0){
@@ -135,7 +136,7 @@ export default class DepositPage extends Component{
 					dataSourceBank:dsBank.cloneWithRows(responseJson.banks),
 					chargeRate:responseJson.charge.rate,
 					chargeMin:responseJson.charge.minimum,
-					alipayIntro:responseJson.alipay,
+					alipayIntro:responseJson.alipayPing,
 					alipayMax:alipayMax,
 					alipayMin:alipayMin,
 					cupMin:cupMin,
@@ -204,11 +205,13 @@ export default class DepositPage extends Component{
 
 		var color = this.state.confirmButtonEnable?'#425a85':'#d0d0d0';
 
+		var buttonText = this.state.payMethodSelected==0?'1个工作日内到账,确认入金':'立即到账,确认入金'
+
 		return(
 			<View style = {{backgroundColor:'white'}}>
 				<TouchableOpacity style={[styles.comfirmButton,{backgroundColor:color}]} onPress={()=>this.pressConfirmButton()}>
 					<Text style={styles.comfirmText}>
-						实时到账，确认入金
+						{buttonText}
 					</Text>
 				</TouchableOpacity>
 			</View>
@@ -478,9 +481,9 @@ export default class DepositPage extends Component{
 			(responseJson) => {
 				 console.log('responseJson = ' + responseJson + ' payMethodSelected = ' + this.state.payMethodSelected);//rmbValue
 				  //  var appendVal = '&TransRef='+responseJson.transferId+'&firstName='+responseJson.firstName+'&lastName='+responseJson.lastName+'&email='+responseJson.email+'&addr='+responseJson.addr
-
 					 var appendVal = '&merchantSig='+responseJson.merchantSig+'&currencyCode='+responseJson.currencyCode+'&merchantAccount='+responseJson.merchantAccount+'&merchantReference='+responseJson.merchantReference+'&paymentAmount='+responseJson.paymentAmount+'&sessionValidity='+responseJson.sessionValidity+'&skinCode='+responseJson.skinCode+'&shipBeforeDate='+responseJson.shipBeforeDate+'&brandCode='+responseJson.brandCode+'&shopperLocale='+responseJson.shopperLocale
-					 var alipayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-alipay.html'+'?Amount='+rmbValue+appendVal
+					//  var alipayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-alipay.html'+'?Amount='+rmbValue+appendVal
+					 var alipayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-ping.html'+'?amount='+rmbValue+'&channel=alipay'+'&token='+userData.userId + '_' + userData.token;
 					//  var unionpayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-quick.html'+'?Amount='+rmbValue+appendVal
 					 var unionpayUrl = 'https://cn.tradehero.mobi/test_form/test_form_Ayondo-adyen.html?'+appendVal
 					 var url = this.state.payMethodSelected == 0? alipayUrl:unionpayUrl;

@@ -108,7 +108,8 @@ export default class PaymentPage extends Component {
   webPageLoaded(content){
     // todo
     console.log("webPageLoaded: "+ content.url);
-    if(content.url && content.url.includes("payForward.do")){
+    if(content.url && content.url.includes("test_form_Ayondo-ping.html")){
+      // if(content.url && content.url.includes("payForward.do")){
       this.setState({
         showPaymentButton: true,
       })
@@ -128,7 +129,7 @@ export default class PaymentPage extends Component {
 			}else{
 				this.props.navigator.pop();
 			}
-    }else{ 
+    }else{
 
       this.setState({
         showPaymentButton: false,

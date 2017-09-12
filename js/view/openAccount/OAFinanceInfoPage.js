@@ -351,9 +351,10 @@ var OAFinanceInfoPage = React.createClass({
 
 	setForHideValues(value,rowID){
 		if(rowID == EMPSWITCH){
-			this.listRawData[EMPSWITCH_0].hide = !value
-			this.listRawData[EMPSWITCH_1].hide = !value
-			this.listRawData[EMPSWITCH_2].hide = !value
+			var hide = !(this.listRawData[EMPSWITCH].value === "Employed" || this.listRawData[EMPSWITCH].value === "Self-Employed");
+			this.listRawData[EMPSWITCH_0].hide = hide;
+			this.listRawData[EMPSWITCH_1].hide = hide;
+			this.listRawData[EMPSWITCH_2].hide = hide;
 		}
 
 		if(rowID == QUALIFICATION){
@@ -513,7 +514,7 @@ var OAFinanceInfoPage = React.createClass({
 				</View>)
 
 		}
-		else if(rowData.type === 'text'){			
+		else if(rowData.type === 'text'){
 			if(this.state.disableChanges){
 				return (
 					<View  style={rowData.hide?{height:0}:null}>

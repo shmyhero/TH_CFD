@@ -36,11 +36,12 @@ const BODY_BOTTOM_MARGIN = 30;
 const CONTENT_WIDTH = width - BODY_HORIZON_MARGIN * 2 - 2 - BODY_BOTTOM_MARGIN * 2;
 const CARD_BORDER_WIDTH = CONTENT_WIDTH * 0.035;
 const BOTTOM_CARD_BORDER_WIDTH = Platform.OS === 'ios' ? CARD_BORDER_WIDTH * 3 : CARD_BORDER_WIDTH * 2;
-const BORDER_WIDTH = (width - BODY_HORIZON_MARGIN * 2 + CARD_BORDER_WIDTH * 2 - BODY_BOTTOM_MARGIN * 2);
-const BORDER_HEIGHT = (BORDER_WIDTH/ 622 * 915);
-const CARD_BORDER_HEADER_HEIGHT = BORDER_HEIGHT * 0.063;
+const CARD_BACKGROUND_WIDTH = (width - BODY_HORIZON_MARGIN * 2 + CARD_BORDER_WIDTH * 2 - BODY_BOTTOM_MARGIN * 2);
+const CARD_BACKGROUND_HEIGHT = (CARD_BACKGROUND_WIDTH/ 622 * 915);
+const CARD_BACKGROUND_BORDER_WIDTH = CARD_BACKGROUND_WIDTH * 0.035;
+const CARD_BORDER_HEADER_HEIGHT = CARD_BACKGROUND_HEIGHT * 0.063;
 const TITLE_FONT_SIZE = 17 / 375 * width;
-const IMAGE_RESIZE_SCALE =  BORDER_HEIGHT / (915 / 2)
+const IMAGE_RESIZE_SCALE =  CARD_BACKGROUND_HEIGHT / (915 / 2)
 const CARD_TITLE_POSITION = 22 * IMAGE_RESIZE_SCALE;
 const ACHIEVEMENT_HEIGHT = 530 / 2 * IMAGE_RESIZE_SCALE;
 const ACHIEVEMENT_WIDTH = 510 / 2 * IMAGE_RESIZE_SCALE;
@@ -209,13 +210,15 @@ var StockTransactionInfoPage = React.createClass({
 		if(this.state.card){
 			var cardBorder = require('../../images/card_border.png');
 			return (
-				<Image source={cardBorder}
-					style={{width: BORDER_WIDTH, height: BORDER_HEIGHT,
-					resizeMode: "contain", top:0, bottom:0, position:'absolute',
-					left:BODY_HORIZON_MARGIN-CARD_BORDER_WIDTH,
-					right: BODY_HORIZON_MARGIN-CARD_BORDER_WIDTH,
-				}}>
-				</Image>
+				<View style={{width: width,
+					position:'absolute',
+					top:0, bottom:0,}}>
+					<Image source={cardBorder}
+						style={{width: CARD_BACKGROUND_WIDTH, height: CARD_BACKGROUND_HEIGHT,
+						resizeMode: "contain",
+					}}>
+					</Image>
+				</View>
 			)
 		}
 	},
@@ -226,6 +229,8 @@ var StockTransactionInfoPage = React.createClass({
 				<View style={{/*flex: 1,*/ flexDirection:'column', alignSelf: 'stretch',
 					paddingTop:CARD_BORDER_HEADER_HEIGHT,
 					paddingBottom: BOTTOM_CARD_BORDER_WIDTH,
+					paddingLeft: (width - CARD_BACKGROUND_WIDTH) / 2,
+					paddingRight: (width - CARD_BACKGROUND_WIDTH) / 2,
 				}}>
 					{this.renderCardBorder()}
 					<View style={styles.realContent}>
@@ -309,6 +314,7 @@ var styles = StyleSheet.create({
 		backgroundColor: 'transparent',
 		*/
 		//flex: 1,
+		//width:width,
 		marginTop: BODY_TOP_MARGIN,
 		justifyContent: 'center',
 		alignSelf: 'center',
@@ -317,11 +323,8 @@ var styles = StyleSheet.create({
 	},
 
 	realContent: {
-		marginLeft: BODY_HORIZON_MARGIN,
-		marginRight: BODY_HORIZON_MARGIN,
-		paddingLeft: 1,
-		paddingRight: 1,
-
+		marginLeft: CARD_BACKGROUND_BORDER_WIDTH,
+		marginRight: CARD_BACKGROUND_BORDER_WIDTH,
 	},
 
   modalInnerContainer: {
@@ -331,7 +334,7 @@ var styles = StyleSheet.create({
   },
 
   actionButton:{
-    marginTop: 0,//(height - actionButtonSize - BORDER_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER)/4,
+    marginTop: 0,//(height - actionButtonSize - CARD_BACKGROUND_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER)/4,
 		flexDirection: 'row',
 		marginBottom: Platform.OS == 'android' ? 48 : 0,
   },

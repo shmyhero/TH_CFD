@@ -239,7 +239,7 @@ export default class DevelopPage extends Component {
         leverage: 100,
         tradePrice: 5743,
         settlePrice: 5664.83,
-        imgUrlBig: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/blue_big.jpg',
+        imgUrlBig: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/brozne_big_2_20170905.gif',
         imgUrlMiddle: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/blue_middle.jpg',
         imgUrlSmall: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/blue_small.jpg',
         reward: 1,

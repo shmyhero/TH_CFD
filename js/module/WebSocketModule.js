@@ -60,6 +60,7 @@ AppStateModule.registerTurnToActiveListener(() => {
 	console.log('App is back again. Always restart the socket')
 	start();
 })
+
 AppStateModule.registerTurnToBackgroundListener(() => {
 	console.log('App move to background. Stop Web sockets.')
 	stop();
@@ -257,6 +258,9 @@ export function cleanRegisteredCallbacks() {
 	// console.log("clean registerCallbacks")
 	wsStockInfoCallback = null
 	wsAlertCallback = null
+
+	registerInterestedStocks("");
+	registerCallbacks(null);
 }
 
 export function alertServiceLogin(token) {

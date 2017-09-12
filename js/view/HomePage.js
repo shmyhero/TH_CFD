@@ -348,6 +348,7 @@ var HomePage = React.createClass({
 
 	onTabChanged: function(){
 		LogicData.setTabIndex(MainPage.HOME_PAGE_TAB_INDEX);
+		WebSocketModule.cleanRegisteredCallbacks();
 
 		console.log("onTabChanged reloadPage");
 		this.reloadPage();

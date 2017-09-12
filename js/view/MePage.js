@@ -150,7 +150,7 @@ var MePage = React.createClass({
 
 	onTabChanged: function(){
 		LogicData.setTabIndex(MainPage.ME_PAGE_TAB_INDEX);
-		WebSocketModule.registerInterestedStocks(null);
+		WebSocketModule.cleanRegisteredCallbacks();
 		this.reloadMeData();
 	},
 

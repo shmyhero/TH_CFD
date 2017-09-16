@@ -566,7 +566,7 @@ var AppNavigator = React.createClass({
 				)
 			}
 			return (
-				<View style={{width: width, height: height, backgroundColor: '#0079ff'}}>
+				<View style={{width: width, height: height, backgroundColor: 'white'}}>
 					<StatusBar barStyle="light-content" backgroundColor={ColorConstants.TITLE_BLUE_SIMULATE}/>
 					<Swiper loop={false} bounces={true} activeDot={activeDot} dot={dot}>
 						{slides}
@@ -635,7 +635,7 @@ var styles = StyleSheet.create({
 	guideEnterTextView: {
 		paddingHorizontal: 40,
 		paddingVertical: 10,
-		borderColor: 'white',
+		borderColor: '#1962dd',
 		borderWidth: 0.5,
 		borderRadius: 5,
 		justifyContent: 'center',
@@ -643,7 +643,7 @@ var styles = StyleSheet.create({
 	guideEnterText: {
 		fontSize: 20,
 		textAlign: 'center',
-		color: '#ffffff',
+		color: '#1962dd',
 	},
 });
 

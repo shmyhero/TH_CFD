@@ -256,11 +256,8 @@ export function registerInterestedStocks(stockList) {
 
 export function cleanRegisteredCallbacks() {
 	// console.log("clean registerCallbacks")
-	wsStockInfoCallback = null
-	wsAlertCallback = null
-
 	registerInterestedStocks("");
-	registerCallbacks(null);
+	registerCallbacks(null, null);
 }
 
 export function alertServiceLogin(token) {

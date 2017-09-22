@@ -99,8 +99,8 @@ android {
         applicationId "com.tradehero.cfd"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 25
-        versionName "1.2.7"
+        versionCode 26
+        versionName "1.2.8"
         ndk {
             abiFilters "armeabi-v7a" //,"x86" //, "armeabi-v7a" not used //, "x86" //If you need to debug on x86 emulators, add x86 or x86_64 here.
         }

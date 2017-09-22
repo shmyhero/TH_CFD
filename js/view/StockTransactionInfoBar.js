@@ -169,7 +169,7 @@ export default class StockTransactionInfoBar extends Component {
             </Text>
             {this.state.isCreate ?
               null :
-              <Text style={[styles.titleText, {marginRight: this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN, marginLeft: this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN}, titleTextStyle]}>
+              <Text style={[styles.titleText, {marginRight: this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN, marginLeft: 5}, titleTextStyle]}>
                 {(plRate).toFixed(2)} %
               </Text>
             }

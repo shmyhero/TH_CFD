@@ -522,9 +522,9 @@ var AppNavigator = React.createClass({
 
 	render: function() {
 		var {height, width} = Dimensions.get('window')
-		var statusBar = <StatusBar barStyle="light-content"/>
 
 		if (this.state.startUpPhase == MAIN_PAGE_PHASE) {
+			var statusBar = <StatusBar barStyle="light-content"/>
 			if(Platform.OS == 'android'){
 				StatusBar.setBackgroundColor(ColorConstants.title_blue());
 			}
@@ -567,7 +567,7 @@ var AppNavigator = React.createClass({
 			}
 			return (
 				<View style={{width: width, height: height, backgroundColor: 'white'}}>
-					<StatusBar barStyle="light-content" backgroundColor={ColorConstants.TITLE_BLUE_SIMULATE}/>
+					<StatusBar barStyle="default" backgroundColor={'#ffffff'}/>
 					<Swiper loop={false} bounces={true} activeDot={activeDot} dot={dot}>
 						{slides}
 					</Swiper>
@@ -579,7 +579,7 @@ var AppNavigator = React.createClass({
 			if (Platform.OS === 'ios') {
 				return (
 					<View style={{backgroundColor: '#0665de', alignItems: 'center'}}>
-						{statusBar}
+						{loadingStatusBar}
 						<Image
 							style={[styles.image, {width: width, height: height}]}
 							source={require('./images/frontPage.jpg')}/>

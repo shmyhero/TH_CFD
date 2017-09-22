@@ -619,7 +619,7 @@ var OAFinanceInfoPage = React.createClass({
 		}
 		return (
 			<View style={styles.wrapper}>
-				<ErrorBar error={this.state.disableChanges ? "财务信息填写后，不能再次修改！": null}/>
+				<ErrorBar error={this.state.disableChanges ? "财务信息填写后，不能再次修改！": "财务信息提交后将无法修改，请认真填写！"}/>
 		    <ListView
 			    	style={styles.list}
 					dataSource={this.state.dataSource}

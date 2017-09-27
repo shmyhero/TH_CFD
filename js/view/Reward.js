@@ -128,7 +128,7 @@ export default class Reward extends Component{
         resizeMode={'stretch'}
         style={[styles.imgReward,{width:this.getWidth(),height:this.getHeight()}]}
         // source={require('../../images/card_ag.png')}
-        source={isSpecialCard?specialPic:{uri: this.props.card.imgUrlMiddle}}
+        source={isSpecialCard?specialPic:{uri: this.props.card.imgUrlSmall}}
         >
         </Image>
         {this.renderBottom()}

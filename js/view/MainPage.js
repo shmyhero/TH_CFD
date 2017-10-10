@@ -727,12 +727,11 @@ var MainPage = React.createClass({
 		if(result){
 			LogicData.setAccountState(true)//实盘状态 true
 			LogicData.setActualLogin(true)//实盘登陆状态 true
-		}
-
-		CookieManager.clearAll((err, res) => {
-			console.log('cookies cleared!');
-		});
-
+		}else{
+			CookieManager.clearAll((err, res) => {
+				console.log('cookies cleared!');
+			});
+		}  
 	},
 
 	refreshMainPage(){

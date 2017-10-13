@@ -109,7 +109,8 @@ export default class DepositPage extends Component{
 
 				var cupMax = responseJson.cupMax == undefined ? this.state.cupMax : responseJson.cupMax;
 				var alipayMax = responseJson.alipayMaxPing == undefined ? this.state.alipayMax : responseJson.alipayMaxPing;
-
+				// alipayMax = 0;//alipay will hide in this version
+				cupMax = 0;
 				var cupMin = responseJson.cupMin == undefined ? this.state.cupMin : responseJson.cupMin;
 				var alipayMin = responseJson.alipayMinPing == undefined ? this.state.alipayMin : responseJson.alipayMinPing;
 
@@ -456,7 +457,7 @@ export default class DepositPage extends Component{
 	requestPayConfirm(){
 		var userData = LogicData.getUserData()
 		// var url = NetConstants.CFD_API.GET_PAY_DEMO_TEST_ID + '?amount=' + inputValue
-		var url = NetConstants.CFD_API.GET_PAY_DEMO_TEST_ADYEN + '?amount=' + inputValue
+		var url = NetConstants.CFD_API.GET_PAY_DEMO_TEST_FOCAL + '?amount=' + inputValue
 	// 	{ merchantSig: '2kNmP+lx9RaKejwrJ9xgYv4Rv/HeeQCgMkz+dMTEHz0=',
   // signingString: 'brandCode:currencyCode:merchantAccount:merchantReference:paymentAmount:sessionValidity:shipBeforeDate:shopperLocale:skinCode:moneybookers:USD:AyoMarLimTHCN:142381748277:33300:2017-08-23T08\\:42\\:46Z:2017-08-24T08\\:12\\:46Z:en_GB:UtmJpnab',
   // currencyCode: 'USD',
@@ -481,11 +482,13 @@ export default class DepositPage extends Component{
 			(responseJson) => {
 				 console.log('responseJson = ' + responseJson + ' payMethodSelected = ' + this.state.payMethodSelected);//rmbValue
 				  //  var appendVal = '&TransRef='+responseJson.transferId+'&firstName='+responseJson.firstName+'&lastName='+responseJson.lastName+'&email='+responseJson.email+'&addr='+responseJson.addr
-					 var appendVal = '&merchantSig='+responseJson.merchantSig+'&currencyCode='+responseJson.currencyCode+'&merchantAccount='+responseJson.merchantAccount+'&merchantReference='+responseJson.merchantReference+'&paymentAmount='+responseJson.paymentAmount+'&sessionValidity='+responseJson.sessionValidity+'&skinCode='+responseJson.skinCode+'&shipBeforeDate='+responseJson.shipBeforeDate+'&brandCode='+responseJson.brandCode+'&shopperLocale='+responseJson.shopperLocale
+					//  var appendVal = '&merchantSig='+responseJson.merchantSig+'&currencyCode='+responseJson.currencyCode+'&merchantAccount='+responseJson.merchantAccount+'&merchantReference='+responseJson.merchantReference+'&paymentAmount='+responseJson.paymentAmount+'&sessionValidity='+responseJson.sessionValidity+'&skinCode='+responseJson.skinCode+'&shipBeforeDate='+responseJson.shipBeforeDate+'&brandCode='+responseJson.brandCode+'&shopperLocale='+responseJson.shopperLocale
 					//  var alipayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-alipay.html'+'?Amount='+rmbValue+appendVal
 					 var alipayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-ping.html'+'?amount='+rmbValue+'&channel=alipay'+'&token='+userData.userId + '_' + userData.token;
 					//  var unionpayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-quick.html'+'?Amount='+rmbValue+appendVal
-					 var unionpayUrl = 'https://cn.tradehero.mobi/test_form/test_form_Ayondo-adyen.html?'+appendVal
+					//  var unionpayUrl = 'https://cn.tradehero.mobi/test_form/test_form_Ayondo-adyen.html?'+appendVal
+				   var appendVal = '&Merchant='+responseJson.Merchant+'&Site='+responseJson.Site+'&Amount='+responseJson.Amount+'&Currency='+responseJson.Currency+'&TransRef='+responseJson.TransRef+'&Product='+responseJson.Product+'&PaymentType='+responseJson.PaymentType+'&AttemptMode='+responseJson.AttemptMode+'&TestTrans='+responseJson.TestTrans+'&email='+responseJson.customer_email+'&first_name='+responseJson.customer_first_name+'&last_name='+responseJson.customer_last_name+'&address1='+responseJson.customer_address1+'&city='+responseJson.customer_city+'&country='+responseJson.customer_country+'&id_type='+responseJson.customer_id_type+'&id_number='+responseJson.customer_id_number+'&lang='+responseJson.lang+'&Signature='+responseJson.Signature;
+					 var unionpayUrl = 'https://cn.tradehero.mobi/test_form/test_form_Ayondo-focal.html?'+appendVal
 					 var url = this.state.payMethodSelected == 0? alipayUrl:unionpayUrl;
 					 console.log('selected Url = ' + url);
 

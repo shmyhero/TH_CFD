@@ -153,11 +153,11 @@ export default class DepositWithdrawPage extends Component {
   onSelectNormalRow(rowData){
     switch(rowData.subtype){
       case 'deposit':
-				// this.props.navigator.push({
-				// 	name: MainPage.DEPOSIT_PAGE,
-				// 	popToOutsidePage: ()=>{this.refreshData();}
-				// });
-				this.gotoWebviewPage(NetConstants.TRADEHERO_API.DEPOSIT_FLOW_HTML,'入金',false)
+				this.props.navigator.push({
+					name: MainPage.DEPOSIT_PAGE,
+					popToOutsidePage: ()=>{this.refreshData();}
+				});
+				// this.gotoWebviewPage(NetConstants.TRADEHERO_API.DEPOSIT_FLOW_HTML,'入金',false)
         return;
       case 'withdraw':
 				var liveUserInfo = LogicData.getLiveUserInfo();

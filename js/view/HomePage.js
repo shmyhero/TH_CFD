@@ -1240,7 +1240,7 @@ var HomePage = React.createClass({
 		return(
 			<TouchableOpacity
 				activeOpacity={1}
-				onPress={()=>this.pressedNavBar()}
+				// onPress={()=>this.pressedNavBar()}
 				style={{position:'absolute', top:0, left: 0, right: width, width:width}}
 				>
 				<NavBar ref={NAV_BAR} title={this.state.connected ? "首页" : "首页（未连接）"}

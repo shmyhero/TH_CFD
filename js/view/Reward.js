@@ -1,4 +1,4 @@
-import React,{Component,PropTypes} from 'react'
+﻿import React,{Component,PropTypes} from 'react'
 import {StyleSheet,Text,View,Image,Dimensions,} from 'react-native'
 
 var ColorConstants = require('../ColorConstants')
@@ -53,7 +53,8 @@ export default class Reward extends Component{
         <View style={styles.lineBottom1}>
           <Image
           style={styles.imgUserHead}
-          source={{uri:this.props.card.profileUrl}}>
+          source={this.props.card.profileUrl ? {uri:this.props.card.profileUrl} : require('../../images/head_portrait.png')} 
+          defaultSource={require('../../images/head_portrait.png)}>
           </Image>
           <Text numberOfLines={1} style = {styles.textName}>
             {this.props.card.userName}

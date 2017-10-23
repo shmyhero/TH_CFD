@@ -24,7 +24,6 @@ var TH_CFD = React.createClass({
       initialPage = 'stockListViewPager'
     }
     return (
-
       <AppNavigator initialViewRoute={initialPage}/>
     );
   }

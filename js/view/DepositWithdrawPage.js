@@ -153,11 +153,16 @@ export default class DepositWithdrawPage extends Component {
   onSelectNormalRow(rowData){
     switch(rowData.subtype){
       case 'deposit':
-				this.props.navigator.push({
-					name: MainPage.DEPOSIT_PAGE,
-					popToOutsidePage: ()=>{this.refreshData();}
-				});
-				// this.gotoWebviewPage(NetConstants.TRADEHERO_API.DEPOSIT_FLOW_HTML,'入金',false)
+				var meData = LogicData.getMeData()
+				console.log("MobileDeposit==>"+meData.mobileDeposit)
+				if (meData.mobileDeposit==undefined || meData.mobileDeposit){//如果不能入金，则跳网页版提示页
+				    this.props.navigator.push({
+                    name: MainPage.DEPOSIT_PAGE,
+                    popToOutsidePage: ()=>{this.refreshData();}
+                    });
+				}else{
+                    this.gotoWebviewPage(NetConstants.TRADEHERO_API.DEPOSIT_FLOW_HTML,'入金',false)
+				}
         return;
       case 'withdraw':
 				var liveUserInfo = LogicData.getLiveUserInfo();

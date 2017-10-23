@@ -109,8 +109,8 @@ export default class DepositPage extends Component{
 
 				var cupMax = responseJson.cupMax == undefined ? this.state.cupMax : responseJson.cupMax;
 				var alipayMax = responseJson.alipayMaxPing == undefined ? this.state.alipayMax : responseJson.alipayMaxPing;
-				// alipayMax = 0;//alipay will hide in this version
-				cupMax = 0;
+				// alipayMax = 0;//hide aliPay
+				// cupMax = 0;//hide unionPay
 				var cupMin = responseJson.cupMin == undefined ? this.state.cupMin : responseJson.cupMin;
 				var alipayMin = responseJson.alipayMinPing == undefined ? this.state.alipayMin : responseJson.alipayMinPing;
 

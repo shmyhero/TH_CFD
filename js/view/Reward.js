@@ -54,7 +54,7 @@ export default class Reward extends Component{
           <Image
           style={styles.imgUserHead}
           source={this.props.card.profileUrl ? {uri:this.props.card.profileUrl} : require('../../images/head_portrait.png')} 
-          defaultSource={require('../../images/head_portrait.png)}>
+          defaultSource={require('../../images/head_portrait.png')}>
           </Image>
           <Text numberOfLines={1} style = {styles.textName}>
             {this.props.card.userName}

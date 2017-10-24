@@ -41,6 +41,7 @@ export default class HeaderLineDialog extends Component {
 
   static propTypes = {
     messageLines: PropTypes.array,
+    noDotLines: PropTypes.array,
     headerImage: PropTypes.number,
     proceedCallback: PropTypes.func,
   }
@@ -53,6 +54,7 @@ export default class HeaderLineDialog extends Component {
       "公布数据以后，别的用户会在达人榜中看到您的交易数据信息。",
       "公布数据以后，别的用户会在达人榜中看到您的交易数据信息。",
     ],
+    noDotLines: [],
     check_selected: require('../../images/check_selected.png'),
     check_unselected: require('../../images/check_unselected.png'),
 
@@ -98,11 +100,11 @@ export default class HeaderLineDialog extends Component {
     this._setModalVisible(true);
   }
 
-  renderLine (message, index){
+  renderLine (message, index, renderDot){
+    var dotView = renderDot ? (<View style = {styles.number} />) : (<View/>)
     return (
       <View style = {styles.lineText} key={index}>
-        <View style = {styles.number} >
-        </View>
+        {dotView}
         <Text style={styles.textModal}>{message}</Text>
       </View>
     );
@@ -112,7 +114,17 @@ export default class HeaderLineDialog extends Component {
     var linesView = this.props.messageLines.map(
       (message, index) =>
         {
-          return this.renderLine(message, index+1);
+          return this.renderLine(message, index+1, true);
+        }
+      )
+    return linesView;
+  }
+
+  renderNoDotsLines(){
+    var linesView = this.props.noDotLines.map(
+      (message, index) =>
+        {
+          return this.renderLine(message, index+1, false);
         }
       )
     return linesView;
@@ -136,6 +148,7 @@ export default class HeaderLineDialog extends Component {
                   <View style = {styles.modalTexContainer}>
                     <ScrollView style={{height: height / 2}}>
                       {this.renderLines()}
+                      {this.renderNoDotsLines()}
                       <View style={{width:width}}></View>
                     </ScrollView>
                   </View>

@@ -108,12 +108,18 @@ export default class UserHomePage extends Component {
 		userName: '',
 		isPrivate: false,
 
-		messageTitle:'公布数据',
+		messageTitle:'盈交易榜单功能条款和条件',
 		messageLines: [
-      "公布数据以后，别的用户会在达人榜中看到您的交易数据信息1公布数据以后，别的用户会在达人榜中看到您的交易数据信息",
-      "公布数据以后，别的用户会在达人榜中看到您的交易数据信息2公布数据以后，别的用户会在达人榜中看到您的交易数据信息",
-      "公布数据以后，别的用户会在达人榜中看到您的交易数据信息3公布数据以后，别的用户会在达人榜中看到您的交易数据信息",
+      "您的账户头寸以及在下文第2条内定义的相关榜单排名将对盈交易其他实盘用户实时开放。",
+      "榜单排名是基于您最近两周所有已平仓交易的滚动平均投资回报率（“ROI”）计算得出。榜单排名每日更新一次",
+      "盈交易用户可以从您的个人资料或交易账户内的公开信息中受益，并可能会根据此信息做出自行交易决策。",
+			"对于任何因访问或使用我们网站和应用所包含的内容或数据（包括用户发布的交易账户或资料信息），而导致直接或间接的后果性、惩罚性、典型性的特别损失或损害，盈交易将不承担任何责任。",
+			"盈交易是该服务唯一解释方，保留随时更换、修改或终止服务的权利，恕不另行通知。我们将通过更新网站或应用程序来通知您有关该服务或条款和条件的更改，您应定期查看此类更新。",
     ],
+		noDotLines: [
+			"盈交易是该服务唯一解释方，保留随时更换、修改或终止服务的权利，恕不另行通知。我们将通过更新网站或应用程序来通知您有关该服务或条款和条件的更改，您应定期查看此类更新。",
+			"盈交易为安易永投（ayondo markets Limited）旗下产品名称。安易永投（ayondo markets Limited）是在英格兰和威尔士注册的公司（注册号为03148972），并由英国金融行为监管局（FCA）授权和监管, FCA注册号为184333。"
+		]
 	}
 
 	constructor(props) {
@@ -529,7 +535,8 @@ export default class UserHomePage extends Component {
 				<HeaderLineDialog2 ref={RULE_DIALOG}
 					proceedCallback={(value)=>this.proceedCallback(value)}
 					messageTitle={this.props.messageTitle}
-					messageLines={this.props.messageLines}/>
+					messageLines={this.props.messageLines}
+					noDotLines={this.props.noDotLines}/>
 		);
 	}
 

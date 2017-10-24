@@ -137,7 +137,7 @@ export default class RankingPage extends Component{
                 rankData:ds.cloneWithRows(responseJson),
                 contentLoaded: true,
                 isRefreshing: false,
-            },()=>this.refs['listview'].scrollTo({x:0,y:0,false}))
+            },()=>this.refs['listview'].scrollTo({x:0,y:0,animated:false}))
           }else{
             var noMessage = responseJson.length == 0;
             this.setState({
@@ -145,7 +145,7 @@ export default class RankingPage extends Component{
                 contentLoaded: true,
                 isRefreshing: false,
                 noMessage:noMessage,
-            },()=>this.refs['listview2'].scrollTo({x:0,y:0,false}))
+            },()=>this.refs['listview2'].scrollTo({x:0,y:0,animated:false}))
           }
 			},
 			(result) => {

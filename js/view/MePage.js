@@ -129,6 +129,8 @@ var MePage = React.createClass({
 			addListener(EventConst.ACCOUNT_LOGIN, ()=>this.reloadMeData());
 		didLogoutSubscription = EventCenter.getEventEmitter().
 			addListener(EventConst.ACCOUNT_LOGOUT, ()=>this.reloadMeData());
+
+
 	},
 
 	componentWillUnmount: function() {

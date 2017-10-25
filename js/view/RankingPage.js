@@ -22,7 +22,6 @@ var Reward = require('./Reward')
 var LogicData = require('../LogicData');
 var NetConstants = require('../NetConstants')
 var NetworkModule = require('../module/NetworkModule')
-var StockTransactionInfoModal = require('./StockTransactionInfoModal')
 var UIConstants = require('../UIConstants')
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 var ColorConstants = require('../ColorConstants')
@@ -44,35 +43,37 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class RankingPage extends Component{
 
-	constructor(props){
-		super(props);
-		this.state = {
-      contentLoaded: false,
-			isRefreshing: true,
-      rankType : RANKING_TYPE_0,
-      rankData: ds.cloneWithRows([]),
-      rankDataFollowing:ds.cloneWithRows([]),
-      noMessage: false,
-		}
-	}
+    constructor(props){
+        super(props);
+        this.state = {
+            contentLoaded: false,
+            isRefreshing: true,
+            rankType: RANKING_TYPE_0,
+            rankData: ds.cloneWithRows([]),
+            rankDataFollowing:ds.cloneWithRows([]),
+            noMessage: false,
+        }
+
+        this.onTabChanged = this.onTabChanged.bind(this);
+    }
 
 	componentDidMount(){
-    didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.RANKING_TAB_PRESS_EVENT, this.onTabChanged);
-    this.getRankList();
+        didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.RANKING_TAB_PRESS_EVENT, this.onTabChanged);
+        this.getRankList();
 	}
 
-  componentWillUnmount() {
-    didTabSelectSubscription && didTabSelectSubscription.remove();
-  }
+    componentWillUnmount() {
+        didTabSelectSubscription && didTabSelectSubscription.remove();
+    }
 
-  renderTopSticker(){
-    return(
-      <View style={styles.topSticker}>
-        <Text style={styles.fontTopSticker}>达人</Text>
-        <Text style={styles.fontTopSticker}>两周收益率</Text>
-      </View>
-    );
-  }
+    renderTopSticker(){
+        return(
+          <View style={styles.topSticker}>
+            <Text style={styles.fontTopSticker}>达人</Text>
+            <Text style={styles.fontTopSticker}>两周收益率</Text>
+          </View>
+        );
+    }
 
   _onRankTypeSelected(rankSelected){
     console.log('rankType = ' + rankSelected);
@@ -88,14 +89,13 @@ export default class RankingPage extends Component{
 
   gotoUserHomePage(rowData) {
     var isPrivate = !rowData.showData
-    // if(LogicData.isUserSelf(rowData.id)) {
+        // if(LogicData.isUserSelf(rowData.id)) {
 		// 		isPrivate = false
 		// }
-
 		this.props.navigator.push({
-			name: MainPage.USER_HOME_PAGE_ROUTE,
-      userData:{userId:rowData.id,userName:rowData.username,isPrivate:isPrivate},
-      backRefresh:()=>this.backRefresh(),
+            name: MainPage.USER_HOME_PAGE_ROUTE,
+            userData:{userId:rowData.id,userName:rowData.username,isPrivate:isPrivate},
+            backRefresh:()=>this.backRefresh(),
 		});
 	}
 
@@ -111,10 +111,10 @@ export default class RankingPage extends Component{
     if(!LogicData.getAccountState())return;
 
     if(!this.state.contentLoaded){
-			this.setState({
-				isRefreshing: true,
-			});
-		}
+        this.setState({
+            isRefreshing: true,
+        });
+    }
     var url = NetConstants.CFD_API.GET_RANK_LIVE_PLCLOSED_2W
     if(this.state.rankType == RANKING_TYPE_1){
       url = NetConstants.CFD_API.GET_RANK_LIVE_FOLLOWING_2W
@@ -131,29 +131,29 @@ export default class RankingPage extends Component{
 				},
 			},
 			(responseJson) => {
-				 console.log(responseJson);
-          if(this.isRankingType0()){
-            this.setState({
-                rankData:ds.cloneWithRows(responseJson),
-                contentLoaded: true,
-                isRefreshing: false,
-            },()=>this.refs['listview'].scrollTo({x:0,y:0,animated:false}))
-          }else{
-            var noMessage = responseJson.length == 0;
-            this.setState({
-                rankDataFollowing:ds.cloneWithRows(responseJson),
-                contentLoaded: true,
-                isRefreshing: false,
-                noMessage:noMessage,
-            },()=>this.refs['listview2'].scrollTo({x:0,y:0,animated:false}))
-          }
+			  console.log(responseJson);
+              if(this.isRankingType0()){
+                this.setState({
+                    rankData:ds.cloneWithRows(responseJson),
+                    contentLoaded: true,
+                    isRefreshing: false,
+                },()=>this.refs['listview'].scrollTo({x:0,y:0,animated:false}))
+              }else{
+                var noMessage = responseJson.length == 0;
+                this.setState({
+                    rankDataFollowing:ds.cloneWithRows(responseJson),
+                    contentLoaded: true,
+                    isRefreshing: false,
+                    noMessage:noMessage,
+                },()=>this.refs['listview2'].scrollTo({x:0,y:0,animated:false}))
+              }
 			},
 			(result) => {
-        this.setState({
-          contentLoaded: false,
-          isRefreshing: false,
-        })
-        this.refs[NETWORK_ERROR_INDICATOR] && this.refs[NETWORK_ERROR_INDICATOR].stopRefresh();
+                this.setState({
+                  contentLoaded: false,
+                  isRefreshing: false,
+                })
+                this.refs[NETWORK_ERROR_INDICATOR] && this.refs[NETWORK_ERROR_INDICATOR].stopRefresh();
 			},
 			true
 		)
@@ -165,7 +165,9 @@ export default class RankingPage extends Component{
 
   onTabChanged(){
 	  LogicData.setTabIndex(MainPage.RANKING_TAB_INDEX);
-	}
+	  console.log("===> Tab Changed");
+	  this.refreshData(true);
+  }
 
   renderHead(){
     var backgroundColor = ColorConstants.title_blue();
@@ -297,7 +299,7 @@ export default class RankingPage extends Component{
 			return (
 				<NetworkErrorIndicator onRefresh={()=>this.refreshData(true)} ref={NETWORK_ERROR_INDICATOR} refreshing={this.state.isRefreshing}/>
 			)
-		}else{
+	}else{
       if(this.isRankingType0()){
         return (
             <ListView
@@ -342,14 +344,12 @@ export default class RankingPage extends Component{
 
 	render(){
 		return(
-      <View style={styles.wapper}>
-        <NavBar onlyShowStatusBar={true}
-          backgroundColor={ColorConstants.title_blue()}/>
-        {this.renderHead()}
-        {this.renderTopSticker()}
-        {/* {this.renderMyRank()} */}
-        {this.renderRankList()}
-      </View>
+          <View style={styles.wapper}>
+            <NavBar onlyShowStatusBar={true} backgroundColor={ColorConstants.title_blue()}/>
+            {this.renderHead()}
+            {this.renderTopSticker()}
+            {this.renderRankList()}
+          </View>
 		);
 	}
 }
@@ -496,10 +496,6 @@ const styles = StyleSheet.create({
     alignItems:'center',
     justifyContent:'center',
   },
-
-
-
-
 
 });
 

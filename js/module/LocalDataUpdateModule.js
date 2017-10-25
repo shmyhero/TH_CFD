@@ -26,12 +26,10 @@ export function updateMeData(userData, onSuccess){
 			},
 		},
 		function(responseJson) {
-      NetworkModule.resetLoginOutsideAlert();
+            NetworkModule.resetLoginOutsideAlert();
 			StorageModule.setMeData(JSON.stringify(responseJson))
 			LogicData.setMeData(responseJson);
-
-      EventCenter.emitAccountLoginEvent();
-
+            EventCenter.emitAccountLoginEvent();
 			if(onSuccess){
 				onSuccess()
 			}
@@ -49,19 +47,15 @@ export function removeUserData(){
       LogicData.removeUserData();
       StorageModule.removeMeData();
       LogicData.removeMeData();
-
       LogicData.removeOwnStocksData();
       return StorageModule.removeOwnStocksData();
     })
     .then(()=>{
       LogicData.setAccountState(false);
       LogicData.setActualLogin(false);
-
       LogicData.removeBalanceData();
-
       LogicData.removeLiveUserInfo();
       LogicData.removeUnpaidReward()
-
       OpenAccountRoutes.clearAllInputData();
       return CacheModule.clearUserRelatedCache();
     })

@@ -44,55 +44,39 @@ export default class UserHomePageTab0 extends Component{
     isPrivate: true,
   }
 
-	constructor(props){
-		super(props);
+    constructor(props){
+        super(props);
+        this.state = {
+            chartType: CHART_TYPE_2MONTH,
+            chartTypeName: NetConstants.PARAMETER_CHARTTYPE_2WEEK_YIELD,
+            id: this.props.userId,
+            plCloseData: null,
+            avgPl: 0,
+            winRate: 0,
+            nickname: '',
+            followerCount: 0,
+            cards: [],
+            pl2w: 0,
+            picUrl: undefined,
+            isFollowing: false,
+            titleOpacity: 0,
+            rank: 1,
+            rankDescription: '',
+            isFollowingStatusChanged: false,
+            // isPrivate: false,
+            avgLeverage: 0,
+            orderCount: 0,
+            avgHoldPeriod: 0,
+            avgInvestUSD: 0,
+        }
+    }
 
-		this.state = {
-      chartType: CHART_TYPE_2MONTH,
-			chartTypeName: NetConstants.PARAMETER_CHARTTYPE_2WEEK_YIELD,
-			id: this.props.userId,
-			plCloseData: null,
-			avgPl: 0,
-			winRate: 0,
-			nickname: '',
-			followerCount: 0,
-			cards: [],
-			pl2w: 0,
-			picUrl: undefined,
-			isFollowing: false,
-			titleOpacity: 0,
-			rank: 1,
-			rankDescription: '',
-			isFollowingStatusChanged: false,
-			// isPrivate: false,
-      avgLeverage: 0,
-      orderCount: 0,
-      avgHoldPeriod: 0,
-      avgInvestUSD: 0,
-		}
-	}
 
-
-	componentDidMount(){
-
-    // this.timer = setTimeout(
-    //   () => { this.loadUserInfo() },
-    //   500
-    // );
-
+  componentDidMount(){
     this.loadUserInfo()
-
-    // if(LogicData.isUserSelf(this.state.id)) {
-    //   this.setState({
-    //     isPrivate: false,
-    //   })
-    // }
-	}
+  }
 
   componentWillUnmount() {
-    // 如果存在this.timer，则使用clearTimeout清空。
-    // 如果你使用多个timer，那么用多个变量，或者用个数组来保存引用，然后逐个clear
-    // this.timer && clearTimeout(this.timer);
   }
 
   loadUserInfo() {
@@ -100,7 +84,8 @@ export default class UserHomePageTab0 extends Component{
 		url = url.replace("<id>", this.props.userId);
 		var userData = LogicData.getUserData()
 		NetworkModule.fetchTHUrl(
-			url, {
+			url,
+			{
 				method: 'GET',
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
@@ -109,29 +94,29 @@ export default class UserHomePageTab0 extends Component{
 			},
 			(responseJson) => {
 				console.log(responseJson);
-        // var isPrivate = responseJson.showData == undefined ? true : (!responseJson.showData);
-        // if(LogicData.isUserSelf(this.state.id)) {
-        //   isPrivate = false;
-        // }
+                // var isPrivate = responseJson.showData == undefined ? true : (!responseJson.showData);
+                // if(LogicData.isUserSelf(this.state.id)) {
+                //   isPrivate = false;
+                // }
 				this.setState({
-					id: responseJson.id,
-					avgPl: responseJson.avgPl,
-					winRate: responseJson.winRate * 100,
-					nickname: responseJson.nickname,
-					followerCount: responseJson.followerCount,
-					cards: responseJson.cards,
-					pl2w: responseJson.pl2w,
-					picUrl: responseJson.picUrl,
-					isFollowing: responseJson.isFollowing,
-					rank: responseJson.rank,
-					rankDescription: responseJson.rankDescription,
-					// isPrivate: isPrivate,
-          avgLeverage: responseJson.avgLeverage,
-          orderCount: responseJson.orderCount,
-          avgHoldPeriod: responseJson.avgHoldPeriod,
-          avgInvestUSD: responseJson.avgInvestUSD,
+                    id: responseJson.id,
+                    avgPl: responseJson.avgPl,
+                    winRate: responseJson.winRate * 100,
+                    nickname: responseJson.nickname,
+                    followerCount: responseJson.followerCount,
+                    cards: responseJson.cards,
+                    pl2w: responseJson.pl2w,
+                    picUrl: responseJson.picUrl,
+                    isFollowing: responseJson.isFollowing,
+                    rank: responseJson.rank,
+                    rankDescription: responseJson.rankDescription,
+                    // isPrivate: isPrivate,
+                    avgLeverage: responseJson.avgLeverage,
+                    orderCount: responseJson.orderCount,
+                    avgHoldPeriod: responseJson.avgHoldPeriod,
+                    avgInvestUSD: responseJson.avgInvestUSD,
 				}, () => {
-          this.refreshData();
+                    this.refreshData();
 				})
 				this.loadPlCloseData()
 			},
@@ -347,7 +332,7 @@ export default class UserHomePageTab0 extends Component{
 
   pressCard(index) {
 		console.log("pressedCard:" + index);
-	}
+  }
 
   cardWarpperRender() {
 		var _scrollView: ScrollView;

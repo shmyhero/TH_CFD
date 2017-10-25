@@ -2,17 +2,17 @@
 
 import React, { Component, PropTypes} from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-	Dimensions,
-	ListView,
-	TextInput,
-	TouchableOpacity,
-	Image,
-	Platform,
-	ScrollView,
-  Keyboard,
+    View,
+    Text,
+    StyleSheet,
+    Dimensions,
+    ListView,
+    TextInput,
+    TouchableOpacity,
+    Image,
+    Platform,
+    ScrollView,
+    Keyboard,
 } from 'react-native';
 
 var NativeSceneModule = require('../../module/NativeSceneModule')
@@ -36,8 +36,8 @@ var rowTitleWidth = (width - (2 * rowPadding)) / 4;
 var rowValueWidth = (width - (2 * rowPadding)) / 4 * 3;
 
 var defaultRawData = [
-		{"type": "cardEntry",},
-		{"type": "withdraw", value: null},
+    {"type": "cardEntry",},
+    {"type": "withdraw", value: null},
 ];
 
 export default class WithdrawIncomePage extends Component {

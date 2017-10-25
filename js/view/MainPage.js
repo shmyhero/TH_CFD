@@ -2,12 +2,12 @@
 
 import React from 'react';
 import {
-	BackAndroid,
-  StyleSheet,
-  View,
-  Text,
-  Navigator,
-  Linking,
+    BackAndroid,
+    StyleSheet,
+    View,
+    Text,
+    Navigator,
+    Linking,
 	Platform,
 	Image,
 } from 'react-native';
@@ -38,7 +38,6 @@ var StockDetailPage = require('./StockDetailPage')
 var StockExchangePage = require('./StockExchangePage')
 var WebViewPage = require('./WebViewPage');
 var QAPage = require('./QAPage')
-var AboutUsPage = require('./AboutUsPage');
 var AccountInfoPage = require('./AccountInfoPage');
 var AccountNameModifyPage = require('./AccountNameModifyPage');
 var MePage = require('./MePage')
@@ -201,7 +200,7 @@ export var STOCK_EXCHANGE_TAB_INDEX = 2;
 export var RANKING_TAB_INDEX = 3;
 export var ME_PAGE_TAB_INDEX = 4;
 
-var HIDE_RANKING_TAB = true;			//Hide ranking tab if necessary
+var HIDE_RANKING_TAB = false;			//Hide ranking tab if necessary
 
 var MainPage = React.createClass({
 	getInitialState: function() {
@@ -386,14 +385,6 @@ var MainPage = React.createClass({
 			hideTabbar();
 			return (
 				<QAPage />
-			)
-		} else if (route.name === ABOUT_US_ROUTE) {
-			hideTabbar();
-			return (
-				<View style={{flex: 1}}>
-					<NavBar title='关于我们' showBackButton={true} navigator={navigationOperations}/>
-					<AboutUsPage />
-				</View>
 			)
 		} else if (route.name === DAY_SIGN_ROUTE) {
 			hideTabbar();
@@ -1037,7 +1028,7 @@ var MainPage = React.createClass({
 	},
 
 	componentWillMount: function(){
-		HIDE_RANKING_TAB = !LogicData.getDebugStatus();
+//		HIDE_RANKING_TAB = !LogicData.getDebugStatus();
  		BackAndroid.addEventListener('hardwareBackPress', this.backAndroidHandler);
 	},
 

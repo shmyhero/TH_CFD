@@ -10,7 +10,7 @@ import {
 	Dimensions,
 	Platform,
 	Alert,
-	ScrollView,
+	ScrollView,//上海虹口区哈尔滨路160号B座405室 胡海平
 } from 'react-native';
 
 var TimerMixin = require('react-timer-mixin');

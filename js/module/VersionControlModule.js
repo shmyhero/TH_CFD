@@ -10,7 +10,7 @@ import {
 	Alert,
 	Linking,
 	Platform,
-  NetInfo,
+    NetInfo,
 	BackAndroid,
 } from 'react-native';
 
@@ -30,16 +30,14 @@ export function getLatestVersion(){
 						//responseJson.androidMinInt = 17;
 						lastOnlineVerionInfo = responseJson;
 						localVersionDataFetched = true;
-            StorageModule.setLastOnlineVerionInfo(JSON.stringify(responseJson))
-            .then(()=>{
+                        StorageModule.setLastOnlineVerionInfo(JSON.stringify(responseJson))
+                        .then(()=>{
 							isCurrentVersionMinimum();
-
-  						var onlineVersionCode = Platform.OS === 'ios' ? responseJson.iOSLatestInt : responseJson.androidLatestInt;
-  						var onlineVersionName = Platform.OS === 'ios' ? responseJson.iOSLatestStr : responseJson.androidLatestStr;
-
-  						LogicData.setOnlineVersionCode(onlineVersionCode);
-  						LogicData.setOnlineVersionName(onlineVersionName);
-            });
+                            var onlineVersionCode = Platform.OS === 'ios' ? responseJson.iOSLatestInt : responseJson.androidLatestInt;
+                            var onlineVersionName = Platform.OS === 'ios' ? responseJson.iOSLatestStr : responseJson.androidLatestStr;
+                            LogicData.setOnlineVersionCode(onlineVersionCode);
+                            LogicData.setOnlineVersionName(onlineVersionName);
+                        });
 					}
 				},
 				(result) => {
@@ -47,13 +45,13 @@ export function getLatestVersion(){
 
 					if(!localVersionDataFetched){
 						StorageModule.loadLastOnlineVerionInfo()
-					  .then((value)=>{
-					    if(value){
-								localVersionDataFetched = true;
-					      lastOnlineVerionInfo = JSON.parse(value);
-					    	isCurrentVersionMinimum();
-					    }
-						});
+                          .then((value)=>{
+                            if(value){
+                                localVersionDataFetched = true;
+                                lastOnlineVerionInfo = JSON.parse(value);
+                                isCurrentVersionMinimum();
+                                }
+                            });
 					}
 				}
 			);
@@ -97,20 +95,18 @@ export function gotoDownloadPage(){
   return new Promise((resolve)=>{
 		if(lastOnlineVerionInfo || Platform.OS !== 'ios'){
 			var url = Platform.OS === 'ios' ? lastOnlineVerionInfo.iOSAppUrl : NetConstants.ANDROID_MARKET_URL;
-	    Linking.openURL(url)
-	    .done(()=>{
-	      if(resolve){
-	        resolve();
-	      }
-	    })
+	        Linking.openURL(url).done(()=>{
+              if(resolve){
+                resolve();
+              }
+            })
 		}else{
 			StorageModule.loadLastOnlineVerionInfo()
 			.then((value)=>{
 				if(value){
 					lastOnlineVerionInfo = JSON.stringify(value);
 					var url = Platform.OS === 'ios' ? lastOnlineVerionInfo.iOSAppUrl : NetConstants.ANDROID_MARKET_URL;
-					Linking.openURL(url)
-					.done(()=>{
+					Linking.openURL(url).done(()=>{
 						if(resolve){
 							resolve();
 						}
@@ -118,7 +114,6 @@ export function gotoDownloadPage(){
 				}
 			})
 		}
-
   })
 }
 
@@ -134,19 +129,18 @@ function handleConnectivityChange(reach){
   if(Platform.OS === 'ios'){
     switch(reach){
       case 'none':
-				break;
-			default:
+	   break;
+	  default:
         getLatestVersion();
-        break;
+       break;
     }
   }else{
     switch(reach){
       case 'NONE':
-			case 'BLUETOOTH':
-				break;
-			default:
-				//
-        getLatestVersion();
+	  case 'BLUETOOTH':
+		break;
+	  default:
+		getLatestVersion();
         break;
     }
   }

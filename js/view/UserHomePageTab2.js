@@ -16,7 +16,7 @@ var UIConstants = require('../UIConstants')
 var PositionBlock = require('./personalPage/PositionBlock')
 
 var POSITION_BLOCK = "positionBlock"
-export default class UserHomePageTab0 extends Component{
+export default class UserHomePageTab2 extends Component{
 	static propTypes = {
     userId: PropTypes.number.isRequired,
     isPrivate: PropTypes.bool,
@@ -68,4 +68,4 @@ const styles = StyleSheet.create({
 });
 
 
-module.exports = UserHomePageTab0;
+module.exports = UserHomePageTab2;

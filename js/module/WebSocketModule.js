@@ -149,30 +149,30 @@ export function start() {
 
 function handleConnectivityChange(reach){
 	var origionNetworkConnectionStatus = networkConnectionStatus;
-  if(Platform.OS === 'ios'){
-    switch(reach){
-      case 'none':
-      case 'unknown':
-        networkConnectionStatus = DISCONNECTED;
-				break;
-      case 'wifi':
-      case 'cell':
-        networkConnectionStatus = CONNECTED;
-        break;
+    if(Platform.OS === 'ios'){
+        switch(reach){
+          case 'none':
+          case 'unknown':
+            networkConnectionStatus = DISCONNECTED;
+            break;
+          case 'wifi':
+          case 'cell':
+            networkConnectionStatus = CONNECTED;
+            break;
+        }
+    }else{
+        switch(reach){
+          case 'NONE':
+          case 'DUMMY':
+          case 'UNKNOWN':
+            networkConnectionStatus = DISCONNECTED;
+            break;
+          case 'MOBILE':
+          case 'WIFI':
+            networkConnectionStatus = CONNECTED;
+            break;
+        }
     }
-  }else{
-    switch(reach){
-      case 'NONE':
-      case 'DUMMY':
-      case 'UNKNOWN':
-        networkConnectionStatus = DISCONNECTED;
-				break;
-      case 'MOBILE':
-      case 'WIFI':
-        networkConnectionStatus = CONNECTED;
-        break;
-    }
-  }
 
 	if(origionNetworkConnectionStatus !== networkConnectionStatus){
 
@@ -237,7 +237,7 @@ export function registerInterestedStocks(stockList) {
 		console.log('Send stockList to websocket server: ' + stockList)
 		previousInterestedStocks = stockList
 		var invokeS = LogicData.getAccountState()?'SL':'S';
-	  var messagePromise = stockPriceWebSocketProxy.invoke(invokeS, stockList);
+	    var messagePromise = stockPriceWebSocketProxy.invoke(invokeS, stockList);
 
 	    messagePromise
 	    	.done(() => {

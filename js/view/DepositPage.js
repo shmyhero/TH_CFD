@@ -1,11 +1,24 @@
 'use strict';
 
 /*
-存取资金->入金
+    我的->存取资金->入金
 */
 
 import React,{Component,PropTypes} from 'react'
-import {StyleSheet,Text,TextInput,TouchableWithoutFeedback,Keyboard,Image,View,Dimensions,ListView,Alert,TouchableOpacity,Platform} from 'react-native'
+import {
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableWithoutFeedback,
+    Keyboard,
+    Image,
+    View,
+    Dimensions,
+    ListView,
+    Alert,
+    TouchableOpacity,
+    Platform
+} from 'react-native'
 
 
 var {height, width} = Dimensions.get('window')
@@ -228,27 +241,6 @@ export default class DepositPage extends Component{
 		});
 	}
 
-	// var newState = {
-	// 	withdrawValueText: this.state.withdrawValueText,
-	// };//{withdrawValueText: text,}
-	// if(text !== ""){
-	// 	var re = /^\d+\.?\d{0,2}$/;
-	// 	var found = text.match(re);
-	// 	if(found){
-	// 		var value = parseFloat(text);
-	// 		if(!isNaN(value)){
-	// 			newState.withdrawValueText = text;
-	// 			newState.withdrawValue = value;
-	// 		}
-	// 	}
-	// }else{
-	// 	newState.withdrawValueText = "";
-	// 	newState.withdrawValue = 0;
-	// }
-	//
-	// console.log("newState " + JSON.stringify(newState));
-	// this.setState(newState);
-
 	onChangeWithdrawValue (text){
 		inputValue = text
 		var text_ = text
@@ -307,36 +299,29 @@ export default class DepositPage extends Component{
 	}
 
 	renderDetail(){
-
 		var textColor = inputError?'#d71a18':'black';
 		console.log("textColor = " + textColor);
-
 		return(
 			<View style = {styles.payDetail}>
 				<Text style = {[styles.payStateTip,{color:textColor}]}>{this.state.payStateTip}</Text>
 					<View style = {styles.cellWrapper}>
 						<Text style = {styles.moneyUSD}>美元</Text>
-						<TextInput ref="textInput"
-											 style={[styles.cellInput, {color: textColor}]}
-											 onChangeText={(text) => this.onChangeWithdrawValue(text)}
-												//  onFocus={() => this.onTextFocus(type)}
-												//  onBlur={() => this.onTextBlur(type)}
-											 value={inputValue}
-											 defaultValue={inputValue}
-											 maxLength={7}
-											 autoFocus={true}
-											 underlineColorAndroid='transparent'
-											 keyboardType='numeric'>
+						<TextInput
+                            ref="textInput"
+                            style={[styles.cellInput, {color: textColor}]}
+                            onChangeText={(text) => this.onChangeWithdrawValue(text)}
+                            value={inputValue}
+                            defaultValue={inputValue}
+                            maxLength={7}
+                            autoFocus={true}
+                            underlineColorAndroid='transparent'
+                            keyboardType='numeric'>
 						</TextInput>
 					</View>
 				<View style = {styles.lineSep}></View>
 				<View style = {styles.tipsLine}>
 					<Text style = {styles.payStateTip2}>{this.state.payStateTip3}</Text>
-					{/* <Text style = {styles.payStateTip2}>{this.state.payStateTip2}</Text>
-					<Text style = {styles.payStateTip3}>{this.state.payStateTip3}</Text> */}
 				</View>
-
-
 			</View>
 		)
 	}
@@ -458,17 +443,6 @@ export default class DepositPage extends Component{
 		var userData = LogicData.getUserData()
 		// var url = NetConstants.CFD_API.GET_PAY_DEMO_TEST_ID + '?amount=' + inputValue
 		var url = NetConstants.CFD_API.GET_PAY_DEMO_TEST_FOCAL + '?amount=' + inputValue
-	// 	{ merchantSig: '2kNmP+lx9RaKejwrJ9xgYv4Rv/HeeQCgMkz+dMTEHz0=',
-  // signingString: 'brandCode:currencyCode:merchantAccount:merchantReference:paymentAmount:sessionValidity:shipBeforeDate:shopperLocale:skinCode:moneybookers:USD:AyoMarLimTHCN:142381748277:33300:2017-08-23T08\\:42\\:46Z:2017-08-24T08\\:12\\:46Z:en_GB:UtmJpnab',
-  // currencyCode: 'USD',
-  // merchantAccount: 'AyoMarLimTHCN',
-  // merchantReference: '142381748277',
-  // paymentAmount: '33300',
-  // sessionValidity: '2017-08-23T08:42:46Z',
-  // skinCode: 'UtmJpnab',
-  // shipBeforeDate: '2017-08-24T08:12:46Z',
-  // brandCode: 'moneybookers',
-  // shopperLocale: 'en_GB' }
 		console.log("requestPayConfirm url = " + url);
 		NetworkModule.fetchTHUrl(
 				url,
@@ -481,7 +455,7 @@ export default class DepositPage extends Component{
 			},
 			(responseJson) => {
 				 console.log('responseJson = ' + responseJson + ' payMethodSelected = ' + this.state.payMethodSelected);//rmbValue
-				  //  var appendVal = '&TransRef='+responseJson.transferId+'&firstName='+responseJson.firstName+'&lastName='+responseJson.lastName+'&email='+responseJson.email+'&addr='+responseJson.addr
+				    //  var appendVal = '&TransRef='+responseJson.transferId+'&firstName='+responseJson.firstName+'&lastName='+responseJson.lastName+'&email='+responseJson.email+'&addr='+responseJson.addr
 					//  var appendVal = '&merchantSig='+responseJson.merchantSig+'&currencyCode='+responseJson.currencyCode+'&merchantAccount='+responseJson.merchantAccount+'&merchantReference='+responseJson.merchantReference+'&paymentAmount='+responseJson.paymentAmount+'&sessionValidity='+responseJson.sessionValidity+'&skinCode='+responseJson.skinCode+'&shipBeforeDate='+responseJson.shipBeforeDate+'&brandCode='+responseJson.brandCode+'&shopperLocale='+responseJson.shopperLocale
 					//  var alipayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-alipay.html'+'?Amount='+rmbValue+appendVal
 					 var alipayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-ping.html'+'?amount='+rmbValue+'&channel=alipay'+'&token='+userData.userId + '_' + userData.token;
@@ -491,15 +465,13 @@ export default class DepositPage extends Component{
 					 var unionpayUrl = 'https://cn.tradehero.mobi/test_form/test_form_Ayondo-focal.html?'+appendVal
 					 var url = this.state.payMethodSelected == 0? alipayUrl:unionpayUrl;
 					 console.log('selected Url = ' + url);
-
-						// var trackingData = {};
-						// trackingData[TalkingdataModule.AD_TRACKING_KEY_USER_ID] = userData.userId;
-						// trackingData[TalkingdataModule.AD_TRACKING_KEY_ORDER_ID] = responseJson.transferId;	//don't know the order id..
-						// trackingData[TalkingdataModule.AD_TRACKING_KEY_AMOUNT] = rmbValue;
-						// trackingData[TalkingdataModule.AD_TRACKING_KEY_CURRENCY] = "RMB";
-						// trackingData[TalkingdataModule.AD_TRACKING_KEY_PAY_TYPE] = this.state.payMethodSelected == 0 ? "支付宝" : "银联";
-						// TalkingdataModule.trackADEvent(TalkingdataModule.AD_TRACKING_EVENT_PAY, trackingData);
-
+                    // var trackingData = {};
+                    // trackingData[TalkingdataModule.AD_TRACKING_KEY_USER_ID] = userData.userId;
+                    // trackingData[TalkingdataModule.AD_TRACKING_KEY_ORDER_ID] = responseJson.transferId;	//don't know the order id..
+                    // trackingData[TalkingdataModule.AD_TRACKING_KEY_AMOUNT] = rmbValue;
+                    // trackingData[TalkingdataModule.AD_TRACKING_KEY_CURRENCY] = "RMB";
+                    // trackingData[TalkingdataModule.AD_TRACKING_KEY_PAY_TYPE] = this.state.payMethodSelected == 0 ? "支付宝" : "银联";
+                    // TalkingdataModule.trackADEvent(TalkingdataModule.AD_TRACKING_EVENT_PAY, trackingData);
 					 this.props.navigator.push({
 				 		name: MainPage.PAYMENT_PAGE,
 				 		url: url,
@@ -531,19 +503,11 @@ export default class DepositPage extends Component{
 	render(){
 
 		return(
-			<View style={{flex:1,backgroundColor:ColorConstants.SEPARATOR_GRAY}}>
+			    <View style={{flex:1,backgroundColor:ColorConstants.SEPARATOR_GRAY}}>
 				<NavBar title='入金' showBackButton={true}
 					imageOnRight={require('../../images/icon_question.png')}
 					rightImageOnClick={()=>this.go2Question()}
 					navigator={this.props.navigator}/>
-
-				{/* <View style = {styles.listViewContainer}>
-					<ListView
-						style={styles.list}
-						dataSource={this.state.dataSource}
-						renderRow={(rowData, sectionID, rowID)=>this.renderRow(rowData, sectionID, rowID)}
-						renderSeparator={(sectionID, rowID, adjacentRowHighlighted)=>this.renderSeparator(sectionID, rowID, adjacentRowHighlighted)} />
-				</View> */}
 
 				{this.renderAliPay()}
 				{this.renderUnionPay()}

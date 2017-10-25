@@ -409,10 +409,10 @@ var DaySignPage = React.createClass({
 			<View style = {styles.calendar}>
 
 			<View style = {styles.lineLeftRightTextContainer}>
-			  <Image style = {styles.lineLeftRight} source = {require('../../images/line_left.png')} ></Image>
+			    <Image style = {styles.lineLeftRight} source = {require('../../images/line_left.png')} ></Image>
 				<Text style = {styles.textMonth}>{this.state.monthToday}月签到日历</Text>
 				<Image style = {styles.lineLeftRight} source = {require('../../images/line_right.png')} ></Image>
-		  </View>
+		    </View>
 				<View style = {styles.calendarContainer}>
 					{daysView}
 				</View>

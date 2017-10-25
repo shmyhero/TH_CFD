@@ -2,17 +2,17 @@
 
 import React, { Component, PropTypes} from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-	Dimensions,
-	ListView,
-	TextInput,
-	TouchableOpacity,
-	Image,
-	Platform,
-	ScrollView,
-  Keyboard,
+    View,
+    Text,
+    StyleSheet,
+    Dimensions,
+    ListView,
+    TextInput,
+    TouchableOpacity,
+    Image,
+    Platform,
+    ScrollView,
+    Keyboard,
 } from 'react-native';
 
 var NavBar = require('../NavBar');
@@ -76,8 +76,8 @@ export default class WithdrawPage extends Component {
       this.state={
         dataSource: this.ds.cloneWithRows(this.listRawData),
         cardImageUrl: bankIcon,
-  			cardBank: cardBank,
-  			lastCardNumber: lastCardNumber,
+        cardBank: cardBank,
+        lastCardNumber: lastCardNumber,
         refundableBanalce: LogicData.getBalanceData().refundable,
         minRefundableBanalce: LogicData.getBalanceData().minRefundable,
         withdrawValueText: "",

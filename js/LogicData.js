@@ -44,9 +44,9 @@ var LogicData = {
 		return userData;
 	},
 
-  removeUserData: function() {
-    userData = {}
-  },
+    removeUserData: function() {
+        userData = {}
+    },
 
 	setAccountState: function(state, isStartUp){
 		// state = true

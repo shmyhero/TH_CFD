@@ -97,6 +97,9 @@ export default class HeaderLineDialog extends Component {
   }
 
   show(){
+    this.setState({
+      checkSelected:false,
+    });
     this._setModalVisible(true);
   }
 

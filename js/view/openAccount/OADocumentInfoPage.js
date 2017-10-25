@@ -40,7 +40,7 @@ var OADocumentInfoPage = React.createClass({
 			{"key":"交易执行政策", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "4")},
 			{"key":"投诉信息", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "5")},
 			{"key":"用户头像使用说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "6")},
-			{"key":"盈交易榜单功能条款", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "7")},
+			{"key":"盈交易榜单功能条款", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "10")},
 
 			{"key":"关于保证金交易", "type": "aboutBlock" },
 			{"type":"openAccountHintBlock", },

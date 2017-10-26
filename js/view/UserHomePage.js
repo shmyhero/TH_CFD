@@ -129,7 +129,7 @@ export default class UserHomePage extends Component {
 			isFollowingStatusChanged: false,
 			isPrivate: true,
 			currentSelectedTab : 0,
-			isShowGuide:false,
+//			isShowGuide:false,
 			height: UIConstants.getVisibleHeight(),
 		}
 	}
@@ -141,19 +141,19 @@ export default class UserHomePage extends Component {
 			this.onLayoutSizeChanged();
 		});
 
-		if(LogicData.isUserSelf(this.state.id)) {
-
-			StorageModule.loadGuideRanking()
-			.then((value) => {
-				 if(value==null){
-					 this.setState({
-		 				isShowGuide:true,
-				 	})
-					console.log("Rambo loadGuideRanking :"+value);
-					StorageModule.setGuideRanking('True')
-			   }
-			}).done()
-		}
+//		if(LogicData.isUserSelf(this.state.id)) {
+//
+//			StorageModule.loadGuideRanking()
+//			.then((value) => {
+//				 if(value==null){
+//					 this.setState({
+//		 				isShowGuide:true,
+//				 	})
+//					console.log("Rambo loadGuideRanking :"+value);
+//					StorageModule.setGuideRanking('True')
+//			   }
+//			}).done()
+//		}
 
 		this.onPageSelected(0)
 
@@ -534,7 +534,7 @@ export default class UserHomePage extends Component {
 						rightCustomContent={() => this.renderRightCustomButton()}/>
 					</View>
 
-					{this.showGuide()}
+					{/*this.showGuide()*/}
 
 			</View>
 		);

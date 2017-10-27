@@ -53,7 +53,7 @@ export default class Reward extends Component{
         <View style={styles.lineBottom1}>
           <Image
           style={styles.imgUserHead}
-          source={this.props.card.profileUrl ? {uri:this.props.card.profileUrl} : require('../../images/head_portrait.png')} 
+          source={this.props.card.profileUrl ? {uri:this.props.card.profileUrl} : require('../../images/head_portrait.png')}
           defaultSource={require('../../images/head_portrait.png')}>
           </Image>
           <Text numberOfLines={1} style = {styles.textName}>
@@ -122,6 +122,14 @@ export default class Reward extends Component{
         specialPic = require('../../images/card_ag.png')
       }
     }
+    var imageSource = {}
+    if(this.props.type === 1){
+      imageSource = isSpecialCard?specialPic:{uri: this.props.card.imgUrlSmall}
+    }else if(this.props.type === 2){
+      imageSource = isSpecialCard?specialPic:{uri: this.props.card.imgUrlMiddle}
+    }else{
+      imageSource = isSpecialCard?specialPic:{uri: this.props.card.imgUrlMiddle}
+    }
 
     return(
       <View style = {[styles.container,{borderWidth:this.props.card.isNew?0.5:0}]}>
@@ -129,7 +137,7 @@ export default class Reward extends Component{
         resizeMode={'stretch'}
         style={[styles.imgReward,{width:this.getWidth(),height:this.getHeight()}]}
         // source={require('../../images/card_ag.png')}
-        source={isSpecialCard?specialPic:{uri: this.props.card.imgUrlSmall}}
+        source={imageSource}
         >
         </Image>
         {this.renderBottom()}

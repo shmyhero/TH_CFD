@@ -29,7 +29,9 @@ var heightRate = height/667.0
 
 var listRawData = [
 {'type':'normal', 'title':'系统平仓提示', 'subtype': 'closepositionpush'},
+{'type':'separator', 'title':'', 'subtype': 'separatorLine'},
 {'type':'normal', 'title':'公布我的详细交易数据', 'subtype': 'showPersonalData'},
+{'type':'normal', 'title':'公布持仓和平仓的数据', 'subtype': 'showPositionData'},
 {'type':'text', 'title':'虽然全力以赴传递通知，却也不能保证。', 'subtype': 'hint'}
 ]
 
@@ -71,6 +73,7 @@ var MePushConfigPage = React.createClass({
 			dataSource: ds.cloneWithRows(listRawData),
 			autoCloseAlertIsOn: true,
 			showPersonalData: true,
+			showPositionData:true,
 		};
 	},
 
@@ -111,9 +114,11 @@ var MePushConfigPage = React.createClass({
 				function(responseJson) {
 					var autoCloseAlert = LogicData.getAccountState() ? responseJson.autoCloseAlert_Live : responseJson.autoCloseAlert;
 					var showPersonalData = responseJson.showData;
+					var showPositionData = responseJson.showOpenCloseData;
 					this.setState({
 						autoCloseAlertIsOn: autoCloseAlert,
 						showPersonalData: showPersonalData,
+						showPositionData: showPositionData,
 						dataSource: ds.cloneWithRows(listRawData),
 					});
 
@@ -126,9 +131,47 @@ var MePushConfigPage = React.createClass({
 		}
 	},
 
+    changePositionDataSetting:function(value){
+        var userData = LogicData.getUserData()
+                var notLogin = Object.keys(userData).length === 0
+                if (notLogin) {
+                }else{
+                    var url = NetConstants.CFD_API.SHOW_USER_DATA_API
+
+                    NetworkModule.fetchTHUrl(
+                        url,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+                                'Content-Type': 'application/json; charset=utf-8',
+                            },
+                            body: JSON.stringify({
+                                showOpenCloseData: value,
+                                showData: this.state.showPersonalData,
+                            }),
+                        },
+                        function(responseJson) {
+                            //Do nothing?
+                        }.bind(this),
+                        function(result) {
+                            Alert.alert('提示', result.errorMessage);
+                        }
+                    )
+                }
+    },
+
+
 	changeShowPersonalDataSetting: function(value){
 		var userData = LogicData.getUserData()
 		var notLogin = Object.keys(userData).length === 0
+
+
+        this.setState({
+            showPositionData:value
+        })
+
+
 		if (notLogin) {
 		}else{
 			var url = NetConstants.CFD_API.SHOW_USER_DATA_API
@@ -183,6 +226,7 @@ var MePushConfigPage = React.createClass({
 
 	onSwitchPressed: function(value, rowData) {
 		if(rowData.subtype === 'closepositionpush'){
+
 			this.setState({
 				dataSource: ds.cloneWithRows(listRawData),
 				autoCloseAlertIsOn: value
@@ -200,6 +244,14 @@ var MePushConfigPage = React.createClass({
 				dataSource: ds.cloneWithRows(listRawData),
 				showPersonalData: value
 			});
+		}else if(rowData.subtype === 'showPositionData'){
+		    if(this.state.showPersonalData){
+                    this.changePositionDataSetting(value);
+                    this.setState({
+                        dataSource: ds.cloneWithRows(listRawData),
+                        showPositionData: value
+                    });
+		    }
 		}
 	},
 
@@ -228,6 +280,7 @@ var MePushConfigPage = React.createClass({
 	renderRow: function(rowData, sectionID, rowID) {
 		if (rowData.type === 'normal') {
 			var switchIsOn = false;
+			var switchDisable = false;
 			if(rowData.subtype === 'closepositionpush'){
 				switchIsOn = this.state.autoCloseAlertIsOn;
 			} else if(rowData.subtype === 'showPersonalData') {
@@ -235,7 +288,13 @@ var MePushConfigPage = React.createClass({
 					return null;
 				}
 				switchIsOn = this.state.showPersonalData;
-			}
+			}else if(rowData.subtype === 'showPositionData') {
+             				if(!LogicData.getAccountState() || MainPage.HIDE_RANKING_TAB){
+             					return null;
+             				}
+             				switchIsOn = this.state.showPositionData;
+             				switchDisable = !this.state.showPersonalData;
+            }
 			return(
 				<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
 					<Text style={styles.title}>{rowData.title}</Text>
@@ -243,6 +302,7 @@ var MePushConfigPage = React.createClass({
 						<Switch
 							onValueChange={(value) => this.onSwitchPressed(value, rowData)}
 							value={switchIsOn}
+							disabled={switchDisable}
 							onTintColor={ColorConstants.title_blue()} />
 					</View>
 				</View>
@@ -253,6 +313,12 @@ var MePushConfigPage = React.createClass({
 						<Text style={styles.hintText}>{rowData.title}</Text>
 				</View>
 			);
+		}else if(rowData.type == 'separator'){
+            return(
+                    <View style={{width:width,height:5}}>
+
+                    </View>
+                );
 		}
 	},
 

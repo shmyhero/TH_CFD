@@ -106,6 +106,7 @@ export default class UserHomePage extends Component {
 		userId: '',
 		userName: '',
 		isPrivate: false,
+		isPositionPrivate:false,
 	}
 
 	constructor(props) {
@@ -128,6 +129,7 @@ export default class UserHomePage extends Component {
 			rankDescription: '',
 			isFollowingStatusChanged: false,
 			isPrivate: true,
+			isPositionPrivate:true,
 			currentSelectedTab : 0,
 //			isShowGuide:false,
 			height: UIConstants.getVisibleHeight(),
@@ -206,7 +208,8 @@ export default class UserHomePage extends Component {
 					isFollowing: responseJson.isFollowing,
 					rank: responseJson.rank,
 					rankDescription: responseJson.rankDescription,
-					isPrivate: responseJson.showData == undefined ? true : (!responseJson.showData),
+					isPrivate:responseJson.showData == undefined ? true : (!responseJson.showData),
+					isPositionPrivate:responseJson.showOpenCloseData == undefined ? true : (!responseJson.showOpenCloseData),
 				}, () => {
 					this.refs['page0'].tabPressed()
 				})
@@ -450,13 +453,13 @@ export default class UserHomePage extends Component {
 	}
 
 	renderContent(){
-		console.log("Rambo:::renderContent:"+this.state.isPrivate);
+//		console.log("Rambo:::renderContent:"+this.state.isPrivate);
 		// userId: PropTypes.number.isRequired,
 		// userName: PropTypes.string.isRequired,
 		var tabPages = [
 			<UserHomePageTab0 navigator={this.props.navigator} userName = {this.props.userName} userId={this.props.userId} isPrivate={this.state.isPrivate} ref={'page0'}/>,
-			<UserHomePageTab1 navigator={this.props.navigator} userId={this.props.userId} isPrivate={this.state.isPrivate} ref={'page1'}/>,
-			<UserHomePageTab2 navigator={this.props.navigator} userId={this.props.userId} isPrivate={this.state.isPrivate} ref={'page2'}/>
+			<UserHomePageTab1 navigator={this.props.navigator} userId={this.props.userId} isPrivate={(this.state.isPrivate)||(this.state.isPositionPrivate)} ref={'page1'}/>,
+			<UserHomePageTab2 navigator={this.props.navigator} userId={this.props.userId} isPrivate={(this.state.isPrivate)||(this.state.isPositionPrivate)} ref={'page2'}/>
 		]
 
 		var viewPages = tabNames.map(

@@ -17,6 +17,7 @@ var UIConstants = require('../UIConstants')
 var MainPage = require('./MainPage')
 var ColorConstants = require('../ColorConstants')
 var StatisticBarBlock = require('./personalPage/StatisticBarBlock')
+var ProfitBlock = require('./personalPage/ProfitBlock')
 var TradeStyleBlock = require('./personalPage/TradeStyleBlock')
 
 var CHART_TYPE_2MONTH = 0;
@@ -25,6 +26,7 @@ var emptyStar = '***'
 
 const STATISTIC_BAR_BLOCK = "statisticBarBlock";
 const TRADE_STYLE_BLOCK = "tradeStyleBlock";
+const PROFIT_BLOCK = 'profitBlock';
 
 export default class UserHomePageTab0 extends Component{
 
@@ -171,8 +173,9 @@ export default class UserHomePageTab0 extends Component{
     }
 
 
-    this.refs[STATISTIC_BAR_BLOCK].refresh(staticBarBlock);
+//    this.refs[STATISTIC_BAR_BLOCK].refresh(staticBarBlock);
     this.refs[TRADE_STYLE_BLOCK].refresh(tradeStyle);
+    this.refs[PROFIT_BLOCK].refresh();
   }
 
   middleWarpperRender() {
@@ -465,6 +468,10 @@ export default class UserHomePageTab0 extends Component{
 		}
 	}
 
+//   <StatisticBarBlock userId={this.props.userId}
+//            isStatisticPage={this.props.isStatisticPage}
+//            ref={STATISTIC_BAR_BLOCK}/>
+
 	render(){
 		return(
       <ScrollView showsHorizontalScrollIndicator={false}>
@@ -472,11 +479,12 @@ export default class UserHomePageTab0 extends Component{
         <View style = {styles.separator}></View>
         {this.bottomWarpperRender()}
         <View style = {styles.separator}></View>
-				<StatisticBarBlock userId={this.props.userId}
-          isStatisticPage={this.props.isStatisticPage}
-					ref={STATISTIC_BAR_BLOCK}/>
+        <ProfitBlock userId={this.props.userId}
+        					isPrivate={this.props.isPrivate}
+        					type="open"
+        					ref={PROFIT_BLOCK}/>
         <View style = {styles.separator}></View>
-				<TradeStyleBlock userId={this.props.userId}
+		<TradeStyleBlock userId={this.props.userId}
 					ref={TRADE_STYLE_BLOCK}/>
         <View style = {styles.separator}></View>
         {this.props.isStatisticPage ? null : this.cardWarpperRender()}

@@ -25,7 +25,6 @@ var PickerItem = Picker.Item;
 var Orientation = require('react-native-orientation');
 var ActivityIndicator = require('ActivityIndicator');
 var LineChart = require('./component/lineChart/LineChart');
-var dismissKeyboard = require('dismissKeyboard');
 var LogicData = require('../LogicData')
 var UIConstants = require('../UIConstants');
 var ColorConstants = require('../ColorConstants')
@@ -116,7 +115,7 @@ var StockDetailPage = React.createClass({
 			leverage: 2,
 			totalMoney: available,
 			tradeDirection: 0,	//0:none, 1:up, 2:down
-			inputText: ''+money,
+			// inputText: ''+money,
 			stockPrice: this.props.stockPrice,
 			stockCurrencyPrice: '--',
 			stockLastPrice: '--',
@@ -220,10 +219,7 @@ var StockDetailPage = React.createClass({
 		if (this.state.totalMoney === 0 && this.state.money === 0 && responseJson.available > 0){
 			// first time get the total money value.
 			var money = responseJson.available > 100 ? 100 : Math.floor(responseJson.available)
-			this.setState({
-				money: money,
-				inputText: ''+money,
-			})
+			this.setInvestValue(money)
 		}
 		this.setState({
 			totalMoney: responseJson.available < 0 ? 0 : responseJson.available,
@@ -310,6 +306,15 @@ var StockDetailPage = React.createClass({
 					60000
 				);
 				this.props.showTutorial('trade')
+
+				if(!this.setInvestValue(this.state.money, true)){
+					console.log("setInvestValue ")
+					var leverageArray = this.getAvailableLeverage()
+					var maxLeverage = leverageArray[leverageArray.length - 1];
+						console.log("setLeverageValue " + maxLeverage)
+					this.findAvailableInvestValue(maxLeverage);
+				}
+
 			},
 			(result) => {
 				// Alert.alert('', result.errorMessage);
@@ -656,6 +661,11 @@ var StockDetailPage = React.createClass({
 	renderMinTradeMondy:function(){
 		var tradeValue = this.state.money * this.state.leverage
 		var minValue = this.state.tradeDirection === 1 ? this.state.stockInfo.minValueLong : this.state.stockInfo.minValueShort
+		if(this.state.error){
+			return (
+				<Text style={styles.errorLabel}>{this.state.error}</Text>
+			);
+		}
 		if(minValue){
 			return (
 				<Text style={styles.leftMoneyLabel}> 交易此产品：本金*杠杆需大于{minValue.toFixed(0)}美元</Text>
@@ -828,45 +838,43 @@ var StockDetailPage = React.createClass({
 		var viewMargin = 0;//= Platform.OS === 'ios' ? 0:15
 		// console.log("render: " + JSON.stringify(this.state.stockInfo))
 		return (
-			<TouchableWithoutFeedback onPress={()=> this.dismissKeyboard()}>
-				<View style={styles.wrapper, {width:width}}>
-					<LinearGradient colors={this.getGradientColor()} style={{height: Math.max(height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER, this.state.height)}}>
+			<View style={styles.wrapper, {width:width}}>
+				<LinearGradient colors={this.getGradientColor()} style={{height: Math.max(height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER, this.state.height)}}>
 
-						{this.renderHeader()}
+					{this.renderHeader()}
 
-						{this.renderChartHeader()}
+					{this.renderChartHeader()}
 
-						<View style={{flex: 3.5,marginTop:5,marginLeft:viewMargin,marginRight:viewMargin}}>
-							{this.renderChart()}
-							{this.renderDataStatus()}
-						</View>
-						<View>
-							<Text style={styles.tipsLine}>行情可能存在细微偏差</Text>
-						</View>
-						<View style={{flex: 1.2, justifyContent: 'space-around'}}>
-							{this.renderTradeButton()}
-						</View>
-						<View style={{flex: 2.5, justifyContent: 'space-around'}}>
-							{this.renderScrollHeader()}
-							{this.renderScroll()}
-						</View>
-						<View style={{flex: 2, alignItems: 'center', justifyContent: 'space-around', paddingTop: 30, paddingBottom: 10}}>
-							{this.renderMinTradeMondy()}
-							{this.renderLeftMoney()}
-							{/* <Text style={styles.smallLabel}> 手续费为{charge}美元</Text> */}
-							{this.renderOKButton()}
-							{this.renderStockCurrencyWarning()}
-						</View>
-					</LinearGradient>
-						<InputAccessory ref='InputAccessory'
-							textValue={this.state.inputText}
-							maxValue={parseFloat(this.state.totalMoney.toFixed(2))}
-							rightButtonOnClick={this.clearMoney}
-							minInvestUSD={this.state.minInvestUSD}/>
+					<View style={{flex: 3.5,marginTop:5,marginLeft:viewMargin,marginRight:viewMargin}}>
+						{this.renderChart()}
+						{this.renderDataStatus()}
+					</View>
+					<View>
+						<Text style={styles.tipsLine}>行情可能存在细微偏差</Text>
+					</View>
+					<View style={{flex: 1.2, justifyContent: 'space-around'}}>
+						{this.renderTradeButton()}
+					</View>
+					<View style={{flex: 2.5, justifyContent: 'space-around'}}>
+						{this.renderScrollHeader()}
+						{this.renderScroll()}
+					</View>
+					<View style={{flex: 2, alignItems: 'center', justifyContent: 'space-around', paddingTop: 30, paddingBottom: 10}}>
+						{this.renderMinTradeMondy()}
+						{this.renderLeftMoney()}
+						{/* <Text style={styles.smallLabel}> 手续费为{charge}美元</Text> */}
+						{this.renderOKButton()}
+						{this.renderStockCurrencyWarning()}
+					</View>
+				</LinearGradient>
+					{/* <InputAccessory ref='InputAccessory'
+						textValue={this.state.inputText}
+						maxValue={parseFloat(this.state.totalMoney.toFixed(2))}
+						rightButtonOnClick={this.clearMoney}
+						minInvestUSD={this.state.minInvestUSD}/> */}
 
-						<StockTransactionInfoModal ref='confirmPage'/>
-				</View>
-				</TouchableWithoutFeedback>
+					<StockTransactionInfoModal ref='confirmPage'/>
+			</View>
 		)
 	},
 
@@ -903,24 +911,10 @@ var StockDetailPage = React.createClass({
 
 	chartClickable: true,
 
-	dismissKeyboard:function(){
-		var value = parseInt(this.state.inputText)
-		if (this.state.inputText.length == 0) {
-			value = 0
-		}
-		if(value >= this.state.minInvestUSD && value <= this.state.totalMoney){
-			this.setState({
-				money: value,
-			});
-		}else{
-		}
-		dismissKeyboard()
-	},
 
 	chartClicked:function(){
 		//Make sure the chart can only be pressed once.
 		if(this.refs['InputAccessory'] && this.refs['InputAccessory'].isShow()){
-			this.dismissKeyboard()
 			return;
 		}
 
@@ -1010,11 +1004,13 @@ var StockDetailPage = React.createClass({
 	},
 
 	clearMoney: function() {
-		var value = parseInt(this.state.inputText)
-		if (value > this.state.totalMoney) {
-			this.setState({inputText:'0', money:0})
+		if (this.state.money > this.state.totalMoney) {
+			this.setState({
+				//inputText:'0',
+				money:0
+			})
 		}else{
-			this.setState({money:value})
+			this.setState({money:this.state.money})
 		}
 	},
 
@@ -1272,11 +1268,25 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
-	renderScroll: function() {
-		console.log("Orientation width = " + width)
-		var pickerWidth = width/2-60
-		var pickerHeight = Platform.OS === 'ios' ? 216 : 100;
-		// money list: 100,500,1000,3000,5000,7000,10000,20000,max
+	getAvailableLeverage: function(){
+		// leverage list: 无，2,3,...,20
+
+		if (this.state.stockInfo.levList !== undefined) {
+			leverageArray = this.state.stockInfo.levList
+		}else{
+			var maxLeverage = 20
+			if (this.state.stockInfo.maxLeverage !== undefined) {
+				maxLeverage = this.state.stockInfo.maxLeverage
+			}
+			var leverageArray = new Array(Math.floor(maxLeverage))
+			for (var i = 0; i < maxLeverage; i++) {
+				leverageArray[i]=i+1
+			};
+		}
+		return leverageArray;
+	},
+
+	getMoneyArray: function(){
 		var rawList=[50,100,200,300,400, 500,800,1000, 2000, 3000, 5000, 7000, 10000, 20000]
 		var moneyCount = 0
 		var moneyArray = []
@@ -1304,11 +1314,9 @@ var StockDetailPage = React.createClass({
 			moneyArray.push(""+ Math.floor(this.state.totalMoney))
 		}
 
-
-
 		// insert the user input value
 		var exist = false
-		var input = this.state.money//parseInt(this.state.inputText)
+		var input = this.state.money
 		if (input > 10) {
 			for (var i = moneyArray.length - 1; i >= 0; i--) {
 				var value = parseInt(moneyArray[i])
@@ -1334,23 +1342,23 @@ var StockDetailPage = React.createClass({
 		}
 
 		moneyArray = commonUtil.removeRepeat1(moneyArray)
+		return {moneyArray, value};
+	},
 
-		// leverage list: 无，2,3,...,20
-		var maxLeverage = 20
-		if (this.state.stockInfo.maxLeverage !== undefined) {
-			maxLeverage = this.state.stockInfo.maxLeverage
-		}
-		var leverageArray = new Array(Math.floor(maxLeverage))
-		for (var i = 0; i < maxLeverage; i++) {
-			leverageArray[i]=i+1
-		};
-		if (this.state.stockInfo.levList !== undefined) {
-			leverageArray = this.state.stockInfo.levList
-		}
+	renderScroll: function() {
+		console.log("Orientation width = " + width)
+		var pickerWidth = width/2-60
+		var pickerHeight = Platform.OS === 'ios' ? 216 : 100;
+		// money list: 100,500,1000,3000,5000,7000,10000,20000,max
 
+		var {moneyArray, value} = this.getMoneyArray();
+		var leverageArray = this.getAvailableLeverage();
+
+		console.log("this.state.money " + this.state.money)
+		console.log("this.state.money value " + value)
 		return(
 			<View style={[styles.rowView, styles.scrollView]}>
-				<View/>
+				<View />
 				<Picker style={{width: pickerWidth, height: pickerHeight}}
 					selectedValue={this.state.money}
 					itemSpace={30}
@@ -1375,7 +1383,6 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
-
 	parseLeverage: function(value) {
 		if (value === 1)
 			return '无'
@@ -1383,17 +1390,97 @@ var StockDetailPage = React.createClass({
 			return ""+value
 	},
 
+	setInvestValue: function(value, ignoreError){
+		var maxValue = this.state.tradeDirection === 1 ? this.state.stockInfo.maxValueLong : this.state.stockInfo.maxValueShort;
+		var minValue = this.state.tradeDirection === 1 ? this.state.stockInfo.minValueLong : this.state.stockInfo.minValueShort;
+
+		if (value * this.state.leverage >= minValue && value * this.state.leverage <= maxValue){
+			this.setState({
+				money: value,
+				error: null,
+			})
+			return true;
+		}else{
+			var levList = this.getAvailableLeverage()
+			for(var i = 0; i < levList.length; i++){
+				if(levList[i] * value >= minValue && levList[i] * value <= maxValue){
+					this.setState({
+						money: value,
+						leverage: levList[i],
+						error: null,
+					})
+					return true;
+				}
+			}
+		}
+
+		var error = this.checkError(value, this.state.leverage)
+		this.setState({
+			money: value,
+			error: ignoreError ? null : error,
+		});
+
+		return error == null;
+	},
+
+	setLeverageValue: function(value){
+		this.setState({
+			leverage: value,
+			error: this.checkError(this.state.money, value),
+		});
+	},
+
+	findAvailableInvestValue: function(leverage){
+		var maxValue = this.state.tradeDirection === 1 ? this.state.stockInfo.maxValueLong : this.state.stockInfo.maxValueShort;
+		var minValue = this.state.tradeDirection === 1 ? this.state.stockInfo.minValueLong : this.state.stockInfo.minValueShort;
+
+		if (this.state.money * leverage >= minValue && this.state.money * leverage <= maxValue){
+			this.setState({
+				leverage: leverage,
+				error: null,
+			})
+			return true;
+		}else{
+			console.log("findAvailableInvestValue")
+			console.log("this.getMoneyArray() " + this.getMoneyArray())
+			var moneyList = this.getMoneyArray().moneyArray
+			console.log(moneyList)
+			for(var i = 0; i < moneyList.length; i++){
+				var value = parseInt(moneyList[i])
+				if(value * leverage >= minValue && value * leverage <= maxValue){
+					this.setState({
+						money: value,
+						leverage: leverage,
+						error: null,
+					})
+					return true;
+				}
+			}
+		}
+
+		console.log("333333")
+		var error = this.checkError(this.state.money, leverage)
+		this.setState({
+			error: error,
+		});
+
+		return error == null;
+	},
+
 	onPikcerSelect: function(value, tag) {
 		if(tag===1){
-			this.setState({money: value, inputText:""+value})
+			this.setInvestValue(value);
 		}
 		else if(tag===2){
-			this.setState({leverage: value})
+			this.setLeverageValue(value);
 		}
 	},
 
 	renderOKButton: function() {
 		var buttonEnable = this.state.tradeDirection !== 0 && !this.state.tradingInProgress
+		if (this.state.error){
+			buttonEnable = false
+		}
 		return (
 			<TouchableOpacity
 				activeOpacity={0.85}
@@ -1543,31 +1630,74 @@ var StockDetailPage = React.createClass({
 	renderInput: function() {
 		return (
 			<View>
-				<Image style={[styles.inputImage, {marginLeft:30-width,marginTop:10}]} source={require('../../images/key.png')}/>
-				<TextInput style={[styles.inputText, {marginLeft:40-width, marginTop:-24}]}
-					keyboardType={Platform.OS === 'ios' ? "number-pad" : "numeric"}
-					underlineColorAndroid="transparent"
-					keyboardAppearance={'dark'}
-					selectionColor={'transparent'}
-					value={this.state.inputText}
-					onChangeText={this.textInputChange}/>
+				<TouchableOpacity style={{marginLeft:30-width, marginTop:10, width:30}}
+					onPress={()=>this.showKeyboard()}>
+					<Image style={styles.inputImage} source={require('../../images/key.png')}/>
+					{/* <TextInput style={[styles.inputText, {marginLeft:40-width, marginTop:-24}]}
+						keyboardType={Platform.OS === 'ios' ? "number-pad" : "numeric"}
+						underlineColorAndroid="transparent"
+						keyboardAppearance={'dark'}
+						selectionColor={'transparent'}
+						value={this.state.inputText}
+						onChangeText={this.textInputChange}/> */}
+					</TouchableOpacity>
     		</View>
 			)
 	},
 
-	textInputChange: function(text) {
-		var value = parseInt(text)
-		if (text.length == 0) {
-			value = 0
+	// textInputChange: function(text) {
+	// 	var value = parseInt(text)
+	// 	if (text.length == 0) {
+	// 		value = 0
+	// 	}
+	// 	else {
+	// 		this.refs['InputAccessory'].resetValidState()
+	// 	}
+	// 	this.setState({
+	// 			inputText:""+value,
+	// 	})
+	// },
+
+	checkError: function(value, leverage){
+		var maxValue = this.state.tradeDirection === 1 ? this.state.stockInfo.maxValueLong : this.state.stockInfo.maxValueShort;
+		var minValue = this.state.tradeDirection === 1 ? this.state.stockInfo.minValueLong : this.state.stockInfo.minValueShort;
+
+		var tradeValue = value * leverage
+
+		console.log("checkError this.state.minInvestUSD " + this.state.minInvestUSD)
+		console.log("checkError minValue " + minValue)
+		console.log("checkError maxValue " + maxValue)
+		console.log("checkError value " + value)
+		console.log("checkError leverage " + leverage)
+
+		var error = null;
+		if (value < this.state.minInvestUSD) {
+			error = "小于最小本金: " + this.state.minInvestUSD.toFixed(0) + "美元";
+		}else if (tradeValue < minValue) {
+			error = "本金 x 杠杆需大于" + minValue.toString() + "美元";
+		} else if (tradeValue > maxValue) {
+			error = "本金 x 杠杆需小于" + maxValue.toString() + "美元";
 		}
-		else {
-			this.refs['InputAccessory'].resetValidState()
-		}
-		this.setState({
-				inputText:""+value,
-		})
+		console.log("checkError error " + error)
+		return error;
 	},
 
+	showKeyboard: function(){
+		MainPage.showKeyboard({
+			value: this.state.money,
+			checkError: (value)=>{
+				if(value < this.state.minInvestUSD){
+					return "小于最小本金： " + this.state.minInvestUSD.toFixed(0) + "美元";
+				}else if (value > this.state.totalMoney){
+					return "剩余本金不够！";
+				}
+				return null;
+			},
+			onInputConfirmed: (newValue)=>{
+				this.setInvestValue(newValue)
+			}
+		})
+	},
 });
 
 
@@ -1643,6 +1773,13 @@ var styles = StyleSheet.create({
 		backgroundColor:'transparent',
 		color: 'transparent',
 	},
+	keyboardButton: {
+		width: 30,
+		height: 30,
+		alignItems: 'center',
+		justifyContent: 'center',
+		backgroundColor:'transparent',
+	},
 	smallLabel: {
 		fontSize: 13,
 		color: 'white',
@@ -1657,6 +1794,14 @@ var styles = StyleSheet.create({
 	leftMoneyLabel: {
 		fontSize: 13,
 		color: '#7a8cb5',
+		paddingTop: 3,
+		paddingBottom: 3,
+		marginTop: 5,
+		marginBottom: 5,
+	},
+	errorLabel: {
+		fontSize: 13,
+		color: 'red',
 		paddingTop: 3,
 		paddingBottom: 3,
 		marginTop: 5,

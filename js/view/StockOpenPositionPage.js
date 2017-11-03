@@ -1345,6 +1345,11 @@ var StockOpenPositionPage = React.createClass({
 
 		price = this.percentToPriceWithRow(percent, rowData, type)
 
+		var endValue1 = this.percentToPriceWithRow(startPercent, rowData, type)
+		var endValue2 = this.percentToPriceWithRow(endPercent, rowData, type)
+		var minValue = Math.min(endValue1, endValue2).toFixed(4)
+		var maxValue = Math.max(endValue1, endValue2).toFixed(4)
+
 		return (
 			<View>
 				<View style={[styles.subDetailRowWrapper, {height:50}]}>
@@ -1356,9 +1361,19 @@ var StockOpenPositionPage = React.createClass({
 								style={{flex:3, textAlign:'right', fontSize:17, color: color}}
 								underlineColorAndroid='transparent'/>
 							<Text style={{flex:1, textAlign:'center', color: '#dfdfdf'}}>|</Text>
-							<TextInput editable={false} ref={component => this.bindRef(type, component, 2)} defaultValue={price.toFixed(rowData.security.dcmCount)}
-								style={{flex:3, textAlign:'left', fontSize:17}}
-								underlineColorAndroid='transparent'/>
+							<TouchableOpacity style={styles.stopProfitLossInputBox}
+								onPress={()=>this.onChangeStopProfitValuePressed(
+									rowData,
+									type,
+									price.toFixed(rowData.security.dcmCount),
+									minValue,
+									maxValue)}
+								>
+								<TextInput editable={false} ref={component => this.bindRef(type, component, 2)} defaultValue={price.toFixed(rowData.security.dcmCount)}
+									style={{textAlign:'center', alignSelf:"stretch", fontSize:17, backgroundColor:'red'}}
+									underlineColorAndroid='transparent'/>
+
+							</TouchableOpacity>
 						</View>
 						: null
 					}
@@ -1373,6 +1388,27 @@ var StockOpenPositionPage = React.createClass({
 				{ switchIsOn ? this.renderSlider(rowData, type, startPercent, endPercent, percent) : null}
 				<View style={styles.darkSeparator} />
 			</View>)
+	},
+
+	onChangeStopProfitValuePressed: function(
+		rowData,
+		type,
+		currentValue,
+		minValue,
+		maxValue){
+		MainPage.showKeyboard({
+			value: currentValue,
+			minValue: minValue,
+			maxValue: maxValue,
+			hasDot: true,
+			getMaxErrorText: ()=>{return "止盈位在" + minValue.toString() + "到" + maxValue.toString() + "之间"},
+			getMinErrorText: ()=>{return "止盈位在" + minValue.toString() + "到" + maxValue.toString() + "之间"},
+			onInputConfirmed: (newValue)=>{
+				console.log("newValue " + newValue)
+				var newPercent = this.priceToPercentWithRow(newValue, rowData, type)
+				this.setSliderValue(type, newPercent, rowData)
+			}
+		})
 	},
 
 	renderChart:function(){
@@ -1698,17 +1734,16 @@ var StockOpenPositionPage = React.createClass({
 				<View style={styles.darkSeparator} />
 
 				<View style={styles.extendRowWrapper}>
-					<TouchableOpacity onPress={()=>this.subItemPress(1, rowData)}
-						style={[styles.extendLeft, (this.state.selectedSubItem===1)&&styles.rightTopBorder,
-								(this.state.selectedSubItem===2)&&styles.bottomBorder,
-								{borderTopColor:ColorConstants.title_blue()},
-								{borderRightColor:ColorConstants.title_blue()},
-							  {borderBottomColor:ColorConstants.title_blue()}
+					<View style={[styles.extendLeft, this.state.selectedSubItem==2 && styles.bottomBorder,
+						{borderBottomColor:ColorConstants.title_blue()},]}>
+						<View>
+      				<Text style={styles.extendTextTop}>隔夜费+分红</Text>
+      			</View>
+						<View>
+      				<Text style={styles.extendTextBottom}>{financing_dividend_sum.toFixed(2)}</Text>
+      			</View>
+					</View>
 
-							]}>
-						<Text style={styles.extendTextTop}>行情</Text>
-						<Image style={styles.extendImageBottom} source={LogicData.getAccountState()?require('../../images/market_actual.png'):require('../../images/market.png')}/>
-					</TouchableOpacity>
 					<TouchableOpacity onPress={()=>this.subItemPress(2, rowData)}
 						style={[styles.extendMiddle, (this.state.selectedSubItem===1)&&styles.bottomBorder,
 								(this.state.selectedSubItem===2)&&styles.leftTopRightBorder,
@@ -1721,18 +1756,9 @@ var StockOpenPositionPage = React.createClass({
 						<Image style={styles.extendImageBottom} source={stopLossImage}/>
 					</TouchableOpacity>
 
-					<View style={[styles.extendRight,this.state.selectedSubItem!==0 && styles.bottomBorder,{borderBottomColor:ColorConstants.title_blue()},{justifyContent:'flex-start',paddingBottom:0,marginLeft:1}]}>
-						<View>
-      				<Text style={styles.extendTextTop}>隔夜费+分红</Text>
-      			</View>
-						<View>
-      				<Text style={styles.extendTextBottom}>{financing_dividend_sum.toFixed(2)}</Text>
-      			</View>
-					</View>
-
-
-
+					<View style={[styles.extendRight, this.state.selectedSubItem==2 && styles.bottomBorder, ]}/>
 				</View>
+
 
 				{this.state.selectedSubItem !== 0 ? this.renderSubDetail(rowData): null}
 
@@ -2227,6 +2253,19 @@ var styles = StyleSheet.create({
 		textAlign: 'center',
 		color: '#ffffff',
 	},
+	stopProfitLossInputBox:	{
+		flex:3,
+		alignSelf: "stretch",
+		alignItems: 'center',
+		justifyContent:'center',
+		height: 30,
+		borderWidth:1,
+		borderTopColor:'gray',
+		borderLeftColor:'gray',
+		borderRightColor:'gray',
+		borderBottomColor:'gray',
+		backgroundColor:'white',
+	}
 });
 
 

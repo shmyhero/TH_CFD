@@ -87,6 +87,7 @@ var DepositPage = require('./DepositPage');
 var RankingPage = require('./RankingPage');
 var UserHomePage = require('./UserHomePage');
 var FSModule = require('../module/FSModule');
+var CustomKeyboard = require('./CustomKeyboard');
 
 var TutorialPage = require('./TutorialPage');
 
@@ -178,6 +179,7 @@ export var showProgress
 export var ayondoLoginResult
 export var refreshMainPage
 export var showSharePage
+export var showKeyboard
 export var gotoLoginPage
 export var gotoTrade
 export var gotoLiveLogin;
@@ -188,6 +190,7 @@ var didAccountLoginOutSideSubscription = null;
 var didDisableTabbarSubscription = null;
 
 var SHARE_PAGE = 'SharePage'
+var KEYBOARD_PAGE = 'KeyboardPage'
 var REGISTER_SUCCESS_DIALOG = 'RegisterSuccessDialog'
 var SUPER_PRIORITY_HINT = 'SuperPriorityHint'
 var ACTIVITY_MODAL = 'activityModal'
@@ -722,7 +725,7 @@ var MainPage = React.createClass({
 			CookieManager.clearAll((err, res) => {
 				console.log('cookies cleared!');
 			});
-		}  
+		}
 	},
 
 	refreshMainPage(){
@@ -856,6 +859,7 @@ var MainPage = React.createClass({
 		ayondoLoginResult = this.ayondoLoginResult
 		refreshMainPage = this.refreshMainPage
 		showSharePage = this._doShare
+    showKeyboard = this.showKeyboard
 		gotoLoginPage = this.gotoLoginPage
 		gotoTrade = this.gotoTrade
 		gotoLiveLogin = this.gotoLiveLogin
@@ -1052,6 +1056,10 @@ var MainPage = React.createClass({
 	_doShare: function(data){
 		this.refs[SHARE_PAGE].showWithData(data);
 	},
+
+  showKeyboard: function(data){
+		this.refs[KEYBOARD_PAGE].showWithData(data);
+  },
 
 	_handleDeepLink: function(url) {
 		console.log('handleDeeplink: ' + url)
@@ -1286,6 +1294,12 @@ var MainPage = React.createClass({
 			<SharePage ref={SHARE_PAGE}/>
 		);
 	},
+
+  renderKeyBoard: function(){
+    return(
+      <CustomKeyboard ref={KEYBOARD_PAGE}/>
+    )
+  },
 
 	renderRegisterSuccessPage: function(){
 		return (
@@ -1587,6 +1601,7 @@ var MainPage = React.createClass({
 	    return (
 	    	<View style={styles.container}>
 					{this.renderShareView()}
+          {this.renderKeyBoard()}
 					{this.renderTabbar()}
 					<LoadingIndicator ref='progressBar'/>
 					{this.state.showTutorial ? <TutorialPage type={this.state.tutorialType} hideTutorial={this.hideTutorial}/> : null }

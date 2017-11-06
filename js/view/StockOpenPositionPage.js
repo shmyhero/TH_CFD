@@ -103,6 +103,7 @@ var StockOpenPositionPage = React.createClass({
 			dataStatus:0,//0正常 1等待刷新 2加载中
 			height: UIConstants.getVisibleHeight(),
 			totalCount:0,
+			isFocused: false,
 		};
 	},
 
@@ -1243,6 +1244,7 @@ var StockOpenPositionPage = React.createClass({
 		return (
 			<View style={[styles.sliderView]}>
 				<Slider
+					ref={component => this.bindSliderRef(type, component, type)}
 					style={styles.slider}
 					minimumTrackTintColor={ColorConstants.title_blue()}
 					minimumValue={startPercent}
@@ -1295,6 +1297,15 @@ var StockOpenPositionPage = React.createClass({
 			else if (type === 2) {
 				this._text4 = component
 			}
+		}
+	},
+
+	bindSliderRef: function(type, component){
+		if (type === 1){
+			this._slider1 = component
+		}
+		else if (type === 2) {
+			this._slider2 = component
 		}
 	},
 
@@ -1376,16 +1387,20 @@ var StockOpenPositionPage = React.createClass({
 							<TextInput editable={false} ref={component => this.bindRef(type, component, 1)} defaultValue={percent.toFixed(2)+'%'}
 								style={{flex:3, textAlign:'right', fontSize:17, color: color}}
 								underlineColorAndroid='transparent'/>
-							<View style={{flex:3, alignSelf:'stretch', flexDirection:'column', alignItems:'center', justifyContent:'center'}}>
-								<View style={[styles.stopProfitLossInputBox, {borderColor:'#445c86',}]}>
+							<TouchableOpacity
+								style={{flex:3, alignSelf:'stretch', flexDirection:'column', alignItems:'center', justifyContent:'center'}}
+								onPress={()=>{
+									//this.setState({isFocused: true});
+									this.onChangeStopProfitValuePressed(
+										rowData,
+										type,
+										price.toFixed(rowData.security.dcmCount))
+								}}>
+								<View style={[styles.stopProfitLossInputBox, {borderColor:'#445c86',}]} pointerEvents={'none'}>
 									<TextInput editable={false} ref={component => this.bindRef(type, component, 2)}
 										defaultValue={price.toFixed(rowData.security.dcmCount)}
 										style={styles.stopProfitLossInputBoxText}
 										numberOfLines={1}
-										onFocus={()=>this.onChangeStopProfitValuePressed(
-											rowData,
-											type,
-											price.toFixed(rowData.security.dcmCount))}
 										underlineColorAndroid='transparent'/>
 									{/* <Text ref={component => this.bindRef(type, component, 2)}
 										 style={styles.stopProfitLossInputBoxText}
@@ -1394,15 +1409,10 @@ var StockOpenPositionPage = React.createClass({
 										 {price.toFixed(rowData.security.dcmCount)}
 									</Text> */}
 								</View>
-								<TouchableOpacity
-									style={{position:'absolute', top:0, left:0, right:0, bottom:0, backgroundColor:'transparent'}}
-									onPress={()=>this.onChangeStopProfitValuePressed(
-										rowData,
-										type,
-										price.toFixed(rowData.security.dcmCount))}
-									>
-								</TouchableOpacity>
-							</View>
+
+								{/*
+								</TouchableOpacity> */}
+							</TouchableOpacity>
 						</View>
 						: null
 					}
@@ -1572,6 +1582,12 @@ var StockOpenPositionPage = React.createClass({
 			onInputConfirmed: (newValue)=>{
 				console.log("newValue " + newValue)
 				var newPercent = this.priceToPercentWithRow(newValue, rowData, type)
+				if (type === 1){
+					this._slider1.value = newPercent
+				}
+				else if (type === 2) {
+					this._slider2.value = newPercent
+				}
 				this.setSliderValue(type, newPercent, rowData)
 			}
 		})
@@ -2432,6 +2448,7 @@ var styles = StyleSheet.create({
 	},
 	stopProfitLossInputBoxText: {
 		flex: 1,
+		color: "#000000",
 		textAlign:'center',
 		padding: 0,
 	},

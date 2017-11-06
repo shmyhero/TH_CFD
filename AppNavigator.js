@@ -545,12 +545,12 @@ var AppNavigator = React.createClass({
 			for (var i = 0; i < GUIDE_SLIDES.length; i++) {
 				slides.push(
 					<View style={[styles.guideContainer, {height: height}]} key={i}>
-						<View style={{flex: 6, justifyContent: 'flex-end'}}>
+						<View style={{flex: 7, justifyContent: 'flex-end'}}>
 							<Image
 								style={styles.guideImage}
 								source={GUIDE_SLIDES[i]}/>
 						</View>
-						<View style={{flex: 1, justifyContent: 'flex-end'}} >
+						<View style={{flex: 1, justifyContent: 'center'}} >
 							{i == GUIDE_SLIDES.length - 1 ?
 								<TouchableOpacity onPress={this.enterMainPage}>
 									<View style={styles.guideEnterTextView}>
@@ -613,7 +613,7 @@ var styles = StyleSheet.create({
 		resizeMode: Image.resizeMode.contain,
 	},
 	guideActiveDot: {
-		backgroundColor: 'rgba(255, 255, 255, 0.8)',
+		backgroundColor: '#1962dd',
 		width: 8,
 		height: 8,
 		borderRadius: 4,
@@ -623,7 +623,7 @@ var styles = StyleSheet.create({
 		marginBottom: 20,
 	},
 	guideDot: {
-		backgroundColor:'rgba(0,0,0,.2)',
+		backgroundColor:'#d1e0f8',
 		width: 8,
 		height: 8,
 		borderRadius: 4,

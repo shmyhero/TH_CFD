@@ -10,10 +10,11 @@ import {
   TouchableOpacity,
   Dimensions,
   TextInput,
+  Image,
 } from 'react-native';
 
 var {height, width} = Dimensions.get('window');
-var SHARE_CONTAINER_HEIGHT = 300;
+var SHARE_CONTAINER_HEIGHT = 290;
 var SHARE_CONTAINER_WIDTH = width;
 var KEYBOARD_HEIGHT = SHARE_CONTAINER_HEIGHT - 50
 var BUTTON_HEIGHT = KEYBOARD_HEIGHT / 3;
@@ -42,6 +43,8 @@ export default class CustomKeyboard extends Component {
       getMaxErrorText: data.getMaxErrorText,
       checkError: data.checkError,
       hasDot: data.hasDot,
+      dcmCount: data.dcmCount,
+      error: null,
     })
     this._setModalVisible(true);
     Animated.timing(       // Uses easing functions
@@ -67,6 +70,14 @@ export default class CustomKeyboard extends Component {
 				duration: 200,    // Configuration
 			},
 		).start();
+  }
+
+  getIsShown(){
+    return this.state.modalVisible
+  }
+
+  updateErrorText(value){
+    this.hasError();
   }
 
   onTextButtonPressed(textValue){
@@ -138,7 +149,7 @@ export default class CustomKeyboard extends Component {
     return (
       <TouchableOpacity style={[styles.keyboardButton, {flex: flex}]}
         onPress={()=>this.onTextButtonPressed(value)}>
-        <Text style={{textAlign:'center', fontSize:25}}>
+        <Text style={styles.buttonTextStyle}>
           {value}
         </Text>
       </TouchableOpacity>
@@ -156,9 +167,7 @@ export default class CustomKeyboard extends Component {
     return (
       <TouchableOpacity style={[styles.keyboardButton, styles.delButton]}
         onPress={()=>this.onDelButtonPressed()}>
-        <Text style={{textAlign:'center', fontSize:25}}>
-          删除
-        </Text>
+        <Image style={{height: 23, width:40}} source={require('../../images/delete_button.png')}/>
       </TouchableOpacity>
     )
   }
@@ -167,7 +176,7 @@ export default class CustomKeyboard extends Component {
     return (
       <TouchableOpacity style={styles.keyboardButton}
         onPress={()=>this.onOKButtonPressed()}>
-        <Text style={{textAlign:'center', fontSize:25}}>
+        <Text style={[styles.buttonTextStyle, {fontSize: 27}]}>
           确定
         </Text>
       </TouchableOpacity>
@@ -175,7 +184,6 @@ export default class CustomKeyboard extends Component {
   }
 
   render() {
-    console.log()
     return (
       <Modal
         animationType={"slide"}
@@ -193,9 +201,8 @@ export default class CustomKeyboard extends Component {
 
         <Animated.View style={styles.keyboardContainer}>
           <View style={styles.inputBarContainer}>
-            {/* <TextInput style={styles.keyboardTextInput}
-              value={this.state.currentDisplayText}/> */}
-            <Text style={styles.keyboardTextInput}>
+            <Text style={[styles.keyboardTextInput, this.state.error == null ? {} : styles.error]}
+              ellipsizeMode="tail" numberOfLines={1}>
               {this.state.currentDisplayText}
             </Text>
             <Text style={styles.errorHint}>{this.state.error}</Text>
@@ -256,35 +263,42 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   errorHint:{
-    color: 'red',
+    color: '#b54118',
+    fontSize: 15,
     textAlign: 'center'
   },
+  error:{
+    color: '#b54118',
+  },
   inputBarContainer: {
-    backgroundColor:'#eeeeee',
+    //backgroundColor:'#ecebeb',
     height: 50,
     flexDirection:'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   keyboardContainer: {
     justifyContent: 'center',
     alignItems: 'stretch',
     //padding: 20,
+    backgroundColor: '#ecebeb',
     height: SHARE_CONTAINER_HEIGHT,
   },
   keyboardTextInput:{
     flex:1,
+    fontSize: 19
   },
-  keyboardButton:{flex:1,
+  keyboardButton:{
+    flex:1,
     alignSelf:'stretch',
     borderTopWidth: 0.5,
     borderLeftWidth: 0.5,
-    borderColor: '#eeeeee',
+    borderColor: '#dfdfdf',
     justifyContent:'center',
     alignItems:'center',
-    backgroundColor:'white'
+    backgroundColor:'#f7f7f7'
   },
   keyboardConfirmButton:{
     width:50,
@@ -295,7 +309,7 @@ const styles = StyleSheet.create({
     textAlign:'center'
   },
   delButton: {
-    backgroundColor: "#dddddd"
+    backgroundColor: "#dfdfdf"
   },
   keyboardRowContainer:{
     flexDirection: 'row',
@@ -303,7 +317,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     flex: 1
   },
-
+  buttonTextStyle: {
+    textAlign:'center',
+    fontSize:26
+  },
   row: {
     alignItems: 'center',
     flex: 1,

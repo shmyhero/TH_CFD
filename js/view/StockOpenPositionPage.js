@@ -1371,22 +1371,38 @@ var StockOpenPositionPage = React.createClass({
 					<Text style={styles.extendLeft}>{titleText}</Text>
 					{
 						switchIsOn ?
-						<View style={[styles.extendMiddle, {flexDirection: 'row', flex:3, paddingTop:0, paddingBottom:0}]}>
+						<View style={[styles.extendMiddle,
+							 {flexDirection: 'row', flex:3, paddingTop:0, paddingBottom:0, justifyContent: 'center', alignItems: 'center'}]}>
 							<TextInput editable={false} ref={component => this.bindRef(type, component, 1)} defaultValue={percent.toFixed(2)+'%'}
 								style={{flex:3, textAlign:'right', fontSize:17, color: color}}
 								underlineColorAndroid='transparent'/>
-							<Text style={{flex:1, textAlign:'center', color: '#dfdfdf'}}>|</Text>
-							<TouchableOpacity style={styles.stopProfitLossInputBox}
-								onPress={()=>this.onChangeStopProfitValuePressed(
-									rowData,
-									type,
-									price.toFixed(rowData.security.dcmCount))}
-								>
-								<TextInput editable={false} ref={component => this.bindRef(type, component, 2)} defaultValue={price.toFixed(rowData.security.dcmCount)}
-									style={{textAlign:'center', alignSelf:"stretch", fontSize:17, backgroundColor:'red'}}
-									underlineColorAndroid='transparent'/>
-
-							</TouchableOpacity>
+							<View style={{flex:3, alignSelf:'stretch', flexDirection:'column', alignItems:'center', justifyContent:'center'}}>
+								<View style={[styles.stopProfitLossInputBox, {borderColor:'#445c86',}]}>
+									<TextInput editable={false} ref={component => this.bindRef(type, component, 2)}
+										defaultValue={price.toFixed(rowData.security.dcmCount)}
+										style={styles.stopProfitLossInputBoxText}
+										numberOfLines={1}
+										onFocus={()=>this.onChangeStopProfitValuePressed(
+											rowData,
+											type,
+											price.toFixed(rowData.security.dcmCount))}
+										underlineColorAndroid='transparent'/>
+									{/* <Text ref={component => this.bindRef(type, component, 2)}
+										 style={styles.stopProfitLossInputBoxText}
+										 numberOfLines={1}
+										 underlineColorAndroid='transparent'>
+										 {price.toFixed(rowData.security.dcmCount)}
+									</Text> */}
+								</View>
+								<TouchableOpacity
+									style={{position:'absolute', top:0, left:0, right:0, bottom:0, backgroundColor:'transparent'}}
+									onPress={()=>this.onChangeStopProfitValuePressed(
+										rowData,
+										type,
+										price.toFixed(rowData.security.dcmCount))}
+									>
+								</TouchableOpacity>
+							</View>
 						</View>
 						: null
 					}
@@ -2404,18 +2420,21 @@ var styles = StyleSheet.create({
 		color: '#ffffff',
 	},
 	stopProfitLossInputBox:	{
-		flex:3,
+		flexDirection:'row',
 		alignSelf: "stretch",
 		alignItems: 'center',
 		justifyContent:'center',
-		height: 30,
+		height: 31,
 		borderWidth:1,
-		borderTopColor:'gray',
-		borderLeftColor:'gray',
-		borderRightColor:'gray',
-		borderBottomColor:'gray',
+		borderRadius:3,
 		backgroundColor:'white',
-	}
+		marginLeft: 15,
+	},
+	stopProfitLossInputBoxText: {
+		flex: 1,
+		textAlign:'center',
+		padding: 0,
+	},
 });
 
 

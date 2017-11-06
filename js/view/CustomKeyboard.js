@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     color: '#b54118',
   },
   inputBarContainer: {
-    backgroundColor:'#ecebeb',
+    //backgroundColor:'#ecebeb',
     height: 50,
     flexDirection:'row',
     justifyContent: 'center',
@@ -283,6 +283,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'stretch',
     //padding: 20,
+    backgroundColor: '#ecebeb',
     height: SHARE_CONTAINER_HEIGHT,
   },
   keyboardTextInput:{

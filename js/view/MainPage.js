@@ -180,6 +180,8 @@ export var ayondoLoginResult
 export var refreshMainPage
 export var showSharePage
 export var showKeyboard
+export var getIsKeyboardShown;
+export var updateKeyboardErrorText
 export var gotoLoginPage
 export var gotoTrade
 export var gotoLiveLogin;
@@ -860,6 +862,8 @@ var MainPage = React.createClass({
 		refreshMainPage = this.refreshMainPage
 		showSharePage = this._doShare
     showKeyboard = this.showKeyboard
+    getIsKeyboardShown = this.getIsKeyboardShown
+    updateKeyboardErrorText = this.updateKeyboardErrorText
 		gotoLoginPage = this.gotoLoginPage
 		gotoTrade = this.gotoTrade
 		gotoLiveLogin = this.gotoLiveLogin
@@ -1059,6 +1063,14 @@ var MainPage = React.createClass({
 
   showKeyboard: function(data){
 		this.refs[KEYBOARD_PAGE].showWithData(data);
+  },
+
+  getIsKeyboardShown: function(){
+    return this.refs[KEYBOARD_PAGE].getIsShown()
+  },
+
+  updateKeyboardErrorText: function(value){
+    this.refs[KEYBOARD_PAGE].updateErrorText(value);
   },
 
 	_handleDeepLink: function(url) {

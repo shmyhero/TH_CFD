@@ -431,6 +431,10 @@ var StockOpenPositionPage = React.createClass({
 					this.state.stockInfoRowData[i].security.bid = realtimeStockInfo[j].bid
 					this.state.stockInfoRowData[i].security.last = (realtimeStockInfo[j].ask + realtimeStockInfo[j].bid) / 2;
 					hasUpdate = true;
+
+					if(this.stopProfitLossStockId == this.state.stockInfoRowData[i].security.id ){
+						this.updateStopProfitLossMinMaxValue(this.state.stockInfoRowData[i])
+					}
 				}
 				if (this.state.stockInfoRowData[i].fxData) {
 					var fxData = this.state.stockInfoRowData[i].fxData
@@ -482,6 +486,9 @@ var StockOpenPositionPage = React.createClass({
 				stockInfo: ds.cloneWithRows(this.state.stockInfoRowData)
 			},this.refreshFooterBar(this.state.stockInfoRowData))
 		}
+
+
+
 
 		// if (hasUpdateDetail) {
 		// 	this.setState({stockDetailInfo: sdi})
@@ -1291,6 +1298,13 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
+	stopProfitLossStockId: 0,
+	stopProfitLossKeyboardType: 0, //1 stop profit, 2 stop loss
+	stopProfitMinValue: 0,
+	stopProfitMaxValue: 0,
+	stopLossMinValue: 0,
+	stopLossMaxValue: 0,
+
 	renderStopProfitLoss: function(rowData, type) {
 		var titleText = type===1 ? "止盈" : "止损"
 		var switchIsOn = type===1 ? this.state.stopProfitSwitchIsOn : this.state.stopLossSwitchIsOn
@@ -1347,6 +1361,7 @@ var StockOpenPositionPage = React.createClass({
 
 		var endValue1 = this.percentToPriceWithRow(startPercent, rowData, type)
 		var endValue2 = this.percentToPriceWithRow(endPercent, rowData, type)
+
 		var minValue = Math.min(endValue1, endValue2).toFixed(4)
 		var maxValue = Math.max(endValue1, endValue2).toFixed(4)
 
@@ -1365,9 +1380,7 @@ var StockOpenPositionPage = React.createClass({
 								onPress={()=>this.onChangeStopProfitValuePressed(
 									rowData,
 									type,
-									price.toFixed(rowData.security.dcmCount),
-									minValue,
-									maxValue)}
+									price.toFixed(rowData.security.dcmCount))}
 								>
 								<TextInput editable={false} ref={component => this.bindRef(type, component, 2)} defaultValue={price.toFixed(rowData.security.dcmCount)}
 									style={{textAlign:'center', alignSelf:"stretch", fontSize:17, backgroundColor:'red'}}
@@ -1390,19 +1403,156 @@ var StockOpenPositionPage = React.createClass({
 			</View>)
 	},
 
+	toFixedCeil: function(num, precision) {
+		return (+(Math.ceil(+(num + 'e' + precision)) + 'e' + -precision)).toFixed(precision);
+	},
+
+	toFixedFloor: function(num, precision) {
+		return (+(Math.floor(+(num + 'e' + precision)) + 'e' + -precision)).toFixed(precision);
+	},
+
+	getErrorText: function(type, minValue, maxValue) {
+		if( type == 1){
+			return "(止盈位在" + minValue.toString() + "到" + maxValue.toString() + "之间)";
+		}else if (type == 2){
+			return "(止损位在" + minValue.toString() + "到" + maxValue.toString() + "之间)";
+		}
+	},
+
+	getError: function(value, rowData, type){
+		var maxValue, minValue = 0;
+		if( type == 1){
+			var maxValue = this.toFixedFloor(this.stopProfitMaxValue, rowData.security.dcmCount);
+			var minValue = this.toFixedCeil(this.stopProfitMinValue, rowData.security.dcmCount);
+		}else if (type == 2){
+			var maxValue = this.toFixedFloor(this.stopLossMaxValue, rowData.security.dcmCount);
+			var minValue = this.toFixedCeil(this.stopLossMinValue, rowData.security.dcmCount);
+		}
+
+		if(value < minValue || value > maxValue){
+			return this.getErrorText(type, minValue, maxValue)
+		}
+		return null;
+	},
+
+	getStopProfitLossMinMaxValue: function(rowData, type){
+		var percent = type===1 ? stopProfitPercent : stopLossPercent
+		var startPercent = 0
+		var endPercent = MAX_LOSS_PERCENT
+
+		if (type === 1) {
+			// stop profit
+			startPercent = this.priceToPercentWithRow(rowData.security.last, rowData, type)
+			// use gsmd to make sure this order is guaranteed.
+			startPercent += rowData.security.smd*100*rowData.leverage
+
+			if (startPercent < 0)
+				startPercent = 0
+			endPercent = startPercent + 100
+			if (percent === DEFAULT_PERCENT) {
+				percent = rowData.takePx === undefined ? startPercent
+					: this.priceToPercentWithRow(rowData.takePx, rowData, type)
+				stopProfitPercent = percent
+			}
+		} else{
+			// stop loss
+			startPercent = MAX_LOSS_PERCENT
+			endPercent = this.priceToPercentWithRow(rowData.security.last, rowData, type)
+			// use smd to make sure this order is guaranteed.
+			endPercent -= rowData.security.gsmd*100*rowData.leverage
+
+			if(endPercent - startPercent > 100){
+				startPercent = endPercent - 100
+			}
+
+			if (!stopLossUpdated){//percent === MAX_LOSS_PERCENT) {
+
+				percent = this.priceToPercentWithRow(rowData.stopPx, rowData, type)
+				if (percent < startPercent) {
+					percent = startPercent
+				}
+				stopLossPercent = percent
+			}
+		};
+
+		var endValue1 = this.percentToPriceWithRow(startPercent, rowData, type)
+		var endValue2 = this.percentToPriceWithRow(endPercent, rowData, type)
+
+		var minValue = Math.min(endValue1, endValue2).toFixed(4)
+		var maxValue = Math.max(endValue1, endValue2).toFixed(4)
+		return {
+			minValue:minValue,
+			maxValue: maxValue
+		};
+	},
+
+	updateCurrentStopLossProfitMinMaxValue: function(rowData, type){
+		var values = this.getStopProfitLossMinMaxValue(rowData,type)
+		var minValue = values.minValue;
+		var maxValue = values.maxValue;
+
+		if(type === 1){
+			this.stopProfitMinValue = minValue
+			this.stopProfitMaxValue = maxValue
+		}else if (type === 2){
+			this.stopLossMinValue = minValue
+			this.stopLossMaxValue = maxValue
+		}
+	},
+
+	updateStopProfitLossMinMaxValue: function(rowData){
+
+		console.log("updateStopProfitLossMinMaxValue 1 " + MainPage.getIsKeyboardShown())
+		if(MainPage.getIsKeyboardShown()){
+			console.log("updateStopProfitLossMinMaxValue 2")
+			var type = this.stopProfitLossKeyboardType;
+
+			var previousMinValue = 0;
+			var previousMaxValue = 0;
+
+			var minValue, maxValue = 0;
+
+			if(type === 1){
+				previousMinValue = this.stopProfitMinValue;
+				previousMaxValue = this.stopProfitMaxValue;
+			}else if (type === 2){
+				previousMinValue = this.stopLossMinValue;
+				previousMaxValue = this.stopLossMaxValue;
+			}
+
+			console.log("updateStopProfitLossMinMaxValue 3")
+			this.updateCurrentStopLossProfitMinMaxValue(rowData, type);
+			if(type === 1){
+				minValue = this.stopProfitMinValue;
+				maxValue = this.stopProfitMaxValue;
+			}else if (type === 2){
+				minValue = this.stopLossMinValue;
+				maxValue = this.stopLossMaxValue;
+			}
+			if(previousMinValue != minValue || previousMaxValue != maxValue){
+				console.log("updateStopProfitLossMinMaxValue 4")
+				MainPage.updateKeyboardErrorText(this.getErrorText(rowData, type));
+			}
+		}
+	},
+
 	onChangeStopProfitValuePressed: function(
 		rowData,
 		type,
-		currentValue,
-		minValue,
-		maxValue){
+		currentValue){
+
+		this.stopProfitLossKeyboardType = type;
+		this.stopProfitLossStockId = rowData.security.id;
+
+		this.updateCurrentStopLossProfitMinMaxValue(rowData, type);
+
 		MainPage.showKeyboard({
 			value: currentValue,
-			minValue: minValue,
-			maxValue: maxValue,
+			checkError: (value)=>{
+				return this.getError(value, rowData, type);
+			},
 			hasDot: true,
-			getMaxErrorText: ()=>{return "止盈位在" + minValue.toString() + "到" + maxValue.toString() + "之间"},
-			getMinErrorText: ()=>{return "止盈位在" + minValue.toString() + "到" + maxValue.toString() + "之间"},
+			dcmCount: rowData.security.dcmCount,
 			onInputConfirmed: (newValue)=>{
 				console.log("newValue " + newValue)
 				var newPercent = this.priceToPercentWithRow(newValue, rowData, type)

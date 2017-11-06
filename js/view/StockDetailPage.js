@@ -1801,7 +1801,7 @@ var styles = StyleSheet.create({
 	},
 	errorLabel: {
 		fontSize: 13,
-		color: 'red',
+		color: '#f46b6f',
 		paddingTop: 3,
 		paddingBottom: 3,
 		marginTop: 5,
@@ -1937,10 +1937,6 @@ var styles = StyleSheet.create({
 		color:'#adc7f4',
 		marginRight:10,
 		alignSelf:'flex-end',
-	},
-	title_landspace:{
-		backgroundColor:'red',
-
 	},
 
 });

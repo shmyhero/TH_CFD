@@ -445,7 +445,7 @@ const styles = StyleSheet.create({
     width:32,
     height:32,
     marginLeft:10,
-    borderRadius:20,
+    borderRadius:16,
   },
   HeaderOffset:{
     width:28,

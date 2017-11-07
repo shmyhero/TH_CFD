@@ -192,7 +192,7 @@ export default class CustomKeyboard extends Component {
         onRequestClose={() => {this._setModalVisible(!this.state.modalVisible)}}
         style={{height: height, width: width}}
         >
-        <TouchableOpacity style={{flex:1, width: width, backgroundColor: 'rgba(77,77,77,0.7)',}}
+        <TouchableOpacity style={{flex:1, width: width, backgroundColor: 'rgba(0,0,0,0.7)',}}
           onPress={() => {
             this.hide();
           }}>
@@ -259,9 +259,6 @@ export default class CustomKeyboard extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   errorHint:{
     color: '#b54118',
     fontSize: 15,

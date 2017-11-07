@@ -1401,17 +1401,9 @@ var StockOpenPositionPage = React.createClass({
 										defaultValue={price.toFixed(rowData.security.dcmCount)}
 										style={styles.stopProfitLossInputBoxText}
 										numberOfLines={1}
-										underlineColorAndroid='transparent'/>
-									{/* <Text ref={component => this.bindRef(type, component, 2)}
-										 style={styles.stopProfitLossInputBoxText}
-										 numberOfLines={1}
-										 underlineColorAndroid='transparent'>
-										 {price.toFixed(rowData.security.dcmCount)}
-									</Text> */}
+										underlineColorAndroid='transparent'
+										pointerEvents={'none'}/>
 								</View>
-
-								{/*
-								</TouchableOpacity> */}
 							</TouchableOpacity>
 						</View>
 						: null
@@ -1580,14 +1572,11 @@ var StockOpenPositionPage = React.createClass({
 			hasDot: true,
 			dcmCount: rowData.security.dcmCount,
 			onInputConfirmed: (newValue)=>{
-				console.log("newValue " + newValue)
 				var newPercent = this.priceToPercentWithRow(newValue, rowData, type)
-				if (type === 1){
-					this._slider1.value = newPercent
-				}
-				else if (type === 2) {
-					this._slider2.value = newPercent
-				}
+
+				this.setState({
+					stockInfo: ds.cloneWithRows(this.state.stockInfoRowData),
+				})
 				this.setSliderValue(type, newPercent, rowData)
 			}
 		})

@@ -525,14 +525,23 @@ var MePage = React.createClass({
 
 	renderUserPortraitView: function(){
 		var meData = LogicData.getMeData();
+//		Alert.alert(""+meData.rank)
+		var headRank = LogicData.getRankHead(meData.rank);
 		if(meData.picUrl){
 			return (
-				<Image source={{uri: meData.picUrl}} style={styles.headImage}
-				defaultSource={require('../../images/head_portrait.png')}/>
+			    <View>
+			        <Image source={{uri: meData.picUrl}} style={styles.headImage}
+                    				defaultSource={require('../../images/head_portrait.png')}/>
+                    <Image style = {styles.userHeaderIconRound} source={headRank}></Image>
+			    </View>
 			);
 		}else{
 			return (
-				<Image source={require('../../images/head_portrait.png')} style={styles.headImage} />
+			    <View>
+			        <Image source={require('../../images/head_portrait.png')} style={styles.headImage} />
+                    <Image style = {styles.userHeaderIconRound} source={headRank}></Image>
+			    </View>
+
 			);
 		}
 	},
@@ -540,7 +549,7 @@ var MePage = React.createClass({
 	renderUserInfoView: function(){
 		return(
 			<TouchableOpacity activeOpacity={0.5} onPress={()=>this.gotoUserInfoPage()}>
-				<View style={[styles.rowWrapper, {height:Math.round(88*heightRate)}]}>
+				<View style={[styles.rowWrapper, {height:Math.round(108*heightRate)}]}>
 					{this.renderUserPortraitView()}
 					{this.renderUserNameView()}
 					<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
@@ -775,6 +784,7 @@ var styles = StyleSheet.create({
 	},
 	userInfoWrapper: {
 		flex: 1,
+		marginLeft:10,
 		flexDirection: 'column',
 		backgroundColor: 'white',
 		alignItems: 'flex-start',
@@ -893,7 +903,14 @@ var styles = StyleSheet.create({
 		backgroundColor: '#ff0000',
 		borderRadius: 5,
 		marginRight: 8,
-  },
+    },
+    userHeaderIconRound:{
+      width:114,
+      height:114,
+      marginTop:-85,
+      marginLeft:-30,
+      position:'absolute'
+    },
 
 });
 

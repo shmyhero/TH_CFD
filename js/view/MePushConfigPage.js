@@ -32,7 +32,7 @@ var listRawData = [
 {'type':'separator', 'title':'', 'subtype': 'separatorLine'},
 {'type':'normal', 'title':'公布我的详细交易数据', 'subtype': 'showPersonalData'},
 {'type':'normal', 'title':'公布持仓和平仓的数据', 'subtype': 'showPositionData'},
-{'type':'text', 'title':'虽然全力以赴传递通知，却也不能保证。', 'subtype': 'hint'}
+{'type':'text', 'title':'"公布持仓和平仓的数据"归属于"公布达人榜数据"。', 'subtype': 'hint'}
 ]
 
 var headerDialogMessages = {
@@ -186,6 +186,7 @@ var MePushConfigPage = React.createClass({
 					},
 					body: JSON.stringify({
 						showData: value,
+						showOpenCloseData: value,
 					}),
 				},
 				function(responseJson) {

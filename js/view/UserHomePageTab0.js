@@ -246,12 +246,15 @@ export default class UserHomePageTab0 extends Component{
     //     </View>
     //   )
     // }else{
+
+
+//     			<View style ={styles.ceilWapper}>
+//        		    <Text style = {{color:'#474747',fontSize:15}}>近2周收益：</Text>
+//  					<Text style = {[{color:totolPlColor,fontSize:15},]}>{addValue}{pl2wShow}</Text>
+//        	    </View>
       return(
-  			<View style = {styles.bottomWapper}>
-     			<View style ={styles.ceilWapper}>
-        		<Text style = {{color:'#474747',fontSize:15}}>近2周收益：</Text>
-  					<Text style = {[{color:totolPlColor,fontSize:15},]}>{addValue}{pl2wShow}</Text>
-        	</View>
+  		  <View style = {styles.bottomWapper}>
+
 
           <View style={styles.separatorLine}/>
 

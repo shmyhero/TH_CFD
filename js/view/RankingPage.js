@@ -227,7 +227,8 @@ export default class RankingPage extends Component{
     }
 
     var isUserSelf = LogicData.isUserSelf(rowData.id);
-
+//<Image style = {[styles.userHeader, headRank?styles.HeaderOffset:null]} source={head}></Image>
+//<Image style = {styles.userHeaderIconRound} source={headRank}></Image>
     var winRateShow = (rowData.showData)?rate:emptyStar;
     var posCountShow = (rowData.showData)?rowData.posCount:emptyStar;
     // console.log("rowDara.posCount = " + rowData.posCount + " emptyStar = " + emptyStar);
@@ -236,13 +237,13 @@ export default class RankingPage extends Component{
         <View>
           <TouchableHighlight onPress={()=>this._onPressedUserItem(rowData)} >
             <View style={styles.rowDataStyle}>
-              <View style={{flexDirection:'row'}}>
+              <View style={{flexDirection:'row',marginLeft:5}}>
                 <View style={{'paddingTop':5}}>
-                  <Image style = {[styles.userHeader, headRank?styles.HeaderOffset:null]} source={head}></Image>
+                  <Image style = {[styles.userHeader]} source={head}></Image>
                   <Image style = {styles.userHeaderIconRound} source={headRank}></Image>
                 </View>
 
-                <View style = {{marginLeft:10}}>
+                <View style = {{marginLeft:15}}>
                   <Text style={[styles.userName]}>{rowData.nickname}</Text>
                   <View style = {styles.userInfo}>
                     <Text style={styles.userInfoTitle}>胜率:</Text>
@@ -441,8 +442,8 @@ const styles = StyleSheet.create({
     marginLeft:15,
 	},
   userHeader:{
-    width:40,
-    height:40,
+    width:32,
+    height:32,
     marginLeft:10,
     borderRadius:20,
   },
@@ -454,10 +455,10 @@ const styles = StyleSheet.create({
     borderRadius:14,
   },
   userHeaderIconRound:{
-    width:56,
-    height:56,
-    marginTop:-42,
-    marginLeft:2,
+    width:64,
+    height:64,
+    marginTop:-49.5,
+    marginLeft:-6.5,
     position:'absolute'
   },
   rateArea:{

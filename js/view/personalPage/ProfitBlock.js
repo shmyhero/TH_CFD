@@ -232,16 +232,21 @@ export default class ProfitBlock extends Component {
               <ListView
                 style={styles.list}
                 ref="listview"
-                initialListSize={11}
+                initialListSize={3}
                 dataSource={this.state.stockInfo}
                 enableEmptySections={true}
                 renderRow={(rowData, sectionID, rowID, highlightRow)=>this.renderRow(rowData, sectionID, rowID, highlightRow)}
                 renderSeparator={this.renderSeparator}/>
+
+              <View style={{position:'absolute',width:width,marginTop:-this.state.height,height:this.state.height,backgroundColor:'transparent'}} />
             </View>
           );
         }
     }
   }
+
+
+//
 
 
   renderContent(){

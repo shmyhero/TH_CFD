@@ -45,6 +45,7 @@ var listRawData = [
 {'type':'normal','title':'卡片交易金(元)', 'subtype': 'totalCard'},
 {'type':'normal','title':'开户交易金(元)', 'subtype': 'liveRegister'},
 {'type':'normal','title':'邀请好友交易金(元)', 'subtype': 'referralReward'},
+{'type':'normal','title':'竞猜盈利交易金(元)', 'subtype': 'quiz'},
 ]
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var RULE_DIALOG = "ruleDialog";
@@ -66,6 +67,7 @@ var MyIncomePage = React.createClass({
 			demoRegister: '--',
 			liveRegister: '--',
 			referralReward: '--',
+			quiz: '--',
 			firstDeposit: '--',
 			demoProfit: '--',
 			dataSource: ds.cloneWithRows(listRawData),
@@ -149,6 +151,7 @@ var MyIncomePage = React.createClass({
 					var liveRegister = responseJson.liveRegister ? responseJson.liveRegister : 0;
 					var totalCard = responseJson.totalCard ? responseJson.totalCard : 0;
 					var referralReward = responseJson.referralReward ? responseJson.referralReward : 0;
+					var quiz = responseJson.quiz ? responseJson.quiz : 0;
 					var firstDeposit = responseJson.firstDeposit ? responseJson.firstDeposit : 0;
 					var demoProfit = responseJson.demoProfit ? responseJson.demoProfit : 0;
 					console.log("totalDailySign: " + totalDailySign.toString())
@@ -157,6 +160,7 @@ var MyIncomePage = React.createClass({
 					console.log("liveRegister: " + liveRegister.toString())
 					console.log("totalCard: " + totalCard.toString())
 					console.log("referralReward: " + referralReward.toString())
+					console.log("quiz: " + quiz.toString())
 					console.log("firstDeposit: " + firstDeposit.toString())
 					console.log("demoProfit: " + demoProfit.toString())
 					this.setState({
@@ -166,6 +170,7 @@ var MyIncomePage = React.createClass({
 						demoRegister: demoRegister.toString(),
 						liveRegister: liveRegister.toString(),
 						referralReward: referralReward.toString(),
+						quiz: quiz.toString(),
 						firstDeposit: firstDeposit.toString(),
 						demoProfit: demoProfit.toString(),
 						dataSource: ds.cloneWithRows(listRawData),
@@ -184,6 +189,7 @@ var MyIncomePage = React.createClass({
 				demoRegister: 0,
 				liveRegister: 0,
 				referralReward: 0,
+				quiz: 0,
 				firstDeposit: 0,
 				demoProfit:0,
 				totalCard: 0,
@@ -293,6 +299,9 @@ var MyIncomePage = React.createClass({
 			}
 			else if(rowData.subtype == 'referralReward'){
 				value = this.state.referralReward;
+			}
+			else if(rowData.subtype == 'quiz'){
+				value = this.state.quiz;
 			}
 			else if(rowData.subtype == 'firstDeposit'){
 				value = this.state.firstDeposit;

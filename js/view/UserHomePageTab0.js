@@ -423,7 +423,7 @@ export default class UserHomePageTab0 extends Component{
 					backgroundColor={backgroundColor}
 					chartPaddingLeft={15}
 					chartPaddingRight={15}
-          chartIsPrivate={this.props.isPrivate}
+                    chartIsPrivate={this.props.isPrivate}
 					lineChartGradient={lineChartGradient}
 				>
 				</LineChart>

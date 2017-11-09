@@ -182,7 +182,7 @@ export default class ProfitBlock extends Component {
 						</View>
 
 						<View style={styles.rowCenterPart}>
-							{this.renderProfit(profitAmount, "%")}
+							{this.renderProfit(profitAmount * 100, "%")}
 						</View>
 
 						<View style={styles.rowRightPart}>

@@ -147,10 +147,10 @@ export default class ProfitBlock extends Component {
           <Text style={styles.headerTextLeft}>产品</Text>
         </View>
         <View style={[styles.rowCenterPart, {	paddingRight: 10,}]}>
-          <Text style={[styles.headerTextLeft, {paddingRight: 0,}]}>平均盈利</Text>
+          <Text style={[styles.headerTextLeft, {paddingRight: 0,}]}>平均盈亏</Text>
         </View>
         <View style={styles.rowRightPart}>
-          <Text style={styles.headerTextLeft}>胜率</Text>
+          <Text style={styles.headerTextLeft}>总胜率</Text>
         </View>
       </View>
     );
@@ -186,7 +186,7 @@ export default class ProfitBlock extends Component {
 						</View>
 
 						<View style={styles.rowRightPart}>
-							{this.renderProfit(profitPercentage * 100, "%")}
+							{this.renderProfit2(profitPercentage * 100, "%")}
 						</View>
 					</View>
 				</TouchableHighlight>
@@ -194,7 +194,7 @@ export default class ProfitBlock extends Component {
 		);
 	}
 
-  renderProfit(percentChange, endMark) {
+    renderProfit(percentChange, endMark) {
 		var textSize = Math.round(18*width/375.0)
 		percentChange = percentChange.toFixed(2)
 		var startMark = percentChange > 0 ? "+":null
@@ -205,6 +205,18 @@ export default class ProfitBlock extends Component {
 		);
 
 	}
+
+    renderProfit2(percentChange, endMark) {
+            var textSize = Math.round(18*width/375.0)
+            percentChange = percentChange.toFixed(2)
+            var startMark = percentChange > 0 ? "+":null
+            return (
+                <Text style={[styles.stockPercentText, {fontSize:textSize}]}>
+                     {startMark}{percentChange} {endMark}
+                </Text>
+            );
+
+        }
 
   renderPrivate(){
     return(

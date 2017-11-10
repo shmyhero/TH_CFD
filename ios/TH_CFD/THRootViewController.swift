@@ -84,4 +84,15 @@ class THRootViewController: UIViewController {
             }
         }
     }
+    
+    override func prefersHomeIndicatorAutoHidden() -> Bool {
+        return true
+    }
+    
+//    override func viewDidAppear(_ animated: Bool)
+//    {
+//        super.viewDidAppear(animated)
+//        self.shouldHideHomeIndicator = true
+//        self.setNeedsUpdateOfHomeIndicatorAutoHidden()
+//    }
 }

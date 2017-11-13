@@ -194,6 +194,8 @@ var HomePage = React.createClass({
 			var url = NetConstants.CFD_API.GET_HOMEPAGE_BANNER_API
 		}
 
+		url += '?version='+LogicData.getCurrentVersionString()
+		// console.log('bv:'+url);
 		NetworkModule.fetchTHUrl(
 			url,
 			{

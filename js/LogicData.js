@@ -337,6 +337,16 @@ var LogicData = {
 		return currentVersionCode;
 	},
 
+	getCurrentVersionString: function(){
+		var str = ''
+		str += Math.floor(currentVersionCode / 1000000)
+		str += '.'
+		str += Math.floor(currentVersionCode % 1000000 / 10000)
+		str += '.'
+		str += Math.floor(currentVersionCode % 10000 / 100)
+		return str
+	},
+
 	setOnlineVersionCode: function(value){
 		onlineVersionCode = value;
 	},

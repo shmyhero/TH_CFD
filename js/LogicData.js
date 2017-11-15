@@ -442,6 +442,13 @@ var LogicData = {
 		return debugStatus
 	},
 
+	isIR: function(){
+		var now = new Date();
+		var r = new Date(2017,10,20,0,0,0)
+		var ir = now < r
+		return Platform.OS === "ios" && ir
+	}
+
 	// getFirstDayWithDraw: function(){
 	// 	// return '1';
 	// 	// StorageModule.loadFirstDayWithDraw(value);

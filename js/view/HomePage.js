@@ -856,7 +856,7 @@ var HomePage = React.createClass({
 	},
 
 	renderPopularityView: function() {
-		if(this.state.rawPopularityInfo.length < 3){
+		if(this.state.rawPopularityInfo.length < 3 || LogicData.isIR()){
 			return(
 				<View></View>
 			)
@@ -960,7 +960,7 @@ var HomePage = React.createClass({
 				</TouchableOpacity>
 			)
 
-			if(cardItems!==undefined && cardItems.length > 0 && LogicData.getAccountState()){
+			if(cardItems!==undefined && cardItems.length > 0 && (LogicData.isIR() || LogicData.getAccountState())){
 				return(
 					<View>
 						<View style={[styles.popularityHeaderContainer,{backgroundColor:'white'}]}>

@@ -305,7 +305,9 @@ var StockDetailPage = React.createClass({
 					},
 					60000
 				);
-				this.props.showTutorial('trade')
+				if(!LogicData.isIR()) {
+					this.props.showTutorial('trade')
+				}
 
 				if(!this.setInvestValue(this.state.money, true)){
 					console.log("setInvestValue ")
@@ -1095,7 +1097,12 @@ var StockDetailPage = React.createClass({
 						<Text style={[styles.tradeButtonText, {color: upTextColor}]}>
 							{this.state.stockPriceAsk}
 						</Text>
-						<Image style={styles.tradeButtonImage} source={upImage}/>
+						{
+							LogicData.isIR()?
+							<Text style={{fontSize: 19,color:upTextColor}}>买入</Text>
+							:
+							<Image style={styles.tradeButtonImage} source={upImage}/>
+						}
 					</View>
 				</TouchableHighlight>
 
@@ -1107,7 +1114,12 @@ var StockDetailPage = React.createClass({
 						<Text style={[styles.tradeButtonText, {color: downTextColor}]}>
 							{this.state.stockPriceBid}
 						</Text>
-						<Image style={styles.tradeButtonImage} source={downImage}/>
+						{
+							LogicData.isIR()?
+							<Text style={{fontSize: 19,color:upTextColor}}>卖出</Text>
+							:
+							<Image style={styles.tradeButtonImage} source={downImage}/>
+						}
 					</View>
 				</TouchableHighlight>
 

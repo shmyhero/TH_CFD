@@ -136,6 +136,8 @@ var StockDetailPage = React.createClass({
 			orientation: ORIENTATION_PORTRAIT,
 			chartViewType: CHARTVIEWTYPE_LINE,
 			minInvestUSD: 50,
+			longable: true,
+			shortable: true,
 		};
 	},
 
@@ -291,6 +293,15 @@ var StockDetailPage = React.createClass({
 				if (responseJson.levList && responseJson.levList.length > 0 && !responseJson.levList.includes(this.state.leverage)){
 					newState.leverage = responseJson.levList[0];
 				}
+
+				var MaxTradeableValueError = this.checkMaxTradeableValueError();
+				var tradeableError = MaxTradeableValueError.error;
+				var longable = MaxTradeableValueError.longable;
+				var shortable = MaxTradeableValueError.shortable;
+				
+				newState.tradeableError = tradeableError;
+				newState.longable = longable;
+				newState.shortable = shortable;
 
 				this.setState(newState)
 
@@ -552,7 +563,8 @@ var StockDetailPage = React.createClass({
 
 		this.setState({
 			chartType: type,
-		},loadStockInfoSuccess?this.loadStockPriceToday(true, type, this.state.stockInfo):this.loadStockInfo())
+		}, ()=>this.loadStockInfo())
+		// },loadStockInfoSuccess?this.loadStockPriceToday(true, type, this.state.stockInfo):this.loadStockInfo())
 		// this.loadStockPriceToday(true, type, this.state.stockInfo)
 	},
 
@@ -663,20 +675,30 @@ var StockDetailPage = React.createClass({
 	renderMinTradeMondy:function(){
 		var tradeValue = this.state.money * this.state.leverage
 		var minValue = this.state.tradeDirection === 1 ? this.state.stockInfo.minValueLong : this.state.stockInfo.minValueShort
+		if(this.state.error ){
+		}else{
+			if(minValue){
+				return (
+					<Text style={styles.leftMoneyLabel}>本金*杠杆需大于{minValue.toFixed(0)}美元</Text>
+				);
+			}
+		}
+		return (
+			null
+		);
+	},
+
+	renderErrorHint: function(){
 		if(this.state.error){
 			return (
 				<Text style={styles.errorLabel}>{this.state.error}</Text>
 			);
-		}
-		if(minValue){
+		}else if(this.state.tradeableError){
 			return (
-				<Text style={styles.leftMoneyLabel}> 交易此产品：本金*杠杆需大于{minValue.toFixed(0)}美元</Text>
-			);
-		}else{
-			return (
-				null
+				<Text style={styles.errorLabel}>{this.state.tradeableError}</Text>
 			);
 		}
+		return null;
 	},
 
 	renderLeftMoney:function(){
@@ -862,8 +884,8 @@ var StockDetailPage = React.createClass({
 						{this.renderScroll()}
 					</View>
 					<View style={{flex: 2, alignItems: 'center', justifyContent: 'space-around', paddingTop: 30, paddingBottom: 10}}>
-						{this.renderMinTradeMondy()}
-						{this.renderLeftMoney()}
+						{this.renderErrorHint()}
+						{this.renderMinTradeMondy()}						
 						{/* <Text style={styles.smallLabel}> 手续费为{charge}美元</Text> */}
 						{this.renderOKButton()}
 						{this.renderStockCurrencyWarning()}
@@ -1116,7 +1138,7 @@ var StockDetailPage = React.createClass({
 						</Text>
 						{
 							LogicData.isIR()?
-							<Text style={{fontSize: 19,color:upTextColor}}>卖出</Text>
+							<Text style={{fontSize: 19,color:downTextColor}}>卖出</Text>
 							:
 							<Image style={styles.tradeButtonImage} source={downImage}/>
 						}
@@ -1453,8 +1475,6 @@ var StockDetailPage = React.createClass({
 			})
 			return true;
 		}else{
-			console.log("findAvailableInvestValue")
-			console.log("this.getMoneyArray() " + this.getMoneyArray())
 			var moneyList = this.getMoneyArray().moneyArray
 			console.log(moneyList)
 			for(var i = 0; i < moneyList.length; i++){
@@ -1470,7 +1490,6 @@ var StockDetailPage = React.createClass({
 			}
 		}
 
-		console.log("333333")
 		var error = this.checkError(this.state.money, leverage)
 		this.setState({
 			error: error,
@@ -1492,6 +1511,13 @@ var StockDetailPage = React.createClass({
 		var buttonEnable = this.state.tradeDirection !== 0 && !this.state.tradingInProgress
 		if (this.state.error){
 			buttonEnable = false
+		}else{
+			if (this.state.tradeDirection == 1 && !this.state.longable){
+				buttonEnable = false
+			}
+			else if (this.state.tradeDirection == 2 && !this.state.shortable){
+				buttonEnable = false
+			}
 		}
 		return (
 			<TouchableOpacity
@@ -1573,7 +1599,7 @@ var StockDetailPage = React.createClass({
 			Alert.alert('提示', '小于最小本金: ' + this.state.minInvestUSD.toFixed(0) + 'USD')
 			return
 		}else if (tradeValue < minValue) {
-			Alert.alert('提示', '交易此产品: 本金X杠杆需大于' + minValue.toFixed(0) + '美元\n请增加交易本金或者提升杠杆')
+			Alert.alert('提示', '本金X杠杆需大于' + minValue.toFixed(0) + '美元\n请增加交易本金或者提升杠杆')
 			return
 		} else if (tradeValue > maxValue) {
 			Alert.alert('提示', '高于最大交易额: ' + maxValue.toFixed(0) + 'USD\n(交易额=交易本金X杠杆)')
@@ -1670,6 +1696,26 @@ var StockDetailPage = React.createClass({
 	// 	})
 	// },
 
+	checkMaxTradeableValueError: function(){
+		var error = null;
+		var longable = true;
+		var shortable = true;
+		
+		if(this.state.stockInfo.maxValueLong <= 0 
+			&& this.state.stockInfo.maxValueShort <= 0){
+			error = '由于流动性不足，此品种当前不能交易';
+			longable = false;
+			shortable = false;
+		} else if(this.state.stockInfo.maxValueLong <= 0){
+			error = '由于流动性不足，此品种当前只允许做空'
+			longable = false;
+		} else if(this.state.stockInfo.maxValueShort <= 0){
+			error = '由于流动性不足，此品种当前只允许做多'
+			shortable = false;
+		}
+		return {error, longable, shortable};
+	},
+
 	checkError: function(value, leverage){
 		var maxValue = this.state.tradeDirection === 1 ? this.state.stockInfo.maxValueLong : this.state.stockInfo.maxValueShort;
 		var minValue = this.state.tradeDirection === 1 ? this.state.stockInfo.minValueLong : this.state.stockInfo.minValueShort;
@@ -1681,11 +1727,15 @@ var StockDetailPage = React.createClass({
 		console.log("checkError maxValue " + maxValue)
 		console.log("checkError value " + value)
 		console.log("checkError leverage " + leverage)
+		
+		var leverageArray = this.getAvailableLeverage()
+		var maxLeverage = leverageArray[leverageArray.length - 1];
 
 		var error = null;
-		if (value < this.state.minInvestUSD) {
-			error = "小于最小本金: " + this.state.minInvestUSD.toFixed(0) + "美元";
-		}else if (tradeValue < minValue) {
+
+		if (this.state.money < this.state.minInvestUSD && this.state.money * maxLeverage < this.state.minInvestUSD) {	
+			error = '本金*杠杆需大于' + this.state.minInvestUSD.toFixed(0) + '美元'
+		} else if (tradeValue < minValue) {
 			error = "本金 x 杠杆需大于" + minValue.toString() + "美元";
 		} else if (tradeValue > maxValue) {
 			error = "本金 x 杠杆需小于" + maxValue.toString() + "美元";

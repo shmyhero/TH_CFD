@@ -212,7 +212,7 @@ function getTradeHeroAPI(){
     COMPETITION_PAGE_URL: TRADEHERO_SERVER_IP + '/CDF_BSY_HF/index.php',
     SHARE_DOWNLOAD_URL: TRADEHERO_SERVER_IP + '/activity/download.php',
     LIVE_REGISTER_TERMS: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/SignTerms<id>.html',
-    SHARE_ACHIEVEMENT_CARD_URL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER + '/CardShare.php?id=<id>',
+    SHARE_ACHIEVEMENT_CARD_URL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/CardShare.php?id=<id>',
 
     HELP_CENTER_URL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER + '/HelpCenter.html',
     HELP_CENTER_URL_ACTUAL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/HelpCenter.html',

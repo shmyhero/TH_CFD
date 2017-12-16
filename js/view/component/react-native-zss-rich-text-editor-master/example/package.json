@@ -1,0 +1,14 @@
+{
+  "name": "example",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "react-native start"
+  },
+  "dependencies": {
+    "react": "*",
+    "react-native": "*",
+    "react-native-zss-rich-text-editor": "file:../",
+    "react-native-keyboard-spacer": "^0.3.0"
+  }
+}

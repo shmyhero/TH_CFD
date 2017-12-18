@@ -11,7 +11,7 @@ import { View,
 } from 'react-native';
 var TweetParser = require('./TweetParser');
 var {height, width} = Dimensions.get('window');
-
+var TweetBlock = require('./TweetBlock')
 class TweetComponent extends Component {
     static propTypes = {
         value: PropTypes.string,
@@ -19,7 +19,7 @@ class TweetComponent extends Component {
     }
     
     static defaultProps = {
-        value:'Hello <SPX id=36013/> News!',
+        value:'',
         onValueChanged: (text)=>{}
     }
 
@@ -27,7 +27,7 @@ class TweetComponent extends Component {
         super(props);
         //props.text
         var textNodes = TweetParser.parseTextNodes(this.props.value);
-        console.log("textNodes" + JSON.stringify(textNodes))
+        //console.log("textNodes" + JSON.stringify(textNodes))
         var displayText = this.getDisplayText(textNodes);
         this.state = {
             text: this.props.value,
@@ -39,9 +39,19 @@ class TweetComponent extends Component {
     }
 
     insertItem(item){
+        var linkText = TweetParser.convertItemToTagString(item);
+        console.log("linkText this.state.selection.start " + this.state.selection.start + ", this.state.selection.end " + this.state.selection.end);
 
-        var linkText = "<a href=\"cfd://page/stock/" + item.id + "\">" + item.name + "</a>";
-        this.insertText(linkText, this.state.selection, this.state.selection);
+        this.lastSelection = {
+            start: this.state.selection.start, 
+            end: this.state.selection.end
+        };
+
+        this.insertText(linkText, {
+            start:this.state.selection.start, 
+            end:this.state.selection.end,
+        }
+         );
         
         // this.refs["RichTextEditor"].focusContent()
         // setTimeout(()=>{
@@ -51,7 +61,6 @@ class TweetComponent extends Component {
         //         this.refs["RichTextEditor"].insertLink("cfd://page/stock/" + item.id, item.name);
         //     });
         // }, 1000)
-       
     }
 
     getDisplayText(textNodes){
@@ -119,7 +128,7 @@ class TweetComponent extends Component {
     }
 
     updateSelection(event){
-        console.log("updateSelection" + JSON.stringify(event.nativeEvent))
+        //console.log("updateSelection" + JSON.stringify(event.nativeEvent))
         //if(this.lastPressedKey == ""){
             // console.log(event.nativeEvent)
             var newSelectionStart = Math.min(event.nativeEvent.selection.start,event.nativeEvent.selection.end);
@@ -174,7 +183,7 @@ class TweetComponent extends Component {
 
     onKeyPress(event){
         var pressedKey = event.nativeEvent.key
-        console.log("onKeyPress " + pressedKey)
+        //console.log("onKeyPress " + pressedKey)
         if(pressedKey == "Backspace"){
             pressedKey = "<Backspace/>"
         }
@@ -189,12 +198,12 @@ class TweetComponent extends Component {
         //在RN中无法得知新增的string是什么，
         //目前的解决方案是比较新旧string的不同，将其作为新的值插入。
 
-        console.log("onChangeText newText: " + newTextValue + ", old: " + this.state.displayText)
+        // console.log("onChangeText newText: " + newTextValue + ", old: " + this.state.displayText)
 
         var newSelection = {start:-1, end:-1}
         var oldSelection = {start:-1, end:-1}
         if (this.lastPressedKey=="<Backspace/>"){
-            this.insertText(this.lastPressedKey, this.state.selection, this.state.selection);
+            this.insertText(this.lastPressedKey, this.state.selection);
         }else if(this.state.displayText != newTextValue){
             for(var i = 0; i < Math.min(this.state.displayText.length, newTextValue.length); i++){
                 if(newTextValue[i] != this.state.displayText[i]){
@@ -231,11 +240,12 @@ class TweetComponent extends Component {
             //         break;
             //     }
             // }
-            console.log("newTextValue " + newTextValue);
-            console.log("this.state.displayText " + this.state.displayText);
+
+            // console.log("newTextValue " + newTextValue);
+            // console.log("this.state.displayText " + this.state.displayText);
             
-            console.log("newSelection.end " + newSelection.end + " newTextValue.length " + newTextValue.length)
-            console.log("oldSelection.end " + oldSelection.end + " oldSelection.length " + this.state.displayText.length)
+            // console.log("newSelection.end " + newSelection.end + " newTextValue.length " + newTextValue.length)
+            // console.log("oldSelection.end " + oldSelection.end + " oldSelection.length " + this.state.displayText.length)
             
             if(newSelection.end == -1){
                 newSelection.end = Math.max(newTextValue.length, this.state.displayText.length) - Math.min(newTextValue.length, this.state.displayText.length);
@@ -251,13 +261,20 @@ class TweetComponent extends Component {
             // console.log("onChangeText newText " + newText);
             // console.log("onChangeText oldSelection " + JSON.stringify(oldSelection))
             // newText = newText.replace("\n", "")
-            this.insertText(newText, oldSelection, newSelection);
+            this.insertText(newText, oldSelection);
         }else{
             return;
         }
     }
 
-    insertText(newText, selectionInOriginalText, newSelection){
+    insertText(newText, selectionInOriginalText){
+        // console.log("insertText")
+        // console.log(selectionInOriginalText)
+
+        /////////this.lastSelection////////
+        //在ios中通过键盘输入的字符，onTextChanged在调用之前会先调用onSelectionChanged, 
+        //所以此时的this.state.selection指向的是错误的位置。需要手动把输入之前的selection位置记下来。
+
         var originalText = this.generateText();
         
         var OriginalTextselectionStart = -1;
@@ -363,6 +380,9 @@ class TweetComponent extends Component {
         var newOriginalText = "";
         // console.log("insertText OriginalTextselectionStart " + OriginalTextselectionStart)
         // console.log("insertText OriginalTextselectionEnd " + OriginalTextselectionEnd)
+        // console.log("originalText.substring(0, OriginalTextselectionStart) " + originalText.substring(0, OriginalTextselectionStart));
+        // console.log("this.state.text.substring(OriginalTextselectionEnd, this.state.text.length) " + this.state.text.substring(OriginalTextselectionEnd, this.state.text.length));
+        
         if (newText == "<Backspace/>"){
             if(OriginalTextselectionStart != OriginalTextselectionEnd){
                 newOriginalText = originalText.substring(0, OriginalTextselectionStart)
@@ -378,7 +398,7 @@ class TweetComponent extends Component {
             + this.state.text.substring(OriginalTextselectionEnd, this.state.text.length);
         }
 
-        console.log("newOriginalText " + newOriginalText)
+        //console.log("newOriginalText " + newOriginalText)
 
         this.lastSelection = {
             start: this.state.selection.start, 
@@ -388,8 +408,8 @@ class TweetComponent extends Component {
         textNodes = TweetParser.parseTextNodes(newOriginalText);
         var displayText = this.getDisplayText(textNodes);
 
-        console.log("onChangeText newOriginalText " + newOriginalText)
-        console.log("onChangeText displayText "+ displayText)
+        // console.log("onChangeText newOriginalText " + newOriginalText)
+        // console.log("onChangeText displayText "+ displayText)
 
         if (displayText != this.state.displayText){
             this.props.onValueChanged && this.props.onValueChanged(displayText);
@@ -397,12 +417,10 @@ class TweetComponent extends Component {
         
         this.lastPressedKey = "";
         
-        console.log("newSelection " + JSON.stringify(newSelection))
         this.setState({
             text: newOriginalText,
             textNodes: textNodes,
             displayText: displayText,
-            //selection: {start: newSelection.end, start: newSelection.end}
         })
     
     }
@@ -415,9 +433,7 @@ class TweetComponent extends Component {
                 newText += part.text;
             }else if(part.type == "link"){
                 //We need to remove the @
-                newText += "<a href=\"" + part.link + "\">"
-                    + part.text.substring(1,part.text.length) + 
-                    "</a>";
+                newText += TweetParser.convertNodeToTagString(part);
             }
         }
         return newText;
@@ -425,7 +441,7 @@ class TweetComponent extends Component {
 
     renderShadowText(childViewList){
         if(childViewList.length > 0){
-            console.log("renderShadowText with children")
+            //console.log("renderShadowText with children")
             return (
                 // <TextInput style={[styles.textPart, styles.inputLayout]}
                 //     multiline={true}  
@@ -436,15 +452,14 @@ class TweetComponent extends Component {
                 // </TextInput>);
             );
         }else{
-
-            console.log("renderShadowText with empty")
+            //console.log("renderShadowText with empty")
             return (
                 <Text style={[styles.textPart, styles.inputLayout, {color: 'gray', lineHeight:20}]}>今天你怎么看？</Text>)
         }
     }
 
     render() {
-        console.log("this.state.textNodes " + this.state.textNodes)
+        //console.log("this.state.textNodes " + this.state.textNodes)
         // var parsedListView = this.state.textNodes.map((part, index, array)=>{
         //     if(part.type == "text"){
         //         return (
@@ -466,22 +481,20 @@ class TweetComponent extends Component {
         // })
         // parsedListView.push(<Text key={parsedListView.length} style={styles.textPart}>{"\n"}</Text>)
         
-
         return(
             <View style={{flex: 1, paddingLeft:15, paddingRight:15}}>
                 <View style={{flex: 1, alignItems:'stretch'}}>
-
-                    {/* <TweetBlock value="dfasdf"/> */}
                     {/* {this.renderShadowText(parsedListView)} */}
-                   
+                    <TweetBlock value={this.state.text}/>
                     <TextInput style={[styles.inputLayout,]}
                         ref="TextInput"
                         multiline={true}
                         maxLength={128}
                         value={this.state.displayText}
+                        placeholder="今天你怎么看？"
                         onChange={(event)=>{
-                            console.log("onChange")
-                            console.log(event.nativeEvent)
+                            //console.log("onChange")
+                            //console.log(event.nativeEvent)
                             if(event.nativeEvent.contentSize.height != this.state.textInputHeight){
                                 this.setState({
                                     textInputHeight: event.nativeEvent.contentSize.height,
@@ -492,25 +505,8 @@ class TweetComponent extends Component {
                         onKeyPress={(event) => this.onKeyPress(event)}                
                         selection={this.state.selection}
                         onSelectionChange={(event)=>this.updateSelection(event)}>
-                        {/* {parsedListView} */}
                     </TextInput>
-                </View>
-                {/* <View style={{height:200,backgroundColor:'gray'}}>
-                    <RichTextEditor ref={"RichTextEditor"}
-                        hiddenTitle={true}
-                        initialContentHTML={this.state.text}
-                        contentPlaceholder="今天你怎么看"
-                        selection={{start: 0, end: 10}}/>
-                        <RichTextToolbar
-                        getEditor={() => this.refs["RichTextEditor"]}/>
-                </View>
-               
-                <TouchableOpacity onPress={()=>{
-                        this.insertItem({name:'safdsaf', id:123})
-                    }}
-
-                    style={{width:width, height:100, backgroundColor:'red'}}
-                /> */}
+                </View>                
             </View>
         );
     }
@@ -529,21 +525,12 @@ const styles = StyleSheet.create({
         flex:1,
         fontSize:15,     
         padding:0,
-        position:'absolute',
-        top:0,
-        left:0,
-        right:0,
-        bottom:0,
+        // position:'absolute',
+        // top:0,
+        // left:0,
+        // right:0,
+        // bottom:0,
     },
-
-    textPart:{
-        fontSize: 13,
-    },
-
-    linkedPart:{
-        color:'blue',
-        fontSize: 13,
-    }
 });
 
 //make this component available to the app

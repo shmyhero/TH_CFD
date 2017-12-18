@@ -187,6 +187,7 @@ export var updateKeyboardErrorText
 export var gotoLoginPage
 export var gotoTrade
 export var gotoLiveLogin;
+export var gotoStockDetail;
 
 var recevieDataSubscription = null
 var didAccountChangeSubscription = null;
@@ -878,6 +879,7 @@ var MainPage = React.createClass({
 		gotoLoginPage = this.gotoLoginPage
 		gotoTrade = this.gotoTrade
 		gotoLiveLogin = this.gotoLiveLogin
+		gotoStockDetail = this.gotoStockDetail
 		this.initTabbarEvent()
 		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>this.refreshMainPage());
 		didAccountLoginOutSideSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGIN_OUT_SIDE, ()=>this.gotoLoginPage());
@@ -1147,8 +1149,12 @@ var MainPage = React.createClass({
 				this.refs['myTabbar'].gotoTab("me")
 			}
 			else if(url==='cfd://page/stock') {
-				// this.gotoStockDetail(pushData.CName,
-				// 	id: parseInt(pushData.StockID),);
+				var textList = url.split("/");
+				var id = textList[textList.length-1]
+				this.gotoStockDetail({
+					CName: "",
+					StockID: id,
+				});
 			}
 			initExchangeTab = 0
 			initStockListTab = 1

@@ -14,13 +14,14 @@ import {
 	Dimensions,
 	PanResponder,
 	Modal,
+  Alert,
 	TouchableOpacity,
   TouchableWithoutFeedback,
 	Platform,
 } from 'react-native';
 
 
-
+var LogicData = require('../LogicData');
 var Swiper = require('react-native-swiper')
 var Touchable = require('Touchable');
 var merge = require('merge');
@@ -41,16 +42,19 @@ const BODY_BOTTOM_MARGIN = Platform.OS === 'ios' ? 0 : 30;
 const imageWidth = width - BODY_HORIZON_MARGIN * 2;
 const imageHeight = imageWidth / 630 * 842;
 var actionButtonSize = 61;
+var Toast = require('./component/toast/Toast');
 
 export default class PraiseModal extends Component {
   static propTypes = {
     getNavigator: React.PropTypes.func,
     enoughCredits:React.PropTypes.bool,
+    callback:React.PropTypes.func,
   }
 
   static defaultProps = {
     getNavigator: ()=>{},
     enoughCredits:true,
+    callback: ()=>{},
   }
 
   constructor(props) {
@@ -58,18 +62,14 @@ export default class PraiseModal extends Component {
 
     this.state = {
 			modalVisible: false,
-      title: "",
-      webPageUrl: "",
-      imageUrl: "",
+      tid: undefined,
       loading: true,
 		}
   }
 
-	show(title, webPageUrl, imageUrl) {
+	show(tid) {
     this.setState({
-      title: title,
-      webPageUrl: webPageUrl,
-      imageUrl: imageUrl,
+      tid: tid,
     }, ()=>{
       this._setModalVisible(true);
     })
@@ -94,15 +94,45 @@ export default class PraiseModal extends Component {
   }
 
 
-
-
-
   onCloseButtonPress(){
     this._setModalVisible(false)
   }
 
   onPressedConfirm(){
-    this._setModalVisible(false)
+    // Alert.alert("tid = " + this.state.tid);
+    // this._setModalVisible(false)
+    this.actionReward()
+  }
+
+  actionReward(){
+    var url = NetConstants.CFD_API.GET_TREND_REWARD
+    url = url.replace(/<trendId>/, this.state.tid)
+    var userData = LogicData.getUserData();
+    NetworkModule.fetchTHUrl(
+      url,
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        // cache: 'offline'
+      },
+      (responseJson, isCache) => {
+        console.log("reward: " + JSON.stringify(responseJson));
+        //{"total":310,"remaining":310,"liveOrder":90,"like":20,"share":200}
+        this.setState({
+          // creditsRemain:responseJson.remaining,
+        });
+
+        this._setModalVisible(false)
+        this.props.callback()
+        Toast.show("打赏成功！");
+      },
+      (result) => {
+        console.log(result.errorMessage)
+      }
+    );
   }
 
   // <View style={{alignItems: 'center'}}>

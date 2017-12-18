@@ -20,16 +20,6 @@ var PraiseModal = require('./PraiseModal')
 var PRAISE_MODAL = "praise_modal"
 var TweetBlock = require('./tweet/TweetBlock')
 var listRawData = [
-	{'time':'2017.09.06','id':'00001',
-	'text':'欧洲央行首席经济学家：重新调整资产购重新调整资产购重新调整资产购重新调整资产购重新调整资产购重新调整资产购买，反应了偶广州香目标足部回升的信心即一步增长买，反应了偶广州香目标足部回升的信心即一步增长',
-	'praise':1,'reward':1},
-	{'time':'2017.09.07','id':'00002',
-	'text':'欧洲央行首席经济学家：重新调整资产购买，反应了偶广州香目标足部回升的信心即一步增长买，反应了偶广州香目标足部回升的信心即一步增长',
-	'praise':2,'reward':22},
-	{'time':'2017.09.08','id':'00003',
-	'text':'欧洲央行首席经济学家：重新调整资产购买，反应了偶广州香目标足部回升的信心即一步增长买，反应了偶广州香目标足部回升的信心即一步增长',
-	'praise':3,'reward':33},
-
 ]
 var listResponse = []
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -56,13 +46,18 @@ export default class UserHomePageTab3 extends Component{
 			noMessage: false,
 			contentLoaded: false,
 			isRefreshing: false,
+			trendId:undefined,
 		}
 	}
 
 
 	componentDidMount(){
-			// this.loadArticles();
-			this.refreshCredits();
+			this.refresh()
+	}
+
+	refresh(){
+		this.loadArticles();
+		this.refreshCredits();
 	}
 
 	loadArticles(){
@@ -85,8 +80,8 @@ export default class UserHomePageTab3 extends Component{
 				//{"total":310,"remaining":310,"liveOrder":90,"like":20,"share":200}
 				this.setState({
 					// creditsRemain:responseJson.remaining,
-					listRawData:ds.cloneWithRows(responseJson)
-					// listRawData: ds.cloneWithRows(listRawData),
+					listRawData:ds.cloneWithRows(responseJson),
+					listResponse:responseJson,
 				});
 			},
 			(result) => {
@@ -96,6 +91,7 @@ export default class UserHomePageTab3 extends Component{
 	}
 
 	actionLiked(tid){
+
 		var url = NetConstants.CFD_API.GET_TREND_LIKE
 		url = url.replace(/<trendId>/, tid)
 		var userData = LogicData.getUserData();
@@ -115,6 +111,8 @@ export default class UserHomePageTab3 extends Component{
 				this.setState({
 					// creditsRemain:responseJson.remaining,
 				});
+
+				this.loadArticles();
 			},
 			(result) => {
 				console.log(result.errorMessage)
@@ -122,9 +120,7 @@ export default class UserHomePageTab3 extends Component{
 		);
 	}
 
-	actionPraised(tid){
 
-	}
 
 	refreshCredits(){
 		var userData = LogicData.getUserData();
@@ -197,8 +193,12 @@ export default class UserHomePageTab3 extends Component{
 	}
 
 	renderContent(){
-		//return this.emptyContent();
-		return this.renderList();
+		// console.log("listResponse" + this.state.listResponse.length)
+		if(this.state.listResponse&&this.state.listResponse.length>0){
+			return this.renderList();
+		}else{
+			return this.emptyContent();
+		}
 	}
 
 	onPressItem(rowId){
@@ -229,21 +229,25 @@ export default class UserHomePageTab3 extends Component{
 		if(LogicData.isUserSelf(this.props.userId)){
 
 		}else{
-			this.refs[PRAISE_MODAL].show(rowData.time,
-				rowData.time,
-				rowData.time)
+			this.refs[PRAISE_MODAL].show(rowData.id)
 		}
 	}
 
 	onPressedPraise(rowData){
 		// Alert.alert('onPressPraise ' + rowData.id)
-		this.actionLiked(rowData.id);
+		if(!rowData.Liked){
+			this.actionLiked(rowData.id);
+		}
+
 	}
 
 
 
 	renderRow(rowData,sectionID,rowID){
 		console.log("renderRow"+rowData.id+"======"+rowData.message)
+		var liked = rowData.Liked
+		var iconPraise = liked?require('../../images/icon_praised.png'):require('../../images/icon_praise.png')
+		var textPraise = liked?{color:'#1962dd'}:{}
 		return(
 			<View style={styles.itemLine}>
 				<View style={{width:20,flex:1,alignItems:'center'}}>
@@ -260,8 +264,8 @@ export default class UserHomePageTab3 extends Component{
 						<View style={styles.separator}></View>
 							<View style={{flexDirection:'row'}}>
 								<TouchableOpacity style={styles.operatorItem} onPress={()=>this.onPressedPraise(rowData)}>
-										 <Image style={styles.iconOperator} source={require('../../images/icon_praise.png')}/>
-										 <Text style={styles.textOperator}>{rowData.likes}</Text>
+										 <Image style={styles.iconOperator} source={iconPraise}/>
+										 <Text style={[styles.textOperator,textPraise]}>{rowData.likes}</Text>
 								</TouchableOpacity>
 								<View style={styles.operatorSepator}/>
 								<TouchableOpacity style={styles.operatorItem} onPress={()=>this.onPressedReward(rowData)}>
@@ -303,7 +307,7 @@ export default class UserHomePageTab3 extends Component{
 	renderPraiseModal(){
 		enoughCredits = this.state.creditsRemain&&this.state.creditsRemain>=10?true:false
 		return (
-			<PraiseModal enoughCredits={enoughCredits} ref={PRAISE_MODAL} getNavigator={this.getNavigator}/>
+			<PraiseModal callback={()=>{this.refresh()}} enoughCredits={enoughCredits} ref={PRAISE_MODAL} getNavigator={this.getNavigator}/>
 		);
 	}
 

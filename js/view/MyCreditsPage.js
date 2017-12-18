@@ -33,9 +33,9 @@ var heightRate = height/667.0
 var listRawData = [
 {'type':'header'},
 {'type':'banner'},
-{'type':'normal','title':'实盘下单积分', 'subtype': 'creditsGetLiveOrder'},
-{'type':'normal','title':'卡片点赞积分', 'subtype': 'creditsGetLike'},
-{'type':'normal','title':'卡片分享积分', 'subtype': 'creditsGetShare'},
+// {'type':'normal','title':'实盘下单积分', 'subtype': 'creditsGetLiveOrder'},
+// {'type':'normal','title':'卡片点赞积分', 'subtype': 'creditsGetLike'},
+// {'type':'normal','title':'卡片分享积分', 'subtype': 'creditsGetShare'},
 ]
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -46,9 +46,9 @@ var MyCreditsPage = React.createClass({
 			dataSource: ds.cloneWithRows(listRawData),
 			creditsTotal:'--',
 			creditsRemain:'--',
-			creditsGetLiveOrder:'--',
-			creditsGetLike:'--',
-			creditsGetShare:'--',
+			// creditsGetLiveOrder:'--',
+			// creditsGetLike:'--',
+			// creditsGetShare:'--',
 		};
 	},
 
@@ -61,7 +61,7 @@ var MyCreditsPage = React.createClass({
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
 			NetworkModule.fetchTHUrl(
-				NetConstants.CFD_API.GET_SCORE,
+				NetConstants.CFD_API.GET_SCORE_V2,
 				{
 					method: 'GET',
 					headers: {
@@ -73,14 +73,28 @@ var MyCreditsPage = React.createClass({
 				(responseJson, isCache) => {
 					console.log("my score: " + JSON.stringify(responseJson));
 					//{"total":310,"remaining":310,"liveOrder":90,"like":20,"share":200}
+					var ITEMS = responseJson.Items
+					listRawData = [
+					{'type':'header'},
+					{'type':'banner'},
+					];
+					
+					for(var i = 0;i<ITEMS.length;i++){
+						listRawData.push(
+							{'type':'normal','title':ITEMS[i].name,'value':ITEMS[i].score}
+						)
+					}
+
 					this.setState({
 						dataSource: ds.cloneWithRows(listRawData),
 						creditsTotal:responseJson.total,
 						creditsRemain:responseJson.remaining,
-						creditsGetLiveOrder:responseJson.liveOrder,
-						creditsGetLike:responseJson.like,
-						creditsGetShare:responseJson.share,
+						// creditsGetLiveOrder:responseJson.liveOrder,
+						// creditsGetLike:responseJson.like,
+						// creditsGetShare:responseJson.share,
 					});
+
+
 				},
 				(result) => {
 					console.log(result.errorMessage)
@@ -167,20 +181,20 @@ var MyCreditsPage = React.createClass({
 		}else if(rowData.type=='banner'){
 			 return (this.renderBanner())
 		}else if(rowData.type == 'normal'){
-			var value;
-			if(rowData.subtype == 'creditsGetLiveOrder'){
-				value = this.state.creditsGetLiveOrder;
-			}
-			else if(rowData.subtype == 'creditsGetLike'){
-				value = this.state.creditsGetLike;
-			}
-			else if(rowData.subtype == 'creditsGetShare'){
-				value = this.state.creditsGetShare;
-			}
+			// var value;
+			// if(rowData.subtype == 'creditsGetLiveOrder'){
+			// 	value = this.state.creditsGetLiveOrder;
+			// }
+			// else if(rowData.subtype == 'creditsGetLike'){
+			// 	value = this.state.creditsGetLike;
+			// }
+			// else if(rowData.subtype == 'creditsGetShare'){
+			// 	value = this.state.creditsGetShare;
+			// }
 			return(
 				<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
 					<Text style={styles.title}>{rowData.title}</Text>
-					<Text style={styles.contentValue}>{value}</Text>
+					<Text style={styles.contentValue}>{rowData.value}</Text>
 				</View>
 			);
 		}

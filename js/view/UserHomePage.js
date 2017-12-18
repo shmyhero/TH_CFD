@@ -38,6 +38,7 @@ var MainPage = require('./MainPage')
 var UserHomePageTab0 = require('./UserHomePageTab0')
 var UserHomePageTab1 = require('./UserHomePageTab1')
 var UserHomePageTab2 = require('./UserHomePageTab2')
+var UserHomePageTab3 = require('./UserHomePageTab3')
 var ScrollTabView = require('./component/ScrollTabView2')
 var {EventCenter, EventConst} = require('../EventCenter')
 
@@ -46,7 +47,7 @@ var CHART_TYPE_2MONTH = 0;
 var CHART_TYPE_ALL = 1;
 
 
-var tabNames = ['主页', '持仓', '平仓']
+var tabNames = ['主页','动态' ,'持仓', '平仓']
 
 var emptyStar = '***'
 var btnBgColor = ['#425a85','#425a85','#425a85','#6f3d23','#55707c','#9a820e',]
@@ -458,8 +459,9 @@ export default class UserHomePage extends Component {
 		// userName: PropTypes.string.isRequired,
 		var tabPages = [
 			<UserHomePageTab0 navigator={this.props.navigator} userName = {this.props.userName} userId={this.props.userId} isPrivate={this.state.isPrivate} ref={'page0'}/>,
-			<UserHomePageTab1 navigator={this.props.navigator} userId={this.props.userId} isPrivate={(this.state.isPrivate)||(this.state.isPositionPrivate)} ref={'page1'}/>,
-			<UserHomePageTab2 navigator={this.props.navigator} userId={this.props.userId} isPrivate={(this.state.isPrivate)||(this.state.isPositionPrivate)} ref={'page2'}/>
+			<UserHomePageTab3 navigator={this.props.navigator} userId={this.props.userId} isPrivate={(this.state.isPrivate)||(this.state.isPositionPrivate)} ref={'page1'}/>,
+			<UserHomePageTab1 navigator={this.props.navigator} userId={this.props.userId} isPrivate={(this.state.isPrivate)||(this.state.isPositionPrivate)} ref={'page2'}/>,
+			<UserHomePageTab2 navigator={this.props.navigator} userId={this.props.userId} isPrivate={(this.state.isPrivate)||(this.state.isPositionPrivate)} ref={'page3'}/>,
 		]
 
 		var viewPages = tabNames.map(

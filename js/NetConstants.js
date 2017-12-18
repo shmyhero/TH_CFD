@@ -183,6 +183,12 @@ function getCFDAPI(){
     GET_SCORE: CFD_API_SERVER + '/api/score',
 
     SUBMIT_TREND: CFD_API_SERVER + '/api/trend',
+
+    GET_SCORE_V2: CFD_API_SERVER + '/api/score/v2',
+    GET_TREND_NEXT:CFD_API_SERVER + '/api/trend/<id>/next/<page>',
+    GET_TREND_LIKE:CFD_API_SERVER + '/api/trend/like/<trendId>',
+    GET_TREND_REWARD:CFD_API_SERVER + '/api/trend/reward/<trendId>',
+
   }
 }
 
@@ -215,6 +221,7 @@ function getTradeHeroAPI(){
     SHARE_DOWNLOAD_URL: TRADEHERO_SERVER_IP + '/activity/download.php',
     LIVE_REGISTER_TERMS: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/SignTerms<id>.html',
     SHARE_ACHIEVEMENT_CARD_URL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/CardShare.php?id=<id>',
+    SHARE_TREND_URL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/TrendShare.php?id=<id>',
 
     HELP_CENTER_URL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER + '/HelpCenter.html',
     HELP_CENTER_URL_ACTUAL: TRADEHERO_SERVER_IP + '/' + VersionConstants.WEBPAGE_FOLDER_ACTUAL + '/HelpCenter.html',

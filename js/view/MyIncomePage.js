@@ -35,18 +35,18 @@ buttonFontSize = buttonFontSize > 17 ? 17 : buttonFontSize;
 var UP_INPUT_REF = "upInput"
 var DOWN_INPUT_REF = "downInput"
 
-var listRawData = [
-{'type':'header'},
-{'type':'normal','title':'首日入金交易金(元)', 'subtype': 'firstDeposit'},
-{'type':'normal','title':'模拟收益交易金(元)', 'subtype': 'demoProfit'},
-{'type':'normal','title':'签到交易金(元)', 'subtype': 'totalDailySign'},
-{'type':'normal','title':'模拟下单交易金(元)', 'subtype': 'demoTransaction'},
-{'type':'normal','title':'注册交易金(元)', 'subtype': 'demoRegister'},
-{'type':'normal','title':'卡片交易金(元)', 'subtype': 'totalCard'},
-{'type':'normal','title':'开户交易金(元)', 'subtype': 'liveRegister'},
-{'type':'normal','title':'邀请好友交易金(元)', 'subtype': 'referralReward'},
-{'type':'normal','title':'竞猜盈利交易金(元)', 'subtype': 'quiz'},
+var headerRow = {'type':'header'};
+var defaultRowData = [
+	{ name: '模拟下单交易金(元)', amount: 0 },
+	{ name: '卡片交易金(元)', amount: 0 },
+	{ name: '注册交易金(元)', amount: 0 },
+	{ name: '开户交易金(元)', amount: 0 },
+	{ name: '邀请好友交易金(元)', amount: 0 },
+	{ name: '首日入金交易金(元)', amount: 0 },
+	{ name: '模拟收益交易金(元)', amount: 0 },
+	{ name: '竞猜盈利交易金(元)', amount: 0 }
 ]
+
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var RULE_DIALOG = "ruleDialog";
 var MyIncomePage = React.createClass({
@@ -61,16 +61,7 @@ var MyIncomePage = React.createClass({
 		return {
 			totalReward: '--',
 			unpaidReward: '--',
-			totalDailySign: '--',
-			totalCard: '--',
-			demoTransaction: '--',
-			demoRegister: '--',
-			liveRegister: '--',
-			referralReward: '--',
-			quiz: '--',
-			firstDeposit: '--',
-			demoProfit: '--',
-			dataSource: ds.cloneWithRows(listRawData),
+			dataSource: ds.cloneWithRows([headerRow].concat(defaultRowData)),
 			minTransfer: 60,
 			canTransfer: false,
 			transferMessage: "",
@@ -143,38 +134,12 @@ var MyIncomePage = React.createClass({
 					cache: 'offline'
 				},
 				(responseJson) => {
-					console.log("my detail rewards: " + JSON.stringify(responseJson));
-
-					var totalDailySign = responseJson.totalDailySign;
-					var demoTransaction = responseJson.totalDemoTransaction;
-					var demoRegister = responseJson.demoRegister
-					var liveRegister = responseJson.liveRegister ? responseJson.liveRegister : 0;
-					var totalCard = responseJson.totalCard ? responseJson.totalCard : 0;
-					var referralReward = responseJson.referralReward ? responseJson.referralReward : 0;
-					var quiz = responseJson.quiz ? responseJson.quiz : 0;
-					var firstDeposit = responseJson.firstDeposit ? responseJson.firstDeposit : 0;
-					var demoProfit = responseJson.demoProfit ? responseJson.demoProfit : 0;
-					console.log("totalDailySign: " + totalDailySign.toString())
-					console.log("demoTransaction: " + demoTransaction.toString())
-					console.log("demoRegister: " + demoRegister.toString())
-					console.log("liveRegister: " + liveRegister.toString())
-					console.log("totalCard: " + totalCard.toString())
-					console.log("referralReward: " + referralReward.toString())
-					console.log("quiz: " + quiz.toString())
-					console.log("firstDeposit: " + firstDeposit.toString())
-					console.log("demoProfit: " + demoProfit.toString())
-					this.setState({
-						totalDailySign : totalDailySign.toString(),
-						totalCard: totalCard.toString(),
-						demoTransaction: demoTransaction.toString(),
-						demoRegister: demoRegister.toString(),
-						liveRegister: liveRegister.toString(),
-						referralReward: referralReward.toString(),
-						quiz: quiz.toString(),
-						firstDeposit: firstDeposit.toString(),
-						demoProfit: demoProfit.toString(),
-						dataSource: ds.cloneWithRows(listRawData),
-					});
+					if(Array.isArray(responseJson)){
+						var rowData = [headerRow].concat(responseJson);
+						this.setState({
+							dataSource: ds.cloneWithRows(rowData)
+						})
+					}
 				},
 				(result) => {
 					console.log(result.errorMessage)
@@ -182,18 +147,7 @@ var MyIncomePage = React.createClass({
 			)
 		}else{
 			this.setState({
-				totalReward: 0,
-				unpaidReward: 0,
-				totalDailySign: 0,
-				demoTransaction: 0,
-				demoRegister: 0,
-				liveRegister: 0,
-				referralReward: 0,
-				quiz: 0,
-				firstDeposit: 0,
-				demoProfit:0,
-				totalCard: 0,
-				dataSource: ds.cloneWithRows(listRawData),
+				dataSource: ds.cloneWithRows([headerRow].concat(defaultRowData)),
 			})
 		}
 	},
@@ -249,74 +203,43 @@ var MyIncomePage = React.createClass({
 
 	},
 
-  renderTotalIncome: function(){
-    return(
-			<View style={{flex:1, flexDirection: 'row', justifyContent: 'space-around'}}>
-				<View style={styles.totalTextContainer}>
-	        <Text style={styles.totalRewardTitleText}>
-	          累计获得交易金(元)
-	        </Text>
-	        <Text style={styles.totalRewardText}>
-	          {this.state.totalReward}
-	        </Text>
-	      </View>
-				<View style={styles.totalTextContainer}>
-					<Text style={styles.totalRewardTitleText}>
-						剩余交易金(元)
-					</Text>
-					<Text style={styles.totalRewardText}>
-						{this.state.unpaidReward}
-					</Text>
-				</View>
+	renderTotalIncome: function(){
+		return(
+				<View style={{flex:1, flexDirection: 'row', justifyContent: 'space-around'}}>
+					<View style={styles.totalTextContainer}>
+				<Text style={styles.totalRewardTitleText}>
+				累计获得交易金(元)
+				</Text>
+				<Text style={styles.totalRewardText}>
+				{this.state.totalReward}
+				</Text>
 			</View>
-    );
-  },
+					<View style={styles.totalTextContainer}>
+						<Text style={styles.totalRewardTitleText}>
+							剩余交易金(元)
+						</Text>
+						<Text style={styles.totalRewardText}>
+							{this.state.unpaidReward}
+						</Text>
+					</View>
+				</View>
+			);
+	},
 
 	renderRow: function(rowData, sectionID, rowID) {
 		if(rowData.type == 'header'){
 			return (
-					<View style={[styles.headerWrapper, {backgroundColor: ColorConstants.TITLE_BLUE}]}>
-						{this.renderTotalIncome()}
-					</View>
-			);
-		}
-		else if(rowData.type == 'normal'){
-			var value;
-			if(rowData.subtype == 'totalDailySign'){
-				value = this.state.totalDailySign;
-			}
-			else if(rowData.subtype == 'demoTransaction'){
-				value = this.state.demoTransaction;
-			}
-			else if(rowData.subtype == 'demoRegister'){
-				value = this.state.demoRegister;
-			}
-			else if(rowData.subtype == 'liveRegister'){
-				value = this.state.liveRegister;
-			}
-			else if(rowData.subtype == 'totalCard'){
-				value = this.state.totalCard;
-			}
-			else if(rowData.subtype == 'referralReward'){
-				value = this.state.referralReward;
-			}
-			else if(rowData.subtype == 'quiz'){
-				value = this.state.quiz;
-			}
-			else if(rowData.subtype == 'firstDeposit'){
-				value = this.state.firstDeposit;
-			}
-			else if(rowData.subtype == 'demoProfit'){
-				value = this.state.demoProfit;
-			}
-
-			return(
-				<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-					<Text style={styles.title}>{rowData.title}</Text>
-					<Text style={styles.contentValue}>{value}</Text>
+				<View style={[styles.headerWrapper, {backgroundColor: ColorConstants.TITLE_BLUE}]}>
+					{this.renderTotalIncome()}
 				</View>
 			);
 		}
+		return(
+			<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
+				<Text style={styles.title}>{rowData.name}</Text>
+				<Text style={styles.contentValue}>{rowData.amount}</Text>
+			</View>
+		);
 	},
 
 	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
@@ -408,7 +331,7 @@ var MyIncomePage = React.createClass({
 			<View style={styles.wrapper}>
 				<NavBar title='我的交易金' showBackButton={true} navigator={this.props.navigator}
 					textOnRight='规则'
-					rightTextOnClick={()=>this.showRules()}/>
+					rightTextOnClick={()=>this.showRules()}/>				
 				<ListView
 					style={styles.list}
 					dataSource={this.state.dataSource}

@@ -112,7 +112,7 @@ function getCFDAPI(){
     GET_USER_DAILY_SIGN_INFO: CFD_API_SERVER + '/api/reward/summary',//获取每日签到页面所需信息（需身份验证）
     GET_USER_DAILY_SIGN_MONTH: CFD_API_SERVER + '/api/reward/checkIn/month',//获取当前月份的签到情况(需要身份验证)
     USER_DAILY_SIGN: CFD_API_SERVER + '/api/reward/checkIn',//每日签到 (需要身份验证)
-    GET_TOTAL_UNPAID: CFD_API_SERVER + '/api/reward/unpaid',
+    GET_TOTAL_UNPAID: CFD_API_SERVER + '/api/reward/unpaid/v2',
     GET_TOTAL_REWARD: CFD_API_SERVER + '/api/reward/total',
     GET_CHECK_IN_SHARE_DATA: CFD_API_SERVER + '/api/reward/checkIn/share',
     GET_REGISTER_SHARE_DATA: CFD_API_SERVER + '/api/reward/demoReg/share',

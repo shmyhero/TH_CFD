@@ -13,6 +13,14 @@ var TweetParser = require('./TweetParser');
 var {height, width} = Dimensions.get('window');
 //var TweetBlock = require('./TweetBlock')
 class TweetComponent extends Component {
+
+    /////////this.lastSelection////////
+    //在ios中通过键盘输入的字符，onTextChanged在调用之前会先调用onSelectionChanged, 
+    //所以此时的this.state.selection指向的是错误的位置。需要手动把输入之前的selection位置记下来。
+
+    lastSelection = {start:0, end:0}
+    lastPressedKey = "";
+
     static propTypes = {
         value: PropTypes.string,
         onValueChanged: PropTypes.func,
@@ -176,11 +184,6 @@ class TweetComponent extends Component {
         //}
     }
 
-    inputText = ""
-    lastSelection = {start:0, end:0}
-    lastPressedKey = "";
-    lastText = "";
-
     onKeyPress(event){
         var pressedKey = event.nativeEvent.key
         //console.log("onKeyPress " + pressedKey)
@@ -270,10 +273,6 @@ class TweetComponent extends Component {
     insertText(newText, selectionInOriginalText){
         // console.log("insertText")
         // console.log(selectionInOriginalText)
-
-        /////////this.lastSelection////////
-        //在ios中通过键盘输入的字符，onTextChanged在调用之前会先调用onSelectionChanged, 
-        //所以此时的this.state.selection指向的是错误的位置。需要手动把输入之前的selection位置记下来。
 
         var originalText = this.generateText();
         
@@ -412,7 +411,7 @@ class TweetComponent extends Component {
         // console.log("onChangeText displayText "+ displayText)
 
         if (displayText != this.state.displayText){
-            this.props.onValueChanged && this.props.onValueChanged(displayText);
+            this.props.onValueChanged && this.props.onValueChanged(newOriginalText);
         }
         
         this.lastPressedKey = "";
@@ -489,7 +488,7 @@ class TweetComponent extends Component {
                     <TextInput style={[styles.inputLayout,]}
                         ref="TextInput"
                         multiline={true}
-                        maxLength={128}
+                        maxLength={240}
                         value={this.state.displayText}
                         placeholder="今天你怎么看？"
                         onChange={(event)=>{
@@ -525,6 +524,7 @@ const styles = StyleSheet.create({
         flex:1,
         fontSize:15,     
         padding:0,
+        color: '#333333',
         // position:'absolute',
         // top:0,
         // left:0,

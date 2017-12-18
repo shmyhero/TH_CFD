@@ -689,7 +689,8 @@ var MainPage = React.createClass({
 		}else if(route.name === NEW_TWEET_PAGE_ROUTE){
 			return (
 				<NewTweetPage navigator={navigationOperations}
-					routeMapper={this.RouteMapper}/>
+					routeMapper={this.RouteMapper}
+					onPopOut={route.onPopOut}/>
 			)
 		}
 

@@ -15,6 +15,7 @@ import {
 } from 'react-native-update';
 
 
+var {height, width} = Dimensions.get('window')
 import Picker from 'react-native-picker';
 var MainPage = require('./MainPage');
 var NetConstants = require('../NetConstants');
@@ -143,6 +144,16 @@ export default class DevelopPage extends Component {
               </Text>
             </TouchableOpacity>
   				</View>
+          
+          <View style={{flexDirection: 'row', padding:15,}}>
+            <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}}
+              onPress={()=>this.showNewTweetPage()}>
+              <Text style={{color:'white', fontSize: 16}}>
+                新动态
+              </Text>
+            </TouchableOpacity>
+          </View>
+
           <View style={{flexDirection: 'row', padding:15,}}>
             <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}} onPress={()=>this.deleteLiveAcccount()}>
               <Text style={{color:'white', fontSize: 16}}>
@@ -173,10 +184,19 @@ export default class DevelopPage extends Component {
               </Text>
             </TouchableOpacity>
           </View>
+
+          
           <StockTransactionInfoModal ref='page'/>
         </ScrollView>
       </View>
     );
+  }
+
+  showNewTweetPage(){
+    this.props.navigator.push({
+			name: MainPage.NEW_TWEET_PAGE_ROUTE,
+			onPopToRoute: ()=>{console.log("onPopToRoute");}
+		});
   }
 
   showPage(){
@@ -268,6 +288,7 @@ export default class DevelopPage extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: width,
   },
   rowTitle:{
     color: '#333333',

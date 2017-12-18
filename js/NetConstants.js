@@ -181,6 +181,8 @@ function getCFDAPI(){
 
     START_UP_ACTIVITY: CFD_API_SERVER + '/api/common/activity?isLive=<isLive>',
     GET_SCORE: CFD_API_SERVER + '/api/score',
+
+    SUBMIT_TREND: CFD_API_SERVER + '/api/trend',
   }
 }
 

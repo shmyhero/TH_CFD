@@ -41,5 +41,8 @@ android/app/libs
 android/keystores/debug.keystore
 
 android/app/src/main/java/com/tradehero/cfd/views/chartDrawer/base/CandleChartDrawer.java
+android/app/bin
+android/MPChartLib/bin
+android/openCVLibrary320/bin
 
 .project

@@ -30,8 +30,23 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var searchText = ""
 var didFocusSubscription = null;
 
+export let SEARCH_TYPE_BOOKMARK = "bookmark";
+export let SEARCH_TYPE_GET_ITEM = "getItem";
+
 var StockSearchPage = React.createClass({
 	mixins: [TimerMixin],
+
+	propTypes: {
+		searchType: React.PropTypes.string,
+		onGetItem: React.PropTypes.func,
+	},
+	
+	getDefaultProps() {
+		return {
+			searchType: SEARCH_TYPE_BOOKMARK,		
+			onGetItem: (item)=>{}	
+		}
+	},	
 
 	getInitialState: function() {
 		return {
@@ -63,18 +78,34 @@ var StockSearchPage = React.createClass({
 
 	updateSearchHistory: function() {
 		// load history
-		LogicData.getSearchStockHistory()
-		.then((history)=>{
-			this.setState({
-				historyRawInfo: history,
-				historyInfo: ds.cloneWithRows(history),
-			})
-		});
+		if(this.props.searchType == SEARCH_TYPE_BOOKMARK){
+			LogicData.getSearchStockHistory()
+			.then((history)=>{
+				this.setState({
+					historyRawInfo: history,
+					historyInfo: ds.cloneWithRows(history),
+				})
+			});
+		}else if(this.props.searchType == SEARCH_TYPE_GET_ITEM){
+			LogicData.getInputSearchStockHistory()
+			.then((history)=>{
+				console.log("getInputSearchStockHistory")
+				this.setState({
+					historyRawInfo: history,
+					historyInfo: ds.cloneWithRows(history),
+				})
+			});
+		}
+		
 	},
 
 	cleanSearchHistory: function() {
 		var history = []
-		LogicData.setSearchStockHistory(history)
+		if(this.props.searchType == SEARCH_TYPE_BOOKMARK){
+			LogicData.setSearchStockHistory(history)
+		}else if(this.props.searchType == SEARCH_TYPE_GET_ITEM){
+			LogicData.setInputSearchStockHistory(history)
+		}
 		this.setState({
 			historyRawInfo: history,
 			historyInfo: ds.cloneWithRows(history),
@@ -207,15 +238,21 @@ var StockSearchPage = React.createClass({
 	},
 
 	stockPressed: function(rowData) {
-		LogicData.addStockToSearchHistory(rowData)
-		this.props.navigator.push({
-			name: MainPage.STOCK_DETAIL_ROUTE,
-			stockRowData: rowData
-		});
+		if(this.props.searchType == SEARCH_TYPE_BOOKMARK){
+			LogicData.addStockToSearchHistory(rowData)
+			this.props.navigator.push({
+				name: MainPage.STOCK_DETAIL_ROUTE,
+				stockRowData: rowData
+			});
 
-		var eventParam = {};
-		eventParam[TalkingdataModule.KEY_STOCK_ID] = rowData.id,
-		TalkingdataModule.trackEvent(TalkingdataModule.SEARCH_AND_LOOK_EVENT, '', eventParam)
+			var eventParam = {};
+			eventParam[TalkingdataModule.KEY_STOCK_ID] = rowData.id,
+			TalkingdataModule.trackEvent(TalkingdataModule.SEARCH_AND_LOOK_EVENT, '', eventParam)
+		}else{
+			LogicData.addInputSearchStockHistory(rowData)
+			this.props.onGetItem && this.props.onGetItem(rowData)
+			this.props.navigator.pop();
+		}
 	},
 
 	renderRowHistory: function(rowData, sectionID, rowID, highlightRow) {
@@ -231,21 +268,27 @@ var StockSearchPage = React.createClass({
 		var myListData = LogicData.getOwnStocksData()
 		var index = myListData.findIndex((stock) => {return stock.id === rowData.id})
 
+		console.log("renderRow this.props.searchType " + this.props.searchType)
 		var viewStyle = Platform.OS === 'android' ?
 			{paddingLeft: 7, paddingRight: 7} :
 			{paddingLeft: 6, paddingRight: 6, paddingBottom: 3}
-		if (index === -1) {
-			rightPartContent =
-					<TouchableOpacity style={styles.addToMyListContainer}
-							onPress={() => onPressFunction(rowID)}>
-						<View style={[styles.addToMyListView, viewStyle]}>
-							<Text style={styles.addToMyListText}>
-								+
-							</Text>
-						</View>
-
-					</TouchableOpacity>
+		if(this.props.searchType == SEARCH_TYPE_GET_ITEM){
+			rightPartContent = <View/>;
+		}else{
+			if (index === -1) {
+				rightPartContent =
+						<TouchableOpacity style={styles.addToMyListContainer}
+								onPress={() => onPressFunction(rowID)}>
+							<View style={[styles.addToMyListView, viewStyle]}>
+								<Text style={styles.addToMyListText}>
+									+
+								</Text>
+							</View>
+	
+						</TouchableOpacity>
+			}
 		}
+		
 		return (
 			<TouchableOpacity onPress={() => this.stockPressed(rowData)}>
 				<View style={styles.rowWrapper} key={rowData.key}>

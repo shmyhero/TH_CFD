@@ -17,7 +17,7 @@ import {
 	TouchableOpacity,
 } from 'react-native'
 
-import TimerEnhance from 'react-native-smart-timer-enhance'
+//import TimerEnhance from 'react-native-smart-timer-enhance'
 import PullToRefreshListView from 'react-native-smart-pull-to-refresh-listview'
 import ColorConstants from '../ColorConstants'
 

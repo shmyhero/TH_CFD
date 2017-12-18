@@ -88,6 +88,7 @@ var RankingPage = require('./RankingPage');
 var UserHomePage = require('./UserHomePage');
 var FSModule = require('../module/FSModule');
 var CustomKeyboard = require('./CustomKeyboard');
+var NewTweetPage = require('./tweet/NewTweetPage')
 
 var TutorialPage = require('./TutorialPage');
 
@@ -149,6 +150,7 @@ export let WITHDRAW_RESULT_ROUTE = 'withdrawFailedRoute'
 export let RANKING_PAGE_ROUTE = 'rankingPageRoute'
 export let USER_HOME_PAGE_ROUTE = 'userHomePageRoute'
 export let PROMOTION_CODE_PAGE_ROUTE = 'promotionCodePage'
+export let NEW_TWEET_PAGE_ROUTE = 'newTweetPageRoute'
 
 const NoBackSwipe ={
   ...Navigator.SceneConfigs.PushFromRight,
@@ -327,11 +329,15 @@ var MainPage = React.createClass({
 			);
 		} else if (route.name === STOCK_SEARCH_ROUTE) {
 			hideTabbar()
+			console.log("route.searchType " + route.searchType)
 			return (
 				<View style={{flex: 1}}>
 					<NavBar onlyShowStatusBar={true}
 						backgroundColor={ColorConstants.title_blue()}/>
-					<StockSearchPage navigator={navigationOperations} style={{flex: 1}}/>
+					<StockSearchPage navigator={navigationOperations} 
+						style={{flex: 1}}
+						searchType={route.searchType}
+						onGetItem={route.onGetItem}/>
 				</View>
 			);
 		} else if (route.name === STOCK_DETAIL_ROUTE) {
@@ -678,6 +684,11 @@ var MainPage = React.createClass({
 				<PromotionCodePage navigator={navigationOperations}
 					routeMapper={this.RouteMapper}
 					onPop={route.onPop}/>
+			)
+		}else if(route.name === NEW_TWEET_PAGE_ROUTE){
+			return (
+				<NewTweetPage navigator={navigationOperations}
+					routeMapper={this.RouteMapper}/>
 			)
 		}
 
@@ -1134,6 +1145,10 @@ var MainPage = React.createClass({
 			}
 			else if(url==='cfd://page/me') {
 				this.refs['myTabbar'].gotoTab("me")
+			}
+			else if(url==='cfd://page/stock') {
+				// this.gotoStockDetail(pushData.CName,
+				// 	id: parseInt(pushData.StockID),);
 			}
 			initExchangeTab = 0
 			initStockListTab = 1

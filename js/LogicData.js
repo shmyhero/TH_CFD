@@ -14,6 +14,7 @@ var wechatUserData = {};
 var ownStocksData = [];
 var ownStocksDataLive = [];
 var searchStockHistory = null;
+var inputStockHistory = null;
 var balanceData = null;
 var balanceDataLive = null;
 var fxData = [];
@@ -67,6 +68,7 @@ var LogicData = {
 			}
 
 			searchStockHistory = null;
+			inputStockHistory = null;
 
 			StorageModule.setAccountState(state)
 			console.log("setAccountState = " + state);
@@ -234,6 +236,54 @@ var LogicData = {
 			return [];
 		}
   },
+
+
+	setInputSearchStockHistory: function(stocksData){
+		inputStockHistory = stocksData
+		if(accountState){
+			StorageModule.setInputSearchStockHistory(JSON.stringify(stocksData))
+		}else{
+			StorageModule.setInputSearchStockHistory(JSON.stringify(stocksData))
+		}
+    },
+
+	getInputSearchStockHistory: function(){
+		return new Promise(resolve=>{
+			if(inputStockHistory == null){
+				StorageModule.loadInputSearchStockHistory()
+				.then((value) => {
+					if (value !== null) {
+						inputStockHistory = JSON.parse(value);
+						resolve(inputStockHistory);
+					}else{
+						inputStockHistory = [];
+					}
+				})
+			}else{
+				resolve(inputStockHistory);
+			}
+		});
+	},
+
+
+	addInputSearchStockHistory: function(stockData) {
+		console.log("addInputSearchStockHistory ")
+		if(inputStockHistory){
+			var findResult = inputStockHistory.find((stock)=>{return stock.id === stockData.id})
+			if (findResult === undefined) {
+				inputStockHistory.unshift(stockData)
+						if(accountState){
+					StorageModule.setInputSearchStockHistory(JSON.stringify(inputStockHistory))
+						}else{
+							StorageModule.setSearchHistory(JSON.stringify(inputStockHistory))
+						}
+			}
+			// if exist, not update.
+			return inputStockHistory
+		}else{
+			return [];
+		}
+	},
 
 	setBalanceData: function(data) {
 		if(accountState){

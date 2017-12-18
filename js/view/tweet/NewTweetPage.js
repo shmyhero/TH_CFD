@@ -22,7 +22,8 @@ class NewTweetPage extends Component {
         super(props)
         
         this.state = {
-            text: "12 <a href=\"cfd://page/stock/36004\">456</a> 89",
+            text: "",
+            // text: "12 <a href=\"cfd://page/stock/36004\">456</a> 89",
         };
     }
 

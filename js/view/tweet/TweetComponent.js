@@ -11,7 +11,7 @@ import { View,
 } from 'react-native';
 var TweetParser = require('./TweetParser');
 var {height, width} = Dimensions.get('window');
-var TweetBlock = require('./TweetBlock')
+//var TweetBlock = require('./TweetBlock')
 class TweetComponent extends Component {
     static propTypes = {
         value: PropTypes.string,
@@ -485,7 +485,7 @@ class TweetComponent extends Component {
             <View style={{flex: 1, paddingLeft:15, paddingRight:15}}>
                 <View style={{flex: 1, alignItems:'stretch'}}>
                     {/* {this.renderShadowText(parsedListView)} */}
-                    <TweetBlock value={this.state.text}/>
+                    {/* <TweetBlock value={this.state.text}/> */}
                     <TextInput style={[styles.inputLayout,]}
                         ref="TextInput"
                         multiline={true}

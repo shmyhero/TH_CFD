@@ -1,10 +1,12 @@
 //import liraries
-import React, { Component } from 'react';
+import React, { Component, PropTypes} from 'react';
 import { View, Text, StyleSheet,
     Dimensions,
     TextInput, 
     TouchableHighlight,
-    TouchableOpacity} from 'react-native';
+    TouchableOpacity,
+    Alert
+} from 'react-native';
 var NavBar = require('../NavBar')
 var TweetComponent = require('./TweetComponent')
 var MainPage = require('../MainPage')
@@ -18,6 +20,14 @@ var {height, width} = Dimensions.get('window')
 const TWEET_WRITER = "TweetWriter"
 // create a component
 class NewTweetPage extends Component {
+    static propTypes = {
+        onPopOut: PropTypes.func,
+    }
+
+    static defaultProps = {
+        onPopOut: ()=>{}
+    }
+
     constructor(props){
         super(props)
         
@@ -64,12 +74,13 @@ class NewTweetPage extends Component {
                 body: JSON.stringify(body),
             },
             (responseJson) => {
-               //  Alert.alert('set deviceToken success auth： ' + alertData.deviceToken +" * " +alertData.deviceType);
-                console.log()
+                if(this.props.onPopOut){
+                    this.props.onPopOut();
+                }
                 this.props.navigator.pop();
             },
             (result) => {
-                console.log('errorMessage' + result.errorMessage);
+                Alert.alert('发布失败', result.errorMessage);
             }
         )
     }
@@ -77,7 +88,7 @@ class NewTweetPage extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <NavBar title="发表动态" showBackButton={true} navigator={this.props.navigator}
+                <NavBar title="发布动态" showBackButton={true} navigator={this.props.navigator}
                     textOnRight='发送'
 					rightTextOnClick={()=>this.pressCommitButton()}
 					enableRightText={this.state.text.length>0}/>

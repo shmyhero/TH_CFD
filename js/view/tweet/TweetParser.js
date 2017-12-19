@@ -28,23 +28,16 @@ export function parseTextNodes(stringValue){
             var hrefTextStart = linkText.indexOf(hrefSearchText);
             var displayText = "@" + linkText.substring(displayTextStart+1, displayTextEnd);
             var linkUrl = linkText.substring(hrefTextStart+hrefSearchText.length); //Remove two "s
-            linkUrl = linkUrl.split("\"")[0]
+            linkUrl = ""+linkUrl.split("\"")[0]
             var nodeObj = {
                 type: "link",
                 text: displayText,
                 link: linkUrl,
                 originalText: linkText
             }
-            console.log("linkUrl " + linkUrl)
-            console.log("linkUrl " + linkUrl[0])
-            console.log(linkUrl.startsWith("cfd"))
-            console.log(linkUrl.startsWith("cfd://page/stock/"))
-            if(linkUrl.startsWith("cfd://page/stock/")){
-                console.log("aaaa")
+            if(linkUrl.indexOf("cfd://page/stock/") == 0){
                 var textList = linkUrl.split("/");
                 nodeObj.id = parseInt(textList[textList.length-1]);
-            }else{
-                console.log("bbbb")
             }
             console.log("node " + JSON.stringify(nodeObj))
             textNodes.push(nodeObj)  

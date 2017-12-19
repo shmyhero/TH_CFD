@@ -243,12 +243,22 @@ class TweetComponent extends Component {
                     oldSelection.end = this.state.displayText.length;
                     newSelection.end = 0;
                 }else{
-                    for(var i = 0; i < this.state.displayText.length; i++){
+                    //只比较较短的String末尾到selectionStart的部分。
+                    for(var i = 0; i < Math.min(this.state.displayText.length, newTextValue.length) - newSelection.start; i++){
                         if(newTextValue[newTextValue.length-i] != this.state.displayText[this.state.displayText.length-i]){
                             newSelection.end = newTextValue.length-i+1;
                             oldSelection.end = this.state.displayText.length-i+1;
                             break;
                         }
+                    }
+                    
+                    //如果没有找到新的selecitonend，则表明短的string的selectionend = selection.start，
+                    //长的string的selectionend = selection.start + 两个string的长度差
+                    if(newSelection.end == -1){                        
+                        newSelection.end = newSelection.start + Math.max(0, newTextValue.length - this.state.displayText.length);
+                    }
+                    if(oldSelection.end == -1){
+                        oldSelection.end = oldSelection.start + Math.max(0, this.state.displayText.length - newTextValue.length);
                     }
                 }
             }

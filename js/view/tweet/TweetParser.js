@@ -29,18 +29,25 @@ export function parseTextNodes(stringValue){
             var displayText = "@" + linkText.substring(displayTextStart+1, displayTextEnd);
             var linkUrl = linkText.substring(hrefTextStart+hrefSearchText.length); //Remove two "s
             linkUrl = linkUrl.split("\"")[0]
-            var id = 0;
-            if(linkUrl.startsWith("cfd://page/stock/")){
-                var textList = linkUrl.split("/");
-				id = textList[textList.length-1]   
-            }
-            textNodes.push({
+            var nodeObj = {
                 type: "link",
                 text: displayText,
-                id: id,
                 link: linkUrl,
                 originalText: linkText
-            })  
+            }
+            console.log("linkUrl " + linkUrl)
+            console.log("linkUrl " + linkUrl[0])
+            console.log(linkUrl.startsWith("cfd"))
+            console.log(linkUrl.startsWith("cfd://page/stock/"))
+            if(linkUrl.startsWith("cfd://page/stock/")){
+                console.log("aaaa")
+                var textList = linkUrl.split("/");
+                nodeObj.id = parseInt(textList[textList.length-1]);
+            }else{
+                console.log("bbbb")
+            }
+            console.log("node " + JSON.stringify(nodeObj))
+            textNodes.push(nodeObj)  
         }       
         stringValue = stringValue.substring(rightIndex+4)
     }

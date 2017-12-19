@@ -87,8 +87,9 @@ class NewTweetPage extends Component {
     }
 
     render() {
+        var {height, width} = Dimensions.get('window');
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, {height: height,}]}>
                 <NavBar title="发布动态" showBackButton={true} navigator={this.props.navigator}
                     textOnRight='发送'
 					rightTextOnClick={()=>this.pressCommitButton()}
@@ -117,7 +118,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: width,
-        height: height,
     },
     bottomActionBar: {
         width:width, 

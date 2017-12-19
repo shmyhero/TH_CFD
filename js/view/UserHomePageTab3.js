@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
 		justifyContent:'center',
 		alignItems:'center',
 		position:'absolute',
-		top:height*2/5,
+		top:height - 220 - 120,//220是ViewPage以上的部分
 		left:width*3/4,
 	},
 
@@ -346,7 +346,7 @@ const styles = StyleSheet.create({
 		flexWrap:'wrap',
 	},
 	itemLine:{
-		height:165,
+		// height:165,
 		flexDirection:'row'
 	},
 	itemOperator:{
@@ -377,6 +377,7 @@ const styles = StyleSheet.create({
 		fontSize:12,
 		color:'#8f8f8f',
 		marginTop:15,
+		marginBottom:5,
 	},
 	iconOperator:{
 		 width:16,

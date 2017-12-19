@@ -174,7 +174,7 @@ export default class UserHomePageTab3 extends Component{
 	onPressedEditView(){
     this.props.navigator.push({
 			name: MainPage.NEW_TWEET_PAGE_ROUTE,
-			onPopToRoute: ()=>{console.log("onPopToRoute");}
+			onPopOut: ()=>{this.refresh()}
 		});
 	}
 
@@ -251,7 +251,7 @@ export default class UserHomePageTab3 extends Component{
 		return(
 			<View style={styles.itemLine}>
 				<View style={{width:20,flex:1,alignItems:'center'}}>
-					<View style={[styles.lineV,{height:15}]}></View>
+					<View style={[styles.lineV,{height:17}]}></View>
 					<Image style={{width:14,height:14}} source={require('../../images/localize.png')}/>
 					<View style={[styles.lineV,{flex:1}]}></View>
 				</View>
@@ -302,8 +302,6 @@ export default class UserHomePageTab3 extends Component{
 		)
 	}
 
-
-
 	renderPraiseModal(){
 		enoughCredits = this.state.creditsRemain&&this.state.creditsRemain>=10?true:false
 		return (
@@ -335,7 +333,7 @@ const styles = StyleSheet.create({
 		justifyContent:'center',
 		alignItems:'center',
 		position:'absolute',
-		top:height*2/4,
+		top:height*2/5,
 		left:width*3/4,
 	},
 
@@ -348,7 +346,7 @@ const styles = StyleSheet.create({
 		flexWrap:'wrap',
 	},
 	itemLine:{
-		height:140,
+		height:165,
 		flexDirection:'row'
 	},
 	itemOperator:{

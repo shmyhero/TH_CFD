@@ -101,7 +101,11 @@ export default class PraiseModal extends Component {
   onPressedConfirm(){
     // Alert.alert("tid = " + this.state.tid);
     // this._setModalVisible(false)
-    this.actionReward()
+    if(this.props.enoughCredits){
+      this.actionReward()
+    }else{
+      this._setModalVisible(false)
+    }
   }
 
   actionReward(){

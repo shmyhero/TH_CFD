@@ -5,6 +5,7 @@ import { View, Text, StyleSheet,
     TextInput, 
     TouchableHighlight,
     TouchableOpacity,
+    Platform,
     Alert
 } from 'react-native';
 var NavBar = require('../NavBar');
@@ -16,7 +17,7 @@ var NetConstants = require('../../NetConstants');
 var LogicData = require('../../LogicData');
 var NetworkModule = require('../../module/NetworkModule');
 var ColorConstants = require('../../ColorConstants');
-
+var UIConstants = require('../../UIConstants')
 var {height, width} = Dimensions.get('window')
 const TWEET_WRITER = "TweetWriter"
 // create a component
@@ -34,6 +35,7 @@ class NewTweetPage extends Component {
         
         this.state = {
             text: "",
+            contentHeight: height-60-UIConstants.HEADER_HEIGHT
             // text: "12 <a href=\"cfd://page/stock/36004\">456</a> 89",
         };
     }
@@ -86,28 +88,55 @@ class NewTweetPage extends Component {
         )
     }
 
+    renderKeyboardSpacer(){
+        if(Platform.OS == "ios"){
+            return (<KeyboardSpacer style={{backgroundColor: "white"}}/>)
+        }
+    }
+
+    contentHeight = 0;
+
     render() {
         var {height, width} = Dimensions.get('window');
+
+        var containerViewStyle = {};
+        if (this.state.contentHeight !=0){
+            containerViewStyle.height = this.state.contentHeight;
+        }
+        
         return (
-            <View style={[styles.container, {height: height,}]}>
-                <NavBar title="发布动态" showBackButton={true} navigator={this.props.navigator}
-                    textOnRight='发送'
-					rightTextOnClick={()=>this.pressCommitButton()}
-					enableRightText={this.state.text.length>0}/>
-               
-                <TweetComponent ref={TWEET_WRITER} 
-                    value={this.state.text}                    
-                    onValueChanged={(value)=> {
-                        console.log("onValueChanged "  + value)
-                        this.setState({text:value})}
+            <View style={[styles.container]} onLayout={(event)=>{
+                    //On Android, if the keyboard shows up, this function will be triggered and will 
+                    //recieve the correct view height. But on iOS this way doesn't work. 
+                    //So let's use KeyboardSpacer only for iOS. 
+                    console.log("event.nativeEvent.layout.height " + event.nativeEvent.layout.height)
+                    console.log("height " + height)
+                    this.setState({
+                        contentHeight: event.nativeEvent.layout.height
+                    })
+                }}>
+                <View style={[{position:'absolute', top:0, left:0, right:0, bottom: 0}, containerViewStyle]}>
+                    <NavBar title="发布动态" showBackButton={true} navigator={this.props.navigator}
+                        textOnRight='发送'
+                        rightTextOnClick={()=>this.pressCommitButton()}
+                        enableRightText={this.state.text.length>0}/>
+                
+                    <TweetComponent ref={TWEET_WRITER} 
+                        value={this.state.text}                    
+                        onValueChanged={(value)=> {
+                            console.log("onValueChanged "  + value)
+                            this.setState({text:value})}
                     }/>
-                <TouchableHighlight onPress={()=>this.addLinkBlock()} >
-                    <View style={styles.bottomActionBar}>
-                        <Text style={{color:'#666666', fontSize:30}}>@</Text>
-                        <Text style={{color:'#666666'}}>产品</Text>
-                    </View>
-                </TouchableHighlight>
-                <KeyboardSpacer/>
+                
+                    <TouchableHighlight onPress={()=>this.addLinkBlock()} >
+                        <View style={styles.bottomActionBar}>
+                            <Text style={{color:'#666666', fontSize:30}}>@</Text>
+                            <Text style={{color:'#666666'}}>产品</Text>
+                        </View>
+                    </TouchableHighlight>
+
+                    {this.renderKeyboardSpacer()}
+                </View>
             </View>
         );
     }
@@ -117,7 +146,7 @@ class NewTweetPage extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        width: width,
+        width: width
     },
     bottomActionBar: {
         width:width, 

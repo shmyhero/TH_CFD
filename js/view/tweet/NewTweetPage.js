@@ -7,14 +7,15 @@ import { View, Text, StyleSheet,
     TouchableOpacity,
     Alert
 } from 'react-native';
-var NavBar = require('../NavBar')
-var TweetComponent = require('./TweetComponent')
-var MainPage = require('../MainPage')
-var StockSearchPage = require('../StockSearchPage')
+var NavBar = require('../NavBar');
+var TweetComponent = require('./TweetComponent');
+var MainPage = require('../MainPage');
+var StockSearchPage = require('../StockSearchPage');
 import KeyboardSpacer from '../component/KeyboardSpacer';
-var NetConstants = require('../../NetConstants')
-var LogicData = require('../../LogicData')
-var NetworkModule = require('../../module/NetworkModule')
+var NetConstants = require('../../NetConstants');
+var LogicData = require('../../LogicData');
+var NetworkModule = require('../../module/NetworkModule');
+var ColorConstants = require('../../ColorConstants');
 
 var {height, width} = Dimensions.get('window')
 const TWEET_WRITER = "TweetWriter"
@@ -94,21 +95,18 @@ class NewTweetPage extends Component {
 					enableRightText={this.state.text.length>0}/>
                
                 <TweetComponent ref={TWEET_WRITER} 
-                    value={this.state.text}
-                    style={{backgroundColor:'red'}} 
+                    value={this.state.text}                    
                     onValueChanged={(value)=> {
                         console.log("onValueChanged "  + value)
-                    this.setState({text:value})}
+                        this.setState({text:value})}
                     }/>
-                <TouchableHighlight onPress={()=>this.addLinkBlock()} 
-                    style={{height:60}}>
-                    <View style={{width:width, height:50, backgroundColor:'white', 
-                        flexDirection:'column', alignItems:'center'}}>
-                        <Text style={{color:'#666666', fontSize:20}}>@</Text>
+                <TouchableHighlight onPress={()=>this.addLinkBlock()} >
+                    <View style={styles.bottomActionBar}>
+                        <Text style={{color:'#666666', fontSize:30}}>@</Text>
                         <Text style={{color:'#666666'}}>产品</Text>
                     </View>
                 </TouchableHighlight>
-                <KeyboardSpacer style={{}}/>
+                <KeyboardSpacer/>
             </View>
         );
     }
@@ -121,6 +119,17 @@ const styles = StyleSheet.create({
         width: width,
         height: height,
     },
+    bottomActionBar: {
+        width:width, 
+        height:60,
+        backgroundColor:'white', 
+        justifyContent: 'center',
+        flexDirection:'column', 
+        alignItems:'center',
+        borderTopWidth: 0.5,
+        borderColor: ColorConstants.SEPARATOR_GRAY,
+
+    }
 });
 
 //make this component available to the app

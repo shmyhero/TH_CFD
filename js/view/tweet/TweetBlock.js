@@ -8,7 +8,7 @@ var MainPage = require("../MainPage")
 class TweetBlock extends Component {
     static propTypes = {
         value: PropTypes.string,
-        style: PropTypes.style,
+        style: View.propTypes.style,
         onBlockPressed: PropTypes.func,
     }
     

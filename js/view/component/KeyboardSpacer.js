@@ -37,7 +37,7 @@ export default class KeyboardSpacer extends Component {
   static propTypes = {
     topSpacing: PropTypes.number,
     onToggle: PropTypes.func,
-    style: PropTypes.style,
+    style: View.propTypes.style,
   };
 
   static defaultProps = {

@@ -7,7 +7,8 @@ import { View,
     Dimensions,
     Clipboard,
     TouchableOpacity,
-    ScrollView
+    ScrollView,
+    Platform
 } from 'react-native';
 var TweetParser = require('./TweetParser');
 var {height, width} = Dimensions.get('window');
@@ -55,11 +56,11 @@ class TweetComponent extends Component {
             end: this.state.selection.end
         };
 
+        console.log("insertItem" + JSON.stringify(this.lastSelection));
         this.insertText(linkText, {
             start:this.state.selection.start, 
             end:this.state.selection.end,
-        }
-         );
+        });
         
         // this.refs["RichTextEditor"].focusContent()
         // setTimeout(()=>{
@@ -136,52 +137,64 @@ class TweetComponent extends Component {
     }
 
     updateSelection(event){
-        //console.log("updateSelection" + JSON.stringify(event.nativeEvent))
-        //if(this.lastPressedKey == ""){
-            // console.log(event.nativeEvent)
-            var newSelectionStart = Math.min(event.nativeEvent.selection.start,event.nativeEvent.selection.end);
-            var newSelectionEnd = Math.max(event.nativeEvent.selection.start,event.nativeEvent.selection.end);
+        
+        if(this.lastPressedKey != "" && Platform.OS == "android"){
+            //Fix Android crash issue.
+            return;
+        }
 
-            var partSelections = this.getCurrentPartSelections(newSelectionStart, newSelectionEnd);
-            for (var i=0; i < partSelections.length; i++) {
-                var partSelection = partSelections[i];
-                var currentPartEnd = partSelection.partEndInWholeString;
-                var currentPartStart = partSelection.partStartInWholeString;
-                var textPart = this.state.textNodes[partSelection.part]
-                if (newSelectionEnd <= currentPartEnd) {
-                    //The selected part is link, just select all.
-                    if (textPart.type == "link") {
-                        if (newSelectionStart == newSelectionEnd && newSelectionStart == currentPartEnd){
-                            //The selection is at the end of the link, do nothing.
+        // console.log(event.nativeEvent)
+        var newSelectionStart = Math.min(event.nativeEvent.selection.start,event.nativeEvent.selection.end);
+        var newSelectionEnd = Math.max(event.nativeEvent.selection.start,event.nativeEvent.selection.end);
+
+        var partSelections = this.getCurrentPartSelections(newSelectionStart, newSelectionEnd);
+        for (var i=0; i < partSelections.length; i++) {
+            var partSelection = partSelections[i];
+            var currentPartEnd = partSelection.partEndInWholeString;
+            var currentPartStart = partSelection.partStartInWholeString;
+            var textPart = this.state.textNodes[partSelection.part]
+            if (newSelectionEnd <= currentPartEnd) {
+                //The selected part is link, just select all.
+                if (textPart.type == "link") {
+                    if (newSelectionStart == newSelectionEnd && newSelectionStart == currentPartEnd){
+                        //The selection is at the end of the link, do nothing.
+                    }
+                    else {
+                        if (newSelectionStart > currentPartStart){
+                            newSelectionStart = currentPartStart;
                         }
-                        else {
-                            if (newSelectionStart > currentPartStart){
-                                newSelectionStart = currentPartStart;
-                            }
-                            if (newSelectionEnd < currentPartEnd){
-                                newSelectionEnd = currentPartEnd;
-                            }
+                        if (newSelectionEnd < currentPartEnd){
+                            newSelectionEnd = currentPartEnd;
                         }
                     }
-                    break;
                 }
+                break;
             }
+        }
 
-            // console.log("newSelectionEnd " + newSelectionEnd)
-            // console.log("newSelectionStart " + newSelectionStart)
+        this.lastSelection = {
+            start: this.state.selection.start, 
+            end: this.state.selection.end
+        };
+        
+        console.log("newSelectionEnd " + newSelectionEnd)
+        console.log("newSelectionStart " + newSelectionStart)
+        console.log("this.state.displayText " + this.state.displayText)
+        console.log("this.state.displayText.length " + this.state.displayText.length)
 
-            this.lastSelection = {
-                start: this.state.selection.start, 
-                end: this.state.selection.end
-            };
-            
-            if(this.state.selection.start != newSelectionStart || 
-                this.state.selection.end != newSelectionEnd){
-                this.setState({
-                    selection:{ start: newSelectionStart, end: newSelectionEnd }
-                });
-            }
-        //}
+        if(Platform.OS == "android" && 
+            (newSelectionStart > this.state.displayText.length 
+            || newSelectionEnd > this.state.displayText.length )){
+            return;
+        }
+      
+        if(this.state.selection.start != newSelectionStart || 
+            this.state.selection.end != newSelectionEnd){
+            this.setState({
+                selection:{ start: newSelectionStart, end: newSelectionEnd }
+            });
+        }
+        
     }
 
     onKeyPress(event){
@@ -201,7 +214,7 @@ class TweetComponent extends Component {
         //在RN中无法得知新增的string是什么，
         //目前的解决方案是比较新旧string的不同，将其作为新的值插入。
 
-        // console.log("onChangeText newText: " + newTextValue + ", old: " + this.state.displayText)
+        console.log("onChangeText newText: " + newTextValue + ", old: " + this.state.displayText)
 
         var newSelection = {start:-1, end:-1}
         var oldSelection = {start:-1, end:-1}
@@ -222,6 +235,9 @@ class TweetComponent extends Component {
             if(this.state.displayText.length == oldSelection.start){
                 oldSelection.end = oldSelection.start;
                 newSelection.end = newTextValue.length;
+            }else if(newTextValue.length == oldSelection.start){
+                oldSelection.end = this.state.displayText.length;
+                newSelection.end = newSelection.start;
             }else{
                 if(newTextValue.length == 0){
                     oldSelection.end = this.state.displayText.length;
@@ -260,9 +276,9 @@ class TweetComponent extends Component {
                 newText = "<Backspace/>"
             }
 
-            // console.log("onChangeText newSelection " + JSON.stringify(newSelection))
-            // console.log("onChangeText newText " + newText);
-            // console.log("onChangeText oldSelection " + JSON.stringify(oldSelection))
+            console.log("onChangeText newSelection " + JSON.stringify(newSelection))
+            console.log("onChangeText newText " + newText);
+            console.log("onChangeText oldSelection " + JSON.stringify(oldSelection))
             // newText = newText.replace("\n", "")
             this.insertText(newText, oldSelection);
         }else{
@@ -407,21 +423,27 @@ class TweetComponent extends Component {
         textNodes = TweetParser.parseTextNodes(newOriginalText);
         var displayText = this.getDisplayText(textNodes);
 
-        // console.log("onChangeText newOriginalText " + newOriginalText)
-        // console.log("onChangeText displayText "+ displayText)
-
+        console.log("onChangeText newOriginalText " + newOriginalText)
+        console.log("onChangeText displayText "+ displayText)
+        console.log("this.lastSelection " + JSON.stringify(this.lastSelection))
         if (displayText != this.state.displayText){
             this.props.onValueChanged && this.props.onValueChanged(newOriginalText);
         }
+        console.log("onChangeText this.state.selection " + JSON.stringify(this.state.selection))
+        
         
         this.lastPressedKey = "";
-        
+
+        var newState = {
+            text: newOriginalText,
+            textNodes: textNodes,
+            displayText: displayText,
+        };
         this.setState({
             text: newOriginalText,
             textNodes: textNodes,
             displayText: displayText,
-        })
-    
+        });
     }
 
     generateText(){
@@ -487,20 +509,29 @@ class TweetComponent extends Component {
                     {/* <TweetBlock value={this.state.text}/> */}
                     <TextInput style={[styles.inputLayout,]}
                         ref="TextInput"
+                        textAlignVertical="top"
+                        underlineColorAndroid="transparent"
                         multiline={true}
                         maxLength={240}
                         value={this.state.displayText}
                         placeholder="今天你怎么看？"
                         onChange={(event)=>{
-                            //console.log("onChange")
-                            //console.log(event.nativeEvent)
-                            if(event.nativeEvent.contentSize.height != this.state.textInputHeight){
-                                this.setState({
-                                    textInputHeight: event.nativeEvent.contentSize.height,
-                                })
+                            console.log("onChange")
+                            console.log(event.nativeEvent)
+                            if(Platform.OS == "android"){
+                                // if(event.nativeEvent.contentSize.height != this.state.textInputHeight){
+                                //     this.setState({
+                                //         textInputHeight: event.nativeEvent.contentSize.height,
+                                //     })
+                                // }
+                                this.onChangeText(event.nativeEvent.text)
                             }
                         }}
-                        onChangeText={(text)=>this.onChangeText(text)}
+                        onChangeText={(text)=>{
+                            if(Platform.OS == "ios"){
+                                this.onChangeText(text)
+                            }
+                        }} //iOS
                         onKeyPress={(event) => this.onKeyPress(event)}                
                         selection={this.state.selection}
                         onSelectionChange={(event)=>this.updateSelection(event)}>

@@ -24,7 +24,7 @@ var listRawData = [
 var listResponse = []
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var enoughCredits = true
-
+var TweetParser = require("./tweet/TweetParser")
 
 
 export default class UserHomePageTab3 extends Component{
@@ -209,9 +209,16 @@ export default class UserHomePageTab3 extends Component{
 		// Alert.alert('onPressShare ' + rowData.time)
 		 var url = NetConstants.TRADEHERO_API.SHARE_TREND_URL;
 	 	 url = url.replace("<id>", rowData.id);
+		 var textNodes = TweetParser.parseTextNodes(rowData.message);
+
+		 var displayText = "";
+		 for(var i = 0; i < textNodes.length; i++){
+				 displayText += textNodes[i].text;
+		 }
+
 	 	 MainPage.showSharePage({
-	 		 title: rowData.message.substring(0,10),
-	 		 description: rowData.message,
+	 		 title: displayText.substring(0,10),
+	 		 description: displayText,
 	 		 webpageUrl: url,
 	 		 imageUrl: NetConstants.TRADEHERO_API.SHARE_LOGO_URL,
 			 //  card: this.state.card,
@@ -248,6 +255,7 @@ export default class UserHomePageTab3 extends Component{
 		var liked = rowData.Liked
 		var iconPraise = liked?require('../../images/icon_praised.png'):require('../../images/icon_praise.png')
 		var textPraise = liked?{color:'#1962dd'}:{}
+
 		return(
 			<View style={styles.itemLine}>
 				<View style={{width:20,flex:1,alignItems:'center'}}>

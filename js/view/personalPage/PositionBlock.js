@@ -206,7 +206,9 @@ export default class PositionBlock extends Component {
   				<NetworkErrorIndicator onRefresh={()=>this.loadData()} refreshing={this.state.isRefreshing}/>
   			)
   		}else {
-        if(this.state.stockInfo.length === 0) {
+        
+        if(this.state.stockInfoRowData.length === 0) {
+          console.log("暂无持仓记录");
   			return (
   				<View style={styles.emptyView}>
   					<Text style={styles.loadingText}>{ this.props.type== "open" ? "暂无持仓记录":"暂无平仓记录"}</Text>
@@ -227,7 +229,7 @@ export default class PositionBlock extends Component {
             </View>
           );
         }
-      }      
+      }
     }
   }
 }

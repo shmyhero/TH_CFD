@@ -160,7 +160,7 @@ export default class UserHomePageTab3 extends Component{
 		if(LogicData.isUserSelf(this.props.userId)){
 			emptyTip = '您的见解相当重要！'
 		}else{
-			emptyTip = '没有任何动态'
+			emptyTip = '暂无动态'
 		}
 
 		return(

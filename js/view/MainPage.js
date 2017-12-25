@@ -771,7 +771,7 @@ var MainPage = React.createClass({
 	sendToSwitchAccountStatus:function(){
 		var userData = LogicData.getUserData()
 		if(userData.token == undefined){return}
-	  var urlToSend = LogicData.getAccountState()?NetConstants.CFD_API.SWITCH_TO_LIVE:NetConstants.CFD_API.SWITCH_TO_DEMO;
+	  	var urlToSend = LogicData.getAccountState()?NetConstants.CFD_API.SWITCH_TO_LIVE:NetConstants.CFD_API.SWITCH_TO_DEMO;
 		console.log('sendToSwitchAccountStatus url = ' + urlToSend);
 		NetworkModule.fetchTHUrl(
 			urlToSend,
@@ -858,12 +858,6 @@ var MainPage = React.createClass({
 
 		var exchangeRef = this.refs['exchangeContent'].refs['wrap'].getWrappedRef()
 		exchangeRef.tabWillFocus = EventCenter.emitExchangeTabPressEvent;
-
-		//Disable ranking tab if necessary
-		if(!HIDE_RANKING_TAB){
-			var rankingRef = this.refs['rankingContent'].refs['wrap'].getWrappedRef();
-			rankingRef.tabWillFocus = EventCenter.emitRankingTabPressEvent;
-		}
 
 		var meRef = this.refs['meContent'].refs['wrap'].getWrappedRef()
 		meRef.tabWillFocus = EventCenter.emitMeTabPressEvent;
@@ -1374,7 +1368,7 @@ var MainPage = React.createClass({
 	gotoStockDetail: function(pushData) {
 
 		var currentNavigatorIndex = LogicData.getTabIndex();
-	  console.log("push gotoStockDetail");
+	  	console.log("push gotoStockDetail");
 		console.log("push " + currentNavigatorIndex);
 
 		var stockRowData = {
@@ -1382,13 +1376,12 @@ var MainPage = React.createClass({
 			id: parseInt(pushData.StockID),
 		}
 
-
-		 if(_navigators[currentNavigatorIndex]){
+		if(_navigators[currentNavigatorIndex]){
 			 console.log("aaaa");
 			 _navigators[currentNavigatorIndex].push({
 				name: STOCK_DETAIL_ROUTE,
-			  stockRowData: stockRowData,
-				});
+			  	stockRowData: stockRowData,
+			});
 		 }
 	},
 
@@ -1399,7 +1392,7 @@ var MainPage = React.createClass({
 
 	gotoWithdrawResultPage: function(pushData){
 		var currentNavigatorIndex = LogicData.getTabIndex();
-	  console.log("push gotoStockDetail");
+	  	console.log("push gotoStockDetail");
 		console.log("push " + currentNavigatorIndex);
 
 		var stockRowData = {
@@ -1561,7 +1554,14 @@ var MainPage = React.createClass({
 			return (
 				<Tab name="ranking">
 					<Icon ref={"rankingBtn"} label="达人" type={glypy.Ranking} from={'myhero'} onActiveColor={systemBuleActual} onInactiveColor={iconGrey}/>
-					<RawContent ref="rankingContent">
+					<RawContent ref={component => {
+						console.log("component " + component)
+						this.rankingContent = component;
+						if(component){
+							var rankingRef = this.rankingContent.refs['wrap'].getWrappedRef();
+							rankingRef.tabWillFocus = EventCenter.emitRankingTabPressEvent;
+						}
+					}}>
 					<Navigator
 						style={styles.container}
 						initialRoute={{name: RANKING_PAGE_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}

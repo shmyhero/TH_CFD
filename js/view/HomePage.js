@@ -1025,7 +1025,7 @@ var HomePage = React.createClass({
 			url = NetConstants.TRADEHERO_API.WEBVIEW_TOP_NEWS_PAGE_ACTUAL+firstNews.id
 		}
 		this.gotoWebviewPage(url,
-			'每日头条',
+			LS.str('MRTT'),
 			false,
 			null,
 			null,
@@ -1034,7 +1034,7 @@ var HomePage = React.createClass({
 
 	tapTopNews: function(url) {
 		this.gotoWebviewPage(url,
-			'每日头条',
+			LS.str('MRTT'),
 			false,
 			null,
 			null,

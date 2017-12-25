@@ -23,6 +23,28 @@ var LS = {
     GZ:['关注','Attention'],
     SL:['胜率','WR'],
     PCBS:['平仓笔数:','CP:'],
+    //持仓展开详情项
+    LX:['类型','type'],
+    BENJIN2:['本金','capital'],
+    GANGAN2:['杠杆','lever'],
+    KCJG:['开仓价格','open price'],
+    PCJG:['开仓价格','close price'],
+    KCF:['开仓费','open cost'],
+    PCF:['平仓费','close cost'],
+    JSY_MY:['净收益(美元)','net earning($)'],
+    DQMJ:['当前买价','current buy price'],
+    DQMJ2:['当前卖价','current sale price'],
+    GYF_FH:['隔夜费+分红','gye+fh'],
+    ZYZS:['止盈/止损','zy/zs'],
+    KS:['亏损','Loss'],
+    HL:['获利','Earn'],
+    YSZ:['已设置','Have set'],
+
+    MRTT:['每日头条','TOP_NEWS'],
+
+
+
+
 
     GZS:['关注数','Attentions'],
     KPS:['卡片数','Cards'],

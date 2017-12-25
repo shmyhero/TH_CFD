@@ -553,26 +553,26 @@ var StockClosedPositionPage = React.createClass({
 				<View style={[styles.darkSeparator, {marginLeft: 0}]} />
 				<View style={styles.extendRowWrapper}>
 					<View style={styles.extendLeft}>
-						<Text style={styles.extendTextTop}>类型</Text>
+						<Text style={styles.extendTextTop}>{LS.str('LX')}</Text>
 						<Image style={styles.extendImageBottom} source={tradeImage}/>
 					</View>
 					<View style={styles.extendMiddle}>
-						<Text style={styles.extendTextTop}>本金({currency})</Text>
+						<Text style={styles.extendTextTop}>{LS.str('BENJIN2')}({currency})</Text>
 						<Text style={styles.extendTextBottom}>{rowData.invest && rowData.invest.toFixed(2)}</Text>
 					</View>
 					<View style={styles.extendRight}>
-						<Text style={styles.extendTextTop}>杠杆</Text>
+						<Text style={styles.extendTextTop}>{LS.str('GANGAN2')}</Text>
 						<Text style={styles.extendTextBottom}>x{rowData.leverage}</Text>
 					</View>
 				</View>
 				<View style={styles.darkSeparator} />
 				<View style={styles.extendRowWrapper}>
 					<View style={styles.extendLeft}>
-						<Text style={styles.extendTextTop}>开仓价格</Text>
+						<Text style={styles.extendTextTop}>{LS.str('KCJG')}</Text>
 						<Text style={styles.extendTextBottom}>{rowData.openPrice.maxDecimal(5)}</Text>
 					</View>
 					<View style={styles.extendMiddle}>
-						<Text style={styles.extendTextTop}>开仓费</Text>
+						<Text style={styles.extendTextTop}>{LS.str('KCF')}</Text>
 						<Text style={styles.extendTextBottom}>0</Text>
 					</View>
 					<View style={styles.extendRight}>
@@ -583,11 +583,11 @@ var StockClosedPositionPage = React.createClass({
 				<View style={styles.darkSeparator} />
 				<View style={styles.extendRowWrapper}>
 					<View style={styles.extendLeft}>
-						<Text style={styles.extendTextTop}>平仓价格</Text>
+						<Text style={styles.extendTextTop}>{LS.str('PCJG')}</Text>
 						<Text style={styles.extendTextBottom}>{rowData.closePrice.maxDecimal(5)}</Text>
 					</View>
 					<View style={styles.extendMiddle}>
-						<Text style={styles.extendTextTop}>平仓费</Text>
+						<Text style={styles.extendTextTop}>{LS.str('PCF')}</Text>
 						<Text style={styles.extendTextBottom}>0</Text>
 					</View>
 					<View style={styles.extendRight}>
@@ -598,11 +598,11 @@ var StockClosedPositionPage = React.createClass({
 				<View style={styles.darkSeparator} />
 				<View style={styles.extendRowWrapper}>
 					<View style={styles.extendLeft}>
-						<Text style={styles.extendTextTop}>隔夜费+分红</Text>
+						<Text style={styles.extendTextTop}>{LS.str('GYF_FH')}</Text>
 						<Text style={styles.extendTextBottom}>{financing_dividend_sum.toFixed(2)}</Text>
 					</View>
 					<View style={styles.extendMiddle}>
-						<Text style={styles.extendTextTop}>净收益(美元)</Text>
+						<Text style={styles.extendTextTop}>{LS.str('JSY_MY')}</Text>
 						<Text style={[styles.extendTextBottom, {color:netEarningColor}]}>{netEarning.toFixed(2)}</Text>
 					</View>
 					<View style={styles.extendRight}>

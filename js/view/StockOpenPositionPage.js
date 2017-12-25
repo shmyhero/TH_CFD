@@ -1804,9 +1804,9 @@ var StockOpenPositionPage = React.createClass({
 			}
 		}
 
-		var buttonText = (profitAmount < 0 ? '亏损':'获利') + ': $' + profitAmount.toFixed(2)
+		var buttonText = (profitAmount < 0 ? LS.str('KS'):LS.str('HL')) + ': $' + profitAmount.toFixed(2)
 		if (this.state.showExchangeDoubleCheck) {
-			buttonText = '确认:$' + profitAmount.toFixed(2)
+			buttonText = LS.str('QR')+':$' + profitAmount.toFixed(2)
 		}
 
 		var underlayColor = rowData.security.isOpen ? ColorConstants.title_blue() : '#dfdee4';
@@ -1814,9 +1814,9 @@ var StockOpenPositionPage = React.createClass({
 		var buttonStyle = [styles.okView,{backgroundColor:ColorConstants.title_blue()},this.state.showExchangeDoubleCheck && {backgroundColor:'white',borderWidth:1,borderColor:ColorConstants.title_blue()}, !rowData.security.isOpen && styles.okViewDisabled];
 		var buttonTextStyle = [styles.okButton,this.state.showExchangeDoubleCheck&&{color:ColorConstants.title_blue()}];
 		if(this.state.selectedSubItem === 2){
-			var buttonText = '确认'
+			var buttonText = LS.str('QR')
 			if (!this.state.profitLossUpdated && this.state.profitLossConfirmed) {
-				buttonText = '已设置'
+				buttonText = LS.str('YSZ')
 			}
 			//separatorStyle = {backgroundColor: 'pink'};
 			underlayColor = this.state.profitLossUpdated ? ColorConstants.title_blue():'#dfdee4';
@@ -1862,7 +1862,7 @@ var StockOpenPositionPage = React.createClass({
 		if (stopLoss || stopProfit) {
 			stopLossImage = LogicData.getAccountState()?require('../../images/check2_actual.png'):require('../../images/check2.png')
 		}
-		var currentPriceLabel = rowData.isLong ?   '当前卖价':'当前买价'
+		var currentPriceLabel = rowData.isLong ?   LS.str('DQMJ2'):LS.str('DQMJ')
 		var openDate = new Date(rowData.createAt)
 		var currency = UIConstants.CURRENCY_CODE_LIST[rowData.security.ccy]
 
@@ -1879,22 +1879,22 @@ var StockOpenPositionPage = React.createClass({
 				<View style={[styles.darkSeparator, {marginLeft: 0}]} />
 				<View style={styles.extendRowWrapper}>
 					<View style={styles.extendLeft}>
-						<Text style={styles.extendTextTop}>类型</Text>
+						<Text style={styles.extendTextTop}>{LS.str('LX')}</Text>
 						<Image style={styles.extendImageBottom} source={tradeImage}/>
 					</View>
 					<View style={styles.extendMiddle}>
-						<Text style={styles.extendTextTop}>本金({currency})</Text>
+						<Text style={styles.extendTextTop}>{LS.str('BENJIN2')}({currency})</Text>
 						<Text style={styles.extendTextBottom}>{rowData.invest.toFixed(2)}</Text>
 					</View>
 					<View style={styles.extendRight}>
-						<Text style={styles.extendTextTop}>杠杆</Text>
+						<Text style={styles.extendTextTop}>{LS.str('GANGAN2')}</Text>
 						<Text style={styles.extendTextBottom}>{rowData.leverage}</Text>
 					</View>
 				</View>
 				<View style={styles.darkSeparator} />
 				<View style={styles.extendRowWrapper}>
 					<View style={styles.extendLeft}>
-						<Text style={styles.extendTextTop}>开仓价格</Text>
+						<Text style={styles.extendTextTop}>{LS.str('KCJG')}</Text>
 						<Text style={styles.extendTextBottom}>{rowData.settlePrice.maxDecimal(5)}</Text>
 					</View>
 					<View style={styles.extendMiddle}>
@@ -1912,7 +1912,7 @@ var StockOpenPositionPage = React.createClass({
 					<View style={[styles.extendLeft, this.state.selectedSubItem==2 && styles.bottomBorder,
 						{borderBottomColor:ColorConstants.title_blue()},]}>
 						<View>
-      				<Text style={styles.extendTextTop}>隔夜费+分红</Text>
+      				<Text style={styles.extendTextTop}>{LS.str('GYF_FH')}</Text>
       			</View>
 						<View>
       				<Text style={styles.extendTextBottom}>{financing_dividend_sum.toFixed(2)}</Text>
@@ -1927,7 +1927,7 @@ var StockOpenPositionPage = React.createClass({
 								{borderLeftColor:ColorConstants.title_blue()},
 								{borderRightColor:ColorConstants.title_blue()},
 							]}>
-						<Text style={styles.extendTextTop}>止盈/止损</Text>
+						<Text style={styles.extendTextTop}>{LS.str('ZYZS')}</Text>
 						<Image style={styles.extendImageBottom} source={stopLossImage}/>
 					</TouchableOpacity>
 

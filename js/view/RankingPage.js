@@ -26,6 +26,7 @@ var UIConstants = require('../UIConstants')
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 var ColorConstants = require('../ColorConstants')
 var MainPage = require('./MainPage')
+var LS = require('../LS')
 
 var didTabSelectSubscription = null
 const NETWORK_ERROR_INDICATOR = "networkErrorIndicator";
@@ -67,10 +68,12 @@ export default class RankingPage extends Component{
     }
 
     renderTopSticker(){
+      var strSL = LS.str('SL')
+      var strLZSYL = LS.str('LZSYL')
         return(
           <View style={styles.topSticker}>
-            <Text style={styles.fontTopSticker}>达人</Text>
-            <Text style={styles.fontTopSticker}>两周收益率</Text>
+            <Text style={styles.fontTopSticker}>{strSL}</Text>
+            <Text style={styles.fontTopSticker}>{strLZSYL}</Text>
           </View>
         );
     }
@@ -182,19 +185,20 @@ export default class RankingPage extends Component{
 
     var colorBgSelected = '#6485c2'
     var colorTextUnSelected = '#6485c2'
-
+    var strDR = LS.str('DAREN')
+    var strGZ = LS.str('GZ')
     return(
       <View style={[styles.container,  this.props.barStyle]} >
         <View style = {styles.headerContainer}>
           <TouchableOpacity
             onPress={()=>{this._onRankTypeSelected(RANKING_TYPE_0)}}
             style = {{backgroundColor:this.state.rankType == RANKING_TYPE_0?colorBgSelected:'transparent'}}>
-            <Text style={[styles.fontHeaderType,{color:this.state.rankType == RANKING_TYPE_0?'white':colorTextUnSelected}]}>达人</Text>
+            <Text style={[styles.fontHeaderType,{color:this.state.rankType == RANKING_TYPE_0?'white':colorTextUnSelected}]}>{strDR}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={()=>{this._onRankTypeSelected(RANKING_TYPE_1)}}
             style = {{backgroundColor:this.state.rankType == RANKING_TYPE_1?colorBgSelected:'transparent'}}>
-            <Text style={[styles.fontHeaderType,{color:this.state.rankType == RANKING_TYPE_1?'white':colorTextUnSelected}]}>关注</Text>
+            <Text style={[styles.fontHeaderType,{color:this.state.rankType == RANKING_TYPE_1?'white':colorTextUnSelected}]}>{strGZ}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -232,6 +236,8 @@ export default class RankingPage extends Component{
     var winRateShow = (rowData.showData)?rate:emptyStar;
     var posCountShow = (rowData.showData)?rowData.posCount:emptyStar;
     // console.log("rowDara.posCount = " + rowData.posCount + " emptyStar = " + emptyStar);
+    var strSL = LS.str('SL')+":";
+    var strPCBS = LS.str('PCBS')
     return(
 
         <View>
@@ -246,9 +252,9 @@ export default class RankingPage extends Component{
                 <View style = {{marginLeft:15}}>
                   <Text style={[styles.userName]}>{rowData.nickname}</Text>
                   <View style = {styles.userInfo}>
-                    <Text style={styles.userInfoTitle}>胜率:</Text>
+                    <Text style={styles.userInfoTitle}>{strSL}</Text>
                     <Text style={styles.userWinRate}>{winRateShow}%</Text>
-                    <Text style={[styles.userInfoTitle,{marginLeft:10}]}>平仓笔数:</Text>
+                    <Text style={[styles.userInfoTitle,{marginLeft:10}]}>{strPCBS}</Text>
                     <Text style={styles.userWinRate}>{posCountShow}</Text>
                   </View>
                 </View>

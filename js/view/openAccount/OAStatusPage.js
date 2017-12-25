@@ -21,7 +21,7 @@ var OpenAccountRoutes = require('./OpenAccountRoutes')
 var LogicData = require('../../LogicData')
 var UIConstants = require('../../UIConstants')
 var SentIntent = require('../component/nativeIntent/SendIntent')
-
+var LS = require('../../LS')
 var {height, width} = Dimensions.get('window')
 
 
@@ -65,6 +65,9 @@ var OAStatusPage = React.createClass({
 
 
 	render: function() {
+		var strWELCOME = LS.str('WELCOME2YJY')
+		var strSERVICES = LS.str('SERVICE24HOURS')
+		var strLIVELOGIN = LS.str('SPDL')
 		return (
 
 			<View style={styles.wrapper}>
@@ -78,7 +81,7 @@ var OAStatusPage = React.createClass({
 				<Image style={styles.image} source={require('../../../images/live_register_banner.png')}/>
 
 				<View style={{flex: 2, marginTop: 50}}>
-					<Text style={styles.text1}>盈交易欢迎您开启财富之旅</Text>
+					<Text style={styles.text1}>{strWELCOME}</Text>
 
 					<View style={{flex:1}}>
 						<Button style={styles.buttonArea}
@@ -86,7 +89,7 @@ var OAStatusPage = React.createClass({
 							onPress={this.gotoNext}
 							textContainerStyle={styles.buttonView}
 							textStyle={styles.buttonText}
-							text='实盘登录' />
+							text={strLIVELOGIN} />
 					</View>
 
 					<View style={styles.helpContainer}>
@@ -94,7 +97,7 @@ var OAStatusPage = React.createClass({
 							<TouchableOpacity style={{flexDirection:'row',alignItems:'center'}} onPress={()=>this.helpPressed()}>
 
 								<Image style = {styles.lineLeftRight} source = {require('../../../images/line_left2.png')} ></Image>
-								<Text style={styles.helpTitle}>{"盈盈在线24小时服务"}</Text>
+								<Text style={styles.helpTitle}>{strSERVICES}</Text>
 								{/* <Text style={styles.helpTitle}>服务热线：{CALL_NUMBER}</Text> */}
 								<Image style = {styles.lineLeftRight} source = {require('../../../images/line_right2.png')} ></Image>
 

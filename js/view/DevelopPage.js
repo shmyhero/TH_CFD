@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Dimensions,
   ScrollView,
+  Alert,
 } from 'react-native';
 import {
 	packageVersion,
@@ -38,7 +39,8 @@ export default class DevelopPage extends Component {
     var server = NetConstants.getAPIServerIP();
     this.state = {
       server: server,
-      debugStatus: LogicData.getDebugStatus()
+      debugStatus: LogicData.getDebugStatus(),
+      languageSetting: LogicData.getLanguageEn()=='1'?'切换成中文':'切换成英文'
     }
   }
 
@@ -116,8 +118,47 @@ export default class DevelopPage extends Component {
     })
   }
 
+  languageChange(){
+    LogicData.setLanguageEn(LogicData.getLanguageEn()=='0'?'1':'0');
+    this.setState({
+      languageSetting: LogicData.getLanguageEn()=='1'?'切换成中文':'切换成英文'
+    },console.log('languageEN:'+LogicData.getLanguageEn()))
+    this.postLanguageSetting();
+  }
+
+  postLanguageSetting(){
+    var userData = LogicData.getUserData();
+    var notLogin = Object.keys(userData).length === 0;
+    if (!notLogin) {
+      NetworkModule.fetchTHUrl(
+        NetConstants.CFD_API.POST_USER_LANGUAGE,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+          },
+          body: JSON.stringify({
+            language: LogicData.getLanguageEn()=="1"?'en':'cn',
+          }),
+        },
+        (responseJson) => {
+          if (responseJson.message){
+
+          }else{
+
+          }
+        },
+        (result) => {
+
+        })
+    }
+  }
+
   render() {
     var liveColor = LogicData.getAccountState()
+
+
     return (
       <View style={styles.container}>
         <ScrollView style={{flex: 1}}>
@@ -144,7 +185,7 @@ export default class DevelopPage extends Component {
               </Text>
             </TouchableOpacity>
   				</View>
-          
+
           <View style={{flexDirection: 'row', padding:15,}}>
             <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}}
               onPress={()=>this.showNewTweetPage()}>
@@ -185,7 +226,16 @@ export default class DevelopPage extends Component {
             </TouchableOpacity>
           </View>
 
-          
+          <View style={{flexDirection: 'row', padding:15,}}>
+            <TouchableOpacity style={{backgroundColor:ColorConstants.title_blue(), flex:1, alignItems:'center', padding: 20, borderRadius: 5}}
+              onPress={()=>this.languageChange()}>
+              <Text style={{color:'white', fontSize: 16}}>
+                {this.state.languageSetting}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+
           <StockTransactionInfoModal ref='page'/>
         </ScrollView>
       </View>

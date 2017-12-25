@@ -34,6 +34,7 @@ var currentPageTag = null;
 var registerReward = 30;
 var firstDayWithDraw = false;
 var debugStatus = false;
+var languageEn = 0;//默认为中文,true则为英文
 
 var LogicData = {
 
@@ -45,9 +46,20 @@ var LogicData = {
 		return userData;
 	},
 
-    removeUserData: function() {
-        userData = {}
-    },
+  removeUserData: function() {
+      userData = {}
+  },
+
+	setLanguageEn(value){
+		if(languageEn!==value){
+			StorageModule.setLanguageEn(value)
+			languageEn = value
+		}
+	},
+
+	getLanguageEn(){
+		return languageEn
+	},
 
 	setAccountState: function(state, isStartUp){
 		// state = true

@@ -41,13 +41,13 @@ var UserHomePageTab2 = require('./UserHomePageTab2')
 var UserHomePageTab3 = require('./UserHomePageTab3')
 var ScrollTabView = require('./component/ScrollTabView2')
 var {EventCenter, EventConst} = require('../EventCenter')
-
+var LS = require('../LS')
 
 var CHART_TYPE_2MONTH = 0;
 var CHART_TYPE_ALL = 1;
 
 
-var tabNames = ['主页','动态' ,'持仓', '平仓']
+var tabNames = ['ZY','DT' ,'CC', 'PC']
 
 var emptyStar = '***'
 var btnBgColor = ['#425a85','#425a85','#425a85','#6f3d23','#55707c','#9a820e',]
@@ -240,6 +240,8 @@ export default class UserHomePage extends Component {
 		} : null;
 
 		var bgBanner = LogicData.getRankBanner(this.state.rank);
+		var strGZS = LS.str('GZS')
+		var strKPS = LS.str('KPS')
 
 		return(
 
@@ -249,7 +251,7 @@ export default class UserHomePage extends Component {
 					<View style = {[styles.topOneOfThree,privateStyle]}>
 						<View style={{marginTop:32}}></View>
 	    			<Text style = {{fontSize:36,backgroundColor:'transparent',color:'white'}}>{this.state.followerCount}</Text>
-						<Text style = {{fontSize:12,backgroundColor:'transparent',color:'white'}}>关注数</Text>
+						<Text style = {{fontSize:12,backgroundColor:'transparent',color:'white'}}>{strGZS}</Text>
 	    		</View>
 
 					<View style = {[styles.topOneOfThree,]}>
@@ -261,7 +263,7 @@ export default class UserHomePage extends Component {
 					<View style = {[styles.topOneOfThree,privateStyle]}>
 						<View style={{marginTop:32}}></View>
 						<Text style = {{fontSize:36,backgroundColor:'transparent',color:'white'}}>{this.state.cards.length}</Text>
-						<Text style = {{fontSize:12,backgroundColor:'transparent',color:'white'}}>卡片数</Text>
+						<Text style = {{fontSize:12,backgroundColor:'transparent',color:'white'}}>{strKPS}</Text>
 					</View>
 
 	   		</Image>
@@ -370,13 +372,14 @@ export default class UserHomePage extends Component {
 
 			var borderColor = btnBorderColor[this.state.rank]
 			var bgColor = btnBgColor[this.state.rank]
-
+			var strQXGZ = LS.str('QXGZ')
+			var strJGZ = LS.str('JGZ')
 			return(
 				<TouchableOpacity
 						onPress={()=>this._onPressedAddFollow()}>
 					<View style={[styles.addToCareContainer,{backgroundColor:bgColor,borderColor:borderColor}]}>
 						<Text style={styles.addToCareText}>
-							{this.state.isFollowing ? '取消关注':'+关注'}
+							{this.state.isFollowing ? strQXGZ:strJGZ}
 						</Text>
 					</View>
 				</TouchableOpacity>
@@ -464,6 +467,8 @@ export default class UserHomePage extends Component {
 			<UserHomePageTab2 navigator={this.props.navigator} userId={this.props.userId} isPrivate={(this.state.isPrivate)||(this.state.isPositionPrivate)} ref={'page3'}/>,
 		]
 
+		var tabNameShow = [LS.str(tabNames[0]),LS.str(tabNames[1]),LS.str(tabNames[2]),LS.str(tabNames[3])]
+
 		var viewPages = tabNames.map(
 			(tabName, i) =>
 			<View style={{width:width}} key={i}>
@@ -472,8 +477,9 @@ export default class UserHomePage extends Component {
 		)
 
 		return (
+
 			<View style={{flex: 1}}>
-				<ScrollTabView ref={"tabPages"} tabNames={tabNames} viewPages={viewPages} removeClippedSubviews={true}
+				<ScrollTabView ref={"tabPages"} tabNames={tabNameShow} viewPages={viewPages} removeClippedSubviews={true}
 					onPageSelected={(index) => this.onPageSelected(index)} />
 			</View>
 		)

@@ -124,6 +124,12 @@ var AppNavigator = React.createClass({
 			}
 		});
 
+		StorageModule.loadLanguageEn().then((value) =>{
+			if(value !== null){
+				LogicData.setLanguageEn(value);
+			}
+		});
+
 		//Load the server setting should always be the first step.
 		StorageModule.loadAccountState().then((value) => {
 			if (value !== null) {

@@ -36,7 +36,7 @@ var Reward = require('./Reward')
 var StockTransactionInfoModal = require('./StockTransactionInfoModal')
 
 var {EventCenter, EventConst} = require('../EventCenter')
-
+var LS = require('../LS')
 //Change URL may be wrong.
 var RECOMMAND_URL = NetConstants.TRADEHERO_API.WEBVIEW_RECOMMAND_PAGE
 var RECOMMAND_URL_ACTUAL = NetConstants.TRADEHERO_API.WEBVIEW_RECOMMAND_PAGE_ACTUAL
@@ -811,6 +811,9 @@ var HomePage = React.createClass({
 		var stockName = ""
 		var stockSymbol = ""
 		var peopleNum = 0
+		var strKD = LS.str('KD')
+		var strKK = LS.str('KK')
+		var strRCY = LS.str('RCY')
 		if(rowData.userCount !== undefined) {
 			percent = rowData.longCount / (rowData.longCount + rowData.shortCount)
 			percent = Math.round(100*percent)/100
@@ -824,7 +827,7 @@ var HomePage = React.createClass({
 		return (
 			<TouchableOpacity style={styles.popularityRowContainer} onPress={()=>this.gotoStockDetail(rowData)}>
 				<View style={styles.popularityRowLeft}>
-					<Text style={styles.buyTitle}>看多 {percent}%</Text>
+					<Text style={styles.buyTitle}>{strKD} {percent}%</Text>
 					<View style={[styles.grayBar, {width:barWidth}]}>
 						<View style={[styles.redBar, {width:buyWidth}]}/>
 					</View>
@@ -832,10 +835,10 @@ var HomePage = React.createClass({
 				<View style={styles.popularityRowCenter}>
 					<Text style={[styles.stockName,{color:LogicData.getAccountState()?ColorConstants.TITLE_DARK_BLUE:'#1862df'}]}>{stockName}</Text>
 					<Text style={styles.stockCode}>{stockSymbol}</Text>
-					<Text style={styles.stockPeople}>{peopleNum}人参与</Text>
+					<Text style={styles.stockPeople}>{peopleNum}{strRCY}</Text>
 				</View>
 				<View style={styles.popularityRowRight}>
-					<Text style={styles.sellTitle}>看空 {100-percent}%</Text>
+					<Text style={styles.sellTitle}>{strKK} {100-percent}%</Text>
 					<View style={[styles.grayBar, {width:barWidth}]}>
 						<View style={[styles.greenBar, {width:sellWidth}]}/>
 					</View>
@@ -856,6 +859,8 @@ var HomePage = React.createClass({
 	},
 
 	renderPopularityView: function() {
+		var strSCQX = LS.str('SCQX')
+		var strMORE = LS.str('GD')
 		if(this.state.rawPopularityInfo.length < 3 || LogicData.isIR()){
 			return(
 				<View></View>
@@ -865,11 +870,11 @@ var HomePage = React.createClass({
 			<View style={{height:249, backgroundColor:'white'}}>
 				<View style={styles.popularityHeaderContainer}>
 					<Text style={styles.popularityTitle}>
-						市场情绪
+						{strSCQX}
 					</Text>
 					<TouchableOpacity onPress={this.showPopularityDetail}>
 						<Text style={styles.more}>
-							更多 >
+							{strMORE} >
 						</Text>
 					</TouchableOpacity>
 				</View>
@@ -950,7 +955,7 @@ var HomePage = React.createClass({
 		}
 	},
 	renderCards: function(){
-
+		var strSYFX = LS.str('SYFX')
 			var cardItems = this.state.rawCardsInfo.map(
 			(card, i) =>
 				<TouchableOpacity onPress={() => this.pressCard(i)} key={i}>
@@ -965,7 +970,7 @@ var HomePage = React.createClass({
 					<View>
 						<View style={[styles.popularityHeaderContainer,{backgroundColor:'white'}]}>
 							<Text style={styles.popularityTitle}>
-								收益分享
+								{strSYFX}
 							</Text>
 						</View>
 						<View style={styles.separator}/>
@@ -1239,13 +1244,15 @@ var HomePage = React.createClass({
 	},
 
 	renderNavBar: function(){
+		var strSY = LS.str('SHOUYE')
+		var strSYWLJ = LS.str('SYWLJ')
 		return(
 			<TouchableOpacity
 				activeOpacity={1}
 				onPress={()=>this.pressedNavBar()}
 				style={{position:'absolute', top:0, left: 0, right: width, width:width}}
 				>
-				<NavBar ref={NAV_BAR} title={this.state.connected ? "首页" : "首页（未连接）"}
+				<NavBar ref={NAV_BAR} title={this.state.connected ? strSY : strSYWLJ}
 					viewOnRight={this.renderMessageIcon()}
 					viewOnLeft={this.renderCheckInView()}
 					hideStatusBar={true}
@@ -1257,10 +1264,11 @@ var HomePage = React.createClass({
 	},
 
 	renderBgHint:function(){
+		var strFCA_SUPERVISE = LS.str('FCA_SUPERVISE')
 		return(
 			<View style={[styles.bgHint, {width: width}]}>
 				<Image style = {{width:20,height:20}} source={bg_hint_image}></Image>
-				<Text style={{marginTop:5,fontSize:12,color:'#c4c4c4'}}>具有全套FCA牌照，受FCA授权与监管</Text>
+				<Text style={{marginTop:5,fontSize:12,color:'#c4c4c4'}}>{strFCA_SUPERVISE}</Text>
 			</View>
 	 	)
 	},

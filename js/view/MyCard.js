@@ -14,7 +14,7 @@ var NetworkModule = require('../module/NetworkModule')
 var StockTransactionInfoModal = require('./StockTransactionInfoModal')
 var UIConstants = require('../UIConstants')
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
-
+var LS = require('../LS')
 var listRawData = []
 var listResponse = []
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -124,9 +124,10 @@ export default class MyCard extends Component{
 	}
 
 	render(){
+		var strWDKP = LS.str('WDKP')
 		return(
 			<View style={{flex:1}}>
-				<NavBar title='我的卡片' showBackButton={true} navigator={this.props.navigator}/>
+				<NavBar title={strWDKP} showBackButton={true} navigator={this.props.navigator}/>
 				{this.renderContent()}
 			</View>
 		);

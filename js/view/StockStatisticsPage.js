@@ -26,7 +26,7 @@ var {EventCenter, EventConst} = require('../EventCenter');
 var StatisticBarBlock = require('./personalPage/StatisticBarBlock');
 var TradeStyleBlock = require('./personalPage/TradeStyleBlock')
 var UserHomePageTab0 =require('./UserHomePageTab0');
-
+var LS = require('../LS')
 var {height, width} = Dimensions.get('window');
 
 var networkConnectionChangedSubscription = null;
@@ -158,14 +158,15 @@ var StockStatisticsPage = React.createClass({
 		if(LogicData.getAccountState()){
 			additionalStyle.height = 179;
 		}
-
+		var strZZC = LS.str('ZZC')
+		var strSYZJ = LS.str('SYZJ')
 		return (
 			<View style={[styles.header, additionalStyle]}>
 				<View style={styles.empty}/>
-				<Text style={styles.headerText1}>总资产(美元)</Text>
+				<Text style={styles.headerText1}>{strZZC}</Text>
 				<Text style={styles.headerText2}>{total}</Text>
 				<View style={styles.empty}/>
-				<Text style={styles.headerText3}>剩余资金(美元)</Text>
+				<Text style={styles.headerText3}>{strSYZJ}</Text>
 				<Text style={styles.headerText4}>{available}</Text>
 				<View style={styles.empty}/>
 			</View>

@@ -31,12 +31,12 @@ var SentIntent = require('./component/nativeIntent/SendIntent')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
-
+var LS = require('../LS')
 var listRawData = [
 {'type':'header'},
-{'type':'depositwithdraw','title':'入金', 'image':require('../../images/deposit.png'), 'subtype': 'deposit'},
-{'type':'depositwithdraw','title':'出金', 'image':require('../../images/withdraw.png'), 'subtype': 'withdraw'},
-{'type':'detail','title':'明细', 'image':require('../../images/detail.png'), 'subtype': 'details'},
+{'type':'depositwithdraw','title':'RJ', 'image':require('../../images/deposit.png'), 'subtype': 'deposit'},
+{'type':'depositwithdraw','title':'CJ', 'image':require('../../images/withdraw.png'), 'subtype': 'withdraw'},
+{'type':'detail','title':'MX', 'image':require('../../images/detail.png'), 'subtype': 'details'},
 ]
 
 var CALL_NUMBER = '66058771'
@@ -238,7 +238,7 @@ export default class DepositWithdrawPage extends Component {
     return(
 			<View style={styles.totalTextContainer}>
         <Text style={styles.totalIncomeTitleText}>
-          可出资金(美元)
+          {LS.str('KCZJ')}
         </Text>
         <Text style={styles.totalIncomeText}>
           {balance}
@@ -274,7 +274,7 @@ export default class DepositWithdrawPage extends Component {
           <TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
             <View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
               <Image source={rowData.image} style={styles.image} />
-              <Text style={styles.title}>{rowData.title}</Text>
+              <Text style={styles.title}>{LS.str(rowData.title)}</Text>
 							{this.renderRowRightPart(rowData)}
             </View>
           </TouchableOpacity>
@@ -305,7 +305,7 @@ export default class DepositWithdrawPage extends Component {
     return(
       <TouchableOpacity style={{flexDirection:'row', alignItems:'center', justifyContent:'center', marginBottom: 20}} onPress={()=>this.helpPressed()}>
         <Image style = {styles.lineLeftRight} source = {require('../../images/line_left2.png')} ></Image>
-			  <Text style={styles.helpTitle}>{"盈盈在线24小时服务"}</Text>
+			  <Text style={styles.helpTitle}>{LS.str('SERVICE24HOURS')}</Text>
         {/* <Text style={styles.helpTitle}>{"服务热线：" + CALL_NUMBER}</Text> */}
         <Image style = {styles.lineLeftRight} source = {require('../../images/line_right2.png')} ></Image>
       </TouchableOpacity>
@@ -332,7 +332,7 @@ export default class DepositWithdrawPage extends Component {
 	render() {
 		return (
 			<View style={{flex: 1, width:width}}>
-				<NavBar title='存取资金' showBackButton={true} leftButtonOnClick={()=>this.pressBackButton()} navigator={this.props.navigator}/>
+				<NavBar title={LS.str('CQZJ')} showBackButton={true} leftButtonOnClick={()=>this.pressBackButton()} navigator={this.props.navigator}/>
 				<ScrollView >
 					{this.renderListView()}
 				</ScrollView>

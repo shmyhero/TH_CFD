@@ -23,6 +23,7 @@ var TradeStyleBlock = require('./personalPage/TradeStyleBlock')
 var CHART_TYPE_2MONTH = 0;
 var CHART_TYPE_ALL = 1;
 var emptyStar = '***'
+var LS = require('../LS')
 
 const STATISTIC_BAR_BLOCK = "statisticBarBlock";
 const TRADE_STYLE_BLOCK = "tradeStyleBlock";
@@ -185,23 +186,26 @@ export default class UserHomePageTab0 extends Component{
 		} : null;
 
     var add = this.state.avgPl >0? '+':'';
+    var strJYDJ = LS.str('JYDJ')
+    var strPJMBSY = LS.str('PJMBSY')
+    var strSL = LS.str('SL')
 		return(
 			<View style = {styles.middleWapper}>
 				<View style={{flexDirection:'row',height:40}}>
 					<View style = {[styles.oneOfThree,{flexDirection:'row'}]}>
 
 							<TouchableOpacity style={{flexDirection:'row',alignItems:'center'}} onPress={()=>this._onPressedAskForRank()}>
-								<Text style={styles.font1}>交易等级</Text>
+								<Text style={styles.font1}>{strJYDJ}</Text>
 								<Image style={{width:16,height:16,marginLeft:2}} source = {require('../../images/icon_ask.png')}></Image>
 							</TouchableOpacity>
 
      			</View>
 					<View style = {styles.oneOfThree}>
-						<Text style={styles.font1}>平均每笔收益</Text>
+						<Text style={styles.font1}>{strPJMBSY}</Text>
 
      			</View>
 					<View style = {styles.oneOfThree}>
-						<Text style={styles.font1}>胜率</Text>
+						<Text style={styles.font1}>{strSL}</Text>
      			</View>
 				</View>
 				<View style={{flexDirection:'row',flex:1,marginBottom:15}}>
@@ -252,26 +256,27 @@ export default class UserHomePageTab0 extends Component{
 //        		    <Text style = {{color:'#474747',fontSize:15}}>近2周收益：</Text>
 //  					<Text style = {[{color:totolPlColor,fontSize:15},]}>{addValue}{pl2wShow}</Text>
 //        	    </View>
+    var strJ2Z = LS.str('J2Z')
+    var strQB = LS.str('QB')
+    var strTDSYZS = LS.str('TDSYZS')
       return(
   		  <View style = {styles.bottomWapper}>
-
-
           <View style={styles.separatorLine}/>
 
   				<View style ={styles.ceilWapper2}>
   					<View style = {styles.ceilLeft}>
        				<View style = {styles.chartTypeBorder}>
   							<TouchableOpacity onPress={()=>this._onPressedChartType(CHART_TYPE_2MONTH)} style = {[styles.chartType,{backgroundColor:this.state.chartType == CHART_TYPE_2MONTH ? ColorConstants.TITLE_BLUE_LIVE:'white'}]}>
-         					<Text style = {{fontSize:13,color:this.state.chartType == CHART_TYPE_2MONTH ? 'white' : ColorConstants.INPUT_TEXT_COLOR}}>近2周</Text>
+         					<Text style = {{fontSize:13,color:this.state.chartType == CHART_TYPE_2MONTH ? 'white' : ColorConstants.INPUT_TEXT_COLOR}}>{strJ2Z}</Text>
          				</TouchableOpacity>
   							<TouchableOpacity onPress={()=>this._onPressedChartType(CHART_TYPE_ALL)} style = {[styles.chartType,{backgroundColor:this.state.chartType == CHART_TYPE_ALL ? ColorConstants.TITLE_BLUE_LIVE:'white'}]}>
-         					<Text style = {{fontSize:13,color:this.state.chartType == CHART_TYPE_ALL ? 'white' : ColorConstants.INPUT_TEXT_COLOR}}>全部</Text>
+         					<Text style = {{fontSize:13,color:this.state.chartType == CHART_TYPE_ALL ? 'white' : ColorConstants.INPUT_TEXT_COLOR}}>{strQB}</Text>
          				</TouchableOpacity>
            		</View>
        			</View>
   					<View style = {styles.ceilRight}>
   						<View style = {[styles.tipIcon,{backgroundColor:ColorConstants.TITLE_BLUE_LIVE}]}></View>
-       				<Text style = {{fontSize:10,color:'#474747'}}>TA的收益走势</Text>
+       				<Text style = {{fontSize:10,color:'#474747'}}>{strTDSYZS}</Text>
        			</View>
       		</View>
   				{this.chartRender()}
@@ -358,15 +363,18 @@ export default class UserHomePageTab0 extends Component{
 				</TouchableOpacity>
 			)
 
+      var strKPCJ = LS.str('KPCJ')
+      var strLJXQ = LS.str('LJXQ')
 			return(
+
 				<View style = {styles.cardWapper}>
 					<View style={styles.cardWapperContainer}>
 						<Text style={styles.cardWapperTitle}>
-							卡片成就
+							{strKPCJ}
 						</Text>
 						<TouchableOpacity onPress={()=>this._onPressedCardDetail()}>
 							<Text style={styles.more}>
-								了解详情 >
+								{strLJXQ} >
 							</Text>
 						</TouchableOpacity>
 					</View>

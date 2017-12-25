@@ -19,13 +19,12 @@ var POSITION_BLOCK = "positionBlock"
 var PraiseModal = require('./PraiseModal')
 var PRAISE_MODAL = "praise_modal"
 var TweetBlock = require('./tweet/TweetBlock')
-var listRawData = [
-]
+var listRawData = []
 var listResponse = []
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var enoughCredits = true
 var TweetParser = require("./tweet/TweetParser")
-
+var LS = require('../LS')
 
 export default class UserHomePageTab3 extends Component{
 	static propTypes = {
@@ -157,10 +156,12 @@ export default class UserHomePageTab3 extends Component{
 
 	emptyContent(){
 		var emptyTip = ''
+		var strNDJJXDZY = LS.str('NDJJXDZY')
+		var strZWDT = LS.str('ZWDT')
 		if(LogicData.isUserSelf(this.props.userId)){
-			emptyTip = '您的见解相当重要！'
+			emptyTip = strNDJJXDZY
 		}else{
-			emptyTip = '暂无动态'
+			emptyTip = strZWDT
 		}
 
 		return(
@@ -255,7 +256,7 @@ export default class UserHomePageTab3 extends Component{
 		var liked = rowData.Liked
 		var iconPraise = liked?require('../../images/icon_praised.png'):require('../../images/icon_praise.png')
 		var textPraise = liked?{color:'#1962dd'}:{}
-
+		var strFX = LS.str('FX')
 		return(
 			<View style={styles.itemLine}>
 				<View style={{width:20,flex:1,alignItems:'center'}}>
@@ -284,7 +285,7 @@ export default class UserHomePageTab3 extends Component{
 
 								<TouchableOpacity style={styles.operatorItem} onPress={()=>this.onPressedShare(rowData)}>
 										<Image style={styles.iconOperator} source={require('../../images/icon_share.png')}/>
-										<Text style={styles.textOperator}>分享</Text>
+										<Text style={styles.textOperator}>{strFX}</Text>
 								</TouchableOpacity>
 							</View>
 						<View style={styles.separator}></View>

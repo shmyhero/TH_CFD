@@ -16,7 +16,7 @@ import {
 var CookieManager = require('react-native-cookies')
 
 var {EventCenter, EventConst} = require('../EventCenter')
-
+var LS = require('../LS');
 var LogicData = require('../LogicData')
 var ColorConstants = require('../ColorConstants')
 var NavBar = require('./NavBar')
@@ -35,21 +35,31 @@ var WebSocketModule = require('../module/WebSocketModule')
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 
-var listRawData = [{'type':'account','subtype':'accountInfo'},
+var listRawData = [
+{'type':'account','subtype':'accountInfo'},
 // {'type':'button','title':'开设实盘账户'},
 {'type':'Separator', 'height':10},
 {'type':'accountState'},
-{'type':'normal','title':'存取资金', 'image':require('../../images/icon_depositwithdraw.png'), 'subtype':'depositWithdraw'},
-{'type':'normal','title':'邀请好友', 'image':require('../../images/icon_invite_friends.png'), 'subtype':'inviteFriends'},
-{'type':'normal','title':'我的积分', 'image':require('../../images/icon_credits.png'), 'subtype':'credits'},
-{'type':'normal','title':'我的交易金', 'image':require('../../images/icon_income.png'), 'subtype':'income'},
-{'type':'normal','title':'我的卡片', 'image':require('../../images/icon_mycard.png'), 'subtype':'mycard'},
-{'type':'normal','title':'帮助中心', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'helpcenter'},
-{'type':'normal','title':'线上咨询', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':'onlinehelp'},
-//{'type':'normal','title':'产品反馈', 'image':require('../../images/icon_response.png'), 'subtype':'feedback'},
-// {'type':'normal','title':'关于我们', 'image':require('../../images/icon_aboutus.png'), 'subtype':'aboutus'},
-//{'type':'normal','title':'用户协议', 'image':require('../../images/icon_protocol.png'), 'subtype':'protocol'},
-{'type':'normal','title':'更多', 'image':require('../../images/icon_config.png'), 'subtype':'config'},
+// {'type':'normal','title':'存取资金', 'image':require('../../images/icon_depositwithdraw.png'), 'subtype':'depositWithdraw'},
+// {'type':'normal','title':'邀请好友', 'image':require('../../images/icon_invite_friends.png'), 'subtype':'inviteFriends'},
+// {'type':'normal','title':'我的积分', 'image':require('../../images/icon_credits.png'), 'subtype':'credits'},
+// {'type':'normal','title':'我的交易金', 'image':require('../../images/icon_income.png'), 'subtype':'income'},
+// {'type':'normal','title':'我的卡片', 'image':require('../../images/icon_mycard.png'), 'subtype':'mycard'},
+// {'type':'normal','title':'帮助中心', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'helpcenter'},
+// {'type':'normal','title':'线上咨询', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':'onlinehelp'},
+// //{'type':'normal','title':'产品反馈', 'image':require('../../images/icon_response.png'), 'subtype':'feedback'},
+// // {'type':'normal','title':'关于我们', 'image':require('../../images/icon_aboutus.png'), 'subtype':'aboutus'},
+// //{'type':'normal','title':'用户协议', 'image':require('../../images/icon_protocol.png'), 'subtype':'protocol'},
+// {'type':'normal','title':'MORE', 'image':require('../../images/icon_config.png'), 'subtype':'config'},
+
+{'type':'normal','title':'CQZJ', 'image':require('../../images/icon_depositwithdraw.png'), 'subtype':'depositWithdraw'},
+{'type':'normal','title':'YQHY', 'image':require('../../images/icon_invite_friends.png'), 'subtype':'inviteFriends'},
+{'type':'normal','title':'WDJF', 'image':require('../../images/icon_credits.png'), 'subtype':'credits'},
+{'type':'normal','title':'WDJYJ', 'image':require('../../images/icon_income.png'), 'subtype':'income'},
+{'type':'normal','title':'WDKP', 'image':require('../../images/icon_mycard.png'), 'subtype':'mycard'},
+{'type':'normal','title':'BZZX', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'helpcenter'},
+{'type':'normal','title':'XSZX', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':'onlinehelp'},
+{'type':'normal','title':'MORE', 'image':require('../../images/icon_config.png'), 'subtype':'config'},
 ]
 
 
@@ -398,11 +408,11 @@ var MePage = React.createClass({
 			var userData = LogicData.getUserData()
 			var notLogin = Object.keys(userData).length === 0
 			if(!notLogin){
-				this.gotoWebviewPage(url, '邀请好友', true);
+				this.gotoWebviewPage(url, LS.str('YQHY'), true);
 			}else{
 				this.props.navigator.push({
 					name: MainPage.LOGIN_ROUTE,
-					getNextRoute: ()=> this.getWebViewPageScene(url, '邀请好友', true),
+					getNextRoute: ()=> this.getWebViewPageScene(url,  LS.str('YQHY'), true),
 				});
 			}
 		}else if(rowData.subtype === 'depositWithdraw'){
@@ -506,11 +516,12 @@ var MePage = React.createClass({
 
 	renderUserNameView: function(){
 		var meData = LogicData.getMeData();
+		var sZhangHao = LS.str('ZHANGHAO');
 		if(meData.phone){
 			return (
 				<View style={[styles.userInfoWrapper]}>
 					<Text style={styles.userNameText}>{meData.nickname ? meData.nickname : "--"}</Text>
-					<Text style={styles.phoneText}>{meData.phone ? ("账号: " + meData.phone) : "--"}</Text>
+					<Text style={styles.phoneText}>{meData.phone ? sZhangHao + meData.phone : "--"}</Text>
 				</View>
 			);
 		}
@@ -632,6 +643,8 @@ var MePage = React.createClass({
 	},
 
 	renderRow: function(rowData, sectionID, rowID) {
+
+
 		if (rowData.type === 'normal') {
 			if((rowData.subtype === 'config' || rowData.subtype === 'mycard') && !this.state.loggedIn){
 				return (
@@ -652,7 +665,7 @@ var MePage = React.createClass({
 					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
 						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
 							<Image source={rowData.image} style={styles.image} />
-							<Text style={styles.title}>{rowData.title}</Text>
+							<Text style={styles.title}>{LS.str(rowData.title)}</Text>
 							{this.renderRowRight(rowData)}
 						</View>
 					</TouchableOpacity>
@@ -713,8 +726,9 @@ var MePage = React.createClass({
 	},
 
 	renderNavBar: function(){
+		var strMe = LS.str('WODE');
 		return(
-			<NavBar title="我的"
+			<NavBar title={strMe}
 				navigator={this.props.navigator}/>
 		);
 	},
@@ -737,6 +751,8 @@ var MePage = React.createClass({
 	},
 
 	render: function() {
+		console.log("HELLO = " + LS.str('HELLO'));
+
 		//Do not use List view with image inside under RN 0.33
 		//since there's a serious bug that the portrait won't update if user changes.
 		/*

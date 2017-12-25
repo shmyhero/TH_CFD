@@ -17,7 +17,7 @@ var NetworkModule = require('../module/NetworkModule')
 var UIConstants = require('../UIConstants')
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 var ColorConstants = require('../ColorConstants')
-
+var LS = require('../LS')
 var listRawData = []
 var listResponse = []
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -105,7 +105,7 @@ export default class DepositWithdrawFlow extends Component{
 		if(this.state.noMessage){
 			return (
 				<View style={styles.emptyContent}>
-						<Text style={styles.emptyText}>暂无明细</Text>
+						<Text style={styles.emptyText}>{LS.str('ZWMX')}</Text>
 				</View>
 			);
 		}
@@ -144,7 +144,7 @@ export default class DepositWithdrawFlow extends Component{
 	render(){
 		return(
 			<View style={{flex:1,backgroundColor:'white'}}>
-				<NavBar title='明细' showBackButton={true} navigator={this.props.navigator}/>
+				<NavBar title={LS.str('MX')} showBackButton={true} navigator={this.props.navigator}/>
 				{this.renderContent()}
 			</View>
 		);

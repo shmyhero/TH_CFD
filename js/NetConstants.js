@@ -188,6 +188,7 @@ function getCFDAPI(){
     GET_TREND_NEXT:CFD_API_SERVER + '/api/trend/<id>/next/<page>',
     GET_TREND_LIKE:CFD_API_SERVER + '/api/trend/like/<trendId>',
     GET_TREND_REWARD:CFD_API_SERVER + '/api/trend/reward/<trendId>',
+    POST_USER_LANGUAGE:CFD_API_SERVER + '/api/user/language',
 
   }
 }

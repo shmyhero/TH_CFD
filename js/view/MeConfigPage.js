@@ -29,20 +29,19 @@ var NetworkModule = require('../module/NetworkModule')
 var NetConstants = require('../NetConstants')
 var Toast = require('./component/toast/Toast');
 var VersionControlModule = require('../module/VersionControlModule')
-
+var LS = require('../LS')
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 var listRawData = [
-
-{'type':'normal','title':'推广码', 'subtype': 'promotionCode'},
-{'type':'normal','title':'用户协议', 'subtype': 'protocol'},
-{'type':'normal','title':'设置', 'subtype': 'pushconfig'},
-{'type':'normal','title':'账号绑定', 'subtype': 'accountbinding'},
-{'type':'normal','title':'切换到模拟交易', 'subtype': 'change2Simulator'},
-{'type':'normal','title':'登出实盘账号', 'subtype': 'logoutAccountActual'},
-{'type':'normal','title':'修改实盘登录密码', 'subtype': 'modifyLoginActualPwd'},
-{'type':'normal','title':'退出盈交易账号', 'subtype': 'logout'},
-{'type':'normal','title':'版本号', 'subtype': 'version'},
+{'type':'normal','title':'TGM', 'subtype': 'promotionCode'},
+{'type':'normal','title':'YHXY', 'subtype': 'protocol'},
+{'type':'normal','title':'SZ', 'subtype': 'pushconfig'},
+{'type':'normal','title':'ZHBD', 'subtype': 'accountbinding'},
+{'type':'normal','title':'QHDMNJY', 'subtype': 'change2Simulator'},
+{'type':'normal','title':'DCSPZH', 'subtype': 'logoutAccountActual'},
+{'type':'normal','title':'XGSPDLMM', 'subtype': 'modifyLoginActualPwd'},
+{'type':'normal','title':'TCYJYZH', 'subtype': 'logout'},
+{'type':'normal','title':'BBH', 'subtype': 'version'},
 ]
 
 if (Platform.OS === 'ios') {
@@ -368,7 +367,7 @@ var MeConfigPage = React.createClass({
 			 return(
 			  <TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
 			 	 <View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-			 		 <Text style={styles.title}>{rowData.title}</Text>
+			 		 <Text style={styles.title}>{LS.str(rowData.title)}</Text>
 					 {this.renderVersion()}
 			 	 </View>
 			  </TouchableOpacity>
@@ -377,7 +376,7 @@ var MeConfigPage = React.createClass({
 			 return(
 				<TouchableOpacity activeOpacity={0.5}>
 				 	<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-					 	<Text style={styles.title}>{rowData.title}</Text>
+					 	<Text style={styles.title}>{LS.str(rowData.title)}</Text>
 					 	<Text style={styles.contentValue}>{this.state.promotionCode}</Text>
 			 		</View>
 				</TouchableOpacity>
@@ -387,7 +386,7 @@ var MeConfigPage = React.createClass({
 			 return(
 	 			<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
 	 				<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-	 					<Text style={styles.title}>{rowData.title}</Text>
+	 					<Text style={styles.title}>{LS.str(rowData.title)}</Text>
 						<View style={styles.rightContent}>
 							<Text style={[styles.circle,{opacity:visable}]}>●</Text>
 		 					<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />

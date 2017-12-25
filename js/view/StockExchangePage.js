@@ -26,8 +26,8 @@ var NavBar = require('../view/NavBar')
 var LogicData = require('../LogicData')
 var MainPage = require('./MainPage')
 var OAStatusPage= require('./openAccount/OAStatusPage')
-
-var tabNames = ['持仓', '平仓', '统计']
+var LS = require('../LS')
+var tabNames = ['CC', 'PC', 'TJ']
 var didTabSelectSubscription = null
 var didAccountChangeSubscription = null
 //var didAccountLoginOutSideSubscription = null
@@ -135,6 +135,7 @@ var StockExchangePage = React.createClass({
 	},
 
 	renderLiveLogin:function(){
+		var strWDCW = LS.str('WDCW')
 		return(
 			// <View style={{flex:1,backgroundColor:'white',alignItems:'center'}}>
    	  //   <NavBar title="我的仓位" navigator={this.props.navigator}/>
@@ -143,7 +144,7 @@ var StockExchangePage = React.createClass({
 			// 	</TouchableOpacity>
 			// </View>
 			<View>
-				<NavBar title="我的仓位" navigator={this.props.navigator}/>
+				<NavBar title={strWDCW} navigator={this.props.navigator}/>
 				<OAStatusPage onLoginClicked={this.jumpToLogin}/>
 			</View>
 
@@ -156,10 +157,11 @@ var StockExchangePage = React.createClass({
 		if (userId == undefined) {
 			userId = 0
 		}
+		var strSPJY = LS.str('SPJY')
 		console.log("gotoAccountStateExce userId = " + userId);
 		this.props.navigator.push({
 			name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
-			title:'实盘交易',
+			title:strSPJY,
 			onNavigationStateChange: this.onWebViewNavigationStateChange,
 			logTimedelta: true,
 			url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
@@ -242,13 +244,14 @@ var StockExchangePage = React.createClass({
 
 
 		console.log('loggined = '+loggined + ' accState = ' + LogicData.getAccountState());
-
+		var strWDCW = LS.str('WDCW')
+		var tabNameShow = [LS.str(tabNames[0]),LS.str(tabNames[1]),LS.str(tabNames[2])]
 		if(loggined && LogicData.getAccountState()){//实盘状态
 			if(LogicData.getActualLogin()){
 				return (
 					<View style={{flex: 1}}>
-						<NavBar title="我的仓位" showSearchButton={true} navigator={this.props.navigator}/>
-						<ScrollTabView ref={"tabPages"} tabNames={tabNames} viewPages={viewPages} removeClippedSubviews={true}
+						<NavBar title={strWDCW} showSearchButton={true} navigator={this.props.navigator}/>
+						<ScrollTabView ref={"tabPages"} tabNames={tabNameShow} viewPages={viewPages} removeClippedSubviews={true}
 							onPageSelected={(index) => this.onPageSelected(index)} />
 					</View>
 				)

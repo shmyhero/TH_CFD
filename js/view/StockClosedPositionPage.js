@@ -30,7 +30,7 @@ var {EventCenter, EventConst} = require('../EventCenter');
 
 var {height, width} = Dimensions.get('window');
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
+var LS = require('../LS')
 var extendHeight = 204
 var rowHeight = 56
 var perPageCount = 20;
@@ -672,16 +672,19 @@ var StockClosedPositionPage = React.createClass({
 	},
 
 	renderHeaderBar: function() {
+		var strCP = LS.str('CP')
+		var strYK = LS.str('YK')
+		var strSYL = LS.str('SYL')
 			return (
 				<View style={styles.headerBar}>
 					<View style={[styles.rowLeftPart, {	paddingTop: 5,}]}>
-						<Text style={styles.headerTextLeft}>产品</Text>
+						<Text style={styles.headerTextLeft}>{strCP}</Text>
 					</View>
 					<View style={[styles.rowCenterPart]}>
-						<Text style={[styles.headerTextLeft]}>亏盈</Text>
+						<Text style={[styles.headerTextLeft]}>{strYK}</Text>
 					</View>
 					<View style={styles.rowRightPart}>
-						<Text style={styles.headerTextLeft}>收益率</Text>
+						<Text style={styles.headerTextLeft}>{strSYL}</Text>
 					</View>
 				</View>
 			);

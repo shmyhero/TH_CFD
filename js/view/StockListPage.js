@@ -27,7 +27,7 @@ var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 var WebSocketModule = require('../module/WebSocketModule');
 var CacheModule = require('../module/CacheModule');
 var AppStateModule = require('../module/AppStateModule');
-
+var LS = require('../LS')
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var didFocusSubscription = null;
 var recevieDataSubscription = null;
@@ -563,27 +563,30 @@ var StockListPage = React.createClass({
 	},
 
 	renderSortText: function() {
+		var strZF = LS.str('ZF')
 		if (this.state.sortType ===0) {
 			return (
 					<View style={styles.headerCell}>
-						<Text style={styles.headerText}>涨幅</Text>
+						<Text style={styles.headerText}>{strZF}</Text>
 						<Image style={[styles.sortImage, {transform: [{rotate: '0deg'}]}]} source={require('../../images/sort.png')}/>
 					</View>);
 		} else {
 			return (
 					<View style={styles.headerCell}>
-						<Text style={styles.headerText}>涨幅</Text>
+						<Text style={styles.headerText}>{strZF}</Text>
 						<Image style={[styles.sortImage, {transform: [{rotate: '180deg'}]}]} source={require('../../images/sort.png')}/>
 					</View>);
 		}
 	},
 
 	renderHeaderBar: function() {
+		var strZDB = LS.str('ZDB')
+
 		if (this.props.showHeaderBar) {
 			return (
 				<View style={styles.headerBar}>
 					<View style={styles.headerCell}>
-						<Text style={styles.headerTextLeft}>涨跌榜</Text>
+						<Text style={styles.headerTextLeft}>{strZDB}</Text>
 					</View>
 					<View style={{flex:3}}>
 					</View>
@@ -686,12 +689,14 @@ var StockListPage = React.createClass({
 	},
 
 	renderStockStatus:function(rowData){
+		var strBS = LS.str('BS')
+		var strZT = LS.str('ZT')
 		if(rowData!==undefined){
 			if(rowData.isOpen || rowData.status == undefined){
 				return null;
 			}else{
 				// console.log('rowData.isOpen = '+rowData.isOpen+' rowData.status = ' + rowData.status);
-				var statusTxt = rowData.status == 2 ? '暂停':'闭市'
+				var statusTxt = rowData.status == 2 ? strZT:strBS
 
 				return(
 					<View style={styles.statusLableContainer}>
@@ -761,7 +766,7 @@ var styles = StyleSheet.create({
 	},
 	headerCell: {
 		flexDirection: 'row',
-		flex: 1,
+		flex: 1.5,
 		alignItems: 'center',
 		justifyContent: 'center',
 		// borderWidth: 1,

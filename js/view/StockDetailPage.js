@@ -38,31 +38,31 @@ var MainPage = require('./MainPage')
 var StockTransactionInfoModal = require('./StockTransactionInfoModal')
 var {EventCenter, EventConst} = require('../EventCenter')
 var TimerMixin = require('react-timer-mixin');
-
+var LS = require('../LS')
 var {height, width} = Dimensions.get('window');
 var commonUtil = require('../utils/commonUtil');
 
 var tabData = [
-			{"type":NetConstants.PARAMETER_CHARTTYPE_TODAY, "name":'分时'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_TWO_HOUR, "name":'2小时'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_WEEK, "name":'5日'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_DAY, "name":'日K'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'5分钟'},]
+			{"type":NetConstants.PARAMETER_CHARTTYPE_TODAY, "name":'FS'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_TWO_HOUR, "name":'HOUR2'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_WEEK, "name":'DAY5'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_DAY, "name":'DAYK'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'MIN5'},]
 
 var tabDataLandscopeLine = [
-			{"type":NetConstants.PARAMETER_CHARTTYPE_TODAY, "name":'分时'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_TWO_HOUR, "name":'2小时'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_WEEK, "name":'5日'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_MONTH, "name":'1月'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_3_MONTH, "name":'3月'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_6_MONTH, "name":'6月'},]
+			{"type":NetConstants.PARAMETER_CHARTTYPE_TODAY, "name":'FS'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_TWO_HOUR, "name":'HOUR2'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_WEEK, "name":'DAY5'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_MONTH, "name":'MON1'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_3_MONTH, "name":'MON3'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_6_MONTH, "name":'MON6'},]
 
 var tabDataLandscopeCandle = [
-			{"type":NetConstants.PARAMETER_CHARTTYPE_1_MINUTE, "name":'1分钟'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'5分钟'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_15_MINUTE, "name":'15分钟'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_60_MINUTE, "name":'60分钟'},
-			{"type":NetConstants.PARAMETER_CHARTTYPE_DAY, "name":'日K'},]
+			{"type":NetConstants.PARAMETER_CHARTTYPE_1_MINUTE, "name":'MIN1'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_5_MINUTE, "name":'MIN5'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_15_MINUTE, "name":'MIN15'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_60_MINUTE, "name":'MIN60'},
+			{"type":NetConstants.PARAMETER_CHARTTYPE_DAY, "name":'DAYK'},]
 
 var didFocusSubscription = null;
 var updateStockInfoTimer = null;
@@ -298,7 +298,7 @@ var StockDetailPage = React.createClass({
 				var tradeableError = MaxTradeableValueError.error;
 				var longable = MaxTradeableValueError.longable;
 				var shortable = MaxTradeableValueError.shortable;
-				
+
 				newState.tradeableError = tradeableError;
 				newState.longable = longable;
 				newState.shortable = shortable;
@@ -621,7 +621,7 @@ var StockDetailPage = React.createClass({
 			<TouchableOpacity style={{width:width/tabData.length}} key={i}
 					onPress={() => this.pressChartHeaderTab(data.type)}>
 				<Text style={this.state.chartType == data.type? styles.chartTitleTextHighlighted : [styles.chartTitleText, tabcolorStyle]}>
-					{data.name}
+					{LS.str(data.name)}
 				</Text>
 			</TouchableOpacity>
 		)
@@ -642,7 +642,7 @@ var StockDetailPage = React.createClass({
 			<TouchableOpacity style={{justifyContent:'center',marginLeft:25}} key={i}
 					onPress={() => this.pressChartHeaderTab(data.type)}>
 				<Text style={this.state.chartType == data.type? styles.chartTitleTextHighlighted : [styles.chartTitleText, tabcolorStyle]}>
-					{data.name}
+					{LS.str(data.name)}
 				</Text>
 			</TouchableOpacity>
 		)
@@ -673,13 +673,15 @@ var StockDetailPage = React.createClass({
 	},
 
 	renderMinTradeMondy:function(){
+		var strZZJXDY = LS.str('ZZJXDY')
+		var strMY = LS.str('MY')
 		var tradeValue = this.state.money * this.state.leverage
 		var minValue = this.state.tradeDirection === 1 ? this.state.stockInfo.minValueLong : this.state.stockInfo.minValueShort
 		if(this.state.error ){
 		}else{
 			if(minValue){
 				return (
-					<Text style={styles.leftMoneyLabel}>本金*杠杆需大于{minValue.toFixed(0)}美元</Text>
+					<Text style={styles.leftMoneyLabel}>{strZZJXDY+minValue.toFixed(0)+strMY}</Text>
 				);
 			}
 		}
@@ -727,18 +729,20 @@ var StockDetailPage = React.createClass({
 		//status 0:正常 1：暂时无法获取数据 2:加载中
 		var status = this.state.dataStatus;
 		var imageError = LogicData.getAccountState()?require('../../images/icon_network_connection_error_live.png'):require('../../images/icon_network_connection_error.png')
-
 		var _width = this.state.orientation == ORIENTATION_LANDSPACE ? Math.max(this.state.width,this.state.height):Math.min(this.state.width,this.state.height);
-		console.log("_width : " + _width + " state.width = " + this.state.width +" state.height = " + this.state.height);
+
+		var strZSWFHQSJ = LS.str('ZSWFHQSJ')
+		var strSX = LS.str('SX')
+		var strJZZ = LS.str('JZZ')
 		if(status === 1){
 			return (
 				<View style={[styles.dataStatus,{width:_width}]}>
 					<View style={[styles.dataStatus2,{width:_width}]}>
 					<Image style={{width:24,height:24,marginBottom:5}} source={imageError}></Image>
-					<Text style={styles.textDataStatus}>暂时无法获取数据</Text>
+					<Text style={styles.textDataStatus}>{strZSWFHQSJ}</Text>
 					<TouchableOpacity onPress={()=> this.dataRefreshClicked()}>
 						<View>
-							<Text style={styles.textDataStatusRefresh}>刷新</Text>
+							<Text style={styles.textDataStatusRefresh}>{strSX}</Text>
 						</View>
 					</TouchableOpacity>
 					</View>
@@ -749,7 +753,7 @@ var StockDetailPage = React.createClass({
 				<View style={[styles.dataStatus,{width:_width}]}>
 					<View style={[styles.dataStatus2,{width:_width}]}>
 					{this._renderActivityIndicator()}
-					<Text style={styles.textDataStatus}>加载中...</Text>
+					<Text style={styles.textDataStatus}>{strJZZ}</Text>
 					</View>
 				</View>
 			)
@@ -861,6 +865,7 @@ var StockDetailPage = React.createClass({
 		var charge = 0
 		var viewMargin = 0;//= Platform.OS === 'ios' ? 0:15
 		// console.log("render: " + JSON.stringify(this.state.stockInfo))
+		var strWarning = LS.str('TRADE_WARNING')
 		return (
 			<View style={styles.wrapper, {width:width}}>
 				<LinearGradient colors={this.getGradientColor()} style={{height: Math.max(height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER, this.state.height)}}>
@@ -874,7 +879,7 @@ var StockDetailPage = React.createClass({
 						{this.renderDataStatus()}
 					</View>
 					<View>
-						<Text style={styles.tipsLine}>行情可能存在细微偏差</Text>
+						<Text style={styles.tipsLine}>{strWarning}</Text>
 					</View>
 					<View style={{flex: 1.2, justifyContent: 'space-around'}}>
 						{this.renderTradeButton()}
@@ -885,7 +890,7 @@ var StockDetailPage = React.createClass({
 					</View>
 					<View style={{flex: 2, alignItems: 'center', justifyContent: 'space-around', paddingTop: 30, paddingBottom: 10}}>
 						{this.renderErrorHint()}
-						{this.renderMinTradeMondy()}						
+						{this.renderMinTradeMondy()}
 						{/* <Text style={styles.smallLabel}> 手续费为{charge}美元</Text> */}
 						{this.renderOKButton()}
 						{this.renderStockCurrencyWarning()}
@@ -1083,12 +1088,14 @@ var StockDetailPage = React.createClass({
 	},
 
 	renderAddToMyListButton: function() {
+		var strSCZX = LS.str('SCZX')
+		var strZX = LS.str('ZX')
 		return (
 			<TouchableOpacity
 					onPress={this.addToMyListClicked}>
 				<View style={[styles.addToMyListContainer,{backgroundColor:ColorConstants.title_blue()}]}>
 					<Text style={styles.addToMyListText}>
-						{this.state.isAddedToMyList ? '删除自选':'+自选'}
+						{this.state.isAddedToMyList ? strSCZX:("+"+strZX)}
 					</Text>
 				</View>
 			</TouchableOpacity>
@@ -1107,7 +1114,8 @@ var StockDetailPage = React.createClass({
 		if (!downSelected) downTextColor = LogicData.getAccountState()?'#6781ab':'#568ff1'
 
 		var isLive = LogicData.getAccountState();
-
+		var strBuy = LS.str('BUY')
+		var strSell = LS.str('SELL')
 		return (
 			<View style={[styles.rowView, {alignItems:'stretch'}]}>
 
@@ -1121,7 +1129,7 @@ var StockDetailPage = React.createClass({
 						</Text>
 						{
 							LogicData.isIR()?
-							<Text style={{fontSize: 19,color:upTextColor}}>买入</Text>
+							<Text style={{fontSize: 19,color:upTextColor}}>{strBuy}</Text>
 							:
 							<Image style={styles.tradeButtonImage} source={upImage}/>
 						}
@@ -1138,7 +1146,7 @@ var StockDetailPage = React.createClass({
 						</Text>
 						{
 							LogicData.isIR()?
-							<Text style={{fontSize: 19,color:downTextColor}}>卖出</Text>
+							<Text style={{fontSize: 19,color:downTextColor}}>{strSell}</Text>
 							:
 							<Image style={styles.tradeButtonImage} source={downImage}/>
 						}
@@ -1156,11 +1164,12 @@ var StockDetailPage = React.createClass({
 			userId = 0
 		}
 		wattingLogin = true;
+		var strSPJY = LS.str('SPJY')
 		console.log("RAMBO wattingLogin = true ")
 		this.resetToLandscape()
 		this.props.navigator.push({
 			name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
-			title:'实盘交易',
+			title:strSPJY,
 			themeColor: "#3f5781",//ColorConstants.TITLE_DARK_BLUE,
 			onNavigationStateChange: this.onWebViewNavigationStateChange,
 			logTimedelta: true,
@@ -1187,12 +1196,13 @@ var StockDetailPage = React.createClass({
 	},
 
 	buyPress: function() {
-
+		var strZTJY_CLOSED = LS.str('ZTJY_CLOSED')
+		var strZTJY = LS.str('ZTJY')
 		if(this.state.stockInfo.status == 2) {
-			Alert.alert(this.state.stockInfo.name,'暂停交易')
+			Alert.alert(this.state.stockInfo.name,strZTJY)
 			return
 		}else	if(!this.state.stockInfo.isOpen) {
-			Alert.alert(this.state.stockInfo.name,'已停牌/休市,暂时不能进行交易')
+			Alert.alert(this.state.stockInfo.name,strZTJY_CLOSED)
 			return
 		}
 
@@ -1219,11 +1229,13 @@ var StockDetailPage = React.createClass({
 	},
 
 	sellPress: function() {
+		var strZTJY_CLOSED = LS.str('ZTJY_CLOSED')
+		var strZTJY = LS.str('ZTJY')
 		if(this.state.stockInfo.status == 2) {
-			Alert.alert(this.state.stockInfo.name,'暂停交易')
+			Alert.alert(this.state.stockInfo.name,strZTJY)
 			return
 		}else if(!this.state.stockInfo.isOpen) {
-			Alert.alert(this.state.stockInfo.name,'已停牌/休市,暂时不能进行交易')
+			Alert.alert(this.state.stockInfo.name,strZTJY_CLOSED)
 			return
 		}
 		var userData = LogicData.getUserData()
@@ -1292,11 +1304,13 @@ var StockDetailPage = React.createClass({
 	},
 
 	renderScrollHeader: function() {
+		var strBJ = LS.str('BENJIN')
+		var strGG = LS.str('GANGGAN')
 		return (
 			<TouchableWithoutFeedback>
 			<View style={[styles.rowView, {height:20}]}>
-				<Text style={styles.smallLabel}>本金（美元）</Text>
-				<Text style={styles.smallLabel}>杠杆（倍）</Text>
+				<Text style={styles.smallLabel}>{strBJ}</Text>
+				<Text style={styles.smallLabel}>{strGG}</Text>
 			</View>
 			</TouchableWithoutFeedback>
 		)
@@ -1519,13 +1533,16 @@ var StockDetailPage = React.createClass({
 				buttonEnable = false
 			}
 		}
+		var strZTJY = LS.str('ZTJY');
+		var strWKS = LS.str('WKS');
+		var strQR = LS.str('QR');
 		return (
 			<TouchableOpacity
 				activeOpacity={0.85}
 				onPress={() => buttonEnable ? this.okPress():this.okPressInDisable()}
 				style={[styles.okView, !buttonEnable && (LogicData.getAccountState()?styles.okViewDisabledLive:styles.okViewDisabled), !this.state.stockInfo.isOpen && (LogicData.getAccountState()?styles.okViewNotOpenedLive:styles.okViewNotOpened)]}>
 				<Text style={[styles.okButton, !buttonEnable &&  (LogicData.getAccountState()?styles.okButtonDisabledLive:styles.okButtonDisabled), !this.state.stockInfo.isOpen && styles.okButtonNotOpened]}>
-					{this.state.stockInfo.isOpen ? '确认' : (this.state.stockInfo.status == 2 ?'暂停交易':'未开市')}
+					{this.state.stockInfo.isOpen ? strQR : (this.state.stockInfo.status == 2 ?strZTJY:strWKS)}
 				</Text>
 			</TouchableOpacity>
 		)
@@ -1544,10 +1561,11 @@ var StockDetailPage = React.createClass({
 					fxPrice = '--'
 				}
 			}
-
+			var strDQY = LS.str('DQY')
+			var strHLJS_WN = LS.str('HLJS_WARNING')
 			return (
 				<Text style={styles.stockCurrencyWarningText}>
-					当前以{fxName}{fxPrice}汇率结算，存在汇率变动风险！
+					{strDQY}{fxName}{fxPrice}{strHLJS_WN}
 				</Text>
 			)
 		}
@@ -1591,18 +1609,23 @@ var StockDetailPage = React.createClass({
 	},
 
 	okPress: function() {
-
+		var strTip = LS.str('TS')
+		var strMin = LS.str('TIP_MIN')
+		var strHigh = LS.str('TIP_HIGH')
+		var strMax = LS.str('TIP_MAX')
+		var strMore = LS.str('TIP_MORE')
+		var strSum = LS.str('TIP_SUM')
 		var tradeValue = this.state.money * this.state.leverage
 		var minValue = this.state.tradeDirection === 1 ? this.state.stockInfo.minValueLong : this.state.stockInfo.minValueShort
 		var maxValue = this.state.tradeDirection === 1 ? this.state.stockInfo.maxValueLong : this.state.stockInfo.maxValueShort
 		if (this.state.money < this.state.minInvestUSD) {
-			Alert.alert('提示', '小于最小本金: ' + this.state.minInvestUSD.toFixed(0) + 'USD')
+			Alert.alert(strTip, strMin + this.state.minInvestUSD.toFixed(0) + 'USD')
 			return
 		}else if (tradeValue < minValue) {
-			Alert.alert('提示', '本金X杠杆需大于' + minValue.toFixed(0) + '美元\n请增加交易本金或者提升杠杆')
+			Alert.alert(strTip, strHigh + minValue.toFixed(0) + strMore)
 			return
 		} else if (tradeValue > maxValue) {
-			Alert.alert('提示', '高于最大交易额: ' + maxValue.toFixed(0) + 'USD\n(交易额=交易本金X杠杆)')
+			Alert.alert(strTip, strMax + maxValue.toFixed(0) + strSum)
 			return
 		}
 
@@ -1700,17 +1723,19 @@ var StockDetailPage = React.createClass({
 		var error = null;
 		var longable = true;
 		var shortable = true;
-		
-		if(this.state.stockInfo.maxValueLong <= 0 
+		var strERROR_CLOSED = LS.str('ERROR_CLOSED')
+		var strERROR_CAN_SHORT = LS.str('ERROR_CAN_SHORT')
+		var strERROR_CAN_LONG = LS.str('ERROR_CAN_LONG')
+		if(this.state.stockInfo.maxValueLong <= 0
 			&& this.state.stockInfo.maxValueShort <= 0){
-			error = '由于流动性不足，此品种当前不能交易';
+			error = strERROR_CLOSED;
 			longable = false;
 			shortable = false;
 		} else if(this.state.stockInfo.maxValueLong <= 0){
-			error = '由于流动性不足，此品种当前只允许做空'
+			error = strERROR_CAN_SHORT
 			longable = false;
 		} else if(this.state.stockInfo.maxValueShort <= 0){
-			error = '由于流动性不足，此品种当前只允许做多'
+			error = strERROR_CAN_LONG
 			shortable = false;
 		}
 		return {error, longable, shortable};
@@ -1727,31 +1752,38 @@ var StockDetailPage = React.createClass({
 		console.log("checkError maxValue " + maxValue)
 		console.log("checkError value " + value)
 		console.log("checkError leverage " + leverage)
-		
+
 		var leverageArray = this.getAvailableLeverage()
 		var maxLeverage = leverageArray[leverageArray.length - 1];
 
 		var error = null;
 
-		if (this.state.money < this.state.minInvestUSD && this.state.money * maxLeverage < this.state.minInvestUSD) {	
-			error = '本金*杠杆需大于' + this.state.minInvestUSD.toFixed(0) + '美元'
+		var strMY = LS.str('MY');
+		var strZZJXDY = LS.str('ZZJXDY')
+		var strZZJXXY = LS.str('ZZJXXY')
+
+		if (this.state.money < this.state.minInvestUSD && this.state.money * maxLeverage < this.state.minInvestUSD) {
+			error = strZZJXDY + this.state.minInvestUSD.toFixed(0) + strMY
 		} else if (tradeValue < minValue) {
-			error = "本金 x 杠杆需大于" + minValue.toString() + "美元";
+			error = strZZJXDY + minValue.toString() + strMY;
 		} else if (tradeValue > maxValue) {
-			error = "本金 x 杠杆需小于" + maxValue.toString() + "美元";
+			error = strZZJXXY + maxValue.toString() + strMY;
 		}
 		console.log("checkError error " + error)
 		return error;
 	},
 
 	showKeyboard: function(){
+		var strMY = LS.str('MY');
+		var strXYZJBJ = LS.str('XYZXBJ');
+		var strSYBJBG = LS.str('SYBJBG');
 		MainPage.showKeyboard({
 			value: this.state.money,
 			checkError: (value)=>{
 				if(value < this.state.minInvestUSD){
-					return "小于最小本金： " + this.state.minInvestUSD.toFixed(0) + "美元";
+					return strXYZJBJ + this.state.minInvestUSD.toFixed(0) + strMY;
 				}else if (value > this.state.totalMoney){
-					return "剩余本金不够！";
+					return strSYBJBG;
 				}
 				return null;
 			},

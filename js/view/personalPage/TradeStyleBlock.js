@@ -11,7 +11,7 @@ var ColorConstants = require('../../ColorConstants');
 var LogicData = require('../../LogicData');
 var NetConstants = require('../../NetConstants');
 var NetworkModule = require('../../module/NetworkModule');
-
+var LS = require('../../LS')
 export default class TradeStyleBlock extends Component {
   static propTypes = {
     userId: PropTypes.number,
@@ -61,32 +61,38 @@ export default class TradeStyleBlock extends Component {
   }
 
   render() {
+    var strJYFG = LS.str('JYFG')
+    var strPJGG = LS.str('PJGG')
+    var strLJXD = LS.str('LJXD')
+    var strPJCCSJ = LS.str('PJCCSJ')
+    var strPJBJ = LS.str('PJBJ')
+
     return (
       <View style={[styles.container, this.props.style]}>
         <View style={styles.titleRow}>
-          <Text style={styles.titleText}>交易风格</Text>
+          <Text style={styles.titleText}>{strJYFG}</Text>
         </View>
 				<View style={styles.separator}/>
         <View style={styles.contentRow}>
           <View style={styles.contentBlock}>
-            <Text style={styles.contentTitleBlock}>平均杠杆(倍)</Text>
+            <Text style={styles.contentTitleBlock}>{strPJGG}</Text>
             <Text style={styles.contentValueBlock}>{this.state.averageLeverage}</Text>
           </View>
           <View style={styles.verticalSeparator}/>
           <View style={styles.contentBlock}>
-            <Text style={styles.contentTitleBlock}>累计下单(次)</Text>
+            <Text style={styles.contentTitleBlock}>{strLJXD}</Text>
             <Text style={styles.contentValueBlock}>{this.state.totalTradeCount}</Text>
           </View>
         </View>
         <View style={[styles.separator, {marginLeft: 15, marginRight: 15,}]}/>
         <View style={styles.contentRow}>
           <View style={styles.contentBlock}>
-            <Text style={styles.contentTitleBlock}>平均持仓时间(天)</Text>
+            <Text style={styles.contentTitleBlock}>{strPJCCSJ}</Text>
             <Text style={styles.contentValueBlock}>{this.state.averageOpenTime}</Text>
           </View>
           <View style={styles.verticalSeparator}/>
           <View style={styles.contentBlock}>
-            <Text style={styles.contentTitleBlock}>平均本金(美元)</Text>
+            <Text style={styles.contentTitleBlock}>{strPJBJ}</Text>
             <Text style={styles.contentValueBlock}>{this.state.averageInvestUSD}</Text>
           </View>
         </View>

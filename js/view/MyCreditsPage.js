@@ -14,7 +14,7 @@ import {
 	TouchableOpacity,
 	Alert,
 } from 'react-native';
-
+var LS = require('../LS')
 var MainPage = require('./MainPage')
 var NetworkModule = require('../module/NetworkModule')
 var ColorConstants = require('../ColorConstants')
@@ -78,7 +78,7 @@ var MyCreditsPage = React.createClass({
 					{'type':'header'},
 					{'type':'banner'},
 					];
-					
+
 					for(var i = 0;i<ITEMS.length;i++){
 						listRawData.push(
 							{'type':'normal','title':ITEMS[i].name,'value':ITEMS[i].score}
@@ -109,9 +109,10 @@ var MyCreditsPage = React.createClass({
 	},
 
 	showRules: function(){
+		var strJFGZ = LS.str('JFGZ')
 		this.props.navigator.push({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
-			title:'积分规则',
+			title:{strJFGZ},
 			url:NetConstants.TRADEHERO_API.CREDITS_RULE
 		});
 	},
@@ -132,11 +133,13 @@ var MyCreditsPage = React.createClass({
 	},
 
   renderTotalIncome: function(){
+		var strLJHDJF = LS.str('LJHDJF')
+		var strSYJF = LS.str('SYJF')
     return(
 				<View style={{flex:1, flexDirection: 'row', justifyContent: 'space-around'}}>
 					<View style={styles.totalTextContainer}>
 		        <Text style={styles.totalRewardTitleText}>
-		          累计获得积分
+		          {strLJHDJF}
 		        </Text>
 		        <Text style={styles.totalRewardText}>
 		          {this.state.creditsTotal}
@@ -144,7 +147,7 @@ var MyCreditsPage = React.createClass({
 		      </View>
 					<View style={styles.totalTextContainer}>
 						<Text style={styles.totalRewardTitleText}>
-							剩余积分
+							{strSYJF}
 						</Text>
 						<Text style={styles.totalRewardText}>
 							{this.state.creditsRemain}
@@ -217,12 +220,13 @@ var MyCreditsPage = React.createClass({
 	},
 
 
-
 	render: function() {
+		var strWDJF = LS.str('WDJF')
+		var strGZ = LS.str('GZ')
 		return (
 			<View style={styles.wrapper}>
-				<NavBar title='我的积分' showBackButton={true} navigator={this.props.navigator}
-					textOnRight='规则'
+				<NavBar title={strWDJF} showBackButton={true} navigator={this.props.navigator}
+					textOnRight={strGZ}
 					rightTextOnClick={()=>this.showRules()}/>
 				<ListView
 					style={styles.list}

@@ -16,7 +16,7 @@ var NetConstants = require('../../NetConstants');
 var UIConstants = require('../../UIConstants');
 var NetworkModule = require('../../module/NetworkModule');
 var NetworkErrorIndicator = require('../../view/NetworkErrorIndicator');
-
+var LS = require('../../LS')
 var {height, width} = Dimensions.get('window');
 var stockNameFontSize = Math.round(17*width/375.0);
 
@@ -130,16 +130,19 @@ export default class PositionBlock extends Component {
 	}
 
   renderHeaderBar() {
+    var strCP = LS.str('CP')
+    var strYK = LS.str('YK')
+    var strSYL = LS.str('SYL')
     return (
       <View style={styles.headerBar}>
         <View style={[styles.rowLeftPart, {	paddingTop: 5,}]}>
-          <Text style={styles.headerTextLeft}>产品</Text>
+          <Text style={styles.headerTextLeft}>{strCP}</Text>
         </View>
         <View style={[styles.rowCenterPart, {	paddingRight: 10,}]}>
-          <Text style={[styles.headerTextLeft, {paddingRight: 0,}]}>亏盈</Text>
+          <Text style={[styles.headerTextLeft, {paddingRight: 0,}]}>{strYK}</Text>
         </View>
         <View style={styles.rowRightPart}>
-          <Text style={styles.headerTextLeft}>收益率</Text>
+          <Text style={styles.headerTextLeft}>{strSYL}</Text>
         </View>
       </View>
     );
@@ -194,10 +197,13 @@ export default class PositionBlock extends Component {
 	}
 
   render() {
+    var strYHWGKSJ = LS.str('YHWGKSJ')
+    var strZWCCJL = LS.str('ZWCCJL')
+    var strZWPCJL = LS.str('ZWPCJL')
     if(this.props.isPrivate){
       return (
         <View style={styles.emptyView}>
-          <Text style={styles.loadingText}>用户未公开数据</Text>
+          <Text style={styles.loadingText}>{strYHWGKSJ}</Text>
         </View>
       )
     }else{
@@ -206,12 +212,12 @@ export default class PositionBlock extends Component {
   				<NetworkErrorIndicator onRefresh={()=>this.loadData()} refreshing={this.state.isRefreshing}/>
   			)
   		}else {
-        
+
         if(this.state.stockInfoRowData.length === 0) {
-          console.log("暂无持仓记录");
+
   			return (
   				<View style={styles.emptyView}>
-  					<Text style={styles.loadingText}>{ this.props.type== "open" ? "暂无持仓记录":"暂无平仓记录"}</Text>
+  					<Text style={styles.loadingText}>{ this.props.type== "open" ? strZWCCJL:strZWPCJL}</Text>
   				</View>
   				)
         }else{

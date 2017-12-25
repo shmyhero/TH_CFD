@@ -39,7 +39,7 @@ var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 var CacheModule = require('../module/CacheModule');
 var AppStateModule = require('../module/AppStateModule');
 var {EventCenter, EventConst} = require('../EventCenter');
-
+var LS = require('../LS')
 var {height, width} = Dimensions.get('window');
 var tabData = [
 			{"type":NetConstants.PARAMETER_CHARTTYPE_TODAY, "name":'分时'},
@@ -1035,27 +1035,31 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	renderHeaderBar: function() {
+		var strCP = LS.str('CP')
+		var strYK = LS.str('YK')
+		var strSYL = LS.str('SYL')
+
 			return (
 				<View style={styles.headerBar}>
 					<View style={[styles.rowLeftPart, {	paddingTop: 5,}]}>
-						<Text style={styles.headerTextLeft}>产品</Text>
+						<Text style={styles.headerTextLeft}>{strCP}</Text>
 					</View>
 					<View style={[styles.rowCenterPart, {	paddingRight: 10,}]}>
-						<Text style={[styles.headerTextLeft, {paddingRight: 0,}]}>亏盈</Text>
+						<Text style={[styles.headerTextLeft, {paddingRight: 0,}]}>{strYK}</Text>
 					</View>
 					<View style={styles.rowRightPart}>
-						<Text style={styles.headerTextLeft}>收益率</Text>
+						<Text style={styles.headerTextLeft}>{strSYL}</Text>
 					</View>
 				</View>
 			);
 	},
 
 	renderFootBar: function() {
-
+		var strCCYK = LS.str('CCYK')
 			return (
 				<View style={styles.headerBar}>
 					<View style={[styles.rowLeftPart, {	paddingTop: 5,}]}>
-						<Text style={styles.headerTextLeft}>持仓盈亏</Text>
+						<Text style={styles.headerTextLeft}>{strCCYK}</Text>
 					</View>
 					<View style={[styles.rowCenterPart, {	paddingRight:width/3,}]}>
 						<Text style={[styles.headerTextLeft, {paddingRight: 0,}]}>{this.state.totalCount.toFixed(2)}</Text>
@@ -1086,7 +1090,7 @@ var StockOpenPositionPage = React.createClass({
 				return null;
 			}else{
 				// console.log('rowData.security.status = ' + rowData.security.status);
-				var statusTxt = rowData.security.status == 2 ? '暂停':'闭市'
+				var statusTxt = rowData.security.status == 2 ? LS.str('ZT'):LS.str('BS')
 				return(
 					<View style={styles.statusLableContainer}>
 						<Text style={styles.statusLable}>{statusTxt}</Text>
@@ -1996,10 +2000,11 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	renderLoadingText: function() {
+		var strZWCCJL = LS.str('ZWCCJL')
 		if(this.state.stockInfoRowData.length === 0) {
 			return (
 				<View style={styles.loadingTextView}>
-					<Text style={styles.loadingText}>暂无持仓记录</Text>
+					<Text style={styles.loadingText}>{strZWCCJL}</Text>
 				</View>
 				)
 		}

@@ -91,7 +91,7 @@ var CustomKeyboard = require('./CustomKeyboard');
 var NewTweetPage = require('./tweet/NewTweetPage')
 
 var TutorialPage = require('./TutorialPage');
-
+var LS = require('../LS');
 var LocalDataUpdateModule = require('../module/LocalDataUpdateModule')
 
 var _navigator;
@@ -292,30 +292,34 @@ var MainPage = React.createClass({
 				</View>
 			);
 		} else if (route.name === MY_HOME_ROUTE) {
+      var strWD= LS.str('WODE')
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title="我的" />
+					<NavBar title={strWD} />
 					<MyHomePage navigator={navigationOperations}/>
 				</View>
 			);
 		} else if (route.name === MY_NOTIFICATION_ROUTE) {
+      var strTZ= LS.str('TZ')
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title="通知" showBackButton={true} navigator={navigationOperations}/>
+					<NavBar title={strTZ} showBackButton={true} navigator={navigationOperations}/>
 					<MyNotifications navigator={navigationOperations} />
 				</View>
 			);
 		} else if (route.name === MY_SETTING_ROUTE) {
+      var strSZ= LS.str('SZ')
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title="设置" showBackButton={true} navigator={navigationOperations}/>
+					<NavBar title={strSZ} showBackButton={true} navigator={navigationOperations}/>
 					<MySettings navigator={navigationOperations} />
 				</View>
 			);
 		} else if (route.name === WECHAT_LOGIN_CONFIRM_ROUTE) {
+      var strSY= LS.str('SHOUYE')
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title="首页" showBackButton={true} navigator={navigationOperations}/>
+					<NavBar title={strSY} showBackButton={true} navigator={navigationOperations}/>
 					<WechatLoginConfirmPage navigator={navigationOperations} />
 				</View>
 			);
@@ -335,7 +339,7 @@ var MainPage = React.createClass({
 				<View style={{flex: 1}}>
 					<NavBar onlyShowStatusBar={true}
 						backgroundColor={ColorConstants.title_blue()}/>
-					<StockSearchPage navigator={navigationOperations} 
+					<StockSearchPage navigator={navigationOperations}
 						style={{flex: 1}}
 						searchType={route.searchType}
 						onGetItem={route.onGetItem}/>
@@ -466,17 +470,19 @@ var MainPage = React.createClass({
 			)
 		} else if(route.name === ME_CONFIG_ROUTE){
 			hideTabbar();
+      var strGD = LS.str('GD')
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title="更多" showBackButton={true} navigator={navigationOperations}/>
+					<NavBar title={strGD} showBackButton={true} navigator={navigationOperations}/>
 					<MeConfigPage navigator={navigationOperations} onPopBack={route.onPopBack}/>
 				</View>
 			)
 		} else if(route.name === ME_CONFIG_MODIFY_PWD_ROUTE){
 			hideTabbar();
+      var strXGDLMM = LS.str('XGDLMM')
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title="修改登入密码" showBackButton={true} navigator={navigationOperations}/>
+					<NavBar title={strXGDLMM} showBackButton={true} navigator={navigationOperations}/>
 					<ModifyPwdPage navigator={navigationOperations} onPopBack={route.onPopBack}/>
 				</View>
 			)
@@ -489,9 +495,10 @@ var MainPage = React.createClass({
 			)
 		} else if(route.name === ME_ACCOUNT_BINDING_ROUTE){
 			hideTabbar();
+      var strZHBD = LS.str('ZHBD')
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title="账号绑定" showBackButton={true} navigator={navigationOperations}/>
+					<NavBar title={strZHBD} showBackButton={true} navigator={navigationOperations}/>
 					<MeAccountBindingPage navigator={navigationOperations} onPopBack={route.onPopBack}/>
 				</View>
 			)
@@ -511,18 +518,20 @@ var MainPage = React.createClass({
 			return OpenAccountRoutes.showOARoute(_navigator, route.step, route.onPop, route.data, route.nextStep);
 		} else if (route.name === LIVE_REGISTER_ROUTE) {
 			// hideTabbar()
+      var strSPZC = LS.str('SPZC')
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title='实盘注册' showBackButton={true}
+					<NavBar title={strSPZC} showBackButton={true}
 						backgroundColor={ColorConstants.TITLE_DARK_BLUE}
 						navigator={navigationOperations}/>
 					<LiveRegisterPage navigator={navigationOperations}/>
 				</View>
 			)
 		} else if (route.name === LIVE_UPDATE_USER_INFO_ROUTE) {
+      var strSPZC = LS.str('SPZC')
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title='实盘注册' showBackButton={true}
+					<NavBar title={strSPZC} showBackButton={true}
 						backgroundColor={ColorConstants.TITLE_DARK_BLUE}
 						navigator={navigationOperations}/>
 					<LiveUpdateUserInfoPage navigator={navigationOperations}/>
@@ -530,9 +539,10 @@ var MainPage = React.createClass({
 			)
 		} else if (route.name === LIVE_REGISTER_STATUS_ROUTE) {
 			showTabbar()
+      var strSPJY = LS.str('SPJY')
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title='实盘交易'
+					<NavBar title={strSPJY}
 						backgroundColor={ColorConstants.TITLE_DARK_BLUE}
 						navigator={navigationOperations}/>
 					<LiveRegisterStatusPage navigator={navigationOperations}/>
@@ -540,9 +550,10 @@ var MainPage = React.createClass({
 			)
 		} else if (route.name === STOCK_POPULARITY_ROUTE) {
 			hideTabbar()
+      var strSCQX = LS.str('SCQX')
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title='市场情绪' showBackButton={true}
+					<NavBar title={strSCQX} showBackButton={true}
 						backButtonOnClick={()=>{
 								this.backAndShowTabbar()
 							}
@@ -596,9 +607,10 @@ var MainPage = React.createClass({
 		}
 		else if(route.name === MY_MESSAGES_ROUTE){
 			hideTabbar()
+      var strWDXX = LS.str('WDXX')
 			return(
 				<View style={{flex: 1}}>
-					<NavBar title='我的消息' showBackButton={true}
+					<NavBar title={strWDXX} showBackButton={true}
 						backButtonOnClick={()=>this.backAndShowTabbar()}
 						navigator={navigationOperations}/>
 					<MyMessagesPage navigator={navigationOperations} routeMapper={this.RouteMapper}
@@ -607,9 +619,10 @@ var MainPage = React.createClass({
 			)
 		}else if (route.name === DEVELOP_ROUTE){
 			hideTabbar();
+      var strTEST = LS.str('TEST')
 			return (
 				<View style={{flex: 1}}>
-					<NavBar title='测试' showBackButton={true}
+					<NavBar title={strTEST} showBackButton={true}
 						backButtonOnClick={()=>this.backAndShowTabbar()}
 						navigator={navigationOperations}/>
 					<DevelopPage navigator={navigationOperations} routeMapper={this.RouteMapper}
@@ -1466,9 +1479,10 @@ var MainPage = React.createClass({
 		console.log("gotoAccountStateExce userId = " + userId);
 		console.log("_navigator LogicData.getTabIndex() " + LogicData.getTabIndex())
 		//console.log(_navigator)
+    var strSPJY = LS.str('SPJY')
 		var route = {
 			name: NAVIGATOR_WEBVIEW_ROUTE,
-			title:'实盘交易',
+			title:strSPJY,
 			themeColor: ColorConstants.TITLE_BLUE_LIVE,
 			onNavigationStateChange: (navState)=>{
 				this.onWebViewNavigationStateChange(navState, doNotPopWhenFinished, onSuccess)
@@ -1548,12 +1562,13 @@ var MainPage = React.createClass({
 	},
 
 	renderRankingTab: function(){
+    var strDR = LS.str('DAREN')
 		if(HIDE_RANKING_TAB){
 			return;
 		}else {
 			return (
 				<Tab name="ranking">
-					<Icon ref={"rankingBtn"} label="达人" type={glypy.Ranking} from={'myhero'} onActiveColor={systemBuleActual} onInactiveColor={iconGrey}/>
+					<Icon ref={"rankingBtn"} label={strDR} type={glypy.Ranking} from={'myhero'} onActiveColor={systemBuleActual} onInactiveColor={iconGrey}/>
 					<RawContent ref={component => {
 						console.log("component " + component)
 						this.rankingContent = component;
@@ -1562,7 +1577,7 @@ var MainPage = React.createClass({
 							rankingRef.tabWillFocus = EventCenter.emitRankingTabPressEvent;
 						}
 					}}>
-					<Navigator
+          <Navigator
 						style={styles.container}
 						initialRoute={{name: RANKING_PAGE_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
 						configureScene={() => Navigator.SceneConfigs.PushFromRight}
@@ -1574,10 +1589,15 @@ var MainPage = React.createClass({
 	},
 
 	renderTabbar: function(){
+    var strSY = LS.str('SHOUYE')
+    var strHQ = LS.str('HANGQING')
+    var strCW = LS.str('CANGWEI')
+
+    var strWD = LS.str('WODE')
 		return (
 			<Tabbar ref="myTabbar" barColor='#f7f7f7' style={{alignItems: 'stretch'}}>
 				<Tab name="home">
-						<Icon ref={"homepageBtn"} label="首页"
+						<Icon ref={"homepageBtn"} label={strSY}
 							type={glypy.Home}
 							from={'myhero'}
 							onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue}
@@ -1595,7 +1615,7 @@ var MainPage = React.createClass({
 						</RawContent>
 				</Tab>
 				<Tab name="trend">
-						<Icon ref={"trendBtn"} label="行情" type={glypy.Camera} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
+						<Icon ref={"trendBtn"} label={strHQ} type={glypy.Camera} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
 						<RawContent style={{width: 100}} ref="stockContent">
 							<Navigator
 					style={styles.container}
@@ -1605,7 +1625,7 @@ var MainPage = React.createClass({
 						</RawContent>
 				</Tab>
 				<Tab name="trade">
-						<Icon ref={"tradeBtn"} label="仓位" type={glypy.Stat} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
+						<Icon ref={"tradeBtn"} label={strCW} type={glypy.Stat} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
 					<RawContent ref="exchangeContent">
 							<Navigator
 					style={styles.container}
@@ -1618,7 +1638,7 @@ var MainPage = React.createClass({
 				{this.renderRankingTab()}
 
 				<Tab name="me">
-						<Icon ref={"meBtn"} label="我的" type={glypy.Settings} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
+						<Icon ref={"meBtn"} label={strWD} type={glypy.Settings} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
 						<RawContent ref="meContent">
 				<Navigator
 					style={styles.container}

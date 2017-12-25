@@ -24,21 +24,21 @@ var ColorConstants = require('../ColorConstants');
 var UIConstants = require('../UIConstants');
 var {height, width} = Dimensions.get('window');
 var heightRate = height/667.0;
-
+var LS = require('../LS')
 var listRawData = [
-	{'type':'head','title':'头像', 'subtype': 'head'},
-	{'type':'nickName','title':'昵称', 'subtype': 'nickName'},
-	{'type':'mobile','title':'账号', 'subtype': 'mobile'},
+	{'type':'head','title':'TX', 'subtype': 'head'},
+	{'type':'nickName','title':'NC', 'subtype': 'nickName'},
+	{'type':'mobile','title':'ZH', 'subtype': 'mobile'},
 ];
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var ImagePicker = require('react-native-image-picker');
 
-const Options = {
+var Options = {
 	title: null, // specify null or empty string to remove the title
-	cancelButtonTitle: '取消',
-	takePhotoButtonTitle: '拍照', // specify null or empty string to remove this button
-	chooseFromLibraryButtonTitle: '照片图库', // specify null or empty string to remove this button
+	cancelButtonTitle: LS.str('QX'),
+	takePhotoButtonTitle: LS.str('PZ'), // specify null or empty string to remove this button
+	chooseFromLibraryButtonTitle: LS.str('ZPTK'), // specify null or empty string to remove this button
 	cameraType: 'back', // 'front' or 'back'
 	mediaType: 'photo', // 'photo' or 'video'
 	maxWidth: Math.floor(width), // photos only
@@ -105,7 +105,9 @@ var AccountInfoPage = React.createClass({
 	},
 
 	pressAddImage: function() {
-
+		Options.cancelButtonTitle= LS.str('QX'),
+		Options.takePhotoButtonTitle= LS.str('PZ'),
+		Options.chooseFromLibraryButtonTitle= LS.str('ZPTK'),
 		ImagePicker.showImagePicker(Options, (response) => {
 			console.log('Response = ', response);
 
@@ -147,12 +149,12 @@ var AccountInfoPage = React.createClass({
 			},
 			(responseJson) => {
 				LocalDataUpdateModule.updateMeData(userData, function(){
-					Alert.alert('设置头像', '头像设置成功',
-						[{text:'确定', onPress: ()=>this.confirmOfSuccess()}]);
+					Alert.alert(SL.str('SZTX'), SL.str('TXSZCG'),
+						[{text:SL.str('QD'), onPress: ()=>this.confirmOfSuccess()}]);
 				}.bind(this));
 			},
 			(result) => {
-				Alert.alert('设置头像', result.errorMessage);
+				Alert.alert(SL.str('SZTX'), result.errorMessage);
 			}
 		)
 	},
@@ -183,7 +185,7 @@ var AccountInfoPage = React.createClass({
 				return(
 					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
 						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-							<Text style={styles.title}>{rowData.title}</Text>
+							<Text style={styles.title}>{LS.str(rowData.title)}</Text>
 							<Image source={source} defaultSource={require('../../images/head_portrait.png')} borderRadius={24*heightRate} style={[styles.headImage,{marginRight:5}]} />
 							<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
 						</View>
@@ -193,7 +195,7 @@ var AccountInfoPage = React.createClass({
 				return(
 					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
 						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-							<Text style={styles.title}>{rowData.title}</Text>
+							<Text style={styles.title}>{LS.str(rowData.title)}</Text>
 							<Text style={styles.contentValue}>{this.state.nickname}</Text>
 							<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
 						</View>
@@ -203,7 +205,7 @@ var AccountInfoPage = React.createClass({
 				if(this.state.mobile){
 					return(
 						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-							<Text style={styles.title}>{rowData.title}</Text>
+							<Text style={styles.title}>{LS.str(rowData.title)}</Text>
 							<Text style={styles.contentValue}>{this.state.mobile}</Text>
 						</View>
 					);
@@ -218,9 +220,10 @@ var AccountInfoPage = React.createClass({
 	},
 
 	render: function() {
+		var strZHXX = LS.str('ZHXX')
 		return (
 			<View style={styles.wrapper}>
-				<NavBar title='帐号信息' showBackButton={true} navigator={this.props.navigator}/>
+				<NavBar title={strZHXX} showBackButton={true} navigator={this.props.navigator}/>
 				<ListView
 					style={styles.list}
 					dataSource={this.state.dataSource}

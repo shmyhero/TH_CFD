@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 
 var {EventCenter, EventConst} = require('../EventCenter')
-
+var LS = require('../LS')
 var NativeSceneModule = require('../module/NativeSceneModule')
 var NativeDataModule = require('../module/NativeDataModule')
 var LogicData = require('../LogicData')
@@ -25,8 +25,7 @@ var NetConstants = require('../NetConstants')
 var NavBar = require('../view/NavBar')
 var MainPage = require('./MainPage')
 
-
-var tabNames = ['自选', '美股','港股','指数', '外汇', '商品']
+var tabNames = ['ZX', 'MG','GG','ZS', 'WH', 'SP']
 var urlKeys = [
 	'GET_USER_BOOKMARK_LIST_API',
 	'GET_US_STOCK_TOP_GAIN_API',
@@ -36,7 +35,7 @@ var urlKeys = [
 	'GET_FUTURE_LIST_API',
 ]
 
-var tabNamesLive = ['自选', '美股', '港股','指数', '外汇', '商品']
+var tabNamesLive = ['ZX', 'MG','GG','ZS', 'WH', 'SP']
 var urlKeysLive = [
 	'GET_USER_BOOKMARK_LIST_LIVE_API',
 	'GET_US_STOCK_TOP_GAIN_LIVE_API',
@@ -148,10 +147,13 @@ var StockListViewPager = React.createClass({
 	},
 
 	renderNavBar: function() {
+		var strBJ = LS.str('BJ')
+		var strHQ = LS.str('HANGQING')
+		var strHQWLJ = LS.str('HQWLJ')
 		var hasOwnStocks = LogicData.getOwnStocksData().length !== 0
 		return (
-			<NavBar title={this.state.connected ? "行情" : "行情（未连接）"}
-				textOnLeft={(_currentSelectedTab==0 && hasOwnStocks) ? '编辑' : null}
+			<NavBar title={this.state.connected ? strHQ : strHQWLJ}
+				textOnLeft={(_currentSelectedTab==0 && hasOwnStocks) ? strBJ : null}
 				leftTextOnClick={this.editButtonClicked}
 				showSearchButton={true}
 				navigator={this.props.navigator}/>
@@ -160,7 +162,8 @@ var StockListViewPager = React.createClass({
 
 	render: function() {
 		var {height, width} = Dimensions.get('window');
-
+		var tabNamesShow = [LS.str(tabNames[0]),LS.str(tabNames[1]),LS.str(tabNames[2]),LS.str(tabNames[3]),LS.str(tabNames[4]),LS.str(tabNames[5])]
+		var tabNamesLiveShow = [LS.str(tabNamesLive[0]),LS.str(tabNamesLive[1]),LS.str(tabNamesLive[2]),LS.str(tabNamesLive[3]),LS.str(tabNamesLive[4]),LS.str(tabNamesLive[5])]
 		if(LogicData.getAccountState()){
 			var viewPages = tabNamesLive.map(
 				(tabName, i) =>
@@ -175,7 +178,7 @@ var StockListViewPager = React.createClass({
 				<View style={[styles.wrapper, {width: width}]}>
 					{this.renderNavBar()}
 					<ScrollTabView
-							tabNames={tabNamesLive}
+							tabNames={tabNamesLiveShow}
 							viewPages={viewPages}
 							onPageSelected={(index) => this.onPageSelected(index)} />
 				</View>
@@ -194,7 +197,7 @@ var StockListViewPager = React.createClass({
 				<View style={[styles.wrapper, {width: width}]}>
 					{this.renderNavBar()}
 					<ScrollTabView
-							tabNames={tabNames}
+							tabNames={tabNamesShow}
 							viewPages={viewPages}
 							onPageSelected={(index) => this.onPageSelected(index)} />
 				</View>

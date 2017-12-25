@@ -17,7 +17,7 @@ var NetConstants = require('../NetConstants');
 var NetworkModule = require('../module/NetworkModule');
 var TimerMixin = require('react-timer-mixin');
 var LogicData = require('../LogicData');
-
+var LS = require('../LS')
 var {height, width} = Dimensions.get('window')
 var barWidth = Math.round(width/3)-12
 
@@ -84,10 +84,13 @@ var StockPopularityPage = React.createClass({
 		var buyWidth = barWidth * percent
 		var sellWidth = barWidth * (1-percent)
 		percent = Math.round(percent*100)
+		var strKD = LS.str('KD')
+		var strKK = LS.str('KK')
+		var strRCY = LS.str('RCY')
 		return (
 			<TouchableOpacity style={[styles.popularityRowContainer, {width: width}]} onPress={()=>this.gotoStockDetail(rowData)}>
 				<View style={styles.popularityRowLeft}>
-					<Text style={styles.buyTitle}>看多 {percent}%</Text>
+					<Text style={styles.buyTitle}>{strKD} {percent}%</Text>
 					<View style={[styles.grayBar, {width:barWidth}]}>
 						<View style={[styles.redBar, {width:buyWidth}]}/>
 					</View>
@@ -95,10 +98,10 @@ var StockPopularityPage = React.createClass({
 				<View style={styles.popularityRowCenter}>
 					<Text style={[styles.stockName,{color:LogicData.getAccountState()?ColorConstants.TITLE_DARK_BLUE:'#1862df'}]}>{stockName}</Text>
 					<Text style={styles.stockCode}>{stockSymbol}</Text>
-					<Text style={styles.stockPeople}>{peopleNum}人参与</Text>
+					<Text style={styles.stockPeople}>{peopleNum}{strRCY}</Text>
 				</View>
 				<View style={styles.popularityRowRight}>
-					<Text style={styles.sellTitle}>看空 {100-percent}%</Text>
+					<Text style={styles.sellTitle}>{strKD} {100-percent}%</Text>
 					<View style={[styles.grayBar, {width:barWidth}]}>
 						<View style={[styles.greenBar, {width:sellWidth}]}/>
 					</View>

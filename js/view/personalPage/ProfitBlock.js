@@ -16,7 +16,7 @@ var NetConstants = require('../../NetConstants');
 var UIConstants = require('../../UIConstants');
 var NetworkModule = require('../../module/NetworkModule');
 var NetworkErrorIndicator = require('../../view/NetworkErrorIndicator');
-
+var LS = require('../../LS')
 var {height, width} = Dimensions.get('window');
 var stockNameFontSize = Math.round(17*width/375.0);
 
@@ -141,16 +141,19 @@ export default class ProfitBlock extends Component {
 	}
 
   renderHeaderBar() {
+    var strCP = LS.str('CP')
+    var strPJSY = LS.str('PJSY')
+    var strZSL = LS.str('ZSL')
     return (
       <View style={styles.headerBar}>
         <View style={[styles.rowLeftPart, {	paddingTop: 5,}]}>
-          <Text style={styles.headerTextLeft}>产品</Text>
+          <Text style={styles.headerTextLeft}>{strCP}</Text>
         </View>
         <View style={[styles.rowCenterPart, {	paddingRight: 10,}]}>
-          <Text style={[styles.headerTextLeft, {paddingRight: 0,}]}>平均盈亏</Text>
+          <Text style={[styles.headerTextLeft, {paddingRight: 0,}]}>{strPJSY}</Text>
         </View>
         <View style={styles.rowRightPart}>
-          <Text style={styles.headerTextLeft}>总胜率</Text>
+          <Text style={styles.headerTextLeft}>{strZSL}</Text>
         </View>
       </View>
     );
@@ -219,14 +222,17 @@ export default class ProfitBlock extends Component {
         }
 
   renderPrivate(){
+    var strYHWGKSJ = LS.str('YHWGKSJ')
     return(
         <View style={styles.emptyView}>
-           <Text style={styles.loadingText}>用户未公开数据</Text>
+           <Text style={styles.loadingText}>{strYHWGKSJ}</Text>
         </View>
         )
   }
 
   renderPublic(){
+
+    var strZWYKFB = LS.str('ZWYKFB');
     if(!this.state.contentLoaded){
         return (
             <View></View>
@@ -235,7 +241,7 @@ export default class ProfitBlock extends Component {
         if(this.state.stockInfo.length === 0) {
             return (
                 <View style={styles.emptyView}>
-                    <Text style={styles.loadingText}>{"暂无盈亏分布"}</Text>
+                    <Text style={styles.loadingText}>{strZWYKFB}</Text>
                 </View>
                 )
         }else{
@@ -271,11 +277,12 @@ export default class ProfitBlock extends Component {
   }
 
   render() {
+    var strYKFB = LS.str('YKFB')
       return (
         <View style={{backgroundColor:'white'}}>
             <View>
                 <View style={styles.titleRow}>
-                    <Text style={styles.titleText}>盈亏分布</Text>
+                    <Text style={styles.titleText}>{strYKFB}</Text>
                 </View>
             </View>
             <View style={styles.separator}/>

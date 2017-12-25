@@ -32,10 +32,10 @@ var ColorConstants = require('../ColorConstants')
 var MainPage = require('./MainPage')
 var InputAccessory = require('./component/InputAccessory')
 var TalkingdataModule = require('../module/TalkingdataModule')
-
+var LS = require('../LS')
 var listRawData = [
-{'type':'paytype','title':'支付宝钱包', 'image':require('../../images/icon_alipay.png'), 'subtype': 'alipay', },
-{'type':'paytype','title':'银联卡', 'image':require('../../images/icon_unionpay.png'), 'subtype': 'unionpay', },
+{'type':'paytype','title':'ZFBQB', 'image':require('../../images/icon_alipay.png'), 'subtype': 'alipay', },
+{'type':'paytype','title':'YLK', 'image':require('../../images/icon_unionpay.png'), 'subtype': 'unionpay', },
 // {'type':'paydetail','title':'支付详情', 'image':null, 'subtype': 'paydetail'},
 ]
 
@@ -219,7 +219,7 @@ export default class DepositPage extends Component{
 
 		var color = this.state.confirmButtonEnable?'#425a85':'#d0d0d0';
 
-		var buttonText = this.state.payMethodSelected==0?'1个工作日内到账,确认入金':'立即到账,确认入金'
+		var buttonText = this.state.payMethodSelected==0?LS.str('ALIPAY_ARRIVED'):LS.str('UNIONPAY_ARRIVED')
 
 		return(
 			<View style = {{backgroundColor:'white'}}>
@@ -237,7 +237,7 @@ export default class DepositPage extends Component{
 		this.props.navigator.push({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			url: NetConstants.TRADEHERO_API.DEPOSIT_AGREEMENT,
-			title: "入金协议",
+			title: LS.str('RJXY'),
 		});
 	}
 
@@ -252,9 +252,9 @@ export default class DepositPage extends Component{
 
 		if(text_ && text_.length>0){
 			if(value < this.state.noLessMoney){
-				error = "入金金额不低于"+this.state.noLessMoney+'美元！';
+				error = LS.str('RJBDY')+' '+this.state.noLessMoney+' '+LS.str('MY')+' '+'!';
 			}else if(value > this.state.noMoreMoney){
-				error = "入金金额不高于"+this.state.noMoreMoney+'美元！';
+				error = LS.str('RJBGY')+' '+this.state.noMoreMoney+' '+LS.str('MY')+' '+'!';
 			}
 		}
 
@@ -263,7 +263,7 @@ export default class DepositPage extends Component{
 			this.setState({
 				payStateTip: error,
 				payStateTip2:/*'当前汇率：'+(1/this.state.fxRate).toFixed(2)+*/'等额人民币：'+rmbValue+'元',
-				payStateTip3:'手续费'+charge+'美元',
+				payStateTip3:LS.str('SXF')+charge+LS.str('MY'),
 			});
 			inputError = true
 		} else{
@@ -272,12 +272,12 @@ export default class DepositPage extends Component{
 			if(this.state.noLessMoney == this.state.noMoreMoney){
 				payStateTip = "单笔固定" + this.state.noMoreMoney + '美元';
 			}else{
-				payStateTip = this.state.noLessMoney + '≤入金额度≤'+ this.state.noMoreMoney + '美元';
+				payStateTip = this.state.noLessMoney +' '+ LS.str('RJED')+' ' +this.state.noMoreMoney+' ' + LS.str('MY');
 			}
 			this.setState({
 				payStateTip: payStateTip,
 				payStateTip2:/*'当前汇率：'+(1/this.state.fxRate).toFixed(2)+*/'等额人民币：'+rmbValue+'元',
-				payStateTip3:'手续费'+charge+'美元',
+				payStateTip3:LS.str('SXF')+' '+charge+' '+LS.str('MY'),
 			})
 			inputError = false;
 		}
@@ -305,17 +305,17 @@ export default class DepositPage extends Component{
 			<View style = {styles.payDetail}>
 				<Text style = {[styles.payStateTip,{color:textColor}]}>{this.state.payStateTip}</Text>
 					<View style = {styles.cellWrapper}>
-						<Text style = {styles.moneyUSD}>美元</Text>
+						<Text style = {styles.moneyUSD}>{LS.str('MY')}</Text>
 						<TextInput
-                            ref="textInput"
-                            style={[styles.cellInput, {color: textColor}]}
-                            onChangeText={(text) => this.onChangeWithdrawValue(text)}
-                            value={inputValue}
-                            defaultValue={inputValue}
-                            maxLength={7}
-                            autoFocus={true}
-                            underlineColorAndroid='transparent'
-                            keyboardType='numeric'>
+                ref="textInput"
+                style={[styles.cellInput, {color: textColor}]}
+                onChangeText={(text) => this.onChangeWithdrawValue(text)}
+                value={inputValue}
+                defaultValue={inputValue}
+                maxLength={7}
+                autoFocus={true}
+                underlineColorAndroid='transparent'
+                keyboardType='numeric'>
 						</TextInput>
 					</View>
 				<View style = {styles.lineSep}></View>
@@ -331,9 +331,9 @@ export default class DepositPage extends Component{
 		return(
 			<TouchableOpacity activeOpacity={0.5} onPress={()=>this.pressSelectProtocol()} style={{flexDirection:'row',alignItems:'center',marginBottom:10}} >
 				<Image source={checkBox} style={[styles.checkbox,{marginLeft:15,marginRight:10}]} />
-				<Text style={styles.protocalLeft}>我已阅读并同意</Text>
+				<Text style={styles.protocalLeft}>{LS.str('RJXYPart0')}</Text>
 				<TouchableOpacity activeOpacity={0.5} onPress={()=>this.go2Protocol()}>
-					<Text style={styles.protocalRight}>入金协议内容</Text>
+					<Text style={styles.protocalRight}>{LS.str('RJXYPart1')}</Text>
 				</TouchableOpacity>
 		 </TouchableOpacity>
 		)
@@ -372,7 +372,7 @@ export default class DepositPage extends Component{
 						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
 							<Image source={checkBox} style={styles.checkbox} />
 							<Image source={rowData.image} style={styles.image} />
-							<Text style={styles.title}>支付宝钱包</Text>
+							<Text style={styles.title}>{LS.str('ZFBQB')}</Text>
 							<Text style={styles.titleIntro}>{this.state.alipayIntro}</Text>
 						</View>
 					</TouchableOpacity>
@@ -395,10 +395,10 @@ export default class DepositPage extends Component{
 						<View style={[styles.rowWrapper2, {height:Math.round(64*heightRate)}]}>
 							<Image source={checkBox} style={styles.checkbox} />
 							<Image source={rowData.image} style={styles.image} />
-							<Text style={styles.title}>银联借记卡</Text>
+							<Text style={styles.title}>{LS.str('YLJJK')}</Text>
 							<TouchableOpacity activeOpacity={0.5} onPress={()=>this.bankSupport()}>
 								<View style = {{flexDirection:'row',alignItems:'center'}}>
-									<Text style = {styles.blankSupport}>支持的银行</Text>
+									<Text style = {styles.blankSupport}>{LS.str('ZCDYH')}</Text>
 									<Image style = {styles.arrow} source={imageArrow}></Image>
 								</View>
 							</TouchableOpacity>
@@ -479,7 +479,7 @@ export default class DepositPage extends Component{
 				 		title: responseJson,
 				 	});
 			 	},(result) => {
-				 Alert.alert("温馨提示","请检查网络");
+				 Alert.alert(LS.str('WXTS'),LS.str('NETWORK_CHECK'));
 				})
 			}
 
@@ -488,7 +488,7 @@ export default class DepositPage extends Component{
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			url: NetConstants.TRADEHERO_API.HELP_CENTER_URL_ACTUAL,
 			isShowNav: false,
-      title: "帮助中心",
+      title: LS.str('BZZX'),
 		});
 	}
 
@@ -504,7 +504,7 @@ export default class DepositPage extends Component{
 
 		return(
 			    <View style={{flex:1,backgroundColor:ColorConstants.SEPARATOR_GRAY}}>
-				<NavBar title='入金' showBackButton={true}
+				<NavBar title={LS.str('RJ')} showBackButton={true}
 					imageOnRight={require('../../images/icon_question.png')}
 					rightImageOnClick={()=>this.go2Question()}
 					navigator={this.props.navigator}/>
@@ -517,9 +517,9 @@ export default class DepositPage extends Component{
 					{this.renderDetail()}
 					<TouchableWithoutFeedback style={styles.blank} onPress={()=>this.pressBlank()}>
 						<View style={{flexDirection:'row'}}>
-							<Text style={styles.psLine}>注意：</Text>
+							<Text style={styles.psLine}>{LS.str('ZY')}</Text>
 							<View style={{marginRight:15,flex:1}}>
-								<Text style={styles.psLine2}>入金手续费为入金金额的{this.state.chargeRate*100}%，入金账户必须与自己的身份证保持一致，以免发生交易风险。</Text>
+								<Text style={styles.psLine2}>{LS.str('ZYPart0')}{this.state.chargeRate*100}{LS.str('ZYPart1')}</Text>
 							</View>
 					  </View>
 				  </TouchableWithoutFeedback>

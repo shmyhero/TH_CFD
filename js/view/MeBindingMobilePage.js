@@ -30,6 +30,7 @@ var WechatModule = require('../module/WechatModule')
 var WebSocketModule = require('../module/WebSocketModule')
 var MainPage = require('./MainPage')
 var dismissKeyboard = require('dismissKeyboard');
+var LS = require("../LS");
 
 var {height, width} = Dimensions.get('window')
 var rowHeight = 40;
@@ -113,7 +114,7 @@ var MeBindingMobilePage = React.createClass({
 				// Nothing to do.
 			}.bind(this),
 			function(result) {
-				Alert.alert('提示', result.errorMessage);
+				Alert.alert(LS.str("TS"), result.errorMessage);
 			}
 		)
 
@@ -182,7 +183,7 @@ var MeBindingMobilePage = React.createClass({
 				this.setState({
 					phoneLoginButtonEnabled: true
 				})
-				Alert.alert('提示', result.errorMessage);
+				Alert.alert(LS.str("TS"), result.errorMessage);
 			}
 		)
 	},
@@ -190,7 +191,7 @@ var MeBindingMobilePage = React.createClass({
 	renderGetValidationCodeButton: function() {
 		var {height, width} = Dimensions.get('window');
 		var textSize = Math.round(fontSize*width/375.0)
-		var text = '获取验证码'
+		var text = LS.str("GET_VERIFICATION_CODE");
 		if (this.state.validationCodeCountdown > 0) {
 			text = '(' + this.state.validationCodeCountdown + ')'
 		}
@@ -230,7 +231,7 @@ var MeBindingMobilePage = React.createClass({
 								<View style={[styles.phoneNumberInputView]}>
 									<TextInput style={styles.phoneNumberInput}
 										onChangeText={(text) => this.setPhoneNumber(text)}
-										placeholder='手机号'
+										placeholder={LS.str("MOBILE_NUMBER")}
 										placeholderTextColor='white'
 										underlineColorAndroid='transparent'
 										maxLength={11}
@@ -245,7 +246,7 @@ var MeBindingMobilePage = React.createClass({
 								<View style={[styles.validationCodeInputView]}>
 									<TextInput style={styles.validationCodeInput}
 										onChangeText={(text) => this.setValidationCode(text)}
-										placeholder='验证码'
+										placeholder={LS.str("VERIFICATION_CODE")}
 										placeholderTextColor='white'
 										underlineColorAndroid='transparent'
 										maxLength={4}
@@ -284,7 +285,7 @@ var MeBindingMobilePage = React.createClass({
 				<LinearGradient colors={gradientColors} style={[styles.wrapper, {height: height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER}]}>
 						<View style={styles.tabContainer}>
 							<Text style={{flex: 1, fontSize: 18, textAlign: 'center', color: '#ffffff'}}>
-								绑定手机号
+								{LS.str("BIND_MOBILE_NUMBER")}
 							</Text>
 							{this.renderCancelButton()}
 						</View>
@@ -301,7 +302,7 @@ var MeBindingMobilePage = React.createClass({
 				<TouchableOpacity style={styles.cancelContainer}
 					onPress={()=>this.props.navigator.pop()}>
 						<Text style={styles.cancel}>
-							取消
+							{LS.str("QX")}
 						</Text>
 				</TouchableOpacity>
 			);

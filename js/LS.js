@@ -482,6 +482,29 @@ var LS = {
     OPEN_ACCOUNT_REVIEW_FINISH: ["审核通过后\n短信提醒", "After approval \n SMS reminder"],
     OPEN_ACCOUNT_SUCCEED_REMINDER: ["开户成功后，\n盈交易会以短信告知您，同时您将收到欢迎邮件。", "After the account is successfully opened, \nwe will inform you by SMS, and you will receive the welcome email."],
 
+    CONFIG_CHANGE_EMAIL_ALERT: ["是否需要发送修改密码邮件到您的邮箱{1}?", "Do I need to send a change password to your email {1}?"],
+    CONFIG_LOGOUT_ACCOUNT: ["是否确认退出？", "Confirm exit?"],
+    CONFIG_LOGOUT_LIVE: ["确认登出实盘账号？", "Confirm to log out the real account?"],
+    CONFIG_GO_TO_DEMO: ["确认切换到模拟账号？", "Confirm switch to the simulation account?"],
+    
+    CONFIG_SEND: ["发送", "Send"],
+    CONFIG_SEND_SUCCESS: ["邮件发送成功", "Mail sent successfully"],
+
+    CONFIG_CLOSE_NOTIF:["系统平仓提示", "System close tips"],
+    CONFIG_PUBLISH_MY_DETAIL:["公布我的详细交易数据", "Publish my detailed transaction data"],
+    CONFIG_PUBLISH_MY_POSITION_DETAIL:["公布持仓和平仓的数据", "Announce positions and positions of the data"],
+    CONFIG_PUBLISH_MY_DATA_HINT: ['"公布持仓和平仓的数据"归属于"公布达人榜数据"。', '"Open positions and positions of the data released" attributed to "release up to the list of data."'],
+    
+    CONFIG_RANKING_TERMS: ["盈交易榜单功能条款和条件", "Profit trading list functional terms and conditions"],
+    CONFIG_RANKING_TERMS_LINE_1: ["您的账户头寸以及在下文第2条内定义的相关榜单排名将对盈交易其他实盘用户实时开放。", "Your account position and the related list position as defined in Clause 2 below will be open to other real users of Profitability in real time."],
+    CONFIG_RANKING_TERMS_LINE_2: ["榜单排名是基于您最近两周所有已平仓交易的滚动平均投资回报率（“ROI”）计算得出。榜单排名每日更新一次", 'The list position is calculated based on the rolling average ROI ("ROI") for all closed trades in the last two weeks. Ranking list updated once daily'],
+    CONFIG_RANKING_TERMS_LINE_3: ["盈交易用户可以从您的个人资料或交易账户内的公开信息中受益，并可能会根据此信息做出自行交易决策。", "Profit trading users can benefit from the public information in your profile or trading account and may make their own trading decisions based on this information."],
+    CONFIG_RANKING_TERMS_LINE_4: ["对于任何因访问或使用我们网站和应用所包含的内容或数据（包括用户发布的交易账户或资料信息），而导致直接或间接的后果性、惩罚性、典型性的特别损失或损害，盈交易将不承担任何责任。", "For any loss or damage, direct or indirect, consequential, punitive or exemplary, arising out of the access to or use of the content or data contained in our websites and applications (including trading accounts or informational information published by users) Will not bear any responsibility."],
+    CONFIG_RANKING_TERMS_LINE_5: ["盈交易是该服务唯一解释方，保留随时更换、修改或终止服务的权利，恕不另行通知。我们将通过更新网站或应用程序来通知您有关该服务或条款和条件的更改，您应定期查看此类更新。", "Profit trading is the sole explanation for the service, reserves the right to change, modify or terminate the service at any time, without prior notice. We will notify you of any changes to this service or terms and conditions by updating our website or application and you should periodically review such updates."],
+    
+    CONFIG_RANKING_TERMS_BELOW_LINE_1: ["盈交易是该服务唯一解释方，保留随时更换、修改或终止服务的权利，恕不另行通知。我们将通过更新网站或应用程序来通知您有关该服务或条款和条件的更改，您应定期查看此类更新。", "Profit trading is the sole explanation for the service, reserves the right to change, modify or terminate the service at any time, without prior notice. We will notify you of any changes to this service or terms and conditions by updating our website or application and you should periodically review such updates."],
+    CONFIG_RANKING_TERMS_BELOW_LINE_2: ["盈交易为安易永投（ayondo markets Limited）旗下产品名称。安易永投（ayondo markets Limited）是在英格兰和威尔士注册的公司（注册号为03148972），并由英国金融行为监管局（FCA）授权和监管, FCA注册号为184333。", "Profit trading is the product name of ayondo markets Limited. Ayondo markets Limited is a company registered in England and Wales with registration number 03148972 and is authorized and regulated by the FCA with FCA registration number 184333."],
+
     GENDER_MALE: ["男", "Male"],
     GENDER_FEMALE: ["女", "Female"],
 
@@ -493,8 +516,14 @@ var LS = {
     NEXT: ["下一步", "Next"],
     FINISH: ["完成", "Finish"],
 
+    GET_VERIFICATION_CODE: ["获取验证码", "get verification code"],
+    MOBILE_NUMBER: ["手机号", "Mobile Number"],
+    VERIFICATION_CODE: ["验证码", "Verification Code"],
+    BIND_MOBILE_NUMBER: ["绑定手机号", "Bind Mobile Number"],
+    WE_CHAT_ID: ["微信", "WeChat"],
 
-
+    ALREADY_BINDED: ["已绑定", "Binded"],
+    BIND_MOBILE_REWARD: ["绑定手机号,再送25元交易金", "Binding phone number, then send 25 yuan trading gold"],
 
 
 

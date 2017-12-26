@@ -22,33 +22,20 @@ var NetworkModule = require('../module/NetworkModule')
 var NavBar = require('./NavBar')
 var MainPage = require('./MainPage')
 var UIConstants = require('../UIConstants')
+var LS = require("../LS")
 var RULE_DIALOG = "ruleDialog";
 var {height, width} = Dimensions.get('window')
 var HeaderLineDialog2 = require('./HeaderLineDialog2')
 var heightRate = height/667.0
 
 var listRawData = [
-{'type':'normal', 'title':'系统平仓提示', 'subtype': 'closepositionpush'},
+{'type':'normal', 'title':'CONFIG_CLOSE_NOTIF', 'subtype': 'closepositionpush'},
 {'type':'separator', 'title':'', 'subtype': 'separatorLine'},
-{'type':'normal', 'title':'公布我的详细交易数据', 'subtype': 'showPersonalData'},
-{'type':'normal', 'title':'公布持仓和平仓的数据', 'subtype': 'showPositionData'},
-{'type':'text', 'title':'"公布持仓和平仓的数据"归属于"公布达人榜数据"。', 'subtype': 'hint'}
+{'type':'normal', 'title':'CONFIG_PUBLISH_MY_DETAIL', 'subtype': 'showPersonalData'},
+{'type':'normal', 'title':'CONFIG_PUBLISH_MY_POSITION_DETAIL', 'subtype': 'showPositionData'},
+{'type':'text', 'title':'CONFIG_PUBLISH_MY_DATA_HINT', 'subtype': 'hint'}
 ]
 
-var headerDialogMessages = {
-	messageTitle:'盈交易榜单功能条款和条件',
-	messageLines: [
-		"您的账户头寸以及在下文第2条内定义的相关榜单排名将对盈交易其他实盘用户实时开放。",
-		"榜单排名是基于您最近两周所有已平仓交易的滚动平均投资回报率（“ROI”）计算得出。榜单排名每日更新一次",
-		"盈交易用户可以从您的个人资料或交易账户内的公开信息中受益，并可能会根据此信息做出自行交易决策。",
-		"对于任何因访问或使用我们网站和应用所包含的内容或数据（包括用户发布的交易账户或资料信息），而导致直接或间接的后果性、惩罚性、典型性的特别损失或损害，盈交易将不承担任何责任。",
-		"盈交易是该服务唯一解释方，保留随时更换、修改或终止服务的权利，恕不另行通知。我们将通过更新网站或应用程序来通知您有关该服务或条款和条件的更改，您应定期查看此类更新。",
-	],
-	noDotLines: [
-		"盈交易是该服务唯一解释方，保留随时更换、修改或终止服务的权利，恕不另行通知。我们将通过更新网站或应用程序来通知您有关该服务或条款和条件的更改，您应定期查看此类更新。",
-		"盈交易为安易永投（ayondo markets Limited）旗下产品名称。安易永投（ayondo markets Limited）是在英格兰和威尔士注册的公司（注册号为03148972），并由英国金融行为监管局（FCA）授权和监管, FCA注册号为184333。"
-	]
-}
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -257,6 +244,22 @@ var MePushConfigPage = React.createClass({
 	},
 
 	renderModal: function(){
+
+		var headerDialogMessages = {
+			messageTitle:'CONFIG_RANKING_TERMS',
+			messageLines: [
+				LS.str("CONFIG_RANKING_TERMS_LINE_1"),
+				LS.str("CONFIG_RANKING_TERMS_LINE_2"),
+				LS.str("CONFIG_RANKING_TERMS_LINE_3"),
+				LS.str("CONFIG_RANKING_TERMS_LINE_4"),
+				LS.str("CONFIG_RANKING_TERMS_LINE_5"),
+			],
+			noDotLines: [
+				LS.str("CONFIG_RANKING_TERMS_BELOW_LINE_1"),
+				LS.str("CONFIG_RANKING_TERMS_BELOW_LINE_2"),
+			]
+		}
+
 		return (
 			<HeaderLineDialog2 ref={RULE_DIALOG}
 				proceedCallback={(value)=>this.changeShowPersonalDataSetting(value)}
@@ -298,7 +301,7 @@ var MePushConfigPage = React.createClass({
             }
 			return(
 				<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-					<Text style={styles.title}>{rowData.title}</Text>
+					<Text style={styles.title}>{LS.str(rowData.title)}</Text>
 					<View style={styles.extendRight}>
 						<Switch
 							onValueChange={(value) => this.onSwitchPressed(value, rowData)}
@@ -311,7 +314,7 @@ var MePushConfigPage = React.createClass({
 		}else if (rowData.type === 'text'){
 			return(
 				<View style={styles.hintWrapper}>
-						<Text style={styles.hintText}>{rowData.title}</Text>
+						<Text style={styles.hintText}>{LS.str(rowData.title)}</Text>
 				</View>
 			);
 		}else if(rowData.type == 'separator'){
@@ -326,7 +329,7 @@ var MePushConfigPage = React.createClass({
 	render: function() {
 		var userData = LogicData.getUserData()
 		return (<View style={styles.wrapper}>
-			<NavBar title="设置" showBackButton={true} navigator={this.props.navigator}/>
+			<NavBar title={LS.str("SZ")} showBackButton={true} navigator={this.props.navigator}/>
 			<ListView
 				style={styles.list}
 				dataSource={this.state.dataSource}

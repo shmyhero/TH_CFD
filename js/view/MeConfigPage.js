@@ -167,11 +167,11 @@ var MeConfigPage = React.createClass({
 		var meData = LogicData.getMeData();
 
 		Alert.alert(
-			"提示",
-			"是否需要发送修改密码邮件到您的邮箱"+meData.liveEmail+"?",
+			LS.str("TS"),
+			LS.str("CONFIG_CHANGE_EMAIL_ALERT").replace("{1}", meData.liveEmail),
 				[
-					{text: '取消'},
-					{text: '发送', onPress: () => this.sendEmailForModifyPwd()},
+					{text: LS.str("QX")},
+					{text: LS.str("CONFIG_SEND"), onPress: () => this.sendEmailForModifyPwd()},
 				]
 			)
 	},
@@ -189,7 +189,7 @@ var MeConfigPage = React.createClass({
 			},
 			function(responseJson) {
 			 console.log('忘记密码。。。邮件发送成功');
-			 Toast.show("邮件发送成功");
+			 Toast.show(LS.str("CONFIG_SEND_SUCCESS"));
 			}.bind(this),
 			function(result) {
 				console.log('登出失败 1');
@@ -220,22 +220,22 @@ var MeConfigPage = React.createClass({
 
 	logoutAccountActualAlert:function(){
 		Alert.alert(
-			"提示",
-			"确认登出实盘账号？",
+			LS.str("TS"),
+			LS.str("CONFIG_LOGOUT_LIVE"),
 				[
-					{text: '取消'},
-					{text: '确定', onPress: () => this.logoutAccountActual()},
+					{text: LS.str("QX")},
+					{text: LS.str("QD"), onPress: () => this.logoutAccountActual()},
 				]
 			)
 	},
 
 	change2ActualOrSimu:function() {
 		Alert.alert(
-			"提示",
-			"确认切换到模拟账号？",
+			LS.str("TS"),
+			LS.str("CONFIG_GO_TO_DEMO"),
 				[
-					{text: '取消'},
-					{text: '确定', onPress: () => this.logout2Simulator()},
+					{text: LS.str("QX")},
+					{text: LS.str("QD"), onPress: () => this.logout2Simulator()},
 				]
 			)
 	},
@@ -243,11 +243,11 @@ var MeConfigPage = React.createClass({
 	logout: function(){
 		//TODO
 		Alert.alert(
-			"提示",
-			"是否确认退出？",
+			LS.str("TS"),
+			LS.str("CONFIG_LOGOUT_ACCOUNT"),
 				[
-					{text: '取消'},
-					{text: '确定', onPress: () => this.sendToSwitchAccountDemo()},
+					{text: LS.str("QX")},
+					{text: LS.str("QD"), onPress: () => this.sendToSwitchAccountDemo()},
 				]
 			)
 	},

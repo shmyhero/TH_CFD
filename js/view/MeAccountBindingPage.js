@@ -23,13 +23,14 @@ var MainPage = require('./MainPage')
 var WechatModule = require('../module/WechatModule')
 var LoadingIndicator = require('./LoadingIndicator')
 var UIConstants = require('../UIConstants')
+var LS = require('../LS')
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0
 
 var listRawData = [
-{'type':'mobile','title':'手机号', 'subtype': 'bindMobile'},
-{'type':'wechat','title':'微信', 'subtype': 'bindWeChat'}
+{'type':'mobile','title':'MOBILE_NUMBER', 'subtype': 'bindMobile'},
+{'type':'wechat','title':'WE_CHAT_ID', 'subtype': 'bindWeChat'}
 ]
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -126,7 +127,7 @@ var MeAccountBindingPage = React.createClass({
 				})
 			},
 			(result) => {
-				Alert.alert('提示', result.errorMessage);
+				Alert.alert(LS.str("TS"), result.errorMessage);
 			}
 		)
 	},
@@ -146,7 +147,7 @@ var MeAccountBindingPage = React.createClass({
 			if(this.state.phoneNumber !== null){
 				return(
 					<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-						<Text style={styles.title}>{rowData.title}</Text>
+						<Text style={styles.title}>{LS.str(rowData.title)}</Text>
 						<View style={styles.extendRight}>
 							<Text style={styles.message}>{this.state.phoneNumber}</Text>
 						</View>
@@ -156,12 +157,12 @@ var MeAccountBindingPage = React.createClass({
 				return(
 					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)} showView={false}>
 						<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]} showView={false}>
-							<Text style={styles.title}>{rowData.title}</Text>
+							<Text style={styles.title}>{LS.str(rowData.title)}</Text>
 							<View style={styles.extendRight}>
 								{/* <Text style={[styles.clickableMessage,{color:ColorConstants.title_blue()}]}>未绑定</Text> */}
 								<View style={{flexDirection:'row'}}>
 									<Image style={styles.redPackageImage} source={require('../../images/icon_red_package.png')} />
-									<Text style={styles.redPackageText}>绑定手机号,再送25元交易金</Text>
+									<Text style={styles.redPackageText}>{LS.str("BIND_MOBILE_REWARD")}</Text>
 								</View>
 							</View>
 							<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
@@ -173,9 +174,9 @@ var MeAccountBindingPage = React.createClass({
 			if(this.state.weChatOpenId != null){
 				return(
 					<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-						<Text style={styles.title}>{rowData.title}</Text>
+						<Text style={styles.title}>{LS.str(rowData.title)}</Text>
 						<View style={styles.extendRight}>
-							<Text style={styles.message}>已绑定</Text>
+							<Text style={styles.message}>{LS.str("ALREADY_BINDED")}</Text>
 						</View>
 					</View>
 				);
@@ -183,7 +184,7 @@ var MeAccountBindingPage = React.createClass({
 					return(
 						<TouchableOpacity activeOpacity={0.5} onPress={()=>this.onSelectNormalRow(rowData)}>
 							<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
-								<Text style={styles.title}>{rowData.title}</Text>
+								<Text style={styles.title}>{LS.str(rowData.title)}</Text>
 								<View style={styles.extendRight}>
 									<Text style={[styles.clickableMessage,{color:ColorConstants.title_blue()}]}>未绑定</Text>
 								</View>

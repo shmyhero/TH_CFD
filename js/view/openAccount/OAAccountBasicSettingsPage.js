@@ -22,17 +22,18 @@ var ErrorBar = require('../component/ErrorBar')
 var NetworkModule = require('../../module/NetworkModule')
 var NetConstants = require('../../NetConstants')
 var OpenAccountHintBlock = require('./OpenAccountHintBlock')
+var LS = require("../../LS")
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
 var fontSize = Math.round(15*width/375)
 
 var defaultRawData = [
-	{"key":"username", "title": "用户名", "value":"", hint: "5位以上数字字母组合", "type": "userName", maxLength: 20},
-	{"key":"password", "title":"登入密码", "value":"", hint: "8位以上数字字母组合", "type": "pwd", maxLength: 25},
-	{"key":"passwordOnceMore", "title":"确认密码", "value":"", hint: "确认登入密码", "type": "pwd", ignoreInRegistery: true, maxLength: 25},
-	{"key":"email", "title":"常用邮箱", "value":"", hint: "请输入常用邮箱", "type": "email", maxLength: 60},
-	{"title":"账户信息将自动绑定到盈交易实盘账户", "type": "hint"},
+	{"key":"username", "title": "OPEN_ACCOUNT_USERNAME", "value":"", hint: "OPEN_ACCOUNT_USERNAME_HINT", "type": "userName", maxLength: 20},
+	{"key":"password", "title": "OPEN_ACCOUNT_PASSWORD", "value":"", hint: "OPEN_ACCOUNT_PASSWORD_HINT", "type": "pwd", maxLength: 25},
+	{"key":"passwordOnceMore", "title": "OPEN_ACCOUNT_PASSWORD_AGAIN", "value":"", hint: "OPEN_ACCOUNT_PASSWORD_AGAIN_HINT", "type": "pwd", ignoreInRegistery: true, maxLength: 25},
+	{"key":"email", "title": "OPEN_ACCOUNT_EMAIL", "value":"", hint: "OPEN_ACCOUNT_EMAIL_HINT", "type": "email", maxLength: 60},
+	{"title": "OPEN_ACCOUNT_REGISTER_HINT", "type": "hint"},
 	{"type":"openAccountHintBlock"},
 ];
 
@@ -145,7 +146,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 			if(this.listRawData[rowID].value){
 				var re = /^\w*[a-zA-Z]\w*$/;
 				if(this.listRawData[rowID].value.length <= 4 || !re.test(this.listRawData[rowID].value)){
-					this.listRawData[rowID].error = "用户名必须是5到20位字母和数字的组合";
+					this.listRawData[rowID].error = LS.str("OPEN_ACCOUNT_USERNAME_ERROR");
 					this.updateList();
 					this.setState({
 						validateInProgress: false,
@@ -207,19 +208,19 @@ var OAAccountBasicSettingsPage = React.createClass({
 			var hasError = false;
 			if(this.listRawData[1].value){
 				if(this.listRawData[1].value.length < 8){
-					this.listRawData[1].error = "密码必须是 8 位或以上字母和数字的组合";
+					this.listRawData[1].error = LS.str("OPEN_ACCOUNT_PASSWORD_ERROR");
 					hasError = true;
 				}else{
 					var re = /^[0-9a-zA-Z\!\#\*\$\-\/\=\?\@\.\,\:\;]+$/;
 					if(!re.test(this.listRawData[1].value)){
-						this.listRawData[1].error = "密码必须是 8 位或以上字母和数字的组合";
+						this.listRawData[1].error = LS.str("OPEN_ACCOUNT_PASSWORD_ERROR");
 						hasError = true;
 					}
 				}
 				//At least 4 chars. Allowed chars: [0-9a-zA-Z\!\#\*\$\-\/\=\?\@\.\,\:\;]
 			}
 			if(this.listRawData[1].value && this.listRawData[2].value && this.listRawData[1].value !== this.listRawData[2].value){
-				this.listRawData[2].error = "两次输入的密码不一致";
+				this.listRawData[2].error = LS.str("OPEN_ACCOUNT_PASSWORD_NOT_SAME_ERROR");
 				hasError = true;
 			}
 
@@ -249,7 +250,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 				}
 			}else{
 				if(!this.listRawData[rowID].error){
-					this.listRawData[rowID].error = "邮箱格式不正确";
+					this.listRawData[rowID].error = LS.str("OPEN_ACCOUNT_EMAIL_ERROR");
 					this.updateList();
 				}
 			}
@@ -267,7 +268,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 		} else if(rowData.type === "hint"){
 			return (
 				<Text style={styles.hintText}>
-					{rowData.title}
+					{LS.str(rowData.title)}
 				</Text>
 			)
 		}else{
@@ -279,13 +280,13 @@ var OAAccountBasicSettingsPage = React.createClass({
 			return (
 				<View>
 					<View style={styles.rowWrapper}>
-						<Text style={style}>{rowData.title}</Text>
+						<Text style={style}>{LS.str(rowData.title)}</Text>
 						<TextInput style={styles.valueText}
 							autoCapitalize="none"
 							autoCorrect={false}
 							secureTextEntry={secureTextEntry}
 							defaultValue={rowData.value}
-							placeholder={rowData.hint}
+							placeholder={LS.str(rowData.hint)}
 							placeholderColor={ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR}
 							selectionColor={ColorConstants.INOUT_TEXT_SELECTION_COLOR}
 							underlineColorAndroid='transparent'
@@ -336,7 +337,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 						onPress={this.gotoNext}
 						textContainerStyle={styles.buttonView}
 						textStyle={styles.buttonText}
-						text={this.state.validateInProgress? "信息正在检查中...": '下一步'} />
+						text={this.state.validateInProgress? LS.str("VALIDATE_IN_PROGRESS"): LS.str("NEXT")} />
 				</View>
 			</View>
 		);

@@ -28,7 +28,7 @@ var NavBar = require('../NavBar')
 var NetworkModule = require('../../module/NetworkModule');
 var NetConstants = require('../../NetConstants');
 var LogicData = require('../../LogicData');
-
+var LS = require("../../LS");
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
@@ -92,12 +92,12 @@ export default class WithdrawSubmittedPage extends Component {
 
     return (
 			<View style={styles.wrapper}>
-        <NavBar title="出金提交成功"
+        <NavBar title={LS.str("WITHDRAW_REQUEST_SUBMITED")}
           showBackButton={false}
           navigator={this.props.navigator}
           />
         <Image source={require('../../../images/withdraw_submitted.png')} style={styles.checkImage}/>
-        <Text style={styles.hintText}>{"预计资金到账时间为" + this.state.refundETA + "个工作日，具体以银行通知为准！"}</Text>
+        <Text style={styles.hintText}>{LS.str("WITHDRAW_ETA_MESSAGE").replace("{1}", this.state.refundETA)}</Text>
 
         <View style={{flex:1}}/>
 
@@ -107,7 +107,7 @@ export default class WithdrawSubmittedPage extends Component {
             onPress={()=>this.gotoNext()}
             textContainerStyle={styles.buttonView}
             textStyle={styles.buttonText}
-            text={'完成'} />
+            text={LS.str("FINISH")} />
         </View>
 			</View>
 		);

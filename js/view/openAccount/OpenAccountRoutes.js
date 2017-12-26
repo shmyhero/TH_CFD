@@ -12,16 +12,17 @@ var NetConstants = require('../../NetConstants')
 var ColorConstants = require('../../ColorConstants')
 var NavBar = require('../NavBar')
 var MainPage = require('../MainPage')
+var LS = require("../../LS")
 
 var OpenAccountInfos = [
-	{"title": "开户准备", "page": require('./OAStartPage')},
-	{"title": "上传身份证照片(1/5)", "page": require('./OAIdPhotoPage')},
-  {"title": "完善个人信息(2/5)", "page": require('./OAPersonalInfoPage')},
+	{"title": "OPEN_ACCOUNT_HEADER_1", "page": require('./OAStartPage')},
+	{"title": "OPEN_ACCOUNT_HEADER_2", "page": require('./OAIdPhotoPage')},
+  {"title": "OPEN_ACCOUNT_HEADER_3", "page": require('./OAPersonalInfoPage')},
   //{"title": "上传地址证明信息(4/6)", "page": require('./OAAddressPhotoPage')},
-  {"title": "完善财务信息(3/5)", "page": require('./OAFinanceInfoPage')},
-	{"title": "设置账户信息(4/5)", "page": require('./OAAccountBasicSettingsPage')},
-  {"title": "提交申请(5/5)", "page": require('./OADocumentInfoPage')},
-  {"title": "审核状态", "page": require('./OAReviewStatusPage'), "removeStoredData": true},
+  {"title": "OPEN_ACCOUNT_HEADER_4", "page": require('./OAFinanceInfoPage')},
+	{"title": "OPEN_ACCOUNT_HEADER_5", "page": require('./OAAccountBasicSettingsPage')},
+  {"title": "OPEN_ACCOUNT_HEADER_6", "page": require('./OADocumentInfoPage')},
+  {"title": "OPEN_ACCOUNT_HEADER_7", "page": require('./OAReviewStatusPage'), "removeStoredData": true},
 ]
 
 var errorRoutes = [];
@@ -117,7 +118,7 @@ export function showOARoute(navigator, step, onPop, data, nextStep){
   console.log("showOARoute " + step);
   var info = OpenAccountInfos[step];
   var Page = info.page;
-  var title = info.title;
+  var title = LS.str(info.title);
   var showBackButton = (step !== OpenAccountInfos.length-1);
   var data = data ? data : (lastStoredData ? lastStoredData[step] : null);
   var page;
@@ -128,7 +129,7 @@ export function showOARoute(navigator, step, onPop, data, nextStep){
         leftButtonOnClick={()=>backToPreviousRoute(navigator, page.getData(), onPop, page.onDismiss)}
         backButtonOnClick={()=>TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_BACK, TalkingdataModule.LABEL_OPEN_ACCOUNT)}
         backgroundColor={ColorConstants.TITLE_DARK_BLUE}
-        textOnRight={showBackButton?'取消':''}
+        textOnRight={showBackButton? LS.str("QX"):''}
         rightTextOnClick={()=>cancelOARoute(navigator, page.getData(), onPop, page.onDismiss)}
         navigator={navigator}/>
       <Page navigator={navigator}

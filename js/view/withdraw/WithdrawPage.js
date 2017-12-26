@@ -31,6 +31,7 @@ var NetworkModule = require('../../module/NetworkModule');
 var NetConstants = require('../../NetConstants');
 var LogicData = require('../../LogicData');
 
+var LS = require('../../LS')
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
@@ -71,7 +72,7 @@ export default class WithdrawPage extends Component {
       var bankIcon = liveUserInfo.bankIcon;
       var bankCardStatus = liveUserInfo.bankCardStatus;
       var pendingDays = liveUserInfo.pendingDays;
-      var withdrawChargeHint = balanceData ? balanceData.comment : "出金手续费为出金金额的1%";
+      var withdrawChargeHint = balanceData ? balanceData.comment : LS.str("WITHDRAW_CHARGE_HINT");
 
       this.state={
         dataSource: this.ds.cloneWithRows(this.listRawData),
@@ -131,7 +132,7 @@ export default class WithdrawPage extends Component {
       name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
       url: NetConstants.TRADEHERO_API.HELP_CENTER_URL_ACTUAL,
       isShowNav: false,
-      title: "帮助中心",
+      title: LS.str("BZZX"),
     });
   }
 
@@ -194,13 +195,13 @@ export default class WithdrawPage extends Component {
   getWithdrawValueError(){
     if(this.state.withdrawValueText && this.state.withdrawValueText.length > 0){
       if(this.state.withdrawValue > this.state.refundableBanalce){
-        return "大于可出资金: " + this.state.refundableBanalce + "美元， ";
+        return LS.str("WITHDRAW_GT_AVAILABLE").replace("{1}", this.state.refundableBanalce);
       }
       if (this.state.refundableBanalce < this.state.minRefundableBanalce && this.state.withdrawValue < this.state.refundableBanalce){
-        return "可出资金小于5美元时，"
+        return LS.str("WITHDRAW_LT_AVAILABLE")
       }
       if(this.state.withdrawValue < this.state.minRefundableBanalce && this.state.refundableBanalce >= this.state.minRefundableBanalce){
-        return "最低出金金额5美元， "
+        return LS.str("WITHDRAW_MINIMUM_VALIE")
       }
       return null;
     }
@@ -217,12 +218,12 @@ export default class WithdrawPage extends Component {
   renderBindCardStatus(){
     if(this.state.bankCardStatus === "PendingReview"){
       return(
-        <Text style={[styles.hintText, styles.warningHintText]}>信息检查中...</Text>
+        <Text style={[styles.hintText, styles.warningHintText]}>{LS.str("WITHDRAW_VERIFING")}</Text>
       )
     }
     else{
       return(
-        <Text style={[styles.hintText, styles.successHintText]}>绑卡成功，解除绑定</Text>
+        <Text style={[styles.hintText, styles.successHintText]}>{LS.str("WITHDRAW_BIND_SUCCEED_AND_UNBIND")}</Text>
       )
     }
   }
@@ -234,7 +235,7 @@ export default class WithdrawPage extends Component {
           <Image source={{uri: this.state.cardImageUrl}} style={{height: 40, width: 40, resizeMode: 'contain', margin: 15, marginLeft: 0,}} />
           <View style={{flexDirection: 'column', flex: 1,}}>
    					<Text style={styles.bankTitle}>{this.state.cardBank}</Text>
-  	        <Text style={styles.cardNumberText}>{"尾号"+this.state.lastCardNumber}</Text>
+  	        <Text style={styles.cardNumberText}>{LS.str("WITHDRAW_CARD_NUMBER_END_WITH").replace("{1}", this.state.lastCardNumber)}</Text>
           </View>
           {/* {this.renderBindCardStatus()} */}
           <Image style={styles.moreImage} source={require("../../../images/icon_arrow_right.png")} />
@@ -250,9 +251,9 @@ export default class WithdrawPage extends Component {
         refundableBalance = (0.00).toFixed(2)
       }
 
-      var withdrawAllText = "全部出金";
+      var withdrawAllText = LS.str("WITHDRAW_ALL");
 
-      var fundableValueText = "可出资金: " + refundableBalance + "美元， ";
+      var fundableValueText = LS.str("WITHDRAW_AVAILABLE_AMOUNT").replace("{1}", refundableBalance);
       var errorText = this.getWithdrawValueError();
       if(errorText != null){
         inputStyle = styles.errorInputText;
@@ -261,18 +262,18 @@ export default class WithdrawPage extends Component {
         fundableValueText = errorText;
         if (this.state.refundableBanalce < this.state.minRefundableBanalce
            && this.state.withdrawValue < this.state.refundableBanalce){
-          withdrawAllText = "只能全部出金";
+          withdrawAllText = LS.str("WITHDRAW_MUST_WITHDRAW_ALL");
         }
       }
 
       return (
         <View style={[styles.rowWrapper, styles.depositRowWrapper]}>
           <View style={{flexDirection: 'row', alignSelf:'stretch', justifyContent:'space-between'}}>
- 					    <Text style={styles.midiumText}>出金金额</Text>
-              <Text style={[styles.midiumText, {alignSelf: 'flex-end'}]}>{"手续费:" + this.state.fee + "美元"}</Text>
+ 					    <Text style={styles.midiumText}>{LS.str('WITHDRAW_AMOUNT')}</Text>
+              <Text style={[styles.midiumText, {alignSelf: 'flex-end'}]}>{LS.str("WITHDRAW_FEE").replace("{1}", this.state.fee + "美元")}</Text>
           </View>
           <View style={{flexDirection: 'row', marginTop:10, alignItems:"center"}}>
-   					<Text style={{fontSize: 17, fontWeight: 'bold', color: '#333333'}}>美元</Text>
+   					<Text style={{fontSize: 17, fontWeight: 'bold', color: '#333333'}}>{LS.str("WITHDRAW_DOLLAR")}</Text>
             <TextInput style={[styles.inputText, inputStyle]}
    						autoCapitalize="none"
               autoFocus={true}
@@ -381,7 +382,7 @@ export default class WithdrawPage extends Component {
     this.props.navigator.push({
       name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
       url: NetConstants.TRADEHERO_API.WITHDRAW_AGREEMENT_URL,
-      title: "出金协议",
+      title: LS.str("WITHDRAW_DOCUMENT_HEADER"),
     });
   }
 
@@ -400,15 +401,15 @@ export default class WithdrawPage extends Component {
       nextEnabled = false;
     }
 
-    var buttonText = this.state.refundETA + '个工作日内到账，确认出金';
+    var buttonText = LS.str("WITHDRAW_WITHDRAW_REQUIRED_DAYS").replace("{1}", this.state.refundETA);
     if(this.state.bankCardStatus === "PendingReview"){
       nextEnabled = false;
-      buttonText = "预计"+ this.state.pendingDays + "个工作日内绑定成功";
+      buttonText = LS.str("WITHDRAW_BINDING_CARD_REQUIRED_DAYS").replace("{1}", this.state.pendingDays);
     }
 
     return (
 			<View style={styles.wrapper}>
-        <NavBar title="出金"
+        <NavBar title={LS.str("WITHDRAW_HEADER")}
           showBackButton={true}
           leftButtonOnClick={()=>this.onBackButtonPressed()}
           navigator={this.props.navigator}
@@ -417,7 +418,7 @@ export default class WithdrawPage extends Component {
           />
         <View style={{flex:1}}>
 					{this.renderListView()}
-          <Text style={styles.bottomHintText}>{"注意："+this.state.withdrawChargeHint}</Text>
+          <Text style={styles.bottomHintText}>{LS.str("WITHDRAW_CHARGE_HINT_PS")+this.state.withdrawChargeHint}</Text>
           <TouchableOpacity style={{flex:1}} onPress={()=>this.hideKeyboard()}></TouchableOpacity>
           <View style={styles.checkboxView}>
             <CheckBoxButton
@@ -428,12 +429,12 @@ export default class WithdrawPage extends Component {
               <View style={{flexDirection:'column'}}>
                 <View style={{flexDirection: 'row'}}>
                   <Text style={styles.readMeText}>
-                    我已阅读并同意
+                    {LS.str("WITHDRAW_READ")}
                     <Text style={{color: 'transparent',}}>0</Text>
                   </Text>
                   <TouchableOpacity onPress={()=>this.showWithdrawDocument()}>
                     <Text style={styles.documentText}>
-                    出金协议内容，
+                    {LS.str("WITHDRAW_DOCUMENT")}
                     <Text style={{color: 'transparent',}}>0</Text>
                     </Text>
                   </TouchableOpacity>
@@ -447,7 +448,7 @@ export default class WithdrawPage extends Component {
   						onPress={()=>this.gotoNext()}
   						textContainerStyle={styles.buttonView}
   						textStyle={styles.buttonText}
-  						text={this.state.validateInProgress? "信息正在检查中...": buttonText} />
+  						text={this.state.validateInProgress? LS.str("VALIDATE_IN_PROGRESS"): buttonText} />
   				</View>
         </View>
         {this.renderAccessoryBar()}

@@ -36,6 +36,8 @@ var NetConstants = require('../../NetConstants');
 var LogicData = require('../../LogicData');
 var Toast = require('../component/toast/Toast');
 
+var LS = require('../../LS');
+
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
 var fontSize = Math.round(16*width/375)
@@ -44,13 +46,13 @@ var rowTitleWidth = (width - (2 * rowPadding)) / 4;
 var rowValueWidth = (width - (2 * rowPadding)) / 4 * 3;
 
 var defaultRawData = [
-		{"title":"姓名", "key": "AccountHolder", "value":""},
-		{"title":"开户城市", "key": "ProvinceAndCity", "value":"",},
-		{"title":"开户银行", "key": "NameOfBank", "value":"",},
-		{"title":"支行名称", "key": "Branch", "value":"",},
-		{"title":"银行卡号", "key": "AccountNumber", "value":"",},
-		{"title":"出金金额", "key": "lastWithdraw", "value":""},
-		{"title":"出金时间", "key": "lastWithdrawAt", "value":"",},
+		{"title": "BIND_CARD_NAME", "key": "AccountHolder", "value":""},
+		{"title": "BIND_CARD_PROVINCE_CITY", "key": "ProvinceAndCity", "value":"",},
+		{"title": "BIND_CARD_NAME_OF_BANK", "key": "NameOfBank", "value":"",},
+		{"title": "BIND_CARD_BRANCH", "key": "Branch", "value":"",},
+		{"title": "BIND_CARD_CARD_NUMBER", "key": "AccountNumber", "value":"",},
+		{"title": "BIND_CARD_LAST_WITHDARW_AMOUNT", "key": "lastWithdraw", "value":""},
+		{"title": "BIND_CARD_LAST_WITHDARW_DATE", "key": "lastWithdrawAt", "value":"",},
 ];
 
 var CALL_NUMBER = '66058771';
@@ -173,7 +175,7 @@ export default class BindCardResultPage extends Component {
       name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
       url: NetConstants.TRADEHERO_API.HELP_CENTER_URL_ACTUAL,
       isShowNav: false,
-      title: "帮助中心",
+      title: LS.str("BZZX"),
     });
   }
 
@@ -203,11 +205,11 @@ export default class BindCardResultPage extends Component {
 		var lastNumber = realNumberString.slice(realNumberString.length - 4);
 
 		Alert.alert(
-		  '确认删除',
-		  '尾号为' + lastNumber + "的银行卡",
+		  LS.str("UNBIND_CARD_ALERT_TITLE"),
+		  LS.str("UNBIND_CARD_ALERT_MESSAGE").replace("{1}", lastNumber),
 		  [
-		    {text: '取消', onPress: () => console.log('cancel unbind  d'), style: 'cancel'},
-			  {text: '确认', onPress: () => this.unbindCard()},
+		    {text: LS.str("QX"), onPress: () => console.log('cancel unbind  d'), style: 'cancel'},
+			  {text: LS.str("QR"), onPress: () => this.unbindCard()},
 		  ]
 		)
 	}
@@ -231,7 +233,6 @@ export default class BindCardResultPage extends Component {
 				},
 			},
 			(responseJson)=>{
-				console.log("aaaa");
 				var liveUserInfo = LogicData.getLiveUserInfo();
 				var clearedInfo = {};
 				clearedInfo.firstName = liveUserInfo.firstName;
@@ -250,7 +251,7 @@ export default class BindCardResultPage extends Component {
 						}
 					}
 
-					Toast.show("解绑成功");
+					Toast.show(LS.str("UNBIND_SUCCESS_TOAST"));
 
 					if(popToRoute){
 						this.props.navigator.popToRoute(popToRoute);
@@ -270,7 +271,7 @@ export default class BindCardResultPage extends Component {
 	    return(
 	      <TouchableOpacity style={{flexDirection:'row', alignItems:'center', justifyContent:'center', marginBottom: 20}} onPress={()=>this.helpPressed()}>
 	        <Image style = {styles.lineLeftRight} source = {require('../../../images/line_left2.png')} ></Image>
-					<Text style={styles.helpTitle}>{"盈盈在线24小时服务"}</Text>
+					<Text style={styles.helpTitle}>{LS.str("SERVICE24HOURS")}</Text>
 	        {/* <Text style={styles.helpTitle}>服务热线：{CALL_NUMBER}</Text> */}
 	        <Image style = {styles.lineLeftRight} source = {require('../../../images/line_right2.png')} ></Image>
 	      </TouchableOpacity>
@@ -304,7 +305,7 @@ export default class BindCardResultPage extends Component {
 		}
     return (
       <View style={styles.rowWrapper}>
-				<Text style={styles.rowTitle}>{rowData.title}</Text>
+				<Text style={styles.rowTitle}>{LS.str(rowData.title)}</Text>
 				<Text style={styles.valueText}>
           {rowData.value}
         </Text>
@@ -327,7 +328,7 @@ export default class BindCardResultPage extends Component {
 		var hintText = "";
 		switch(this.props.bankCardStatus){
 			case "PendingReview":
-			 	hintText = "注意：信息正在检查中，预计一个工作日内审核成功！";
+			 	hintText = LS.str("BIND_CARD_PENDING_REVIEW_HINT");
 				break;
 			case "Rejected":
 				hintText = "";//"注意：出金金额于3个工作日内退还到您的实盘账户";
@@ -349,15 +350,15 @@ export default class BindCardResultPage extends Component {
 		var buttonAction = ()=>{};
 		switch(this.props.bankCardStatus){
 			case "PendingReview":
-				buttonText = "解除绑定";
+				buttonText = LS.str("WITHDRAW_UNBIND_CARD");
 				buttonAction = ()=>this.readyToUnbindCard();
 				break;
 			case "Rejected":
-				buttonText = "重新绑卡";
+				buttonText = LS.str("WITHDRAW_REBIND_CARD");
 				buttonAction = ()=>this.goToBindCardPage();
 				break;
 			case "Approved":
-				buttonText = "解除绑定";
+				buttonText = LS.str("WITHDRAW_UNBIND_CARD");
 				buttonAction = ()=>this.readyToUnbindCard();
 		}
 
@@ -368,7 +369,7 @@ export default class BindCardResultPage extends Component {
           onPress={buttonAction}
           textContainerStyle={styles.buttonView}
           textStyle={styles.buttonText}
-          text={this.state.validateInProgress? "信息正在检查中...": buttonText} />
+          text={this.state.validateInProgress? LS.str("VALIDATE_IN_PROGRESS") : buttonText} />
       </View>
     );
   }
@@ -385,7 +386,7 @@ export default class BindCardResultPage extends Component {
 	render() {
 		var title = "";
 		console.log("this.props.bankCardStatus " + this.props.bankCardStatus)
-		title = "我的银行卡";
+		title = LS.str("BIND_CARD_RESULT_TITLE");
 		// switch(this.props.bankCardStatus){
 		// 	case "PendingReview":
 		// 		title = "我的银行卡";

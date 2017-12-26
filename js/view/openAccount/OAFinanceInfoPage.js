@@ -26,6 +26,7 @@ var OpenAccountRoutes = require('./OpenAccountRoutes')
 var OpenAccountUtils = require('./OpenAccountUtils')
 var OpenAccountHintBlock = require('./OpenAccountHintBlock')
 var ErrorBar = require('../component/ErrorBar')
+var LS = require("../../LS")
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
@@ -33,110 +34,110 @@ var fontSize = Math.round(16*width/375)
 var fontSize2 = Math.round(15*width/375)
 
 var IncomeMapping = [
-	{"value": 0, "displayText": "低于 8000 元"},
-	{"value": 1, "displayText": "8001-20000 元"},
-	{"value": 2, "displayText": "20001-32000 元"},
-	{"value": 3, "displayText": "32001-48000 元"},
-	{"value": 4, "displayText": "高于 48000 元"},
+	{"value": 0, "displayText": "OPEN_ACCOUNT_FINANCE_INCOMING_LEVEL_1"},
+	{"value": 1, "displayText": "OPEN_ACCOUNT_FINANCE_INCOMING_LEVEL_2"},
+	{"value": 2, "displayText": "OPEN_ACCOUNT_FINANCE_INCOMING_LEVEL_3"},
+	{"value": 3, "displayText": "OPEN_ACCOUNT_FINANCE_INCOMING_LEVEL_4"},
+	{"value": 4, "displayText": "OPEN_ACCOUNT_FINANCE_INCOMING_LEVEL_5"},
 ];
 
 var NetWorthMapping = [
-	{"value": 0, "displayText": "9万以下（人民币）"},
-	{"value": 1, "displayText": "9-24万（人民币）"},
-	{"value": 2, "displayText": "24-42万（人民币）"},
-	{"value": 3, "displayText": "42-60万（人民币）"},
-	{"value": 4, "displayText": "60-300万以上（人民币）"},
-	{"value": 5, "displayText": "300万以上（人民币）"},
+	{"value": 0, "displayText": "OPEN_ACCOUNT_FINANCE_NETWORTH_LEVEL_1"},
+	{"value": 1, "displayText": "OPEN_ACCOUNT_FINANCE_NETWORTH_LEVEL_2"},
+	{"value": 2, "displayText": "OPEN_ACCOUNT_FINANCE_NETWORTH_LEVEL_3"},
+	{"value": 3, "displayText": "OPEN_ACCOUNT_FINANCE_NETWORTH_LEVEL_4"},
+	{"value": 4, "displayText": "OPEN_ACCOUNT_FINANCE_NETWORTH_LEVEL_5"},
+	{"value": 5, "displayText": "OPEN_ACCOUNT_FINANCE_NETWORTH_LEVEL_6"},
 ]
 
 var InvestmentPortfolioMapping = [
-	{"value": 0, "displayText": "占净资产0-25%"},
-	{"value": 25, "displayText": "占净资产25-50%"},
-	{"value": 50, "displayText": "占净资产50-75%"},
-	{"value": 75, "displayText": "占净资产75-100%"},
+	{"value": 0, "displayText": "OPEN_ACCOUNT_FINANCE_PORTFOLIO_LEVEL_1"},
+	{"value": 25, "displayText": "OPEN_ACCOUNT_FINANCE_PORTFOLIO_LEVEL_2"},
+	{"value": 50, "displayText": "OPEN_ACCOUNT_FINANCE_PORTFOLIO_LEVEL_3"},
+	{"value": 75, "displayText": "OPEN_ACCOUNT_FINANCE_PORTFOLIO_LEVEL_4"},
 ]
 
-var EmploymengStatusMapping = [
-	{"value": "Employed", "displayText": "就业"},
-	{"value": "Self-Employed", "displayText": "自雇"},
-	{"value": "Unemployed", "displayText": "失业"},
-	{"value": "Retired", "displayText": "退休"},
-	{"value": "Student", "displayText": "学生"},
+var EmploymentStatusMapping = [
+	{"value": "Employed", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_1"},
+	{"value": "Self-Employed", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_2"},
+	{"value": "Unemployed", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_3"},
+	{"value": "Retired", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_4"},
+	{"value": "Student", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_5"},
 	// {"value": "Other", "displayText": "其他"},	//API Doesn't have this value!
 ]
 
-var EmploymengTypeMapping = [
-	{"value": "automotive", "displayText": "汽车和零部件"},
-	{"value": "capital-goods", "displayText": "资本产品"},
-	{"value": "commercial", "displayText": "商业及专业服务"},
-	{"value": "consumer", "displayText": "消费产品及服务"},
-	{"value": "financials", "displayText": "银行与金融服务"},
-	{"value": "energy", "displayText": "能源"},
-	{"value": "food", "displayText": "食品，饮料和烟草"},
-	{"value": "health", "displayText": "医疗保健设备和服务"},
-	{"value": "household", "displayText": "家用和个人产品"},
-	{"value": "insurance", "displayText": "保险"},
-	{"value": "media", "displayText": "传媒"},
-	{"value": "pharma", "displayText": "医疗"},
-	// {"value": "type12", "displayText": "生物技术与生命科学"},	//API Doesn't have this value!
-	{"value": "real-estate", "displayText": "房地产"},
-	{"value": "retailing", "displayText": "零售"},
-	{"value": "software", "displayText": "软件与服务"},
-	{"value": "technology", "displayText": "科技"},
-	{"value": "telecomms", "displayText": "电信"},
-	{"value": "transportation", "displayText": "运输"},
-	{"value": "utilities", "displayText": "公共事业"},
-	{"value": "other", "displayText": "其他"},
+var EmploymentTypeMapping = [
+	{"value": "automotive", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_1"},
+	{"value": "capital-goods", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_2"},
+	{"value": "commercial", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_3"},
+	{"value": "consumer", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_4"},
+	{"value": "financials", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_5"},
+	{"value": "energy", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_6"},
+	{"value": "food", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_7"},
+	{"value": "health", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_8"},
+	{"value": "household", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_9"},
+	{"value": "insurance", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_10"},
+	{"value": "media", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_11"},
+	{"value": "pharma", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_12"},
+	// {"value": "type12", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_13"},	//API Doesn't have this value!
+	{"value": "real-estate", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_14"},
+	{"value": "retailing", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_15"},
+	{"value": "software", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_16"},
+	{"value": "technology", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_17"},
+	{"value": "telecomms", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_18"},
+	{"value": "transportation", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_19"},
+	{"value": "utilities", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_20"},
+	{"value": "other", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_TYPE_21"},
 ]
 
 var PositionMapping = [
-	{"value": "associate", "displayText": "副经理"},
-	{"value": "supervisor", "displayText": "主管"},
-	{"value": "manager", "displayText": "经理"},
-	{"value": "owner", "displayText": "创始人"},
-	{"value": "partner", "displayText": "合伙人"},
-	{"value": "other", "displayText": "其他"},
+	{"value": "associate", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_POSITION_1"},
+	{"value": "supervisor", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_POSITION_2"},
+	{"value": "manager", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_POSITION_3"},
+	{"value": "owner", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_POSITION_4"},
+	{"value": "partner", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_POSITION_5"},
+	{"value": "other", "displayText": "OPEN_ACCOUNT_FINANCE_EMPLOYMENT_POSITION_6"},
 ]
 
 var investFrqMappings = [
-	{"value": 0, "displayText": "完全没有"},
-	{"value": 1, "displayText": "1-5次"},
-	{"value": 2, "displayText": "6-10次"},
-	{"value": 3, "displayText": "超过10次"},
+	{"value": 0, "displayText": "OPEN_ACCOUNT_FINANCE_INVEST_FRQ_1"},
+	{"value": 1, "displayText": "OPEN_ACCOUNT_FINANCE_INVEST_FRQ_2"},
+	{"value": 2, "displayText": "OPEN_ACCOUNT_FINANCE_INVEST_FRQ_3"},
+	{"value": 3, "displayText": "OPEN_ACCOUNT_FINANCE_INVEST_FRQ_4"},
 ]
 
 var amontOfMoneyMappings = [
-	{"value": 0, "displayText": "低于 8000 元"},
-	{"value": 1, "displayText": "8001 - 40000 元"},
-	{"value": 2, "displayText": "40001 - 80000 元"},
-	{"value": 3, "displayText": "80001 - 200000 元"},
-	{"value": 4, "displayText": "200001- 400000 元"},
-	{"value": 5, "displayText": "400001- 800000 元"},
-	{"value": 6, "displayText": "高于 800000 元"},
+	{"value": 0, "displayText": "OPEN_ACCOUNT_FINANCE_AMOUNT_OF_MONEY_1"},
+	{"value": 1, "displayText": "OPEN_ACCOUNT_FINANCE_AMOUNT_OF_MONEY_2"},
+	{"value": 2, "displayText": "OPEN_ACCOUNT_FINANCE_AMOUNT_OF_MONEY_3"},
+	{"value": 3, "displayText": "OPEN_ACCOUNT_FINANCE_AMOUNT_OF_MONEY_4"},
+	{"value": 4, "displayText": "OPEN_ACCOUNT_FINANCE_AMOUNT_OF_MONEY_5"},
+	{"value": 5, "displayText": "OPEN_ACCOUNT_FINANCE_AMOUNT_OF_MONEY_6"},
+	{"value": 6, "displayText": "OPEN_ACCOUNT_FINANCE_AMOUNT_OF_MONEY_7"},
 	//BUGBUG: There's a "6" here per API doc!!!
 ]
 
 var investProportionMapping = [
-	{"value": 0, "displayText": "低于 10%"},
-	{"value": 1, "displayText": "10% - 25%"},
-	{"value": 2, "displayText": "25% - 50%"},
-	{"value": 3, "displayText": "50% - 75%"},
-	{"value": 4, "displayText": "75% - 100%"},
+	{"value": 0, "displayText": "OPEN_ACCOUNT_FINANCE_INVEST_PROPOTION_1"},
+	{"value": 1, "displayText": "OPEN_ACCOUNT_FINANCE_INVEST_PROPOTION_2"},
+	{"value": 2, "displayText": "OPEN_ACCOUNT_FINANCE_INVEST_PROPOTION_3"},
+	{"value": 3, "displayText": "OPEN_ACCOUNT_FINANCE_INVEST_PROPOTION_4"},
+	{"value": 4, "displayText": "OPEN_ACCOUNT_FINANCE_INVEST_PROPOTION_5"},
 ]
 
 var expierenceMappings = [
-	{"key": "expOTCDeriv", "displayText": "场外衍生品", "value": false},
-	{"key": "expDeriv", "displayText": "衍生产品", "value": false},
-	{"key": "expShareBond", "displayText": "股票和债券", "value": false},
+	{"key": "expOTCDeriv", "displayText": "OPEN_ACCOUNT_FINANCE_EXPIERENCE_1", "value": false},
+	{"key": "expDeriv", "displayText": "OPEN_ACCOUNT_FINANCE_EXPIERENCE_2", "value": false},
+	{"key": "expShareBond", "displayText": "OPEN_ACCOUNT_FINANCE_EXPIERENCE_3", "value": false},
 ]
 
 var InComeSourceMappings = [
-	{"value":"savings" , "displayText":"存款与投资"},
-	{"value":"employment" , "displayText":"工作收入"},
-	{"value":"gift" , "displayText":"赠予",},
-	{"value":"inheritance" , "displayText":"遗产"},
-	{"value":"pension" , "displayText":"养老金"},
-	{"value":"other" , "displayText":"其他"},
+	{"value":"savings" , "displayText":"OPEN_ACCOUNT_FINANCE_INCOME_SOURCE_1"},
+	{"value":"employment" , "displayText":"OPEN_ACCOUNT_FINANCE_INCOME_SOURCE_2"},
+	{"value":"gift" , "displayText":"OPEN_ACCOUNT_FINANCE_INCOME_SOURCE_3",},
+	{"value":"inheritance" , "displayText":"OPEN_ACCOUNT_FINANCE_INCOME_SOURCE_4"},
+	{"value":"pension" , "displayText":"OPEN_ACCOUNT_FINANCE_INCOME_SOURCE_5"},
+	{"value":"other" , "displayText":"OPEN_ACCOUNT_FINANCE_INCOME_SOURCE_6"},
 ]
 //
 // //Options values
@@ -150,10 +151,10 @@ var InComeSourceMappings = [
 // ]
 
 var qualificationsMappings = [
-	{"key":"professional" , "displayText":"专业资格", value:false},
-	{"key":"university" , "displayText":"大学学位", value:false},
-	{"key":"vocational" , "displayText":"职业资格", value:false},
-	{"key":"other" , "displayText":"其他资历", value:false},
+	{"key":"professional" , "displayText":"OPEN_ACCOUNT_FINANCE_QUALIFICATION_1", value:false},
+	{"key":"university" , "displayText":"OPEN_ACCOUNT_FINANCE_QUALIFICATION_2", value:false},
+	{"key":"vocational" , "displayText":"OPEN_ACCOUNT_FINANCE_QUALIFICATION_3", value:false},
+	{"key":"other" , "displayText":"OPEN_ACCOUNT_FINANCE_QUALIFICATION_4", value:false},
 ]
 
 //hard code for control hide line
@@ -176,36 +177,38 @@ var EXPCHANNEL2_0 = 22
 var EXPCHANNEL2_1 = 23
 var EXPCHANNEL2_2 = 24
 
+
+
 var defaultRawData = [
-	{"key":"monthlyIncome", "title":"每月可支配净收入", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":IncomeMapping},
-	{"key":"investments", "title":"净资产", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":NetWorthMapping},
-	{"key":"sourceOfFunds", "title":"资金主要来源", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":InComeSourceMappings},
+	{"key":"monthlyIncome", "title":"OPEN_ACCOUNT_FINANCE_MONTHLY_INCOME", "defaultValue":"PRESS_TO_CHOOSE", "value":"", "type":"choice", "choices":IncomeMapping},
+	{"key":"investments", "title":"OPEN_ACCOUNT_FINANCE_NETWORTH", "defaultValue":"PRESS_TO_CHOOSE", "value":"", "type":"choice", "choices":NetWorthMapping},
+	{"key":"sourceOfFunds", "title":"OPEN_ACCOUNT_FINANCE_SOURCE", "defaultValue":"PRESS_TO_CHOOSE", "value":"", "type":"choice", "choices":InComeSourceMappings},
 	// {"multiOptionsKey":"sourceOfFunds" ,"title":"交易资金主要来源", "value":InComeSourceMappings, "type":"options",},
-	// {"key":"investPct", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":InvestmentPortfolioMapping},
-	{"key":"empStatus", "title":"职业信息", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":EmploymengStatusMapping, "trueChoice":["Employed", "Self-Employed"]},
-	{"key":"employerName", "title": "雇主名称", "value":"", hint: "请输入雇主名称", "type": "text", maxLength: 20,"hide":true, "parent":"empStatus"},
-	{"key":"employerSector", "title":"业务类型", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":EmploymengTypeMapping,"hide":true, "parent":"empStatus"},
-	{"key":"empPosition", "title":"担任职位", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":PositionMapping,"hide":true, "parent":"empStatus"},
-	// {"key":"investFrq", "title":"投资频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings},
-	{"key":"hasProExp", "title":"您是否曾经在金融领域担任专业杠杆交易相关职位至少一年？", "value":false, "type":"switch"},
-	{"key":"hasTraining", "title":"您以前参加过培训研讨会或通过其他教育形式了解过我们的产品吗？", "value":false, "type":"switch"},
-	{"key":"hasDemoAcc", "title":"您是否用过点差交易或差价合约(CFD)的模拟账户？", "value":false, "type":"switch"},
-	{"key":"hasOtherQualif", "title":"您是否有其他相关的资历证书，让您可以更好理解我们的金融服务？", "value":false, "type":"switch",},
+	// {"key":"investPct", "title":"投资比重", "defaultValue":"PRESS_TO_CHOOSE", "value":"", "type":"choice", "choices":InvestmentPortfolioMapping},
+	{"key":"empStatus", "title":"OPEN_ACCOUNT_FINANCE_EMP_STATUS", "defaultValue":"PRESS_TO_CHOOSE", "value":"", "type":"choice", "choices":EmploymentStatusMapping, "trueChoice":["Employed", "Self-Employed"]},
+	{"key":"employerName", "title": "OPEN_ACCOUNT_FINANCE_EMPLOYER_NAME", "value":"", hint: "OPEN_ACCOUNT_FINANCE_EMPLOYER_NAME_HINT", "type": "text", maxLength: 20,"hide":true, "parent":"empStatus"},
+	{"key":"employerSector", "title":"OPEN_ACCOUNT_FINANCE_EMPLOYER_SECTOR", "defaultValue":"PRESS_TO_CHOOSE", "value":"", "type":"choice", "choices":EmploymentTypeMapping,"hide":true, "parent":"empStatus"},
+	{"key":"empPosition", "title":"OPEN_ACCOUNT_FINANCE_EMP_POSITION", "defaultValue":"PRESS_TO_CHOOSE", "value":"", "type":"choice", "choices":PositionMapping,"hide":true, "parent":"empStatus"},
+	// {"key":"investFrq", "title":"投资频率", "defaultValue":"PRESS_TO_CHOOSE", "value":"", "type":"choice", "choices":investFrqMappings},
+	{"key":"hasProExp", "title":"OPEN_ACCOUNT_FINANCE_HAS_PRO_EXP", "value":false, "type":"switch"},
+	{"key":"hasTraining", "title":"OPEN_ACCOUNT_FINANCE_HAS_TRAINING", "value":false, "type":"switch"},
+	{"key":"hasDemoAcc", "title":"OPEN_ACCOUNT_FINANCE_HAS_DEMO_ACC", "value":false, "type":"switch"},
+	{"key":"hasOtherQualif", "title":"OPEN_ACCOUNT_FINANCE_HAS_OTHER_QUALIF", "value":false, "type":"switch",},
 	{"multiOptionsKey":"otherQualif" ,"title":"", "value":qualificationsMappings, "type":"options","hide":true, "parent": "hasOtherQualification"},
 	// {"optionsKey":"tradingExp" ,"title":"您有以下哪种产品的实盘交易经验？", "value":expierenceMappings, "type":"options"},
-	{"title":"您有以下哪种产品的实盘交易经验？"},
-	{"key":"hasTradedHighLev", "title":"差价合约、点差交易或外汇", "value":false, "type":"switch"},
-		{"key":"highLevFrq", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true, "parent":"hasTradedHighLev"},
-		{"key":"highLevBalance", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMoneyMappings,"hide":true, "parent":"hasTradedHighLev"},
-		{"key":"highLevRisk", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true, "parent":"hasTradedHighLev"},
-	{"key":"hasTradedNoLev", "title":"股票或债券", "value":false, "type":"switch"},
-		{"key":"noLevFrq", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true, "parent":"hasTradedMidLev"},
-		{"key":"noLevBalance", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMoneyMappings,"hide":true, "parent":"hasTradedMidLev"},
-		{"key":"noLevRisk", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true, "parent":"hasTradedMidLev"},
-	{"key":"hasTradedMidLev", "title":"期权，期货或认购权证", "value":false, "type":"switch"},
-		{"key":"midLevFrq", "title":"季度交易频率", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true, "parent":"hasTradedNoLev"},
-		{"key":"midLevBalance", "title":"投入金额", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":amontOfMoneyMappings,"hide":true, "parent":"hasTradedNoLev"},
-		{"key":"midLevRisk", "title":"投资比重", "defaultValue":"点击选择", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true, "parent":"hasTradedNoLev"},
+	{"title":"OPEN_ACCOUNT_FINANCE_HAS_FOLLOWING_EXP"},
+	{"key":"hasTradedHighLev", "title":"OPEN_ACCOUNT_FINANCE_HAS_TRADE_HIGH_LEV", "value":false, "type":"switch"},
+		{"key":"highLevFrq", "title":"OPEN_ACCOUNT_FINANCE_FRQ", "defaultValue":"PRESS_TO_CHOOSE", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true, "parent":"hasTradedHighLev"},
+		{"key":"highLevBalance", "title":"OPEN_ACCOUNT_FINANCE_BALANCE", "defaultValue":"PRESS_TO_CHOOSE", "value":"", "type":"choice", "choices":amontOfMoneyMappings,"hide":true, "parent":"hasTradedHighLev"},
+		{"key":"highLevRisk", "title":"OPEN_ACCOUNT_FINANCE_RISK", "defaultValue":"PRESS_TO_CHOOSE", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true, "parent":"hasTradedHighLev"},
+	{"key":"hasTradedNoLev", "title":"OPEN_ACCOUNT_FINANCE_HAS_TRADE_NO_LEV", "value":false, "type":"switch"},
+		{"key":"noLevFrq", "title":"OPEN_ACCOUNT_FINANCE_FRQ", "defaultValue":"PRESS_TO_CHOOSE", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true, "parent":"hasTradedMidLev"},
+		{"key":"noLevBalance", "title":"OPEN_ACCOUNT_FINANCE_BALANCE", "defaultValue":"PRESS_TO_CHOOSE", "value":"", "type":"choice", "choices":amontOfMoneyMappings,"hide":true, "parent":"hasTradedMidLev"},
+		{"key":"noLevRisk", "title":"OPEN_ACCOUNT_FINANCE_RISK", "defaultValue":"PRESS_TO_CHOOSE", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true, "parent":"hasTradedMidLev"},
+	{"key":"hasTradedMidLev", "title":"OPEN_ACCOUNT_FINANCE_HAS_TRADE_MID_LEV", "value":false, "type":"switch"},
+		{"key":"midLevFrq", "title":"OPEN_ACCOUNT_FINANCE_FRQ", "defaultValue":"PRESS_TO_CHOOSE", "value":"", "type":"choice", "choices":investFrqMappings,"hide":true, "parent":"hasTradedNoLev"},
+		{"key":"midLevBalance", "title":"OPEN_ACCOUNT_FINANCE_BALANCE", "defaultValue":"PRESS_TO_CHOOSE", "value":"", "type":"choice", "choices":amontOfMoneyMappings,"hide":true, "parent":"hasTradedNoLev"},
+		{"key":"midLevRisk", "title":"OPEN_ACCOUNT_FINANCE_RISK", "defaultValue":"PRESS_TO_CHOOSE", "value":"", "type":"choice", "choices":investProportionMapping,"hide":true, "parent":"hasTradedNoLev"},
 		{"type": "openAccountHintBlock", "ignoreInRegistery": true}
 ];
 
@@ -289,13 +292,13 @@ var OAFinanceInfoPage = React.createClass({
 		var choices = [];
 		for(var i = 0; i < rowData.choices.length; i++){
 			if(rowData.value === rowData.choices[i].value){
-				selectedText = rowData.choices[i].displayText;
+				selectedText = LS.str(rowData.choices[i].displayText);
 			}
-			choices.push(rowData.choices[i].displayText);
+			choices.push(LS.str(rowData.choices[i].displayText));
 		}
 
 		if(selectedText == "" && rowData.choices.length > 0){
-			selectedText = rowData.choices[0].displayText;
+			selectedText = LS.str(rowData.choices[0].displayText);
 		}
 
     Picker.init({
@@ -310,7 +313,7 @@ var OAFinanceInfoPage = React.createClass({
 
 						for(var i = 0; i < this.listRawData[rowID].choices.length; i++){
 							console.log("this.listRawData[rowID].choices[i]: " + JSON.stringify(this.listRawData[rowID].choices[i]))
-							if(data[0] === this.listRawData[rowID].choices[i].displayText){
+							if(data[0] === LS.str(this.listRawData[rowID].choices[i].displayText)){
 								this.listRawData[rowID].value = this.listRawData[rowID].choices[i].value;
 								break;
 							}
@@ -318,7 +321,8 @@ var OAFinanceInfoPage = React.createClass({
 
 						console.log("this.listRawData[rowID].value: " + this.listRawData[rowID].value)
 						if(rowID == EMPSWITCH){
-							var showEMPSwitches = (data[0] == "就业" || data[0] == "自雇")
+							var showEMPSwitches = (data[0] == LS.str("OPEN_ACCOUNT_FINANCE_EMPLOYMENT_1") 
+												|| data[0] == LS.str("OPEN_ACCOUNT_FINANCE_EMPLOYMENT_2"))
 							this.listRawData[EMPSWITCH_0].hide = !showEMPSwitches
 							this.listRawData[EMPSWITCH_1].hide = !showEMPSwitches
 							this.listRawData[EMPSWITCH_2].hide = !showEMPSwitches
@@ -413,11 +417,11 @@ var OAFinanceInfoPage = React.createClass({
 			var textColor = ColorConstants.INPUT_TEXT_COLOR;
 			for(var i = 0; i < rowData.choices.length; i++){
 				if(rowData.value === rowData.choices[i].value){
-					displayText = rowData.choices[i].displayText;
+					displayText = LS.str(rowData.choices[i].displayText);
 				}
 			}
 			if(displayText === ""){
-				displayText = rowData.defaultValue;
+				displayText = LS.str(rowData.defaultValue);
 				textColor = '#3f6dbd';
 			}
 
@@ -425,14 +429,14 @@ var OAFinanceInfoPage = React.createClass({
 				<TouchableOpacity style = {rowData.hide?{height:0}:null} activeOpacity={0.9} onPress={() => this.onPressPicker(rowData, rowID)}
 													disabled={this.state.disableChanges}>
 				<View style={styles.rowWrapper}>
-					<Text style={[styles.rowTitle, {flex:3}]}>{rowData.title}</Text>
+					<Text style={[styles.rowTitle, {flex:3}]}>{LS.str(rowData.title)}</Text>
 					<View style={{flex:4, flexDirection: 'row'}}>
 						<View style={{flex: 1, flexDirection: 'column', justifyContent: "center",}}>
 							<Text style={[styles.centerText, {color: textColor}]}
 								autoCapitalize="none"
 								autoCorrect={false}
 								editable={false}
-								placeholder={rowData.defaultValue}
+								placeholder={LS.str(rowData.defaultValue)}
 								placeholderTextColor={"#3f6dbd"}>
 								{displayText}
 							</Text>
@@ -446,7 +450,7 @@ var OAFinanceInfoPage = React.createClass({
 		else if(rowData.type === "switch") {
 			return (
 				<View style={styles.rowWrapper}>
-					<Text style={styles.rowTitle}>{rowData.title}</Text>
+					<Text style={styles.rowTitle}>{LS.str(rowData.title)}</Text>
 					<Switch
 						onValueChange={(value) => this.onPressSwitch(value, rowID)}
 						style={{height: 22}}
@@ -482,8 +486,8 @@ var OAFinanceInfoPage = React.createClass({
 						(data, j) =>{
 							if(data){
 								var index = i*3+j;
-								console.log("data.displayText: " + data.displayText + ", data.value: " + data.value)
-								return (<CheckBoxButton key={index} text={data.displayText}
+								console.log("data.displayText: " + LS.str(data.displayText) + ", data.value: " + data.value)
+								return (<CheckBoxButton key={index} text={LS.str(data.displayText)}
 									defaultSelected={data.value}
 									onPress={(selected)=>this.onCheckBoxPressed(rowID, index, selected)}
 									enabled={!this.state.disableChanges}>
@@ -507,7 +511,7 @@ var OAFinanceInfoPage = React.createClass({
 
 			return(rowData.hide?null:
 				<View style={[styles.rowWrapperOption]}>
-				  <Text style={[styles.rowTitle,rowData.title ? null : {height:0}]}>{rowData.title}</Text>
+				  <Text style={[styles.rowTitle, rowData.title == "" ? null : {height:0}]}>{rowData.title == "" ? "" : LS.str(rowData.title)}</Text>
 					<View style={{flexDirection: 'column'}}>
 						{rows}
 					</View>
@@ -519,7 +523,7 @@ var OAFinanceInfoPage = React.createClass({
 				return (
 					<View  style={rowData.hide?{height:0}:null}>
 						<View style={styles.rowWrapper}>
-							<Text style={[styles.rowTitle, {flex: 3}]}>{rowData.title}</Text>
+							<Text style={[styles.rowTitle, {flex: 3}]}>{LS.str(rowData.title)}</Text>
 							<Text style={styles.valueText}>
 								{rowData.value}
 							</Text>
@@ -530,13 +534,13 @@ var OAFinanceInfoPage = React.createClass({
 			return (
 				<View  style={rowData.hide?{height:0}:null}>
 					<View style={styles.rowWrapper}>
-						<Text style={[styles.rowTitle, {flex: 3}]}>{rowData.title}</Text>
+						<Text style={[styles.rowTitle, {flex: 3}]}>{LS.str(rowData.title)}</Text>
 						<TextInput style={styles.valueText}
 							autoCapitalize="none"
 							autoCorrect={false}
 							// secureTextEntry={secureTextEntry}
 							defaultValue={rowData.value}
-							placeholder={rowData.hint}
+							placeholder={LS.str(rowData.hint)}
 							placeholderColor={ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR}
 							selectionColor={ColorConstants.INOUT_TEXT_SELECTION_COLOR}
 							underlineColorAndroid='transparent'
@@ -549,7 +553,7 @@ var OAFinanceInfoPage = React.createClass({
 		else {
 			return(
 				<View style={styles.rowWrapper}>
-					<Text style={styles.rowTitle}>{rowData.title}</Text>
+					<Text style={styles.rowTitle}>{LS.str(rowData.title)}</Text>
 				</View>)
 		}
 	},
@@ -619,7 +623,9 @@ var OAFinanceInfoPage = React.createClass({
 		}
 		return (
 			<View style={styles.wrapper}>
-				<ErrorBar error={this.state.disableChanges ? "财务信息填写后，不能再次修改！": "财务信息提交后将无法修改，请认真填写！"}/>
+				<ErrorBar error={this.state.disableChanges ? 
+					LS.str("OPEN_ACCOUNT_FINANCE_INFORMATION_READONLY_HINT"): 
+					LS.str("OPEN_ACCOUNT_FINANCE_INFORMATION_NOT_CHANGED_HINT")}/>
 		    <ListView
 			    	style={styles.list}
 					dataSource={this.state.dataSource}
@@ -631,7 +637,7 @@ var OAFinanceInfoPage = React.createClass({
 						onPress={this.gotoNext}
 						textContainerStyle={styles.buttonView}
 						textStyle={styles.buttonText}
-						text='下一步' />
+						text={LS.str("NEXT")} />
 				</View>
 				{pickerModal}
 			</View>

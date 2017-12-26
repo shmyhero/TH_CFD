@@ -27,6 +27,8 @@ var {height, width} = Dimensions.get('window')
 var Button = require('./component/Button');
 var OpenAccountRoutes = require('./openAccount/OpenAccountRoutes');
 var StorageModule = require('../module/StorageModule');
+var LS = require('../LS');
+
 var heightRate = height/667.0
 
 var buttonFontSize = heightRate * 17;
@@ -208,7 +210,7 @@ var MyIncomePage = React.createClass({
 				<View style={{flex:1, flexDirection: 'row', justifyContent: 'space-around'}}>
 					<View style={styles.totalTextContainer}>
 				<Text style={styles.totalRewardTitleText}>
-				累计获得交易金(元)
+					{LS.str("MY_REWARD_TOTAL")}
 				</Text>
 				<Text style={styles.totalRewardText}>
 				{this.state.totalReward}
@@ -216,7 +218,7 @@ var MyIncomePage = React.createClass({
 			</View>
 					<View style={styles.totalTextContainer}>
 						<Text style={styles.totalRewardTitleText}>
-							剩余交易金(元)
+							{LS.str("MY_REWARD_REMAINING")}
 						</Text>
 						<Text style={styles.totalRewardText}>
 							{this.state.unpaidReward}
@@ -263,14 +265,14 @@ var MyIncomePage = React.createClass({
 			return (
 				<TouchableOpacity onPress={()=>this.gotoOpenAccount()}>
 					<Text style={[styles.openaccountText, {color: ColorConstants.TITLE_BLUE,}]}>
-						开通实盘账户
+						{LS.str("OPEN_LIVE_ACCOUNT")}
 					</Text>
 				</TouchableOpacity>
 			)
 		}else if(liveAccStatus == 2){
 			return(
 				<Text style={styles.noticeText}>
-					开通实盘账户
+					{LS.str("OPEN_LIVE_ACCOUNT")}
 				</Text>
 			);
 		}
@@ -287,7 +289,7 @@ var MyIncomePage = React.createClass({
 						<View style={{flexDirection:'column'}}>
 							<View style={{flexDirection: 'row'}}>
 								<Text style={styles.noticeText}>
-									注意：交易金转入实盘账户前，必须
+									{LS.str("MY_REWARD_LIVE_ACCOUNT_WARNING")}
 								</Text>
 								{this.renderOpenAccountButton(meData.liveAccStatus)}
 							</View>
@@ -303,7 +305,7 @@ var MyIncomePage = React.createClass({
 		var nextEnabled = false;
 		var meData = LogicData.getMeData();
 		var notLogin = Object.keys(meData).length === 0
-		var buttonText = '转入实盘账户'
+		var buttonText = LS.str("MY_REWARD_TRANSFER_TO_LIVE");
 		if(!notLogin && meData.liveAccStatus === 1){
 			if(this.state.canTransfer){
 				nextEnabled = true;
@@ -329,8 +331,8 @@ var MyIncomePage = React.createClass({
 
 		return (
 			<View style={styles.wrapper}>
-				<NavBar title='我的交易金' showBackButton={true} navigator={this.props.navigator}
-					textOnRight='规则'
+				<NavBar title={LS.str("MY_REWARD_TITLE")} showBackButton={true} navigator={this.props.navigator}
+					textOnRight={LS.str("GZ")}
 					rightTextOnClick={()=>this.showRules()}/>				
 				<ListView
 					style={styles.list}

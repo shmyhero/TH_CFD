@@ -22,6 +22,7 @@ var NetworkModule = require('../../module/NetworkModule')
 var NetConstants = require('../../NetConstants')
 var ErrorBar = require('../component/ErrorBar')
 var OpenAccountHintBlock = require('./OpenAccountHintBlock')
+var LS = require("../../LS")
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
@@ -34,15 +35,15 @@ var OADocumentInfoPage = React.createClass({
 	isProceedAnyway: false,
 
 	listRawData: [
-			{"key":"服务条款", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "1")},
-			{"key":"风险披露", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "2")},
-			{"key":"数据共享协议", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "3")},
-			{"key":"交易执行政策", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "4")},
-			{"key":"投诉信息", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "5")},
-			{"key":"用户头像使用说明", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "6")},
-			{"key":"盈交易榜单功能条款", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "10")},
+			{"key":"OPEN_ACCOUNT_TERMS", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "1")},
+			{"key":"OPEN_ACCOUNT_RISK_DISCLOSURE", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "2")},
+			{"key":"OPEN_ACCOUNT_DATA_SHARING_AGREEMENT", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "3")},
+			{"key":"OPEN_ACCOUNT_TRADE_ESTABLISH_POLICY", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "4")},
+			{"key":"OPEN_ACCOUNT_COMPLAINT_INFORMATION", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "5")},
+			{"key":"OPEN_ACCOUNT_PORTRAIT_INFORMATION", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "6")},
+			{"key":"OPEN_ACCOUNT_RANKING_TERMS", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "10")},
 
-			{"key":"关于保证金交易", "type": "aboutBlock" },
+			{"key":"OPEN_ACCOUNT_ABOUT_MARGIN_TRADING", "type": "aboutBlock" },
 			{"type":"openAccountHintBlock", },
 		],
 
@@ -182,7 +183,7 @@ var OADocumentInfoPage = React.createClass({
 		}
 		if(!errorMessage){
 			this.setState({
-				error: "遇到错误，请稍后再试"
+				error: LS.str("ENCOUNTER_ERROR")
 			})
 			return;
 		}
@@ -205,9 +206,9 @@ var OADocumentInfoPage = React.createClass({
 					key = key.replace("'", "").replace("'", "");
 					console.log("key: " + key)
 
-					var error = "格式不正确";
+					var error = LS.str("OPEN_ACCOUNT_WRONG_FORMAT");
 					if(errorlines[i].indexOf("UserNameAvailableRule")){
-						error = "用户名已存在"
+						error = LS.str("OPEN_ACCOUNT_USERNAME_EXIST")
 					}
 
 					errorList.push({"key": key, "error": error});
@@ -233,7 +234,7 @@ var OADocumentInfoPage = React.createClass({
 		this.props.navigator.push({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			url: rowData.url,
-			title: rowData.key,
+			title: LS.str(rowData.key),
 			themeColor: ColorConstants.TITLE_DARK_BLUE,
 		});
 	},
@@ -241,27 +242,27 @@ var OADocumentInfoPage = React.createClass({
 	renderAboutCashDeposit:function(){
 		return(
 			<View style={styles.aboutCash}>
-	  		<Text style = {[styles.textTitle,{marginTop:0}]}>关于保证金交易:</Text>
+	  		<Text style = {[styles.textTitle,{marginTop:0}]}>{LS.str("OPEN_ACCOUNT_ABOUT_MARGIN_TRADING_HEADER")}</Text>
 				<View style = {styles.textLine}>
 					<Text style = {styles.textRound}>●</Text>
-					<Text style = {styles.textValue}>保证金交易是对价格的变动进行投注或交易，您的盈亏取决于以保证金建仓的金融标的市场波动以及我们进而提供的买卖报价。</Text>
+					<Text style = {styles.textValue}>{LS.str("OPEN_ACCOUNT_ABOUT_MARGIN_TRADING_LINE_1")}</Text>
 				</View>
 
 				<View style = {styles.textLine}>
 					<Text style = {styles.textRound}>●</Text>
-					<Text style = {styles.textValue}>保证金交易只能以现金交割，且具有法律强制效力。</Text>
+					<Text style = {styles.textValue}>{LS.str("OPEN_ACCOUNT_ABOUT_MARGIN_TRADING_LINE_2")}</Text>
 				</View>
 
 				<View style = {styles.textLine}>
 					<Text style = {styles.textRound}>●</Text>
-					<Text style = {styles.textValue}>您必须确保明白保证金交易的任何潜在结果，并对其风险程度具有心理准备，保证金交易并不在普通或特指的交易所执行，如果您在我们这里开仓交易，也必须在这里平仓。</Text>
+					<Text style = {styles.textValue}>{LS.str("OPEN_ACCOUNT_ABOUT_MARGIN_TRADING_LINE_3")}</Text>
 				</View>
 
 				<View style = {styles.textLine}>
 					<Text style = {styles.textRound}>●</Text>
-					<Text style = {styles.textValue}>您不会持有实际标的的资产或者相关权利，也不必承担标的实际交割义务。</Text>
+					<Text style = {styles.textValue}>{LS.str("OPEN_ACCOUNT_ABOUT_MARGIN_TRADING_LINE_4")}</Text>
 				</View>
-				<Text style = {styles.textTitle}>我确认我不是美国公民且或永久居民（为纳税目的）</Text>
+				<Text style = {styles.textTitle}>{LS.str("OPEN_ACCOUNT_NOT_US_CHECK")}</Text>
 	  	</View>
 		)
 	},
@@ -277,7 +278,7 @@ var OADocumentInfoPage = React.createClass({
 			return (
 				<TouchableHighlight onPress={() => this.documentPressed(rowData)}>
 					<View style={styles.rowWrapper}>
-						<Text style={styles.rowTitle}>{rowData.key}</Text>
+						<Text style={styles.rowTitle}>{LS.str(rowData.key)}</Text>
 						<Image style={styles.image} source={require("../../../images/icon_arrow_right.png")} />
 					</View>
 				</TouchableHighlight>
@@ -309,7 +310,7 @@ var OADocumentInfoPage = React.createClass({
 					renderSeparator={this.renderSeparator} />
 				<View style={styles.checkboxView}>
 					<CheckBoxButton
-						text={"我已阅读并同意上述相关内容"}
+						text={LS.str("OPEN_ACCOUNT_READ_DOCUMENT")}
 						defaultSelected={false}
 						onPress={(value)=>{this.onClickCheckbox(value)}}/>
 				</View>
@@ -319,7 +320,7 @@ var OADocumentInfoPage = React.createClass({
 						onPress={this.gotoNext}
 						textContainerStyle={styles.buttonView}
 						textStyle={styles.buttonText}
-						text={this.state.validateInProgress? "信息正在检查中...": '提交申请'} />
+						text={this.state.validateInProgress? LS.str("VALIDATE_IN_PROGRESS"): LS.str("OPEN_ACCOUNT_SUBMIT")} />
 				</View>
 				<OAWarningDialog ref={OA_WARNING_DIALOG}
 					proceedCallback={()=>this.proceedAnyway()}/>

@@ -35,6 +35,7 @@ var UserInfoSelectorProvider = require('./UserInfoSelectorProvider')
 var NetworkModule = require('../../module/NetworkModule');
 var NetConstants = require('../../NetConstants');
 var LogicData = require('../../LogicData');
+var LS = require("../../LS");
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
@@ -44,11 +45,11 @@ var rowTitleWidth = (width - (2 * rowPadding)) / 4;
 var rowValueWidth = (width - (2 * rowPadding)) / 4 * 3;
 
 var defaultRawData = [
-		{"title":"姓名", "key": "AccountHolder", "value":"", hint:"请输入姓名", "type": "realname",},
-		{"title":"开户城市", "key": "ProvinceAndCity", "value":{"Province": null, "City": null}, hint: "点击选择", "type": "cascadeChoice", "choicesKey": "Provices"},
-		{"title":"开户银行", "key": "NameOfBank", "value":"", hint: "点击选择", "type": "choice", "choicesKey": "SupportedBanks"},
-		{"title":"支行名称", "key": "Branch", "value":"", hint:"请输入支行名称", maxLength: 50,},
-		{"title":"银行卡号", "key": "AccountNumber", "value":"", hint:"请输入银行卡号", maxLength:50, "type": "cardNumber",},
+		{"title":"BIND_CARD_NAME", "key": "AccountHolder", "value":"", hint: "BIND_CARD_NAME_HINT", "type": "realname",},
+		{"title":"BIND_CARD_PROVINCE_CITY", "key": "ProvinceAndCity", "value":{"Province": null, "City": null}, hint: "PRESS_TO_CHOOSE", "type": "cascadeChoice", "choicesKey": "Provices"},
+		{"title":"BIND_CARD_NAME_OF_BANK", "key": "NameOfBank", "value":"", hint: "PRESS_TO_CHOOSE", "type": "choice", "choicesKey": "SupportedBanks"},
+		{"title":"BIND_CARD_BRANCH", "key": "Branch", "value":"", hint: "BIND_CARD_BRANCH_HINT", maxLength: 50,},
+		{"title":"BIND_CARD_CARD_NUMBER", "key": "AccountNumber", "value":"", hint: "BIND_CARD_CARD_NUMBER_HINT" , maxLength:50, "type": "cardNumber",},
 ];
 
 export default class BindCardPage extends Component {
@@ -218,7 +219,7 @@ export default class BindCardPage extends Component {
 						this.setState({
 		          validateInProgress: false,
 		        });
-						Alert.alert('绑卡失败', result.errorMessage, [{text: '确认',}]);
+						Alert.alert(LS.str("BIND_CARD_FAILED"), result.errorMessage, [{text: LS.str("QR"),}]);
 		      });
 				}else{
 					//Do something???
@@ -228,7 +229,7 @@ export default class BindCardPage extends Component {
         this.setState({
           validateInProgress: false,
         });
-				Alert.alert('绑卡失败', result.errorMessage, [{text: '确认',}]);
+				Alert.alert(LS.str("BIND_CARD_FAILED"), result.errorMessage, [{text: LS.str("QR"),}]);
       });
 	}
 
@@ -443,7 +444,7 @@ export default class BindCardPage extends Component {
       name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
       url: NetConstants.TRADEHERO_API.HELP_CENTER_URL_ACTUAL,
       isShowNav: false,
-      title: "帮助中心",
+      title: LS.str("BZZX"),
     });
   }
 
@@ -489,7 +490,7 @@ export default class BindCardPage extends Component {
     return (
       <TouchableOpacity activeOpacity={0.9} onPress={onPress}>
         <View style={styles.rowWrapper}>
-          <Text style={styles.rowTitle}>{rowData.title}</Text>
+          <Text style={styles.rowTitle}>{LS.str(rowData.title)}</Text>
           <View style={styles.valueContent}>
             <View style={{flex: 1, flexDirection: 'column', justifyContent: "center", margin: 0,}}>
               <Text style={[styles.centerText, {color: textColor}]}
@@ -509,7 +510,7 @@ export default class BindCardPage extends Component {
   renderNameHint(){
     return(
       <Text style={[{color: ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR, fontSize: 12}]}>
-        与身份证一致，不可更改
+        {LS.str("BIND_CARD_NAME_ID_CARD_HINT")}
       </Text>
     )
   }
@@ -530,7 +531,7 @@ export default class BindCardPage extends Component {
 				autoCapitalize="none"
 				autoCorrect={false}
 				defaultValue={displayText}
-				placeholder={rowData.hint}
+				placeholder={LS.str(rowData.hint)}
 				placeholderTextColor={ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR}
 				selectionColor={ColorConstants.INOUT_TEXT_SELECTION_COLOR}
 				underlineColorAndroid='transparent'
@@ -578,7 +579,7 @@ export default class BindCardPage extends Component {
     var buttonText = "";
     var buttonAction;
 
-    buttonText = "下一步";
+    buttonText = LS.str("NEXT");
     buttonAction = ()=>this.bindCard();
     //OpenAccountUtils.canGoNext(this.listRawData);
     //console.log("listRawData: " + JSON.stringify(listRawData));
@@ -603,7 +604,7 @@ export default class BindCardPage extends Component {
           onPress={buttonAction}
           textContainerStyle={styles.buttonView}
           textStyle={styles.buttonText}
-          text={this.state.validateInProgress? "信息正在检查中...": buttonText} />
+          text={this.state.validateInProgress? LS.str("VALIDATE_IN_PROGRESS"): buttonText} />
       </View>
     );
   }
@@ -620,7 +621,7 @@ export default class BindCardPage extends Component {
 			)
 		}
 
-		var navbarTitle = "添加银行卡";
+		var navbarTitle = LS.str("BIND_CARD_TITLE");
 
 		return (
 			<View style={styles.wrapper}>

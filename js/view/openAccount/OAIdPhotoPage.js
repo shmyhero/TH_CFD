@@ -27,6 +27,7 @@ var ErrorBar = require('../component/ErrorBar')
 var OpenAccountUtils = require('./OpenAccountUtils')
 var OpenAccountHintBlock = require('./OpenAccountHintBlock')
 var {height, width} = Dimensions.get('window')
+var LS = require("../../LS")
 
 const ID_CARD_FRONT = 1
 const ID_CARD_BACK = 2
@@ -47,9 +48,6 @@ const defaultIDFront = require('../../../images/openAccountIDFront.jpg');
 const defaultIDBack = require('../../../images/openAccountIDBack.jpg');
 var options = {
 	title: null, // specify null or empty string to remove the title
-	cancelButtonTitle: '取消',
-	takePhotoButtonTitle: '拍照', // specify null or empty string to remove this button
-	chooseFromLibraryButtonTitle: '照片图库', // specify null or empty string to remove this button
 
 	cameraType: 'back', // 'front' or 'back'
 	mediaType: 'photo', // 'photo' or 'video'
@@ -111,6 +109,11 @@ var OAIdPhotoPage = React.createClass({
 		var eventParam = {};
 		eventParam[TalkingdataModule.KEY_TYPE] = (idCardIndex==ID_CARD_FRONT) ? "正面" : "反面";
 		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_UPLOAD_ID_IMAGE, TalkingdataModule.LABEL_OPEN_ACCOUNT, eventParam)
+
+		options.cancelButtonTitle = LS.str("QX")
+		options.takePhotoButtonTitle = LS.str("OPEN_ACCOUNT_TAKE_PICTURE")
+		options.chooseFromLibraryButtonTitle = LS.str("OPEN_ACCOUNT_LIBRARY")		
+
 		ImagePicker.showImagePicker(options, (response) => {
 			console.log('Response = ', response);
 
@@ -192,7 +195,7 @@ var OAIdPhotoPage = React.createClass({
 						} else {
 							console.log("ocr failed. error: " + JSON.stringify(decodeURIComponent(responseJson.message)))
 							this.setState({
-								error: "图片识别失败，请重新上传图片"
+								error: LS.str("OPEN_ACCOUNT_OCR_FAILED")
 							});
 						}
 					},
@@ -234,7 +237,7 @@ var OAIdPhotoPage = React.createClass({
 				<ErrorBar error={this.state.error}/>
 				<ScrollView style={{flex:1}}>
 					<Text style={styles.reminderText}>
-						请上传您的身份证正反面照片
+						{LS.str("OPEN_ACCOUNT_ID_UPLOAD_FRONT_REAR_HINT")}
 					</Text>
 					<TouchableOpacity style={styles.imageArea} onPress={() => this.pressAddImage(ID_CARD_FRONT)}>
 						<Image style={styles.addImage} source={this.state.idCardFront}/>
@@ -246,7 +249,7 @@ var OAIdPhotoPage = React.createClass({
 						paddingLeft:15, paddingRight:15}}>
 						<View style={{height: 40, justifyContent:'center'}}>
 							<Text style={{}}>
-							请拍摄身份证原件:
+								{LS.str("OPEN_ACCOUNT_ID_PHOTO_HINT")}
 							</Text>
 						</View>
 						<View style={styles.separator}/>
@@ -260,7 +263,7 @@ var OAIdPhotoPage = React.createClass({
 						onPress={this.gotoNext}
 						textContainerStyle={styles.buttonView}
 						textStyle={styles.buttonText}
-						text={this.state.validateInProgress? "信息正在检查中...": '下一步'} />
+						text={this.state.validateInProgress? LS.str("VALIDATE_IN_PROGRESS"): LS.str("NEXT")} />
 				</View>
 			</View>
 		);

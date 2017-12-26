@@ -16,6 +16,7 @@ var ColorConstants = require('../../ColorConstants')
 var TalkingdataModule = require('../../module/TalkingdataModule')
 var OpenAccountRoutes = require('./OpenAccountRoutes')
 var OpenAccountHintBlock = require('./OpenAccountHintBlock')
+var LS = require("../../LS")
 
 var {height, width} = Dimensions.get('window')
 
@@ -55,7 +56,7 @@ var OAStartPage = React.createClass({
 						onPress={this.gotoNext}
 						textContainerStyle={styles.buttonView}
 						textStyle={styles.buttonText}
-						text='下一步' />
+						text={LS.str("NEXT")} />
 				</View>
 			</View>
 		);

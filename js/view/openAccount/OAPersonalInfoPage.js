@@ -33,6 +33,7 @@ var NetworkModule = require('../../module/NetworkModule');
 var NetConstants = require('../../NetConstants');
 var LogicData = require('../../LogicData');
 var OpenAccountHintBlock = require('./OpenAccountHintBlock');
+var LS = require("../../LS")
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
@@ -42,18 +43,18 @@ var rowTitleWidth = (width - (2 * rowPadding)) / 4;
 var rowValueWidth = (width - (2 * rowPadding)) / 4 * 3;
 
 const GenderTranslater = [
-  {"value":true, "displayText": "男"},
-  {"value":false, "displayText": "女"},
+  {"value":true, "displayText": "GENDER_MALE"},
+  {"value":false, "displayText": "GENDER_FEMALE"},
 ]
 
 var defaultRawData = [
-		{"title":"姓", "key": "lastName", "value":"", hint:"请输入姓", maxLength: 50, "ignoreInRegistery": true},	//TODO: add ignoreInRegistery when API is avaliable.
-		{"title":"名", "key": "firstName", "value":"", hint:"请输入名", maxLength: 50, "ignoreInRegistery": true},
-		{"title":"性别", "key": "gender", "value":"", hint: "点击选择", "type": "choice", "choices": GenderTranslater},
-		//{"title":"出生日期", "key": "birthday", "value":"", hint: "点击选择", "type": "date"},
+		{"title":"OPEN_ACCOUNT_LAST_NAME", "key": "lastName", "value":"", hint:"OPEN_ACCOUNT_LAST_NAME_HINT", maxLength: 50, "ignoreInRegistery": true},	//TODO: add ignoreInRegistery when API is avaliable.
+		{"title":"OPEN_ACCOUNT_FIRST_NAME", "key": "firstName", "value":"", hint:"OPEN_ACCOUNT_FIRST_NAME_HINT", maxLength: 50, "ignoreInRegistery": true},
+		{"title":"OPEN_ACCOUNT_GENDER", "key": "gender", "value":"", hint: "PRESS_TO_CHOOSE", "type": "choice", "choices": GenderTranslater},
+		//{"title":"出生日期", "key": "birthday", "value":"", hint: "PRESS_TO_CHOOSE", "type": "date"},
 		//{"title":"民族", "key": "ethnic", "value":"", hint:"请输入民族", maxLength: 10,},
-		{"title":"身份证号", "key": "idCode", "value":"", hint:"请输入身份证号", maxLength: 18, minLength: 18, "ignoreInRegistery": true},
-		{"title":"证件地址", "key": "addr", "value":"", hint:"请输入证件地址", maxLength:75, maxLine: 2},
+		{"title":"OPEN_ACCOUNT_ID_CODE", "key": "idCode", "value":"", hint:"OPEN_ACCOUNT_ID_CODE_HINT", maxLength: 18, minLength: 18, "ignoreInRegistery": true},
+		{"title":"OPEN_ACCOUNT_ID_ADDR", "key": "addr", "value":"", hint:"OPEN_ACCOUNT_ID_ADDR_HINT", maxLength:75, maxLine: 2},
 		//{"title":"签发机关", "key": "issueAuth", hint:"请输入签发机关", "value":""},
 		//{"title":"有效期限", "key": "validPeriod", "value":"", "type": "datePeriod"},
 		{"type":"openAccountHintBlock", "ignoreInRegistery": true,},
@@ -242,9 +243,9 @@ var OAPersonalInfoPage = React.createClass({
 		var choices = [];
 		for(var i = 0; i < rowData.choices.length; i++){
 			if(rowData.value === rowData.choices[i].value){
-				selectedText = rowData.choices[i].displayText;
+				selectedText = LS.str(rowData.choices[i].displayText);
 			}
-			choices.push(rowData.choices[i].displayText);
+			choices.push(LS.str(rowData.choices[i].displayText));
 		}
 
     Picker.init({
@@ -258,7 +259,7 @@ var OAPersonalInfoPage = React.createClass({
 						rowData.value = rowData.choices[0].value;
 					}else{
 						for(var i = 0; i < rowData.choices.length; i++){
-							if(data[0] === rowData.choices[i].displayText){
+							if(data[0] === LS.str(rowData.choices[i].displayText)){
 								rowData.value = rowData.choices[i].value;
 							}
 						}
@@ -351,7 +352,7 @@ var OAPersonalInfoPage = React.createClass({
 
 		return (
 			<View style={[styles.rowWrapper, {paddingTop: 0, paddingBottom: 0}]}>
-				<Text style={[styles.rowTitle, {paddingTop: rowPadding, paddingBottom: rowPadding,}]}>{rowData.title}</Text>
+				<Text style={[styles.rowTitle, {paddingTop: rowPadding, paddingBottom: rowPadding,}]}>{LS.str(rowData.title)}</Text>
 				<View style={styles.valueContent}>
 					<TouchableOpacity style={styles.datePeriodButton} onPress={()=>this.chooseStartDatePicker()}>
 						<DatePicker
@@ -360,14 +361,14 @@ var OAPersonalInfoPage = React.createClass({
 							date={dateInfo.startDate}
 							mode="date"
 							format="YYYY.MM.DD"
-							confirmBtnText="确定"
-							cancelBtnText="取消"
+							confirmBtnText={LS.str("QD")}
+							cancelBtnText={LS.str("QX")}
 							showIcon={false}
 							minDate={"1990-01-01"}
 							maxDate={dateInfo.endDate!==""?dateInfo.endDate:"2099-01-01"}
 							onDateChange={(datetime) => this.onStartDateSelect(rowID, datetime)}
 							customStyles={datePeriodPickerStyle}
-							placeholder="开始日期"
+							placeholder={LS.str("OPEN_ACCOUNT_START_DATE")}
 						/>
 					</TouchableOpacity>
 					<View style={{alignItems:'center', alignSelf:'center', width: 60,}}>
@@ -380,14 +381,14 @@ var OAPersonalInfoPage = React.createClass({
 							date={dateInfo.endDate}
 							mode="date"
 							format="YYYY.MM.DD"
-							confirmBtnText="确定"
-							cancelBtnText="取消"
+							confirmBtnText={LS.str("QD")}
+							cancelBtnText={LS.str("QX")}
 							showIcon={false}
 							minDate={dateInfo.startDate!==""?dateInfo.startDate:"1990-01-01"}
 							maxDate={"2099-01-01"}
 							onDateChange={(datetime) => this.onEndDateSelect(rowID, datetime)}
 							customStyles={datePeriodPickerStyle}
-							placeholder="结束日期"
+							placeholder={LS.str("OPEN_ACCOUNT_END_DATE")}
 						/>
 
 					</TouchableOpacity>
@@ -411,18 +412,18 @@ var OAPersonalInfoPage = React.createClass({
 			var textColor = ColorConstants.INPUT_TEXT_COLOR;
 			for(var i = 0; i < rowData.choices.length; i++){
 				if(rowData.value === rowData.choices[i].value){
-					displayText = rowData.choices[i].displayText;
+					displayText = LS.str(rowData.choices[i].displayText);
 				}
 			}
 			if(displayText === ""){
-				displayText = rowData.hint;
+				displayText = LS.str(rowData.hint);
 				textColor = ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR;
 			}
 
 			return (
 				<TouchableOpacity activeOpacity={0.9} onPress={() => this.onPressPicker(rowData, rowID)}>
 					<View style={styles.rowWrapper}>
-						<Text style={rowTitleStyle}>{rowData.title}</Text>
+						<Text style={rowTitleStyle}>{LS.str(rowData.title)}</Text>
 						<View style={styles.valueContent}>
 							<View style={{flex: 1, flexDirection: 'column', justifyContent: "center", margin: 0,}}>
 								<Text style={[styles.centerText, {color: textColor}]}
@@ -442,18 +443,18 @@ var OAPersonalInfoPage = React.createClass({
 			return (
 				<TouchableOpacity onPress={()=>this.chooseBirthday()}>
 					<View style={styles.rowWrapper}>
-						<Text style={styles.rowTitle}>{rowData.title}</Text>
+						<Text style={styles.rowTitle}>{LS.str(rowData.title)}</Text>
 						<DatePicker
 							ref={"birthdayPicker"}
-		          style={styles.datePicker}
-		          date={rowData.value}
-		          mode="date"
-		          format="YYYY.MM.DD"
-		          confirmBtnText="确定"
-		          cancelBtnText="取消"
-							placeholder="点击选择"
-		          showIcon={false}
-		          onDateChange={(datetime) => this.onDateTimeSelect(rowID, datetime)}
+							style={styles.datePicker}
+							date={rowData.value}
+							mode="date"
+							format="YYYY.MM.DD"
+							confirmBtnText={LS.str("QD")}
+							cancelBtnText={LS.str("QX")}
+							placeholder={LS.str("PRESS_TO_CHOOSE")}
+							showIcon={false}
+							onDateChange={(datetime) => this.onDateTimeSelect(rowID, datetime)}
 							customStyles={datePickerStyle}
 		        />
 					</View>
@@ -473,12 +474,12 @@ var OAPersonalInfoPage = React.createClass({
 			}
 			return (
 				<View style={titleStyle}>
-					<Text style={rowTitleStyle}>{rowData.title}</Text>
+					<Text style={rowTitleStyle}>{LS.str(rowData.title)}</Text>
 					<TextInput style={inputStyle}
 						autoCapitalize="none"
 						autoCorrect={false}
 						defaultValue={rowData.value}
-						placeholder={rowData.hint}
+						placeholder={LS.str(rowData.hint)}
 						placeholderTextColor={ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR}
 						multiline={multiline}
 						numberOfLines={numberOfLines}
@@ -515,7 +516,7 @@ var OAPersonalInfoPage = React.createClass({
 					if(this.listRawData[i].error){
 						error = this.listRawData[i].error;
 					}else{
-						error = "您输入的" + this.listRawData[i].title + "有误，请核对后重试";
+						error = LS.str("OPEN_ACCOUNT_ID_INFO_ERROR").replace("{1}", LS.str(this.listRawData[i].title));
 					}
 				}
 			}
@@ -553,7 +554,7 @@ var OAPersonalInfoPage = React.createClass({
 						onPress={this.gotoNext}
 						textContainerStyle={styles.buttonView}
 						textStyle={styles.buttonText}
-						text={this.state.validateInProgress? "信息正在检查中...": '下一步'} />
+						text={this.state.validateInProgress? LS.str("VALIDATE_IN_PROGRESS"): LS.str("NEXT")} />
 				</View>
 				{pickerModal}
 			</View>

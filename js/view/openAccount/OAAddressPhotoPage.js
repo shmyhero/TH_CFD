@@ -29,6 +29,8 @@ var ErrorBar = require('../component/ErrorBar')
 var OpenAccountHintBlock = require('./OpenAccountHintBlock')
 var UIConstants = require('../../UIConstants')
 var TalkingdataModule = require('../../module/TalkingdataModule')
+var LS = require('../../LS');
+
 // var OpenAccountUtils = require('./OpenAccountUtils')
 var {height, width} = Dimensions.get('window')
 
@@ -50,25 +52,22 @@ var ADDRESS_FILE_TYPE_PICKER_HEIGHT = 55;
 var TOP_HINT_BAR_HEIGHT = 36;
 
 var PhotoTypeMapping = [
-	{"value": 'HuKou', "displayText": "户口本", "imageHint": ["上传户主页图片", "上传本人页图片"]},
-	{"value": 'JuZhuZheng', "displayText": "居住证", "imageHint": ["上传带头像面的图片"]},
-	{"value": 'House', "displayText": "房产证", "imageHint": ["上传房产证图片"]},
-	{"value": 'DriveLincense', "displayText": "驾照", "imageHint": ["上传带头像面的图片"]},
-	{"value": 'Internet', "displayText": "宽带", "imageHint": ["上传近3个月内宽带费用图片"]},
-	{"value": 'LivingFair', "displayText": "水电煤", "imageHint": ["上传近3个月内水电煤费用图片"]},
-	{"value": 'Phone', "displayText": "固话账单", "imageHint": ["上传近3个月内固话账单图片"]},
-	{"value": 'Bank', "displayText": "银行账单", "imageHint": ["上传近3个月内银行流水图片"]},
+	{"value": 'HuKou', "displayText": "OPEN_ACCOUNT_HUKOU", "imageHint": ["OPEN_ACCOUNT_HUKOU_HINT_1", "OPEN_ACCOUNT_HUKOU_HINT_2"]},
+	{"value": 'JuZhuZheng', "displayText": "OPEN_ACCOUNT_JUZHUZHENG", "imageHint": ["OPEN_ACCOUNT_JUZHUZHENG_HINT"]},
+	{"value": 'House', "displayText": "OPEN_ACCOUNT_DEED", "imageHint": ["OPEN_ACCOUNT_DEED_HINT"]},
+	{"value": 'DriveLincense', "displayText": "OPEN_ACCOUNT_DRIVE_LICENSE", "imageHint": ["OPEN_ACCOUNT_DRIVE_LICENSE_HINT"]},
+	{"value": 'Internet', "displayText": "OPEN_ACCOUNT_BROADBAND", "imageHint": ["OPEN_ACCOUNT_BROADBAND_HINT"]},
+	{"value": 'LivingFair', "displayText": "OPEN_ACCOUNT_BILLS", "imageHint": ["OPEN_ACCOUNT_BILLS_HINT"]},
+	{"value": 'Phone', "displayText": "OPEN_ACCOUNT_TEL_BILLS", "imageHint": ["OPEN_ACCOUNT_TEL_BILLS_HINT"]},
+	{"value": 'Bank', "displayText": "OPEN_ACCOUNT_BANK_BILLS", "imageHint": ["OPEN_ACCOUNT_BANK_BILLS_HINT"]},
 ];
 
 var defaultRawData = [
-	{"key":"imageType", "title":"地址证明", "defaultValue":"HuKou", "value":"", "type":"choice", "choices":PhotoTypeMapping},
+	{"key":"imageType", "title":"OPEN_ACCOUNT_PROOF_OF_ADDRESS", "defaultValue":"HuKou", "value":"", "type":"choice", "choices":PhotoTypeMapping},
 ];
 
 var options = {
 	title: null, // specify null or empty string to remove the title
-	cancelButtonTitle: '取消',
-	takePhotoButtonTitle: '拍照', // specify null or empty string to remove this button
-	chooseFromLibraryButtonTitle: '照片图库', // specify null or empty string to remove this button
 
 	cameraType: 'back', // 'front' or 'back'
 	mediaType: 'photo', // 'photo' or 'video'
@@ -157,6 +156,11 @@ var OAAddressPhotoPage = React.createClass({
 	},
 
 	pressAddImage: function(imageIndex, rowData) {
+
+		options.cancelButtonTitle = LS.str("QX")
+		options.takePhotoButtonTitle = LS.str("OPEN_ACCOUNT_TAKE_PICTURE")
+		options.chooseFromLibraryButtonTitle = LS.str("OPEN_ACCOUNT_LIBRARY")
+
 		ImagePicker.showImagePicker(options, (response) => {
 			console.log('Response = ', response);
 
@@ -251,7 +255,7 @@ var OAAddressPhotoPage = React.createClass({
 								var trackingData = {};
 								for(var i = 0; i < PhotoTypeMapping.length; i++){
 									if(PhotoTypeMapping[i].value === this.state.selectedAddressType){
-										trackingData[TalkingdataModule.KEY_ADDRESS_TYPE] = PhotoTypeMapping[i].displayText;
+										trackingData[TalkingdataModule.KEY_ADDRESS_TYPE] = LS.str(PhotoTypeMapping[i].displayText);
 										break;
 									}
 								}
@@ -261,7 +265,7 @@ var OAAddressPhotoPage = React.createClass({
 							} else {
 								console.log("upload address photo failed. error: " + JSON.stringify(decodeURIComponent(responseJson.message)))
 								this.setState({
-									error: "图片上传失败，请重新上传图片"
+									error: LS.str("OPEN_ACCOUNT_UPLOAD_IMAGE_FAILED")
 								});
 							}
 						},
@@ -329,13 +333,13 @@ var OAAddressPhotoPage = React.createClass({
 	},
 
 	renderImagePicker: function(rowData){
-		var title = rowData.title;
+		var title = LS.str(rowData.title);
 		var value = this.state.selectedAddressType;
 
 		var imageHint = [];
 		for(var i = 0; i < rowData.choices.length; i++){
 			if(rowData.choices[i].value === value){
-				imageHint = rowData.choices[i].imageHint
+				imageHint = LS.str(rowData.choices[i].imageHint)
 			}
 		}
 
@@ -369,20 +373,20 @@ var OAAddressPhotoPage = React.createClass({
 	renderAddressTypePicker: function(rowData){
 		var imageArrow = this.state.showAddressFileTypeList ? require('../../../images/more_up.png'):require('../../../images/more_down.png')
 
-		var title = rowData.title;
+		var title = LS.str(rowData.title);
 		var value = this.state.selectedAddressType;
 
 		var selectedText = "";
 		for(var i = 0; i < rowData.choices.length; i++){
 			if(rowData.choices[i].value === value){
-				selectedText = rowData.choices[i].displayText;
+				selectedText = LS.str(rowData.choices[i].displayText);
 			}
 		}
 
 		return (
 			<View >
 				<View style={styles.rowWrapper}>
-					<Text style={styles.rowTitle}>{rowData.title}</Text>
+					<Text style={styles.rowTitle}>{LS.str(rowData.title)}</Text>
 					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.selectAddressFileType()}>
 						<View style = {{flexDirection:'row',alignItems:'center'}}>
 							<Text style = {styles.addressTypeText}>{selectedText}</Text>
@@ -405,7 +409,7 @@ var OAAddressPhotoPage = React.createClass({
 	renderAddressTypeRow: function(rowData, sectionID, rowID) {
 		return (
 			<TouchableOpacity style={{width:width/5, height:30}} onPress={()=>this.onAddressTypeSelected(rowData)}>
-				<Text key={rowID} style={styles.addressTypeText}>{rowData.displayText}</Text>
+				<Text key={rowID} style={styles.addressTypeText}>{LS.str(rowData.displayText)}</Text>
 			</TouchableOpacity>)
 	},
 
@@ -465,12 +469,12 @@ var OAAddressPhotoPage = React.createClass({
 				<ScrollView style={{flex:1}} ref={SCROLL_VIEW}
 					scrollEnabled={this.state.scrollEnabled}>
 					<View style={styles.hintBar}>
-						<Text style={styles.hintText}>请上传任意一种与本人身份证信息一致的图片</Text>
+						<Text style={styles.hintText}>{LS.str("OPEN_ACCOUNT_UPLOAD_IMAGE_HINT_1")}</Text>
 					</View>
 					{this.renderAddressTypePicker(rowData)}
 					{this.renderImagePicker(rowData)}
 					<View style={styles.container}>
-						<Text style={styles.hintText}>输入的地址必须与上传图片中的地址保持一致！</Text>
+						<Text style={styles.hintText}>{LS.str("OPEN_ACCOUNT_UPLOAD_IMAGE_HINT_2")}</Text>
 						<TextInput style={styles.inputText}
 							autoCapitalize="none"
 							autoCorrect={false}
@@ -480,7 +484,7 @@ var OAAddressPhotoPage = React.createClass({
 							maxLength={50}
 							selectionColor={ColorConstants.INOUT_TEXT_SELECTION_COLOR}
 							underlineColorAndroid='transparent'
-							placeholder="请输入上传图片中的地址"
+							placeholder={LS.str("OPEN_ACCOUNT_IMAGE_ADDRESS_PLACEHOLDER")}
 							onChangeText={(text)=>this.textInputChange(text)}
 							/>
 					</View>
@@ -492,7 +496,7 @@ var OAAddressPhotoPage = React.createClass({
 						onPress={this.gotoNext}
 						textContainerStyle={styles.buttonView}
 						textStyle={styles.buttonText}
-						text={this.state.validateInProgress? "信息正在检查中...": '下一步'} />
+						text={this.state.validateInProgress? LS.str("VALIDATE_IN_PROGRESS"): LS.str("NEXT")} />
 				</View>
 				{this.renderAddressTypeList()}
 			</View>);

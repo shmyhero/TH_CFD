@@ -17,6 +17,7 @@ var OpenAccountRoutes = require('./OpenAccountRoutes')
 var NetworkModule = require('../../module/NetworkModule')
 var NetConstants = require('../../NetConstants')
 var OpenAccountHintBlock = require('./OpenAccountHintBlock');
+var LS = require("../../LS")
 
 var {height, width} = Dimensions.get('window')
 
@@ -43,7 +44,7 @@ var OAReviewStatusPage = React.createClass({
 		return (
 			<View style={styles.wrapper}>
 				<ScrollView style={{flex:1}}>
-					<Text style={styles.text1}>感谢您开设盈交易实盘账户</Text>
+					<Text style={styles.text1}>{LS.str("OPEN_ACCOUNT_THANKS")}</Text>
 					<View style={styles.rowWrapper}>
 						<Image style={styles.image} source={require('../../../images/icon_review1.png')}/>
 						<Text style={styles.ellipse}>· · ·</Text>
@@ -52,11 +53,11 @@ var OAReviewStatusPage = React.createClass({
 						<Image style={styles.image} source={require('../../../images/icon_review3.png')}/>
 					</View>
 					<View style={styles.rowWrapper}>
-						<Text style={styles.text2}>{"提交申请\n"+startDate.Format('yyyy-MM-dd')+"\n"+startDate.Format('hh:mm:ss')}</Text>
-						<Text style={styles.text2}>{"正在审核"}</Text>
-						<Text style={styles.text2}>{"审核通过后\n短信提醒"}</Text>
+						<Text style={styles.text2}>{LS.str("OPEN_ACCOUNT_APPLICATION_SUBMIT") + "\n"+startDate.Format('yyyy-MM-dd')+"\n"+startDate.Format('hh:mm:ss')}</Text>
+						<Text style={styles.text2}>{LS.str("OPEN_ACCOUNT_REVIEWING")}</Text>
+						<Text style={styles.text2}>{LS.str("OPEN_ACCOUNT_REVIEW_FINISH")}</Text>
 					</View>
-					<Text style={styles.text3}>{"开户成功后，\n盈交易会以短信告知您，同时您将收到欢迎邮件。"}</Text>
+					<Text style={styles.text3}>{LS.str("OPEN_ACCOUNT_SUCCEED_REMINDER")}</Text>
 					<OpenAccountHintBlock/>
 			 	</ScrollView>
 				<View style={styles.bottomArea}>
@@ -65,7 +66,7 @@ var OAReviewStatusPage = React.createClass({
 						onPress={this.gotoNext}
 						textContainerStyle={styles.buttonView}
 						textStyle={styles.buttonText}
-						text='完成' />
+						text={LS.str("FINISH")} />
 				</View>
 			</View>
 		);

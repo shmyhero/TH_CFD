@@ -42,12 +42,19 @@ class Icon extends Component {
     })
   }
 
+  setLabel(value){
+    this.setState({
+      label: value,
+    })
+  }
+
   setEnable(value){
     this.state.enable = value;
   }
 
   render() {
-    const { label, type, from, size, iconStyle, onActiveColor, onInactiveColor, ...rest } = this.props;
+    const {type, from, size, iconStyle, onActiveColor, onInactiveColor, ...rest } = this.props;
+    const label = this.state.label ? this.state.label : this.props.label;
     const { selected } = this.state;
 
     const color = selected? (this.state.onActiveColor ? this.state.onActiveColor  : onActiveColor ): onInactiveColor

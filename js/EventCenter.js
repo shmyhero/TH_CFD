@@ -19,6 +19,7 @@ const EventConst = {
 	LAYOUT_SIZE_CHANGED: 'layout_size_changed',
 	CHART_CLICKED: 'chart_clicked',
 	DISABLE_TABBAR: 'disable_tabbar',
+	LANGUAGE_CHANGED: 'language_changed'
 }
 
 var EventCenter = {
@@ -80,6 +81,10 @@ var EventCenter = {
 	emitDisableTabbarEvent: function(){
 		eventEmitter.emit(EventConst.DISABLE_TABBAR);
 	},
+
+	emitLanguageChangedEvent: function(){
+		eventEmitter.emit(EventConst.LANGUAGE_CHANGED);
+	}
 }
 
 module.exports = {EventCenter, EventConst};

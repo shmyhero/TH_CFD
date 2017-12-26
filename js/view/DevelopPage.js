@@ -30,6 +30,7 @@ var StockTransactionInfoModal = require('./StockTransactionInfoModal');
 var StockTransactionInfoBar = require('./StockTransactionInfoBar')
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 var StorageModule = require('../module/StorageModule')
+var {EventCenter, EventConst} = require("../EventCenter");
 
 export default class DevelopPage extends Component {
 
@@ -123,6 +124,8 @@ export default class DevelopPage extends Component {
     this.setState({
       languageSetting: LogicData.getLanguageEn()=='1'?'切换成中文':'切换成英文'
     },console.log('languageEN:'+LogicData.getLanguageEn()))
+    EventCenter.emitLanguageChangedEvent();
+
     this.postLanguageSetting();
   }
 

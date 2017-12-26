@@ -36,6 +36,10 @@ const extendRawIcon = (ChildComponent) => {
       this.refs['wrap'].refs['child'].setActiveColor(color)
     }
 
+    setLabel(value){
+      this.refs['wrap'].refs['child'].setLabel(value)
+    }
+
     setEnable(value){
       this.refs['wrap'].refs['child'].setEnable(value)
     }

@@ -193,6 +193,7 @@ var recevieDataSubscription = null
 var didAccountChangeSubscription = null;
 var didAccountLoginOutSideSubscription = null;
 var didDisableTabbarSubscription = null;
+var didLanguageChangeSubscription = null;
 
 var SHARE_PAGE = 'SharePage'
 var KEYBOARD_PAGE = 'KeyboardPage'
@@ -756,6 +757,16 @@ var MainPage = React.createClass({
 		}
 	},
 
+	onLanguageChanged(){
+		this.refs["homepageBtn"].setLabel(LS.str('SHOUYE'));
+		this.refs["tradeBtn"].setLabel(LS.str('HANGQING'));
+		this.refs["trendBtn"].setLabel(LS.str('CANGWEI'));
+		if(!HIDE_RANKING_TAB){
+			this.refs["rankingBtn"] && this.refs["rankingBtn"].setLabel(LS.str('DAREN'));
+		}
+		this.refs["meBtn"].setLabel(LS.str('WODE'));
+	},
+
 	refreshMainPage(){
 		// this.setState({
 		// 	barColor:LogicData.getAccountState()?'#00ff00':'#f7f7f7'
@@ -892,7 +903,8 @@ var MainPage = React.createClass({
 		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>this.refreshMainPage());
 		didAccountLoginOutSideSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGIN_OUT_SIDE, ()=>this.gotoLoginPage());
 		didDisableTabbarSubscription = EventCenter.getEventEmitter().addListener(EventConst.DISABLE_TABBAR, ()=>this.setTabbarEnable(false));
-
+		didLanguageChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.LANGUAGE_CHANGED, ()=>this.onLanguageChanged());
+		
 		var currentNavigatorIndex = LogicData.getTabIndex();
 		if(_navigators && _navigators.length > currentNavigatorIndex){
 			_navigator = _navigators[currentNavigatorIndex];
@@ -1069,7 +1081,7 @@ var MainPage = React.createClass({
 		}
 
 		didAccountChangeSubscription && didAccountChangeSubscription.remove();
-
+		didLanguageChangeSubscription && didLanguageChangeSubscription.remove();
 		BackAndroid.removeEventListener('hardwareBackPress', this.backAndroidHandler);
 	},
 
@@ -1597,7 +1609,8 @@ var MainPage = React.createClass({
 		return (
 			<Tabbar ref="myTabbar" barColor='#f7f7f7' style={{alignItems: 'stretch'}}>
 				<Tab name="home">
-						<Icon ref={"homepageBtn"} label={strSY}
+						<Icon ref={"homepageBtn"}
+							label={strSY}
 							type={glypy.Home}
 							from={'myhero'}
 							onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue}

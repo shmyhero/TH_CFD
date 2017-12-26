@@ -39,6 +39,16 @@ var LS = {
     KS:['亏损','Loss'],
     HL:['获利','Earn'],
     YSZ:['已设置','Have set'],
+    ZYWZ:['(止盈位在','Stop Win'],
+    ZSWZ:['(止损位在','Stop Loss'],
+    D:['到','To'],
+    ZJ_:['之间)','Area'],
+    ZY1:['止盈','Stop Win'],
+    ZS1:['止损','Stop Loss'],
+    ZSCG:['止损超过','Stop Loss More Than'],
+    WFSZ:['，无法设置','，Can Not To Set'],
+
+
 
     MRTT:['每日头条','TOP_NEWS'],
 

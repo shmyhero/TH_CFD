@@ -841,7 +841,7 @@ var StockOpenPositionPage = React.createClass({
 				if (stopLossUpdated) {
 					var userData = LogicData.getUserData()
 					if (stopLossSwitchIsOn && stopLossPercent < MAX_LOSS_PERCENT) {
-						Alert.alert('', '止损超过'+MAX_LOSS_PERCENT+'%，无法设置');
+						Alert.alert('', LS.str('ZSCG')+MAX_LOSS_PERCENT+LS.str('WFSZ'));
 						reject();
 						return
 					}
@@ -1321,7 +1321,8 @@ var StockOpenPositionPage = React.createClass({
 	stopLossMaxValue: 0,
 
 	renderStopProfitLoss: function(rowData, type) {
-		var titleText = type===1 ? "止盈" : "止损"
+
+		var titleText = type===1 ?  LS.str('ZY1'):LS.str('ZS1')
 		var switchIsOn = type===1 ? this.state.stopProfitSwitchIsOn : this.state.stopLossSwitchIsOn
 		var price = rowData.settlePrice
 		var percent = type===1 ? stopProfitPercent : stopLossPercent
@@ -1435,9 +1436,9 @@ var StockOpenPositionPage = React.createClass({
 
 	getErrorText: function(type, minValue, maxValue) {
 		if( type == 1){
-			return "(止盈位在" + minValue.toString() + "到" + maxValue.toString() + "之间)";
+			return LS.str('ZYWZ') +" "+ minValue.toString()+" " + LS.str('D') +" "+ maxValue.toString()+" "+   LS.str('ZJ_');
 		}else if (type == 2){
-			return "(止损位在" + minValue.toString() + "到" + maxValue.toString() + "之间)";
+			return LS.str('ZSWZ') +" "+ minValue.toString()+" " + LS.str('D')+" " + maxValue.toString() +" "+ LS.str('ZJ_');
 		}
 	},
 

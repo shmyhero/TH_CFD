@@ -643,21 +643,26 @@ var StockListPage = React.createClass({
 		if (rowData.preClose > 0) {
 			percentChange = (rowData.last - rowData.preClose) / rowData.preClose * 100
 		}
-
+		var bottomLine = rowData.symbol
+		var topLine = rowData.name
+		if(LogicData.getLanguageEn() == '1'){
+			bottomLine = rowData.name
+			topLine = rowData.symbol
+		}
 		return (
 			<TouchableHighlight onPress={() => this.stockPressed(rowData)}>
 				<View style={styles.rowWrapper} key={rowData.key}>
 
 					<View style={styles.rowLeftPart}>
 						<Text style={[styles.stockNameText, {fontSize: stockNameFontSize}]}>
-							{rowData.name}
+							{topLine}
 						</Text>
 
 						<View style={{flexDirection: 'row', alignItems: 'center'}}>
 							{/* {this.renderCountyFlag(rowData)} */}
 							{this.renderStockStatus(rowData)}
 							<Text style={styles.stockSymbolText}>
-								{rowData.symbol}
+								{bottomLine}
 							</Text>
 						</View>
 					</View>

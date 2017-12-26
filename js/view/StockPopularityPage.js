@@ -87,6 +87,12 @@ var StockPopularityPage = React.createClass({
 		var strKD = LS.str('KD')
 		var strKK = LS.str('KK')
 		var strRCY = LS.str('RCY')
+		var topLine = stockName
+		var bottomLine = stockSymbol
+		if(LogicData.getLanguageEn() == '1'){
+			topLine = stockSymbol
+			bottomLine = stockName
+		}
 		return (
 			<TouchableOpacity style={[styles.popularityRowContainer, {width: width}]} onPress={()=>this.gotoStockDetail(rowData)}>
 				<View style={styles.popularityRowLeft}>
@@ -96,8 +102,8 @@ var StockPopularityPage = React.createClass({
 					</View>
 				</View>
 				<View style={styles.popularityRowCenter}>
-					<Text style={[styles.stockName,{color:LogicData.getAccountState()?ColorConstants.TITLE_DARK_BLUE:'#1862df'}]}>{stockName}</Text>
-					<Text style={styles.stockCode}>{stockSymbol}</Text>
+					<Text style={[styles.stockName,{color:LogicData.getAccountState()?ColorConstants.TITLE_DARK_BLUE:'#1862df'}]}>{topLine}</Text>
+					<Text style={styles.stockCode}>{bottomLine}</Text>
 					<Text style={styles.stockPeople}>{peopleNum}{strRCY}</Text>
 				</View>
 				<View style={styles.popularityRowRight}>

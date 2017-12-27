@@ -42,7 +42,8 @@ var OADocumentInfoPage = React.createClass({
 			{"key":"OPEN_ACCOUNT_COMPLAINT_INFORMATION", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "5")},
 			{"key":"OPEN_ACCOUNT_PORTRAIT_INFORMATION", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "6")},
 			{"key":"OPEN_ACCOUNT_RANKING_TERMS", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "10")},
-
+			{"key":"OPEN_ACCOUNT_IMPORTANT_DOCUMENTS", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "11")},
+			
 			{"key":"OPEN_ACCOUNT_ABOUT_MARGIN_TRADING", "type": "aboutBlock" },
 			{"type":"openAccountHintBlock", },
 		],

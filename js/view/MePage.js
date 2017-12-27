@@ -499,7 +499,7 @@ var MePage = React.createClass({
 		else if(rowData.subtype === 'helpcenter') {
 			var qaUrl = LogicData.getAccountState()? NetConstants.TRADEHERO_API.HELP_CENTER_URL_ACTUAL:NetConstants.TRADEHERO_API.HELP_CENTER_URL;
 			qaUrl = qaUrl.replace('<version>', VersionConstants.WEBVIEW_QA_VERSION);
-			this.gotoWebviewPage(qaUrl, '帮助中心', true);
+			this.gotoWebviewPage(qaUrl, LS.str("BZZX"), true);
 		}
 		else if(rowData.subtype === 'onlinehelp') {
 			NativeSceneModule.launchNativeScene('MeiQia')
@@ -601,7 +601,7 @@ var MePage = React.createClass({
 	renderAccountStateView: function(){
 		var meData = LogicData.getMeData();
 		console.log('提示：','liveAccStatus = '+meData.liveAccStatus + ', liveAccRejReason = '+ meData.liveAccRejReason)
-	  accStatus = meData.liveAccStatus;
+	  	accStatus = meData.liveAccStatus;
 		//accStatus = 0
 		var strStatus = '';
 		var colorStatus = ColorConstants.TITLE_BLUE
@@ -650,7 +650,7 @@ var MePage = React.createClass({
 				return (
 					<View style={{flexDirection:'row'}}>
 						<Image style={styles.redPackageImage} source={require('../../images/icon_red_package.png')} />
-						<Text style={styles.redPackageText}>入金最高获20%赠金</Text>
+						<Text style={styles.redPackageText}>{LS.str("ME_DEPOSIT_REWARD")}</Text>
 						<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
 					</View>
 				)
@@ -659,7 +659,7 @@ var MePage = React.createClass({
 			return (
 				<View style={{flexDirection:'row'}}>
 					<Image style={styles.redPackageImage} source={require('../../images/icon_red_package.png')} />
-					<Text style={styles.redPackageText}>绑定手机号,再送25元交易金</Text>
+					<Text style={styles.redPackageText}>{LS.str("ME_BIND_MOBILE_REWARD")}</Text>
 					<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
 				</View>
 			)
@@ -722,7 +722,7 @@ var MePage = React.createClass({
 					<TouchableOpacity activeOpacity={0.5} onPress={()=>this.gotoLogin()}>
 						<View style={[styles.rowWrapper, {height:Math.round(88*heightRate)}]}>
 							<Image source={require('../../images/head_portrait.png')} style={styles.headImage} />
-							<Text style={styles.defaultText}>手机号/微信号登录</Text>
+							<Text style={styles.defaultText}>{LS.str("ME_LOGIN")}</Text>
 							<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
 						</View>
 					</TouchableOpacity>

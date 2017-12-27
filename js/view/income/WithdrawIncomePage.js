@@ -27,6 +27,7 @@ var TalkingdataModule = require('../../module/TalkingdataModule')
 var NetworkModule = require('../../module/NetworkModule');
 var NetConstants = require('../../NetConstants');
 var StorageModule = require('../../module/StorageModule');
+var LS = require("../../LS");
 
 var {height, width} = Dimensions.get('window')
 var rowPadding = Math.round(18*width/375)
@@ -164,25 +165,25 @@ export default class WithdrawIncomePage extends Component {
     var withdrawValueError = false;
     var inputStyle = styles.normalInputText;
     var fundableValueStyle = styles.fundableValueText;
-    var fundableValueText = "剩余交易金: " + this.state.refundableBanalce + "元， ";
+    var fundableValueText = LS.str("TRANSFER_REWARD_REMAINING").replace("{1}", this.state.refundableBanalce);
     if(!this.isWithdrawValueAvailable()){
       inputStyle = styles.errorInputText;
       fundableValueStyle = styles.errorInputText;
       withdrawValueError = true;
-      fundableValueText = "大于剩余交易金: " + this.state.refundableBanalce + "元， ";
+      fundableValueText = LS.str("TRANSFER_REWARD_GT_REMAINING").replace("{1}", this.state.refundableBanalce);
     }
     else if (withdrawValue != "" && !this.isWithdrawValueAboveMinium()){
       inputStyle = styles.errorInputText;
       fundableValueStyle = styles.errorInputText;
       withdrawValueError = true;
-      fundableValueText = "每次转入的交易金必须≥"+this.props.minTransfer+"元，";
+      fundableValueText = LS.str("TRANSFER_REWARD_MINIMUM_TRANSFER").replace("{1}", this.props.minTransfer);
     }
 
     return (
       <View style={[styles.rowWrapper, styles.depositRowWrapper]}>
-        <Text style={{fontSize: 15, color: '#5a5a5a', marginTop: 18}}>转入金额</Text>
+        <Text style={{fontSize: 15, color: '#5a5a5a', marginTop: 18}}>{LS.str("TRANSFER_REWARD_TRANSFER_VALUE")}</Text>
         <View style={{flexDirection: 'row', marginTop:10, alignItems:"center"}}>
-          <Text style={{fontSize: 17, fontWeight: 'bold', color: '#333333'}}>人民币</Text>
+          <Text style={{fontSize: 17, fontWeight: 'bold', color: '#333333'}}>{LS.str("CURRENCY_RMB")}</Text>
           <TextInput style={[styles.inputText, inputStyle]}
             autoCapitalize="none"
             autoFocus={true}
@@ -205,7 +206,7 @@ export default class WithdrawIncomePage extends Component {
           <Text style={fundableValueStyle}>{fundableValueText}</Text>
           <TouchableOpacity onPress={()=>this.withdrawAll()}>
             <Text style={{fontSize: 14, color: '#415a86', }}>
-              全部转入
+              {LS.str("TRANSFER_REWARD_TRANSFER_ALL")}
               <Text style={{color: 'transparent'}}>
                 0
               </Text>
@@ -320,7 +321,7 @@ export default class WithdrawIncomePage extends Component {
           onPress={()=>this.gotoNext()}
           textContainerStyle={[styles.buttonView, {backgroundColor: ColorConstants.TITLE_BLUE,}]}
           textStyle={styles.buttonText}
-          text={this.state.validateInProgress? "信息正在检查中...": '确认转入'} />
+          text={this.state.validateInProgress? LS.str("VALIDATE_IN_PROGRESS"): LS.str("TRANSFER_REWARD_CONFIRM_TO_TRANSFER")} />
       </View>
     );
   }
@@ -329,7 +330,7 @@ export default class WithdrawIncomePage extends Component {
 
     return (
 			<View style={styles.wrapper}>
-        <NavBar title="转入"
+        <NavBar title={LS.str("TRANSFER_REWARD_TITLE")}
           showBackButton={true}
           leftButtonOnClick={()=>this.onBackButtonPressed()}
           navigator={this.props.navigator}
@@ -338,7 +339,7 @@ export default class WithdrawIncomePage extends Component {
 					{this.renderWithdraw()}
           <TouchableOpacity style={{flex:1}} onPress={()=>this.hideKeyboard()} activeOpacity={1}>
             <Text style={[styles.readMeText, {margin:15, }]}>
-              {"注意：每次转入实盘账户的交易金必须≥"+this.props.minTransfer+"元，转入申请在3个工作日内完成，资金到账后，系统会根据固定转换汇率(6.5人民币=1美元)，兑换成相应的美元金额，并以短信告知您。"}
+              {LS.str("TRANSFER_REWARD_HINT").replace("{1}", this.props.minTransfer)}
             </Text>
           </TouchableOpacity>
           {this.renderTransferButton()}

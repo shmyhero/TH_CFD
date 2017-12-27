@@ -12,6 +12,7 @@ var ColorConstants = require('../../ColorConstants');
 var LogicData = require('../../LogicData');
 var NetConstants = require('../../NetConstants');
 var NetworkModule = require('../../module/NetworkModule');
+var LS = require("../../LS");
 
 var {height, width} = Dimensions.get('window');
 
@@ -243,19 +244,19 @@ export default class StatisticBarBlock extends Component {
 			<View style={styles.center}>
         <View style={styles.centerView}>
           <View style={styles.empty}/>
-          <Text style={styles.centerText1}>近1月收益(美元)</Text>
+          <Text style={styles.centerText1}>{LS.str("STATISTIC_LATEST_MONTH_INCOME")}</Text>
           <Text style={[styles.centerText2,{color:LogicData.getAccountState()?'#85b1fb':'#1962dd'}]}>{sumPl}</Text>
           <View style={styles.empty}/>
         </View>
         <View style={styles.centerView}>
           <View style={styles.empty}/>
-          <Text style={styles.centerText1}>近1月交易本金(美元)</Text>
+          <Text style={styles.centerText1}>{LS.str("STATISTIC_LATEST_MONTH_CAPITAL")}</Text>
           <Text style={[styles.centerText2,{color:LogicData.getAccountState()?'#85b1fb':'#1962dd'}]}>{sumInvest}</Text>
           <View style={styles.empty}/>
         </View>
         <View style={styles.centerView}>
           <View style={styles.empty}/>
-          <Text style={styles.centerText1}>近1月投资回报率</Text>
+          <Text style={styles.centerText1}>{LS.str("STATISTIC_LATEST_MONTH_INCOME_PERCENT")}</Text>
           <Text style={[styles.centerText2,{color:LogicData.getAccountState()?'#85b1fb':'#1962dd'}]}>{avgPlRate}%</Text>
           <View style={styles.empty}/>
         </View>
@@ -324,15 +325,15 @@ export default class StatisticBarBlock extends Component {
 		return (
 			<View style={styles.chartHeader}>
 				<View style={styles.centerView2}>
-					<Text style={styles.chartHeaderText1}>{ (LogicData.getAccountState() ? "累计收益" : "盈亏分布") + "："}
+					<Text style={styles.chartHeaderText1}>{ (LogicData.getAccountState() ? LS.str("STATISTIC_TOTAL_INCOME") : LS.str("STATISTIC_PROFIT_AND_LOSS")) + "："}
             <Text style={proFitStyle}>{sumPl}</Text>
           </Text>
 				</View>
 				<View style={styles.chartHeaderRightPart}>
 					<View style={styles.redSquare}/>
-					<Text style={styles.chartHeaderText2}>盈利</Text>
+					<Text style={styles.chartHeaderText2}>{LS.str("STATISTIC_PROFIT")}</Text>
 					<View style={styles.greenSquare}/>
-					<Text style={styles.chartHeaderText2}>亏损</Text>
+					<Text style={styles.chartHeaderText2}>{LS.str("STATISTIC_LOSS")}</Text>
 				</View>
 			</View>
 		)
@@ -345,7 +346,7 @@ export default class StatisticBarBlock extends Component {
         {this.renderChartHeader()}
         <View style={styles.separator}/>
         <View style={styles.emptyView}>
-          <Text style={styles.loadingText}>用户未公开数据</Text>
+          <Text style={styles.loadingText}>{LS.str("YHWGKSJ")}</Text>
         </View>
       </View>);
     }else{
@@ -371,7 +372,7 @@ export default class StatisticBarBlock extends Component {
   					{this.renderChartHeader()}
   					<View style={styles.separator}/>
             <View style={styles.emptyView}>
-    					<Text style={styles.loadingText}>暂无盈亏分布记录</Text>
+    					<Text style={styles.loadingText}>{LS.str("STATISTIC_NO_DATA")}</Text>
     				</View>
   				</View>
   			)

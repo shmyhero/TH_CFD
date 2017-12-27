@@ -4,6 +4,7 @@ var LogicData = require('./LogicData.js');
 
 var LS = {
   Str:{
+    APP_NAME: ["盈交易", "YinJiaoYi"],
     HELLO:['你好','hello'],
     ZHANGHAO:['账号:','ACCOUNT:'],
     SHOUYE:['首页','MAIN'],
@@ -234,6 +235,17 @@ var LS = {
     WXTS:['温馨提示','Tips'],
     NETWORK_CHECK:['请检查网络','Please check the network'],
 
+    ME_LOGIN: ["手机号/微信号登录", "Mobile/Wechat Login"],
+    ME_DEPOSIT_REWARD: ["入金最高获20%赠金", "Deposit and get up to 20% rewards"],
+    ME_BIND_MOBILE_REWARD: ["绑定手机号,再送25元交易金", "Bind mobile and get RMB 25"],
+    
+    LOGIN_FAST_LOGIN: ["快速登录", "Fast Login"],
+    LOGIN_LIVE: ["实盘", "Live"],
+    LOGIN_DEMO: ["模拟", "Demo"],
+    LOGIN: ["登录", "Login"],
+    LOGIN_HINT: ["您正在登录盈交易", "You are logging in YinJiaoYi"],
+
+
     WITHDRAW_HEADER: ["出金", "WITHDRAW"],
     WITHDRAW_AMOUNT: ['出金金额', 'Withdraw amount'],
     WITHDRAW_DOLLAR: ['美元', "$"],
@@ -287,6 +299,28 @@ var LS = {
     MY_REWARD_REMAINING: ["剩余交易金(元)", "Remaining reward(RMB)"],
     MY_REWARD_TRANSFER_TO_LIVE: ['转入实盘账户', "Transfer to Live Account"],
     MY_REWARD_LIVE_ACCOUNT_WARNING: ["注意：交易金转入实盘账户前，必须", "Before transfering the reward, you must "],
+
+    CURRENCY_RMB: ["人民币", "RMB"],
+    TRANSFER_REWARD_TRANSFER_VALUE: ["转入金额", "Transfer Value"],
+    TRANSFER_REWARD_REMAINING: ["剩余交易金: {1}元， ", "Remaining reward: RMB {1}"],
+    TRANSFER_REWARD_GT_REMAINING: ["大于剩余交易金: {1}元， ", "Greater than remaining reward: RMB {1}"],
+    TRANSFER_REWARD_MINIMUM_TRANSFER: ["每次转入的交易金必须≥{1}元，", "Transfer value must be greater than {1}"],
+    TRANSFER_REWARD_TRANSFER_ALL: ["全部转入", "Transfer all"],    
+    TRANSFER_REWARD_CONFIRM_TO_TRANSFER: ["确认转入", "Confirm to Transfer"],  
+    TRANSFER_REWARD_TITLE: ["转入", "Transfer"],  
+    TRANSFER_REWARD_HINT: ["注意：每次转入实盘账户的交易金必须≥{1}元，转入申请在3个工作日内完成，资金到账后，系统会根据固定转换汇率(6.5人民币=1美元)，兑换成相应的美元金额，并以短信告知您。", "Note: Each time you transfer to firm account must be {1} yuan, transfer into the application within 3 working days, the funds credited into account, the system will be based on a fixed exchange rate (6.5 yuan = 1 US dollars) Redeem the appropriate dollar amount and send you a text message."],    
+
+    STATISTIC_LATEST_MONTH_INCOME: ["近1月收益(美元)", "Near January income (USD)"],
+    STATISTIC_LATEST_MONTH_CAPITAL: ["近1月交易本金(美元)", "Nearly January transaction principal (USD)"],
+    STATISTIC_LATEST_MONTH_INCOME_PERCENT: ["近1月投资回报率", "Nearly 1 month return on investment"], 
+    STATISTIC_TOTAL_INCOME: ["累计收益", "Cumulative revenue"],
+    STATISTIC_PROFIT_AND_LOSS: ["累计收益", "Profit and loss distribution"],
+    STATISTIC_PROFIT: ["盈利", "Profit"],
+    STATISTIC_LOSS: ["亏损", "Loss"],
+    STATISTIC_NO_DATA: ["暂无盈亏分布记录", "No profit and loss distribution records"],
+
+    SEARCH_PRODUCT_HINT: ["搜索金融产品", "Search Product"],
+    SEARCH_NO_RESULT: ["搜索无结果", "No results found"],
 
     OPEN_ACCOUNT_HEADER_1: ["开户准备", "Ready"],
     OPEN_ACCOUNT_HEADER_2: ["上传身份证照片(1/5)", "Update ID Photo (1/5)"],
@@ -531,7 +565,7 @@ var LS = {
     NEXT: ["下一步", "Next"],
     FINISH: ["完成", "Finish"],
 
-    GET_VERIFICATION_CODE: ["获取验证码", "get verification code"],
+    GET_VERIFICATION_CODE: ["获取验证码", "get verif code"],
     MOBILE_NUMBER: ["手机号", "Mobile Number"],
     VERIFICATION_CODE: ["验证码", "Verification Code"],
     BIND_MOBILE_NUMBER: ["绑定手机号", "Bind Mobile Number"],

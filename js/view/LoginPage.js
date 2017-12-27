@@ -36,6 +36,7 @@ var TalkingdataModule = require('../module/TalkingdataModule')
 //var TongDaoModule = require('../module/TongDaoModule')
 var LocalDataUpdateModule = require('../module/LocalDataUpdateModule')
 var AppNavigator = require('../../AppNavigator')
+var LS = require("../LS");
 
 var {height, width} = Dimensions.get('window')
 var rowHeight = 40;
@@ -194,7 +195,7 @@ var LoginPage = React.createClass({
 					getValidationCodeButtonEnabled: true,
 				});
 
-				Alert.alert('提示', result.errorMessage);
+				Alert.alert(LS.str("TS"), result.errorMessage);
 			}
 		)
 	},
@@ -250,7 +251,7 @@ var LoginPage = React.createClass({
 				this.loginSuccess(responseJson);
 			},
 			(result) => {
-				Alert.alert('提示', result.errorMessage);
+				Alert.alert(LS.str("TS"), result.errorMessage);
 			}
 		)
 	},
@@ -284,7 +285,7 @@ var LoginPage = React.createClass({
 				this.setState({
 					phoneLoginButtonEnabled: true
 				})
-				Alert.alert('提示', result.errorMessage);
+				Alert.alert(LS.str("TS"), result.errorMessage);
 			}
 		)
 	},
@@ -321,7 +322,7 @@ var LoginPage = React.createClass({
 				this.setState({
 					isWorking: false
 				})
-				Alert.alert('提示', result.errorMessage);
+				Alert.alert(LS.str("TS"), result.errorMessage);
 			}
 		)
 	},
@@ -355,7 +356,7 @@ var LoginPage = React.createClass({
 				this.setState({
 					phoneLoginButtonEnabled: true
 				})
-				Alert.alert('提示', result.errorMessage);
+				Alert.alert(LS.str("TS"), result.errorMessage);
 			}
 		)
 	},
@@ -525,7 +526,7 @@ var LoginPage = React.createClass({
 					<View style={styles.fastLoginRowWrapper}>
 						<View style={styles.line}/>
 						<Text style={styles.fastLoginTitle}>
-							快速登录
+							{LS.str("LOGIN_FAST_LOGIN")}
 						</Text>
 						<View style={styles.line}/>
 					</View>
@@ -548,7 +549,7 @@ var LoginPage = React.createClass({
 	renderGetValidationCodeButton: function() {
 		var {height, width} = Dimensions.get('window');
 		var textSize = Math.round(fontSize*width/375.0)
-		var text = '获取验证码'
+		var text = LS.str("GET_VERIFICATION_CODE")
 		if (this.state.validationCodeCountdown > 0) {
 			text = '(' + this.state.validationCodeCountdown + ')'
 		}
@@ -594,14 +595,14 @@ var LoginPage = React.createClass({
 				<TouchableOpacity onPress={() => this.setState({tabSelected: TAB_LIVE})}>
 					<View style={[styles.liveTab, liveTabAdditionalAttributes]}>
 						<Text style={[styles.tabText, liveTextAdditionalAttributes]}>
-							实盘
+							{LS.str("LOGIN_LIVE")}
 						</Text>
 					</View>
 				</TouchableOpacity>
 				<TouchableOpacity  onPress={() => this.setState({tabSelected: TAB_SIMULATOR})}>
 					<View style={[styles.simulatorTab, simulatorTabAdditionalAttributes]}>
 						<Text style={[styles.tabText, simulatorTextAdditionalAttributes]}>
-							模拟
+							{LS.str("LOGIN_LIVE")}
 						</Text>
 					</View>
 				</TouchableOpacity>
@@ -629,14 +630,14 @@ var LoginPage = React.createClass({
 				<View style={{flex: 1, justifyContent: 'space-between'}}>
 					<View>
 						<Image style={styles.ayondoLogoImage} source={require('../../images/ayondo_logo.png')}/>
-						<Text style={{alignSelf: 'center', fontSize: 11, color: '#2a3f43', marginTop: 30}}>您正在登录盈交易</Text>
+						<Text style={{alignSelf: 'center', fontSize: 11, color: '#2a3f43', marginTop: 30}}>{LS.str("LOGIN_HINT")}</Text>
 
 						<View style={styles.phoneLoginContainer}>
 							<View style={styles.liveRowWrapper}>
 								<View style={[styles.phoneNumberInputView]}>
 									<TextInput style={styles.phoneNumberInput}
 										onChangeText={(text) => this.setPhoneNumber(text)}
-										placeholder='手机号'
+										placeholder={LS.str("MOBILE_NUMBER")}
 										placeholderTextColor='white'
 										underlineColorAndroid='transparent'
 										maxLength={11}
@@ -724,7 +725,7 @@ var LoginPage = React.createClass({
 														activeOpacity={activeOpacity}>
 						<View style={styles.loginTextView}>
 							<Text style={textStyle}>
-								{this.props.isMobileBinding ? "确认" : "登录"}
+								{this.props.isMobileBinding ? LS.str("QR") : LS.str("LOGIN")}
 							</Text>
 						</View>
 					</TouchableOpacity>
@@ -739,14 +740,14 @@ var LoginPage = React.createClass({
 				<View style={{flex: 1, justifyContent: 'space-between'}}>
 					<View>
 						<Image style={styles.ayondoLogoImage} source={require('../../images/yingjiaoyi-logo.png')}/>
-						<Text style={{alignSelf: 'center', fontSize: 11, color: '#2a3f43', marginTop: 30}}>您正在登录盈交易</Text>
+						<Text style={{alignSelf: 'center', fontSize: 11, color: '#2a3f43', marginTop: 30}}>{LS.str("LOGIN_HINT")}</Text>
 
 						<View style={styles.phoneLoginContainer}>
 							<View style={styles.rowWrapper}>
 								<View style={[styles.phoneNumberInputView]}>
 									<TextInput style={styles.phoneNumberInput}
-										onChangeText={(text) => this.setPhoneNumber(text)}
-										placeholder='手机号'
+										onChangeText={(text) => this.setPhoneNumber(text)} 
+										placeholder={LS.str("MOBILE_NUMBER")}
 										placeholderTextColor='white'
 										underlineColorAndroid='transparent'
 										maxLength={11}
@@ -761,7 +762,7 @@ var LoginPage = React.createClass({
 								<View style={[styles.validationCodeInputView]}>
 									<TextInput style={styles.validationCodeInput}
 										onChangeText={(text) => this.setValidationCode(text)}
-										placeholder='验证码'
+										placeholder={LS.str("VERIFICATION_CODE")}
 										placeholderTextColor='white'
 										underlineColorAndroid='transparent'
 										maxLength={4}
@@ -803,7 +804,7 @@ var LoginPage = React.createClass({
 						{/* {this.renderTab()} */}
 						<View style={styles.tabContainer}>
 							<Text style={{flex: 1, fontSize: 18, textAlign: 'center', color: '#ffffff'}}>
-								{this.props.isMobileBinding ? "绑定手机号" : "盈交易"}
+								{this.props.isMobileBinding ? LS.str("BIND_MOBILE_NUMBER") : LS.str("APP_NAME")}
 							</Text>
 							{this.renderCancelButton()}
 						</View>
@@ -820,7 +821,7 @@ var LoginPage = React.createClass({
 				<TouchableOpacity style={styles.cancelContainer}
 					onPress={()=>this.onBackPressed()}>
 						<Text style={styles.cancel}>
-							取消
+							{LS.str("QX")}
 						</Text>
 				</TouchableOpacity>
 			);

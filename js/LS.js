@@ -146,6 +146,7 @@ var LS = {
 
     TGM:['推广码','promotionCode'],
     YHXY:['用户协议','protocol'],
+    YYQH:['语言切换','language'],
     SZ:['设置','pushconfig'],
     ZHBD:['账号绑定','accountbinding'],
     QHDMNJY:['切换到模拟交易','change2Simulator'],
@@ -238,7 +239,7 @@ var LS = {
     ME_LOGIN: ["手机号/微信号登录", "Mobile/Wechat Login"],
     ME_DEPOSIT_REWARD: ["入金最高获20%赠金", "Deposit and get up to 20% rewards"],
     ME_BIND_MOBILE_REWARD: ["绑定手机号,再送25元交易金", "Bind mobile and get RMB 25"],
-    
+
     LOGIN_FAST_LOGIN: ["快速登录", "Fast Login"],
     LOGIN_LIVE: ["实盘", "Live"],
     LOGIN_DEMO: ["模拟", "Demo"],
@@ -305,14 +306,14 @@ var LS = {
     TRANSFER_REWARD_REMAINING: ["剩余交易金: {1}元， ", "Remaining reward: RMB {1}"],
     TRANSFER_REWARD_GT_REMAINING: ["大于剩余交易金: {1}元， ", "Greater than remaining reward: RMB {1}"],
     TRANSFER_REWARD_MINIMUM_TRANSFER: ["每次转入的交易金必须≥{1}元，", "Transfer value must be greater than {1}"],
-    TRANSFER_REWARD_TRANSFER_ALL: ["全部转入", "Transfer all"],    
-    TRANSFER_REWARD_CONFIRM_TO_TRANSFER: ["确认转入", "Confirm to Transfer"],  
-    TRANSFER_REWARD_TITLE: ["转入", "Transfer"],  
-    TRANSFER_REWARD_HINT: ["注意：每次转入实盘账户的交易金必须≥{1}元，转入申请在3个工作日内完成，资金到账后，系统会根据固定转换汇率(6.5人民币=1美元)，兑换成相应的美元金额，并以短信告知您。", "Note: Each time you transfer to firm account must be {1} yuan, transfer into the application within 3 working days, the funds credited into account, the system will be based on a fixed exchange rate (6.5 yuan = 1 US dollars) Redeem the appropriate dollar amount and send you a text message."],    
+    TRANSFER_REWARD_TRANSFER_ALL: ["全部转入", "Transfer all"],
+    TRANSFER_REWARD_CONFIRM_TO_TRANSFER: ["确认转入", "Confirm to Transfer"],
+    TRANSFER_REWARD_TITLE: ["转入", "Transfer"],
+    TRANSFER_REWARD_HINT: ["注意：每次转入实盘账户的交易金必须≥{1}元，转入申请在3个工作日内完成，资金到账后，系统会根据固定转换汇率(6.5人民币=1美元)，兑换成相应的美元金额，并以短信告知您。", "Note: Each time you transfer to firm account must be {1} yuan, transfer into the application within 3 working days, the funds credited into account, the system will be based on a fixed exchange rate (6.5 yuan = 1 US dollars) Redeem the appropriate dollar amount and send you a text message."],
 
     STATISTIC_LATEST_MONTH_INCOME: ["近1月收益(美元)", "Near January income (USD)"],
     STATISTIC_LATEST_MONTH_CAPITAL: ["近1月交易本金(美元)", "Nearly January transaction principal (USD)"],
-    STATISTIC_LATEST_MONTH_INCOME_PERCENT: ["近1月投资回报率", "Nearly 1 month return on investment"], 
+    STATISTIC_LATEST_MONTH_INCOME_PERCENT: ["近1月投资回报率", "Nearly 1 month return on investment"],
     STATISTIC_TOTAL_INCOME: ["累计收益", "Cumulative revenue"],
     STATISTIC_PROFIT_AND_LOSS: ["累计收益", "Profit and loss distribution"],
     STATISTIC_PROFIT: ["盈利", "Profit"],

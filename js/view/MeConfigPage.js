@@ -41,6 +41,7 @@ var listRawData = [
 {'type':'normal','title':'DCSPZH', 'subtype': 'logoutAccountActual'},
 {'type':'normal','title':'XGSPDLMM', 'subtype': 'modifyLoginActualPwd'},
 {'type':'normal','title':'TCYJYZH', 'subtype': 'logout'},
+{'type':'normal','title':'YYQH', 'subtype': 'language'},
 {'type':'normal','title':'BBH', 'subtype': 'version'},
 ]
 
@@ -49,7 +50,7 @@ if (Platform.OS === 'ios') {
 }
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
+var {EventCenter, EventConst} = require("../EventCenter");
 var MeConfigPage = React.createClass({
 
 	propTypes: {
@@ -75,6 +76,9 @@ var MeConfigPage = React.createClass({
 	componentWillMount: function(){
 		//TODO: use real API.
 		this.refreshData();
+		this.setState({
+			languageSetting: LogicData.getLanguageEn()=='1'?'change to Chinese':'切换成英文'
+		})
 	},
 
 	refreshData: function(){
@@ -350,10 +354,56 @@ var MeConfigPage = React.createClass({
 		}
 	},
 
+	languageChange: function(){
+		LogicData.setLanguageEn(LogicData.getLanguageEn()=='0'?'1':'0');
+		this.setState({
+			languageSetting: LogicData.getLanguageEn()=='1'?'change to Chinese':'切换成英文'
+		},console.log('languageEN:'+LogicData.getLanguageEn()))
+		EventCenter.emitLanguageChangedEvent();
+
+		this.postLanguageSetting();
+	},
+
+	postLanguageSetting: function(){
+		var userData = LogicData.getUserData();
+		var notLogin = Object.keys(userData).length === 0;
+		if (!notLogin) {
+			NetworkModule.fetchTHUrl(
+				NetConstants.CFD_API.POST_USER_LANGUAGE,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json; charset=UTF-8',
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					},
+					body: JSON.stringify({
+						language: LogicData.getLanguageEn()=="1"?'en':'cn',
+					}),
+				},
+				(responseJson) => {
+					if (responseJson.message){
+
+					}else{
+
+					}
+				},
+				(result) => {
+
+				})
+		}
+	},
+
+
+
 	renderRow: function(rowData, sectionID, rowID) {
 		var meData = LogicData.getMeData();
 
-		if(!LogicData.getAccountState() &&
+		var notLogin = Object.keys(meData).length === 0
+		if(notLogin && rowData.subtype !== 'protocol' && rowData.subtype !== 'language' ){
+			return(
+				null
+			)
+		}else if(!LogicData.getAccountState() &&
 		(rowData.subtype === 'change2Simulator' ||
 		 rowData.subtype === 'logoutAccountActual' ||
 		 rowData.subtype === 'modifyLoginActualPwd' )){
@@ -378,6 +428,18 @@ var MeConfigPage = React.createClass({
 				 	<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
 					 	<Text style={styles.title}>{LS.str(rowData.title)}</Text>
 					 	<Text style={styles.contentValue}>{this.state.promotionCode}</Text>
+			 		</View>
+				</TouchableOpacity>
+		 		);
+		 } else if (rowData.subtype === 'language'){
+			 return(
+				<TouchableOpacity activeOpacity={0.5} onPress={()=>this.languageChange()}>
+				 	<View style={[styles.rowWrapper, {height:Math.round(64*heightRate)}]}>
+					 	<Text style={styles.title}>{this.state.languageSetting}</Text>
+						<View style={[styles.rightContent,{width:150,justifyContent:'flex-end'}]}>
+							{/* <Text style={styles.contentValue}>中文</Text> */}
+		 					<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
+						</View>
 			 		</View>
 				</TouchableOpacity>
 		 		);

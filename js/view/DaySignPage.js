@@ -26,6 +26,7 @@ var NavBar = require('./NavBar')
 var TalkingdataModule = require('../module/TalkingdataModule')
 //var TongDaoModule = require('../module/TongDaoModule')
 var HeaderLineDialog = require('./HeaderLineDialog')
+var LS = require("../LS")
 var {EventCenter, EventConst} = require('../EventCenter')
 
 var {height, width} = Dimensions.get('window');
@@ -267,7 +268,7 @@ var DaySignPage = React.createClass({
 						<View style = {styles.bottomSepContainer}>
 							<View style = {styles.topSep}>
 
-								<Text style = {styles.textTopLine1}>总计交易金(元)</Text>
+								<Text style = {styles.textTopLine1}>{LS.str("DAY_SIGN_TOTAL_REWARDS")}</Text>
 								<Text style = {styles.textTopLine2}>{this.state.totalUnpaidAmount}</Text>
 
 							</View>
@@ -276,7 +277,7 @@ var DaySignPage = React.createClass({
 							</View>
 
 							<View style = {styles.topSep}>
-								<Text style = {styles.textTopLine1}>累计签到数(天)</Text>
+								<Text style = {styles.textTopLine1}>{LS.str("DAY_SIGN_TOTAL_CHECK_IN_DAYS")}</Text>
 								<Text style = {styles.textTopLine2}>{this.state.totalSignDays}</Text>
 							</View>
  						</View>
@@ -320,8 +321,8 @@ var DaySignPage = React.createClass({
 						<View style = {styles.roundButtonBoard}>
 						<TouchableOpacity onPress={() => this._clickSign()}>
 						 <View style = {[styles.roundButton,{backgroundColor:this.state.isSignedToday?'#b6b6b6':'#f5a228'}]}>
-						 		<Text style = {styles.textSign}>{this.state.isSignedToday?'已签到':'签到'}</Text>
-								<Text style = {styles.textSignIntro}>赚{this.state.amountToday}元</Text>
+						 		<Text style = {styles.textSign}>{this.state.isSignedToday? LS.str('DAY_SIGN_ALREADY_CHECK_IN'):LS.str("DAY_SIGN_CHECK_IN")}</Text>
+								<Text style = {styles.textSignIntro}>{LS.str("DAY_SIGN_ERAN_EACH_CHECK_IN").replace("{1}", this.state.amountToday)}</Text>
 						 </View>
 						 </TouchableOpacity>
 	     			</View>
@@ -329,7 +330,7 @@ var DaySignPage = React.createClass({
 
 									<TouchableOpacity onPress={() => this._clickStratgy()}>
 										<View style = {[styles.signStrategy,LogicData.getAccountState()?{backgroundColor:'#5b75a4'}:null]}>
-											<Text style={styles.textSignStrategy}>签到攻略</Text>
+											<Text style={styles.textSignStrategy}>{LS.str("DAY_SIGN_RULES")}</Text>
 											<View style={styles.textSignDot}></View>
 										</View>
 									</TouchableOpacity>
@@ -339,7 +340,7 @@ var DaySignPage = React.createClass({
 					</View>
 
 					<View style = {styles.belowSign}>
-						<Text style = {styles.textMoreIntro}> 连签越多，赚的实盘交易金越多</Text>
+						<Text style = {styles.textMoreIntro}>{LS.str("DAY_SIGN_HINT")}</Text>
 						{this.renderCalendar()}
 					</View>
 
@@ -410,7 +411,7 @@ var DaySignPage = React.createClass({
 
 			<View style = {styles.lineLeftRightTextContainer}>
 			    <Image style = {styles.lineLeftRight} source = {require('../../images/line_left.png')} ></Image>
-				<Text style = {styles.textMonth}>{this.state.monthToday}月签到日历</Text>
+				<Text style = {styles.textMonth}>{this.state.monthToday + LS.str("DAY_SIGN_CALENDAR")}</Text>
 				<Image style = {styles.lineLeftRight} source = {require('../../images/line_right.png')} ></Image>
 		    </View>
 				<View style = {styles.calendarContainer}>
@@ -427,18 +428,18 @@ var DaySignPage = React.createClass({
 			<View style = {[styles.bottomLayout, {height:heightShow*(1*0.12),}]}>
 					<View style = {styles.lineLeftRightTextContainer}>
 						<Image style = {styles.lineLeftRight} source = {require('../../images/line_left.png')} ></Image>
-     			 	<Text style = {[styles.textBottom]}>更多交易金获取方式</Text>
+     			 	<Text style = {[styles.textBottom]}>{LS.str("DAY_SIGN_EARN_MORE_REWARD")}</Text>
 						<Image style = {styles.lineLeftRight} source = {require('../../images/line_right.png')} ></Image>
      			</View>
 
 					<View style = {styles.bottomSepContainer}>
 						<View style = {styles.bottomSep}>
 							<View style = {styles.lineLittle}></View>
-							<Text style = {styles.textBottom}>每日模拟交易送0.5元</Text>
+							<Text style = {styles.textBottom}>{LS.str("DAY_SIGN_EARN_SIM_TRADE")}</Text>
 						</View>
 						<View style = {styles.bottomSep2}>
 							<View style = {styles.lineLittle}></View>
-							<Text style = {styles.textBottom}>{"注册盈交易即送" + LogicData.getRegisterReward() + "元"}</Text>
+							<Text style = {styles.textBottom}>{LS.str("DAY_SIGN_EARN_REGISTER").replace("{1}", LogicData.getRegisterReward())}</Text>
 						</View>
 					</View>
 			</View>
@@ -478,7 +479,7 @@ var DaySignPage = React.createClass({
 	render: function() {
 		return (
 			<View style={{flex: 1}}>
-				<NavBar title='每日签到' showBackButton={true} navigator={this.props.navigator}
+				<NavBar title={LS.str("DAY_SIGN_TITLE")} showBackButton={true} navigator={this.props.navigator}
 							// imageOnRight={require('../../images/share01.png')}
 							// rightImageOnClick={this._share}
 							/>

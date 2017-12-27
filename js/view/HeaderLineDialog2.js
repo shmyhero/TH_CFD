@@ -25,6 +25,7 @@ var heightShow = height - UIConstants.HEADER_HEIGHT - UIConstants.ANDROID_LIST_V
 var roundR = (width-10)/2
 
 var Button = require('./component/Button')
+var LS = require('../LS');
 
 var dialog_horizontal_padding = 20;
 var imgWidth = width - 40;
@@ -158,7 +159,7 @@ export default class HeaderLineDialog extends Component {
 
                   <TouchableOpacity onPress={() => this._setCheckSelected()} style={{flexDirection:'row',alignItems:'center',width:width-60,marginBottom:5}}>
                     <Image style={{width:14,height:14}} source={this.state.checkSelected?this.props.check_selected:this.props.check_unselected}></Image>
-                    <Text style={{fontSize:12,color:'#b2b2b2',marginLeft:2}}>我已阅读并同意以上所阐述的协议</Text>
+                    <Text style={{fontSize:12,color:'#b2b2b2',marginLeft:2}}>{LS.str("ALREADY_READ_ABOVE_TERMS")}</Text>
                   </TouchableOpacity>
 
                   <Button style={styles.buttonArea}
@@ -166,7 +167,7 @@ export default class HeaderLineDialog extends Component {
         						onPress={() => this._setComfirmed()}
         						textContainerStyle={styles.buttonView}
         						textStyle={styles.buttonText}
-        						text='确定' />
+        						text={LS.str('QD')} />
               </View>
           </View>
 

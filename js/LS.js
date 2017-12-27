@@ -524,10 +524,25 @@ var LS = {
 
     ALREADY_BINDED: ["已绑定", "Binded"],
     BIND_MOBILE_REWARD: ["绑定手机号,再送25元交易金", "Binding phone number, then send 25 yuan trading gold"],
+    ALREADY_READ_ABOVE_TERMS: ["我已阅读并同意以上所阐述的协议", "I have read and agree to the agreement set forth above"],
 
-
-
-
+    DAY_SIGN_TITLE: ['每日签到', "Daily Check In"],    
+    DAY_SIGN_TOTAL_REWARDS: ["总计交易金(元)", "Total Rewards(RMB)"],
+    DAY_SIGN_TOTAL_CHECK_IN_DAYS: ["累计签到数(天)", "Total Check In Days"],
+    DAY_SIGN_CHECK_IN: ["签到", "Check In"],
+    DAY_SIGN_ALREADY_CHECK_IN: ["已签到", "Already Check In"],
+    DAY_SIGN_ERAN_EACH_CHECK_IN: ["赚{1}元", "Earn RMB {1}"],
+    DAY_SIGN_RULES: ["签到攻略", "Rules"],
+    DAY_SIGN_HINT: ["连签越多，赚的实盘交易金越多", "Even more sign, earn more firm real trading gold"],
+    DAY_SIGN_CALENDAR: ["月签到日历", "Calendar"],
+    DAY_SIGN_EARN_MORE_REWARD: ["更多交易金获取方式", "More ways to get the transaction"],
+    DAY_SIGN_EARN_SIM_TRADE: ["每日模拟交易送0.5元", "Daily simulation transaction sent 0.5 yuan"],
+    DAY_SIGN_EARN_REGISTER: ["注册盈交易即送{1}元", "Registered profit trading that send {1} yuan"],
+    DAY_SIGN_RULES_LINE_1: ["签到1天，赠送0.5元交易金；", "Sign 1 day, giving 0.5 yuan trading gold;"],
+    DAY_SIGN_RULES_LINE_2: ["连续签到5天后，第6天起，赠送0.6元交易金；", "After a continuous sign in 5 days, the first 6 days, giving 0.6 yuan trading gold;"],
+    DAY_SIGN_RULES_LINE_3: ["连续签到10天后，第11天起，赠送0.8元交易金；", "After 10 consecutive signings, the first 11 days, giving 0.8 yuan trading gold;"],
+    DAY_SIGN_RULES_LINE_4: ["连续签到中断，即恢复到每日赠送0.5元交易金，重新积累连续签到天数。", "Continued check-in interrupt, which returned to the daily donated 0.5 yuan trading gold, re-accumulation of consecutive sign in days."],
+    
 
 
 

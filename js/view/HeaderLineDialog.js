@@ -17,6 +17,7 @@ import {
 var UIConstants = require('../UIConstants');
 var ColorConstants = require('../ColorConstants');
 var {height, width} = Dimensions.get('window');
+var LS = require("../LS");
 
 var heightRate = height/667.0;
 var heightShow = height - UIConstants.HEADER_HEIGHT - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
@@ -42,10 +43,10 @@ export default class HeaderLineDialog extends Component {
 
   static defaultProps = {
     messageLines: [
-      "签到1天，赠送0.5元交易金；",
-      "连续签到5天后，第6天起，赠送0.6元交易金；",
-      "连续签到10天后，第11天起，赠送0.8元交易金；",
-      "连续签到中断，即恢复到每日赠送0.5元交易金，重新积累连续签到天数。",
+      "DAY_SIGN_RULES_LINE_1",
+      "DAY_SIGN_RULES_LINE_2",
+      "DAY_SIGN_RULES_LINE_3",
+      "DAY_SIGN_RULES_LINE_4",
     ],
     headerImage: require('../../images/sign_stratgy.png'),
   }
@@ -73,7 +74,7 @@ export default class HeaderLineDialog extends Component {
         <View style = {styles.number} >
           <Text style = {styles.textDayNumber2}>{index}</Text>
         </View>
-        <Text style={styles.textModal}>{message}</Text>
+        <Text style={styles.textModal}>{LS.str(message)}</Text>
       </View>
     );
   }

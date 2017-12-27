@@ -51,6 +51,18 @@ var LS = {
     YTJ:['已添加','added'],
     WDZX:['我的自选','my own stocks'],
 
+    KTSPZH:['开通实盘账户','Open a real account'],
+    DLSPZH:['登入实盘账户','Login to the real account'],
+    SPKHSHZ:['实盘开户审核中','Firm account verification'],
+    CXKH:['重新开户','Re-open an account'],
+    JXKH:['继续开户','Continue to open an account'],
+
+
+
+
+
+
+
 
 
 
@@ -489,7 +501,7 @@ var LS = {
     CONFIG_LOGOUT_ACCOUNT: ["是否确认退出？", "Confirm exit?"],
     CONFIG_LOGOUT_LIVE: ["确认登出实盘账号？", "Confirm to log out the real account?"],
     CONFIG_GO_TO_DEMO: ["确认切换到模拟账号？", "Confirm switch to the simulation account?"],
-    
+
     CONFIG_SEND: ["发送", "Send"],
     CONFIG_SEND_SUCCESS: ["邮件发送成功", "Mail sent successfully"],
 
@@ -497,14 +509,14 @@ var LS = {
     CONFIG_PUBLISH_MY_DETAIL:["公布我的详细交易数据", "Publish my detailed transaction data"],
     CONFIG_PUBLISH_MY_POSITION_DETAIL:["公布持仓和平仓的数据", "Announce positions and positions of the data"],
     CONFIG_PUBLISH_MY_DATA_HINT: ['"公布持仓和平仓的数据"归属于"公布达人榜数据"。', '"Open positions and positions of the data released" attributed to "release up to the list of data."'],
-    
+
     CONFIG_RANKING_TERMS: ["盈交易榜单功能条款和条件", "Profit trading list functional terms and conditions"],
     CONFIG_RANKING_TERMS_LINE_1: ["您的账户头寸以及在下文第2条内定义的相关榜单排名将对盈交易其他实盘用户实时开放。", "Your account position and the related list position as defined in Clause 2 below will be open to other real users of Profitability in real time."],
     CONFIG_RANKING_TERMS_LINE_2: ["榜单排名是基于您最近两周所有已平仓交易的滚动平均投资回报率（“ROI”）计算得出。榜单排名每日更新一次", 'The list position is calculated based on the rolling average ROI ("ROI") for all closed trades in the last two weeks. Ranking list updated once daily'],
     CONFIG_RANKING_TERMS_LINE_3: ["盈交易用户可以从您的个人资料或交易账户内的公开信息中受益，并可能会根据此信息做出自行交易决策。", "Profit trading users can benefit from the public information in your profile or trading account and may make their own trading decisions based on this information."],
     CONFIG_RANKING_TERMS_LINE_4: ["对于任何因访问或使用我们网站和应用所包含的内容或数据（包括用户发布的交易账户或资料信息），而导致直接或间接的后果性、惩罚性、典型性的特别损失或损害，盈交易将不承担任何责任。", "For any loss or damage, direct or indirect, consequential, punitive or exemplary, arising out of the access to or use of the content or data contained in our websites and applications (including trading accounts or informational information published by users) Will not bear any responsibility."],
     CONFIG_RANKING_TERMS_LINE_5: ["盈交易是该服务唯一解释方，保留随时更换、修改或终止服务的权利，恕不另行通知。我们将通过更新网站或应用程序来通知您有关该服务或条款和条件的更改，您应定期查看此类更新。", "Profit trading is the sole explanation for the service, reserves the right to change, modify or terminate the service at any time, without prior notice. We will notify you of any changes to this service or terms and conditions by updating our website or application and you should periodically review such updates."],
-    
+
     CONFIG_RANKING_TERMS_BELOW_LINE_1: ["盈交易是该服务唯一解释方，保留随时更换、修改或终止服务的权利，恕不另行通知。我们将通过更新网站或应用程序来通知您有关该服务或条款和条件的更改，您应定期查看此类更新。", "Profit trading is the sole explanation for the service, reserves the right to change, modify or terminate the service at any time, without prior notice. We will notify you of any changes to this service or terms and conditions by updating our website or application and you should periodically review such updates."],
     CONFIG_RANKING_TERMS_BELOW_LINE_2: ["盈交易为安易永投（ayondo markets Limited）旗下产品名称。安易永投（ayondo markets Limited）是在英格兰和威尔士注册的公司（注册号为03148972），并由英国金融行为监管局（FCA）授权和监管, FCA注册号为184333。", "Profit trading is the product name of ayondo markets Limited. Ayondo markets Limited is a company registered in England and Wales with registration number 03148972 and is authorized and regulated by the FCA with FCA registration number 184333."],
 
@@ -529,7 +541,7 @@ var LS = {
     BIND_MOBILE_REWARD: ["绑定手机号,再送25元交易金", "Binding phone number, then send 25 yuan trading gold"],
     ALREADY_READ_ABOVE_TERMS: ["我已阅读并同意以上所阐述的协议", "I have read and agree to the agreement set forth above"],
 
-    DAY_SIGN_TITLE: ['每日签到', "Daily Check In"],    
+    DAY_SIGN_TITLE: ['每日签到', "Daily Check In"],
     DAY_SIGN_TOTAL_REWARDS: ["总计交易金(元)", "Total Rewards(RMB)"],
     DAY_SIGN_TOTAL_CHECK_IN_DAYS: ["累计签到数(天)", "Total Check In Days"],
     DAY_SIGN_CHECK_IN: ["签到", "Check In"],
@@ -545,7 +557,7 @@ var LS = {
     DAY_SIGN_RULES_LINE_2: ["连续签到5天后，第6天起，赠送0.6元交易金；", "After a continuous sign in 5 days, the first 6 days, giving 0.6 yuan trading gold;"],
     DAY_SIGN_RULES_LINE_3: ["连续签到10天后，第11天起，赠送0.8元交易金；", "After 10 consecutive signings, the first 11 days, giving 0.8 yuan trading gold;"],
     DAY_SIGN_RULES_LINE_4: ["连续签到中断，即恢复到每日赠送0.5元交易金，重新积累连续签到天数。", "Continued check-in interrupt, which returned to the daily donated 0.5 yuan trading gold, re-accumulation of consecutive sign in days."],
-    
+
 
 
 

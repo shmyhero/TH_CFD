@@ -62,15 +62,14 @@ var listRawData = [
 {'type':'normal','title':'MORE', 'image':require('../../images/icon_config.png'), 'subtype':'config'},
 ]
 
-
 //0未注册 1已注册 2审核中 3审核失败
 //"liveAccRejReason": "实盘注册申请信息未达到欧盟金融工具市场法规(MiFID)的要求" //审核失败原因
 var accountInfoData = [
-	{title:'开通实盘账户',color:ColorConstants.TITLE_BLUE},//0未注册
-	{title:'登入实盘账户',color:ColorConstants.TITLE_BLUE},//1已注册
-	{title:'实盘开户审核中...',color:'#757575'},//2审核中
-	{title:'重新开户',color:ColorConstants.TITLE_BLUE},//3审核失败
-	{title:'继续开户',color:ColorConstants.TITLE_BLUE},//0－未注册情况下 获取本地Step 如2/5
+	{title:'KTSPZH',color:ColorConstants.TITLE_BLUE},//0未注册
+	{title:'DLSPZH',color:ColorConstants.TITLE_BLUE},//1已注册
+	{title:'SPKHSHZ',color:'#757575'},//2审核中
+	{title:'CXKH',color:ColorConstants.TITLE_BLUE},//3审核失败
+	{title:'JXKH',color:ColorConstants.TITLE_BLUE},//0－未注册情况下 获取本地Step 如2/5
 ]
 
 var OpenAccountInfos = [
@@ -608,7 +607,7 @@ var MePage = React.createClass({
 		var colorStatus = ColorConstants.TITLE_BLUE
 
 		if(accStatus!==undefined && accStatus<accountInfoData.length){
-			strStatus = accountInfoData[accStatus].title;
+			strStatus = LS.str(accountInfoData[accStatus].title);
 			colorStatus = accountInfoData[accStatus].color;
 
 			if(accStatus == 0 && this.state.lastStep > 0 ){

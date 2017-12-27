@@ -671,7 +671,7 @@ var StockClosedPositionPage = React.createClass({
 		if(this.state.stockInfoRowData.length === 0) {
 			return (
 				<View style={styles.loadingTextView}>
-					<Text style={styles.loadingText}>暂无平仓记录</Text>
+					<Text style={styles.loadingText}>{LS.str('ZWPCJL')}</Text>
 				</View>
 				)
 		}

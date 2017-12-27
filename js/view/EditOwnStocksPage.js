@@ -16,7 +16,7 @@ var LogicData = require('../LogicData')
 var NetworkModule = require('../module/NetworkModule')
 var NetConstants = require('../NetConstants')
 var NativeDataModule = require('../module/NativeDataModule')
-
+var LS = require('../LS')
 var {height, width} = Dimensions.get('window')
 var didFocusSubscription = null;
 
@@ -56,15 +56,17 @@ var EditOwnStocksPage = React.createClass({
 
 		var userData = LogicData.getUserData()
 	 	var notLogin = Object.keys(userData).length === 0
+		var isEn = LogicData.getLanguageEn()==='1'
 
 		return (
 			<View style={styles.wrapper}>
-				<NavBar title='我的自选'
+				<NavBar title={LS.str('WDZX')}
 					leftTextOnClick={this.pressBackButton}
-					textOnLeft='完成'
+					textOnLeft={LS.str('FINISH')}
 					navigator={this.props.navigator}/>
 				<StockEditFragment style={{flex: 1}}
 					isLogin = {!notLogin}
+					isLanguageEn = {isEn}
 					isActual = {LogicData.getAccountState()}
 					onTapEditAlert={this.gotoEditAlertPage}
 					alertData={JSON.stringify(this.state.stockAlertList)}/>

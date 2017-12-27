@@ -11,6 +11,9 @@
     <string name="tab_main_competition">竞赛</string>
     <string name="tab_main_learning">学堂</string>
     <string name="tab_main_me">我的</string>
+
+
+
     <string name="all_product">全部产品</string>
     <string name="drag">拖拽</string>
     <string name="push_to_top">置顶</string>
@@ -23,6 +26,19 @@
     <string name="cancel">取消</string>
     <string name="confirm">确认</string>
     <string name="pushed_to_top">已顶置</string>
+
+    <string name="all_product_en">Products</string>
+    <string name="drag_en">Drag</string>
+    <string name="push_to_top_en">Top</string>
+    <string name="notification_switch_en">Note</string>
+    <string name="select_all_en">select all</string>
+    <string name="delete_en">delete</string>
+    <string name="done_en">done</string>
+    <string name="remove_hint_message_en">remove comfirm？</string>
+    <string name="dialog_title_en">tip</string>
+    <string name="cancel_en">cancel</string>
+    <string name="confirm_en">confirm</string>
+    <string name="pushed_to_top_en">Top</string>
 
 
     <string-array name="jazz_artist_names">

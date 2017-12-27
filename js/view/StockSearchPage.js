@@ -15,7 +15,7 @@ import {
 	TouchableOpacity,
 } from 'react-native';
 var LayoutAnimation = require('LayoutAnimation')
-
+var LS = require('../LS')
 var LogicData = require('../LogicData')
 var MainPage = require('./MainPage')
 var ColorConstants = require('../ColorConstants')
@@ -40,13 +40,13 @@ var StockSearchPage = React.createClass({
 		searchType: React.PropTypes.string,
 		onGetItem: React.PropTypes.func,
 	},
-	
+
 	getDefaultProps() {
 		return {
-			searchType: SEARCH_TYPE_BOOKMARK,		
-			onGetItem: (item)=>{}	
+			searchType: SEARCH_TYPE_BOOKMARK,
+			onGetItem: (item)=>{}
 		}
-	},	
+	},
 
 	getInitialState: function() {
 		return {
@@ -96,7 +96,7 @@ var StockSearchPage = React.createClass({
 				})
 			});
 		}
-		
+
 	},
 
 	cleanSearchHistory: function() {
@@ -144,7 +144,7 @@ var StockSearchPage = React.createClass({
 					LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 					if (responseJson.length == 0) {
 						this.setState({
-							searchFailedText: '搜索无结果',
+							searchFailedText: LS.str('SSWJG'),
 						})
 						var eventParam = {};
 						eventParam[TalkingdataModule.KEY_SEARCH_TEXT] = text;
@@ -222,7 +222,7 @@ var StockSearchPage = React.createClass({
 							autoCorrect={false}
 							autoCapitalize='none'
 							returnKeyType='search'
-							placeholder='搜索金融产品'
+							placeholder={LS.str('SSJRCP')}
 							placeholderTextColor='#bac6e6'
 							underlineColorAndroid='transparent' />
 				</View>
@@ -230,7 +230,7 @@ var StockSearchPage = React.createClass({
 				<TouchableOpacity style={styles.navBarCancelTextContainer}
 						onPress={this.cancel}>
 					<Text style={styles.cancelText}>
-						取消
+						{LS.str('QX')}
 					</Text>
 				</TouchableOpacity>
 			</View>
@@ -264,7 +264,7 @@ var StockSearchPage = React.createClass({
 	},
 
 	renderRow: function(rowData, sectionID, rowID, highlightRow, onPressFunction) {
-		var rightPartContent = <Text style={styles.alreadyAddText}>已添加</Text>
+		var rightPartContent = <Text style={styles.alreadyAddText}>{LS.str('YTJ')}</Text>
 		var myListData = LogicData.getOwnStocksData()
 		var index = myListData.findIndex((stock) => {return stock.id === rowData.id})
 
@@ -284,22 +284,28 @@ var StockSearchPage = React.createClass({
 									+
 								</Text>
 							</View>
-	
+
 						</TouchableOpacity>
 			}
 		}
-		
+
+		var topLine = rowData.name;
+		var bottomLine = rowData.symbol;
+		if(LogicData.getLanguageEn() == '1'){
+			topLine = rowData.symbol;
+			bottomLine = rowData.name;
+		}
 		return (
 			<TouchableOpacity onPress={() => this.stockPressed(rowData)}>
 				<View style={styles.rowWrapper} key={rowData.key}>
 
 					<View style={styles.rowLeftPart}>
 						<Text style={styles.stockNameText}>
-							{rowData.name}
+							{topLine}
 						</Text>
 
 						<Text style={styles.stockSymbolText}>
-							{rowData.symbol}
+							{bottomLine}
 						</Text>
 					</View>
 
@@ -432,7 +438,7 @@ var styles = StyleSheet.create({
 	},
 
 	cancelText: {
-		fontSize: 16,
+		fontSize: 14,
 		textAlign: 'center',
 		color: '#ffffff',
 		marginRight: 5,

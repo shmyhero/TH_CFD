@@ -18,6 +18,7 @@ var StockEditFragment = React.createClass ({
 		isLogin: React.PropTypes.bool,
 		alertData: React.PropTypes.string,
 		isActual: React.PropTypes.bool,
+		isLanguageEn: React.PropTypes.bool,
 	},
 
 	getInitialState: function() {

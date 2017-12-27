@@ -214,6 +214,7 @@ var MePage = React.createClass({
 						LogicData.setMeData(responseJson);
 						NativeDataModule.passRawDataToNative('userName', responseJson.liveUsername)
 						NativeDataModule.passRawDataToNative('userEmail', responseJson.liveEmail)
+						NativeDataModule.passRawDataToNative('Lang', LogicData.getLanguageEn() == '1'?'en':'cn')
 						if(responseJson.firstDayRewarded&&responseJson.firstDayRewarded==true){
 							StorageModule.loadFirstDayWithDraw().then((value) => {
 								if (value !== null&&value !== '2'||value==undefined) {
@@ -334,6 +335,21 @@ var MePage = React.createClass({
 				});
 
 				CookieManager.set({
+					  name: 'Lang',
+					  value: LogicData.getLanguageEn() == '1'?'en':'cn',
+					  domain: 'cn.tradehero.mobi',
+					  origin: 'cn.tradehero.mobi',
+					  path: '/',
+					  version: '1',
+					  expiration: '2029-05-30T12:30:00.00-05:00'
+					}, (err, res) => {
+					  console.log('cookie set email!');
+					  console.log(err);
+					  console.log(res);
+					});
+
+
+				CookieManager.set({
 				  name: 'username',
 				  value: meData.liveUsername,
 				  domain: 'web.typhoontechnology.hk',
@@ -360,6 +376,20 @@ var MePage = React.createClass({
 					  console.log(err);
 					  console.log(res);
 					});
+
+					CookieManager.set({
+						  name: 'Lang',
+						  value: LogicData.getLanguageEn() == '1'?'en':'cn',
+						  domain: 'web.typhoontechnology.hk',
+						  origin: 'web.typhoontechnology.hk',
+						  path: '/',
+						  version: '1',
+						  expiration: '2029-05-30T12:30:00.00-05:00'
+						}, (err, res) => {
+						  console.log('cookie set email!');
+						  console.log(err);
+						  console.log(res);
+						});
 	},
 
 	////0未注册 1已注册 2审核中 3审核失败

@@ -11,7 +11,6 @@ var LS = {
     CANGWEI:['仓位','POSITION'],
     DAREN:['达人','XMAN'],
     WODE:['我的','ME'],
-    CQZJ:['存取资金','depositWithdraw'],
     YQHY:['邀请好友','inviteFriends'],
     WDJF:['我的积分','credits'],
     WDJYJ:['我的交易金','income'],
@@ -47,6 +46,12 @@ var LS = {
     ZS1:['止损','Stop Loss'],
     ZSCG:['止损超过','Stop Loss More Than'],
     WFSZ:['，无法设置','，Can Not To Set'],
+    SSJRCP:['搜索金融产品','Search for financial products'],
+    SSWJG:['搜索无结果','No result for search'],
+    YTJ:['已添加','added'],
+    WDZX:['我的自选','my own stocks'],
+
+
 
 
 
@@ -60,7 +65,7 @@ var LS = {
     KPS:['卡片数','Cards'],
     JYDJ:['交易等级','TradeLevel'],
     PJMBSY:['平均每笔收益','PLAV'],
-    ZY:['主页','MainPage'],
+    ZUYE:['主页','MainPage'],
     DT:['动态','Trend'],
     CC:['持仓','Hold'],
     PC:['平仓','Closed'],
@@ -111,9 +116,7 @@ var LS = {
     RCY:['人参与','person join'],
 
     TZ:['通知','ATTENTION'],
-    SZ:['设置','SETTING'],
     XGDLMM:['修改登入密码','MODIFY PSWD'],
-    ZHBD:['账号绑定','ACCOUNT BANDING'],
     SPZC:['实盘注册','LIVE REGISTER'],
     SPJY:['实盘交易','LIVE TRADE'],
     WDXX:['我的消息','MY MESSAGE'],
@@ -124,7 +127,7 @@ var LS = {
     SERVICE24HOURS:['盈盈在线24小时服务','24 HOURS ONLINE'],
     SPDL:['实盘登录','LIVE LOGIN'],
     JFGZ:['积分规则','CREDIT RULE'],
-    GZ:['规则','RULES'],
+    RULES:['规则','RULES'],
     LJHDJF:['累计获得积分','CREDIT TOTAL'],
     SYJF:['剩余积分','CREDIT NOW'],
 
@@ -153,7 +156,7 @@ var LS = {
     ZF:['涨幅','Increase'],
     FX:['分享','Share'],
     SCZX:['删除自选','DEL'],
-    ZX:['+自选','ADD'],
+    JZX:['+自选','ADD'],
     BENJIN:['本金（美元）','capital($)'],
     GANGGAN:['杠杆（倍）','lever(times)'],
     TRADE_WARNING:['行情可能存在细微偏差','Quotes may have subtle bias'],
@@ -247,7 +250,7 @@ var LS = {
 
     BIND_CARD_TITLE: ["添加银行卡", "Add new card"],
     BIND_CARD_RESULT_TITLE: ["我的银行卡", "My card"],
-    BIND_CARD_NAME: ["姓名", "Name"],    
+    BIND_CARD_NAME: ["姓名", "Name"],
     BIND_CARD_PROVINCE_CITY: ["开户城市", "Province And City"],
     BIND_CARD_NAME_OF_BANK: ["开户银行", "Name Of Bank"],
     BIND_CARD_BRANCH: ["支行名称", "Branch"],
@@ -256,7 +259,7 @@ var LS = {
     BIND_CARD_NAME_HINT: ["请输入姓名", "Please input your name"],
     BIND_CARD_BRANCH_HINT: ["请输入支行名称", "Please input your branch name"],
     BIND_CARD_CARD_NUMBER_HINT: ["请输入银行卡号", "Please input your card number"],
-    
+
     BIND_CARD_LAST_WITHDARW_AMOUNT: ["出金金额", "Last withdraw amount"],
     BIND_CARD_LAST_WITHDARW_DATE: ["出金时间", "Last withdraw date"],
     UNBIND_CARD_ALERT_TITLE: ['确认删除', "Are you sure you want to unbind"],
@@ -284,10 +287,10 @@ var LS = {
     OPEN_ACCOUNT_RISK_NOTICE_1: ["差价合约是高风险的投资，并不适合所有投资者。您的资本面临风险。您应该确保了解其中的风险,如有必要,请寻求独立财务意见,以确保该产品符合您的投资目标。", "CFDs are high-risk investments that are not suitable for all investors. Your capital is at risk. You should make sure you understand the risks involved and, if necessary, seek independent financial advice to ensure that the product meets your investment objectives."],
     OPEN_ACCOUNT_RISK_NOTICE_2: ["如果您在英国以外的司法辖区缴税，税法可能会发生改变或可能会有所不同。盈交易为安易永投（ayondo markets Limited）旗下产品名称。安易永投(ayondo markets Limited)是在英格兰和威尔士注册的公司(注册号为03148972)，并由英国金融行为监管局(FCA)授权和监管，FCA注册号为184333。", "If you pay taxes outside the United Kingdom, tax laws may change or may vary. Profit trading is the product name of ayondo markets Limited. Ayondo markets Limited is a company registered in England and Wales with registration number 03148972 and is authorized and regulated by the FCA with FCA registration number 184333."],
     OPEN_ACCOUNT_RISK_NOTICE_3: ["您的资本面临风险。差价合约并不适合所有投资者。您应该确保了解其中的风险。", "Your capital is at risk. CFDs are not suitable for all investors. You should make sure you understand the risks involved."],
-    
+
     OPEN_ACCOUNT_ID_UPLOAD_FRONT_REAR_HINT: ["请上传您的身份证正反面照片", "Please upload your ID card front and back photos"],
     OPEN_ACCOUNT_ID_PHOTO_HINT: ["请拍摄身份证原件:", "Please take the original ID card:"],
-    
+
     OPEN_ACCOUNT_LAST_NAME: ["姓", "last name"],
     OPEN_ACCOUNT_LAST_NAME_HINT: ["请输入姓", "Enter your last name"],
     OPEN_ACCOUNT_FIRST_NAME: ["名", "first name"],
@@ -296,14 +299,14 @@ var LS = {
     OPEN_ACCOUNT_ID_CODE: ["身份证号", "ID Code"],
     OPEN_ACCOUNT_ID_CODE_HINT: ["请输入身份证号", "Enter your ID Code"],
     OPEN_ACCOUNT_ID_ADDR: ["证件地址", "ID Addr"],
-    OPEN_ACCOUNT_ID_ADDR_HINT: ["请输入证件地址", "Enter your ID Addr"],   
-    
+    OPEN_ACCOUNT_ID_ADDR_HINT: ["请输入证件地址", "Enter your ID Addr"],
+
     OPEN_ACCOUNT_ID_INFO_ERROR: ["您输入的{1}有误，请核对后重试", "The {1} you input is not correct"],
 
     OPEN_LIVE_ACCOUNT: ["开通实盘账户", "Register live account"],
     OPEN_ACCOUNT_USERNAME: ["用户名", "Username"],
     OPEN_ACCOUNT_PASSWORD: ["登入密码", "Password"],
-    OPEN_ACCOUNT_PASSWORD_AGAIN: ["确认密码", "passwordOnceMore"],   
+    OPEN_ACCOUNT_PASSWORD_AGAIN: ["确认密码", "passwordOnceMore"],
     OPEN_ACCOUNT_EMAIL: ["常用邮箱", "Email Address"],
     OPEN_ACCOUNT_USERNAME_HINT: ["5位以上数字字母组合", "Enter a combinition of at least 5 digits and characters"],
     OPEN_ACCOUNT_PASSWORD_HINT: ["8位以上数字字母组合", "Enter a combinition of at least 8 digits and characters"],
@@ -314,7 +317,7 @@ var LS = {
     OPEN_ACCOUNT_PASSWORD_ERROR: ["密码必须是 8 位或以上字母和数字的组合", "Password must be a combinition of at least 8 digits and characters"],
     OPEN_ACCOUNT_PASSWORD_NOT_SAME_ERROR: ["两次输入的密码不一致", "Passwords are not same"],
     OPEN_ACCOUNT_EMAIL_ERROR: ["邮箱格式不正确", "E-mail format is incorrect"],
-    
+
     OPEN_ACCOUNT_PROOF_OF_ADDRESS: ["地址证明", "Proof of address"],
     OPEN_ACCOUNT_HUKOU: ["户口本", "HUKOU"],
     OPEN_ACCOUNT_JUZHUZHENG: ["居住证", "JUZHUZHENG"],
@@ -324,7 +327,7 @@ var LS = {
     OPEN_ACCOUNT_BILLS: ["水电煤", "Bills"],
     OPEN_ACCOUNT_TEL_BILLS: ["固话账单","telephone bill"],
     OPEN_ACCOUNT_BANK_BILLS: ["银行账单","bank bill"],
-    
+
     OPEN_ACCOUNT_HUKOU_HINT_1: ["上传户主页图片", "Upload home page picture"],
     OPEN_ACCOUNT_HUKOU_HINT_2: ["上传本人页图片", "Upload my page picture"],
     OPEN_ACCOUNT_JUZHUZHENG_HINT: ["上传带头像面的图片", "Upload picture with head picture"],
@@ -332,8 +335,8 @@ var LS = {
     OPEN_ACCOUNT_DRIVE_LICENSE_HINT: ["上传带头像面的图片", "Upload picture with head picture"],
     OPEN_ACCOUNT_BROADBAND_HINT: ["上传近3个月内宽带费用图片", "Upload nearly 3 months broadband charges picture"],
     OPEN_ACCOUNT_BILLS_HINT: ["上传近3个月内水电煤费用图片", "Upload nearly 3 months of water and electricity costs picture"],
-    OPEN_ACCOUNT_TEL_BILLS_HINT: ["上传近3个月内固话账单图片", "Upload nearly 3 months fixed-line bill picture"],    
-    OPEN_ACCOUNT_BANK_BILLS_HINT: ["上传近3个月内银行流水图片", "Upload bank pictures of the past three months"],    
+    OPEN_ACCOUNT_TEL_BILLS_HINT: ["上传近3个月内固话账单图片", "Upload nearly 3 months fixed-line bill picture"],
+    OPEN_ACCOUNT_BANK_BILLS_HINT: ["上传近3个月内银行流水图片", "Upload bank pictures of the past three months"],
 
     OPEN_ACCOUNT_TAKE_PICTURE: ["拍照", "Take Picture"],
     OPEN_ACCOUNT_LIBRARY: ["照片图库", "Library"],
@@ -379,7 +382,7 @@ var LS = {
     OPEN_ACCOUNT_FINANCE_PORTFOLIO_LEVEL_2: ["占净资产25-50%", "Accounting for 25-50% of net assets"],
     OPEN_ACCOUNT_FINANCE_PORTFOLIO_LEVEL_3: ["占净资产50-75%", "Accounting for 50-75% of net assets"],
     OPEN_ACCOUNT_FINANCE_PORTFOLIO_LEVEL_4: ["占净资产75-100%", "Accounting for 75-100% of net assets"],
-    
+
     OPEN_ACCOUNT_FINANCE_EMPLOYMENT_1: ["就业", "Employed"],
     OPEN_ACCOUNT_FINANCE_EMPLOYMENT_2: ["自雇", "Self-Employed"],
     OPEN_ACCOUNT_FINANCE_EMPLOYMENT_3: ["失业", "Unemployed"],
@@ -472,7 +475,7 @@ var LS = {
 
     OPEN_ACCOUNT_FINANCE_INFORMATION_READONLY_HINT: ["财务信息填写后，不能再次修改！", "Fill in the financial information, can not be modified again!"],
     OPEN_ACCOUNT_FINANCE_INFORMATION_NOT_CHANGED_HINT: ["财务信息提交后将无法修改，请认真填写！", "Financial information submitted will not be modified, please fill in!"],
-    
+
     OPEN_ACCOUNT_WRONG_FORMAT: ["格式不正确", "Wrong format"],
     OPEN_ACCOUNT_USERNAME_EXIST: ["用户名已存在", "The username alerady exists"],
 

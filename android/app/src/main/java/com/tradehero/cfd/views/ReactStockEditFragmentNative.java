@@ -47,6 +47,7 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
     EventDispatcher mEventDispatcher;
     private boolean isLogin = false;
     private boolean isAcutal = false;
+    private boolean isLanguageEn = false;
     public static ReactStockEditFragmentNative instance = null;
 
     public RelativeLayout rlTop;
@@ -88,12 +89,22 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
     private JSONArray myAlertListArray;
     private LinearLayout notificationSwitch;
 
+    private TextView tvAllProduct;
+    private TextView tvNotification;
+    private TextView tvDrag;
+    private TextView tvPushToTop;
+
     public void initView() {
         list = (DragSortListView) findViewById(R.id.stockList);
         selectAll = (TextView) findViewById(R.id.selectAll);
         deleteSelected = (TextView) findViewById(R.id.deleteSelected);
         notificationSwitch = (LinearLayout) findViewById(R.id.notificationSwitch);
         rlTop = (RelativeLayout) findViewById(R.id.rlTop);
+
+        tvAllProduct = (TextView)findViewById(R.id.tvAllProduct);
+        tvNotification= (TextView)findViewById(R.id.tvNotification);
+        tvDrag= (TextView)findViewById(R.id.tvDrag);
+        tvPushToTop= (TextView)findViewById(R.id.tvPushToTop);
 
         myListArray = LogicData.getInstance().getMyList();
         myAlertListArray = LogicData.getInstance().getMyAlertList();
@@ -110,11 +121,11 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
                 if (selectAllPicked) {
                     selectAllPicked = false;
                     adapter.markAllUnchecked();
-                    selectAll.setText(R.string.select_all);
+                    selectAll.setText(isLanguageEn?R.string.select_all_en:R.string.select_all);
                 } else {
                     adapter.markAllChecked();
                     selectAllPicked = true;
-                    selectAll.setText(R.string.cancel);
+                    selectAll.setText(isLanguageEn?R.string.cancel_en:R.string.cancel);
                 }
 
             }
@@ -125,16 +136,16 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
             public void onClick(View v) {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mContext);
                 alertDialogBuilder
-                        .setTitle(R.string.dialog_title)
-                        .setMessage(R.string.remove_hint_message)
+                        .setTitle(isLanguageEn?R.string.dialog_title_en:R.string.dialog_title)
+                        .setMessage(isLanguageEn?R.string.remove_hint_message_en:R.string.remove_hint_message)
                         .setCancelable(true)
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        .setNegativeButton(isLanguageEn?R.string.cancel_en:R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                             }
                         })
-                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                        .setPositiveButton(isLanguageEn?R.string.confirm_en:R.string.confirm, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -199,17 +210,17 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
         int checkNumber = adapter.getCheckedNum();
         if (checkNumber > 0) {
             deleteSelected.setEnabled(true);
-            deleteSelected.setText(getResources().getText(R.string.delete) + "(" + checkNumber + ")");
+            deleteSelected.setText(getResources().getText(isLanguageEn?R.string.delete_en:R.string.delete) + "(" + checkNumber + ")");
         } else {
             deleteSelected.setEnabled(false);
-            deleteSelected.setText(getResources().getText(R.string.delete));
+            deleteSelected.setText(getResources().getText(isLanguageEn?R.string.delete_en:R.string.delete));
         }
     }
 
     private void updateSelectAllButton() {
         if (selectAllPicked && adapter.getCheckedNum() == 0) {
             selectAllPicked = false;
-            selectAll.setText(R.string.select_all);
+            selectAll.setText(isLanguageEn?R.string.select_all_en:R.string.select_all);
         }
     }
 
@@ -317,7 +328,7 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
                 public void onClick(View v) {
                     StockInfo info = remove(position);
                     insert(info, 0);
-                    Toast.makeText(mContext, R.string.pushed_to_top, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, isLanguageEn?R.string.pushed_to_top_en:R.string.pushed_to_top, Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -489,6 +500,37 @@ public class ReactStockEditFragmentNative extends RelativeLayout {
         if (notificationSwitch != null && !isLogin) {
             notificationSwitch.setVisibility(View.GONE);
         }
+    }
+
+    public void setIsLanguageEn(boolean isEn){
+        this.isLanguageEn = isEn;
+        Log.d("setIsLanguageEn","==>"+isEn);
+        updateDeleteButton();
+        updateSelectAllButton();
+        updateTopTextView();
+    }
+
+    public void updateTopTextView(){
+        tvAllProduct.setText(isLanguageEn?R.string.all_product_en:R.string.all_product);
+        tvDrag.setText(isLanguageEn?R.string.drag_en:R.string.drag);
+        tvNotification.setText(isLanguageEn?R.string.notification_switch_en:R.string.notification_switch);
+        tvPushToTop.setText(isLanguageEn?R.string.pushed_to_top_en:R.string.pushed_to_top);
+        selectAll.setText(isLanguageEn?R.string.select_all_en:R.string.select_all);
+        selectAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectAllPicked) {
+                    selectAllPicked = false;
+                    adapter.markAllUnchecked();
+                    selectAll.setText(isLanguageEn?R.string.select_all_en:R.string.select_all);
+                } else {
+                    adapter.markAllChecked();
+                    selectAllPicked = true;
+                    selectAll.setText(isLanguageEn?R.string.cancel_en:R.string.cancel);
+                }
+
+            }
+        });
     }
 
     public void setIsActual(boolean isActual) {

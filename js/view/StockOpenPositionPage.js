@@ -1963,21 +1963,26 @@ var StockOpenPositionPage = React.createClass({
 			}
 		}
 		var bgcolor = this.state.selectedRow == rowID ? '#e6e5eb' : 'white'
-
+		var topLine = rowData.security.name
+		var bottomLine = rowData.security.symbol
+		if(LogicData.getLanguageEn() == '1'){
+			 topLine = rowData.security.symbol
+			 bottomLine = rowData.security.name
+		}
 		return (
 			<View>
 				<TouchableHighlight activeOpacity={1} onPress={() => this.stockPressed(rowData, sectionID, rowID, highlightRow)}>
 					<View style={[styles.rowWrapper, {backgroundColor: bgcolor}]} key={rowData.key}>
 						<View style={styles.rowLeftPart}>
 							<Text style={styles.stockNameText} allowFontScaling={false} numberOfLines={1}>
-								{rowData.security.name}
+								{topLine}
 							</Text>
 
 							<View style={{flexDirection: 'row', alignItems: 'center'}}>
 								{/* {this.renderCountyFlag(rowData)} */}
 								{this.renderStockStatus(rowData)}
 								<Text style={styles.stockSymbolText}>
-									{rowData.security.symbol}
+									{bottomLine}
 								</Text>
 							</View>
 						</View>

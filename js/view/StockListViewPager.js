@@ -129,6 +129,8 @@ var StockListViewPager = React.createClass({
 
 	editButtonClicked: function() {
 		NativeDataModule.passDataToNative('myList', LogicData.getOwnStocksData())
+		NativeDataModule.passDataToNative('Lang', LogicData.getLanguageEn() == '1'?'en':'cn')
+		console.log('Lang = ' + LogicData.getLanguageEn() == '1'?'en':'cn')
 		// NativeSceneModule.launchNativeScene('StockEditFragment')
 		this.props.navigator.push({
 			name: MainPage.EDIT_OWN_STOCKS_ROUTE,

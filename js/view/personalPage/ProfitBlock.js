@@ -163,7 +163,12 @@ export default class ProfitBlock extends Component {
 		var profitPercentage = rowData.rate
 		var profitAmount = rowData.pl
 		var bgcolor = 'white'
-
+    var topLine = rowData.name
+    var bottomLine = rowData.symbol
+    if(LogicData.getLanguageEn() == '1'){
+       topLine = rowData.symbol
+       bottomLine = rowData.name
+    }
 		return (
 			<View>
 				<TouchableHighlight activeOpacity={1}>
@@ -171,7 +176,7 @@ export default class ProfitBlock extends Component {
 						<View style={styles.rowLeftPart}>
 						    <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <Text style={styles.stockNameText} allowFontScaling={false} numberOfLines={1}>
-                                    {rowData.name}
+                                    {topLine}
                                 </Text>
                                 <Text style={styles.textCount}>
                                     ({rowData.count}笔)
@@ -179,7 +184,7 @@ export default class ProfitBlock extends Component {
                             </View>
 							<View style={{flexDirection: 'row', alignItems: 'center'}}>
 								<Text style={styles.stockSymbolText}>
-									{rowData.symbol}
+									{bottomLine}
 								</Text>
 							</View>
 						</View>

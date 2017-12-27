@@ -28,6 +28,7 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/tvAllProduct"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#abcaff"
@@ -43,6 +44,7 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/tvDrag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#abcaff"
@@ -61,6 +63,7 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/tvNotification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#abcaff"
@@ -77,6 +80,7 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/tvPushToTop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#abcaff"

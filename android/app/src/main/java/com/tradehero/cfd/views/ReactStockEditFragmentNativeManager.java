@@ -67,6 +67,13 @@ public class ReactStockEditFragmentNativeManager extends ViewGroupManager<ReactS
         }
     }
 
+    @ReactProp(name = "isLanguageEn")
+    public void setIsLanguageEn(ReactStockEditFragmentNative reactStockEditFragmentNative, boolean isEn){
+        if (reactStockEditFragmentNative != null) {
+            reactStockEditFragmentNative.setIsLanguageEn(isEn);
+        }
+    }
+
     @ReactProp(name = "isLogin")
     public void setIsLogin(ReactStockEditFragmentNative reactStockEditFragmentNative, boolean isLogin) {
         if (reactStockEditFragmentNative != null) {

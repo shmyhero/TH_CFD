@@ -77,7 +77,7 @@ var MeConfigPage = React.createClass({
 		//TODO: use real API.
 		this.refreshData();
 		this.setState({
-			languageSetting: LogicData.getLanguageEn()=='1'?'change to Chinese':'切换成英文'
+			languageSetting: LogicData.getLanguageEn()=='1'?'Change to Chinese':'切换成英文'
 		})
 	},
 
@@ -357,7 +357,7 @@ var MeConfigPage = React.createClass({
 	languageChange: function(){
 		LogicData.setLanguageEn(LogicData.getLanguageEn()=='0'?'1':'0');
 		this.setState({
-			languageSetting: LogicData.getLanguageEn()=='1'?'change to Chinese':'切换成英文'
+			languageSetting: LogicData.getLanguageEn()=='1'?'Change to Chinese':'切换成英文'
 		},console.log('languageEN:'+LogicData.getLanguageEn()))
 		EventCenter.emitLanguageChangedEvent();
 

@@ -165,10 +165,10 @@ export default class ProfitBlock extends Component {
 		var bgcolor = 'white'
     var topLine = rowData.name
     var bottomLine = rowData.symbol
-    if(LogicData.getLanguageEn() == '1'){
-       topLine = rowData.symbol
-       bottomLine = rowData.name
-    }
+    // if(LogicData.getLanguageEn() == '1'){
+    //    topLine = rowData.symbol
+    //    bottomLine = rowData.name
+    // }
 		return (
 			<View>
 				<TouchableHighlight activeOpacity={1}>

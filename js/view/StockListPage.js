@@ -207,16 +207,14 @@ var StockListPage = React.createClass({
 								})
 							}
 						});
-
+					console.log('==========<<<<<')
 					NetworkModule.fetchTHUrl(
 						url,
 						{
 							method: 'GET',
-							// headers: {
-							// 	'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-							// },
-							//cache: 'offline',
-							//timeout: 1000,
+							headers: {
+								'Accept-Language': LogicData.getLanguageEn() == '1'?'en':'cn',
+							},
 						},
 						(responseJson) => {
 							this.isDisplayingCache = false;
@@ -645,16 +643,16 @@ var StockListPage = React.createClass({
 		}
 		var bottomLine = rowData.symbol
 		var topLine = rowData.name
-		if(LogicData.getLanguageEn() == '1'){
-			bottomLine = rowData.name
-			topLine = rowData.symbol
-		}
+		// if(LogicData.getLanguageEn() == '1'){
+		// 	bottomLine = rowData.name
+		// 	topLine = rowData.symbol
+		// }
 		return (
 			<TouchableHighlight onPress={() => this.stockPressed(rowData)}>
 				<View style={styles.rowWrapper} key={rowData.key}>
 
 					<View style={styles.rowLeftPart}>
-						<Text style={[styles.stockNameText, {fontSize: stockNameFontSize}]}>
+						<Text numberOfLines={1} style={[styles.stockNameText, {fontSize: stockNameFontSize}]}>
 							{topLine}
 						</Text>
 
@@ -829,6 +827,7 @@ var styles = StyleSheet.create({
 	stockNameText: {
 		textAlign: 'center',
 		fontWeight: 'bold',
+
 	},
 	stockSymbolText: {
 		fontSize: 12,

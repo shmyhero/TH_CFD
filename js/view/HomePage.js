@@ -147,6 +147,7 @@ var HomePage = React.createClass({
 				method: 'GET',
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Accept-Language': LogicData.getLanguageEn() == '1'?'en':'cn',
 				},
 				//cache: 'offline',
 			},
@@ -201,6 +202,9 @@ var HomePage = React.createClass({
 			{
 				method: 'GET',
 				cache: 'offline',
+				headers: { 
+					'Accept-Language': LogicData.getLanguageEn() == '1'?'en':'cn',
+				},
 			},
 			(responseJson) => {
 				console.log("GET_HOMEPAGE_BANNER_ALL_API " + JSON.stringify(responseJson))
@@ -254,7 +258,9 @@ var HomePage = React.createClass({
 				method: 'GET',
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Accept-Language': LogicData.getLanguageEn() == '1'?'en':'cn',
 				},
+
 				cache: 'none',
 			},
 			(responseJson) => {
@@ -286,6 +292,9 @@ var HomePage = React.createClass({
 			{
 				method: 'GET',
 				cache: 'offline',
+				headers: {
+					'Accept-Language': LogicData.getLanguageEn() == '1'?'en':'cn',
+				},
 			},
 			(responseJson) => {
 				var listdata = responseJson
@@ -304,6 +313,9 @@ var HomePage = React.createClass({
 			{
 				method: 'GET',
 				cache: 'offline',
+				headers: {
+					'Accept-Language': LogicData.getLanguageEn() == '1'?'en':'cn',
+				},
 			},
 			(responseJson) => {
 				this.setState({
@@ -827,10 +839,10 @@ var HomePage = React.createClass({
 
 		var topLine = stockName
 		var bottomLine = stockSymbol
-		if(LogicData.getLanguageEn() == '1'){
-			topLine = stockSymbol
-			bottomLine = stockName
-		}
+		// if(LogicData.getLanguageEn() == '1'){
+		// 	topLine = stockSymbol
+		// 	bottomLine = stockName
+		// }
 		return (
 			<TouchableOpacity style={styles.popularityRowContainer} onPress={()=>this.gotoStockDetail(rowData)}>
 				<View style={styles.popularityRowLeft}>
@@ -840,7 +852,7 @@ var HomePage = React.createClass({
 					</View>
 				</View>
 				<View style={styles.popularityRowCenter}>
-					<Text style={[styles.stockName,{color:LogicData.getAccountState()?ColorConstants.TITLE_DARK_BLUE:'#1862df'}]}>{topLine}</Text>
+					<Text numberOfLines={1} style={[styles.stockName,{color:LogicData.getAccountState()?ColorConstants.TITLE_DARK_BLUE:'#1862df'}]}>{topLine}</Text>
 					<Text style={styles.stockCode}>{bottomLine}</Text>
 					<Text style={styles.stockPeople}>{peopleNum}{strRCY}</Text>
 				</View>

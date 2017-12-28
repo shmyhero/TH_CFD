@@ -1965,10 +1965,10 @@ var StockOpenPositionPage = React.createClass({
 		var bgcolor = this.state.selectedRow == rowID ? '#e6e5eb' : 'white'
 		var topLine = rowData.security.name
 		var bottomLine = rowData.security.symbol
-		if(LogicData.getLanguageEn() == '1'){
-			 topLine = rowData.security.symbol
-			 bottomLine = rowData.security.name
-		}
+		// if(LogicData.getLanguageEn() == '1'){
+		// 	 topLine = rowData.security.symbol
+		// 	 bottomLine = rowData.security.name
+		// }
 		return (
 			<View>
 				<TouchableHighlight activeOpacity={1} onPress={() => this.stockPressed(rowData, sectionID, rowID, highlightRow)}>

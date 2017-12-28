@@ -629,10 +629,10 @@ var StockClosedPositionPage = React.createClass({
 		plPercent = plPercent * (rowData.isLong ? 1 : -1)
 		var topLine = rowData.security.name
     var bottomLine = rowData.security.symbol
-    if(LogicData.getLanguageEn() == '1'){
-       topLine = rowData.security.symbol
-       bottomLine = rowData.security.name
-    }
+    // if(LogicData.getLanguageEn() == '1'){
+    //    topLine = rowData.security.symbol
+    //    bottomLine = rowData.security.name
+    // }
 		return (
 			<View>
 				<TouchableHighlight activeOpacity={1} onPress={() => this.stockPressed(rowData, sectionID, rowID, highlightRow)}>

@@ -595,19 +595,19 @@ var LS = {
     DAY_SIGN_RULES_LINE_4: ["连续签到中断，即恢复到每日赠送0.5元交易金，重新积累连续签到天数。", "Continued check-in interrupt, which returned to the daily donated 0.5 yuan trading gold, re-accumulation of consecutive sign in days."],
 
     CARD_SHARE_TITLE: ["我获得了一张盈交易卡片奖励", "I've got a card!"],
-    CARD_SHARE_DESCRIPTION: ["盈交易-风靡全球的投资神器登陆亚洲", "YinJiaoYi"],
+    CARD_SHARE_DESCRIPTION: ["盈交易-风靡全球的投资神器登陆亚洲", "盈交易-风靡全球的投资神器登陆亚洲"],
     CARD_OPEN: ["开仓","Open"],
-    CARD_CLOSE: ["平仓","Close"],
+    CARD_CLOSE: ["平仓","Closed"],
     CARD_TYPE: ["类型", "Type"],
-    CARD_INVEST: ["本金({1})", "Invest({1})"],
-    CARD_LEVERAGE: ["杠杆", "Leverage"],
+    CARD_INVEST: ["本金({1})", "Amount({1})"],
+    CARD_LEVERAGE: ["杠杆", "Multiplier"],
     CARD_TRADE_PRICE: ["交易价格", "Trade Price"],
     CARD_MAX_RISK: ["最大风险({1})", "Max Risk ({1})"],
-    CARD_PROFIT_AND_LOSS: ["盈亏(美元)", "Profit and Loss (USD)"],
-    CARD_WIN_SCORE: ["赚{1}积分", "Win {1} Score"],
-    CARD_PAGE_NO_ITEMS: ["暂无卡片", "No cards now"],
+    CARD_PROFIT_AND_LOSS: ["盈亏(美元)", "Profit / loss ($)"],
+    CARD_WIN_SCORE: ["赚{1}积分", "Win {1} Points"],
+    CARD_PAGE_NO_ITEMS: ["暂无卡片", "There are no cards"],
 
-    SUPER_PRIORITY_MESSAGE_1: ["注册送{1}交易金", "Sign up, get {1} reward"],
+    SUPER_PRIORITY_MESSAGE_1: ["注册送{1}交易金", "Sign up, get {1} Virtual Bonus"],
     SUPER_PRIORITY_MESSAGE_REWARD_VALUE: ["10万", "100,000"],
     SUPER_PRIORITY_MESSAGE_REAL_MONEY_VALUE: ["{1}元", "￥{1}"],
     SUPER_PRIORITY_MESSAGE_2: ["签到日送", "Check in, get "],  
@@ -618,25 +618,26 @@ var LS = {
     SUPER_PRIORITY_REGISTER_NOW: ["立即注册", "Sign up Now"],
     SUPER_PRIORITY_CHECK_IN_NOW: ["签到", "Check in Now"],
 
-    MY_MESSAGES_NO_MESSAGE: ["暂无消息", "No Messages now"],
+    MY_MESSAGES_NO_MESSAGE: ["暂无消息", "There are No Messages"],
     PULL_TO_REFRESH: ["下拉刷新", "Pull To Refresh"],
     REFRESHING: ["刷新中", "Refreshing..."],
     LOAD_MORE: ["加载更多", "Load more"],
     LOADING: ["加载中...", "Loading..."],
 
-    BOOKMARK_NO_ITEM: ["暂无产品 点击添加", "No items now"],
+    BOOKMARK_NO_ITEM: ["暂无产品 点击添加", "Choose"],
 
-    MY_REWARD_RULES: ["交易金规则", "Reward rules"],
+    MY_REWARD_RULES: ["交易金规则", "Rules"],
 
-    ACCOUNT_NAME_TITLE: ["我的昵称", "My Username"],
-    ACCOUNT_NAME_INPUT_HINT: ['请输入昵称', "Please Input Your Username"],
-    ACCOUNT_NAME_CANNOT_BE_EMPTY: ["昵称不能为空", "Username cannot be empty"],
-    ACCOUNT_NAME_MAXINUM_LENGTH: ["昵称不能超过{1}个字段", "Username cannot be longer than {1} charecters."],
+    ACCOUNT_NAME_TITLE: ["我的昵称", "Name"],
+    ACCOUNT_NAME_INPUT_HINT: ['请输入昵称', "Name"],
+    ACCOUNT_NAME_CANNOT_BE_EMPTY: ["昵称不能为空", "Name cannot be empty"],
+    ACCOUNT_NAME_MAXINUM_LENGTH: ["昵称不能超过{1}个字段", "Name cannot be longer than {1} characters."],
     
     ERROR_HINT: ["错误提示", "Error Hint"],
 
-    SEARCH_CLEAR_HISTORY: ["清除历史记录", "Clear Search History"],
-    SEARCH_HISTORY: ["以下为历史查询记录", "Search History"],
+    SEARCH_CLEAR_HISTORY: ["清除历史记录", "Clear"],
+    SEARCH_HISTORY: ["以下为历史查询记录", "History"],
+
 
 
 

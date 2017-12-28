@@ -630,8 +630,12 @@ var LS = {
 
     BOOKMARK_NO_ITEM: ["暂无产品 点击添加", "No items now"],
     
-
+    ACCOUNT_NAME_TITLE: ["我的昵称", "My Username"],
+    ACCOUNT_NAME_INPUT_HINT: ['请输入昵称', "Please Input Your Username"],
+    ACCOUNT_NAME_CANNOT_BE_EMPTY: ["昵称不能为空", "Username cannot be empty"],
+    ACCOUNT_NAME_MAXINUM_LENGTH: ["昵称不能超过{1}个字段", "Username cannot be longer than {1} charecters."],
     
+    ERROR_HINT: ["错误提示", "Error Hint"],
 
     
 

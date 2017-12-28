@@ -23,6 +23,7 @@ var ColorConstants = require('../ColorConstants');
 var heightRate = height/667.0;
 var NavBar = require('../view/NavBar')
 var UIConstants = require('../UIConstants')
+var LS = require("../LS")
 class ErrorMsg extends Component{
 	constructor(prop){
 		super(prop);
@@ -74,7 +75,7 @@ var AccountNameModifyPage = React.createClass({
 	getInitialState: function() {
 		return {
 			isShowError:false,
-			errorText:'错误提示',
+			errorText: LS.str("ERROR_HINT"),
 			nickName:'',
 		};
 	},
@@ -95,7 +96,7 @@ var AccountNameModifyPage = React.createClass({
 
 				 <TextInput style={styles.nickNameInputView}
 					onChangeText={(text) => this.setNickName(text)}
-					placeholder='请输入昵称'
+					placeholder={LS.str("ACCOUNT_NAME_INPUT_HINT")}
 					placeholderTextColor='grey'
 					maxLength={UIConstants.MAX_NICKNAME_LENGTH}
 					value={this.state.nickName}
@@ -119,9 +120,9 @@ var AccountNameModifyPage = React.createClass({
 		return (
 			<NavBar showBackButton={true} navigator={this.props.navigator}
 				barStyle={{height: barHeight}}	titleStyle={{fontSize:18}}
-				title='我的昵称'
+				title={LS.str("ACCOUNT_NAME_TITLE")}
 				subTitleStyle={styles.subTitle}
-				textOnRight='完成'
+				textOnRight={LS.str("FINISH")}
 				rightTextOnClick={this.onComplete}/>
 		)
 	},
@@ -132,13 +133,13 @@ var AccountNameModifyPage = React.createClass({
 		if(!this.state.nickName || this.state.nickName.length==0 ){
 			this.setState({
 				isShowError:true,
-				errorText:"昵称不能为空",
+				errorText:LS.str("ACCOUNT_NAME_CANNOT_BE_EMPTY"),
 			});
 			return;
 		}else if(this.state.nickName.length > UIConstants.MAX_NICKNAME_LENGTH){
 			this.setState({
 				isShowError:true,
-				errorText: "昵称不能超过" + UIConstants.MAX_NICKNAME_LENGTH + "个字段",
+				errorText: LS.str("ACCOUNT_NAME_MAXINUM_LENGTH").replace("{1}", UIConstants.MAX_NICKNAME_LENGTH),
 			});
 			return;
 		}

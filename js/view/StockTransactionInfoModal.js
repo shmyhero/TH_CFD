@@ -84,7 +84,7 @@ var StockTransactionInfoModal = React.createClass({
 		this.state.hideCallback && this.state.hideCallback();
 
 		if(this.state.transactionInfo && this.state.transactionInfo.score){
-			Toast.show("赚" + this.state.transactionInfo.score + "积分", {
+			Toast.show(LS.str("CARD_WIN_SCORE").replace("{1}", this.state.transactionInfo.score), {
 				duration: 500,
 			})
 		}

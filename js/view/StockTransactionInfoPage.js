@@ -26,6 +26,7 @@ var NetConstants = require('../NetConstants');
 var LogicData = require('../LogicData');
 var NetworkModule = require('../module/NetworkModule');
 var Toast = require('./component/toast/Toast');
+var LS = require('../LS');
 
 var {height, width} = Dimensions.get('window');
 var actionButtonSize = 61;
@@ -110,10 +111,10 @@ var StockTransactionInfoPage = React.createClass({
 		var url = NetConstants.TRADEHERO_API.SHARE_ACHIEVEMENT_CARD_URL;
 		url = url.replace("<id>", this.state.card.cardId);
 		MainPage.showSharePage({
-			title: "我获得了一张盈交易卡片奖励",
-      description: "盈交易-风靡全球的投资神器登陆亚洲",
-      webpageUrl: url,
-      imageUrl: NetConstants.TRADEHERO_API.SHARE_LOGO_URL,
+			title: LS.str("CARD_SHARE_TITLE"),
+			description: LS.str("CARD_SHARE_DESCRIPTION"),
+			webpageUrl: url,
+			imageUrl: NetConstants.TRADEHERO_API.SHARE_LOGO_URL,
 			card: this.state.card,
 			onShareToSession: ()=>{this.shareToWechat(2)},
 			onShareToTimeline: ()=>{this.shareToWechat(3)},

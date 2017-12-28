@@ -21,6 +21,7 @@ var NetworkModule = require("../module/NetworkModule")
 var LogicData = require("../LogicData")
 var MainPage = require("./MainPage")
 var StorageModule = require("../module/StorageModule")
+var LS = require("../LS")
 
 var content_image_1 = require("../../images/super_priority_icon_1.png")
 var content_image_2 = require("../../images/super_priority_icon_2.png")
@@ -124,6 +125,9 @@ var SuperPriorityHintPage = React.createClass({
 	},
 
   renderRigisterLine: function(isLogin){
+    var registerStr = LS.str("SUPER_PRIORITY_MESSAGE_1");
+    var registerStr_part1 = registerStr.split("{1}")[0];
+    var registerStr_part2 = registerStr.split("{1}")[1];
     if(!isLogin){
       return (
         <View style={styles.bodyRowContainer}>
@@ -131,13 +135,13 @@ var SuperPriorityHintPage = React.createClass({
             <Image resizeMode="contain" source={content_image_1} style={styles.bodyImage}/>
             <View style={styles.bodyTextContainer}>
               <Text style={styles.bodyText}>
-              注册送
+                {registerStr_part1}
               </Text>
               <Text style={styles.bodyTextHighlight}>
-              10万
+                {LS.str("SUPER_PRIORITY_MESSAGE_REWARD_VALUE")}
               </Text>
               <Text style={styles.bodyText}>
-              体验金
+                {registerStr_part2}
               </Text>
             </View>
           </View>
@@ -145,10 +149,10 @@ var SuperPriorityHintPage = React.createClass({
             <Image resizeMode="contain" source={content_image_2} style={styles.bodyImage}/>
             <View style={styles.bodyTextContainer}>
               <Text style={styles.bodyText}>
-              注册送
+                {registerStr_part1}
               </Text>
               <Text style={styles.bodyTextHighlight}>
-              {LogicData.getRegisterReward()+"元"}
+                {LS.str("SUPER_PRIORITY_MESSAGE_REAL_MONEY_VALUE").replace("{1}", LogicData.getRegisterReward())}
               </Text>
             </View>
           </View>
@@ -162,22 +166,22 @@ var SuperPriorityHintPage = React.createClass({
         <View style={styles.bodyContent}>
 					<Image resizeMode="contain" source={content_image_3} style={styles.bodyImage}/>
           <View style={styles.bodyTextContainer}>
-            <Text style={styles.bodyText}>
-            签到日送
+            <Text style={styles.bodyText}>            
+              {LS.str("SUPER_PRIORITY_MESSAGE_2")}
             </Text>
             <Text style={styles.bodyTextHighlight}>
-            0.5元
+              {LS.str("SUPER_PRIORITY_MESSAGE_CHECK_IN_REWARD")}
             </Text>
           </View>
         </View>
         <View style={styles.bodyContent}>
           <Image resizeMode="contain" source={content_image_4} style={styles.bodyImage}/>
           <View style={styles.bodyTextContainer}>
-            <Text style={styles.bodyText}>
-            模拟交易日送
+            <Text style={styles.bodyText}>            
+              {LS.str("SUPER_PRIORITY_MESSAGE_3")}
             </Text>
             <Text style={styles.bodyTextHighlight}>
-            0.5元
+              {LS.str("SUPER_PRIORITY_MESSAGE_DEMO_TRADE_REWARD")}
             </Text>
           </View>
         </View>
@@ -193,7 +197,8 @@ var SuperPriorityHintPage = React.createClass({
 					this._goToLoginPage()
 				}}>
 				<Text style={styles.buttonText}>
-					立即注册
+					
+          {LS.str("SUPER_PRIORITY_REGISTER_NOW")}
 				</Text>
 			</TouchableOpacity>);
 		}else{
@@ -203,7 +208,7 @@ var SuperPriorityHintPage = React.createClass({
 					this._goToCheckInPage()
 				}}>
 				<Text style={styles.buttonText}>
-					签到
+					{LS.str("SUPER_PRIORITY_CHECK_IN_NOW")}
 				</Text>
 			</TouchableOpacity>);
 		}
@@ -243,7 +248,7 @@ var SuperPriorityHintPage = React.createClass({
                       this.hide();
                     }}>
                     <Text style={styles.buttonText}>
-                      知道了
+                      {LS.str("SUPER_PRIORITY_I_KNOW")}
                     </Text>
                   </TouchableOpacity>
                   {this.renderActionButton(isLogin)}

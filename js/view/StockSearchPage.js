@@ -330,7 +330,7 @@ var StockSearchPage = React.createClass({
 			<View style={styles.historyFooterView}>
 				<TouchableOpacity style={styles.cleanHistoryButton} onPress={() => this.cleanSearchHistory()}>
 					<Image style={styles.cleanHistoryImage} source={require('../../images/delete.png')}/>
-					<Text style={styles.cleanHistoryText}>清除历史记录</Text>
+					<Text style={styles.cleanHistoryText}>{LS.str("SEARCH_CLEAR_HISTORY")}</Text>
 				</TouchableOpacity>
 			</View>
 		)
@@ -341,7 +341,7 @@ var StockSearchPage = React.createClass({
 			return(
 				<View style={{flex: 1}}>
 					<View style={{flexDirection: 'row', alignItems: 'center', padding: 8}}>
-						<Text style={styles.historyText}>以下为历史查询记录</Text>
+						<Text style={styles.historyText}>{LS.str("SEARCH_HISTORY")}</Text>
 					</View>
 					<ListView
 						style={styles.list}

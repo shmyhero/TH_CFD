@@ -96,7 +96,7 @@ export default class MyCard extends Component{
 		if(this.state.noMessage){
 			return (
 				<View style={styles.emptyContent}>
-						<Text style={styles.emptyText}>暂无卡片</Text>
+						<Text style={styles.emptyText}>{LS.str("CARD_PAGE_NO_ITEMS")}</Text>
 				</View>
 			);
 		}

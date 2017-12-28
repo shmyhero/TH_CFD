@@ -300,6 +300,7 @@ var LS = {
     MY_REWARD_REMAINING: ["剩余交易金(元)", "Remaining reward(RMB)"],
     MY_REWARD_TRANSFER_TO_LIVE: ['转入实盘账户', "Transfer to Live Account"],
     MY_REWARD_LIVE_ACCOUNT_WARNING: ["注意：交易金转入实盘账户前，必须", "Before transfering the reward, you must "],
+    MY_REWARD_RULES: ["交易金规则", "Reward rules"],
 
     CURRENCY_RMB: ["人民币", "RMB"],
     TRANSFER_REWARD_TRANSFER_VALUE: ["转入金额", "Transfer Value"],
@@ -322,6 +323,9 @@ var LS = {
 
     SEARCH_PRODUCT_HINT: ["搜索金融产品", "Search Product"],
     SEARCH_NO_RESULT: ["搜索无结果", "No results found"],
+    SEARCH_CLEAR_HISTORY: ["清除历史记录", "Clear Search History"],
+    SEARCH_HISTORY: ["以下为历史查询记录", "Search History"],
+
 
     OPEN_ACCOUNT_HEADER_1: ["开户准备", "Ready"],
     OPEN_ACCOUNT_HEADER_2: ["上传身份证照片(1/5)", "Update ID Photo (1/5)"],
@@ -594,8 +598,42 @@ var LS = {
     DAY_SIGN_RULES_LINE_3: ["连续签到10天后，第11天起，赠送0.8元交易金；", "After 10 consecutive signings, the first 11 days, giving 0.8 yuan trading gold;"],
     DAY_SIGN_RULES_LINE_4: ["连续签到中断，即恢复到每日赠送0.5元交易金，重新积累连续签到天数。", "Continued check-in interrupt, which returned to the daily donated 0.5 yuan trading gold, re-accumulation of consecutive sign in days."],
 
+    CARD_SHARE_TITLE: ["我获得了一张盈交易卡片奖励", "I've got a card!"],
+    CARD_SHARE_DESCRIPTION: ["盈交易-风靡全球的投资神器登陆亚洲", "YinJiaoYi"],
+    CARD_OPEN: ["开仓","Open"],
+    CARD_CLOSE: ["平仓","Close"],
+    CARD_TYPE: ["类型", "Type"],
+    CARD_INVEST: ["本金({1})", "Invest({1})"],
+    CARD_LEVERAGE: ["杠杆", "Leverage"],
+    CARD_TRADE_PRICE: ["交易价格", "Trade Price"],
+    CARD_MAX_RISK: ["最大风险({1})", "Max Risk ({1})"],
+    CARD_PROFIT_AND_LOSS: ["盈亏(美元)", "Profit and Loss (USD)"],
+    CARD_WIN_SCORE: ["赚{1}积分", "Win {1} Score"],
+    CARD_PAGE_NO_ITEMS: ["暂无卡片", "No cards now"],
 
+    SUPER_PRIORITY_MESSAGE_1: ["注册送{1}交易金", "Sign up, get {1} reward"],
+    SUPER_PRIORITY_MESSAGE_REWARD_VALUE: ["10万", "100,000"],
+    SUPER_PRIORITY_MESSAGE_REAL_MONEY_VALUE: ["{1}元", "￥{1}"],
+    SUPER_PRIORITY_MESSAGE_2: ["签到日送", "Check in, get "],  
+    SUPER_PRIORITY_MESSAGE_CHECK_IN_REWARD: ["0.5元", "￥0.5"],
+    SUPER_PRIORITY_MESSAGE_3: ["模拟交易日送", "Demo trade, get "],  
+    SUPER_PRIORITY_MESSAGE_DEMO_TRADE_REWARD: ["0.5元", "￥0.5"],  
+    SUPER_PRIORITY_I_KNOW: ["知道了", "I knew"],
+    SUPER_PRIORITY_REGISTER_NOW: ["立即注册", "Sign up Now"],
+    SUPER_PRIORITY_CHECK_IN_NOW: ["签到", "Check in Now"],
 
+    MY_MESSAGES_NO_MESSAGE: ["暂无消息", "No Messages now"],
+    PULL_TO_REFRESH: ["下拉刷新", "Pull To Refresh"],
+    REFRESHING: ["刷新中", "Refreshing..."],
+    LOAD_MORE: ["加载更多", "Load more"],
+    LOADING: ["加载中...", "Loading..."],
+
+    BOOKMARK_NO_ITEM: ["暂无产品 点击添加", "No items now"],
+    
+
+    
+
+    
 
 
 

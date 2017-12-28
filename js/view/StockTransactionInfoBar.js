@@ -14,6 +14,7 @@ import {
 
 var ColorConstants = require('../ColorConstants')
 var UIConstants = require('../UIConstants');
+var LS = require("../LS");
 
 var {height, width} = Dimensions.get('window');
 const RESIZE_SCALE = width/375
@@ -165,7 +166,7 @@ export default class StockTransactionInfoBar extends Component {
         <View style={[styles.titleContainer, extraTitleContainerStyle, {height: headerHeight, justifyContent:'center'}]}>
           <View style={{flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'stretch'}}>
             <Text style={[styles.titleText, {flex:1, marginLeft: this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN}, titleTextStyle]} numberOfLines={1} ellipsizeMode={'head'}>
-              {this.state.name} - {this.state.isCreate?'开仓':'平仓'}
+              {this.state.name} - {this.state.isCreate? LS.str("CARD_OPEN") : LS.str("CARD_CLOSE")}
             </Text>
             {this.state.isCreate ?
               null :
@@ -179,13 +180,13 @@ export default class StockTransactionInfoBar extends Component {
         <View style={[styles.centerContainer, {height: this.props.width / 690 * 122, }, backgroundStyle]}>
           <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN, paddingVertical: 8}}>
             <Text style={[styles.itemTitleText, itemTitleTextStyle]}>
-              类型
+              {LS.str("CARD_TYPE")}
             </Text>
             <Image style={[styles.longImage, longImageStyle]} source={longImageSrc}/>
           </View>
           <View style={{flex: 2, alignItems: 'center'}}>
             <Text style={[styles.itemTitleText, itemTitleTextStyle]}>
-              本金({currency})
+              {LS.str("CARD_TYPE").replace("{1}", currency)}
             </Text>
             <Text style={[styles.itemValueText, itemValueTextStyle]}>
               {this.state.invest.toFixed(2)}
@@ -193,7 +194,7 @@ export default class StockTransactionInfoBar extends Component {
           </View>
           <View style={{flex: 1, alignItems: 'flex-end', paddingRight: this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN}}>
             <Text style={[styles.itemTitleText, itemTitleTextStyle]}>
-              杠杆
+              {LS.str("CARD_LEVERAGE")}
             </Text>
             <Text style={[styles.itemValueText, itemValueTextStyle]}>
               {this.state.leverage}
@@ -204,7 +205,7 @@ export default class StockTransactionInfoBar extends Component {
         <View style={[styles.bottomContainer, {height: this.props.width / 690 * 122}, backgroundStyle]}>
           <View style={{flex: 1, alignItems: 'flex-start', paddingLeft: this.props.bigMargin ? HORIZONTAL_BIG_MARGIN : HORIZONTAL_SMALL_MARGIN, paddingVertical: 8}}>
             <Text style={[styles.itemTitleText, itemTitleTextStyle]}>
-              交易价格
+              {LS.str("CARD_TRADE_PRICE")}
             </Text>
             <Text style={[styles.itemValueText, itemValueTextStyle]}>
               {this.state.settlePrice}
@@ -212,7 +213,7 @@ export default class StockTransactionInfoBar extends Component {
           </View>
           <View style={{flex: 2, alignItems: 'center'}}>
             <Text style={[styles.itemTitleText, itemTitleTextStyle]}>
-              {this.state.isCreate? ('最大风险('+currency+')') : '盈亏(美元)'}
+              {this.state.isCreate? LS.str("CARD_MAX_RISK").replace("{1}", currency) : LS.str("CARD_PROFIT_AND_LOSS")}
             </Text>
             <Text style={[styles.itemValueText, itemValueTextStyle, {color: plColor}]}>
               {this.state.isCreate ? this.state.invest.toFixed(2) : this.state.pl.toFixed(2)}

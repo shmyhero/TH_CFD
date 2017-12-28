@@ -606,7 +606,7 @@ var StockListPage = React.createClass({
 						<TouchableOpacity onPress={this.handleAddStock}>
 							<View>
 								<Image style={styles.addImage} source={LogicData.getAccountState()?require('../../images/add_live.png'):require('../../images/add.png')}/>
-								<Text style={[styles.addText,{color:ColorConstants.TITLE_BLUE}]}>暂无产品 点击添加</Text>
+								<Text style={[styles.addText,{color:ColorConstants.TITLE_BLUE}]}>{LS.str("BOOKMARK_NO_ITEM")}</Text>
 							</View>
 						</TouchableOpacity>
 					</View>
@@ -869,6 +869,7 @@ var styles = StyleSheet.create({
 		fontSize: 12,
 		color: '#185ed3',
 		marginTop: 14,
+		textAlign:'center',
 	},
 	statusLableContainer: {
 		backgroundColor: '#999999',

@@ -166,7 +166,7 @@ var MyIncomePage = React.createClass({
 	showRules: function(){
 		this.props.navigator.push({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
-			title:'交易金规则',
+			title: LS.str("MY_REWARD_RULES"),
 			url:NetConstants.TRADEHERO_API.INCOME_RULE
 		});
 	},

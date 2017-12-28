@@ -274,7 +274,7 @@ export default class MyMessagesPage extends Component {
 			return (
 				<View style={styles.emptyContent}>
 						<Image style={styles.emptyImage} source={require('../../images/icon_mail.png')}/>
-						<Text style={styles.emptyText}>暂无消息</Text>
+						<Text style={styles.emptyText}>{LS.str("MY_MESSAGES_NO_MESSAGE")}</Text>
 				</View>
 			);
 		}
@@ -357,13 +357,13 @@ export default class MyMessagesPage extends Component {
 			case will_refresh:
         return (
           <View style={{height: 35, justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={styles.refreshTextStyle}>下拉刷新</Text>
+              <Text style={styles.refreshTextStyle}>{LS.str("PULL_TO_REFRESH")}</Text>
           </View>
         )
       case refreshing:
         return (
             <View style={{flexDirection: 'row', height: 35, justifyContent: 'center', alignItems: 'center'}}>
-                {this._renderActivityIndicator()}<Text style={styles.refreshTextStyle}>刷新中</Text>
+                {this._renderActivityIndicator()}<Text style={styles.refreshTextStyle}>{LS.str("REFRESHING")}</Text>
             </View>
         )
     }
@@ -382,13 +382,13 @@ export default class MyMessagesPage extends Component {
 			case will_load_more:
         return (
           <View style={{height: 35, justifyContent: 'center', alignItems: 'center'}}>
-            <Text style={styles.refreshTextStyle}>加载更多</Text>
+            <Text style={styles.refreshTextStyle}>{LS.str("LOAD_MORE")}</Text>
           </View>
         )
       case loading_more:
         return (
           <View style={{flexDirection: 'row', height: 35, justifyContent: 'center', alignItems: 'center'}}>
-            {this._renderActivityIndicator()}<Text style={styles.refreshTextStyle}>加载中...</Text>
+            {this._renderActivityIndicator()}<Text style={styles.refreshTextStyle}>{LS.str("LOADING")}</Text>
           </View>
         )
       case loaded_all:

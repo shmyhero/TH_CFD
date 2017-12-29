@@ -18,6 +18,8 @@ var LogicData = require('../../LogicData');
 var NetworkModule = require('../../module/NetworkModule');
 var ColorConstants = require('../../ColorConstants');
 var UIConstants = require('../../UIConstants')
+var LS = require("../../LS");
+
 var {height, width} = Dimensions.get('window')
 const TWEET_WRITER = "TweetWriter"
 // create a component
@@ -83,7 +85,7 @@ class NewTweetPage extends Component {
                 this.props.navigator.pop();
             },
             (result) => {
-                Alert.alert('发布失败', result.errorMessage);
+                Alert.alert(LS.str("TWEET_PUBLISH_FAILED_TITLE"), result.errorMessage);
             }
         )
     }
@@ -116,8 +118,8 @@ class NewTweetPage extends Component {
                     })
                 }}>
                 <View style={[{position:'absolute', top:0, left:0, right:0, bottom: 0}, containerViewStyle]}>
-                    <NavBar title="发布动态" showBackButton={true} navigator={this.props.navigator}
-                        textOnRight='发送'
+                    <NavBar title={LS.str("TWEET_PUBLISH")} showBackButton={true} navigator={this.props.navigator}
+                        textOnRight={LS.str("CONFIG_SEND")}
                         rightTextOnClick={()=>this.pressCommitButton()}
                         enableRightText={this.state.text.length>0}/>
                 
@@ -131,7 +133,7 @@ class NewTweetPage extends Component {
                     <TouchableHighlight onPress={()=>this.addLinkBlock()} >
                         <View style={styles.bottomActionBar}>
                             <Text style={{color:'#666666', fontSize:30}}>@</Text>
-                            <Text style={{color:'#666666'}}>产品</Text>
+                            <Text style={{color:'#666666'}}>{LS.str("TWEET_PUBLISH_PRODUCTS")}</Text>
                         </View>
                     </TouchableHighlight>
 

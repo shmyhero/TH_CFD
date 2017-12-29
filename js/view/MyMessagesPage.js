@@ -31,6 +31,7 @@ var LogicData = require('../LogicData')
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 var WaitingRing = require('./component/WaitingRing')
 var CacheModule = require('../module/CacheModule');
+var LS = require("../LS");
 
 var {height, width} = Dimensions.get('window')
 var heightRate = height/667.0

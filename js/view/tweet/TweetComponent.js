@@ -12,6 +12,8 @@ import { View,
 } from 'react-native';
 var TweetParser = require('./TweetParser');
 var {height, width} = Dimensions.get('window');
+var LS = require("../../LS")
+
 //var TweetBlock = require('./TweetBlock')
 class TweetComponent extends Component {
 
@@ -485,7 +487,7 @@ class TweetComponent extends Component {
         }else{
             //console.log("renderShadowText with empty")
             return (
-                <Text style={[styles.textPart, styles.inputLayout, {color: 'gray', lineHeight:20}]}>今天你怎么看？</Text>)
+                <Text style={[styles.textPart, styles.inputLayout, {color: 'gray', lineHeight:20}]}>{LS.str("TWEET_HINT")}</Text>)
         }
     }
 
@@ -524,7 +526,7 @@ class TweetComponent extends Component {
                         multiline={true}
                         maxLength={240}
                         value={this.state.displayText}
-                        placeholder="今天你怎么看？"
+                        placeholder={LS.str("TWEET_HINT")}
                         onChange={(event)=>{
                             console.log("onChange")
                             console.log(event.nativeEvent)

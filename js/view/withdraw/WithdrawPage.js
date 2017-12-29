@@ -270,7 +270,7 @@ export default class WithdrawPage extends Component {
         <View style={[styles.rowWrapper, styles.depositRowWrapper]}>
           <View style={{flexDirection: 'row', alignSelf:'stretch', justifyContent:'space-between'}}>
  					    <Text style={styles.midiumText}>{LS.str('WITHDRAW_AMOUNT')}</Text>
-              <Text style={[styles.midiumText, {alignSelf: 'flex-end'}]}>{LS.str("WITHDRAW_FEE").replace("{1}", this.state.fee + "美元")}</Text>
+              <Text style={[styles.midiumText, {alignSelf: 'flex-end'}]}>{LS.str("WITHDRAW_FEE").replace("{1}", this.state.fee)}</Text>
           </View>
           <View style={{flexDirection: 'row', marginTop:10, alignItems:"center"}}>
    					<Text style={{fontSize: 17, fontWeight: 'bold', color: '#333333'}}>{LS.str("WITHDRAW_DOLLAR")}</Text>

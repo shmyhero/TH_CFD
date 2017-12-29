@@ -176,8 +176,8 @@ var StockTransactionInfoPage = React.createClass({
 								likes: this.state.liked ? this.state.likes - 1 : this.state.likes + 1,
 								liked: !this.state.liked,
 							})
-							if(responseJson.score){
-								Toast.show("赚" + responseJson.score + "积分", {
+							if(responseJson.score){								
+								Toast.show(LS.str("CARD_WIN_SCORE").replace("{1}", responseJson.score ), {
 									duration: 500,
 								})
 							}

@@ -638,7 +638,10 @@ var LS = {
     SEARCH_CLEAR_HISTORY: ["清除历史记录", "Clear"],
     SEARCH_HISTORY: ["以下为历史查询记录", "History"],
 
-
+    TWEET_PUBLISH: ["发布动态", "Publish Tweet"],
+    TWEET_PUBLISH_FAILED_TITLE: ["发布失败", "Publish failed"],
+    TWEET_PUBLISH_PRODUCTS: ["产品", "Products"],
+    TWEET_HINT: ["今天你怎么看？", "What's your opinion today?"],
 
 
 

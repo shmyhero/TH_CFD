@@ -1350,6 +1350,11 @@ var HomePage = React.createClass({
 					{this.renderBgHint()}
 					<ScrollView ref={SCROLL_VIEW}
 						onScroll={this.onScroll}
+						onScrollEndDrag={(e)=>{
+							if(e.nativeEvent.contentOffset.y < 0){
+								this.refs[SCROLL_VIEW] && this.refs[SCROLL_VIEW].scrollTo({x:e.nativeEvent.contentOffset.x, y:0})
+							}
+						}}
 						onContentSizeChange={this.onContentSizeChange}
 						scrollEventThrottle={8} >
 						<View style={{width: width, height: imageHeight}}>

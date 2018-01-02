@@ -335,14 +335,22 @@ var WebViewPage = React.createClass({
 
 	renderNavBar: function() {
 		console.log("this.props.isShowNav" + this.props.isShowNav)
+		var themeColor = this.props.isLoadingColorSameAsTheme ? this.props.themeColor : ColorConstants.title_blue();
+		if(!themeColor){
+			themeColor = ColorConstants.title_blue();
+		}
 		if(!this.props.isShowNav && this.state.isLoaded){
-			return(
-				<NavBar onlyShowStatusBar={true}
-					backgroundColor={this.props.themeColor}/>
-			);
+			console.log("Platform.OS " + Platform.OS)
+			if(Platform.OS=="ios"){				
+				return (<View style={{height: 20, backgroundColor: themeColor}}/>);
+			}else{
+				return(
+					<NavBar onlyShowStatusBar={true}
+						backgroundColor={this.props.themeColor}/>
+				);	
+			}
 		}
 
-		var themeColor = this.props.isLoadingColorSameAsTheme ? this.props.themeColor : ColorConstants.title_blue();
 		if((this.props.shareID || this.props.shareUrl) && (this.props.shareTitle || this.props.shareDescription)){
 			return(
 			<NavBar title={this.props.title}

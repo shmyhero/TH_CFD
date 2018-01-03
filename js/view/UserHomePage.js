@@ -47,7 +47,7 @@ var CHART_TYPE_2MONTH = 0;
 var CHART_TYPE_ALL = 1;
 
 
-var tabNames = ['ZY','DT' ,'CC', 'PC']
+var tabNames = ['ZUYE','DT' ,'CC', 'PC']
 
 var emptyStar = '***'
 var btnBgColor = ['#425a85','#425a85','#425a85','#6f3d23','#55707c','#9a820e',]

@@ -35,7 +35,7 @@ var LS = {
     DQMJ:['当前买价','Current Price'],
     DQMJ2:['当前卖价','Current Price'],
     GYF_FH:['隔夜费+分红','Swaps+ Bonus'],
-    ZYZS:['止盈/止损','Take Profit / Stop loss'],
+    ZYZS:['止盈/止损','Profit / Loss'],
     KS:['亏损','Take loss'],
     HL:['获利','Take Profit'],
     YSZ:['已设置','setted'],
@@ -643,6 +643,7 @@ var LS = {
     TWEET_PUBLISH_PRODUCTS: ["产品", "Products"],
     TWEET_HINT: ["今天你怎么看？", "What's your opinion today?"],
 
+    CLOSED_NUMBERS: ["({1}笔)", "({1})"],
 
 
 

@@ -43,6 +43,7 @@ var rowHeight = 40;
 var fontSize = 16;
 var MAX_ValidationCodeCountdown = 60
 
+const SCROLL_VIEW = "scrollView"
 const TAB_LIVE = 1
 const TAB_SIMULATOR = 2
 var last_pressed_login = new Date().getTime();
@@ -799,7 +800,13 @@ var LoginPage = React.createClass({
 		return (
 			<View style={{flex:1}}>
 				<NavBar onlyShowStatusBar={true}/>
-				<ScrollView style={{flex:1}}>
+				<ScrollView style={{flex:1}}
+					ref={SCROLL_VIEW}
+					onScrollEndDrag={(e)=>{
+						if(e.nativeEvent.contentOffset.y < 0){
+							this.refs[SCROLL_VIEW] && this.refs[SCROLL_VIEW].scrollTo({x:e.nativeEvent.contentOffset.x, y:0})
+						}
+					}}>
 					<LinearGradient colors={gradientColors} style={[styles.wrapper, {height: this.state.height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER}]}>
 						{/* {this.renderTab()} */}
 						<View style={styles.tabContainer}>

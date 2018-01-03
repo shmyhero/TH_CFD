@@ -153,6 +153,10 @@ var NavBar = React.createClass({
 			// StatusBar.setBackgroundColor(bgColor);
 			return (<StatusBar barStyle="light-content" backgroundColor={bgColor}
 				translucent={translucent}/>)
+		}else{
+			return (
+				<StatusBar barStyle="light-content" backgroundColor={bgColor}
+					/>)
 		}
 	},
 

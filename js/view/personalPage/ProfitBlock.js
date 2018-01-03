@@ -179,7 +179,7 @@ export default class ProfitBlock extends Component {
                                     {topLine}
                                 </Text>
                                 <Text style={styles.textCount}>
-                                    ({rowData.count}笔)
+                                    {LS.str("CLOSED_NUMBERS").replace("{1}", rowData.count)}
                                 </Text>
                             </View>
 							<View style={{flexDirection: 'row', alignItems: 'center'}}>

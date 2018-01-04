@@ -24,7 +24,7 @@ RCT_EXPORT_MODULE();
 		[manager loadOwnStocksData:jsonData];
 	}
     else if([dataName isEqualToString:@"Lang"]){
-        if ([jsonData isEqualToString:@"cn"]) {
+        if ([jsonData isEqualToString:@"\"cn\""]) {
             [[NSUserDefaults standardUserDefaults] setObject:@"zh-Hans" forKey:@"appLanguage"];
         }
         else {

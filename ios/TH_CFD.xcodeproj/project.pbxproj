@@ -176,11 +176,12 @@
 		3D5C46C81C92B51000BF6FD3 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 3D5C46C71C92B51000BF6FD3 /* main.jsbundle */; };
 		3D61C5CB1C9909CB0037816A /* EditOwnStocksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */; };
 		3D61C5F11C9931810037816A /* EditOwnStockCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D61C5F01C9931810037816A /* EditOwnStockCell.swift */; };
-		3D61C5F31C9931A10037816A /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D61C5F21C9931A10037816A /* MainStoryboard.storyboard */; };
 		3D6A23E51C9AA93F00FF1306 /* NativeScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A23E41C9AA93F00FF1306 /* NativeScene.m */; };
 		3D6A24091C9AB90000FF1306 /* NativeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A24081C9AB90000FF1306 /* NativeData.m */; };
 		3D6A240B1C9ABDE900FF1306 /* StockDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */; };
 		3D6A24181C9C026200FF1306 /* SwiftExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A24171C9C026200FF1306 /* SwiftExtensions.swift */; };
+		3D9025211FFDD3B6004A94FF /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D9025231FFDD3B6004A94FF /* MainStoryboard.storyboard */; };
+		3D9025461FFDDCE3004A94FF /* NativeStrings.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3D9025481FFDDCE3004A94FF /* NativeStrings.strings */; };
 		3DB98C0F1CE1CF1A00DB3FA5 /* frontPage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3DB98C0E1CE1CF1A00DB3FA5 /* frontPage.jpg */; };
 		3DB9F24A1D64499800DC5C63 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DB9F2491D64499800DC5C63 /* libicucore.tbd */; };
 		3DB9F24C1D6449AA00DC5C63 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DB9F24B1D6449AA00DC5C63 /* AVFoundation.framework */; };
@@ -728,13 +729,16 @@
 		3D5C46C71C92B51000BF6FD3 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditOwnStocksViewController.swift; path = TH_CFD/EditOwnStocksViewController.swift; sourceTree = "<group>"; };
 		3D61C5F01C9931810037816A /* EditOwnStockCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditOwnStockCell.swift; path = TH_CFD/EditOwnStockCell.swift; sourceTree = "<group>"; };
-		3D61C5F21C9931A10037816A /* MainStoryboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MainStoryboard.storyboard; path = TH_CFD/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		3D6A23E31C9AA93F00FF1306 /* NativeScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NativeScene.h; path = TH_CFD/NativeScene.h; sourceTree = "<group>"; };
 		3D6A23E41C9AA93F00FF1306 /* NativeScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NativeScene.m; path = TH_CFD/NativeScene.m; sourceTree = "<group>"; };
 		3D6A24071C9AB90000FF1306 /* NativeData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NativeData.h; path = TH_CFD/NativeData.h; sourceTree = "<group>"; };
 		3D6A24081C9AB90000FF1306 /* NativeData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NativeData.m; path = TH_CFD/NativeData.m; sourceTree = "<group>"; };
 		3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StockDataManager.swift; path = TH_CFD/StockDataManager.swift; sourceTree = "<group>"; };
 		3D6A24171C9C026200FF1306 /* SwiftExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftExtensions.swift; path = TH_CFD/SwiftExtensions.swift; sourceTree = "<group>"; };
+		3D9025221FFDD3B6004A94FF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
+		3D9025411FFDD3BB004A94FF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/MainStoryboard.strings"; sourceTree = "<group>"; };
+		3D9025471FFDDCE3004A94FF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/NativeStrings.strings"; sourceTree = "<group>"; };
+		3D9025491FFDDCE5004A94FF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/NativeStrings.strings; sourceTree = "<group>"; };
 		3D915BAF1E77EDD200FE2408 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		3D9AAE8B1DB8B8030033CA98 /* TH_CFD.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = TH_CFD.entitlements; path = TH_CFD/TH_CFD.entitlements; sourceTree = "<group>"; };
 		3DB98C0E1CE1CF1A00DB3FA5 /* frontPage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = frontPage.jpg; path = ../images/frontPage.jpg; sourceTree = "<group>"; };
@@ -909,7 +913,8 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
-				3D61C5F21C9931A10037816A /* MainStoryboard.storyboard */,
+				3D9025231FFDD3B6004A94FF /* MainStoryboard.storyboard */,
+				3D9025481FFDDCE3004A94FF /* NativeStrings.strings */,
 			);
 			name = TH_CFD;
 			sourceTree = "<group>";
@@ -1931,6 +1936,8 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				Base,
+				"zh-Hans",
+				en,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
@@ -2235,7 +2242,8 @@
 				3DB98C0F1CE1CF1A00DB3FA5 /* frontPage.jpg in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				3D61C5F31C9931A10037816A /* MainStoryboard.storyboard in Resources */,
+				3D9025211FFDD3B6004A94FF /* MainStoryboard.storyboard in Resources */,
+				3D9025461FFDDCE3004A94FF /* NativeStrings.strings in Resources */,
 				3DD744771CCE18040021304F /* myhero.ttf in Resources */,
 				3D5C46C81C92B51000BF6FD3 /* main.jsbundle in Resources */,
 				3DDB311C1D868476009E1D01 /* coin.mp3 in Resources */,
@@ -2434,6 +2442,25 @@
 			);
 			name = LaunchScreen.xib;
 			path = TH_CFD;
+			sourceTree = "<group>";
+		};
+		3D9025231FFDD3B6004A94FF /* MainStoryboard.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3D9025221FFDD3B6004A94FF /* Base */,
+				3D9025411FFDD3BB004A94FF /* zh-Hans */,
+			);
+			name = MainStoryboard.storyboard;
+			path = TH_CFD;
+			sourceTree = "<group>";
+		};
+		3D9025481FFDDCE3004A94FF /* NativeStrings.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3D9025471FFDDCE3004A94FF /* zh-Hans */,
+				3D9025491FFDDCE5004A94FF /* en */,
+			);
+			name = NativeStrings.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

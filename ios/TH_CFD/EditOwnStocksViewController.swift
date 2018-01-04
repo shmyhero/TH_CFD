@@ -18,7 +18,11 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 	@IBOutlet weak var editTableView: UITableView!
 	@IBOutlet weak var allButton: UIButton!
 	@IBOutlet weak var deleteButton: UIButton!
-	
+    @IBOutlet weak var allLabel: UILabel!
+    @IBOutlet weak var remindLabel: UILabel!
+    @IBOutlet weak var topLabel: UILabel!
+    @IBOutlet weak var moveLabel: UILabel!
+    
 	@IBOutlet var headLabels: [UILabel]!
 	@IBOutlet weak var alertHeaderLabel: UILabel!
 	@IBOutlet weak var topLabelTrailConstraint: NSLayoutConstraint!
@@ -79,22 +83,28 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 	}
 	
 	func updateButtons() {
+        allLabel.text = THLocalized(key: "allLabel")
+        topLabel.text = THLocalized(key: "topLabel")
+        remindLabel.text = THLocalized(key: "remindLabel")
+        moveLabel.text = THLocalized(key: "moveLabel")
+        
 		let selectedRows = rawData.filter({ (stock) -> Bool in
 			stock.choose == true
 		})
 		allSelect = selectedRows.count == rawData.count
-		allButton.setTitle(allSelect ? "取消":"全部", for: UIControlState())
+		allButton.setTitle(allSelect ? THLocalized(key: "cancel"):THLocalized(key: "all"), for: UIControlState())
 		allButton.isEnabled = rawData.count > 0
 		allButton.backgroundColor = allButton.isEnabled ? _colorSet.bgColor : UIColor(hexInt: 0xe0e0e0)
 		
 		deleteButton.isEnabled = selectedRows.count > 0
+        let deleteText = THLocalized(key: "delete")
 		if deleteButton.isEnabled {
 			deleteButton.backgroundColor = UIColor(hexInt: 0xf1585c)
-			deleteButton.setTitle("删除(\(selectedRows.count))", for: UIControlState())
+			deleteButton.setTitle("\(deleteText)(\(selectedRows.count))", for: UIControlState())
 		}
 		else {
 			deleteButton.backgroundColor = UIColor(hexInt: 0xe0e0e0)
-			deleteButton.setTitle("删除", for: UIControlState())
+			deleteButton.setTitle(deleteText, for: UIControlState())
 		}
 	}
 	
@@ -130,7 +140,7 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 				}
 			}
 			self.editTableView.endUpdates()
-			self.noticeSuccess("已置顶")
+            self.noticeSuccess(self.THLocalized(key: "pin"))
 		}
 		
 		cell.selectCell { (selectStock) -> Void in
@@ -182,13 +192,13 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 	}
 	
 	@IBAction func didTapDeleteButton(_ sender: AnyObject) {
-		let refreshAlert = UIAlertController(title: "确认删除", message: "", preferredStyle: UIAlertControllerStyle.alert)
+		let refreshAlert = UIAlertController(title: THLocalized(key: "confirmDelete"), message: "", preferredStyle: UIAlertControllerStyle.alert)
 		
-		refreshAlert.addAction(UIAlertAction(title: "取消", style: .default, handler: { (action: UIAlertAction!) in
+		refreshAlert.addAction(UIAlertAction(title: THLocalized(key: "cancel"), style: .default, handler: { (action: UIAlertAction!) in
 			// do nothing
 		}))
 		
-		refreshAlert.addAction(UIAlertAction(title: "确定", style: .default, handler: { (action: UIAlertAction!) in
+		refreshAlert.addAction(UIAlertAction(title: THLocalized(key: "ok"), style: .default, handler: { (action: UIAlertAction!) in
 			self.deleteStocks()
 			self.updateButtons()
 		}))
@@ -228,4 +238,13 @@ class EditOwnStocksViewController: UIViewController, UITableViewDelegate, UITabl
 			self.editTableView.reloadData()
 		})
 	}
+    
+    func currentLanguage() -> String {
+        return UserDefaults.standard.value(forKey: "appLanguage") as! String
+    }
+    
+    func THLocalized(key:String) -> String {
+        let path = Bundle.main.path(forResource: currentLanguage(), ofType: "lproj")
+        return Bundle.init(path: path!)!.localizedString(forKey: key, value: nil, table: "NativeStrings")
+    }
 }

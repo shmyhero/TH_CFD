@@ -23,6 +23,14 @@ RCT_EXPORT_MODULE();
 	if([dataName isEqualToString:@"myList"]) {
 		[manager loadOwnStocksData:jsonData];
 	}
+    else if([dataName isEqualToString:@"Lang"]){
+        if ([jsonData isEqualToString:@"cn"]) {
+            [[NSUserDefaults standardUserDefaults] setObject:@"zh-Hans" forKey:@"appLanguage"];
+        }
+        else {
+            [[NSUserDefaults standardUserDefaults] setObject:@"en" forKey:@"appLanguage"];
+        }
+    }
 	else if([dataName isEqualToString:@"myAlertList"]) {
 		// depreciated
 		[manager loadOwnAlertData:jsonData];

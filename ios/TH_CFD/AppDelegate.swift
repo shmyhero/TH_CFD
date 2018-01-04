@@ -67,6 +67,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 				print("init meiqia completion:", clientId!)
 			}
 		})
+        
+        // setdefault language to chinese
+        if (!(UserDefaults.standard.object(forKey: "appLanguage") != nil)) {
+            UserDefaults.standard.set("zh-Hans", forKey: "appLanguage")
+        }
 		
 		// initialize the rootView to fetch JS from the dev server
 		let jsCodeLocation:URL?

@@ -1,0 +1,27 @@
+
+/* Class = "UILabel"; text = "拖动"; ObjectID = "53d-61-UGc"; */
+"53d-61-UGc.text" = "拖动";
+
+/* Class = "UILabel"; text = "全部产品"; ObjectID = "KCJ-vF-tJa"; */
+"KCJ-vF-tJa.text" = "全部产品";
+
+/* Class = "UILabel"; text = "Alphabet(谷歌)"; ObjectID = "QcP-IO-3zC"; */
+"QcP-IO-3zC.text" = "Alphabet(谷歌)";
+
+/* Class = "UILabel"; text = "提醒"; ObjectID = "Sbg-mV-MQL"; */
+"Sbg-mV-MQL.text" = "提醒";
+
+/* Class = "UILabel"; text = "US"; ObjectID = "TkX-2n-Hbe"; */
+"TkX-2n-Hbe.text" = "US";
+
+/* Class = "UIButton"; normalTitle = "删除"; ObjectID = "Xu9-Ut-wRa"; */
+"Xu9-Ut-wRa.normalTitle" = "删除";
+
+/* Class = "UIButton"; normalTitle = "全部"; ObjectID = "YtX-PF-eiI"; */
+"YtX-PF-eiI.normalTitle" = "全部";
+
+/* Class = "UILabel"; text = "置顶"; ObjectID = "dhq-GU-dFC"; */
+"dhq-GU-dFC.text" = "置顶";
+
+/* Class = "UILabel"; text = "code"; ObjectID = "gfz-EQ-g5m"; */
+"gfz-EQ-g5m.text" = "code";

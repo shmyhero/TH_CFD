@@ -22,7 +22,7 @@ var LogicData = require('../LogicData')
 var WebSocketModule = require('../module/WebSocketModule')
 var UIConstants = require('../UIConstants')
 var {height, width} = Dimensions.get('window')
-
+var LS = require('../LS')
 var UP_INPUT_REF = "upInput"
 var DOWN_INPUT_REF = "downInput"
 
@@ -300,7 +300,7 @@ var EditAlertPage = React.createClass({
 
 	renderAlertCell: function(type){
 		//type 1:做多， 2:做空
-		var title = type === 1 ? '做多价格高于':'做空价格低于'
+		var title = type === 1 ? LS.str('ZDJGGY'):LS.str('ZKJGDY')
 		var textColor = "black";
 		var text = null;
 		var inputEnable = false;
@@ -454,9 +454,9 @@ var EditAlertPage = React.createClass({
 	render: function() {
 		return (
 			<View style={styles.wrapper} ref="root">
-				<NavBar title='提醒设置'
+				<NavBar title={LS.str('TXSZ')}
 					showBackButton={true}
-					textOnRight='完成'
+					textOnRight={LS.str('FINISH')}
 					rightTextOnClick={this.onComplete}
 					enableRightText={!this.hasError() && this.state.isFinishButtonEnabled}
 					navigator={this.props.navigator}/>
@@ -465,7 +465,7 @@ var EditAlertPage = React.createClass({
 						{this.props.stockInfo.name}
 					</Text>
 					<Text style={styles.priceText}>
-						当前做多价格 {this.state.stockPriceAsk} 当前做空价格 {this.state.stockPriceBid}
+					{LS.str('DQZDJG')} {this.state.stockPriceAsk} {LS.str('DQZKJG')} {this.state.stockPriceBid}
 					</Text>
 				</View>
 				{this.renderSeparator(0)}
@@ -474,7 +474,7 @@ var EditAlertPage = React.createClass({
 				{this.renderAlertCell(2)}
 				{this.renderSeparator(0)}
 				<Text style={styles.bottomText}>
-					虽然全力以赴传递通知，却也不能保证。
+					{LS.str('REMINDER_TIPS')}
 				</Text>
 				{this.renderHighErrorHint()}
 				{this.renderLowErrorHint()}

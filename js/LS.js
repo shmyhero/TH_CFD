@@ -57,7 +57,14 @@ var LS = {
     SPKHSHZ:['实盘开户审核中','Firm account verification'],
     CXKH:['重新开户','Re-open an account'],
     JXKH:['继续开户','Continue to open an account'],
-
+    TXSZ:['提醒设置','Reminder Setting'],
+    DQZDJG:['当前做多价格','Long Pirces'],
+    DQZKJG:['当前做空价格','Short Pirces'],
+    REMINDER_TIPS:['虽然全力以赴传递通知，却也不能保证。','Although fully committed to pass the notice, but can not be guaranteed.'],
+    ZDJGGY:['做多价格高于','Long price more than'],
+    ZKJGDY:['做空价格低于','Short price less than'],
+    
+    
 
 
 

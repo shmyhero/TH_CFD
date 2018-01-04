@@ -201,7 +201,7 @@ var LS = {
     SELL:['卖出','SELL'],
 
     FS:['分时','Today'],
-    HOUR2:['2小时','2 Tours'],
+    HOUR2:['2小时','2 Hours'],
     DAY5:['5日','5 Days'],
     DAYK:['日K','Day'],
     MIN5:['5分钟','5 min'],

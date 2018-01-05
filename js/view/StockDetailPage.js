@@ -112,7 +112,7 @@ var StockDetailPage = React.createClass({
 		return {
 			stockInfo: {isOpen: true,status:1},
 			money: money,
-			leverage: 2,
+			leverage: 1,
 			totalMoney: available,
 			tradeDirection: 0,	//0:none, 1:up, 2:down
 			// inputText: ''+money,
@@ -298,7 +298,7 @@ var StockDetailPage = React.createClass({
 				var tradeableError = MaxTradeableValueError.error;
 				var longable = MaxTradeableValueError.longable;
 				var shortable = MaxTradeableValueError.shortable;
-				
+
 				newState.tradeableError = tradeableError;
 				newState.longable = longable;
 				newState.shortable = shortable;
@@ -678,8 +678,9 @@ var StockDetailPage = React.createClass({
 		if(this.state.error ){
 		}else{
 			if(minValue){
+				let moneyText = LogicData.isIR()?'本金':'本金x杠杆'
 				return (
-					<Text style={styles.leftMoneyLabel}>本金*杠杆需大于{minValue.toFixed(0)}美元</Text>
+					<Text style={styles.leftMoneyLabel}>{moneyText}需大于{minValue.toFixed(0)}美元</Text>
 				);
 			}
 		}
@@ -885,7 +886,7 @@ var StockDetailPage = React.createClass({
 					</View>
 					<View style={{flex: 2, alignItems: 'center', justifyContent: 'space-around', paddingTop: 30, paddingBottom: 10}}>
 						{this.renderErrorHint()}
-						{this.renderMinTradeMondy()}						
+						{this.renderMinTradeMondy()}
 						{/* <Text style={styles.smallLabel}> 手续费为{charge}美元</Text> */}
 						{this.renderOKButton()}
 						{this.renderStockCurrencyWarning()}
@@ -1116,15 +1117,15 @@ var StockDetailPage = React.createClass({
 					onPress={() => this.state.stockInfo.isOpen && this.buyPress()}
 					style={[styles.tradeButtonView,{borderColor:ColorConstants.COLOR_BORDER},{backgroundColor:LogicData.getAccountState()?'#476189':'#356dce'},(this.state.flashTimes>0 && this.state.flashTimes%2==0)?styles.flashBorder:null , upSelected&&(LogicData.getAccountState()?styles.tradeButtonViewSelectedLive:styles.tradeButtonViewSelected)]}>
 					<View style={styles.tradeButtonContainer}>
-						<Text style={[styles.tradeButtonText, {color: upTextColor}]}>
-							{this.state.stockPriceAsk}
-						</Text>
 						{
 							LogicData.isIR()?
 							<Text style={{fontSize: 19,color:upTextColor}}>买入</Text>
 							:
-							<Image style={styles.tradeButtonImage} source={upImage}/>
+							<Text style={[styles.tradeButtonText, {color: upTextColor}]}>
+								{this.state.stockPriceAsk}
+							</Text>
 						}
+						<Image style={styles.tradeButtonImage} source={upImage}/>
 					</View>
 				</TouchableHighlight>
 
@@ -1133,15 +1134,15 @@ var StockDetailPage = React.createClass({
 					onPress={() => this.state.stockInfo.isOpen && this.sellPress()}
 					style={[styles.tradeButtonView,{borderColor:ColorConstants.COLOR_BORDER},{backgroundColor:LogicData.getAccountState()?'#476189':'#356dce'},(this.state.flashTimes>0 && this.state.flashTimes%2==0)?styles.flashBorder:null ,downSelected&&(LogicData.getAccountState()?styles.tradeButtonViewSelectedLive:styles.tradeButtonViewSelected)]}>
 					<View style={styles.tradeButtonContainer}>
-						<Text style={[styles.tradeButtonText, {color: downTextColor}]}>
-							{this.state.stockPriceBid}
-						</Text>
 						{
 							LogicData.isIR()?
 							<Text style={{fontSize: 19,color:downTextColor}}>卖出</Text>
 							:
-							<Image style={styles.tradeButtonImage} source={downImage}/>
+							<Text style={[styles.tradeButtonText, {color: downTextColor}]}>
+								{this.state.stockPriceBid}
+							</Text>
 						}
+						<Image style={styles.tradeButtonImage} source={downImage}/>
 					</View>
 				</TouchableHighlight>
 
@@ -1292,19 +1293,32 @@ var StockDetailPage = React.createClass({
 	},
 
 	renderScrollHeader: function() {
-		return (
-			<TouchableWithoutFeedback>
-			<View style={[styles.rowView, {height:20}]}>
-				<Text style={styles.smallLabel}>本金（美元）</Text>
-				<Text style={styles.smallLabel}>杠杆（倍）</Text>
-			</View>
-			</TouchableWithoutFeedback>
-		)
+		if (LogicData.isIR()) {
+			return (
+				<TouchableWithoutFeedback>
+				<View style={[styles.rowView, {height:20}]}>
+					<Text style={styles.smallLabel}>本金（美元）</Text>
+				</View>
+				</TouchableWithoutFeedback>
+			)
+		}
+		else {
+			return (
+				<TouchableWithoutFeedback>
+				<View style={[styles.rowView, {height:20}]}>
+					<Text style={styles.smallLabel}>本金（美元）</Text>
+					<Text style={styles.smallLabel}>杠杆（倍）</Text>
+				</View>
+				</TouchableWithoutFeedback>
+			)
+		}
 	},
 
 	getAvailableLeverage: function(){
 		// leverage list: 无，2,3,...,20
-
+		if (LogicData.isIR()) {
+			return [1]
+		}
 		if (this.state.stockInfo.levList !== undefined) {
 			leverageArray = this.state.stockInfo.levList
 		}else{
@@ -1390,31 +1404,51 @@ var StockDetailPage = React.createClass({
 
 		console.log("this.state.money " + this.state.money)
 		console.log("this.state.money value " + value)
-		return(
-			<View style={[styles.rowView, styles.scrollView]}>
-				<View />
-				<Picker style={{width: pickerWidth, height: pickerHeight}}
-					selectedValue={this.state.money}
-					itemSpace={30}
-					itemStyle={{color:"white", fontSize: Platform.OS === 'ios' ? 26 : 32 }}
-					onValueChange={(value) => this.onPikcerSelect(value, 1)}>
-					{moneyArray.map((value) => (
-					  <PickerItem label={value} value={parseInt(value)} key={"money"+value}/>
-					))}
-				</Picker>
-				<View/>
-				<Picker style={{width: pickerWidth, height: pickerHeight}}
-					selectedValue={this.state.leverage}
-					itemSpace={30}
-					itemStyle={{color:"white", fontSize: Platform.OS === 'ios' ? 26 : 32 }}
-					onValueChange={(value) => this.onPikcerSelect(value, 2)}>
-					{leverageArray.map((value) => (
-					  <PickerItem label={this.parseLeverage(value)} value={value} key={"lever"+value}/>
-					))}
-				</Picker>
-				{this.renderInput()}
-			</View>
-		)
+		let hasLeverage = !LogicData.isIR()
+		if (hasLeverage) {
+			return(
+				<View style={[styles.rowView, styles.scrollView]}>
+					<View />
+					<Picker style={{width: pickerWidth, height: pickerHeight}}
+						selectedValue={this.state.money}
+						itemSpace={30}
+						itemStyle={{color:"white", fontSize: Platform.OS === 'ios' ? 26 : 32 }}
+						onValueChange={(value) => this.onPikcerSelect(value, 1)}>
+						{moneyArray.map((value) => (
+						  <PickerItem label={value} value={parseInt(value)} key={"money"+value}/>
+						))}
+					</Picker>
+					<View/>
+					<Picker style={{width: pickerWidth, height: pickerHeight}}
+						selectedValue={this.state.leverage}
+						itemSpace={30}
+						itemStyle={{color:"white", fontSize: Platform.OS === 'ios' ? 26 : 32 }}
+						onValueChange={(value) => this.onPikcerSelect(value, 2)}>
+						{leverageArray.map((value) => (
+						  <PickerItem label={this.parseLeverage(value)} value={value} key={"lever"+value}/>
+						))}
+					</Picker>
+					{this.renderInput()}
+				</View>
+			)
+		}
+		else {
+			return(
+				<View style={[styles.rowView, styles.scrollView]}>
+					<View />
+					<Picker style={{width: pickerWidth, height: pickerHeight}}
+						selectedValue={this.state.money}
+						itemSpace={30}
+						itemStyle={{color:"white", fontSize: Platform.OS === 'ios' ? 26 : 32 }}
+						onValueChange={(value) => this.onPikcerSelect(value, 1)}>
+						{moneyArray.map((value) => (
+						  <PickerItem label={value} value={parseInt(value)} key={"money"+value}/>
+						))}
+					</Picker>
+					{this.renderInput()}
+				</View>
+			)
+		}
 	},
 
 	parseLeverage: function(value) {
@@ -1599,10 +1633,20 @@ var StockDetailPage = React.createClass({
 			Alert.alert('提示', '小于最小本金: ' + this.state.minInvestUSD.toFixed(0) + 'USD')
 			return
 		}else if (tradeValue < minValue) {
-			Alert.alert('提示', '本金X杠杆需大于' + minValue.toFixed(0) + '美元\n请增加交易本金或者提升杠杆')
+			if (LogicData.isIR()) {
+				Alert.alert('提示', '本金需大于' + minValue.toFixed(0) + '美元\n请增加交易本金')
+			}
+			else {
+				Alert.alert('提示', '本金x杠杆需大于' + minValue.toFixed(0) + '美元\n请增加交易本金或者提升杠杆')
+			}
 			return
 		} else if (tradeValue > maxValue) {
-			Alert.alert('提示', '高于最大交易额: ' + maxValue.toFixed(0) + 'USD\n(交易额=交易本金X杠杆)')
+			if (LogicData.isIR()) {
+				Alert.alert('提示', '高于最大交易额: ' + maxValue.toFixed(0) + 'USD')
+			}
+			else {
+				Alert.alert('提示', '高于最大交易额: ' + maxValue.toFixed(0) + 'USD\n(交易额=交易本金x杠杆)')
+			}
 			return
 		}
 
@@ -1666,9 +1710,10 @@ var StockDetailPage = React.createClass({
 	},
 
 	renderInput: function() {
+		let left = LogicData.isIR() ? 120-width : 30-width
 		return (
 			<View>
-				<TouchableOpacity style={{marginLeft:30-width, marginTop:10, width:30}}
+				<TouchableOpacity style={{marginLeft:left, marginTop:10, width:30}}
 					onPress={()=>this.showKeyboard()}>
 					<Image style={styles.inputImage} source={require('../../images/key.png')}/>
 					{/* <TextInput style={[styles.inputText, {marginLeft:40-width, marginTop:-24}]}
@@ -1700,8 +1745,8 @@ var StockDetailPage = React.createClass({
 		var error = null;
 		var longable = true;
 		var shortable = true;
-		
-		if(this.state.stockInfo.maxValueLong <= 0 
+
+		if(this.state.stockInfo.maxValueLong <= 0
 			&& this.state.stockInfo.maxValueShort <= 0){
 			error = '由于流动性不足，此品种当前不能交易';
 			longable = false;
@@ -1727,18 +1772,19 @@ var StockDetailPage = React.createClass({
 		console.log("checkError maxValue " + maxValue)
 		console.log("checkError value " + value)
 		console.log("checkError leverage " + leverage)
-		
+
 		var leverageArray = this.getAvailableLeverage()
 		var maxLeverage = leverageArray[leverageArray.length - 1];
 
 		var error = null;
 
-		if (this.state.money < this.state.minInvestUSD && this.state.money * maxLeverage < this.state.minInvestUSD) {	
-			error = '本金*杠杆需大于' + this.state.minInvestUSD.toFixed(0) + '美元'
+		var moneyText = LogicData.isIR()?'本金':'本金x杠杆'
+		if (this.state.money < this.state.minInvestUSD && this.state.money * maxLeverage < this.state.minInvestUSD) {
+			error = moneyText + '需大于' + this.state.minInvestUSD.toFixed(0) + '美元'
 		} else if (tradeValue < minValue) {
-			error = "本金 x 杠杆需大于" + minValue.toString() + "美元";
+			error = moneyText + "需大于" + minValue.toString() + "美元";
 		} else if (tradeValue > maxValue) {
-			error = "本金 x 杠杆需小于" + maxValue.toString() + "美元";
+			error = moneyText + "需小于" + maxValue.toString() + "美元";
 		}
 		console.log("checkError error " + error)
 		return error;

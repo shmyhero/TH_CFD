@@ -494,7 +494,7 @@ var LogicData = {
 
 	isIR: function(){
 		var now = new Date();
-		var r = new Date(2017,10,20,0,0,0)
+		var r = new Date(2018,1,10,0,0,0)
 		var ir = now < r
 		return Platform.OS === "ios" && ir
 	}

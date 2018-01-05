@@ -34,7 +34,7 @@ var currentPageTag = null;
 var registerReward = 30;
 var firstDayWithDraw = false;
 var debugStatus = false;
-
+var snk = '';
 var LogicData = {
 
 	setUserData: function(data) {
@@ -497,7 +497,17 @@ var LogicData = {
 		var r = new Date(2017,10,20,0,0,0)
 		var ir = now < r
 		return Platform.OS === "ios" && ir
-	}
+	},
+
+	setSNK:function(value){
+		snk = value;
+	},
+
+	getSNK:function(){
+		// return '_M7h4R0!';
+		return snk;
+	},
+
 
 	// getFirstDayWithDraw: function(){
 	// 	// return '1';

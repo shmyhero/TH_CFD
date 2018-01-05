@@ -18,6 +18,7 @@ import com.igexin.sdk.PushConsts;
 //import com.tongdao.sdk.ui.TongDaoUiCore;
 import com.tradehero.cfd.RNNativeModules.NativeActions;
 import com.tradehero.cfd.RNNativeModules.NativeDataModule;
+import com.tradehero.cfd.views.chartDrawer.base.ChartDrawerConstants;
 
 import org.json.JSONObject;
 
@@ -140,6 +141,7 @@ public class GeTuiBroadcastReceiver extends BroadcastReceiver{
 
         ReactContext rnContext = ((MainApplication) application).getReactNativeHost().getReactInstanceManager().getCurrentReactContext();
         NativeDataModule.passDataToRN(rnContext, NativeActions.ACTION_PUSH_DIALOG, data);
+
     }
 
     private void createNotification(Application application, String data){

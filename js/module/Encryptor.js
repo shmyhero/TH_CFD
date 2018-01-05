@@ -5,12 +5,22 @@ var LogicData = require('../LogicData')
 
 export function DESEncrypt(data){
 
-  var userData = LogicData.getUserData();
-  if(userData.token == undefined){return}
+    var userData = LogicData.getUserData();
+    if(userData.token == undefined){return}
+  
+    var basicKey = userData.token.substr(0, 8);
+  
+    return encryptByDES(data, basicKey);
+  }
 
-  var basicKey = userData.token.substr(0, 8);
+export function DESLocalEncrypt(data){
 
-  return encryptByDES(data, basicKey);
+    var pwd = LogicData.getSNK()
+     
+    console.log('pwd  =' + pwd);
+    var basicKey = pwd.substr(0, 8); 
+  
+    return encryptByDES(data, basicKey);
 }
 
 function encryptByDES(message, key) {

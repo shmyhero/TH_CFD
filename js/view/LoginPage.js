@@ -156,8 +156,8 @@ var LoginPage = React.createClass({
 			getValidationCodeButtonEnabled: false,
 		});
 
-		NetworkModule.fetchTHUrl(
-			NetConstants.CFD_API.GET_PHONE_CODE_API + '?' + NetConstants.PARAMETER_PHONE + "=" + this.state.phoneNumber,
+		NetworkModule.fetchLocalEncryptedUrl(
+			NetConstants.CFD_API.GET_PHONE_VERIFY_CODE_API + '?' + NetConstants.PARAMETER_PHONE + "=" + this.state.phoneNumber,
 			{
 				method: 'POST',
 			},

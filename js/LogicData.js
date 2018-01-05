@@ -504,7 +504,6 @@ var LogicData = {
 	},
 
 	getSNK:function(){
-		// return '_M7h4R0!';
 		return snk;
 	},
 

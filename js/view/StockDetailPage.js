@@ -673,14 +673,13 @@ var StockDetailPage = React.createClass({
 	},
 
 	renderMinTradeMondy:function(){
-		var strZZJXDY = LS.str('ZZJXDY')
+		var strZZJXDY = LogicData.isIR() ? LS.str('ZZJXDY_IR') : LS.str('ZZJXDY')
 		var strMY = LS.str('MY')
 		var tradeValue = this.state.money * this.state.leverage
 		var minValue = this.state.tradeDirection === 1 ? this.state.stockInfo.minValueLong : this.state.stockInfo.minValueShort
 		if(this.state.error ){
 		}else{
 			if(minValue){
-				let moneyText = LogicData.isIR()?'本金':'本金x杠杆'
 				return (
 					<Text style={styles.leftMoneyLabel}>{strZZJXDY+minValue.toFixed(0)+strMY}</Text>
 					// <Text style={styles.leftMoneyLabel}>{moneyText}需大于{minValue.toFixed(0)}美元</Text>
@@ -1645,12 +1644,13 @@ var StockDetailPage = React.createClass({
 	},
 
 	okPress: function() {
+		let ir = LogicData.isIR()
 		var strTip = LS.str('TS')
 		var strMin = LS.str('TIP_MIN')
-		var strHigh = LS.str('TIP_HIGH')
+		var strHigh = ir ? LS.str('TIP_HIGH_IR') : LS.str('TIP_HIGH')
 		var strMax = LS.str('TIP_MAX')
-		var strMore = LS.str('TIP_MORE')
-		var strSum = LS.str('TIP_SUM')
+		var strMore = ir ? LS.str('TIP_MORE_IR') : LS.str('TIP_MORE')
+		var strSum = ir ? LS.str('TIP_SUM_IR') : LS.str('TIP_SUM')
 		var tradeValue = this.state.money * this.state.leverage
 		var minValue = this.state.tradeDirection === 1 ? this.state.stockInfo.minValueLong : this.state.stockInfo.minValueShort
 		var maxValue = this.state.tradeDirection === 1 ? this.state.stockInfo.maxValueLong : this.state.stockInfo.maxValueShort
@@ -1662,20 +1662,6 @@ var StockDetailPage = React.createClass({
 			return
 		} else if (tradeValue > maxValue) {
 			Alert.alert(strTip, strMax + maxValue.toFixed(0) + strSum)
-		// 	if (LogicData.isIR()) {
-		// 		Alert.alert('提示', '本金需大于' + minValue.toFixed(0) + '美元\n请增加交易本金')
-		// 	}
-		// 	else {
-		// 		Alert.alert('提示', '本金x杠杆需大于' + minValue.toFixed(0) + '美元\n请增加交易本金或者提升杠杆')
-		// 	}
-		// 	return
-		// } else if (tradeValue > maxValue) {
-		// 	if (LogicData.isIR()) {
-		// 		Alert.alert('提示', '高于最大交易额: ' + maxValue.toFixed(0) + 'USD')
-		// 	}
-		// 	else {
-		// 		Alert.alert('提示', '高于最大交易额: ' + maxValue.toFixed(0) + 'USD\n(交易额=交易本金x杠杆)')
-		// 	}
 			return
 		}
 
@@ -1812,8 +1798,8 @@ var StockDetailPage = React.createClass({
 		var error = null;
 
 		var strMY = LS.str('MY');
-		var strZZJXDY = LS.str('ZZJXDY')
-		var strZZJXXY = LS.str('ZZJXXY')
+		var strZZJXDY = LogicData.isIR() ? LS.str('ZZJXDY_IR') : LS.str('ZZJXDY')
+		var strZZJXXY = LogicData.isIR() ? LS.str('ZZJXXY_IR') : LS.str('ZZJXXY')
 
 		if (this.state.money < this.state.minInvestUSD && this.state.money * maxLeverage < this.state.minInvestUSD) {
 			error = strZZJXDY + this.state.minInvestUSD.toFixed(0) + strMY

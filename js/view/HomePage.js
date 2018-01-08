@@ -1043,6 +1043,9 @@ var HomePage = React.createClass({
 		if(LogicData.getAccountState()){
 			url = NetConstants.TRADEHERO_API.WEBVIEW_TOP_NEWS_PAGE_ACTUAL+firstNews.id
 		}
+		if(LogicData.getLanguageEn() == '1'){
+			url += 'language=en'
+		}
 		this.gotoWebviewPage(url,
 			LS.str('MRTT'),
 			false,
@@ -1065,6 +1068,9 @@ var HomePage = React.createClass({
 		var url = NetConstants.TRADEHERO_API.WEBVIEW_TOP_NEWS_PAGE+news.id
 		if(LogicData.getAccountState()){
 			url = NetConstants.TRADEHERO_API.WEBVIEW_TOP_NEWS_PAGE_ACTUAL+news.id
+		}
+		if(LogicData.getLanguageEn() == '1'){
+			url += 'language=en'
 		}
 		return(
 			<TouchableOpacity style={styles.newsContainer} onPress={() => this.tapTopNews(url)}>

@@ -439,11 +439,34 @@ export default class DepositPage extends Component{
 				)
 	}
 
+
+
 	requestPayConfirm(){
+		if(this.state.payMethodSelected == 0){
+			this.requestForAlipay()
+		}else if(this.state.payMethodSelected == 1){
+			this.requestForUnionPay()
+		}
+	}
+		
+
+	requestForAlipay(){
+		var userData = LogicData.getUserData() 
+		var alipayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-ping.html'+'?amount='+rmbValue+'&channel=alipay'+'&token='+userData.userId + '_' + userData.token;
+		this.props.navigator.push({
+		name: MainPage.PAYMENT_PAGE,
+		url: alipayUrl,
+		popToOutsidePage: this.props.popToOutsidePage,
+		title: '支付', 
+		});
+	}
+
+	requestForUnionPay(){
 		var userData = LogicData.getUserData()
 		// var url = NetConstants.CFD_API.GET_PAY_DEMO_TEST_ID + '?amount=' + inputValue
 		var url = NetConstants.CFD_API.GET_PAY_DEMO_TEST_FOCAL + '?amount=' + inputValue
 		console.log("requestPayConfirm url = " + url);
+		
 		NetworkModule.fetchTHUrl(
 				url,
 			{
@@ -461,7 +484,7 @@ export default class DepositPage extends Component{
 					 var alipayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-ping.html'+'?amount='+rmbValue+'&channel=alipay'+'&token='+userData.userId + '_' + userData.token;
 					//  var unionpayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-quick.html'+'?Amount='+rmbValue+appendVal
 					//  var unionpayUrl = 'https://cn.tradehero.mobi/test_form/test_form_Ayondo-adyen.html?'+appendVal
-				   var appendVal = '&Merchant='+responseJson.Merchant+'&Site='+responseJson.Site+'&Amount='+responseJson.Amount+'&Currency='+responseJson.Currency+'&TransRef='+responseJson.TransRef+'&Product='+responseJson.Product+'&PaymentType='+responseJson.PaymentType+'&AttemptMode='+responseJson.AttemptMode+'&TestTrans='+responseJson.TestTrans+'&email='+responseJson.customer_email+'&first_name='+responseJson.customer_first_name+'&last_name='+responseJson.customer_last_name+'&address1='+responseJson.customer_address1+'&city='+responseJson.customer_city+'&country='+responseJson.customer_country+'&id_type='+responseJson.customer_id_type+'&id_number='+responseJson.customer_id_number+'&lang='+responseJson.lang+'&Signature='+responseJson.Signature;
+				     var appendVal = '&Merchant='+responseJson.Merchant+'&Site='+responseJson.Site+'&Amount='+responseJson.Amount+'&Currency='+responseJson.Currency+'&TransRef='+responseJson.TransRef+'&Product='+responseJson.Product+'&PaymentType='+responseJson.PaymentType+'&AttemptMode='+responseJson.AttemptMode+'&TestTrans='+responseJson.TestTrans+'&email='+responseJson.customer_email+'&first_name='+responseJson.customer_first_name+'&last_name='+responseJson.customer_last_name+'&address1='+responseJson.customer_address1+'&city='+responseJson.customer_city+'&country='+responseJson.customer_country+'&id_type='+responseJson.customer_id_type+'&id_number='+responseJson.customer_id_number+'&lang='+responseJson.lang+'&Signature='+responseJson.Signature;
 					 var unionpayUrl = 'https://cn.tradehero.mobi/test_form/test_form_Ayondo-focal.html?'+appendVal
 					 var url = this.state.payMethodSelected == 0? alipayUrl:unionpayUrl;
 					 console.log('selected Url = ' + url);
@@ -480,8 +503,8 @@ export default class DepositPage extends Component{
 				 	});
 			 	},(result) => {
 				 Alert.alert(LS.str('WXTS'),LS.str('NETWORK_CHECK'));
-				})
-			}
+				}) 
+	}
 
 	go2Question(){
 		this.props.navigator.push({

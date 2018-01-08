@@ -35,6 +35,7 @@ import com.tendcloud.appcpa.TalkingDataAppCpa;
 import com.tradehero.cfd.RNNativeModules.NativeActions;
 import com.tradehero.cfd.RNNativeModules.NativeDataModule;
 import com.tradehero.cfd.talkingdata.TalkingDataModule;
+import com.tradehero.cfd.views.chartDrawer.base.ChartDrawerConstants;
 
 import java.util.HashMap;
 
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         mInstance = this;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        preferences.edit().putString("debug_http_host", "192.168.88.206:8081").apply();
+        preferences.edit().putString("debug_http_host", "192.168.20.147:8081").apply();
 
         super.onCreate(null);
 
@@ -135,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
                     jsonObject.put("width", widthDp);
                     ReactContext context = mReactInstanceManager.getCurrentReactContext();
                     if (context != null) {
+                        NativeDataModule.passDataToRN(mReactInstanceManager.getCurrentReactContext(), NativeActions.ACTION_SNK, ChartDrawerConstants.snk);
                         NativeDataModule.passDataToRN(mReactInstanceManager.getCurrentReactContext(),
                                 NativeActions.ACTION_GET_ANDROID_VISIBLE_SIZE, jsonObject.toString());
                     }

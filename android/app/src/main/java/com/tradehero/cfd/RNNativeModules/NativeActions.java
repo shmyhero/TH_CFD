@@ -7,6 +7,7 @@ package com.tradehero.cfd.RNNativeModules;
 public class NativeActions {
     public final static String ACTION_OPEN_URL = "openURL";
     public final static String ACTION_PUSH_DIALOG = "PushShowDialog";
+    public final static String ACTION_SNK = "local_snk";
     public final static String ACTION_SHOW_DETAIL = "PushShowDetail";
     public final static String ACTION_DEVICE_TOKEN = "deviceToken";
     public final static String ACTION_SET_IS_PRODUCT_SERVER = "isProductServer";

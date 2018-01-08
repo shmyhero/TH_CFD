@@ -112,7 +112,7 @@ var StockDetailPage = React.createClass({
 		return {
 			stockInfo: {isOpen: true,status:1},
 			money: money,
-			leverage: 2,
+			leverage: 1,
 			totalMoney: available,
 			tradeDirection: 0,	//0:none, 1:up, 2:down
 			// inputText: ''+money,
@@ -680,8 +680,10 @@ var StockDetailPage = React.createClass({
 		if(this.state.error ){
 		}else{
 			if(minValue){
+				let moneyText = LogicData.isIR()?'本金':'本金x杠杆'
 				return (
 					<Text style={styles.leftMoneyLabel}>{strZZJXDY+minValue.toFixed(0)+strMY}</Text>
+					// <Text style={styles.leftMoneyLabel}>{moneyText}需大于{minValue.toFixed(0)}美元</Text>
 				);
 			}
 		}
@@ -1124,15 +1126,15 @@ var StockDetailPage = React.createClass({
 					onPress={() => this.state.stockInfo.isOpen && this.buyPress()}
 					style={[styles.tradeButtonView,{borderColor:ColorConstants.COLOR_BORDER},{backgroundColor:LogicData.getAccountState()?'#476189':'#356dce'},(this.state.flashTimes>0 && this.state.flashTimes%2==0)?styles.flashBorder:null , upSelected&&(LogicData.getAccountState()?styles.tradeButtonViewSelectedLive:styles.tradeButtonViewSelected)]}>
 					<View style={styles.tradeButtonContainer}>
-						<Text style={[styles.tradeButtonText, {color: upTextColor}]}>
-							{this.state.stockPriceAsk}
-						</Text>
 						{
 							LogicData.isIR()?
 							<Text style={{fontSize: 19,color:upTextColor}}>{strBuy}</Text>
 							:
-							<Image style={styles.tradeButtonImage} source={upImage}/>
+							<Text style={[styles.tradeButtonText, {color: upTextColor}]}>
+								{this.state.stockPriceAsk}
+							</Text>
 						}
+						<Image style={styles.tradeButtonImage} source={upImage}/>
 					</View>
 				</TouchableHighlight>
 
@@ -1141,15 +1143,15 @@ var StockDetailPage = React.createClass({
 					onPress={() => this.state.stockInfo.isOpen && this.sellPress()}
 					style={[styles.tradeButtonView,{borderColor:ColorConstants.COLOR_BORDER},{backgroundColor:LogicData.getAccountState()?'#476189':'#356dce'},(this.state.flashTimes>0 && this.state.flashTimes%2==0)?styles.flashBorder:null ,downSelected&&(LogicData.getAccountState()?styles.tradeButtonViewSelectedLive:styles.tradeButtonViewSelected)]}>
 					<View style={styles.tradeButtonContainer}>
-						<Text style={[styles.tradeButtonText, {color: downTextColor}]}>
-							{this.state.stockPriceBid}
-						</Text>
 						{
 							LogicData.isIR()?
 							<Text style={{fontSize: 19,color:downTextColor}}>{strSell}</Text>
 							:
-							<Image style={styles.tradeButtonImage} source={downImage}/>
+							<Text style={[styles.tradeButtonText, {color: downTextColor}]}>
+								{this.state.stockPriceBid}
+							</Text>
 						}
+						<Image style={styles.tradeButtonImage} source={downImage}/>
 					</View>
 				</TouchableHighlight>
 
@@ -1304,21 +1306,35 @@ var StockDetailPage = React.createClass({
 	},
 
 	renderScrollHeader: function() {
+
 		var strBJ = LS.str('BENJIN')
 		var strGG = LS.str('GANGGAN')
-		return (
-			<TouchableWithoutFeedback>
-			<View style={[styles.rowView, {height:20}]}>
-				<Text style={styles.smallLabel}>{strBJ}</Text>
-				<Text style={styles.smallLabel}>{strGG}</Text>
-			</View>
-			</TouchableWithoutFeedback>
-		)
+		if (LogicData.isIR()) {
+			return (
+				<TouchableWithoutFeedback>
+				<View style={[styles.rowView, {height:20}]}>
+					<Text style={styles.smallLabel}>{strBJ}</Text>
+				</View>
+				</TouchableWithoutFeedback>
+			)
+		}
+		else {
+			return (
+				<TouchableWithoutFeedback>
+				<View style={[styles.rowView, {height:20}]}>
+					<Text style={styles.smallLabel}>{strBJ}</Text>
+					<Text style={styles.smallLabel}>{strGG}</Text>
+				</View>
+				</TouchableWithoutFeedback>
+			)
+		}
 	},
 
 	getAvailableLeverage: function(){
 		// leverage list: 无，2,3,...,20
-
+		if (LogicData.isIR()) {
+			return [1]
+		}
 		if (this.state.stockInfo.levList !== undefined) {
 			leverageArray = this.state.stockInfo.levList
 		}else{
@@ -1404,31 +1420,51 @@ var StockDetailPage = React.createClass({
 
 		console.log("this.state.money " + this.state.money)
 		console.log("this.state.money value " + value)
-		return(
-			<View style={[styles.rowView, styles.scrollView]}>
-				<View />
-				<Picker style={{width: pickerWidth, height: pickerHeight}}
-					selectedValue={this.state.money}
-					itemSpace={30}
-					itemStyle={{color:"white", fontSize: Platform.OS === 'ios' ? 26 : 32 }}
-					onValueChange={(value) => this.onPikcerSelect(value, 1)}>
-					{moneyArray.map((value) => (
-					  <PickerItem label={value} value={parseInt(value)} key={"money"+value}/>
-					))}
-				</Picker>
-				<View/>
-				<Picker style={{width: pickerWidth, height: pickerHeight}}
-					selectedValue={this.state.leverage}
-					itemSpace={30}
-					itemStyle={{color:"white", fontSize: Platform.OS === 'ios' ? 26 : 32 }}
-					onValueChange={(value) => this.onPikcerSelect(value, 2)}>
-					{leverageArray.map((value) => (
-					  <PickerItem label={this.parseLeverage(value)} value={value} key={"lever"+value}/>
-					))}
-				</Picker>
-				{this.renderInput()}
-			</View>
-		)
+		let hasLeverage = !LogicData.isIR()
+		if (hasLeverage) {
+			return(
+				<View style={[styles.rowView, styles.scrollView]}>
+					<View />
+					<Picker style={{width: pickerWidth, height: pickerHeight}}
+						selectedValue={this.state.money}
+						itemSpace={30}
+						itemStyle={{color:"white", fontSize: Platform.OS === 'ios' ? 26 : 32 }}
+						onValueChange={(value) => this.onPikcerSelect(value, 1)}>
+						{moneyArray.map((value) => (
+						  <PickerItem label={value} value={parseInt(value)} key={"money"+value}/>
+						))}
+					</Picker>
+					<View/>
+					<Picker style={{width: pickerWidth, height: pickerHeight}}
+						selectedValue={this.state.leverage}
+						itemSpace={30}
+						itemStyle={{color:"white", fontSize: Platform.OS === 'ios' ? 26 : 32 }}
+						onValueChange={(value) => this.onPikcerSelect(value, 2)}>
+						{leverageArray.map((value) => (
+						  <PickerItem label={this.parseLeverage(value)} value={value} key={"lever"+value}/>
+						))}
+					</Picker>
+					{this.renderInput()}
+				</View>
+			)
+		}
+		else {
+			return(
+				<View style={[styles.rowView, styles.scrollView]}>
+					<View />
+					<Picker style={{width: pickerWidth, height: pickerHeight}}
+						selectedValue={this.state.money}
+						itemSpace={30}
+						itemStyle={{color:"white", fontSize: Platform.OS === 'ios' ? 26 : 32 }}
+						onValueChange={(value) => this.onPikcerSelect(value, 1)}>
+						{moneyArray.map((value) => (
+						  <PickerItem label={value} value={parseInt(value)} key={"money"+value}/>
+						))}
+					</Picker>
+					{this.renderInput()}
+				</View>
+			)
+		}
 	},
 
 	parseLeverage: function(value) {
@@ -1626,6 +1662,20 @@ var StockDetailPage = React.createClass({
 			return
 		} else if (tradeValue > maxValue) {
 			Alert.alert(strTip, strMax + maxValue.toFixed(0) + strSum)
+		// 	if (LogicData.isIR()) {
+		// 		Alert.alert('提示', '本金需大于' + minValue.toFixed(0) + '美元\n请增加交易本金')
+		// 	}
+		// 	else {
+		// 		Alert.alert('提示', '本金x杠杆需大于' + minValue.toFixed(0) + '美元\n请增加交易本金或者提升杠杆')
+		// 	}
+		// 	return
+		// } else if (tradeValue > maxValue) {
+		// 	if (LogicData.isIR()) {
+		// 		Alert.alert('提示', '高于最大交易额: ' + maxValue.toFixed(0) + 'USD')
+		// 	}
+		// 	else {
+		// 		Alert.alert('提示', '高于最大交易额: ' + maxValue.toFixed(0) + 'USD\n(交易额=交易本金x杠杆)')
+		// 	}
 			return
 		}
 
@@ -1689,9 +1739,10 @@ var StockDetailPage = React.createClass({
 	},
 
 	renderInput: function() {
+		let left = LogicData.isIR() ? 120-width : 30-width
 		return (
 			<View>
-				<TouchableOpacity style={{marginLeft:30-width, marginTop:10, width:30}}
+				<TouchableOpacity style={{marginLeft:left, marginTop:10, width:30}}
 					onPress={()=>this.showKeyboard()}>
 					<Image style={styles.inputImage} source={require('../../images/key.png')}/>
 					{/* <TextInput style={[styles.inputText, {marginLeft:40-width, marginTop:-24}]}
@@ -1723,9 +1774,11 @@ var StockDetailPage = React.createClass({
 		var error = null;
 		var longable = true;
 		var shortable = true;
+
 		var strERROR_CLOSED = LS.str('ERROR_CLOSED')
 		var strERROR_CAN_SHORT = LS.str('ERROR_CAN_SHORT')
 		var strERROR_CAN_LONG = LS.str('ERROR_CAN_LONG')
+
 		if(this.state.stockInfo.maxValueLong <= 0
 			&& this.state.stockInfo.maxValueShort <= 0){
 			error = strERROR_CLOSED;
@@ -1768,6 +1821,7 @@ var StockDetailPage = React.createClass({
 			error = strZZJXDY + minValue.toString() + strMY;
 		} else if (tradeValue > maxValue) {
 			error = strZZJXXY + maxValue.toString() + strMY;
+
 		}
 		console.log("checkError error " + error)
 		return error;

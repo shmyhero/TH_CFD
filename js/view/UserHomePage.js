@@ -195,7 +195,7 @@ export default class UserHomePage extends Component {
 				console.log(responseJson);
 
 				let res = responseJson.showData == undefined ? true : (!responseJson.showData)
-				console.log("Rambo:::"+res);
+				// console.log("Rambo:::"+res);
 
 				this.setState({
 					id: responseJson.id,
@@ -518,7 +518,7 @@ export default class UserHomePage extends Component {
 	}
 
 	proceedCallback(result){
-		console.log("Rambo  llll ",result);
+		// console.log("Rambo  llll ",result);
 		if(result){
 			this.setState({
 				isPrivate: !this.state.isPrivate

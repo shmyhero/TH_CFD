@@ -188,6 +188,29 @@ export function fetchEncryptedUrl(url, params, successCallback, errorCallback, n
 		}, true);
 }
 
+export function fetchLocalEncryptedUrl(url, params, successCallback, errorCallback, notShowResponseLog){
+	 
+	fetchTHUrl(NetConstants.CFD_API.TIMESTAMP_LOCAL,
+		{
+			method: 'GET', 
+		},
+		(response)=>{
+			console.log("TIMESTAMP " + JSON.stringify(response));
+			var data = "" +response.timeStamp + response.nonce;
+			var encryptedData = Encryptor.DESLocalEncrypt(data);
+			console.log("encryptedData " + encryptedData)
+			if(!params.headers){
+				params.headers = {}
+			}
+			params.headers.signature = encryptedData;
+
+			fetchTHUrl(url, params, successCallback, errorCallback, true);
+
+		}, (result)=>{
+			errorCallback(result)
+		}, true);
+}
+
 export function syncOwnStocks(userData) {
   return new Promise((resolve, reject)=>{
 		var stockData = LogicData.getOwnStocksData()

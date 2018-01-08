@@ -34,8 +34,10 @@ var currentPageTag = null;
 var registerReward = 30;
 var firstDayWithDraw = false;
 var debugStatus = false;
+
 var languageEn = 0;//默认为中文,true则为英文
 
+var snk = '';
 var LogicData = {
 
 	setUserData: function(data) {
@@ -506,10 +508,19 @@ var LogicData = {
 
 	isIR: function(){
 		var now = new Date();
-		var r = new Date(2017,10,20,0,0,0)
+		var r = new Date(2018,1,10,0,0,0)
 		var ir = now < r
 		return Platform.OS === "ios" && ir
-	}
+	},
+
+	setSNK:function(value){
+		snk = value;
+	},
+
+	getSNK:function(){
+		return snk;
+	},
+
 
 	// getFirstDayWithDraw: function(){
 	// 	// return '1';

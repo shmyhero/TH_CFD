@@ -87,7 +87,7 @@ export default class HeaderLineDialog extends Component {
 
   callBack(result){
     if(this.props.proceedCallback){
-      console.log('Rambo set CallBack ' + result);
+      // console.log('Rambo set CallBack ' + result);
       this.props.proceedCallback(result);
     }
     this._setModalVisible(false)

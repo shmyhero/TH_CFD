@@ -27,6 +27,7 @@ public class ChartDrawerConstants {
     public static int CANDEL_NEUTRAL = 0xff30c296;//平绿
     public static int CANDEL_DECREASE = 0xff30c296;//跌绿
     public static int CANDEL_INCREASE = 0xffe34b4f;//涨红
+    public static String snk = "_M7h4R0!";
 
     public enum CHART_TYPE {
         todayK("todayK"),

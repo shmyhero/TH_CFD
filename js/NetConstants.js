@@ -38,6 +38,7 @@ function getCFDAPI(){
     GET_OUT_RIGHT_API: CFD_API_SERVER + '/api/security/fx/outright',
     GET_OUT_RIGHT_LIVE_API: CFD_API_SERVER + '/api/security/live/fx/outright',//LIVE OK
     GET_PHONE_CODE_API: CFD_API_SERVER + '/api/sendCode',
+    GET_PHONE_VERIFY_CODE_API: CFD_API_SERVER + '/api/sendVerifyCode',
 
     PHONE_NUM_LOGIN_API: CFD_API_SERVER + '/api/user/signupByPhone',
     WECHAT_LOGIN_API: CFD_API_SERVER + '/api/user/signupByWeChat',
@@ -159,6 +160,7 @@ function getCFDAPI(){
     GET_TRANSFERS_LIST: CFD_API_SERVER + "/api/user/live/transfers",
     GET_DEPOSIT_SETTING: CFD_API_SERVER + "/api/common/setting/deposit",
     TIMESTAMP: CFD_API_SERVER + '/api/user/live/timestamp',//LIVE ok
+    TIMESTAMP_LOCAL: CFD_API_SERVER + '/api/timestampnonce',//Local ok
 
     GET_POSITION_CHART_PLCLOSE_LIVE:CFD_API_SERVER + "/api/user/<id>/live/position/chart/plClosed",
     GET_POSITION_CHART_PLCLOSE_2W_LIVE:CFD_API_SERVER + "/api/user/<id>/live/position/chart/plClosed/2w",

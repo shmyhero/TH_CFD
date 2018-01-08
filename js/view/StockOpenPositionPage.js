@@ -748,7 +748,7 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	switchConfrim: function(rowData) {
-		console.log('Rambo: stopLossPercent switchConfrim = ' + stopLossPercent)
+		// console.log('Rambo: stopLossPercent switchConfrim = ' + stopLossPercent)
 		var currentStopProfitUpdated = stopProfitUpdated;
 		var currentStopLossUpdated = stopLossUpdated;
 		var currentStopLossPercent = stopLossPercent;
@@ -851,9 +851,9 @@ var StockOpenPositionPage = React.createClass({
 						console.log('live', url );
 					}
 					var price = this.percentToPriceWithRow(stopLossPercent, rowData, 2)
-					console.log("sendStopLoss rowData " + JSON.stringify(rowData));
-					console.log('Rambo: stopLossPercent = ' + stopLossPercent)
-					console.log('Rambo: price = ' + price)
+					// console.log("sendStopLoss rowData " + JSON.stringify(rowData));
+					// console.log('Rambo: stopLossPercent = ' + stopLossPercent)
+					// console.log('Rambo: price = ' + price)
 					if(!stopLossSwitchIsOn){
 						stopLossPercent=DEFAULT_PERCENT
 						price = this.percentToPriceWithRow(-100, rowData, 2)
@@ -865,7 +865,7 @@ var StockOpenPositionPage = React.createClass({
 							price = Math.floor(price * dcm)/dcm
 						}
 					}
-					console.log('Rambo: final price = ' + price)
+					// console.log('Rambo: final price = ' + price)
 					NetworkModule.fetchTHUrl(
 						url,
 						{
@@ -934,7 +934,7 @@ var StockOpenPositionPage = React.createClass({
 					console.log("StopProfitPrice " + price);
 					if (rowData.takeOID === undefined) {
 
-						console.log('Rambo: final price = ' + price)
+						// console.log('Rambo: final price = ' + price)
 						if (stopProfitSwitchIsOn) {
 							url = NetConstants.CFD_API.ADD_REMOVE_STOP_PROFIT_API
 							if(LogicData.getAccountState()){
@@ -1589,7 +1589,7 @@ var StockOpenPositionPage = React.createClass({
 
 	renderChart:function(){
 		var state = this.state.dataStatus;
-		console.log("RAMBO: chartType = " + this.state.chartType)
+		// console.log("RAMBO: chartType = " + this.state.chartType)
 		var opacity = state == 0? 1.0 : 0.01;
 		if(Platform.OS === 'ios'){
 			return(
@@ -1669,7 +1669,7 @@ var StockOpenPositionPage = React.createClass({
 		// }else{
 	  // this.loadStockPriceToday(false, this.state.chartType, this.state.stockInfo)
 		// }
-		console.log('Rambo stockId is '+_currentRowData.security.id);
+		// console.log('Rambo stockId is '+_currentRowData.security.id);
 		this.loadStockDetailInfo(this.state.chartType,_currentRowData.security.id)
 
 	},
@@ -1853,9 +1853,9 @@ var StockOpenPositionPage = React.createClass({
 	renderDetailInfo: function(rowData) {
 		var tradeImage = rowData.isLong ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
 		var lastPrice = this.getLastPrice(rowData)
-		console.log('RAMBO rowData.id = ' + rowData.security.id)
+		// console.log('RAMBO rowData.id = ' + rowData.security.id)
 		_currentRowData = rowData
-	  console.log('RAMBO _currentRowData.id = ' + _currentRowData.security.id)
+	//   console.log('RAMBO _currentRowData.id = ' + _currentRowData.security.id)
 		var newExtendHeight = this.currentExtendHeight(this.state.selectedSubItem)
 		var stopLossImage = LogicData.getAccountState()?require('../../images/check_actual.png'):require('../../images/check.png')
 		var stopLoss = this.priceToPercentWithRow(rowData.stopPx, rowData, 2) >= MAX_LOSS_PERCENT

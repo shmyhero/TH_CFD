@@ -39,6 +39,7 @@ RCT_EXPORT_MODULE();
 		if (delegate.getuiID) {
 			[self sendDataToRN:@"deviceToken" data: delegate.getuiID];
 		}
+        [self sendDataToRN:@"local_snk" data: @"_M7h4R0!"];
 		[[NotificationManager sharedInstance] showCurrentNotification];
 	}
 	else if([dataName isEqualToString:@"playSound"]) {

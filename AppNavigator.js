@@ -210,6 +210,25 @@ var AppNavigator = React.createClass({
 				console.log(result.errorMessage)
 			}
 		)
+		if (Platform.OS === "ios") {
+			NetworkModule.fetchTHUrl(
+				NetConstants.CFD_API.GET_PUBLISH_DATE,
+				{
+					method: 'GET',
+				},
+				(responseJson) =>{
+					 console.log(responseJson)
+					 let parts = responseJson.split('-')
+					 if (parts.length === 3) {
+						 let endDate = new Date(parseInt(parts[0]), parseInt(parts[1]-1), parseInt(parts[2]))
+						 LogicData.setPublishDate(endDate)
+					 }
+				},
+				(result) => {
+					console.log(result.errorMessage)
+				}
+			)
+		}
 
 		this.recevieDataSubscription = RCTNativeAppEventEmitter.addListener(
 			'nativeSendDataToRN',

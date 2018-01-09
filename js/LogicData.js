@@ -36,8 +36,10 @@ var firstDayWithDraw = false;
 var debugStatus = false;
 
 var languageEn = 0;//默认为中文,true则为英文
-
 var snk = '';
+var publishDate = null;
+
+
 var LogicData = {
 
 	setUserData: function(data) {
@@ -506,11 +508,37 @@ var LogicData = {
 		return debugStatus
 	},
 
+	setPublishDate: function(value){
+		publishDate = value
+		StorageModule.setPublishDate(JSON.stringify(value))
+	},
+
+	getPublishDate: function(){
+		// console.log('publish date:'+publishDate)
+		if (publishDate == null) {
+			StorageModule.loadPublishDate().then((value) => {
+				if (value !== null) {
+					publishDate = JSON.parse(value)
+				}
+				else {
+					publishDate = new Date(2018,0,16,0,0,0)
+				}
+			})
+			.done()
+		}
+		// console.log('publish date:'+publishDate)
+
+		return publishDate
+	},
+
 	isIR: function(){
+		if (Platform.OS !== "ios") {
+			return false
+		}
 		var now = new Date();
-		var r = new Date(2018,1,16,0,0,0)
+		var r = this.getPublishDate()
 		var ir = now < r
-		return Platform.OS === "ios" && ir
+		return ir
 	},
 
 	setSNK:function(value){

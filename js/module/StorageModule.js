@@ -29,6 +29,7 @@ var DEBUG_SETTINGS = '@TH_CFD:debugSettings'
 var LAST_ACTIVITY_DATA = '@TH_CFD:lastActivityData'
 var MIFID_TEST_VERIFIED = '@TH_CFD:MIFIDTestVerified'
 var LANGUAGE_EN = '@TH_CFD:language_en'
+var PUBLISH_DATE = '@TH_CFD:publish_date'
 
 export async function loadUserData() {
 	try {
@@ -498,6 +499,23 @@ export async function setLanguageEn(value){
 export async function loadLanguageEn(){
   try {
 		  var value = await AsyncStorage.getItem(LANGUAGE_EN);
+      return value;
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function setPublishDate(value){
+  try {
+		await AsyncStorage.setItem(PUBLISH_DATE, value);
+	} catch (error) {
+		console.log('AsyncStorage error: ' + error.message);
+	}
+}
+
+export async function loadPublishDate(){
+  try {
+		  var value = await AsyncStorage.getItem(PUBLISH_DATE);
       return value;
 	} catch (error) {
 		console.log('AsyncStorage error: ' + error.message);

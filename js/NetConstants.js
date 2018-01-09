@@ -192,6 +192,7 @@ function getCFDAPI(){
     GET_TREND_REWARD:CFD_API_SERVER + '/api/trend/reward/<trendId>',
     POST_USER_LANGUAGE:CFD_API_SERVER + '/api/user/language',
 
+    GET_PUBLISH_DATE: CFD_API_SERVER + '/api/IOSEffectDay',
   }
 }
 

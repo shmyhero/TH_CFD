@@ -1046,7 +1046,7 @@ var HomePage = React.createClass({
 		if(LogicData.getLanguageEn() == '1'){
 			url += '&language=en'
 		}
-		Alert.alert(url)
+		// Alert.alert(url)
 		this.gotoWebviewPage(url,
 			LS.str('MRTT'),
 			false,

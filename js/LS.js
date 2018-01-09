@@ -75,7 +75,7 @@ var LS = {
 
 
 
-    MRTT:['每日头条','TOP_NEWS'],
+    MRTT:['每日头条','TOP NEWS'],
 
 
 

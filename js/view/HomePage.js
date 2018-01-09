@@ -1044,8 +1044,9 @@ var HomePage = React.createClass({
 			url = NetConstants.TRADEHERO_API.WEBVIEW_TOP_NEWS_PAGE_ACTUAL+firstNews.id
 		}
 		if(LogicData.getLanguageEn() == '1'){
-			url += 'language=en'
+			url += '&language=en'
 		}
+		Alert.alert(url)
 		this.gotoWebviewPage(url,
 			LS.str('MRTT'),
 			false,
@@ -1070,8 +1071,9 @@ var HomePage = React.createClass({
 			url = NetConstants.TRADEHERO_API.WEBVIEW_TOP_NEWS_PAGE_ACTUAL+news.id
 		}
 		if(LogicData.getLanguageEn() == '1'){
-			url += 'language=en'
+			url += '&language=en'
 		}
+		// Alert.alert(url)
 		return(
 			<TouchableOpacity style={styles.newsContainer} onPress={() => this.tapTopNews(url)}>
 				<View style={[styles.bluePoint,{backgroundColor:ColorConstants.title_blue()}]}/>
@@ -1274,7 +1276,7 @@ var HomePage = React.createClass({
 		return(
 			<TouchableOpacity
 				activeOpacity={1}
-				onPress={()=>this.pressedNavBar()}
+				// onPress={()=>this.pressedNavBar()}
 				style={{position:'absolute', top:0, left: 0, right: width, width:width}}
 				>
 				<NavBar ref={NAV_BAR} title={this.state.connected ? strSY : strSYWLJ}

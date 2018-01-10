@@ -27,7 +27,7 @@ var StockTransactionInfoPage = require('./StockTransactionInfoPage');
 var NetworkModule = require('../module/NetworkModule');
 var NetConstants = require('../NetConstants');
 var Toast = require('./component/toast/Toast');
-
+var LS = require('../LS');
 var {height, width} = Dimensions.get('window');
 
 var StockTransactionInfoModal = React.createClass({

@@ -532,13 +532,14 @@ var LogicData = {
 	},
 
 	isIR: function(){
-		if (Platform.OS !== "ios") {
-			return false
-		}
-		var now = new Date();
-		var r = this.getPublishDate()
-		var ir = now < r
-		return ir
+		return false
+		// if (Platform.OS !== "ios") {
+		// 	return false
+		// }
+		// var now = new Date();
+		// var r = this.getPublishDate()
+		// var ir = now < r
+		// return ir
 	},
 
 	setSNK:function(value){

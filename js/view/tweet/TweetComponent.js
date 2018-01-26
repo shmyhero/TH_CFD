@@ -247,9 +247,9 @@ class TweetComponent extends Component {
                 }else{
                     //只比较较短的String末尾到selectionStart的部分。
                     for(var i = 0; i < Math.min(this.state.displayText.length, newTextValue.length) - newSelection.start; i++){
-                        if(newTextValue[newTextValue.length-i] != this.state.displayText[this.state.displayText.length-i]){
-                            newSelection.end = newTextValue.length-i+1;
-                            oldSelection.end = this.state.displayText.length-i+1;
+                        if(newTextValue[newTextValue.length-i-1] != this.state.displayText[this.state.displayText.length-i-1]){
+                            newSelection.end = newTextValue.length-i;
+                            oldSelection.end = this.state.displayText.length-i;
                             break;
                         }
                     }

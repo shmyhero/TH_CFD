@@ -759,8 +759,8 @@ var MainPage = React.createClass({
 
 	onLanguageChanged(){
 		this.refs["homepageBtn"].setLabel(LS.str('SHOUYE'));
-		this.refs["tradeBtn"].setLabel(LS.str('HANGQING'));
-		this.refs["trendBtn"].setLabel(LS.str('CANGWEI'));
+		this.refs["trendBtn"].setLabel(LS.str('HANGQING'));
+		this.refs["tradeBtn"].setLabel(LS.str('CANGWEI'));
 		if(!HIDE_RANKING_TAB){
 			this.refs["rankingBtn"] && this.refs["rankingBtn"].setLabel(LS.str('DAREN'));
 		}

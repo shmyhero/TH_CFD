@@ -122,7 +122,7 @@ var LS = {
     SYZJ:['剩余资金(美元)','Balance（$）'],
     BJ:['编辑','Edit'],
     HQWLJ:['行情（未连接）','Market DISCONNECT'],
-    ZX:['自选','MINE'],
+    ZX:['自选','WATCH LIST'],
     MG:['美股','US'],
     GG:['港股','HK'],
     ZS:['指数','INDEX'],
@@ -183,6 +183,7 @@ var LS = {
     TRADE_WARNING:['行情可能存在细微偏差','Data is for reference only'],
     ZTJY:['暂停交易','Stop'],
     ZTJY_CLOSED:['已停牌/休市,暂时不能进行交易','Closed'],
+    VIEW_KID:['查看关键信息文件', 'View Key Information Document'],
 
     WKS:['未开市','Closed'],
     TS:['提示','Tips'],

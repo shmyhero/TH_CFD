@@ -568,6 +568,33 @@ var StockDetailPage = React.createClass({
 		// this.loadStockPriceToday(true, type, this.state.stockInfo)
 	},
 
+	pressViewKID: function() {
+		var protocolUrl = NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "11")
+		this.gotoWebviewPage(protocolUrl, LS.str('OPEN_ACCOUNT_IMPORTANT_DOCUMENTS'),false);
+
+	},
+
+	gotoWebviewPage: function(targetUrl, title, hideNavBar) {
+		var userData = LogicData.getUserData()
+		var userId = userData.userId
+		if (userId == undefined) {
+			userId = 0
+		}
+
+		if (targetUrl.indexOf('?') !== -1) {
+			targetUrl = targetUrl + '&userId=' + userId
+		} else {
+			targetUrl = targetUrl + '?userId=' + userId
+		}
+
+		this.props.navigator.push({
+			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			url: targetUrl,
+			title: title,
+			isShowNav: hideNavBar ? false : true,
+		});
+	},
+
 	renderStockMaxPriceInfo: function(maxPrice, maxPercentage) {
 		if (maxPrice && maxPercentage)
 		{
@@ -867,6 +894,7 @@ var StockDetailPage = React.createClass({
 		var viewMargin = 0;//= Platform.OS === 'ios' ? 0:15
 		// console.log("render: " + JSON.stringify(this.state.stockInfo))
 		var strWarning = LS.str('TRADE_WARNING')
+		var strKID = LS.str('VIEW_KID')
 		return (
 			<View style={styles.wrapper, {width:width}}>
 				<LinearGradient colors={this.getGradientColor()} style={{height: Math.max(height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER, this.state.height)}}>
@@ -879,7 +907,15 @@ var StockDetailPage = React.createClass({
 						{this.renderChart()}
 						{this.renderDataStatus()}
 					</View>
-					<View>
+					<View style={{
+						alignSelf: 'stretch',
+						flexDirection: 'row',
+						justifyContent: 'space-between',
+						alignItems: 'center'}}>
+						<TouchableOpacity style={{width:width/2}}
+								onPress={() => this.pressViewKID()}>
+								<Text style={styles.viewKID}>{strKID}</Text>
+						</TouchableOpacity>
 						<Text style={styles.tipsLine}>{strWarning}</Text>
 					</View>
 					<View style={{flex: 1.2, justifyContent: 'space-around'}}>
@@ -2065,6 +2101,13 @@ var styles = StyleSheet.create({
 		borderColor:'white',
 		borderRadius:4,
 		borderWidth:1,
+	},
+	viewKID:{
+		fontSize:9,
+		color:'#a2c3fd',
+		marginLeft:10,
+		alignSelf:'center',
+		textDecorationLine:'underline',
 	},
 	tipsLine:{
 		fontSize:9,

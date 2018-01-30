@@ -138,6 +138,7 @@ var StockDetailPage = React.createClass({
 			minInvestUSD: 50,
 			longable: true,
 			shortable: true,
+			stockType: 'Stocks',
 		};
 	},
 
@@ -302,6 +303,7 @@ var StockDetailPage = React.createClass({
 				newState.tradeableError = tradeableError;
 				newState.longable = longable;
 				newState.shortable = shortable;
+				newState.stockType = responseJson.assetClass;
 
 				this.setState(newState)
 
@@ -569,24 +571,17 @@ var StockDetailPage = React.createClass({
 	},
 
 	pressViewKID: function() {
-		var protocolUrl = NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "11")
+		var stockType = this.state.stockType
+		if (stockType === 'Single Stocks') {
+			stockType = 'Stocks'
+		} else if (stockType === 'Stock Indices') {
+			stockType = 'Indices'
+		}
+		let protocolUrl = NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", stockType)
 		this.gotoWebviewPage(protocolUrl, LS.str('OPEN_ACCOUNT_IMPORTANT_DOCUMENTS'),false);
-
 	},
 
 	gotoWebviewPage: function(targetUrl, title, hideNavBar) {
-		var userData = LogicData.getUserData()
-		var userId = userData.userId
-		if (userId == undefined) {
-			userId = 0
-		}
-
-		if (targetUrl.indexOf('?') !== -1) {
-			targetUrl = targetUrl + '&userId=' + userId
-		} else {
-			targetUrl = targetUrl + '?userId=' + userId
-		}
-
 		this.props.navigator.push({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			url: targetUrl,
@@ -907,11 +902,7 @@ var StockDetailPage = React.createClass({
 						{this.renderChart()}
 						{this.renderDataStatus()}
 					</View>
-					<View style={{
-						alignSelf: 'stretch',
-						flexDirection: 'row',
-						justifyContent: 'space-between',
-						alignItems: 'center'}}>
+					<View style={{alignSelf: 'stretch', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
 						<TouchableOpacity style={{width:width/2}}
 								onPress={() => this.pressViewKID()}>
 								<Text style={styles.viewKID}>{strKID}</Text>

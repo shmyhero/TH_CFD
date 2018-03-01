@@ -28,6 +28,9 @@ export default class TradeStyleBlock extends Component {
       totalTradeCount: '--',
       averageOpenTime: '--',
       averageInvestUSD: '--',
+
+      avgPl:'--',
+      winRate:'--',
     }
   }
 
@@ -40,13 +43,17 @@ export default class TradeStyleBlock extends Component {
         totalTradeCount: "***",
         averageOpenTime: "***",
         averageInvestUSD: "***",
+        avgPl:'***',
+        winRate:'***',
       })
     }else{
       this.setState({
         averageLeverage: tradeStyle.avgLeverage,
         totalTradeCount: tradeStyle.orderCount,
         averageOpenTime: tradeStyle.avgHoldPeriod,
-        averageInvestUSD: tradeStyle.avgInvestUSD
+        averageInvestUSD: tradeStyle.avgInvestUSD,
+        avgPl:tradeStyle.avgPl.toFixed(2),
+        winRate:tradeStyle.winRate.toFixed(2)+'%',
       })
     }
   }
@@ -57,6 +64,8 @@ export default class TradeStyleBlock extends Component {
       totalTradeCount: '--',
       averageOpenTime: '--',
       averageInvestUSD: '--',
+      avgPl:'--',
+      winRate:'--',
     })
   }
 
@@ -67,35 +76,48 @@ export default class TradeStyleBlock extends Component {
     var strPJCCSJ = LS.str('PJCCSJ')
     var strPJBJ = LS.str('PJBJ')
 
+    var strZSL = LS.str('ZSL')
+    var strPJMBSY = LS.str('PJMBSY')
+    var add = this.state.avgPl >0? '+':'';
     return (
       <View style={[styles.container, this.props.style]}>
         <View style={styles.titleRow}>
           <Text style={styles.titleText}>{strJYFG}</Text>
         </View>
 				<View style={styles.separator}/>
-        <View style={styles.contentRow}>
-          <View style={styles.contentBlock}>
-            <Text style={styles.contentTitleBlock}>{strPJGG}</Text>
-            <Text style={styles.contentValueBlock}>{LogicData.isIR() ? 1 : this.state.averageLeverage}</Text>
+          <View style={styles.contentRow}>
+            <View style={styles.contentBlock}>
+              <Text style={styles.contentTitleBlock}>{strZSL}</Text>
+              <Text style={styles.contentValueBlock}>{this.state.winRate}</Text>
+            </View>
+            <View style={styles.verticalSeparator}/>
+            <View style={styles.contentBlock}>
+              <Text style={styles.contentTitleBlock}>{strPJMBSY}</Text>
+              <Text style={styles.contentValueBlock}>{add}{this.state.avgPl}</Text>
+            </View>
+            <View style={styles.verticalSeparator}/>
+            <View style={styles.contentBlock}>
+              <Text style={styles.contentTitleBlock}>{strLJXD}</Text>
+              <Text style={styles.contentValueBlock}>{this.state.totalTradeCount}</Text>
+            </View>
           </View>
-          <View style={styles.verticalSeparator}/>
-          <View style={styles.contentBlock}>
-            <Text style={styles.contentTitleBlock}>{strLJXD}</Text>
-            <Text style={styles.contentValueBlock}>{this.state.totalTradeCount}</Text>
-          </View>
-        </View>
         <View style={[styles.separator, {marginLeft: 15, marginRight: 15,}]}/>
-        <View style={styles.contentRow}>
-          <View style={styles.contentBlock}>
-            <Text style={styles.contentTitleBlock}>{strPJCCSJ}</Text>
-            <Text style={styles.contentValueBlock}>{this.state.averageOpenTime}</Text>
+          <View style={styles.contentRow}>
+            <View style={styles.contentBlock}>
+              <Text style={styles.contentTitleBlock}>{strPJCCSJ}</Text>
+              <Text style={styles.contentValueBlock}>{this.state.averageOpenTime}</Text>
+            </View>
+            <View style={styles.verticalSeparator}/>
+            <View style={styles.contentBlock}>
+              <Text style={styles.contentTitleBlock}>{strPJGG}</Text>
+              <Text style={styles.contentValueBlock}>{LogicData.isIR() ? 1 : this.state.averageLeverage}</Text>
+            </View>
+            <View style={styles.verticalSeparator}/>
+            <View style={styles.contentBlock}>
+              <Text style={styles.contentTitleBlock}>{strPJBJ}</Text>
+              <Text style={styles.contentValueBlock}>{this.state.averageInvestUSD}</Text>
+            </View>
           </View>
-          <View style={styles.verticalSeparator}/>
-          <View style={styles.contentBlock}>
-            <Text style={styles.contentTitleBlock}>{strPJBJ}</Text>
-            <Text style={styles.contentValueBlock}>{this.state.averageInvestUSD}</Text>
-          </View>
-        </View>
       </View>
     );
   }

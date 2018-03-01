@@ -166,6 +166,8 @@ export default class UserHomePageTab0 extends Component{
       orderCount:this.state.orderCount,
       avgHoldPeriod: this.state.avgHoldPeriod,
       avgInvestUSD: this.state.avgInvestUSD,
+      avgPl:this.state.avgPl,
+      winRate:this.state.winRate,
       isPrivate:this.props.isPrivate,
     }
 
@@ -486,8 +488,8 @@ export default class UserHomePageTab0 extends Component{
 	render(){
 		return(
       <ScrollView showsHorizontalScrollIndicator={false}>
-        {this.middleWarpperRender()}
-        <View style = {styles.separator}></View>
+        {/* {this.middleWarpperRender()} */}
+        {/* <View style = {styles.separator}></View> */}
         {this.bottomWarpperRender()}
         <View style = {styles.separator}></View>
         <ProfitBlock userId={this.props.userId}
@@ -495,8 +497,7 @@ export default class UserHomePageTab0 extends Component{
         					type="open"
         					ref={PROFIT_BLOCK}/>
         <View style = {styles.separator}></View>
-		<TradeStyleBlock userId={this.props.userId}
-					ref={TRADE_STYLE_BLOCK}/>
+		    <TradeStyleBlock userId={this.props.userId} ref={TRADE_STYLE_BLOCK}/>
         <View style = {styles.separator}></View>
         {this.props.isStatisticPage ? null : this.cardWarpperRender()}
         <View style = {styles.separator}></View>

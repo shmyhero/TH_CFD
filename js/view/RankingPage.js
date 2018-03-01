@@ -10,6 +10,7 @@ import {
   Dimensions,
   ListView,
   Alert,
+  ImageBackground,
   TouchableOpacity,
   TouchableHighlight
 } from 'react-native'
@@ -34,6 +35,10 @@ var RANKING_TYPE_0 = 0;
 var RANKING_TYPE_1 = 1;
 var emptyStar = '***'
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
+ 
+
+
 //
 // { roi: 0,
 //     posCount: 0,
@@ -50,12 +55,14 @@ export default class RankingPage extends Component{
             contentLoaded: false,
             isRefreshing: true,
             rankType: RANKING_TYPE_0,
+            rankSource:[],
             rankData: ds.cloneWithRows([]),
             rankDataFollowing:ds.cloneWithRows([]),
             noMessage: false,
         }
 
         this.onTabChanged = this.onTabChanged.bind(this);
+ 
     }
 
 	componentDidMount(){
@@ -68,14 +75,18 @@ export default class RankingPage extends Component{
     }
 
     renderTopSticker(){
-      var strSL = LS.str('SL')
-      var strLZSYL = LS.str('LZSYL')
-        return(
-          <View style={styles.topSticker}>
-            <Text style={styles.fontTopSticker}>{strSL}</Text>
-            <Text style={styles.fontTopSticker}>{strLZSYL}</Text>
-          </View>
-        );
+      if(this.state.rankType == RANKING_TYPE_0){
+        return null
+      }else{
+        var strSL = LS.str('GZR')
+        var strLZSYL = LS.str('LZSYL')
+          return(
+            <View style={styles.topSticker}>
+              <Text style={styles.fontTopSticker}>{strSL}</Text>
+              <Text style={styles.fontTopSticker}>{strLZSYL}</Text>
+            </View>
+          );
+      } 
     }
 
   _onRankTypeSelected(rankSelected){
@@ -137,10 +148,12 @@ export default class RankingPage extends Component{
 			  console.log(responseJson);
               if(this.isRankingType0()){
                 this.setState({
+                    rankSource:responseJson,
                     rankData:ds.cloneWithRows(responseJson),
                     contentLoaded: true,
                     isRefreshing: false,
-                },()=>this.refs['listview'].scrollTo({x:0,y:0,animated:false}))
+                })
+                //,/*()=>this.refs['listview'].scrollTo({x:0,y:0,animated:false})*/
               }else{
                 var noMessage = responseJson.length == 0;
                 this.setState({
@@ -185,8 +198,8 @@ export default class RankingPage extends Component{
 
     var colorBgSelected = '#6485c2'
     var colorTextUnSelected = '#6485c2'
-    var strDR = LS.str('DAREN')
-    var strGZ = LS.str('GZ')
+    var strDR = LS.str('TWOWEEKS')
+    var strGZ = LS.str('GUAZZHUDE')
     return(
       <View style={[styles.container,  this.props.barStyle]} >
         <View style = {styles.headerContainer}>
@@ -253,15 +266,15 @@ export default class RankingPage extends Component{
                   <Text style={[styles.userName]}>{rowData.nickname}</Text>
                   <View style = {styles.userInfo}>
                     <Text style={styles.userInfoTitle}>{strSL}</Text>
-                    <Text style={styles.userWinRate}>{winRateShow}%</Text>
-                    <Text style={[styles.userInfoTitle,{marginLeft:10}]}>{strPCBS}</Text>
-                    <Text style={styles.userWinRate}>{posCountShow}</Text>
+                    <Text style={styles.userWinRate}>{winRateShow.replace('.00','')}%</Text>
+                    {/* <Text style={[styles.userInfoTitle,{marginLeft:10}]}>{strPCBS}</Text>
+                    <Text style={styles.userWinRate}>{posCountShow}</Text> */}
                   </View>
                 </View>
               </View>
               <View>
-                <View style = {[styles.rateArea,{backgroundColor:roi<0?ColorConstants.STOCK_DOWN_GREEN:'#c24a17'}]}>
-                  <Text style = {styles.rateText}>{roi}%</Text>
+                <View style = {[styles.rateArea]}>
+                  <Text style = {[styles.rateText,{color:roi<0?ColorConstants.STOCK_DOWN_GREEN:'#c24a17'}]}>{roi}%</Text>
                 </View>
               </View>
             </View>
@@ -301,29 +314,177 @@ export default class RankingPage extends Component{
     }
   }
 
+  renderMe(){ 
+    return(
+        <TouchableOpacity onPress={()=>this._onPressedUserItem(this.state.rankSource[0])}>
+            <Image style={{width:width-20,height:69,marginTop:5, alignSelf:'center', alignItems:'center',justifyContent:'space-between',flexDirection:'row'}} source={require('../../images/rank_bg_me.png')}>
+                <View style={{flexDirection:'row',alignItems:'center'}}>
+                    <Image style={{height:34,width:34,borderRadius:17,marginLeft:28,marginBottom:5}} source={{uri:this.state.rankSource[0].picUrl}}></Image>
+                    <View style={{marginLeft:10}}>
+                        <Text style={{backgroundColor:'transparent',fontSize:15,color:'white'}}>我的</Text>
+                        <View style={{flexDirection:'row',marginBottom:5,alignItems:'center'}}>
+                            <Text style={{backgroundColor:'transparent',fontSize:12,color:'#6e90cc'}}>胜率：</Text>
+                            <Text style={{backgroundColor:'transparent',fontSize:16,color:'#d8effc'}}>{(this.state.rankSource[0].winRate*100).toFixed(2).replace('.00','')}%</Text>
+                        </View>
+                    </View>
+                </View>     
+                <View style={{marginRight:30}}>
+                    <Text style={{backgroundColor:'transparent',color:'white',fontSize:17}}>+{(this.state.rankSource[0].roi*100).toFixed(2)}%</Text>
+                </View> 
+            </Image>
+        </TouchableOpacity>
+    )
+}
+
+renderThreeHero(){
+
+    // var rate = width/345*0.75;
+
+    var headRank2 = LogicData.getRankHead(this.state.rankSource[2].rank);
+    var headRank1 = LogicData.getRankHead(this.state.rankSource[1].rank);
+    var headRank3 = LogicData.getRankHead(this.state.rankSource[3].rank);
+    var bgWidth = (width-30)/3;
+    var bgHeight = bgWidth*99/115;
+    var bgHeightLR = bgHeight*0.85;
+
+    return(
+        <View>
+            <View style={styles.containerAll}>
+                <TouchableOpacity activeOpacity={0.90} style={{flex:1}} onPress={()=>this._onPressedUserItem(this.state.rankSource[2])}>
+                    <View style={{alignItems:'center'}}>
+                      <Image style={styles.headPortrait} source={{uri:this.state.rankSource[2].picUrl}}></Image>
+                      <Image style = {[styles.userHeaderIconRoundBig]} source={headRank2}></Image>
+                    </View>  
+                    <Text style={styles.textTopUserName}>{this.state.rankSource[2].nickname}</Text>
+                    <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+                        <Text style={styles.textWinRate}>胜率: </Text>
+                        <Text style={styles.textTopUserScore}>{(this.state.rankSource[2].winRate*100).toFixed(2).replace('.00','')}%</Text>
+                    </View>    
+                    <Image style={{height:bgHeightLR,width:bgWidth,marginBottom:-5,justifyContent:'center',alignItems:'center'}} source={require('../../images/rank_bg_ag.png')}>
+                        <Text style={styles.textProfit}>+{(this.state.rankSource[2].roi*100).toFixed(2)}%</Text>
+                    </Image>  
+                </TouchableOpacity>
+
+                <TouchableOpacity activeOpacity={0.90} style={{flex:1}} onPress={()=>this._onPressedUserItem(this.state.rankSource[1])}>
+                    <View style={{alignItems:'center'}}>
+                      <Image style={styles.headPortrait} source={{uri:this.state.rankSource[1].picUrl}}></Image>
+                      <Image style = {[styles.userHeaderIconRoundBig]} source={headRank1}></Image>
+                    </View>
+                    <Text style={styles.textTopUserName}>{this.state.rankSource[1].nickname}</Text>
+                    <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+                        <Text style={styles.textWinRate}>胜率: </Text>
+                        <Text style={styles.textTopUserScore}>{(this.state.rankSource[1].winRate*100).toFixed(2).replace('.00','')}%</Text>
+                    </View>    
+                    <Image style={{height:bgHeight ,width:bgWidth,marginBottom:-5,justifyContent:'center',alignItems:'center'}} source={require('../../images/rank_bg_gd.png')}>
+                        <Text style={styles.textProfit}>+{(this.state.rankSource[1].roi*100).toFixed(2)}%</Text>
+                    </Image>  
+                </TouchableOpacity>
+
+                <TouchableOpacity activeOpacity={0.90} style={{flex:1}} onPress={()=>this._onPressedUserItem(this.state.rankSource[3])}>
+                    <View style={{alignItems:'center'}}>
+                      <Image style={styles.headPortrait} source={{uri:this.state.rankSource[3].picUrl}}></Image>
+                      <Image style = {[styles.userHeaderIconRoundBig]} source={headRank3}></Image>
+                    </View>
+                    <Text style={styles.textTopUserName}>{this.state.rankSource[3].nickname}</Text>
+                    <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+                        <Text style={styles.textWinRate}>胜率: </Text>
+                        <Text style={styles.textTopUserScore}>{(this.state.rankSource[3].winRate*100).toFixed(2).replace('.00','')}%</Text>
+                    </View>    
+                    <Image style={{height:bgHeightLR ,width:bgWidth,marginBottom:-5,justifyContent:'center',alignItems:'center'}} source={require('../../images/rank_bg_cu.png')}>
+                        <Text style={styles.textProfit}>+{(this.state.rankSource[3].roi*100).toFixed(2)}%</Text>
+                    </Image>  
+                </TouchableOpacity> 
+            </View>
+        </View>
+    )
+}
+
+
+_renderRow2 = (rowData, sectionID, rowID) => {
+    var rate = (rowData.winRate*100).toFixed(2) 
+    var roi = (rowData.roi*100).toFixed(2)
+    var head = (rowData.picUrl)
+    var headRank = LogicData.getRankHead(rowData.rank); 
+    if(head){
+      head = {uri:head}
+    }else{
+      head = require('../../images/head_portrait.png')
+    }
+
+    var winRateShow = (rowData.showData)?rate:emptyStar;
+    if(rowID>=4){
+        return( 
+            <TouchableOpacity onPress={()=>this._onPressedUserItem(rowData)} style={{height:68,width:width,alignItems:'center',justifyContent:'space-between',flexDirection:'row'}}>
+                <View style={{flexDirection:'row',alignItems:'center'}}>
+                    <View style={{'paddingTop':5}}>
+                      <Image style={{height:32,width:32,marginLeft:28,borderRadius:16}} source={head}></Image>
+                      <Image style = {[styles.userHeaderIconRound,{marginLeft:14}]} source={headRank}></Image>
+                    </View>
+                    <View style={{marginLeft:10,paddingTop:10}}>
+                        <Text style={{fontSize:15,color:'#454545'}}>{rowData.nickname}</Text>
+                        <View style={{flexDirection:'row',marginBottom:5,alignItems:'center',justifyContent:'center'}}>
+                            <Text style={{fontSize:12, color:'#999999'}}>胜率：</Text>
+                            <Text style={{fontSize:14, color:'#666666'}}>{winRateShow.replace('.00','')}%</Text>
+                        </View>
+                    </View>
+                </View>
+                <View style={{marginRight:30}}>
+                    <Text style={{fontSize:17, color:'#ca3538'}}>+{roi}%</Text>
+                </View> 
+            </TouchableOpacity>
+        )
+    }else{
+        return null
+    }
+    
+} 
+
+renderListAll(){
+    return(
+        <View style={{flex:1,width:width,backgroundColor:'white',marginBottom:20}}>
+            <ListView
+                ref="listview"
+                dataSource={this.state.rankData}
+                renderRow={this._renderRow2}
+                enableEmptySections={true}
+                removeClippedSubviews={false}
+                renderFooter={this.renderFooter}
+            />
+        </View>
+    )
+}
+ 
+
   renderListView(){
-    if(!this.state.contentLoaded){
+    if(!this.state.contentLoaded){ 
 			return (
 				<NetworkErrorIndicator onRefresh={()=>this.refreshData(true)} ref={NETWORK_ERROR_INDICATOR} refreshing={this.state.isRefreshing}/>
 			)
-	}else{
+	  }else{
       if(this.isRankingType0()){
         return (
-            <ListView
-            style={styles.list}
-            ref="listview"
-            initialListSize={11}
-            dataSource={this.state.rankData}
-            enableEmptySections={true}
-            renderFooter={this.renderFooter}
-            renderRow={this._renderRow.bind(this)}
-            renderSeparator={this.renderSeparator}
-            removeClippedSubviews={false}/>
+          // <ListView
+          // style={styles.list}
+          // ref="listview"
+          // initialListSize={11}
+          // dataSource={this.state.rankData}
+          // enableEmptySections={true}
+          // renderFooter={this.renderFooter}
+          // renderRow={this._renderRow.bind(this)}
+          // renderSeparator={this.renderSeparator}
+          // removeClippedSubviews={false}/>
+
+          <View style={{flex:1,backgroundColor:'#425a85'}}> 
+                 {this.renderMe()}
+                 {this.renderThreeHero()}
+                 {this.renderListAll()}
+                  
+          </View>
         )
-      }else{
+      }else{ 
         return(
-          <View>
-              {this.renderEmptyView()}
+          <View style={{flex:1}}>
+              {this.renderEmptyView()} 
               <ListView
                 style={styles.list}
                 ref="listview2"
@@ -332,8 +493,8 @@ export default class RankingPage extends Component{
                 enableEmptySections={true}
                 renderFooter={this.renderFooter}
                 renderRow={this._renderRow.bind(this)}
-                renderSeparator={this.renderSeparator}
-                removeClippedSubviews={false}/>
+                renderSeparator={this.renderSeparator} 
+                removeClippedSubviews={false}/> 
           </View>
         )
       }
@@ -467,6 +628,7 @@ const styles = StyleSheet.create({
     marginLeft:-6.5,
     position:'absolute'
   },
+  
   rateArea:{
     width:80,
     height:30,
@@ -503,6 +665,54 @@ const styles = StyleSheet.create({
     alignItems:'center',
     justifyContent:'center',
   },
+ 
+    containerAll:{
+        flexDirection:'row',
+        justifyContent:'center',
+        alignItems:'flex-end', 
+        height:218,
+        width:width,
+        paddingLeft:20,
+        paddingRight:20,
+    },
+
+    headPortrait:{
+        width:48,
+        height:48, 
+        marginTop:15,
+        marginBottom:15,
+        borderRadius:24,
+    },
+
+    userHeaderIconRoundBig:{
+      width:96,
+      height:96,
+      marginTop:-96+15/2, 
+      // position:'absolute'
+    },
+
+
+    textTopUserName:{
+        alignSelf:'center',
+        marginTop:5,
+        color:'white',
+        fontSize:12,
+    },
+    textTopUserScore:{
+        alignSelf:'center',
+        marginBottom:2,
+        color:'#d8effc',
+        fontSize:13,
+    },
+    textProfit:{
+        color:'#ffffff',
+        fontSize:15,
+        backgroundColor:'transparent'
+    },
+    textWinRate:{
+        fontSize:12,
+        color:'#6e90cc',
+    }
 
 });
 

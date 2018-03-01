@@ -223,6 +223,14 @@ export default class UserHomePage extends Component {
 		)
 	}
 
+	_onPressedAskForRank() {
+		this.props.navigator.push({
+			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+			url: NetConstants.TRADEHERO_API.WEBVIEW_TRADE_LEVEL,
+			isShowNav: false,
+		});
+	}
+
 	topWarpperRender() {
 		// console.log("this.state.rank = "+this.state.rank);
 		var head = (this.state.picUrl)
@@ -243,6 +251,13 @@ export default class UserHomePage extends Component {
 		var strGZS = LS.str('GZS')
 		var strKPS = LS.str('KPS')
 
+		var viewDessciption = (
+			<TouchableOpacity onPress={()=>this._onPressedAskForRank()} style={{borderBottomWidth:1,borderBottomColor:'#a3aec4',marginBottom:-30,marginTop:30}}>
+				<Text style={{color:'#e5edfa',fontSize:12}}>{this.state.rankDescription}</Text>
+			</TouchableOpacity>
+		)
+		var rankDescriptionView = headRank==undefined?null:viewDessciption
+
 		return(
 
 			<View>
@@ -258,6 +273,7 @@ export default class UserHomePage extends Component {
 							<View style={{marginTop:32}}></View>
 							<Image style = {styles.userHeaderIcon} source={head}></Image>
 							<Image style = {styles.userHeaderIconRound} source={headRank}></Image>
+							{rankDescriptionView} 
 					</View>
 
 					<View style = {[styles.topOneOfThree,privateStyle]}>

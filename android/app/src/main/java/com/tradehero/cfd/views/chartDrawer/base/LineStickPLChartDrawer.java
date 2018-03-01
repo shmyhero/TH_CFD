@@ -11,7 +11,10 @@ import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.FillFormatter;
 import com.github.mikephil.charting.formatter.YAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.Utils;
 import com.tradehero.cfd.MainActivity;
 import com.tradehero.cfd.StringUtils;
@@ -104,7 +107,6 @@ public abstract class LineStickPLChartDrawer extends BaseChartDrawer {
         minVal -= (maxVal - minVal) / 5;
         maxVal += (maxVal - minVal) / 5;
 
-
 //        int[] circleColors = {Color.TRANSPARENT};
 //        if (yVals.size() > 0) {
 //            circleColors = new int[yVals.size()];
@@ -139,6 +141,13 @@ public abstract class LineStickPLChartDrawer extends BaseChartDrawer {
 
         set1.setFillDrawable(drawable);
         set1.setDrawFilled(true);
+
+        set1.setFillFormatter(new FillFormatter() {
+            @Override
+            public float getFillLinePosition(ILineDataSet dataSet, LineDataProvider dataProvider) {
+                return minVal;
+            }
+        });
 
         LineData d = new LineData();
         d.addDataSet(set1);

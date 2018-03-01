@@ -105,7 +105,7 @@ public abstract class LineStickPLChartDrawer extends BaseChartDrawer {
         maxVal += (maxVal - minVal) / 5;
 
 
-        int[] circleColors = {Color.TRANSPARENT};
+//        int[] circleColors = {Color.TRANSPARENT};
 //        if (yVals.size() > 0) {
 //            circleColors = new int[yVals.size()];
 //            for (int i = 0; i < yVals.size(); i++) {
@@ -123,9 +123,9 @@ public abstract class LineStickPLChartDrawer extends BaseChartDrawer {
         set1.enableDashedLine(10f, 0f, 0f);
         set1.setColor(getDataSetColor());
         set1.setLineWidth(ChartDrawerConstants.LINE_WIDTH_PRICE);
-        set1.setDrawCircles(true);
+        set1.setDrawCircles(false);
         set1.setDrawCircleHole(false);
-        set1.setCircleColors(circleColors);
+        //set1.setCircleColors(circleColors);
         set1.setValueTextSize(0f);
 //        boolean isActual = false;
 //        try {
@@ -138,7 +138,7 @@ public abstract class LineStickPLChartDrawer extends BaseChartDrawer {
         //Drawable drawable = ContextCompat.getDrawable(chart.getContext(), isActual ? R.drawable.stock_price_fill_color_actual : R.drawable.stock_price_fill_color);
 
         set1.setFillDrawable(drawable);
-        set1.setDrawFilled(false);
+        set1.setDrawFilled(true);
 
         LineData d = new LineData();
         d.addDataSet(set1);

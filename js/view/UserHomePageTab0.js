@@ -409,7 +409,7 @@ export default class UserHomePageTab0 extends Component{
 			var textColor = "#999999"; //text bottom and right
 			var backgroundColor = "white"
 			var borderColor = "#EEEEEE"; //line
-			var lineChartGradient = ['transparent', 'transparent']
+			var lineChartGradient = ['#8ea2c6', '#fefeff']
 
 			return(
 				<LineChart style={styles.lineChart}
@@ -431,7 +431,7 @@ export default class UserHomePageTab0 extends Component{
 					backgroundColor={backgroundColor}
 					chartPaddingLeft={15}
 					chartPaddingRight={15}
-                    chartIsPrivate={this.props.isPrivate}
+          chartIsPrivate={this.props.isPrivate}
 					lineChartGradient={lineChartGradient}
 				>
 				</LineChart>

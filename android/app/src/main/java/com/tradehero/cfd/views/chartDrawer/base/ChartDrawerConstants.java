@@ -15,7 +15,7 @@ public class ChartDrawerConstants {
     public static int CHART_LINE_COLOR2 = 0Xff1d4fa2;
     public static int CHART_TEXT_COLOR = 0Xff70a5ff;
     public static int CHART_DATA_SET_COLOR = 0xffffffff;
-    public static int CHART_DATA_SET_COLOR2 = 0xff0066cc;//个人收益曲线颜色
+    public static int CHART_DATA_SET_COLOR2 = 0xff435b86;//个人收益曲线颜色
 
     public static int FIVE_MINUTE_POINT_NUMBER = 300;//60s*5
     public static int TEN_MINUTE_POINT_NUMBER = 600;//60s*10

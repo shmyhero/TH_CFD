@@ -317,7 +317,7 @@ export default class RankingPage extends Component{
   renderMe(){ 
     return(
         <TouchableOpacity onPress={()=>this._onPressedUserItem(this.state.rankSource[0])}>
-            <Image style={{width:width-20,height:69,marginTop:5, alignSelf:'center', alignItems:'center',justifyContent:'space-between',flexDirection:'row'}} source={require('../../images/rank_bg_me.png')}>
+            <Image style={{width:width-20,height:69,marginTop:0, alignSelf:'center', alignItems:'center',justifyContent:'space-between',flexDirection:'row'}} source={require('../../images/rank_bg_me.png')}>
                 <View style={{flexDirection:'row',alignItems:'center'}}>
                     <Image style={{height:34,width:34,borderRadius:17,marginLeft:28,marginBottom:5}} source={{uri:this.state.rankSource[0].picUrl}}></Image>
                     <View style={{marginLeft:10}}>
@@ -343,37 +343,41 @@ renderThreeHero(){
     var headRank2 = LogicData.getRankHead(this.state.rankSource[2].rank);
     var headRank1 = LogicData.getRankHead(this.state.rankSource[1].rank);
     var headRank3 = LogicData.getRankHead(this.state.rankSource[3].rank);
-    var bgWidth = (width-30)/3;
-    var bgHeight = bgWidth*99/115;
-    var bgHeightLR = bgHeight*0.85;
+    var bgWidth = (width-40)/3;
+    var bgHeight = bgWidth;
+    var bgHeightLR = bgHeight*201/230;
 
     return(
         <View>
             <View style={styles.containerAll}>
                 <TouchableOpacity activeOpacity={0.90} style={{flex:1}} onPress={()=>this._onPressedUserItem(this.state.rankSource[2])}>
-                    <View style={{alignItems:'center'}}>
+                    <View style={{alignItems:'center',height:68}}>
                       <Image style={styles.headPortrait} source={{uri:this.state.rankSource[2].picUrl}}></Image>
                       <Image style = {[styles.userHeaderIconRoundBig]} source={headRank2}></Image>
+                    </View>
+                    <View style={{marginBottom:-5}}> 
+                      <Text style={styles.textTopUserName}>{this.state.rankSource[2].nickname}</Text>
+                      <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+                          <Text style={styles.textWinRate}>胜率: </Text>
+                          <Text style={styles.textTopUserScore}>{(this.state.rankSource[2].winRate*100).toFixed(2).replace('.00','')}%</Text>
+                      </View>    
                     </View>  
-                    <Text style={styles.textTopUserName}>{this.state.rankSource[2].nickname}</Text>
-                    <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-                        <Text style={styles.textWinRate}>胜率: </Text>
-                        <Text style={styles.textTopUserScore}>{(this.state.rankSource[2].winRate*100).toFixed(2).replace('.00','')}%</Text>
-                    </View>    
-                    <Image style={{height:bgHeightLR,width:bgWidth,marginBottom:-5,justifyContent:'center',alignItems:'center'}} source={require('../../images/rank_bg_ag.png')}>
+                    <Image style={{height:bgHeightLR,width:bgWidth,marginBottom:-15,justifyContent:'center',alignItems:'center'}} source={require('../../images/rank_bg_ag.png')}>
                         <Text style={styles.textProfit}>+{(this.state.rankSource[2].roi*100).toFixed(2)}%</Text>
                     </Image>  
                 </TouchableOpacity>
 
                 <TouchableOpacity activeOpacity={0.90} style={{flex:1}} onPress={()=>this._onPressedUserItem(this.state.rankSource[1])}>
-                    <View style={{alignItems:'center'}}>
+                    <View style={{alignItems:'center',height:68}}>
                       <Image style={styles.headPortrait} source={{uri:this.state.rankSource[1].picUrl}}></Image>
                       <Image style = {[styles.userHeaderIconRoundBig]} source={headRank1}></Image>
                     </View>
-                    <Text style={styles.textTopUserName}>{this.state.rankSource[1].nickname}</Text>
-                    <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-                        <Text style={styles.textWinRate}>胜率: </Text>
-                        <Text style={styles.textTopUserScore}>{(this.state.rankSource[1].winRate*100).toFixed(2).replace('.00','')}%</Text>
+                    <View style={{marginBottom:0}}> 
+                      <Text style={styles.textTopUserName}>{this.state.rankSource[1].nickname}</Text>
+                      <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+                          <Text style={styles.textWinRate}>胜率: </Text>
+                          <Text style={styles.textTopUserScore}>{(this.state.rankSource[1].winRate*100).toFixed(2).replace('.00','')}%</Text>
+                      </View> 
                     </View>    
                     <Image style={{height:bgHeight ,width:bgWidth,marginBottom:-5,justifyContent:'center',alignItems:'center'}} source={require('../../images/rank_bg_gd.png')}>
                         <Text style={styles.textProfit}>+{(this.state.rankSource[1].roi*100).toFixed(2)}%</Text>
@@ -381,16 +385,18 @@ renderThreeHero(){
                 </TouchableOpacity>
 
                 <TouchableOpacity activeOpacity={0.90} style={{flex:1}} onPress={()=>this._onPressedUserItem(this.state.rankSource[3])}>
-                    <View style={{alignItems:'center'}}>
+                    <View style={{alignItems:'center',height:68}}>
                       <Image style={styles.headPortrait} source={{uri:this.state.rankSource[3].picUrl}}></Image>
                       <Image style = {[styles.userHeaderIconRoundBig]} source={headRank3}></Image>
                     </View>
-                    <Text style={styles.textTopUserName}>{this.state.rankSource[3].nickname}</Text>
-                    <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
-                        <Text style={styles.textWinRate}>胜率: </Text>
-                        <Text style={styles.textTopUserScore}>{(this.state.rankSource[3].winRate*100).toFixed(2).replace('.00','')}%</Text>
-                    </View>    
-                    <Image style={{height:bgHeightLR ,width:bgWidth,marginBottom:-5,justifyContent:'center',alignItems:'center'}} source={require('../../images/rank_bg_cu.png')}>
+                    <View style={{marginBottom:-5}}>
+                      <Text style={styles.textTopUserName}>{this.state.rankSource[3].nickname}</Text>
+                      <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+                          <Text style={styles.textWinRate}>胜率: </Text>
+                          <Text style={styles.textTopUserScore}>{(this.state.rankSource[3].winRate*100).toFixed(2).replace('.00','')}%</Text>
+                      </View>  
+                    </View>  
+                    <Image style={{height:bgHeightLR ,width:bgWidth,marginBottom:-15,justifyContent:'center',alignItems:'center'}} source={require('../../images/rank_bg_cu.png')}>
                         <Text style={styles.textProfit}>+{(this.state.rankSource[3].roi*100).toFixed(2)}%</Text>
                     </Image>  
                 </TouchableOpacity> 
@@ -447,6 +453,7 @@ renderListAll(){
                 dataSource={this.state.rankData}
                 renderRow={this._renderRow2}
                 enableEmptySections={true}
+                renderSeparator={this.renderSeparator} 
                 removeClippedSubviews={false}
                 renderFooter={this.renderFooter}
             />
@@ -667,13 +674,14 @@ const styles = StyleSheet.create({
   },
  
     containerAll:{
+        marginTop:-5,
         flexDirection:'row',
         justifyContent:'center',
         alignItems:'flex-end', 
         height:218,
         width:width,
         paddingLeft:20,
-        paddingRight:20,
+        paddingRight:20, 
     },
 
     headPortrait:{

@@ -143,7 +143,7 @@ export default class ProfitBlock extends Component {
   renderHeaderBar() {
     var strCP = LS.str('CP')
     var strPJSY = LS.str('PJSY')
-    var strZSL = LS.str('ZSL')
+    var strSL = LS.str('SL')
     return (
       <View style={styles.headerBar}>
         <View style={[styles.rowLeftPart, {	paddingTop: 5,}]}>
@@ -153,7 +153,7 @@ export default class ProfitBlock extends Component {
           <Text style={[styles.headerTextLeft, {paddingRight: 0,}]}>{strPJSY}</Text>
         </View>
         <View style={styles.rowRightPart}>
-          <Text style={styles.headerTextLeft}>{strZSL}</Text>
+          <Text style={styles.headerTextLeft}>{strSL}</Text>
         </View>
       </View>
     );

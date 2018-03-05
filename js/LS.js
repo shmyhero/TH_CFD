@@ -100,7 +100,7 @@ var LS = {
     TDSYZS:['TA的收益走势',' Investment Trend'],
     YKFB:['盈亏分布','Profit / loss Show'],
     CP:['产品','Products'],
-    PJSY:['平均收益','Average Profit'],
+    PJSY:['平均收益率','Average Profit'],
     ZSL:['总胜率','WinRate'],
     JYFG:['交易风格','TradeStyle'],
     PJGG:['平均杠杆(倍)','Average Multiplier'],

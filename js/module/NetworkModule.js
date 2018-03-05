@@ -9,7 +9,8 @@ var {EventCenter, EventConst} = require('../EventCenter')
 
 import React from 'react';
 import {
-	Alert
+	Alert,
+	Platform,
 } from 'react-native';
 
 var loginOutsideAlertShown = false
@@ -23,9 +24,6 @@ export function resetLoginOutsideAlert(){
 
 export function fetchTHUrl(url, params, successCallback, errorCallback, notShowResponseLog) {
 	var requestSuccess = true;
-
-	console.log('fetching: ' + url + ' with params: ')
-	console.log(params)
 
 	var result = {
 		error: null,
@@ -48,6 +46,15 @@ export function fetchTHUrl(url, params, successCallback, errorCallback, notShowR
 			}
 		});
 	}
+
+	if(params.headers){
+		params.headers['User-Agent'] = Platform.OS;
+	} else {
+		params.headers = {'User-Agent': Platform.OS};
+	}
+
+	console.log('fetching: ' + url + ' with params: ')
+	console.log(params)
 
 	fetch(url, params)
 		.then((response) => {

@@ -293,6 +293,14 @@ export default class RankingPage extends Component{
     );
   }
 
+  renderSeparatorShort(sectionID, rowID, adjacentRowHighlighted) {
+    return (
+      <View style={styles.line} key={rowID}>
+        <View style = {styles.separatorShort}></View>
+      </View>
+    );
+  }
+
   renderFooter(){
     return(
       <View style={{width:width,height:UIConstants.TAB_BAR_HEIGHT}}>
@@ -453,7 +461,7 @@ renderListAll(){
                 dataSource={this.state.rankData}
                 renderRow={this._renderRow2}
                 enableEmptySections={true}
-                renderSeparator={this.renderSeparator} 
+                renderSeparator={this.renderSeparatorShort} 
                 removeClippedSubviews={false}
                 renderFooter={this.renderFooter}
             />
@@ -614,7 +622,13 @@ const styles = StyleSheet.create({
 		height: 0.5,
 		backgroundColor: '#eeeeee',
     marginLeft:15,
-	},
+  },
+  separatorShort:{
+    height: 0.5,
+		backgroundColor: '#eeeeee',
+    marginLeft:20,
+    marginRight:20,
+  },
   userHeader:{
     width:32,
     height:32,

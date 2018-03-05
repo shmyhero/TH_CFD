@@ -343,7 +343,7 @@ renderThreeHero(){
     var headRank2 = LogicData.getRankHead(this.state.rankSource[2].rank);
     var headRank1 = LogicData.getRankHead(this.state.rankSource[1].rank);
     var headRank3 = LogicData.getRankHead(this.state.rankSource[3].rank);
-    var bgWidth = (width-40)/3;
+    var bgWidth = (width-39.5)/3;
     var bgHeight = bgWidth;
     var bgHeightLR = bgHeight*201/230;
 

@@ -243,8 +243,11 @@ public abstract class LineStickPLChartDrawer extends BaseChartDrawer {
                 nextLineAt = calendar;
             } else if (calendar.after(nextLineAt)) {
 
-                while (calendar.after(nextLineAt)) {
-                    nextLineAt.add(getGapLineUnit(), getGapLineUnitAddMount(dataSize));
+                int nextGap = getGapLineUnitAddMount(dataSize);
+                if(nextGap > 0) {
+                    while (calendar.after(nextLineAt)) {
+                        nextLineAt.add(getGapLineUnit(), nextGap);
+                    }
                 }
 
                 limitLineAt.add(i);

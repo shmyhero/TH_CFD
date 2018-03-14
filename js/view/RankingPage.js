@@ -323,6 +323,7 @@ export default class RankingPage extends Component{
   }
 
   renderMe(){ 
+    var add = this.state.rankSource[0].roi>0?'+':'';
     return(
         <TouchableOpacity onPress={()=>this._onPressedUserItem(this.state.rankSource[0])}>
             <Image style={{width:width-20,height:69,marginTop:0, alignSelf:'center', alignItems:'center',justifyContent:'space-between',flexDirection:'row'}} source={require('../../images/rank_bg_me.png')}>
@@ -337,7 +338,7 @@ export default class RankingPage extends Component{
                     </View>
                 </View>     
                 <View style={{marginRight:30}}>
-                    <Text style={{backgroundColor:'transparent',color:'white',fontSize:17}}>+{(this.state.rankSource[0].roi*100).toFixed(2)}%</Text>
+                    <Text style={{backgroundColor:'transparent',color:'white',fontSize:17}}>{add}{(this.state.rankSource[0].roi*100).toFixed(2)}%</Text>
                 </View> 
             </Image>
         </TouchableOpacity>

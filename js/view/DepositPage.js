@@ -198,6 +198,7 @@ export default class DepositPage extends Component{
 
 	pressConfirmButton(){
 		if(this.state.confirmButtonEnable && (this.getCurrentTime() - last_pressed_confirm  > 3000)){
+			this.dismissKB();
 			this.requestPayConfirm();
 			last_pressed_confirm = this.getCurrentTime();
 		}

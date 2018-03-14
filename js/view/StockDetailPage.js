@@ -714,6 +714,8 @@ var StockDetailPage = React.createClass({
 	},
 
 	renderErrorHint: function(){
+		console.log("this.state.error", this.state.error)
+		console.log("this.state.tradeableError", this.state.tradeableError)
 		if(this.state.error){
 			return (
 				<Text style={styles.errorLabel}>{this.state.error}</Text>
@@ -1525,6 +1527,7 @@ var StockDetailPage = React.createClass({
 		}
 
 		var error = this.checkError(value, this.state.leverage)
+		console.log("checkError",error)
 		this.setState({
 			money: value,
 			error: ignoreError ? null : error,
@@ -1825,16 +1828,13 @@ var StockDetailPage = React.createClass({
 		var error = null;
 
 		var strMY = LS.str('MY');
-		var strZZJXDY = LogicData.isIR() ? LS.str('ZZJXDY_IR') : LS.str('ZZJXDY')
-		var strZZJXXY = LogicData.isIR() ? LS.str('ZZJXXY_IR') : LS.str('ZZJXXY')
 
 		if (this.state.money < this.state.minInvestUSD && this.state.money * maxLeverage < this.state.minInvestUSD) {
-			error = strZZJXDY + this.state.minInvestUSD.toFixed(0) + strMY
+			error = LS.str('ZZJXDY_IR') + this.state.minInvestUSD.toFixed(0) + strMY
 		} else if (tradeValue < minValue) {
-			error = strZZJXDY + minValue.toString() + strMY;
+			error = LS.str('ZZJXDY') + minValue.toString() + strMY;
 		} else if (tradeValue > maxValue) {
-			error = strZZJXXY + maxValue.toString() + strMY;
-
+			error = LS.str('ZZJXXY') + maxValue.toString() + strMY;
 		}
 		console.log("checkError error " + error)
 		return error;

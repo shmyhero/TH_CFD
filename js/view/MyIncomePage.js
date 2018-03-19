@@ -332,7 +332,7 @@ var MyIncomePage = React.createClass({
 		return (
 			<View style={styles.wrapper}>
 				<NavBar title={LS.str("MY_REWARD_TITLE")} showBackButton={true} navigator={this.props.navigator}
-					textOnRight={LS.str("GZ")}
+					textOnRight={LS.str("RULES")}
 					rightTextOnClick={()=>this.showRules()}/>				
 				<ListView
 					style={styles.list}

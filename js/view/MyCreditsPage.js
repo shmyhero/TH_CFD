@@ -109,10 +109,9 @@ var MyCreditsPage = React.createClass({
 	},
 
 	showRules: function(){
-		var strJFGZ = LS.str('JFGZ')
 		this.props.navigator.push({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
-			title:{strJFGZ},
+			title: LS.str('JFGZ'),
 			url:NetConstants.TRADEHERO_API.CREDITS_RULE
 		});
 	},
@@ -222,7 +221,7 @@ var MyCreditsPage = React.createClass({
 
 	render: function() {
 		var strWDJF = LS.str('WDJF')
-		var strGZ = LS.str('GZ')
+		var strGZ = LS.str('RULES')
 		return (
 			<View style={styles.wrapper}>
 				<NavBar title={strWDJF} showBackButton={true} navigator={this.props.navigator}

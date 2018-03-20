@@ -355,13 +355,13 @@ export default class UserHomePageTab0 extends Component{
 			var cardItems = this.state.cards.map(
 				(card, i) =>
 				<TouchableOpacity onPress={() => this.pressCard(i)} key={i}>
-					<View style={[styles.cardItem,{marginRight:i==0?4:10},{marginRight:i==lastIndex?10:4}]}>
+					<Image  source={require('../../images/bg_card.png')} style={[styles.cardItem,{marginRight:i==0?4:10},{marginRight:i==lastIndex?10:4}]}>
 						<Image style={styles.cardImage} source={{uri:this.state.cards[i].imgUrlMiddle}}></Image>
 						<View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
 							<Text style={{color:'#fa2c21',fontSize:14,marginBottom:5}}>{this.state.cards[i].plRate.toFixed(2)}%</Text>
 							<Text style={{color:'#3f3f3f',fontSize:14}}>{this.state.cards[i].stockName}</Text>
 						</View>
-					</View>
+					</Image>
 				</TouchableOpacity>
 			)
 
@@ -381,7 +381,7 @@ export default class UserHomePageTab0 extends Component{
 						</TouchableOpacity>
 					</View>
 					<View style={{flexDirection:'row',
-					  backgroundColor: ColorConstants.TITLE_BLUE_LIVE,}}>
+					  backgroundColor: 'white',}}>
 						<ScrollView
 							ref={(scrollView) => { _scrollView = scrollView; }}
 							automaticallyAdjustContentInsets={false}
@@ -486,7 +486,7 @@ export default class UserHomePageTab0 extends Component{
 //            ref={STATISTIC_BAR_BLOCK}/>
 
 	render(){
-		return(
+		return( 
       <ScrollView showsHorizontalScrollIndicator={false}>
         {/* {this.middleWarpperRender()} */}
         {/* <View style = {styles.separator}></View> */}
@@ -737,14 +737,20 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
     marginLeft: 10,
-    marginRight: 10,
-    backgroundColor: 'white',
+    // marginRight: 10,
+    // backgroundColor: 'white',
     borderRadius: 2,
+    resizeMode:'stretch'
   },
-  cardImage: {
-    backgroundColor: 'green',
+  cardImage: { 
     height: (width * 4 / 5) * 2 / 3,
-    width: (width - 30) / 2
+    width: (width - 30) / 2 - 20,
+    marginLeft:10, 
+    borderRadius:6,
+    borderTopLeftRadius:6,
+    borderTopRightRadius:6,
+    borderBottomRightRadius:0,
+    borderBottomLeftRadius:0,
   },
   loadingText: {
 		fontSize: 13,

@@ -393,7 +393,7 @@ export default class UserHomePage extends Component {
 			return(
 				<TouchableOpacity
 						onPress={()=>this._onPressedAddFollow()}>
-					<View style={[styles.addToCareContainer,{backgroundColor:bgColor,borderColor:borderColor}]}>
+					<View style={[styles.addToCareContainer,{backgroundColor:'transparent',borderColor:borderColor}]}>
 						<Text style={styles.addToCareText}>
 							{this.state.isFollowing ? strQXGZ:strJGZ}
 						</Text>

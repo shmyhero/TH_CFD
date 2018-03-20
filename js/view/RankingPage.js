@@ -306,7 +306,16 @@ export default class RankingPage extends Component{
       <View style={{width:width,height:UIConstants.TAB_BAR_HEIGHT}}>
       </View>
     )
-	}
+  }
+  
+  renderHeader(){
+    return(
+      <View style={{paddingTop:10,backgroundColor:'#425a85'}}>
+        {this.renderMe()}
+        {this.renderThreeHero()} 
+      </View>
+    )
+  }
 
   refreshData(forceRefetch){
     this.getRankList()
@@ -465,6 +474,7 @@ renderListAll(){
                 renderSeparator={this.renderSeparatorShort} 
                 removeClippedSubviews={false}
                 renderFooter={this.renderFooter}
+                renderHeader={this.renderHeader.bind(this)}
             />
         </View>
     )
@@ -491,10 +501,9 @@ renderListAll(){
           // removeClippedSubviews={false}/>
 
           <View style={{flex:1,backgroundColor:'#425a85'}}> 
-                 {this.renderMe()}
-                 {this.renderThreeHero()}
-                 {this.renderListAll()}
-                  
+                 {/* {this.renderMe()}
+                 {this.renderThreeHero()} */}
+                 {this.renderListAll()} 
           </View>
         )
       }else{ 

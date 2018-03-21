@@ -483,7 +483,7 @@ export default class BindCardPage extends Component {
     }
 
     if(displayText === ""){
-      displayText = rowData.hint;
+      displayText = LS.str(rowData.hint);
       textColor = ColorConstants.INPUT_TEXT_PLACE_HOLDER_COLOR;
     }
 
@@ -549,7 +549,7 @@ export default class BindCardPage extends Component {
 		} else if(rowData.type === "realname"){
       return (
         <View style={styles.rowWrapper}>
-					<Text style={styles.rowTitle}>{rowData.title}</Text>
+					<Text style={styles.rowTitle}>{LS.str(rowData.title)}</Text>
 					<Text style={styles.valueText}>
             {rowData.value}
           </Text>
@@ -559,7 +559,7 @@ export default class BindCardPage extends Component {
     }else{
 			return (
 				<View style={styles.rowWrapper}>
-					<Text style={styles.rowTitle}>{rowData.title}</Text>
+					<Text style={styles.rowTitle}>{LS.str(rowData.title)}</Text>
 					{this.renderRowValue(rowData, rowID)}
 				</View>
 				)

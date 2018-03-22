@@ -280,11 +280,19 @@ class TweetComponent extends Component {
         }
 
         var currentEnd = this.state.selection.start;
+        //console.log("currentEnd default", currentEnd)
         if (insertedText == "<Backspace/>"){
             if(this.state.selection.start == this.state.selection.end){
-                if(currentEnd >0){
-                    currentEnd = currentEnd - 1;
+                var originalTextFirstPart = originalText.substr(0,OriginalTextselectionStart);
+                var newTextNodes = TweetParser.parseTextNodes(originalTextFirstPart);
+                currentEnd=0;
+                for (var i = 0; i < newTextNodes.length; i++){
+                    currentEnd += newTextNodes[i].text.length;
                 }
+                console.log("currentEnd", currentEnd)
+                this.setState({
+                    selection: {start: currentEnd, stop: currentEnd}
+                })
             }
         }else{
             var newTextNodes = TweetParser.parseTextNodes(insertedText);
@@ -400,7 +408,7 @@ class TweetComponent extends Component {
                         newText = "<Backspace/>";
                     }
                     this.insertText(newText, event.nativeEvent.range);
-                }}                        
+                }}
                 onKeyPress={(event) => this.onKeyPress(event)}
                 selection={this.state.selection}
                 onSelectionChange={(event)=>this.updateSelection(event)}/>

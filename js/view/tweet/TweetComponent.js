@@ -1,9 +1,9 @@
 //import liraries
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { View,
     Text,
     StyleSheet,
-    TextInput,
     Dimensions,
     Clipboard,
     TouchableOpacity,
@@ -11,16 +11,11 @@ import { View,
     Platform
 } from 'react-native';
 var TweetParser = require('./TweetParser');
+import CustomTextInput from '../component/CustomTextInput';
 var {height, width} = Dimensions.get('window');
-var LS = require("../../LS")
 
 //var TweetBlock = require('./TweetBlock')
 class TweetComponent extends Component {
-
-    /////////this.lastSelection////////
-    //在ios中通过键盘输入的字符，onTextChanged在调用之前会先调用onSelectionChanged,
-    //所以此时的this.state.selection指向的是错误的位置。需要手动把输入之前的selection位置记下来。
-
     lastSelection = {start:0, end:0}
     lastPressedKey = "";
 
@@ -36,42 +31,39 @@ class TweetComponent extends Component {
 
     constructor(props) {
         super(props);
+
         //props.text
-        var textNodes = TweetParser.parseTextNodes(this.props.value);
+        this.textNodes = TweetParser.parseTextNodes(this.props.value);
+        this.htmlText = this.props.value;
         //console.log("textNodes" + JSON.stringify(textNodes))
-        var displayText = this.getDisplayText(textNodes);
+        var displayText = this.getDisplayText(this.textNodes);
         this.state = {
-            text: this.props.value,
             displayText: displayText,
             selection:{ start: 0, end: 0},
-            textNodes: textNodes,
             textInputHeight:38
         };
     }
 
+    htmlText = "";
+    textNodes = [];
+
     insertItem(item){
+        console.log("insertItem");
         var linkText = TweetParser.convertItemToTagString(item);
-        console.log("linkText this.state.selection.start " + this.state.selection.start + ", this.state.selection.end " + this.state.selection.end);
+        //console.log("linkText this.state.selection.start " + this.state.selection.start + ", this.state.selection.end " + this.state.selection.end);
 
         this.lastSelection = {
             start: this.state.selection.start,
             end: this.state.selection.end
         };
 
-        console.log("insertItem" + JSON.stringify(this.lastSelection));
         this.insertText(linkText, {
             start:this.state.selection.start,
             end:this.state.selection.end,
         });
-
-        // this.refs["RichTextEditor"].focusContent()
-        // setTimeout(()=>{
-        //     this.refs["RichTextEditor"].prepareInsert()
-        //     this.refs["RichTextEditor"].getSelectedText().then((selectedText)=>{
-        //         console.log("selectedText " + selectedText)
-        //         this.refs["RichTextEditor"].insertLink("cfd://page/stock/" + item.id, item.name);
-        //     });
-        // }, 1000)
+        
+        var displayText = this.getDisplayText(this.textNodes);
+        this.refs["TextInput"].setText(displayText);
     }
 
     getDisplayText(textNodes){
@@ -82,22 +74,13 @@ class TweetComponent extends Component {
         return displayText;
     }
 
-
-
-    getCurrentSelectionsOnText(newSelectionStart, newSelectionEnd){
-        var partSelections = this.getCurrentPartSelections(newSelectionStart, newSelectionEnd);
-        for(var i = 0; i < partSelections.length; i++){
-            // partSelections[i].selectionStart
-        }
-    }
-
     getCurrentPartSelections(newSelectionStart, newSelectionEnd){
         var partSelection = []
         var currentPartStart = 0;
         var currentPartEnd = 0;
 
-        for (var i = 0; i < this.state.textNodes.length; i ++){
-            var textPart = this.state.textNodes[i];
+        for (var i = 0; i < this.textNodes.length; i ++){
+            var textPart = this.textNodes[i];
             currentPartStart = currentPartEnd
             currentPartEnd = currentPartStart + textPart.text.length;
             // console.log("getCurrentPartSelections currentPartStart " + currentPartStart)
@@ -105,8 +88,12 @@ class TweetComponent extends Component {
             // console.log("getCurrentPartSelections newSelectionStart " + newSelectionStart)
             // console.log("getCurrentPartSelections newSelectionEnd " + newSelectionEnd)
 
-            if((newSelectionStart <= currentPartEnd && newSelectionEnd > currentPartStart)
+            if((newSelectionStart <= currentPartEnd 
+                && newSelectionEnd > currentPartStart)
                 || newSelectionEnd == 0 && i ==0){
+                if(newSelectionStart == currentPartEnd && textPart.type == "link"){
+                    continue;
+                }
                 partSelection.push({
                     "part": i,
                     "partStartInWholeString": currentPartStart,
@@ -114,24 +101,7 @@ class TweetComponent extends Component {
                     "selectionStart": Math.max(newSelectionStart - currentPartStart, 0),
                     "selectionEnd": Math.min(newSelectionEnd - currentPartStart, textPart.text.length)
                 })
-            }
-            // if(newSelectionEnd <= currentPartEnd
-
-            //     ||newSelectionEnd == 0 && i ==0){
-            //     if (partSelection.length > 0 && partSelection[0].part == i){
-            //         //console.log("update!")
-            //         partSelection[0].selectionEnd = Math.max(newSelectionEnd - currentPartStart, 0);
-            //     }else{
-            //         //console.log("push!")
-            //         partSelection.push({
-            //             "part": i,
-            //             "partStartInWholeString": currentPartStart,
-            //             "partEndInWholeString": currentPartEnd,
-            //             "selectionStart": 0,
-            //             "selectionEnd": Math.min(newSelectionEnd - currentPartStart, 0)
-            //         })
-            //     }
-            // }
+            }            
         }
 
         //console.log("partSelection " + JSON.stringify(partSelection));
@@ -139,7 +109,6 @@ class TweetComponent extends Component {
     }
 
     updateSelection(event){
-
         if(this.lastPressedKey != "" && Platform.OS == "android"){
             //Fix Android crash issue.
             return;
@@ -154,7 +123,7 @@ class TweetComponent extends Component {
             var partSelection = partSelections[i];
             var currentPartEnd = partSelection.partEndInWholeString;
             var currentPartStart = partSelection.partStartInWholeString;
-            var textPart = this.state.textNodes[partSelection.part]
+            var textPart = this.textNodes[partSelection.part]
             if (newSelectionEnd <= currentPartEnd) {
                 //The selected part is link, just select all.
                 if (textPart.type == "link") {
@@ -192,6 +161,8 @@ class TweetComponent extends Component {
 
         if(this.state.selection.start != newSelectionStart ||
             this.state.selection.end != newSelectionEnd){
+            console.log("updateSelection newSelectionStart:", newSelectionStart)
+            console.log("updateSelection newSelectionEnd:", newSelectionEnd)
             this.setState({
                 selection:{ start: newSelectionStart, end: newSelectionEnd }
             });
@@ -212,118 +183,33 @@ class TweetComponent extends Component {
         this.lastPressedKey = pressedKey;
     }
 
-    onChangeText(newTextValue){
-        //在RN中无法得知新增的string是什么，
-        //目前的解决方案是比较新旧string的不同，将其作为新的值插入。
-
-        console.log("onChangeText newText: " + newTextValue + ", old: " + this.state.displayText)
-
-        var newSelection = {start:-1, end:-1}
-        var oldSelection = {start:-1, end:-1}
-        if (this.lastPressedKey=="<Backspace/>"){
-            this.insertText(this.lastPressedKey, this.state.selection);
-        }else if(this.state.displayText != newTextValue){
-            for(var i = 0; i < Math.min(this.state.displayText.length, newTextValue.length); i++){
-                if(newTextValue[i] != this.state.displayText[i]){
-                    newSelection.start = i;
-                    break;
-                }
-            }
-            if(newSelection.start == -1){
-                newSelection.start = Math.min(newTextValue.length, this.state.displayText.length);
-            }
-            oldSelection.start = newSelection.start;
-
-            if(this.state.displayText.length == oldSelection.start){
-                oldSelection.end = oldSelection.start;
-                newSelection.end = newTextValue.length;
-            }else if(newTextValue.length == oldSelection.start){
-                oldSelection.end = this.state.displayText.length;
-                newSelection.end = newSelection.start;
-            }else{
-                if(newTextValue.length == 0){
-                    oldSelection.end = this.state.displayText.length;
-                    newSelection.end = 0;
-                }else{
-                    //只比较较短的String末尾到selectionStart的部分。
-                    for(var i = 0; i < Math.min(this.state.displayText.length, newTextValue.length) - newSelection.start; i++){
-                        if(newTextValue[newTextValue.length-i-1] != this.state.displayText[this.state.displayText.length-i-1]){
-                            newSelection.end = newTextValue.length-i;
-                            oldSelection.end = this.state.displayText.length-i;
-                            break;
-                        }
-                    }
-
-                    //如果没有找到新的selecitonend，则表明短的string的selectionend = selection.start，
-                    //长的string的selectionend = selection.start + 两个string的长度差
-                    if(newSelection.end == -1){
-                        newSelection.end = newSelection.start + Math.max(0, newTextValue.length - this.state.displayText.length);
-                    }
-                    if(oldSelection.end == -1){
-                        oldSelection.end = oldSelection.start + Math.max(0, this.state.displayText.length - newTextValue.length);
-                    }
-                }
-            }
-            // for(var i = 1; i <  Math.max(newTextValue.length, this.state.displayText.length); i++){
-            //     if(newTextValue[newTextValue.length-i] != this.state.displayText[this.state.displayText.length-i]){
-            //         newSelection.end = newTextValue.length-i+1;
-            //         oldSelection.end = this.state.displayText.length-i+1;
-            //         break;
-            //     }
-            // }
-
-            // console.log("newTextValue " + newTextValue);
-            // console.log("this.state.displayText " + this.state.displayText);
-
-            // console.log("newSelection.end " + newSelection.end + " newTextValue.length " + newTextValue.length)
-            // console.log("oldSelection.end " + oldSelection.end + " oldSelection.length " + this.state.displayText.length)
-
-            if(newSelection.end == -1){
-                newSelection.end = Math.max(newTextValue.length, this.state.displayText.length) - Math.min(newTextValue.length, this.state.displayText.length);
-            }
-            this.lastSelection = oldSelection
-            var newText = newTextValue.substring(newSelection.start, newSelection.end);
-
-            if(newSelection.end == newSelection.start){
-                newText = "<Backspace/>"
-            }
-
-            console.log("onChangeText newSelection " + JSON.stringify(newSelection))
-            console.log("onChangeText newText " + newText);
-            console.log("onChangeText oldSelection " + JSON.stringify(oldSelection))
-            // newText = newText.replace("\n", "")
-            this.insertText(newText, oldSelection);
-        }else{
-            return;
-        }
-    }
-
-    insertText(newText, selectionInOriginalText){
-        // console.log("insertText")
-        // console.log(selectionInOriginalText)
-
+    insertText(insertedText, selection){
+        console.log("insertText");
+        
         var originalText = this.generateText();
 
         var OriginalTextselectionStart = -1;
         var OriginalTextselectionEnd = -1;
-        var textNodes = this.state.textNodes;
+        var textNodes = this.textNodes;
         var currentTextIndex = 0;
 
         var partSelections = this.getCurrentPartSelections(
-            this.lastSelection.start, this.lastSelection.end);
+            selection.start, selection.end);
+
+        console.log("insertText partSelections ", partSelections);
 
         for (var partIndex = 0; partIndex < textNodes.length; partIndex++){
             var textPart = textNodes[partIndex];
             for (var i = 0; i < partSelections.length; i++) {
                 var partSelection = partSelections[i];
                 var currentPartIndex = partSelection.part;
-                //console.log("selection part " + currentPartIndex)
+                console.log("selection part " + currentPartIndex)
                 if(partIndex == currentPartIndex){
-                    //console.log("parse part " + partIndex)
+                    console.log("parse part " + partIndex)
                     //The part is in selection.
                     if(OriginalTextselectionStart == -1){
                         if(textPart.type == "link"){
-                            if (newText == "<Backspace/>"){
+                            if (insertedText == "<Backspace/>"){
                                 //Select All if the input key is backspace!!!
                                 OriginalTextselectionStart = currentTextIndex;
                             }else{
@@ -338,6 +224,9 @@ class TweetComponent extends Component {
                             }
 
                         }else{
+                            console.log("currentTextIndex ",currentTextIndex)
+                            console.log("partSelection.selectionStart ",partSelection.selectionStart)
+                                
                             OriginalTextselectionStart = currentTextIndex + partSelection.selectionStart
                         }
                     }
@@ -347,7 +236,7 @@ class TweetComponent extends Component {
                     }else if(textPart.type == "link"){
                         // If it is a link part, always select all.
                         //console.log("textPart.originalText " + textPart.originalText)
-                        if (newText == "<Backspace/>"){
+                        if (insertedText == "<Backspace/>"){
                             //Select All if the input key is backspace!!!
                             OriginalTextselectionEnd = currentTextIndex + textPart.originalText.length;
                         }else{
@@ -357,7 +246,7 @@ class TweetComponent extends Component {
                                 OriginalTextselectionEnd = currentTextIndex + textPart.originalText.length;
                             }
                         }
-                        //console.log("textPart.originalTextPart " + this.state.text.substring(0, textPart.originalText))
+                        //console.log("textPart.originalTextPart " + this.htmlText.substring(0, textPart.originalText))
                     }
 
                 }else{
@@ -375,7 +264,7 @@ class TweetComponent extends Component {
         }
 
         var newOriginalText = "";
-        if (newText == "<Backspace/>"){
+        if (insertedText == "<Backspace/>"){
             if(OriginalTextselectionStart != OriginalTextselectionEnd){
                 newOriginalText = originalText.substring(0, OriginalTextselectionStart)
                 + originalText.substring(OriginalTextselectionEnd, originalText.length);
@@ -386,19 +275,19 @@ class TweetComponent extends Component {
         }
         else {
             newOriginalText = originalText.substring(0, OriginalTextselectionStart)
-            + newText
+            + insertedText
             + originalText.substring(OriginalTextselectionEnd, originalText.length);
         }
 
         var currentEnd = this.state.selection.start;
-        if (newText == "<Backspace/>"){
+        if (insertedText == "<Backspace/>"){
             if(this.state.selection.start == this.state.selection.end){
                 if(currentEnd >0){
                     currentEnd = currentEnd - 1;
                 }
             }
         }else{
-            var newTextNodes = TweetParser.parseTextNodes(newText);
+            var newTextNodes = TweetParser.parseTextNodes(insertedText);
             for (var i = 0; i < newTextNodes.length; i++){
                 currentEnd += newTextNodes[i].text.length;
             }
@@ -408,24 +297,31 @@ class TweetComponent extends Component {
         // console.log("insertText OriginalTextselectionStart " + OriginalTextselectionStart)
         // console.log("insertText OriginalTextselectionEnd " + OriginalTextselectionEnd)
         // console.log("originalText.substring(0, OriginalTextselectionStart) " + originalText.substring(0, OriginalTextselectionStart));
-        // console.log("this.state.text.substring(OriginalTextselectionEnd, this.state.text.length) " + this.state.text.substring(OriginalTextselectionEnd, this.state.text.length));
+        // console.log("this.htmlText.substring(OriginalTextselectionEnd, this.htmlText.length) " + this.htmlText.substring(OriginalTextselectionEnd, this.htmlText.length));
 
-        if (newText == "<Backspace/>"){
+        if (insertedText == "<Backspace/>"){
             if(OriginalTextselectionStart != OriginalTextselectionEnd){
                 newOriginalText = originalText.substring(0, OriginalTextselectionStart)
-                + this.state.text.substring(OriginalTextselectionEnd, this.state.text.length);
+                + this.htmlText.substring(OriginalTextselectionEnd, this.htmlText.length);
             }else{
                 newOriginalText = originalText.substring(0, OriginalTextselectionStart-1)
-                + this.state.text.substring(OriginalTextselectionEnd, this.state.text.length);
+                + this.htmlText.substring(OriginalTextselectionEnd, this.htmlText.length);
             }
+            console.log("this.htmlText ", this.htmlText);
+            console.log("OriginalTextselectionStart ", OriginalTextselectionStart);
+            console.log("OriginalTextselectionEnd ", OriginalTextselectionEnd);
+            console.log("newOriginalText ", newOriginalText);
         }
         else {
             newOriginalText = originalText.substring(0, OriginalTextselectionStart)
-            + newText
-            + this.state.text.substring(OriginalTextselectionEnd, this.state.text.length);
+            + insertedText
+            + this.htmlText.substring(OriginalTextselectionEnd, this.htmlText.length);
         }
-
-        //console.log("newOriginalText " + newOriginalText)
+        console.log("OriginalTextselectionStart ", OriginalTextselectionStart)
+        console.log("OriginalTextselectionEnd ", OriginalTextselectionEnd)        
+        console.log("insertedText ", insertedText)
+        console.log("this.htmlText ", this.htmlText)
+        console.log("this.htmlText.substring(OriginalTextselectionEnd, this.htmlText.length) ", this.htmlText.substring(OriginalTextselectionEnd, this.htmlText.length))
 
         this.lastSelection = {
             start: this.state.selection.start,
@@ -435,9 +331,9 @@ class TweetComponent extends Component {
         textNodes = TweetParser.parseTextNodes(newOriginalText);
         var displayText = this.getDisplayText(textNodes);
 
-        console.log("onChangeText newOriginalText " + newOriginalText)
-        console.log("onChangeText displayText "+ displayText)
-        console.log("this.lastSelection " + JSON.stringify(this.lastSelection))
+        console.log("onChangeText newOriginalText ", newOriginalText)
+        console.log("onChangeText displayText ", displayText)
+        console.log("this.lastSelection ", JSON.stringify(this.lastSelection))
         if (displayText != this.state.displayText){
             this.props.onValueChanged && this.props.onValueChanged(newOriginalText);
         }
@@ -446,22 +342,18 @@ class TweetComponent extends Component {
 
         this.lastPressedKey = "";
 
-        var newState = {
-            text: newOriginalText,
-            textNodes: textNodes,
-            displayText: displayText,
-        };
+        this.htmlText = newOriginalText;
+        this.textNodes = textNodes;
+
         this.setState({
-            text: newOriginalText,
-            textNodes: textNodes,
             displayText: displayText,
         });
     }
 
     generateText(){
         var newText = ""
-        for(var i = 0; i < this.state.textNodes.length; i++){
-            var part = this.state.textNodes[i];
+        for(var i = 0; i < this.textNodes.length; i++){
+            var part = this.textNodes[i];
             if(part.type == "text"){
                 newText += part.text;
             }else if(part.type == "link"){
@@ -487,67 +379,65 @@ class TweetComponent extends Component {
         }else{
             //console.log("renderShadowText with empty")
             return (
-                <Text style={[styles.textPart, styles.inputLayout, {color: 'gray', lineHeight:20}]}>{LS.str("TWEET_HINT")}</Text>)
+                <Text style={[styles.textPart, styles.inputLayout, {color: 'gray', lineHeight:20}]}>{"今天你怎么看？"}</Text>)
         }
     }
 
+    renderIOSTextInput(){
+        return (
+            <CustomTextInput style={[styles.inputLayout,]}
+                ref="TextInput"
+                textAlignVertical="top"
+                underlineColorAndroid="transparent"
+                multiline={true}
+                maxLength={240}
+                defaultValue={this.state.displayText}
+                value={this.state.displayText}
+                placeholder={"今天你怎么看？"}
+                onTextInput={(event)=>{
+                    var newText = event.nativeEvent.text;
+                    if(event.nativeEvent.text == "" && event.nativeEvent.range.start != event.nativeEvent.range.end){
+                        newText = "<Backspace/>";
+                    }
+                    this.insertText(newText, event.nativeEvent.range);
+                }}                        
+                onKeyPress={(event) => this.onKeyPress(event)}
+                selection={this.state.selection}
+                onSelectionChange={(event)=>this.updateSelection(event)}/>
+        );
+    }
+
+    renderAndroidTextInput(){
+        return (
+            <CustomTextInput style={[styles.inputLayout,]}
+                ref="TextInput"
+                textAlignVertical="top"
+                underlineColorAndroid="transparent"
+                multiline={true}
+                maxLength={240}
+                defaultValue={this.state.displayText}
+                //value={this.state.displayText}
+                placeholder={"今天你怎么看？"}
+                onTextInput={(event)=>{
+                    var newText = event.nativeEvent.text;
+                    if(event.nativeEvent.text == "" && event.nativeEvent.range.start != event.nativeEvent.range.end){
+                        newText = "<Backspace/>";
+                    }
+                    this.insertText(newText, event.nativeEvent.range);
+                }}                        
+                onKeyPress={(event) => this.onKeyPress(event)}
+                selection={this.state.selection}
+                onSelectionChange={(event)=>this.updateSelection(event)}/>
+        );
+    }
+
     render() {
-        //console.log("this.state.textNodes " + this.state.textNodes)
-        // var parsedListView = this.state.textNodes.map((part, index, array)=>{
-        //     if(part.type == "text"){
-        //         return (
-        //             <Text key={index}
-        //                 //style={styles.textPart}
-        //             >
-        //                 {part.text}
-        //             </Text>)
-        //     }else if(part.type == "link"){
-        //         return (<Text key={index} style={styles.linkedPart}>{part.text}</Text>)
-        //     }
-        // })
-        // var parsedShadowListView = this.state.textNodes.map((part, index, array)=>{
-        //     if(part.type == "text"){
-        //         return (<Text key={index} style={[styles.textPart, {color:"transparent"}]}>{part.text}</Text>)
-        //     }else if(part.type == "link"){
-        //         return (<Text key={index} style={[styles.linkedPart, {color:"transparent"}]}>{part.text}</Text>)
-        //     }
-        // })
-        // parsedListView.push(<Text key={parsedListView.length} style={styles.textPart}>{"\n"}</Text>)
+        console.log("render this.state.selection", this.state.selection)
 
         return(
             <View style={{flex: 1, paddingLeft:15, paddingRight:15}}>
                 <View style={{flex: 1, alignItems:'stretch'}}>
-                    {/* {this.renderShadowText(parsedListView)} */}
-                    {/* <TweetBlock value={this.state.text}/> */}
-                    <TextInput style={[styles.inputLayout,]}
-                        ref="TextInput"
-                        textAlignVertical="top"
-                        underlineColorAndroid="transparent"
-                        multiline={true}
-                        maxLength={240}
-                        value={this.state.displayText}
-                        placeholder={LS.str("TWEET_HINT")}
-                        onChange={(event)=>{
-                            console.log("onChange")
-                            console.log(event.nativeEvent)
-                            if(Platform.OS == "android"){
-                                // if(event.nativeEvent.contentSize.height != this.state.textInputHeight){
-                                //     this.setState({
-                                //         textInputHeight: event.nativeEvent.contentSize.height,
-                                //     })
-                                // }
-                                this.onChangeText(event.nativeEvent.text)
-                            }
-                        }}
-                        onChangeText={(text)=>{
-                            if(Platform.OS == "ios"){
-                                this.onChangeText(text)
-                            }
-                        }} //iOS
-                        onKeyPress={(event) => this.onKeyPress(event)}
-                        selection={this.state.selection}
-                        onSelectionChange={(event)=>this.updateSelection(event)}>
-                    </TextInput>
+                    {Platform.OS == "android" ? this.renderAndroidTextInput() : this.renderIOSTextInput()}                    
                 </View>
             </View>
         );
@@ -579,4 +469,4 @@ const styles = StyleSheet.create({
 });
 
 //make this component available to the app
-module.exports = TweetComponent;
+export default TweetComponent;

@@ -9,7 +9,7 @@ import { View, Text, StyleSheet,
     Alert
 } from 'react-native';
 var NavBar = require('../NavBar');
-var TweetComponent = require('./TweetComponent');
+import TweetComponent from './TweetComponent';
 var MainPage = require('../MainPage');
 var StockSearchPage = require('../StockSearchPage');
 import KeyboardSpacer from '../component/KeyboardSpacer';
@@ -130,7 +130,7 @@ class NewTweetPage extends Component {
                             this.setState({text:value})}
                     }/>
                 
-                    <TouchableHighlight onPress={()=>this.addLinkBlock()} >
+                    <TouchableHighlight style={{backgroundColor:'red'}} onPress={()=>this.addLinkBlock()} >
                         <View style={styles.bottomActionBar}>
                             <Text style={{color:'#666666', fontSize:30}}>@</Text>
                             <Text style={{color:'#666666'}}>{LS.str("TWEET_PUBLISH_PRODUCTS")}</Text>
@@ -157,9 +157,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection:'column', 
         alignItems:'center',
-        borderTopWidth: 0.5,
+        borderTopWidth: 1,
+        borderBottomWidth: 0,
         borderColor: ColorConstants.SEPARATOR_GRAY,
-
     }
 });
 

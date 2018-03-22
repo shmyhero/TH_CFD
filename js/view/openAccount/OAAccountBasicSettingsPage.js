@@ -242,7 +242,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 	checkEmail: function(rowID){
 		return new Promise(resolve=>{
 			//var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-			var re = /^[\w\._\-]+@[0-9a-zA-Z_\.]+?\.[0-9a-zA-Z]+$/;
+			var re = /^[\w\._\-]+@([0-9a-zA-Z_]+?\.)+[0-9a-zA-Z]+$/;
 	    if(re.test(this.listRawData[rowID].value)){
 				if(this.listRawData[rowID].error){
 					this.listRawData[rowID].error = null;

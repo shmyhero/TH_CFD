@@ -15,6 +15,7 @@ var QRCode = require('@remobile/react-native-qrcode-local-image');
 var WebViewPage = require('./WebViewPage');
 var ColorConstants = require('../ColorConstants')
 var MainPage = require('./MainPage')
+var TalkingdataModule = require('../module/TalkingdataModule')
 
 export default class PaymentPage extends Component {
   static propTypes = {
@@ -74,6 +75,7 @@ export default class PaymentPage extends Component {
 								try{
                   Linking.openURL("alipayqr://platformapi/startapp?saId=10000007&qrcode=" + encodedValue/*+"%3Dweb-other"*/)
                   .then(()=>{
+                    TalkingdataModule.trackEvent(TalkingdataModule.DEPOSIT_READY, TalkingdataModule.DEPOSIT);
                     console.log('openURL success')
                   })
                   .catch(err => {
@@ -81,7 +83,8 @@ export default class PaymentPage extends Component {
                     console.log('An error occurred: ' + err + " when open " + this.getDestinationName() + ", try to open " + result + " instead")
                     Linking.openURL(result)
                     .then(()=>{
-
+                      TalkingdataModule.trackEvent(TalkingdataModule.DEPOSIT_READY, TalkingdataModule.DEPOSIT);
+                      console.log('open Alipay success')
                     })
                     .catch(error =>{
                       console.log('An error occurred' + error + ", result + " + error)
@@ -92,6 +95,8 @@ export default class PaymentPage extends Component {
                   alert(error)
                 }
 							}else {
+                TalkingdataModule.trackEvent(TalkingdataModule.DEPOSIT_READY, TalkingdataModule.DEPOSIT);
+                console.log('open Alipay download page success')
 								Linking.openURL(uri);
 							}
 						}

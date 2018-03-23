@@ -98,6 +98,9 @@ export const AD_TRACKING_KEY_PAY_TYPE = "payType";
 export const DEBUG_TIME_DELTA = "页面用时_"
 export const DEBUG_LOADING_ERROR = "页面加载失败_"
 
+export const DEPOSIT = "入金";
+export const DEPOSIT_READY = "准备入金";
+
 export function trackADEvent(event_name, parameters) {
   try{
     console.log("parameters: " + JSON.stringify(parameters))

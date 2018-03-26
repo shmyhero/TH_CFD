@@ -9,8 +9,10 @@ import {
 	Alert,
 	Dimensions,
 	NetInfo,
+	TouchableOpacity
 } from 'react-native';
 
+import TimerMixin from 'react-timer-mixin';
 var {EventCenter, EventConst} = require('../EventCenter')
 var LS = require('../LS')
 var NativeSceneModule = require('../module/NativeSceneModule')
@@ -34,7 +36,7 @@ var urlKeys = [
 	'GET_FX_LIST_API',
 	'GET_FUTURE_LIST_API',
 ]
-
+var {height, width} = Dimensions.get('window');
 var tabNamesLive = ['ZX', 'MG','GG','ZS', 'WH', 'SP']
 var urlKeysLive = [
 	'GET_USER_BOOKMARK_LIST_LIVE_API',
@@ -43,16 +45,15 @@ var urlKeysLive = [
 	'GET_INDEX_LIST_LIVE_API',
 	'GET_FX_LIST_LIVE_API',
 	'GET_FUTURE_LIST_LIVE_API',
-]
-
-
-
-
+] 
 
 var didFocusSubscription = null;
 var didTabSelectSubscription = null;
 var _currentSelectedTab = 0;
 var StockListViewPager = React.createClass({
+	mixins: [TimerMixin],
+	navBarPressedCount: 0,
+	developPageTriggerCount: 10,
 
 	getInitialState: function() {
 		return {
@@ -154,16 +155,42 @@ var StockListViewPager = React.createClass({
 		var strHQWLJ = LS.str('HQWLJ')
 		var hasOwnStocks = LogicData.getOwnStocksData().length !== 0
 		return (
-			<NavBar title={this.state.connected ? strHQ : strHQWLJ}
-				textOnLeft={(_currentSelectedTab==0 && hasOwnStocks) ? strBJ : null}
-				leftTextOnClick={this.editButtonClicked}
-				showSearchButton={true}
-				navigator={this.props.navigator}/>
+			<TouchableOpacity
+				activeOpacity={1}
+				onPress={()=>this.pressedNavBar()}
+				// style={{position:'absolute', top:0, left: 0, right: width, width:width}}
+				>
+				<NavBar title={this.state.connected ? strHQ : strHQWLJ} 
+					textOnLeft={(_currentSelectedTab==0 && hasOwnStocks) ? strBJ : null}
+					leftTextOnClick={this.editButtonClicked}
+					showSearchButton={true}
+					navigator={this.props.navigator}/>
+			</TouchableOpacity>
 		)
 	},
 
+	pressedNavBar: function(){ 
+		if(this.navBarPressedCount >= this.developPageTriggerCount - 1){
+			this.navBarPressedCount = 0;
+			this.props.navigator.push({
+				name: MainPage.DEVELOP_ROUTE,
+			});
+		}else{
+			this.navBarPressedCount++;
+			var currentCount = this.navBarPressedCount;
+			this.setTimeout(
+				()=>{
+					if(this.navBarPressedCount == currentCount && this.navBarPressedCount < this.developPageTriggerCount - 1){
+						this.navBarPressedCount = 0;
+						console.log("count to 10 failed.")
+					}
+				}, 500
+		 	);
+		}
+	},
+
 	render: function() {
-		var {height, width} = Dimensions.get('window');
+		
 		var tabNamesShow = [LS.str(tabNames[0]),LS.str(tabNames[1]),LS.str(tabNames[2]),LS.str(tabNames[3]),LS.str(tabNames[4]),LS.str(tabNames[5])]
 		var tabNamesLiveShow = [LS.str(tabNamesLive[0]),LS.str(tabNamesLive[1]),LS.str(tabNamesLive[2]),LS.str(tabNamesLive[3]),LS.str(tabNamesLive[4]),LS.str(tabNamesLive[5])]
 		if(LogicData.getAccountState()){
@@ -211,7 +238,7 @@ var StockListViewPager = React.createClass({
 
 var styles = StyleSheet.create({
 	wrapper: {
-		flex: 1,
+		flex: 1, 
 		alignItems: 'stretch',
 		alignSelf: 'stretch',
 		justifyContent: 'space-around',

@@ -144,7 +144,7 @@ var StockExchangePage = React.createClass({
 			// 	</TouchableOpacity>
 			// </View>
 			<View>
-				<NavBar title={strWDCW} navigator={this.props.navigator}/>
+				{/* <NavBar title={''} navigator={this.props.navigator}/> */}
 				<OAStatusPage onLoginClicked={this.jumpToLogin}/>
 			</View>
 

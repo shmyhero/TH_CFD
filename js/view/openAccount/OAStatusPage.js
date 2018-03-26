@@ -23,7 +23,7 @@ var UIConstants = require('../../UIConstants')
 var SentIntent = require('../component/nativeIntent/SendIntent')
 var LS = require('../../LS')
 var {height, width} = Dimensions.get('window')
-
+import LinearGradient from 'react-native-linear-gradient';
 
 var CALL_NUMBER = '66058771'
 
@@ -69,75 +69,57 @@ var OAStatusPage = React.createClass({
 		var strSERVICES = LS.str('SERVICE24HOURS')
 		var strLIVELOGIN = LS.str('SPDL')
 		return (
+			<LinearGradient colors={['#6689c6','#445c86']} style={styles.wrapper}>
+			   
+				<Image style={styles.image} source={require('../../../images/bg_login_live.png')}/>
 
-			<View style={styles.wrapper}>
-				{/* <Image
-					style={[styles.backgroundImage, {height: imageHeight, width: width}]}
-					source={BANNERS[0]} >
-				</Image> */}
-
-				{/* <Image style={styles.image} source={require('../../../images/live_register_sub_banner.png')}/> */}
-
-				<Image style={styles.image} source={require('../../../images/live_register_banner.png')}/>
-
-				<View style={{flex: 2, marginTop: 50}}>
-					<Text style={styles.text1}>{strWELCOME}</Text>
-
-					<View style={{flex:1}}>
+				<View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+					 
+						<Text style={styles.text1}>{strWELCOME}</Text>  
 						<Button style={styles.buttonArea}
 							enabled={true}
 							onPress={this.gotoNext}
 							textContainerStyle={styles.buttonView}
 							textStyle={styles.buttonText}
 							text={strLIVELOGIN} />
-					</View>
-
-					<View style={styles.helpContainer}>
-						<View style={styles.helpRowWrapper}>
-							<TouchableOpacity style={{flexDirection:'row',alignItems:'center'}} onPress={()=>this.helpPressed()}>
-
-								<Image style = {styles.lineLeftRight} source = {require('../../../images/line_left2.png')} ></Image>
-								<Text style={styles.helpTitle}>{strSERVICES}</Text>
-								{/* <Text style={styles.helpTitle}>服务热线：{CALL_NUMBER}</Text> */}
-								<Image style = {styles.lineLeftRight} source = {require('../../../images/line_right2.png')} ></Image>
-
-							</TouchableOpacity>
-						</View>
-					</View>
+						 
+				 
 				</View>
-			</View>
+
+			</LinearGradient>
 		);
 	},
+
 });
 
 var styles = StyleSheet.create({
 	wrapper: {
 		flex: 1,
 		flexDirection: 'column',
-   	alignItems: 'stretch',
-		//backgroundColor: ColorConstants.BACKGROUND_GREY,
+   		alignItems: 'stretch',
+		backgroundColor: '#445c86',
+		paddingTop:50,
 		height: height
-				- UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
-				- UIConstants.HEADER_HEIGHT
-				- UIConstants.TAB_BAR_HEIGHT,
-		//backgroundColor: 'pink',
+				// - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
+				// - UIConstants.HEADER_HEIGHT
+				- UIConstants.TAB_BAR_HEIGHT, 
 	},
 	text1: {
 		fontSize: 17,
 		textAlign: 'center',
 		paddingTop: 10,
 		marginBottom: 20,
-		color:'#A4A4A4',
+		color:'#7d9fdb',
 		backgroundColor: 'transparent',
 	},
 	image: {
 		alignSelf: 'center',
 		width: width,
-		height: 523 / 750 * width,
+		height: 770 / 720 * width,
 	},
-	buttonArea: {
-
-		alignItems:'stretch',
+	buttonArea: { 
+		// alignItems:'stretch',
+		width:width-30,
 		marginLeft: 15,
 		marginRight: 15,
 		marginBottom: 16,
@@ -146,7 +128,7 @@ var styles = StyleSheet.create({
 	buttonView: {
 		height: 40,
 		borderRadius: 3,
-		backgroundColor: '#ee595e',
+		backgroundColor: '#698ac5',
 		justifyContent: 'center',
 	},
 	buttonText: {

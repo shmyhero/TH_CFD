@@ -193,6 +193,9 @@ function getCFDAPI(){
     POST_USER_LANGUAGE:CFD_API_SERVER + '/api/user/language',
 
     GET_PUBLISH_DATE: CFD_API_SERVER + '/api/IOSEffectDay',
+
+    GET_FEED_LIVE_DEFAULT: CFD_API_SERVER + '/api/feed/live/default',
+    
   }
 }
 

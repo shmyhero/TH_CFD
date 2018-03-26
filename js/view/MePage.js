@@ -56,7 +56,7 @@ var listRawData = [
 {'type':'normal','title':'YQHY', 'image':require('../../images/icon_invite_friends.png'), 'subtype':'inviteFriends'},
 {'type':'normal','title':'WDJF', 'image':require('../../images/icon_credits.png'), 'subtype':'credits'},
 {'type':'normal','title':'WDJYJ', 'image':require('../../images/icon_income.png'), 'subtype':'income'},
-{'type':'normal','title':'WDKP', 'image':require('../../images/icon_mycard.png'), 'subtype':'mycard'},
+// {'type':'normal','title':'WDKP', 'image':require('../../images/icon_mycard.png'), 'subtype':'mycard'},
 {'type':'normal','title':'BZZX', 'image':require('../../images/icon_helpcenter.png'), 'subtype':'helpcenter'},
 {'type':'normal','title':'XSZX', 'image':require('../../images/icon_onlinehelp.png'), 'subtype':'onlinehelp'},
 {'type':'normal','title':'MORE', 'image':require('../../images/icon_config.png'), 'subtype':'config'},

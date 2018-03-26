@@ -77,7 +77,14 @@ var accountStateChangedSubscription = null;
 var layoutSizeChangedSubscription = null
 
 var _currentRowData = null;
-
+var viewStyle = Platform.OS === 'android' ?
+			{	width: width,
+				height: height
+				- UIConstants.HEADER_HEIGHT
+				- UIConstants.SCROLL_TAB_HEIGHT
+				- UIConstants.TAB_BAR_HEIGHT,
+			}:
+			{width: width, flex: 1}
 
 var StockOpenPositionPage = React.createClass({
 	dataToStore: [],
@@ -2051,14 +2058,7 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	render: function() {
-		var viewStyle = Platform.OS === 'android' ?
-			{	width: width,
-				height: this.state.height
-				- UIConstants.HEADER_HEIGHT
-				- UIConstants.SCROLL_TAB_HEIGHT
-				- UIConstants.TAB_BAR_HEIGHT,
-			}:
-			{width: width, flex: 1}
+		
 		return (
 			<View style={viewStyle}>
 				{this.renderContent()}

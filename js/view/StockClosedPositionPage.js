@@ -41,6 +41,15 @@ var accountLogoutEventSubscription = null;
 var accountStateChangedSubscription = null;
 var layoutSizeChangedSubscription = null
 
+
+var viewStyle = Platform.OS === 'android' ?
+		{width: width, height: height
+			- UIConstants.HEADER_HEIGHT
+			- UIConstants.SCROLL_TAB_HEIGHT
+			- UIConstants.TAB_BAR_HEIGHT} :
+			{width: width, flex: 1,}
+
+
 var StockClosedPositionPage = React.createClass({
 	mixins: [TimerMixin],
 
@@ -462,7 +471,7 @@ var StockClosedPositionPage = React.createClass({
 	},
 
 	renderProfit: function(pl) {
-		var {height, width} = Dimensions.get('window');
+		// var {height, width} = Dimensions.get('window');
 		var textSize = Math.round(18*width/375.0)
 		pl = pl.toFixed(2)
 		var add = (pl > 0)?'+':'';
@@ -496,7 +505,7 @@ var StockClosedPositionPage = React.createClass({
 	},
 
 	renderProfitPercentage: function(percentChange) {
-		var {height, width} = Dimensions.get('window');
+		// var {height, width} = Dimensions.get('window');
 		var textSize = Math.round(18*width/375.0)
 		percentChange = percentChange.toFixed(2)
 		var add = (percentChange > 0)?'+':'';
@@ -740,12 +749,7 @@ var StockClosedPositionPage = React.createClass({
 	},
 
 	render: function() {
-		var viewStyle = Platform.OS === 'android' ?
-		{width: width, height: this.state.height
-			- UIConstants.HEADER_HEIGHT
-			- UIConstants.SCROLL_TAB_HEIGHT
-			- UIConstants.TAB_BAR_HEIGHT} :
-			{width: width, flex: 1,}
+		
 		return (
 			<View style={viewStyle}>
 				{this.renderContent()}

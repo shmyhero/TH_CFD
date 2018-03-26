@@ -27,6 +27,7 @@ var colors = {
 	COLOR_BORDER:'#184692',
 	COLOR_STATIC_TEXT1:'#85b1fb',
 	COLOR_CUSTOM_BLUE:'#629af3',
+	COLOR_CUSTOM_BLUE2:'#8199c7',
 
 	stock_color: function(change) {
 		if (change > 0) {

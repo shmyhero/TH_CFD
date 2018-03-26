@@ -15,6 +15,9 @@ import {
 	ScrollView,
 	WebView,
 	StatusBar,
+	ActivityIndicator,
+    ProgressBarAndroid,
+    ActivityIndicatorIOS,
 } from 'react-native';
 
 var Swiper = require('react-native-swiper')
@@ -63,6 +66,7 @@ var imageHeight = BANNER_HEIGHT / BANNER_WIDTH * width
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var bsds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+var dsDynamic = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var magicCode = ""
 var NO_MAGIC = false
@@ -77,6 +81,25 @@ const SCROLL_VIEW = "scrollView"
 const NAV_BAR = "navBar"
 var accStatus
 
+
+
+
+import PullToRefreshListView from 'react-native-smart-pull-to-refresh-listview'
+import DynamicRowComponent from './component/DynamicRowComponent';
+var mokeData = [
+
+	// { time: '2018-03-26T07:42:59.377',
+    // type: 'open',
+    // user: 
+    //  { id: 7821,
+    //    nickname: 'u007821',
+    //    picUrl: 'https://cfdstorage.blob.core.chinacloudapi.cn/user-picture/7.jpg' },
+    // isRankedUser: true,
+    // security: { id: 36004, name: '美国科技股100' },
+	// position: { id: '106828530550', invest: 50, leverage: 100, isLong: false } },
+]
+   
+
 var HomePage = React.createClass({
 	mixins: [TimerMixin],
 	navBarPressedCount: 0,
@@ -88,13 +111,13 @@ var HomePage = React.createClass({
 			rawPopularityInfo: [],
 			popularityInfo: bsds.cloneWithRows([]),
 			rawCardsInfo: [],
-			topNews: [],
-			//attendedMovieEvent: false,
-			//winMovieTicket: false,
+			topNews: [], 
 			isConnected: false,
-			unreadMessageCount: 0,
-			//navBarBackgroundColor: 'rgba(255,255,255,0)'
+			unreadMessageCount: 0, 
 			titleOpacity: 0,
+			isLoading:false,
+			dataResponse:[],
+			// dataSourceDynamic:dsDynamic.cloneWithRows(mokeData),
 		};
 	},
 
@@ -108,25 +131,16 @@ var HomePage = React.createClass({
 		}
 	},
 
-	componentWillMount: function() {
-		// StorageModule.loadBanners()
-		// 	.then((value) => {
-		// 		if (value !== null) {
-		// 			this.downloadBannerImages(JSON.parse(value))
-		// 			.then(()=>{
-		// 				//Make sure the downloading synchronized.
-		// 				this.reloadBanner();
-		// 			})
-		// 		}else{
-		// 			this.reloadBanner();
-		// 		}
-		// 	})
-		// 	.done();
+	componentWillMount: function() {  
 
-		this.loadUnreadMessage();
-		this.reloadBanner();
-		this.loadHomeData();
-		this.loadCards();
+		if(LogicData.getAccountState()){
+			this.loadData(false)
+		}else{
+			this.loadUnreadMessage();
+			this.reloadBanner();
+			this.loadHomeData();
+			this.loadCards();
+		} 
 	},
 
 	loadUnreadMessage: function(){
@@ -211,38 +225,7 @@ var HomePage = React.createClass({
 				this.downloadBannerImages(responseJson)
 				//StorageModule.setBanners(JSON.stringify(responseJson))
 			}
-		);
-
-		var userId = userData.userId
-		// var login = Object.keys(userData).length !== 0
-		// if(login){
-		// 	var url = NetConstants.CFD_API.GET_MOVIE_RANK;
-		// 	url = url.replace("<userId>", userId);
-		//
-		// 	NetworkModule.fetchTHUrl(
-		// 		url,
-		// 		{
-		// 			method: 'GET',
-		// 			headers: {
-		// 				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-		// 				'Content-Type': 'application/json; charset=UTF-8',
-		// 			},
-		// 		},
-		// 		(responseJson) => {
-		// 			if(responseJson.rank){
-		// 				this.setState({
-		// 					attendedMovieEvent: true,
-		// 					winMovieTicket: responseJson.rank <= 3,
-		// 				})
-		// 			}else{
-		// 				this.setState({
-		// 					attendedMovieEvent: false,
-		// 					winMovieTicket: false,
-		// 				})
-		// 			}
-		// 		}
-		// 	);
-		// }
+		); 
 	},
 
 	loadCards: function() {
@@ -373,8 +356,9 @@ var HomePage = React.createClass({
 		//didfocus emit in componentDidMount
 		if (event.data.route && MainPage.HOME_PAGE_ROUTE === event.data.route.name) {
 			console.log("on did focus homepage")
-			this.refs[NAV_BAR].onDidFocus();
-
+			if(this.refs[NAV_BAR]){
+				this.refs[NAV_BAR].onDidFocus(); 
+			} 
 			this.forceloopSwipers()
 		}
 	},
@@ -564,24 +548,7 @@ var HomePage = React.createClass({
 				this.props.navigator.push(OARoute);
 		}
 	},
-
-	// getShareMovieEventInfo: function(){
-	// 	var info = {};
-	// 	if(!this.state.attendedMovieEvent){
-	// 		info.shareUrl = NetConstants.TRADEHERO_API.SHARE_MOVIE_NOT_ATTENDED_TICKET_URL;
-	// 		info.message = "模拟投资比收益，排名前三，每天都送电影票！";
-	// 	}else{
-	// 		if(this.state.winMovieTicket){
-	// 			info.shareUrl = NetConstants.TRADEHERO_API.SHARE_MOVIE_WIN_TICKET_URL;
-	// 			info.message = "朕的投资收益率排名前3，快快赞我！";
-	// 		}else{
-	// 			info.shareUrl = NetConstants.TRADEHERO_API.SHARE_MOVIE_NOT_WIN_TICKET_URL;
-	// 			info.message = "俺的模拟投资战绩不佳，求大侠支招，助我拿到电影票！";
-	// 		}
-	// 	}
-	// 	info.title = "一大波影券来啦";
-	// 	return info;
-	// },
+ 
 
 	gotoWebviewPage: function(targetUrl, title, shareID, shareTitle, shareDescription, sharingTrackingEvent, shareUrl,isShowNav, themeColor) {
 		var userData = LogicData.getUserData()
@@ -597,14 +564,7 @@ var HomePage = React.createClass({
 				targetUrl = targetUrl + '?userId=' + userId
 			}
 		}
-
-		// if(!shareUrl && targetUrl.startsWith(NetConstants.TRADEHERO_API.MOVIE_WIN_TICKET_URL)){
-		// 	var shareInfo = this.getShareMovieEventInfo();
-		// 	shareUrl = shareInfo.shareUrl;
-		// 	shareDescription = shareInfo.message;
-		// 	shareTitle = shareInfo.title;
-		// }
-
+ 
 		if(!shareID){
 			shareID = null
 		}
@@ -656,26 +616,7 @@ var HomePage = React.createClass({
 			backFunction: this.forceloopSwipers,
 		});
 	},
-
-	// gotoMoviePage: function(){
-	// 	TalkingdataModule.trackEvent(TalkingdataModule.MOVIE_ACTIVITY_EVENT);
-	//
-	// 	var url = NetConstants.TRADEHERO_API.MOVIE_WIN_TICKET_URL;
-	// 	var userData = LogicData.getUserData();
-	// 	var userId = userData.userId;
-	// 	if(userId == undefined){
-	// 		userId = 0;
-	// 	}
-	// 	url = url + '?userId=' + userId;
-	//
-	// 	var info = this.getShareMovieEventInfo();
-	// 	this.gotoWebviewPage(url, '推荐',
-	// 		null,
-	// 		info.title,
-	// 		info.message,
-	// 		TalkingdataModule.MOVIE_SHARE_EVENT,
-	// 		info.shareUrl);
-	// },
+ 
 
 	gotoCheckinPage: function(){
 		TalkingdataModule.trackEvent(TalkingdataModule.CHECK_IN_ACTIVITY_EVENT);
@@ -700,82 +641,7 @@ var HomePage = React.createClass({
 	endsWith: function(str, suffix) {
 	    return str.indexOf(suffix, str.length - suffix.length) !== -1;
 	},
-
-//	payDemoTest:function(index){
-//		var userData = LogicData.getUserData()
-//		NetworkModule.fetchTHUrl(
-//				NetConstants.CFD_API.GET_PAY_DEMO_TEST_ID,
-//			{
-//				method: 'GET',
-//				headers: {
-//					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-//					'Content-Type': 'application/json; charset=UTF-8',
-//				},
-//			},
-//			(responseJson) => {
-//				 console.log('responseJson = ' + responseJson + 'index = ' + index);
-//
-//				 if (Platform.OS === 'ios') {
-//					 var url =            'http://cn.tradehero.mobi/test_form/test_form_Ayondo-wechat.html';
-//					 if(index == 1){url = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-alipay.html';}
-//					 if(index == 2){url = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-quick.html';}
-//					 if(index == 3){url = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-wechat.html';}
-//					 this.props.navigator.push({
-//			 			name: MainPage.PAYMENT_PAGE,
-//			 			url: url,
-//			 			title: responseJson,
-//			 			backFunction: this.forceloopSwipers,
-//			 		});
-//				 }else{
-//					 var payMethod;
-//					 if(index == 1){payMethod = 'alipay'}
-//					 if(index == 2){payMethod = 'quick'}
-//					 if(index == 3){payMethod = 'wechat'}
-//					 this.props.navigator.push({
-//			 			name: MainPage.PAYMENT_PAGE,
-//			 			url: 'http://www.test.paytest/'+payMethod,
-//			 			title: responseJson,
-//			 			backFunction: this.forceloopSwipers,
-//			 		});
-//				 }
-//			}
-//		);
-//	},
-
-//	magicButtonPress: function(index) {
-//
-//		//Pay Demo Test
-//
-//		this.payDemoTest(index);
-//		return;
-//
-//		if (NO_MAGIC) {
-//			return
-//		}
-//
-//		// magicCode += ""+index
-//
-//		// if(this.endsWith(magicCode, "12341234")){
-//		// 	// open account
-//		// 	this.props.navigator.push({
-//		// 		name: MainPage.OPEN_ACCOUNT_ROUTE,
-//		// 		step: 0,
-//		// 	});
-//		// }
-//		// else if(this.endsWith(magicCode, "41414141")) {
-//		// 	this.logoutPress()
-//		// }
-//		var targetUrl = 'http://cn.tradehero.mobi/TH_CFD_WEB/detail0'+index+'.html'
-//		if(LogicData.getAccountState()){
-//			targetUrl = 'http://cn.tradehero.mobi/TH_CFD_SP/detail0'+index+'.html'
-//		}
-//		this.props.navigator.push({
-//			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
-//			url: targetUrl,
-//			title: '',
-//			backFunction: this.forceloopSwipers,
-//		});
-//	},
+ 
 
 	gotoNewUserGuide:function(){
 		var targetUrl = LogicData.getAccountState()?NetConstants.TRADEHERO_API.WEBVIEW_URL_SCHOOL_ACTUAL:NetConstants.TRADEHERO_API.WEBVIEW_URL_SCHOOL;
@@ -913,44 +779,7 @@ var HomePage = React.createClass({
 			</View>
 			)
 		}
-	},
-
-//	renderIntroduceView: function(index, head, body, image) {
-//		return (
-//			<TouchableOpacity style={styles.blockContainer} activeOpacity={0.95} onPress={()=>this.magicButtonPress(index)}>
-//				<View style={styles.blockContainer}>
-//					<View style={styles.blockTextContainer}>
-//						<Text style={[styles.blockTitleText],{color:LogicData.getAccountState()?ColorConstants.TITLE_DARK_BLUE:'#1862df'}}>
-//							{head}
-//						</Text>
-//						<Text style={styles.blockBodyContent}>
-//							{body}
-//						</Text>
-//					</View>
-//					<Image style={styles.blockImage} source={image}/>
-//				</View>
-//			</TouchableOpacity>
-//		)
-//	},
-
-
-//	renderBottomViews: function() {
-//		return (
-//			<View style={{flex:1}}>
-//				<View style={styles.rowContainer}>
-//					{this.renderIntroduceView(1, '涨跌双盈','买对趋势就是盈利',LogicData.getAccountState()?require('../../images/updown_actual.png'):require('../../images/updown.png'))}
-//					<View style={styles.vertLine}/>
-//					{this.renderIntroduceView(2, '以小搏大','本金加上杠杆交易',LogicData.getAccountState()?require('../../images/small_big_actual.png'):require('../../images/smallbig.png'))}
-//				</View>
-//				<View style={styles.horiLine}/>
-//				<View style={styles.rowContainer}>
-//					{this.renderIntroduceView(3, '实时行情','免费实时全球行情',LogicData.getAccountState()?require('../../images/markets_actual.png'):require('../../images/markets.png'))}
-//					<View style={styles.vertLine}/>
-//					{this.renderIntroduceView(4, '体验简单','极简交易三步骤',LogicData.getAccountState()?require('../../images/advantage_actual.png'):require('../../images/advantage.png'))}
-//				</View>
-//			</View>
-//		)
-//	},
+	}, 
 
 
 	renderNewUser:function(){
@@ -973,6 +802,7 @@ var HomePage = React.createClass({
 			)
 		}
 	},
+
 	renderCards: function(){
 		var strSYFX = LS.str('SYFX')
 			var cardItems = this.state.rawCardsInfo.map(
@@ -1354,6 +1184,193 @@ var HomePage = React.createClass({
 		});
 	},
 
+	_renderRow :function (rowData, sectionID, rowID)  {        
+        return(
+			<DynamicRowComponent navigator={this.props.navigator} rowData={rowData}/> 
+        ) 
+    },
+
+    _renderHeader :function (viewState) {
+        let {pullState, pullDistancePercent} = viewState
+        let {refresh_none, refresh_idle, will_refresh, refreshing,} = PullToRefreshListView.constants.viewState
+        pullDistancePercent = Math.round(pullDistancePercent * 100)
+        switch(pullState) {
+            case refresh_none:
+                return (
+                    <View style={{height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent',}}>
+                        <Text style={styles.listText}>下拉刷新</Text>
+                    </View>
+                )
+            case refresh_idle:
+                return (
+                    <View style={{height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent',}}>
+                        <Text style={styles.listText}>下拉刷新...</Text>
+                    </View>
+                )
+            case will_refresh:
+                return (
+                    <View style={{height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent',}}>
+                        <Text style={styles.listText}>释放刷新</Text>
+                    </View>
+                )
+            case refreshing:
+                return (
+                    <View style={{flexDirection: 'row', height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent',}}>
+                        {this._renderActivityIndicator()}<Text style={styles.listText}>刷新中...</Text>
+                    </View>
+                )
+        }
+    },
+
+    _renderFooter :function(viewState) {
+        let {pullState, pullDistancePercent} = viewState
+        let {load_more_none, load_more_idle, will_load_more, loading_more, loaded_all, } = PullToRefreshListView.constants.viewState
+        pullDistancePercent = Math.round(pullDistancePercent * 100)
+        switch(pullState) {
+            case load_more_none:
+                return (
+                    <View style={{height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent',}}>
+                        <Text style={styles.listText}>加载更多</Text>
+                    </View>
+                )
+            case load_more_idle:
+                return (
+                    <View style={{height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent',}}>
+                        <Text style={styles.listText}>加载更多</Text>
+                    </View>
+                )
+            case will_load_more:
+                return (
+                    <View style={{height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent',}}>
+                        <Text style={styles.listText}>释放加载更多</Text>
+                    </View>
+                )
+            case loading_more:
+                return (
+                    <View style={{flexDirection: 'row', height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent',}}>
+                        {this._renderActivityIndicator()}<Text style={styles.listText}>加载中...</Text>
+                    </View>
+                )
+            case loaded_all:
+                return (
+                    <View style={{height: 35, justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent',}}>
+                        <Text style={styles.listText}>没有更多</Text>
+                    </View>
+                )
+        }
+	},
+	
+	_onLoadMore:function(){
+		// this._pullToRefreshListView.endLoadMore()   
+		var userData = LogicData.getUserData();
+		var login = Object.keys(userData).length !== 0
+		if (!login){
+			return
+		} 
+
+		var timer = this.state.dataResponse[this.state.dataResponse.length-1].time
+		var url = NetConstants.CFD_API.GET_FEED_LIVE_DEFAULT; 
+		url += '?olderThan=' + timer
+        url += '&count=' + 30
+
+		NetworkModule.fetchTHUrl(
+			url,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Accept-Language': LogicData.getLanguageEn() == '1'?'en':'cn',
+				},
+				//cache: 'offline',
+			},
+			function(response) {
+				var data = this.state.dataResponse.concat(response)
+				this.setState(
+					{
+						dataResponse:data,
+						dataSourceDynamic: dsDynamic.cloneWithRows(data),
+						isLoading:false,
+					}
+				)
+				this._pullToRefreshListView.endLoadMore() 
+			}.bind(this),
+			(result) => {
+				console.log(result.errorMessage)
+				this._pullToRefreshListView.endLoadMore() 
+			}
+		); 
+	},
+	
+	_onRefresh:function(){  
+        this.loadData(true) 
+	},
+	
+	loadData:function(isRefresh){
+		console.log("loadData isRefresh = "+isRefresh) ;
+
+		var userData = LogicData.getUserData();
+		var login = Object.keys(userData).length !== 0
+		if (!login){
+			return
+		}
+		var url = NetConstants.CFD_API.GET_FEED_LIVE_DEFAULT; 
+
+		NetworkModule.fetchTHUrl(
+			url,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Accept-Language': LogicData.getLanguageEn() == '1'?'en':'cn',
+				},
+				// cache: 'offline',
+			},
+			function(response) {
+				this.setState(
+					{
+						dataResponse: response,
+						dataSourceDynamic: dsDynamic.cloneWithRows(response),
+						isLoading:false,
+					}
+				)
+
+				if(isRefresh){
+                    this._pullToRefreshListView.endRefresh()
+				}
+				
+			}.bind(this),
+			(result) => {
+				console.log(result.errorMessage)
+				if(isRefresh){
+                    this._pullToRefreshListView.endRefresh()
+				}
+			}
+		); 
+	},
+
+    _renderActivityIndicator:function() {
+        return ActivityIndicator ? (
+            <ActivityIndicator
+                style={{marginRight: 10,}}
+                animating={true}
+                color={ColorConstants.COLOR_CUSTOM_BLUE2}
+                size={'small'}/>
+        ) : Platform.OS == 'android' ?
+            (
+                <ProgressBarAndroid
+                    style={{marginRight: 10,}}
+                    color={ColorConstants.COLOR_CUSTOM_BLUE2}
+                    styleAttr={'Small'}/>
+
+            ) :  (
+            <ActivityIndicatorIOS
+                style={{marginRight: 10,}}
+                animating={true}
+                color={ColorConstants.COLOR_CUSTOM_BLUE2}
+                size={'small'}/>
+        )
+    } ,
+
 	render: function() {
 		height = Dimensions.get('window').height;
 		width = Dimensions.get('window').width;
@@ -1379,62 +1396,91 @@ var HomePage = React.createClass({
 				);
 			}
 		}
-		return (
-			<View style={{width: width, flex: 1, paddingBottom: UIConstants.TAB_BAR_HEIGHT}}>
-				<View style={{width:width, flex: 1}}>
-					{this.renderBgHint()}
-					<ScrollView ref={SCROLL_VIEW}
-						onScroll={this.onScroll}
-						onScrollEndDrag={(e)=>{
-							if(e.nativeEvent.contentOffset.y < 0){
-								this.refs[SCROLL_VIEW] && this.refs[SCROLL_VIEW].scrollTo({x:e.nativeEvent.contentOffset.x, y:0})
-							}
-						}}
-						onContentSizeChange={this.onContentSizeChange}
-						scrollEventThrottle={8} >
-						<View style={{width: width, height: imageHeight}}>
-							<Swiper
-							  style={{backgroundColor:'#eaeaea'}}
-								ref="bannerswiper"
-								height={imageHeight}
-								loop={true}
-								bounces={true}
-								autoplay={true}
-								autoplayTimeout={3}
-								paginationStyle={{
-									bottom: 0, top: null, left: 12, right: 12,
-								}}
-								activeDot={activeDot}
-								dot={dot}>
-								{slides}
-							</Swiper>
-						</View>
 
-						{this.renderTopNews()}
-						<View style={styles.bigSeparator}/>
-
-						{/* {this.renderEventsRow()} */}
-						{/* {this.renderEventSeparator2()} */}
-
-
-						{this.renderPopularityView()}
-
-
-						{this.renderCards()}
-
-						{/* {this.renderBottomViews()} */}
-
-						{this.renderNewUser()}
-
-						{/* {this.renderLoginWebView()} */}
-
-					</ScrollView>
-				</View>
-				{this.renderNavBar()}
-			</View>
-
-		);
+		if(LogicData.getAccountState()){ 
+			if(this.state.isLoading){
+				return (
+				<View style={[styles.mainContainer,{ flex: 1, justifyContent:'center'}]}>
+					<Text style={{textAlign:'center', color: 'white', fontSize:20}}>数据读取中... </Text>
+				</View>);
+			}else{
+				return ( 
+					<View style = {styles.mainContainer}> 
+						<PullToRefreshListView
+							ref={ (component) => this._pullToRefreshListView = component }
+							viewType={PullToRefreshListView.constants.viewType.listView}
+							contentContainerStyle={{backgroundColor: 'transparent', }}
+							style={{marginTop: Platform.OS == 'ios' ? 0 : 0, }}
+							initialListSize={20}
+							enableEmptySections={true}
+							dataSource={this.state.dataSourceDynamic}
+							pageSize={20}
+							renderRow={this._renderRow}
+							renderHeader={this._renderHeader}
+							renderFooter={this._renderFooter} 
+							onRefresh={this._onRefresh}
+							onLoadMore={this._onLoadMore}
+							pullUpDistance={35}
+							pullUpStayDistance={50} 
+							removeClippedSubviews={false}
+							pullDownDistance={35}
+							pullDownStayDistance={50}
+						/>
+					</View>
+				)
+			}  
+		}else{
+			return (
+				<View style={{width: width, flex: 1, paddingBottom: UIConstants.TAB_BAR_HEIGHT}}>
+					<View style={{width:width, flex: 1}}>
+						{this.renderBgHint()}
+						<ScrollView ref={SCROLL_VIEW}
+							onScroll={this.onScroll}
+							onScrollEndDrag={(e)=>{
+								if(e.nativeEvent.contentOffset.y < 0){
+									this.refs[SCROLL_VIEW] && this.refs[SCROLL_VIEW].scrollTo({x:e.nativeEvent.contentOffset.x, y:0})
+								}
+							}}
+							onContentSizeChange={this.onContentSizeChange}
+							scrollEventThrottle={8} >
+							<View style={{width: width, height: imageHeight}}>
+								<Swiper
+								  style={{backgroundColor:'#eaeaea'}}
+									ref="bannerswiper"
+									height={imageHeight}
+									loop={true}
+									bounces={true}
+									autoplay={true}
+									autoplayTimeout={3}
+									paginationStyle={{
+										bottom: 0, top: null, left: 12, right: 12,
+									}}
+									activeDot={activeDot}
+									dot={dot}>
+									{slides}
+								</Swiper>
+							</View>
+	
+							{this.renderTopNews()}
+							<View style={styles.bigSeparator}/> 
+							{/* {this.renderEventsRow()} */}
+							{/* {this.renderEventSeparator2()} */} 
+							{this.renderPopularityView()}  
+							{this.renderCards()} 
+							{/* {this.renderBottomViews()} */} 
+							{this.renderNewUser()} 
+							{/* {this.renderLoginWebView()} */} 
+						</ScrollView>
+					</View>
+					{this.renderNavBar()}
+				</View> 
+			);
+		} 
 	},
+
+
+
+	
 });
 
 var styles = StyleSheet.create({
@@ -1751,6 +1797,18 @@ var styles = StyleSheet.create({
 		alignItems:"flex-start",
 		justifyContent:"center",
 	},
+
+	mainContainer:{
+		width:width,
+        flex:1,
+		backgroundColor:ColorConstants.TITLE_BLUE_LIVE,
+		paddingTop:20,
+		paddingBottom: UIConstants.TAB_BAR_HEIGHT,
+	},
+	listText:{
+		color:ColorConstants.COLOR_CUSTOM_BLUE2
+	}
+     
 });
 
 module.exports = HomePage;

@@ -18,8 +18,7 @@ var MainPage = require('./MainPage')
 var ColorConstants = require('../ColorConstants')
 var StatisticBarBlock = require('./personalPage/StatisticBarBlock')
 var ProfitBlock = require('./personalPage/ProfitBlock')
-var TradeStyleBlock = require('./personalPage/TradeStyleBlock')
-
+var TradeStyleBlock = require('./personalPage/TradeStyleBlock') 
 var CHART_TYPE_2MONTH = 0;
 var CHART_TYPE_ALL = 1;
 var emptyStar = '***'
@@ -344,7 +343,14 @@ export default class UserHomePageTab0 extends Component{
 	}
 
   pressCard(index) {
-		console.log("pressedCard:" + index);
+    console.log("pressedCard:" + index);
+    var isUserSelf = LogicData.isUserSelf(this.props.userId)
+    var pageSetting = isUserSelf?null:{showLike:true}
+    
+    this.refs['stockTransactionInfoModal'].showAchievement(this.state.cards, parseInt(index), ()=>{
+			//alert("我回来了！");
+		},pageSetting);
+
   }
 
   cardWarpperRender() {
@@ -501,6 +507,8 @@ export default class UserHomePageTab0 extends Component{
         <View style = {styles.separator}></View>
         {this.props.isStatisticPage ? null : this.cardWarpperRender()}
         <View style = {styles.separator}></View>
+
+        <StockTransactionInfoModal ref='stockTransactionInfoModal'/>
 			</ScrollView>
 		);
 	}

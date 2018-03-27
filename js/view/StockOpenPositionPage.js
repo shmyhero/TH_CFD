@@ -1858,7 +1858,7 @@ var StockOpenPositionPage = React.createClass({
 	},
 
 	renderDetailInfo: function(rowData) {
-		var tradeImage = rowData.isLong ? require('../../images/dark_up.png') : require('../../images/dark_down.png')
+		var tradeImage = rowData.isLong ? require('../../images/icon_up_cw.png') : require('../../images/icon_down_cw.png')
 		var lastPrice = this.getLastPrice(rowData)
 		// console.log('RAMBO rowData.id = ' + rowData.security.id)
 		_currentRowData = rowData

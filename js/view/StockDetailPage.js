@@ -1134,9 +1134,9 @@ var StockDetailPage = React.createClass({
 
 	renderTradeButton: function() {
 		var upSelected = this.state.tradeDirection === 1
-		var upImage = upSelected ? require('../../images/click-up.png') : (LogicData.getAccountState()?require('../../images/up_live.png'):require('../../images/up.png'))
+		var upImage = upSelected ? require('../../images/icon_up_detail_pressed.png') : (LogicData.getAccountState()?require('../../images/icon_up_normal_live.png'):require('../../images/icon_up_normal.png'))
 		var downSelected = this.state.tradeDirection === 2
-		var downImage = downSelected ? require('../../images/click-down.png') : (LogicData.getAccountState()?require('../../images/down_live.png'):require('../../images/down.png'))
+		var downImage = downSelected ? require('../../images/icon_down_detail_pressed.png') : (LogicData.getAccountState()?require('../../images/icon_down_normal_live.png'):require('../../images/icon_down_normal.png'))
 
 		var upTextColor = 'white'
 		var downTextColor = 'white'
@@ -1919,8 +1919,8 @@ var styles = StyleSheet.create({
 		backgroundColor: '#a1b6d8',
 	},
 	tradeButtonImage: {
-		width: 35,
-		height: 25,
+		width: 26,
+		height: 26,
 		marginTop: 5,
 		marginBottom: 5,
 	},

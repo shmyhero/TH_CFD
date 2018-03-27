@@ -97,6 +97,7 @@ var MePage = React.createClass({
 			loggedIn: false,
 			dataSource: ds.cloneWithRows(listRawData),
 			lastStep:0,
+			unreadMessageCount: 0, 
 		};
 	},
 
@@ -163,6 +164,7 @@ var MePage = React.createClass({
 		LogicData.setTabIndex(MainPage.ME_PAGE_TAB_INDEX);
 		WebSocketModule.cleanRegisteredCallbacks();
 		this.reloadMeData();
+		this.loadUnreadMessage();
 	},
 
 	reloadMeData: function(){
@@ -758,8 +760,83 @@ var MePage = React.createClass({
 		var strMe = LS.str('WODE');
 		return(
 			<NavBar title={strMe}
-				navigator={this.props.navigator}/>
+				navigator={this.props.navigator}
+				viewOnRight={this.renderMessageIcon()}/>
 		);
+	},
+
+	loadUnreadMessage: function(){
+		var userData = LogicData.getUserData();
+		var login = Object.keys(userData).length !== 0
+		if (!login){
+			return
+		}
+		var url = NetConstants.CFD_API.GET_UNREAD_MESSAGE;
+		if(LogicData.getAccountState()){
+			url = NetConstants.CFD_API.GET_UNREAD_MESSAGE_LIVE
+			console.log('live', url );
+		}
+
+		NetworkModule.fetchTHUrl(
+			url,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Accept-Language': LogicData.getLanguageEn() == '1'?'en':'cn',
+				},
+				//cache: 'offline',
+			},
+			function(response) {
+				this.setState(
+					{
+						unreadMessageCount: response,
+					}
+				)
+			}.bind(this),
+			(result) => {
+				console.log(result.errorMessage)
+			}
+		);
+	},
+
+	renderUnreadCount: function(){
+		if(this.state.unreadMessageCount > 0){
+			var text = this.state.unreadMessageCount > 9 ? "9+" : "" + this.state.unreadMessageCount;
+			return (
+				<View style={styles.unreadMessageView}>
+					<Text style={styles.unreadMessageText}>
+						{text}
+					</Text>
+				</View>
+			)
+		}else{
+			return null;
+		}
+	},
+
+	goToMailPage: function(){
+		this.props.navigator.push({
+			name: MainPage.MY_MESSAGES_ROUTE,
+			onPopToRoute: this.loadUnreadMessage,
+		});
+	},
+
+	renderMessageIcon: function(){
+		var userData = LogicData.getUserData()
+		var login = Object.keys(userData).length !== 0
+		if(login){
+			return (
+				<TouchableOpacity onPress={()=>this.goToMailPage()}
+					style={styles.navBarRightView}>
+					<Image
+							style={[styles.navBarIcon, styles.navBarIconRight]}
+							source={require('../../images/icon_my_message.png')}/>
+					{this.renderUnreadCount()}
+				</TouchableOpacity>
+			);
+		}
+		return null;
 	},
 
 	renderListView: function(){
@@ -955,7 +1032,34 @@ var styles = StyleSheet.create({
       marginTop:-85,
       marginLeft:-30,
       position:'absolute'
-    },
+	},
+	
+	navBarIcon: {
+		width: 21,
+		height: 21,
+		resizeMode: Image.resizeMode.contain,
+	},
+
+	navBarIconRight: {
+		marginRight: 20,
+	},
+
+	unreadMessageView:{
+		backgroundColor:'#ff3333',
+		position:'absolute',
+		top:0,
+		right:13,
+		width:20,
+		height:14,
+		alignItems:'center',
+		justifyContent:'center',
+		borderRadius: 6,
+	},
+
+	unreadMessageText:{
+		color:'white',
+		fontSize:10,
+	},
 
 });
 

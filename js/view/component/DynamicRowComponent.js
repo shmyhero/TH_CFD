@@ -35,7 +35,9 @@ class DynamicRowComponent extends Component {
     }
 
     componentDidMount() { 
+        // console.log('isNew = ' + this.props.rowData.isNew)
         if(this.props.rowData.isNew){
+            
             this.animate() 
         }else{
             this.setState( {
@@ -44,16 +46,14 @@ class DynamicRowComponent extends Component {
         }
     } 
 
-    componentWillReceiveProps(props){  
-
-        // if(props.rowData.isNew){
-        //     this.setState( {
-        //         translateX: new RN.Animated.Value(0-width*2), 
-        //     }, ()=>{
-        //         this.animate()
-        //     });
-        // }
-
+    componentWillReceiveProps(props){   
+        if(props.rowData.isNew){
+            this.setState( {
+                translateX: new RN.Animated.Value(0-width*2), 
+            }, ()=>{
+                this.animate()
+            });
+        } 
     }
 
     componentWillUpdate(){
@@ -114,13 +114,13 @@ class DynamicRowComponent extends Component {
         //     nickName:rowData.user.nickname,
         // }
         // this.props.navigation.navigate(ViewKeys.SCREEN_USER_PROFILE, {userData:userData})
- 
+        if(rowData.type == 'system'){return}
         var isPrivate = false//!rowData.showData
          
         this.props.navigator.push({
             name: MainPage.USER_HOME_PAGE_ROUTE,
             userData:{userId:rowData.user.id,userName:rowData.user.nickname,isPrivate:isPrivate},
-            backRefresh:()=>this.backRefresh(),
+            // backRefresh:()=>this.backRefresh(),
         });  
     }
 
@@ -128,6 +128,14 @@ class DynamicRowComponent extends Component {
         var text = '';
 
         if(rowData.type == 'status'){
+            text = rowData.status
+            return (
+                <TweetBlock 
+                // style={{fontSize:15,color:'#666666',lineHeight:20}}
+                value={text}
+                onBlockPressed={(name, id)=>{this.jump2Detail(name, id)}}/>
+            )
+        }else if(rowData.type == 'system'){
             text = rowData.status
             return (
                 <TweetBlock 

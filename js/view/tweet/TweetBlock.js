@@ -23,7 +23,8 @@ class TweetBlock extends Component {
 
         var textNodes = TweetParser.parseTextNodes(this.props.value);
         this.state = {
-            textNodes: textNodes
+            textNodes: textNodes,
+            maxLine:3,
         };
     }
 
@@ -34,6 +35,12 @@ class TweetBlock extends Component {
                 textNodes: textNodes
             };
         }
+    }
+
+    onPressed(){
+        this.setState({
+            maxLine:this.state.maxLine==99?3:99
+        })
     }
 
     render() {
@@ -66,19 +73,23 @@ class TweetBlock extends Component {
             }
         });
 
-        return (           
-            <Text style={[styles.container, this.props.style]}>
-                {parsedListView}
-            </Text>
+        return (        
+            
+            <TouchableOpacity onPress={()=>this.onPressed()}>      
+                <Text  style={[styles.container, this.props.style]} numberOfLines={this.state.maxLine}>
+                    {parsedListView}
+                </Text>
+            </TouchableOpacity> 
+ 
         );
     }
 }
 
 // define your styles
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
+    // container: {
+    //     flex: 1,
+    // },
 
     textPart:{
         fontSize: 15,

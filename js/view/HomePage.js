@@ -325,6 +325,58 @@ var HomePage = React.createClass({
 		accountStateChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, this.resetPage);
 		//
 		// this.onConnectionStateChanged();
+
+
+		this.setInterval(
+			()=>{
+				if(LogicData.getAccountState()){
+					this.loadCacheListData()
+				} 
+			},
+			30000
+		)
+
+		this.setInterval(
+			()=>{
+				if(LogicData.getAccountState()){
+					var responseJson = this.state.dataResponse
+					if(this.state.cacheData&&this.state.cacheData.length>0){  
+						if(responseJson && responseJson.length > 0){
+							for(var i = 0; i < responseJson.length; i++){
+								responseJson[i].isNew = false;
+							} 
+						}
+
+						var add = {}
+						$.extend(true, add, this.state.cacheData[this.state.cacheData.length-1]);
+						add.isNew = true
+						responseJson.splice(0, 0, add);
+						this.state.cacheData.splice(this.state.cacheData.length-1,1)
+
+						console.log("responseJson[0].isNew = " + responseJson[0].isNew)
+						
+						this.setState({ 
+							dataResponse:responseJson,
+							cacheData:this.state.cacheData,
+							// dataSource:this._dataSource.cloneWithRows(responseJson),
+							dataSourceDynamic: dsDynamic.cloneWithRows(responseJson),
+						}) 
+
+					}else{
+						for(var i = 0; i < responseJson.length; i++){
+							responseJson[i].isNew = false;
+						} 
+						this.setState({ 
+							dataResponse:responseJson, 
+							// dataSource:this._dataSource.cloneWithRows(responseJson),
+							dataSourceDynamic: dsDynamic.cloneWithRows(responseJson),
+						})
+					}
+				}
+			},
+			2000
+		)
+
 	},
 
 	componentWillUnmount: function() {
@@ -340,7 +392,10 @@ var HomePage = React.createClass({
 			connected: isConnected
 		})
 		console.log("onConnectionStateChanged reloadPage" + isConnected);
-		this.reloadPage();
+		if(LogicData.getAccountState()){
+		}else{
+			this.reloadPage();
+		} 
 	},
 
 	onTabChanged: function(){
@@ -348,8 +403,16 @@ var HomePage = React.createClass({
 		WebSocketModule.cleanRegisteredCallbacks();
 
 		console.log("onTabChanged reloadPage");
-		this.reloadPage();
-		this.forceloopSwipers();
+
+		if(LogicData.getAccountState()){
+			if(this.state.dataResponse.length<=0){
+				this.loadData(false)
+			}
+		}else{
+			this.reloadPage();
+			this.forceloopSwipers();
+		}
+		
 	},
 
 	onDidFocus: function(event) {
@@ -1259,15 +1322,57 @@ var HomePage = React.createClass({
                 )
         }
 	},
-	
-	_onLoadMore:function(){
-		// this._pullToRefreshListView.endLoadMore()   
+
+	loadCacheListData:function(){
+
 		var userData = LogicData.getUserData();
 		var login = Object.keys(userData).length !== 0
 		if (!login){
 			return
 		} 
 
+
+        if(this.state.dataResponse&&this.state.dataResponse.length>0){
+            var timer = this.state.dataResponse[0].time
+            var url = NetConstants.CFD_API.GET_FEED_LIVE_DEFAULT; 
+            url += '?newerThan=' + timer
+			url += '&count=' + 5 
+			
+            NetworkModule.fetchTHUrl(
+                url,
+                {
+                    method: 'GET',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						'Accept-Language': LogicData.getLanguageEn() == '1'?'en':'cn',
+					},
+                },
+                (responseJson) => {
+                    for(var i = 0; i < responseJson.length; i++){
+                        responseJson[i].isNew = true;
+                    } 
+                    this.setState({ 
+                        cacheData: responseJson,
+                    }) 
+    
+                    console.log('loadCacheListData length is = ' + responseJson.length);
+                },
+                (result) => {
+                    Alert.alert('提示', result.errorMessage);
+                }
+            )
+        } 
+    },
+	
+	_onLoadMore:function(){
+		// this._pullToRefreshListView.endLoadMore()   
+		console.log("Rambo 1")
+		var userData = LogicData.getUserData();
+		var login = Object.keys(userData).length !== 0
+		if (!login){
+			return
+		} 
+		console.log("Rambo 2")
 		var timer = this.state.dataResponse[this.state.dataResponse.length-1].time
 		var url = NetConstants.CFD_API.GET_FEED_LIVE_DEFAULT; 
 		url += '?olderThan=' + timer
@@ -1292,11 +1397,13 @@ var HomePage = React.createClass({
 						isLoading:false,
 					}
 				)
+				console.log("Rambo 3")
 				this._pullToRefreshListView.endLoadMore() 
 			}.bind(this),
 			(result) => {
 				console.log(result.errorMessage)
 				this._pullToRefreshListView.endLoadMore() 
+				console.log("Rambo 4")
 			}
 		); 
 	},
@@ -1307,6 +1414,11 @@ var HomePage = React.createClass({
 	
 	loadData:function(isRefresh){
 		console.log("loadData isRefresh = "+isRefresh) ;
+		if(this.state.dataResponse.length<=0){
+			this.setState({
+				isLoading : true
+			})
+		}
 
 		var userData = LogicData.getUserData();
 		var login = Object.keys(userData).length !== 0
@@ -1314,7 +1426,7 @@ var HomePage = React.createClass({
 			return
 		}
 		var url = NetConstants.CFD_API.GET_FEED_LIVE_DEFAULT; 
-
+		var param = isRefresh?null:{cache:'offline'}
 		NetworkModule.fetchTHUrl(
 			url,
 			{
@@ -1323,7 +1435,7 @@ var HomePage = React.createClass({
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 					'Accept-Language': LogicData.getLanguageEn() == '1'?'en':'cn',
 				},
-				// cache: 'offline',
+				param,
 			},
 			function(response) {
 				this.setState(

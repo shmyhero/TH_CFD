@@ -69,6 +69,8 @@ var StockListPage = React.createClass({
 			contentLoaded: false,
 			isRefreshing: true,
 			height: UIConstants.getVisibleHeight(),
+			 
+
 		};
 	},
 
@@ -170,6 +172,7 @@ var StockListPage = React.createClass({
 			console.log("onLayoutSizeChanged");
 			this.setState({
 				height: UIConstants.getVisibleHeight(),
+				 
 			});
 		}
 	},
@@ -741,7 +744,7 @@ var StockListPage = React.createClass({
 		var scrollTabHeight = 48
 
 		var viewStyle = Platform.OS === 'android' ?
-			{width: width, height: this.state.height
+			{width: width, height: UIConstants.getVisibleHeight()//this.state.height
 					- UIConstants.HEADER_HEIGHT
 					- UIConstants.SCROLL_TAB_HEIGHT
 					- UIConstants.TAB_BAR_HEIGHT} :

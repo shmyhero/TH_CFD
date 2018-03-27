@@ -122,7 +122,7 @@ var styles = StyleSheet.create({
 		width:width-30,
 		marginLeft: 15,
 		marginRight: 15,
-		marginBottom: 16,
+		marginBottom: 50,
 		borderRadius: 3,
 	},
 	buttonView: {

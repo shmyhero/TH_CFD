@@ -761,9 +761,12 @@ var MePage = React.createClass({
 		return(
 			<NavBar title={strMe}
 				navigator={this.props.navigator}
-				viewOnRight={this.renderMessageIcon()}/>
+				viewOnRight={this.renderMessageIcon()}
+			 />
 		);
 	},
+
+ 
 
 	loadUnreadMessage: function(){
 		var userData = LogicData.getUserData();
@@ -1059,6 +1062,19 @@ var styles = StyleSheet.create({
 	unreadMessageText:{
 		color:'white',
 		fontSize:10,
+	},
+
+	navBarLeftView:{
+		flex:1,
+		height: 30,
+		alignItems:"flex-start",
+		justifyContent:"center",
+	},
+	navBarRightView:{
+		flex:1,
+		height: 30,
+		alignItems:"flex-end",
+		justifyContent:"center",
 	},
 
 });

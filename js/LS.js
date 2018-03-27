@@ -98,7 +98,7 @@ var LS = {
     J2Z:['近2周','2 weeks'],
     QB:['全部','All'],
     TDSYZS:['TA的收益走势',' Investment Trend'],
-    YKFB:['盈亏分布','Profit / loss Show'],
+    YKFB:['开仓最多','Profit / loss Show'],
     CP:['产品','Products'],
     PJSY:['平均收益率','Average Profit'],
     ZSL:['总胜率','WinRate'],

@@ -9,10 +9,14 @@ import android.graphics.drawable.Drawable;
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by Philipp Jahoda on 25/01/16.
  */
 public abstract class LineRadarRenderer extends LineScatterCandleRadarRenderer {
+
+    protected WeakReference<Bitmap> mTempBitmap;
 
     public LineRadarRenderer(ChartAnimator animator, ViewPortHandler viewPortHandler) {
         super(animator, viewPortHandler);
@@ -28,9 +32,14 @@ public abstract class LineRadarRenderer extends LineScatterCandleRadarRenderer {
     protected void drawFilledPath(Canvas c, Path filledPath, Drawable drawable) {
         c.save();
 
-        Bitmap tempBitmap = Bitmap.createBitmap((int)mViewPortHandler.getChartWidth(),
-                (int)mViewPortHandler.getChartHeight(), Bitmap.Config.ARGB_8888);
-        Canvas tempCanvas = new Canvas(tempBitmap);
+        if (mTempBitmap == null
+                || mTempBitmap.get() == null
+                || (mTempBitmap.get().getWidth() != mViewPortHandler.getChartWidth())
+                || (mTempBitmap.get().getHeight() != mViewPortHandler.getChartHeight())) {
+            mTempBitmap = new WeakReference<Bitmap>(Bitmap.createBitmap((int) mViewPortHandler.getChartWidth(),
+                    (int) mViewPortHandler.getChartHeight(), Bitmap.Config.ARGB_8888));
+        }
+        Canvas tempCanvas = new Canvas(mTempBitmap.get());
 
         tempCanvas.clipPath(filledPath);
         drawable.setBounds((int) mViewPortHandler.contentLeft(),
@@ -39,7 +48,7 @@ public abstract class LineRadarRenderer extends LineScatterCandleRadarRenderer {
                 (int) mViewPortHandler.contentBottom());
         drawable.draw(tempCanvas);
 
-        c.drawBitmap(tempBitmap, 0, 0, new Paint());
+        c.drawBitmap(mTempBitmap.get(), 0, 0, new Paint());
 
         c.restore();
     }
@@ -60,5 +69,13 @@ public abstract class LineRadarRenderer extends LineScatterCandleRadarRenderer {
         int color = (fillAlpha << 24) | (fillColor & 0xffffff);
         c.drawColor(color);
         c.restore();
+    }
+
+    public void releaseBitmap() {
+        if (mTempBitmap != null) {
+            mTempBitmap.get().recycle();
+            mTempBitmap.clear();
+            mTempBitmap = null;
+        }
     }
 }

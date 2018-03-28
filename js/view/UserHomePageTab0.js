@@ -348,7 +348,9 @@ export default class UserHomePageTab0 extends Component{
     var pageSetting = isUserSelf?null:{showLike:true}
     
     this.refs['stockTransactionInfoModal'].showAchievement(this.state.cards, parseInt(index), ()=>{
-			//alert("我回来了！");
+      //alert("我回来了！");
+      
+      this.refresh();
 		},pageSetting);
 
   }
@@ -366,6 +368,7 @@ export default class UserHomePageTab0 extends Component{
 						<View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
 							<Text style={{color:'#fa2c21',fontSize:14,marginBottom:5}}>{this.state.cards[i].plRate.toFixed(2)}%</Text>
 							<Text style={{color:'#3f3f3f',fontSize:14}}>{this.state.cards[i].stockName}</Text>
+              <View style={{height:20,width:20}}></View>
 						</View>
 					</Image>
 				</TouchableOpacity>

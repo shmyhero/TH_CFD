@@ -184,7 +184,7 @@ export default class UserHomePageTab3 extends Component{
 			return(
 					<TouchableOpacity style={styles.editView} onPress={()=>this.onPressedEditView()}>
 
-							<Image style={{width:48,height:48}} source={require('../../images/icon_edit.png')}/>
+							<Image style={{width:72,height:72}} source={require('../../images/icon_edit.png')}/>
 
   				</TouchableOpacity>
 			)
@@ -321,7 +321,7 @@ export default class UserHomePageTab3 extends Component{
 	render(){
 		return(
 			<View style={{flex:1,backgroundColor:'white'}}>
-       	{this.renderContent()}
+       			{this.renderContent()}
 				{this.editView()}
 			</View>
 		);
@@ -334,15 +334,15 @@ const styles = StyleSheet.create({
 	separator: {
     height: 0.5,
     backgroundColor: '#f0f0f0',
-  },
+  	},
 
 	editView:{
-		width:48,
-		height:48,
+		width:72,
+		height:72,
 		justifyContent:'center',
 		alignItems:'center',
 		position:'absolute',
-		top:height - 220 - 120,//220是ViewPage以上的部分
+		top:height - 240 - 120,//220是ViewPage以上的部分
 		left:width*3/4,
 	},
 

@@ -113,7 +113,7 @@ var ScrollTabView = React.createClass({
 		return (
 			<View style={styles.lineContainer}>
 
-				<View style={[styles.tabItemContainer, {backgroundColor:'#1962dd',height:2,width: width / this.props.tabNames.length, marginLeft: offsetX}]}>
+				<View style={[styles.tabItemContainer, {backgroundColor:ColorConstants.TITLE_BLUE_LIVE,height:2,width: width / this.props.tabNames.length, marginLeft: offsetX}]}>
 
 				</View>
 
@@ -178,7 +178,7 @@ var styles = StyleSheet.create({
 
 	tabItemTextSelected: {
 		textAlign: 'center',
-		color: '#1962dd',
+		color: ColorConstants.TITLE_BLUE_LIVE,
 		fontSize: 15,
 		fontWeight: 'bold',
 	},

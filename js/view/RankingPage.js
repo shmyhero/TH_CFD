@@ -555,11 +555,13 @@ const styles = StyleSheet.create({
   },
 
   container: {
-		height: UIConstants.HEADER_HEIGHT,
-		backgroundColor: '#425a85',
+    // height: UIConstants.HEADER_HEIGHT,
+    height:60,
+    backgroundColor: '#425a85',
+    // backgroundColor:'white',
 		alignItems:'center',
     justifyContent:'center',
-		paddingTop: (Platform.OS === 'ios') ? 15 : 0,
+		paddingTop: (Platform.OS === 'ios') ? 20 : 0,
 	},
 
 	scroolItem:{

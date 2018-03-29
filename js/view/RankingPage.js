@@ -243,12 +243,9 @@ export default class RankingPage extends Component{
       head = require('../../images/head_portrait.png')
     }
 
-    var isUserSelf = LogicData.isUserSelf(rowData.id);
-//<Image style = {[styles.userHeader, headRank?styles.HeaderOffset:null]} source={head}></Image>
-//<Image style = {styles.userHeaderIconRound} source={headRank}></Image>
+    var isUserSelf = LogicData.isUserSelf(rowData.id); 
     var winRateShow = (rowData.showData)?rate:emptyStar;
-    var posCountShow = (rowData.showData)?rowData.posCount:emptyStar;
-    // console.log("rowDara.posCount = " + rowData.posCount + " emptyStar = " + emptyStar);
+    var posCountShow = (rowData.showData)?rowData.posCount:emptyStar; 
     var strSL = LS.str('SL')+":";
     var strPCBS = LS.str('PCBS')
     return(
@@ -294,11 +291,17 @@ export default class RankingPage extends Component{
   }
 
   renderSeparatorShort(sectionID, rowID, adjacentRowHighlighted) {
-    return (
-      <View style={styles.line} key={rowID}>
-        <View style = {styles.separatorShort}></View>
-      </View>
-    );
+    // console.log('rowID = ' + rowID)
+    // if(rowID !== 0){
+    //   return (
+    //     <View style={styles.line} key={rowID}>
+    //       <View style = {styles.separatorShort}></View>
+    //     </View> 
+    //   );
+    // }else{
+      return <View/>
+    // }
+    
   }
 
   renderFooter(){
@@ -310,7 +313,7 @@ export default class RankingPage extends Component{
   
   renderHeader(){
     return(
-      <View style={{paddingTop:10,backgroundColor:'#425a85'}}>
+      <View style={{paddingTop:2,backgroundColor:'#425a85'}}>
         {this.renderMe()}
         {this.renderThreeHero()} 
       </View>
@@ -337,7 +340,7 @@ export default class RankingPage extends Component{
         <TouchableOpacity onPress={()=>this._onPressedUserItem(this.state.rankSource[0])}>
             <Image style={{width:width-20,height:69,marginTop:0, alignSelf:'center', alignItems:'center',justifyContent:'space-between',flexDirection:'row'}} source={require('../../images/rank_bg_me.png')}>
                 <View style={{flexDirection:'row',alignItems:'center'}}>
-                    <Image style={{height:34,width:34,borderRadius:17,marginLeft:28,marginBottom:5}} source={{uri:this.state.rankSource[0].picUrl}}></Image>
+                    <Image style={{height:34,width:34,borderRadius:17,marginLeft:28,marginBottom:5,borderWidth:1,borderColor:'#6f8dc3'}} source={{uri:this.state.rankSource[0].picUrl}}></Image>
                     <View style={{marginLeft:10}}>
                         <Text style={{backgroundColor:'transparent',fontSize:15,color:'white'}}>我的</Text>
                         <View style={{flexDirection:'row',marginBottom:5,alignItems:'center'}}>
@@ -438,11 +441,13 @@ _renderRow2 = (rowData, sectionID, rowID) => {
     var winRateShow = (rowData.showData)?rate:emptyStar;
     if(rowID>=4){
         return( 
+            <View>
+             
             <TouchableOpacity onPress={()=>this._onPressedUserItem(rowData)} style={{height:68,width:width,alignItems:'center',justifyContent:'space-between',flexDirection:'row'}}>
                 <View style={{flexDirection:'row',alignItems:'center'}}>
                     <View style={{'paddingTop':5}}>
-                      <Image style={{height:32,width:32,marginLeft:28,borderRadius:16}} source={head}></Image>
-                      <Image style = {[styles.userHeaderIconRound,{marginLeft:14}]} source={headRank}></Image>
+                      <Image style={{height:40,width:40,marginLeft:28,borderRadius:20}} source={head}></Image>
+                      <Image style = {[styles.userHeaderIconRound,{marginLeft:8}]} source={headRank}></Image>
                     </View>
                     <View style={{marginLeft:10,paddingTop:10}}>
                         <Text style={{fontSize:15,color:'#454545'}}>{rowData.nickname}</Text>
@@ -456,6 +461,9 @@ _renderRow2 = (rowData, sectionID, rowID) => {
                     <Text style={{fontSize:17, color:'#ca3538'}}>+{roi}%</Text>
                 </View> 
             </TouchableOpacity>
+
+            <View style={styles.separatorShort}></View>
+            </View>
         )
     }else{
         return null
@@ -642,10 +650,10 @@ const styles = StyleSheet.create({
     marginRight:20,
   },
   userHeader:{
-    width:32,
-    height:32,
+    width:40,
+    height:40,
     marginLeft:10,
-    borderRadius:16,
+    borderRadius:20,
   },
   HeaderOffset:{
     width:28,
@@ -655,10 +663,10 @@ const styles = StyleSheet.create({
     borderRadius:14,
   },
   userHeaderIconRound:{
-    width:64,
-    height:64,
-    marginTop:-49.5,
-    marginLeft:-6.5,
+    width:80,
+    height:80,
+    marginTop:-62,
+    marginLeft:-10,
     position:'absolute'
   },
   
@@ -728,14 +736,14 @@ const styles = StyleSheet.create({
 
     textTopUserName:{
         alignSelf:'center',
-        marginTop:5,
-        color:'white',
+        marginTop:8,
+        color:'#cedfff',
         fontSize:12,
     },
     textTopUserScore:{
         alignSelf:'center',
         marginBottom:2,
-        color:'#d8effc',
+        color:'#e1e8f6',
         fontSize:13,
     },
     textProfit:{

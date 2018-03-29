@@ -253,7 +253,7 @@ export default class UserHomePage extends Component {
 
 		var viewDessciption = (
 			<TouchableOpacity onPress={()=>this._onPressedAskForRank()} style={{borderBottomWidth:1,borderBottomColor:'#a3aec4',marginBottom:-30,marginTop:30}}>
-				<Text style={{color:'#e5edfa',fontSize:12}}>{this.state.rankDescription}</Text>
+				<Text style={{opacity:0.8, color:'white',fontSize:12}}>{this.state.rankDescription}</Text>
 			</TouchableOpacity>
 		)
 		var rankDescriptionView = headRank==undefined?null:viewDessciption
@@ -737,7 +737,7 @@ const styles = StyleSheet.create({
 		height: 80,
 		borderRadius: 40,
 		borderWidth: 2,
-		borderColor: 'white'
+		borderColor: '#6f8dc3'
 	},
 
 	userHeaderIconRound: {

@@ -1914,7 +1914,7 @@ var styles = StyleSheet.create({
 		width:width,
         flex:1,
 		backgroundColor:ColorConstants.TITLE_BLUE_LIVE,
-		paddingTop:20,
+		paddingTop:40,
 		paddingBottom: UIConstants.TAB_BAR_HEIGHT,
 	},
 	listText:{

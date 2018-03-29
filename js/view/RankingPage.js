@@ -376,14 +376,14 @@ renderThreeHero(){
                       <Image style={styles.headPortrait} source={{uri:this.state.rankSource[2].picUrl}}></Image>
                       <Image style = {[styles.userHeaderIconRoundBig]} source={headRank2}></Image>
                     </View>
-                    <View style={{marginBottom:-8}}> 
+                    <View style={{marginBottom:-5}}> 
                       <Text style={styles.textTopUserName}>{this.state.rankSource[2].nickname}</Text>
                       <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
                           <Text style={styles.textWinRate}>胜率: </Text>
                           <Text style={styles.textTopUserScore}>{(this.state.rankSource[2].winRate*100).toFixed(2).replace('.00','')}%</Text>
                       </View>    
                     </View>  
-                    <Image style={{height:bgHeightLR,width:bgWidth,marginBottom:-15,justifyContent:'center',alignItems:'center'}} source={require('../../images/rank_bg_ag.png')}>
+                    <Image style={{height:bgHeightLR,width:bgWidth,marginBottom:-10,justifyContent:'center',alignItems:'center'}} source={require('../../images/rank_bg_ag.png')}>
                         <Text style={styles.textProfit}>+{(this.state.rankSource[2].roi*100).toFixed(2)}%</Text>
                     </Image>  
                 </TouchableOpacity>
@@ -410,14 +410,14 @@ renderThreeHero(){
                       <Image style={styles.headPortrait} source={{uri:this.state.rankSource[3].picUrl}}></Image>
                       <Image style = {[styles.userHeaderIconRoundBig]} source={headRank3}></Image>
                     </View>
-                    <View style={{marginBottom:-8}}>
+                    <View style={{marginBottom:-5}}>
                       <Text style={styles.textTopUserName}>{this.state.rankSource[3].nickname}</Text>
                       <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
                           <Text style={styles.textWinRate}>胜率: </Text>
                           <Text style={styles.textTopUserScore}>{(this.state.rankSource[3].winRate*100).toFixed(2).replace('.00','')}%</Text>
                       </View>  
                     </View>  
-                    <Image style={{height:bgHeightLR ,width:bgWidth,marginBottom:-15,justifyContent:'center',alignItems:'center'}} source={require('../../images/rank_bg_cu.png')}>
+                    <Image style={{height:bgHeightLR ,width:bgWidth,marginBottom:-10,justifyContent:'center',alignItems:'center'}} source={require('../../images/rank_bg_cu.png')}>
                         <Text style={styles.textProfit}>+{(this.state.rankSource[3].roi*100).toFixed(2)}%</Text>
                     </Image>  
                 </TouchableOpacity> 
@@ -518,7 +518,7 @@ renderListAll(){
         return(
           <View style={{flex:1}}>
               {this.renderEmptyView()} 
-              <ListView
+              <ListView 
                 style={styles.list}
                 ref="listview2"
                 initialListSize={11}

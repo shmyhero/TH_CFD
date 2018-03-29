@@ -131,7 +131,7 @@ class DynamicRowComponent extends Component {
             text = rowData.status
             return (
                 <TweetBlock 
-                style={{fontSize:15,color:'#666666',lineHeight:24}}
+                style={{fontSize:15,color:'#666666',lineHeight:26}}
                 value={text}
                 onBlockPressed={(name, id)=>{this.jump2Detail(name, id)}}/>
             )
@@ -139,7 +139,7 @@ class DynamicRowComponent extends Component {
             text = rowData.status
             return (
                 <TweetBlock 
-                 style={{fontSize:15,color:'#666666',lineHeight:20}}
+                 style={{marginBottom:5, fontSize:15,color:'#666666',lineHeight:26}}
                 value={text}
                 onBlockPressed={(name, id)=>{this.jump2Detail(name, id)}}/>
             )
@@ -174,7 +174,7 @@ class DynamicRowComponent extends Component {
         var d = new Date(this.props.rowData.time);
         var timeText = d.getDateSimpleString()
 
-        console.log("rowID = " + this.props.rowID)
+        // console.log("rowID = " + this.props.rowID)
         var colorTopLine = this.props.rowID&&this.props.rowID==0?'transparent':'#4b6492'
 
         return(  
@@ -184,7 +184,7 @@ class DynamicRowComponent extends Component {
                          <View style={{marginLeft:20,width:1,flex:1,backgroundColor:colorTopLine}}></View>
                          <View style={{width:40,flexDirection:'row'}}>
                              <Text style={{width:30,color:'#7895cb',marginLeft:8,fontSize:10,alignSelf:'center'}}>{timeText}</Text>
-                             <Image style={{marginTop:2,marginLeft:4, width:7,height:7.5}} source={require('../../../images/triangle2.png')}></Image>
+                             <Image style={{marginTop:2,marginLeft:2, width:7,height:7.5}} source={require('../../../images/triangle2.png')}></Image>
                          </View>
                          <View style={{marginLeft:20,width:1,flex:2,backgroundColor:'#4b6492'}}></View> 
                      </View> 
@@ -220,10 +220,10 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         flex:1,
         justifyContent: 'center', 
-        alignItems: 'flex-start',   
+        alignItems: 'flex-start', 
     },
     textUserName:{
-        fontSize:12,
+        fontSize:13,
         alignSelf:'flex-start',
         marginTop:5,
         color:'#999999'

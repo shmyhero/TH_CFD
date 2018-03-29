@@ -9,7 +9,7 @@ var ColorConstants = require("../../ColorConstants")
 class TweetBlock extends Component {
     static propTypes = {
         value: PropTypes.string,
-        style: View.propTypes.style,
+        style: Text.propTypes.style,
         onBlockPressed: PropTypes.func,
     }
     

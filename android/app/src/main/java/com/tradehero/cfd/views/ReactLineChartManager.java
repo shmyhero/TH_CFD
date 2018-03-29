@@ -61,6 +61,7 @@ public class ReactLineChartManager extends ViewGroupManager<ReactLineChart> {
     @Override
     protected ReactLineChart createViewInstance(ThemedReactContext reactContext) {
         ReactLineChart chart = new ReactLineChart(reactContext);
+        chart.setUnbindEnabled(true);
 
         chart.setDrawGridBackground(false);
         chart.setDragEnabled(false);

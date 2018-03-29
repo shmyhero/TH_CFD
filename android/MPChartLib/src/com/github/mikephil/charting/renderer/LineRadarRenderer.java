@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.utils.ViewPortHandler;
@@ -32,24 +33,27 @@ public abstract class LineRadarRenderer extends LineScatterCandleRadarRenderer {
     protected void drawFilledPath(Canvas c, Path filledPath, Drawable drawable) {
         c.save();
 
-        if (mTempBitmap == null
-                || mTempBitmap.get() == null
-                || (mTempBitmap.get().getWidth() != mViewPortHandler.getChartWidth())
-                || (mTempBitmap.get().getHeight() != mViewPortHandler.getChartHeight())) {
-            mTempBitmap = new WeakReference<Bitmap>(Bitmap.createBitmap((int) mViewPortHandler.getChartWidth(),
-                    (int) mViewPortHandler.getChartHeight(), Bitmap.Config.ARGB_8888));
+        try {
+            if (mTempBitmap == null
+                    || mTempBitmap.get() == null
+                    || (mTempBitmap.get().getWidth() != mViewPortHandler.getChartWidth())
+                    || (mTempBitmap.get().getHeight() != mViewPortHandler.getChartHeight())) {
+                mTempBitmap = new WeakReference<Bitmap>(Bitmap.createBitmap((int) mViewPortHandler.getChartWidth(),
+                        (int) mViewPortHandler.getChartHeight(), Bitmap.Config.ARGB_8888));
+            }
+            Canvas tempCanvas = new Canvas(mTempBitmap.get());
+
+            tempCanvas.clipPath(filledPath);
+            drawable.setBounds((int) mViewPortHandler.contentLeft(),
+                    (int) mViewPortHandler.contentTop(),
+                    (int) mViewPortHandler.contentRight(),
+                    (int) mViewPortHandler.contentBottom());
+            drawable.draw(tempCanvas);
+
+            c.drawBitmap(mTempBitmap.get(), 0, 0, new Paint());
+        }catch(Exception e){
+            Log.e("TH_CFD Chart", e.getMessage(), e);
         }
-        Canvas tempCanvas = new Canvas(mTempBitmap.get());
-
-        tempCanvas.clipPath(filledPath);
-        drawable.setBounds((int) mViewPortHandler.contentLeft(),
-                (int) mViewPortHandler.contentTop(),
-                (int) mViewPortHandler.contentRight(),
-                (int) mViewPortHandler.contentBottom());
-        drawable.draw(tempCanvas);
-
-        c.drawBitmap(mTempBitmap.get(), 0, 0, new Paint());
-
         c.restore();
     }
 

@@ -50,6 +50,8 @@ public class ReactChartManager extends ViewGroupManager<ReactChart> {
     protected ReactChart createViewInstance(ThemedReactContext reactContext) {
 
         ReactChart chart = new ReactChart(reactContext);
+        chart.setUnbindEnabled(true);
+
         chart.setDrawGridBackground(false);
         chart.setDragEnabled(true);
         chart.setScaleEnabled(true);

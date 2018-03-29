@@ -179,12 +179,12 @@ class DynamicRowComponent extends Component {
             <RN.Animated.View style={{transform:[{translateX:this.state.translateX}],flex:1}}> 
                 <View style={styles.thumbnailAll}> 
                      <View>
-                         <View style={{marginLeft:20,width:0.5,flex:1,backgroundColor:ColorConstants.COLOR_CUSTOM_BLUE2}}></View>
+                         <View style={{marginLeft:20,width:0.5,flex:1,backgroundColor:"#4b6492"}}></View>
                          <View style={{width:40,flexDirection:'row'}}>
-                             <Text style={{width:30,color:ColorConstants.COLOR_CUSTOM_BLUE2,marginLeft:5,fontSize:10,alignSelf:'center'}}>{timeText}</Text>
+                             <Text style={{width:30,color:"#7895cb",marginLeft:5,fontSize:10,alignSelf:'center'}}>{timeText}</Text>
                              <Image style={{marginTop:2,marginLeft:4, width:7,height:7.5}} source={require('../../../images/triangle2.png')}></Image>
                          </View>
-                         <View style={{marginLeft:20,width:0.5,flex:2,backgroundColor:ColorConstants.COLOR_CUSTOM_BLUE2}}></View>
+                         <View style={{marginLeft:20,width:0.5,flex:2,backgroundColor:"#4b6492"}}></View>
                      </View> 
                      <View style={{margin:5,borderRadius:8,width:width-60,backgroundColor:'white',flex:1}}>
                          <View style={{flexDirection:'row',margin:5}}>

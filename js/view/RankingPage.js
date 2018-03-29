@@ -303,7 +303,7 @@ export default class RankingPage extends Component{
 
   renderFooter(){
     return(
-      <View style={{width:width,height:UIConstants.TAB_BAR_HEIGHT}}>
+      <View style={{width:width,height:UIConstants.TAB_BAR_HEIGHT*1.5}}>
       </View>
     )
   }

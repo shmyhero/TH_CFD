@@ -376,7 +376,7 @@ renderThreeHero(){
                       <Image style={styles.headPortrait} source={{uri:this.state.rankSource[2].picUrl}}></Image>
                       <Image style = {[styles.userHeaderIconRoundBig]} source={headRank2}></Image>
                     </View>
-                    <View style={{marginBottom:-5}}> 
+                    <View style={{marginBottom:-8}}> 
                       <Text style={styles.textTopUserName}>{this.state.rankSource[2].nickname}</Text>
                       <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
                           <Text style={styles.textWinRate}>胜率: </Text>
@@ -399,7 +399,7 @@ renderThreeHero(){
                           <Text style={styles.textWinRate}>胜率: </Text>
                           <Text style={styles.textTopUserScore}>{(this.state.rankSource[1].winRate*100).toFixed(2).replace('.00','')}%</Text>
                       </View> 
-                    </View>    
+                    </View> 
                     <Image style={{height:bgHeight ,width:bgWidth,marginBottom:-5,justifyContent:'center',alignItems:'center'}} source={require('../../images/rank_bg_gd.png')}>
                         <Text style={styles.textProfit}>+{(this.state.rankSource[1].roi*100).toFixed(2)}%</Text>
                     </Image>  
@@ -410,7 +410,7 @@ renderThreeHero(){
                       <Image style={styles.headPortrait} source={{uri:this.state.rankSource[3].picUrl}}></Image>
                       <Image style = {[styles.userHeaderIconRoundBig]} source={headRank3}></Image>
                     </View>
-                    <View style={{marginBottom:-5}}>
+                    <View style={{marginBottom:-8}}>
                       <Text style={styles.textTopUserName}>{this.state.rankSource[3].nickname}</Text>
                       <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
                           <Text style={styles.textWinRate}>胜率: </Text>
@@ -724,6 +724,8 @@ const styles = StyleSheet.create({
         marginTop:15,
         marginBottom:15,
         borderRadius:24,
+        borderWidth:1,
+        borderColor:'#6f8dc3'
     },
 
     userHeaderIconRoundBig:{

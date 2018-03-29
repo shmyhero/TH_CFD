@@ -1249,7 +1249,7 @@ var HomePage = React.createClass({
 
 	_renderRow :function (rowData, sectionID, rowID)  {        
         return(
-			<DynamicRowComponent navigator={this.props.navigator} rowData={rowData}/> 
+			<DynamicRowComponent navigator={this.props.navigator} rowData={rowData} rowID={rowID}/> 
         ) 
     },
 

@@ -758,7 +758,11 @@ var MainPage = React.createClass({
 	},
 
 	onLanguageChanged(){
-		this.refs["homepageBtn"].setLabel(LS.str('SHOUYE'));
+		if(!LogicData.getAccountState()){
+			this.refs["homepageBtn"].setLabel(LS.str('SHOUYE'));
+		}else{
+			this.refs["homepageBtn"].setLabel(LS.str('DT'));
+		}
 		this.refs["trendBtn"].setLabel(LS.str('HANGQING'));
 		this.refs["tradeBtn"].setLabel(LS.str('CANGWEI'));
 		if(!HIDE_RANKING_TAB){
@@ -780,8 +784,10 @@ var MainPage = React.createClass({
 
 		if(!LogicData.getAccountState()){
 			this.refs['myTabbar'].hideTab("ranking");
+			this.refs["homepageBtn"].setLabel(LS.str('SHOUYE'));
 		}else{
 			this.refs['myTabbar'].showTab("ranking");
+			this.refs["homepageBtn"].setLabel(LS.str('DT'));
 		}
 
 		console.log('refresh for Tab Icon Color ... ');
@@ -1601,7 +1607,7 @@ var MainPage = React.createClass({
 	},
 
 	renderTabbar: function(){
-    var strSY = LS.str('SHOUYE')
+    var strSY = LogicData.getAccountState() ? LS.str('DT') : LS.str('SHOUYE');
     var strHQ = LS.str('HANGQING')
     var strCW = LS.str('CANGWEI')
 

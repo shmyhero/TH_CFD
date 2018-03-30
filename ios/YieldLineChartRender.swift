@@ -35,15 +35,9 @@ class YieldLineChartRender: BaseRender {
             return
         }
         
+        let width = lineDataProvider!.chartWidth()
+        let height = lineDataProvider!.chartHeight()
         self.drawBorderLines(context, lineColor: _colorSet.yieldBgLineColor)
-        self.drawExtraText(context)
-        
-//        let width = lineDataProvider!.chartWidth()
-//        let height = lineDataProvider!.chartHeight()
-        
-        // draw the line graph
-        _colorSet.yieldLineColor.setFill()
-        _colorSet.yieldLineColor.setStroke()
         
         //set up the points line
         let graphPath = UIBezierPath()
@@ -56,6 +50,50 @@ class YieldLineChartRender: BaseRender {
             let nextPoint = pointData[i]
             graphPath.addLine(to: nextPoint)
         }
+        
+        context.saveGState()
+        
+        let clippingPath = graphPath.copy() as! UIBezierPath
+        
+        // add lines to the copied path to complete the clip area
+        clippingPath.addLine(to: CGPoint(x: pointData.last!.x, y:height))
+        clippingPath.addLine(to: CGPoint(x: pointData[0].x, y:height))
+        clippingPath.close()
+        
+        // add the clipping path to the context
+        clippingPath.addClip()
+        
+        let clippingBox:UIBezierPath = UIBezierPath.init(rect: CGRect(x: _margin-1, y: _topMargin-1, width: width-_margin*2+2, height: height-_bottomMargin-_topMargin+2))
+
+        let colors = [_colorSet.yieldStartColor.cgColor, _colorSet.yieldEndColor.cgColor]
+        //set up the color space
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        //set up the color stops
+        let colorLocations:[CGFloat] = [0.0, 1.0]
+        if(pointData.count > 1) {
+            // draw gradients
+            let highestYPoint = height*0.12//topLineY
+            let startPoint = CGPoint(x:_margin, y: highestYPoint)
+            let endPoint = CGPoint(x:_margin, y:height-_bottomMargin)
+            
+            //create the gradient
+            let gradient = CGGradient(colorsSpace: colorSpace,
+                                      colors: colors as CFArray,
+                                      locations: colorLocations)
+            
+            context.drawLinearGradient(gradient!, start: startPoint, end: endPoint, options: .drawsBeforeStartLocation)
+            context.restoreGState()
+        }
+        
+        clippingBox.addClip()
+        
+        self.drawExtraText(context)
+        
+        // draw the line graph
+        _colorSet.yieldLineColor.setFill()
+        _colorSet.yieldLineColor.setStroke()
+        
+       
         
         context.saveGState()
         

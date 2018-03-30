@@ -826,6 +826,10 @@ var MePage = React.createClass({
 	},
 
 	renderMessageIcon: function(){
+		if(!LogicData.getAccountState()){
+			return null;
+		}
+
 		var userData = LogicData.getUserData()
 		var login = Object.keys(userData).length !== 0
 		if(login){

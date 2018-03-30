@@ -290,19 +290,7 @@ export default class RankingPage extends Component{
     );
   }
 
-  renderSeparatorShort(sectionID, rowID, adjacentRowHighlighted) {
-    // console.log('rowID = ' + rowID)
-    // if(rowID !== 0){
-    //   return (
-    //     <View style={styles.line} key={rowID}>
-    //       <View style = {styles.separatorShort}></View>
-    //     </View> 
-    //   );
-    // }else{
-      return <View/>
-    // }
-    
-  }
+ 
 
   renderFooter(){
     return(
@@ -439,30 +427,29 @@ _renderRow2 = (rowData, sectionID, rowID) => {
     }
 
     var winRateShow = (rowData.showData)?rate:emptyStar;
+   
     if(rowID>=4){
         return( 
-            <View>
-             
-            <TouchableOpacity onPress={()=>this._onPressedUserItem(rowData)} style={{height:68,width:width,alignItems:'center',justifyContent:'space-between',flexDirection:'row'}}>
-                <View style={{flexDirection:'row',alignItems:'center'}}>
-                    <View style={{'paddingTop':5}}>
-                      <Image style={{height:40,width:40,marginLeft:28,borderRadius:20}} source={head}></Image>
-                      <Image style = {[styles.userHeaderIconRound,{marginLeft:8}]} source={headRank}></Image>
-                    </View>
-                    <View style={{marginLeft:10,paddingTop:10}}>
-                        <Text style={{fontSize:15,color:'#454545'}}>{rowData.nickname}</Text>
-                        <View style={{flexDirection:'row',marginBottom:5,alignItems:'center',justifyContent:'center'}}>
-                            <Text style={{fontSize:12, color:'#999999'}}>胜率：</Text>
-                            <Text style={{fontSize:14, color:'#666666'}}>{winRateShow.replace('.00','')}%</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={{marginRight:30}}>
-                    <Text style={{fontSize:17, color:'#ca3538'}}>+{roi}%</Text>
-                </View> 
-            </TouchableOpacity>
-
-            <View style={styles.separatorShort}></View>
+            <View> 
+              <TouchableOpacity onPress={()=>this._onPressedUserItem(rowData)} style={{height:68,width:width,alignItems:'center',justifyContent:'space-between',flexDirection:'row'}}>
+                  <View style={{flexDirection:'row',alignItems:'center'}}>
+                      <View style={{'paddingTop':5}}>
+                        <Image style={{height:40,width:40,marginLeft:28,borderRadius:20}} source={head}></Image>
+                        <Image style = {[styles.userHeaderIconRound,{marginLeft:8}]} source={headRank}></Image>
+                      </View>
+                      <View style={{marginLeft:10,paddingTop:10}}>
+                          <Text style={{fontSize:15,color:'#454545'}}>{rowData.nickname}</Text>
+                          <View style={{flexDirection:'row',marginBottom:5,alignItems:'center',justifyContent:'center'}}>
+                              <Text style={{fontSize:12, color:'#999999'}}>胜率：</Text>
+                              <Text style={{fontSize:14, color:'#666666'}}>{winRateShow.replace('.00','')}%</Text>
+                          </View>
+                      </View>
+                  </View>
+                  <View style={{marginRight:30}}>
+                      <Text style={{fontSize:17, color:'#ca3538'}}>+{roi}%</Text>
+                  </View> 
+              </TouchableOpacity> 
+              <View style={styles.separatorShort}></View>
             </View>
         )
     }else{
@@ -479,7 +466,7 @@ renderListAll(){
                 dataSource={this.state.rankData}
                 renderRow={this._renderRow2}
                 enableEmptySections={true}
-                renderSeparator={this.renderSeparatorShort} 
+                // renderSeparator={this.renderSeparator} 
                 removeClippedSubviews={false}
                 renderFooter={this.renderFooter}
                 renderHeader={this.renderHeader.bind(this)}
@@ -496,18 +483,7 @@ renderListAll(){
 			)
 	  }else{
       if(this.isRankingType0()){
-        return (
-          // <ListView
-          // style={styles.list}
-          // ref="listview"
-          // initialListSize={11}
-          // dataSource={this.state.rankData}
-          // enableEmptySections={true}
-          // renderFooter={this.renderFooter}
-          // renderRow={this._renderRow.bind(this)}
-          // renderSeparator={this.renderSeparator}
-          // removeClippedSubviews={false}/>
-
+        return ( 
           <View style={{flex:1,backgroundColor:'#425a85'}}> 
                  {/* {this.renderMe()}
                  {this.renderThreeHero()} */}

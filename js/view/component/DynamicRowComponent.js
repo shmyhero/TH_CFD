@@ -14,17 +14,16 @@ import {
 var {height, width} = Dimensions.get('window');
 require('../../utils/dateUtils')
 import TweetBlock from '../tweet/TweetBlock';
-// import Swipeout from 'react-native-swipeout';
+import Swipeout from 'react-native-swipeout';
 var ColorConstants = require('../../ColorConstants');
-// import { ViewKeys } from '../../../AppNavigatorConfiguration';
-var MainPage = require('../MainPage')
+var MainPage = require('../MainPage') 
  
 class DynamicRowComponent extends Component {
     constructor(props) {
         super(props); 
          
         this.state={
-            translateX: new RN.Animated.Value(0-width*2), 
+            translateX: new RN.Animated.Value(0-width*2),  
         }
     }
 
@@ -91,8 +90,10 @@ class DynamicRowComponent extends Component {
       
     }
 
-    _onPressButton(){
-        
+    _onPressButton(rowData){
+       if(this.props.delCallBack){
+            this.props.delCallBack(rowData.time)
+       }
     }
 
     _onPressToSecurity(data){
@@ -136,13 +137,18 @@ class DynamicRowComponent extends Component {
                 onBlockPressed={(name, id)=>{this.jump2Detail(name, id)}}/>
             )
         }else if(rowData.type == 'system'){
-            text = rowData.status
-            return (
-                <TweetBlock 
-                 style={{marginBottom:5, fontSize:15,color:'#666666',lineHeight:26}}
-                value={text}
-                onBlockPressed={(name, id)=>{this.jump2Detail(name, id)}}/>
-            )
+            text = rowData.body
+            text2 = rowData.title
+            if(text == text2){
+                return null
+            }else{
+                return (
+                    <TweetBlock 
+                     style={{marginBottom:5, fontSize:15,color:'#666666',lineHeight:26}}
+                    value={text}
+                    onBlockPressed={(name, id)=>{this.jump2Detail(name, id)}}/>
+                ) 
+            } 
         }else if(rowData.type == 'open'){ 
             text = rowData.position.invest + '本金x'+rowData.position.leverage+'杠杆'
             return (
@@ -168,14 +174,30 @@ class DynamicRowComponent extends Component {
         }
     } 
 
+    closeSwiper(){  
+    }
+
     render() { 
 
         var viewHero = this.props.rowData.isRankedUser ? <View style={styles.heroStyle}><Text style={styles.textHero}>达人</Text></View> : null;
         var d = new Date(this.props.rowData.time);
         var timeText = d.getDateSimpleString()
 
-        // console.log("rowID = " + this.props.rowID)
+        var swipeoutBtns = [
+            {
+                backgroundColor:'#ff4240',  
+                text:'删除', 
+                onPress:()=>this._onPressButton(this.props.rowData)
+            }
+          ] 
+
         var colorTopLine = this.props.rowID&&this.props.rowID==0?'transparent':'#4b6492'
+
+
+        var titleLineView = this.props.rowData.type == 'system' ? this.props.rowData.title:this.props.rowData.user.nickname
+
+         
+        
 
         return(  
             <RN.Animated.View style={{transform:[{translateX:this.state.translateX}],flex:1}}> 
@@ -188,23 +210,33 @@ class DynamicRowComponent extends Component {
                          </View>
                          <View style={{marginLeft:20,width:1,flex:2,backgroundColor:'#4b6492'}}></View> 
                      </View> 
-                     <View style={{margin:5,borderRadius:12.5,width:width-60,backgroundColor:'white',flex:1}}>
-                         <View style={{flexDirection:'row',margin:5}}>
-                             <TouchableOpacity onPress={()=>this._onPressToUser(this.props.rowData)}>
-                                 <Image source={{uri:this.props.rowData.user.picUrl}}
-                                     style={{height:34,width:34,margin:10,borderRadius:17}} >
-                                 </Image>
-                             </TouchableOpacity> 
-                             <View style={styles.textContainer}>
-                                 <View style={{flexDirection:'row',marginTop:0}}>
-                                     <Text style={styles.textUserName}>{this.props.rowData.user.nickname}</Text>
-                                     {viewHero}
-                                 </View>
-                                 {this.renderNewsText(this.props.rowData)}
-                             </View>
-                             {this.renderItemTrede(this.props.rowData)}
-                         </View>      
-                       </View>   
+
+                     <Swipeout
+                        right={swipeoutBtns}
+                        autoClose={true}   
+                        sensitivity={50}
+                        // close={this.props.rowData.needClose}
+                        onOpen={()=>{console.log("onOpen()")}}
+                        onClose={()=>{console.log("onClose()")}}
+                        style={{margin:5,borderRadius:8,width:width-60,backgroundColor:'white',flex:1}}> 
+                        <View style={{margin:5,borderRadius:12.5,width:width-60,backgroundColor:'white',flex:1}}>
+                            <View style={{flexDirection:'row',margin:5}}>
+                                <TouchableOpacity onPress={()=>this._onPressToUser(this.props.rowData)}>
+                                    <Image source={{uri:this.props.rowData.user.picUrl}}
+                                        style={{height:34,width:34,margin:10,borderRadius:17}} >
+                                    </Image>
+                                </TouchableOpacity> 
+                                <View style={styles.textContainer}>
+                                    <View style={{flexDirection:'row',marginTop:0}}>
+                                        <Text style={styles.textUserName}>{titleLineView}</Text>
+                                        {viewHero}
+                                    </View>
+                                    {this.renderNewsText(this.props.rowData)}
+                                </View>
+                                {this.renderItemTrede(this.props.rowData)}
+                            </View>      
+                        </View>  
+                       </Swipeout> 
                </View>   
         </RN.Animated.View>
         )

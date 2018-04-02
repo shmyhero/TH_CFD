@@ -327,56 +327,55 @@ var HomePage = React.createClass({
 		// this.onConnectionStateChanged();
 
 
-		this.setInterval(
-			()=>{
-				if(LogicData.getAccountState()){
-					this.loadCacheListData()
-				} 
-			},
-			30000
-		)
+		// this.setInterval(
+		// 	()=>{
+		// 		if(LogicData.getAccountState()){
+		// 			this.loadCacheListData()
+		// 		} 
+		// 	},
+		// 	30000
+		// )
 
-		this.setInterval(
-			()=>{
-				if(LogicData.getAccountState()){
-					var responseJson = this.state.dataResponse
-					if(this.state.cacheData&&this.state.cacheData.length>0){  
-						if(responseJson && responseJson.length > 0){
-							for(var i = 0; i < responseJson.length; i++){
-								responseJson[i].isNew = false;
-							} 
-						}
+		// this.setInterval(
+		// 	()=>{
+		// 		if(LogicData.getAccountState()){
+		// 			var responseJson = this.state.dataResponse
+		// 			if(this.state.cacheData&&this.state.cacheData.length>0){  
+		// 				if(responseJson && responseJson.length > 0){
+		// 					for(var i = 0; i < responseJson.length; i++){
+		// 						responseJson[i].isNew = false;
+		// 					} 
+		// 				}
 
-						var add = {}
-						$.extend(true, add, this.state.cacheData[this.state.cacheData.length-1]);
-						add.isNew = true
-						responseJson.splice(0, 0, add);
-						this.state.cacheData.splice(this.state.cacheData.length-1,1)
+		// 				var add = {}
+		// 				$.extend(true, add, this.state.cacheData[this.state.cacheData.length-1]);
+		// 				add.isNew = true
+		// 				responseJson.splice(0, 0, add);
+		// 				this.state.cacheData.splice(this.state.cacheData.length-1,1)
 
-						console.log("responseJson[0].isNew = " + responseJson[0].isNew)
+		// 				console.log("responseJson[0].isNew = " + responseJson[0].isNew)
 						
-						this.setState({ 
-							dataResponse:responseJson,
-							cacheData:this.state.cacheData,
-							// dataSource:this._dataSource.cloneWithRows(responseJson),
-							dataSourceDynamic: dsDynamic.cloneWithRows(responseJson),
-						}) 
+		// 				this.setState({ 
+		// 					dataResponse:responseJson,
+		// 					cacheData:this.state.cacheData,
+		// 					// dataSource:this._dataSource.cloneWithRows(responseJson),
+		// 					dataSourceDynamic: dsDynamic.cloneWithRows(responseJson),
+		// 				}) 
 
-					}else{
-						for(var i = 0; i < responseJson.length; i++){
-							responseJson[i].isNew = false;
-						} 
-						this.setState({ 
-							dataResponse:responseJson, 
-							// dataSource:this._dataSource.cloneWithRows(responseJson),
-							dataSourceDynamic: dsDynamic.cloneWithRows(responseJson),
-						})
-					}
-				}
-			},
-			2000
-		)
-
+		// 			}else{
+		// 				for(var i = 0; i < responseJson.length; i++){
+		// 					responseJson[i].isNew = false;
+		// 				} 
+		// 				this.setState({ 
+		// 					dataResponse:responseJson, 
+		// 					// dataSource:this._dataSource.cloneWithRows(responseJson),
+		// 					dataSourceDynamic: dsDynamic.cloneWithRows(responseJson),
+		// 				})
+		// 			}
+		// 		}
+		// 	},
+		// 	2000
+		// ) 
 	},
 
 	componentWillUnmount: function() {
@@ -1247,9 +1246,35 @@ var HomePage = React.createClass({
 		});
 	},
 
+	delItem(id){
+
+		LogicData.addRemovdedDynamicRow(id) 
+
+		LogicData.getRemovedRynamicRow().then((delList)=>{
+			
+
+			var responseJson = this.state.dataResponse
+			responseJson = responseJson.filter(function(item){
+				for(var i = 0;i<delList.length;i++){ 
+					if(delList[i] == item.time){
+						return false
+					}
+				}
+				return true
+			}) 
+
+			this.setState({ 
+				dataResponse:responseJson,
+				dataSourceDynamic: dsDynamic.cloneWithRows(responseJson),
+			})  
+
+		 }) 
+
+	},
+
 	_renderRow :function (rowData, sectionID, rowID)  {        
         return(
-			<DynamicRowComponent navigator={this.props.navigator} rowData={rowData} rowID={rowID}/> 
+			<DynamicRowComponent navigator={this.props.navigator} rowData={rowData} rowID={rowID} delCallBack={(id)=>{this.delItem(id)}}/> 
         ) 
     },
 
@@ -1390,20 +1415,36 @@ var HomePage = React.createClass({
 			},
 			function(response) {
 				var data = this.state.dataResponse.concat(response)
-				this.setState(
-					{
-						dataResponse:data,
-						dataSourceDynamic: dsDynamic.cloneWithRows(data),
-						isLoading:false,
-					}
-				)
-				console.log("Rambo 3")
+
+
+				LogicData.getRemovedRynamicRow().then((delList)=>{ 
+					 
+					var responseJson = data.filter(function(item){
+						for(var i = 0;i<delList.length;i++){ 
+							if(delList[i] == item.time){
+								return false
+							}
+						}
+						return true
+					}) 
+
+					this.setState(
+						{
+							dataResponse: responseJson,
+							dataSourceDynamic: dsDynamic.cloneWithRows(responseJson),
+							isLoading:false,
+						}
+					) 
+
+				})   
+ 
 				this._pullToRefreshListView.endLoadMore() 
+
 			}.bind(this),
 			(result) => {
 				console.log(result.errorMessage)
 				this._pullToRefreshListView.endLoadMore() 
-				console.log("Rambo 4")
+			 
 			}
 		); 
 	},
@@ -1437,14 +1478,28 @@ var HomePage = React.createClass({
 				},
 				param,
 			},
-			function(response) {
-				this.setState(
-					{
-						dataResponse: response,
-						dataSourceDynamic: dsDynamic.cloneWithRows(response),
-						isLoading:false,
-					}
-				)
+			function(response) { 
+ 
+				LogicData.getRemovedRynamicRow().then((delList)=>{
+
+					var responseJson = response
+					responseJson = responseJson.filter(function(item){
+						for(var i = 0;i<delList.length;i++){ 
+							if(delList[i] == item.time){
+								return false
+							}
+						}
+						return true
+					})  
+
+					this.setState(
+						{
+							dataResponse: responseJson,
+							dataSourceDynamic: dsDynamic.cloneWithRows(responseJson),
+							isLoading:false,
+						}
+					) 
+				})  
 
 				if(isRefresh){
                     this._pullToRefreshListView.endRefresh()

@@ -130,6 +130,8 @@ var AppNavigator = React.createClass({
 			}
 		});
 
+		LogicData.getRemovedRynamicRow();
+
 		//Load the server setting should always be the first step.
 		StorageModule.loadAccountState().then((value) => {
 			if (value !== null) {

@@ -30,6 +30,7 @@ var LAST_ACTIVITY_DATA = '@TH_CFD:lastActivityData'
 var MIFID_TEST_VERIFIED = '@TH_CFD:MIFIDTestVerified'
 var LANGUAGE_EN = '@TH_CFD:language_en'
 var PUBLISH_DATE = '@TH_CFD:publish_date'
+var REMOVED_DYNAMICROW = '@TH_CFD:removed_dynamicrow'
 
 export async function loadUserData() {
 	try {
@@ -503,6 +504,23 @@ export async function loadLanguageEn(){
 	} catch (error) {
 		console.log('AsyncStorage error: ' + error.message);
 	}
+}
+
+export async function setRemovedDynamicRows(value){
+	try {
+		  await AsyncStorage.setItem(REMOVED_DYNAMICROW, value);
+	  } catch (error) {
+		  console.log('AsyncStorage error: ' + error.message);
+	  }
+  }
+  
+export async function loadRemovedDynamicRows(){
+	try {
+			var value = await AsyncStorage.getItem(REMOVED_DYNAMICROW);
+			return value;
+		} catch (error) {
+			console.log('AsyncStorage error: ' + error.message);
+		}
 }
 
 export async function setPublishDate(value){

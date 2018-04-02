@@ -168,7 +168,7 @@ var SharePage = React.createClass({
           <Animated.View style={[styles.shareContainer, {opacity: this.state.fadeAnim}]}>
             <Text style={styles.shareTitleText}>分享到</Text>
             <View style={styles.shareItemContainer}>
-							{this.renderHomePageShare()}
+							{/* {this.renderHomePageShare()} */}
 	            <TouchableOpacity onPress={()=>{this.shareToWeChat("session")}}>
 	              <Image style={[styles.icon, {transform: [{rotate: '0deg'}]}]}
 	               source={require('../../images/wechat_session.png')}/>

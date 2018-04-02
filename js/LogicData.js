@@ -34,6 +34,7 @@ var currentPageTag = null;
 var registerReward = 30;
 var firstDayWithDraw = false;
 var debugStatus = false;
+var removedDynamicRow = null;
 
 var languageEn = 0;//默认为中文,true则为英文
 var snk = '';
@@ -50,9 +51,9 @@ var LogicData = {
 		return userData;
 	},
 
-  removeUserData: function() {
-      userData = {}
-  },
+	removeUserData: function() {
+		userData = {}
+	},
 
 	setLanguageEn(value){
 		if(languageEn!==value){
@@ -241,7 +242,7 @@ var LogicData = {
       if (findResult === undefined) {
           searchStockHistory.unshift(stockData)
 					if(accountState){
-	          StorageModule.setLiveSearchHistory(JSON.stringify(searchStockHistory))
+	          			StorageModule.setLiveSearchHistory(JSON.stringify(searchStockHistory))
 					}else{
 						StorageModule.setSearchHistory(JSON.stringify(searchStockHistory))
 					}
@@ -564,6 +565,35 @@ var LogicData = {
 	// 		}
 	// 	})
 	// }
+ 
+
+	getRemovedRynamicRow: function() {
+		return new Promise(resolve=>{
+			if(removedDynamicRow == null){ 
+				StorageModule.loadRemovedDynamicRows()
+				.then((value) => {
+					if (value !== null) {
+						removedDynamicRow = JSON.parse(value);  
+						resolve(removedDynamicRow);
+					}else{ 
+						removedDynamicRow = [];
+						resolve(removedDynamicRow);
+					}
+				})
+			}else{ 
+				resolve(removedDynamicRow);
+			}
+		});
+  	},
+  
+
+	addRemovdedDynamicRow(item){
+		if(removedDynamicRow == null) return 
+		if(removedDynamicRow.indexOf(item) == -1){
+			removedDynamicRow.push(item);
+		} 
+		StorageModule.setRemovedDynamicRows(JSON.stringify(removedDynamicRow))
+	},
 
 
 };

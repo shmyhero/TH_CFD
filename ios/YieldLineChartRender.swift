@@ -82,10 +82,9 @@ class YieldLineChartRender: BaseRender {
                                       locations: colorLocations)
             
             context.drawLinearGradient(gradient!, start: startPoint, end: endPoint, options: .drawsBeforeStartLocation)
-            context.restoreGState()
         }
-        
         clippingBox.addClip()
+        context.restoreGState()
         
         self.drawExtraText(context)
         

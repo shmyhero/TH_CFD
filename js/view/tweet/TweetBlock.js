@@ -74,10 +74,12 @@ class TweetBlock extends Component {
             }
         });
 
-        return (        
-            
+
+        var maxLine = this.state.maxLine?this.state.maxLine:3
+
+        return (     
             <TouchableOpacity onPress={()=>this.onPressed()}>      
-                <Text  style={[styles.container, this.props.style]} numberOfLines={this.state.maxLine}>
+                <Text  style={[styles.container, this.props.style]} numberOfLines={maxLine}>
                     {parsedListView}
                 </Text>
             </TouchableOpacity> 

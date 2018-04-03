@@ -111,7 +111,8 @@ var StockTransactionInfoPage = React.createClass({
 
 	getCardLikedInfo:function(){
 		console.log('getCardLikedInfo')
-
+		if(this.props.card==undefined){return}
+		
 		var url = NetConstants.CFD_API.SET_CARD_READ;
 			url = url.replace("<id>", this.props.card.cardId);
 			var userData = LogicData.getUserData();

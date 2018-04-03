@@ -200,29 +200,7 @@ class DynamicRowComponent extends Component {
 
     _onPressedCard(){
         console.log('_onPressedCard')
-        var cardItem = { cardId: 84,
-            invest: 100,
-            isLong: true,
-            leverage: 10,
-            tradePrice: 107.91,
-            settlePrice: 118.72,
-            imgUrlBig: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/blue_big_1_20170912.gif',
-            imgUrlMiddle: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/blue_middle_1_20170912.jpg',
-            imgUrlSmall: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/blue_small_1_20171026.jpg',
-            reward: 1,
-            tradeTime: '2017-11-21T14:39:24.18',
-            ccy: 'USD',
-            stockID: 35939,
-            stockName: '欢聚时代',
-            themeColor: '#1658d8',
-            title: '财富启航',
-            cardType: 4,
-            pl: 100.18,
-            plRate: 100.1761,
-            likes: 0,
-            liked: false,
-            shared: false,
-            isNew: false } 
+        var cardItem = this.props.rowData.position.card;
         var listData = []
         listData.push(cardItem)
         this.refs['stockTransactionInfoModal'].showAchievement(listData, 0, ()=>{}, {showLike:true})
@@ -230,18 +208,18 @@ class DynamicRowComponent extends Component {
 
     renderCard(rowData){ 
 
-        if(rowData.type == 'close'){
-            if(rowData.card==null){
-                imageUri = 'https://cfdstorage.blob.core.chinacloudapi.cn/card/blue_small_1_20171026.jpg'
+        if(rowData.type == 'close'&&rowData.position.card!==undefined){
+            
+                imageUri = rowData.position.card.imgUrlSmall
                 return(
                     <TouchableOpacity onPress={()=>this._onPressedCard()}>
-                    <View style={{height:80,width:68,marginLeft:60,marginTop:-5,marginBottom:5}}>
+                    <View style={{height:75,width:66,marginLeft:60,marginTop:-5,marginBottom:5}}>
                         <Image style={{height:80,width:68,borderWidth:1,borderRadius:8}} source={{uri:imageUri}}></Image>
                     </View> 
                     <StockTransactionInfoModal ref='stockTransactionInfoModal' /> 
                 </TouchableOpacity>  
                 )
-            } 
+            
         }else{
             return null
         }

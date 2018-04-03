@@ -17,6 +17,7 @@ import TweetBlock from '../tweet/TweetBlock';
 import Swipeout from 'react-native-swipeout';
 var ColorConstants = require('../../ColorConstants');
 var MainPage = require('../MainPage') 
+var StockTransactionInfoModal = require('../StockTransactionInfoModal')
  
 class DynamicRowComponent extends Component {
     static propTypes = {
@@ -163,8 +164,8 @@ class DynamicRowComponent extends Component {
                 return null
             }else{
                 return (
-                    <TweetBlock 
-                        style={{marginBottom:5, fontSize:15,color:'#666666',lineHeight:26}}
+                    <TweetBlock  
+                        style={{marginBottom:5, fontSize:15,color:'#999999',lineHeight:26}}
                         value={text}
                         onLinkPressed={(name, id)=>{this.jump2Detail(name, id)}}
                         onPressed={()=>{
@@ -197,6 +198,56 @@ class DynamicRowComponent extends Component {
         }
     } 
 
+    _onPressedCard(){
+        console.log('_onPressedCard')
+        var cardItem = { cardId: 84,
+            invest: 100,
+            isLong: true,
+            leverage: 10,
+            tradePrice: 107.91,
+            settlePrice: 118.72,
+            imgUrlBig: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/blue_big_1_20170912.gif',
+            imgUrlMiddle: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/blue_middle_1_20170912.jpg',
+            imgUrlSmall: 'https://cfdstorage.blob.core.chinacloudapi.cn/card/blue_small_1_20171026.jpg',
+            reward: 1,
+            tradeTime: '2017-11-21T14:39:24.18',
+            ccy: 'USD',
+            stockID: 35939,
+            stockName: '欢聚时代',
+            themeColor: '#1658d8',
+            title: '财富启航',
+            cardType: 4,
+            pl: 100.18,
+            plRate: 100.1761,
+            likes: 0,
+            liked: false,
+            shared: false,
+            isNew: false } 
+        var listData = []
+        listData.push(cardItem)
+        this.refs['stockTransactionInfoModal'].showAchievement(listData, 0, ()=>{}, {showLike:true})
+    }
+
+    renderCard(rowData){ 
+
+        if(rowData.type == 'close'){
+            if(rowData.card==null){
+                imageUri = 'https://cfdstorage.blob.core.chinacloudapi.cn/card/blue_small_1_20171026.jpg'
+                return(
+                    <TouchableOpacity onPress={()=>this._onPressedCard()}>
+                    <View style={{height:80,width:68,marginLeft:60,marginTop:-5,marginBottom:5}}>
+                        <Image style={{height:80,width:68,borderWidth:1,borderRadius:8}} source={{uri:imageUri}}></Image>
+                    </View> 
+                    <StockTransactionInfoModal ref='stockTransactionInfoModal' /> 
+                </TouchableOpacity>  
+                )
+            } 
+        }else{
+            return null
+        }
+       
+    }
+
     closeSwiper(){  
     }
 
@@ -218,7 +269,8 @@ class DynamicRowComponent extends Component {
 
 
         var titleLineView = this.props.rowData.type == 'system' ? this.props.rowData.title:this.props.rowData.user.nickname
-
+        var titleLineStyle = this.props.rowData.type == 'system' ? styles.textTitleLine:styles.textUserName
+  
 
         return(  
             <RN.Animated.View style={{transform:[{translateX:this.state.translateX}],flex:1}}> 
@@ -248,20 +300,23 @@ class DynamicRowComponent extends Component {
                         }}
                         style={{margin:5,borderRadius:8,width:width-60,backgroundColor:'white',flex:1}}> 
                         <View style={{margin:5,borderRadius:12.5,width:width-60,backgroundColor:'white',flex:1}}>
-                            <View style={{flexDirection:'row',margin:5}}>
-                                <TouchableOpacity onPress={()=>this._onPressToUser(this.props.rowData)}>
-                                    <Image source={{uri:this.props.rowData.user.picUrl}}
-                                        style={{height:34,width:34,margin:10,borderRadius:17}} >
-                                    </Image>
-                                </TouchableOpacity> 
-                                <View style={styles.textContainer}>
-                                    <View style={{flexDirection:'row',marginTop:0}}>
-                                        <Text style={styles.textUserName}>{titleLineView}</Text>
-                                        {viewHero}
+                            <View>
+                                <View style={{flexDirection:'row',margin:5}}> 
+                                    <TouchableOpacity onPress={()=>this._onPressToUser(this.props.rowData)}>
+                                        <Image source={{uri:this.props.rowData.user.picUrl}}
+                                            style={{height:34,width:34,margin:10,borderRadius:17}} >
+                                        </Image>
+                                    </TouchableOpacity> 
+                                    <View style={styles.textContainer}>
+                                        <View style={{flexDirection:'row',marginTop:0}}>
+                                            <Text style={titleLineStyle}>{titleLineView}</Text>
+                                            {viewHero}
+                                        </View>
+                                        {this.renderNewsText(this.props.rowData)}
                                     </View>
-                                    {this.renderNewsText(this.props.rowData)}
-                                </View>
-                                {this.renderItemTrede(this.props.rowData)}
+                                    {this.renderItemTrede(this.props.rowData)}
+                                </View> 
+                                {this.renderCard(this.props.rowData)}     
                             </View>      
                         </View>  
                     </Swipeout> 
@@ -287,6 +342,12 @@ const styles = StyleSheet.create({
         alignSelf:'flex-start',
         marginTop:5,
         color:'#999999'
+    },
+    textTitleLine:{
+        fontSize:13,
+        alignSelf:'flex-start',
+        marginTop:5,
+        color:'#666666'
     },
     thumbnailAll: {
         marginLeft:0,

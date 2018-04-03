@@ -104,6 +104,36 @@ var StockTransactionInfoPage = React.createClass({
 			state.showLike = this.props.pageSettings.showLike;
 		}
 		this.setState(state);
+
+
+		this.getCardLikedInfo()
+	},
+
+	getCardLikedInfo:function(){
+		console.log('getCardLikedInfo')
+
+		var url = NetConstants.CFD_API.SET_CARD_READ;
+			url = url.replace("<id>", this.props.card.cardId);
+			var userData = LogicData.getUserData();
+			NetworkModule.fetchTHUrl(
+				url,
+				{
+					method: 'GET',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						'Content-Type': 'application/json; charset=UTF-8',
+					},
+				},
+				(responseJson) => {
+					this.setState({
+						liked:responseJson.liked,
+						likes:responseJson.likes,
+					})
+				},
+				(result) => {
+					console.log(result.errorMessage)
+				}
+			)
 	},
 
 	_showSharePanel: function(){

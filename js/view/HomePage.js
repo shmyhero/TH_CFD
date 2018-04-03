@@ -890,7 +890,7 @@ var HomePage = React.createClass({
 							horizontal={true}
 							showsHorizontalScrollIndicator={false}>
 						 	{cardItems}
-			   		</ScrollView>
+			   			</ScrollView>
 						<View style={styles.bigSeparator}/>
 						<StockTransactionInfoModal ref='stockTransactionInfoModal' navigator={this.state.navigator}/>
 					</View>

@@ -188,12 +188,15 @@ class DynamicRowComponent extends Component {
             text = '平仓'+winOrLoss;
 
             return (
-                <Text style={{fontSize:15,color:'#666666',lineHeight:20}}>
-                    {text}
-                    <Text style={{color: valueColor}}>
-                        {value}
+                <View style={{flexDirection:'row'}}>
+                     <Text style={{fontSize:15,color:'#666666',lineHeight:20}}>
+                    {text} 
                     </Text>
-                </Text>
+                    <Text style={{color: valueColor}}>
+                    {value}
+                    </Text>
+                </View>    
+               
             )
         }
     } 
@@ -213,7 +216,7 @@ class DynamicRowComponent extends Component {
                 imageUri = rowData.position.card.imgUrlSmall
                 return(
                     <TouchableOpacity onPress={()=>this._onPressedCard()}>
-                    <View style={{height:75,width:66,marginLeft:60,marginTop:-5,marginBottom:5}}>
+                    <View style={{height:75,width:66,marginLeft:60,marginTop:0,marginBottom:10}}>
                         <Image style={{height:80,width:68,borderWidth:1,borderRadius:8}} source={{uri:imageUri}}></Image>
                     </View> 
                     <StockTransactionInfoModal ref='stockTransactionInfoModal' /> 
@@ -341,7 +344,7 @@ const styles = StyleSheet.create({
         padding:2,
         alignItems:'center',
         justifyContent:'center',
-        marginTop:5,
+        marginTop:7,
         marginLeft:2,
     }
 

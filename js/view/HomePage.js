@@ -117,6 +117,7 @@ var HomePage = React.createClass({
 			titleOpacity: 0,
 			isLoading:false,
 			dataResponse:[],
+			currentOperatedRow: -1,
 			// dataSourceDynamic:dsDynamic.cloneWithRows(mokeData),
 		};
 	},
@@ -1272,9 +1273,35 @@ var HomePage = React.createClass({
 
 	},
 
-	_renderRow :function (rowData, sectionID, rowID)  {        
-        return(
-			<DynamicRowComponent navigator={this.props.navigator} rowData={rowData} rowID={rowID} delCallBack={(id)=>{this.delItem(id)}}/> 
+	_renderRow :function (rowData, sectionID, rowID)  {
+		return(
+			<DynamicRowComponent
+				navigator={this.props.navigator}
+				rowData={rowData}
+				rowID={rowID}
+				delCallBack={(id)=>{this.delItem(id)}}
+				close={this.state.currentOperatedRow != rowID}
+				onRowPress={()=>{
+					this.closeAllRows();
+				}}
+				onClose={()=>{
+					if(this.state.currentOperatedRow == rowID){
+						this.setState({
+							currentOperatedRow: -1,
+							dataSourceDynamic: dsDynamic.cloneWithRows(this.state.dataResponse),
+						});
+					}
+				}}
+				onOpen={()=>{
+					
+					if(this.state.currentOperatedRow != rowID){
+						this.setState({
+							currentOperatedRow: rowID,
+							dataSourceDynamic: dsDynamic.cloneWithRows(this.state.dataResponse),
+						});
+					}
+				}}
+				/>
         ) 
     },
 
@@ -1389,7 +1416,17 @@ var HomePage = React.createClass({
         } 
     },
 	
+	closeAllRows: function(){
+		if(this.state.currentOperatedRow != -1){
+			this.setState({
+				currentOperatedRow: -1,
+				dataSourceDynamic: dsDynamic.cloneWithRows(this.state.dataResponse),
+			});
+		}
+	},
+	
 	_onLoadMore:function(){
+		this.closeAllRows();
 		// this._pullToRefreshListView.endLoadMore()   
 		console.log("Rambo 1")
 		var userData = LogicData.getUserData();
@@ -1447,9 +1484,10 @@ var HomePage = React.createClass({
 			 
 			}
 		); 
-	},
-	
-	_onRefresh:function(){  
+	},	
+
+	_onRefresh:function(){
+		this.closeAllRows();
         this.loadData(true) 
 	},
 	
@@ -1479,7 +1517,6 @@ var HomePage = React.createClass({
 				param,
 			},
 			function(response) { 
- 
 				LogicData.getRemovedRynamicRow().then((delList)=>{
 
 					var responseJson = response
@@ -1582,11 +1619,11 @@ var HomePage = React.createClass({
 							enableEmptySections={true}
 							dataSource={this.state.dataSourceDynamic}
 							pageSize={20}
-							renderRow={this._renderRow}
+							renderRow={(rowData, sectionID, rowID)=>this._renderRow(rowData, sectionID, rowID)}
 							renderHeader={this._renderHeader}
 							renderFooter={this._renderFooter} 
-							onRefresh={this._onRefresh}
-							onLoadMore={this._onLoadMore}
+							onRefresh={()=>this._onRefresh()}
+							onLoadMore={()=>this._onLoadMore()}
 							pullUpDistance={35}
 							pullUpStayDistance={50} 
 							removeClippedSubviews={false}

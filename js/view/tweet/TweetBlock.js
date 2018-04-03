@@ -10,13 +10,15 @@ class TweetBlock extends Component {
     static propTypes = {
         value: PropTypes.string,
         style: Text.propTypes.style,
-        onBlockPressed: PropTypes.func,
+        onLinkPressed: PropTypes.func,
+        onPressed: PropTypes.func,
     }
     
     static defaultProps = {
         value:'',
         style: {},
-        onBlockPressed: (stockID)=>{}
+        onLinkPressed: (stockID)=>{},
+        onPressed: ()=>{},
     }
 
     constructor(props){
@@ -39,6 +41,8 @@ class TweetBlock extends Component {
     }
 
     onPressed(){
+        this.props.onPressed && this.props.onPressed();
+
         this.setState({
             maxLine:this.state.maxLine==99?3:99
         })
@@ -65,7 +69,7 @@ class TweetBlock extends Component {
                                 StockID: node.id,
                             });
                             console.log("node.link " + node.link)
-                            this.props.onBlockPressed(node.link);
+                            this.props.onLinkPressed(node.link);
                         }}
                         style={[styles.linkedPart, {fontSize:fontSize}]}>
                         {node.text}
@@ -79,7 +83,7 @@ class TweetBlock extends Component {
 
         return (     
             <TouchableOpacity onPress={()=>this.onPressed()}>      
-                <Text  style={[styles.container, this.props.style]} numberOfLines={maxLine}>
+                <Text style={[styles.container, this.props.style]} numberOfLines={maxLine}>
                     {parsedListView}
                 </Text>
             </TouchableOpacity> 

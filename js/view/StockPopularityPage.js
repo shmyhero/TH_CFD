@@ -107,7 +107,7 @@ var StockPopularityPage = React.createClass({
 					<Text style={styles.stockPeople}>{peopleNum}{strRCY}</Text>
 				</View>
 				<View style={styles.popularityRowRight}>
-					<Text style={styles.sellTitle}>{strKD} {100-percent}%</Text>
+					<Text style={styles.sellTitle}>{strKK} {100-percent}%</Text>
 					<View style={[styles.grayBar, {width:barWidth}]}>
 						<View style={[styles.greenBar, {width:sellWidth}]}/>
 					</View>

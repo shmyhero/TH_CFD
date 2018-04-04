@@ -186,7 +186,7 @@ export default class StockTransactionInfoBar extends Component {
           </View>
           <View style={{flex: 2, alignItems: 'center'}}>
             <Text style={[styles.itemTitleText, itemTitleTextStyle]}>
-              {LS.str("CARD_TYPE").replace("{1}", currency)}
+              {LS.str("CARD_INVEST").replace("{1}", currency)}
             </Text>
             <Text style={[styles.itemValueText, itemValueTextStyle]}>
               {this.state.invest.toFixed(2)}

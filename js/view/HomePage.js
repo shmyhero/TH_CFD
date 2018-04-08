@@ -117,8 +117,7 @@ var HomePage = React.createClass({
 			titleOpacity: 0,
 			isLoading:false,
 			dataResponse:[],
-			currentOperatedRow: -1,
-			// dataSourceDynamic:dsDynamic.cloneWithRows(mokeData),
+			currentOperatedRow: -1, 
 		};
 	},
 
@@ -328,55 +327,55 @@ var HomePage = React.createClass({
 		// this.onConnectionStateChanged();
 
 
-		// this.setInterval(
-		// 	()=>{
-		// 		if(LogicData.getAccountState()){
-		// 			this.loadCacheListData()
-		// 		} 
-		// 	},
-		// 	30000
-		// )
+		this.setInterval(
+			()=>{
+				if(LogicData.getAccountState()){
+					this.loadCacheListData()
+				} 
+			},
+			30000
+		)
 
-		// this.setInterval(
-		// 	()=>{
-		// 		if(LogicData.getAccountState()){
-		// 			var responseJson = this.state.dataResponse
-		// 			if(this.state.cacheData&&this.state.cacheData.length>0){  
-		// 				if(responseJson && responseJson.length > 0){
-		// 					for(var i = 0; i < responseJson.length; i++){
-		// 						responseJson[i].isNew = false;
-		// 					} 
-		// 				}
+		this.setInterval(
+			()=>{
+				if(LogicData.getAccountState()){
+					var responseJson = this.state.dataResponse
+					if(this.state.cacheData&&this.state.cacheData.length>0){  
+						if(responseJson && responseJson.length > 0){
+							for(var i = 0; i < responseJson.length; i++){
+								responseJson[i].isNew = false;
+							} 
+						}
 
-		// 				var add = {}
-		// 				$.extend(true, add, this.state.cacheData[this.state.cacheData.length-1]);
-		// 				add.isNew = true
-		// 				responseJson.splice(0, 0, add);
-		// 				this.state.cacheData.splice(this.state.cacheData.length-1,1)
+						var add = {}
+						$.extend(true, add, this.state.cacheData[this.state.cacheData.length-1]);
+						add.isNew = true
+						responseJson.splice(0, 0, add);
+						this.state.cacheData.splice(this.state.cacheData.length-1,1)
 
-		// 				console.log("responseJson[0].isNew = " + responseJson[0].isNew)
+						console.log("responseJson[0].isNew = " + responseJson[0].isNew)
 						
-		// 				this.setState({ 
-		// 					dataResponse:responseJson,
-		// 					cacheData:this.state.cacheData,
-		// 					// dataSource:this._dataSource.cloneWithRows(responseJson),
-		// 					dataSourceDynamic: dsDynamic.cloneWithRows(responseJson),
-		// 				}) 
+						this.setState({ 
+							dataResponse:responseJson,
+							cacheData:this.state.cacheData,
+							// dataSource:this._dataSource.cloneWithRows(responseJson),
+							dataSourceDynamic: dsDynamic.cloneWithRows(responseJson),
+						}) 
 
-		// 			}else{
-		// 				for(var i = 0; i < responseJson.length; i++){
-		// 					responseJson[i].isNew = false;
-		// 				} 
-		// 				this.setState({ 
-		// 					dataResponse:responseJson, 
-		// 					// dataSource:this._dataSource.cloneWithRows(responseJson),
-		// 					dataSourceDynamic: dsDynamic.cloneWithRows(responseJson),
-		// 				})
-		// 			}
-		// 		}
-		// 	},
-		// 	2000
-		// ) 
+					}else{
+						for(var i = 0; i < responseJson.length; i++){
+							responseJson[i].isNew = false;
+						} 
+						this.setState({ 
+							dataResponse:responseJson, 
+							// dataSource:this._dataSource.cloneWithRows(responseJson),
+							dataSourceDynamic: dsDynamic.cloneWithRows(responseJson),
+						})
+					}
+				}
+			},
+			2000
+		) 
 	},
 
 	componentWillUnmount: function() {
@@ -1399,13 +1398,26 @@ var HomePage = React.createClass({
 						'Accept-Language': LogicData.getLanguageEn() == '1'?'en':'cn',
 					},
                 },
-                (responseJson) => {
-                    for(var i = 0; i < responseJson.length; i++){
-                        responseJson[i].isNew = true;
-                    } 
-                    this.setState({ 
-                        cacheData: responseJson,
-                    }) 
+                (responseJson) => { 
+
+					LogicData.getRemovedRynamicRow().then((delList)=>{  
+						responseJson = responseJson.filter(function(item){
+							for(var i = 0;i<delList.length;i++){ 
+								if(delList[i] == item.time){
+									return false
+								}
+							}
+							return true
+						})  
+	
+						for(var i = 0; i < responseJson.length; i++){
+							responseJson[i].isNew = true;
+						} 
+						this.setState({ 
+							cacheData: responseJson,
+						})  
+	
+					})   
     
                     console.log('loadCacheListData length is = ' + responseJson.length);
                 },
@@ -1514,6 +1526,7 @@ var HomePage = React.createClass({
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
 					'Accept-Language': LogicData.getLanguageEn() == '1'?'en':'cn',
 				},
+				cache: 'offline',
 				param,
 			},
 			function(response) { 
@@ -1528,15 +1541,13 @@ var HomePage = React.createClass({
 						}
 						return true
 					})  
-
-					this.setState(
-						{
+					
+					this.setState({ 
 							dataResponse: responseJson,
 							dataSourceDynamic: dsDynamic.cloneWithRows(responseJson),
 							isLoading:false,
-						}
-					) 
-				})  
+						}) 
+				})
 
 				if(isRefresh){
                     this._pullToRefreshListView.endRefresh()

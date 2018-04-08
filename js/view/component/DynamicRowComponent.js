@@ -9,7 +9,8 @@ import {
     TouchableOpacity,
     Image,
     Dimensions,
-    Alert
+    Alert,
+    Platform
 } from 'react-native';
 var {height, width} = Dimensions.get('window');
 require('../../utils/dateUtils')
@@ -165,7 +166,7 @@ class DynamicRowComponent extends Component {
             }else{
                 return (
                     <TweetBlock  
-                        style={{marginBottom:5, fontSize:15,color:'#999999',lineHeight:26}}
+                        style={{marginBottom:5, fontSize:13,color:'#999999',lineHeight:26}}
                         value={text}
                         onLinkPressed={(name, id)=>{this.jump2Detail(name, id)}}
                         onPressed={()=>{
@@ -186,13 +187,14 @@ class DynamicRowComponent extends Component {
             var valueColor = rowData.position.roi>=0 ? ColorConstants.STOCK_RISE_RED:ColorConstants.STOCK_DOWN_GREEN;
            
             text = '平仓'+winOrLoss;
+            var margin = Platform.OS == 'android'?0:3
 
             return (
                 <View style={{flexDirection:'row'}}>
                      <Text style={{fontSize:15,color:'#666666',lineHeight:20}}>
                     {text} 
                     </Text>
-                    <Text style={{color: valueColor}}>
+                    <Text style={{color: valueColor,marginTop:margin}}>
                     {value}
                     </Text>
                 </View>    
@@ -325,9 +327,10 @@ const styles = StyleSheet.create({
         color:'#999999'
     },
     textTitleLine:{
-        fontSize:13,
+        fontSize:15,
         alignSelf:'flex-start',
         marginTop:5,
+        lineHeight:22,
         color:'#666666'
     },
     thumbnailAll: {

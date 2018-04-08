@@ -134,6 +134,11 @@ var StockClosedPositionPage = React.createClass({
 	scrollViewYOffset: 0,
 
 	tabPressed: function(index) {
+
+		WebSocketModule.registerCallbacks(
+			() => {
+		})
+
 		var d = new Date();
 		this.currentTicks = d.getTime();
 		console.log("tabpressed ")
@@ -142,41 +147,38 @@ var StockClosedPositionPage = React.createClass({
 		this.setState({
 			selectedRow: -1,
 		})
-		if(this._pullToRefreshListView && this._pullToRefreshListView._scrollView){
-			try{
-				this.endNextPageLoadingState(false);
-			}catch(e){
-				console.log("Met error when clear closed position page!" + e)
-			}
-		}
-
+		
 		if(this.scrollViewYOffset != 0){
-			//If current scrollview offset isn't 0, scroll to 0.
 			if(this._pullToRefreshListView && this._pullToRefreshListView._scrollView){
+				//If current scrollview offset isn't 0, scroll to 0.
 				console.log("tabPressed - scroll to top")
 				this.isResetScroll = true;
-				this._pullToRefreshListView._scrollView.scrollTo({x:0, y:0, animated:false})
+				this._pullToRefreshListView._scrollView.scrollTo({x:0, y:0, animated:false});
+				//And the reload data operation will be called in the onScroll callback.
 			}
 		}else{
+			this.endNextPageLoadingState(false);
 			this.loadClosedPositionInfo();
 		}
 
-		WebSocketModule.registerCallbacks(
-			() => {
-		})
 	},
 
 	onScroll: function(event){
 		this.scrollViewYOffset = event.nativeEvent.contentOffset.y;
 		if(this.isResetScroll && this.scrollViewYOffset == 0){
 			this.isResetScroll = false;
-			//BUGBUG: We need to move the following code to scroll to callback.
+			//BUGBUG: We need to move the following code to callback.
 			if(!this.state.contentLoaded){
 				this.setState({
 					isRefreshing: true,
+				}, ()=>{
+					this.endNextPageLoadingState(false);
+					this.loadClosedPositionInfo();
 				});
+			}else{
+				this.endNextPageLoadingState(false);
+				this.loadClosedPositionInfo();
 			}
-			this.loadClosedPositionInfo();
 		}
 	},
 

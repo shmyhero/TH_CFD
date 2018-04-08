@@ -105,16 +105,17 @@ var StockExchangePage = React.createClass({
 				this.refs['tabPages'].tabClicked(currentTab)
 				this.setState({
 					currentSelectedTab: currentTab
-				})
-				if(currentTab === 2) {
-					this.refs['page2'].tabPressed()
-				}
-				else if(currentTab === 1) {
-					this.refs['page1'].tabPressed()
-				}
-				else {
-					this.refs['page0'].tabPressed()
-				}
+				}, ()=>{
+					if(currentTab === 2) {
+						this.refs['page2'].tabPressed()
+					}
+					else if(currentTab === 1) {
+						this.refs['page1'].tabPressed()
+					}
+					else {
+						this.refs['page0'].tabPressed()
+					}
+				});				
 			}
 			else{
 				//It is the first time user goes into this tab! Just trigger the render!
@@ -145,7 +146,7 @@ var StockExchangePage = React.createClass({
 			// </View>
 			<View>
 				{/* <NavBar title={''} navigator={this.props.navigator}/> */}
-				<OAStatusPage onLoginClicked={this.jumpToLogin}/>
+				<OAStatusPage onLoginClicked={()=>this.jumpToLogin()}/>
 			</View>
 
 		)
@@ -184,6 +185,10 @@ var StockExchangePage = React.createClass({
 			MainPage.ayondoLoginResult(true)
 			this.setState({
 				loggined:true,
+			},()=>{
+				if(this.refs['page'+this.state.currentSelectedTab]){
+					this.refs['page'+this.state.currentSelectedTab].tabPressed()
+				}
 			});
 		}else if(navState.url.indexOf('live/oauth/error')>0){
 			console.log('success login error');

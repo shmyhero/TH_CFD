@@ -157,7 +157,7 @@ var StockListViewPager = React.createClass({
 		return (
 			<TouchableOpacity
 				activeOpacity={1}
-				onPress={()=>this.pressedNavBar()}
+				// onPress={()=>this.pressedNavBar()}
 				// style={{position:'absolute', top:0, left: 0, right: width, width:width}}
 				>
 				<NavBar title={this.state.connected ? strHQ : strHQWLJ} 

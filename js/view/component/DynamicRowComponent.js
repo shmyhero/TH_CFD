@@ -282,9 +282,9 @@ class DynamicRowComponent extends Component {
                             //console.log("onClose()");
                         }}
                         style={{margin:5,borderRadius:8,width:width-60,backgroundColor:'white',flex:1}}> 
-                        <View style={{margin:5,borderRadius:12.5,width:width-60,backgroundColor:'white',flex:1}}>
+                        <View style={{marginLeft:5,marginRight:5, borderRadius:12.5,width:width-60,backgroundColor:'white',flex:1}}>
                             <View>
-                                <View style={{flexDirection:'row',margin:5}}> 
+                                <View style={{flexDirection:'row',marginLeft:5,marginRight:5}}> 
                                     <TouchableOpacity onPress={()=>this._onPressToUser(this.props.rowData)}>
                                         <Image source={{uri:this.props.rowData.user.picUrl}}
                                             style={{height:34,width:34,margin:10,borderRadius:17}} >
@@ -317,13 +317,14 @@ const styles = StyleSheet.create({
     textContainer: {
         paddingRight: 10,
         flex:1,
+        // backgroundColor:'yellow',
         justifyContent: 'center', 
         alignItems: 'flex-start', 
     },
     textUserName:{
         fontSize:13,
         alignSelf:'flex-start',
-        marginTop:5,
+        marginTop:2,
         color:'#999999'
     },
     textTitleLine:{
@@ -347,7 +348,7 @@ const styles = StyleSheet.create({
         padding:2,
         alignItems:'center',
         justifyContent:'center',
-        marginTop:7,
+        marginTop:2,
         marginLeft:2,
     }
 

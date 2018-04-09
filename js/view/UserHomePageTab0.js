@@ -366,7 +366,7 @@ export default class UserHomePageTab0 extends Component{
 					<Image  source={require('../../images/bg_card.png')} style={[styles.cardItem,{marginRight:i==0?4:10},{marginRight:i==lastIndex?10:4}]}>
 						<Image style={styles.cardImage} source={{uri:this.state.cards[i].imgUrlMiddle}}></Image>
 						<View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
-							<Text style={{color:'#fa2c21',fontSize:14,marginBottom:5}}>{this.state.cards[i].plRate.toFixed(2)}%</Text>
+							<Text style={{color:'#fa2c21',fontSize:14,marginBottom:1}}>{this.state.cards[i].plRate.toFixed(2)}%</Text>
 							<Text style={{color:'#3f3f3f',fontSize:14}}>{this.state.cards[i].stockName}</Text>
               <View style={{height:10,width:20}}></View>
 						</View>

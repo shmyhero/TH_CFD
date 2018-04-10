@@ -1826,10 +1826,9 @@ var StockDetailPage = React.createClass({
 		var maxLeverage = leverageArray[leverageArray.length - 1];
 
 		var error = null;
-
 		var strMY = LS.str('MY');
 
-		if (this.state.money < this.state.minInvestUSD && this.state.money * maxLeverage < this.state.minInvestUSD) {
+		if (this.state.money < this.state.minInvestUSD){
 			error = LS.str('ZZJXDY_IR') + this.state.minInvestUSD.toFixed(0) + strMY
 		} else if (tradeValue < minValue) {
 			error = LS.str('ZZJXDY') + minValue.toString() + strMY;

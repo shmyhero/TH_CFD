@@ -290,8 +290,8 @@ const styles = StyleSheet.create({
   keyboardButton:{
     flex:1,
     alignSelf:'stretch',
-    borderTopWidth: 0.5,
-    borderLeftWidth: 0.5,
+    borderTopWidth: 1,
+    borderLeftWidth: 1,
     borderColor: '#dfdfdf',
     justifyContent:'center',
     alignItems:'center',

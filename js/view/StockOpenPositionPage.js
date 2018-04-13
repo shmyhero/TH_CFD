@@ -278,7 +278,8 @@ var StockOpenPositionPage = React.createClass({
 				method: 'GET',
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
-				},
+					'Accept-Language': LogicData.getLanguageEn() == '1'?'en':'cn',
+				}, 
 				cache: 'offline',
 				//timeout: 1000,
 			},

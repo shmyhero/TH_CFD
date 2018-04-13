@@ -230,6 +230,7 @@ export function syncOwnStocks(userData) {
 				method: 'GET',
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Accept-Language': LogicData.getLanguageEn() == '1'?'en':'cn',
 				},
 			},
 			(responseJson) => {
@@ -296,6 +297,7 @@ export function addToOwnStocks(stockData) {
 				method: 'POST',
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Accept-Language': LogicData.getLanguageEn() == '1'?'en':'cn',
 				}
 			},
 			(responseJson) => {
@@ -329,6 +331,7 @@ export function removeFromOwnStocks(stockData) {
 				method: 'DELETE',
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Accept-Language': LogicData.getLanguageEn() == '1'?'en':'cn',
 				}
 			},
 			(responseJson) => {
@@ -364,6 +367,7 @@ export function updateOwnStocks(stockData) {
 				method: 'PUT',
 				headers: {
 					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Accept-Language': LogicData.getLanguageEn() == '1'?'en':'cn',
 				},
 			},
 			(responseJson) => {

@@ -97,6 +97,7 @@ export default class PositionBlock extends Component {
           method: 'GET',
           headers: {
             'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+            'Accept-Language': LogicData.getLanguageEn() == '1'?'en':'cn',
           },
           cache: 'none',
         },

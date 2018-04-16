@@ -118,6 +118,7 @@ var HomePage = React.createClass({
 			isLoading:false,
 			dataResponse:[],
 			currentOperatedRow: -1, 
+			visableFirstItem:0,
 		};
 	},
 
@@ -1584,7 +1585,49 @@ var HomePage = React.createClass({
                 color={ColorConstants.COLOR_CUSTOM_BLUE2}
                 size={'small'}/>
         )
-    } ,
+	} ,
+	
+	onPressedConfig:function(){
+		this.props.navigator.push({
+			name:MainPage.DYNAMIC_STATUS_CONFIG,
+		})
+	},
+
+	renderDateInfo:function(){
+		var firstItemId = this.state.visableFirstItem;
+		 
+		
+		var dataTime = '';
+		if(this.state.dataResponse.length>firstItemId){
+			var d = new Date(this.state.dataResponse[firstItemId].time);
+			dataTime = d.getDateFullString() 
+		}
+
+		return(
+			<View style = {{height:20,paddingLeft:10,paddingRight:10,flexDirection:'row',justifyContent:'space-between'}}>
+				 
+				<Text style={{color:'#a9a9a9'}}>{dataTime}</Text>
+				 
+				<TouchableOpacity onPress={()=>{this.onPressedConfig()}}>
+					<Text style={{color:'#a9a9a9'}}>。。。</Text>
+				</TouchableOpacity>
+			</View>	
+		)
+	},
+
+	_onChangeVisibleRows(visibleRows, changedRows){
+		// let visibleRowsCount = Object.keys(visibleRows.s1).length;
+		console.log('visibleRows FirstItem is ：'+Object.keys(visibleRows.s1));
+		console.log('visibleRows FirstItem is ：'+Object.keys(visibleRows.s1)[0]);
+		
+		if(visibleRows&&visibleRows.s1){
+			this.setState({
+				visableFirstItem:Object.keys(visibleRows.s1)[0]
+			})
+		}
+		
+		 
+	},
 
 	render: function() {
 		height = Dimensions.get('window').height;
@@ -1621,6 +1664,7 @@ var HomePage = React.createClass({
 			}else{
 				return ( 
 					<View style = {styles.mainContainer}> 
+						{this.renderDateInfo()}
 						<PullToRefreshListView
 							ref={ (component) => this._pullToRefreshListView = component }
 							viewType={PullToRefreshListView.constants.viewType.listView}
@@ -1637,6 +1681,7 @@ var HomePage = React.createClass({
 							onLoadMore={()=>this._onLoadMore()}
 							pullUpDistance={35}
 							pullUpStayDistance={50} 
+							onChangeVisibleRows={this._onChangeVisibleRows}
 							removeClippedSubviews={false}
 							pullDownDistance={35}
 							pullDownStayDistance={50}

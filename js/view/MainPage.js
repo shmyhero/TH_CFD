@@ -88,7 +88,8 @@ var RankingPage = require('./RankingPage');
 var UserHomePage = require('./UserHomePage');
 var FSModule = require('../module/FSModule');
 var CustomKeyboard = require('./CustomKeyboard');
-var NewTweetPage = require('./tweet/NewTweetPage')
+var NewTweetPage = require('./tweet/NewTweetPage');
+var DynamicStatusConfig = require('./DynamicStatusConfig');
 
 var TutorialPage = require('./TutorialPage');
 var LS = require('../LS');
@@ -151,6 +152,7 @@ export let RANKING_PAGE_ROUTE = 'rankingPageRoute'
 export let USER_HOME_PAGE_ROUTE = 'userHomePageRoute'
 export let PROMOTION_CODE_PAGE_ROUTE = 'promotionCodePage'
 export let NEW_TWEET_PAGE_ROUTE = 'newTweetPageRoute'
+export let DYNAMIC_STATUS_CONFIG = 'DynamicStatusConfigRoute'
 
 const NoBackSwipe ={
   ...Navigator.SceneConfigs.PushFromRight,
@@ -705,6 +707,13 @@ var MainPage = React.createClass({
 				<NewTweetPage navigator={navigationOperations}
 					routeMapper={this.RouteMapper}
 					onPopOut={route.onPopOut}/>
+			)
+		}else if(route.name === DYNAMIC_STATUS_CONFIG){
+			return(
+				<DynamicStatusConfig 
+					navigator={navigationOperations}
+					routeMapper={this.RouteMapper}
+				/>
 			)
 		}
 

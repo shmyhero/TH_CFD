@@ -67,4 +67,26 @@ Date.prototype.getDateString = function(){
     return today;
     }
 
+    Date.prototype.getDateFullString = function(){
+        var weekday = new Array("日", "一", "二", "三", "四", "五", "六");
+        var day = weekday[this.getDay()];//当前系统天数0-6 
+
+        var dd = this.getDate();
+        var mm = this.getMonth()+1; //January is 0!
+        var yyyy = this.getFullYear();
+        var dayName = this.get
+        if(dd<10) {
+            dd='0'+dd
+        }
+        if(mm<10) {
+            mm='0'+mm
+        }
+
+         
+        today = yyyy+"年"+mm+"月"+dd+"日" + "  星期" + day;
+        return today;
+      }
+
+
+
 

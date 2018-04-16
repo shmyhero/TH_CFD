@@ -441,7 +441,7 @@ var StockOpenPositionPage = React.createClass({
 					this.state.stockInfoRowData[i].security.last = (realtimeStockInfo[j].ask + realtimeStockInfo[j].bid) / 2;
 					hasUpdate = true;
 
-					if(this.stopProfitLossStockId == this.state.stockInfoRowData[i].security.id ){
+					if(this.stopProfitLossRowId == this.state.stockInfoRowData[i].id){
 						this.updateStopProfitLossMinMaxValue(this.state.stockInfoRowData[i])
 					}
 				}
@@ -1205,13 +1205,13 @@ var StockOpenPositionPage = React.createClass({
 		return this.percentToPrice(percent, rowData.settlePrice, leverage, type, rowData.isLong)
 	},
 
-	priceToPercent: function(price, basePrice, leverage, type, isLong) {
+	priceToPercent: function(price, basePrice, leverage, type, isLong) {	
 		//if (type === 1) {
 			return (price-basePrice)/basePrice*100*leverage * (isLong?1:-1)
-		//}
-		//else {
-		//	return (basePrice-price)/basePrice*100*leverage * (isLong?1:-1)
-		//}
+		// }
+		// else {
+		// 	return (basePrice-price)/basePrice*100*leverage * (isLong?1:-1)
+		// }
 	},
 
 	priceToPercentWithRow: function(price, rowData, type) {
@@ -1321,7 +1321,7 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	stopProfitLossStockId: 0,
+	stopProfitLossRowId: 0,
 	stopProfitLossKeyboardType: 0, //1 stop profit, 2 stop loss
 	stopProfitMinValue: 0,
 	stopProfitMaxValue: 0,
@@ -1342,7 +1342,6 @@ var StockOpenPositionPage = React.createClass({
 			startPercent = this.priceToPercentWithRow(rowData.security.last, rowData, type)
 			// use gsmd to make sure this order is guaranteed.
 			startPercent += rowData.security.smd*100*rowData.leverage
-
 			if (startPercent < 0)
 				startPercent = 0
 			endPercent = startPercent + 100
@@ -1357,11 +1356,10 @@ var StockOpenPositionPage = React.createClass({
 			endPercent = this.priceToPercentWithRow(rowData.security.last, rowData, type)
 			// use smd to make sure this order is guaranteed.
 			endPercent -= rowData.security.gsmd*100*rowData.leverage
-
+			
 			if(endPercent - startPercent > 100){
 				startPercent = endPercent - 100
 			}
-
 			if (!stopLossUpdated){//percent === MAX_LOSS_PERCENT) {
 
 				percent = this.priceToPercentWithRow(rowData.stopPx, rowData, type)
@@ -1472,6 +1470,7 @@ var StockOpenPositionPage = React.createClass({
 		var endPercent = MAX_LOSS_PERCENT
 
 		if (type === 1) {
+
 			// stop profit
 			startPercent = this.priceToPercentWithRow(rowData.security.last, rowData, type)
 			// use gsmd to make sure this order is guaranteed.
@@ -1486,6 +1485,7 @@ var StockOpenPositionPage = React.createClass({
 				stopProfitPercent = percent
 			}
 		} else{
+
 			// stop loss
 			startPercent = MAX_LOSS_PERCENT
 			endPercent = this.priceToPercentWithRow(rowData.security.last, rowData, type)
@@ -1533,9 +1533,7 @@ var StockOpenPositionPage = React.createClass({
 
 	updateStopProfitLossMinMaxValue: function(rowData){
 
-		console.log("updateStopProfitLossMinMaxValue 1 " + MainPage.getIsKeyboardShown())
 		if(MainPage.getIsKeyboardShown()){
-			console.log("updateStopProfitLossMinMaxValue 2")
 			var type = this.stopProfitLossKeyboardType;
 
 			var previousMinValue = 0;
@@ -1551,7 +1549,6 @@ var StockOpenPositionPage = React.createClass({
 				previousMaxValue = this.stopLossMaxValue;
 			}
 
-			console.log("updateStopProfitLossMinMaxValue 3")
 			this.updateCurrentStopLossProfitMinMaxValue(rowData, type);
 			if(type === 1){
 				minValue = this.stopProfitMinValue;
@@ -1560,8 +1557,8 @@ var StockOpenPositionPage = React.createClass({
 				minValue = this.stopLossMinValue;
 				maxValue = this.stopLossMaxValue;
 			}
+			
 			if(previousMinValue != minValue || previousMaxValue != maxValue){
-				console.log("updateStopProfitLossMinMaxValue 4")
 				MainPage.updateKeyboardErrorText(this.getErrorText(rowData, type));
 			}
 		}
@@ -1573,7 +1570,7 @@ var StockOpenPositionPage = React.createClass({
 		currentValue){
 
 		this.stopProfitLossKeyboardType = type;
-		this.stopProfitLossStockId = rowData.security.id;
+		this.stopProfitLossRowId = rowData.id;
 
 		this.updateCurrentStopLossProfitMinMaxValue(rowData, type);
 

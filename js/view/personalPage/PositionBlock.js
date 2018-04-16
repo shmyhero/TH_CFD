@@ -8,6 +8,9 @@ import {
   ListView,
   TouchableHighlight,
   Dimensions,
+  Image,
+  Platform,
+  LayoutAnimation
 } from 'react-native';
 
 var ColorConstants = require('../../ColorConstants');
@@ -19,6 +22,11 @@ var NetworkErrorIndicator = require('../../view/NetworkErrorIndicator');
 var LS = require('../../LS')
 var {height, width} = Dimensions.get('window');
 var stockNameFontSize = Math.round(17*width/375.0);
+
+var DEFAULT_EXTENDED_HEIGHT = 222;
+var extendHeight = DEFAULT_EXTENDED_HEIGHT
+var rowHeight = 0
+var isWaiting = false
 
 var {height, width} = Dimensions.get('window');
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => {
@@ -59,11 +67,6 @@ export default class PositionBlock extends Component {
     }
   }
 
-  getLastPrice(rowData) {
-		var lastPrice = rowData.isLong ? rowData.security.bid : rowData.security.ask
-		// console.log(rowData.security.bid, rowData.security.ask)
-		return lastPrice === undefined ? rowData.security.last : lastPrice
-	}
 
   refresh(){
     if(this.props.isPrivate){
@@ -72,6 +75,109 @@ export default class PositionBlock extends Component {
 
     this.loadData();
   }
+
+  stockPressed(rowData, sectionID, rowID, highlightRow) {
+		if (rowHeight === 0) {	// to get the row height, should have better method.
+			rowHeight = this.refs['listview'].getMetrics().contentLength/this.state.stockInfoRowData.length
+		}
+
+		this.setState({
+			showExchangeDoubleCheck: false,
+		})
+		var newData = []
+		$.extend(true, newData, this.state.stockInfoRowData)	// deep copy
+
+		extendHeight = DEFAULT_EXTENDED_HEIGHT
+		if (this.state.selectedRow == rowID) {
+			LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+			newData[rowID].hasSelected = false
+			this.setState({
+				stockInfo: this.state.stockInfo.cloneWithRows(newData),
+				selectedRow: -1,
+				selectedSubItem: 0,
+				stockInfoRowData: newData,
+			})
+			if (Platform.OS === 'android') {
+				var currentY = rowHeight*(parseInt(rowID))
+				this.setTimeout(
+					() => {
+						if (currentY > 300 && currentY + 3 * rowHeight > this.refs['listview'].getMetrics().contentLength) {
+							this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY), animated:true})
+						}
+					 },
+					500
+				);
+			}
+		} else {
+			isWaiting = false
+			if (this.state.selectedRow >=0) {
+				newData[this.state.selectedRow].hasSelected = false
+			}
+			newData[rowID].hasSelected = true
+		
+			this.setState({
+				stockInfo: this.state.stockInfo.cloneWithRows(newData),
+				selectedRow: rowID,
+				selectedSubItem: 0,
+				stockInfoRowData: newData,			
+			}, ()=>{
+				this.doScrollAnimation();
+			});
+		}
+  }
+
+  currentExtendHeight(subItem) {
+		var showNetIncome = false
+		var newHeight = DEFAULT_EXTENDED_HEIGHT
+		if (showNetIncome) {
+			newHeight += 20
+		}
+		if (subItem === 1) {
+			newHeight += 170
+		}
+		if (subItem === 2) {
+			newHeight += 170 - 70		
+		}
+		if (this.state.showExchangeDoubleCheck) {
+			newHeight += 28
+		}
+		return newHeight
+	}
+  
+  doScrollAnimation() {
+		if (Platform.OS === 'ios') {
+			var newExtendHeight = this.currentExtendHeight(this.state.selectedSubItem)
+			if (newExtendHeight < extendHeight) {
+				newExtendHeight = extendHeight
+			}
+			var rowID = this.state.selectedRow
+			var maxY = (height-114-UIConstants.LIST_HEADER_BAR_HEIGHT)*20/21 - newExtendHeight
+			var currentY = rowHeight*(parseInt(rowID)+1)
+			if (currentY > maxY) {
+				this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY-maxY), animated:true})
+			}
+
+			//Disable the spring animation on Android for now since the RN 3.3 list view has a bug.
+			if(Platform.OS === 'ios'){
+				//Do not set delete animation, or the some row will be removed if clicked quickly.
+				var animation = {
+					duration: 700,
+					create: {
+						type: 'linear',
+						property: 'opacity',
+					},
+					update: {
+						type: 'spring',
+						springDamping: 0.4,
+						property: 'scaleXY',
+					},
+				}
+				LayoutAnimation.configureNext(animation);//LayoutAnimation.Presets.spring);
+				//LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+			}
+			extendHeight = newExtendHeight
+		}
+	}
 
   loadData(){
 		this.setState({
@@ -156,7 +262,7 @@ export default class PositionBlock extends Component {
 
 		return (
 			<View>
-				<TouchableHighlight activeOpacity={1}>
+				<TouchableHighlight activeOpacity={1} onPress={() => this.stockPressed(rowData, sectionID, rowID, highlightRow)}>
 					<View style={[styles.rowWrapper, {backgroundColor: bgcolor}]} key={rowID}>
 						<View style={styles.rowLeftPart}>
 							<Text style={styles.stockNameText} allowFontScaling={false} numberOfLines={1}>
@@ -181,8 +287,27 @@ export default class PositionBlock extends Component {
 						</View>
 					</View>
 				</TouchableHighlight>
+        {this.state.selectedRow == rowID ? this.renderDetailInfo(rowData, rowID): null}
 			</View>
 		);
+  } 
+
+	renderDetailInfo(rowData, rowID){
+    var tradeImage = rowData.isLong ? require('../../../images/icon_up_cw.png') : require('../../../images/icon_down_cw.png')
+    var timeSubTitle = this.props.type == "open" ? LS.str('OPEN_TIME') : LS.str('CLOSE_TIME');
+    var date = this.props.type == "open" ? new Date(rowData.createAt) : new Date(rowData.closeAt);
+    var timeString = date.Format('yy/MM/dd hh:mm');
+    return (
+      <View style={styles.extendRowWrapper}>
+        <View style={styles.extendLeft}>
+          <Text style={styles.extendTextTop}>{LS.str('LX')}</Text>
+          <Image style={styles.extendImageBottom} source={tradeImage}/>
+        </View>
+        <View style={styles.extendRight}>
+          <Text style={styles.extendTextTop}>{timeSubTitle}</Text>
+          <Text style={styles.extendTextBottom}>{}</Text>
+        </View>
+      </View>);
 	}
 
   renderProfit(percentChange, endMark) {
@@ -336,6 +461,31 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#9f9f9f'
   },
+  extendLeft: {
+		flex: 1,
+		alignItems: 'flex-start',
+		marginLeft: 15,
+		paddingTop: 8,
+		paddingBottom: 8,
+  },
+  extendRight: {
+		flex: 1,
+		alignItems: 'flex-end',
+		marginRight: 15,
+		paddingTop: 8,
+		paddingBottom: 8,
+	},
+  extendImageBottom: {
+		width: 24,
+		height: 24,
+  },
+  extendRowWrapper: {
+		flexDirection: 'row',
+		alignItems: 'stretch',
+		justifyContent: 'space-around',
+    height: 51,
+    backgroundColor: ColorConstants.LIST_BACKGROUND_GREY,
+	},
 });
 
 module.exports = PositionBlock;

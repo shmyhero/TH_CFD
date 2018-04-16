@@ -32,6 +32,8 @@ var LS = {
     GANGAN2:['杠杆','Multiplier'],
     KCJG:['开仓价格','Trade Price'],
     PCJG:['平仓价格','Close Price'],
+    OPEN_TIME: ["开仓时间", "Opened"],
+    CLOSE_TIME: ["平仓时间", "Closed"],
     KCF:['开仓费','Open Fee'],
     PCF:['平仓费','Closed Fee'],
     JSY_MY:['净收益(美元)','Net Profit($)'],

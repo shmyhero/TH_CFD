@@ -1617,8 +1617,8 @@ var HomePage = React.createClass({
 
 	_onChangeVisibleRows(visibleRows, changedRows){
 		// let visibleRowsCount = Object.keys(visibleRows.s1).length;
-		console.log('visibleRows FirstItem is ：'+Object.keys(visibleRows.s1));
-		console.log('visibleRows FirstItem is ：'+Object.keys(visibleRows.s1)[0]);
+		// console.log('visibleRows FirstItem is ：'+Object.keys(visibleRows.s1));
+		// console.log('visibleRows FirstItem is ：'+Object.keys(visibleRows.s1)[0]);
 		
 		if(visibleRows&&visibleRows.s1){
 			this.setState({

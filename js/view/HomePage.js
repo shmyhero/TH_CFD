@@ -1586,10 +1586,16 @@ var HomePage = React.createClass({
                 size={'small'}/>
         )
 	} ,
+
+	onPopOut(){
+		console.log('重新刷新数据')
+		this.loadData(false)
+	},
 	
 	onPressedConfig:function(){
 		this.props.navigator.push({
 			name:MainPage.DYNAMIC_STATUS_CONFIG,
+			onPopOut:this.onPopOut
 		})
 	},
 
@@ -1604,12 +1610,12 @@ var HomePage = React.createClass({
 		}
 
 		return(
-			<View style = {{height:20,paddingLeft:10,paddingRight:10,flexDirection:'row',justifyContent:'space-between'}}>
+			<View style = {{height:28,paddingLeft:10,paddingRight:12,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
 				 
-				<Text style={{color:'#a9a9a9'}}>{dataTime}</Text>
+				<Text style={{color:'#7895cb'}}>{dataTime}</Text>
 				 
 				<TouchableOpacity onPress={()=>{this.onPressedConfig()}}>
-					<Text style={{color:'#a9a9a9'}}>。。。</Text>
+					<Image style = {{width:29,height:29,}} source={require('../../images/three_point.png')}></Image>
 				</TouchableOpacity>
 			</View>	
 		)
@@ -1619,7 +1625,7 @@ var HomePage = React.createClass({
 		// let visibleRowsCount = Object.keys(visibleRows.s1).length;
 		// console.log('visibleRows FirstItem is ：'+Object.keys(visibleRows.s1));
 		// console.log('visibleRows FirstItem is ：'+Object.keys(visibleRows.s1)[0]);
-		
+		console.log('visibleRows :' + visibleRows.s1 + '===' +changedRows.s1);
 		if(visibleRows&&visibleRows.s1){
 			this.setState({
 				visableFirstItem:Object.keys(visibleRows.s1)[0]

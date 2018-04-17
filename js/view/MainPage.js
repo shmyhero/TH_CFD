@@ -713,6 +713,7 @@ var MainPage = React.createClass({
 				<DynamicStatusConfig 
 					navigator={navigationOperations}
 					routeMapper={this.RouteMapper}
+					onPopOut={route.onPopOut}
 				/>
 			)
 		}

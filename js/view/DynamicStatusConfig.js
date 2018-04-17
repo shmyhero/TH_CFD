@@ -100,6 +100,9 @@ export default class DynamicStatusConfig extends Component {
 
 	onCompleted(){
 		this.props.navigator.pop();
+		if(this.props.onPopOut){
+			this.props.onPopOut()
+		}
 	}
 
 	render(){

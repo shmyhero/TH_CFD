@@ -24,6 +24,7 @@
     "react-native-update": "^4.0.0",
     "react-native-view-shot": "1.5.1",
     "react-native-wheel-picker": "1.1.0",
+    "react-native-spinkit": "^0.1.5",
     "react-native-wx": "^2.0.1",
     "react-timer-mixin": "0.13.3",
     "realm": "1.12.0"

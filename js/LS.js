@@ -62,6 +62,7 @@ var LS = {
     SPKHSHZ:['实盘开户审核中','Firm account verification'],
     CXKH:['重新开户','Re-open an account'],
     JXKH:['继续开户','Continue to open an account'],
+    OPEN_ACCOUNT_NOW:['立即开户','Open an account NOW'],
     TXSZ:['提醒设置','Reminder Setting'],
     DQZDJG:['当前做多价格','Long Pirces'],
     DQZKJG:['当前做空价格','Short Pirces'],
@@ -342,19 +343,22 @@ var LS = {
     SEARCH_NO_RESULT: ["搜索无结果", "No result"],
 
     OPEN_ACCOUNT_HEADER_1: ["开户准备", "Ready"],
-    OPEN_ACCOUNT_HEADER_2: ["上传身份证照片(1/5)", "Update ID Photo (1/5)"],
-    OPEN_ACCOUNT_HEADER_3: ["完善个人信息(2/5)", "Fill Personal Information (2/5)"],
-    OPEN_ACCOUNT_HEADER_4: ["完善财务信息(3/5)", "Fill Financial Information (2/5)"],
-    OPEN_ACCOUNT_HEADER_5: ["设置账户信息(4/5)", "Set account information(4/5)"],
-    OPEN_ACCOUNT_HEADER_6: ["提交申请(5/5)", "Submit application (5/5)"],
+    OPEN_ACCOUNT_HEADER_2: ["上传身份证照片(1/4)", "Update ID Photo (1/4)"],
+    OPEN_ACCOUNT_HEADER_3: ["完善个人信息(2/4)", "Fill Personal Information (2/4)"],
+    OPEN_ACCOUNT_HEADER_4: ["完善财务信息(2/4)", "Fill Financial Information (2/4)"],
+    OPEN_ACCOUNT_HEADER_5: ["设置账户信息(3/4)", "Set account information(3/4)"],
+    OPEN_ACCOUNT_HEADER_6: ["提交申请(4/4)", "Submit application (4/4)"],
     OPEN_ACCOUNT_HEADER_7: ["审核状态", "Review status"],
 
     OPEN_ACCOUNT_RISK_NOTICE_1: ["差价合约是高风险的投资，并不适合所有投资者。您的资本面临风险。您应该确保了解其中的风险,如有必要,请寻求独立财务意见,以确保该产品符合您的投资目标。", "CFDs are high-risk investments that are not suitable for all investors. Your capital is at risk. You should make sure you understand the risks involved and, if necessary, seek independent financial advice to ensure that the product meets your investment objectives."],
     OPEN_ACCOUNT_RISK_NOTICE_2: ["如果您在英国以外的司法辖区缴税，税法可能会发生改变或可能会有所不同。盈交易为安易永投（ayondo markets Limited）旗下产品名称。安易永投(ayondo markets Limited)是在英格兰和威尔士注册的公司(注册号为03148972)，并由英国金融行为监管局(FCA)授权和监管，FCA注册号为184333。", "If you pay taxes outside the United Kingdom, tax laws may change or may vary. Profit trading is the product name of ayondo markets Limited. Ayondo markets Limited is a company registered in England and Wales with registration number 03148972 and is authorized and regulated by the FCA with FCA registration number 184333."],
     OPEN_ACCOUNT_RISK_NOTICE_3: ["您的资本面临风险。差价合约并不适合所有投资者。您应该确保了解其中的风险。", "Your capital is at risk. CFDs are not suitable for all investors. You should make sure you understand the risks involved."],
 
-    OPEN_ACCOUNT_ID_UPLOAD_FRONT_REAR_HINT: ["请上传您的身份证正反面照片", "Please upload your ID card front and back photos"],
-    OPEN_ACCOUNT_ID_PHOTO_HINT: ["请拍摄身份证原件:", "Please take the original ID card:"],
+    OPEN_ACCOUNT_ID_UPLOAD_FRONT_REAR_HINT: ["请拍摄并上传您的身份证", "Please upload your ID card front and back photos"],
+    OPEN_ACCOUNT_ID_PHOTO_HINT: ["拍摄要求", "Please take the original ID card:"],
+    OPEN_ACCOUNT_ID_DATA_HINT: ["确认身份证信息", "Please confirm your information"],
+    OPEN_ACCOUNT_ID_DATA_HINT_2: ["（若有误手动修改）", "(You need to fix the errors manually)"],
+
 
     OPEN_ACCOUNT_LAST_NAME: ["姓", "last name"],
     OPEN_ACCOUNT_LAST_NAME_HINT: ["请输入姓", "Enter your last name"],

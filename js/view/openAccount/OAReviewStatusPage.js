@@ -8,6 +8,8 @@ import {
 	Image,
 	Dimensions,
 	ScrollView,
+	ActivityIndicator,
+	Platform
 } from 'react-native';
 
 var Button = require('../component/Button')
@@ -18,6 +20,8 @@ var NetworkModule = require('../../module/NetworkModule')
 var NetConstants = require('../../NetConstants')
 var OpenAccountHintBlock = require('./OpenAccountHintBlock');
 var LS = require("../../LS")
+
+var Spinner = require('react-native-spinkit');
 
 var {height, width} = Dimensions.get('window')
 
@@ -37,27 +41,45 @@ var OAReviewStatusPage = React.createClass({
 	},
 
 	render: function() {
-		var startDate = new Date()
-		startDate.Format('yy/MM/dd')
-		//var endDate = new Date(startDate.valueOf()+7*24*60*60*1000)
-		//endDate.Format('yy/MM/dd')+"\n"+startDate.Format('hh:mm:ss')
+		// var types = ['CircleFlip', 'Bounce', 'Wave', 'WanderingCubes', 'Pulse', 'ChasingDots',
+		// 	 'ThreeBounce', 'Circle', '9CubeGrid', 'WordPress', 'FadingCircle', 'FadingCircleAlt',
+		// 	'Arc', 'ArcAlt'];
+		// var views = types.map((key, index) => {
+		// 	return (<Spinner style={styles.spinner}
+		// 		isVisible={true}
+		// 		size={spinnerHeight} type={key} color='#ffffff' key={index}/>)
+		// });
+      
+		var topImageHeight = width/750*630;
+		var spinnerType = Platform.OS == "ios" ? "ArcAlt" : "FadingCircleAlt";
+		var spinnerHeight = Platform.OS == "ios" ? 100 : 120;
+		var spinnerPaddingBottom = (topImageHeight - 100 )/ 3 * 2;
+		var textHeight = Platform.OS == "ios" ? 90 : 110;
 		return (
 			<View style={styles.wrapper}>
-				<ScrollView style={{flex:1}}>
-					<Text style={styles.text1}>{LS.str("OPEN_ACCOUNT_THANKS")}</Text>
-					<View style={styles.rowWrapper}>
-						<Image style={styles.image} source={require('../../../images/icon_review1.png')}/>
-						<Text style={styles.ellipse}>· · ·</Text>
-						<Image style={styles.image} source={require('../../../images/icon_review2.png')}/>
-						<Text style={styles.ellipse}>· · ·</Text>
-						<Image style={styles.image} source={require('../../../images/icon_review3.png')}/>
+				<ScrollView style={{flex:1}}>					
+					<View style={{width:width, height:topImageHeight}}>
+						<Image style={{width:width, height:topImageHeight}} source={require('../../../images/openAccountReview.jpg')}/>
+						<View style={{position: 'absolute', 
+							bottom:spinnerPaddingBottom, 
+							left: 0, right: 0, 
+							width:width, 
+							height: spinnerHeight,
+							alignItems:'center'}}>
+							<Spinner style={styles.spinner}
+								isVisible={true}
+								size={spinnerHeight} type={spinnerType} color='#ffffff'/>
+							<View style={{
+								position: 'absolute', 
+								left: 0, right: 0, top:0, bottom:0, 
+								height:textHeight, width:width, 
+								alignItems:'center',
+								justifyContent:'center'}}>
+								<Text style={{color:'white', backgroundColor:'transparent', fontSize:30}}>!</Text>
+								<Text style={[{color:'white', backgroundColor:'transparent'}]}>审核中...</Text>
+							</View>
+						</View>
 					</View>
-					<View style={styles.rowWrapper}>
-						<Text style={styles.text2}>{LS.str("OPEN_ACCOUNT_APPLICATION_SUBMIT") + "\n"+startDate.Format('yyyy-MM-dd')+"\n"+startDate.Format('hh:mm:ss')}</Text>
-						<Text style={styles.text2}>{LS.str("OPEN_ACCOUNT_REVIEWING")}</Text>
-						<Text style={styles.text2}>{LS.str("OPEN_ACCOUNT_REVIEW_FINISH")}</Text>
-					</View>
-					<Text style={styles.text3}>{LS.str("OPEN_ACCOUNT_SUCCEED_REMINDER")}</Text>
 					<OpenAccountHintBlock/>
 			 	</ScrollView>
 				<View style={styles.bottomArea}>
@@ -142,6 +164,12 @@ var styles = StyleSheet.create({
 		alignItems: 'flex-end',
 		flexDirection:'row'
 	},
+	spinner: {
+		transform: [
+			{ perspective: 850 },
+			{ rotate: '-90deg'},
+		],
+	}
 });
 
 

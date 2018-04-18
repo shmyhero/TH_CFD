@@ -10,19 +10,20 @@ export const LIVE_LOGIN_EVENT = '实盘登录'
 export const LIVE_REGISTER_EVENT = '实盘注册'
 
 export const LIVE_QUIT = '退出实盘'		// todo
-export const LIVE_OPEN_ACCOUNT_START = '实盘开户-开始2'
-export const LIVE_OPEN_ACCOUNT_STEP0 = '实盘开户-准备完成2'
-export const LIVE_OPEN_ACCOUNT_STEP1 = '实盘开户-用户名密码完成2'
-export const LIVE_OPEN_ACCOUNT_STEP2 = '实盘开户-上传照片完成2'
-export const LIVE_OPEN_ACCOUNT_STEP3 = '实盘开户-个人信息完成2'
-export const LIVE_OPEN_ACCOUNT_STEP4 = '实盘开户-上传地址证明完成2'
-export const LIVE_OPEN_ACCOUNT_STEP5 = '实盘开户-财务信息完成2'
-export const LIVE_OPEN_ACCOUNT_STEP6 = '实盘开户-提交完成2'
+export const LIVE_OPEN_ACCOUNT_START = '实盘开户-开始3'
+export const LIVE_OPEN_ACCOUNT_STEP0 = '实盘开户-准备完成3'
+export const LIVE_OPEN_ACCOUNT_STEP1 = '实盘开户-用户名密码完成3'
+export const LIVE_OPEN_ACCOUNT_STEP2 = '实盘开户-上传照片完成3'
+export const LIVE_OPEN_ACCOUNT_STEP3 = '实盘开户-个人信息完成3'
+export const LIVE_OPEN_ACCOUNT_STEP4 = '实盘开户-上传地址证明完成3'
+export const LIVE_OPEN_ACCOUNT_STEP5 = '实盘开户-财务信息完成3'
+export const LIVE_OPEN_ACCOUNT_STEP6 = '实盘开户-提交完成3'
 export const LIVE_OPEN_ACCOUNT_BACK = '实盘开户-返回'
 export const LIVE_OPEN_ACCOUNT_CONTINUE = '实盘开户-继续'		// todo
 export const LIVE_OPEN_ACCOUNT_QUIT = '退出实盘开户'
 export const LIVE_UPLOAD_ID_IMAGE = '上传身份证照片'
 export const LIVE_UPLOAD_ID_IMAGE_CANCEL = '取消上传身份证照片'
+export const DEPOSIT_READY = "准备入金3";
 
 export const SIMULATOR_LOGIN_EVENT = '模拟注册登录'
 export const SIMULATOR_WECHAT_LOGIN_EVENT = '模拟注册登录(微信)'
@@ -99,7 +100,6 @@ export const DEBUG_TIME_DELTA = "页面用时_"
 export const DEBUG_LOADING_ERROR = "页面加载失败_"
 
 export const DEPOSIT = "入金";
-export const DEPOSIT_READY = "准备入金";
 
 export function trackADEvent(event_name, parameters) {
   try{

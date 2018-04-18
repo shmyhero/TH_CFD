@@ -4,6 +4,7 @@ import React from 'react';
 import {
   AsyncStorage,
   View,
+  Dimensions
 } from 'react-native';
 
 var TalkingdataModule = require('../../module/TalkingdataModule')
@@ -14,10 +15,12 @@ var NavBar = require('../NavBar')
 var MainPage = require('../MainPage')
 var LS = require("../../LS")
 
+var {height, width} = Dimensions.get('window')
+
 var OpenAccountInfos = [
 	{"title": "OPEN_ACCOUNT_HEADER_1", "page": require('./OAStartPage')},
 	{"title": "OPEN_ACCOUNT_HEADER_2", "page": require('./OAIdPhotoPage')},
-  {"title": "OPEN_ACCOUNT_HEADER_3", "page": require('./OAPersonalInfoPage')},
+  //{"title": "OPEN_ACCOUNT_HEADER_3", "page": require('./OAPersonalInfoPage')},
   //{"title": "上传地址证明信息(4/6)", "page": require('./OAAddressPhotoPage')},
   {"title": "OPEN_ACCOUNT_HEADER_4", "page": require('./OAFinanceInfoPage')},
 	{"title": "OPEN_ACCOUNT_HEADER_5", "page": require('./OAAccountBasicSettingsPage')},
@@ -122,23 +125,45 @@ export function showOARoute(navigator, step, onPop, data, nextStep){
   var showBackButton = (step !== OpenAccountInfos.length-1);
   var data = data ? data : (lastStoredData ? lastStoredData[step] : null);
   var page;
-  return (
-    <View style={{flex: 1}}>
-      <NavBar title={title}
-        showBackButton={showBackButton}
-        leftButtonOnClick={()=>backToPreviousRoute(navigator, page.getData(), onPop, page.onDismiss)}
-        backButtonOnClick={()=>TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_BACK, TalkingdataModule.LABEL_OPEN_ACCOUNT)}
-        backgroundColor={ColorConstants.TITLE_DARK_BLUE}
-        textOnRight={showBackButton? LS.str("QX"):''}
-        rightTextOnClick={()=>cancelOARoute(navigator, page.getData(), onPop, page.onDismiss)}
-        navigator={navigator}/>
+  if(step == 0){
+    return ( 
+    <View style={{flex: 1}}>      
       <Page navigator={navigator}
         ref={(ref) => page = ref}
         data={data}
         onPop={onPop}
         />
-    </View>
-  )
+      <View style={{position:'absolute', top:0, left: 0, right: width, width:width}}>
+        <NavBar 
+          showBackButton={showBackButton}
+          leftButtonOnClick={()=>backToPreviousRoute(navigator, page.getData(), onPop, page.onDismiss)}
+          backButtonOnClick={()=>TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_BACK, TalkingdataModule.LABEL_OPEN_ACCOUNT)}
+          backgroundColor={'transparent'}
+          textOnRight={showBackButton? LS.str("QX"):''}
+          rightTextOnClick={()=>cancelOARoute(navigator, page.getData(), onPop, page.onDismiss)}
+          navigator={navigator}/>
+      </View>
+    </View>)
+  }else{
+
+    return (
+      <View style={{flex: 1}}>
+        <NavBar title={title}
+          showBackButton={showBackButton}
+          leftButtonOnClick={()=>backToPreviousRoute(navigator, page.getData(), onPop, page.onDismiss)}
+          backButtonOnClick={()=>TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_BACK, TalkingdataModule.LABEL_OPEN_ACCOUNT)}
+          backgroundColor={ColorConstants.TITLE_DARK_BLUE}
+          textOnRight={showBackButton? LS.str("QX"):''}
+          rightTextOnClick={()=>cancelOARoute(navigator, page.getData(), onPop, page.onDismiss)}
+          navigator={navigator}/>
+        <Page navigator={navigator}
+          ref={(ref) => page = ref}
+          data={data}
+          onPop={onPop}
+          />
+      </View>
+    )
+  }
 }
 
 export function showErrorRoute(navigator, onPop, nextRouteData){
@@ -236,6 +261,10 @@ export function getOpenAccountData(){
     for(var i = 0; i < OpenAccountInfos.length; i++){
       if(lastStoredData[i]){
         var dataArray = lastStoredData[i];
+
+        if(dataArray && dataArray.listData){
+          dataArray = dataArray.listData
+        }
         if(dataArray.values && dataArray.values.length>0){
           dataArray = dataArray.values
         }

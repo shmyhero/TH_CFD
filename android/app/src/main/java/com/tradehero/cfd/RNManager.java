@@ -28,6 +28,7 @@ import java.util.List;
 import cn.reactnative.modules.update.UpdateContext;
 import cn.reactnative.modules.update.UpdatePackage;
 import cn.reactnative.modules.wx.WeChatPackage;
+import com.react.rnspinkit.RNSpinkitPackage;
 
 /**
  * @author <a href="mailto:sam@tradehero.mobi"> Sam Yu </a>
@@ -53,7 +54,8 @@ public class RNManager {
                 new RealmReactPackage(),
                 new RNViewShotPackage(),
                 new RCTQRCodeLocalImagePackage(),
-                new OrientationPackage()
+                new OrientationPackage(),
+                new RNSpinkitPackage()
         );
         return packages;
     }

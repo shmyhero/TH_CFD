@@ -295,7 +295,10 @@ export default class PositionBlock extends Component {
 	renderDetailInfo(rowData, rowID){
     var tradeImage = rowData.isLong ? require('../../../images/icon_up_cw.png') : require('../../../images/icon_down_cw.png')
     var timeSubTitle = this.props.type == "open" ? LS.str('OPEN_TIME') : LS.str('CLOSE_TIME');
-    var date = this.props.type == "open" ? new Date(rowData.createAt) : new Date(rowData.closeAt);
+		var dateString = this.props.type == "open" ? rowData.createdAt : rowData.closedAt;
+		console.log("renderDetailInfo", dateString)
+		var date = new Date(dateString)
+		console.log("renderDetailInfo", date)
     var timeString = date.Format('yy/MM/dd hh:mm');
     return (
       <View style={styles.extendRowWrapper}>
@@ -305,7 +308,7 @@ export default class PositionBlock extends Component {
         </View>
         <View style={styles.extendRight}>
           <Text style={styles.extendTextTop}>{timeSubTitle}</Text>
-          <Text style={styles.extendTextBottom}>{}</Text>
+          <Text style={styles.extendTextBottom}>{timeString}</Text>
         </View>
       </View>);
 	}
@@ -485,6 +488,15 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-around',
     height: 51,
     backgroundColor: ColorConstants.LIST_BACKGROUND_GREY,
+	},
+	extendTextTop: {
+		fontSize:14,
+		color: '#7d7d7d',
+	},
+	extendTextBottom: {
+		fontSize:13,
+		color: 'black',
+		marginTop: 5,
 	},
 });
 

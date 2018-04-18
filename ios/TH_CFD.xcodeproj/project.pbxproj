@@ -202,6 +202,7 @@
 		4139073B1DC096CC0015FF54 /* libRCTBEEPickerManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4139072C1DC093C70015FF54 /* libRCTBEEPickerManager.a */; };
 		413E77EE1E09099900419EC1 /* libRCTQRCodeLocalImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 413E77DC1E09098C00419EC1 /* libRCTQRCodeLocalImage.a */; };
 		413E77EF1E0909B400419EC1 /* libRNViewShot.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 413E77ED1E09098C00419EC1 /* libRNViewShot.a */; };
+		419B821A20858B3D004E483E /* libRNSpinkit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 419B821720858B20004E483E /* libRNSpinkit.a */; };
 		73DFEAF21CDB242700234CE8 /* libbz2.1.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 73DFEAF01CDB22A500234CE8 /* libbz2.1.0.tbd */; };
 		73FD306D1D0574FD00D77EFC /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73FD306C1D0574C200D77EFC /* libRNFS.a */; };
 		80BCA2B8147C419E82DF3DFB /* libRCTHotUpdate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADAFAB0527AA419A8350A2B3 /* libRCTHotUpdate.a */; };
@@ -374,6 +375,20 @@
 			proxyType = 2;
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RNViewShot;
+		};
+		419B821620858B20004E483E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 419B821120858B1F004E483E /* RNSpinkit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D42CB3511B2538DE00FD0AE2;
+			remoteInfo = RNSpinkit;
+		};
+		419B821820858B20004E483E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 419B821120858B1F004E483E /* RNSpinkit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 641194871EC9FD4A00D4FC03;
+			remoteInfo = "RNSpinkit-tvOS";
 		};
 		737363661D17CCFA00476488 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -765,6 +780,7 @@
 		413907251DC093C60015FF54 /* RCTBEEPickerManager.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBEEPickerManager.xcodeproj; path = "../node_modules/react-native-picker/ios/RCTBEEPickerManager.xcodeproj"; sourceTree = "<group>"; };
 		413E77C91E09098B00419EC1 /* RCTQRCodeLocalImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTQRCodeLocalImage.xcodeproj; path = "../node_modules/@remobile/react-native-qrcode-local-image/ios/RCTQRCodeLocalImage.xcodeproj"; sourceTree = "<group>"; };
 		413E77CC1E09098B00419EC1 /* RNViewShot.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNViewShot.xcodeproj; path = "../node_modules/react-native-view-shot/ios/RNViewShot.xcodeproj"; sourceTree = "<group>"; };
+		419B821120858B1F004E483E /* RNSpinkit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSpinkit.xcodeproj; path = "../node_modules/react-native-spinkit/ios/RNSpinkit.xcodeproj"; sourceTree = "<group>"; };
 		4487FACCDD89490AA4A8E7F9 /* RealmReact.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RealmReact.xcodeproj; path = "../node_modules/realm/react-native/ios/RealmReact.xcodeproj"; sourceTree = "<group>"; };
 		58602275B1F14B899E56D44F /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
 		5EE2CE709A38445E9875FCBD /* libRealmReact.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRealmReact.a; sourceTree = "<group>"; };
@@ -786,6 +802,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				419B821A20858B3D004E483E /* libRNSpinkit.a in Frameworks */,
 				3D3D56CC1ECC4357007E3F69 /* UserNotifications.framework in Frameworks */,
 				3D2A16EE1D7804F600FEB181 /* CoreLocation.framework in Frameworks */,
 				413E77EF1E0909B400419EC1 /* libRNViewShot.a in Frameworks */,
@@ -1769,6 +1786,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		419B821220858B1F004E483E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				419B821720858B20004E483E /* libRNSpinkit.a */,
+				419B821920858B20004E483E /* libRNSpinkit.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		43D0F270D79E4680AD511CD9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1825,6 +1851,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				419B821120858B1F004E483E /* RNSpinkit.xcodeproj */,
 				413E77C91E09098B00419EC1 /* RCTQRCodeLocalImage.xcodeproj */,
 				413E77CC1E09098B00419EC1 /* RNViewShot.xcodeproj */,
 				413907251DC093C60015FF54 /* RCTBEEPickerManager.xcodeproj */,
@@ -2024,6 +2051,10 @@
 					ProjectRef = FC36C2CB97CE4D7DBE61CD48 /* RNImagePicker.xcodeproj */;
 				},
 				{
+					ProductGroup = 419B821220858B1F004E483E /* Products */;
+					ProjectRef = 419B821120858B1F004E483E /* RNSpinkit.xcodeproj */;
+				},
+				{
 					ProductGroup = 413E77CD1E09098B00419EC1 /* Products */;
 					ProjectRef = 413E77CC1E09098B00419EC1 /* RNViewShot.xcodeproj */;
 				},
@@ -2195,6 +2226,20 @@
 			fileType = archive.ar;
 			path = libRNViewShot.a;
 			remoteRef = 413E77EC1E09098C00419EC1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		419B821720858B20004E483E /* libRNSpinkit.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNSpinkit.a;
+			remoteRef = 419B821620858B20004E483E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		419B821920858B20004E483E /* libRNSpinkit.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNSpinkit.a;
+			remoteRef = 419B821820858B20004E483E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		737363671D17CCFA00476488 /* libRNImagePicker.a */ = {

@@ -1,6 +1,8 @@
 rootProject.name = 'TH_CFD'
 
 include ':app'
+include ':@remobile/react-native-qrcode-local-image'
+project(':@remobile/react-native-qrcode-local-image').projectDir = new File(rootProject.projectDir, '../node_modules/@remobile/react-native-qrcode-local-image/android')
 include ':react-native-orientation'
 project(':react-native-orientation').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-orientation/android')
 include ':react-native-wx'
@@ -18,6 +20,7 @@ include ':react-native-view-shot'
 include ':react-native-qrcode-local-image'
 include ':react-native-orientation'
 include ':openCVLibrary320'
+include ':react-native-spinkit'
 
 project(':react-native-wx').projectDir = new File(settingsDir, '../node_modules/react-native-wx/android')
 project(':MPChartLib').projectDir = new File(settingsDir, './MPChartLib')
@@ -33,3 +36,4 @@ project(':react-native-cookies').projectDir = new File(rootProject.projectDir, '
 project(':react-native-view-shot').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-view-shot/android')
 project(':react-native-qrcode-local-image').projectDir = new File(settingsDir, '../node_modules/@remobile/react-native-qrcode-local-image/android')
 project(':react-native-orientation').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-orientation/android')
+project(':react-native-spinkit').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-spinkit/android')

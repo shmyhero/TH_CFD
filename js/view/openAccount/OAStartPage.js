@@ -17,7 +17,7 @@ var TalkingdataModule = require('../../module/TalkingdataModule')
 var OpenAccountRoutes = require('./OpenAccountRoutes')
 var OpenAccountHintBlock = require('./OpenAccountHintBlock')
 var LS = require("../../LS")
-
+var SCROLL_VIEW = "scrollView";
 var {height, width} = Dimensions.get('window')
 
 var OAStartPage = React.createClass({
@@ -44,21 +44,27 @@ var OAStartPage = React.createClass({
 
 
 		return (
-			<View style={styles.wrapper}>
-				<ScrollView style={{flex: 1}}>
-					<Image style={{width: width, height: width * 486 / 750 }} source={require('../../../images/openAccountBanner.jpg')}/>
-					<Image style={{width: width, height: width * 142 / 750 }} source={require('../../../images/openAccountTitle.jpg')}/>
-					<OpenAccountHintBlock />
-				</ScrollView>
-				<View style={styles.bottomArea}>
-					<Button style={styles.buttonArea}
-						enabled={true}
-						onPress={this.gotoNext}
-						textContainerStyle={styles.buttonView}
-						textStyle={styles.buttonText}
-						text={LS.str("NEXT")} />
+			<ScrollView ref={SCROLL_VIEW}
+				onScrollEndDrag={(e)=>{
+					if(e.nativeEvent.contentOffset.y < 0){
+						this.refs[SCROLL_VIEW] && this.refs[SCROLL_VIEW].scrollTo({x:e.nativeEvent.contentOffset.x, y:0})
+					}
+				}}>
+				<View style={styles.wrapper}>
+					<View style={{width: width, height: width * 726 / 750 }}>
+						<Image style={{width: width, height: width * 726 / 750 }} source={require('../../../images/openAccountTop.jpg')}/>
+						<View style={styles.bottomArea}> 
+							<Button style={styles.buttonArea}
+								enabled={true}
+								onPress={this.gotoNext}
+								textContainerStyle={styles.buttonView}
+								textStyle={styles.buttonText}
+								text={LS.str("OPEN_ACCOUNT_NOW")} />
+						</View>
+					</View>
+					<Image style={{width: width, height: width * 850 / 750 }} source={require('../../../images/openAccountBottom.jpg')}/>				
 				</View>
-			</View>
+			</ScrollView>
 		);
 	},
 });
@@ -106,27 +112,29 @@ var styles = StyleSheet.create({
 
 	bottomArea: {
 		height: 72,
-		backgroundColor: 'white',
-		alignItems: 'flex-end',
-		flexDirection:'row'
+		width:width,
+		position:'absolute',
+		left: 0,
+		right: width,
+		bottom:0,
 	},
 	buttonArea: {
 		flex: 1,
 		marginLeft: 15,
 		marginRight: 15,
-		marginBottom: 16,
+		marginBottom: 10,
 		borderRadius: 3,
 	},
 	buttonView: {
 		height: 40,
 		borderRadius: 3,
-		backgroundColor: ColorConstants.TITLE_DARK_BLUE,
+		backgroundColor: '#efcb24',
 		justifyContent: 'center',
 	},
 	buttonText: {
 		fontSize: 17,
 		textAlign: 'center',
-		color: '#ffffff',
+		color: '#5e4e05',
 	},
 });
 

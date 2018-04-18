@@ -41,11 +41,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
 
-  textBlock:{
-    color: '#7b7b7b',
-    marginTop:12,
-  },
-
 	textRound:{
 		fontSize:12,
 		color:'#cccccc'
@@ -60,7 +55,7 @@ const styles = StyleSheet.create({
 
 	textValue:{
 		fontSize:12,
-		color:'#7b7b7b',
+		color:'#cccccc',
 		marginLeft:5,
 		marginRight:10,
 	},

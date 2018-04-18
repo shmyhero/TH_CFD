@@ -1635,6 +1635,48 @@ var HomePage = React.createClass({
 		 
 	},
 
+	renderEmpty(){
+		if(this.state.dataResponse&&this.state.dataResponse.length>0){
+		}else{
+			return(
+				<View style={{flex:1,alignItems:'center',justifyContent: 'center',}} >
+					<Image style={{width:230,height:230}} source={require('../../images/dynamic_empty.png')}></Image>
+			   </View>	  
+			) 
+		} 
+	},
+
+	renderListView(){
+		if(this.state.dataResponse&&this.state.dataResponse.length>0){
+			return(
+				<PullToRefreshListView
+				ref={ (component) => this._pullToRefreshListView = component }
+				viewType={PullToRefreshListView.constants.viewType.listView}
+				contentContainerStyle={{backgroundColor: 'transparent', }}
+				style={{marginTop: Platform.OS == 'ios' ? 0 : 0, }}
+				initialListSize={20}
+				enableEmptySections={true}
+				dataSource={this.state.dataSourceDynamic}
+				pageSize={20}
+				renderRow={(rowData, sectionID, rowID)=>this._renderRow(rowData, sectionID, rowID)}
+				renderHeader={this._renderHeader}
+				renderFooter={this._renderFooter} 
+				onRefresh={()=>this._onRefresh()}
+				onLoadMore={()=>this._onLoadMore()}
+				pullUpDistance={35}
+				pullUpStayDistance={50} 
+				onChangeVisibleRows={this._onChangeVisibleRows}
+				removeClippedSubviews={false}
+				pullDownDistance={35}
+				pullDownStayDistance={50}
+				 
+				/>   
+			)
+		}else{
+			return null
+		} 
+	},
+
 	render: function() {
 		height = Dimensions.get('window').height;
 		width = Dimensions.get('window').width;
@@ -1670,28 +1712,9 @@ var HomePage = React.createClass({
 			}else{
 				return ( 
 					<View style = {styles.mainContainer}> 
-						{this.renderDateInfo()}
-						<PullToRefreshListView
-							ref={ (component) => this._pullToRefreshListView = component }
-							viewType={PullToRefreshListView.constants.viewType.listView}
-							contentContainerStyle={{backgroundColor: 'transparent', }}
-							style={{marginTop: Platform.OS == 'ios' ? 0 : 0, }}
-							initialListSize={20}
-							enableEmptySections={true}
-							dataSource={this.state.dataSourceDynamic}
-							pageSize={20}
-							renderRow={(rowData, sectionID, rowID)=>this._renderRow(rowData, sectionID, rowID)}
-							renderHeader={this._renderHeader}
-							renderFooter={this._renderFooter} 
-							onRefresh={()=>this._onRefresh()}
-							onLoadMore={()=>this._onLoadMore()}
-							pullUpDistance={35}
-							pullUpStayDistance={50} 
-							onChangeVisibleRows={this._onChangeVisibleRows}
-							removeClippedSubviews={false}
-							pullDownDistance={35}
-							pullDownStayDistance={50}
-						/>
+						  {this.renderDateInfo()} 
+						  {this.renderEmpty()}
+						  {this.renderListView()}
 					</View>
 				)
 			}  

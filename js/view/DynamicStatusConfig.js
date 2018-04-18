@@ -18,6 +18,10 @@ import {
 
 var NavBar = require('./NavBar')
 var ColorConstants = require('../ColorConstants')
+var LogicData = require('../LogicData');
+var NetConstants = require('../NetConstants')
+var NetworkModule = require('../module/NetworkModule')
+
 const FOCUS_ME = 0
 const FOCUS_FOLLOW = 1
 const FOCUS_SYSTEM = 2
@@ -30,15 +34,17 @@ var listRawData = [
 var {height, width} = Dimensions.get('window')
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
+
+// { showMy: true, showFollowing: true, showHeadline: true }
 export default class DynamicStatusConfig extends Component {
  
 
 	constructor(props){
 		super(props);
 		this.state = {
-			isFocusMe:false,
-			isFocusFollow:false,
-			ifFocusSystem:false,
+			showMy:false,
+			showFollowing:false,
+			showHeadline:false,
 			dataSource: ds.cloneWithRows(listRawData),
 		}
 	}
@@ -51,21 +57,25 @@ export default class DynamicStatusConfig extends Component {
 		);
 	}
 
+	componentDidMount(){
+		this.loadLiveFilter()
+	}
+
 	onSwitchPressed(value,rowData){
 		if(rowData.type == FOCUS_ME){
 			this.setState({
 				dataSource: ds.cloneWithRows(listRawData),
-				isFocusMe: value
+				showMy: value
 			})
 		}else if(rowData.type == FOCUS_FOLLOW){
 			this.setState({
 				dataSource: ds.cloneWithRows(listRawData),
-				isFocusFollow: value
+				showFollowing: value
 			})
 		}else if(rowData.type == FOCUS_SYSTEM){
 			this.setState({
 				dataSource: ds.cloneWithRows(listRawData),
-				ifFocusSystem: value
+				showHeadline: value
 			})
 		}
 	}
@@ -74,11 +84,11 @@ export default class DynamicStatusConfig extends Component {
 		var switchIsOn = false;
 
 		if(rowData.type == FOCUS_ME){
-			switchIsOn = this.state.isFocusMe
+			switchIsOn = this.state.showMy
 		}else if(rowData.type == FOCUS_FOLLOW){
-			switchIsOn = this.state.isFocusFollow
+			switchIsOn = this.state.showFollowing
 		}else if(rowData.type == FOCUS_SYSTEM){
-			switchIsOn = this.state.ifFocusSystem
+			switchIsOn = this.state.showHeadline
 		}
 		
 
@@ -96,13 +106,63 @@ export default class DynamicStatusConfig extends Component {
 			
 		) 
 	}
-	 
-
-	onCompleted(){
-		this.props.navigator.pop();
-		if(this.props.onPopOut){
-			this.props.onPopOut()
+ 
+	loadLiveFilter() { 
+		var userData = LogicData.getUserData()
+		var notLogin = Object.keys(userData).length === 0
+		if(!notLogin){
+			NetworkModule.fetchTHUrl(
+				NetConstants.CFD_API.GET_FEED_LIVE_FILTER,
+				{
+					method: 'GET',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					},  
+				},
+				(responseJson) =>{ 
+					this.setState(
+						{
+							showMy:responseJson.showMy,
+							showFollowing:responseJson.showFollowing,
+							showHeadline:responseJson.showHeadline, 
+							dataSource: ds.cloneWithRows(listRawData),
+						}
+					)
+				}
+			)
 		}
+	} 
+
+	setLiveFilter(){
+		var userData = LogicData.getUserData()
+		var notLogin = Object.keys(userData).length === 0
+		if(!notLogin){
+			NetworkModule.fetchTHUrl(
+				NetConstants.CFD_API.GET_FEED_LIVE_FILTER,
+				{
+					method: 'PUT',
+					headers: {
+						'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+						'Content-Type': 'application/json; charset=utf-8',
+					}, 
+					body: JSON.stringify({
+						showMy: this.state.showMy,
+						showFollowing: this.state.showFollowing,
+						showHeadline: this.state.showHeadline, 
+					}),
+				},
+				(responseJson) =>{ 
+					this.props.navigator.pop();
+					if(this.props.onPopOut){
+						this.props.onPopOut()
+					}
+				}
+			)
+		}
+	} 
+
+	onCompleted(){ 
+		this.setLiveFilter() 
 	}
 
 	render(){

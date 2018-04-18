@@ -195,6 +195,7 @@ function getCFDAPI(){
     GET_PUBLISH_DATE: CFD_API_SERVER + '/api/IOSEffectDay',
 
     GET_FEED_LIVE_DEFAULT: CFD_API_SERVER + '/api/feed/live/default',
+    GET_FEED_LIVE_FILTER:CFD_API_SERVER+'/api/feed/live/filter',
     
   }
 }

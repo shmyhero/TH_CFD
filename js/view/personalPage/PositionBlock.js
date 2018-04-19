@@ -99,7 +99,7 @@ export default class PositionBlock extends Component {
 			})
 			if (Platform.OS === 'android') {
 				var currentY = rowHeight*(parseInt(rowID))
-				this.setTimeout(
+				setTimeout(
 					() => {
 						if (currentY > 300 && currentY + 3 * rowHeight > this.refs['listview'].getMetrics().contentLength) {
 							this.refs['listview'].scrollTo({x:0, y:Math.floor(currentY), animated:true})

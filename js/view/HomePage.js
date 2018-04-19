@@ -368,14 +368,14 @@ var HomePage = React.createClass({
 						}) 
 
 					}else{
-						for(var i = 0; i < responseJson.length; i++){
-							responseJson[i].isNew = false;
-						} 
-						this.setState({ 
-							dataResponse:responseJson, 
-							// dataSource:this._dataSource.cloneWithRows(responseJson),
-							dataSourceDynamic: dsDynamic.cloneWithRows(responseJson),
-						})
+						// for(var i = 0; i < responseJson.length; i++){
+						// 	responseJson[i].isNew = false;
+						// } 
+						// this.setState({ 
+						// 	dataResponse:responseJson, 
+						// 	// dataSource:this._dataSource.cloneWithRows(responseJson),
+						// 	dataSourceDynamic: dsDynamic.cloneWithRows(responseJson),
+						// })
 					}
 				}
 			},
@@ -1278,15 +1278,15 @@ var HomePage = React.createClass({
 	}, 
 
 	_renderRow :function (rowData, sectionID, rowID)  {
-
-		console.log('rowID = ' + rowID)
+		// console.log('rowID = ' + rowID)
 		var id = rowID
 		return(
 			<View onLayout={(e) => {
 				childHeights[parseInt(id)] = e.nativeEvent.layout.height;
 				console.log("id = "+ id + "  height = " + e.nativeEvent.layout.height)
 				console.log('childHeights length = ' + childHeights.length)
-				}}>
+				}} 
+				>
 				<DynamicRowComponent 
 					navigator={this.props.navigator}
 					rowData={rowData}
@@ -1313,7 +1313,7 @@ var HomePage = React.createClass({
 							});
 						}
 					}}/>
-			 </View>
+			  </View>
         ) 
     },
 
@@ -1636,7 +1636,7 @@ var HomePage = React.createClass({
 		}
 
 		return(
-			<View style = {{height:28,paddingLeft:10,paddingRight:12,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
+			<View style = {{height:36,paddingLeft:10,paddingRight:12,flexDirection:'row',alignItems:'center',justifyContent:'space-between'}}>
 				 
 				<Text style={{color:'#7895cb'}}>{dataTime}</Text>
 				 

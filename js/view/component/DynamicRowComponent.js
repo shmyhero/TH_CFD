@@ -281,7 +281,7 @@ class DynamicRowComponent extends Component {
                             this.props.onClose && this.props.onClose();
                             //console.log("onClose()");
                         }}
-                        style={{margin:5,borderRadius:8,width:width-60,backgroundColor:'white',flex:1}}> 
+                        style={{margin:5,borderRadius:8,marginRight:10, width:width-60,backgroundColor:'white',flex:1}}> 
                         <View style={{marginLeft:5,marginRight:5, borderRadius:12.5,width:width-60,backgroundColor:'white',flex:1}}>
                             <View>
                                 <View style={{flexDirection:'row',marginLeft:5,marginRight:5}}> 
@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
     },
     thumbnailAll: {
         marginLeft:0,
-        marginRight:10,
+        marginRight:0, 
         flexDirection: 'row',  
     }, 
     heroStyle:{

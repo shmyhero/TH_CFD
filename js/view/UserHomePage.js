@@ -250,10 +250,11 @@ export default class UserHomePage extends Component {
 		var bgBanner = LogicData.getRankBanner(this.state.rank);
 		var strGZS = LS.str('GZS')
 		var strKPS = LS.str('KPS')
-
+//borderBottomWidth:1,borderBottomColor:'#a3aec4',
 		var viewDessciption = (
-			<TouchableOpacity onPress={()=>this._onPressedAskForRank()} style={{borderBottomWidth:1,borderBottomColor:'#a3aec4',marginBottom:-30,marginTop:30}}>
+			<TouchableOpacity onPress={()=>this._onPressedAskForRank()} style={{marginBottom:-30,marginTop:30}}>
 				<Text style={{opacity:0.8, color:'white',fontSize:12}}>{this.state.rankDescription}</Text>
+				<View style={{opacity:0.6,marginTop:2,height:1,width:48,backgroundColor:'#a3aec4'}}></View>
 			</TouchableOpacity>
 		)
 		var rankDescriptionView = headRank==undefined?null:viewDessciption

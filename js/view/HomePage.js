@@ -100,6 +100,9 @@ var mokeData = [
 ]
    
 
+var childHeights=[];
+var listViewOffY = 0;
+
 var HomePage = React.createClass({
 	mixins: [TimerMixin],
 	navBarPressedCount: 0,
@@ -119,6 +122,7 @@ var HomePage = React.createClass({
 			dataResponse:[],
 			currentOperatedRow: -1, 
 			visableFirstItem:0,
+			
 		};
 	},
 
@@ -1271,37 +1275,45 @@ var HomePage = React.createClass({
 
 		 }) 
 
-	},
+	}, 
 
 	_renderRow :function (rowData, sectionID, rowID)  {
+
+		console.log('rowID = ' + rowID)
+		var id = rowID
 		return(
-			<DynamicRowComponent
-				navigator={this.props.navigator}
-				rowData={rowData}
-				rowID={rowID}
-				delCallBack={(id)=>{this.delItem(id)}}
-				close={this.state.currentOperatedRow != rowID}
-				onRowPress={()=>{
-					this.closeAllRows();
-				}}
-				onClose={()=>{
-					if(this.state.currentOperatedRow == rowID){
-						this.setState({
-							currentOperatedRow: -1,
-							dataSourceDynamic: dsDynamic.cloneWithRows(this.state.dataResponse),
-						});
-					}
-				}}
-				onOpen={()=>{
-					
-					if(this.state.currentOperatedRow != rowID){
-						this.setState({
-							currentOperatedRow: rowID,
-							dataSourceDynamic: dsDynamic.cloneWithRows(this.state.dataResponse),
-						});
-					}
-				}}
-				/>
+			<View onLayout={(e) => {
+				childHeights[parseInt(id)] = e.nativeEvent.layout.height;
+				console.log("id = "+ id + "  height = " + e.nativeEvent.layout.height)
+				console.log('childHeights length = ' + childHeights.length)
+				}}>
+				<DynamicRowComponent 
+					navigator={this.props.navigator}
+					rowData={rowData}
+					rowID={rowID}
+					delCallBack={(id)=>{this.delItem(id)}}
+					close={this.state.currentOperatedRow != rowID}
+					onRowPress={()=>{
+						this.closeAllRows();
+					}}
+					onClose={()=>{
+						if(this.state.currentOperatedRow == rowID){
+							this.setState({
+								currentOperatedRow: -1,
+								dataSourceDynamic: dsDynamic.cloneWithRows(this.state.dataResponse),
+							});
+						}
+					}}
+					onOpen={()=>{
+						
+						if(this.state.currentOperatedRow != rowID){
+							this.setState({
+								currentOperatedRow: rowID,
+								dataSourceDynamic: dsDynamic.cloneWithRows(this.state.dataResponse),
+							});
+						}
+					}}/>
+			 </View>
         ) 
     },
 
@@ -1600,7 +1612,21 @@ var HomePage = React.createClass({
 	},
 
 	renderDateInfo:function(){
-		var firstItemId = this.state.visableFirstItem;
+
+		console.log('LOG ==> offY =' + listViewOffY)
+		var maxOff = listViewOffY
+		var fistItem = 0
+		for(var i = 0;i<childHeights.length;i++){
+			maxOff -= childHeights[i]
+			if(maxOff <= 0) {
+				fistItem = i
+				break
+			}
+		} 
+
+
+		// var firstItemId = this.state.visableFirstItem;
+		var firstItemId = fistItem;
 		 
 		
 		var dataTime = '';
@@ -1624,8 +1650,8 @@ var HomePage = React.createClass({
 	_onChangeVisibleRows(visibleRows, changedRows){
 		// let visibleRowsCount = Object.keys(visibleRows.s1).length;
 		// console.log('visibleRows FirstItem is ：'+Object.keys(visibleRows.s1));
-		// console.log('visibleRows FirstItem is ：'+Object.keys(visibleRows.s1)[0]);
-		console.log('visibleRows :' + visibleRows.s1 + '===' +changedRows.s1);
+		// console.log('visibleRows FirstItem is ：'+Object.keys(visibleRows.s1)[0]); 
+		// console.log('visibleRows :' + visibleRows.s1 + '===' +changedRows.s1);
 		if(visibleRows&&visibleRows.s1){
 			this.setState({
 				visableFirstItem:Object.keys(visibleRows.s1)[0]
@@ -1646,6 +1672,12 @@ var HomePage = React.createClass({
 		} 
 	},
 
+	 
+	_onScroll(event){ 
+			listViewOffY = event.nativeEvent.contentOffset.y;
+	},
+	 
+
 	renderListView(){
 		if(this.state.dataResponse&&this.state.dataResponse.length>0){
 			return(
@@ -1658,6 +1690,8 @@ var HomePage = React.createClass({
 				enableEmptySections={true}
 				dataSource={this.state.dataSourceDynamic}
 				pageSize={20}
+				onScroll={this._onScroll}
+				scrollEventThrottle={8} 
 				renderRow={(rowData, sectionID, rowID)=>this._renderRow(rowData, sectionID, rowID)}
 				renderHeader={this._renderHeader}
 				renderFooter={this._renderFooter} 
@@ -1668,8 +1702,7 @@ var HomePage = React.createClass({
 				onChangeVisibleRows={this._onChangeVisibleRows}
 				removeClippedSubviews={false}
 				pullDownDistance={35}
-				pullDownStayDistance={50}
-				 
+				pullDownStayDistance={50} 
 				/>   
 			)
 		}else{
@@ -2091,7 +2124,7 @@ var styles = StyleSheet.create({
 		width:width,
         flex:1,
 		backgroundColor:ColorConstants.TITLE_BLUE_LIVE,
-		paddingTop:40,
+		paddingTop:25,
 		paddingBottom: UIConstants.TAB_BAR_HEIGHT,
 	},
 	listText:{

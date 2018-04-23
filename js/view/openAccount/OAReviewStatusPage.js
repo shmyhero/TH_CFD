@@ -60,7 +60,7 @@ var OAReviewStatusPage = React.createClass({
 				<ScrollView style={{flex:1}}>					
 					<View style={{width:width, height:topImageHeight}}>
 						<Image style={{width:width, height:topImageHeight}} source={require('../../../images/openAccountReview.jpg')}/>
-						<View style={{position: 'absolute', 
+						{/* <View style={{position: 'absolute', 
 							bottom:spinnerPaddingBottom, 
 							left: 0, right: 0, 
 							width:width, 
@@ -78,7 +78,7 @@ var OAReviewStatusPage = React.createClass({
 								<Text style={{color:'white', backgroundColor:'transparent', fontSize:30}}>!</Text>
 								<Text style={[{color:'white', backgroundColor:'transparent'}]}>审核中...</Text>
 							</View>
-						</View>
+						</View> */}
 					</View>
 					<OpenAccountHintBlock/>
 			 	</ScrollView>

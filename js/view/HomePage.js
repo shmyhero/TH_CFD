@@ -345,7 +345,7 @@ var HomePage = React.createClass({
 			()=>{
 				if(LogicData.getAccountState()){
 					var responseJson = this.state.dataResponse
-					if(this.state.cacheData&&this.state.cacheData.length>0){  
+					if(this.state.cacheData&&this.state.cacheData.length>0){
 						if(responseJson && responseJson.length > 0){
 							for(var i = 0; i < responseJson.length; i++){
 								responseJson[i].isNew = false;
@@ -363,19 +363,23 @@ var HomePage = React.createClass({
 						this.setState({ 
 							dataResponse:responseJson,
 							cacheData:this.state.cacheData,
+							isNewData:true,
 							// dataSource:this._dataSource.cloneWithRows(responseJson),
 							dataSourceDynamic: dsDynamic.cloneWithRows(responseJson),
-						}) 
-
+						})
 					}else{
-						// for(var i = 0; i < responseJson.length; i++){
-						// 	responseJson[i].isNew = false;
-						// } 
-						// this.setState({ 
-						// 	dataResponse:responseJson, 
-						// 	// dataSource:this._dataSource.cloneWithRows(responseJson),
-						// 	dataSourceDynamic: dsDynamic.cloneWithRows(responseJson),
-						// })
+						if(this.state.isNewData){
+							for(var i = 0; i < responseJson.length; i++){
+								responseJson[i].isNew = false;
+							} 
+							this.setState({ 
+								dataResponse:responseJson, 
+								isNewData:false,
+								// dataSource:this._dataSource.cloneWithRows(responseJson),
+								dataSourceDynamic: dsDynamic.cloneWithRows(responseJson),
+							})
+						}
+						
 					}
 				}
 			},

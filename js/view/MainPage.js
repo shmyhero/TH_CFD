@@ -709,6 +709,7 @@ var MainPage = React.createClass({
 					onPopOut={route.onPopOut}/>
 			)
 		}else if(route.name === DYNAMIC_STATUS_CONFIG){
+			hideTabbar();
 			return(
 				<DynamicStatusConfig 
 					navigator={navigationOperations}

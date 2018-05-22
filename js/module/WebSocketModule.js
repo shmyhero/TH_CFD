@@ -16,7 +16,7 @@ var StorageModule = require('./StorageModule')
 var CacheModule = require('./CacheModule')
 var {EventCenter, EventConst} = require('../EventCenter');
 
-var serverURL = 'http://cfd-webapi.chinacloudapp.cn'
+var serverURL = 'https://cfd-webapi.chinacloudapp.cn'
 var stockPriceServerName = 'Q'
 var alertServerName = 'A'
 var serverListenerName = 'p'

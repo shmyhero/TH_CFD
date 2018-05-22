@@ -5,7 +5,7 @@ import {
 var VersionConstants = require('./VersionConstants');
 
 const SERVER_MAPPING = {};
-SERVER_MAPPING[VersionConstants.SERVER_TYPE_PRODUCT] = 'https://api.typhoontechnology.hk';
+SERVER_MAPPING[VersionConstants.SERVER_TYPE_PRODUCT] = 'https://cfd-webapi.chinacloudapp.cn';
 SERVER_MAPPING[VersionConstants.SERVER_TYPE_STAGE] = 'http://300f8c59436243fe920fce09eb87d765.chinacloudapp.cn';
 SERVER_MAPPING[VersionConstants.SERVER_TYPE_DEVELOP] = 'http://cfd-webapi-dev.chinacloudapp.cn';
 

@@ -113,7 +113,6 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            Log.d("ReactWebView", url);
             if (url.startsWith("tel:") ||
                     url.startsWith("sms:") ||
                     url.startsWith("smsto:") ||
@@ -136,20 +135,15 @@ public class NativeWebViewModule extends SimpleViewManager<WebView> {
             CookieManager cookieManager = CookieManager.getInstance();
             cookieManager.setAcceptCookie(true);
             String url2 = "cn.tradehero.mobi";
-
-            Log.d("username", LogicData.getInstance().getLiveName());
             cookieManager.setCookie(url2, "username="+ LogicData.getInstance().getLiveName());
             cookieManager.setCookie(url2, "email="+LogicData.getInstance().getLiveEmail());
             cookieManager.setCookie(url2, "Lang="+LogicData.getInstance().getLang());
-            cookieManager.setCookie(url2, "TH_AUTH="+LogicData.getInstance().getAuthString());
 
 
-
-            String url3 = "web.typhoontechnology.hk";
+            String url3 = "cfd-webapi.chinacloudapp.cn";
             cookieManager.setCookie(url3, "username="+ LogicData.getInstance().getLiveName());
             cookieManager.setCookie(url3, "email="+LogicData.getInstance().getLiveEmail());
             cookieManager.setCookie(url3, "Lang="+LogicData.getInstance().getLang());
-            cookieManager.setCookie(url3, "TH_AUTH="+LogicData.getInstance().getAuthString());
 
             if (Build.VERSION.SDK_INT < 21) {
                 CookieSyncManager.getInstance().sync();

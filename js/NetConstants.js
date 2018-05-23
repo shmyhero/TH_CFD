@@ -11,7 +11,8 @@ SERVER_MAPPING[VersionConstants.SERVER_TYPE_DEVELOP] = 'http://cfd-webapi-dev.ch
 
 export const TRADEHERO_SERVER_IP = 'https://cn.tradehero.mobi'//http://cn.tradehero.mobi
 
-export const LOGIN_LIVE = TRADEHERO_SERVER_IP + '/tradehub/live/login.html'
+export const LOGIN_LIVE = 'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri='+SERVER_MAPPING[VersionConstants.SERVER_TYPE_PRODUCT]+'/api/live/oauth&state=<user_id>'
+
 
 //const GZT_SERVER_IP = 'http://124.192.161.110:8080'
 const GZT_SERVER_IP_LIVE = 'http://219.143.253.206:2025'

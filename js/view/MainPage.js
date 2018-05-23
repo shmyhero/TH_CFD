@@ -1500,6 +1500,7 @@ var MainPage = React.createClass({
 
 	pushToLiveLoginView: function(navigator, doNotPopWhenFinished, onSuccess, afterLogin){
 		var strSPJY = LS.str('SPJY')
+		var userData = LogicData.getUserData()
 		var route = {
 			name: NAVIGATOR_WEBVIEW_ROUTE,
 			title:strSPJY,
@@ -1508,7 +1509,7 @@ var MainPage = React.createClass({
 				this.onWebViewNavigationStateChange(navState, doNotPopWhenFinished, onSuccess)
 			},
 			logTimedelta: true,
-			url: NetConstants.LOGIN_LIVE,
+			url: NetConstants.LOGIN_LIVE.replace("<user_id>", userData.userId),
 		};
 
 		if (afterLogin){
@@ -1549,7 +1550,7 @@ var MainPage = React.createClass({
 		)
 
 		if(Platform.OS == "android"){
-			this.pushToLiveLoginView(navigator, doNotPopWhenFinished, onSuccess, afterLogin)						
+			this.pushToLiveLoginView(navigator, doNotPopWhenFinished, onSuccess, afterLogin)
 		}else{
 			CookieManager.set({
 				name: 'username',
@@ -1645,7 +1646,7 @@ var MainPage = React.createClass({
   			console.log('about cookie 2', res);
 		})
 
-		if(navState.url.indexOf('live/loginout.html')>0){
+		if(navState.url.indexOf('live/loginload.html')>0){
 			console.log('success login ok');
 			ayondoLoginResult(true, doNotPopWhenFinished);
 

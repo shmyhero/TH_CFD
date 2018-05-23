@@ -27,6 +27,7 @@ public class LogicData {
     public static final String LIVE_NAME = "userName";
     public static final String LIVE_EMAIL = "userEmail";
     public static final String LANGUAGE= "Lang";
+    public static final String TH_AUTH= "TH_AUTH";
 
     private static LogicData mInstance;
     private JSONArray mMyList;
@@ -35,6 +36,7 @@ public class LogicData {
     private String mLiveName;
     private String mLiveEmail;
     private String mLang;
+    private String mAUTH;
 
     public static LogicData getInstance() {
         if (mInstance == null) {
@@ -79,6 +81,8 @@ public class LogicData {
             mLiveEmail = data;
         }else if(dataName.equals(LANGUAGE)){
             mLang = data;
+        }else if(dataName.equals(TH_AUTH)){
+            mAUTH = data;
         }else if(dataName.equals(GET_VERSION_CODE)){
             getVersionCode();
         }else if(dataName.equals(GET_DEVICE_TOKEN)){
@@ -88,6 +92,10 @@ public class LogicData {
 
     public String getLang(){
         return mLang;
+    }
+
+    public String getAuthString(){
+        return mAUTH;
     }
 
     public String getLiveName(){

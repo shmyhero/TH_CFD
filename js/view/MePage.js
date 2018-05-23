@@ -216,6 +216,7 @@ var MePage = React.createClass({
 						NativeDataModule.passRawDataToNative('userName', responseJson.liveUsername)
 						NativeDataModule.passRawDataToNative('userEmail', responseJson.liveEmail)
 						NativeDataModule.passRawDataToNative('Lang', LogicData.getLanguageEn() == '1'?'en':'cn')
+						NativeDataModule.passRawDataToNative('AUTH_DATA', userData.userId + '_' + userData.token)
 						if(responseJson.firstDayRewarded&&responseJson.firstDayRewarded==true){
 							StorageModule.loadFirstDayWithDraw().then((value) => {
 								if (value !== null&&value !== '2'||value==undefined) {
@@ -227,7 +228,7 @@ var MePage = React.createClass({
 						if (Platform.OS === 'ios') {
 							this.setCookie();
 						}
-						console.log("about cookie " + "userName = " + responseJson.liveUsername + " && userEmail = " + responseJson.liveEmail);
+						console.log("about cookie " + "userName = " + responseJson.liveUsername + " && userEmail = " + responseJson.liveEmail + " && AUTH_DATA = " + userData.userId + '_' + userData.token);
 					}.bind(this)
 				)
 			}

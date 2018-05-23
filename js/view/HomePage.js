@@ -1201,24 +1201,6 @@ var HomePage = React.createClass({
 	 	)
 	},
 
-	renderLoginWebView:function(){
-		// if(firstLoad){
-			console.log("firstLoad true renderLoginWebView");
-			firstLoad = false
-			var url = 'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state=1'
-			return(
-				<WebView
-					style = {{height:0}}
-					source={{uri: url}}
-				/>
-			)
-		// }else{
-		// 	console.log("firstLoad false not renderLoginWebView");
-		// 	return null;
-		// }
-
-	},
-
 	hexToRgb: function(hex) {
 	    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 	    return result ? {
@@ -1794,8 +1776,7 @@ var HomePage = React.createClass({
 							{this.renderPopularityView()}  
 							{this.renderCards()} 
 							{/* {this.renderBottomViews()} */} 
-							{this.renderNewUser()} 
-							{/* {this.renderLoginWebView()} */} 
+							{this.renderNewUser()}
 						</ScrollView>
 					</View>
 					{this.renderNavBar()}

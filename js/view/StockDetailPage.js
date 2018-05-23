@@ -1197,15 +1197,19 @@ var StockDetailPage = React.createClass({
 		var strSPJY = LS.str('SPJY')
 		console.log("RAMBO wattingLogin = true ")
 		this.resetToLandscape()
-		this.props.navigator.push({
-			name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
-			title:strSPJY,
-			themeColor: "#3f5781",//ColorConstants.TITLE_DARK_BLUE,
-			onNavigationStateChange: this.onWebViewNavigationStateChange,
-			logTimedelta: true,
-			url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
-			// url:'http://cn.tradehero.mobi/tradehub/login.html'
-		});
+
+		MainPage.gotoLiveLogin(this.props.navigator, false, ()=>{})
+
+		// this.props.navigator.push({
+		// 	name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+		// 	title:strSPJY,
+		// 	themeColor: "#3f5781",//ColorConstants.TITLE_DARK_BLUE,
+		// 	onNavigationStateChange: this.onWebViewNavigationStateChange,
+		// 	logTimedelta: true,
+		// 	url: 'https://cn.tradehero.mobi/tradehub/live/login.html',
+		// 	//url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
+		// 	// url:'http://cn.tradehero.mobi/tradehub/login.html'
+		// });
 
 	},
 

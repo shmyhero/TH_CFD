@@ -9,9 +9,12 @@ SERVER_MAPPING[VersionConstants.SERVER_TYPE_PRODUCT] = 'https://cfd-webapi.china
 SERVER_MAPPING[VersionConstants.SERVER_TYPE_STAGE] = 'http://300f8c59436243fe920fce09eb87d765.chinacloudapp.cn';
 SERVER_MAPPING[VersionConstants.SERVER_TYPE_DEVELOP] = 'http://cfd-webapi-dev.chinacloudapp.cn';
 
+export const TRADEHERO_SERVER_IP = 'https://cn.tradehero.mobi'//http://cn.tradehero.mobi
+
+export const LOGIN_LIVE = TRADEHERO_SERVER_IP + '/tradehub/live/login.html'
+
 //const GZT_SERVER_IP = 'http://124.192.161.110:8080'
 const GZT_SERVER_IP_LIVE = 'http://219.143.253.206:2025'
-const TRADEHERO_SERVER_IP = 'https://cn.tradehero.mobi'//http://cn.tradehero.mobi
 
 const TRADEHERO_TEST_SERVER_IP = 'http://cn.tradehero.mobi'
 

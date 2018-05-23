@@ -1508,33 +1508,103 @@ var MainPage = React.createClass({
 		console.log("gotoAccountStateExce userId = " + userId);
 		console.log("_navigator LogicData.getTabIndex() " + LogicData.getTabIndex())
 		//console.log(_navigator)
-    var strSPJY = LS.str('SPJY')
-		var route = {
-			name: NAVIGATOR_WEBVIEW_ROUTE,
-			title:strSPJY,
-			themeColor: ColorConstants.TITLE_BLUE_LIVE,
-			onNavigationStateChange: (navState)=>{
-				this.onWebViewNavigationStateChange(navState, doNotPopWhenFinished, onSuccess)
-			},
-			logTimedelta: true,
-			url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
-//			url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
-			// url:'http://cn.tradehero.mobi/tradehub/live/login1.html'
-			// url:'http://www.baidu.com'
-			// url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
-			// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
-			// url:'https://www.tradehub.net/demo/ff-beta/tradehero-login-debug.html',
-			// url:'http://cn.tradehero.mobi/TH_CFD_WEB/bangdan1.html',
-		};
+		var strSPJY = LS.str('SPJY')
+	
+		var meData = LogicData.getMeData()
+		
+		console.log("meData.liveUsername ", meData.liveUsername)
+		console.log("meData.liveEmail ", meData.liveEmail)
+		console.log("meData.liveUsername ", meData.liveUsername)
 
-		if (afterLogin){
-			console.log("刚登录过，接着实盘登录")
-			this.goToRouteAfterLogin(route)
-		}else{
-			console.log("直接实盘登录")
-			navigator.push(route);
-		}
+		CookieManager.set({
+			name: 'username',
+			value: meData.liveUsername,
+			domain: 'cn.tradehero.mobi',
+			origin: 'cn.tradehero.mobi',
+			path: '/',
+			version: '1',
+			expiration: '2029-05-30T12:30:00.00-05:00'
+		}, (res, err)=>{
+			console.log("err username", err)
+			console.log("res username ", res)
+			CookieManager.set({
+				name: 'email',
+				value: meData.liveEmail,
+				domain: 'cn.tradehero.mobi',
+				origin: 'cn.tradehero.mobi',
+				path: '/',
+				version: '1',
+				expiration: '2029-05-30T12:30:00.00-05:00'
+			}, (res, err)=>{
+				console.log("err email", err)
+				console.log("res email ", res)
+				CookieManager.set({
+					name: 'Lang',
+					value: LogicData.getLanguageEn() == '1' ? 'en':'cn',
+					domain: 'cn.tradehero.mobi',
+					origin: 'cn.tradehero.mobi',
+					path: '/',
+					version: '1',
+					expiration: '2029-05-30T12:30:00.00-05:00'
+				}, (res, err)=>{
+					console.log("err Lang", err)
+					console.log('CookieManager.set =>', res);
 
+
+					var url = "?redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId"
+					var route = {
+						name: NAVIGATOR_WEBVIEW_ROUTE,
+						title:strSPJY,
+						themeColor: ColorConstants.TITLE_BLUE_LIVE,
+						onNavigationStateChange: (navState)=>{
+							this.onWebViewNavigationStateChange(navState, doNotPopWhenFinished, onSuccess)
+						},
+						logTimedelta: true,
+						url: NetConstants.LOGIN_LIVE,
+					};
+
+					if (afterLogin){
+						console.log("刚登录过，接着实盘登录")
+						this.goToRouteAfterLogin(route)
+					}else{
+						console.log("直接实盘登录")
+						navigator.push(route);
+					}
+				})
+			})
+		})
+		
+		// CookieManager.set({
+		// 	name: 'username',
+		// 	value: meData.liveUsername,
+		// 	domain: 'web.typhoontechnology.hk',
+		// 	origin: 'web.typhoontechnology.hk',
+		// 	path: '/',
+		// 	version: '1',
+		// 	expiration: '2029-05-30T12:30:00.00-05:00'
+		// }, (res, err)=>{
+		// 	CookieManager.set({
+		// 		name: 'email',
+		// 		value: meData.liveEmail,
+		// 		domain: 'web.typhoontechnology.hk',
+		// 		origin: 'web.typhoontechnology.hk',
+		// 		path: '/',
+		// 		version: '1',
+		// 		expiration: '2029-05-30T12:30:00.00-05:00'
+		// 	}, (res, err)=>{
+		// 		CookieManager.set({
+		// 			name: 'Lang',
+		// 			value: LogicData.getLanguageEn() == '1'?'en':'cn',
+		// 			domain: 'web.typhoontechnology.hk',
+		// 			origin: 'web.typhoontechnology.hk',
+		// 			path: '/',
+		// 			version: '1',
+		// 			expiration: '2029-05-30T12:30:00.00-05:00'
+		// 		}, (res, err)=>{
+
+		// 		})
+		// 	})
+		// })		
 	},
 
 	onWebViewNavigationStateChange: function(navState, doNotPopWhenFinished, onSuccess) {
@@ -1545,9 +1615,7 @@ var MainPage = React.createClass({
   			console.log('about cookie 2', res);
 		})
 
-		// console.log('about cookie 3',navState.url)
-
-		if(navState.url.indexOf('live/loginload')>0){
+		if(navState.url.indexOf('live/loginout.html')>0){
 			console.log('success login ok');
 			ayondoLoginResult(true, doNotPopWhenFinished);
 

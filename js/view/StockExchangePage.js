@@ -160,40 +160,32 @@ var StockExchangePage = React.createClass({
 		}
 		var strSPJY = LS.str('SPJY')
 		console.log("gotoAccountStateExce userId = " + userId);
-		this.props.navigator.push({
-			name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
-			title:strSPJY,
-			onNavigationStateChange: this.onWebViewNavigationStateChange,
-			logTimedelta: true,
-			url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
-			// url:'http://cn.tradehero.mobi/tradehub/live/login1.html'
-			// url:'http://cn.tradehero.mobi/tradehub/live/login1.html?client_id=62d275a211'
-			// url:'http://cn.tradehero.mobi/tradehub/live/loginload.html'
-			// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
-		});
+
+		MainPage.gotoLiveLogin(this.props.navigator, false, ()=>{this.onWebViewNavigationStateChange()})
+		// this.props.navigator.push({
+		// 	name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+		// 	title:strSPJY,
+		// 	onNavigationStateChange: this.onWebViewNavigationStateChange,
+		// 	logTimedelta: true,
+		// 	url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
+		// 	// url:'http://cn.tradehero.mobi/tradehub/live/login1.html'
+		// 	// url:'http://cn.tradehero.mobi/tradehub/live/login1.html?client_id=62d275a211'
+		// 	// url:'http://cn.tradehero.mobi/tradehub/live/loginload.html'
+		// 	// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
+		// });
 	},
 
-	onWebViewNavigationStateChange: function(navState) {
+	onWebViewNavigationStateChange: function() {
 		// todo
-		console.log("my web view state changed: "+navState.url)
-		CookieManager.get('https://tradehub.net/demo/auth', (err, res) => {
-  			console.log('Got cookies for url: ', res);
-		})
-
-		if(navState.url.indexOf('live/loginload')>0){
-			console.log('success login ok');
-			MainPage.ayondoLoginResult(true)
-			this.setState({
-				loggined:true,
-			},()=>{
-				if(this.refs['page'+this.state.currentSelectedTab]){
-					this.refs['page'+this.state.currentSelectedTab].tabPressed()
-				}
-			});
-		}else if(navState.url.indexOf('live/oauth/error')>0){
-			console.log('success login error');
-			MainPage.ayondoLoginResult(false)
-		}
+		console.log('success login ok');
+		MainPage.ayondoLoginResult(true)
+		this.setState({
+			loggined:true,
+		},()=>{
+			if(this.refs['page'+this.state.currentSelectedTab]){
+				this.refs['page'+this.state.currentSelectedTab].tabPressed()
+			}
+		});		
 	},
 
 	// onNavigationStateChange:function (navState) {

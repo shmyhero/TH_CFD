@@ -1498,6 +1498,28 @@ var MainPage = React.createClass({
 		}
 	},
 
+	pushToLiveLoginView: function(navigator, doNotPopWhenFinished, onSuccess, afterLogin){
+		var strSPJY = LS.str('SPJY')
+		var route = {
+			name: NAVIGATOR_WEBVIEW_ROUTE,
+			title:strSPJY,
+			themeColor: ColorConstants.TITLE_BLUE_LIVE,
+			onNavigationStateChange: (navState)=>{
+				this.onWebViewNavigationStateChange(navState, doNotPopWhenFinished, onSuccess)
+			},
+			logTimedelta: true,
+			url: NetConstants.LOGIN_LIVE,
+		};
+
+		if (afterLogin){
+			console.log("刚登录过，接着实盘登录")
+			this.goToRouteAfterLogin(route)
+		}else{
+			console.log("直接实盘登录")
+			navigator.push(route);
+		}
+	},
+
 	gotoLiveLogin: function(navigator, doNotPopWhenFinished, onSuccess, afterLogin){
 		var userData = LogicData.getUserData()
 		var userId = userData.userId
@@ -1508,82 +1530,79 @@ var MainPage = React.createClass({
 		console.log("gotoAccountStateExce userId = " + userId);
 		console.log("_navigator LogicData.getTabIndex() " + LogicData.getTabIndex())
 		//console.log(_navigator)
-		var strSPJY = LS.str('SPJY')
 	
 		var meData = LogicData.getMeData()
-		
-		console.log("meData.liveUsername ", meData.liveUsername)
-		console.log("meData.liveEmail ", meData.liveEmail)
-		console.log("meData.liveUsername ", meData.liveUsername)
 
-		CookieManager.set({
-			name: 'username',
-			value: meData.liveUsername,
-			domain: 'cn.tradehero.mobi',
-			origin: 'cn.tradehero.mobi',
-			path: '/',
-			version: '1',
-			expiration: '2029-05-30T12:30:00.00-05:00'
-		}, (res, err)=>{
-			console.log("err username", err)
-			console.log("res username ", res)
+		//Call logout before login. Don't wait for the return
+		NetworkModule.fetchTHUrl(NetConstants.USER_ACTUAL_LOGOUT,
+			{
+				method: 'GET',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+				},
+			},
+			(responseJson)=>{
+
+			},(error)=>{
+
+			}
+		)
+
+		if(Platform.OS == "android"){
+			this.pushToLiveLoginView(navigator, doNotPopWhenFinished, onSuccess, afterLogin)						
+		}else{
 			CookieManager.set({
-				name: 'email',
-				value: meData.liveEmail,
+				name: 'username',
+				value: meData.liveUsername,
 				domain: 'cn.tradehero.mobi',
 				origin: 'cn.tradehero.mobi',
 				path: '/',
 				version: '1',
 				expiration: '2029-05-30T12:30:00.00-05:00'
 			}, (res, err)=>{
-				console.log("err email", err)
-				console.log("res email ", res)
+				console.log("err username", err)
+				console.log("res username ", res)
 				CookieManager.set({
-					name: 'Lang',
-					value: LogicData.getLanguageEn() == '1' ? 'en':'cn',
+					name: 'email',
+					value: meData.liveEmail,
 					domain: 'cn.tradehero.mobi',
 					origin: 'cn.tradehero.mobi',
 					path: '/',
 					version: '1',
 					expiration: '2029-05-30T12:30:00.00-05:00'
 				}, (res, err)=>{
-
+					console.log("err email", err)
+					console.log("res email ", res)
 					CookieManager.set({
-						name: 'TH_AUTH',
-						value: userData.userId + '_' + userData.token,
+						name: 'Lang',
+						value: LogicData.getLanguageEn() == '1' ? 'en':'cn',
 						domain: 'cn.tradehero.mobi',
 						origin: 'cn.tradehero.mobi',
 						path: '/',
 						version: '1',
 						expiration: '2029-05-30T12:30:00.00-05:00'
 					}, (res, err)=>{
+	
+						CookieManager.set({
+							name: 'TH_AUTH',
+							value: userData.userId + '_' + userData.token,
+							domain: 'cn.tradehero.mobi',
+							origin: 'cn.tradehero.mobi',
+							path: '/',
+							version: '1',
+							expiration: '2029-05-30T12:30:00.00-05:00'
+						}, (res, err)=>{
+						})
+						console.log("err Lang", err)
+						console.log('CookieManager.set =>', res);
+						this.pushToLiveLoginView(navigator, doNotPopWhenFinished, onSuccess, afterLogin)					
 					})
-					console.log("err Lang", err)
-					console.log('CookieManager.set =>', res);
-
-
-					var url = "?redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId"
-					var route = {
-						name: NAVIGATOR_WEBVIEW_ROUTE,
-						title:strSPJY,
-						themeColor: ColorConstants.TITLE_BLUE_LIVE,
-						onNavigationStateChange: (navState)=>{
-							this.onWebViewNavigationStateChange(navState, doNotPopWhenFinished, onSuccess)
-						},
-						logTimedelta: true,
-						url: NetConstants.LOGIN_LIVE,
-					};
-
-					if (afterLogin){
-						console.log("刚登录过，接着实盘登录")
-						this.goToRouteAfterLogin(route)
-					}else{
-						console.log("直接实盘登录")
-						navigator.push(route);
-					}
 				})
 			})
-		})
+		}
+		
+
+		
 		
 		// CookieManager.set({
 		// 	name: 'username',

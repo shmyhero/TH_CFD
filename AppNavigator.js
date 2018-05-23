@@ -607,7 +607,9 @@ var AppNavigator = React.createClass({
 		} else if (this.state.startUpPhase == LOADING_PHASE){
 			var loadingStatusBar = <StatusBar barStyle="light-content" backgroundColor={ColorConstants.TITLE_BLUE_SIMULATE}/>
 			var translucent = Platform.OS === 'android';
-			StatusBar.setTranslucent(translucent);
+			if(Platform.OS === 'android'){
+				StatusBar.setTranslucent(translucent);
+			}
 			if (Platform.OS === 'ios') {
 				return (
 					<View style={{backgroundColor: '#0665de', alignItems: 'center'}}>

@@ -1547,6 +1547,17 @@ var MainPage = React.createClass({
 					version: '1',
 					expiration: '2029-05-30T12:30:00.00-05:00'
 				}, (res, err)=>{
+
+					CookieManager.set({
+						name: 'TH_AUTH',
+						value: userData.userId + '_' + userData.token,
+						domain: 'cn.tradehero.mobi',
+						origin: 'cn.tradehero.mobi',
+						path: '/',
+						version: '1',
+						expiration: '2029-05-30T12:30:00.00-05:00'
+					}, (res, err)=>{
+					})
 					console.log("err Lang", err)
 					console.log('CookieManager.set =>', res);
 

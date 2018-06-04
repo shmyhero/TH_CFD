@@ -383,13 +383,6 @@
 			remoteGlobalIDString = D42CB3511B2538DE00FD0AE2;
 			remoteInfo = RNSpinkit;
 		};
-		419B821820858B20004E483E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 419B821120858B1F004E483E /* RNSpinkit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 641194871EC9FD4A00D4FC03;
-			remoteInfo = "RNSpinkit-tvOS";
-		};
 		737363661D17CCFA00476488 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FC36C2CB97CE4D7DBE61CD48 /* RNImagePicker.xcodeproj */;
@@ -1790,7 +1783,6 @@
 			isa = PBXGroup;
 			children = (
 				419B821720858B20004E483E /* libRNSpinkit.a */,
-				419B821920858B20004E483E /* libRNSpinkit.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2233,13 +2225,6 @@
 			fileType = archive.ar;
 			path = libRNSpinkit.a;
 			remoteRef = 419B821620858B20004E483E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		419B821920858B20004E483E /* libRNSpinkit.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNSpinkit.a;
-			remoteRef = 419B821820858B20004E483E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		737363671D17CCFA00476488 /* libRNImagePicker.a */ = {

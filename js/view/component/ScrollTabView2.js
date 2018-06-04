@@ -125,7 +125,7 @@ var ScrollTabView = React.createClass({
 		if (Platform.OS === 'ios') {
 			return (
 				<ScrollView style={styles.viewPage} ref='viewPages'
-						contentContainerStyle={{width: width * this.props.tabNames.length, flex:1}}
+						contentContainerStyle={{width: width * this.props.tabNames.length}}
 						pagingEnabled={true}
 						horizontal={true}
 						onScroll={this.onScroll}

@@ -234,19 +234,29 @@ var StockDetailPage = React.createClass({
 		loadStockInfoSuccess = false
 		var url = NetConstants.CFD_API.GET_STOCK_DETAIL_API
 		if(LogicData.getAccountState()){
-		 url = NetConstants.CFD_API.GET_STOCK_DETAIL_LIVE_API
-		 console.log('live', url );
-	 	}
+			url = NetConstants.CFD_API.GET_STOCK_DETAIL_LIVE_API
+			console.log('live', url );
+		}
+		var userData = LogicData.getUserData()
+	
+		var parameters = {
+			method: 'GET',
+			showLoading: true,
+		};
+		var loggined = Object.keys(userData).length !== 0
+		if(loggined){
+			parameters.headers = {
+				'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+			};
+		}
+
 		url = url.replace(/<stockCode>/, this.props.stockCode)
 		this.setState({
 			dataStatus :2,
 		})
 		NetworkModule.fetchTHUrl(
 			url,
-			{
-				method: 'GET',
-				showLoading: true,
-			},
+			parameters,
 			(responseJson) => {
 				var currencySymbol = responseJson.ccy
 				if (currencySymbol != UIConstants.USD_CURRENCY) {

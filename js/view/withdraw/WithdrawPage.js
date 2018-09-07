@@ -42,7 +42,7 @@ var rowValueWidth = (width - (2 * rowPadding)) / 4 * 3;
 
 var defaultRawData = [
 		{"type": "cardEntry",},
-		{"type": "withdraw", value: null},
+    {"type": "withdraw", value: null},
 ];
 
 export default class WithdrawPage extends Component {
@@ -305,6 +305,12 @@ export default class WithdrawPage extends Component {
           </View>
  				</View>
       )
+    }else if(rowData.type == 'e-coupon'){
+        return(
+          <View>
+            <Text>e-conpon</Text>
+          </View>
+        )
     }
   }
 

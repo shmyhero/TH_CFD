@@ -17,7 +17,8 @@ import {
     ListView,
     Alert,
     TouchableOpacity,
-    Platform
+	Platform,
+	ScrollView
 } from 'react-native'
 
 
@@ -95,6 +96,8 @@ export default class DepositPage extends Component{
 			alipayMax: 3000,
 			cupMin: 50,
 			cupMax: 3000,
+			useEcoupon:false,
+			econponValue:0,
 		}
 	}
 
@@ -107,12 +110,16 @@ export default class DepositPage extends Component{
 	}
 
 	loadDepositSetting(){
-
+		var userData = LogicData.getUserData()
 		NetworkModule.fetchTHUrl(
 			NetConstants.CFD_API.GET_DEPOSIT_SETTING,
 			{
 				method: 'GET',
-				cache: 'offline',
+				// cache: 'offline',
+				headers: {
+					'Authorization': 'Basic ' + userData.userId + '_' + userData.token,
+					'Content-Type': 'application/json; charset=utf-8',
+				  },
 			},
 			(responseJson) =>{
 				console.log('minimun = ' + responseJson.minimum +' fxRate = ' + responseJson.fxRate);
@@ -126,7 +133,7 @@ export default class DepositPage extends Component{
 				// cupMax = 0;//hide unionPay
 				var cupMin = responseJson.cupMin == undefined ? this.state.cupMin : responseJson.cupMin;
 				var alipayMin = responseJson.alipayMinPing == undefined ? this.state.alipayMin : responseJson.alipayMinPing;
-
+				var availableReward = responseJson.availableReward == undefined? 0:responseJson.availableReward;
 				var payMethodSelected = this.state.payMethodSelected
 				if (alipayMax <=0){
 					payMethodSelected = 1;
@@ -155,6 +162,7 @@ export default class DepositPage extends Component{
 					alipayMin:alipayMin,
 					cupMin:cupMin,
 					cupMax:cupMax,
+					econponValue:availableReward,
 				},()=>this.onChangeWithdrawValue(''))
 			},
 			(result) => {
@@ -216,19 +224,43 @@ export default class DepositPage extends Component{
 		})
 	}
 
+	renderPartOfECoupon(){
+		if(this.state.useEcoupon){
+			return(
+				<View style={{flexDirection:'row',alignItems:'center'}}>
+					<View style={{marginLeft:5,marginRight:5,width:0.5,height:18,backgroundColor:'#999999'}}></View>
+					<Text style={{fontSize:12,color:'#999999'}}>已抵用$</Text>
+					<Text style={{fontSize:12,color:'#999999'}}>{this.state.econponValue}</Text>
+				</View>	
+			)
+		}else{
+			return null
+		}
+		
+	}
+
 	renderConfirm(){
-
+		var value = parseFloat(inputValue)
 		var color = this.state.confirmButtonEnable?'#425a85':'#d0d0d0';
-
 		var buttonText = this.state.payMethodSelected==0?LS.str('ALIPAY_ARRIVED'):LS.str('UNIONPAY_ARRIVED')
-
+		var inputValueAfterUseEcoupon = value - (this.state.useEcoupon?this.state.econponValue:0);
+		var showInputValueAfterUseEcoupon = (inputValueAfterUseEcoupon&&inputValueAfterUseEcoupon>0)?inputValueAfterUseEcoupon:0
+		
 		return(
 			<View style = {{backgroundColor:'white'}}>
+			<View style={{height:68,justifyContent:'space-between',flexDirection:'row',alignItems:'center'}}>
+				<View style={{paddingLeft:10,flexDirection:'row',alignItems:'center'}}>
+					<Text style={{fontSize:16,marginTop:4,color:'black'}}>$</Text>
+					<Text style={{fontSize:20,color:'black'}}>{showInputValueAfterUseEcoupon}</Text>
+					{this.renderPartOfECoupon()}
+				</View>	
 				<TouchableOpacity style={[styles.comfirmButton,{backgroundColor:color}]} onPress={()=>this.pressConfirmButton()}>
 					<Text style={styles.comfirmText}>
 						{buttonText}
 					</Text>
 				</TouchableOpacity>
+			</View>
+				
 			</View>
 		)
 	}
@@ -356,7 +388,9 @@ export default class DepositPage extends Component{
 			)
 		}else{
 			return(
-				<View></View>
+				<View>
+
+				</View>
 			)
 		}
 	}
@@ -449,11 +483,27 @@ export default class DepositPage extends Component{
 			this.requestForUnionPay()
 		}
 	}
+
+	getValueOfRmbPay(){
+		if(this.state.useEcoupon){
+			if(inputValue - this.state.econponValue<=0){
+				return 0.01
+			}
+			else{
+				return (inputValue - this.state.econponValue) / this.state.fxRate;
+			} 
+		}else{
+			return inputValue / this.state.fxRate;
+		}
+	}
 		
 
 	requestForAlipay(){
+		var rmb = this.getValueOfRmbPay();
 		var userData = LogicData.getUserData() 
-		var alipayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-ping.html'+'?amount='+rmbValue+'&channel=alipay'+'&token='+userData.userId + '_' + userData.token;
+		var useRewardValue = this.state.useEcoupon?this.state.econponValue:0
+		// Alert.alert(''+useRewardValue)
+		var alipayUrl = 'http://cn.tradehero.mobi/test_form/test_form_Ayondo-ping.html'+'?amount='+rmb+'&rewardAmount='+useRewardValue+'&channel=alipay'+'&token='+userData.userId + '_' + userData.token;
 		this.props.navigator.push({
 		name: MainPage.PAYMENT_PAGE,
 		url: alipayUrl,
@@ -524,6 +574,37 @@ export default class DepositPage extends Component{
 		Keyboard.dismiss();
 	}
 
+	selectEcoupon(){
+		this.setState({
+			useEcoupon:!this.state.useEcoupon
+		})
+	}
+
+	renderEcoupon(){
+		var checkBox = this.state.useEcoupon ? require('../../images/check_selected.png'):require('../../images/check_unselected.png')
+
+		if(this.state.econponValue != 0){
+			return(
+				<View>
+					{this.renderSeparator()}
+					<TouchableOpacity onPress={()=>this.selectEcoupon()} style={{flexDirection:'row',justifyContent:'space-between', paddingLeft:10,paddingRight:10, alignItems:'center',height:Math.round(64*heightRate),backgroundColor:'white'}}> 
+						<View style={{flexDirection:'row',alignItems:'center',}}>
+							<Image source={checkBox} style={styles.checkbox} />
+							<Text style={{fontSize:36,color:'#000000',marginLeft:10}}>{this.state.econponValue}</Text>
+							<Text style={{fontSize:11,color:'#999999',marginTop:12.5}}>美元</Text>
+						</View>	
+						
+						<Text style={{fontSize:12,color:'#999999'}}>交易金抵用券</Text>
+					</TouchableOpacity>
+				</View>
+			)
+		}else{
+			return null;
+		}
+		
+		
+	}
+
 	render(){
 
 		return(
@@ -532,13 +613,15 @@ export default class DepositPage extends Component{
 					imageOnRight={require('../../images/icon_question.png')}
 					rightImageOnClick={()=>this.go2Question()}
 					navigator={this.props.navigator}/>
-
+				 
+				
 				{this.renderAliPay()}
-				{this.renderUnionPay()}
+				{/* {this.renderUnionPay()} */}
 				{this.renderSeparator()}
 
-				<View style = {{flex:1}}>
+				<View style = {{flex:1}}> 
 					{this.renderDetail()}
+					{this.renderEcoupon()}
 					<TouchableWithoutFeedback style={styles.blank} onPress={()=>this.pressBlank()}>
 						<View style={{flexDirection:'row'}}>
 							<Text style={styles.psLine}>{LS.str('ZY')}</Text>
@@ -549,13 +632,17 @@ export default class DepositPage extends Component{
 				  </TouchableWithoutFeedback>
 					<TouchableOpacity style={styles.blank} onPress={()=>this.pressBlank()}>
 						<View></View>
-					</TouchableOpacity>
+					</TouchableOpacity> 
 
-					<View style = {{flex:1,justifyContent:'flex-end'}}>
-					{this.renderProtocol()}
-					{this.renderConfirm()}
+					<View style = {{flex:1,justifyContent:'space-between'}}>
+						<View></View>
+						<View>
+							{this.renderProtocol()} 
+							{this.renderConfirm()} 
+						</View> 
 					</View>
 				</View>
+				 
 				{this.renderAccessoryBar()}
 
 			</View>
@@ -724,6 +811,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		backgroundColor: '#425a85',
 		margin:10,
+		width:100,
 		borderRadius:4,
 	},
 
@@ -756,8 +844,8 @@ const styles = StyleSheet.create({
 		color:'#ff6666'
 	},
 
-	blank:{
-		flex:1,
+	blank:{ 
+		height:100, 
 	},
 
 	blankSupport:{

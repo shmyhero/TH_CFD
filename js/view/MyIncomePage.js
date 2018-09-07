@@ -44,7 +44,7 @@ var defaultRowData = [
 	{ name: '注册交易金(元)', amount: 0 },
 	{ name: '开户交易金(元)', amount: 0 },
 	{ name: '邀请好友交易金(元)', amount: 0 },
-	{ name: '首日入金交易金(元)', amount: 0 },
+	// { name: '首日入金交易金(元)', amount: 0 },
 	{ name: '模拟收益交易金(元)', amount: 0 },
 	{ name: '竞猜盈利交易金(元)', amount: 0 }
 ]
@@ -340,7 +340,7 @@ var MyIncomePage = React.createClass({
 					renderRow={this.renderRow}
 					renderSeparator={this.renderSeparator} />
 				{this.renderNoticeView()}
-				{this.renderTrasferButton()}
+				{/* {this.renderTrasferButton()} */}
 				{/* <HeaderLineDialog ref={RULE_DIALOG}
 				headerImage={require('../../images/my_income_strategy.png')}
 				messageLines={this.rules}/> */}

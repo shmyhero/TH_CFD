@@ -9,8 +9,8 @@
 #import "EditOwnStocksViewManager.h"
 #import "EditOwnStocksView.h"
 
-#import "RCTBridge.h"
-#import "RCTEventDispatcher.h"
+//#import "RCTBridge.h"
+//#import "RCTEventDispatcher.h"
 #import "UIView+React.h"
 
 @interface EditOwnStocksView ()

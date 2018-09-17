@@ -58,22 +58,22 @@ var LandingPage = React.createClass({
 					<View style={styles.slide}>
 						<Image 
 							style={styles.image} 
-							source={require('image!guide_screen1')}/>
+							source={require('../../images/guide_screen1.png')}/>
 					</View>
 					<View style={styles.slide}>
 						<Image 
 							style={styles.image} 
-							source={require('image!guide_screen2')}/>
+							source={require('../../images/guide_screen2.png')}/>
 					</View>
 					<View style={styles.slide}>
 						<Image 
 							style={styles.image} 
-							source={require('image!guide_screen3')}/>
+							source={require('../../images/guide_screen3.png')}/>
 					</View>
 					<View style={styles.slide}>
 						<Image 
 							style={styles.image} 
-							source={require('image!guide_screen4')}/>
+							source={require('../../images/guide_screen4.png')}/>
 					</View>
 				</Swiper>
 				<TouchableHighlight style={styles.loginClickableArea}

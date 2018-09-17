@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet } from 'react-native';
 import Dynamicbar from './dynamic';
 import { window } from './../util';
+import PropTypes from 'prop-types';
 
 const styles = StyleSheet.create({
   bar: {
@@ -43,9 +44,9 @@ export default class Normalbar extends Component {
 }
 
 Normalbar.propTypes = {
-  size: React.PropTypes.number,
-  duration: React.PropTypes.number,
-  barColor: React.PropTypes.string
+  size: PropTypes.number,
+  duration: PropTypes.number,
+  barColor: PropTypes.string
 };
 
 Normalbar.defaultProps = {

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import Wrapper from './../wrapper'
+import PropTypes from 'prop-types';
 
 const extendRawIcon = (ChildComponent) => {
   class RawIcon extends Component {
@@ -59,9 +60,9 @@ const extendRawIcon = (ChildComponent) => {
   }
 
   RawIcon.contextTypes = {
-    barSize: React.PropTypes.number,
-    tabName: React.PropTypes.string,
-    registerTabIcon: React.PropTypes.func
+    barSize: PropTypes.number,
+    tabName: PropTypes.string,
+    registerTabIcon: PropTypes.func
   };
 
   RawIcon.displayName = "RawIcon";

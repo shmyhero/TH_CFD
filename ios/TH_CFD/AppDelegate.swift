@@ -76,7 +76,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GeTuiSdkDelegate {
 		// initialize the rootView to fetch JS from the dev server
 		let jsCodeLocation:URL?
 		if Platform.isSimulator {
-			jsCodeLocation = URL(string: "http://localhost:8081/index.ios.bundle?platform=ios&dev=true")
+//			jsCodeLocation = URL(string: "http://localhost:8081/index.ios.bundle?platform=ios&dev=true")
+			jsCodeLocation = RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index.ios", fallbackResource: nil)
 		} else {
             jsCodeLocation = RCTHotUpdate.bundleURL();
 //			jsCodeLocation = NSBundle.mainBundle().URLForResource("main", withExtension: "jsbundle")

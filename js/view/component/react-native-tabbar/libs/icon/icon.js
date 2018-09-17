@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, TouchableWithoutFeedback } from 'react-native';
 import { extendRawIcon } from './raw';
 
@@ -86,13 +87,13 @@ class Icon extends Component {
 }
 
 Icon.propTypes = {
-  label: React.PropTypes.string,
-  type: React.PropTypes.string,
-  from: React.PropTypes.string,
-  size: React.PropTypes.number,
-  iconStyle: React.PropTypes.any,
-  onActiveColor: React.PropTypes.string,
-  onInactiveColor: React.PropTypes.string
+  label: PropTypes.string,
+  type: PropTypes.string,
+  from: PropTypes.string,
+  size: PropTypes.number,
+  iconStyle: PropTypes.any,
+  onActiveColor: PropTypes.string,
+  onInactiveColor: PropTypes.string
 };
 
 Icon.defaultProps = {
@@ -102,8 +103,8 @@ Icon.defaultProps = {
 };
 
 Icon.contextTypes = {
-  tabName: React.PropTypes.string,
-  gotoTab: React.PropTypes.func
+  tabName: PropTypes.string,
+  gotoTab: PropTypes.func
 };
 
 export default extendRawIcon(Icon);

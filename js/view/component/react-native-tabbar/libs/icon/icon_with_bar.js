@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   StyleSheet,
   View,
@@ -85,15 +86,15 @@ class IconWithBar extends Component {
 }
 
 IconWithBar.propTypes = {
-  label: React.PropTypes.string,
-  type: React.PropTypes.string,
-  from: React.PropTypes.string,
-  size: React.PropTypes.number,
-  iconStyle: React.PropTypes.any,
-  onActiveColor: React.PropTypes.string,
-  onInactiveColor: React.PropTypes.string,
-  onActiveColorBar: React.PropTypes.string,
-  onInactiveColorBar: React.PropTypes.string
+  label: PropTypes.string,
+  type: PropTypes.string,
+  from: PropTypes.string,
+  size: PropTypes.number,
+  iconStyle: PropTypes.any,
+  onActiveColor: PropTypes.string,
+  onInactiveColor: PropTypes.string,
+  onActiveColorBar: PropTypes.string,
+  onInactiveColorBar: PropTypes.string
 };
 
 IconWithBar.defaultProps = {
@@ -105,8 +106,8 @@ IconWithBar.defaultProps = {
 };
 
 IconWithBar.contextTypes = {
-  tabName: React.PropTypes.string,
-  gotoTab: React.PropTypes.func
+  tabName: PropTypes.string,
+  gotoTab: PropTypes.func
 };
 
 export default extendRawIcon(IconWithBar);

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { buildTabGraph } from './tab_graph';
 import { Normalbar } from './bar';
+import PropTypes from 'prop-types';
 
 const REF_BAR = 'REF_BAR';
 
@@ -163,10 +164,10 @@ export default class Tabbar extends Component {
 }
 
 Tabbar.propTypes = {
-  barSize: React.PropTypes.number,
-  BarComponent: React.PropTypes.func,
-  barColor: React.PropTypes.string,
-  initialTab: React.PropTypes.string
+  barSize: PropTypes.number,
+  BarComponent: PropTypes.func,
+  barColor: PropTypes.string,
+  initialTab: PropTypes.string
 };
 
 Tabbar.defaultProps = {
@@ -177,9 +178,9 @@ Tabbar.defaultProps = {
 };
 
 Tabbar.childContextTypes = {
-  barSize: React.PropTypes.number,
-  registerTabContent: React.PropTypes.func,
-  registerTabIcon: React.PropTypes.func,
-  gotoTab: React.PropTypes.func,
-  getBarRef: React.PropTypes.func
+  barSize: PropTypes.number,
+  registerTabContent: PropTypes.func,
+  registerTabIcon: PropTypes.func,
+  gotoTab: PropTypes.func,
+  getBarRef: PropTypes.func
 };

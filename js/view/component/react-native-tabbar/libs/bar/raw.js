@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Animated } from 'react-native';
+import PropTypes from 'prop-types';
 
 export default class Rawbar extends Component {
   constructor(props, context) {
@@ -18,5 +19,5 @@ export default class Rawbar extends Component {
 }
 
 Rawbar.propTypes = {
-  style: React.PropTypes.any.isRequired
+  style: PropTypes.any.isRequired
 };

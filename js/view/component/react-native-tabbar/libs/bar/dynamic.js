@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Animated } from 'react-native';
 import Rawbar from './raw';
+import PropTypes from 'prop-types';
 
 const sizeLimit = (minValue, maxValue) => {
   let prevValue = 0;
@@ -68,6 +69,6 @@ export default class Dynamicbar extends Component {
 }
 
 Dynamicbar.propTypes = {
-  size: React.PropTypes.number.isRequired,
-  style: React.PropTypes.any
+  size: PropTypes.number.isRequired,
+  style: PropTypes.any
 };

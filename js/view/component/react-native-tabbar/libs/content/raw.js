@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { StyleSheet, View, Animated } from 'react-native';
 import Wrapper from './../wrapper'
 
@@ -72,8 +73,8 @@ const extendRawContent = (ChildComponent) => {
   }
 
   RawContent.contextTypes = {
-    registerTabContent: React.PropTypes.func,
-    tabName: React.PropTypes.string
+    registerTabContent: PropTypes.func,
+    tabName: PropTypes.string
   };
 
   RawContent.displayName = 'RawContent';

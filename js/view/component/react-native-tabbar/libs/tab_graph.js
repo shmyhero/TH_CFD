@@ -3,6 +3,7 @@ import Tabbar from './tabbar';
 import Tab from './tab';
 import { RawIcon } from './icon';
 import { RawContent } from './content';
+import PropTypes from 'prop-types';
 
 class InjectTabNameContext extends Component {
   constructor(props, context) {
@@ -22,11 +23,11 @@ class InjectTabNameContext extends Component {
 }
 
 InjectTabNameContext.childContextTypes = {
-  tabName: React.PropTypes.string
+  tabName: PropTypes.string
 };
 
 InjectTabNameContext.propTypes = {
-  name: React.PropTypes.string.isRequired
+  name: PropTypes.string.isRequired
 };
 
 //this fuction tries to validated and created an array of tab graph with the

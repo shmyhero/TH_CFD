@@ -100,13 +100,14 @@ RCT_EXPORT_MODULE();
 
 - (void)sendDataToRN:(NSString *)dataName data:(NSString *)jsonData
 {
-    if (jsonData != nil) {
-        [self.bridge.eventDispatcher sendAppEventWithName:@"nativeSendDataToRN" body:@[dataName, jsonData]];
-    }
-    else {
-        [self.bridge.eventDispatcher sendAppEventWithName:@"nativeSendDataToRN" body:@[dataName]];
-        
-    }
+	// use RCTEventEmitter to replace
+//    if (jsonData != nil) {
+//        [self.bridge.eventDispatcher sendAppEventWithName:@"nativeSendDataToRN" body:@[dataName, jsonData]];
+//    }
+//    else {
+//        [self.bridge.eventDispatcher sendAppEventWithName:@"nativeSendDataToRN" body:@[dataName]];
+//
+//    }
 }
 
 #pragma mark RCT_EXPORT

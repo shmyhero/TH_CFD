@@ -1,6 +1,7 @@
 'use strict'
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
 	StyleSheet,
 	View,
@@ -11,7 +12,7 @@ import {
 
 var LoadingIndicator = React.createClass({
 	propTypes: {
-		animating: React.PropTypes.bool,
+		animating: PropTypes.bool,
 	},
 	
 	getInitialState: function() {

@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RCTBridge.h"
-#import "RCTEventDispatcher.h"
+//#import "RCTBridge.h"
+//#import "RCTEventDispatcher.h"
+#import <React/RCTBridgeModule.h>
 
 @interface NativeData : NSObject<RCTBridgeModule>
 

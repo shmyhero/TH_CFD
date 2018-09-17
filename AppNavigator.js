@@ -46,25 +46,25 @@ require('./js/utils/numberUtils')
 require('./js/utils/stringUtils')
 
 var SCREEN_WIDTH = Dimensions.get('window').width;
-var ToTheLeft = {
-	opacity: {
-		from: 1,
-		to: 0.5,
-		min: 0,
-		max: 1,
-		type: 'linear',
-		extrapolate: false,
-	},
-	left: {
-		from: 0,
-		to: -SCREEN_WIDTH,
-		min: 0,
-		max: 1,
-		type: 'linear',
-		extrapolate: true,
-	},
-};
-Navigator.SceneConfigs.PushFromRight.animationInterpolators.out = buildStyleInterpolator(ToTheLeft)
+// var ToTheLeft = {
+// 	opacity: {
+// 		from: 1,
+// 		to: 0.5,
+// 		min: 0,
+// 		max: 1,
+// 		type: 'linear',
+// 		extrapolate: false,
+// 	},
+// 	left: {
+// 		from: 0,
+// 		to: -SCREEN_WIDTH,
+// 		min: 0,
+// 		max: 1,
+// 		type: 'linear',
+// 		extrapolate: true,
+// 	},
+// };
+// Navigator.SceneConfigs.PushFromRight.animationInterpolators.out = buildStyleInterpolator(ToTheLeft)
 
 var TimerMixin = require('react-timer-mixin');
 var LayoutAnimation = require('LayoutAnimation')

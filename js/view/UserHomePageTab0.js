@@ -1,6 +1,8 @@
 'use strict';
 
-import React,{Component,PropTypes} from 'react'
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 import {StyleSheet,Text,Image,ScrollView,Platform,View,Dimensions,ListView,Alert,TouchableOpacity} from 'react-native'
 
 
@@ -18,7 +20,7 @@ var MainPage = require('./MainPage')
 var ColorConstants = require('../ColorConstants')
 var StatisticBarBlock = require('./personalPage/StatisticBarBlock')
 var ProfitBlock = require('./personalPage/ProfitBlock')
-var TradeStyleBlock = require('./personalPage/TradeStyleBlock') 
+var TradeStyleBlock = require('./personalPage/TradeStyleBlock')
 var CHART_TYPE_2MONTH = 0;
 var CHART_TYPE_ALL = 1;
 var emptyStar = '***'
@@ -35,7 +37,7 @@ export default class UserHomePageTab0 extends Component{
     isStatisticPage: PropTypes.bool,
     userId: PropTypes.number.isRequired,
     userName: PropTypes.string.isRequired,
-    backRefresh: React.PropTypes.func,
+    backRefresh: PropTypes.func,
     isPrivate: PropTypes.bool,
   }
 
@@ -356,7 +358,8 @@ export default class UserHomePageTab0 extends Component{
   }
 
   cardWarpperRender() {
-		var _scrollView: ScrollView;
+    // var _scrollView: ScrollView;
+    var _scrollView
 
 		if(this.state.cards.length > 0 && !this.props.isPrivate) {
 			var lastIndex = this.state.cards.length - 1;

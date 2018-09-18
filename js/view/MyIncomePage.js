@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	View,
@@ -51,15 +52,17 @@ var defaultRowData = [
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var RULE_DIALOG = "ruleDialog";
-var MyIncomePage = React.createClass({
-	rules: [
+var MyIncomePage = createReactClass({
+    displayName: 'MyIncomePage',
+
+    rules: [
 		"盈交易平台交易金等同于现金，开通实盘账户后，可以手动申请转到实盘账户，转入成功后以短信告知；",
     "用户累计交易金额（即历次交易投入的本金之和）达到5000美元、交易次数达到20次，赠送的交易金即可提现；",
     "交易金可以通过签到、模拟交易、实盘交易等方式获取；",
     "模拟交易金：用户通过模拟下单交易，每日可以获得0.5元交易金。",
   ],
 
-	getInitialState: function() {
+    getInitialState: function() {
 		return {
 			totalReward: '--',
 			unpaidReward: '--',
@@ -70,7 +73,7 @@ var MyIncomePage = React.createClass({
 		};
 	},
 
-	componentDidMount: function(){
+    componentDidMount: function(){
 		var unpaidReward = LogicData.getUnpaidReward();
 		if(unpaidReward == null){
 			StorageModule.loadUnpaidReward()
@@ -87,7 +90,7 @@ var MyIncomePage = React.createClass({
 		}
 	},
 
-	refreshData: function(){
+    refreshData: function(){
 		var userData = LogicData.getUserData();
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
@@ -154,16 +157,16 @@ var MyIncomePage = React.createClass({
 		}
 	},
 
-	pressBackButton: function() {
+    pressBackButton: function() {
 		this.props.showTabbar()
 		this.props.navigator.pop()
 	},
 
-	showDialog: function(){
+    showDialog: function(){
 		this.refs[RULE_DIALOG].show();
 	},
 
-	showRules: function(){
+    showRules: function(){
 		this.props.navigator.push({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			title: LS.str("MY_REWARD_RULES"),
@@ -171,7 +174,7 @@ var MyIncomePage = React.createClass({
 		});
 	},
 
-	gotoNext: function(){
+    gotoNext: function(){
 		this.props.navigator.push({
 			name: MainPage.WITHDRAW_INCOME_ROUTE,
 			minTransfer: this.state.minTransfer,
@@ -179,7 +182,7 @@ var MyIncomePage = React.createClass({
 		});
 	},
 
-	gotoOpenAccount: function(){
+    gotoOpenAccount: function(){
 		OpenAccountRoutes.getLatestInputStep()
 		.then(step=>{
 			var meData = LogicData.getMeData();
@@ -205,7 +208,7 @@ var MyIncomePage = React.createClass({
 
 	},
 
-	renderTotalIncome: function(){
+    renderTotalIncome: function(){
 		return(
 				<View style={{flex:1, flexDirection: 'row', justifyContent: 'space-around'}}>
 					<View style={styles.totalTextContainer}>
@@ -228,7 +231,7 @@ var MyIncomePage = React.createClass({
 			);
 	},
 
-	renderRow: function(rowData, sectionID, rowID) {
+    renderRow: function(rowData, sectionID, rowID) {
 		if(rowData.type == 'header'){
 			return (
 				<View style={[styles.headerWrapper, {backgroundColor: ColorConstants.TITLE_BLUE}]}>
@@ -244,7 +247,7 @@ var MyIncomePage = React.createClass({
 		);
 	},
 
-	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
+    renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
 		if(rowID == 0){
 			return (
 				<View style={[styles.line, {height: 10}]} key={rowID}>
@@ -260,7 +263,7 @@ var MyIncomePage = React.createClass({
 		}
 	},
 
-	renderOpenAccountButton: function(liveAccStatus){
+    renderOpenAccountButton: function(liveAccStatus){
 		if(liveAccStatus == 0 || liveAccStatus == 3){
 			return (
 				<TouchableOpacity onPress={()=>this.gotoOpenAccount()}>
@@ -278,7 +281,7 @@ var MyIncomePage = React.createClass({
 		}
 	},
 
-	renderNoticeView: function(){
+    renderNoticeView: function(){
 		var meData = LogicData.getMeData();
 		var notLogin = Object.keys(meData).length === 0
 		if(!notLogin){
@@ -301,7 +304,7 @@ var MyIncomePage = React.createClass({
 		return null;
 	},
 
-	renderTrasferButton: function(){
+    renderTrasferButton: function(){
 		var nextEnabled = false;
 		var meData = LogicData.getMeData();
 		var notLogin = Object.keys(meData).length === 0
@@ -326,7 +329,7 @@ var MyIncomePage = React.createClass({
 		);
 	},
 
-	render: function() {
+    render: function() {
 
 
 		return (

@@ -1,5 +1,7 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {
 	StyleSheet,
@@ -51,37 +53,33 @@ if (Platform.OS === 'ios') {
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 var {EventCenter, EventConst} = require("../EventCenter");
-var MeConfigPage = React.createClass({
 
-	propTypes: {
-		onPopBack: React.PropTypes.func,
-	},
+class MeConfigPage extends React.Component {
+    static propTypes = {
+		onPopBack: PropTypes.func,
+	};
 
-	getDefaultProps: function(){
-		return {
-				onPopBack: ()=>{}
-		};
-	},
+    static defaultProps = {
+            onPopBack: ()=>{}
+    };
 
-	getInitialState: function() {
-		return {
-			dataSource: ds.cloneWithRows(listRawData),
-			currentVersionCode: LogicData.getCurrentVersionCode(),
-			onlineVersionCode: LogicData.getOnlineVersionCode(),
-			onlineVersionName: LogicData.getOnlineVersionName(),
-			promotionCode: null,
-		};
-	},
+    state = {
+        dataSource: ds.cloneWithRows(listRawData),
+        currentVersionCode: LogicData.getCurrentVersionCode(),
+        onlineVersionCode: LogicData.getOnlineVersionCode(),
+        onlineVersionName: LogicData.getOnlineVersionName(),
+        promotionCode: null,
+    };
 
-	componentWillMount: function(){
+    componentWillMount() {
 		//TODO: use real API.
 		this.refreshData();
 		this.setState({
 			languageSetting: LogicData.getLanguageEn()=='1'?'Change to Chinese':'切换成英文'
 		})
-	},
+	}
 
-	refreshData: function(){
+    refreshData = () => {
 		var meData = LogicData.getMeData();
 		var notLogin = Object.keys(meData).length === 0
 
@@ -91,9 +89,9 @@ var MeConfigPage = React.createClass({
 				promotionCode: meData.promotionCode,
 			})
 		}
-	},
+	};
 
-	gotoWebviewPage: function(targetUrl, title, hideNavBar) {
+    gotoWebviewPage = (targetUrl, title, hideNavBar) => {
 		var userData = LogicData.getUserData()
 		var userId = userData.userId
 		if (userId == undefined) {
@@ -112,9 +110,9 @@ var MeConfigPage = React.createClass({
 			title: title,
 			isShowNav: hideNavBar ? false : true,
 		});
-	},
+	};
 
-	onSelectNormalRow: function(rowData) {
+    onSelectNormalRow = (rowData) => {
 		//todo
 		if(rowData.subtype === 'promotionCode'){
 			var meData = LogicData.getMeData();
@@ -164,9 +162,9 @@ var MeConfigPage = React.createClass({
 		}else if(rowData.subtype === 'version'){
 			this.upgradeAppVersion();
 		}
-	},
+	};
 
-	askForSendEmailToModifyPwd:function(){
+    askForSendEmailToModifyPwd = () => {
 
 		var meData = LogicData.getMeData();
 
@@ -178,9 +176,9 @@ var MeConfigPage = React.createClass({
 					{text: LS.str("CONFIG_SEND"), onPress: () => this.sendEmailForModifyPwd()},
 				]
 			)
-	},
+	};
 
-	sendEmailForModifyPwd:function(){
+    sendEmailForModifyPwd = () => {
 		var userData = LogicData.getUserData()
 
 		NetworkModule.fetchTHUrl(
@@ -202,9 +200,9 @@ var MeConfigPage = React.createClass({
 				console.log('登出失败 2');
 			}.bind(this)
 		)
-	},
+	};
 
-	shareApp:function(){
+    shareApp = () => {
 		var url = NetConstants.TRADEHERO_API.SHARE_DOWNLOAD_URL;
 		MainPage.showSharePage({
 			title: "盈交易-ayondo亚洲中文交易平台",
@@ -213,16 +211,16 @@ var MeConfigPage = React.createClass({
       webpageUrl: url,
       imageUrl: NetConstants.TRADEHERO_API.SHARE_LOGO_URL,
 		});
-	},
+	};
 
-	upgradeAppVersion: function(){
+    upgradeAppVersion = () => {
 		if(this.state.onlineVersionCode > this.state.currentVersionCode){
 			VersionControlModule.gotoDownloadPage();
 		}
 
-	},
+	};
 
-	logoutAccountActualAlert:function(){
+    logoutAccountActualAlert = () => {
 		Alert.alert(
 			LS.str("TS"),
 			LS.str("CONFIG_LOGOUT_LIVE"),
@@ -231,9 +229,9 @@ var MeConfigPage = React.createClass({
 					{text: LS.str("QD"), onPress: () => this.logoutAccountActual()},
 				]
 			)
-	},
+	};
 
-	change2ActualOrSimu:function() {
+    change2ActualOrSimu = () => {
 		Alert.alert(
 			LS.str("TS"),
 			LS.str("CONFIG_GO_TO_DEMO"),
@@ -242,9 +240,9 @@ var MeConfigPage = React.createClass({
 					{text: LS.str("QD"), onPress: () => this.logout2Simulator()},
 				]
 			)
-	},
+	};
 
-	logout: function(){
+    logout = () => {
 		//TODO
 		Alert.alert(
 			LS.str("TS"),
@@ -254,9 +252,9 @@ var MeConfigPage = React.createClass({
 					{text: LS.str("QD"), onPress: () => this.sendToSwitchAccountDemo()},
 				]
 			)
-	},
+	};
 
-	logoutAccountActual:function(){
+    logoutAccountActual = () => {
 		var userData = LogicData.getUserData()
 
 		NetworkModule.fetchTHUrl(
@@ -280,35 +278,35 @@ var MeConfigPage = React.createClass({
 				console.log('登出失败 2');
 			}.bind(this)
 		)
-	},
+	};
 
-	logoutAccountActualNative(){
+    logoutAccountActualNative = () => {
 		LogicData.setActualLogin(false);
 		// if(this.props.onPopBack){
 		//  this.props.onPopBack();
 		// }
 		this.props.navigator.pop();
-	},
+	};
 
-	logout2Simulator: function(){
+    logout2Simulator = () => {
 		LogicData.setAccountState(false)
 		this.props.navigator.pop();
 		// if(this.props.onPopBack){
 		// 	this.props.onPopBack();
 		// }
 		MainPage.refreshMainPage()
-	},
+	};
 
-	logoutCurrentAccount: function(){
+    logoutCurrentAccount = () => {
 		LocalDataUpdateModule.removeUserData();
 
 		this.props.navigator.pop();
 		// if(this.props.onPopBack){
 		// 	this.props.onPopBack();
 		// }
-	},
+	};
 
-	sendToSwitchAccountDemo:function(){
+    sendToSwitchAccountDemo = () => {
 		var userData = LogicData.getUserData()
 		var urlToSend = NetConstants.CFD_API.SWITCH_TO_DEMO;
 		console.log('sendToSwitchAccountStatus url = ' + urlToSend);
@@ -328,9 +326,9 @@ var MeConfigPage = React.createClass({
 				console.log(result.errorMessage)
 			}
 		)
-	},
+	};
 
-	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
+    renderSeparator = (sectionID, rowID, adjacentRowHighlighted) => {
 		var marginLeft = 0
 		//if (rowID > 1 && rowID < 3){
 		//	marginLeft = 15
@@ -340,9 +338,9 @@ var MeConfigPage = React.createClass({
 				<View style={[styles.separator, {marginLeft: marginLeft}]}/>
 			</View>
 			)
-	},
+	};
 
-	renderVersion: function(){
+    renderVersion = () => {
 		if(this.state.onlineVersionCode > this.state.currentVersionCode){
 			return (
 				 <Text style={[styles.contentValue, {color:ColorConstants.title_blue()}]}>更新到{this.state.onlineVersionName}版本</Text>
@@ -352,9 +350,9 @@ var MeConfigPage = React.createClass({
 				 <Text style={styles.contentValue}>{packageVersion}</Text>
 			)
 		}
-	},
+	};
 
-	languageChange: function(){
+    languageChange = () => {
 		LogicData.setLanguageEn(LogicData.getLanguageEn()=='0'?'1':'0');
 		this.setState({
 			languageSetting: LogicData.getLanguageEn()=='1'?'Change to Chinese':'切换成英文'
@@ -362,9 +360,9 @@ var MeConfigPage = React.createClass({
 		EventCenter.emitLanguageChangedEvent();
 
 		this.postLanguageSetting();
-	},
+	};
 
-	postLanguageSetting: function(){
+    postLanguageSetting = () => {
 		var userData = LogicData.getUserData();
 		var notLogin = Object.keys(userData).length === 0;
 		if (!notLogin) {
@@ -391,11 +389,9 @@ var MeConfigPage = React.createClass({
 
 				})
 		}
-	},
+	};
 
-
-
-	renderRow: function(rowData, sectionID, rowID) {
+    renderRow = (rowData, sectionID, rowID) => {
 		var meData = LogicData.getMeData();
 
 		var notLogin = Object.keys(meData).length === 0
@@ -457,9 +453,9 @@ var MeConfigPage = React.createClass({
 	 			</TouchableOpacity>
 	 		)
 		 }
-	},
+	};
 
-	renderListView: function(){
+    renderListView = () => {
 		var listDataView = listRawData.map((data, i)=>{
 			var row = this.renderRow(data, 's1', i)
 			return(
@@ -474,9 +470,9 @@ var MeConfigPage = React.createClass({
 			<View>
 				{listDataView}
 			</View>);
-	},
+	};
 
-	render: function() {
+    render() {
 		return (
 			<View style={styles.wrapper}>
 				<ScrollView>
@@ -484,8 +480,8 @@ var MeConfigPage = React.createClass({
 				</ScrollView>
 			</View>
 		);
-	},
-});
+	}
+}
 
 var styles = StyleSheet.create({
 	wrapper: {

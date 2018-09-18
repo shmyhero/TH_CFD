@@ -22,23 +22,20 @@ var didFocusSubscription = null;
 
 // var stockAlertList = [];
 
-var EditOwnStocksPage = React.createClass({
+class EditOwnStocksPage extends React.Component {
+    state = {
+        stockAlertList: [],
+    };
 
-	getInitialState: function() {
-		return {
-			stockAlertList: [],
-		};
-	},
+    gotoNext = () => {
+	};
 
-	gotoNext: function() {
-	},
-
-	pressBackButton: function() {
+    pressBackButton = () => {
 		this.props.showTabbar()
 		this.props.navigator.pop()
-	},
+	};
 
-	gotoEditAlertPage: function(alertData) {
+    gotoEditAlertPage = (alertData) => {
 
     var stockInfo = LogicData.getStockFromOwnStockData(alertData);
 		var stockAlert = this.state.stockAlertList.find((alert)=>{return alert.SecurityId === alertData})
@@ -50,9 +47,9 @@ var EditOwnStocksPage = React.createClass({
 			stockAlert: stockAlert,
 			onAlertSetComplete: this.onAlertSetComplete,
 		})
-	},
+	};
 
-	render: function() {
+    render() {
 
 		var userData = LogicData.getUserData()
 	 	var notLogin = Object.keys(userData).length === 0
@@ -72,17 +69,17 @@ var EditOwnStocksPage = React.createClass({
 					alertData={JSON.stringify(this.state.stockAlertList)}/>
 			</View>
 		);
-	},
+	}
 
-	onAlertSetComplete: function() {
+    onAlertSetComplete = () => {
 		this.loadAlertList();
-	},
+	};
 
- 	componentDidMount: function() {
+    componentDidMount() {
 		 this.loadAlertList();
-	},
+	}
 
-	loadAlertList: function(){
+    loadAlertList = () => {
 		var userData = LogicData.getUserData()
 	 	var notLogin = Object.keys(userData).length === 0
 	 	if(!notLogin){
@@ -107,11 +104,8 @@ var EditOwnStocksPage = React.createClass({
 			 }
 		 )
 		}
-	},
-
-
-
-});
+	};
+}
 
 
 

@@ -39,24 +39,21 @@ var listRawData = [
 ]
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-var MyCreditsPage = React.createClass({
+class MyCreditsPage extends React.Component {
+    state = {
+        dataSource: ds.cloneWithRows(listRawData),
+        creditsTotal:'--',
+        creditsRemain:'--',
+        // creditsGetLiveOrder:'--',
+        // creditsGetLike:'--',
+        // creditsGetShare:'--',
+    };
 
-	getInitialState: function() {
-		return {
-			dataSource: ds.cloneWithRows(listRawData),
-			creditsTotal:'--',
-			creditsRemain:'--',
-			// creditsGetLiveOrder:'--',
-			// creditsGetLike:'--',
-			// creditsGetShare:'--',
-		};
-	},
-
-	componentDidMount: function(){
+    componentDidMount() {
 		this.refreshData();
-	},
+	}
 
-	refreshData: function(){
+    refreshData = () => {
 		var userData = LogicData.getUserData();
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
@@ -101,22 +98,22 @@ var MyCreditsPage = React.createClass({
 				}
 			);
  		}
-	},
+	};
 
-	pressBackButton: function() {
+    pressBackButton = () => {
 		this.props.showTabbar()
 		this.props.navigator.pop()
-	},
+	};
 
-	showRules: function(){
+    showRules = () => {
 		this.props.navigator.push({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			title: LS.str('JFGZ'),
 			url:NetConstants.TRADEHERO_API.CREDITS_RULE
 		});
-	},
+	};
 
-	enterCredits:function(){
+    enterCredits = () => {
 		var userData = LogicData.getUserData();
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
@@ -129,34 +126,34 @@ var MyCreditsPage = React.createClass({
 				backFunction: ()=>{this.refreshData()}
 			});
 		}
-	},
+	};
 
-  renderTotalIncome: function(){
-		var strLJHDJF = LS.str('LJHDJF')
-		var strSYJF = LS.str('SYJF')
-    return(
-				<View style={{flex:1, flexDirection: 'row', justifyContent: 'space-around'}}>
-					<View style={styles.totalTextContainer}>
-		        <Text style={styles.totalRewardTitleText}>
-		          {strLJHDJF}
-		        </Text>
-		        <Text style={styles.totalRewardText}>
-		          {this.state.creditsTotal}
-		        </Text>
-		      </View>
-					<View style={styles.totalTextContainer}>
-						<Text style={styles.totalRewardTitleText}>
-							{strSYJF}
-						</Text>
-						<Text style={styles.totalRewardText}>
-							{this.state.creditsRemain}
-						</Text>
-					</View>
-				</View>
-    );
-  },
+    renderTotalIncome = () => {
+          var strLJHDJF = LS.str('LJHDJF')
+          var strSYJF = LS.str('SYJF')
+      return(
+                  <View style={{flex:1, flexDirection: 'row', justifyContent: 'space-around'}}>
+                      <View style={styles.totalTextContainer}>
+                  <Text style={styles.totalRewardTitleText}>
+                    {strLJHDJF}
+                  </Text>
+                  <Text style={styles.totalRewardText}>
+                    {this.state.creditsTotal}
+                  </Text>
+                </View>
+                      <View style={styles.totalTextContainer}>
+                          <Text style={styles.totalRewardTitleText}>
+                              {strSYJF}
+                          </Text>
+                          <Text style={styles.totalRewardText}>
+                              {this.state.creditsRemain}
+                          </Text>
+                      </View>
+                  </View>
+      );
+    };
 
-	renderBanner:function(){
+    renderBanner = () => {
 		return(
 			<View style = {{height:126,width:width,marginBottom:10}}>
 			 <TouchableOpacity onPress={()=>this.gotoBannerPage()}>
@@ -167,13 +164,13 @@ var MyCreditsPage = React.createClass({
 				</TouchableOpacity>
 			</View>
 		)
-	},
+	};
 
-	gotoBannerPage:function(){
+    gotoBannerPage = () => {
 		this.enterCredits()
-	},
+	};
 
-	renderRow: function(rowData, sectionID, rowID) {
+    renderRow = (rowData, sectionID, rowID) => {
 		if(rowData.type == 'header'){
 			return (
 					<View style={[styles.headerWrapper, {backgroundColor: ColorConstants.TITLE_BLUE}]}>
@@ -200,9 +197,9 @@ var MyCreditsPage = React.createClass({
 				</View>
 			);
 		}
-	},
+	};
 
-	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
+    renderSeparator = (sectionID, rowID, adjacentRowHighlighted) => {
 		if(rowID == 0){
 			return (
 				<View style={[styles.line, {height: 10}]} key={rowID}>
@@ -216,10 +213,9 @@ var MyCreditsPage = React.createClass({
 				</View>
 				)
 		}
-	},
+	};
 
-
-	render: function() {
+    render() {
 		var strWDJF = LS.str('WDJF')
 		var strGZ = LS.str('RULES')
 		return (
@@ -234,8 +230,8 @@ var MyCreditsPage = React.createClass({
 					renderSeparator={this.renderSeparator} />
 			</View>
 		);
-	},
-});
+	}
+}
 
 var styles = StyleSheet.create({
   wrapper:{

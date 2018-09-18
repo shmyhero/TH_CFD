@@ -1,6 +1,9 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
+import createReactClass from 'create-react-class';
 import TimerMixin from 'react-timer-mixin';
 import {
 	StyleSheet,
@@ -98,17 +101,18 @@ var mokeData = [
     // security: { id: 36004, name: '美国科技股100' },
 	// position: { id: '106828530550', invest: 50, leverage: 100, isLong: false } },
 ]
-   
+
 
 var childHeights=[];
 var listViewOffY = 0;
 
-var HomePage = React.createClass({
-	mixins: [TimerMixin],
-	navBarPressedCount: 0,
-	developPageTriggerCount: 10,
+var HomePage = createReactClass({
+    displayName: 'HomePage',
+    mixins: [TimerMixin],
+    navBarPressedCount: 0,
+    developPageTriggerCount: 10,
 
-	getInitialState: function() {
+    getInitialState: function() {
 		return {
 			dataSource: ds.cloneWithRows(PAGES),
 			rawPopularityInfo: [],
@@ -126,17 +130,17 @@ var HomePage = React.createClass({
 		};
 	},
 
-	propTypes: {
-		showIncomeDialogWhenNecessary: React.PropTypes.func,
+    propTypes: {
+		showIncomeDialogWhenNecessary: PropTypes.func,
 	},
 
-	getDefaultProps: function() {
+    getDefaultProps: function() {
 		return {
 			showIncomeDialogWhenNecessary: ()=>{}
 		}
 	},
 
-	componentWillMount: function() {  
+    componentWillMount: function() {  
 
 		if(LogicData.getAccountState()){
 			this.loadData(false)
@@ -148,7 +152,7 @@ var HomePage = React.createClass({
 		} 
 	},
 
-	loadUnreadMessage: function(){
+    loadUnreadMessage: function(){
 		var userData = LogicData.getUserData();
 		var login = Object.keys(userData).length !== 0
 		if (!login){
@@ -183,12 +187,12 @@ var HomePage = React.createClass({
 		);
 	},
 
-	resetPage: function(){
+    resetPage: function(){
 		this.setState(this.getInitialState());
 		this.refs[SCROLL_VIEW] && this.refs[SCROLL_VIEW].scrollTo({x:0, y:0})
 	},
 
-	reloadPage: function(){
+    reloadPage: function(){
 		console.log("reloadPage " + LogicData.getTabIndex());
 		console.log("MainPage.HOME_PAGE_TAB_INDEX" +  MainPage.HOME_PAGE_TAB_INDEX)
 		if(LogicData.getTabIndex() == MainPage.HOME_PAGE_TAB_INDEX){
@@ -204,7 +208,7 @@ var HomePage = React.createClass({
 		}
 	},
 
-	reloadBanner: function() {
+    reloadBanner: function() {
 		var userData = LogicData.getUserData();
 
 		this.refs[CARDS_LIST] && this.refs[CARDS_LIST].scrollTo({x:0})
@@ -233,7 +237,7 @@ var HomePage = React.createClass({
 		); 
 	},
 
-	loadCards: function() {
+    loadCards: function() {
 
 		var url = NetConstants.CFD_API.GET_HOME_CARDS;
 		var userData = LogicData.getUserData()
@@ -260,14 +264,14 @@ var HomePage = React.createClass({
 
 	},
 
-	goToMailPage: function(){
+    goToMailPage: function(){
 		this.props.navigator.push({
 			name: MainPage.MY_MESSAGES_ROUTE,
 			onPopToRoute: this.loadUnreadMessage,
 		});
 	},
 
-	loadHomeData: function() {
+    loadHomeData: function() {
 
 		var url = NetConstants.CFD_API.GET_POPULARITY_API
 		if(LogicData.getAccountState()){
@@ -313,7 +317,7 @@ var HomePage = React.createClass({
 		);
 	},
 
-	componentDidMount: function() {
+    componentDidMount: function() {
 		LogicData.setTabIndex(MainPage.HOME_PAGE_TAB_INDEX);
 
 		var isConnected = WebSocketModule.isConnected();
@@ -387,14 +391,14 @@ var HomePage = React.createClass({
 		) 
 	},
 
-	componentWillUnmount: function() {
+    componentWillUnmount: function() {
 		didTabSelectSubscription && didTabSelectSubscription.remove();
 		didFocusSubscription && didFocusSubscription.remove();
 		networkConnectionChangedSubscription && networkConnectionChangedSubscription.remove();
 		accountStateChangedSubscription && accountStateChangedSubscription.remove();
 	},
 
-	onConnectionStateChanged: function(){
+    onConnectionStateChanged: function(){
 		var isConnected = WebSocketModule.isConnected();
 		this.setState({
 			connected: isConnected
@@ -406,7 +410,7 @@ var HomePage = React.createClass({
 		} 
 	},
 
-	onTabChanged: function(){
+    onTabChanged: function(){
 		LogicData.setTabIndex(MainPage.HOME_PAGE_TAB_INDEX);
 		WebSocketModule.cleanRegisteredCallbacks();
 
@@ -423,7 +427,7 @@ var HomePage = React.createClass({
 		
 	},
 
-	onDidFocus: function(event) {
+    onDidFocus: function(event) {
 		//didfocus emit in componentDidMount
 		if (event.data.route && MainPage.HOME_PAGE_ROUTE === event.data.route.name) {
 			console.log("on did focus homepage")
@@ -434,23 +438,23 @@ var HomePage = React.createClass({
 		}
 	},
 
-	forceloopSwipers: function() {
+    forceloopSwipers: function() {
 		if (Platform.OS === 'ios') {
     		var nowTime = (new Date()).valueOf();
     		if (nowTime - lastForceloopTime > 1200) {
     			console.log("forceloop:"+nowTime)
-				if (this.refs["bannerswiper"] !== undefined) {
-					this.refs["bannerswiper"].forceloop()
-				}
-				if (this.refs["topnewsswiper"] !== undefined) {
-					this.refs["topnewsswiper"].forceloop()
-				}
+				// if (this.refs["bannerswiper"] !== undefined) {
+				// 	this.refs["bannerswiper"].forceloop()
+				// }
+				// if (this.refs["topnewsswiper"] !== undefined) {
+				// 	this.refs["topnewsswiper"].forceloop()
+				// }
 				lastForceloopTime = nowTime
 			}
 		}
 	},
 
-	downloadBannerImages: function(images) {
+    downloadBannerImages: function(images) {
 		var promise = new Promise((resolve, reject) => {
 		  // do a thing, possibly async, then…
 			this.downloadOneBannerImage(images, 0, resolve);
@@ -458,7 +462,7 @@ var HomePage = React.createClass({
 		return promise;
 	},
 
-	downloadOneBannerImage: function(images, index, resolve) {
+    downloadOneBannerImage: function(images, index, resolve) {
 		console.log("downloadOneBannerImage: " + index)
 		if (index >= images.length) {
 			resolve()
@@ -497,7 +501,7 @@ var HomePage = React.createClass({
 		}
 	},
 
-	goToBannerPage: function(i) {
+    goToBannerPage: function(i) {
 		var trackingData = {};
 		trackingData[TalkingdataModule.KEY_BANNER_PAGE] = PAGES[i].header;
 		TalkingdataModule.trackEvent(TalkingdataModule.BANNER_EVENT, "", trackingData)
@@ -525,11 +529,11 @@ var HomePage = React.createClass({
 		}
 	},
 
-	gotoWebviewPage2: function(targetUrl, title, hideNavBar) {
+    gotoWebviewPage2: function(targetUrl, title, hideNavBar) {
 		this.props.navigator.push(this.getWebViewPageScene(targetUrl, title, hideNavBar));
 	},
 
-	getWebViewPageScene: function(targetUrl, title, hideNavBar) {
+    getWebViewPageScene: function(targetUrl, title, hideNavBar) {
 		var userData = LogicData.getUserData()
 		var userId = userData.userId
 		if (userId == undefined) {
@@ -550,7 +554,7 @@ var HomePage = React.createClass({
 		}
 	},
 
-	gotoInviteFriends:function(){
+    gotoInviteFriends:function(){
 		console.log("跳转至邀请好友");
 		var url = LogicData.getAccountState()?NetConstants.TRADEHERO_API.NEW_USER_INVITATION_ACTUAL:NetConstants.TRADEHERO_API.NEW_USER_INVITATION;
 		var userData = LogicData.getUserData()
@@ -565,7 +569,7 @@ var HomePage = React.createClass({
 		}
 	},
 
-	gotoCreateLiveAccount:function(){
+    gotoCreateLiveAccount:function(){
 		console.log("跳转至开通实盘");
 		var url = LogicData.getAccountState()?NetConstants.TRADEHERO_API.NEW_USER_INVITATION_ACTUAL:NetConstants.TRADEHERO_API.NEW_USER_INVITATION;
 		var userData = LogicData.getUserData()
@@ -580,8 +584,8 @@ var HomePage = React.createClass({
 		}
 	},
 
-	////0未注册 1已注册 2审核中 3审核失败
-	gotoAccountStateExce:function(){
+    ////0未注册 1已注册 2审核中 3审核失败
+    gotoAccountStateExce:function(){
 		var meData = LogicData.getMeData();
 		console.log('提示：','liveAccStatus = '+meData.liveAccStatus + ', liveAccRejReason = '+ meData.liveAccRejReason)
 	  accStatus = meData.liveAccStatus;
@@ -599,7 +603,7 @@ var HomePage = React.createClass({
 		}
 	},
 
-	gotoOpenLiveAccount:function(){
+    gotoOpenLiveAccount:function(){
 		var meData = LogicData.getMeData();
 	  console.log("showOARoute medata: " + JSON.stringify(meData));
 
@@ -619,9 +623,8 @@ var HomePage = React.createClass({
 				this.props.navigator.push(OARoute);
 		}
 	},
- 
 
-	gotoWebviewPage: function(targetUrl, title, shareID, shareTitle, shareDescription, sharingTrackingEvent, shareUrl,isShowNav, themeColor) {
+    gotoWebviewPage: function(targetUrl, title, shareID, shareTitle, shareDescription, sharingTrackingEvent, shareUrl,isShowNav, themeColor) {
 		var userData = LogicData.getUserData()
 		var userId = userData.userId
 		if (userId == undefined) {
@@ -668,7 +671,7 @@ var HomePage = React.createClass({
 		this.props.navigator.push(result);
 	},
 
-	gotoCompetitionPage: function(){
+    gotoCompetitionPage: function(){
 		TalkingdataModule.trackEvent(TalkingdataModule.MOVIE_ACTIVITY_EVENT);
 
 		var url = NetConstants.TRADEHERO_API.COMPETITION_PAGE_URL;
@@ -687,9 +690,8 @@ var HomePage = React.createClass({
 			backFunction: this.forceloopSwipers,
 		});
 	},
- 
 
-	gotoCheckinPage: function(){
+    gotoCheckinPage: function(){
 		TalkingdataModule.trackEvent(TalkingdataModule.CHECK_IN_ACTIVITY_EVENT);
 		var userData = LogicData.getUserData()
 		var notLogin = Object.keys(userData).length === 0
@@ -703,18 +705,17 @@ var HomePage = React.createClass({
 		}
 	},
 
-	showCheckInPage: function(){
+    showCheckInPage: function(){
 		this.props.navigator.push({
 			name:MainPage.DAY_SIGN_ROUTE,
 		});
 	},
 
-	endsWith: function(str, suffix) {
+    endsWith: function(str, suffix) {
 	    return str.indexOf(suffix, str.length - suffix.length) !== -1;
 	},
- 
 
-	gotoNewUserGuide:function(){
+    gotoNewUserGuide:function(){
 		var targetUrl = LogicData.getAccountState()?NetConstants.TRADEHERO_API.WEBVIEW_URL_SCHOOL_ACTUAL:NetConstants.TRADEHERO_API.WEBVIEW_URL_SCHOOL;
 		console.log('targetUrl : ' + targetUrl);
 		this.props.navigator.push({
@@ -726,7 +727,7 @@ var HomePage = React.createClass({
 
 	},
 
-	logoutPress: function() {
+    logoutPress: function() {
 		StorageModule.removeUserData()
 		.then(() => {
 			LogicData.removeUserData()
@@ -736,14 +737,14 @@ var HomePage = React.createClass({
 		})
 	},
 
-	gotoStockDetail: function(rowData) {
+    gotoStockDetail: function(rowData) {
   		this.props.navigator.push({
 			name: MainPage.STOCK_DETAIL_ROUTE,
 			stockRowData: rowData,
 		});
 	},
 
-	gotoStockDetalWithID: function(card){
+    gotoStockDetalWithID: function(card){
 		var stockRowData = {
 			name: card.stockName,
 			id: parseInt(card.stockID),
@@ -755,7 +756,7 @@ var HomePage = React.createClass({
 		});
 	},
 
-	renderPopularityRow: function(rowData, sectionID, rowID, highlightRow) {
+    renderPopularityRow: function(rowData, sectionID, rowID, highlightRow) {
 		var percent = 0
 		var stockName = ""
 		var stockSymbol = ""
@@ -802,11 +803,11 @@ var HomePage = React.createClass({
 			</TouchableOpacity>)
 	},
 
-	renderSeparator:function(sectionID, rowID, adjacentRowHighlighted) {
+    renderSeparator:function(sectionID, rowID, adjacentRowHighlighted) {
 		return(<View key={rowID} style={styles.separator}/>)
 	},
 
-	showPopularityDetail: function() {
+    showPopularityDetail: function() {
 		this.props.navigator.push({
 		 	name: MainPage.STOCK_POPULARITY_ROUTE,
 			data: this.state.rawPopularityInfo,
@@ -814,7 +815,7 @@ var HomePage = React.createClass({
 		});
 	},
 
-	renderPopularityView: function() {
+    renderPopularityView: function() {
 		var strSCQX = LS.str('SCQX')
 		var strMORE = LS.str('GD')
 		if(this.state.rawPopularityInfo.length < 3 || LogicData.isIR()){
@@ -850,10 +851,9 @@ var HomePage = React.createClass({
 			</View>
 			)
 		}
-	}, 
+	},
 
-
-	renderNewUser:function(){
+    renderNewUser:function(){
 		if(LogicData.getAccountState()){
 			return (<View/>)
 		}else{
@@ -874,7 +874,7 @@ var HomePage = React.createClass({
 		}
 	},
 
-	renderCards: function(){
+    renderCards: function(){
 		var strSYFX = LS.str('SYFX')
 			var cardItems = this.state.rawCardsInfo.map(
 			(card, i) =>
@@ -908,7 +908,7 @@ var HomePage = React.createClass({
 			}
 	},
 
-	pressCard:function(index){
+    pressCard:function(index){
 		if(this.state.rawCardsInfo[index].likes == undefined){
 				//special Card like gold and ag
 			// Alert.alert('go to ' + this.state.rawCardsInfo[index].stockName);
@@ -927,7 +927,7 @@ var HomePage = React.createClass({
 		}
 	},
 
-	renderBannar: function(i) {
+    renderBannar: function(i) {
 		return(
 			<TouchableOpacity
 				activeOpacity = {0.8}
@@ -939,7 +939,7 @@ var HomePage = React.createClass({
 		)
 	},
 
-	tapFirstTopNews: function(firstNews) {
+    tapFirstTopNews: function(firstNews) {
 		var url = NetConstants.TRADEHERO_API.WEBVIEW_TOP_NEWS_PAGE + firstNews.id;
 		if(LogicData.getAccountState()){
 			url = NetConstants.TRADEHERO_API.WEBVIEW_TOP_NEWS_PAGE_ACTUAL+firstNews.id
@@ -956,7 +956,7 @@ var HomePage = React.createClass({
 			TalkingdataModule.HEADER_SHARE_EVENT);
 	},
 
-	tapTopNews: function(url) {
+    tapTopNews: function(url) {
 		this.gotoWebviewPage(url,
 			LS.str('MRTT'),
 			false,
@@ -965,7 +965,7 @@ var HomePage = React.createClass({
 			TalkingdataModule.HEADER_SHARE_EVENT)
 	},
 
-	renderOneNews: function(news) {
+    renderOneNews: function(news) {
 		var header = news.header
 		var url = NetConstants.TRADEHERO_API.WEBVIEW_TOP_NEWS_PAGE+news.id
 		if(LogicData.getAccountState()){
@@ -987,7 +987,7 @@ var HomePage = React.createClass({
 		)
 	},
 
-	renderTopNews: function() {
+    renderTopNews: function() {
 		var rowHeight = 60
 		var news = []
 		var len = this.state.topNews.length;
@@ -1032,7 +1032,7 @@ var HomePage = React.createClass({
 		}
 	},
 
-	renderEventItem: function(i){
+    renderEventItem: function(i){
 		var title;
 		var description;
 		var onPress;
@@ -1073,11 +1073,11 @@ var HomePage = React.createClass({
 		)
 	},
 
-	renderEventSeparator: function(){
+    renderEventSeparator: function(){
 		return(<View style={styles.eventSeparator}/>);
 	},
 
-	renderEventsRow: function(){
+    renderEventsRow: function(){
 		if(LogicData.getAccountState()){
 			return(
 				<View></View>
@@ -1093,7 +1093,7 @@ var HomePage = React.createClass({
 		}
 	},
 
-	renderEventSeparator2: function(){
+    renderEventSeparator2: function(){
 		if(LogicData.getAccountState()){
 			return(
 				<View></View>
@@ -1105,7 +1105,7 @@ var HomePage = React.createClass({
 		}
 	},
 
-	pressedNavBar: function(){
+    pressedNavBar: function(){
 		if(this.navBarPressedCount >= this.developPageTriggerCount - 1){
 			this.navBarPressedCount = 0;
 			this.props.navigator.push({
@@ -1125,7 +1125,7 @@ var HomePage = React.createClass({
 		}
 	},
 
-	renderUnreadCount: function(){
+    renderUnreadCount: function(){
 		if(this.state.unreadMessageCount > 0){
 			var text = this.state.unreadMessageCount > 9 ? "9+" : "" + this.state.unreadMessageCount;
 			return (
@@ -1140,7 +1140,7 @@ var HomePage = React.createClass({
 		}
 	},
 
-	renderMessageIcon: function(){
+    renderMessageIcon: function(){
 		var userData = LogicData.getUserData()
 		var login = Object.keys(userData).length !== 0
 		if(login){
@@ -1157,7 +1157,7 @@ var HomePage = React.createClass({
 		return null;
 	},
 
-	renderCheckInView: function(){
+    renderCheckInView: function(){
 		// if(LogicData.getAccountState()){
 			return (
 				<TouchableOpacity onPress={()=>this.gotoCheckinPage()}
@@ -1171,7 +1171,7 @@ var HomePage = React.createClass({
 		// return null
 	},
 
-	renderNavBar: function(){
+    renderNavBar: function(){
 		var strSY = LS.str('SHOUYE')
 		var strSYWLJ = LS.str('SYWLJ')
 		return(
@@ -1191,7 +1191,7 @@ var HomePage = React.createClass({
 		)
 	},
 
-	renderBgHint:function(){
+    renderBgHint:function(){
 		var strFCA_SUPERVISE = LS.str('FCA_SUPERVISE')
 		return(
 			<View style={[styles.bgHint, {width: width}]}>
@@ -1201,7 +1201,7 @@ var HomePage = React.createClass({
 	 	)
 	},
 
-	hexToRgb: function(hex) {
+    hexToRgb: function(hex) {
 	    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 	    return result ? {
 	        r: parseInt(result[1], 16),
@@ -1210,13 +1210,13 @@ var HomePage = React.createClass({
 	    } : null;
 	},
 
-	contentHeight: 0,
+    contentHeight: 0,
 
-	onContentSizeChange: function(contentWidth, contentHeight){
+    onContentSizeChange: function(contentWidth, contentHeight){
 		this.contentHeight = contentHeight;
 	},
 
-	onScroll: function(event){
+    onScroll: function(event){
 		console.log("event " + event.nativeEvent.contentOffset.y)
 		var rgb = this.hexToRgb(ColorConstants.title_blue())
 		var alpha = 0;
@@ -1237,7 +1237,7 @@ var HomePage = React.createClass({
 		});
 	},
 
-	delItem(id){
+    delItem(id){
 
 		LogicData.addRemovdedDynamicRow(id) 
 
@@ -1261,9 +1261,9 @@ var HomePage = React.createClass({
 
 		 }) 
 
-	}, 
+	},
 
-	_renderRow :function (rowData, sectionID, rowID)  {
+    _renderRow :function (rowData, sectionID, rowID)  {
 		// console.log('rowID = ' + rowID)
 		var id = rowID
 		return(
@@ -1373,7 +1373,7 @@ var HomePage = React.createClass({
         }
 	},
 
-	loadCacheListData:function(){
+    loadCacheListData:function(){
 
 		var userData = LogicData.getUserData();
 		var login = Object.keys(userData).length !== 0
@@ -1426,8 +1426,8 @@ var HomePage = React.createClass({
             )
         } 
     },
-	
-	closeAllRows: function(){
+
+    closeAllRows: function(){
 		if(this.state.currentOperatedRow != -1){
 			this.setState({
 				currentOperatedRow: -1,
@@ -1435,8 +1435,8 @@ var HomePage = React.createClass({
 			});
 		}
 	},
-	
-	_onLoadMore:function(){
+
+    _onLoadMore:function(){
 		this.closeAllRows();
 		// this._pullToRefreshListView.endLoadMore()   
 		console.log("Rambo 1")
@@ -1495,14 +1495,14 @@ var HomePage = React.createClass({
 			 
 			}
 		); 
-	},	
+	},
 
-	_onRefresh:function(){
+    _onRefresh:function(){
 		this.closeAllRows();
         this.loadData(true) 
 	},
-	
-	loadData:function(isRefresh){
+
+    loadData:function(isRefresh){
 		console.log("loadData isRefresh = "+isRefresh) ;
 		if(this.state.dataResponse.length<=0){
 			this.setState({
@@ -1583,21 +1583,21 @@ var HomePage = React.createClass({
                 color={ColorConstants.COLOR_CUSTOM_BLUE2}
                 size={'small'}/>
         )
-	} ,
+	},
 
-	onPopOut(){
+    onPopOut(){
 		console.log('重新刷新数据')
 		this.loadData(false)
 	},
-	
-	onPressedConfig:function(){
+
+    onPressedConfig:function(){
 		this.props.navigator.push({
 			name:MainPage.DYNAMIC_STATUS_CONFIG,
 			onPopOut:this.onPopOut
 		})
 	},
 
-	renderDateInfo:function(){
+    renderDateInfo:function(){
 
 		console.log('LOG ==> offY =' + listViewOffY)
 		var maxOff = listViewOffY
@@ -1633,7 +1633,7 @@ var HomePage = React.createClass({
 		)
 	},
 
-	_onChangeVisibleRows(visibleRows, changedRows){
+    _onChangeVisibleRows(visibleRows, changedRows){
 		// let visibleRowsCount = Object.keys(visibleRows.s1).length;
 		// console.log('visibleRows FirstItem is ：'+Object.keys(visibleRows.s1));
 		// console.log('visibleRows FirstItem is ：'+Object.keys(visibleRows.s1)[0]); 
@@ -1647,7 +1647,7 @@ var HomePage = React.createClass({
 		 
 	},
 
-	renderEmpty(){
+    renderEmpty(){
 		if(this.state.dataResponse&&this.state.dataResponse.length>0){
 		}else{
 			return(
@@ -1658,13 +1658,11 @@ var HomePage = React.createClass({
 		} 
 	},
 
-	 
-	_onScroll(event){ 
+    _onScroll(event){ 
 			listViewOffY = event.nativeEvent.contentOffset.y;
 	},
-	 
 
-	renderListView(){
+    renderListView(){
 		if(this.state.dataResponse&&this.state.dataResponse.length>0){
 			return(
 				<PullToRefreshListView
@@ -1696,7 +1694,7 @@ var HomePage = React.createClass({
 		} 
 	},
 
-	render: function() {
+    render: function() {
 		height = Dimensions.get('window').height;
 		width = Dimensions.get('window').width;
 		barWidth = Math.round(width/3)-12
@@ -1784,16 +1782,12 @@ var HomePage = React.createClass({
 			);
 		} 
 	},
-
-
-
-	
 });
 
 var styles = StyleSheet.create({
 	image: {
 		height: 239,
-		resizeMode: Image.resizeMode.stretch,
+		resizeMode: 'stretch',
 		backgroundColor:'transparent',
 	},
 	rowContainer: {
@@ -2080,7 +2074,7 @@ var styles = StyleSheet.create({
 	navBarIcon: {
 		width: 21,
 		height: 21,
-		resizeMode: Image.resizeMode.contain,
+		resizeMode: 'contain',
 	},
 
 	navBarIconRight: {

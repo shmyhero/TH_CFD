@@ -1,4 +1,5 @@
 'use strict';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import {
@@ -24,37 +25,34 @@ import {
 var ColorConstants = require('../ColorConstants')
 var Button = require('./component/Button')
 
-var AskForRestartPage = React.createClass({
+class AskForRestartPage extends React.Component {
+    static propTypes = {
+		updateDescription: PropTypes.string,
+		updateHash: PropTypes.string,
+		closeCallback: PropTypes.func,
+	};
 
-	propTypes: {
-		updateDescription: React.PropTypes.string,
-		updateHash: React.PropTypes.string,
-		closeCallback: React.PropTypes.func,
-	},
+    static defaultProps = {
+        updateDescription: '',
+        updateHash: '',
+        closeCallback: null,
+    };
 
-	getDefaultProps() {
-		return {
-			updateDescription: '',
-			updateHash: '',
-			closeCallback: null,
-		}
-	},
-
-	restartNow: function() {
+    restartNow = () => {
 		switchVersion(this.props.updateHash)
 		if (this.props.closeCallback) {
 			this.props.closeCallback()
 		}
-	},
+	};
 
-	restartLater: function() {
+    restartLater = () => {
 		switchVersionLater(this.props.updateHash)
 		if (this.props.closeCallback) {
 			this.props.closeCallback()
 		}
-	},
+	};
 
-	render: function() {
+    render() {
 		var {height, width} = Dimensions.get('window')
 		return (
 			<View style={styles.askForRestartView}>
@@ -85,8 +83,8 @@ var AskForRestartPage = React.createClass({
 				</View>
 			</View>
 		)
-	},
-});
+	}
+}
 
 var styles = StyleSheet.create({
 	askForRestartView: {

@@ -35,17 +35,15 @@ var listRawData = [
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-var MeAccountBindingPage = React.createClass({
-	getInitialState: function() {
-		return {
-			dataSource: ds.cloneWithRows(listRawData),
-			phoneNumber: null,
-			weChatOpenId: null,
-			wechatInstalled: false,
-		};
-	},
+class MeAccountBindingPage extends React.Component {
+    state = {
+        dataSource: ds.cloneWithRows(listRawData),
+        phoneNumber: null,
+        weChatOpenId: null,
+        wechatInstalled: false,
+    };
 
-	componentWillMount: function(){
+    componentWillMount() {
 		var userData = LogicData.getUserData()
 		var notLogin = Object.keys(userData).length === 0
 		WechatModule.isWechatInstalled()
@@ -55,9 +53,9 @@ var MeAccountBindingPage = React.createClass({
 			})
 			this.loadAccountBindingInfo(userData)
 		})
-	},
+	}
 
-	onSelectNormalRow: function(rowData) {
+    onSelectNormalRow = (rowData) => {
 		if(rowData.subtype === 'bindWeChat') {
 			this.wechatPressed();
 		}else if(rowData.subtype === 'bindMobile'){
@@ -70,9 +68,9 @@ var MeAccountBindingPage = React.createClass({
 				isMobileBinding: true,
 			});
 		}
-	},
+	};
 
-	loadAccountBindingInfo: function(userData){
+    loadAccountBindingInfo = (userData) => {
 		var meData = LogicData.getMeData();
 		console.log(JSON.stringify(meData))
 
@@ -90,9 +88,9 @@ var MeAccountBindingPage = React.createClass({
 		this.setState({
 			dataSource: ds.cloneWithRows(listRawData),
 		})
-	},
+	};
 
-	wechatPressed: function() {
+    wechatPressed = () => {
 		WechatModule.wechatLogin(
 			() => {
 				this.bindWechat()
@@ -100,9 +98,9 @@ var MeAccountBindingPage = React.createClass({
 
 			function() {}.bind(this)
 		)
-	},
+	};
 
-	bindWechat: function() {
+    bindWechat = () => {
 		//TODO: Use MeData.
 		var userData = LogicData.getUserData()
 		var wechatUserData = LogicData.getWechatUserData()
@@ -130,18 +128,18 @@ var MeAccountBindingPage = React.createClass({
 				Alert.alert(LS.str("TS"), result.errorMessage);
 			}
 		)
-	},
+	};
 
-	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
+    renderSeparator = (sectionID, rowID, adjacentRowHighlighted) => {
 		var marginLeft = 0
 		return (
 			<View style={styles.line} key={rowID}>
 				<View style={[styles.separator, {marginLeft: marginLeft}]}/>
 			</View>
 			)
-	},
+	};
 
-	renderRow: function(rowData, sectionID, rowID) {
+    renderRow = (rowData, sectionID, rowID) => {
 		if (rowData.type === 'mobile'){
 			//TODO: Use Real Data
 			if(this.state.phoneNumber !== null){
@@ -196,9 +194,9 @@ var MeAccountBindingPage = React.createClass({
 				return (<View></View>)
 			}
 		}
-	},
+	};
 
-	render: function() {
+    render() {
 		return (
 			<ListView
 	    	style={styles.list}
@@ -206,8 +204,8 @@ var MeAccountBindingPage = React.createClass({
 				renderRow={this.renderRow}
 				renderSeparator={this.renderSeparator} />
 		);
-	},
-});
+	}
+}
 
 var styles = StyleSheet.create({
 	wrapper: {

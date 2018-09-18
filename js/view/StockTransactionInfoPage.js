@@ -1,6 +1,9 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	View,
@@ -50,18 +53,19 @@ const ACHIEVEMENT_MARGIN_TOP = 40 * IMAGE_RESIZE_SCALE;
 // const CONTENT_WIDTH = 570;
 // const CONTENT_HEIGHT = 827;
 
-var StockTransactionInfoPage = React.createClass({
-	mixins: [Touchable.Mixin],
+var StockTransactionInfoPage = createReactClass({
+    displayName: 'StockTransactionInfoPage',
+    mixins: [Touchable.Mixin],
 
-	propTypes: {
-		transactionInfo: React.PropTypes.object,
-		card: React.PropTypes.object,
-		pageSettings: React.PropTypes.object,
-		hideFunction: React.PropTypes.func,
-		showReward: React.PropTypes.bool,
+    propTypes: {
+		transactionInfo: PropTypes.object,
+		card: PropTypes.object,
+		pageSettings: PropTypes.object,
+		hideFunction: PropTypes.func,
+		showReward: PropTypes.bool,
 	},
 
-	getDefaultProps() {
+    getDefaultProps() {
 		return {
 			transactionInfo: null,
 			card: null,
@@ -71,7 +75,7 @@ var StockTransactionInfoPage = React.createClass({
 		}
 	},
 
-	getInitialState: function() {
+    getInitialState: function() {
 		return merge(
 			this.touchableGetInitialState(),
 			{
@@ -80,7 +84,7 @@ var StockTransactionInfoPage = React.createClass({
 		);
 	},
 
-	componentWillMount: function(){
+    componentWillMount: function(){
 		var state = {};
 		if(this.props.card !== null){
 			state.card = this.props.card;
@@ -109,7 +113,7 @@ var StockTransactionInfoPage = React.createClass({
 		this.getCardLikedInfo()
 	},
 
-	getCardLikedInfo:function(){
+    getCardLikedInfo:function(){
 		console.log('getCardLikedInfo')
 		if(this.props.card==undefined){return}
 		
@@ -137,7 +141,7 @@ var StockTransactionInfoPage = React.createClass({
 			)
 	},
 
-	_showSharePanel: function(){
+    _showSharePanel: function(){
 		this.props.hideFunction && this.props.hideFunction();
 		var url = NetConstants.TRADEHERO_API.SHARE_ACHIEVEMENT_CARD_URL;
 		url = url.replace("<id>", this.state.card.cardId);
@@ -152,7 +156,7 @@ var StockTransactionInfoPage = React.createClass({
 		});
 	},
 
-	shareToWechat: function(type){
+    shareToWechat: function(type){
 		console.log("shareToWechat " + type)
 		var url = NetConstants.CFD_API.SHARE_CARD_TO_HOME;
 		url = url.replace("<id>", this.state.card.cardId);
@@ -183,7 +187,7 @@ var StockTransactionInfoPage = React.createClass({
 		}
 	},
 
-	likeTransaction: function(){
+    likeTransaction: function(){
 		if(!this.state.liked){
 			var userData = LogicData.getUserData();
 			var login = Object.keys(userData).length !== 0
@@ -222,7 +226,7 @@ var StockTransactionInfoPage = React.createClass({
 		}
 	},
 
-	renderAchievementCard: function(){
+    renderAchievementCard: function(){
 		if(this.state.card){
 			return (
 				<AchievementCard card={this.state.card} showReward={this.props.showReward}
@@ -233,12 +237,12 @@ var StockTransactionInfoPage = React.createClass({
 		}
 	},
 
-	gotoTrade:function(){
+    gotoTrade:function(){
 		console.log("gotoTrade");
 		MainPage.gotoTrade()
 	},
 
-	renderCardBorder: function(){
+    renderCardBorder: function(){
 		if(this.state.card){
 			var cardBorder = require('../../images/card_border.png');
 			return (
@@ -255,7 +259,7 @@ var StockTransactionInfoPage = React.createClass({
 		}
 	},
 
-	renderContent: function(){
+    renderContent: function(){
 		if(this.state.card){
 			return (
 				<View style={{/*flex: 1,*/ flexDirection:'column', alignSelf: 'stretch',
@@ -297,7 +301,7 @@ var StockTransactionInfoPage = React.createClass({
 		}
 	},
 
-	renderShare: function(){
+    renderShare: function(){
 		if(this.state.card && this.state.showShare){
 			return (
 				<TouchableOpacity style={styles.actionButton} onPress={() => this._showSharePanel()}>
@@ -307,7 +311,7 @@ var StockTransactionInfoPage = React.createClass({
 		}
 	},
 
-	renderLike: function(){
+    renderLike: function(){
 		if(this.state.card  && this.state.showLike){
 			var imgSource = this.state.liked ? require('../../images/card_liked.png') : require('../../images/cald_unliked.png');
 			return (
@@ -319,7 +323,7 @@ var StockTransactionInfoPage = React.createClass({
 		}
 	},
 
-	render: function() {
+    render: function() {
 		return (
 			<View style={styles.container}>
 				<TouchableOpacity activeOpacity={1}>

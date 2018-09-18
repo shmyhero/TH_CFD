@@ -1,5 +1,7 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {
 	StyleSheet,
@@ -42,29 +44,25 @@ var BANNERS = [
 
 var imageHeight = 311 / 750 * width
 
-var OAStatusPage = React.createClass({
+class OAStatusPage extends React.Component {
+    static propTypes = {
+		onLoginClicked: PropTypes.func,
+	};
 
-	propTypes: {
-		onLoginClicked: React.PropTypes.func,
-	},
+    state = {
+        // dataSource: ds.cloneWithPages(PAGES),
+    };
 
-	getInitialState: function() {
-		return {
-			// dataSource: ds.cloneWithPages(PAGES),
-		};
-	},
-
-	gotoNext: function() {
+    gotoNext = () => {
 		this.props.onLoginClicked()
-	},
+	};
 
-	helpPressed: function() {
+    helpPressed = () => {
 		NativeSceneModule.launchNativeScene('MeiQia')
 		// SentIntent.sendPhoneDial(CALL_NUMBER)
-	},
+	};
 
-
-	render: function() {
+    render() {
 		var strWELCOME = LS.str('WELCOME2YJY')
 		var strSERVICES = LS.str('SERVICE24HOURS')
 		var strLIVELOGIN = LS.str('SPDL')
@@ -88,9 +86,8 @@ var OAStatusPage = React.createClass({
 
 			</LinearGradient>
 		);
-	},
-
-});
+	}
+}
 
 var styles = StyleSheet.create({
 	wrapper: {

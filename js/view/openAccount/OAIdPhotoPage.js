@@ -1,6 +1,9 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	View,
@@ -85,7 +88,7 @@ var options = {
 const GenderTranslater = [
 	{"value":true, "displayText": "GENDER_MALE"},
 	{"value":false, "displayText": "GENDER_FEMALE"},
-] 
+]
 
 var defaultRawData = [
 	{"title":"OPEN_ACCOUNT_LAST_NAME", "key": "lastName", "value":"", hint:"OPEN_ACCOUNT_LAST_NAME_HINT", maxLength: 50, "ignoreInRegistery": true},	//TODO: add ignoreInRegistery when API is avaliable.
@@ -99,36 +102,37 @@ var defaultRawData = [
 	//{"title":"有效期限", "key": "validPeriod", "value":"", "type": "datePeriod"},
 ];
 
-var OAIdPhotoPage = React.createClass({
-	propTypes: {
-		data: React.PropTypes.object,
-		onPop: React.PropTypes.func,
+var OAIdPhotoPage = createReactClass({
+    displayName: 'OAIdPhotoPage',
+
+    propTypes: {
+		data: PropTypes.object,
+		onPop: PropTypes.func,
 	},
 
-	getDefaultProps() {
+    getDefaultProps() {
 		return {
 			data: {},
 			onPop: ()=>{},
 		}
 	},
 
-	listRawData: [],
-	
-	ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 }),
+    listRawData: [],
+    ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 }),
 
-	componentWillMount: function(){
+    componentWillMount: function(){
 		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
 	},
 
-	componentWillUnmount: function(){
+    componentWillUnmount: function(){
 		this.keyboardDidHideListener.remove();
 	},
 
-	_keyboardDidHide: function(){
+    _keyboardDidHide: function(){
 		this.refs[SCROLL_VIEW] && this.refs[SCROLL_VIEW].scrollTo({y:0})
 	},
 
-	getInitialState: function() {
+    getInitialState: function() {
 		var idCardFront = defaultIDFront;
 		var idCardBack = defaultIDBack;
 		var idCardFrontData = null;
@@ -176,7 +180,7 @@ var OAIdPhotoPage = React.createClass({
 		};
 	},
 
-	pressAddImage: function(idCardIndex) {
+    pressAddImage: function(idCardIndex) {
 		if(!this.state.isImageUploading){
 			var eventParam = {};
 			eventParam[TalkingdataModule.KEY_TYPE] = (idCardIndex==ID_CARD_FRONT) ? "正面" : "反面";
@@ -229,7 +233,7 @@ var OAIdPhotoPage = React.createClass({
 		}		
 	},
 
-	uploadImage: function(){
+    uploadImage: function(){
 		this.setState({
 			isImageUploading: true,
 			nextEnabled: false,
@@ -292,7 +296,7 @@ var OAIdPhotoPage = React.createClass({
 		});
 	},
 
-	gotoNext: function() {
+    gotoNext: function() {
 		//GZT validation.
 		if(this.checkValues()){
 			this.setState({
@@ -359,7 +363,7 @@ var OAIdPhotoPage = React.createClass({
 		}
 	},
 
-	getData: function(){
+    getData: function(){
 		var idCardFrontData = null;
 		var idCardBackData = null;
 
@@ -385,7 +389,7 @@ var OAIdPhotoPage = React.createClass({
 		return retData;
 	},
 
-	setListData: function(dataList){
+    setListData: function(dataList){
 		this.listRawData = JSON.parse(JSON.stringify(defaultRawData));		
 		if (dataList) {
 			OpenAccountUtils.getPageListRawDataFromData(this.listRawData, dataList);
@@ -397,12 +401,12 @@ var OAIdPhotoPage = React.createClass({
 			showList: true,
 		})
 	},
-	
-	onDismiss: function(){
+
+    onDismiss: function(){
 		this.hidePicker();
 	},
 
-	textInputChange: function(text, rowID) {
+    textInputChange: function(text, rowID) {
 		this.listRawData[rowID].value = text;
 		this.listRawData[rowID].error = null;
 		this.setState({
@@ -411,7 +415,7 @@ var OAIdPhotoPage = React.createClass({
 		this.updateList();
 	},
 
-	textInputEndChange: function(event, rowID){
+    textInputEndChange: function(event, rowID){
 		if(this.listRawData[rowID].value && this.listRawData[rowID].value.length > 0){
 			this.listRawData[rowID].checked = true;
 			if(this.listRawData[rowID].key === "idCode"){
@@ -420,7 +424,7 @@ var OAIdPhotoPage = React.createClass({
 		}
 	},
 
-	checkValues: function(){
+    checkValues: function(){
 		var valid = true;
 		for(var rowID = 0; rowID < this.listRawData.length; rowID++){
 			if(this.listRawData[rowID].key === "idCode"){
@@ -430,7 +434,7 @@ var OAIdPhotoPage = React.createClass({
 		return valid;
 	},
 
-	checkIDCode: function(rowID){
+    checkIDCode: function(rowID){
 		if(this.listRawData[rowID].value.length < 18){
 			this.listRawData[rowID].error = "请输入" + this.listRawData[rowID].minLength + "位身份证号";
 			this.updateList();
@@ -442,7 +446,7 @@ var OAIdPhotoPage = React.createClass({
 		}
 	},
 
-	onPressPicker: function(rowData,rowID) {
+    onPressPicker: function(rowData,rowID) {
 		this.setState({
 			selectedPicker: rowID,
 		})
@@ -486,7 +490,7 @@ var OAIdPhotoPage = React.createClass({
 		Picker.show();
 	},
 
-	hidePicker: function(){
+    hidePicker: function(){
 		Picker.isPickerShow(show => {
 			if(show){
 				Picker.hide();
@@ -497,7 +501,7 @@ var OAIdPhotoPage = React.createClass({
 		});
 	},
 
-	onDateTimeSelect: function(rowID, value) {
+    onDateTimeSelect: function(rowID, value) {
 		if (rowID>= 0) {
 			console.log("onDatePikcerSelect: " + value);
 			this.listRawData[rowID].value = value;
@@ -506,7 +510,7 @@ var OAIdPhotoPage = React.createClass({
 		}
 	},
 
-	onStartDateSelect: function(rowID, value) {
+    onStartDateSelect: function(rowID, value) {
 		if (rowID >= 0) {
 			var dateInfo = this.parseStartEndDate(this.listRawData[rowID].value);
 			this.listRawData[rowID].value = value + "-" + dateInfo.endDate;
@@ -514,7 +518,7 @@ var OAIdPhotoPage = React.createClass({
 		}
 	},
 
-	onEndDateSelect: function(rowID, value) {
+    onEndDateSelect: function(rowID, value) {
 		if (rowID >= 0) {
 			var dateInfo = this.parseStartEndDate(this.listRawData[rowID].value);
 			this.listRawData[rowID].value = dateInfo.startDate + "-" + value;
@@ -522,7 +526,7 @@ var OAIdPhotoPage = React.createClass({
 		}
 	},
 
-	parseStartEndDate: function(period){
+    parseStartEndDate: function(period){
 		var dateArray = period.split("-");
 		var startDate = "";
 		var endDate = "";
@@ -537,25 +541,25 @@ var OAIdPhotoPage = React.createClass({
 		}
 	},
 
-	updateList: function(){
+    updateList: function(){
 		this.setState({
 				dataSource: this.ds.cloneWithRows(this.listRawData),
 		});
 	},
 
-	chooseBirthday: function(){
+    chooseBirthday: function(){
 		this.refs["birthdayPicker"].onPressDate();
 	},
 
-	chooseStartDatePicker: function(){
+    chooseStartDatePicker: function(){
 		this.refs['startDatePicker'].onPressDate();
 	},
 
-	chooseEndDatePicker: function(){
+    chooseEndDatePicker: function(){
 		this.refs['endDatePicker'].onPressDate();
 	},
 
-	renderDatePeriod: function(rowID, rowData){
+    renderDatePeriod: function(rowID, rowData){
 		var dateInfo = this.parseStartEndDate(rowData.value);
 
 		return (
@@ -604,7 +608,7 @@ var OAIdPhotoPage = React.createClass({
 			</View>)
 	},
 
-	renderRow: function(rowData, sectionID, rowID) {
+    renderRow: function(rowData, sectionID, rowID) {
 		var rowTitleStyle = styles.rowTitle;
 		if(rowData.error){
 			rowTitleStyle = styles.errorRowTitle;
@@ -697,7 +701,7 @@ var OAIdPhotoPage = React.createClass({
 		}
 	},
 
-	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
+    renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
 		return (
 			<View style={styles.line} key={rowID}>
 				<View style={styles.separator}/>
@@ -705,7 +709,7 @@ var OAIdPhotoPage = React.createClass({
 			)
 	},
 
-	renderListView: function(){
+    renderListView: function(){
 		if(this.state.showList){
 			var listDataView = this.listRawData.map((data, i)=>{
 				return(
@@ -731,7 +735,7 @@ var OAIdPhotoPage = React.createClass({
 		return null;
 	},
 
-	renderUploadingHint: function(){
+    renderUploadingHint: function(){
 		if(this.state.isImageUploading){
 			return (
 				<View style={{
@@ -758,7 +762,7 @@ var OAIdPhotoPage = React.createClass({
 		}
 	},
 
-	render: function() {
+    render: function() {
 		var pickerModal = null
 		var error = this.state.error;
 

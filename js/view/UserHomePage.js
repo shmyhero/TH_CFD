@@ -1,9 +1,8 @@
 'use strict';
 
-import React, {
-	Component,
-	PropTypes
-} from 'react'
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 import {
 	StyleSheet,
 	ScrollView,
@@ -100,7 +99,7 @@ export default class UserHomePage extends Component {
 		userId: PropTypes.number.isRequired,
 		userName: PropTypes.string.isRequired,
 		isPrivate: PropTypes.bool.isRequired,
-		backRefresh: React.PropTypes.func,
+		backRefresh: PropTypes.func,
 	}
 
 	static defaultProps = {
@@ -454,7 +453,7 @@ export default class UserHomePage extends Component {
 	}
 
 
-	handleScroll(event: Object) {
+	handleScroll(event) {
 		var opt = Math.min(Math.abs(event.nativeEvent.contentOffset.y), 100)
 		opt /= 100;
 		this.setState({
@@ -462,7 +461,7 @@ export default class UserHomePage extends Component {
 		})
 	}
 
-	onPageSelected(index: number) {
+	onPageSelected(index) {
 		this.setState({
 			currentSelectedTab: index,
 		})

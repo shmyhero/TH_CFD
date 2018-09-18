@@ -1,5 +1,7 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {
 	StyleSheet,
@@ -88,49 +90,48 @@ var options = {
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-var OAAddressPhotoPage = React.createClass({
-	propTypes: {
-		data: React.PropTypes.object,
-		onPop: React.PropTypes.func,
-	},
+class OAAddressPhotoPage extends React.Component {
+    static propTypes = {
+		data: PropTypes.object,
+		onPop: PropTypes.func,
+	};
 
-	getDefaultProps() {
-		return {
-			data: null,
-			onPop: ()=>{},
-		}
-	},
+    static defaultProps = {
+        data: null,
+        onPop: ()=>{},
+    };
 
-	getInitialState: function() {
-		var addressText = "";
-		var uploadData = null;
-		if(this.props.data){
+    constructor(props) {
+        super(props);
+        var addressText = "";
+        var uploadData = null;
+        if(props.data){
 
-			if(this.props.data.values){
-				for(var i = 0; i < this.props.data.values.length; i++ ){
-					if(this.props.data.values[i].key === "addr"){
-						addressText = this.props.data.values[i].value;
+			if(props.data.values){
+				for(var i = 0; i < props.data.values.length; i++ ){
+					if(props.data.values[i].key === "addr"){
+						addressText = props.data.values[i].value;
 					}
 				}
 			}
 
-			if(this.props.data.uploadData){
-				uploadData = this.props.data.uploadData;
+			if(props.data.uploadData){
+				uploadData = props.data.uploadData;
 			}
 		}
 
-		var rowData = defaultRawData[0];
+        var rowData = defaultRawData[0];
 
-		if(!uploadData){
+        if(!uploadData){
 			uploadData = {}
 			uploadData.type = rowData.value;
 			if (!uploadData.type){
 				uploadData.type = rowData.defaultValue;
 			}
 		}
-		var selectedAddressType = uploadData.type;
+        var selectedAddressType = uploadData.type;
 
-		return {
+        this.state = {
 			addressText: addressText,
 			error: null,
 			validateInProgress: false,
@@ -141,21 +142,21 @@ var OAAddressPhotoPage = React.createClass({
 			selectedAddressType: selectedAddressType,
 			uploadData: uploadData,
 		};
-	},
+    }
 
-	componentWillMount: function(){
+    componentWillMount() {
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
-	},
+	}
 
-	componentWillUnmount: function(){
+    componentWillUnmount() {
 		this.keyboardDidHideListener.remove();
-	},
+	}
 
-	_keyboardDidHide: function(){
+    _keyboardDidHide = () => {
 		//this.refs[SCROLL_VIEW] && this.refs[SCROLL_VIEW].scrollTo({y:0})
-	},
+	};
 
-	pressAddImage: function(imageIndex, rowData) {
+    pressAddImage = (imageIndex, rowData) => {
 
 		options.cancelButtonTitle = LS.str("QX")
 		options.takePhotoButtonTitle = LS.str("OPEN_ACCOUNT_TAKE_PICTURE")
@@ -207,9 +208,9 @@ var OAAddressPhotoPage = React.createClass({
 				});
 			}
 		});
-	},
+	};
 
-	gotoNext: function() {
+    gotoNext = () => {
 		this.setState({
 			isProcessing: true,
 			validateInProgress: true,
@@ -282,9 +283,9 @@ var OAAddressPhotoPage = React.createClass({
 				}
 			});
 		}
-	},
+	};
 
-	getData: function(){
+    getData = () => {
 		var addressText = null;
 		var uploadData = null;
 
@@ -300,19 +301,19 @@ var OAAddressPhotoPage = React.createClass({
 			values: [{"key":"addr","value":addressText}],
 			uploadData: uploadData,
 		};
-	},
+	};
 
-	textInputChange: function(text){
+    textInputChange = (text) => {
 		this.setState({
 			addressText: text,
 		})
-	},
+	};
 
-	dismissKB: function(){
+    dismissKB = () => {
 		Keyboard.dismiss();
-	},
+	};
 
-	selectAddressFileType: function(rowData){
+    selectAddressFileType = (rowData) => {
 		console.log("this.state.showAddressFileTypeList - " + this.state.showAddressFileTypeList)
 		var showAddressFileTypeList = !this.state.showAddressFileTypeList;
 		if (showAddressFileTypeList){
@@ -322,17 +323,17 @@ var OAAddressPhotoPage = React.createClass({
 			showAddressFileTypeList: showAddressFileTypeList,
 			scrollEnabled: !showAddressFileTypeList,
 		})
-	},
+	};
 
-	onAddressTypeSelected: function(rowData){
+    onAddressTypeSelected = (rowData) => {
 		this.setState({
 			showAddressFileTypeList: false,
 			scrollEnabled: true,
 			selectedAddressType: rowData.value,
 		})
-	},
+	};
 
-	renderImagePicker: function(rowData){
+    renderImagePicker = (rowData) => {
 		var title = LS.str(rowData.title);
 		var value = this.state.selectedAddressType;
 
@@ -368,9 +369,9 @@ var OAAddressPhotoPage = React.createClass({
 			<View style={{backgroundColor:'white', paddingBottom: 16, paddingTop: 6}}>
 				{imageView}
 			</View>);
-	},
+	};
 
-	renderAddressTypePicker: function(rowData){
+    renderAddressTypePicker = (rowData) => {
 		var imageArrow = this.state.showAddressFileTypeList ? require('../../../images/more_up.png'):require('../../../images/more_down.png')
 
 		var title = LS.str(rowData.title);
@@ -397,23 +398,23 @@ var OAAddressPhotoPage = React.createClass({
 				{this.renderSeparator()}
 			</View>
 		)
-	},
+	};
 
-	renderSeparator: function(){
+    renderSeparator = () => {
 		return (
 			<View style={styles.line}>
 				<View style={[styles.separator, {marginLeft: 15}]}/>
 			</View>);
-	},
+	};
 
-	renderAddressTypeRow: function(rowData, sectionID, rowID) {
+    renderAddressTypeRow = (rowData, sectionID, rowID) => {
 		return (
 			<TouchableOpacity style={{width:width/5, height:30}} onPress={()=>this.onAddressTypeSelected(rowData)}>
 				<Text key={rowID} style={styles.addressTypeText}>{LS.str(rowData.displayText)}</Text>
 			</TouchableOpacity>)
-	},
+	};
 
-	renderAddressTypeList:function(){
+    renderAddressTypeList = () => {
 		if (this.state.showAddressFileTypeList){
 			return (
 				<View style={{position: 'absolute', left: 0, right:0, top: TOP_HINT_BAR_HEIGHT + ADDRESS_FILE_TYPE_PICKER_HEIGHT, bottom:0,}}>
@@ -437,9 +438,9 @@ var OAAddressPhotoPage = React.createClass({
 				</View>);
 		}
 		return null;
-	},
+	};
 
-	hasImageData: function(){
+    hasImageData = () => {
 		var imageDataComplete = true;
 		if (!this.state.uploadData){
 			imageDataComplete = false
@@ -456,9 +457,9 @@ var OAAddressPhotoPage = React.createClass({
 			}
 		}
 		return imageDataComplete;
-	},
+	};
 
-	render: function(){
+    render() {
 		var nextEnabled = this.hasImageData() && this.state.addressText!= null && this.state.addressText != "";
 
 		var rowData = this.state.rowData;
@@ -501,8 +502,8 @@ var OAAddressPhotoPage = React.createClass({
 				{this.renderAddressTypeList()}
 			</View>);
 
-	},
-});
+	}
+}
 
 var styles = StyleSheet.create({
 	wrapper: {

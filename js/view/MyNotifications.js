@@ -14,14 +14,12 @@ var LogicData = require('../LogicData')
 var requestSuccess = true;
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-var MyNotifications = React.createClass({
-	getInitialState: function() {
-		return {
-			notificationSource: ds.cloneWithRows([]),
-		};
-	},
+class MyNotifications extends React.Component {
+    state = {
+        notificationSource: ds.cloneWithRows([]),
+    };
 
-	componentDidMount: function() {
+    componentDidMount() {
 		fetch('https://cn1.api.tradehero.mobi/api/notifications?page=1&perPage=42', {
 			method: 'GET',
 			headers: {
@@ -56,19 +54,19 @@ var MyNotifications = React.createClass({
 				Toast.showShortTop(responseJson.Message);
 			}
 		});
-	},
+	}
 
-	renderSeparator: function() {
+    renderSeparator = () => {
 		return (
 			<View style={styles.line}/>
 		);
-	},
+	};
 
-	renderFooter: function() {
+    renderFooter = () => {
 
-	},
+	};
 
-	renderRow: function(rowData: string, sectionID: number, rowID: number) {
+    renderRow = (rowData, sectionID, rowID) => {
 		return (
 			<View style={styles.rowWrapper} >
 				<Image
@@ -79,9 +77,9 @@ var MyNotifications = React.createClass({
 				</Text>
 			</View>
 		);
-	},
+	};
 
-	render: function() {
+    render() {
 		return (
 			<ListView 
 				style={styles.list}
@@ -97,7 +95,7 @@ var MyNotifications = React.createClass({
 				showsVerticalScrollIndicator={false} />
 		);
 	}
-});
+}
 
 var styles = StyleSheet.create({
 	list: {

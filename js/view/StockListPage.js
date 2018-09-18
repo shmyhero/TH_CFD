@@ -1,6 +1,9 @@
 'use strict'
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	View,
@@ -41,17 +44,18 @@ var ACTIVE_CONTRY_COLOR = '#5483d8';
 var SIMULATE_CONTRY_COLOR = '#00b2fe';
 const NETWORK_ERROR_INDICATOR = "networkErrorIndicator";
 
-var StockListPage = React.createClass({
+var StockListPage = createReactClass({
+    displayName: 'StockListPage',
 
-	propTypes: {
-		dataURL: React.PropTypes.string,
-		activeDataURL: React.PropTypes.string,
-		showHeaderBar: React.PropTypes.bool,
-		isOwnStockPage: React.PropTypes.bool,
-		pageKey: React.PropTypes.number,
+    propTypes: {
+		dataURL: PropTypes.string,
+		activeDataURL: PropTypes.string,
+		showHeaderBar: PropTypes.bool,
+		isOwnStockPage: PropTypes.bool,
+		pageKey: PropTypes.number,
 	},
 
-	getDefaultProps() {
+    getDefaultProps() {
 		return {
 			dataURL: NetConstants.CFD_API.GET_USER_BOOKMARK_LIST_API,
 			activeDataURL: NetConstants.CFD_API.GET_ACTIVE_USER_BOOKMARK_LIST_API,
@@ -61,7 +65,7 @@ var StockListPage = React.createClass({
 		}
 	},
 
-	getInitialState: function() {
+    getInitialState: function() {
 		return {
 			stockInfo: ds.cloneWithRows([]),
 			sortType: this.props.showHeaderBar ? 0: -1,
@@ -74,11 +78,11 @@ var StockListPage = React.createClass({
 		};
 	},
 
-	resetContent: function(){
+    resetContent: function(){
 		this.setState(this.getInitialState());
 	},
 
-	getShownStocks: function() {
+    getShownStocks: function() {
 		var result = ''
 		for (var i = 0; i < this.state.rowStockInfoData.length; i++) {
 			result += ( this.state.rowStockInfoData[i].id + ',')
@@ -88,7 +92,7 @@ var StockListPage = React.createClass({
 		return result
 	},
 
-	updateListDataWithLastInfo: function(listData, info) {
+    updateListDataWithLastInfo: function(listData, info) {
 		var hasUpdate = false
 		for (var i = 0; i < listData.length; i++) {
 			for (var j = 0; j < info.length; j++) {
@@ -105,7 +109,7 @@ var StockListPage = React.createClass({
 		return hasUpdate
 	},
 
-	handleStockInfo: function(realtimeStockInfo) {
+    handleStockInfo: function(realtimeStockInfo) {
 		var listRowData = JSON.parse(JSON.stringify(this.state.rowStockInfoData));
 		var hasUpdate = this.updateListDataWithLastInfo(listRowData, realtimeStockInfo)
 
@@ -124,7 +128,7 @@ var StockListPage = React.createClass({
 		}
 	},
 
-	isCurrentPage: function(){
+    isCurrentPage: function(){
 		if(LogicData.getTabIndex() == MainPage.STOCK_LIST_PAGE_TAB_INDEX){
 			var routes = this.props.navigator.getCurrentRoutes();
 			if(routes && routes[routes.length-1] &&
@@ -136,7 +140,7 @@ var StockListPage = React.createClass({
 		return false;
 	},
 
-	refreshData: function(forceRefetch) {
+    refreshData: function(forceRefetch) {
 		console.log("refreshData")
 		if(this.isCurrentPage()){
 			var currentIndex = LogicData.getCurrentPageTag();
@@ -158,7 +162,7 @@ var StockListPage = React.createClass({
 		}
 	},
 
-	reFetchStockData: function(forceRefetch) {
+    reFetchStockData: function(forceRefetch) {
 		//If the last shown list is read from cache, we need to refetch the data.
 		if (this.state.rowStockInfoData.length === 0 || forceRefetch) {
 			console.log("reFetchStockData");
@@ -166,8 +170,8 @@ var StockListPage = React.createClass({
 		}
 	},
 
-	//Only Android has the layout size changed issue because the navigation bar can be hidden.
-	onLayoutSizeChanged: function(){
+    //Only Android has the layout size changed issue because the navigation bar can be hidden.
+    onLayoutSizeChanged: function(){
 		if(Platform.OS === "android" && this.isCurrentPage()){
 			console.log("onLayoutSizeChanged");
 			this.setState({
@@ -177,7 +181,7 @@ var StockListPage = React.createClass({
 		}
 	},
 
-	fetchStockData: function() {
+    fetchStockData: function() {
 		if(!this.state.contentLoaded){
 			this.setState({
 				isRefreshing: true,
@@ -247,9 +251,9 @@ var StockListPage = React.createClass({
 			.done()
 	},
 
-	isDisplayingCache: false,
+    isDisplayingCache: false,
 
-	refreshOwnData: function() {
+    refreshOwnData: function() {
 		var ownData = LogicData.getOwnStocksData()
 		this.setState({
 			rowStockInfoData: ownData,
@@ -257,7 +261,7 @@ var StockListPage = React.createClass({
 		})
 	},
 
-	syncOwnData: function(){
+    syncOwnData: function(){
 		this.getOwnStocksDataCache()		//Read last cache.
 		.then(()=>{
 			var userData = LogicData.getUserData()
@@ -287,7 +291,7 @@ var StockListPage = React.createClass({
 		});
 	},
 
-	fetchOwnData: function() {
+    fetchOwnData: function() {
 		StorageModule.loadOwnStocksData(LogicData.getAccountState()).then((value) => {
 			console.log("stocklistpage StorageModule.loadOwnStocksData " + JSON.stringify(value));
 			if (value !== null) {
@@ -300,7 +304,7 @@ var StockListPage = React.createClass({
 		})
 	},
 
-	getOwnStocksDataCache: function(){
+    getOwnStocksDataCache: function(){
 		return new Promise((resolve)=>{
 			var ownData = LogicData.getOwnStocksData()
 			if (ownData.length > 0) {
@@ -331,7 +335,7 @@ var StockListPage = React.createClass({
 		});
 	},
 
-	fetchOwnStockData: function(){
+    fetchOwnStockData: function(){
 		var ownData = LogicData.getOwnStocksData()
 		console.log("stocklistpage LogicData.getOwnStocksData() " + JSON.stringify(ownData));
 		if (ownData.length > 0) {
@@ -381,7 +385,7 @@ var StockListPage = React.createClass({
 		}
 	},
 
-	componentDidMount: function() {
+    componentDidMount: function() {
 		var {height, width} = Dimensions.get('window');
 		stockNameFontSize = Math.round(18*width/375)
 
@@ -437,7 +441,7 @@ var StockListPage = React.createClass({
 		AppStateModule.registerTurnToActiveListener(()=>this.refreshData(true));
 	},
 
-	accountStateChange: function(){
+    accountStateChange: function(){
 		if(this.props.isOwnStockPage){
 			var userData = LogicData.getUserData()
 			if(Object.keys(userData).length !== 0){
@@ -449,13 +453,13 @@ var StockListPage = React.createClass({
 		this.resetContent();
 	},
 
-	onConnectionStateChanged: function(){
+    onConnectionStateChanged: function(){
 		if(WebSocketModule.isConnected()){
 			this.refreshData(true);
 		}
 	},
 
-	componentWillUnmount: function() {
+    componentWillUnmount: function() {
 		if (this.props.isOwnStockPage) {
 			this.didFocusSubscription.remove();
 			this.recevieDataSubscription.remove();
@@ -468,7 +472,7 @@ var StockListPage = React.createClass({
 		AppStateModule.unregisterTurnToActiveListener(()=>this.refreshData(true));
 	},
 
-	onDidFocus: function(event) {
+    onDidFocus: function(event) {
 		this.onLayoutSizeChanged()
 		var currentRoute = this.props.navigator.navigationContext.currentRoute;
 		//didfocus emit in componentDidMount
@@ -477,23 +481,23 @@ var StockListPage = React.createClass({
       }
 	},
 
-	onPageSelected: function() {
+    onPageSelected: function() {
 		console.log("onPageSelected")
 		this.refreshData(true);
 	},
 
-	tabPressed: function() {
+    tabPressed: function() {
 		console.log("tabPressed")
 		//onPageSelected will be triggered when tabPressed is triggered, we don't want
 		//the refresh function called twice...
 		//this.refreshData(true);
 	},
 
-	onEndReached: function() {
+    onEndReached: function() {
 
 	},
 
-	sortRawData: function(newType, data) {
+    sortRawData: function(newType, data) {
 		if (data===undefined) {
 			data = this.state.rowStockInfoData
 		}
@@ -528,7 +532,7 @@ var StockListPage = React.createClass({
 		return result
 	},
 
-	handlePress: function() {
+    handlePress: function() {
 		var newType = this.state.sortType === 0?1:0
 		var newRowData = this.sortRawData(newType)
     	this.setState({
@@ -537,13 +541,13 @@ var StockListPage = React.createClass({
     	});
   	},
 
-  	handleAddStock: function() {
+    handleAddStock: function() {
 			this.props.navigator.push({
 				name: MainPage.STOCK_SEARCH_ROUTE,
 			});
   	},
 
-  	stockPressed: function(rowData) {
+    stockPressed: function(rowData) {
   		this.props.navigator.push({
 			name: MainPage.STOCK_DETAIL_ROUTE,
 			stockRowData: rowData,
@@ -555,7 +559,7 @@ var StockListPage = React.createClass({
 		});
   	},
 
-	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
+    renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
 		return (
 			<View style={styles.line} key={rowID}>
 				<View style={styles.separator}/>
@@ -563,7 +567,7 @@ var StockListPage = React.createClass({
 		);
 	},
 
-	renderSortText: function() {
+    renderSortText: function() {
 		var strZF = LS.str('ZF')
 		if (this.state.sortType ===0) {
 			return (
@@ -580,7 +584,7 @@ var StockListPage = React.createClass({
 		}
 	},
 
-	renderHeaderBar: function() {
+    renderHeaderBar: function() {
 		var strZDB = LS.str('ZDB')
 
 		if (this.props.showHeaderBar) {
@@ -599,7 +603,7 @@ var StockListPage = React.createClass({
 		}
 	},
 
-	renderAddStockView: function() {
+    renderAddStockView: function() {
 		if(this.props.isOwnStockPage){
 			if(this.state.rowStockInfoData.length===0){
 				return (
@@ -616,11 +620,11 @@ var StockListPage = React.createClass({
 		}
 	},
 
-	renderFooter: function() {
+    renderFooter: function() {
 
 	},
 
-	renderCountyFlag: function(rowData) {
+    renderCountyFlag: function(rowData) {
 		if (rowData.tag && rowData.tag !== "") {
 			return (
 				<View style={[styles.stockCountryFlagContainer,{backgroundColor:LogicData.getAccountState()?ACTIVE_CONTRY_COLOR:SIMULATE_CONTRY_COLOR}]}>
@@ -632,7 +636,7 @@ var StockListPage = React.createClass({
 		}
 	},
 
-	renderRow: function(rowData, sectionID, rowID, highlightRow) {
+    renderRow: function(rowData, sectionID, rowID, highlightRow) {
 		if (rowData === undefined) {
 			// strange, rowData should not become undefined.
 			return (<View />)
@@ -680,7 +684,7 @@ var StockListPage = React.createClass({
 		);
 	},
 
-	renderRowRight: function(percentChange) {
+    renderRowRight: function(percentChange) {
 		percentChange = percentChange.toFixed(2)
 		var color = ColorConstants.stock_color(percentChange)
 		var startMark = percentChange > 0 ? "+" : null
@@ -694,7 +698,7 @@ var StockListPage = React.createClass({
 
 	},
 
-	renderStockStatus:function(rowData){
+    renderStockStatus:function(rowData){
 		var strBS = LS.str('BS')
 		var strZT = LS.str('ZT')
 		if(rowData!==undefined){
@@ -713,7 +717,7 @@ var StockListPage = React.createClass({
 		}
 	},
 
-	renderContent: function(){
+    renderContent: function(){
 		if(!this.state.contentLoaded){
 			return (
 				<NetworkErrorIndicator onRefresh={()=>this.refreshData(true)} ref={NETWORK_ERROR_INDICATOR} refreshing={this.state.isRefreshing}/>
@@ -739,7 +743,7 @@ var StockListPage = React.createClass({
 		}
 	},
 
-	render: function() {
+    render: function() {
 		var {height, width} = Dimensions.get('window');
 		var scrollTabHeight = 48
 

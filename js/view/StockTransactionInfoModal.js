@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	View,
@@ -30,10 +31,11 @@ var Toast = require('./component/toast/Toast');
 var LS = require('../LS');
 var {height, width} = Dimensions.get('window');
 
-var StockTransactionInfoModal = React.createClass({
-	mixins: [Touchable.Mixin],
+var StockTransactionInfoModal = createReactClass({
+    displayName: 'StockTransactionInfoModal',
+    mixins: [Touchable.Mixin],
 
-	getInitialState: function() {
+    getInitialState: function() {
 		return merge(
 			this.touchableGetInitialState(),
 			{
@@ -43,7 +45,7 @@ var StockTransactionInfoModal = React.createClass({
 		);
 	},
 
-	show: function(transactionInfo, callback, pageSettings) {
+    show: function(transactionInfo, callback, pageSettings) {
 		var state = {
 			modalVisible: true,
 			hideCallback: callback,
@@ -57,7 +59,7 @@ var StockTransactionInfoModal = React.createClass({
 		this.setState(state);
 	},
 
-	showAchievement: function(cardList, currentIndex, callback, pageSettings) {
+    showAchievement: function(cardList, currentIndex, callback, pageSettings) {
 		var state = {
 			modalVisible: true,
 			hideCallback: callback,
@@ -77,7 +79,7 @@ var StockTransactionInfoModal = React.createClass({
 		this.setState(state);
 	},
 
-	hide: function() {
+    hide: function() {
 		this.setState({
 			modalVisible: false,
 		});
@@ -90,11 +92,11 @@ var StockTransactionInfoModal = React.createClass({
 		}
 	},
 
-	_setModalVisible: function(visible) {
+    _setModalVisible: function(visible) {
     this.setState({modalVisible: visible});
   },
 
-	setPageViewed: function(cardInfo){
+    setPageViewed: function(cardInfo){
 		if(cardInfo.isNew){
 			var url = NetConstants.CFD_API.SET_CARD_READ;
 			url = url.replace("<id>", cardInfo.cardId);
@@ -113,7 +115,7 @@ var StockTransactionInfoModal = React.createClass({
 		}
 	},
 
-	onSwipeTouchEnd: function() {
+    onSwipeTouchEnd: function() {
 		var index = this.refs["swiper"].state.index;
 		console.log(index);
 		if(this.state.cardList && this.state.cardList[index]){
@@ -121,7 +123,7 @@ var StockTransactionInfoModal = React.createClass({
 		}
 	},
 
-	renderPage: function(transactionInfo, i){
+    renderPage: function(transactionInfo, i){
 		if(!i){
 			i = 0;
 		}
@@ -133,7 +135,7 @@ var StockTransactionInfoModal = React.createClass({
 		);
 	},
 
-	renderPageWithCard: function(card, i){
+    renderPageWithCard: function(card, i){
 		if(!i){
 			i = 0;
 		}
@@ -155,7 +157,7 @@ var StockTransactionInfoModal = React.createClass({
 		);
 	},
 
-	renderContent: function(){
+    renderContent: function(){
 		//return (<View style={{backgroundColor:'red', height: 100, width: 100}}/>);
 		if(this.state.isCardList){
 			var activeDot = <View/>;
@@ -191,7 +193,7 @@ var StockTransactionInfoModal = React.createClass({
 		}
 	},
 
-	render: function() {
+    render: function() {
 		return (
 			<View>
 				<Modal

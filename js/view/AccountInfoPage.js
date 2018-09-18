@@ -55,11 +55,12 @@ var Options = {
 	},
 };
 
-var AccountInfoPage = React.createClass({
+class AccountInfoPage extends React.Component {
+    constructor(props) {
+        super(props);
+        var meData = LogicData.getMeData()
 
-	getInitialState: function() {
-		var meData = LogicData.getMeData()
-		return {
+        this.state = {
 			dataSource: ds.cloneWithRows(listRawData),
 			headUrl:meData.picUrl,
 			nickname:meData.nickname,
@@ -67,21 +68,21 @@ var AccountInfoPage = React.createClass({
 			headSource:'',
 			headSourceData:'',
 		};
-	},
+    }
 
-	// componentWillMount: function(){
-	// 	var meData = LogicData.getMeData()
-	// 	var notLogin = Object.keys(meData).length === 0
-	// 	if(!notLogin){
-	// 			this.setState({
-	// 				headUrl: meData.picUrl,
-	// 				nickName: meData.nickname,
-	// 				mobile: meData.phone
-	// 			})
-	// 	}
-	// },
+    // componentWillMount: function(){
+    // 	var meData = LogicData.getMeData()
+    // 	var notLogin = Object.keys(meData).length === 0
+    // 	if(!notLogin){
+    // 			this.setState({
+    // 				headUrl: meData.picUrl,
+    // 				nickName: meData.nickname,
+    // 				mobile: meData.phone
+    // 			})
+    // 	}
+    // },
 
-	onReturnToPage:function(){
+    onReturnToPage = () => {
 		var meData = LogicData.getMeData()
 		var notLogin = Object.keys(meData).length === 0
 		if(!notLogin){
@@ -93,18 +94,17 @@ var AccountInfoPage = React.createClass({
 
 				})
 		}
-	},
+	};
 
-
-	onSelectNormalRow: function(rowData) {
+    onSelectNormalRow = (rowData) => {
 		if(rowData.subtype === 'head') {
 			this.pressAddImage();
 		}else if(rowData.subtype === 'nickName') {
 			this.gotoAccountNameModifyPage();
 		}
-	},
+	};
 
-	pressAddImage: function() {
+    pressAddImage = () => {
 		Options.cancelButtonTitle= LS.str('QX'),
 		Options.takePhotoButtonTitle= LS.str('PZ'),
 		Options.chooseFromLibraryButtonTitle= LS.str('ZPTK'),
@@ -130,9 +130,9 @@ var AccountInfoPage = React.createClass({
 					this.commitHeadPhoto();
 			}
 		});
-	},
+	};
 
-	commitHeadPhoto: function() {
+    commitHeadPhoto = () => {
 
 		var userData = LogicData.getUserData();
 		var url = NetConstants.CFD_API.UPDATE_HEAD_PHOTO;
@@ -157,22 +157,22 @@ var AccountInfoPage = React.createClass({
 				Alert.alert(SL.str('SZTX'), result.errorMessage);
 			}
 		)
-	},
+	};
 
-	confirmOfSuccess(){
+    confirmOfSuccess = () => {
 
-	},
+	};
 
-	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
+    renderSeparator = (sectionID, rowID, adjacentRowHighlighted) => {
 		var marginLeft = 0;
 		return (
 			<View style={styles.line} key={rowID}>
 				<View style={[styles.separator, {marginLeft: marginLeft}]}/>
 			</View>
 			)
-	},
+	};
 
-	renderRow: function(rowData, sectionID, rowID) {
+    renderRow = (rowData, sectionID, rowID) => {
 
 			var source = require('../../images/head_portrait.png');
 			if(this.state.headSource){
@@ -217,9 +217,9 @@ var AccountInfoPage = React.createClass({
 			}
 
 
-	},
+	};
 
-	render: function() {
+    render() {
 		var strZHXX = LS.str('ZHXX')
 		return (
 			<View style={styles.wrapper}>
@@ -231,15 +231,15 @@ var AccountInfoPage = React.createClass({
 					renderSeparator={this.renderSeparator} />
 			</View>
 		);
-	},
+	}
 
-	gotoAccountNameModifyPage(){
+    gotoAccountNameModifyPage = () => {
 		this.props.navigator.push({
 			name: MainPage.ACCOUNT_NAME_MODIFY_ROUTE,
 			onReturnToPage: this.onReturnToPage,
 		});
-	},
-});
+	};
+}
 
 var styles = StyleSheet.create({
 

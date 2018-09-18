@@ -1,6 +1,9 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	View,
@@ -33,22 +36,23 @@ var didFocusSubscription = null;
 export let SEARCH_TYPE_BOOKMARK = "bookmark";
 export let SEARCH_TYPE_GET_ITEM = "getItem";
 
-var StockSearchPage = React.createClass({
-	mixins: [TimerMixin],
+var StockSearchPage = createReactClass({
+    displayName: 'StockSearchPage',
+    mixins: [TimerMixin],
 
-	propTypes: {
-		searchType: React.PropTypes.string,
-		onGetItem: React.PropTypes.func,
+    propTypes: {
+		searchType: PropTypes.string,
+		onGetItem: PropTypes.func,
 	},
 
-	getDefaultProps() {
+    getDefaultProps() {
 		return {
 			searchType: SEARCH_TYPE_BOOKMARK,
 			onGetItem: (item)=>{}
 		}
 	},
 
-	getInitialState: function() {
+    getInitialState: function() {
 		return {
 			searchStockRawInfo: [],
 			searchStockInfo: ds.cloneWithRows([]),
@@ -59,16 +63,16 @@ var StockSearchPage = React.createClass({
 		};
 	},
 
-	componentDidMount: function() {
+    componentDidMount: function() {
 		this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
 		searchText = ""
 	},
 
-	componentWillUnmount: function() {
+    componentWillUnmount: function() {
 		this.didFocusSubscription.remove();
 	},
 
-	onDidFocus: function(event) {
+    onDidFocus: function(event) {
 		var currentRoute = this.props.navigator.navigationContext.currentRoute;
 		//didfocus emit in componentDidMount
         if (currentRoute === event.data.route) {
@@ -76,7 +80,7 @@ var StockSearchPage = React.createClass({
         }
 	},
 
-	updateSearchHistory: function() {
+    updateSearchHistory: function() {
 		// load history
 		if(this.props.searchType == SEARCH_TYPE_BOOKMARK){
 			LogicData.getSearchStockHistory()
@@ -99,7 +103,7 @@ var StockSearchPage = React.createClass({
 
 	},
 
-	cleanSearchHistory: function() {
+    cleanSearchHistory: function() {
 		var history = []
 		if(this.props.searchType == SEARCH_TYPE_BOOKMARK){
 			LogicData.setSearchStockHistory(history)
@@ -112,7 +116,7 @@ var StockSearchPage = React.createClass({
 		})
 	},
 
-	searchStockDelay: function(text) {
+    searchStockDelay: function(text) {
 		searchText = text
 		this.setState({
 			timerCount: this.state.timerCount+1,
@@ -131,7 +135,7 @@ var StockSearchPage = React.createClass({
 		);
 	},
 
-	searchStock: function(text) {
+    searchStock: function(text) {
 		if (text.length > 0) {
 			console.log('Start search: ' + text)
 			NetworkModule.fetchTHUrl(
@@ -172,7 +176,7 @@ var StockSearchPage = React.createClass({
 		}
 	},
 
-	addToMyListPressedFromSearchResult: function(rowID) {
+    addToMyListPressedFromSearchResult: function(rowID) {
 		var stockData = this.state.searchStockRawInfo[rowID]
 		NetworkModule.addToOwnStocks([stockData])
 		.then(()=>{
@@ -192,7 +196,7 @@ var StockSearchPage = React.createClass({
 		//TongDaoModule.trackAddRemoveOwnStockEvent(stockData.id.toString(), true)
 	},
 
-	addToMyListPressedFromHistory: function(rowID) {
+    addToMyListPressedFromHistory: function(rowID) {
 		var stockData = this.state.historyRawInfo[rowID]
 		NetworkModule.addToOwnStocks([stockData])
 		.then(()=>{
@@ -204,11 +208,11 @@ var StockSearchPage = React.createClass({
 		})
 	},
 
-	cancel: function() {
+    cancel: function() {
 		this.props.navigator.pop();
 	},
 
-	renderNavBar: function() {
+    renderNavBar: function() {
 		return (
 			<View style={[styles.navBarContainer,{backgroundColor:ColorConstants.title_blue()}]} >
 				<View style={[styles.navBarInputContainer,{borderColor:LogicData.getAccountState()?'#556f99':'#3877df'},{backgroundColor:LogicData.getAccountState()?'#384d71':'#1553bc'}]}>
@@ -237,7 +241,7 @@ var StockSearchPage = React.createClass({
 		);
 	},
 
-	stockPressed: function(rowData) {
+    stockPressed: function(rowData) {
 		if(this.props.searchType == SEARCH_TYPE_BOOKMARK){
 			LogicData.addStockToSearchHistory(rowData)
 			this.props.navigator.push({
@@ -255,15 +259,15 @@ var StockSearchPage = React.createClass({
 		}
 	},
 
-	renderRowHistory: function(rowData, sectionID, rowID, highlightRow) {
+    renderRowHistory: function(rowData, sectionID, rowID, highlightRow) {
 		return this.renderRow(rowData, sectionID, rowID, highlightRow, this.addToMyListPressedFromHistory)
 	},
 
-	renderRowSearchResult: function(rowData, sectionID, rowID, highlightRow) {
+    renderRowSearchResult: function(rowData, sectionID, rowID, highlightRow) {
 		return this.renderRow(rowData, sectionID, rowID, highlightRow, this.addToMyListPressedFromSearchResult)
 	},
 
-	renderRow: function(rowData, sectionID, rowID, highlightRow, onPressFunction) {
+    renderRow: function(rowData, sectionID, rowID, highlightRow, onPressFunction) {
 		var rightPartContent = <Text style={styles.alreadyAddText}>{LS.str('YTJ')}</Text>
 		var myListData = LogicData.getOwnStocksData()
 		var index = myListData.findIndex((stock) => {return stock.id === rowData.id})
@@ -317,7 +321,7 @@ var StockSearchPage = React.createClass({
 		);
 	},
 
-	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
+    renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
 		return (
 			<View style={styles.line} key={rowID}>
 				<View style={styles.separator}/>
@@ -325,7 +329,7 @@ var StockSearchPage = React.createClass({
 		);
 	},
 
-	renderHistoryFooter: function() {
+    renderHistoryFooter: function() {
 		return(
 			<View style={styles.historyFooterView}>
 				<TouchableOpacity style={styles.cleanHistoryButton} onPress={() => this.cleanSearchHistory()}>
@@ -336,7 +340,7 @@ var StockSearchPage = React.createClass({
 		)
 	},
 
-	renderHistoryView: function() {
+    renderHistoryView: function() {
 		if(this.state.historyRawInfo.length > 0) {
 			return(
 				<View style={{flex: 1}}>
@@ -357,7 +361,7 @@ var StockSearchPage = React.createClass({
 		}
 	},
 
-	renderSearchView: function() {
+    renderSearchView: function() {
 		return (
 			<View style={{flex: 1, alignItems: 'center'}}>
 				{this.state.searchFailedText !== null ?
@@ -377,7 +381,7 @@ var StockSearchPage = React.createClass({
 			)
 	},
 
-	render: function() {
+    render: function() {
 		var {height, width} = Dimensions.get('window');
 		var showHistory = searchText.length === 0
 		return (
@@ -423,7 +427,7 @@ var styles = StyleSheet.create({
 		width: 15,
 		height: 15,
 		marginLeft: 5,
-		resizeMode: Image.resizeMode.contain,
+		resizeMode: 'contain',
 	},
 
 	searchInput: {

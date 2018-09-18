@@ -4,13 +4,13 @@ var NativeDataModule = require('NativeModules').NativeData;
 
 var NativeData = {
 
-	passDataToNative: function ( dataName: string, data ): void {
+	passDataToNative: function ( dataName, data ) {
 
 		NativeDataModule.passDataToNative(dataName, JSON.stringify(data))
 
 	},
 
-	passRawDataToNative: function ( dataName: string, data ): void {
+	passRawDataToNative: function ( dataName, data ) {
 
 		NativeDataModule.passRawDataToNative(dataName, data)
 

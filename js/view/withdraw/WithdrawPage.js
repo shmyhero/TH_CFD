@@ -1,6 +1,8 @@
 'use strict'
 
-import React, { Component, PropTypes} from 'react';
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 import {
     View,
     Text,
@@ -178,7 +180,7 @@ export default class WithdrawPage extends Component {
 
   generateFee(withdrawValue){
     if(withdrawValue == 0){
-      return 0.00.toFixed(2);
+      return (0.00).toFixed(2);
     }
     var fee = (withdrawValue * this.state.feeRate).toFixed(2);
     if(fee < this.state.minFee){

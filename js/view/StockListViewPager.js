@@ -1,6 +1,7 @@
 'use strict'
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	View,
@@ -45,24 +46,25 @@ var urlKeysLive = [
 	'GET_INDEX_LIST_LIVE_API',
 	'GET_FX_LIST_LIVE_API',
 	'GET_FUTURE_LIST_LIVE_API',
-] 
+]
 
 var didFocusSubscription = null;
 var didTabSelectSubscription = null;
 var _currentSelectedTab = 0;
-var StockListViewPager = React.createClass({
-	mixins: [TimerMixin],
-	navBarPressedCount: 0,
-	developPageTriggerCount: 10,
+var StockListViewPager = createReactClass({
+    displayName: 'StockListViewPager',
+    mixins: [TimerMixin],
+    navBarPressedCount: 0,
+    developPageTriggerCount: 10,
 
-	getInitialState: function() {
+    getInitialState: function() {
 		return {
 			currentSelectedTab : 0,
 			connected : false,
 		}
 	},
 
-	componentWillMount: function() {
+    componentWillMount: function() {
 		WebSocketModule.start()
 
 		this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', (event) => this.onDidFocus(event));
@@ -77,21 +79,21 @@ var StockListViewPager = React.createClass({
 		this.onConnectionStateChanged();
 	},
 
-	onConnectionStateChanged: function(){
+    onConnectionStateChanged: function(){
 		var isConnected = WebSocketModule.isConnected();
 		this.setState({
 			connected: isConnected
 		})
 	},
 
-	componentDidMount: function() {
+    componentDidMount: function() {
 		NetInfo.isConnected.addEventListener(
 			'change',
 			this._handleConnectivityChange
 		);
 	},
 
-	componentWillUnmount: function() {
+    componentWillUnmount: function() {
 		this.didFocusSubscription.remove();
 		this.didTabSelectSubscription.remove();
     	NetInfo.isConnected.removeEventListener(
@@ -101,7 +103,7 @@ var StockListViewPager = React.createClass({
 		this.networkConnectionChangedSubscription && this.networkConnectionChangedSubscription.remove();
 	},
 
-	onTabChanged: function() {
+    onTabChanged: function() {
 		LogicData.setTabIndex(MainPage.STOCK_LIST_PAGE_TAB_INDEX);
 		LogicData.setCurrentPageTag(_currentSelectedTab);
 		this.setState({currentSelectedTab: _currentSelectedTab});
@@ -114,13 +116,13 @@ var StockListViewPager = React.createClass({
 		WebSocketModule.registerInterestedStocks(this.refs['page' + _currentSelectedTab].getShownStocks())
 	},
 
-	_handleConnectivityChange: function(isConnected) {
+    _handleConnectivityChange: function(isConnected) {
 		if (isConnected) {
 			this.refs['page' + _currentSelectedTab].onPageSelected()
 		}
 	},
 
-	onDidFocus: function(event) {
+    onDidFocus: function(event) {
         if (MainPage.STOCK_LIST_VIEW_PAGER_ROUTE === event.data.route.name) {
             WebSocketModule.registerCallbacks((stockInfo) => {
 				this.refs['page' + _currentSelectedTab] && this.refs['page' + _currentSelectedTab].handleStockInfo(stockInfo)
@@ -128,7 +130,7 @@ var StockListViewPager = React.createClass({
         }
 	},
 
-	editButtonClicked: function() {
+    editButtonClicked: function() {
 		NativeDataModule.passDataToNative('myList', LogicData.getOwnStocksData())
 		NativeDataModule.passDataToNative('Lang', LogicData.getLanguageEn() == '1'?'en':'cn')
 		console.log('Lang = ' + LogicData.getLanguageEn() == '1'?'en':'cn')
@@ -138,7 +140,7 @@ var StockListViewPager = React.createClass({
 		});
 	},
 
-	onPageSelected: function(index) {
+    onPageSelected: function(index) {
 		this.setState({
 			currentSelectedTab: index,
 		})
@@ -149,7 +151,7 @@ var StockListViewPager = React.createClass({
 		WebSocketModule.registerInterestedStocks(this.refs['page' + _currentSelectedTab].getShownStocks())
 	},
 
-	renderNavBar: function() {
+    renderNavBar: function() {
 		var strBJ = LS.str('BJ')
 		var strHQ = LS.str('HANGQING')
 		var strHQWLJ = LS.str('HQWLJ')
@@ -169,7 +171,7 @@ var StockListViewPager = React.createClass({
 		)
 	},
 
-	pressedNavBar: function(){ 
+    pressedNavBar: function(){ 
 		if(this.navBarPressedCount >= this.developPageTriggerCount - 1){
 			this.navBarPressedCount = 0;
 			this.props.navigator.push({
@@ -189,7 +191,7 @@ var StockListViewPager = React.createClass({
 		}
 	},
 
-	render: function() {
+    render: function() {
 		
 		var tabNamesShow = [LS.str(tabNames[0]),LS.str(tabNames[1]),LS.str(tabNames[2]),LS.str(tabNames[3]),LS.str(tabNames[4]),LS.str(tabNames[5])]
 		var tabNamesLiveShow = [LS.str(tabNamesLive[0]),LS.str(tabNamesLive[1]),LS.str(tabNamesLive[2]),LS.str(tabNamesLive[3]),LS.str(tabNamesLive[4]),LS.str(tabNamesLive[5])]
@@ -233,7 +235,7 @@ var StockListViewPager = React.createClass({
 			)
 		}
 
-	}
+	},
 })
 
 var styles = StyleSheet.create({

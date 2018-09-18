@@ -17,8 +17,14 @@ var NetworkModule = require('../module/NetworkModule')
 var LogicData = require('../LogicData')
 
 
-var WechatLoginConfirmPage = React.createClass({
-	componentDidMount: function() {
+class WechatLoginConfirmPage extends React.Component {
+    state = {
+        wechatData: LogicData.getWechatUserData(),
+        userData: LogicData.getUserData(),
+        nickName: '',
+    };
+
+    componentDidMount() {
 		var userData = LogicData.getUserData()
 
 		NetworkModule.fetchTHUrl(
@@ -38,17 +44,9 @@ var WechatLoginConfirmPage = React.createClass({
 				Alert.alert('提示', result.errorMessage);
 			}
 		)
-	},
+	}
 
-	getInitialState: function() {
-		return {
-			wechatData: LogicData.getWechatUserData(),
-			userData: LogicData.getUserData(),
-			nickName: '',
-		};
-	},
-
-	render: function() {
+    render() {
 		return (
 			<View style={styles.wrapper}>
 
@@ -70,8 +68,8 @@ var WechatLoginConfirmPage = React.createClass({
 
 			</View>
 		);
-	},
-});
+	}
+}
 
 var styles = StyleSheet.create({
 	wrapper: {

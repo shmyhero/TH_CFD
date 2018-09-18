@@ -1,5 +1,7 @@
 /* @flow */
 
+import PropTypes from 'prop-types';
+
 import React, { Component } from 'react';
 import {
 	StyleSheet,
@@ -26,27 +28,23 @@ var HEADER_IMAGE_WIDTH = DIALOG_WIDTH;
 var HEADER_IMAGE_HEIGHT = HEADER_IMAGE_WIDTH / 1.5;
 var DIALOG_OFFSET = HEADER_IMAGE_HEIGHT / 2;
 
-var RegisterSuccessPage = React.createClass({
-  propTypes: {
-    shareFunction: React.PropTypes.func,
-  },
+class RegisterSuccessPage extends React.Component {
+  static propTypes = {
+    shareFunction: PropTypes.func,
+  };
 
-  getDefaultProps: function(){
-    return {
-      shareFunction: ()=>{}
-    }
-  },
+  static defaultProps = {
+    shareFunction: ()=>{}
+  };
 
-  getInitialState: function() {
-    return {
-      dialogVisible: false,
-      fadeAnim: new Animated.Value(1),
-			modalVisible: false,
-			rewardAmount: 50,
-    };
-  },
+  state = {
+    dialogVisible: false,
+    fadeAnim: new Animated.Value(1),
+          modalVisible: false,
+          rewardAmount: 50,
+  };
 
-  show: function(rewardAmount) {
+  show = (rewardAmount) => {
     this.setState({
       dialogVisible: true,
 			rewardAmount: rewardAmount,
@@ -61,9 +59,9 @@ var RegisterSuccessPage = React.createClass({
 		).start();
 
 		this._setModalVisible(true)
-  },
+  };
 
-  hide: function() {
+  hide = () => {
     var callbackId = this.state.fadeAnim.addListener(function(){
       if(this.state.fadeAnim._value == 0){
         this.state.fadeAnim.removeListener(callbackId)
@@ -81,9 +79,9 @@ var RegisterSuccessPage = React.createClass({
 		).start();
 
 		this._setModalVisible(false);
-  },
+  };
 
-  shareInfo: function(){
+  shareInfo = () => {
 		TalkingdataModule.trackEvent(TalkingdataModule.REGISTER_INCOME_SHARE_EVENT);
 
     if(this.props.shareFunction){
@@ -104,13 +102,13 @@ var RegisterSuccessPage = React.createClass({
 				}
 			);
     }
-  },
+  };
 
-  _setModalVisible(visible) {
+  _setModalVisible = (visible) => {
     this.setState({modalVisible: visible});
-  },
+  };
 
-  render: function() {
+  render() {
 		if(this.state.dialogVisible){
       //
       //style={{height: height, width: width, backgroundColor: '#fff'}}
@@ -166,8 +164,8 @@ var RegisterSuccessPage = React.createClass({
       return (<View/>)
     }
 
-  },
-});
+  }
+}
 
 /*
 var styles = StyleSheet.create({

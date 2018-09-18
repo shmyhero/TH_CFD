@@ -1,6 +1,9 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	View,
@@ -26,22 +29,23 @@ var LS = require('../LS')
 var UP_INPUT_REF = "upInput"
 var DOWN_INPUT_REF = "downInput"
 
-var EditAlertPage = React.createClass({
+var EditAlertPage = createReactClass({
+    displayName: 'EditAlertPage',
 
-	propTypes: {
-		stockId:React.PropTypes.number,
-		stockInfo: React.PropTypes.object,
-		stockAlert: React.PropTypes.object,
-		onAlertSetComplete: React.PropTypes.func,
+    propTypes: {
+		stockId:PropTypes.number,
+		stockInfo: PropTypes.object,
+		stockAlert: PropTypes.object,
+		onAlertSetComplete: PropTypes.func,
 	},
 
-	getDefaultProps() {
+    getDefaultProps() {
 		return {
 
 		}
 	},
 
-	getInitialState: function() {
+    getInitialState: function() {
 		return {
 			HighPrice: 0,
 			LowPrice: 0,
@@ -59,10 +63,10 @@ var EditAlertPage = React.createClass({
 		};
 	},
 
-	upInputPosition: {},
-	downInputPosition: {},
+    upInputPosition: {},
+    downInputPosition: {},
 
-	componentDidMount: function(){
+    componentDidMount: function(){
 		console.log(this.props.stockInfo)
 		console.log(this.props.stockAlert)
 
@@ -82,7 +86,7 @@ var EditAlertPage = React.createClass({
 		this.loadStockInfo();
 	},
 
-	calculateInputPosition(onFinish){
+    calculateInputPosition(onFinish){
 		//Bug fix. The measure function may fail if not wrapped with settimeout...
 		setTimeout(()=>{
 			this.refs[UP_INPUT_REF].measure((fx, fy, width, height, px, py) => {
@@ -114,7 +118,7 @@ var EditAlertPage = React.createClass({
 		}, 0);
 	},
 
-	loadStockInfo: function() {
+    loadStockInfo: function() {
 		var url = NetConstants.CFD_API.GET_STOCK_DETAIL_API
 		if(LogicData.getAccountState()){
 		 url = NetConstants.CFD_API.GET_STOCK_DETAIL_LIVE_API
@@ -165,7 +169,7 @@ var EditAlertPage = React.createClass({
 		)
 	},
 
-	connectWebSocket: function() {
+    connectWebSocket: function() {
 		WebSocketModule.registerCallbacks(
 			(realtimeStockInfo) => {
 				console.log("websocket changes! " + JSON.stringify(realtimeStockInfo))
@@ -199,18 +203,18 @@ var EditAlertPage = React.createClass({
 			})
 	},
 
-	pressBackButton: function() {
+    pressBackButton: function() {
 		this.props.showTabbar()
 		this.props.navigator.pop()
 	},
 
-	validateInputData: function(){
+    validateInputData: function(){
 		console.log("EditAlertPage validateInputData: " + this.state.HighPrice + ", " + this.state.LowPrice);
 		this.validatePrice(1, this.state.HighPrice)
 		this.validatePrice(2, this.state.LowPrice)
 	},
 
-	validatePrice: function(type, text){
+    validatePrice: function(type, text){
 		var value = parseFloat(text);
 		var error = null
 		if(type === 1){
@@ -236,7 +240,7 @@ var EditAlertPage = React.createClass({
 		}
 	},
 
-	onTextFocus: function(type){
+    onTextFocus: function(type){
 		if(type === 1){
 			//High
 			this.setState(
@@ -254,7 +258,7 @@ var EditAlertPage = React.createClass({
 		}
 	},
 
-	onTextBlur: function(type){
+    onTextBlur: function(type){
 		if(type === 1){
 			//High
 			if(!this.state.HighPrice){
@@ -290,7 +294,7 @@ var EditAlertPage = React.createClass({
 		}
 	},
 
-	renderSeparator: function(marginLeft) {
+    renderSeparator: function(marginLeft) {
 		return(
 			<View style={{backgroundColor:'white'}}>
 				<View style={[styles.separator,{marginLeft: marginLeft}]}/>
@@ -298,7 +302,7 @@ var EditAlertPage = React.createClass({
 			)
 	},
 
-	renderAlertCell: function(type){
+    renderAlertCell: function(type){
 		//type 1:做多， 2:做空
 		var title = type === 1 ? LS.str('ZDJGGY'):LS.str('ZKJGDY')
 		var textColor = "black";
@@ -344,7 +348,7 @@ var EditAlertPage = React.createClass({
 			)
 	},
 
-	onComplete: function(){
+    onComplete: function(){
 		this.setState({
 			isFinishButtonEnabled: false
 		});
@@ -400,11 +404,11 @@ var EditAlertPage = React.createClass({
 		)
 	},
 
-	hasError: function(){
+    hasError: function(){
 		return this.state.HighError || this.state.LowError ? true : false;
 	},
 
-	renderErrorBubble: function(offsetX, offsetY, errorText){
+    renderErrorBubble: function(offsetX, offsetY, errorText){
 		return (
 			<View style={[styles.tooltip, {top: offsetY - 42, left: offsetX - 5}]}>
 				<Image
@@ -418,8 +422,8 @@ var EditAlertPage = React.createClass({
 		)
 	},
 
-	//Silly way! But cannot find a better solution..
-	renderHighErrorHint: function(){
+    //Silly way! But cannot find a better solution..
+    renderHighErrorHint: function(){
 		console.log("renderHighErrorHint this.state.HighFocused: " + this.state.HighFocused + ", y: " + this.upInputPosition.py + ", x: " + this.upInputPosition.px)
 		if(this.state.HighError && this.state.HighFocused){
 			//Sometimes the position calculation will fail...So we may need to update the position...
@@ -436,7 +440,7 @@ var EditAlertPage = React.createClass({
 		return (<View/>)
 	},
 
-	renderLowErrorHint: function(){
+    renderLowErrorHint: function(){
 		if(this.state.LowError && this.state.LowFocused){
 			if(this.upInputPosition){
 				return this.renderErrorBubble(this.downInputPosition.px, this.downInputPosition.py, this.state.LowError)
@@ -451,7 +455,7 @@ var EditAlertPage = React.createClass({
 		return (<View/>)
 	},
 
-	render: function() {
+    render: function() {
 		return (
 			<View style={styles.wrapper} ref="root">
 				<NavBar title={LS.str('TXSZ')}

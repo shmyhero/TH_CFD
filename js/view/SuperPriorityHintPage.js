@@ -1,5 +1,7 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React, { Component } from 'react';
 import {
 	StyleSheet,
@@ -40,25 +42,21 @@ var HEADER_IMAGE_HEIGHT = HEADER_IMAGE_WIDTH / 646 * 323;
 var DIALOG_OFFSET = HEADER_IMAGE_HEIGHT - CONTENT_TOP_MARGIN;
 var BACKGROUD_LIGHT_HEIGHT = height / 3 * 2;
 
-var SuperPriorityHintPage = React.createClass({
-	propTypes: {
-		getNavigator: React.PropTypes.func,
-	},
+class SuperPriorityHintPage extends React.Component {
+  static propTypes = {
+      getNavigator: PropTypes.func,
+  };
 
-	getDefaultProps() {
-		return {
-			getNavigator: ()=>{},
-		}
-	},
+  static defaultProps = {
+      getNavigator: ()=>{},
+  };
 
-  getInitialState: function() {
-    return {
-      dialogVisible: false,
-      fadeAnim: new Animated.Value(1),
-    };
-  },
+  state = {
+    dialogVisible: false,
+    fadeAnim: new Animated.Value(1),
+  };
 
-  show: function() {
+  show = () => {
     this.setState({
       dialogVisible: true,
     })
@@ -72,27 +70,27 @@ var SuperPriorityHintPage = React.createClass({
 		).start();
 
 		this.updateLastShow();
-  },
+  };
 
-	updateLastShow: function(){
-		var userData = LogicData.getUserData();
-		var isLogin = Object.keys(userData).length != 0;
+  updateLastShow = () => {
+      var userData = LogicData.getUserData();
+      var isLogin = Object.keys(userData).length != 0;
 
-		var date = new Date().getDateString();
-		var data = {
-			"lastDate": date,
-			"isCheckInDialogShown": isLogin
-		};
+      var date = new Date().getDateString();
+      var data = {
+          "lastDate": date,
+          "isCheckInDialogShown": isLogin
+      };
 
-		StorageModule.setLastSuperPriorityHintData(JSON.stringify(data))
-		.then(()=>{
-				if (data !== null) {
-					LogicData.setLastSuperPriorityHintData(JSON.stringify(data))
-				}
-		})
-	},
+      StorageModule.setLastSuperPriorityHintData(JSON.stringify(data))
+      .then(()=>{
+              if (data !== null) {
+                  LogicData.setLastSuperPriorityHintData(JSON.stringify(data))
+              }
+      })
+  };
 
-  hide: function() {
+  hide = () => {
     var callbackId = this.state.fadeAnim.addListener(function(){
       if(this.state.fadeAnim._value == 0){
         this.state.fadeAnim.removeListener(callbackId)
@@ -108,23 +106,23 @@ var SuperPriorityHintPage = React.createClass({
 				duration: 200,    // Configuration
 			},
 		).start();
-  },
+  };
 
-  _goToLoginPage: function(){
+  _goToLoginPage = () => {
 		var navigator = this.props.getNavigator();
     navigator.push({
       name: MainPage.LOGIN_ROUTE,
     });
-  },
+  };
 
-	_goToCheckInPage: function(){
-		var navigator = this.props.getNavigator();
-		navigator.push({
-			name:MainPage.DAY_SIGN_ROUTE,
-		});
-	},
+  _goToCheckInPage = () => {
+      var navigator = this.props.getNavigator();
+      navigator.push({
+          name:MainPage.DAY_SIGN_ROUTE,
+      });
+  };
 
-  renderRigisterLine: function(isLogin){
+  renderRigisterLine = (isLogin) => {
     var registerStr = LS.str("SUPER_PRIORITY_MESSAGE_1");
     var registerStr_part1 = registerStr.split("{1}")[0];
     var registerStr_part2 = registerStr.split("{1}")[1];
@@ -158,9 +156,9 @@ var SuperPriorityHintPage = React.createClass({
           </View>
         </View>)
     }
-  },
+  };
 
-  renderTradingLine: function(){
+  renderTradingLine = () => {
     return (
       <View style={styles.bodyRowContainer}>
         <View style={styles.bodyContent}>
@@ -187,34 +185,34 @@ var SuperPriorityHintPage = React.createClass({
         </View>
       </View>
     );
-  },
+  };
 
-	renderActionButton: function(isLogin){
-		if(!isLogin){
-			return (<TouchableOpacity style={styles.blueButton}
-				onPress={() => {
-					this.hide();
-					this._goToLoginPage()
-				}}>
-				<Text style={styles.buttonText}>
-					
-          {LS.str("SUPER_PRIORITY_REGISTER_NOW")}
-				</Text>
-			</TouchableOpacity>);
-		}else{
-			return (<TouchableOpacity style={styles.blueButton}
-				onPress={() => {
-					this.hide();
-					this._goToCheckInPage()
-				}}>
-				<Text style={styles.buttonText}>
-					{LS.str("SUPER_PRIORITY_CHECK_IN_NOW")}
-				</Text>
-			</TouchableOpacity>);
-		}
-	},
+  renderActionButton = (isLogin) => {
+      if(!isLogin){
+          return (<TouchableOpacity style={styles.blueButton}
+              onPress={() => {
+                  this.hide();
+                  this._goToLoginPage()
+              }}>
+              <Text style={styles.buttonText}>
+                  
+        {LS.str("SUPER_PRIORITY_REGISTER_NOW")}
+              </Text>
+          </TouchableOpacity>);
+      }else{
+          return (<TouchableOpacity style={styles.blueButton}
+              onPress={() => {
+                  this.hide();
+                  this._goToCheckInPage()
+              }}>
+              <Text style={styles.buttonText}>
+                  {LS.str("SUPER_PRIORITY_CHECK_IN_NOW")}
+              </Text>
+          </TouchableOpacity>);
+      }
+  };
 
-  render: function() {
+  render() {
   	if(this.state.dialogVisible){
       var userData = LogicData.getUserData();
       var isLogin = Object.keys(userData).length != 0
@@ -262,8 +260,8 @@ var SuperPriorityHintPage = React.createClass({
     }else{
       return(<View/>);
     }
-  },
-});
+  }
+}
 
 const styles = StyleSheet.create({
   outsideContainer:{

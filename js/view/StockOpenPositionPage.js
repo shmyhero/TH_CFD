@@ -2,6 +2,7 @@
 
 var LineChart = require('./component/lineChart/LineChart');
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	View,
@@ -86,12 +87,12 @@ var viewStyle = Platform.OS === 'android' ?
 			}:
 			{width: width, flex: 1}
 
-var StockOpenPositionPage = React.createClass({
-	dataToStore: [],
+var StockOpenPositionPage = createReactClass({
+    displayName: 'StockOpenPositionPage',
+    dataToStore: [],
+    mixins: [TimerMixin],
 
-	mixins: [TimerMixin],
-
-	getInitialState: function() {
+    getInitialState: function() {
 		return {
 			stockInfo: ds.cloneWithRows([]),
 			stockInfoRowData: [],
@@ -114,7 +115,7 @@ var StockOpenPositionPage = React.createClass({
 		};
 	},
 
-	componentDidMount: function() {
+    componentDidMount: function() {
 		this.loadOpenPositionInfo();
 
 		networkConnectionChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.NETWORK_CONNECTION_CHANGED, () => {
@@ -136,8 +137,8 @@ var StockOpenPositionPage = React.createClass({
 		AppStateModule.registerTurnToActiveListener(this.refreshData);
 	},
 
-	//Only Android has the layout size changed issue because the navigation bar can be hidden.
-	onLayoutSizeChanged: function(){
+    //Only Android has the layout size changed issue because the navigation bar can be hidden.
+    onLayoutSizeChanged: function(){
 		if(Platform.OS === "android" && this.isCurrentPage()){
 			console.log("onLayoutSizeChanged StockOpenPositionPage");
 			this.setState({
@@ -146,7 +147,7 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	isCurrentPage: function(){
+    isCurrentPage: function(){
 		if(LogicData.getTabIndex() == MainPage.STOCK_EXCHANGE_TAB_INDEX){
 			var currentPageTag = LogicData.getCurrentPageTag();
 			if(currentPageTag == 0){
@@ -159,13 +160,13 @@ var StockOpenPositionPage = React.createClass({
 		return false;
 	},
 
-	onConnectionStateChanged: function(){
+    onConnectionStateChanged: function(){
 		if(WebSocketModule.isConnected()){
 			this.refreshData();
 		}
 	},
 
-	refreshData: function(){
+    refreshData: function(){
 		if(this.isCurrentPage()){
 			//Refresh current page data.
 			var userData = LogicData.getUserData();
@@ -176,7 +177,7 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	componentWillUnmount: function(){
+    componentWillUnmount: function(){
 		networkConnectionChangedSubscription && networkConnectionChangedSubscription.remove();
 		accountStateChangedSubscription && accountStateChangedSubscription.remove();
 		accountLogoutEventSubscription && accountLogoutEventSubscription.remove();
@@ -184,11 +185,11 @@ var StockOpenPositionPage = React.createClass({
 		AppStateModule.unregisterTurnToActiveListener(this.refreshData);
 	},
 
-	onEndReached: function() {
+    onEndReached: function() {
 
 	},
 
-	tabPressed: function() {
+    tabPressed: function() {
 
 		this.setState({
 			selectedRow: -1,
@@ -202,7 +203,7 @@ var StockOpenPositionPage = React.createClass({
 		this.loadOpenPositionInfo()
 	},
 
-	clearViews:function(){
+    clearViews:function(){
 		extendHeight = DEFAULT_EXTENDED_HEIGHT;
 
 		this.setState({
@@ -224,7 +225,7 @@ var StockOpenPositionPage = React.createClass({
 		})
 	},
 
-	getDataUrl: function(){
+    getDataUrl: function(){
 		var url = NetConstants.CFD_API.GET_OPEN_POSITION_API
 		if(LogicData.getAccountState()){
 			url = NetConstants.CFD_API.GET_OPEN_POSITION_LIVE_API
@@ -233,7 +234,7 @@ var StockOpenPositionPage = React.createClass({
 		return url;
 	},
 
-	refreshFooterBar(responseJson){
+    refreshFooterBar(responseJson){
 		var totalCount = 0;
 		for (var i = 0; i < responseJson.length; i++) {
 			var rowData = responseJson[i];
@@ -264,7 +265,7 @@ var StockOpenPositionPage = React.createClass({
 		})
 	},
 
-	loadOpenPositionInfo: function() {
+    loadOpenPositionInfo: function() {
 		if(!this.state.contentLoaded){
 			this.setState({
 				isRefreshing: true,
@@ -372,24 +373,24 @@ var StockOpenPositionPage = React.createClass({
 		)
 	},
 
-	// gotoAccountStateExce:function(){
-	// 	var userData = LogicData.getUserData()
-	// 	var userId = userData.userId
-	// 	if (userId == undefined) {
-	// 		userId = 0
-	// 	}
-	// 	console.log("gotoAccountStateExce userId = " + userId);
-	// 	this.props.navigator.push({
-	// 		name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
-	// 		title:'实盘交易',
-  //     onNavigationStateChange: this.onWebViewNavigationStateChange,
-	// 		url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
-	// 		// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
-	// 		// url:'http://www.baidu.com',
-	// 	});
-	// },
+    // gotoAccountStateExce:function(){
+    // 	var userData = LogicData.getUserData()
+    // 	var userId = userData.userId
+    // 	if (userId == undefined) {
+    // 		userId = 0
+    // 	}
+    // 	console.log("gotoAccountStateExce userId = " + userId);
+    // 	this.props.navigator.push({
+    // 		name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
+    // 		title:'实盘交易',
+    //     onNavigationStateChange: this.onWebViewNavigationStateChange,
+    // 		url:'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId
+    // 		// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
+    // 		// url:'http://www.baidu.com',
+    // 	});
+    // },
 
-	loadStockDetailInfo: function(chartType,stockCode) {
+    loadStockDetailInfo: function(chartType,stockCode) {
 		var isLive = LogicData.getAccountState()
 		var url = "";
 
@@ -427,7 +428,7 @@ var StockOpenPositionPage = React.createClass({
 		)
 	},
 
-	handleStockInfo: function(realtimeStockInfo) {
+    handleStockInfo: function(realtimeStockInfo) {
 		var hasUpdate = false
 		// var hasUpdateDetail = false
 		var sdi = this.state.stockDetailInfo
@@ -504,7 +505,7 @@ var StockOpenPositionPage = React.createClass({
 		// }
 	},
 
-	doScrollAnimation: function() {
+    doScrollAnimation: function() {
 		if (Platform.OS === 'ios') {
 			var newExtendHeight = this.currentExtendHeight(this.state.selectedSubItem)
 			if (newExtendHeight < extendHeight) {
@@ -539,7 +540,7 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	stockPressed: function(rowData, sectionID, rowID, highlightRow) {
+    stockPressed: function(rowData, sectionID, rowID, highlightRow) {
 		if (rowHeight === 0) {	// to get the row height, should have better method.
 			rowHeight = this.refs['listview'].getMetrics().contentLength/this.state.stockInfoRowData.length
 		}
@@ -602,7 +603,7 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	subItemPress: function(item, rowData) {
+    subItemPress: function(item, rowData) {
 		var detalY = 0
 
 		var state = {
@@ -623,7 +624,7 @@ var StockOpenPositionPage = React.createClass({
 		});
 	},
 
-	okPress: function(rowData) {
+    okPress: function(rowData) {
 		if (!rowData.security.isOpen)
 			return
 
@@ -712,14 +713,14 @@ var StockOpenPositionPage = React.createClass({
 		)
 	},
 
-	pressChartHeaderTab: function(type, rowData) {
+    pressChartHeaderTab: function(type, rowData) {
 		this.setState({
 			chartType: type
 		}, ()=>this.loadStockDetailInfo(type,rowData.security.id)
 		)
 	},
 
-	currentExtendHeight: function(subItem) {
+    currentExtendHeight: function(subItem) {
 		var showNetIncome = false
 		var newHeight = DEFAULT_EXTENDED_HEIGHT
 		if (showNetIncome) {
@@ -739,7 +740,7 @@ var StockOpenPositionPage = React.createClass({
 		return newHeight
 	},
 
-	onSwitchPressed: function(type, value) {
+    onSwitchPressed: function(type, value) {
 		var state = {};
 		if (type===1) {
 			state.stopProfitSwitchIsOn = value;
@@ -755,7 +756,7 @@ var StockOpenPositionPage = React.createClass({
 		});
 	},
 
-	switchConfrim: function(rowData) {
+    switchConfrim: function(rowData) {
 		// console.log('Rambo: stopLossPercent switchConfrim = ' + stopLossPercent)
 		var currentStopProfitUpdated = stopProfitUpdated;
 		var currentStopLossUpdated = stopLossUpdated;
@@ -842,7 +843,7 @@ var StockOpenPositionPage = React.createClass({
 		//});
 	},
 
-	sendStopLossRequest: function(rowData, lastSelectedRow, stopLossSwitchIsOn, stopLossPercent, stopLossUpdated){
+    sendStopLossRequest: function(rowData, lastSelectedRow, stopLossSwitchIsOn, stopLossPercent, stopLossUpdated){
 		return new Promise((resolve, reject)=>{
 			try{
 				console.log("stopLossUpdated " + stopLossUpdated)
@@ -924,7 +925,7 @@ var StockOpenPositionPage = React.createClass({
 		});
 	},
 
-	sendStopProfitRequest: function(rowData, lastSelectedRow, resolveData, stopProfitSwitchIsOn, stopProfitPercent, stopProfitUpdated){
+    sendStopProfitRequest: function(rowData, lastSelectedRow, resolveData, stopProfitSwitchIsOn, stopProfitPercent, stopProfitUpdated){
 		return new Promise(resolve=>{
 			try{
 				var type = 'PUT'
@@ -1036,13 +1037,13 @@ var StockOpenPositionPage = React.createClass({
 		});
 	},
 
-	getLastPrice: function(rowData) {
+    getLastPrice: function(rowData) {
 		var lastPrice = rowData.isLong ? rowData.security.bid : rowData.security.ask
 		// console.log(rowData.security.bid, rowData.security.ask)
 		return lastPrice === undefined ? rowData.security.last : lastPrice
 	},
 
-	renderHeaderBar: function() {
+    renderHeaderBar: function() {
 		var strCP = LS.str('CP')
 		var strYK = LS.str('YK')
 		var strSYL = LS.str('SYL')
@@ -1062,7 +1063,7 @@ var StockOpenPositionPage = React.createClass({
 			);
 	},
 
-	renderFootBar: function() {
+    renderFootBar: function() {
 		var strCCYK = LS.str('CCYK')
 			return (
 				<View style={styles.headerBar}>
@@ -1077,7 +1078,7 @@ var StockOpenPositionPage = React.createClass({
 
 	},
 
-	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
+    renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
 		if(rowID == this.state.selectedRow - 1) {
 			return null
 		}
@@ -1088,11 +1089,11 @@ var StockOpenPositionPage = React.createClass({
 		);
 	},
 
-	renderFooter: function() {
+    renderFooter: function() {
 
 	},
 
-	renderStockStatus:function(rowData){
+    renderStockStatus:function(rowData){
 		if(rowData.security!==undefined){
 			if(rowData.security.isOpen){
 				return null;
@@ -1108,7 +1109,7 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	renderCountyFlag: function(rowData) {
+    renderCountyFlag: function(rowData) {
 		if (rowData.tag !== undefined) {
 			return (
 				<View style={styles.stockCountryFlagContainer}>
@@ -1120,7 +1121,7 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	renderProfit: function(percentChange, endMark) {
+    renderProfit: function(percentChange, endMark) {
 		var textSize = Math.round(18*width/375.0)
 		percentChange = percentChange.toFixed(2)
 		var startMark = percentChange > 0 ? "+":null
@@ -1132,7 +1133,7 @@ var StockOpenPositionPage = React.createClass({
 
 	},
 
-	renderChartHeader: function(rowData) {
+    renderChartHeader: function(rowData) {
 		var tabs = tabData.map(
 			(data, i) =>
 			<TouchableOpacity style={{width:width/tabData.length}} key={i}
@@ -1151,7 +1152,7 @@ var StockOpenPositionPage = React.createClass({
 			);
 	},
 
-	renderStockMaxPriceInfo: function(maxPrice, maxPercentage, isTop) {
+    renderStockMaxPriceInfo: function(maxPrice, maxPercentage, isTop) {
 		if (maxPrice && maxPercentage)
 		{
 			return (
@@ -1176,7 +1177,7 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	setSliderValue: function(type, value, rowData) {
+    setSliderValue: function(type, value, rowData) {
 		// console.log('Rambo:stopLossPercent' + value)
 		if (type === 1) {
 			stopProfitPercent = value
@@ -1189,7 +1190,7 @@ var StockOpenPositionPage = React.createClass({
 		this.useNativePropsToUpdate(type, value, rowData)
 	},
 
-	percentToPrice: function(percent, basePrice, leverage, type, isLong) {
+    percentToPrice: function(percent, basePrice, leverage, type, isLong) {
 		//if (type === 1) {
 			// 止盈
 		return isLong ? basePrice * (1+percent/100/leverage) : basePrice * (1-percent/100/leverage)
@@ -1200,12 +1201,12 @@ var StockOpenPositionPage = React.createClass({
 		// }
 	},
 
-	percentToPriceWithRow: function(percent, rowData, type) {
+    percentToPriceWithRow: function(percent, rowData, type) {
 		var leverage = rowData.leverage === 0 ? 1 : rowData.leverage
 		return this.percentToPrice(percent, rowData.settlePrice, leverage, type, rowData.isLong)
 	},
 
-	priceToPercent: function(price, basePrice, leverage, type, isLong) {	
+    priceToPercent: function(price, basePrice, leverage, type, isLong) {	
 		//if (type === 1) {
 			return (price-basePrice)/basePrice*100*leverage * (isLong?1:-1)
 		// }
@@ -1214,12 +1215,12 @@ var StockOpenPositionPage = React.createClass({
 		// }
 	},
 
-	priceToPercentWithRow: function(price, rowData, type) {
+    priceToPercentWithRow: function(price, rowData, type) {
 		var leverage = rowData.leverage === 0 ? 1 : rowData.leverage
 		return this.priceToPercent(price, rowData.settlePrice, leverage, type, rowData.isLong)
 	},
 
-	calculateProfitWithOutright: function(profitAmount, fxData) {
+    calculateProfitWithOutright: function(profitAmount, fxData) {
 		if (profitAmount > 0) {//want to sell XXX and buy USD
 			var fxPrice
 			if (fxData.symbol.substring(UIConstants.USD_CURRENCY.length) != UIConstants.USD_CURRENCY) {//USD/XXX
@@ -1241,7 +1242,7 @@ var StockOpenPositionPage = React.createClass({
 		return profitAmount
 	},
 
-	renderSlider: function(rowData, type, startPercent, endPercent, percent) {
+    renderSlider: function(rowData, type, startPercent, endPercent, percent) {
 		//1, stop profit
 		//2, stop loss
 		var disabled = false
@@ -1274,7 +1275,7 @@ var StockOpenPositionPage = React.createClass({
 			)
 	},
 
-	useNativePropsToUpdate: function(type, value, rowData){
+    useNativePropsToUpdate: function(type, value, rowData){
 		var price = this.percentToPriceWithRow(value, rowData, type)
 		if (type === 1){
 			this._text1.setNativeProps({text: value.toFixed(2)+'%'});
@@ -1293,7 +1294,7 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	bindRef: function(type, component, mode){
+    bindRef: function(type, component, mode){
 		if (mode === 1) {
 			if (type === 1){
 				this._text1 = component
@@ -1312,7 +1313,7 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	bindSliderRef: function(type, component){
+    bindSliderRef: function(type, component){
 		if (type === 1){
 			this._slider1 = component
 		}
@@ -1321,14 +1322,17 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	stopProfitLossRowId: 0,
-	stopProfitLossKeyboardType: 0, //1 stop profit, 2 stop loss
-	stopProfitMinValue: 0,
-	stopProfitMaxValue: 0,
-	stopLossMinValue: 0,
-	stopLossMaxValue: 0,
+    stopProfitLossRowId: 0,
 
-	renderStopProfitLoss: function(rowData, type) {
+    //1 stop profit, 2 stop loss
+    stopProfitLossKeyboardType: 0,
+
+    stopProfitMinValue: 0,
+    stopProfitMaxValue: 0,
+    stopLossMinValue: 0,
+    stopLossMaxValue: 0,
+
+    renderStopProfitLoss: function(rowData, type) {
 
 		var titleText = type===1 ?  LS.str('ZY1'):LS.str('ZS1')
 		var switchIsOn = type===1 ? this.state.stopProfitSwitchIsOn : this.state.stopLossSwitchIsOn
@@ -1432,15 +1436,15 @@ var StockOpenPositionPage = React.createClass({
 			</View>)
 	},
 
-	toFixedCeil: function(num, precision) {
+    toFixedCeil: function(num, precision) {
 		return (+(Math.ceil(+(num + 'e' + precision)) + 'e' + -precision)).toFixed(precision);
 	},
 
-	toFixedFloor: function(num, precision) {
+    toFixedFloor: function(num, precision) {
 		return (+(Math.floor(+(num + 'e' + precision)) + 'e' + -precision)).toFixed(precision);
 	},
 
-	getErrorText: function(type, minValue, maxValue) {
+    getErrorText: function(type, minValue, maxValue) {
 		if( type == 1){
 			return LS.str('ZYWZ') +" "+ minValue.toString()+" " + LS.str('D') +" "+ maxValue.toString()+" "+   LS.str('ZJ_');
 		}else if (type == 2){
@@ -1448,7 +1452,7 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	getError: function(value, rowData, type){
+    getError: function(value, rowData, type){
 		var maxValue, minValue = 0;
 		if( type == 1){
 			var maxValue = this.toFixedFloor(this.stopProfitMaxValue, rowData.security.dcmCount);
@@ -1464,7 +1468,7 @@ var StockOpenPositionPage = React.createClass({
 		return null;
 	},
 
-	getStopProfitLossMinMaxValue: function(rowData, type){
+    getStopProfitLossMinMaxValue: function(rowData, type){
 		var percent = type===1 ? stopProfitPercent : stopLossPercent
 		var startPercent = 0
 		var endPercent = MAX_LOSS_PERCENT
@@ -1517,7 +1521,7 @@ var StockOpenPositionPage = React.createClass({
 		};
 	},
 
-	updateCurrentStopLossProfitMinMaxValue: function(rowData, type){
+    updateCurrentStopLossProfitMinMaxValue: function(rowData, type){
 		var values = this.getStopProfitLossMinMaxValue(rowData,type)
 		var minValue = values.minValue;
 		var maxValue = values.maxValue;
@@ -1531,7 +1535,7 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	updateStopProfitLossMinMaxValue: function(rowData){
+    updateStopProfitLossMinMaxValue: function(rowData){
 
 		if(MainPage.getIsKeyboardShown()){
 			var type = this.stopProfitLossKeyboardType;
@@ -1564,7 +1568,7 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	onChangeStopProfitValuePressed: function(
+    onChangeStopProfitValuePressed: function(
 		rowData,
 		type,
 		currentValue){
@@ -1592,7 +1596,7 @@ var StockOpenPositionPage = React.createClass({
 		})
 	},
 
-	renderChart:function(){
+    renderChart:function(){
 		var state = this.state.dataStatus;
 		// console.log("RAMBO: chartType = " + this.state.chartType)
 		var opacity = state == 0? 1.0 : 0.01;
@@ -1635,7 +1639,7 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	renderDataStatus:function(){
+    renderDataStatus:function(){
 		//status 0:正常 1：暂时无法获取数据 2:加载中
 		var status = this.state.dataStatus;
 		// if(WebSocketModule.isConnected()){status=0}
@@ -1667,7 +1671,7 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	dataRefreshClicked:function(){
+    dataRefreshClicked:function(){
 
 		// if(!loadStockInfoSuccess){
 		// 	this.loadStockInfo();
@@ -1679,7 +1683,7 @@ var StockOpenPositionPage = React.createClass({
 
 	},
 
-	_renderActivityIndicator() {
+    _renderActivityIndicator() {
 			return ActivityIndicator ? (
 					<ActivityIndicator
 							style={{marginRight: 10,}}
@@ -1702,7 +1706,7 @@ var StockOpenPositionPage = React.createClass({
 			)
 	},
 
-	renderSubDetail: function(rowData) {
+    renderSubDetail: function(rowData) {
 		if (this.state.selectedSubItem === 1) {
 			// market view
 			var priceData = this.state.stockDetailInfo.priceData
@@ -1765,7 +1769,7 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	renderProfitOKViw: function(rowData){
+    renderProfitOKViw: function(rowData){
 		var confirmText = '确认'
 		if (!this.state.profitLossUpdated && this.state.profitLossConfirmed) {
 			confirmText = '已设置'
@@ -1782,7 +1786,7 @@ var StockOpenPositionPage = React.createClass({
 		)
 	},
 
-	renderOKView: function(rowData) {
+    renderOKView: function(rowData) {
 		var showNetIncome = false
 
 		var profitAmount = rowData.upl
@@ -1855,7 +1859,7 @@ var StockOpenPositionPage = React.createClass({
 			</View>)
 	},
 
-	renderDetailInfo: function(rowData) {
+    renderDetailInfo: function(rowData) {
 		var tradeImage = rowData.isLong ? require('../../images/icon_up_cw.png') : require('../../images/icon_down_cw.png')
 		var lastPrice = this.getLastPrice(rowData)
 		// console.log('RAMBO rowData.id = ' + rowData.security.id)
@@ -1948,7 +1952,7 @@ var StockOpenPositionPage = React.createClass({
 		);
 	},
 
-	renderRow: function(rowData, sectionID, rowID, highlightRow) {
+    renderRow: function(rowData, sectionID, rowID, highlightRow) {
 		var profitPercentage = 0
 		var profitAmount = rowData.upl
 		if (rowData.settlePrice !== 0) {
@@ -2010,7 +2014,7 @@ var StockOpenPositionPage = React.createClass({
 		);
 	},
 
-	renderLoadingText: function() {
+    renderLoadingText: function() {
 		var strZWCCJL = LS.str('ZWCCJL')
 		if(this.state.stockInfoRowData.length === 0) {
 			return (
@@ -2021,13 +2025,13 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	renderOrClear:function(){
+    renderOrClear:function(){
 		if(this.state.isClear){
 			return(<View style={{height:10000}}></View>)
 		}
 	},
 
-	renderContent: function(){
+    renderContent: function(){
 		if(!this.state.contentLoaded){
 			return (
 				<NetworkErrorIndicator onRefresh={()=>this.loadOpenPositionInfo()} refreshing={this.state.isRefreshing}/>
@@ -2055,7 +2059,7 @@ var StockOpenPositionPage = React.createClass({
 		}
 	},
 
-	render: function() {
+    render: function() {
 		
 		return (
 			<View style={viewStyle}>

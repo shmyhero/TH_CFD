@@ -26,7 +26,7 @@ InjectTabNameContext.childContextTypes = {
   tabName: PropTypes.string
 };
 
-InjectTabNameContext.propTypes = {
+InjectTabNameConPropTypes = {
   name: PropTypes.string.isRequired
 };
 

@@ -1,5 +1,7 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {
 	StyleSheet,
@@ -25,22 +27,20 @@ var Spinner = require('react-native-spinkit');
 
 var {height, width} = Dimensions.get('window')
 
-var OAReviewStatusPage = React.createClass({
-	propTypes: {
-		onPop: React.PropTypes.func,
-	},
+class OAReviewStatusPage extends React.Component {
+    static propTypes = {
+		onPop: PropTypes.func,
+	};
 
-	getDefaultProps() {
-		return {
-			onPop: ()=>{},
-		}
-	},
+    static defaultProps = {
+        onPop: ()=>{},
+    };
 
-	gotoNext: function() {
+    gotoNext = () => {
 		OpenAccountRoutes.goToNextRoute(this.props.navigator, {}, this.props.onPop);
-	},
+	};
 
-	render: function() {
+    render() {
 		// var types = ['CircleFlip', 'Bounce', 'Wave', 'WanderingCubes', 'Pulse', 'ChasingDots',
 		// 	 'ThreeBounce', 'Circle', '9CubeGrid', 'WordPress', 'FadingCircle', 'FadingCircleAlt',
 		// 	'Arc', 'ArcAlt'];
@@ -92,8 +92,8 @@ var OAReviewStatusPage = React.createClass({
 				</View>
 			</View>
 		);
-	},
-});
+	}
+}
 
 var styles = StyleSheet.create({
 	wrapper: {

@@ -1,6 +1,9 @@
 'use strict'
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	Platform,
@@ -49,22 +52,23 @@ const TAB_SIMULATOR = 2
 var last_pressed_login = new Date().getTime();
 var layoutSizeChangedSubscription = null
 
-var LoginPage = React.createClass({
-	mixins: [TimerMixin],
+var LoginPage = createReactClass({
+    displayName: 'LoginPage',
+    mixins: [TimerMixin],
 
-	propTypes: {
-		showCancelButton: React.PropTypes.bool,
-		popToRoute: React.PropTypes.string,
-		nextRoute: React.PropTypes.object,
-		showRegisterSuccessDialog: React.PropTypes.func,
-		isTabbarShown: React.PropTypes.func,
-		isMobileBinding: React.PropTypes.bool,
-		popToStackTop: React.PropTypes.bool,
-		getNextRoute: React.PropTypes.func,
-		onLoginFinish: React.PropTypes.func,
+    propTypes: {
+		showCancelButton: PropTypes.bool,
+		popToRoute: PropTypes.string,
+		nextRoute: PropTypes.object,
+		showRegisterSuccessDialog: PropTypes.func,
+		isTabbarShown: PropTypes.func,
+		isMobileBinding: PropTypes.bool,
+		popToStackTop: PropTypes.bool,
+		getNextRoute: PropTypes.func,
+		onLoginFinish: PropTypes.func,
 	},
 
-	getDefaultProps() {
+    getDefaultProps() {
 		return {
 			showCancelButton: false,
 			popToRoute: null,
@@ -78,7 +82,7 @@ var LoginPage = React.createClass({
 		}
 	},
 
-	componentWillMount: function() {
+    componentWillMount: function() {
 		var isTabbarShown = this.props.isTabbarShown();
 		if(!isTabbarShown){
 			this.setState({
@@ -97,18 +101,18 @@ var LoginPage = React.createClass({
 		});
 	},
 
-	componentWillUnmount: function(){
+    componentWillUnmount: function(){
 		layoutSizeChangedSubscription && layoutSizeChangedSubscription.remove();
 	},
 
-	onLayoutSizeChanged: function(){
+    onLayoutSizeChanged: function(){
 		console.log("onLayoutSizeChanged");
 		this.setState({
 			height: UIConstants.getVisibleHeight(),
 		})
 	},
 
-	getInitialState: function() {
+    getInitialState: function() {
 		return {
 			tabSelected: TAB_SIMULATOR,
 			wechatInstalled: false,
@@ -125,14 +129,14 @@ var LoginPage = React.createClass({
 		};
 	},
 
-	checkButtonsEnable: function(phoneNumber, validationCode) {
+    checkButtonsEnable: function(phoneNumber, validationCode) {
 		this.setState({
 			getValidationCodeButtonEnabled: (phoneNumber.length === 11 && this.state.validationCodeCountdown < 0),
 			phoneLoginButtonEnabled: (phoneNumber.length === 11 && validationCode.length === 4),
 		})
 	},
 
-	setPhoneNumber: function(text: string) {
+    setPhoneNumber: function(text) {
 		this.setState({
 			phoneNumber: text
 		})
@@ -140,7 +144,7 @@ var LoginPage = React.createClass({
 		this.checkButtonsEnable(text, this.state.validationCode)
 	},
 
-	setValidationCode: function(text: string) {
+    setValidationCode: function(text) {
 		this.setState({
 			validationCode: text
 		})
@@ -148,7 +152,7 @@ var LoginPage = React.createClass({
 		this.checkButtonsEnable(this.state.phoneNumber, text)
 	},
 
-	getValidationCodePressed: function() {
+    getValidationCodePressed: function() {
 		if (! this.state.getValidationCodeButtonEnabled) {
 			return
 		}
@@ -201,7 +205,7 @@ var LoginPage = React.createClass({
 		)
 	},
 
-	wechatPressed: function() {
+    wechatPressed: function() {
 		TalkingdataModule.trackEvent(TalkingdataModule.SIMULATOR_WECHAT_LOGIN_EVENT);
 		WechatModule.wechatLogin(
 			() => {
@@ -211,11 +215,11 @@ var LoginPage = React.createClass({
 		)
 	},
 
-	getCurrentTime:function(){
+    getCurrentTime:function(){
 		return new Date().getTime();
 	},
 
-	isBlockedButton:function(){
+    isBlockedButton:function(){
 		if(this.getCurrentTime() - last_pressed_login  > 2000){
 			last_pressed_login = this.getCurrentTime();
 			console.log('isBolcked = false');
@@ -226,7 +230,7 @@ var LoginPage = React.createClass({
 		}
 	},
 
-	wechatLogin: function() {
+    wechatLogin: function() {
 		var wechatUserData = LogicData.getWechatUserData()
 
 		if(this.isBlockedButton()){
@@ -257,7 +261,7 @@ var LoginPage = React.createClass({
 		)
 	},
 
-	loginWithPasswordPressed: function() {
+    loginWithPasswordPressed: function() {
 		if(this.isBlockedButton()){
 			return
 		}
@@ -291,7 +295,7 @@ var LoginPage = React.createClass({
 		)
 	},
 
-	loginWithCodePressed: function() {
+    loginWithCodePressed: function() {
 		if(this.isBlockedButton()){
 			return
 		}
@@ -328,7 +332,7 @@ var LoginPage = React.createClass({
 		)
 	},
 
-	bindWithCode: function() {
+    bindWithCode: function() {
 		if (!this.state.phoneLoginButtonEnabled) {
 			return
 		}
@@ -362,13 +366,13 @@ var LoginPage = React.createClass({
 		)
 	},
 
-	liveRegisterPressed: function() {
+    liveRegisterPressed: function() {
 		this.props.navigator.push({
 			name: MainPage.LIVE_REGISTER_ROUTE,
 		});
 	},
 
-	loginSuccess: function(userData) {
+    loginSuccess: function(userData) {
 		StorageModule.setUserData(JSON.stringify(userData))
 		LogicData.setUserData(userData);
 
@@ -387,8 +391,7 @@ var LoginPage = React.createClass({
 		this.updateMeData();
 	},
 
-
-	updateMeData: function(){
+    updateMeData: function(){
 		var userData = LogicData.getUserData();
 		LocalDataUpdateModule.updateMeData(userData, ()=>{
 			var meData = LogicData.getMeData();
@@ -472,7 +475,7 @@ var LoginPage = React.createClass({
 		})
 	},
 
-	onBackPressed: function(){
+    onBackPressed: function(){
 		if(this.props.popToStackTop){
 			this.props.navigator.popToTop();
 		}else{
@@ -480,7 +483,7 @@ var LoginPage = React.createClass({
 		}
 	},
 
-	initTokenForGeTui:function(){
+    initTokenForGeTui:function(){
 		var userData = LogicData.getUserData()
 
 		var alertData = {
@@ -509,17 +512,17 @@ var LoginPage = React.createClass({
 		 )
 	},
 
-	trackTongDao: function(userData) {
+    trackTongDao: function(userData) {
 		console.log("tong dao register:", userData)
 		//TongDaoModule.setUserId(userData.userId)
 		//TongDaoModule.trackRegistration()
 	},
 
-	forgetPassword: function() {
+    forgetPassword: function() {
 
 	},
 
-	renderFastLogin: function() {
+    renderFastLogin: function() {
 		if (this.state.wechatInstalled && !this.props.isMobileBinding) {
 			//console.log("renderFastLogin: " + quickLoginBottomMargin)
 			return (
@@ -547,7 +550,7 @@ var LoginPage = React.createClass({
 		}
 	},
 
-	renderGetValidationCodeButton: function() {
+    renderGetValidationCodeButton: function() {
 		var {height, width} = Dimensions.get('window');
 		var textSize = Math.round(fontSize*width/375.0)
 		var text = LS.str("GET_VERIFICATION_CODE")
@@ -563,7 +566,7 @@ var LoginPage = React.createClass({
 		);
 	},
 
-	renderTab: function() {
+    renderTab: function() {
 		var liveTabAdditionalAttributes = {}
 		var liveTextAdditionalAttributes = {}
 		var simulatorTabAdditionalAttributes = {}
@@ -611,7 +614,7 @@ var LoginPage = React.createClass({
 		)
 	},
 
-	renderRememberUserCheckbox: function() {
+    renderRememberUserCheckbox: function() {
 		var checkBox = require('../../images/checkbox_unchecked.png')
 		if (this.state.liveLoginRememberUserName) {
 			checkBox = require('../../images/checkbox_checked.png')
@@ -623,7 +626,7 @@ var LoginPage = React.createClass({
 		)
 	},
 
-	renderLiveLoginContent: function() {
+    renderLiveLoginContent: function() {
 		var {height, width} = Dimensions.get('window');
 
 		return (
@@ -706,7 +709,7 @@ var LoginPage = React.createClass({
 		)
 	},
 
-	renderLoginButton: function(){
+    renderLoginButton: function(){
 		var style = [styles.loginTextView];
 		var textStyle = [styles.loginText];
 		var activeOpacity = 0.2;
@@ -734,7 +737,7 @@ var LoginPage = React.createClass({
 		);
 	},
 
-	renderSimulatorLoginContent: function() {
+    renderSimulatorLoginContent: function() {
 		var {height, width} = Dimensions.get('window');
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
@@ -781,7 +784,7 @@ var LoginPage = React.createClass({
 		)
 	},
 
-	renderLoginContent: function() {
+    renderLoginContent: function() {
 		if (this.state.tabSelected == TAB_LIVE) {
 			return this.renderLiveLoginContent()
 		} else {
@@ -789,7 +792,7 @@ var LoginPage = React.createClass({
 		}
 	},
 
-	render: function() {
+    render: function() {
 		var {height, width} = Dimensions.get('window');
 		var gradientColors = ['#1c5fd1', '#123b80']
 		if (this.state.tabSelected == TAB_LIVE) {
@@ -822,7 +825,7 @@ var LoginPage = React.createClass({
 		)
 	},
 
-	renderCancelButton: function() {
+    renderCancelButton: function() {
 		if (this.props.showCancelButton) {
 			return (
 				<TouchableOpacity style={styles.cancelContainer}
@@ -834,7 +837,6 @@ var LoginPage = React.createClass({
 			);
 		}
 	},
-
 })
 
 var styles = StyleSheet.create({

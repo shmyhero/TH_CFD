@@ -10,28 +10,25 @@ import {
 	TouchableHighlight,
 } from 'react-native';
 
-var MySettings = React.createClass({
+class MySettings extends React.Component {
+    state = {
+        trueSwitchIsOn: true,
+    };
 
-	getInitialState: function() {
-		return {
-			trueSwitchIsOn: true,
-		};
-	},
-
-	quitOnClick: function() {
+    quitOnClick = () => {
 		this.props.navigator.replace({
 			name: 'login'
 		});
-	},
+	};
 
-	render: function() {
+    render() {
 		return (
 			<View style={styles.wrapper}>
 
 			</View>
 		);
 	}
-});
+}
 
 var styles = StyleSheet.create({
 	wrapper: {
@@ -73,7 +70,7 @@ var styles = StyleSheet.create({
 	rowImage: {
 		width: 15,
 		height: 15,
-		resizeMode: Image.resizeMode.contain,
+		resizeMode: 'contain',
 	},
 
 	quitContainer: {

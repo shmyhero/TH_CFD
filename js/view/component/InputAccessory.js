@@ -1,5 +1,7 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {View,
 	DeviceEventEmitter,
@@ -14,36 +16,32 @@ import {View,
 const dismissKeyboard = require('dismissKeyboard');
 var INPUT_ACCESSORY_HEIGHT = 40;
 
-var InputAccessory = React.createClass({
-	getInitialState: function() {
-		return {
-			visibleHeight: Dimensions.get('window').height,
-			opacity: 0,
-			validValue: 0, //0, ok; 1, too less; 2, too much
-			hideKA: true,
-		};
-	},
+class InputAccessory extends React.Component {
+    static propTypes = {
+		enableNumberText: PropTypes.bool,
+		textValue: PropTypes.string,
+		maxValue: PropTypes.number,
+		rightButtonOnClick: PropTypes.func,	// use to clear text when error occured.
+		minInvestUSD: PropTypes.number,
+	};
 
-	propTypes: {
-		enableNumberText: React.PropTypes.bool,
-		textValue: React.PropTypes.string,
-		maxValue: React.PropTypes.number,
-		rightButtonOnClick: React.PropTypes.func,	// use to clear text when error occured.
-		minInvestUSD: React.PropTypes.number,
-	},
+    static defaultProps = {
+        enableNumberText: true,
+        textValue: '',
+        maxValue: 0,
+        rightButtonOnClick: null,
+        minInvestUSD: 50,
+    };
 
-	getDefaultProps(): Object {
-		return {
-			enableNumberText: true,
-			textValue: '',
-			maxValue: 0,
-			rightButtonOnClick: null,
-			minInvestUSD: 50,
-		};
-	},
+    state = {
+        visibleHeight: Dimensions.get('window').height,
+        opacity: 0,
+        validValue: 0, //0, ok; 1, too less; 2, too much
+        hideKA: true,
+    };
 
-	//For some reason, this gives warnings?
-	componentWillMount() {
+    //For some reason, this gives warnings?
+    componentWillMount() {
 		if (Platform.OS === 'ios') {
 			this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', this.keyboardDidShow)
 			this.keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', this.keyboardDidHide)
@@ -52,9 +50,9 @@ var InputAccessory = React.createClass({
 			this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.keyboardDidShow)
 			this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.keyboardDidHide)
 		}
-	},
+	}
 
-	componentWillUnmount() {
+    componentWillUnmount() {
 		let newSize = Dimensions.get('window').height
 		this.setState({
 				visibleHeight: newSize,
@@ -70,9 +68,9 @@ var InputAccessory = React.createClass({
 			this.keyboardDidShowListener.remove();
 			this.keyboardDidHideListener.remove();
 		}
-	},
+	}
 
-	keyboardDidShow(e) {
+    keyboardDidShow = (e) => {
 		var newSize = e.endCoordinates.screenY - (INPUT_ACCESSORY_HEIGHT - 1); //-1 so 1px is showing so it doesn't unmount
 
 		if (Platform.OS === 'ios') {
@@ -94,26 +92,26 @@ var InputAccessory = React.createClass({
 			opacity: 1,
 			validValue: 0,
 		})
-	},
+	};
 
-	rotateDevice: function() {
+    rotateDevice = () => {
 		return false;
-	},
+	};
 
-	keyboardDidHide(e) {
+    keyboardDidHide = (e) => {
 		let newSize = Dimensions.get('window').height
 		this.setState({
 			visibleHeight: Dimensions.get('window').height,
 			hideKA: true,
 			opacity: 0,
 		})
-	},
+	};
 
-	isShow: function(){
+    isShow = () => {
 		return !this.state.hideKA;
-	},
+	};
 
-	dismissKeyboardHandler: function() {
+    dismissKeyboardHandler = () => {
 		var value = parseInt(this.props.textValue)
 		if (value < this.props.minInvestUSD) {
 			this.setState({
@@ -150,15 +148,15 @@ var InputAccessory = React.createClass({
 
 		this.props.rightButtonOnClick && this.props.rightButtonOnClick()
 		dismissKeyboard();
-	},
+	};
 
-	resetValidState: function() {
+    resetValidState = () => {
 		this.setState({
 			validValue: 0
 		})
-	},
+	};
 
-	render: function() {
+    render() {
 
 		var warningText = <View />
 		if (this.state.validValue===1) {
@@ -192,7 +190,7 @@ var InputAccessory = React.createClass({
 					</View>)
 		}
 	}
-});
+}
 
 var s = StyleSheet.create({
 	InputAccessory: {

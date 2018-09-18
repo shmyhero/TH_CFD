@@ -1,7 +1,11 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
-var View = require('View');
+import ViewPropTypes from 'react-native';
+import createReactClass from 'create-react-class';
+// const ViewPropTypes = require('ViewPropTypes');
 var ColorPropType = require('ColorPropType');
 
 var Touchable = require('Touchable');
@@ -13,73 +17,74 @@ var LineChartXAxisPosition = require('./LineChartXAxisPosition');
 var LineChartYAxisPosition = require('./LineChartYAxisPosition');
 
 
-var LineChart = React.createClass({
-	mixins: [Touchable.Mixin, /*NativeMethodsMixin*/],
+var LineChart = createReactClass({
+    displayName: 'LineChart',
+    mixins: [Touchable.Mixin, /*NativeMethodsMixin*/],
 
-	propTypes: {
-		...View.propTypes,
+    propTypes: {
+		...ViewPropTypes,
 
 		...TouchableWithoutFeedback.propTypes,
 
-		data: React.PropTypes.string,	// JSON format
+		data: PropTypes.string,	// JSON format
 
-		colorType: React.PropTypes.number,
+		colorType: PropTypes.number,
 
-		chartType: React.PropTypes.string,
+		chartType: PropTypes.string,
 
-		chartIsActual: React.PropTypes.bool,
+		chartIsActual: PropTypes.bool,
 
-		description: React.PropTypes.string,
+		description: PropTypes.string,
 
-		descriptionColor: React.PropTypes.number,
+		descriptionColor: PropTypes.number,
 
-		noDataText: React.PropTypes.string,
+		noDataText: PropTypes.string,
 
-		noDataTextDescription: React.PropTypes.string,
+		noDataTextDescription: PropTypes.string,
 
-		padding: React.PropTypes.number,
+		padding: PropTypes.number,
 
-		xAxisPosition: React.PropTypes.oneOf(['TOP', 'BOTTOM', 'BOTH_SIDED', 'TOP_INSIDE', 'BOTTOM_INSIDE']),
+		xAxisPosition: PropTypes.oneOf(['TOP', 'BOTTOM', 'BOTH_SIDED', 'TOP_INSIDE', 'BOTTOM_INSIDE']),
 
-		xAxisStep: React.PropTypes.number,
+		xAxisStep: PropTypes.number,
 
-		xAxisTextSize: React.PropTypes.number,
+		xAxisTextSize: PropTypes.number,
 
-		xAxisDrawLabel: React.PropTypes.bool,
+		xAxisDrawLabel: PropTypes.bool,
 
-		leftAxisEnabled: React.PropTypes.bool,
+		leftAxisEnabled: PropTypes.bool,
 
-		leftAxisMaxValue: React.PropTypes.number,
+		leftAxisMaxValue: PropTypes.number,
 
-		leftAxisMinValue: React.PropTypes.number,
+		leftAxisMinValue: PropTypes.number,
 
-		leftAxisPosition: React.PropTypes.oneOf(['OUTSIDE_CHART', 'INSIDE_CHART']),
+		leftAxisPosition: PropTypes.oneOf(['OUTSIDE_CHART', 'INSIDE_CHART']),
 
-		leftAxisLabelCount: React.PropTypes.number,
+		leftAxisLabelCount: PropTypes.number,
 
-		leftAxisTextSize: React.PropTypes.number,
+		leftAxisTextSize: PropTypes.number,
 
-		leftAxisDrawLabel: React.PropTypes.bool,
+		leftAxisDrawLabel: PropTypes.bool,
 
-		leftAxisLimitLines: React.PropTypes.array,
+		leftAxisLimitLines: PropTypes.array,
 
-		rightAxisEnabled: React.PropTypes.bool,
+		rightAxisEnabled: PropTypes.bool,
 
-		rightAxisMaxValue: React.PropTypes.number,
+		rightAxisMaxValue: PropTypes.number,
 
-		rightAxisMinValue: React.PropTypes.number,
+		rightAxisMinValue: PropTypes.number,
 
-		rightAxisPosition: React.PropTypes.oneOf(['OUTSIDE_CHART', 'INSIDE_CHART']),
+		rightAxisPosition: PropTypes.oneOf(['OUTSIDE_CHART', 'INSIDE_CHART']),
 
-		rightAxisLabelCount: React.PropTypes.number,
+		rightAxisLabelCount: PropTypes.number,
 
-		rightAxisTextSize: React.PropTypes.number,
+		rightAxisTextSize: PropTypes.number,
 
-		rightAxisDrawLabel: React.PropTypes.bool,
+		rightAxisDrawLabel: PropTypes.bool,
 
-		drawBackground: React.PropTypes.bool,
+		drawBackground: PropTypes.bool,
 
-		drawBorders: React.PropTypes.bool,
+		drawBorders: PropTypes.bool,
 
 		borderColor: ColorPropType,
 
@@ -89,24 +94,24 @@ var LineChart = React.createClass({
 
 		backgroundColor: ColorPropType,
 
-		rightAxisDrawGridLines: React.PropTypes.bool,
+		rightAxisDrawGridLines: PropTypes.bool,
 
-		chartPaddingTop: React.PropTypes.number,
+		chartPaddingTop: PropTypes.number,
 
-		chartPaddingBottom: React.PropTypes.number,
+		chartPaddingBottom: PropTypes.number,
 
-		chartPaddingLeft: React.PropTypes.number,
+		chartPaddingLeft: PropTypes.number,
 
-		chartPaddingRight: React.PropTypes.number,
+		chartPaddingRight: PropTypes.number,
 
-		lineChartGradient: React.PropTypes.array,
+		lineChartGradient: PropTypes.array,
 
-		isLandspace:React.PropTypes.bool,
+		isLandspace:PropTypes.bool,
 
-		chartIsPrivate:React.PropTypes.bool,
+		chartIsPrivate:PropTypes.bool,
 	},
 
-	getDefaultProps(): Object {
+    getDefaultProps() {
 		return {
 			colorType: 0,
 			chartType: 'today',	//today, week, month
@@ -140,18 +145,18 @@ var LineChart = React.createClass({
 		};
 	},
 
-	getInitialState: function() {
+    getInitialState: function() {
 		return {
 			...this.touchableGetInitialState(),
 		};
 	},
 
-	statics: {
+    statics: {
 		xAxisPosition: LineChartXAxisPosition,
 		yAxisPosition: LineChartYAxisPosition,
 	},
 
-	render: function() {
+    render: function() {
 		return (
 			<LineChartNative {...this.props}
 				onStartShouldSetResponder={this.touchableHandleStartShouldSetResponder}
@@ -161,7 +166,7 @@ var LineChart = React.createClass({
 				onResponderRelease={this.touchableHandleResponderRelease}
 				onResponderTerminate={this.touchableHandleResponderTerminate}/>
 		);
-	}
+	},
 });
 
 var LineChartNative = requireNativeComponent('LineChart', LineChart);

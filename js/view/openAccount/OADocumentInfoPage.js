@@ -1,6 +1,9 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	View,
@@ -31,10 +34,11 @@ var fontSize = Math.round(15*width/375)
 var OA_WARNING_DIALOG = "oaWarningDialog";
 var OAWarningDialog = require('./OAWarningDialog');
 
-var OADocumentInfoPage = React.createClass({
-	isProceedAnyway: false,
+var OADocumentInfoPage = createReactClass({
+    displayName: 'OADocumentInfoPage',
+    isProceedAnyway: false,
 
-	listRawData: [
+    listRawData: [
 			{"key":"OPEN_ACCOUNT_TERMS", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "1")},
 			{"key":"OPEN_ACCOUNT_RISK_DISCLOSURE", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "2")},
 			{"key":"OPEN_ACCOUNT_DATA_SHARING_AGREEMENT", "url": NetConstants.TRADEHERO_API.LIVE_REGISTER_TERMS.replace("<id>", "3")},
@@ -48,23 +52,23 @@ var OADocumentInfoPage = React.createClass({
 			{"type":"openAccountHintBlock", },
 		],
 
-	propTypes: {
-		data: React.PropTypes.object,
-		onPop: React.PropTypes.func,
+    propTypes: {
+		data: PropTypes.object,
+		onPop: PropTypes.func,
 	},
 
-	getDefaultProps() {
+    getDefaultProps() {
 		return {
 			data: null,
 			onPop: ()=>{},
 		}
 	},
 
-	getData: function(){
+    getData: function(){
 		return {};
 	},
 
-	getInitialState: function() {
+    getInitialState: function() {
 		var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		return {
 			dataSource: ds.cloneWithRows(this.listRawData),
@@ -74,12 +78,12 @@ var OADocumentInfoPage = React.createClass({
 		};
 	},
 
-	proceedAnyway: function(){
+    proceedAnyway: function(){
 		this.isProceedAnyway = true;
 		this.gotoNext();
 	},
 
-	gotoNext: function(){
+    gotoNext: function(){
 		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP6, TalkingdataModule.LABEL_OPEN_ACCOUNT)
 
 		this.setState({
@@ -177,7 +181,7 @@ var OADocumentInfoPage = React.createClass({
 		})
 	},
 
-	parseError: function(errorMessage){
+    parseError: function(errorMessage){
 		if(errorMessage === "MifidTestFailed"){
 			this.refs[OA_WARNING_DIALOG].show();
 			return;
@@ -231,7 +235,7 @@ var OADocumentInfoPage = React.createClass({
 		}
 	},
 
-	documentPressed: function(rowData) {
+    documentPressed: function(rowData) {
 		this.props.navigator.push({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			url: rowData.url,
@@ -240,7 +244,7 @@ var OADocumentInfoPage = React.createClass({
 		});
 	},
 
-	renderAboutCashDeposit:function(){
+    renderAboutCashDeposit:function(){
 		return(
 			<View style={styles.aboutCash}>
 	  		<Text style = {[styles.textTitle,{marginTop:0}]}>{LS.str("OPEN_ACCOUNT_ABOUT_MARGIN_TRADING_HEADER")}</Text>
@@ -268,7 +272,7 @@ var OADocumentInfoPage = React.createClass({
 		)
 	},
 
-	renderRow: function(rowData, sectionID, rowID) {
+    renderRow: function(rowData, sectionID, rowID) {
 		if(rowData.type == 'openAccountHintBlock'){
 			return (
 				<OpenAccountHintBlock />
@@ -286,7 +290,8 @@ var OADocumentInfoPage = React.createClass({
 				)
 		}
 	},
-	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
+
+    renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
 		return (
 			<View style={styles.line} key={rowID}>
 				<View style={styles.separator}/>
@@ -294,13 +299,13 @@ var OADocumentInfoPage = React.createClass({
 			)
 	},
 
-	onClickCheckbox: function(value){
+    onClickCheckbox: function(value){
 		this.setState({
 			hasRead: value,
 		})
 	},
 
-	render: function() {
+    render: function() {
 		return (
 			<View style={styles.wrapper}>
 				<ErrorBar error={this.state.error}/>

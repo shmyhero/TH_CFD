@@ -1,5 +1,7 @@
 'use strict'
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {
 	StyleSheet,
@@ -9,30 +11,29 @@ import {
 
 var ProgressBar = require('ProgressBarAndroid');
 var {height, width} = Dimensions.get('window')
-var LoadingIndicator = React.createClass({
-	propTypes: {
-		animating: React.PropTypes.bool,
-	},
 
-	getInitialState: function() {
-		return {
-			visible: false,
-		};
-	},
+class LoadingIndicator extends React.Component {
+    static propTypes = {
+		animating: PropTypes.bool,
+	};
 
-	show: function() {
+    state = {
+        visible: false,
+    };
+
+    show = () => {
 		this.setState({
 			visible: true,
 		})
-	},
+	};
 
-	hide: function() {
+    hide = () => {
 		this.setState({
 			visible: false,
 		})
-	},
+	};
 
-	render: function() {
+    render() {
 		if (this.state.visible) {
 			return (
 				<View style={styles.container}>
@@ -43,7 +44,7 @@ var LoadingIndicator = React.createClass({
 			return null
 		}
 	}
-})
+}
 
 var styles = StyleSheet.create({
 	container: {

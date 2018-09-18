@@ -1,5 +1,7 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {
 	StyleSheet,
@@ -7,7 +9,6 @@ import {
 	Dimensions,
 	ListView,
 	Platform,
-	Navigator,
 	Switch,
 	Text,
 	Image,
@@ -41,30 +42,25 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 var closePositionPushUpdated = false
 
-var MePushConfigPage = React.createClass({
+class MePushConfigPage extends React.Component {
+    static propTypes = {
+		routeMapper: PropTypes.func,
+	};
 
-	propTypes: {
-		routeMapper: React.PropTypes.func,
-	},
+    static defaultProps = {
+        routeMapper: function(route, navigationOperations, onComponentRef) {
 
-	getDefaultProps() {
-		return {
-			routeMapper: function(route, navigationOperations, onComponentRef) {
+        },
+    };
 
-			},
-		}
-	},
+    state = {
+        dataSource: ds.cloneWithRows(listRawData),
+        autoCloseAlertIsOn: true,
+        showPersonalData: true,
+        showPositionData:true,
+    };
 
-	getInitialState: function() {
-		return {
-			dataSource: ds.cloneWithRows(listRawData),
-			autoCloseAlertIsOn: true,
-			showPersonalData: true,
-			showPositionData:true,
-		};
-	},
-
-	componentDidMount: function() {
+    componentDidMount() {
 		//Once user moves into this page, check server setting.
 		this.loadPushConfigInfo()
 
@@ -78,13 +74,13 @@ var MePushConfigPage = React.createClass({
 				onPopToRoute: this.loadPushConfigInfo
 			});
 		}
-	},
+	}
 
-	onSelectNormalRow: function(rowData) {
+    onSelectNormalRow = (rowData) => {
 		//DO NOTHING!
-	},
+	};
 
-	loadPushConfigInfo: function(){
+    loadPushConfigInfo = () => {
 		var userData = LogicData.getUserData()
 		var meData = LogicData.getMeData()
 		var notLogin = Object.keys(meData).length === 0
@@ -116,9 +112,9 @@ var MePushConfigPage = React.createClass({
 				}
 			)
 		}
-	},
+	};
 
-    changePositionDataSetting:function(value){
+    changePositionDataSetting = (value) => {
         var userData = LogicData.getUserData()
                 var notLogin = Object.keys(userData).length === 0
                 if (notLogin) {
@@ -146,10 +142,9 @@ var MePushConfigPage = React.createClass({
                         }
                     )
                 }
-    },
+    };
 
-
-	changeShowPersonalDataSetting: function(value){
+    changeShowPersonalDataSetting = (value) => {
 		var userData = LogicData.getUserData()
 		var notLogin = Object.keys(userData).length === 0
 
@@ -184,9 +179,9 @@ var MePushConfigPage = React.createClass({
 				}
 			)
 		}
-	},
+	};
 
-	changeAutoCloseAlertSetting: function(value){
+    changeAutoCloseAlertSetting = (value) => {
 		var userData = LogicData.getUserData()
 		var notLogin = Object.keys(userData).length === 0
 		if (notLogin) {
@@ -210,9 +205,9 @@ var MePushConfigPage = React.createClass({
 				}
 			)
 		}
-	},
+	};
 
-	onSwitchPressed: function(value, rowData) {
+    onSwitchPressed = (value, rowData) => {
 		if(rowData.subtype === 'closepositionpush'){
 
 			this.setState({
@@ -241,9 +236,9 @@ var MePushConfigPage = React.createClass({
                     });
 		    }
 		}
-	},
+	};
 
-	renderModal: function(){
+    renderModal = () => {
 
 		var headerDialogMessages = {
 			messageTitle:'CONFIG_RANKING_TERMS',
@@ -267,9 +262,9 @@ var MePushConfigPage = React.createClass({
 				messageLines={headerDialogMessages.messageLines}
 				noDotLines={headerDialogMessages.noDotLines}/>
 		)
-	},
+	};
 
-	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
+    renderSeparator = (sectionID, rowID, adjacentRowHighlighted) => {
 		var marginLeft = 0
 		//if (rowID > 1 && rowID < 3){
 		//	marginLeft = 15
@@ -279,9 +274,9 @@ var MePushConfigPage = React.createClass({
 				<View style={[styles.separator, {marginLeft: marginLeft}]}/>
 			</View>
 			)
-	},
+	};
 
-	renderRow: function(rowData, sectionID, rowID) {
+    renderRow = (rowData, sectionID, rowID) => {
 		if (rowData.type === 'normal') {
 			var switchIsOn = false;
 			var switchDisable = false;
@@ -324,9 +319,9 @@ var MePushConfigPage = React.createClass({
                     </View>
                 );
 		}
-	},
+	};
 
-	render: function() {
+    render() {
 		var userData = LogicData.getUserData()
 		return (<View style={styles.wrapper}>
 			<NavBar title={LS.str("SZ")} showBackButton={true} navigator={this.props.navigator}/>
@@ -338,8 +333,8 @@ var MePushConfigPage = React.createClass({
 			{this.renderModal()}
 		</View>
 		);
-	},
-});
+	}
+}
 
 var styles = StyleSheet.create({
 	wrapper: {

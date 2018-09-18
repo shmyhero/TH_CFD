@@ -39,14 +39,12 @@ var options = {
 
 var LogicData = require('../LogicData')
 
-var MyHomePage = React.createClass({
-	getInitialState: function() {
-		return {
-			avatarSource: require('../../images/bannar_01.jpg'),
-		};
-	},
+class MyHomePage extends React.Component {
+    state = {
+        avatarSource: require('../../images/bannar_01.jpg'),
+    };
 
-	mySettingsOnClick: function() {
+    mySettingsOnClick = () => {
 		ImagePicker.showImagePicker(options, (response) => {
 			console.log('Response = ', response);
 
@@ -74,9 +72,9 @@ var MyHomePage = React.createClass({
 
 			}
 		});
-	},
+	};
 
-	render: function() {
+    render() {
 		return (
 			<View style={styles.wrapper}>
 				<TouchableHighlight
@@ -99,8 +97,8 @@ var MyHomePage = React.createClass({
 			</View>
 
 		);
-	},
-});
+	}
+}
 
 var styles = StyleSheet.create({
 	wrapper: {
@@ -203,7 +201,7 @@ var styles = StyleSheet.create({
 		width: 20,
 		height: 20,
 		marginLeft: 15,
-		resizeMode: Image.resizeMode.contain,
+		resizeMode: 'contain',
 	},
 	toaName: {
 		fontSize: 15,

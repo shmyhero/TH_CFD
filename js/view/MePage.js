@@ -91,17 +91,15 @@ var didLogoutSubscription = null;
 var accStatus
 var LIST_SCROLL_VIEW = "listScrollView"
 
-var MePage = React.createClass({
-	getInitialState: function() {
-		return {
-			loggedIn: false,
-			dataSource: ds.cloneWithRows(listRawData),
-			lastStep:0,
-			unreadMessageCount: 0, 
-		};
-	},
+class MePage extends React.Component {
+    state = {
+        loggedIn: false,
+        dataSource: ds.cloneWithRows(listRawData),
+        lastStep:0,
+        unreadMessageCount: 0, 
+    };
 
-	componentWillMount: function(){
+    componentWillMount() {
 		var userData = LogicData.getUserData()
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
@@ -128,9 +126,9 @@ var MePage = React.createClass({
 		}else{
 			this.reloadMeDataFromStorage();
 		}
-	},
+	}
 
-	componentDidMount: function(){
+    componentDidMount() {
 		didTabSelectSubscription = EventCenter.getEventEmitter().
 			addListener(EventConst.ME_TAB_PRESS_EVENT, this.onTabChanged);
 		didAccountStateChangeSubscription = EventCenter.getEventEmitter().
@@ -141,16 +139,16 @@ var MePage = React.createClass({
 			addListener(EventConst.ACCOUNT_LOGOUT, ()=>this.reloadMeData());
 
 
-	},
+	}
 
-	componentWillUnmount: function() {
+    componentWillUnmount() {
 		didTabSelectSubscription && didTabSelectSubscription.remove();
 		didAccountStateChangeSubscription && didAccountStateChangeSubscription.remove();
 		didLoginSubscription && didLoginSubscription.remove();
 		didLogoutSubscription && didLogoutSubscription.remove();
-	},
+	}
 
-	reloadMeDataFromStorage: function(){
+    reloadMeDataFromStorage = () => {
 		StorageModule.loadMeData()
 		.then(function(value) {
 			if (value) {
@@ -158,16 +156,16 @@ var MePage = React.createClass({
 				this.reloadMeData();
 			}
 		}.bind(this));
-	},
+	};
 
-	onTabChanged: function(){
+    onTabChanged = () => {
 		LogicData.setTabIndex(MainPage.ME_PAGE_TAB_INDEX);
 		WebSocketModule.cleanRegisteredCallbacks();
 		this.reloadMeData();
 		this.loadUnreadMessage();
-	},
+	};
 
-	reloadMeData: function(){
+    reloadMeData = () => {
 		// if(LogicData.getTabIndex() == MainPage.ME_PAGE_TAB_INDEX){
 			//Check if the user has logged in and the config row need to be shown.
 			if(this.refs[LIST_SCROLL_VIEW]){
@@ -238,9 +236,9 @@ var MePage = React.createClass({
 				dataSource: datasource,
 			})
 		// }
-	},
+	};
 
-	requestForFirstDayClicked:function(){
+    requestForFirstDayClicked = () => {
 		var userData = LogicData.getUserData();
 		NetworkModule.fetchTHUrl(
 			NetConstants.CFD_API.GET_REWARD_FIRSTDAY_CLICKED,
@@ -254,32 +252,32 @@ var MePage = React.createClass({
 			function(responseJson) {
 			}.bind(this)
 		)
-	},
+	};
 
-	gotoOpenAccount: function() {
+    gotoOpenAccount = () => {
 		this.props.navigator.push({
 			name: MainPage.LOGIN_ROUTE,
 		});
-	},
+	};
 
-	gotoLogin: function(){
+    gotoLogin = () => {
 		this.props.navigator.push({
 			name: MainPage.LOGIN_ROUTE,
 			popToRoute: MainPage.ME_ROUTE,	//Set to destination page
 			//onPopToRoute: this.reloadMeData,
 		});
-	},
+	};
 
-	gotoUserInfoPage: function() {
+    gotoUserInfoPage = () => {
 		//TODO: Use real page.
 		this.props.navigator.push({
 			name: MainPage.ACCOUNT_INFO_ROUTE,
 			//backButtonOnClick: this.reloadMeData,
 			//popToRoute: MainPage.ME_PUSH_CONFIG_ROUTE,	//Set to destination page
 		});
-	},
+	};
 
-	gotoOpenLiveAccount:function(){
+    gotoOpenLiveAccount = () => {
 		var meData = LogicData.getMeData();
 	  console.log("showOARoute medata: " + JSON.stringify(meData));
 
@@ -298,9 +296,9 @@ var MePage = React.createClass({
 		}else{
 				this.props.navigator.push(OARoute);
 		}
-	},
+	};
 
-	setCookie:function(){
+    setCookie = () => {
 
 		var meData = LogicData.getMeData();
 
@@ -392,10 +390,10 @@ var MePage = React.createClass({
 						  console.log(err);
 						  console.log(res);
 						});
-	},
+	};
 
-	////0未注册 1已注册 2审核中 3审核失败
-	gotoAccountStateExce:function(){
+    ////0未注册 1已注册 2审核中 3审核失败
+    gotoAccountStateExce = () => {
 		if(accStatus == 0){
 			this.gotoOpenLiveAccount();
 		}else if(accStatus == 1){//已注册，去登录
@@ -407,9 +405,9 @@ var MePage = React.createClass({
 		}else{
 
 		}
-	},
+	};
 
-	getWebViewPageScene: function(targetUrl, title, hideNavBar) {
+    getWebViewPageScene = (targetUrl, title, hideNavBar) => {
 		var userData = LogicData.getUserData()
 		var userId = userData.userId
 		if (userId == undefined) {
@@ -428,13 +426,13 @@ var MePage = React.createClass({
 			title: title,
 			isShowNav: hideNavBar ? false : true,
 		}
-	},
+	};
 
-	gotoWebviewPage: function(targetUrl, title, hideNavBar) {
+    gotoWebviewPage = (targetUrl, title, hideNavBar) => {
 		this.props.navigator.push(this.getWebViewPageScene(targetUrl, title, hideNavBar));
-	},
+	};
 
-	onSelectNormalRow: function(rowData) {
+    onSelectNormalRow = (rowData) => {
 		if(rowData.subtype === 'inviteFriends'){
 			var url = LogicData.getAccountState()?NetConstants.TRADEHERO_API.NEW_USER_INVITATION_ACTUAL:NetConstants.TRADEHERO_API.NEW_USER_INVITATION;
 			var userData = LogicData.getUserData()
@@ -532,9 +530,9 @@ var MePage = React.createClass({
 		else if(rowData.subtype === 'accountInfo') {
 			this.gotoUserInfoPage()
 		}
-	},
+	};
 
-	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
+    renderSeparator = (sectionID, rowID, adjacentRowHighlighted) => {
 		var marginLeft = 0
 		// if (rowID > 1 && rowID < 6){
 			marginLeft = 15
@@ -544,9 +542,9 @@ var MePage = React.createClass({
 				<View style={[styles.separator, {marginLeft: marginLeft}]}/>
 			</View>
 			)
-	},
+	};
 
-	renderUserNameView: function(){
+    renderUserNameView = () => {
 		var meData = LogicData.getMeData();
 		var sZhangHao = LS.str('ZHANGHAO');
 		if(meData.phone){
@@ -564,9 +562,9 @@ var MePage = React.createClass({
 				</View>
 			)
 		}
-	},
+	};
 
-	renderUserPortraitView: function(){
+    renderUserPortraitView = () => {
 		var meData = LogicData.getMeData();
 //		Alert.alert(""+meData.rank)
 		var headRank = LogicData.getRankHead(meData.rank);
@@ -587,9 +585,9 @@ var MePage = React.createClass({
 
 			);
 		}
-	},
+	};
 
-	renderUserInfoView: function(){
+    renderUserInfoView = () => {
 		return(
 			<TouchableOpacity activeOpacity={0.5} onPress={()=>this.gotoUserInfoPage()}>
 				<View style={[styles.rowWrapper, {height:Math.round(108*heightRate)}]}>
@@ -599,9 +597,9 @@ var MePage = React.createClass({
 				</View>
 			</TouchableOpacity>
 		);
-	},
+	};
 
-	renderAccountStateView: function(){
+    renderAccountStateView = () => {
 		var meData = LogicData.getMeData();
 		console.log('提示：','liveAccStatus = '+meData.liveAccStatus + ', liveAccRejReason = '+ meData.liveAccRejReason)
 	  	accStatus = meData.liveAccStatus;
@@ -636,9 +634,9 @@ var MePage = React.createClass({
 		}
 
 
-	},
+	};
 
-	renderRowRight: function(rowData){
+    renderRowRight = (rowData) => {
 		var meData = LogicData.getMeData();
 		if(rowData.subtype === "depositWithdraw"){
 			var hasError = LogicData.getMeData().bankCardStatus === "Rejected";
@@ -672,9 +670,9 @@ var MePage = React.createClass({
 				<Image style={styles.moreImage} source={require("../../images/icon_arrow_right.png")} />
 			</View>
 		);
-	},
+	};
 
-	renderRow: function(rowData, sectionID, rowID) {
+    renderRow = (rowData, sectionID, rowID) => {
 
 
 		if (rowData.type === 'normal') {
@@ -755,9 +753,9 @@ var MePage = React.createClass({
 					)
 			}
 		}
-	},
+	};
 
-	renderNavBar: function(){
+    renderNavBar = () => {
 		var strMe = LS.str('WODE');
 		return(
 			<NavBar title={strMe}
@@ -765,11 +763,9 @@ var MePage = React.createClass({
 				viewOnRight={this.renderMessageIcon()}
 			 />
 		);
-	},
+	};
 
- 
-
-	loadUnreadMessage: function(){
+    loadUnreadMessage = () => {
 		var userData = LogicData.getUserData();
 		var login = Object.keys(userData).length !== 0
 		if (!login){
@@ -802,9 +798,9 @@ var MePage = React.createClass({
 				console.log(result.errorMessage)
 			}
 		);
-	},
+	};
 
-	renderUnreadCount: function(){
+    renderUnreadCount = () => {
 		if(this.state.unreadMessageCount > 0){
 			var text = this.state.unreadMessageCount > 9 ? "9+" : "" + this.state.unreadMessageCount;
 			return (
@@ -817,16 +813,16 @@ var MePage = React.createClass({
 		}else{
 			return null;
 		}
-	},
+	};
 
-	goToMailPage: function(){
+    goToMailPage = () => {
 		this.props.navigator.push({
 			name: MainPage.MY_MESSAGES_ROUTE,
 			onPopToRoute: this.loadUnreadMessage,
 		});
-	},
+	};
 
-	renderMessageIcon: function(){
+    renderMessageIcon = () => {
 		if(!LogicData.getAccountState()){
 			return null;
 		}
@@ -845,9 +841,9 @@ var MePage = React.createClass({
 			);
 		}
 		return null;
-	},
+	};
 
-	renderListView: function(){
+    renderListView = () => {
 		var listDataView = listRawData.map((data, i)=>{
 			var row = this.renderRow(data, 's1', i)
 			return(
@@ -862,9 +858,9 @@ var MePage = React.createClass({
 			<View>
 				{listDataView}
 			</View>);
-	},
+	};
 
-	render: function() {
+    render() {
 		console.log("HELLO = " + LS.str('HELLO'));
 
 		//Do not use List view with image inside under RN 0.33
@@ -886,8 +882,8 @@ var MePage = React.createClass({
 				<View style={{width:width,height:UIConstants.TAB_BAR_HEIGHT}}></View>
 			</View>
 		);
-	},
-});
+	}
+}
 
 var styles = StyleSheet.create({
 	wrapper: {
@@ -1045,7 +1041,7 @@ var styles = StyleSheet.create({
 	navBarIcon: {
 		width: 21,
 		height: 21,
-		resizeMode: Image.resizeMode.contain,
+		resizeMode: 'contain',
 	},
 
 	navBarIconRight: {

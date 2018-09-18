@@ -1,6 +1,9 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	View,
@@ -63,39 +66,39 @@ var defaultRawData = [
 const DEFAULT_ERROR = "身份一致性验证失败";
 const SCROLL_VIEW = "scrollView"
 
-var OAPersonalInfoPage = React.createClass({
-	mixins: [TimerMixin],
-	pickerDisplayed: false,
+var OAPersonalInfoPage = createReactClass({
+    displayName: 'OAPersonalInfoPage',
+    mixins: [TimerMixin],
+    pickerDisplayed: false,
 
-	propTypes: {
-		data: React.PropTypes.array,
-		onPop: React.PropTypes.func,
+    propTypes: {
+		data: PropTypes.array,
+		onPop: PropTypes.func,
 	},
 
-	listRawData: [],
+    listRawData: [],
+    ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 }),
 
-	ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 }),
-
-	getDefaultProps() {
+    getDefaultProps() {
 		return {
 			data: null,
 			onPop: ()=>{},
 		}
 	},
 
-	componentWillMount: function(){
+    componentWillMount: function(){
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
 	},
 
-	componentWillUnmount: function(){
+    componentWillUnmount: function(){
 		this.keyboardDidHideListener.remove();
 	},
 
-	_keyboardDidHide: function(){
+    _keyboardDidHide: function(){
 		this.refs[SCROLL_VIEW] && this.refs[SCROLL_VIEW].scrollTo({y:0})
 	},
 
-	getInitialState: function() {
+    getInitialState: function() {
 		this.listRawData = JSON.parse(JSON.stringify(defaultRawData));
 
 		if (this.props.data && this.props.data) {
@@ -119,7 +122,7 @@ var OAPersonalInfoPage = React.createClass({
 		};
 	},
 
-	gotoNext: function() {
+    gotoNext: function() {
 		//GZT validation.
 		if(this.checkValues()){
 			this.setState({
@@ -186,15 +189,15 @@ var OAPersonalInfoPage = React.createClass({
 		}
 	},
 
-	getData: function(){
+    getData: function(){
 		return OpenAccountUtils.getDataFromPageListRawData(this.listRawData);
 	},
 
-	onDismiss: function(){
+    onDismiss: function(){
 		this.hidePicker();
 	},
 
-	textInputChange: function(text, rowID) {
+    textInputChange: function(text, rowID) {
 		this.listRawData[rowID].value = text;
 		this.listRawData[rowID].error = null;
 		this.setState({
@@ -203,7 +206,7 @@ var OAPersonalInfoPage = React.createClass({
 		this.updateList();
 	},
 
-	textInputEndChange: function(event, rowID){
+    textInputEndChange: function(event, rowID){
 		if(this.listRawData[rowID].value && this.listRawData[rowID].value.length > 0){
 			this.listRawData[rowID].checked = true;
 			if(this.listRawData[rowID].key === "idCode"){
@@ -212,7 +215,7 @@ var OAPersonalInfoPage = React.createClass({
 		}
 	},
 
-	checkValues: function(){
+    checkValues: function(){
 		var valid = true;
 		for(var rowID = 0; rowID < this.listRawData.length; rowID++){
 			if(this.listRawData[rowID].key === "idCode"){
@@ -222,7 +225,7 @@ var OAPersonalInfoPage = React.createClass({
 		return valid;
 	},
 
-	checkIDCode: function(rowID){
+    checkIDCode: function(rowID){
 		if(this.listRawData[rowID].value.length < 18){
 			this.listRawData[rowID].error = "请输入" + this.listRawData[rowID].minLength + "位身份证号";
 			this.updateList();
@@ -234,7 +237,7 @@ var OAPersonalInfoPage = React.createClass({
 		}
 	},
 
-	onPressPicker: function(rowData,rowID) {
+    onPressPicker: function(rowData,rowID) {
 		this.setState({
 			selectedPicker: rowID,
 		})
@@ -278,7 +281,7 @@ var OAPersonalInfoPage = React.createClass({
     Picker.show();
 	},
 
-	hidePicker: function(){
+    hidePicker: function(){
 		Picker.isPickerShow(show => {
 			if(show){
 				Picker.hide();
@@ -289,7 +292,7 @@ var OAPersonalInfoPage = React.createClass({
 		});
 	},
 
-	onDateTimeSelect: function(rowID, value) {
+    onDateTimeSelect: function(rowID, value) {
 		if (rowID>= 0) {
 			console.log("onDatePikcerSelect: " + value);
 			this.listRawData[rowID].value = value;
@@ -298,7 +301,7 @@ var OAPersonalInfoPage = React.createClass({
 		}
 	},
 
-	onStartDateSelect: function(rowID, value) {
+    onStartDateSelect: function(rowID, value) {
 		if (rowID >= 0) {
 			var dateInfo = this.parseStartEndDate(this.listRawData[rowID].value);
 			this.listRawData[rowID].value = value + "-" + dateInfo.endDate;
@@ -306,7 +309,7 @@ var OAPersonalInfoPage = React.createClass({
 		}
 	},
 
-	onEndDateSelect: function(rowID, value) {
+    onEndDateSelect: function(rowID, value) {
 		if (rowID >= 0) {
 			var dateInfo = this.parseStartEndDate(this.listRawData[rowID].value);
 			this.listRawData[rowID].value = dateInfo.startDate + "-" + value;
@@ -314,7 +317,7 @@ var OAPersonalInfoPage = React.createClass({
 		}
 	},
 
-	parseStartEndDate: function(period){
+    parseStartEndDate: function(period){
 		var dateArray = period.split("-");
 		var startDate = "";
 		var endDate = "";
@@ -329,25 +332,25 @@ var OAPersonalInfoPage = React.createClass({
 		}
 	},
 
-	updateList: function(){
+    updateList: function(){
 		this.setState({
 				dataSource: this.ds.cloneWithRows(this.listRawData),
 		});
 	},
 
-	chooseBirthday: function(){
+    chooseBirthday: function(){
 		this.refs["birthdayPicker"].onPressDate();
 	},
 
-	chooseStartDatePicker: function(){
+    chooseStartDatePicker: function(){
 		this.refs['startDatePicker'].onPressDate();
 	},
 
-	chooseEndDatePicker: function(){
+    chooseEndDatePicker: function(){
 		this.refs['endDatePicker'].onPressDate();
 	},
 
-	renderDatePeriod: function(rowID, rowData){
+    renderDatePeriod: function(rowID, rowData){
 		var dateInfo = this.parseStartEndDate(rowData.value);
 
 		return (
@@ -396,7 +399,7 @@ var OAPersonalInfoPage = React.createClass({
 			</View>)
 	},
 
-	renderRow: function(rowData, sectionID, rowID) {
+    renderRow: function(rowData, sectionID, rowID) {
 		var rowTitleStyle = styles.rowTitle;
 		if(rowData.error){
 			rowTitleStyle = styles.errorRowTitle;
@@ -494,7 +497,7 @@ var OAPersonalInfoPage = React.createClass({
 		}
 	},
 
-	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
+    renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
 		return (
 			<View style={styles.line} key={rowID}>
 				<View style={styles.separator}/>
@@ -502,7 +505,7 @@ var OAPersonalInfoPage = React.createClass({
 			)
 	},
 
-	render: function() {
+    render: function() {
 		var pickerModal = null
 		var error = this.state.error;
 
@@ -561,7 +564,7 @@ var OAPersonalInfoPage = React.createClass({
 		);
 	},
 
-	renderListView: function(){
+    renderListView: function(){
 		var listDataView = this.listRawData.map((data, i)=>{
 			return(
 				<View key={i}>

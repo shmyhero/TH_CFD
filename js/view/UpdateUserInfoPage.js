@@ -1,5 +1,7 @@
 'use strict'
 
+import PropTypes from 'prop-types';
+
 import React, { Component } from 'react';
 import {
 	StyleSheet,
@@ -52,39 +54,35 @@ class ErrorMsg extends Component{
 
 }
 
-var UpdateUserInfoPage = React.createClass({
-	propTypes: {
-		popToRoute: React.PropTypes.string,
-		showRegisterSuccessDialog: React.PropTypes.func,
-		popToStackTop: React.PropTypes.bool,
-		getNextRoute: React.PropTypes.func,
-		onLoginFinish: React.PropTypes.func,
-		needShowPromoCode:React.PropTypes.bool,
-	},
+class UpdateUserInfoPage extends React.Component {
+    static propTypes = {
+		popToRoute: PropTypes.string,
+		showRegisterSuccessDialog: PropTypes.func,
+		popToStackTop: PropTypes.bool,
+		getNextRoute: PropTypes.func,
+		onLoginFinish: PropTypes.func,
+		needShowPromoCode:PropTypes.bool,
+	};
 
-	getDefaultProps() {
-		return {
-			popToRoute: null,
-			showRegisterSuccessDialog: ()=>{},
-			popToStackTop: false,
-			getNextRoute: null,
-			onLoginFinish: null,
-		}
-	},
+    static defaultProps = {
+        popToRoute: null,
+        showRegisterSuccessDialog: ()=>{},
+        popToStackTop: false,
+        getNextRoute: null,
+        onLoginFinish: null,
+    };
 
-	getInitialState: function() {
-		return {
-			noteState: NOTE_STATE_NORMAL,
-			nickName: '',
-			promoCode: '',
-			saveButtonEnabled: false,
-			errorPromo:'推广码不正确！'
-		};
-	},
+    state = {
+        noteState: NOTE_STATE_NORMAL,
+        nickName: '',
+        promoCode: '',
+        saveButtonEnabled: false,
+        errorPromo:'推广码不正确！'
+    };
 
-	initialMeData: null,
+    initialMeData = null;
 
-	componentDidMount: function() {
+    componentDidMount() {
 		this.initialMeData = LogicData.getMeData();
 
 		if (LogicData.getWechatUserData().nickname !== undefined) {
@@ -117,17 +115,17 @@ var UpdateUserInfoPage = React.createClass({
 				Alert.alert('提示',result.errorMessage);
 			}
 		)
-	},
+	}
 
-	setUserName: function(name) {
+    setUserName = (name) => {
 		this.setState({
 			nickName: name
 		})
 
 		this.verifyNickName(name);
-	},
+	};
 
-	verifyNickName: function(name) {
+    verifyNickName = (name) => {
 		var errorMsg = undefined
 
 		if (name.length == 0) {
@@ -142,17 +140,17 @@ var UpdateUserInfoPage = React.createClass({
 			errorText: errorMsg,
 			saveButtonEnabled: errorMsg == undefined
 		})
-	},
+	};
 
-	setPromoCode: function(code) {
+    setPromoCode = (code) => {
 		this.setState({
 			promoCode: code
 		})
 
 		this.verifyPromoCode(code);
-	},
+	};
 
-	verifyPromoCode: function(code) {
+    verifyPromoCode = (code) => {
 		var errorMsg = undefined
 
 		// if (code.length == 0) {
@@ -167,9 +165,9 @@ var UpdateUserInfoPage = React.createClass({
 		// 	errorText: errorMsg,
 		// 	saveButtonEnabled: errorMsg == undefined
 		// })
-	},
+	};
 
-	savePressed: function() {
+    savePressed = () => {
 		var userData = LogicData.getUserData();
 		var promoCode = this.state.promoCode;
 		var promoUrl = '';
@@ -199,9 +197,9 @@ var UpdateUserInfoPage = React.createClass({
 				Alert.alert('提示',result.errorMessage);
 			}
 		)
-	},
+	};
 
-	renderHintOrError: function(){
+    renderHintOrError = () => {
 		if(this.state.isShowError){
 			return (
 				<ErrorMsg showView={this.state.isShowError} showText={this.state.errorText}/>
@@ -215,9 +213,9 @@ var UpdateUserInfoPage = React.createClass({
 					</View>
 				);
 		}
-	},
+	};
 
-	renderNotes: function() {
+    renderNotes = () => {
 		if (this.state.noteState == NOTE_STATE_NORMAL) {
 			return this.renderHintOrError();
 		} else if(this.state.noteState == NOTE_STATE_NORMAL_WECHAT) {
@@ -229,9 +227,9 @@ var UpdateUserInfoPage = React.createClass({
 				</View>
 			);
 		}
-	},
+	};
 
-	renderPromoHintOrError: function(){
+    renderPromoHintOrError = () => {
 			return (
 				<View style={styles.noteView}>
 					<Text style={styles.noteText}>
@@ -239,13 +237,13 @@ var UpdateUserInfoPage = React.createClass({
 					</Text>
 				</View>
 			);
-	},
+	};
 
-	renderPromoNotes: function() {
+    renderPromoNotes = () => {
 	 		return this.renderPromoHintOrError();
-	},
+	};
 
-	backButtonPressed: function(){
+    backButtonPressed = () => {
 		if(this.props.onLoginFinish){
 			this.props.onLoginFinish();
 		}else{
@@ -295,9 +293,9 @@ var UpdateUserInfoPage = React.createClass({
 		if(this.props.showRegisterSuccessDialog){
 			this.props.showRegisterSuccessDialog(this.initialMeData.rewardAmount);
 		}
-	},
+	};
 
-	renderNickName:function(){
+    renderNickName = () => {
 		return(
 			<View>
 				<View style={styles.rowWrapperWithBorder}>
@@ -318,9 +316,9 @@ var UpdateUserInfoPage = React.createClass({
 				{this.renderNotes()}
 			</View>
 		)
-	},
+	};
 
-	renderPromoCode:function(){
+    renderPromoCode = () => {
 		if(this.props.needShowPromoCode){
 			return(
 				<View>
@@ -348,9 +346,9 @@ var UpdateUserInfoPage = React.createClass({
 			)
 		}
 
-	},
+	};
 
-	render: function() {
+    render() {
 		var {height, width} = Dimensions.get('window');
 
 		return (
@@ -383,9 +381,8 @@ var UpdateUserInfoPage = React.createClass({
 				</View>
 			</View>
 		)
-	},
-
-});
+	}
+}
 
 var styles = StyleSheet.create({
 

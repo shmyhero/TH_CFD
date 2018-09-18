@@ -1,6 +1,8 @@
 'use strict';
 
-import React, {Component, PropTypes} from 'react';
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 import {
 	StyleSheet,
 	View,
@@ -669,7 +671,7 @@ export default class BindCardPage extends Component {
 				{listDataView}
 			</View>);
 	}
-};
+}
 
 var styles = StyleSheet.create({
 	wrapper: {

@@ -1,8 +1,6 @@
 'use strict'
 
-var {
-	StyleSheet
-} from 'react-native';
+import StyleSheet from 'react-native';
 
 var styles = StyleSheet.create({
 	container: {

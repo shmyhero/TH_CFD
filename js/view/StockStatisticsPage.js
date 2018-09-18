@@ -3,6 +3,8 @@
 var LayoutAnimation = require('LayoutAnimation');
 import React from 'react';
 
+import createReactClass from 'create-react-class';
+
 import {
 	StyleSheet,
 	View,
@@ -37,10 +39,11 @@ var layoutSizeChangedSubscription = null
 const STATISTIC_BAR_BLOCK = "statisticBarBlock";
 const TRADE_STYLE_BLOCK = "tradeStyleBlock";
 
-var StockStatisticsPage = React.createClass({
-	mixins: [TimerMixin],
+var StockStatisticsPage = createReactClass({
+    displayName: 'StockStatisticsPage',
+    mixins: [TimerMixin],
 
-	getInitialState: function() {
+    getInitialState: function() {
 		var balanceData = LogicData.getBalanceData()
 		return {
 			balanceData: balanceData,
@@ -49,14 +52,14 @@ var StockStatisticsPage = React.createClass({
 		}
 	},
 
-	clearViews:function(){
+    clearViews:function(){
 		this.setState({
 			balanceData: null,
 			isClear:true,
 		})
 	},
 
-	tabPressed: function(index) {
+    tabPressed: function(index) {
 		this.onLayoutSizeChanged()
 		var balanceData = LogicData.getBalanceData()
 		this.setState({
@@ -70,7 +73,7 @@ var StockStatisticsPage = React.createClass({
 		);
 	},
 
-	componentDidMount: function(){
+    componentDidMount: function(){
 		networkConnectionChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.NETWORK_CONNECTION_CHANGED, () => {
 			this.onConnectionStateChanged();
 		});
@@ -90,7 +93,7 @@ var StockStatisticsPage = React.createClass({
 		AppStateModule.registerTurnToActiveListener(this.refreshData);
 	},
 
-	componentWillUnmount: function(){
+    componentWillUnmount: function(){
 		networkConnectionChangedSubscription && networkConnectionChangedSubscription.remove();
 		accountStateChangedSubscription && accountStateChangedSubscription.remove();
 		accountLogoutEventSubscription && accountLogoutEventSubscription.remove();
@@ -98,8 +101,8 @@ var StockStatisticsPage = React.createClass({
 		AppStateModule.unregisterTurnToActiveListener(this.refreshData);
 	},
 
-	//Only Android has the layout size changed issue because the navigation bar can be hidden.
-	onLayoutSizeChanged: function(){
+    //Only Android has the layout size changed issue because the navigation bar can be hidden.
+    onLayoutSizeChanged: function(){
 		if(Platform.OS === "android" && this.isCurrentPage()){
 			console.log("onLayoutSizeChanged StockStatisticsPage");
 			this.setState({
@@ -108,7 +111,7 @@ var StockStatisticsPage = React.createClass({
 		}
 	},
 
-	isCurrentPage: function(){
+    isCurrentPage: function(){
 		if(LogicData.getTabIndex() == MainPage.STOCK_EXCHANGE_TAB_INDEX){
 			var routes = this.props.navigator.getCurrentRoutes();
 			if(routes && routes[routes.length-1] && routes[routes.length-1].name == MainPage.STOCK_EXCHANGE_ROUTE){
@@ -121,13 +124,13 @@ var StockStatisticsPage = React.createClass({
 		return false;
 	},
 
-	onConnectionStateChanged: function(){
+    onConnectionStateChanged: function(){
 		if(WebSocketModule.isConnected()){
 			this.refreshData();
 		}
 	},
 
-	refreshData: function(){
+    refreshData: function(){
 		console.log("refreshData")
 		if(this.isCurrentPage()){
 			var userData = LogicData.getUserData();
@@ -143,7 +146,7 @@ var StockStatisticsPage = React.createClass({
 		}
 	},
 
-	renderHeader: function() {
+    renderHeader: function() {
 		var total = '--'
 		var available = '--'
 		if (this.state.balanceData) {
@@ -173,15 +176,13 @@ var StockStatisticsPage = React.createClass({
 		)
 	},
 
-
-
-	renderOrClear:function(){
+    renderOrClear:function(){
 		if(this.state.isClear){
 			return(<View style={{flex:10000}}></View>)
 		}
 	},
 
-	renderBody: function(){
+    renderBody: function(){
 		var userData = LogicData.getUserData()
 		if(LogicData.getAccountState()){
 			return (
@@ -207,7 +208,7 @@ var StockStatisticsPage = React.createClass({
 		}
 	},
 
-	render: function() {
+    render: function() {
 
 		return (
 			<View style={[styles.wrapper, {width:width,

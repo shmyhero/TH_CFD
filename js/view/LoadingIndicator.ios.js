@@ -10,30 +10,28 @@ import {
 } from 'react-native';
 
 
-var LoadingIndicator = React.createClass({
-	propTypes: {
+class LoadingIndicator extends React.Component {
+    static propTypes = {
 		animating: PropTypes.bool,
-	},
-	
-	getInitialState: function() {
-		return {
-			visible: false,
-		};
-	},
+	};
 
-	show: function() {
+    state = {
+        visible: false,
+    };
+
+    show = () => {
 		this.setState({
 			visible: true,
 		})
-	},
+	};
 
-	hide: function() {
+    hide = () => {
 		this.setState({
 			visible: false,
 		})
-	},
+	};
 
-	render: function() {
+    render() {
 		if (this.state.visible) {
 			return (
 				<View style={styles.container}>
@@ -46,7 +44,7 @@ var LoadingIndicator = React.createClass({
 			return null
 		}
 	}
-})
+}
 
 var styles = StyleSheet.create({
 	container: {

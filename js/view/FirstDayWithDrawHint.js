@@ -1,5 +1,7 @@
 /* @flow */
 
+import PropTypes from 'prop-types';
+
 import React, { Component } from 'react';
 import {
 	StyleSheet,
@@ -27,26 +29,23 @@ var HEADER_IMAGE_HEIGHT = HEADER_IMAGE_WIDTH / 1.5;
 var DIALOG_OFFSET = HEADER_IMAGE_HEIGHT / 2;
 
 var LogicData = require('../LogicData')
-var FirstDayWithDrawHint = React.createClass({
-	propTypes: {
-		getNavigator: React.PropTypes.func,
-	},
 
-	getDefaultProps() {
-		return {
-			getNavigator: ()=>{},
-		}
-	},
+class FirstDayWithDrawHint extends React.Component {
+  static propTypes = {
+      getNavigator: PropTypes.func,
+  };
 
-  getInitialState: function() {
-    return {
-      dialogVisible: false,
-      fadeAnim: new Animated.Value(1),
-			modalVisible: false,
-    };
-  },
+  static defaultProps = {
+      getNavigator: ()=>{},
+  };
 
-  show: function() {
+  state = {
+    dialogVisible: false,
+    fadeAnim: new Animated.Value(1),
+          modalVisible: false,
+  };
+
+  show = () => {
     this.setState({
       dialogVisible: true,
     })
@@ -60,9 +59,9 @@ var FirstDayWithDrawHint = React.createClass({
 		).start();
 
 		this._setModalVisible(true)
-  },
+  };
 
-  hide: function() {
+  hide = () => {
 		console.log("hide");
 		LogicData.setFirstDayWithDraw('2');
     var callbackId = this.state.fadeAnim.addListener(function(){
@@ -82,22 +81,22 @@ var FirstDayWithDrawHint = React.createClass({
 			},
 		).start();
 		// this._setModalVisible(false);
-  },
+  };
 
-  gotoCheck: function(){
+  gotoCheck = () => {
 		console.log("gotocheck");
 		var navigator = this.props.getNavigator();
 		navigator.push({
 			name: MainPage.MY_INCOME_ROUTE,
 		})
 
-  },
+  };
 
-  _setModalVisible(visible) {
+  _setModalVisible = (visible) => {
     this.setState({modalVisible: visible});
-  },
+  };
 
-  render: function() {
+  render() {
 		console.log(this.state.dialogVisible);
 		if(this.state.dialogVisible){
       //
@@ -154,8 +153,8 @@ var FirstDayWithDrawHint = React.createClass({
       return (<View/>)
     }
 
-  },
-});
+  }
+}
 
 /*
 var styles = StyleSheet.create({

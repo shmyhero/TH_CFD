@@ -1,5 +1,7 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {
 	StyleSheet,
@@ -28,51 +30,48 @@ var NetworkModule = require('../module/NetworkModule')
 var {height, width} = Dimensions.get('window');
 
 const NETWORK_ERROR_INDICATOR = "networkErrorIndicator";
-var WebViewPage = React.createClass({
-	isPageLoaded: false,
-	lastUrl: "",
 
-	propTypes: {
-		url: React.PropTypes.string,
-		shareID: React.PropTypes.number,
-		shareTitle: React.PropTypes.string,
-		shareDescription: React.PropTypes.string,
-		showTabbar: React.PropTypes.func,
-		shareFunction: React.PropTypes.func,
-		shareTrackingEvent: React.PropTypes.string,
-		shareUrl: React.PropTypes.string,
-		backFunction: React.PropTypes.func,
-		isShowNav: React.PropTypes.bool,
+class WebViewPage extends React.Component {
+    static propTypes = {
+		url: PropTypes.string,
+		shareID: PropTypes.number,
+		shareTitle: PropTypes.string,
+		shareDescription: PropTypes.string,
+		showTabbar: PropTypes.func,
+		shareFunction: PropTypes.func,
+		shareTrackingEvent: PropTypes.string,
+		shareUrl: PropTypes.string,
+		backFunction: PropTypes.func,
+		isShowNav: PropTypes.bool,
 		themeColor: ColorPropType,
-		onNavigationStateChange: React.PropTypes.func,
-		onWebPageLoaded: React.PropTypes.func,
-		isLoadingColorSameAsTheme: React.PropTypes.bool,
-		logTimedelta: React.PropTypes.bool,
-	},
+		onNavigationStateChange: PropTypes.func,
+		onWebPageLoaded: PropTypes.func,
+		isLoadingColorSameAsTheme: PropTypes.bool,
+		logTimedelta: PropTypes.bool,
+	};
 
-	getDefaultProps() {
-		return {
-			url: 'http://www.baidu.com',
-			shareID: null,
-			shareTitle: null,
-			shareDescription: null,
-			showTabbar: ()=>{},
-			shareFunction: ()=>{},
-			shareTrackingEvent: null,
-			shareUrl: null,
-			isShowNav: true,
-			isLoadingColorSameAsTheme: true,
-			logTimedelta: false,
-		}
-	},
+    static defaultProps = {
+        url: 'http://www.baidu.com',
+        shareID: null,
+        shareTitle: null,
+        shareDescription: null,
+        showTabbar: ()=>{},
+        shareFunction: ()=>{},
+        shareTrackingEvent: null,
+        shareUrl: null,
+        isShowNav: true,
+        isLoadingColorSameAsTheme: true,
+        logTimedelta: false,
+    };
 
-	getInitialState: function() {
-		return {
-			isNetConnected: false,
-		};
-	},
+    state = {
+        isNetConnected: false,
+    };
 
-	componentDidMount: function() {
+    isPageLoaded = false;
+    lastUrl = "";
+
+    componentDidMount() {
 		if(this.props.shareTrackingEvent){
 			TalkingdataModule.setCurrentTrackingEvent(this.props.shareTrackingEvent);
 		}
@@ -90,9 +89,9 @@ var WebViewPage = React.createClass({
 				}
 			}
 		);
-	},
+	}
 
-	componentWillUnmount: function() {
+    componentWillUnmount() {
 		if(this.props.shareTrackingEvent){
 			TalkingdataModule.clearCurrentTrackingEvent()
 		}
@@ -101,9 +100,9 @@ var WebViewPage = React.createClass({
 			'change',
 			this._handleConnectivityChange
 		);
-  },
+  }
 
-	_handleConnectivityChange: function(isConnected, error) {
+    _handleConnectivityChange = (isConnected, error) => {
 		console.log("isConnected? " + isConnected);
 		if (!this.state.isLoaded) {
 			this.setState({
@@ -121,18 +120,18 @@ var WebViewPage = React.createClass({
 				isrefresh: false
 			});
 		}
-	},
+	};
 
-	getWebViewRef: function(){
+    getWebViewRef = () => {
 		return this.refs[WEBVIEW_REF].getWebViewHandle();
-	},
+	};
 
-	pressBackButton: function() {
+    pressBackButton = () => {
 		//this.props.navigator.pop();
 		this.props.backFunction && this.props.backFunction()
-	},
+	};
 
-	pressShareButton: function(){
+    pressShareButton = () => {
 		//Have some issue on Android...
 		//this.refs[WEBVIEW_REF].sendToBridge("get-share-info");
 
@@ -154,15 +153,15 @@ var WebViewPage = React.createClass({
 			description: this.props.shareDescription,
 		}
 		this.props.shareFunction(data);
-	},
+	};
 
-	//Do not use the bridge for now since the bridge (0.20.3) currently does not support Android...
-	onBridgeMessage: function(message){
+    //Do not use the bridge for now since the bridge (0.20.3) currently does not support Android...
+    onBridgeMessage = (message) => {
 		var data = JSON.parse(message)
 		this.props.shareFunction(data);
-	},
+	};
 
-	onNavigationStateChange:function (navState) {
+    onNavigationStateChange = (navState) => {
 		if(navState && this.lastUrl === navState.url){
 			return;
 		}
@@ -170,9 +169,9 @@ var WebViewPage = React.createClass({
 		if (this.props.onNavigationStateChange) {
 			this.props.onNavigationStateChange(navState)
 		}
-	},
+	};
 
-	onRefresh: function(){
+    onRefresh = () => {
 		NetInfo.isConnected.fetch().done(
 			(isConnected) => {
 				console.log("isConnected " + isConnected)
@@ -190,20 +189,20 @@ var WebViewPage = React.createClass({
 			}
 		);
 
-	},
+	};
 
-	renderLoading: function(){
+    renderLoading = () => {
 		return (
 			<View style={styles.containerView}>
 				<NetworkErrorIndicator onRefresh={()=>this.onRefresh()} refreshing={true}/>
 			</View>
 		)
-	},
+	};
 
-	start_time: 0,
-	last_url: "",
+    start_time = 0;
+    last_url = "";
 
-	webViewLoadingStart: function(content){
+    webViewLoadingStart = (content) => {
 		console.log("webview onLoadStart " + content);
 		if (this.props.logTimedelta && content.nativeEvent && content.nativeEvent.url){
 			if (this.start_time != 0 && this.last_url != ""){
@@ -212,9 +211,9 @@ var WebViewPage = React.createClass({
 			this.start_time = new Date();
 			this.last_url = content.nativeEvent.url;
 		}
-	},
+	};
 
-	webViewLoaded: function(content){
+    webViewLoaded = (content) => {
 		console.log("webview onLoadEnd " +content);
 		this.setState({isLoaded:true});
 		if(this.props.onWebPageLoaded){
@@ -226,17 +225,17 @@ var WebViewPage = React.createClass({
 		}
 		this.start_time = 0;
 		this.last_url = "";
-	},
+	};
 
-	webViewLoadFailed: function(content){
+    webViewLoadFailed = (content) => {
 		console.log("webview error:" + content.nativeEvent.description);
 		this._handleConnectivityChange(false, content)
 		if(this.props.logTimedelta && content.nativeEvent && content.nativeEvent.description){
 			this.trackPageLoadingTime(this.last_url, content.nativeEvent.description)
 		}
-	},
+	};
 
-	trackPageLoadingTime: function(url, error){
+    trackPageLoadingTime = (url, error) => {
 		var current_time = new Date();
 		var timedelta = ((current_time - this.start_time) / 1000).toFixed(1);
 		console.log("track url loading time: " + timedelta);
@@ -275,9 +274,9 @@ var WebViewPage = React.createClass({
 				this.parseData(url, "unknown", trackingData)
 			})
 		}
-	},
+	};
 
-	parseData: function(url, ipAddress, trackingData){
+    parseData = (url, ipAddress, trackingData) => {
 		if(this.trackingData != trackingData){
 			return;
 		}
@@ -295,9 +294,9 @@ var WebViewPage = React.createClass({
 			console.log("track url loading info: " + label);
 			TalkingdataModule.trackEvent(TalkingdataModule.DEBUG_TIME_DELTA + url, label, trackingData)
 		}
-	},
+	};
 
-	renderWebView: function(){
+    renderWebView = () => {
 		if(this.state.isNetConnected) {
 
 			//onBridgeMessage={this.onBridgeMessage}
@@ -331,9 +330,9 @@ var WebViewPage = React.createClass({
 					</View>
 				)
 		}
-	},
+	};
 
-	renderNavBar: function() {
+    renderNavBar = () => {
 		console.log("this.props.isShowNav" + this.props.isShowNav)
 		var themeColor = this.props.isLoadingColorSameAsTheme ? this.props.themeColor : ColorConstants.title_blue();
 		if(!themeColor){
@@ -370,17 +369,17 @@ var WebViewPage = React.createClass({
 				navigator={this.props.navigator}/>
 			);
 		}
-	},
+	};
 
-	render: function() {
+    render() {
 		return(
 			<View style={{flex: 1}}>
 				{this.renderNavBar()}
 				{this.renderWebView()}
 			</View>
 		);
-	},
-});
+	}
+}
 
 var styles = StyleSheet.create({
 	webView: {

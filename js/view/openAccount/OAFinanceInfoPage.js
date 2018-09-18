@@ -1,7 +1,10 @@
 
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	View,
@@ -212,25 +215,25 @@ var defaultRawData = [
 		{"type": "openAccountHintBlock", "ignoreInRegistery": true}
 ];
 
-var OAFinanceInfoPage = React.createClass({
-	listRawData: [],
+var OAFinanceInfoPage = createReactClass({
+    displayName: 'OAFinanceInfoPage',
+    listRawData: [],
+    ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
+    mixins: [TimerMixin],
 
-	ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
-
-	mixins: [TimerMixin],
-	propTypes: {
-		data: React.PropTypes.array,
-		onPop: React.PropTypes.func,
+    propTypes: {
+		data: PropTypes.array,
+		onPop: PropTypes.func,
 	},
 
-	getDefaultProps() {
+    getDefaultProps() {
 		return {
 			data: null,
 			onPop: ()=>{},
 		}
 	},
 
-	getInitialState: function() {
+    getInitialState: function() {
 		this.listRawData = JSON.parse(JSON.stringify(defaultRawData));
 		var dataSource;
 		if (this.props.data && this.props.data) {
@@ -245,7 +248,7 @@ var OAFinanceInfoPage = React.createClass({
 		};
 	},
 
-	componentWillMount: function(){
+    componentWillMount: function(){
 		OpenAccountRoutes.loadMIFIDTestVerified((value)=>{
 			if(value){
 				this.setState({
@@ -261,16 +264,16 @@ var OAFinanceInfoPage = React.createClass({
 		this.setForHideValues(this.listRawData[EXPCHANNEL2].value, EXPCHANNEL2)
 	},
 
-	gotoNext: function() {
+    gotoNext: function() {
 		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP5, TalkingdataModule.LABEL_OPEN_ACCOUNT);
 		OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
 	},
 
-	getData: function(){
+    getData: function(){
 		return OpenAccountUtils.getDataFromPageListRawData(this.listRawData);
 	},
 
-	textInputChange: function(text, rowID) {
+    textInputChange: function(text, rowID) {
 		this.listRawData[rowID].value = text;
 		this.listRawData[rowID].error = null;
 		this.setState({
@@ -279,11 +282,11 @@ var OAFinanceInfoPage = React.createClass({
 		})
 	},
 
-	onDismiss: function(){
+    onDismiss: function(){
 		this.hidePicker();
 	},
 
-	onPressPicker: function(rowData,rowID) {
+    onPressPicker: function(rowData,rowID) {
 		this.setState({
 			selectedPicker: rowID,
 		})
@@ -342,7 +345,7 @@ var OAFinanceInfoPage = React.createClass({
     Picker.show();
 	},
 
-	hidePicker: function(){
+    hidePicker: function(){
 		Picker.isPickerShow(show => {
 			if(show){
 				Picker.hide();
@@ -353,7 +356,7 @@ var OAFinanceInfoPage = React.createClass({
 		});
 	},
 
-	setForHideValues(value,rowID){
+    setForHideValues(value,rowID){
 		if(rowID == EMPSWITCH){
 			var hide = !(this.listRawData[EMPSWITCH].value === "Employed" || this.listRawData[EMPSWITCH].value === "Self-Employed");
 			this.listRawData[EMPSWITCH_0].hide = hide;
@@ -382,7 +385,7 @@ var OAFinanceInfoPage = React.createClass({
 		}
 	},
 
-	onPressSwitch: function(value, rowID) {
+    onPressSwitch: function(value, rowID) {
 		if(rowID >= 0) {
 			this.listRawData[rowID].value = value
 
@@ -394,7 +397,7 @@ var OAFinanceInfoPage = React.createClass({
 		}
 	},
 
-	onCheckBoxPressed: function(rowID, checkboxIndex, selected){
+    onCheckBoxPressed: function(rowID, checkboxIndex, selected){
 		if(this.listRawData[rowID]){
 			if(this.listRawData[rowID].value[checkboxIndex]){
 				this.listRawData[rowID].value[checkboxIndex].value = selected;
@@ -405,7 +408,7 @@ var OAFinanceInfoPage = React.createClass({
 		}
 	},
 
-	renderRow: function(rowData, sectionID, rowID) {
+    renderRow: function(rowData, sectionID, rowID) {
 
 		if (rowData.type === "openAccountHintBlock"){
 			return (
@@ -558,8 +561,7 @@ var OAFinanceInfoPage = React.createClass({
 		}
 	},
 
-
-	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
+    renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
 		return (
 			<View style={styles.line} key={rowID}>
 				<View style={styles.separator}/>
@@ -567,7 +569,7 @@ var OAFinanceInfoPage = React.createClass({
 			)
 	},
 
-	render: function() {
+    render: function() {
 		var pickerModal = null
 		var enabled = true
 		var switchEmpStatus = false;

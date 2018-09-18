@@ -1,14 +1,17 @@
 /**
  * Created by andrewhurst on 10/5/15.
  */
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 import {
   Keyboard,
   LayoutAnimation,
   View,
   Dimensions,
   Platform,
-  StyleSheet
+  StyleSheet,
+  ViewPropTypes,
 } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -37,7 +40,7 @@ export default class KeyboardSpacer extends Component {
   static propTypes = {
     topSpacing: PropTypes.number,
     onToggle: PropTypes.func,
-    style: View.propTypes.style,
+    style: ViewPropTypes.style,
   };
 
   static defaultProps = {

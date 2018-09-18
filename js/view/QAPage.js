@@ -1,5 +1,7 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {
 	StyleSheet,
@@ -22,12 +24,13 @@ var LogicData = require('../LogicData')
 
 // var didTabSelectSubscription = null;
 var {height, width} = Dimensions.get('window')
-var QAPage = React.createClass({
-	propTypes: {
-		url: React.PropTypes.string,
-	},
 
-	getDefaultProps() {
+class QAPage extends React.Component {
+    static propTypes = {
+		url: PropTypes.string,
+	};
+
+    static defaultProps = function() {
 		var url = NetConstants.TRADEHERO_API.WEBVIEW_QA_PAGE;
 		url = url.replace('<version>', VersionConstants.WEBVIEW_QA_VERSION);
 
@@ -36,15 +39,13 @@ var QAPage = React.createClass({
 		return {
 			url: url,
 		}
-	},
+	}();
 
-	getInitialState: function() {
-		return {
-			isNetConnected: true,
-		};
-	},
+    state = {
+        isNetConnected: true,
+    };
 
-	componentDidMount: function() {
+    componentDidMount() {
 		NetInfo.isConnected.addEventListener(
 			'change',
 			this._handleConnectivityChange
@@ -53,32 +54,32 @@ var QAPage = React.createClass({
 		NetInfo.isConnected.fetch().done(
 			(isConnected) => { this.setState({isNetConnected: isConnected}); }
 		);
-	},
+	}
 
-	componentWillUnmount: function() {
+    componentWillUnmount() {
     	NetInfo.isConnected.removeEventListener(
 			'change',
 			this._handleConnectivityChange
 		);
 		// this.didTabSelectSubscription.remove()
-    },
+    }
 
-	_handleConnectivityChange: function(isConnected) {
+    _handleConnectivityChange = (isConnected) => {
 		this.setState({isNetConnected: isConnected})
 		if (isConnected) {
 			this.refs[WEBVIEW_REF].reload();
 		}
-	},
+	};
 
-	// onTabPressed: function() {
-	// 	this.refs[WEBVIEW_REF].reload();
-	// },
+    // onTabPressed: function() {
+    // 	this.refs[WEBVIEW_REF].reload();
+    // },
 
-	getUrlForQA(){
+    getUrlForQA = () => {
 		return LogicData.getAccountState()? NetConstants.TRADEHERO_API.WEBVIEW_QA_PAGE_ACTUAL:this.props.url;
-	},
+	};
 
-	render: function() {
+    render() {
 		if(this.state.isNetConnected) {
 			return (
 				<WebView
@@ -103,10 +104,8 @@ var QAPage = React.createClass({
 					</View>
 				)
 		}
-	},
-
-
-});
+	}
+}
 
 
 

@@ -1,9 +1,9 @@
 'use strict';
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
-	Navigator,
 	View,
 	Text,
 	Image,
@@ -27,6 +27,8 @@ import {
 	markSuccess,
 } from 'react-native-update';
 
+import NavigationExperimental from 'react-native-deprecated-custom-components';
+
 import _updateConfig from './update.json';
 const {appKey} = _updateConfig[Platform.OS];
 
@@ -46,25 +48,25 @@ require('./js/utils/numberUtils')
 require('./js/utils/stringUtils')
 
 var SCREEN_WIDTH = Dimensions.get('window').width;
-// var ToTheLeft = {
-// 	opacity: {
-// 		from: 1,
-// 		to: 0.5,
-// 		min: 0,
-// 		max: 1,
-// 		type: 'linear',
-// 		extrapolate: false,
-// 	},
-// 	left: {
-// 		from: 0,
-// 		to: -SCREEN_WIDTH,
-// 		min: 0,
-// 		max: 1,
-// 		type: 'linear',
-// 		extrapolate: true,
-// 	},
-// };
-// Navigator.SceneConfigs.PushFromRight.animationInterpolators.out = buildStyleInterpolator(ToTheLeft)
+var ToTheLeft = {
+	opacity: {
+		from: 1,
+		to: 0.5,
+		min: 0,
+		max: 1,
+		type: 'linear',
+		extrapolate: false,
+	},
+	left: {
+		from: 0,
+		to: -SCREEN_WIDTH,
+		min: 0,
+		max: 1,
+		type: 'linear',
+		extrapolate: true,
+	},
+};
+NavigationExperimental.Navigator.SceneConfigs.PushFromRight.animationInterpolators.out = buildStyleInterpolator(ToTheLeft)
 
 var TimerMixin = require('react-timer-mixin');
 var LayoutAnimation = require('LayoutAnimation')
@@ -94,14 +96,13 @@ var LOADING_PHASE = 'loading'
 var GUIDE_PHASE = 'guide'
 var MAIN_PAGE_PHASE = 'mainPage'
 
-var AppNavigator = React.createClass({
+var AppNavigator = createReactClass({
+    displayName: 'AppNavigator',
+    mixins: [TimerMixin],
+    registerRewardInitialized: false,
+    fxDataInitialized: false,
 
-	mixins: [TimerMixin],
-
-	registerRewardInitialized: false,
-	fxDataInitialized: false,
-
-	getInitialState: function() {
+    getInitialState: function() {
 		return {
 			startUpPhase: LOADING_PHASE,
 			showAskForRestart: false,
@@ -112,7 +113,7 @@ var AppNavigator = React.createClass({
 		};
 	},
 
-	componentDidMount: function() {
+    componentDidMount: function() {
 		if (isFirstTime) {
 			markSuccess()
 		}
@@ -155,7 +156,7 @@ var AppNavigator = React.createClass({
 		Orientation.lockToPortrait(); //this will lock the view to Portrait
 	},
 
-	initializeApp: function(){
+    initializeApp: function(){
 		console.log("initializeApp");
 		StorageModule.loadUserData()
 			.then((value) => {
@@ -331,28 +332,29 @@ var AppNavigator = React.createClass({
 		// this.alertForPush(alertData);
 	},
 
-	setCurrentVersionCode: function(value){
+    setCurrentVersionCode: function(value){
 		LogicData.setCurrentVersionCode(value);
 		VersionControlModule.start();
 	},
 
-	componentWillUnmount: function() {
+    componentWillUnmount: function() {
 		this.recevieDataSubscription.remove();
 	},
 
-	// setIsProduct: function(setIsProductApp){
-	// 	var value = (setIsProductApp == "true" ? true : false);
-	// 	console.log("setIsProductApp: " + setIsProductApp);
-	// 	VersionConstants.setIsProductApp(value);
-	// },
+    // setIsProduct: function(setIsProductApp){
+    // 	var value = (setIsProductApp == "true" ? true : false);
+    // 	console.log("setIsProductApp: " + setIsProductApp);
+    // 	VersionConstants.setIsProductApp(value);
+    // },
 
-	// ayondoLoginResule:function(result){
-	// 	this.refs['mainPage'].ayondoLoginResult(result)
-	// },
+    // ayondoLoginResule:function(result){
+    // 	this.refs['mainPage'].ayondoLoginResult(result)
+    // },
 
 
-	lastDeviceToken: "",
-	_handleDeviceToken: function(event) {
+    lastDeviceToken: "",
+
+    _handleDeviceToken: function(event) {
 		console.log("deviceToken from native:", event);
 
 		if(this.lastDeviceToken != event){
@@ -361,7 +363,7 @@ var AppNavigator = React.createClass({
 		}
 	},
 
-	sendDeviceTokenToServer: function(event){
+    sendDeviceTokenToServer: function(event){
 		if(!event || event === ""){
 			console.log("devicetoken not set in RN " + event)
 			return;
@@ -415,8 +417,7 @@ var AppNavigator = React.createClass({
 	 }
 	},
 
-
-	enterMainPage: function() {
+    enterMainPage: function() {
 		LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 		this.setState({
 			startUpPhase: MAIN_PAGE_PHASE,
@@ -424,7 +425,7 @@ var AppNavigator = React.createClass({
 		StorageModule.setGuide(JSON.stringify(GUIDE_VERSION))
 	},
 
-	checkUpdate: function() {
+    checkUpdate: function() {
 		checkUpdate(appKey).then(info => {
 			if (info.expired) {
 				// TODO redirect to App store to update.
@@ -445,7 +446,7 @@ var AppNavigator = React.createClass({
 		});
 	},
 
-	doUpdate: function(info) {
+    doUpdate: function(info) {
 		downloadUpdate(info).then(hash => {
 			this.setState({
 				showAskForRestart: true,
@@ -456,13 +457,13 @@ var AppNavigator = React.createClass({
 		});
 	},
 
-	closeAskForRestartDialog: function() {
+    closeAskForRestartDialog: function() {
 		this.setState({
 			showAskForRestart: false,
 		})
 	},
 
-	renderAskForRestart: function() {
+    renderAskForRestart: function() {
 		if (this.state.showAskForRestart) {
 			return (
 				<AskForRestartPage
@@ -473,8 +474,8 @@ var AppNavigator = React.createClass({
 		}
 	},
 
-	//收到NativePush后弹出Alert后跳转
-	alertForPush: function(data){
+    //收到NativePush后弹出Alert后跳转
+    alertForPush: function(data){
 		if(data.type === '1' || data.type === '2' || data.type  === '3'){
 			//type: 1: 平仓, 2: 股价提醒, 3: deeplink
 			if(data.title && data.message){
@@ -493,8 +494,8 @@ var AppNavigator = React.createClass({
 
 	},
 
-	//收到NativePush后直接打开响应界面
-	actionForPush: function(data){
+    //收到NativePush后直接打开响应界面
+    actionForPush: function(data){
 		if(data.type === '1' || data.type === '2' || data.type  === '3'){
 			//type: 1: 平仓, 2: 股价提醒, 3: deeplink
 			console.log('actionForPush '+ data.title);
@@ -526,7 +527,7 @@ var AppNavigator = React.createClass({
 		}
 	},
 
-	setMessageRead: function(id) {
+    setMessageRead: function(id) {
 		var userData = LogicData.getUserData();
 		var url = NetConstants.CFD_API.SET_MESSAGE_READ;
 		if(LogicData.getAccountState()){
@@ -545,11 +546,11 @@ var AppNavigator = React.createClass({
 		)
 	},
 
-	cancelAlert:function(){
+    cancelAlert:function(){
 		console.log("cancelAlert");
 	},
 
-	render: function() {
+    render: function() {
 		var {height, width} = Dimensions.get('window')
 
 		if (this.state.startUpPhase == MAIN_PAGE_PHASE) {
@@ -625,7 +626,7 @@ var AppNavigator = React.createClass({
 				return null;
 			}
 		}
-	}
+	},
 });
 
 var styles = StyleSheet.create({
@@ -635,7 +636,7 @@ var styles = StyleSheet.create({
 		alignItems: 'stretch',
 	},
 	image: {
-		resizeMode: Image.resizeMode.contain,
+		resizeMode: 'contain',
 	},
 	guideContainer: {
 		alignItems: 'center',
@@ -644,7 +645,7 @@ var styles = StyleSheet.create({
 	guideImage: {
 		height: 445 * SCREEN_WIDTH / 375,
 		width: SCREEN_WIDTH,
-		resizeMode: Image.resizeMode.contain,
+		resizeMode: 'contain',
 	},
 	guideActiveDot: {
 		backgroundColor: '#1962dd',

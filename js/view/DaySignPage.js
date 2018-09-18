@@ -1,5 +1,7 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {
 	StyleSheet,
@@ -46,19 +48,16 @@ var signEnable = true;//防止网络不畅多次点击事件发生
 var RULE_DIALOG = "ruleDialog";
 var layoutSizeChangedSubscription = null
 
-var DaySignPage = React.createClass({
-	propTypes: {
-    shareFunction: React.PropTypes.func,
-  },
+class DaySignPage extends React.Component {
+    static propTypes = {
+    shareFunction: PropTypes.func,
+  };
 
-  getDefaultProps: function(){
-    return {
+    static defaultProps = {
       shareFunction: ()=>{}
-    }
-  },
+    };
 
-	getInitialState() {
-    return {
+    state = {
 			modalCoinVisible: false,
 			monthToday: '-',
 			monthDays:31,
@@ -78,34 +77,33 @@ var DaySignPage = React.createClass({
 			fadeInValue: new Animated.Value(0),
 			height: UIConstants.getVisibleHeight(),
     };
-  },
 
-	componentDidMount:function(){
+    componentDidMount() {
 		this._refresh()
 	  signEnable = true
 
 		layoutSizeChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.LAYOUT_SIZE_CHANGED, () => {
 			this.onLayoutSizeChanged();
 		});
-	},
+	}
 
-	componentWillUnmount: function() {
+    componentWillUnmount() {
 		layoutSizeChangedSubscription && layoutSizeChangedSubscription.remove();
-	},
+	}
 
-	onLayoutSizeChanged: function(){
+    onLayoutSizeChanged = () => {
 		console.log("onLayoutSizeChanged");
 		this.setState({
 			height: UIConstants.getVisibleHeight(),
 		})
-	},
+	};
 
-	_refresh:function() {
+    _refresh = () => {
 		this._loadDailySignInfo()
 		this._loadDailySignMonth()
-	},
+	};
 
-	_actionAni:function(){
+    _actionAni = () => {
 		console.log('_actionAni');
 		this.setState({
 			modalCoinVisible:true,
@@ -143,9 +141,9 @@ var DaySignPage = React.createClass({
 		//             easing: Easing.linear // 缓动函数
 		//         }).start();
 
-	},
+	};
 
-	_actionAni2:function(){
+    _actionAni2 = () => {
 		console.log('_actionAni2');
 		 this.state.fadeInValue.setValue(1);
 		 this.state.bounceValue.setValue(1);
@@ -158,14 +156,14 @@ var DaySignPage = React.createClass({
 
 	       //调用start启动动画,start可以回调一个函数,从而实现动画循环
 	   ]).start(()=>this.setState({modalCoinVisible:false}));
-	},
+	};
 
-	_playSound:function(){
+    _playSound = () => {
 		NativeDataModule.passDataToNative('playSound', "0")
-	},
+	};
 
-	//获取当天的签到状态
-	_loadDailySignInfo:function() {
+    //获取当天的签到状态
+    _loadDailySignInfo = () => {
 		// Alert.alert('_loadDailySignInfo')
 		var userData = LogicData.getUserData()
 		var notLogin = Object.keys(userData).length === 0
@@ -192,10 +190,10 @@ var DaySignPage = React.createClass({
 				}
 			)
 		}
-	},
+	};
 
-	//获取当月的签到状态
-	_loadDailySignMonth:function(){
+    //获取当月的签到状态
+    _loadDailySignMonth = () => {
 		// Alert.alert('_loadDailySignMonth')
 		var userData = LogicData.getUserData()
 		var notLogin = Object.keys(userData).length === 0
@@ -235,9 +233,9 @@ var DaySignPage = React.createClass({
 				}
 			);
 		}
-	},
+	};
 
-	_share: function(){
+    _share = () => {
 		TalkingdataModule.trackEvent(TalkingdataModule.CHECK_IN_SHARE_EVENT);
     if(this.props.shareFunction){
 			NetworkModule.fetchTHUrl(
@@ -257,9 +255,9 @@ var DaySignPage = React.createClass({
 				}
 			);
     }
-	},
+	};
 
-	renderTop: function(){
+    renderTop = () => {
 		var heightShow = this.state.height - UIConstants.HEADER_HEIGHT;
 
 			return(
@@ -283,9 +281,9 @@ var DaySignPage = React.createClass({
  						</View>
 				</View>
 			);
-	},
+	};
 
-	renderCoin:function(){
+    renderCoin = () => {
 		return(
 				<Animated.View
 						 style={{
@@ -311,9 +309,9 @@ var DaySignPage = React.createClass({
 
 
 		);
-	},
+	};
 
-	renderMiddle: function(){
+    renderMiddle = () => {
 		var heightShow = this.state.height - UIConstants.HEADER_HEIGHT;
 		return(
 			<View style = {[styles.middleLayout, {height: heightShow*(1*0.57) + (roundR/2),}]}>
@@ -346,13 +344,13 @@ var DaySignPage = React.createClass({
 
 			</View>
 		);
-	},
+	};
 
-	_clickStratgy:function(){
+    _clickStratgy = () => {
 		this.refs[RULE_DIALOG].show();
-	},
+	};
 
-	_clickSign:function(){
+    _clickSign = () => {
 		if(!this.state.isSignedToday && signEnable){
 			var userData = LogicData.getUserData()
 			var notLogin = Object.keys(userData).length === 0
@@ -386,17 +384,17 @@ var DaySignPage = React.createClass({
 		}else{
 			// this._actionAni()
 		}
-	},
+	};
 
-	_isSignedToday:function(){
+    _isSignedToday = () => {
 		return this.state.isSignedToday
-	},
+	};
 
-	_isSignedDay:function(index){
+    _isSignedDay = (index) => {
 		return this.state.days[index]
-	},
+	};
 
-	renderCalendar: function(){
+    renderCalendar = () => {
 		// var days = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
 		var colorSign = LogicData.getAccountState()?'#7294d0':'#4c88f1';
 		var daysView = this.state.days.map(
@@ -419,9 +417,9 @@ var DaySignPage = React.createClass({
 				</View>
 			</View>
 		);
-	},
+	};
 
-	renderBottom: function(){
+    renderBottom = () => {
 		var heightShow = this.state.height - UIConstants.HEADER_HEIGHT;
 
 		return(
@@ -444,17 +442,17 @@ var DaySignPage = React.createClass({
 					</View>
 			</View>
 		);
-	},
+	};
 
-	renderModal:function(){
+    renderModal = () => {
 		return(
 			<HeaderLineDialog ref={RULE_DIALOG}
 				headerImage={require('../../images/sign_stratgy.png')}
 				messageLines={this.rules}/>
 		);
-	},
+	};
 
-	renderModalCoin:function(){
+    renderModalCoin = () => {
 		return(
 			<Modal
 				transparent={true}
@@ -469,14 +467,13 @@ var DaySignPage = React.createClass({
 
 			</Modal>
 		);
-	},
+	};
 
- _setModalCoinVisible(visible) {
- 	 this.setState({modalCoinVisible: visible});
-  },
+    _setModalCoinVisible = (visible) => {
+        this.setState({modalCoinVisible: visible});
+     };
 
-
-	render: function() {
+    render() {
 		return (
 			<View style={{flex: 1}}>
 				<NavBar title={LS.str("DAY_SIGN_TITLE")} showBackButton={true} navigator={this.props.navigator}
@@ -492,8 +489,8 @@ var DaySignPage = React.createClass({
 				</View>
 			</View>
 		);
-	},
-});
+	}
+}
 
 
 

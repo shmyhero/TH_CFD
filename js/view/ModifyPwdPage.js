@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	View,
@@ -37,10 +38,11 @@ var MainPage = require('./MainPage')
 var MAX_ValidationCodeCountdown = 60
 var getCompleteEnable = false;
 
-var ModifyPwdPage = React.createClass({
-	mixins: [TimerMixin],
+var ModifyPwdPage = createReactClass({
+    displayName: 'ModifyPwdPage',
+    mixins: [TimerMixin],
 
-	getInitialState: function() {
+    getInitialState: function() {
 		return {
 			phoneNumber: '',
 			validationCode: '',
@@ -54,10 +56,10 @@ var ModifyPwdPage = React.createClass({
 		};
 	},
 
-	componentDidMount:function(){
+    componentDidMount:function(){
 	},
 
-	render: function() {
+    render: function() {
 		var getCode = '获取验证码'
 		if(this.state.validationCodeCountdown>0){
 			getCode = this.state.validationCodeCountdown + '秒'
@@ -142,31 +144,31 @@ var ModifyPwdPage = React.createClass({
 		);
 	},
 
-	setValidationCode:function(text){
+    setValidationCode:function(text){
 		this.setState({
 			validationCode:text,
 		},()=>{getCompleteEnable = this.checkForCompleteEnable()})
 	},
 
-  setOldPwd:function(text){
-		this.setState({
-			oldPwd:text,
-		},()=>{getCompleteEnable = this.checkForCompleteEnable()})
-	},
+    setOldPwd:function(text){
+          this.setState({
+              oldPwd:text,
+          },()=>{getCompleteEnable = this.checkForCompleteEnable()})
+      },
 
-	setNewPwd:function(text){
+    setNewPwd:function(text){
 		this.setState({
 			newPwd:text,
 		},()=>{getCompleteEnable = this.checkForCompleteEnable()})
 	},
 
-	setNewPwdAgain:function(text){
+    setNewPwdAgain:function(text){
 		this.setState({
 			newPwdAgain:text,
 		},()=>{getCompleteEnable = this.checkForCompleteEnable()})
 	},
 
-	setValidationPhoneNumber:function(phone){
+    setValidationPhoneNumber:function(phone){
 		this.setState({
 			phoneNumber:phone
 		},()=>{getCompleteEnable = this.checkForCompleteEnable()})
@@ -182,7 +184,7 @@ var ModifyPwdPage = React.createClass({
 		}
 	},
 
-	checkForCompleteEnable(){
+    checkForCompleteEnable(){
 		this.setState({count:this.state.count++})
 		if(this.state.oldPwd.length<8){
 			return false;
@@ -198,7 +200,7 @@ var ModifyPwdPage = React.createClass({
 		return true;
 	},
 
-	getCompletePressed(){
+    getCompletePressed(){
 		if(!getCompleteEnable){
 			return
 		}
@@ -206,8 +208,7 @@ var ModifyPwdPage = React.createClass({
 		Alert.alert('提示','完成');
 	},
 
-
-	getValidationCodePressed: function() {
+    getValidationCodePressed: function() {
 		if (! this.state.getValidationCodeButtonEnabled) {
 			return
 		}
@@ -251,7 +252,6 @@ var ModifyPwdPage = React.createClass({
 			1000
 		);
 	},
-
 });
 
 var styles = StyleSheet.create({

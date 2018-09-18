@@ -1,9 +1,8 @@
 'use strict';
 
-import React, {
-  Component,
-  PropTypes,
-} from 'react';
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 
 import {
 	StyleSheet,
@@ -41,7 +40,7 @@ var actionButtonSize = 61;
 
 export default class ActivityModal extends Component {
   static propTypes = {
-    getNavigator: React.PropTypes.func,
+    getNavigator: PropTypes.func,
   }
 
   static defaultProps = {
@@ -176,7 +175,7 @@ export default class ActivityModal extends Component {
         </TouchableOpacity>
       );
   }
-};
+}
 
 var styles = StyleSheet.create({
 	// container: {

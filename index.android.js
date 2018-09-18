@@ -11,14 +11,13 @@ import React, {
 import {
   AppRegistry,
   StyleSheet,
-  Navigator,
   View,
 } from 'react-native';
 
 var AppNavigator = require('./AppNavigator')
 
-var TH_CFD = React.createClass({
-  render: function() {
+class TH_CFD extends React.Component {
+  render() {
     var initialPage = this.props.initialPage;
     if (initialPage == null) {
       initialPage = 'stockListViewPager'
@@ -27,7 +26,7 @@ var TH_CFD = React.createClass({
       <AppNavigator initialViewRoute={initialPage}/>
     );
   }
-});
+}
 
 var styles = StyleSheet.create({
   container: {

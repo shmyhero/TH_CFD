@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	View,
@@ -50,10 +51,11 @@ var viewStyle = Platform.OS === 'android' ?
 			{width: width, flex: 1,}
 
 
-var StockClosedPositionPage = React.createClass({
-	mixins: [TimerMixin],
+var StockClosedPositionPage = createReactClass({
+    displayName: 'StockClosedPositionPage',
+    mixins: [TimerMixin],
 
-	getInitialState: function() {
+    getInitialState: function() {
 		return {
 			stockInfoRowData: [],
 			stockInfo: ds.cloneWithRows([]),
@@ -65,7 +67,7 @@ var StockClosedPositionPage = React.createClass({
 		};
 	},
 
-	componentDidMount: function() {
+    componentDidMount: function() {
 		this.loadClosedPositionInfo();
 
 		networkConnectionChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.NETWORK_CONNECTION_CHANGED, () => {
@@ -85,7 +87,7 @@ var StockClosedPositionPage = React.createClass({
 		});
 	},
 
-	onConnectionStateChanged: function(){
+    onConnectionStateChanged: function(){
 		if(this.isCurrentPage()){
 			var userData = LogicData.getUserData();
 			var notLogin = Object.keys(userData).length === 0;
@@ -95,15 +97,15 @@ var StockClosedPositionPage = React.createClass({
 		}
 	},
 
-	componentWillUnmount: function(){
+    componentWillUnmount: function(){
 		networkConnectionChangedSubscription && networkConnectionChangedSubscription.remove();
 		accountStateChangedSubscription && accountStateChangedSubscription.remove();
 		accountLogoutEventSubscription && accountLogoutEventSubscription.remove();
 		layoutSizeChangedSubscription && layoutSizeChangedSubscription.remove();
 	},
 
-	//Only Android has the layout size changed issue because the navigation bar can be hidden.
-	onLayoutSizeChanged: function(){
+    //Only Android has the layout size changed issue because the navigation bar can be hidden.
+    onLayoutSizeChanged: function(){
 		if(Platform.OS === "android" && this.isCurrentPage()){
 			console.log("onLayoutSizeChanged StockClosedPositionPage");
 			this.setState({
@@ -112,7 +114,7 @@ var StockClosedPositionPage = React.createClass({
 		}
 	},
 
-	isCurrentPage: function(){
+    isCurrentPage: function(){
 		if(LogicData.getTabIndex() == MainPage.STOCK_EXCHANGE_TAB_INDEX && !this.state.contentLoaded && !this.state.isRefreshing && WebSocketModule.isConnected()){
 			var currentPageTag = LogicData.getCurrentPageTag();
 			if(currentPageTag == 1){
@@ -125,15 +127,12 @@ var StockClosedPositionPage = React.createClass({
 		return false;
 	},
 
-	isLoadedAll: false,
+    isLoadedAll: false,
+    currentTicks: 0,
+    isResetScroll: false,
+    scrollViewYOffset: 0,
 
-	currentTicks: 0,
-
-	isResetScroll: false,
-
-	scrollViewYOffset: 0,
-
-	tabPressed: function(index) {
+    tabPressed: function(index) {
 
 		WebSocketModule.registerCallbacks(
 			() => {
@@ -163,7 +162,7 @@ var StockClosedPositionPage = React.createClass({
 
 	},
 
-	onScroll: function(event){
+    onScroll: function(event){
 		this.scrollViewYOffset = event.nativeEvent.contentOffset.y;
 		if(this.isResetScroll && this.scrollViewYOffset == 0){
 			this.isResetScroll = false;
@@ -182,7 +181,7 @@ var StockClosedPositionPage = React.createClass({
 		}
 	},
 
-	clearViews:function(){
+    clearViews:function(){
 		if(this._pullToRefreshListView && this._pullToRefreshListView._scrollView){
 			try{
 				this.endNextPageLoadingState(false);
@@ -204,7 +203,7 @@ var StockClosedPositionPage = React.createClass({
 		})
 	},
 
-	loadClosedPositionInfo: function() {
+    loadClosedPositionInfo: function() {
 		var lastTicks = this.currentTicks;
 
 		if(!this.state.contentLoaded){
@@ -271,7 +270,7 @@ var StockClosedPositionPage = React.createClass({
 		)
 	},
 
-	loadClosedPositionInfoWithLastDateTime: function(dateTime, count) {
+    loadClosedPositionInfoWithLastDateTime: function(dateTime, count) {
 		var lastTicks = this.currentTicks;
 
 		console.log("loadClosedPositionInfoWithLastDateTime: " + dateTime + ", " + count);
@@ -325,7 +324,7 @@ var StockClosedPositionPage = React.createClass({
 		)
 	},
 
-	endNextPageLoadingState: function(endLoadMore){
+    endNextPageLoadingState: function(endLoadMore){
 		console.log("endLoadMore " + endLoadMore)
 		if(this.isLoadedAll != endLoadMore){
 			this.isLoadedAll = endLoadMore;
@@ -333,7 +332,7 @@ var StockClosedPositionPage = React.createClass({
 		}
 	},
 
-	onLoadMore: function() {
+    onLoadMore: function() {
 		if(this.state.stockInfoRowData && this.state.stockInfoRowData.length>0){
 			var lastItem = this.state.stockInfoRowData[this.state.stockInfoRowData.length-1];
 			var dateTime = lastItem.closeAt;
@@ -342,7 +341,7 @@ var StockClosedPositionPage = React.createClass({
 		}
 	},
 
-	stockPressed: function(rowData, sectionID, rowID, highlightRow) {
+    stockPressed: function(rowData, sectionID, rowID, highlightRow) {
 		var contentLength = this._pullToRefreshListView._scrollView.getMetrics().contentLength;
 		// if (rowHeight === 0) {
 		// 	rowHeight = contentLength/this.state.stockInfoRowData.length
@@ -416,7 +415,7 @@ var StockClosedPositionPage = React.createClass({
 		}
 	},
 
-	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
+    renderSeparator: function(sectionID, rowID, adjacentRowHighlighted) {
 		if(rowID == this.state.selectedRow - 1) {
 			return null
 		}
@@ -427,7 +426,7 @@ var StockClosedPositionPage = React.createClass({
 		);
 	},
 
-	renderFooter: function(viewState) {
+    renderFooter: function(viewState) {
 		let {pullState, pullDistancePercent} = viewState
 		let {load_more_none, load_more_idle, will_load_more, loading_more, loaded_all, } = PullToRefreshListView.constants.viewState
 		pullDistancePercent = Math.round(pullDistancePercent * 100)
@@ -453,7 +452,7 @@ var StockClosedPositionPage = React.createClass({
 		}
 	},
 
-	renderActivityIndicator: function(){
+    renderActivityIndicator: function(){
 		var color = "#7a7987";
 		var styleAttr = 'small' //or "large"
 		return (
@@ -461,7 +460,7 @@ var StockClosedPositionPage = React.createClass({
 		);
 	},
 
-	renderCountyFlag: function(rowData) {
+    renderCountyFlag: function(rowData) {
 		if (rowData.tag !== undefined) {
 			return (
 				<View style={styles.stockCountryFlagContainer}>
@@ -473,7 +472,7 @@ var StockClosedPositionPage = React.createClass({
 		}
 	},
 
-	renderProfit: function(pl) {
+    renderProfit: function(pl) {
 		// var {height, width} = Dimensions.get('window');
 		var textSize = Math.round(18*width/375.0)
 		pl = pl.toFixed(2)
@@ -507,7 +506,7 @@ var StockClosedPositionPage = React.createClass({
 		// }
 	},
 
-	renderProfitPercentage: function(percentChange) {
+    renderProfitPercentage: function(percentChange) {
 		// var {height, width} = Dimensions.get('window');
 		var textSize = Math.round(18*width/375.0)
 		percentChange = percentChange.toFixed(2)
@@ -540,7 +539,7 @@ var StockClosedPositionPage = React.createClass({
 		// }
 	},
 
-	renderDetailInfo: function(rowData) {
+    renderDetailInfo: function(rowData) {
 		var tradeImage = rowData.isLong ? require('../../images/icon_up_cw.png') : require('../../images/icon_down_cw.png')
 		var profitColor = rowData.pl > 0 ? ColorConstants.STOCK_RISE_RED : ColorConstants.STOCK_DOWN_GREEN
 
@@ -625,7 +624,7 @@ var StockClosedPositionPage = React.createClass({
 		);
 	},
 
-	renderAchievementIcon: function(rowData){
+    renderAchievementIcon: function(rowData){
 		if(rowData.hasCard){
 			return(
 				<Image style={styles.achievementIcon}
@@ -634,7 +633,7 @@ var StockClosedPositionPage = React.createClass({
 		}
 	},
 
-	renderRow: function(rowData, sectionID, rowID, highlightRow) {
+    renderRow: function(rowData, sectionID, rowID, highlightRow) {
 		console.log("BUG FIX - renderRow rowID " + rowID + ", rowData " + JSON.stringify(rowData))
 		var bgcolor = this.state.selectedRow === rowID ? '#e6e5eb' : 'white'
 		var plPercent = (rowData.closePrice - rowData.openPrice) / rowData.openPrice * rowData.leverage * 100
@@ -679,7 +678,7 @@ var StockClosedPositionPage = React.createClass({
 		);
 	},
 
-	renderLoadingText: function() {
+    renderLoadingText: function() {
 		if(this.state.stockInfoRowData.length === 0) {
 			return (
 				<View style={styles.loadingTextView}>
@@ -689,7 +688,7 @@ var StockClosedPositionPage = React.createClass({
 		}
 	},
 
-	renderHeaderBar: function() {
+    renderHeaderBar: function() {
 		var strCP = LS.str('CP')
 		var strYK = LS.str('YK')
 		var strSYL = LS.str('SYL')
@@ -708,13 +707,13 @@ var StockClosedPositionPage = React.createClass({
 			);
 	},
 
-	renderOrClear:function(){
+    renderOrClear:function(){
 		if(this.state.isClear){
 			return(<View style={{height:10000}}></View>)
 		}
 	},
 
-	renderContent: function(){
+    renderContent: function(){
 		if(!this.state.contentLoaded){
 			return (
 				<NetworkErrorIndicator onRefresh={()=>this.loadClosedPositionInfo()} refreshing={this.state.isRefreshing}/>
@@ -751,7 +750,7 @@ var StockClosedPositionPage = React.createClass({
 		}
 	},
 
-	render: function() {
+    render: function() {
 		
 		return (
 			<View style={viewStyle}>

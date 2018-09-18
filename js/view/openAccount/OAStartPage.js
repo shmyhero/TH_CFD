@@ -1,5 +1,7 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {
 	StyleSheet,
@@ -20,27 +22,25 @@ var LS = require("../../LS")
 var SCROLL_VIEW = "scrollView";
 var {height, width} = Dimensions.get('window')
 
-var OAStartPage = React.createClass({
-	propTypes: {
-		onPop: React.PropTypes.func,
-	},
+class OAStartPage extends React.Component {
+    static propTypes = {
+		onPop: PropTypes.func,
+	};
 
-	getDefaultProps() {
-		return {
-			onPop: ()=>{},
-		}
-	},
+    static defaultProps = {
+        onPop: ()=>{},
+    };
 
-	gotoNext: function() {
+    gotoNext = () => {
 		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_OPEN_ACCOUNT_STEP0, TalkingdataModule.LABEL_OPEN_ACCOUNT);
 		OpenAccountRoutes.goToNextRoute(this.props.navigator, this.getData(), this.props.onPop);
-	},
+	};
 
-	getData: function(){
+    getData = () => {
 		return [];
-	},
+	};
 
-	render: function() {
+    render() {
 
 
 		return (
@@ -66,8 +66,8 @@ var OAStartPage = React.createClass({
 				</View>
 			</ScrollView>
 		);
-	},
-});
+	}
+}
 
 var styles = StyleSheet.create({
 	wrapper: {

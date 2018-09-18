@@ -1,9 +1,8 @@
 'use strict';
 
-import React, {
-  Component,
-  PropTypes,
-} from 'react';
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 
 import {
 	StyleSheet,
@@ -46,9 +45,9 @@ var Toast = require('./component/toast/Toast');
 
 export default class PraiseModal extends Component {
   static propTypes = {
-    getNavigator: React.PropTypes.func,
-    enoughCredits:React.PropTypes.bool,
-    callback:React.PropTypes.func,
+    getNavigator: PropTypes.func,
+    enoughCredits:PropTypes.bool,
+    callback:PropTypes.func,
   }
 
   static defaultProps = {
@@ -182,7 +181,7 @@ export default class PraiseModal extends Component {
 
 
 
-};
+}
 
 //
 // <TouchableWithoutFeedback

@@ -1,5 +1,7 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {
 	StyleSheet,
@@ -7,64 +9,60 @@ import {
 	Text,
 	TouchableOpacity,
 	Image,
+	ViewPropTypes
 } from 'react-native';
 var ColorConstants = require('../../ColorConstants')
 
-var CheckBoxButton = React.createClass({
-
-	propTypes: {
+class CheckBoxButton extends React.Component {
+    static propTypes = {
 		...TouchableOpacity.propTypes,
 
-		containerStyle: View.propTypes.style,
+		containerStyle: ViewPropTypes.style,
 
-		textStyle: Text.propTypes.style,
+		textStyle: PropTypes.style,
 
-		text: React.PropTypes.string,
+		text: PropTypes.string,
 
-		enabled: React.PropTypes.bool,
+		enabled: PropTypes.bool,
 
-		defaultSelected: React.PropTypes.bool,
+		defaultSelected: PropTypes.bool,
 
-		onPress: React.PropTypes.func,
+		onPress: PropTypes.func,
 
-		content: React.PropTypes.element,
+		content: PropTypes.element,
 
-		selectedIcon: React.PropTypes.number,
+		selectedIcon: PropTypes.number,
 
-		unSelectedIcon: React.PropTypes.number,
-	},
+		unSelectedIcon: PropTypes.number,
+	};
 
-	getInitialState: function() {
-		return {
-			selected: this.props.defaultSelected,
-		};
-	},
+    static defaultProps = {
+        containerStyle: {flex: 1,flexDirection: 'row', alignItems:'center'},
+        textStyle: {fontSize: 14, paddingLeft: 5},
+        enabled: true,
+        defaultSelected: false,
+        onPress: null,
+    };
 
-	getDefaultProps(): Object {
-		return {
-			containerStyle: {flex: 1,flexDirection: 'row', alignItems:'center'},
-			textStyle: {fontSize: 14, paddingLeft: 5},
-			enabled: true,
-			defaultSelected: false,
-			onPress: null,
-		};
-	},
+    state = {
+        selected: this.props.defaultSelected,
+    };
 
-	onPressed: function() {
+    onPressed = () => {
 		var newState = !this.state.selected
 		this.props.onPress &&this.props.onPress(newState)
 		this.setState({
 			selected: newState,
 		})
-	},
+	};
 
-	setSelectedState:function(newState){
+    setSelectedState = (newState) => {
 		this.setState({
 			selected: newState,
 		})
-	},
+	};
 
-	render: function() {
+    render() {
 		var icon = this.state.selected ?
 			(this.props.selectedIcon ? this.props.selectedIcon : require('../../../images/checkbox1.png'))
 		 : (this.props.unSelectedIcon ? this.props.unSelectedIcon : require('../../../images/checkbox2.png'))
@@ -77,9 +75,8 @@ var CheckBoxButton = React.createClass({
 				</View>
 			</TouchableOpacity>
 		)
-	},
-
-});
+	}
+}
 
 var styles = StyleSheet.create({
 	wrapper: {

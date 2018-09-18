@@ -6,11 +6,12 @@ import {
     StyleSheet,
     View,
     Text,
-    Navigator,
     Linking,
 	Platform,
 	Image,
 } from 'react-native';
+
+import NavigationExperimental from 'react-native-deprecated-custom-components';
 
 import Tabbar, { Tab, RawContent,  Icon, IconWithBar, glypyMapMaker } from './component/react-native-tabbar';
 
@@ -155,7 +156,7 @@ export let NEW_TWEET_PAGE_ROUTE = 'newTweetPageRoute'
 export let DYNAMIC_STATUS_CONFIG = 'DynamicStatusConfigRoute'
 
 const NoBackSwipe ={
-  ...Navigator.SceneConfigs.PushFromRight,
+	...NavigationExperimental.Navigator.SceneConfigs.PushFromRight,
     gestures: {
       pop: {},
     },
@@ -213,24 +214,22 @@ export var ME_PAGE_TAB_INDEX = 4;
 
 var HIDE_RANKING_TAB = false;			//Hide ranking tab if necessary
 
-var MainPage = React.createClass({
-	getInitialState: function() {
-		return {
-			showTutorial: false,
-			tutorialType: 'trade',
-		};
-	},
+class MainPage extends React.Component {
+    state = {
+        showTutorial: false,
+        tutorialType: 'trade',
+    };
 
-	_configureScene(route){
+    _configureScene = (route) => {
 		if (route.name === STOCK_DETAIL_ROUTE) {
 			return NoBackSwipe
 		}
 		else {
-			return Navigator.SceneConfigs.PushFromRight
+			return NavigationExperimental.Navigator.SceneConfigs.PushFromRight
 		}
-	},
+	};
 
-	RouteMapper : function(route, navigationOperations, onComponentRef) {
+    RouteMapper = (route, navigationOperations, onComponentRef) => {
 		console.log("Current Router ===>  " + route.name);
 
 		_navigators[route.__navigatorRouteID] = navigationOperations;
@@ -719,17 +718,17 @@ var MainPage = React.createClass({
 			)
 		}
 
-	},
+	};
 
-	showTutorial: function(type){
+    showTutorial = (type) => {
 		this.setState({tutorialType:type, showTutorial:true})
-	},
+	};
 
-	hideTutorial: function(){
+    hideTutorial = () => {
 		this.setState({showTutorial: false})
-	},
+	};
 
-	backAndShowTabbar: function() {
+    backAndShowTabbar = () => {
 		if(_navigator){
 			var routes = _navigator.getCurrentRoutes();
 			if(routes && routes.length == 2){
@@ -740,18 +739,18 @@ var MainPage = React.createClass({
 			}
 			_navigator.pop();
 		}
-	},
+	};
 
-	showTabbar() {
+    showTabbar = () => {
 		if(this.refs['myTabbar']){
 			isTabbarShown = true;
 			console.log("showTabbar")
 			this.setTabbarEnable(true);
 			this.refs['myTabbar'].getBarRef().show(true);
 	 	}
-	},
+	};
 
-	ayondoLoginResult(result, stayInCurrentRoute){
+    ayondoLoginResult = (result, stayInCurrentRoute) => {
 		console.log('login:ayondoLoginResult'+result);
 		if(!stayInCurrentRoute){
 	  	this.backAndShowTabbar();
@@ -766,9 +765,9 @@ var MainPage = React.createClass({
 				console.log('cookies cleared!');
 			});
 		}
-	},
+	};
 
-	onLanguageChanged(){
+    onLanguageChanged = () => {
 		if(!LogicData.getAccountState()){
 			this.refs["homepageBtn"].setLabel(LS.str('SHOUYE'));
 		}else{
@@ -780,9 +779,9 @@ var MainPage = React.createClass({
 			this.refs["rankingBtn"] && this.refs["rankingBtn"].setLabel(LS.str('DAREN'));
 		}
 		this.refs["meBtn"].setLabel(LS.str('WODE'));
-	},
+	};
 
-	refreshMainPage(){
+    refreshMainPage = () => {
 		// this.setState({
 		// 	barColor:LogicData.getAccountState()?'#00ff00':'#f7f7f7'
 		// })
@@ -807,9 +806,9 @@ var MainPage = React.createClass({
 		//监听到模拟或实盘状态切换的时候，调用相应API，SwitchTo/Live or SwitchTo/demo
 		console.log('refreshMainPage ' + LogicData.getAccountState());
 		this.sendToSwitchAccountStatus()
-	},
+	};
 
-	sendToSwitchAccountStatus:function(){
+    sendToSwitchAccountStatus = () => {
 		var userData = LogicData.getUserData()
 		if(userData.token == undefined){return}
 	  	var urlToSend = LogicData.getAccountState()?NetConstants.CFD_API.SWITCH_TO_LIVE:NetConstants.CFD_API.SWITCH_TO_DEMO;
@@ -829,38 +828,37 @@ var MainPage = React.createClass({
 				console.log(result.errorMessage)
 			}
 		)
-	},
+	};
 
-
-	hideTabbar() {
+    hideTabbar = () => {
 		if(this.refs['myTabbar']){
 			isTabbarShown = false;
 			console.log("hideTabbar")
 			this.setTabbarEnable(false);
 			this.refs['myTabbar'].getBarRef().show(false);
 		}
-	},
+	};
 
-	getIsTabbarShown() {
+    getIsTabbarShown = () => {
 		console.log("getIsTabbarShown " + isTabbarShown)
 		return isTabbarShown;
-	},
+	};
 
-	showProgress() {
+    showProgress = () => {
 		this.refs['progressBar'] && this.refs['progressBar'].show()
-	},
+	};
 
-	hideProgress() {
+    hideProgress = () => {
 		this.refs['progressBar'] && this.refs['progressBar'].hide()
-	},
+	};
 
-	showRegisterSuccessDialog(rewardAmount) {
+    showRegisterSuccessDialog = (rewardAmount) => {
 		if(rewardAmount){
 			this.refs[REGISTER_SUCCESS_DIALOG] && this.refs[REGISTER_SUCCESS_DIALOG].show(rewardAmount);
 		}
-	},
+	};
 
-	showFirstDayWithDrawHint(){
+    showFirstDayWithDrawHint = () => {
 		var userData = LogicData.getUserData()
 		var notLogin = Object.keys(userData).length === 0
 		StorageModule.loadFirstDayWithDraw().then((value) => {
@@ -872,9 +870,9 @@ var MainPage = React.createClass({
 			 }
 			}
 		});
-	},
+	};
 
-	requestForFirstDayRewarded:function(){
+    requestForFirstDayRewarded = () => {
 		var userData = LogicData.getUserData();
 		NetworkModule.fetchTHUrl(
 			NetConstants.CFD_API.GET_REWARD_FIRSTDAY_REWARDED,
@@ -888,9 +886,9 @@ var MainPage = React.createClass({
 			function(responseJson) {
 			}.bind(this)
 		)
-	},
+	};
 
-	initTabbarEvent() {
+    initTabbarEvent = () => {
 		var homeRef = this.refs['homeContent'].refs['wrap'].getWrappedRef()
 		homeRef.tabWillFocus = EventCenter.emitHomeTabPressEvent;
 
@@ -902,9 +900,9 @@ var MainPage = React.createClass({
 
 		var meRef = this.refs['meContent'].refs['wrap'].getWrappedRef()
 		meRef.tabWillFocus = EventCenter.emitMeTabPressEvent;
-	},
+	};
 
-	componentDidMount: function() {
+    componentDidMount() {
 		this.setTabbarEnable(true);
 		ayondoLoginResult = this.ayondoLoginResult
 		refreshMainPage = this.refreshMainPage
@@ -1002,11 +1000,11 @@ var MainPage = React.createClass({
 			}
 
 			this.showFirstDayWithDrawHint();
-	},
+	}
 
-	canShowActivityModal : false,
+    canShowActivityModal = false;
 
-	showActivityModal: function(){
+    showActivityModal = () => {
 		var userData = LogicData.getUserData()
 		var notLogin = Object.keys(userData).length === 0
 		if(!notLogin){
@@ -1069,9 +1067,9 @@ var MainPage = React.createClass({
 
 
 		}
-	},
+	};
 
-	backAndroidHandler: function(){
+    backAndroidHandler = () => {
 		console.log("hardwareBackPress");
 		if (_navigator && _navigator.getCurrentRoutes().length > 1) {
 			_navigator.pop();
@@ -1083,14 +1081,14 @@ var MainPage = React.createClass({
 
 		console.log("hardwareBackPress return false");
 		return false;
-	},
+	};
 
-	componentWillMount: function(){
+    componentWillMount() {
 //		HIDE_RANKING_TAB = !LogicData.getDebugStatus();
  		BackAndroid.addEventListener('hardwareBackPress', this.backAndroidHandler);
-	},
+	}
 
-	componentWillUnmount: function() {
+    componentWillUnmount() {
 		if (Platform.OS === 'ios') {
 			Linking.removeEventListener('url', this._handleOpenURL);
 		} else {
@@ -1100,30 +1098,30 @@ var MainPage = React.createClass({
 		didAccountChangeSubscription && didAccountChangeSubscription.remove();
 		didLanguageChangeSubscription && didLanguageChangeSubscription.remove();
 		BackAndroid.removeEventListener('hardwareBackPress', this.backAndroidHandler);
-	},
+	}
 
-	_handleOpenURL: function(event) {
+    _handleOpenURL = (event) => {
 		console.log("url:", event.url);
 		this._handleDeepLink(event.url)
-	},
+	};
 
-	_doShare: function(data){
+    _doShare = (data) => {
 		this.refs[SHARE_PAGE].showWithData(data);
-	},
+	};
 
-  showKeyboard: function(data){
-		this.refs[KEYBOARD_PAGE].showWithData(data);
-  },
+    showKeyboard = (data) => {
+          this.refs[KEYBOARD_PAGE].showWithData(data);
+    };
 
-  getIsKeyboardShown: function(){
-    return this.refs[KEYBOARD_PAGE].getIsShown()
-  },
+    getIsKeyboardShown = () => {
+      return this.refs[KEYBOARD_PAGE].getIsShown()
+    };
 
-  updateKeyboardErrorText: function(value){
-    this.refs[KEYBOARD_PAGE].updateErrorText(value);
-  },
+    updateKeyboardErrorText = (value) => {
+      this.refs[KEYBOARD_PAGE].updateErrorText(value);
+    };
 
-	_handleDeepLink: function(url) {
+    _handleDeepLink = (url) => {
 		console.log('handleDeeplink: ' + url)
 
 		if(url.startsWith('cfd://page/share/session')){
@@ -1196,9 +1194,9 @@ var MainPage = React.createClass({
 			initExchangeTab = 0
 			initStockListTab = 1
 		}
-	},
+	};
 
-	getJsonFromUrl: function(url) {
+    getJsonFromUrl = (url) => {
 	  var result = {};
 
 	  url.slice(url.indexOf("?")+1).split("&").forEach(function(part) {
@@ -1206,18 +1204,18 @@ var MainPage = React.createClass({
 	    result[item[0]] = decodeURIComponent(item[1]);
 	  });
 	  return result;
-	},
+	};
 
-	//***
-	//入金活动流程：
-	//	未开户用户（未绑定手机号）：-> 登录 -> 绑定手机号 -> 开户
-	//	未开户用户（已绑定手机号）：-> 登录 -> 开户
-	//	已开户用户、未登录模拟盘：-> 登录 -> 实盘登录 -> 入金
-	//	已开户用户、已登录模拟盘、未登录实盘：-> 实盘登录 -> 入金
-	//	已开户用户、已登录模拟盘、已登录实盘：-> 入金
-	//  *入金及开户的返回会回到我的页面
-	//***
-	goToDeposit: function(afterLogin){
+    //***
+    //入金活动流程：
+    //	未开户用户（未绑定手机号）：-> 登录 -> 绑定手机号 -> 开户
+    //	未开户用户（已绑定手机号）：-> 登录 -> 开户
+    //	已开户用户、未登录模拟盘：-> 登录 -> 实盘登录 -> 入金
+    //	已开户用户、已登录模拟盘、未登录实盘：-> 实盘登录 -> 入金
+    //	已开户用户、已登录模拟盘、已登录实盘：-> 入金
+    //  *入金及开户的返回会回到我的页面
+    //***
+    goToDeposit = (afterLogin) => {
 		if(LogicData.getActualLogin()){
 			console.log("doRegisterAndDeposit 实盘已登录")
 			var routes = _navigator.getCurrentRoutes();
@@ -1246,9 +1244,9 @@ var MainPage = React.createClass({
 			},
 			afterLogin);
 		}
-	},
+	};
 
-	getOpenLiveAccountRoute: function(){
+    getOpenLiveAccountRoute = () => {
 		return new Promise((resolve)=>{
 			var meData = LogicData.getMeData();
 			OpenAccountRoutes.getLatestInputStep()
@@ -1276,9 +1274,9 @@ var MainPage = React.createClass({
 				resolve(OARoute)
 			});
 		});
-	},
+	};
 
-	goToRouteAfterLogin: function(route){
+    goToRouteAfterLogin = (route) => {
 		console.log("登录后转换页面")
 		var routes = _navigator.getCurrentRoutes();
 		var currentRouteIndex = -1;
@@ -1294,9 +1292,9 @@ var MainPage = React.createClass({
 			routes.push(route)
 		}
 		_navigator.immediatelyResetRouteStack(routes);
-	},
+	};
 
-	gotoOpenLiveAccount:function(afterLogin){
+    gotoOpenLiveAccount = (afterLogin) => {
 		this.getOpenLiveAccountRoute().then((route)=>{
 			//绑定手机号
 			var meData = LogicData.getMeData();
@@ -1321,9 +1319,9 @@ var MainPage = React.createClass({
 				}
 			}
 		});
-	},
+	};
 
-	doRegisterAndDeposit: function(afterLogin){
+    doRegisterAndDeposit = (afterLogin) => {
 		//this.refs['myTabbar'].gotoTab("me")
 		if (LogicData.getAccountState()){
 			console.log("doRegisterAndDeposit 实盘状态")
@@ -1354,60 +1352,61 @@ var MainPage = React.createClass({
 				});
 			}
 		}
-	},
-	//***
-	//入金活动
-	//***
+	};
 
-	renderShareView: function(){
+    //***
+    //入金活动
+    //***
+
+    renderShareView = () => {
 		return (
 			<SharePage ref={SHARE_PAGE}/>
 		);
-	},
+	};
 
-  renderKeyBoard: function(){
-    return(
-      <CustomKeyboard ref={KEYBOARD_PAGE}/>
-    )
-  },
+    renderKeyBoard = () => {
+      return(
+        <CustomKeyboard ref={KEYBOARD_PAGE}/>
+      )
+    };
 
-	renderRegisterSuccessPage: function(){
+    renderRegisterSuccessPage = () => {
 		return (
 			<RegisterSuccessPage ref={REGISTER_SUCCESS_DIALOG}
 			shareFunction={this._doShare}/>
 		);
-	},
+	};
 
-	getNavigator: function(){
+    getNavigator = () => {
 		var currentNavigatorIndex = LogicData.getTabIndex()
 		console.log("_navigators[currentNavigatorIndex] " + currentNavigatorIndex)
 		if(currentNavigatorIndex >= _navigators.length){
 			return _navigators[_navigators.length - 1];
 		}
 		return _navigators[currentNavigatorIndex];
-	},
+	};
 
-	renderSuperPriorityHintPage: function(){
+    renderSuperPriorityHintPage = () => {
 		return (
 			<SuperPriorityHintPage ref={SUPER_PRIORITY_HINT}
 				getNavigator={this.getNavigator}/>
 		);
-	},
+	};
 
-	renderActivityModal: function(){
+    renderActivityModal = () => {
 		return (
 			<ActivityModal ref={ACTIVITY_MODAL} getNavigator={this.getNavigator}/>
 		);
-	},
+	};
 
-	renderFirstDayWithDrawHintPage:function(){
+    renderFirstDayWithDrawHintPage = () => {
 		return (
 			<FirstDayWithDrawHint ref={FIRST_DAY_WITHDRAW_HINT}
 				getNavigator={this.getNavigator}/>
 		);
-	},
+	};
 
-	gotoStockDetail: function(pushData) {
+    gotoStockDetail = (pushData) => {
 
 		var currentNavigatorIndex = LogicData.getTabIndex();
 	  	console.log("push gotoStockDetail");
@@ -1425,14 +1424,14 @@ var MainPage = React.createClass({
 			  	stockRowData: stockRowData,
 			});
 		 }
-	},
+	};
 
-	gotoTrade:function(){
+    gotoTrade = () => {
 		_navigator.popToTop()
 		this.refs['myTabbar'].gotoTab("trade")
-	},
+	};
 
-	gotoWithdrawResultPage: function(pushData){
+    gotoWithdrawResultPage = (pushData) => {
 		var currentNavigatorIndex = LogicData.getTabIndex();
 	  	console.log("push gotoStockDetail");
 		console.log("push " + currentNavigatorIndex);
@@ -1462,9 +1461,9 @@ var MainPage = React.createClass({
 				bankCardStatus: "Rejected",
 			});
 		}
-	},
+	};
 
-	setTabbarEnable: function(value){
+    setTabbarEnable = (value) => {
 		this.refs["homepageBtn"].setEnable(value);
 		this.refs["tradeBtn"].setEnable(value);
 		this.refs["trendBtn"].setEnable(value);
@@ -1472,9 +1471,9 @@ var MainPage = React.createClass({
 		if(LogicData.getAccountState()){
 			this.refs['rankingBtn'] && this.refs['rankingBtn'].setEnable(value);
 		}
-	},
+	};
 
-	gotoLoginPage: function(){
+    gotoLoginPage = () => {
 		var userData = LogicData.getUserData();
 		if (Object.keys(userData).length !== 0) {
 			this.setTabbarEnable(false);
@@ -1496,9 +1495,9 @@ var MainPage = React.createClass({
 				}
 			});
 		}
-	},
+	};
 
-	pushToLiveLoginView: function(navigator, doNotPopWhenFinished, onSuccess, afterLogin){
+    pushToLiveLoginView = (navigator, doNotPopWhenFinished, onSuccess, afterLogin) => {
 		var strSPJY = LS.str('SPJY')
 		var userData = LogicData.getUserData()
 		var route = {
@@ -1519,9 +1518,9 @@ var MainPage = React.createClass({
 			console.log("直接实盘登录")
 			navigator.push(route);
 		}
-	},
+	};
 
-	gotoLiveLogin: function(navigator, doNotPopWhenFinished, onSuccess, afterLogin){
+    gotoLiveLogin = (navigator, doNotPopWhenFinished, onSuccess, afterLogin) => {
 		var userData = LogicData.getUserData()
 		var userId = userData.userId
 		if (userId == undefined) {
@@ -1636,9 +1635,9 @@ var MainPage = React.createClass({
 		// 		})
 		// 	})
 		// })		
-	},
+	};
 
-	onWebViewNavigationStateChange: function(navState, doNotPopWhenFinished, onSuccess) {
+    onWebViewNavigationStateChange = (navState, doNotPopWhenFinished, onSuccess) => {
 		// todo
 		console.log("my web view state changed: "+navState.url)
 
@@ -1657,9 +1656,9 @@ var MainPage = React.createClass({
 			console.log('success login error');
 			ayondoLoginResult(false, doNotPopWhenFinished)
 		}
-	},
+	};
 
-	showNotification: function() {
+    showNotification = () => {
 		var pushData = LogicData.getPushData();
 		if(pushData != null){
 			if(pushData.type == "1" || pushData.type == "2"){
@@ -1675,21 +1674,21 @@ var MainPage = React.createClass({
 				this.gotoWithdrawResultPage(pushData);
 			}
 		}
-	},
+	};
 
-	componentDidUpdate: function(){
+    componentDidUpdate() {
 		this.showNotification()
-	},
+	}
 
-	showTabInfo(){
+    showTabInfo = () => {
 		if(LogicData.getAccountState()){
 			return (<Icon label="首页" type={glypy.Home} from={'myhero'} onActiveColor={systemBuleActual} onInactiveColor={iconGrey}/>)
 		}else{
 			return (<Icon label="首页" type={glypy.Home} from={'myhero'} onActiveColor={systemBlue} onInactiveColor={iconGrey}/>)
 		}
-	},
+	};
 
-	renderRankingTab: function(){
+    renderRankingTab = () => {
     var strDR = LS.str('DAREN')
 		if(HIDE_RANKING_TAB){
 			return;
@@ -1705,18 +1704,18 @@ var MainPage = React.createClass({
 							rankingRef.tabWillFocus = EventCenter.emitRankingTabPressEvent;
 						}
 					}}>
-          <Navigator
+						<NavigationExperimental.Navigator
 						style={styles.container}
 						initialRoute={{name: RANKING_PAGE_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
-						configureScene={() => Navigator.SceneConfigs.PushFromRight}
+						configureScene={() => NavigationExperimental.Navigator.SceneConfigs.PushFromRight}
 						renderScene={this.RouteMapper} />
 					</RawContent>
 				</Tab>
 			);
 		}
-	},
+	};
 
-	renderTabbar: function(){
+    renderTabbar = () => {
     var strSY = LogicData.getAccountState() ? LS.str('DT') : LS.str('SHOUYE');
     var strHQ = LS.str('HANGQING')
     var strCW = LS.str('CANGWEI')
@@ -1732,34 +1731,34 @@ var MainPage = React.createClass({
 							onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue}
 							onInactiveColor={iconGrey}/>
 						<RawContent ref="homeContent">
-							<Navigator
+						<NavigationExperimental.Navigator
 					style={styles.container}
 					initialRoute={{name: HOME_PAGE_ROUTE,
 									showTabbar: this.showTabbar,
 									hideTabbar: this.hideTabbar,
 									showProgress: this.showProgress,
 									hideProgress: this.hideProgress}}
-					configureScene={() => Navigator.SceneConfigs.PushFromRight}
+					configureScene={() => NavigationExperimental.Navigator.SceneConfigs.PushFromRight}
 					renderScene={this.RouteMapper} />
 						</RawContent>
 				</Tab>
 				<Tab name="trend">
 						<Icon ref={"trendBtn"} label={strHQ} type={glypy.Camera} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
 						<RawContent style={{width: 100}} ref="stockContent">
-							<Navigator
+						<NavigationExperimental.Navigator
 					style={styles.container}
 					initialRoute={{name: STOCK_LIST_VIEW_PAGER_ROUTE}}
-					configureScene={() => Navigator.SceneConfigs.PushFromRight}
+					configureScene={() => NavigationExperimental.Navigator.SceneConfigs.PushFromRight}
 					renderScene={this.RouteMapper} />
 						</RawContent>
 				</Tab>
 				<Tab name="trade">
 						<Icon ref={"tradeBtn"} label={strCW} type={glypy.Stat} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
 					<RawContent ref="exchangeContent">
-							<Navigator
+						<NavigationExperimental.Navigator
 					style={styles.container}
 					initialRoute={{name: STOCK_EXCHANGE_ROUTE}}
-					configureScene={() => Navigator.SceneConfigs.PushFromRight}
+					configureScene={() => NavigationExperimental.Navigator.SceneConfigs.PushFromRight}
 					renderScene={this.RouteMapper} />
 						</RawContent>
 				</Tab>
@@ -1769,19 +1768,19 @@ var MainPage = React.createClass({
 				<Tab name="me">
 						<Icon ref={"meBtn"} label={strWD} type={glypy.Settings} from={'myhero'} onActiveColor={LogicData.getAccountState()?systemBuleActual:systemBlue} onInactiveColor={iconGrey}/>
 						<RawContent ref="meContent">
-				<Navigator
+						<NavigationExperimental.Navigator
 					style={styles.container}
 					initialRoute={{name: ME_ROUTE, showTabbar: this.showTabbar, hideTabbar: this.hideTabbar}}
-					configureScene={() => Navigator.SceneConfigs.PushFromRight}
+					configureScene={() => NavigationExperimental.Navigator.SceneConfigs.PushFromRight}
 					renderScene={this.RouteMapper} />
 						</RawContent>
 				</Tab>
 
 			</Tabbar>
 		);
-	},
+	};
 
-	render: function() {
+    render() {
 	    return (
 	    	<View style={styles.container}>
 					{this.renderShareView()}
@@ -1796,7 +1795,7 @@ var MainPage = React.createClass({
       	</View>
 		);
 	}
-});
+}
 
 var styles = StyleSheet.create({
 	container: {

@@ -1,6 +1,9 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	View,
@@ -37,24 +40,24 @@ var defaultRawData = [
 	{"type":"openAccountHintBlock"},
 ];
 
-var OAAccountBasicSettingsPage = React.createClass({
-	listRawData: [],
+var OAAccountBasicSettingsPage = createReactClass({
+    displayName: 'OAAccountBasicSettingsPage',
+    listRawData: [],
+    ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 }),
 
-	ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 === r2 }),
-
-	propTypes: {
-		data: React.PropTypes.array,
-		onPop: React.PropTypes.func,
+    propTypes: {
+		data: PropTypes.array,
+		onPop: PropTypes.func,
 	},
 
-	getDefaultProps() {
+    getDefaultProps() {
 		return {
 			data: null,
 			onPop: ()=>{},
 		}
 	},
 
-	getInitialState: function() {
+    getInitialState: function() {
 		this.listRawData = JSON.parse(JSON.stringify(defaultRawData));
 
 		OpenAccountUtils.getPageListRawDataFromData(this.listRawData, this.props.data);
@@ -66,11 +69,11 @@ var OAAccountBasicSettingsPage = React.createClass({
 		};
 	},
 
-	checkData: function(){
+    checkData: function(){
 		this.checkPassword();
 	},
 
-	gotoNext: function() {
+    gotoNext: function() {
 		this.setState({
 			enabled: false,
 			validateInProgress: true,
@@ -89,17 +92,17 @@ var OAAccountBasicSettingsPage = React.createClass({
 		});
 	},
 
-	getData: function(){
+    getData: function(){
 		return OpenAccountUtils.getDataFromPageListRawData(this.listRawData);
 	},
 
-	updateList: function(){
+    updateList: function(){
 		this.setState({
 				dataSource: this.ds.cloneWithRows(this.listRawData),
 		});
 	},
 
-	textInputChange: function(text, rowID) {
+    textInputChange: function(text, rowID) {
 		this.listRawData[rowID].value = text;
 		this.listRawData[rowID].checked = false;
 		if(this.listRawData[rowID].error){
@@ -114,11 +117,11 @@ var OAAccountBasicSettingsPage = React.createClass({
 		this.updateList();
 	},
 
-	textInputEndChange: function(event, rowID){
+    textInputEndChange: function(event, rowID){
 		this.validateRowValue(rowID);
 	},
 
-	validateRowValue: function(rowID){
+    validateRowValue: function(rowID){
 		if(this.listRawData[rowID].value && this.listRawData[rowID].value.length > 0){
 			this.listRawData[rowID].checked = true;
 			if(this.listRawData[rowID].type === "userName"){
@@ -136,7 +139,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 		}
 	},
 
-	checkUserName: function(rowID){
+    checkUserName: function(rowID){
 		this.setState({
 			validateInProgress: true,
 		})
@@ -203,7 +206,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 
 	},
 
-	checkPassword: function(){
+    checkPassword: function(){
 		return new Promise(resolve=>{
 			var hasError = false;
 			if(this.listRawData[1].value){
@@ -239,7 +242,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 		});
 	},
 
-	checkEmail: function(rowID){
+    checkEmail: function(rowID){
 		return new Promise(resolve=>{
 			//var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 			var re = /^[\w\._\-]+@([0-9a-zA-Z_]+?\.)+[0-9a-zA-Z]+$/;
@@ -260,7 +263,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 		});
 	},
 
-	renderRow: function(rowData, sectionID, rowID) {
+    renderRow: function(rowData, sectionID, rowID) {
 		if (rowData.type === "openAccountHintBlock"){
 			return (
 				<OpenAccountHintBlock />
@@ -300,7 +303,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 		}
 	},
 
-	renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
+    renderSeparator: function(sectionID, rowID, adjacentRowHighlighted){
 		return (
 			<View style={styles.line} key={rowID}>
 				<View style={styles.separator}/>
@@ -308,7 +311,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 			)
 	},
 
-	renderListView: function(){
+    renderListView: function(){
 		var listDataView = this.listRawData.map((data, i)=>{
 			return(
 				<View key={i}>
@@ -323,7 +326,7 @@ var OAAccountBasicSettingsPage = React.createClass({
 			</View>);
 	},
 
-	render: function() {
+    render: function() {
 		var nextButtonEnabled = OpenAccountUtils.canGoNext(this.listRawData);
 
 		return (

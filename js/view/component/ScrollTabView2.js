@@ -1,5 +1,7 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {
 	StyleSheet,
@@ -17,22 +19,19 @@ var ColorConstants = require('../../ColorConstants')
 
 var {height, width} = Dimensions.get('window');
 
-var ScrollTabView = React.createClass({
+class ScrollTabView extends React.Component {
+    static propTypes = {
+		tabNames: PropTypes.array,
+		viewPages: PropTypes.any,
+		onPageSelected: PropTypes.func,
+	};
 
-	propTypes: {
-		tabNames: React.PropTypes.array,
-		viewPages: React.PropTypes.any,
-		onPageSelected: React.PropTypes.func,
-	},
+    state = {
+        currentSelectedTab : 0,
+        skipOnScrollEvent: false,
+    };
 
-	getInitialState: function() {
-		return {
-			currentSelectedTab : 0,
-			skipOnScrollEvent: false,
-		}
-	},
-
-	tabClicked: function(index) {
+    tabClicked = (index) => {
 		if (Platform.OS === 'ios') {
 			this.refs.viewPages && this.refs.viewPages.scrollTo({x: index * width, y: 0, animated: false})
 		} else {
@@ -45,9 +44,9 @@ var ScrollTabView = React.createClass({
 			})
 			this.props.onPageSelected && this.props.onPageSelected(index)
 		}
-	},
+	};
 
-	viewPageScrolled: function(event) {
+    viewPageScrolled = (event) => {
 		var targetTabPosition = event.nativeEvent.position
 		if (event.nativeEvent.offset > 0.5) {
 			targetTabPosition ++
@@ -59,9 +58,9 @@ var ScrollTabView = React.createClass({
 			})
 			this.props.onPageSelected && this.props.onPageSelected(targetTabPosition)
 		}
-	},
+	};
 
-	onScroll: function(event) {
+    onScroll = (event) => {
 		var {height, width} = Dimensions.get('window');
 		var offsetX = event.nativeEvent.contentOffset.x
 		var targetTabPosition = Math.round(offsetX / width)
@@ -78,9 +77,9 @@ var ScrollTabView = React.createClass({
 			})
 			this.props.onPageSelected && this.props.onPageSelected(targetTabPosition)
 		}
-	},
+	};
 
-	renderTabs: function() {
+    renderTabs = () => {
 		var tabs = this.props.tabNames.map(
 			(tabName, i) =>
 			<TouchableHighlight style={[styles.tabItemContainer,
@@ -105,9 +104,9 @@ var ScrollTabView = React.createClass({
 				</ScrollView>
 			</View>
 		);
-	},
+	};
 
-	renderSeperate: function() {
+    renderSeperate = () => {
 		var offsetX = width / this.props.tabNames.length * this.state.currentSelectedTab
 
 		return (
@@ -119,9 +118,9 @@ var ScrollTabView = React.createClass({
 
 			</View>
 		);
-	},
+	};
 
-	renderViewPagers: function() {
+    renderViewPagers = () => {
 		if (Platform.OS === 'ios') {
 			return (
 				<ScrollView style={styles.viewPage} ref='viewPages'
@@ -142,9 +141,9 @@ var ScrollTabView = React.createClass({
 				</ViewPagerAndroid>
 			);
 		}
-	},
+	};
 
-	render: function() {
+    render() {
 		return (
 			<View style={[styles.wrapper, {width: width}]}>
 				{this.renderTabs()}
@@ -154,8 +153,8 @@ var ScrollTabView = React.createClass({
 				{this.renderViewPagers()}
 			</View>
 		)
-	},
-});
+	}
+}
 
 var styles = StyleSheet.create({
 	wrapper: {

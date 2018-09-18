@@ -1,39 +1,43 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
-import {View,Text,requireNativeComponent,Dimensions,StyleSheet} from 'react-native';
+import createReactClass from 'create-react-class';
+import { View, Text, requireNativeComponent, Dimensions, StyleSheet, ViewPropTypes} from 'react-native';
 
 var {height, width} = Dimensions.get('window')
 var ColorConstants = require('../../ColorConstants')
-var TimerMixin = require('react-timer-mixin');
+// var TimerMixin = require('react-timer-mixin');
+import TimerMixin from 'react-timer-mixin';
 var flashButtonTimer = null;
 
 
-var StockEditFragment = React.createClass ({
-	mixins: [TimerMixin],
+var StockEditFragment = createReactClass({
+    displayName: 'StockEditFragment',
+    // mixins: [TimerMixin],
 
-	propTypes: {
-		...View.propTypes,
-		onTapEditAlert: React.PropTypes.func,
-		isLogin: React.PropTypes.bool,
-		alertData: React.PropTypes.string,
-		isActual: React.PropTypes.bool,
-		isLanguageEn: React.PropTypes.bool,
+    propTypes: {
+		...ViewPropTypes,
+		onTapEditAlert: PropTypes.func,
+		isLogin: PropTypes.bool,
+		alertData: PropTypes.string,
+		isActual: PropTypes.bool,
+		isLanguageEn: PropTypes.bool,
 	},
 
-	getInitialState: function() {
+    getInitialState: function() {
 		return {
 			 currentIndex:1,
 		};
 	},
 
-
-	getDefaultProps(): Object {
+    getDefaultProps: function() {
 		return {
 		};
 	},
 
-	onTapAlertButton: function(event) {
+    onTapAlertButton: function(event) {
 		if (!this.props.onTapEditAlert) {
 			return;
 		}
@@ -41,12 +45,12 @@ var StockEditFragment = React.createClass ({
 		this.props.onTapEditAlert(event.nativeEvent.data);
 	},
 
-	onNativeRefresh(){
+    onNativeRefresh(){
 
 		this.refresh();
 	},
 
-	render() {
+    render() {
 	  return (
 			<View style = {styles.wrapper}>
 				<StockEditFragmentNative style = {styles.wrapper} {...this.props}
@@ -58,9 +62,8 @@ var StockEditFragment = React.createClass ({
 		);
 	},
 
-
-//接受到Native事件后主动刷新UI，是解决Android端一个listView不刷新的bug，貌似跟RN线程有关。
-	refresh:function(){
+    //接受到Native事件后主动刷新UI，是解决Android端一个listView不刷新的bug，貌似跟RN线程有关。
+    refresh:function(){
 		if(flashButtonTimer !== null) {
 			this.clearInterval(flashButtonTimer)
 		}
@@ -79,10 +82,7 @@ var StockEditFragment = React.createClass ({
 			},
 			10
 		);
-	}
-
-
-
+	},
 });
 
 var styles = StyleSheet.create({

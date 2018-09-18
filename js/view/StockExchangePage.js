@@ -33,32 +33,30 @@ var didAccountChangeSubscription = null
 //var didAccountLoginOutSideSubscription = null
 var didLoginSubscription = null;
 var didLogoutSubscription = null;
-var StockExchangePage = React.createClass({
 
-	getInitialState: function() {
-		return {
-			currentSelectedTab : 0,
-			loggined: false,
-		}
-	},
+class StockExchangePage extends React.Component {
+    state = {
+        currentSelectedTab : 0,
+        loggined: false,
+    };
 
-	componentDidMount: function() {
+    componentDidMount() {
 		didTabSelectSubscription = EventCenter.getEventEmitter().addListener(EventConst.EXCHANGE_TAB_PRESS_EVENT, this.onTabChanged);
 		didAccountChangeSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_STATE_CHANGE, ()=>this.clearViews());
 		//didAccountLoginOutSideSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGIN_OUT_SIDE, ()=>this.clearViews());
 		didLoginSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGIN, ()=>this.clearViews());
 		didLogoutSubscription = EventCenter.getEventEmitter().addListener(EventConst.ACCOUNT_LOGOUT, ()=>this.clearViews());
-	},
+	}
 
-	componentWillUnmount: function() {
+    componentWillUnmount() {
 		didTabSelectSubscription && didTabSelectSubscription.remove();
 		didAccountChangeSubscription && didAccountChangeSubscription.remove();
 		//didAccountLoginOutSideSubscription && didAccountLoginOutSideSubscription.remove();
 		didLoginSubscription && didLoginSubscription.remove();
 		didLogoutSubscription && didLogoutSubscription.remove();
-	},
+	}
 
-	clearViews:function(){
+    clearViews = () => {
 		if(LogicData.getTabIndex() == MainPage.STOCK_EXCHANGE_TAB_INDEX){
 			var routes = this.props.navigator.getCurrentRoutes();
 			if(routes && routes[routes.length-1] &&
@@ -70,9 +68,9 @@ var StockExchangePage = React.createClass({
 				// if(this.refs['page0'])this.refs['page0'].clearViews();
 			}
 		}
-	},
+	};
 
-	onPageSelected: function(index: number) {
+    onPageSelected = (index) => {
 		this.setState({
 			currentSelectedTab: index,
 		})
@@ -83,15 +81,15 @@ var StockExchangePage = React.createClass({
 		if (loggined && this.refs['page' + index]) {
 			this.refs['page' + index].tabPressed()
 		}
-	},
+	};
 
-	onTabChanged: function(){
+    onTabChanged = () => {
 	  LogicData.setTabIndex(MainPage.STOCK_EXCHANGE_TAB_INDEX);
 		LogicData.setCurrentPageTag(this.state.currentSelectedTab);
 		this.reloadTabData();
-	},
+	};
 
-	reloadTabData: function(){
+    reloadTabData = () => {
 		var userData = LogicData.getUserData()
 		var loggined = Object.keys(userData).length !== 0
 
@@ -133,9 +131,9 @@ var StockExchangePage = React.createClass({
 				loggined: false,
 			});
 		}
-	},
+	};
 
-	renderLiveLogin:function(){
+    renderLiveLogin = () => {
 		var strWDCW = LS.str('WDCW')
 		return(
 			// <View style={{flex:1,backgroundColor:'white',alignItems:'center'}}>
@@ -150,9 +148,9 @@ var StockExchangePage = React.createClass({
 			</View>
 
 		)
-	},
+	};
 
-	jumpToLogin:function(){
+    jumpToLogin = () => {
 		var userData = LogicData.getUserData()
 		var userId = userData.userId
 		if (userId == undefined) {
@@ -173,9 +171,9 @@ var StockExchangePage = React.createClass({
 		// 	// url:'http://cn.tradehero.mobi/tradehub/live/loginload.html'
 		// 	// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
 		// });
-	},
+	};
 
-	onWebViewNavigationStateChange: function() {
+    onWebViewNavigationStateChange = () => {
 		// todo
 		console.log('success login ok');
 		MainPage.ayondoLoginResult(true)
@@ -186,34 +184,34 @@ var StockExchangePage = React.createClass({
 				this.refs['page'+this.state.currentSelectedTab].tabPressed()
 			}
 		});		
-	},
+	};
 
-	// onNavigationStateChange:function (navState) {
-	// 	console.log("my web view state changed: "+navState.url)
-	// 	CookieManager.get('https://tradehub.net/demo/auth', (err, res) => {
-  // 			console.log('Got cookies for url: ', res);
-	// 	})
-	//
-	// 	if(navState.url.indexOf('live/loginload')>0){
-	// 		console.log('success login ok');
-	// 		// MainPage.ayondoLoginResult(true)
-	// 		LogicData.setAccountState(true)
-	// 		LogicData.setActualLogin(true)
-	// 		this.setState({
-	// 			loggined:true,
-	// 		})
-	// 	}else if(navState.url.indexOf('live/oauth/error')>0){
-	// 		console.log('success login error');
-	// 		// MainPage.ayondoLoginResult(false)
-	// 		LogicData.setAccountState(true)
-	// 		LogicData.setActualLogin(false)
-	// 		this.setState({
-	// 			loggined:true,
-	// 		})
-	// 	}
-	// },
+    // onNavigationStateChange:function (navState) {
+    // 	console.log("my web view state changed: "+navState.url)
+    // 	CookieManager.get('https://tradehub.net/demo/auth', (err, res) => {
+    // 			console.log('Got cookies for url: ', res);
+    // 	})
+    //
+    // 	if(navState.url.indexOf('live/loginload')>0){
+    // 		console.log('success login ok');
+    // 		// MainPage.ayondoLoginResult(true)
+    // 		LogicData.setAccountState(true)
+    // 		LogicData.setActualLogin(true)
+    // 		this.setState({
+    // 			loggined:true,
+    // 		})
+    // 	}else if(navState.url.indexOf('live/oauth/error')>0){
+    // 		console.log('success login error');
+    // 		// MainPage.ayondoLoginResult(false)
+    // 		LogicData.setAccountState(true)
+    // 		LogicData.setActualLogin(false)
+    // 		this.setState({
+    // 			loggined:true,
+    // 		})
+    // 	}
+    // },
 
-	renderContent: function(){
+    renderContent = () => {
 		//var userData = LogicData.getUserData()
 		var loggined = this.state.loggined;//Object.keys(userData).length !== 0
 
@@ -336,16 +334,16 @@ var StockExchangePage = React.createClass({
 		// // 		)
 		// // 	}
 		// // }
-	},
+	};
 
-	render: function() {
+    render() {
 		return (
 			<View style={{flex: 1}}>
 				{this.renderContent()}
 			</View>
 		);
-	},
-});
+	}
+}
 
 var styles = StyleSheet.create({
 	wrapper: {

@@ -1,10 +1,12 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 /*
     我的->存取资金->入金
 */
 
-import React,{Component,PropTypes} from 'react'
+import React, { Component } from 'react';
 import {
     StyleSheet,
     Text,
@@ -280,8 +282,8 @@ export default class DepositPage extends Component{
 		var value = parseFloat(text_);
 		var error = null
 		rmbValue = value / this.state.fxRate;
-		rmbValue = (text.length>0 ? rmbValue.toFixed(2):0.00.toFixed(2))
-		var charge = (text.length>0 ? Math.max(value*this.state.chargeRate,this.state.chargeMin).toFixed(2):0.00.toFixed(2))
+		rmbValue = (text.length>0 ? rmbValue.toFixed(2):(0.00).toFixed(2))
+		var charge = (text.length>0 ? Math.max(value*this.state.chargeRate,this.state.chargeMin).toFixed(2):(0.00).toFixed(2))
 
 		if(text_ && text_.length>0){
 			if(value < this.state.noLessMoney){

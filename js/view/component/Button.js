@@ -1,29 +1,31 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {
 	StyleSheet,
 	View,
 	Text,
-	TouchableHighlight
+	TouchableHighlight,
+	ViewPropTypes
 } from 'react-native';
 var ColorConstants = require('../../ColorConstants')
 
-var Button = React.createClass({
-
-	propTypes: {
+class Button extends React.Component {
+    static propTypes = {
 		...TouchableHighlight.propTypes,
 
-		textContainerStyle: View.propTypes.style,
+		textContainerStyle: ViewPropTypes.style,
 
-		textStyle: Text.propTypes.style,
+		textStyle: PropTypes.style,
 
-		text: React.PropTypes.string,
+		text: PropTypes.string,
 
-		enabled: React.PropTypes.bool,
-	},
+		enabled: PropTypes.bool,
+	};
 
-	render: function() {
+    render() {
 		return (
 			<TouchableHighlight style={this.props.style}
 				activeOpacity={this.props.enabled ? 0.7 : 1}
@@ -38,8 +40,7 @@ var Button = React.createClass({
 				</View>
 			</TouchableHighlight>
 		)
-	},
-
-});
+	}
+}
 
 module.exports = Button

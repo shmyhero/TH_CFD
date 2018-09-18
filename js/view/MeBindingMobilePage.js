@@ -1,6 +1,9 @@
 'use strict'
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	Platform,
@@ -40,23 +43,25 @@ var MAX_ValidationCodeCountdown = 60
 const TAB_LIVE = 1
 const TAB_SIMULATOR = 2
 
-var MeBindingMobilePage = React.createClass({
-	mixins: [TimerMixin],
+var MeBindingMobilePage = createReactClass({
+    displayName: 'MeBindingMobilePage',
+    mixins: [TimerMixin],
 
-	propTypes: {
-		showCancelButton: React.PropTypes.bool,
-		onPopBack: React.PropTypes.func,
-		existingMobile: React.PropTypes.string
+    propTypes: {
+		showCancelButton: PropTypes.bool,
+		onPopBack: PropTypes.func,
+		existingMobile: PropTypes.string
 	},
 
-	getDefaultProps() {
+    getDefaultProps() {
 		return {
 			showCancelButton: false,
 			onPopBack: null,
 			existingMobile: null,
 		}
 	},
-	componentWillMount: function() {
+
+    componentWillMount: function() {
 		WechatModule.isWechatInstalled()
 		.then((installed) => {
 			this.setState({
@@ -65,7 +70,7 @@ var MeBindingMobilePage = React.createClass({
 		})
 	},
 
-	getInitialState: function() {
+    getInitialState: function() {
 		return {
 			wechatInstalled: false,
 			phoneNumber: '',
@@ -78,14 +83,14 @@ var MeBindingMobilePage = React.createClass({
 		};
 	},
 
-	checkButtonsEnable: function() {
+    checkButtonsEnable: function() {
 		this.setState({
 			getValidationCodeButtonEnabled: (this.state.phoneNumber.length === 11 && this.state.validationCodeCountdown < 0),
 			phoneLoginButtonEnabled: (this.state.phoneNumber.length === 11 && this.state.validationCode.length === 4),
 		})
 	},
 
-	setPhoneNumber: function(text: string) {
+    setPhoneNumber: function(text) {
 		this.setState({
 			phoneNumber: text
 		}, ()=>{
@@ -93,7 +98,7 @@ var MeBindingMobilePage = React.createClass({
 		});
 	},
 
-	setValidationCode: function(text: string) {
+    setValidationCode: function(text) {
 		this.setState({
 			validationCode: text
 		}, ()=>{
@@ -101,7 +106,7 @@ var MeBindingMobilePage = React.createClass({
 		})
 	},
 
-	getValidationCodePressed: function() {
+    getValidationCodePressed: function() {
 		if (! this.state.getValidationCodeButtonEnabled) {
 			return
 		}
@@ -144,7 +149,7 @@ var MeBindingMobilePage = React.createClass({
 		);
 	},
 
-	bindWithCode: function() {
+    bindWithCode: function() {
 		if (!this.state.phoneLoginButtonEnabled) {
 			return
 		}
@@ -188,7 +193,7 @@ var MeBindingMobilePage = React.createClass({
 		)
 	},
 
-	renderGetValidationCodeButton: function() {
+    renderGetValidationCodeButton: function() {
 		var {height, width} = Dimensions.get('window');
 		var textSize = Math.round(fontSize*width/375.0)
 		var text = LS.str("GET_VERIFICATION_CODE");
@@ -204,7 +209,7 @@ var MeBindingMobilePage = React.createClass({
 		);
 	},
 
-	renderRememberUserCheckbox: function() {
+    renderRememberUserCheckbox: function() {
 		var checkBox = require('../../images/checkbox_unchecked.png')
 		if (this.state.liveLoginRememberUserName) {
 			checkBox = require('../../images/checkbox_checked.png')
@@ -216,7 +221,7 @@ var MeBindingMobilePage = React.createClass({
 		)
 	},
 
-	renderMobileLoginContent: function() {
+    renderMobileLoginContent: function() {
 		var {height, width} = Dimensions.get('window');
 		return (
 			<TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
@@ -271,11 +276,11 @@ var MeBindingMobilePage = React.createClass({
 		)
 	},
 
-	renderLoginContent: function() {
+    renderLoginContent: function() {
 			return this.renderMobileLoginContent()
 	},
 
-	render: function() {
+    render: function() {
 		var {height, width} = Dimensions.get('window');
 		var gradientColors = ['#1c5fd1', '#123b80']
 
@@ -296,7 +301,7 @@ var MeBindingMobilePage = React.createClass({
 		)
 	},
 
-	renderCancelButton: function() {
+    renderCancelButton: function() {
 		if (this.props.showCancelButton) {
 			return (
 				<TouchableOpacity style={styles.cancelContainer}
@@ -308,7 +313,6 @@ var MeBindingMobilePage = React.createClass({
 			);
 		}
 	},
-
 })
 
 var styles = StyleSheet.create({

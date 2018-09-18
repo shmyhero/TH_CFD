@@ -1,5 +1,7 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {
 	StyleSheet,
@@ -24,76 +26,73 @@ var Toast = require('./component/toast/Toast');
 
 var {height, width} = Dimensions.get('window')
 var SHARE_CONTAINER_HEIGHT = 150;
-var SharePage = React.createClass({
-  propTypes: {
-    title: React.PropTypes.string,
-    url: React.PropTypes.string,
-		description: React.PropTypes.string,
-		imgUrl: React.PropTypes.string,
-  },
 
-  getDefaultProps() {
-    return {
+class SharePage extends React.Component {
+    static propTypes = {
+      title: PropTypes.string,
+      url: PropTypes.string,
+          description: PropTypes.string,
+          imgUrl: PropTypes.string,
+    };
+
+    static defaultProps = {
       title: "",
       url: "",
       description: "",
       imgUrl: "",
-    }
-  },
+    };
 
-  getInitialState: function() {
-		return {
-      animationType: 'none',
-      modalVisible: false,
-      transparent: false,
-			fadeAnim: new Animated.Value(0),
-		};
-	},
+    state = {
+  animationType: 'none',
+  modalVisible: false,
+  transparent: false,
+        fadeAnim: new Animated.Value(0),
+    };
 
-	data: null,
+    data = null;
 
-  showWithData: function(data) {
-		this.data = data;
-    this._setModalVisible(true);
-		Animated.timing(       // Uses easing functions
-			this.state.fadeAnim, // The value to drive
-			{
-				toValue: 1,        // Target
-				duration: 200,    // Configuration
-			},
-		).start();
-  },
+    showWithData = (data) => {
+          this.data = data;
+      this._setModalVisible(true);
+          Animated.timing(       // Uses easing functions
+              this.state.fadeAnim, // The value to drive
+              {
+                  toValue: 1,        // Target
+                  duration: 200,    // Configuration
+              },
+          ).start();
+    };
 
-  hide: function(){
-		var callbackId = this.state.fadeAnim.addListener(function(){
-			if(this.state.fadeAnim._value == 0){
-				this.state.fadeAnim.removeListener(callbackId)
-				this._setModalVisible(false);
-			}
-		}.bind(this))
-		Animated.timing(       // Uses easing functions
-			this.state.fadeAnim, // The value to drive
-			{
-				toValue: 0,        // Target
-				duration: 200,    // Configuration
-			},
-		).start();
+    hide = () => {
+          var callbackId = this.state.fadeAnim.addListener(function(){
+              if(this.state.fadeAnim._value == 0){
+                  this.state.fadeAnim.removeListener(callbackId)
+                  this._setModalVisible(false);
+              }
+          }.bind(this))
+          Animated.timing(       // Uses easing functions
+              this.state.fadeAnim, // The value to drive
+              {
+                  toValue: 0,        // Target
+                  duration: 200,    // Configuration
+              },
+          ).start();
 
-  },
+    };
 
-  _setModalVisible: function(visible) {
-    this.setState({modalVisible: visible});
-  },
+    _setModalVisible = (visible) => {
+      this.setState({modalVisible: visible});
+    };
 
-  _setAnimationType : function(type) {
-    this.setState({animationType: type});
-  },
+    _setAnimationType = (type) => {
+      this.setState({animationType: type});
+    };
 
-  _toggleTransparent : function() {
-    this.setState({transparent: !this.state.transparent});
-  },
+    _toggleTransparent = () => {
+      this.setState({transparent: !this.state.transparent});
+    };
 
-	shareToHomePage: function(card){
+    shareToHomePage = (card) => {
 		var userData = LogicData.getUserData();
 		var login = Object.keys(userData).length !== 0
 		if(login){
@@ -133,9 +132,9 @@ var SharePage = React.createClass({
 		}
 
 		this.hide();
-	},
+	};
 
-	renderHomePageShare: function(){
+    renderHomePageShare = () => {
 		if(this.data && this.data.card && ! this.data.card.shared){
 			return (
 				<TouchableOpacity onPress={()=>{this.shareToHomePage(this.data.card)}}>
@@ -145,47 +144,47 @@ var SharePage = React.createClass({
 				</TouchableOpacity>
 			)
 		}
-	},
+	};
 
-  render: function() {
-		//BUGBUG: The status bar cannot be hidden beforn RN 0.27...
-		//So make the animation in our code until we update RN.
-    return (
-        <Modal
-          animationType={"slide"}
-          transparent={true}
-          visible={this.state.modalVisible}
-          onRequestClose={() => {this._setModalVisible(!this.state.modalVisible)}}
-					style={{height: height, width: width}}
-          >
-          <TouchableOpacity style={{flex:1, width: width}}
-						onPress={() => {
-		          this.hide();
-	          }}>
-						<View style={{flex:1, width: width}}/>
-					</TouchableOpacity>
+    render() {
+          //BUGBUG: The status bar cannot be hidden beforn RN 0.27...
+          //So make the animation in our code until we update RN.
+      return (
+          <Modal
+            animationType={"slide"}
+            transparent={true}
+            visible={this.state.modalVisible}
+            onRequestClose={() => {this._setModalVisible(!this.state.modalVisible)}}
+                      style={{height: height, width: width}}
+            >
+            <TouchableOpacity style={{flex:1, width: width}}
+                          onPress={() => {
+                    this.hide();
+                }}>
+                          <View style={{flex:1, width: width}}/>
+                      </TouchableOpacity>
 
-          <Animated.View style={[styles.shareContainer, {opacity: this.state.fadeAnim}]}>
-            <Text style={styles.shareTitleText}>分享到</Text>
-            <View style={styles.shareItemContainer}>
-							{/* {this.renderHomePageShare()} */}
-	            <TouchableOpacity onPress={()=>{this.shareToWeChat("session")}}>
-	              <Image style={[styles.icon, {transform: [{rotate: '0deg'}]}]}
-	               source={require('../../images/wechat_session.png')}/>
-	              <Text style={styles.shareText}>微信</Text>
-	            </TouchableOpacity>
-	            <TouchableOpacity onPress={()=>{this.shareToWeChat("timeline")}}>
-	            <Image style={[styles.icon, {transform: [{rotate: '0deg'}]}]}
-	             source={require('../../images/wechat_timeline.png')}/>
-	              <Text style={styles.shareText}>朋友圈</Text>
-	            </TouchableOpacity>
-            </View>
-          </Animated.View>
-         </Modal>
-    );
-  },
+            <Animated.View style={[styles.shareContainer, {opacity: this.state.fadeAnim}]}>
+              <Text style={styles.shareTitleText}>分享到</Text>
+              <View style={styles.shareItemContainer}>
+                              {/* {this.renderHomePageShare()} */}
+                  <TouchableOpacity onPress={()=>{this.shareToWeChat("session")}}>
+                    <Image style={[styles.icon, {transform: [{rotate: '0deg'}]}]}
+                     source={require('../../images/wechat_session.png')}/>
+                    <Text style={styles.shareText}>微信</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={()=>{this.shareToWeChat("timeline")}}>
+                  <Image style={[styles.icon, {transform: [{rotate: '0deg'}]}]}
+                   source={require('../../images/wechat_timeline.png')}/>
+                    <Text style={styles.shareText}>朋友圈</Text>
+                  </TouchableOpacity>
+              </View>
+            </Animated.View>
+           </Modal>
+      );
+    }
 
-	shareToSession: function(data){
+    shareToSession = (data) => {
 		if(data){
 			console.log("shareToSession data: " + JSON.stringify(data));
 			WechatModule.wechatShare(data.title,
@@ -199,9 +198,9 @@ var SharePage = React.createClass({
 				()=>{
 				});
 		}
-	},
+	};
 
-	shareToTimeline: function(data){
+    shareToTimeline = (data) => {
 		if(data){
 			console.log("shareToTimeline data: " + JSON.stringify(data));
 			WechatModule.wechatShare(data.title,
@@ -215,23 +214,23 @@ var SharePage = React.createClass({
 				()=>{
 				});
 		}
-	},
+	};
 
-  shareToWeChat: function(type){
-	  if(this.data){
-	    if(type == "session"){
-	      this.shareToSession(this.data);
-	    }else{
-				var data = {
-					...this.data,
-					title: this.data.circleTitle ? this.data.circleTitle : this.data.title,
-				};
-				this.shareToTimeline(data);
-	    }
-		  this.hide();
-		}
-  },
-});
+    shareToWeChat = (type) => {
+        if(this.data){
+          if(type == "session"){
+            this.shareToSession(this.data);
+          }else{
+                  var data = {
+                      ...this.data,
+                      title: this.data.circleTitle ? this.data.circleTitle : this.data.title,
+                  };
+                  this.shareToTimeline(data);
+          }
+            this.hide();
+          }
+    };
+}
 
 var styles = StyleSheet.create({
   shareContainer: {

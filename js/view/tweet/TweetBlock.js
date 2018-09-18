@@ -1,5 +1,7 @@
 //import liraries
-import React, { Component, PropTypes} from 'react';
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 var TweetParser = require("./TweetParser")
 var MainPage = require("../MainPage")
@@ -9,7 +11,7 @@ var ColorConstants = require("../../ColorConstants")
 class TweetBlock extends Component {
     static propTypes = {
         value: PropTypes.string,
-        style: Text.propTypes.style,
+        style: PropTypes.style,
         onLinkPressed: PropTypes.func,
         onPressed: PropTypes.func,
     }

@@ -1,5 +1,7 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React, { Component } from 'react';
 import {
 	StyleSheet,
@@ -58,36 +60,31 @@ class ErrorMsg extends Component{
 
 }
 
-var AccountNameModifyPage = React.createClass({
+class AccountNameModifyPage extends React.Component {
+    static propTypes = {
+		onReturnToPage: PropTypes.func,
+	};
 
-	propTypes: {
-		onReturnToPage: React.PropTypes.func,
-	},
+    static defaultProps = {
+        onReturnToPage: function() {
 
-	getDefaultProps() {
-		return {
-			onReturnToPage: function() {
+        },
+    };
 
-			},
-		}
-	},
+    state = {
+        isShowError:false,
+        errorText: LS.str("ERROR_HINT"),
+        nickName:'',
+    };
 
-	getInitialState: function() {
-		return {
-			isShowError:false,
-			errorText: LS.str("ERROR_HINT"),
-			nickName:'',
-		};
-	},
-
-	componentWillMount: function() {
+    componentWillMount() {
 		var meData = LogicData.getMeData()
 		this.setState({
 			nickName: meData.nickname,
 		})
-	},
+	}
 
-	render: function() {
+    render() {
 
 		return (
 			<View style={{flex:1,backgroundColor:'white'}}>
@@ -110,9 +107,9 @@ var AccountNameModifyPage = React.createClass({
 
 			</View>
 		);
-	},
+	}
 
-	renderHeader(){
+    renderHeader = () => {
 		var barHeight = 68
 		if (Platform.OS == 'android') {
 			barHeight = 50 + UIConstants.STATUS_BAR_ACTUAL_HEIGHT
@@ -125,9 +122,9 @@ var AccountNameModifyPage = React.createClass({
 				textOnRight={LS.str("FINISH")}
 				rightTextOnClick={this.onComplete}/>
 		)
-	},
+	};
 
-	onComplete(){
+    onComplete = () => {
 		//Check if the new value is valid.
 
 		if(!this.state.nickName || this.state.nickName.length==0 ){
@@ -168,16 +165,15 @@ var AccountNameModifyPage = React.createClass({
 				});
 			}
 		)
-	},
+	};
 
-	setNickName(text){
+    setNickName = (text) => {
 		console.log("nickname: " + text);
 		this.setState({
 			nickName: text
 		});
-	},
-
-});
+	};
+}
 
 
 

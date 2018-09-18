@@ -18,9 +18,8 @@ var NetworkModule = require('../module/NetworkModule')
 var MainPage = require('./MainPage')
 var WebSocketModule = require('../module/WebSocketModule')
 
-var LandingPage = React.createClass({
-
-	loginPress: function() {
+class LandingPage extends React.Component {
+    loginPress = () => {
 		StorageModule.loadUserData()
 			.then((value) => {
 				if (value !== null) {
@@ -35,9 +34,9 @@ var LandingPage = React.createClass({
 					});
 				}
 			})
-	},
+	};
 
-	logoutPress: function() {
+    logoutPress = () => {
 		StorageModule.removeUserData()
 		.then(() => {
 			LogicData.removeUserData()
@@ -45,9 +44,9 @@ var LandingPage = React.createClass({
 				() => {
 			})
 		})
-	},
+	};
 
-	render: function() {
+    render() {
 		var {height, width} = Dimensions.get('window');
 
 		return (
@@ -96,7 +95,7 @@ var LandingPage = React.createClass({
 			</View>
 		)
 	}
-})
+}
 
 var styles = StyleSheet.create({
 	wrapper: {
@@ -110,7 +109,7 @@ var styles = StyleSheet.create({
 	image: {
 		flex: 1,
 		height: 400,
-		resizeMode: Image.resizeMode.contain,
+		resizeMode: 'contain',
 	},
 	loginClickableArea: {
 		marginTop: 10,

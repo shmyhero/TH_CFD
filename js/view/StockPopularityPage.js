@@ -1,6 +1,9 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	View,
@@ -23,21 +26,22 @@ var barWidth = Math.round(width/3)-12
 
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-var StockPopularityPage = React.createClass({
-	mixins: [TimerMixin],
+var StockPopularityPage = createReactClass({
+    displayName: 'StockPopularityPage',
+    mixins: [TimerMixin],
 
-	propTypes: {
-		initialInfo: React.PropTypes.array,
+    propTypes: {
+		initialInfo: PropTypes.array,
 	},
 
-	getInitialState: function() {
+    getInitialState: function() {
 		return {
 			rawInfo: [],
 			popularityInfo: ds.cloneWithRows([]),
 		};
 	},
 
-	componentDidMount: function() {
+    componentDidMount: function() {
 		// todo, push to refresh.
 		// delay 3 seconds to load again.
 		// this.setTimeout(
@@ -62,14 +66,14 @@ var StockPopularityPage = React.createClass({
 		// );
 	},
 
-	gotoStockDetail: function(rowData) {
+    gotoStockDetail: function(rowData) {
   		this.props.navigator.push({
 			name: MainPage.STOCK_DETAIL_ROUTE,
 			stockRowData: rowData
 		});
 	},
 
-	renderPopularityRow: function(rowData, sectionID, rowID, highlightRow) {
+    renderPopularityRow: function(rowData, sectionID, rowID, highlightRow) {
 		var percent = 0
 		var stockName = ""
 		var stockSymbol = ""
@@ -115,11 +119,11 @@ var StockPopularityPage = React.createClass({
 			</TouchableOpacity>)
 	},
 
-	renderSeparator:function(sectionID, rowID, adjacentRowHighlighted) {
+    renderSeparator:function(sectionID, rowID, adjacentRowHighlighted) {
 		return(<View key={rowID} style={styles.separator}/>)
 	},
 
-	render: function() {
+    render: function() {
 		var dataSource = this.state.rawInfo.length > 0 ? this.state.popularityInfo : ds.cloneWithRows(this.props.initialInfo)
 		return (
 			<View style={styles.wrapper}>

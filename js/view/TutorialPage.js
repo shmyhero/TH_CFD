@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	Dimensions,
 	Image,
@@ -26,11 +27,11 @@ var gifIamgeTimer = null;
 var savedData = null
 
 
-var TutorialPage = React.createClass({
+var TutorialPage = createReactClass({
+    displayName: 'TutorialPage',
+    mixins: [TimerMixin],
 
-	mixins: [TimerMixin],
-
-	getInitialState: function() {
+    getInitialState: function() {
 		return {
 			tutorialType: 'trade',
 			visible: false,
@@ -38,18 +39,18 @@ var TutorialPage = React.createClass({
 		}
 	},
 
-	componentWillMount: function() {
+    componentWillMount: function() {
 		// this.show()
 	},
 
-	componentWillUnmount() {
+    componentWillUnmount() {
       //Unregister handleActions from dispatcher
 			if(gifIamgeTimer !== null) {
 				this.clearInterval(gifIamgeTimer)
 			}
 	},
 
-	checkShow: function() {
+    checkShow: function() {
 		var type = this.props.type
 		StorageModule.loadTutorial()
 			.then((value) => {
@@ -74,7 +75,7 @@ var TutorialPage = React.createClass({
 			.done()
 	},
 
-	gotoNextPage: function() {
+    gotoNextPage: function() {
 		// var totalPage = pages[this.state.tutorialType].length;
 		// if (this.state.page+1 >= totalPage) {
 			if(savedData === null) {
@@ -97,7 +98,7 @@ var TutorialPage = React.createClass({
 		// }
 	},
 
-	render: function() {
+    render: function() {
 		if (!this.state.visible) {
 			this.checkShow()
 			return null

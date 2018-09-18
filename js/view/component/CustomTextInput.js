@@ -4,8 +4,7 @@ import {
     View,
     Text,
     StyleSheet,
-    TextInput,
-    ViewPropTypes
+    TextInput
 } from 'react-native';
 
 class CustomTextInput extends Component {

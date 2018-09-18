@@ -28,22 +28,19 @@ var originalName = null;
 var NOTE_STATE_NORMAL = 0;
 var NOTE_STATE_NORMAL_WECHAT = 1;
 
-var OALiveUpdateUserInfoPage = React.createClass({
+class OALiveUpdateUserInfoPage extends React.Component {
+    state = {
+        noteState: NOTE_STATE_NORMAL,
+        nickName: '',
+        password1: '',
+        password2: '',
+        saveButtonEnabled: false,
+        nicknameBorderColor: ColorConstants.TITLE_DARK_BLUE,
+        password1BorderColor: ColorConstants.DISABLED_GREY,
+        password2BorderColor: ColorConstants.DISABLED_GREY,
+    };
 
-	getInitialState: function() {
-		return {
-			noteState: NOTE_STATE_NORMAL,
-			nickName: '',
-			password1: '',
-			password2: '',
-			saveButtonEnabled: false,
-			nicknameBorderColor: ColorConstants.TITLE_DARK_BLUE,
-			password1BorderColor: ColorConstants.DISABLED_GREY,
-			password2BorderColor: ColorConstants.DISABLED_GREY,
-		};
-	},
-
-	componentDidMount: function() {
+    componentDidMount() {
 		if (LogicData.getWechatUserData().nickname !== undefined) {
 			this.setState({
 				noteState: NOTE_STATE_NORMAL_WECHAT,
@@ -71,57 +68,57 @@ var OALiveUpdateUserInfoPage = React.createClass({
 				Alert.alert('提示',result.errorMessage);
 			}
 		)
-	},
+	}
 
-	onNickNameFocus: function() {
+    onNickNameFocus = () => {
 		this.setState({
 			nicknameBorderColor: ColorConstants.TITLE_DARK_BLUE,
 			password1BorderColor: ColorConstants.DISABLED_GREY,
 			password2BorderColor: ColorConstants.DISABLED_GREY,
 		})
-	},
+	};
 
-	onPassword1Focus: function() {
+    onPassword1Focus = () => {
 		this.setState({
 			nicknameBorderColor: ColorConstants.DISABLED_GREY,
 			password1BorderColor: ColorConstants.TITLE_DARK_BLUE,
 			password2BorderColor: ColorConstants.DISABLED_GREY,
 		})
-	},
+	};
 
-	onPassword2Focus: function() {
+    onPassword2Focus = () => {
 		this.setState({
 			nicknameBorderColor: ColorConstants.DISABLED_GREY,
 			password1BorderColor: ColorConstants.DISABLED_GREY,
 			password2BorderColor: ColorConstants.TITLE_DARK_BLUE,
 		})
-	},
+	};
 
-	setUserName: function(name) {
+    setUserName = (name) => {
 		this.setState({
 			nickName: name
 		})
 
 		this.checkInfoValid()
-	},
+	};
 
-	setPassword1: function(password) {
+    setPassword1 = (password) => {
 		this.setState({
 			password1: password
 		})
 
 		this.checkInfoValid()
-	},
+	};
 
-	setPassword2: function(password) {
+    setPassword2 = (password) => {
 		this.setState({
 			password2: password
 		})
 
 		this.checkInfoValid()
-	},
+	};
 
-	checkInfoValid: function() {
+    checkInfoValid = () => {
 		var buttonEnabled = true
 		if (this.state.nickName.length <= 0 || this.state.password1.length < 8 || this.state.password2.length < 8) {
 			buttonEnabled = false
@@ -132,9 +129,9 @@ var OALiveUpdateUserInfoPage = React.createClass({
 		this.setState({
 			saveButtonEnabled: buttonEnabled
 		})
-	},
+	};
 
-	savePressed: function() {
+    savePressed = () => {
 		TalkingdataModule.trackEvent(TalkingdataModule.LIVE_REGISTER_EVENT)
 
 		var userData = LogicData.getUserData()
@@ -156,9 +153,9 @@ var OALiveUpdateUserInfoPage = React.createClass({
 				Alert.alert('提示',result.errorMessage);
 			}
 		)
-	},
+	};
 
-	renderNotes: function() {
+    renderNotes = () => {
 		if (this.state.noteState == NOTE_STATE_NORMAL) {
 			return (
 				<View style={styles.noteView}>
@@ -176,9 +173,9 @@ var OALiveUpdateUserInfoPage = React.createClass({
 				</View>
 			);
 		}
-	},
+	};
 
-	render: function() {
+    render() {
 		var {height, width} = Dimensions.get('window');
 
 		return (
@@ -247,9 +244,8 @@ var OALiveUpdateUserInfoPage = React.createClass({
 				</View>
 			</View>
 		)
-	},
-
-});
+	}
+}
 
 var styles = StyleSheet.create({
 

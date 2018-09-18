@@ -1,6 +1,9 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	View,
@@ -76,24 +79,25 @@ var ORIENTATION_LANDSPACE = 1;
 var CHARTVIEWTYPE_LINE = 0;
 var CHARTVIEWTYPE_CANDLE = 1;
 
-var StockDetailPage = React.createClass({
-	mixins: [TimerMixin],
+var StockDetailPage = createReactClass({
+    displayName: 'StockDetailPage',
+    mixins: [TimerMixin],
 
-	propTypes: {
-		stockCode: React.PropTypes.number,
-		stockName: React.PropTypes.string,
-		stockSymbol: React.PropTypes.string,
-		stockPrice: React.PropTypes.number,
-		stockPriceAsk: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
-		stockPriceBid: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string]),
-		stockTag: React.PropTypes.string,
-		lastClosePrice: React.PropTypes.number,
-		openPrice: React.PropTypes.number,
-		showTabbar: React.PropTypes.func,
-		onPopUp: React.PropTypes.func,
+    propTypes: {
+		stockCode: PropTypes.number,
+		stockName: PropTypes.string,
+		stockSymbol: PropTypes.string,
+		stockPrice: PropTypes.number,
+		stockPriceAsk: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+		stockPriceBid: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+		stockTag: PropTypes.string,
+		lastClosePrice: PropTypes.number,
+		openPrice: PropTypes.number,
+		showTabbar: PropTypes.func,
+		onPopUp: PropTypes.func,
 	},
 
-	getDefaultProps() {
+    getDefaultProps() {
 		return {
 			stockCode: 14993,
 			stockName: 'ABC company',
@@ -105,7 +109,7 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
-	getInitialState: function() {
+    getInitialState: function() {
 		var balanceData = LogicData.getBalanceData()
 		var available = balanceData === null ? 0 : (balanceData.available < 0 ? 0 : balanceData.available)
 		var money = available > 100 ? 100 : Math.floor(available)
@@ -142,7 +146,7 @@ var StockDetailPage = React.createClass({
 		};
 	},
 
-	componentDidMount: function() {
+    componentDidMount: function() {
 		this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
 
 		layoutSizeChangedSubscription = EventCenter.getEventEmitter().addListener(EventConst.LAYOUT_SIZE_CHANGED, () => {
@@ -162,7 +166,7 @@ var StockDetailPage = React.createClass({
 		BackAndroid.addEventListener('hardwareBackPress', this.hardwareBackPress);
 	},
 
-	componentWillUnmount: function() {
+    componentWillUnmount: function() {
 		this.didFocusSubscription.remove();
 		layoutSizeChangedSubscription && layoutSizeChangedSubscription.remove();
 		chartClickedSubscription && chartClickedSubscription.remove();
@@ -182,7 +186,7 @@ var StockDetailPage = React.createClass({
 		BackAndroid.removeEventListener('hardwareBackPress', this.hardwareBackPress);
 	},
 
-	hardwareBackPress:function(){
+    hardwareBackPress:function(){
 		if (this.state.orientation == ORIENTATION_PORTRAIT) {
         return false;
     } else {
@@ -191,7 +195,7 @@ var StockDetailPage = React.createClass({
     }
 	},
 
-	onLayoutSizeChanged: function(){
+    onLayoutSizeChanged: function(){
 		if (Platform.OS == 'android') {
 			// only huawei phones
 			var routes = this.props.navigator.getCurrentRoutes();
@@ -209,7 +213,7 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
-	onDidFocus: function(event) {
+    onDidFocus: function(event) {
     if (MainPage.STOCK_DETAIL_ROUTE === event.data.route.name) {
       this.loadStockInfo();
 			if(this.state.orientation == ORIENTATION_PORTRAIT){
@@ -218,7 +222,7 @@ var StockDetailPage = React.createClass({
   	}
 	},
 
-	updateUserBalance: function(responseJson){
+    updateUserBalance: function(responseJson){
 		if (this.state.totalMoney === 0 && this.state.money === 0 && responseJson.available > 0){
 			// first time get the total money value.
 			var money = responseJson.available > 100 ? 100 : Math.floor(responseJson.available)
@@ -229,7 +233,7 @@ var StockDetailPage = React.createClass({
 		})
 	},
 
-	loadStockInfo: function() {
+    loadStockInfo: function() {
 	  console.log('StockDetailPage loadStockInfo');
 		loadStockInfoSuccess = false
 		var url = NetConstants.CFD_API.GET_STOCK_DETAIL_API
@@ -358,7 +362,7 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
-	updateStockInfo: function() {
+    updateStockInfo: function() {
 
 		console.log("updateStockInfo: " + this.state.chartType);
 		if (this.state.chartType !== NetConstants.PARAMETER_CHARTTYPE_TODAY)
@@ -367,7 +371,7 @@ var StockDetailPage = React.createClass({
 		this.loadStockPriceToday(false, this.state.chartType, this.state.stockInfo)
 	},
 
-	loadStockPriceToday: function(showLoading, chartType, stockInfo) {
+    loadStockPriceToday: function(showLoading, chartType, stockInfo) {
 		var isLive = LogicData.getAccountState()
 		var url = "";
 
@@ -472,7 +476,7 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
-	connectWebSocket: function() {
+    connectWebSocket: function() {
 		WebSocketModule.registerCallbacks(
 			(realtimeStockInfo) => {
 				for (var i = 0; i < realtimeStockInfo.length; i++) {
@@ -504,7 +508,7 @@ var StockDetailPage = React.createClass({
 			})
 	},
 
-	addToMyListClicked: function() {
+    addToMyListClicked: function() {
 		var stock = {
 			id: this.props.stockCode,
 			symbol: this.props.stockSymbol,
@@ -553,7 +557,7 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
-	pressChartHeaderTab: function(type) {
+    pressChartHeaderTab: function(type) {
 		console.log('StockDetailPage: pressChartHeaderTab ' + type);
 		switch(type){
 			case NetConstants.PARAMETER_CHARTTYPE_TODAY:
@@ -580,7 +584,7 @@ var StockDetailPage = React.createClass({
 		// this.loadStockPriceToday(true, type, this.state.stockInfo)
 	},
 
-	pressViewKID: function() {
+    pressViewKID: function() {
 		var stockType = this.state.stockType
 		if (stockType === 'Single Stocks') {
 			stockType = 'Stocks'
@@ -591,7 +595,7 @@ var StockDetailPage = React.createClass({
 		this.gotoWebviewPage(protocolUrl, LS.str('OPEN_ACCOUNT_IMPORTANT_DOCUMENTS'),false);
 	},
 
-	gotoWebviewPage: function(targetUrl, title, hideNavBar) {
+    gotoWebviewPage: function(targetUrl, title, hideNavBar) {
 		this.props.navigator.push({
 			name: MainPage.NAVIGATOR_WEBVIEW_ROUTE,
 			url: targetUrl,
@@ -600,7 +604,7 @@ var StockDetailPage = React.createClass({
 		});
 	},
 
-	renderStockMaxPriceInfo: function(maxPrice, maxPercentage) {
+    renderStockMaxPriceInfo: function(maxPrice, maxPercentage) {
 		if (maxPrice && maxPercentage)
 		{
 			return (
@@ -625,7 +629,7 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
-	renderStockMinPriceInfo: function(minPrice, minPercentage) {
+    renderStockMinPriceInfo: function(minPrice, minPercentage) {
 		if (minPrice && minPercentage)
 		{
 			return (
@@ -646,7 +650,7 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
-	renderChartHeader: function() {
+    renderChartHeader: function() {
 		var tabcolorStyle = {color: ColorConstants.STOCK_TAB_BLUE}
 		var tabs = tabData.map(
 			(data, i) =>
@@ -666,7 +670,7 @@ var StockDetailPage = React.createClass({
 			);
 	},
 
-	renderChartHeaderLandscape: function() {
+    renderChartHeaderLandscape: function() {
 		var tabcolorStyle = {color: ColorConstants.STOCK_TAB_BLUE}
 		var tabDataCurrent = this.state.chartViewType == CHARTVIEWTYPE_LINE ? tabDataLandscopeLine : tabDataLandscopeCandle;
 		var tabs = tabDataCurrent.map(
@@ -688,7 +692,7 @@ var StockDetailPage = React.createClass({
 			);
 	},
 
-	getGradientColor(){
+    getGradientColor(){
 		if(LogicData.getAccountState()){
 			if(this.state.orientation == ORIENTATION_LANDSPACE){
 				return ['#3f5680', '#3f5680'];
@@ -704,7 +708,7 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
-	renderMinTradeMondy:function(){
+    renderMinTradeMondy:function(){
 		var strZZJXDY = LogicData.isIR() ? LS.str('ZZJXDY_IR') : LS.str('ZZJXDY')
 		var strMY = LS.str('MY')
 		var tradeValue = this.state.money * this.state.leverage
@@ -723,7 +727,7 @@ var StockDetailPage = React.createClass({
 		);
 	},
 
-	renderErrorHint: function(){
+    renderErrorHint: function(){
 		console.log("this.state.error", this.state.error)
 		console.log("this.state.tradeableError", this.state.tradeableError)
 		if(this.state.error){
@@ -738,7 +742,7 @@ var StockDetailPage = React.createClass({
 		return null;
 	},
 
-	renderLeftMoney:function(){
+    renderLeftMoney:function(){
 			var leftMoney = this.state.totalMoney;// - this.state.money
 
 			var userData = LogicData.getUserData()
@@ -760,7 +764,7 @@ var StockDetailPage = React.createClass({
 			}
 	},
 
-	renderDataStatus:function(){
+    renderDataStatus:function(){
 		//status 0:正常 1：暂时无法获取数据 2:加载中
 		var status = this.state.dataStatus;
 		var imageError = LogicData.getAccountState()?require('../../images/icon_network_connection_error_live.png'):require('../../images/icon_network_connection_error.png')
@@ -795,7 +799,7 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
-	dataRefreshClicked:function(){
+    dataRefreshClicked:function(){
 
 		if(!loadStockInfoSuccess){
 			this.loadStockInfo();
@@ -805,7 +809,7 @@ var StockDetailPage = React.createClass({
 
 	},
 
-	_renderActivityIndicator() {
+    _renderActivityIndicator() {
 			return ActivityIndicator ? (
 					<ActivityIndicator
 							style={{marginRight: 10,}}
@@ -828,8 +832,7 @@ var StockDetailPage = React.createClass({
 			)
 	},
 
-
-	renderChart:function(){
+    renderChart:function(){
 		var state = this.state.dataStatus;
 		console.log("RAMBO: chartType = " + this.state.chartType)
 		var opacity = state == 0? 1.0 : 0.01;
@@ -894,7 +897,7 @@ var StockDetailPage = React.createClass({
 		// }
 	},
 
-	renderPortrait:function(){
+    renderPortrait:function(){
 		// 0.06%, limit to 0.01
 		var leftMoney = this.state.totalMoney - this.state.money
 		var charge = 0
@@ -903,7 +906,7 @@ var StockDetailPage = React.createClass({
 		var strWarning = LS.str('TRADE_WARNING')
 		var strKID = LS.str('VIEW_KID')
 		return (
-			<View style={styles.wrapper, {width:width}}>
+            <View style={(styles.wrapper, {width:width})}>
 				<LinearGradient colors={this.getGradientColor()} style={{height: Math.max(height - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER, this.state.height)}}>
 
 					{this.renderHeader()}
@@ -944,10 +947,10 @@ var StockDetailPage = React.createClass({
 
 					<StockTransactionInfoModal ref='confirmPage'/>
 			</View>
-		)
+        );
 	},
 
-	renderTitleLandspace:function(){
+    renderTitleLandspace:function(){
 
 		var titleText  = this.props.stockName;
 		var currentPriceText = this.state.stockLastPrice;
@@ -978,10 +981,9 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
-	chartClickable: true,
+    chartClickable: true,
 
-
-	chartClicked:function(){
+    chartClicked:function(){
 		//Make sure the chart can only be pressed once.
 		if(this.refs['InputAccessory'] && this.refs['InputAccessory'].isShow()){
 			return;
@@ -1000,11 +1002,11 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
-	closeLandspace:function(){
+    closeLandspace:function(){
 		this.changeOrientatioin();
 	},
 
-	changeChartViewType:function(type){
+    changeChartViewType:function(type){
 		if(type!==this.state.chartViewType){
 			this.setState({
 				chartViewType:type
@@ -1012,7 +1014,7 @@ var StockDetailPage = React.createClass({
 			}
 	},
 
-	renderBottomViewType:function(){
+    renderBottomViewType:function(){
 		var isLive = LogicData.getAccountState();
 		var imageType0 = this.state.chartViewType == CHARTVIEWTYPE_LINE ? require('../../images/icon_chart_type_line_selected.png'):(isLive?require('../../images/icon_chart_type_line_unselected_live.png'):require('../../images/icon_chart_type_line_unselected.png'));
 		var imageType1 = this.state.chartViewType == CHARTVIEWTYPE_CANDLE ? require('../../images/icon_chart_type_candle_selected.png'):(isLive?require('../../images/icon_chart_type_candle_unselected_live.png'):require('../../images/icon_chart_type_candle_unselected.png'));
@@ -1029,7 +1031,7 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
-	renderLandscape:function(){
+    renderLandscape:function(){
 		// 0.06%, limit to 0.01
 		var leftMoney = this.state.totalMoney - this.state.money
 		var charge = 0
@@ -1064,7 +1066,7 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
-	render: function() {
+    render: function() {
 		if(this.state.orientation == ORIENTATION_PORTRAIT){
 			{return this.renderPortrait()}
 		}else{
@@ -1072,7 +1074,7 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
-	clearMoney: function() {
+    clearMoney: function() {
 		if (this.state.money > this.state.totalMoney) {
 			this.setState({
 				//inputText:'0',
@@ -1083,7 +1085,7 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
-	renderHeader: function() {
+    renderHeader: function() {
 		var percentChange = 0
 
 		if (this.props.lastClosePrice <= 0) {
@@ -1127,7 +1129,7 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
-	renderAddToMyListButton: function() {
+    renderAddToMyListButton: function() {
 		var strSCZX = LS.str('SCZX')
 		var strZX = LS.str('ZX')
 		return (
@@ -1142,7 +1144,7 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
-	renderTradeButton: function() {
+    renderTradeButton: function() {
 		var upSelected = this.state.tradeDirection === 1
 		var upImage = upSelected ? require('../../images/icon_up_detail_pressed.png') : (LogicData.getAccountState()?require('../../images/icon_up_normal_live.png'):require('../../images/icon_up_normal.png'))
 		var downSelected = this.state.tradeDirection === 2
@@ -1197,7 +1199,7 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
-	live_login:function(){
+    live_login:function(){
 		var userData = LogicData.getUserData()
 		var userId = userData.userId
 		if (userId == undefined) {
@@ -1223,7 +1225,7 @@ var StockDetailPage = React.createClass({
 
 	},
 
-	onWebViewNavigationStateChange: function(navState) {
+    onWebViewNavigationStateChange: function(navState) {
 		// todo
 		console.log("RAMBO my web view state changed: "+navState.url)
 
@@ -1239,7 +1241,7 @@ var StockDetailPage = React.createClass({
 
 	},
 
-	buyPress: function() {
+    buyPress: function() {
 		var strZTJY_CLOSED = LS.str('ZTJY_CLOSED')
 		var strZTJY = LS.str('ZTJY')
 		if(this.state.stockInfo.status == 2) {
@@ -1272,7 +1274,7 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
-	sellPress: function() {
+    sellPress: function() {
 		var strZTJY_CLOSED = LS.str('ZTJY_CLOSED')
 		var strZTJY = LS.str('ZTJY')
 		if(this.state.stockInfo.status == 2) {
@@ -1303,7 +1305,7 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
-	changeOrientatioin:function(){
+    changeOrientatioin:function(){
 		console.log("changeOrientatioin:", this.state.orientation);
 		if(this.state.orientation === ORIENTATION_PORTRAIT){
 			height = Dimensions.get('window').width
@@ -1332,7 +1334,7 @@ var StockDetailPage = React.createClass({
 		console.log("Set Orientation: ", this.state.orientation);
 	},
 
-	_orientationDidChange: function(orientation) {
+    _orientationDidChange: function(orientation) {
 	 	console.log("changeOrientatioin _orientationDidChange : " + orientation);
 
 		this.chartClickable = true;
@@ -1343,11 +1345,11 @@ var StockDetailPage = React.createClass({
 		}
  },
 
-	resetToLandscape:function(){
+    resetToLandscape:function(){
 		Orientation.lockToPortrait();
 	},
 
-	renderScrollHeader: function() {
+    renderScrollHeader: function() {
 
 		var strBJ = LS.str('BENJIN')
 		var strGG = LS.str('GANGGAN')
@@ -1372,7 +1374,7 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
-	getAvailableLeverage: function(){
+    getAvailableLeverage: function(){
 		// leverage list: 无，2,3,...,20
 		if (LogicData.isIR()) {
 			return [1]
@@ -1392,7 +1394,7 @@ var StockDetailPage = React.createClass({
 		return leverageArray;
 	},
 
-	getMoneyArray: function(){
+    getMoneyArray: function(){
 		var rawList=[50,100,200,300,400, 500,800,1000, 2000, 3000, 5000, 7000, 10000, 20000]
 		var moneyCount = 0
 		var moneyArray = []
@@ -1451,7 +1453,7 @@ var StockDetailPage = React.createClass({
 		return {moneyArray, value};
 	},
 
-	renderScroll: function() {
+    renderScroll: function() {
 		console.log("Orientation width = " + width)
 		var pickerWidth = width/2-60
 		var pickerHeight = Platform.OS === 'ios' ? 216 : 100;
@@ -1509,14 +1511,14 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
-	parseLeverage: function(value) {
+    parseLeverage: function(value) {
 		if (value === 1)
 			return '无'
 		else
 			return ""+value
 	},
 
-	setInvestValue: function(value, ignoreError){
+    setInvestValue: function(value, ignoreError){
 		var maxValue = this.state.tradeDirection === 1 ? this.state.stockInfo.maxValueLong : this.state.stockInfo.maxValueShort;
 		var minValue = this.state.tradeDirection === 1 ? this.state.stockInfo.minValueLong : this.state.stockInfo.minValueShort;
 
@@ -1550,14 +1552,14 @@ var StockDetailPage = React.createClass({
 		return error == null;
 	},
 
-	setLeverageValue: function(value){
+    setLeverageValue: function(value){
 		this.setState({
 			leverage: value,
 			error: this.checkError(this.state.money, value),
 		});
 	},
 
-	findAvailableInvestValue: function(leverage){
+    findAvailableInvestValue: function(leverage){
 		var maxValue = this.state.tradeDirection === 1 ? this.state.stockInfo.maxValueLong : this.state.stockInfo.maxValueShort;
 		var minValue = this.state.tradeDirection === 1 ? this.state.stockInfo.minValueLong : this.state.stockInfo.minValueShort;
 
@@ -1591,7 +1593,7 @@ var StockDetailPage = React.createClass({
 		return error == null;
 	},
 
-	onPikcerSelect: function(value, tag) {
+    onPikcerSelect: function(value, tag) {
 		if(tag===1){
 			this.setInvestValue(value);
 		}
@@ -1600,7 +1602,7 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
-	renderOKButton: function() {
+    renderOKButton: function() {
 		var buttonEnable = this.state.tradeDirection !== 0 && !this.state.tradingInProgress
 		if (this.state.error){
 			buttonEnable = false
@@ -1627,7 +1629,7 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
-	renderStockCurrencyWarning: function() {
+    renderStockCurrencyWarning: function() {
 		if (this.state.stockInfo.fxData) {
 			var fxData = this.state.stockInfo.fxData
 			var fxName = fxData.name
@@ -1650,7 +1652,7 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
-	resultConfirmed: function() {
+    resultConfirmed: function() {
 		this.clearMoney()
 		this.setState({
 			tradingInProgress: false,
@@ -1658,7 +1660,7 @@ var StockDetailPage = React.createClass({
 		})
 	},
 
-	okPressInDisable: function(){
+    okPressInDisable: function(){
 		var isNeedButtonFlash = this.state.tradeDirection === 0 && this.state.tradingInProgress;
 		if(flashButtonTimer !== null) {
 			this.clearInterval(flashButtonTimer)
@@ -1674,7 +1676,7 @@ var StockDetailPage = React.createClass({
 		);
 	},
 
-	doFlash:function(){
+    doFlash:function(){
 		console.log("doFlash = " + this.state.flashTimes);
 		if(this.state.flashTimes>0){
 			this.setState({
@@ -1687,7 +1689,7 @@ var StockDetailPage = React.createClass({
 		}
 	},
 
-	okPress: function() {
+    okPress: function() {
 		let ir = LogicData.isIR()
 		var strTip = LS.str('TS')
 		var strMin = LS.str('TIP_MIN')
@@ -1768,7 +1770,7 @@ var StockDetailPage = React.createClass({
 		)
 	},
 
-	renderInput: function() {
+    renderInput: function() {
 		let left = LogicData.isIR() ? 120-width : 30-width
 		return (
 			<View>
@@ -1787,20 +1789,20 @@ var StockDetailPage = React.createClass({
 			)
 	},
 
-	// textInputChange: function(text) {
-	// 	var value = parseInt(text)
-	// 	if (text.length == 0) {
-	// 		value = 0
-	// 	}
-	// 	else {
-	// 		this.refs['InputAccessory'].resetValidState()
-	// 	}
-	// 	this.setState({
-	// 			inputText:""+value,
-	// 	})
-	// },
+    // textInputChange: function(text) {
+    // 	var value = parseInt(text)
+    // 	if (text.length == 0) {
+    // 		value = 0
+    // 	}
+    // 	else {
+    // 		this.refs['InputAccessory'].resetValidState()
+    // 	}
+    // 	this.setState({
+    // 			inputText:""+value,
+    // 	})
+    // },
 
-	checkMaxTradeableValueError: function(){
+    checkMaxTradeableValueError: function(){
 		var error = null;
 		var longable = true;
 		var shortable = true;
@@ -1824,7 +1826,7 @@ var StockDetailPage = React.createClass({
 		return {error, longable, shortable};
 	},
 
-	checkError: function(value, leverage){
+    checkError: function(value, leverage){
 		var maxValue = this.state.tradeDirection === 1 ? this.state.stockInfo.maxValueLong : this.state.stockInfo.maxValueShort;
 		var minValue = this.state.tradeDirection === 1 ? this.state.stockInfo.minValueLong : this.state.stockInfo.minValueShort;
 
@@ -1853,7 +1855,7 @@ var StockDetailPage = React.createClass({
 		return error;
 	},
 
-	showKeyboard: function(){
+    showKeyboard: function(){
 		var strMY = LS.str('MY');
 		var strXYZJBJ = LS.str('XYZXBJ');
 		var strSYBJBG = LS.str('SYBJBG');

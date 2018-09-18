@@ -1,5 +1,7 @@
 'use strict';
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {
 	StyleSheet,
@@ -54,46 +56,42 @@ const Options = {
 
 var imageNumber = 0
 
-var FeedbackPage = React.createClass({
-	propTypes: {
-		showTabbar: React.PropTypes.func,
-		backToTop: React.PropTypes.bool,
-	},
+class FeedbackPage extends React.Component {
+    static propTypes = {
+		showTabbar: PropTypes.func,
+		backToTop: PropTypes.bool,
+	};
 
-	getDefaultProps() {
-		return {
-			showTabbar: ()=>{},
-			backToTop: true,
-		}
-	},
+    static defaultProps = {
+        showTabbar: ()=>{},
+        backToTop: true,
+    };
 
-	getInitialState: function() {
-		return {
-			commitButtonEnabled: true,
-			text: '',
-			phoneNumber: '',
-			imagesSource: [add_image],
-			imagesData: [],
-		};
-	},
+    state = {
+        commitButtonEnabled: true,
+        text: '',
+        phoneNumber: '',
+        imagesSource: [add_image],
+        imagesData: [],
+    };
 
-	componentWillMount: function() {
+    componentWillMount() {
 		imageNumber = 0
 		if(this.props.phone !== undefined) {
 			this.setState({
 				phoneNumber: this.props.phone,
 			})
 		}
-	},
+	}
 
-	pressBackButton: function() {
+    pressBackButton = () => {
 		if(this.props.backToTop){
 			this.props.showTabbar();
 		}
 		this.props.navigator.pop();
-	},
+	};
 
-	pressCommitButton: function() {
+    pressCommitButton = () => {
 		if(this.state.text.length == 0) {
 			Alert.alert('', '反馈内容不能为空');
 			return
@@ -124,9 +122,9 @@ var FeedbackPage = React.createClass({
 				Alert.alert('', result.errorMessage);
 			}
 		)
-	},
+	};
 
-	pressAddImage: function(index) {
+    pressAddImage = (index) => {
 		ImagePicker.showImagePicker(Options, (response) => {
 			console.log('Response = ', response);
 
@@ -162,9 +160,9 @@ var FeedbackPage = React.createClass({
 				})
 			}
 		});
-	},
+	};
 
-	pressDeleteImage: function(index) {
+    pressDeleteImage = (index) => {
 		this.state.imagesSource.splice(index, 1)
 		if(imageNumber === MaxImageNumber) {
 			// add the add button back
@@ -177,9 +175,9 @@ var FeedbackPage = React.createClass({
 			imagesSource: this.state.imagesSource,
 			imagesData: this.state.imagesData,
 		})
-	},
+	};
 
-	renderDeleteButton: function(index){
+    renderDeleteButton = (index) => {
 		if(index < imageNumber) {
 			return (
 				<TouchableOpacity onPress={() => this.pressDeleteImage(index)} style={styles.deletaImageArea}>
@@ -187,16 +185,16 @@ var FeedbackPage = React.createClass({
 				</TouchableOpacity>
 			);
 		}
-	},
+	};
 
-	updateText: function(text) {
+    updateText = (text) => {
 		if(text.length > MaxTextNumber){
 			text = text.slice(0, MaxTextNumber)
 		}
 		this.setState({text});
-	},
+	};
 
-	render: function() {
+    render() {
 		var images = this.state.imagesSource.map(
 			(source, i) =>
 				<TouchableOpacity onPress={() => this.pressAddImage(i)} key={i}>
@@ -248,8 +246,8 @@ var FeedbackPage = React.createClass({
 					</ScrollView>
 			</View>
 		);
-	},
-});
+	}
+}
 
 var styles = StyleSheet.create({
 	wrapper: {

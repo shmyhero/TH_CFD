@@ -1,6 +1,7 @@
 'use strict'
 
 import React from 'react';
+import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	Platform,
@@ -33,10 +34,11 @@ var rowHeight = 40;
 var fontSize = 16;
 var MAX_ValidationCodeCountdown = 60
 
-var OALiveRegisterPage = React.createClass({
-	mixins: [TimerMixin],
+var OALiveRegisterPage = createReactClass({
+    displayName: 'OALiveRegisterPage',
+    mixins: [TimerMixin],
 
-	getInitialState: function() {
+    getInitialState: function() {
 		return {
 			wechatInstalled: false,
 			phoneNumber: '',
@@ -50,14 +52,14 @@ var OALiveRegisterPage = React.createClass({
 		};
 	},
 
-	checkButtonsEnable: function() {
+    checkButtonsEnable: function() {
 		this.setState({
 			getValidationCodeButtonEnabled: (this.state.phoneNumber.length === 11 && this.state.validationCodeCountdown < 0),
 			phoneLoginButtonEnabled: (this.state.phoneNumber.length === 11 && this.state.validationCode.length === 4),
 		})
 	},
 
-	setPhoneNumber: function(text: string) {
+    setPhoneNumber: function(text) {
 		this.setState({
 			phoneNumber: text
 		})
@@ -65,7 +67,7 @@ var OALiveRegisterPage = React.createClass({
 		this.checkButtonsEnable()
 	},
 
-	setValidationCode: function(text: string) {
+    setValidationCode: function(text) {
 		this.setState({
 			validationCode: text
 		})
@@ -73,21 +75,21 @@ var OALiveRegisterPage = React.createClass({
 		this.checkButtonsEnable()
 	},
 
-	phoneNumberOnFocus: function() {
+    phoneNumberOnFocus: function() {
 		this.setState({
 			phoneNumberBorderColor: ColorConstants.TITLE_DARK_BLUE,
 			validationCodeBorderColor: ColorConstants.DISABLED_GREY,
 		})
 	},
 
-	validationCodeOnFocus: function() {
+    validationCodeOnFocus: function() {
 		this.setState({
 			phoneNumberBorderColor: ColorConstants.DISABLED_GREY,
 			validationCodeBorderColor: ColorConstants.TITLE_DARK_BLUE,
 		})
 	},
 
-	getValidationCodePressed: function() {
+    getValidationCodePressed: function() {
 		console.log('getValidationCodePressed')
 		NetworkModule.fetchTHUrl(
 			NetConstants.CFD_API.GET_PHONE_CODE_API + '?' + NetConstants.PARAMETER_PHONE + "=" + this.state.phoneNumber,
@@ -128,7 +130,7 @@ var OALiveRegisterPage = React.createClass({
 		);
 	},
 
-	wechatPressed: function() {
+    wechatPressed: function() {
 		WechatModule.wechatLogin(
 			() => {
 				this.wechatLogin()
@@ -138,7 +140,7 @@ var OALiveRegisterPage = React.createClass({
 		)
 	},
 
-	wechatLogin: function() {
+    wechatLogin: function() {
 		var wechatUserData = LogicData.getWechatUserData()
 
 		NetworkModule.fetchTHUrl(
@@ -165,7 +167,7 @@ var OALiveRegisterPage = React.createClass({
 		)
 	},
 
-	loginPressed: function() {
+    loginPressed: function() {
 		NetworkModule.fetchTHUrl(
 			NetConstants.CFD_API.PHONE_NUM_LOGIN_API,
 			{
@@ -188,7 +190,7 @@ var OALiveRegisterPage = React.createClass({
 		)
 	},
 
-	loginSuccess: function(userData) {
+    loginSuccess: function(userData) {
 		StorageModule.setUserData(JSON.stringify(userData))
 		LogicData.setUserData(userData);
 		console.log(LogicData.getUserData());
@@ -201,7 +203,7 @@ var OALiveRegisterPage = React.createClass({
 		});
 	},
 
-	renderGetValidationCodeButton: function() {
+    renderGetValidationCodeButton: function() {
 		var {height, width} = Dimensions.get('window');
 		var textSize = Math.round(fontSize*width/375.0)
 		if (this.state.validationCodeCountdown < 0) {
@@ -225,7 +227,7 @@ var OALiveRegisterPage = React.createClass({
 		}
 	},
 
-	render: function() {
+    render: function() {
 		var {height, width} = Dimensions.get('window');
 
 		return (
@@ -271,7 +273,7 @@ var OALiveRegisterPage = React.createClass({
 			</View>
 			</TouchableWithoutFeedback>
 		)
-	}
+	},
 })
 
 var styles = StyleSheet.create({

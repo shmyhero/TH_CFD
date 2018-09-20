@@ -159,8 +159,7 @@ class MyCreditsPage extends React.Component {
 			 <TouchableOpacity onPress={()=>this.gotoBannerPage()}>
 					<Image
 						style = {{height:126,width:width}}
-						source = {require('../../images/bannner_credits.jpg')}>
-					</Image>
+						source = {require('../../images/bannner_credits.jpg')} />
 				</TouchableOpacity>
 			</View>
 		)

@@ -169,8 +169,7 @@ export default class ActivityModal extends Component {
       var imgStyle = [styles.activityImage, {width: imageWidth, height: imageHeight}];
       return (
         <TouchableOpacity style={styles.container} onPress={()=>this.onImagePress()}>
-          <Image style={imgStyle} source={source} onLoad={()=>this.onLoad()}>
-          </Image>
+          <Image style={imgStyle} source={source} onLoad={()=>this.onLoad()} />
           {this.renderWaitingRing()}
         </TouchableOpacity>
       );

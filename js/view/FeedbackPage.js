@@ -10,6 +10,7 @@ import {
 	Text,
 	TextInput,
 	Image,
+	ImageBackground,
 	TouchableOpacity,
 	Alert,
 	ScrollView,
@@ -199,9 +200,9 @@ class FeedbackPage extends React.Component {
 			(source, i) =>
 				<TouchableOpacity onPress={() => this.pressAddImage(i)} key={i}>
 					<View>
-						<Image style={styles.image} source={source}>
+						<ImageBackground style={styles.image} source={source}>
 						{this.renderDeleteButton(i)}
-						</Image>
+						</ImageBackground>
 					</View>
 				</TouchableOpacity>
 			)

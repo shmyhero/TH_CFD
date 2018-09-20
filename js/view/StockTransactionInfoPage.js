@@ -252,8 +252,7 @@ var StockTransactionInfoPage = createReactClass({
 					<Image source={cardBorder}
 						style={{width: CARD_BACKGROUND_WIDTH, height: CARD_BACKGROUND_HEIGHT,
 						resizeMode: "contain",
-					}}>
-					</Image>
+					}} />
 				</View>
 			)
 		}

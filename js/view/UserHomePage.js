@@ -8,6 +8,7 @@ import {
 	ScrollView,
 	Text,
 	Image,
+	ImageBackground,
 	View,
 	Dimensions,
 	ListView,
@@ -261,7 +262,7 @@ export default class UserHomePage extends Component {
 		return(
 
 			<View>
-				<Image style = {[styles.topWapper,{backgroundColor:ColorConstants.TITLE_BLUE_LIVE}]} source={bgBanner}>
+				<ImageBackground style = {[styles.topWapper,{backgroundColor:ColorConstants.TITLE_BLUE_LIVE}]} source={bgBanner}>
 
 					<View style = {[styles.topOneOfThree,privateStyle]}>
 						<View style={{marginTop:32}}></View>
@@ -282,7 +283,7 @@ export default class UserHomePage extends Component {
 						<Text style = {{fontSize:12,backgroundColor:'transparent',color:'white'}}>{strKPS}</Text>
 					</View>
 
-	   		</Image>
+				</ImageBackground>
 			</View>
 
 		)

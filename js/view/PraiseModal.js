@@ -8,7 +8,8 @@ import {
 	StyleSheet,
 	View,
 	Text,
-	Image,
+  Image,
+  ImageBackground,
 	Animated,
 	Dimensions,
 	PanResponder,
@@ -159,11 +160,11 @@ export default class PraiseModal extends Component {
           <View style={styles.modalContainer}>
             <TouchableWithoutFeedback onPress={()=>{}}>
             <View style={styles.modalInnerContainerAll}>
-              <Image style={styles.modalInnerContainer} source={bgImage}>
+              <ImageBackground style={styles.modalInnerContainer} source={bgImage}>
                 <TouchableOpacity onPress={()=>this.onCloseButtonPress()}>
                   <Image  style={{width:16,height:16,alignSelf:'flex-end',margin:15}} source={require('../../images/close_praise.png')}></Image>
                 </TouchableOpacity>
-              </Image>
+              </ImageBackground>
               <View style={{flex:1,alignItems: 'stretch',backgroundColor:'white',padding:10}}>
                 <TouchableOpacity onPress={()=>this.onPressedConfirm()} style={{flex:1,alignItems:'center', justifyContent:'center',backgroundColor:'#d7ac3e'}}>
                   <Text style={{color:'white',fontSize:14}}>确定</Text>

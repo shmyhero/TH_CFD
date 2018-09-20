@@ -55,8 +55,7 @@ export default class Reward extends Component{
           <Image
           style={styles.imgUserHead}
           source={this.props.card.profileUrl ? {uri:this.props.card.profileUrl} : require('../../images/head_portrait.png')}
-          defaultSource={require('../../images/head_portrait.png')}>
-          </Image>
+          defaultSource={require('../../images/head_portrait.png')} />
           <Text numberOfLines={1} style = {styles.textName}>
             {this.props.card.userName}
           </Text>
@@ -64,8 +63,7 @@ export default class Reward extends Component{
         <View style={styles.lineBottom2}>
           <Image
           style={styles.imgLove}
-          source={require('../../images/like_small.png') }>
-          </Image>
+          source={require('../../images/like_small.png') } />
           <Text style = {styles.textCounter}>
           {this.props.card.likes}
           </Text>
@@ -137,10 +135,7 @@ export default class Reward extends Component{
         <Image
         resizeMode={'stretch'}
         style={[styles.imgReward,{width:this.getWidth(),height:this.getHeight()}]}
-        // source={require('../../images/card_ag.png')}
-        source={imageSource}
-        >
-        </Image>
+        source={imageSource} />
         {this.renderBottom()}
 
       </View>

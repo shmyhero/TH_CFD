@@ -106,8 +106,7 @@ export default class AchievementCard extends Component {
       var imgStyle = [styles.cardImage, {width: this.props.width, height: imageHeight,}];
       return (
         <View style={[styles.container, this.props.style]}>
-          <Image style={imgStyle} source={source} onLoad={()=>this.onLoad()}>
-          </Image>
+          <Image style={imgStyle} source={source} onLoad={()=>this.onLoad()} />
           {this.renderWaitingRing()}
         </View>
       );

@@ -89,8 +89,7 @@ class DynamicRowComponent extends Component {
             return (
                 <TouchableOpacity onPress={()=>this._onPressToSecurity(rowData)} style={{marginRight:10,alignItems:'flex-end',justifyContent:'center'}}>
                     <Image source={rowData.position.isLong ? require('../../../images/direction_up.png') : require('../../../images/direction_down.png')}
-                        style={{width:22,height:22,marginBottom:-3}}>
-                    </Image>
+                        style={{width:22,height:22,marginBottom:-3}} />
                     <Text style={{marginRight:2,fontSize:9,color:'#a9a9a9'}}>{rowData.security.name}</Text>
                 </TouchableOpacity>
             )
@@ -287,8 +286,7 @@ class DynamicRowComponent extends Component {
                                 <View style={{flexDirection:'row',marginLeft:5,marginRight:5}}> 
                                     <TouchableOpacity onPress={()=>this._onPressToUser(this.props.rowData)}>
                                         <Image source={{uri:this.props.rowData.user.picUrl}}
-                                            style={{height:34,width:34,margin:10,borderRadius:17}} >
-                                        </Image>
+                                            style={{height:34,width:34,margin:10,borderRadius:17}} />
                                     </TouchableOpacity> 
                                     <View style={styles.textContainer}>
                                         <View style={{flexDirection:'row',marginTop:0}}>

@@ -5,12 +5,12 @@ import {
   StyleSheet,
   Text,
   Image,
+  ImageBackground,
   Platform,
   View,
   Dimensions,
   ListView,
   Alert,
-  ImageBackground,
   TouchableOpacity,
   TouchableHighlight
 } from 'react-native'
@@ -326,7 +326,7 @@ export default class RankingPage extends Component{
     var add = this.state.rankSource[0].roi>0?'+':'';
     return(
         <TouchableOpacity onPress={()=>this._onPressedUserItem(this.state.rankSource[0])}>
-            <Image style={{width:width-20,height:69,marginTop:0, alignSelf:'center', alignItems:'center',justifyContent:'space-between',flexDirection:'row'}} source={require('../../images/rank_bg_me.png')}>
+            <ImageBackground style={{width:width-20,height:69,marginTop:0, alignSelf:'center', alignItems:'center',justifyContent:'space-between',flexDirection:'row'}} source={require('../../images/rank_bg_me.png')}>
                 <View style={{flexDirection:'row',alignItems:'center'}}>
                     <Image style={{height:34,width:34,borderRadius:17,marginLeft:28,marginBottom:5,borderWidth:1,borderColor:'#6f8dc3'}} source={{uri:this.state.rankSource[0].picUrl}}></Image>
                     <View style={{marginLeft:10}}>
@@ -340,7 +340,7 @@ export default class RankingPage extends Component{
                 <View style={{marginRight:30}}>
                     <Text style={{backgroundColor:'transparent',color:'white',fontSize:17}}>{add}{(this.state.rankSource[0].roi*100).toFixed(2)}%</Text>
                 </View> 
-            </Image>
+            </ImageBackground>
         </TouchableOpacity>
     )
 }
@@ -371,9 +371,9 @@ renderThreeHero(){
                           <Text style={styles.textTopUserScore}>{(this.state.rankSource[2].winRate*100).toFixed(2).replace('.00','')}%</Text>
                       </View>    
                     </View>  
-                    <Image style={{height:bgHeightLR,width:bgWidth,marginBottom:-10,justifyContent:'center',alignItems:'center'}} source={require('../../images/rank_bg_ag.png')}>
+                    <ImageBackground style={{height:bgHeightLR,width:bgWidth,marginBottom:-10,justifyContent:'center',alignItems:'center'}} source={require('../../images/rank_bg_ag.png')}>
                         <Text style={styles.textProfit}>+{(this.state.rankSource[2].roi*100).toFixed(2)}%</Text>
-                    </Image>  
+                    </ImageBackground>  
                 </TouchableOpacity>
 
                 <TouchableOpacity activeOpacity={0.90} style={{flex:1}} onPress={()=>this._onPressedUserItem(this.state.rankSource[1])}>
@@ -388,9 +388,9 @@ renderThreeHero(){
                           <Text style={styles.textTopUserScore}>{(this.state.rankSource[1].winRate*100).toFixed(2).replace('.00','')}%</Text>
                       </View> 
                     </View> 
-                    <Image style={{height:bgHeight ,width:bgWidth,marginBottom:-5,justifyContent:'center',alignItems:'center'}} source={require('../../images/rank_bg_gd.png')}>
+                    <ImageBackground style={{height:bgHeight ,width:bgWidth,marginBottom:-5,justifyContent:'center',alignItems:'center'}} source={require('../../images/rank_bg_gd.png')}>
                         <Text style={styles.textProfit}>+{(this.state.rankSource[1].roi*100).toFixed(2)}%</Text>
-                    </Image>  
+                    </ImageBackground>  
                 </TouchableOpacity>
 
                 <TouchableOpacity activeOpacity={0.90} style={{flex:1}} onPress={()=>this._onPressedUserItem(this.state.rankSource[3])}>
@@ -405,9 +405,9 @@ renderThreeHero(){
                           <Text style={styles.textTopUserScore}>{(this.state.rankSource[3].winRate*100).toFixed(2).replace('.00','')}%</Text>
                       </View>  
                     </View>  
-                    <Image style={{height:bgHeightLR ,width:bgWidth,marginBottom:-10,justifyContent:'center',alignItems:'center'}} source={require('../../images/rank_bg_cu.png')}>
+                    <ImageBackground style={{height:bgHeightLR ,width:bgWidth,marginBottom:-10,justifyContent:'center',alignItems:'center'}} source={require('../../images/rank_bg_cu.png')}>
                         <Text style={styles.textProfit}>+{(this.state.rankSource[3].roi*100).toFixed(2)}%</Text>
-                    </Image>  
+                    </ImageBackground>  
                 </TouchableOpacity> 
             </View>
         </View>

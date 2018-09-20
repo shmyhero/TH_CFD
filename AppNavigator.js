@@ -13,6 +13,8 @@ import {
 	TouchableOpacity,
 	Alert,
 	Linking,
+	NativeModules,
+	NativeEventEmitter,
 } from 'react-native';
 
 import {
@@ -39,7 +41,9 @@ var UIConstants = require('./js/UIConstants')
 var recevieDataSubscription = null
 var didAccountChangeSubscription = null;
 var networkConnectionChangedSubscription = null;
-var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
+// var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
+const { NativeData } = NativeModules;
+const NativeDataEmitter = new NativeEventEmitter(NativeData);
 var {EventCenter, EventConst} = require('./js/EventCenter');
 var Orientation = require('react-native-orientation');
 
@@ -233,7 +237,7 @@ var AppNavigator = createReactClass({
 		// 	)
 		// }
 
-		this.recevieDataSubscription = RCTNativeAppEventEmitter.addListener(
+		this.recevieDataSubscription = NativeDataEmitter.addListener(
 			'nativeSendDataToRN',
 			(args) => {
 				try{

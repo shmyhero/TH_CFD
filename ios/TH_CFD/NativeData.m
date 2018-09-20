@@ -14,6 +14,11 @@
 RCT_EXPORT_MODULE();
 @synthesize bridge = _bridge;
 
+- (NSArray<NSString *> *)supportedEvents
+{
+	return @[@"nativeSendDataToRN", @"nativeSendDataToRN"];
+}
+
 - (void)receiveDataFromRN:(NSString *)dataName data:(NSString *)jsonData
 {
 	AppDelegate *delegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -101,13 +106,12 @@ RCT_EXPORT_MODULE();
 - (void)sendDataToRN:(NSString *)dataName data:(NSString *)jsonData
 {
 	// use RCTEventEmitter to replace
-//    if (jsonData != nil) {
-//        [self.bridge.eventDispatcher sendAppEventWithName:@"nativeSendDataToRN" body:@[dataName, jsonData]];
-//    }
-//    else {
-//        [self.bridge.eventDispatcher sendAppEventWithName:@"nativeSendDataToRN" body:@[dataName]];
-//
-//    }
+    if (jsonData != nil) {
+        [self sendEventWithName:@"nativeSendDataToRN" body:@[dataName, jsonData]];
+    }
+    else {
+        [self sendEventWithName:@"nativeSendDataToRN" body:@[dataName]];
+    }
 }
 
 #pragma mark RCT_EXPORT

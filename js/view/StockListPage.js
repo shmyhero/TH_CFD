@@ -15,6 +15,8 @@ import {
 	Alert,
 	Platform,
 	TouchableOpacity,
+	NativeModules,
+	NativeEventEmitter,
 } from 'react-native';
 
 var {EventCenter, EventConst} = require('../EventCenter')
@@ -25,7 +27,9 @@ var UIConstants = require('../UIConstants');
 var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
 var MainPage = require('./MainPage')
-var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
+// var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
+const { NativeData } = NativeModules;
+const NativeDataEmitter = new NativeEventEmitter(NativeData);
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 var WebSocketModule = require('../module/WebSocketModule');
 var CacheModule = require('../module/CacheModule');
@@ -395,7 +399,7 @@ var StockListPage = createReactClass({
 			this.syncOwnData()
 
 	    this.didFocusSubscription = this.props.navigator.navigationContext.addListener('didfocus', this.onDidFocus);
-	    this.recevieDataSubscription = RCTNativeAppEventEmitter.addListener(
+			this.recevieDataSubscription = NativeDataEmitter.addListener(
 			'nativeSendDataToRN',
 			(args) => {
 				if (args[0] == 'myList') {

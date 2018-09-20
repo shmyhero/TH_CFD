@@ -9,6 +9,8 @@ import {
     Linking,
 	Platform,
 	Image,
+	NativeModules,
+	NativeEventEmitter,
 } from 'react-native';
 
 import NavigationExperimental from 'react-native-deprecated-custom-components';
@@ -80,7 +82,9 @@ var PromotionCodePage = require('./PromotionCodePage');
 
 var TalkingdataModule = require('../module/TalkingdataModule')
 var WebSocketModule = require('../module/WebSocketModule');
-var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
+// var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
+const { NativeData } = NativeModules;
+const NativeDataEmitter = new NativeEventEmitter(NativeData);
 var StorageModule = require('../module/StorageModule');
 var OpenAccountRoutes = require('./openAccount/OpenAccountRoutes');
 var DepositWithdrawFlow = require('./DepositWithdrawFlow');
@@ -935,7 +939,7 @@ class MainPage extends React.Component {
 		if (Platform.OS === 'ios') {
 			Linking.addEventListener('url', this._handleOpenURL);
 		} else {
-			this.recevieDataSubscription = RCTNativeAppEventEmitter.addListener(
+			this.recevieDataSubscription = NativeDataEmitter.addListener(
 				'nativeSendDataToRN',
 				(args) => {
 					if (args[0] == 'openURL') {

@@ -24,7 +24,6 @@ var ColorPropType = require('ColorPropType');
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');
 var NativeDataModule = require('../module/NativeDataModule');
 var ColorConstants = require('../ColorConstants');
-var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 var LogicData = require('../LogicData')
 var NetworkModule = require('../module/NetworkModule')
 var {height, width} = Dimensions.get('window');

@@ -17,7 +17,6 @@
 		139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		30EC836D765B4E7CBB7D0CA5 /* libRNCookieManagerIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 364F0D55964C421580FB2DE1 /* libRNCookieManagerIOS.a */; };
 		3D02CECF1D922B3100BA9160 /* BaseDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D02CECE1D922B3100BA9160 /* BaseDataSource.swift */; };
 		3D02CEE21D9237C000BA9160 /* LineChartDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D02CEE11D9237C000BA9160 /* LineChartDataSource.swift */; };
@@ -179,6 +178,7 @@
 		3D5C46C81C92B51000BF6FD3 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 3D5C46C71C92B51000BF6FD3 /* main.jsbundle */; };
 		3D61C5CB1C9909CB0037816A /* EditOwnStocksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D61C5C91C9909CB0037816A /* EditOwnStocksViewController.swift */; };
 		3D61C5F11C9931810037816A /* EditOwnStockCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D61C5F01C9931810037816A /* EditOwnStockCell.swift */; };
+		3D660C5D2153906A00BA5E31 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		3D6A23E51C9AA93F00FF1306 /* NativeScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A23E41C9AA93F00FF1306 /* NativeScene.m */; };
 		3D6A24091C9AB90000FF1306 /* NativeData.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A24081C9AB90000FF1306 /* NativeData.m */; };
 		3D6A240B1C9ABDE900FF1306 /* StockDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6A240A1C9ABDE900FF1306 /* StockDataManager.swift */; };
@@ -928,6 +928,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D660C5D2153906A00BA5E31 /* libReact.a in Frameworks */,
 				3D1D4651214D6566001275E6 /* libRCTHotUpdate.a in Frameworks */,
 				3D1D45D4214D5E63001275E6 /* libBVLinearGradient.a in Frameworks */,
 				3D1D4561214BBEB5001275E6 /* libRCTWeChat.a in Frameworks */,
@@ -951,7 +952,6 @@
 				73DFEAF21CDB242700234CE8 /* libbz2.1.0.tbd in Frameworks */,
 				3D2A39FF1C7C3EDA0085264D /* libc++.tbd in Frameworks */,
 				3D2A39F31C7C3ECD0085264D /* libsqlite3.tbd in Frameworks */,
-				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
 				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,

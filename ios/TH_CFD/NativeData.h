@@ -6,12 +6,11 @@
 //  Copyright © 2016年 Facebook. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-//#import "RCTBridge.h"
-//#import "RCTEventDispatcher.h"
+//#import <Foundation/Foundation.h>
 #import <React/RCTBridgeModule.h>
+#import <React/RCTEventEmitter.h>
 
-@interface NativeData : NSObject<RCTBridgeModule>
+@interface NativeData : RCTEventEmitter<RCTBridgeModule>
 
 - (void)receiveDataFromRN:(NSString *)dataName data:(NSString *)jsonData;
 - (void)sendDataToRN:(NSString *)dataName data:(NSString *)jsonData;

@@ -6,7 +6,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
-    "@remobile/react-native-qrcode-local-image": "1.0.1",
+    "@remobile/react-native-qrcode-local-image": "^1.0.4",
     "babylon": "6.8.4",
     "create-react-class": "^15.6.3",
     "crypto-js": "3.1.9-1",
@@ -17,7 +17,7 @@
     "react-native-datepicker": "^1.7.2",
     "react-native-deprecated-custom-components": "^0.1.2",
     "react-native-fs": "^2.11.15",
-    "react-native-image-picker": "0.22.7",
+    "react-native-image-picker": "^0.26.10",
     "react-native-linear-gradient": "^2.4.2",
     "react-native-orientation": "yamill/react-native-orientation",
     "react-native-picker": "^4.3.7",

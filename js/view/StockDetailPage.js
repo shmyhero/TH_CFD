@@ -18,7 +18,7 @@ import {
 	Platform,
 	ScrollView,
 	ProgressBarAndroid,
-	BackAndroid,
+	BackHandler,
 	ActivityIndicatorIOS,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -163,7 +163,7 @@ var StockDetailPage = createReactClass({
     //Orientation.unlockAllOrientations(); //this will unlock the view to all Orientations
     Orientation.addOrientationListener(this._orientationDidChange);
 
-		BackAndroid.addEventListener('hardwareBackPress', this.hardwareBackPress);
+		BackHandler.addEventListener('hardwareBackPress', this.hardwareBackPress);
 	},
 
     componentWillUnmount: function() {
@@ -183,7 +183,7 @@ var StockDetailPage = createReactClass({
 		Orientation.lockToPortrait();
 
 		Orientation.removeOrientationListener(this._orientationDidChange);
-		BackAndroid.removeEventListener('hardwareBackPress', this.hardwareBackPress);
+		BackHandler.removeEventListener('hardwareBackPress', this.hardwareBackPress);
 	},
 
     hardwareBackPress:function(){

@@ -76,7 +76,7 @@ export function start() {
 	console.log('start web socket');
 
 	NetInfo.addEventListener(
-	  'change',
+	  'connectionChange',
 	  handleConnectivityChange
 	);
 
@@ -216,7 +216,7 @@ export function stop() {
 	}
 
 	NetInfo.removeEventListener(
-		'change',
+		'connectionChange',
 		handleConnectivityChange
 	);
 }

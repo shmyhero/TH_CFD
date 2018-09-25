@@ -19,7 +19,7 @@ class CheckBoxButton extends React.Component {
 
 		containerStyle: ViewPropTypes.style,
 
-		textStyle: PropTypes.style,
+		textStyle: Text.propTypes.style,
 
 		text: PropTypes.string,
 

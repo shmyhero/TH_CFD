@@ -8,7 +8,7 @@ import {
 	View,
 	Text,
 	TouchableHighlight,
-	ViewPropTypes
+	ViewPropTypes,
 } from 'react-native';
 var ColorConstants = require('../../ColorConstants')
 
@@ -18,7 +18,7 @@ class Button extends React.Component {
 
 		textContainerStyle: ViewPropTypes.style,
 
-		textStyle: PropTypes.style,
+		textStyle: Text.propTypes.style,
 
 		text: PropTypes.string,
 

@@ -11,7 +11,6 @@ import {
 	Linking,
 	Platform,
     NetInfo,
-	BackAndroid,
 } from 'react-native';
 
 var isAlertShown = false;
@@ -120,7 +119,7 @@ export function gotoDownloadPage(){
 export function start(){
   getLatestVersion();
   NetInfo.addEventListener(
-    'change',
+    'connectionChange',
     handleConnectivityChange
   );
 }

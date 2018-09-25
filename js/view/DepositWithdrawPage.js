@@ -14,7 +14,7 @@ import {
 	Image,
 	ListView,
   TouchableOpacity,
-	BackAndroid,
+	BackHandler,
 	ScrollView,
 } from 'react-native';
 
@@ -64,11 +64,11 @@ export default class DepositWithdrawPage extends Component {
   }
 
 	componentWillUnmount(){
-		BackAndroid.removeEventListener('hardwareBackPress', this.hardwareBackPress);
+		BackHandler.removeEventListener('hardwareBackPress', this.hardwareBackPress);
 	}
 
 	componentDidMount(){
-		BackAndroid.addEventListener('hardwareBackPress', this.hardwareBackPress);
+		BackHandler.addEventListener('hardwareBackPress', this.hardwareBackPress);
 		this.refreshData();
 	}
 

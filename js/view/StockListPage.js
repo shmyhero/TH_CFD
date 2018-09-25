@@ -27,7 +27,6 @@ var UIConstants = require('../UIConstants');
 var StorageModule = require('../module/StorageModule')
 var NetworkModule = require('../module/NetworkModule')
 var MainPage = require('./MainPage')
-// var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 const { NativeData } = NativeModules;
 const NativeDataEmitter = new NativeEventEmitter(NativeData);
 var NetworkErrorIndicator = require('./NetworkErrorIndicator');

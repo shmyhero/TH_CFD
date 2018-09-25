@@ -47,7 +47,7 @@ class QAPage extends React.Component {
 
     componentDidMount() {
 		NetInfo.isConnected.addEventListener(
-			'change',
+			'connectionChange',
 			this._handleConnectivityChange
 		);
 		//检测网络是否连接
@@ -58,7 +58,7 @@ class QAPage extends React.Component {
 
     componentWillUnmount() {
     	NetInfo.isConnected.removeEventListener(
-			'change',
+			'connectionChange',
 			this._handleConnectivityChange
 		);
 		// this.didTabSelectSubscription.remove()

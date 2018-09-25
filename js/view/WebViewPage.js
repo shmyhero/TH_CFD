@@ -76,7 +76,7 @@ class WebViewPage extends React.Component {
 		}
 
 		NetInfo.isConnected.addEventListener(
-			'change',
+			'connectionChange',
 			this._handleConnectivityChange
 		);
 		//检测网络是否连接
@@ -96,7 +96,7 @@ class WebViewPage extends React.Component {
 		}
 
   	NetInfo.isConnected.removeEventListener(
-			'change',
+			'connectionChange',
 			this._handleConnectivityChange
 		);
   }

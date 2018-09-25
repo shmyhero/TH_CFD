@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {
-    BackAndroid,
+    BackHandler,
     StyleSheet,
     View,
     Text,
@@ -82,7 +82,6 @@ var PromotionCodePage = require('./PromotionCodePage');
 
 var TalkingdataModule = require('../module/TalkingdataModule')
 var WebSocketModule = require('../module/WebSocketModule');
-// var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 const { NativeData } = NativeModules;
 const NativeDataEmitter = new NativeEventEmitter(NativeData);
 var StorageModule = require('../module/StorageModule');
@@ -1089,7 +1088,7 @@ class MainPage extends React.Component {
 
     componentWillMount() {
 //		HIDE_RANKING_TAB = !LogicData.getDebugStatus();
- 		BackAndroid.addEventListener('hardwareBackPress', this.backAndroidHandler);
+ 		BackHandler.addEventListener('hardwareBackPress', this.backAndroidHandler);
 	}
 
     componentWillUnmount() {
@@ -1101,7 +1100,7 @@ class MainPage extends React.Component {
 
 		didAccountChangeSubscription && didAccountChangeSubscription.remove();
 		didLanguageChangeSubscription && didLanguageChangeSubscription.remove();
-		BackAndroid.removeEventListener('hardwareBackPress', this.backAndroidHandler);
+		BackHandler.removeEventListener('hardwareBackPress', this.backAndroidHandler);
 	}
 
     _handleOpenURL = (event) => {

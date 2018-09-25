@@ -12,7 +12,7 @@ import {
   TextInput,
 } from 'react-native';
 
-import RNViewShot from "react-native-view-shot";
+import { captureRef }  from "react-native-view-shot";
 var QRCode = require('@remobile/react-native-qrcode-local-image');
 var WebViewPage = require('./WebViewPage');
 var ColorConstants = require('../ColorConstants')
@@ -46,8 +46,8 @@ export default class PaymentPage extends Component {
 
   pressPayButton(){
     //Take snapshot of the webview.
-		RNViewShot.takeSnapshot(this.refs["webView"].getWebViewRef(), {
-		  format: "jpeg",
+    captureRef(this.refs["webView"].getWebViewRef(), {
+		  format: "jpg",
 		  quality: 1
 		})
 		.then( uri => {

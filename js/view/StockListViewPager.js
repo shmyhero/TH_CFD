@@ -88,7 +88,7 @@ var StockListViewPager = createReactClass({
 
     componentDidMount: function() {
 		NetInfo.isConnected.addEventListener(
-			'change',
+			'connectionChange',
 			this._handleConnectivityChange
 		);
 	},
@@ -97,7 +97,7 @@ var StockListViewPager = createReactClass({
 		this.didFocusSubscription.remove();
 		this.didTabSelectSubscription.remove();
     	NetInfo.isConnected.removeEventListener(
-			'change',
+			'connectionChange',
 			this._handleConnectivityChange
 		);
 		this.networkConnectionChangedSubscription && this.networkConnectionChangedSubscription.remove();

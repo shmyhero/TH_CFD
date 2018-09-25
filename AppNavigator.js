@@ -41,7 +41,6 @@ var UIConstants = require('./js/UIConstants')
 var recevieDataSubscription = null
 var didAccountChangeSubscription = null;
 var networkConnectionChangedSubscription = null;
-// var RCTNativeAppEventEmitter = require('RCTNativeAppEventEmitter');
 const { NativeData } = NativeModules;
 const NativeDataEmitter = new NativeEventEmitter(NativeData);
 var {EventCenter, EventConst} = require('./js/EventCenter');
@@ -85,7 +84,7 @@ var AskForRestartPage = require('./js/view/AskForRestartPage')
 var NativeDataModule = require('./js/module/NativeDataModule')
 var VersionConstants = require('./js/VersionConstants')
 var VersionControlModule = require('./js/module/VersionControlModule')
-//var TongDaoModule = require('./js/module/TongDaoModule')
+
 
 var GUIDE_SLIDES = [
 	require('./images/Guide-page01.png'),

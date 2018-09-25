@@ -9,20 +9,12 @@ import {
 	Text,
 	Image,
 	Dimensions,
-	TouchableOpacity,
-	Alert,
 } from 'react-native';
 
 var NativeSceneModule = require('../../module/NativeSceneModule')
 // var ViewPager = require('react-native-viewpager-es6');
 var Button = require('../component/Button')
-var MainPage = require('../MainPage')
-var ColorConstants = require('../../ColorConstants')
-var TalkingdataModule = require('../../module/TalkingdataModule')
-var OpenAccountRoutes = require('./OpenAccountRoutes')
-var LogicData = require('../../LogicData')
 var UIConstants = require('../../UIConstants')
-var SentIntent = require('../component/nativeIntent/SendIntent')
 var LS = require('../../LS')
 var {height, width} = Dimensions.get('window')
 import LinearGradient from 'react-native-linear-gradient';
@@ -38,10 +30,6 @@ var BANNERS = [
 	require('../../../images/live_register_banner02.png'),
 ];
 
-// var ds = new ViewPager.DataSource({
-// 	pageHasChanged: (p1, p2) => p1 !== p2,
-// });
-
 var imageHeight = 311 / 750 * width
 
 class OAStatusPage extends React.Component {
@@ -49,9 +37,9 @@ class OAStatusPage extends React.Component {
 		onLoginClicked: PropTypes.func,
 	};
 
-    state = {
-        // dataSource: ds.cloneWithPages(PAGES),
-    };
+    // state = {
+    //     // dataSource: ds.cloneWithPages(PAGES),
+    // };
 
     gotoNext = () => {
 		this.props.onLoginClicked()
@@ -59,7 +47,6 @@ class OAStatusPage extends React.Component {
 
     helpPressed = () => {
 		NativeSceneModule.launchNativeScene('MeiQia')
-		// SentIntent.sendPhoneDial(CALL_NUMBER)
 	};
 
     render() {
@@ -91,15 +78,11 @@ class OAStatusPage extends React.Component {
 
 var styles = StyleSheet.create({
 	wrapper: {
-		flex: 1,
 		flexDirection: 'column',
    		alignItems: 'stretch',
 		backgroundColor: '#445c86',
 		paddingTop:50,
-		height: height
-				// - UIConstants.ANDROID_LIST_VIEW_HEIGHT_MAGIC_NUMBER
-				// - UIConstants.HEADER_HEIGHT
-				- UIConstants.TAB_BAR_HEIGHT, 
+		height: height - UIConstants.TAB_BAR_HEIGHT, 
 	},
 	text1: {
 		fontSize: 17,
@@ -115,7 +98,6 @@ var styles = StyleSheet.create({
 		height: 770 / 720 * width,
 	},
 	buttonArea: { 
-		// alignItems:'stretch',
 		width:width-30,
 		marginLeft: 15,
 		marginRight: 15,
@@ -136,7 +118,6 @@ var styles = StyleSheet.create({
 	helpContainer: {
 		paddingBottom: 30 - UIConstants.STATUS_BAR_ACTUAL_HEIGHT,
 		alignItems: 'stretch',
-		//height: 30,
 	},
 	helpRowWrapper: {
 		flexDirection: 'row',

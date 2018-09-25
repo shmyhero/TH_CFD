@@ -27,7 +27,7 @@
     "react-native-swiper": "^1.5.13",
     "react-native-update": "^5.1.2",
     "react-native-view-shot": "^2.4.0",
-    "react-native-wheel-picker": "1.1.0",
+    "react-native-wheel-picker": "^1.2.0",
     "react-native-wx": "^3.0.3",
     "react-timer-mixin": "^0.13.4",
     "realm": "1.12.0"

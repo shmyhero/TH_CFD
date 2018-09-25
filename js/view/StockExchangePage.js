@@ -136,12 +136,6 @@ class StockExchangePage extends React.Component {
     renderLiveLogin = () => {
 		var strWDCW = LS.str('WDCW')
 		return(
-			// <View style={{flex:1,backgroundColor:'white',alignItems:'center'}}>
-   	  //   <NavBar title="我的仓位" navigator={this.props.navigator}/>
-			// 	<TouchableOpacity onPress={()=>this.jumpToLogin()}>
-			// 		<Text style={{textAlign:'center',fontSize:20, alignSelf:'center',justifyContent:'center',backgroundColor:'yellow'}}>点击登录实盘账户</Text>
-			// 	</TouchableOpacity>
-			// </View>
 			<View>
 				{/* <NavBar title={''} navigator={this.props.navigator}/> */}
 				<OAStatusPage onLoginClicked={()=>this.jumpToLogin()}/>
@@ -160,17 +154,6 @@ class StockExchangePage extends React.Component {
 		console.log("gotoAccountStateExce userId = " + userId);
 
 		MainPage.gotoLiveLogin(this.props.navigator, false, ()=>{this.onWebViewNavigationStateChange()})
-		// this.props.navigator.push({
-		// 	name:MainPage.NAVIGATOR_WEBVIEW_ROUTE,
-		// 	title:strSPJY,
-		// 	onNavigationStateChange: this.onWebViewNavigationStateChange,
-		// 	logTimedelta: true,
-		// 	url:'https://tradehub.net/live/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/live/oauth&state='+userId
-		// 	// url:'http://cn.tradehero.mobi/tradehub/live/login1.html'
-		// 	// url:'http://cn.tradehero.mobi/tradehub/live/login1.html?client_id=62d275a211'
-		// 	// url:'http://cn.tradehero.mobi/tradehub/live/loginload.html'
-		// 	// url:'https://www.tradehub.net/live/yuefei-beta/login.html',
-		// });
 	};
 
     onWebViewNavigationStateChange = () => {
@@ -186,30 +169,6 @@ class StockExchangePage extends React.Component {
 		});		
 	};
 
-    // onNavigationStateChange:function (navState) {
-    // 	console.log("my web view state changed: "+navState.url)
-    // 	CookieManager.get('https://tradehub.net/demo/auth', (err, res) => {
-    // 			console.log('Got cookies for url: ', res);
-    // 	})
-    //
-    // 	if(navState.url.indexOf('live/loginload')>0){
-    // 		console.log('success login ok');
-    // 		// MainPage.ayondoLoginResult(true)
-    // 		LogicData.setAccountState(true)
-    // 		LogicData.setActualLogin(true)
-    // 		this.setState({
-    // 			loggined:true,
-    // 		})
-    // 	}else if(navState.url.indexOf('live/oauth/error')>0){
-    // 		console.log('success login error');
-    // 		// MainPage.ayondoLoginResult(false)
-    // 		LogicData.setAccountState(true)
-    // 		LogicData.setActualLogin(false)
-    // 		this.setState({
-    // 			loggined:true,
-    // 		})
-    // 	}
-    // },
 
     renderContent = () => {
 		//var userData = LogicData.getUserData()
@@ -251,23 +210,7 @@ class StockExchangePage extends React.Component {
 					</View>
 				)
 			} else{
-				// return (
-				// 	<View style={{flex: 1}}>
-				// 		<NavBar title="我的仓位" navigator={this.props.navigator}/>
-				// 		<WebViewPage
-				// 			isShowNav= {false}
-				// 			onNavigationStateChange={this.onNavigationStateChange}
-				// 			// url={'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId}
-				// 			// url={'https://www.baidu.com'}
-				// 		  // url={'https://www.tradehub.net/live/yuefei-beta/login.html'}
-				// 			// url={'https://www.tradehub.net/demo/ff-beta/tradehero-login-debug.html'}
-				// 			// url={'http://cn.tradehero.mobi/TH_CFD_SP/detail01.html'}
-				// 			url={'http://cn.tradehero.mobi/tradehub/login.html'}
-				//
-				// 		/>
-				// 	</View>
-					return(this.renderLiveLogin())
-				// )
+				return(this.renderLiveLogin())
 			}
 		}else{//模拟盘状态
 			if (loggined) {
@@ -287,53 +230,6 @@ class StockExchangePage extends React.Component {
 			}
 		}
 
-
-		// // if(loggined && LogicData.getAccountState()){//实盘状态
-		// // 	if(LogicData.getActualLogin()){
-		// // 		return (
-		// // 			<View style={{flex: 1}}>
-		// // 				<NavBar title="我的仓位" showSearchButton={true} navigator={this.props.navigator}/>
-		// // 				<ScrollTabView ref={"tabPages"} tabNames={tabNames} viewPages={viewPages} removeClippedSubviews={true}
-		// // 					onPageSelected={(index) => this.onPageSelected(index)} />
-		// // 			</View>
-		// // 		)
-		// // 	} else{
-		// 		return (
-		// 			<View style={{flex: 1}}>
-		// 				<NavBar title="我的仓位" navigator={this.props.navigator}/>
-		// 				<WebViewPage
-		// 					isShowNav= {false}
-		// 					onNavigationStateChange={this.onNavigationStateChange}
-		// 					// url={'https://tradehub.net/demo/auth?response_type=token&client_id=62d275a211&redirect_uri=https://api.typhoontechnology.hk/api/demo/oauth&state='+userId}
-		// 					// url={'https://www.baidu.com'}
-		// 					// url={'https://www.tradehub.net/live/yuefei-beta/login.html'}
-		// 					// url={'https://www.tradehub.net/demo/ff-beta/tradehero-login-debug.html'}
-		// 					// url={'http://cn.tradehero.mobi/TH_CFD_SP/detail01.html'}
-		// 					url={'http://cn.tradehero.mobi/tradehub/login.html'}
-		//
-		// 				/>
-		// 			</View>
-		// 			// return(this.renderLiveLogin())
-		// 		)
-		// // 	}
-		// // }else{//模拟盘状态
-		// // 	if (loggined) {
-		// // 		return (
-		// // 			<View style={{flex: 1}}>
-		// // 				<NavBar title="我的仓位" showSearchButton={true} navigator={this.props.navigator}/>
-		// // 				<ScrollTabView ref={"tabPages"} tabNames={tabNames} viewPages={viewPages} removeClippedSubviews={true}
-		// // 					onPageSelected={(index) => this.onPageSelected(index)} />
-		// // 			</View>
-		// // 		)
-		// // 	}
-		// // 	else {
-		// // 		return (
-		// // 			<LoginPage navigator={this.props.navigator}
-		// // 								onPopToRoute={this.onPageSelected}
-		// // 								isTabbarShown={()=> { return true;}}/>
-		// // 		)
-		// // 	}
-		// // }
 	};
 
     render() {

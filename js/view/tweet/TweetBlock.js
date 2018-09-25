@@ -36,9 +36,9 @@ class TweetBlock extends Component {
     componentWillReceiveProps(props){
         if(props.value != this.props.value){
             var textNodes = TweetParser.parseTextNodes(props.value);
-            this.state = {
+            this.setState({
                 textNodes: textNodes
-            };
+            })
         }
     }
 

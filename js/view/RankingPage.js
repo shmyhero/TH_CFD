@@ -641,9 +641,9 @@ const styles = StyleSheet.create({
   userHeaderIconRound:{
     width:80,
     height:80,
-    marginTop:-62,
-    marginLeft:-10,
-    position:'absolute'
+    marginTop:-18,
+    marginLeft:-12,
+    position:'absolute',
   },
   
   rateArea:{

@@ -487,16 +487,20 @@ export default class DepositPage extends Component{
 	}
 
 	getValueOfRmbPay(){
+		var value = 0.01
 		if(this.state.useEcoupon){
-			if(inputValue - this.state.econponValue<=0){
+			if(inputValue - this.state.econponValue <= 0){
 				return 0.01
 			}
-			else{
-				return (inputValue - this.state.econponValue) / this.state.fxRate;
+			else {
+				value =  (inputValue - this.state.econponValue) / this.state.fxRate;
 			} 
 		}else{
-			return inputValue / this.state.fxRate;
+			value = inputValue / this.state.fxRate;
 		}
+		// 保留2位小数，fix server bug
+		value = Math.round(value * 100) / 100
+		return value
 	}
 		
 

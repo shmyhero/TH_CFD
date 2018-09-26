@@ -112,7 +112,7 @@ export default class TradeStyleBlock extends Component {
             <View style={styles.verticalSeparator}/>
             <View style={styles.contentBlock}>
               <Text style={styles.contentTitleBlock}>{strPJGG}</Text>
-              <Text style={styles.contentValueBlock}>{LogicData.isIR() ? 1 : this.state.averageLeverage}</Text>
+              <Text style={styles.contentValueBlock}>{this.state.averageLeverage}</Text>
             </View>
             <View style={styles.verticalSeparator}/>
             <View style={styles.contentBlock}>

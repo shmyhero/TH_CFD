@@ -818,7 +818,7 @@ var HomePage = createReactClass({
     renderPopularityView: function() {
 		var strSCQX = LS.str('SCQX')
 		var strMORE = LS.str('GD')
-		if(this.state.rawPopularityInfo.length < 3 || LogicData.isIR()){
+		if(this.state.rawPopularityInfo.length < 3){
 			return(
 				<View></View>
 			)
@@ -885,7 +885,7 @@ var HomePage = createReactClass({
 				</TouchableOpacity>
 			)
 
-			if(cardItems!==undefined && cardItems.length > 0 && (LogicData.isIR() || LogicData.getAccountState())){
+			if(cardItems!==undefined && cardItems.length > 0 && LogicData.getAccountState()){
 				return(
 					<View>
 						<View style={[styles.popularityHeaderContainer,{backgroundColor:'white'}]}>

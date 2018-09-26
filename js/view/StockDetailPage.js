@@ -332,9 +332,8 @@ var StockDetailPage = createReactClass({
 					},
 					60000
 				);
-				if(!LogicData.isIR()) {
-					this.props.showTutorial('trade')
-				}
+
+				this.props.showTutorial('trade')
 
 				if(!this.setInvestValue(this.state.money, true)){
 					console.log("setInvestValue ")
@@ -709,7 +708,7 @@ var StockDetailPage = createReactClass({
 	},
 
     renderMinTradeMondy:function(){
-		var strZZJXDY = LogicData.isIR() ? LS.str('ZZJXDY_IR') : LS.str('ZZJXDY')
+		var strZZJXDY = LS.str('ZZJXDY')
 		var strMY = LS.str('MY')
 		var tradeValue = this.state.money * this.state.leverage
 		var minValue = this.state.tradeDirection === 1 ? this.state.stockInfo.minValueLong : this.state.stockInfo.minValueShort
@@ -934,7 +933,6 @@ var StockDetailPage = createReactClass({
 					<View style={{flex: 2, alignItems: 'center', justifyContent: 'space-around', paddingTop: 30, paddingBottom: 10}}>
 						{this.renderErrorHint()}
 						{this.renderMinTradeMondy()}
-						{/* <Text style={styles.smallLabel}> 手续费为{charge}美元</Text> */}
 						{this.renderOKButton()}
 						{this.renderStockCurrencyWarning()}
 					</View>
@@ -1167,9 +1165,6 @@ var StockDetailPage = createReactClass({
 					style={[styles.tradeButtonView,{borderColor:ColorConstants.COLOR_BORDER},{backgroundColor:LogicData.getAccountState()?'#476189':'#356dce'},(this.state.flashTimes>0 && this.state.flashTimes%2==0)?styles.flashBorder:null , upSelected&&(LogicData.getAccountState()?styles.tradeButtonViewSelectedLive:styles.tradeButtonViewSelected)]}>
 					<View style={styles.tradeButtonContainer}>
 						{
-							LogicData.isIR()?
-							<Text style={{fontSize: 19,color:upTextColor}}>{strBuy}</Text>
-							:
 							<Text style={[styles.tradeButtonText, {color: upTextColor}]}>
 								{this.state.stockPriceAsk}
 							</Text>
@@ -1184,9 +1179,6 @@ var StockDetailPage = createReactClass({
 					style={[styles.tradeButtonView,{borderColor:ColorConstants.COLOR_BORDER},{backgroundColor:LogicData.getAccountState()?'#476189':'#356dce'},(this.state.flashTimes>0 && this.state.flashTimes%2==0)?styles.flashBorder:null ,downSelected&&(LogicData.getAccountState()?styles.tradeButtonViewSelectedLive:styles.tradeButtonViewSelected)]}>
 					<View style={styles.tradeButtonContainer}>
 						{
-							LogicData.isIR()?
-							<Text style={{fontSize: 19,color:downTextColor}}>{strSell}</Text>
-							:
 							<Text style={[styles.tradeButtonText, {color: downTextColor}]}>
 								{this.state.stockPriceBid}
 							</Text>
@@ -1353,32 +1345,18 @@ var StockDetailPage = createReactClass({
 
 		var strBJ = LS.str('BENJIN')
 		var strGG = LS.str('GANGGAN')
-		if (LogicData.isIR()) {
-			return (
-				<TouchableWithoutFeedback>
-				<View style={[styles.rowView, {height:20}]}>
-					<Text style={styles.smallLabel}>{strBJ}</Text>
-				</View>
-				</TouchableWithoutFeedback>
-			)
-		}
-		else {
-			return (
-				<TouchableWithoutFeedback>
+		return (
+			<TouchableWithoutFeedback>
 				<View style={[styles.rowView, {height:20}]}>
 					<Text style={styles.smallLabel}>{strBJ}</Text>
 					<Text style={styles.smallLabel}>{strGG}</Text>
 				</View>
-				</TouchableWithoutFeedback>
-			)
-		}
+			</TouchableWithoutFeedback>
+		)
 	},
 
     getAvailableLeverage: function(){
 		// leverage list: 无，2,3,...,20
-		if (LogicData.isIR()) {
-			return [1]
-		}
 		if (this.state.stockInfo.levList !== undefined) {
 			leverageArray = this.state.stockInfo.levList
 		}else{
@@ -1464,51 +1442,31 @@ var StockDetailPage = createReactClass({
 
 		console.log("this.state.money " + this.state.money)
 		console.log("this.state.money value " + value)
-		let hasLeverage = !LogicData.isIR()
-		if (hasLeverage) {
-			return(
-				<View style={[styles.rowView, styles.scrollView]}>
-					<View />
-					<Picker style={{width: pickerWidth, height: pickerHeight}}
-						selectedValue={this.state.money}
-						itemSpace={30}
-						itemStyle={{color:"white", fontSize: Platform.OS === 'ios' ? 26 : 32 }}
-						onValueChange={(value) => this.onPikcerSelect(value, 1)}>
-						{moneyArray.map((value) => (
-						  <PickerItem label={value} value={parseInt(value)} key={"money"+value}/>
-						))}
-					</Picker>
-					<View/>
-					<Picker style={{width: pickerWidth, height: pickerHeight}}
-						selectedValue={this.state.leverage}
-						itemSpace={30}
-						itemStyle={{color:"white", fontSize: Platform.OS === 'ios' ? 26 : 32 }}
-						onValueChange={(value) => this.onPikcerSelect(value, 2)}>
-						{leverageArray.map((value) => (
-						  <PickerItem label={this.parseLeverage(value)} value={value} key={"lever"+value}/>
-						))}
-					</Picker>
-					{this.renderInput()}
-				</View>
-			)
-		}
-		else {
-			return(
-				<View style={[styles.rowView, styles.scrollView]}>
-					<View />
-					<Picker style={{width: pickerWidth, height: pickerHeight}}
-						selectedValue={this.state.money}
-						itemSpace={30}
-						itemStyle={{color:"white", fontSize: Platform.OS === 'ios' ? 26 : 32 }}
-						onValueChange={(value) => this.onPikcerSelect(value, 1)}>
-						{moneyArray.map((value) => (
-						  <PickerItem label={value} value={parseInt(value)} key={"money"+value}/>
-						))}
-					</Picker>
-					{this.renderInput()}
-				</View>
-			)
-		}
+		return(
+			<View style={[styles.rowView, styles.scrollView]}>
+				<View />
+				<Picker style={{width: pickerWidth, height: pickerHeight}}
+					selectedValue={this.state.money}
+					itemSpace={30}
+					itemStyle={{color:"white", fontSize: Platform.OS === 'ios' ? 26 : 32 }}
+					onValueChange={(value) => this.onPikcerSelect(value, 1)}>
+					{moneyArray.map((value) => (
+						<PickerItem label={value} value={parseInt(value)} key={"money"+value}/>
+					))}
+				</Picker>
+				<View/>
+				<Picker style={{width: pickerWidth, height: pickerHeight}}
+					selectedValue={this.state.leverage}
+					itemSpace={30}
+					itemStyle={{color:"white", fontSize: Platform.OS === 'ios' ? 26 : 32 }}
+					onValueChange={(value) => this.onPikcerSelect(value, 2)}>
+					{leverageArray.map((value) => (
+						<PickerItem label={this.parseLeverage(value)} value={value} key={"lever"+value}/>
+					))}
+				</Picker>
+				{this.renderInput()}
+			</View>
+		)
 	},
 
     parseLeverage: function(value) {
@@ -1690,13 +1648,12 @@ var StockDetailPage = createReactClass({
 	},
 
     okPress: function() {
-		let ir = LogicData.isIR()
 		var strTip = LS.str('TS')
 		var strMin = LS.str('TIP_MIN')
-		var strHigh = ir ? LS.str('TIP_HIGH_IR') : LS.str('TIP_HIGH')
+		var strHigh = LS.str('TIP_HIGH')
 		var strMax = LS.str('TIP_MAX')
-		var strMore = ir ? LS.str('TIP_MORE_IR') : LS.str('TIP_MORE')
-		var strSum = ir ? LS.str('TIP_SUM_IR') : LS.str('TIP_SUM')
+		var strMore = LS.str('TIP_MORE')
+		var strSum = LS.str('TIP_SUM')
 		var tradeValue = this.state.money * this.state.leverage
 		var minValue = this.state.tradeDirection === 1 ? this.state.stockInfo.minValueLong : this.state.stockInfo.minValueShort
 		var maxValue = this.state.tradeDirection === 1 ? this.state.stockInfo.maxValueLong : this.state.stockInfo.maxValueShort
@@ -1771,7 +1728,7 @@ var StockDetailPage = createReactClass({
 	},
 
     renderInput: function() {
-		let left = LogicData.isIR() ? 120-width : 30-width
+		let left = 30-width
 		return (
 			<View>
 				<TouchableOpacity style={{marginLeft:left, marginTop:10, width:30}}
@@ -1959,8 +1916,9 @@ var styles = StyleSheet.create({
 	smallLabel: {
 		fontSize: 13,
 		color: 'white',
-		paddingTop: 3,
-		paddingBottom: 3,
+		paddingTop: 0,
+		paddingBottom: 0,
+		height: 14,
 	},
 	scrollView: {
 		height: 100,

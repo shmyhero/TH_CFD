@@ -246,7 +246,8 @@ export default class DepositPage extends Component{
 		var color = this.state.confirmButtonEnable?'#425a85':'#d0d0d0';
 		var buttonText = this.state.payMethodSelected==0?LS.str('ALIPAY_ARRIVED'):LS.str('UNIONPAY_ARRIVED')
 		var inputValueAfterUseEcoupon = value - (this.state.useEcoupon?this.state.econponValue:0);
-		var showInputValueAfterUseEcoupon = (inputValueAfterUseEcoupon&&inputValueAfterUseEcoupon>0)?inputValueAfterUseEcoupon:0
+		var showInputValueAfterUseEcoupon = (inputValueAfterUseEcoupon && inputValueAfterUseEcoupon > 0) ? inputValueAfterUseEcoupon : 0
+		showInputValueAfterUseEcoupon = Math.round(showInputValueAfterUseEcoupon * 100) / 100
 		
 		return(
 			<View style = {{backgroundColor:'white'}}>

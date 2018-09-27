@@ -5,11 +5,7 @@ import createReactClass from 'create-react-class';
 import {
 	StyleSheet,
 	View,
-	Text,
-	Image,
-	Animated,
 	Dimensions,
-	PanResponder,
 	Modal,
 	TouchableOpacity,
 	Platform,
@@ -18,12 +14,6 @@ import {
 var Swiper = require('react-native-swiper')
 var Touchable = require('Touchable');
 var merge = require('merge');
-var ColorConstants = require('../ColorConstants')
-var UIConstants = require('../UIConstants');
-var StockTransactionInfoBar = require('./StockTransactionInfoBar');
-var AchievementCard = require('./AchievementCard');
-var SharePage = require('./SharePage')
-var MainPage = require('./MainPage')
 var StockTransactionInfoPage = require('./StockTransactionInfoPage');
 var NetworkModule = require('../module/NetworkModule');
 var NetConstants = require('../NetConstants');
@@ -195,33 +185,23 @@ var StockTransactionInfoModal = createReactClass({
 
     render: function() {
 		return (
-			<View>
-				<Modal
-					transparent={true}
-					visible={this.state.modalVisible}
-					animationType={"slide"}
-					style={{height: height, width: width}}
-					onRequestClose={() => {this._setModalVisible(false)}}>
-						<TouchableOpacity activeOpacity={1} onPress={()=>this.hide()}>
-							<View style={styles.modalContainer}>
-								{this.renderContent()}
-							</View>
-						</TouchableOpacity>
-				</Modal>
-			</View>
+			<Modal
+				transparent={true}
+				visible={this.state.modalVisible}
+				animationType={"slide"}
+				style={{height: height, width: width}}
+				onRequestClose={() => {this._setModalVisible(false)}}>
+				<TouchableOpacity activeOpacity={1} onPress={() => this.hide()} style={styles.modalContainer}>
+					{/* <View style={styles.modalContainer}> */}
+						{this.renderContent()}
+					{/* </View> */}
+				</TouchableOpacity>
+			</Modal>
 		);
 	},
 });
 
 var styles = StyleSheet.create({
-	container: {
-		position: 'absolute',
-		left: 0,
-		right: 0,
-		top: 0,
-		bottom: 0,
-	},
-
 	modalContainer:{
 		flex: 1,
 		justifyContent: 'center',

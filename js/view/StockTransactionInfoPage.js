@@ -9,9 +9,7 @@ import {
 	View,
 	Text,
 	Image,
-	Animated,
 	Dimensions,
-	PanResponder,
 	TouchableOpacity,
 	Alert,
 	Platform,
@@ -19,11 +17,8 @@ import {
 
 var Touchable = require('Touchable');
 var merge = require('merge');
-var ColorConstants = require('../ColorConstants')
-var UIConstants = require('../UIConstants');
 var StockTransactionInfoBar = require('./StockTransactionInfoBar');
 var AchievementCard = require('./AchievementCard');
-var SharePage = require('./SharePage')
 var MainPage = require('./MainPage')
 var NetConstants = require('../NetConstants');
 var LogicData = require('../LogicData');
@@ -50,8 +45,7 @@ const CARD_TITLE_POSITION = 22 * IMAGE_RESIZE_SCALE;
 const ACHIEVEMENT_HEIGHT = 530 / 2 * IMAGE_RESIZE_SCALE;
 const ACHIEVEMENT_WIDTH = 510 / 2 * IMAGE_RESIZE_SCALE;
 const ACHIEVEMENT_MARGIN_TOP = 40 * IMAGE_RESIZE_SCALE;
-// const CONTENT_WIDTH = 570;
-// const CONTENT_HEIGHT = 827;
+
 
 var StockTransactionInfoPage = createReactClass({
     displayName: 'StockTransactionInfoPage',
@@ -247,8 +241,8 @@ var StockTransactionInfoPage = createReactClass({
 			var cardBorder = require('../../images/card_border.png');
 			return (
 				<View style={{width: width,
-					position:'absolute',
-					top:0, bottom:0,}}>
+					position:'absolute', alignItems:'center',
+					top:0, bottom:0, }}>
 					<Image source={cardBorder}
 						style={{width: CARD_BACKGROUND_WIDTH, height: CARD_BACKGROUND_HEIGHT,
 						resizeMode: "contain",
@@ -341,20 +335,9 @@ var StockTransactionInfoPage = createReactClass({
 
 var styles = StyleSheet.create({
 	container: {
-		/*position: 'absolute',
-		left: 0,
-		right: 0,
-		top: 0,
-		bottom: 0,
-		backgroundColor: 'transparent',
-		*/
-		//flex: 1,
-		//width:width,
 		marginTop: BODY_TOP_MARGIN,
 		justifyContent: 'center',
 		alignSelf: 'center',
-		//backgroundColor: "red",
-		// paddingBottom:height/2,
 	},
 
 	realContent: {
